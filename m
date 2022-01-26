@@ -1,51 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E585EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67B60C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BB7760FC9;
-	Wed, 26 Jan 2022 21:06:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 230D884D37;
+	Wed, 26 Jan 2022 21:06:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8c15P88fiP-m; Wed, 26 Jan 2022 21:06:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C33484C7E;
+	Wed, 26 Jan 2022 21:06:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E8B0F1BF48B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D75B360FB5
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OQw4XdqtpPZh; Wed, 26 Jan 2022 21:06:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2C0160FB5;
-	Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4102E1BF48B
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:05:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FFFC41616
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:05:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uW-iqM9-o5NI for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 21:05:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3283941650
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:05:31 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 111041C0008;
- Wed, 26 Jan 2022 21:05:29 +0000 (UTC)
-Date: Wed, 26 Jan 2022 22:05:29 +0100
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dgz90WEf07Sv for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45C3D60F9E
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id E00C581906; Wed, 26 Jan 2022 20:59:14 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220126220529.246fa6d3@windsurf>
-In-Reply-To: <20220123103922.1928118-1-giulio.benetti@benettiengineering.com>
-References: <20220123103922.1928118-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH]
- board/orangepi/orangepi-rk3399/extlinux.conf: fix label name
+To: buildroot@buildroot.org
+Date: Wed, 26 Jan 2022 22:06:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 07a0d71657323d137bfb33e29311bff29ac58539
+X-Git-Newrev: c99d84fb9694000a91fa04abc820f3e63a14e7e9
+X-Patchwork-Hint: ignore
+Message-Id: <20220126205914.E00C581906@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpjsip: update
+ LIBPJSIP_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,30 +53,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 23 Jan 2022 11:39:22 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c99d84fb9694000a91fa04abc820f3e63a14e7e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> RK3399_ROCKPRO64 has been picked from pine64/rockpro64 but here we deal
-> with orangepi-rk3399, so let's change the label to RK3399_ORANGEPI.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  board/orangepi/orangepi-rk3399/extlinux.conf | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+pjsip:pjsip has been deprecated by teluu:pjsip since September 2021:
 
-Applied to master, thanks.
+ <cpe-23:cpe23-item name="cpe:2.3:a:pjsip:pjsip:2.7.1:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:teluu:pjsip:2.7.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+  <cpe-item name="cpe:/a:pjsip:pjsip:2.7.2" deprecated="true" deprecation_date="2021-09-02T14:49:19.527Z">
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libpjsip/libpjsip.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 0a93780e93..b05cc31a83 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -12,7 +12,7 @@ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
+ LIBPJSIP_LICENSE_FILES = COPYING
+-LIBPJSIP_CPE_ID_VENDOR = pjsip
++LIBPJSIP_CPE_ID_VENDOR = teluu
+ LIBPJSIP_CPE_ID_PRODUCT = pjsip
+ LIBPJSIP_INSTALL_STAGING = YES
+ LIBPJSIP_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
