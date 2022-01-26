@@ -1,46 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67B60C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:06:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7742FC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 230D884D37;
-	Wed, 26 Jan 2022 21:06:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D04D415D1;
+	Wed, 26 Jan 2022 21:06:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8c15P88fiP-m; Wed, 26 Jan 2022 21:06:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PJSF8XvmQ_Z5; Wed, 26 Jan 2022 21:06:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C33484C7E;
-	Wed, 26 Jan 2022 21:06:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E8B0F1BF48B
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58D0C4159E;
+	Wed, 26 Jan 2022 21:06:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 688B21BF48B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D75B360FB5
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64C28415B3
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:06:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dgz90WEf07Sv for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45C3D60F9E
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:06:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E00C581906; Wed, 26 Jan 2022 20:59:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6PZs-2qtPV19 for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 21:06:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4ECA94159E
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:06:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1E541240007;
+ Wed, 26 Jan 2022 21:06:11 +0000 (UTC)
+Date: Wed, 26 Jan 2022 22:06:10 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 22:06:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07a0d71657323d137bfb33e29311bff29ac58539
-X-Git-Newrev: c99d84fb9694000a91fa04abc820f3e63a14e7e9
-X-Patchwork-Hint: ignore
-Message-Id: <20220126205914.E00C581906@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpjsip: update
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220126220610.7d44f5cc@windsurf>
+In-Reply-To: <20220123134751.703269-1-fontaine.fabrice@gmail.com>
+References: <20220123134751.703269-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/libpjsip: update
  LIBPJSIP_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -53,40 +56,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Luca Ceresoli <luca@lucaceresoli.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c99d84fb9694000a91fa04abc820f3e63a14e7e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 23 Jan 2022 14:47:50 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-pjsip:pjsip has been deprecated by teluu:pjsip since September 2021:
+> pjsip:pjsip has been deprecated by teluu:pjsip since September 2021:
+> 
+>  <cpe-23:cpe23-item name="cpe:2.3:a:pjsip:pjsip:2.7.1:*:*:*:*:*:*:*">
+>         <cpe-23:deprecated-by name="cpe:2.3:a:teluu:pjsip:2.7.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+>   <cpe-item name="cpe:/a:pjsip:pjsip:2.7.2" deprecated="true" deprecation_date="2021-09-02T14:49:19.527Z">
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libpjsip/libpjsip.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
- <cpe-23:cpe23-item name="cpe:2.3:a:pjsip:pjsip:2.7.1:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:teluu:pjsip:2.7.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
-  <cpe-item name="cpe:/a:pjsip:pjsip:2.7.2" deprecated="true" deprecation_date="2021-09-02T14:49:19.527Z">
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libpjsip/libpjsip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 0a93780e93..b05cc31a83 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -12,7 +12,7 @@ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
- LIBPJSIP_DEPENDENCIES = libsrtp
- LIBPJSIP_LICENSE = GPL-2.0+
- LIBPJSIP_LICENSE_FILES = COPYING
--LIBPJSIP_CPE_ID_VENDOR = pjsip
-+LIBPJSIP_CPE_ID_VENDOR = teluu
- LIBPJSIP_CPE_ID_PRODUCT = pjsip
- LIBPJSIP_INSTALL_STAGING = YES
- LIBPJSIP_MAKE = $(MAKE1)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
