@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 035EEC28CF5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 20:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CBB4C2BA4C
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 20:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A31DC41790;
-	Wed, 26 Jan 2022 20:05:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC765400C7;
+	Wed, 26 Jan 2022 20:05:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VPc08hFIULPE; Wed, 26 Jan 2022 20:05:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA1D74016D;
+	Wed, 26 Jan 2022 20:05:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 320C01BF5A0
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:05:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2101A4178C
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:05:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rW0JC8nUK-Wp; Wed, 26 Jan 2022 20:05:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3FA04178D;
-	Wed, 26 Jan 2022 20:05:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2E60F1BF4D5
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:05:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BE8D606E7
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:05:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wjPdCDoy8zF1 for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ejsza-dsujnS for <buildroot@lists.busybox.net>;
  Wed, 26 Jan 2022 20:05:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C36C60585
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64A1441789
  for <buildroot@buildroot.org>; Wed, 26 Jan 2022 20:05:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 25E928140B; Wed, 26 Jan 2022 19:58:20 +0000 (UTC)
+ id 191DD81503; Wed, 26 Jan 2022 19:58:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 21:02:45 +0100
+Date: Wed, 26 Jan 2022 20:59:47 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: bf791f4051576d7175dd63db5c14320ed5cbca4c
-X-Git-Newrev: 47b28bb6ad65ed97bcdf7c245b06931f51662f71
+X-Git-Oldrev: b5037ecffd5d42771ece111a220e011fec547764
+X-Git-Newrev: bf791f4051576d7175dd63db5c14320ed5cbca4c
 X-Patchwork-Hint: ignore
-Message-Id: <20220126195820.25E928140B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/tpm2-tss: remove
- unused dependency
+Message-Id: <20220126195820.191DD81503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/pipewire: fix
+ avahi build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47b28bb6ad65ed97bcdf7c245b06931f51662f71
+commit: https://git.buildroot.net/buildroot/commit/?id=bf791f4051576d7175dd63db5c14320ed5cbca4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-The last reference of uriparser was removed in:
-https://github.com/tpm2-software/tpm2-tss/commit/17a670dd4c0e4effc2ac3cdf021c299fa92df70e
+Fix the following build failure raised since commit
+27908c6eab768d0b9fd3444a929b3f1b1510da71:
 
-Signed-off-by: Erik Larsson <who+buildroot@cnackers.org>
+../output-1/build/pipewire-0.3.40/meson.build:348:0: ERROR: Dependency "avahi-client" not found, tried pkgconfig
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d1707ad82159aafbddb69c503109bf2e830f0f29
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 593683b45f72169dd94ec14fa18720b3cec9dda4)
+(cherry picked from commit f5131f6f28e384eb9dca1b11f571536e38d3ee9d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-tss/tpm2-tss.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pipewire/pipewire.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 71aa3feb96..060883c377 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -11,7 +11,7 @@ TPM2_TSS_LICENSE_FILES = LICENSE
- TPM2_TSS_CPE_ID_VENDOR = tpm2_software_stack_project
- TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
- TPM2_TSS_INSTALL_STAGING = YES
--TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
-+TPM2_TSS_DEPENDENCIES = openssl host-pkgconf
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index efda3ad695..7043745cc1 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -82,7 +82,8 @@ else
+ PIPEWIRE_CONF_OPTS += -Dalsa=disabled -Dpipewire-alsa=disabled
+ endif
  
- # 0001-configure-Only-use-CXX-when-fuzzing.patch
- TPM2_TSS_AUTORECONF = YES
+-ifeq ($(BR2_PACKAGE_AVAHI),y)
++# avahi support needs avahi-client, which needs avahi-daemon and dbus
++ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
+ PIPEWIRE_CONF_OPTS += -Davahi=enabled
+ PIPEWIRE_DEPENDENCIES += avahi
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
