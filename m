@@ -4,73 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A20DC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28AB5C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0524484E3E;
-	Wed, 26 Jan 2022 22:50:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D069A84E38;
+	Wed, 26 Jan 2022 22:54:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dyha_ak-63-C; Wed, 26 Jan 2022 22:50:10 +0000 (UTC)
+	with ESMTP id DueB7sAAFYzK; Wed, 26 Jan 2022 22:54:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5209B84DD6;
-	Wed, 26 Jan 2022 22:50:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB77B1BF48B
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:50:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 180F584E31;
+	Wed, 26 Jan 2022 22:54:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DC7F91BF48B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D97B440ADB
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:50:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB04861035
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:54:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f-gbLUYSG_GN for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 22:50:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0DyA2T_IwDqM for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 22:54:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C071740AD7
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:50:06 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id i1so993968ils.5
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 14:50:06 -0800 (PST)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 76D0161029
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:54:00 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id s18so1499382wrv.7
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 14:54:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=8LhCIhWmKJTHG7lsPkLj24H96k+7niFWEriKCaRBx7E=;
- b=WC/Kazn4fT/oPcMfi8xp9mDbtfneSvfRGIfahpeAVyepEk8gNg0Bz49qTAbRB/D2tY
- kzreEkwFd3rx7dMt5vaA9yRuERiNi3bTtiUKBQ+/WeIQw6eivz/pYI21zD8UFDP9sx+D
- oeeeiqvcfKhsGuEfxyggBd8lGqLDArrIHgvpSF5Hg6iAPhx34VaX9ziO4rQEAp7v8OJl
- zhw9VJ1+NzK3CMdaRQUgn/7/mM59pZ3OJvRXSgK+FW8EJCPuYEAXiThihL6dYS3w9GGn
- 67odQSVxuSFJHhs40f3dQB4RQUjVhHYcxa1palptlbxUr2qWYD5AZfGWREvNJ/ai2DqE
- 2Qdw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=T9nuuFGfAtoqka5tnod/GDnOPvVJBGrXv7LLnC72BFk=;
+ b=fiVoKLTmMOhcEBeCgmKHFpXE3Ya+I+9Usu9O1iLNqqwajyOqHHGo5h10JovJJV/xfR
+ dgTcbNswcbu3Q/HlIDHuni+Z0D559ybchAhW7NA+nUgEmcwQSAmUMjoGsxmraXgzZ5mt
+ CXTdf/z2ebmK/bZF4swacbbnOSK7pCdGYegS7wG8m6nq5zGFQXcQHjP3n+0q3sHNuYj3
+ VNcXaHAQymBhNgdNBj07woC0gB+HI+lDpu4GNON2KZRiZEFrv4vOeZ0N9klCLsVH4Xo7
+ pkww3OP1tWaM6UrCWFNj9jFodxVxKZHqFBguC8POLhUFoayDs5vCs8nmw0O0lBP1rPkC
+ XHcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=8LhCIhWmKJTHG7lsPkLj24H96k+7niFWEriKCaRBx7E=;
- b=R+rqjWRj5p2ACKRMUDXMTOnxQSPknrznMH2nphFLbzUCh6QC+PVQBMDdtmZAhQ69D0
- 1P4VCpeDYZIjVYVEM2YdUTjDXWoX5SA7bBKNgqP51tAYbx1iF1ZHwiqpGGgJJkJPjdhz
- i1kVPzrnr6GWjQ2BBXfw9ObDEyBQrEEXmRin3Hedsq3ZChEZdV2BT0CPUIDQcAMocP4o
- xaImE3b55Rx0gZmil5ri9JmV9rkB2tKYF2BArVRvPFk1hse9v0JYJQXFIC5wLkuRnPBG
- iCiCdvEaEWUofxVVELs0pNG6vujK/h+In3OJmgIku3YVnvbfp6Zxpc9zDFz1+xeiJFrg
- UuQA==
-X-Gm-Message-State: AOAM533EfL5GSGurYlUNf02bFjyHit5URLMwsQ8VkapgA+FmxKH+VDMD
- xIfveG5ex3wq81VaZARjOLGRXneANxpVzw6RRCioyuZt8WtZYg==
-X-Google-Smtp-Source: ABdhPJzUJ87GOdOLcIkxzq9QWV/Ctf6TWJgApkynMqcLPFP6Tt6gAvIe0ZB1EgANMKcswKOs127VyebBPyK+4I6zvtE=
-X-Received: by 2002:a05:6e02:1ba7:: with SMTP id
- n7mr938567ili.290.1643237405839; 
- Wed, 26 Jan 2022 14:50:05 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=T9nuuFGfAtoqka5tnod/GDnOPvVJBGrXv7LLnC72BFk=;
+ b=Pnr1z/3YpNdKBn+S3OptD2K+jt9yD6ox5uPPaY/dbV5nUHGLuux/QlqvImEt47gzB5
+ gcorRAtOJyyQlJ4qhRfOZHJ9r/ZpM+yrBrkoz3pKyxa1vM0ZhNph6dU/4+9n+amo+TxE
+ qbgO2wytiY0lxPcfdaL/54QyoXAaEqUJIFoWKUp0kd+6YSelnjxQM9ysn7YKyOSB27UI
+ v1HIxAPqxKELnftt+fEiQEl4avy7713ybEcYFrL9CDhY5NqY9Pgo3tzl5A5fxEB4UsR8
+ Aqj7A8kF14J9zeq74GgzdHzGH9CwikIOZcX4pgXauL1pWJxMc+L5yaiKyODByo1fl2n7
+ uhyA==
+X-Gm-Message-State: AOAM532vGnJTrGseO0+iddALeWaiSyIdAuHqZotPTSd/DMHYCnlEvQ1d
+ bHBGcH73ZylN/ekilHtU0xt0RQmkfHI=
+X-Google-Smtp-Source: ABdhPJzyjfFmC6NsffUStYAY2Fwyci1cLY0FHU8hvQHx6Ox7f5gdKehcdsP3Xh5D45sRKZrFEI+6Lw==
+X-Received: by 2002:a5d:544c:: with SMTP id w12mr535248wrv.357.1643237638467; 
+ Wed, 26 Jan 2022 14:53:58 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id g20sm5720248wmq.9.2022.01.26.14.53.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Jan 2022 14:53:57 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 26 Jan 2022 23:51:58 +0100
+Message-Id: <20220126225159.1567622-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220125190650.107677-1-fontaine.fabrice@gmail.com>
- <20220125190650.107677-2-fontaine.fabrice@gmail.com>
-In-Reply-To: <20220125190650.107677-2-fontaine.fabrice@gmail.com>
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 27 Jan 2022 08:49:39 +1000
-Message-ID: <CAKmqyKPkQZZ0bJbjT+DPpkvny-7ZEBevJQ9QPmgZTdYh7DZU6Q@mail.gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 2/2] package/xvisor: add riscv support
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/xvisor: drop ARM32 without virtualization support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,71 +87,71 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- buildroot <buildroot@buildroot.org>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 26, 2022 at 5:09 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> riscv is supported since version 0.3.0 and
-> https://github.com/xvisor/xvisor/commit/d6feda4e80eefd372294b081111ce709d08ee4c0
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Support for old 32-bit ARM boards (i.e. ARMv5, ARMv6, ARMv7a) without
+virtualization has been dropped since
+https://github.com/xvisor/xvisor/commit/9fcd69692484e0f6aa5036c27196f55c797582c5
+resulting in the following build failure since bump to version 0.3.1 in
+commit c4f8b8968770ecbf6444a5921c6472f126717626:
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+*** Can't find default configuration "/home/giuliobenetti/autobuild/run/instance-3/output-1/build/xvisor-0.3.1/arch/arm/configs/generic-v6-defconfig"!
 
-Alistair
+*** Can't find default configuration "/home/giuliobenetti/autobuild/run/instance-0/output-1/build/xvisor-0.3.1/arch/arm/configs/generic-v7-defconfig"!
 
-> ---
->  package/xvisor/Config.in | 4 +++-
->  package/xvisor/xvisor.mk | 2 ++
->  2 files changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
-> index 55c43e6959..4e7a3e1b53 100644
-> --- a/package/xvisor/Config.in
-> +++ b/package/xvisor/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_XVISOR_ARCH_SUPPORTS
->         bool
->         default y
->         depends on BR2_USE_MMU
-> -       depends on BR2_aarch64 || BR2_x86_64
-> +       depends on BR2_aarch64 || BR2_riscv || BR2_x86_64
->
->  menuconfig BR2_PACKAGE_XVISOR
->         bool "xvisor"
-> @@ -32,6 +32,8 @@ endchoice
->  config BR2_PACKAGE_XVISOR_DEFCONFIG
->         string "Defconfig name"
->         default "generic-v8" if BR2_aarch64
-> +       default "generic-32b" if BR2_RISCV_32
-> +       default "generic-64b" if BR2_RISCV_64
->         default "x86_64_generic" if BR2_x86_64
->         depends on BR2_PACKAGE_XVISOR_USE_DEFCONFIG
->         help
-> diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-> index 4ceb5ed7cb..1a7b49e689 100644
-> --- a/package/xvisor/xvisor.mk
-> +++ b/package/xvisor/xvisor.mk
-> @@ -32,6 +32,8 @@ ifeq ($(BR2_x86_64),y)
->  XVISOR_ARCH = x86
->  else ifeq ($(BR2_aarch64),y)
->  XVISOR_ARCH = arm
-> +else ifeq ($(BR2_riscv),y)
-> +XVISOR_ARCH = riscv
->  endif
->
->  ifeq ($(BR2_PACKAGE_XVISOR)$(BR_BUILDING),yy)
-> --
-> 2.34.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+As spotted by Thomas Petazzoni in
+https://patchwork.ozlabs.org/project/buildroot/patch/20220125190650.107677-1-fontaine.fabrice@gmail.com,
+"ARM32 cores that support the ARMv7ve instruction set are still
+supported by Xvisor. This means that Cortex-A7, Cortex-A12, Cortex-A15
+and Cortex-A17, which are all ARM32 cores, are still supported"
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1211bf6ff10c75815fa3ac320532fab5fe649a2b
+ - http://autobuild.buildroot.org/results/2bcbbb270df71d2489b7bc83e56c898c58cc90d2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Keep ARM32 with virtualization
+
+ package/xvisor/Config.in | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
+index eb7475b86d..71628e633e 100644
+--- a/package/xvisor/Config.in
++++ b/package/xvisor/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_XVISOR_ARCH_SUPPORTS
+ 	bool
+-	default y
++	default y if BR2_aarch64
++	default y if BR2_cortex_a7 || BR2_cortex_a12 || BR2_cortex_a15 || BR2_cortex_a17
++	default y if BR2_x86_64
+ 	depends on BR2_USE_MMU
+-	depends on BR2_arm || BR2_aarch64 || BR2_x86_64
+-	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV7M
+ 
+ menuconfig BR2_PACKAGE_XVISOR
+ 	bool "xvisor"
+@@ -32,9 +32,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XVISOR_DEFCONFIG
+ 	string "Defconfig name"
+-	default "generic-v5" if BR2_ARM_CPU_ARMV5
+-	default "generic-v6" if BR2_ARM_CPU_ARMV6
+-	default "generic-v7" if BR2_ARM_CPU_ARMV7A
++	default "generic-v7-ve" if BR2_ARM_CPU_ARMV7A
+ 	default "generic-v8" if BR2_aarch64
+ 	default "x86_64_generic" if BR2_x86_64
+ 	depends on BR2_PACKAGE_XVISOR_USE_DEFCONFIG
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
