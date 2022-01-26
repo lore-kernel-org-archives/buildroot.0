@@ -1,46 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A7E1C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9272BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49065417F2;
-	Wed, 26 Jan 2022 21:56:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2496E60FF3;
+	Wed, 26 Jan 2022 22:00:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bu8XH4iiwWwQ; Wed, 26 Jan 2022 21:56:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rR7dvawNt88b; Wed, 26 Jan 2022 22:00:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BC86417EF;
-	Wed, 26 Jan 2022 21:56:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63ECF60FF6;
+	Wed, 26 Jan 2022 22:00:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CCF701BF4D6
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:56:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 250F31BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9BE6417EF
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:56:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13BC7417D7
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:00:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YJs96V2_8_RP for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 21:56:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 009484168C
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:56:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 872A780FF9; Wed, 26 Jan 2022 21:49:36 +0000 (UTC)
+ with ESMTP id HltA5XoY1-7t for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 22:00:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 05BFC41717
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:00:28 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B97EAE0004;
+ Wed, 26 Jan 2022 22:00:25 +0000 (UTC)
+Date: Wed, 26 Jan 2022 23:00:25 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 22:56:26 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 163509a8e0d558e6339c5489f072dfe805e0cc34
-X-Git-Newrev: 2d893f870f7c0be22b340cd5fca5ae0661c20182
-X-Patchwork-Hint: ignore
-Message-Id: <20220126214936.872A780FF9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyyaml: bump to version 6.0
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220126230025.67670779@windsurf>
+In-Reply-To: <20220124111725.544497-1-james.hilliard1@gmail.com>
+References: <20220124111725.544497-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyyaml: bump to version
+ 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,142 +57,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Geoffrey Ragot <geoffreyragot@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d893f870f7c0be22b340cd5fca5ae0661c20182
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 24 Jan 2022 04:17:25 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Drop python2 support and propagate dependency changes.
+> Drop python2 support and propagate dependency changes.
+> 
+> Ensure optimized cython build is enabled and add host cython
+> dependency.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/libcamera/libcamera.mk             |  2 +-
+>  package/mongodb/mongodb.mk                 |  2 +-
+>  package/python-pyyaml/Config.in            |  1 +
+>  package/python-pyyaml/python-pyyaml.hash   |  4 ++--
+>  package/python-pyyaml/python-pyyaml.mk     |  9 +++++----
+>  package/python3-pyyaml/python3-pyyaml.hash |  1 -
+>  package/python3-pyyaml/python3-pyyaml.mk   | 20 --------------------
+>  7 files changed, 10 insertions(+), 29 deletions(-)
+>  delete mode 120000 package/python3-pyyaml/python3-pyyaml.hash
+>  delete mode 100644 package/python3-pyyaml/python3-pyyaml.mk
 
-Ensure optimized cython build is enabled and add host cython
-dependency.
+Applied to master, thanks. I was surprised by the usage of
+host-python-pyyaml by host-sdbusplus. Indeed, host-sdbusplus depends on
+host-python3 and host-python-pyyaml, the latter being (before your
+patch) forcefully build for Python 2.x.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcamera/libcamera.mk             |  2 +-
- package/mongodb/mongodb.mk                 |  2 +-
- package/python-pyyaml/Config.in            |  1 +
- package/python-pyyaml/python-pyyaml.hash   |  4 ++--
- package/python-pyyaml/python-pyyaml.mk     |  9 +++++----
- package/python3-pyyaml/python3-pyyaml.hash |  1 -
- package/python3-pyyaml/python3-pyyaml.mk   | 20 --------------------
- 7 files changed, 10 insertions(+), 29 deletions(-)
+So of the 3 Python modules that host-sdbusplus needs (inflection, mako,
+pyyaml), inflection and mako were installed for the host Python 3.x
+interpreter, and host-python-pyyaml for the host Python 2.x
+interpreter. And the host-sdbusplus build, even though it depended on
+host-python3, was in fact using host Python 2.x... which raises a
+question on the actual need of host-python-inflection and
+host-python-mako... as they are not actually needed during the build:
+the build succeeds when host-sdbusplus uses host Python 2.x, while mako
+and inflection are installed for host Python 3.x.
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 0052ca558a..524cf07e03 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -12,7 +12,7 @@ LIBCAMERA_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-python-jinja2 \
- 	host-python3-ply \
--	host-python3-pyyaml \
-+	host-python-pyyaml \
- 	gnutls
- LIBCAMERA_CONF_OPTS = \
- 	-Dandroid=disabled \
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index c33c3c2eb7..92656dd7a4 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
-@@ -18,7 +18,7 @@ MONGODB_DEPENDENCIES = \
- 	boost \
- 	host-python3-cheetah \
- 	host-python3-psutil \
--	host-python3-pyyaml \
-+	host-python-pyyaml \
- 	host-python3-regex \
- 	host-python-requests \
- 	host-scons \
-diff --git a/package/python-pyyaml/Config.in b/package/python-pyyaml/Config.in
-index 45e818b7e7..eb073b9c03 100644
---- a/package/python-pyyaml/Config.in
-+++ b/package/python-pyyaml/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYYAML
- 	bool "python-pyyaml"
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_LIBYAML
- 	help
- 	  The PyYAML package contains binding to the libyaml API.
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index 82b2f4f880..f8b5332565 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyYAML/json
--md5  46e25294c7efec23d4072ed6a7777f46  PyYAML-5.4.1.tar.gz
--sha256  607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e  PyYAML-5.4.1.tar.gz
-+md5  1d19c798f25e58e3e582f0f8c977dbb8  PyYAML-6.0.tar.gz
-+sha256  68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2  PyYAML-6.0.tar.gz
- # Locally computed sha256 checksums
- sha256  8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4  LICENSE
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index c9013de8ec..8f5a2d269e 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
-@@ -4,17 +4,18 @@
- #
- ################################################################################
- 
--# Please keep in sync package/python3-pyyaml/python3-pyyaml.mk
--PYTHON_PYYAML_VERSION = 5.4.1
-+PYTHON_PYYAML_VERSION = 6.0
- PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/36/2b/61d51a2c4f25ef062ae3f74576b01638bebad5e045f747ff12643df63844
- PYTHON_PYYAML_SETUP_TYPE = setuptools
- PYTHON_PYYAML_LICENSE = MIT
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
- PYTHON_PYYAML_CPE_ID_VENDOR = pyyaml
- PYTHON_PYYAML_CPE_ID_PRODUCT = pyyaml
--PYTHON_PYYAML_DEPENDENCIES = libyaml
-+PYTHON_PYYAML_DEPENDENCIES = host-python-cython libyaml
-+PYTHON_PYYAML_ENV = PYYAML_FORCE_CYTHON=1
- HOST_PYTHON_PYYAML_DEPENDENCIES = host-libyaml
-+HOST_PYTHON_PYYAML_NEEDS_HOST_PYTHON = python3
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
-diff --git a/package/python3-pyyaml/python3-pyyaml.hash b/package/python3-pyyaml/python3-pyyaml.hash
-deleted file mode 120000
-index afa4932ecb..0000000000
---- a/package/python3-pyyaml/python3-pyyaml.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../python-pyyaml/python-pyyaml.hash
-\ No newline at end of file
-diff --git a/package/python3-pyyaml/python3-pyyaml.mk b/package/python3-pyyaml/python3-pyyaml.mk
-deleted file mode 100644
-index f758341502..0000000000
---- a/package/python3-pyyaml/python3-pyyaml.mk
-+++ /dev/null
-@@ -1,20 +0,0 @@
--################################################################################
--#
--# python3-pyyaml
--#
--################################################################################
--
--# Please keep in sync with package/python-pyyaml/python-pyyaml.mk
--PYTHON3_PYYAML_VERSION = 5.4.1
--PYTHON3_PYYAML_SOURCE = PyYAML-$(PYTHON3_PYYAML_VERSION).tar.gz
--PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
--PYTHON3_PYYAML_SETUP_TYPE = setuptools
--PYTHON3_PYYAML_LICENSE = MIT
--PYTHON3_PYYAML_LICENSE_FILES = LICENSE
--PYTHON3_PYYAML_CPE_ID_VENDOR = pyyaml
--PYTHON3_PYYAML_CPE_ID_PRODUCT = pyyaml
--HOST_PYTHON3_PYYAML_DL_SUBDIR = python-pyyaml
--HOST_PYTHON3_PYYAML_NEEDS_HOST_PYTHON = python3
--HOST_PYTHON3_PYYAML_DEPENDENCIES = host-libyaml
--
--$(eval $(host-python-package))
+It seems like they are only used at runtime ? But that also wouldn't
+work.
+
+Anyway, now with host-python-pyyaml being python3 only, this kind of
+solves the problem. But perhaps host-sdbusplus should be explicitly
+told to use $(HOST_DIR)/bin/python3, because if $(HOST_DIR)/bin/python2
+is here, it will use it, and it won't have access to pyyaml.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
