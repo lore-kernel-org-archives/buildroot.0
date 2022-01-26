@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E6F3C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 23:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2C9BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 23:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A42384DBA;
-	Wed, 26 Jan 2022 23:00:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D2EB61047;
+	Wed, 26 Jan 2022 23:57:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 39VF7TLh3aFQ; Wed, 26 Jan 2022 23:00:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EbTh44hbO1sT; Wed, 26 Jan 2022 23:57:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5F0C84DC1;
-	Wed, 26 Jan 2022 23:00:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 132111BF48B
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 23:00:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04CE561048;
+	Wed, 26 Jan 2022 23:57:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 294DE1BF291
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 23:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C61A41B40
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 23:00:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2437140AED
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 23:57:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2yoqZ2pnTajT for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 23:00:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YL5XYxInuzJc for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 23:57:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
  [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8644541B3D
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 23:00:22 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id s18so1518994wrv.7
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 15:00:22 -0800 (PST)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 302324019D
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 23:57:00 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id s9so1687477wrb.6
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 15:56:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=sHW3XojR6w39sImC0JIF4QfxE8f8Kom1platLN21Q/8=;
- b=FDW51NrAH8OGc3r7LU84wD7cHSzIPlVsfDkSxZliGRAx/YFl/HAAGfeNaRUD+NBtoC
- /FKyYg3/jSO7mp8/9dp6ETysXjnkdCuj6+fFZvxZOarrDW2Xnf1oo85QkxxG3TUs1gQa
- rTUMG4WXwtXiHvBkTBxDKBx6GNYsApgtTjYSCcNrrbKLTGrTLoeudl1rJJWpuxHOFWjK
- a+stW9ayU149oTVXc89R72UID6fSAt58w9X4Uu0qvtds6ocoS9/rI8UPLFqrxd0Uo9NU
- Ivf3dd9EQINHc5PXfMv9rRMwQntG09lJTnCP5GzMjkMm255hyzcHLEmkdbnkUg/nwgv4
- EgiQ==
+ bh=Qmo8VZ62aLA7yH4cQtzY/9R9BDTNOBOfg7FWNRwTmuA=;
+ b=V6EmuOqZ1FOp5G8N7LCpbR0XrUVFxnlGPYlcwwpU+doKsSgS1DD02YW4JPD3xuItSm
+ Soqz/CvbzOLSDqq4nSRQHqndAjm0vTQs4fr9ImWm+EoFvdrAzLs0UOubOA99vLGc+9OC
+ GDdjpomLfAoXtcMOZM3sBHn9dE2pCwBubzOrFw2PsnJOgzfJUaCn9zsU3g1QUa4X1Dgm
+ TQucFvl71D/CtHTKqSYuzS12/2J3YuxhrgL6oIEhdMTa4L74+GP4qsZq8SgRAJxf0rOA
+ bV/wBDmloaImJvordgl2g0vFSzMttXDsgSO4QQf9/ZCo6j/DQ8I+XEEAcOnwY6lESMT9
+ xnqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=sHW3XojR6w39sImC0JIF4QfxE8f8Kom1platLN21Q/8=;
- b=sKUlFAwxpeibiFJimc3cMCfp75UZtOcZCM7lc8lnD/9RwpbZSUvSHnlfhviDMCjYL4
- 8pFiwwElNdddc1YoAOGkttGjvUfBev2gPcmZK4HHWIOZ+ynlLpJ9s8XjxDJcE/CNng3I
- awo+zbgPAAmIcmB+7uSXTl8EZT0K9lZJjuTtNW2MEe45pqKgkqwAN+7Mq/r9cgS/q/iw
- 5IggNrucGKFd1179K7i56DRsp7zN++C6b9DCeClgAd5tPCeq99XBg2q5KH4JekSpUVur
- 32rpTeR1SsFPIfRfur009xMnwIk8BEexVjm7PekNILjtqEPiLNNsEDe+bXaV9jOd2MDi
- NWsg==
-X-Gm-Message-State: AOAM5320h+c1FyywcFRKzvk/Tj90Gd+Rw6CjN3fhgGOkydBeoJJkTar4
- QUepH1Ak/eLfLj9sbaOHjsF9j2KKQTuR4idR
-X-Google-Smtp-Source: ABdhPJxadsX9set3YhOh+yOJ9zrV1s9kmuZ8UXFmQ6G68M6IhgclE9c21ztopz8j2S6X5nEhcIkaEQ==
-X-Received: by 2002:a05:6000:1c01:: with SMTP id
- ba1mr681051wrb.28.1643238020747; 
- Wed, 26 Jan 2022 15:00:20 -0800 (PST)
+ bh=Qmo8VZ62aLA7yH4cQtzY/9R9BDTNOBOfg7FWNRwTmuA=;
+ b=e5XFnYp5egvYfnUKZONZ8rvhidslU16U1ReDt0kyf9UbzO63sZh2SMlGayTAbpWDr6
+ 88cMIqfb8V3VOjyiWDacSMxvTtjswPxo6FTvfdmsF/wCAnGsVkWEveijCMkm2MR8lV++
+ CB6ugDpuTvZlXWmYqrC+/767yrh8j6sqEo9WZKCQxDEkWuExs152oix4AEOFhejvncIW
+ p9faniwmHPTC86Zj2Rzr74+yIPmqTYUn/+1QCmClcmthJBmk5xFUMKc3LPlS+LJOuLCZ
+ YHBLzj4cMsjPHH8lSkiCdWFdAC6TSicjnm8vF/nYR6C+lkAAx26lopW/C0+S8SQPlHhI
+ W8Ag==
+X-Gm-Message-State: AOAM530ElJX07EjuFrbK2J+MH51MIx3lFGWQvVqX5zyei1NT4sAEw3D7
+ Qw+eAMZr3skvZA5n1HcTGD8wgJOOXAPB5EJg
+X-Google-Smtp-Source: ABdhPJww0mEt/Z7fIcfRVF8lbWmiS5eZGoDgtc1NE5cRB6RxuhkE3azZNuxt3f3TIw5W7pHa6O6RUA==
+X-Received: by 2002:adf:dc52:: with SMTP id m18mr774551wrj.370.1643241418281; 
+ Wed, 26 Jan 2022 15:56:58 -0800 (PST)
 Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id i11sm667924wry.102.2022.01.26.15.00.19
+ by smtp.gmail.com with ESMTPSA id o10sm796894wri.19.2022.01.26.15.56.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Jan 2022 15:00:20 -0800 (PST)
+ Wed, 26 Jan 2022 15:56:57 -0800 (PST)
 From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 00:00:14 +0100
-Message-Id: <20220126230014.15420-1-petr.vorel@gmail.com>
+Date: Thu, 27 Jan 2022 00:56:52 +0100
+Message-Id: <20220126235652.25712-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
+Subject: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version to
  20220121
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -92,9 +91,9 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 LTP now builds metadata directory as host target.
-It's mandatory, therefore adding HOST_CFLAGS to make (adding to
-configure does not work) to avoid adding -mlongcalls -mauto-litpools
-for some targets (e.g. bootlin-xtensa-uclibc).
+It's mandatory, therefore adding HOST_CFLAGS and HOST_LDFLAGS to make
+(adding to configure does not work) to avoid adding -mlongcalls
+-mauto-litpools for some targets (e.g. bootlin-xtensa-uclibc).
 
 Drop patches from this release.
 
@@ -103,14 +102,21 @@ Refresh 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
+Changes v1->v2:
+* Add missin g HOST_LDFLAGS to fix br-arm-full-static (cannot find -lc
+when compiling host target)
+
+Kind regards,
+Petr
+
  ...ysinfo.h-to-fix-build-with-MUSL-libc.patch | 45 ++++++--------
  .../0002-lib-fix-MemAvailable-parsing.patch   | 36 -----------
  ...-lapi-rtnetlink.h-Fix-include-guards.patch | 37 ------------
  ...f_addr.h-and-reuse-it-in-rtnetlink.h.patch | 58 ------------------
  ...0005-lapi-if_addr.h-Define-IFA_FLAGS.patch | 60 -------------------
  package/ltp-testsuite/ltp-testsuite.hash      |  6 +-
- package/ltp-testsuite/ltp-testsuite.mk        |  4 +-
- 7 files changed, 23 insertions(+), 223 deletions(-)
+ package/ltp-testsuite/ltp-testsuite.mk        |  6 +-
+ 7 files changed, 25 insertions(+), 223 deletions(-)
  delete mode 100644 package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch
  delete mode 100644 package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch
  delete mode 100644 package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch
@@ -478,7 +484,7 @@ index a9f3cfdfe1..bd648cbfdd 100644
 -sha256  779e9e5cc9af4f2b3d4cb32f5439ebd635504d2c4591bf900f0942dac290ed15  ltp-full-20210927.tar.xz
 +sha256  ad002520616fac52362229ea0f1bb9d304fc03ff0096ccb5b1820cee9fc8413a  ltp-full-20220121.tar.xz
 diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index cc6d3c63b6..bc1497e940 100644
+index cc6d3c63b6..d9b7133b07 100644
 --- a/package/ltp-testsuite/ltp-testsuite.mk
 +++ b/package/ltp-testsuite/ltp-testsuite.mk
 @@ -4,7 +4,7 @@
@@ -490,11 +496,13 @@ index cc6d3c63b6..bc1497e940 100644
  LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
  LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
  
-@@ -70,6 +70,8 @@ LTP_TESTSUITE_CONF_ENV += \
+@@ -70,6 +70,10 @@ LTP_TESTSUITE_CONF_ENV += \
  	LIBS="$(LTP_TESTSUITE_LIBS)" \
  	SYSROOT="$(STAGING_DIR)"
  
-+LTP_TESTSUITE_MAKE_ENV += HOST_CFLAGS="$(HOST_CFLAGS)"
++LTP_TESTSUITE_MAKE_ENV += \
++	HOST_CFLAGS="$(HOST_CFLAGS)" \
++	HOST_LDFLAGS="$(HOST_LDFLAGS)"
 +
  # uclibc: bessel support normally not enabled
  LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
