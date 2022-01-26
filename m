@@ -1,79 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F490C28CF5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 05:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F4BC28CF5
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 05:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E5E540018;
-	Wed, 26 Jan 2022 05:18:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 906A260EAA;
+	Wed, 26 Jan 2022 05:41:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qcItnMlmL4_R; Wed, 26 Jan 2022 05:18:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59B404055E;
-	Wed, 26 Jan 2022 05:18:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85C451BF591
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 05:18:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D6CB60E39
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 05:18:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G0FPON8HSCmX for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 05:18:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
- [IPv6:2a00:1450:4864:20::22a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A3ECD60E15
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 05:18:14 +0000 (UTC)
-Received: by mail-lj1-x22a.google.com with SMTP id q127so5023863ljq.2
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 21:18:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=WWwmvZZO7jvzesztavG2P2LZ+PVUfSZ2szwP52WVjJE=;
- b=UrhR7MBRHflN9A3z7wk4L2y8Rk3lBsEplCWN860jtLOxsn//A/3gl+ZpnJ+0nAH3jI
- 2EddxvTDLq7ecde9kZet7mF9dPUjiTX5o5YfbROdAB+w49r+OwowwpRbDtEsbs3J/z4H
- 7ZtHAi4gioyeL//xQAGNlccSlgJDEcjw4IGkUGbixKb5r8MMfV4Pv8udU75DF8qgzf+K
- btXteIAGmBTBYopxqacgSkZasZYHZJDxTPChi4mCTH6LYyLgnhwQv/EOaIXMMRAZYKAg
- UCBnNre7q/zd7Hl/djY4/2dqTvX7x6xeU2yCFjrNQIDokG8mnysKsfMKvciI/NZ+K3Yo
- stcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=WWwmvZZO7jvzesztavG2P2LZ+PVUfSZ2szwP52WVjJE=;
- b=fXPgDsEjOtzaJMRwKHihzbBiT1EDvPD+QJd1tP8xGp/IP2JdBrNCyEG0geeLXL4veB
- nN9HBE09AMS5debLAZlS7oqdWTQFURGZ7z9o4vj2xpcRC24ZuWm1Uk6dwoUXRHelspei
- MMP8Q/rCNgBJhHy4dQY2rmJcTN88VY30IeVVN0nAjHfcoSvHIAobFh4nSs8PMGL7I4XL
- Q784vsoXIypAM2pCXr8yeowTX9wAnbTubmqI7AOVrEbwzBvo+yRoWk8mlIdVjo64c5Zl
- HgCiXdmYH+EsOUejJOmOhnnn65h2a6Of4s6XIK/ejrvp4VFc0yLxN78ygL+bItgUWwNm
- sQ4w==
-X-Gm-Message-State: AOAM5302PYOO5Cluv1d1aITfnX/klimqivrKkZTYMCO/cZwbZjax5zXv
- 55t6vV6fI2Tjd07JBOcBJsWaTmfkm7M=
-X-Google-Smtp-Source: ABdhPJxVLj+Xg9LO21Fxn7CSHicCPtPV6yyoQWREPGCkY9BkvvL4rgyyvtfsjEztb+b19za5iM07sQ==
-X-Received: by 2002:a2e:9243:: with SMTP id v3mr4035155ljg.179.1643174292168; 
- Tue, 25 Jan 2022 21:18:12 -0800 (PST)
-Received: from hellfire.local ([178.155.5.204])
- by smtp.gmail.com with ESMTPSA id bq32sm985031lfb.142.2022.01.25.21.18.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jan 2022 21:18:11 -0800 (PST)
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 08:18:08 +0300
-Message-Id: <20220126051808.26581-1-kuzminov.sergey81@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UBG1KA_VsNFI; Wed, 26 Jan 2022 05:41:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B10A760EA5;
+	Wed, 26 Jan 2022 05:41:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D7CF1BF591
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 05:41:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B6D04155E
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 05:41:42 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=lexina.in
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Sbq9F24iRAE for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 05:41:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mx.msync.work (mx.msync.work [IPv6:2a01:4f9:2b:2dc2::3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 631CC40933
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 05:41:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 96420282D11; Wed, 26 Jan 2022 05:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
+ t=1643175690; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references:
+ disposition-notification-to; bh=pfuMmif/rl8iI6sn33qt0Zf0s3NbTwgtWv8gXAmARs8=; 
+ b=L58V1e+dEGT8jKKb0Ni6rG4rH3mgtImAX64Mf0L3uLYJ7J9/XqWwza2WsbOR/cAD1X8DE/
+ 5/u8384+564NbiU0oGusqj6DcVo6WRhzvkjmqHRACag+0FqCwRhznW/e+9mcgvzitERLVB
+ qqw9rOz4VQtEonGAbr/YdUOI7FLAf17HanB5rSuFb0aNCeSY7SzPcJl2GpfnilYR1VkOUS
+ w/xqHVT3aWIimyICmNdY5cmogNb94uk4R4nulndWoUcmfVVc9OGcjI0NLlXC/JfOLTq2Nb
+ XtyHk8w43OATzY8ecf6BAiogzrsw/JU49u8bcqAAWKXeWyokIHN/NG1fATBZLw==
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Neil Armstrong <narmstrong@baylibre.com>
+References: <20220118111457.2491318-1-adeep@lexina.in>
+ <20220122143327.7d1a1cf7@windsurf>
+ <27eb54d9-6897-a2df-00c3-fb6dca8aba91@lexina.in>
+ <20220122160914.7e4cc513@windsurf>
+ <1a3ce2b5-4b17-b79f-5dd5-29637575d473@lexina.in>
+ <4a94b253-6fe7-5e79-b1e9-331b0a9051ca@baylibre.com>
+ <20220124214529.56b1bf5d@windsurf>
+Message-ID: <f8514765-6558-cbab-61c7-13112726b245@lexina.in>
+Date: Wed, 26 Jan 2022 08:41:26 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/orangepi_zero_defconfig: refactoring,
- bump Linux and U-Boot versions
+In-Reply-To: <20220124214529.56b1bf5d@windsurf>
+Content-Language: en-US
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/amlogic-boot-fip: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,112 +73,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Vyacheslav via buildroot <buildroot@buildroot.org>
+Reply-To: Vyacheslav <adeep@lexina.in>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-- Refactoring configs/orangepi_zero_defconfig.
-- Linux: bump to version 5.15.16 (from 5.12.2).
-- U-Boot: bump to version 2022.01 (from 2021.04).
+Hi.
+Thanks all for replies.
 
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
----
- ...ux-extras.config => linux-extras.fragment} |  0
- configs/orangepi_zero_defconfig               | 32 +++++++++++++------
- 2 files changed, 22 insertions(+), 10 deletions(-)
- rename board/orangepi/orangepi-zero/{linux-extras.config => linux-extras.fragment} (100%)
+24.01.2022 23:45, Thomas Petazzoni wrote:
+> Hello Neil,
+> 
+> Thanks for the additional feedback.
+> 
+> On Mon, 24 Jan 2022 14:41:49 +0100
+> Neil Armstrong <narmstrong@baylibre.com> wrote:
+> 
+>> The binaries must be split into 2 categories:
+>> - Pre-built: bl2, bl31, bl21, bl32, fip_create, aml_encrypt_*, ddr*.fw, acs_tool.py
+>> - Built in the Vendor U-Boot source: acs.bin bl301.bin
+> 
+> Right.
+> 
+>> In 2019, Amlogic finally added a LICENSE for the pre-built binaries, before
+>> nobody knew what was the term of the distribution.
+>>
+>> commit 6abaf9a869a6584b3cfca8b96d0946ed49bc9b64
+>> Author: Lawrence Mok <lawrence.mok@amlogic.com>
+>> Date:   Mon May 6 12:34:56 2019 -0700
+>>
+>>      add LICENSE file and text referring to it [1/1]
+>>
+>>      Change-Id: Id291f42bec3ddb0c2162e6540ce1f35d1cb1d079
+>>
+>> The LICENSE can be found at [1] in Khadas github.
+> 
+> And this license is the one used at
+> https://github.com/LibreELEC/amlogic-boot-fip which Vyacheslav wants to
+> package in Buildroot, and this license is extremely restrictive.
+> Basically, it says that excepts private use of the content of this
+> repository, you can't do anything with it.
+> 
+>> Concerning the acs.bin & bl301.bin, they use the U-Boot build system and
+>> config header files and all these were also updated with the following SPDX:
+>> /* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> 
+> I don't really see what the license of the U-Boot build system and
+> config headers has to do with the resulting license of the binaries.
+> 
+>> commit 94de43d3d940cf75b4a9e4fd2a2715be8eff6138
+>> Author: Jiucheng Xu <jiucheng.xu@amlogic.com>
+>> Date:   Wed Dec 16 10:11:00 2020 +0800
+>>
+>>      license: Fix the license of amlogic related codes [1/1]
+>>
+>>      PD#SWPL-39001
+>>
+>>      Problem:
+>>      A customer want to add amlogic driver in uboot to
+>>      their private bootloader. Since the driver codes
+>>      are licensed under GPL-2.0, and customer have
+>>      to open their code, so we need fix the license
+>>      issue.
+>>
+>>      Solution:
+>>      Fix the license of our related code in uboot by
+>>      adding MIT license
+>>
+>>      Verify:
+>>      Franklin
+>>
+>>      Change-Id: I2f3571e8720d1f4db069f882353d6ae050702cba
+>>      Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+>>
+>> Note, none of the vendor who publicly published the Amlogic U-Boot
+>> source has this change, so we can consider acs.bin & bl301.bin
+>> generated from GPL-2.0 as the commit explains.
+> 
+> This is really a stretch. The question is which source files are
+> compiled into acs.bin and bl301.bin ? If they use parts under the
+> GPL-2.0, then indeed we can assume the whole is also under GPL-2.0, as
+> it is the only license under which derivative works can be published.
 
-diff --git a/board/orangepi/orangepi-zero/linux-extras.config b/board/orangepi/orangepi-zero/linux-extras.fragment
-similarity index 100%
-rename from board/orangepi/orangepi-zero/linux-extras.config
-rename to board/orangepi/orangepi-zero/linux-extras.fragment
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 1c107b10e6..5aaa1566c5 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -1,49 +1,61 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+
-+# System
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
-+BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- BR2_SYSTEM_DHCP="eth0"
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.16"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.config"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+
-+# Required tools to create the SD image
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+
-+# Image
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
- 
--# wireless driver and firmware
-+# Wireless driver and firmware
- BR2_PACKAGE_XR819_XRADIO=y
- BR2_PACKAGE_ARMBIAN_FIRMWARE=y
- BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819=y
- 
--# wireless support
-+# Wireless support
- BR2_PACKAGE_IW=y
- BR2_PACKAGE_WIRELESS_TOOLS=y
- BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
-@@ -51,5 +63,5 @@ BR2_PACKAGE_WPA_SUPPLICANT=y
- BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
- BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
- 
--# spi flash support
-+# Spi flash support
- BR2_PACKAGE_MTD=y
--- 
-2.34.1
+These sources usually published inside Amlogic U-Boot source
+
+> 
+> But the repository at https://github.com/LibreELEC/amlogic-boot-fip/
+> contains a lot more things than acs.bin and bl301.bin.
+> 
+>> The pre-built binaries stored on the LibreELEC repository only comes from
+>> public Vendor sources (Khadas, HardKernel, Libre Computer, FriendlyARM, Radxa)
+>> and checked against vendor repositories we have access to.
+>>
+>> We assume they got permission from Amlogic to publicly redistribute these binaries
+>> as we (BayLibre) were allowed to redistribute the VDEC firmware in [2] & [3].
+> 
+> If that's the case, then why does
+> https://github.com/LibreELEC/amlogic-boot-fip has this LICENSE file
+> with scary terms?
+> 
+> I am really surprised by how unclear the licensing terms are for those
+> blobs. This should scare pretty much any company from doing products
+> based on Amlogic SoCs.
+> 
+> Would it be possible to clarify this with Amlogic, and instead of their
+> silly terms of "you can't do anything with it", have a license that at
+> least allows distribution on Amlogic platforms?
+
+I will try to contact Amlogic via JetHome, but most likely after the 
+Chinese New Year.
+
+> 
+> Again, thanks for your support on this!
+> 
+> Thomas
+> 
 
 _______________________________________________
 buildroot mailing list
