@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E872C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1272C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D7B060FF3;
-	Wed, 26 Jan 2022 21:55:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9090384DF6;
+	Wed, 26 Jan 2022 21:55:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fssq2CUufRte; Wed, 26 Jan 2022 21:55:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TuIM-SnanK7W; Wed, 26 Jan 2022 21:55:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CACC760FF1;
-	Wed, 26 Jan 2022 21:55:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 479451BF4D6
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2DC684DF3;
+	Wed, 26 Jan 2022 21:55:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FFA61BF9B9
  for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3248160FF1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E4DC84DF0
  for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:55:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i82c59u4CAVf for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GMoCQgbmCIpJ for <buildroot@lists.busybox.net>;
  Wed, 26 Jan 2022 21:55:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CED960FEF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 716B784D51
  for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:55:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EE9368276B; Wed, 26 Jan 2022 21:48:43 +0000 (UTC)
+ id 0389580538; Wed, 26 Jan 2022 21:48:44 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 22:44:44 +0100
+Date: Wed, 26 Jan 2022 22:50:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 436983e0a3c075c2d8ea417c61e58b295323d15b
-X-Git-Newrev: b2c5bf66aceb795fbeb8e275f2df08788af1a864
+X-Git-Oldrev: b2c5bf66aceb795fbeb8e275f2df08788af1a864
+X-Git-Newrev: 163509a8e0d558e6339c5489f072dfe805e0cc34
 X-Patchwork-Hint: ignore
-Message-Id: <20220126214843.EE9368276B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.34.4
+Message-Id: <20220126214844.0389580538@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/htpdate: bump to version 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +58,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2c5bf66aceb795fbeb8e275f2df08788af1a864
+commit: https://git.buildroot.net/buildroot/commit/?id=163509a8e0d558e6339c5489f072dfe805e0cc34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a minor release which provides fixes for CVE-2021-30934,
-CVE-2021-30936, CVE-2021-30951, CVE-2021-30952, CVE-2021-30953,
-CVE-2021-30954, CVE-2021-30984, and the safarileaks.com vulnerability
-(which has not yet been assigned a CVE number). Release notes can be
-found at:
+Bump and update project to its new location.
 
-  https://wpewebkit.org/release/wpewebkit-2.34.4.html
-
-An accompanying security advisory has been published at:
-
-  https://wpewebkit.org/security/WSA-2022-0001.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/htpdate/Config.in       | 2 +-
+ package/htpdate/S43htpdate      | 2 +-
+ package/htpdate/htpdate.hash    | 4 ++--
+ package/htpdate/htpdate.mk      | 6 +++---
+ package/htpdate/htpdate.service | 2 +-
+ 5 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 52652b72ae..b863a0d705 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.34.3.tar.xz.sums
--md5  f8eb92825bf6477fb04ca017926c2458  wpewebkit-2.34.3.tar.xz
--sha1  a72f507dfd6d4d579b2e6c939d7c171c2cfb1d92  wpewebkit-2.34.3.tar.xz
--sha256  c35de4bfce35c81cbd6c1da27879b4ea33e20bd51d750ce296a4d100d45f40fc  wpewebkit-2.34.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.34.4.tar.xz.sums
-+md5  b0f7dcb18acfa94cfb42fea0fe10fb0d  wpewebkit-2.34.4.tar.xz
-+sha1  de58481b43a6dba054097f619ee486f7889d7a56  wpewebkit-2.34.4.tar.xz
-+sha256  3653ba42dbe22a4e6751b3f7cab8d2ebb2db5b7654c5d135a2f9bedf94778cee  wpewebkit-2.34.4.tar.xz
+diff --git a/package/htpdate/Config.in b/package/htpdate/Config.in
+index 42c10c308b..d2a71fb696 100644
+--- a/package/htpdate/Config.in
++++ b/package/htpdate/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_HTPDATE
+ 	  The HTTP Time Protocol (HTP) is used to synchronize a
+ 	  computer's time with web servers as reference time source.
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 64c179534f..8d564d8223 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
+-	  https://github.com/angeloc/htpdate
++	  https://github.com/twekkel/htpdate
+diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
+index 75f9a995ff..5971d70639 100644
+--- a/package/htpdate/S43htpdate
++++ b/package/htpdate/S43htpdate
+@@ -9,7 +9,7 @@ test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
++	start-stop-daemon -S -q -x "/usr/sbin/$DAEMON" \
+ 		-- -D -i "$PIDFILE" $HTPDATE_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
+index 824266c1bc..b56522ea99 100644
+--- a/package/htpdate/htpdate.hash
++++ b/package/htpdate/htpdate.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256 d2cff522b8f53b00769dcca77d8025b19238ed35d702a4739dc05e387f718909  htpdate-1.2.6.tar.gz
+-sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
++sha256  74f34b013eba6f99369819fa4b3d48e9ab5e531ad04f6af59cc04e8777c76ed7  htpdate-1.3.3.tar.gz
++sha256  7989949df09a0489434723c571541604cd3f2e0418c6a6aa9179bfaf8ec807cc  LICENSE
+diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
+index 52022346a9..200c3207a2 100644
+--- a/package/htpdate/htpdate.mk
++++ b/package/htpdate/htpdate.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.34.3
-+WPEWEBKIT_VERSION = 2.34.4
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-HTPDATE_VERSION = 1.2.6
+-HTPDATE_SITE = $(call github,angeloc,htpdate,v$(HTPDATE_VERSION))
++HTPDATE_VERSION = 1.3.3
++HTPDATE_SITE = $(call github,twekkel,htpdate,v$(HTPDATE_VERSION))
+ HTPDATE_LICENSE = GPL-2.0+
+ HTPDATE_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
++HTPDATE_BUILD_OPTS = https
+ HTPDATE_DEPENDENCIES += openssl host-pkgconf
+ endif
+ 
+diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
+index b7f1371b08..95220581d4 100644
+--- a/package/htpdate/htpdate.service
++++ b/package/htpdate/htpdate.service
+@@ -7,7 +7,7 @@ Type=forking
+ PIDFile=/run/htpdate.pid
+ Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
+ EnvironmentFile=-/etc/default/htpdate
+-ExecStart=/usr/bin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
++ExecStart=/usr/sbin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
+ 
+ [Install]
+ WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
