@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D648CC28CF5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 12:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F415C28CF5
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 13:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84764607A3;
-	Wed, 26 Jan 2022 12:51:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2PFc4NKWh3_c; Wed, 26 Jan 2022 12:51:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 199DE60C00;
-	Wed, 26 Jan 2022 12:51:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DA2371BF473
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 12:50:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7A8640132
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 12:50:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DEE3440977;
+	Wed, 26 Jan 2022 13:01:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5C4pQpO4AGhN for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 12:50:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 47C4040977
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 12:50:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A42C282241; Wed, 26 Jan 2022 12:43:17 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tQ2E3pWGBUMj; Wed, 26 Jan 2022 13:01:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E840A40291;
+	Wed, 26 Jan 2022 13:01:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E00311BF473
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 13:01:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE52860F4F
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 13:01:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zW9kW11iVxtU for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 13:01:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BCEAB60F4C
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 13:01:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A3B08100011;
+ Wed, 26 Jan 2022 13:01:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nChvo-0003MY-UM; Wed, 26 Jan 2022 14:01:48 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 13:22:13 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 575a94b1acc2079f6f0ebb37f451f6bf044c99eb
-X-Git-Newrev: c6e486cf1e815c50d6cac136296e08bbd0816062
-X-Patchwork-Hint: ignore
-Message-Id: <20220126124317.A42C282241@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/qt5/qt5location:
- fix build failures without opengl
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211230223606.3076350-1-fontaine.fabrice@gmail.com>
+Date: Wed, 26 Jan 2022 14:01:48 +0100
+In-Reply-To: <20211230223606.3076350-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 30 Dec 2021 23:36:06 +0100")
+Message-ID: <878rv2irb7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcpreplay: security bump to
+ version 4.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,564 +60,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6e486cf1e815c50d6cac136296e08bbd0816062
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Backport a patch that fixes several "const marked override but does not
-override" compilation errors when openGL is not enabled.
+ > - heap buffer overflow in tcpreplay fast_edit_packet
+ > - heap buffer overflow in tcpreplay get_next_packet
+ > - CVE-2020-24266 heap buffer overflow in tcpprep get_l2len
+ > - CVE-2020-24265 heap buffer overflow in tcpprep
+ > - Drop patch (already in version) and so autoreconf
+ > - Update hash of license file (http -> https with
+ >   https://github.com/appneta/tcpreplay/commit/ad8a18005347b3cef84a9b478d56de96d1ad254f)
 
-Patch fetched from: https://codereview.qt-project.org/c/qt/qtlocation/+/340353
+ > https://github.com/appneta/tcpreplay/releases/tag/v4.3.4
 
-Fixes:
-http://autobuild.buildroot.net/results/6378e43d50dfad13a45522492f14c9df7acd64e4
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cea2b082eb35d9fd466833098463e2adcbb40022)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0002-fix-compilation-for-no-opengl-builds.patch | 528 +++++++++++++++++++++
- 1 file changed, 528 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch b/package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch
-new file mode 100644
-index 0000000000..98e65df202
---- /dev/null
-+++ b/package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch
-@@ -0,0 +1,528 @@
-+From 4bcacd0dc8f73de7b9e5e5f5fa2129fd88bdff3b Mon Sep 17 00:00:00 2001
-+From: Michal Klocek <michal.klocek@qt.io>
-+Date: Mon, 11 Jan 2021 16:02:14 +0100
-+Subject: [PATCH] Fix compilation for no opengl builds
-+
-+Disables experimental labs qml plugin, which
-+since a4469cad40 depends heavily on opengl backend.
-+
-+Fix warnings with msvc when compiling without experimental
-+plugin.
-+
-+Task-number: QTBUG-91623
-+Fixes: QTBUG-88017
-+Change-Id: I53c5da915981bd05f39134ba57f585d0a0786aa8
-+
-+Signed-off-by: Michal Klocek <michal.klocek@qt.io>
-+Signed-off-by: Alex Blasche <alexander.blasche@qt.io>
-+
-+[Retrieved from: https://codereview.qt-project.org/c/qt/qtlocation/+/340353]
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/location/configure.json                   |  1 +
-+ .../qdeclarativecirclemapitem.cpp             | 20 +++++++++++--
-+ .../qdeclarativecirclemapitem_p_p.h           |  2 ++
-+ .../qdeclarativepolygonmapitem.cpp            | 27 +++++++++++++----
-+ .../qdeclarativepolygonmapitem_p_p.h          |  6 ++++
-+ .../qdeclarativepolylinemapitem.cpp           | 30 +++++++++++++++----
-+ .../qdeclarativepolylinemapitem_p.h           |  2 ++
-+ .../qdeclarativepolylinemapitem_p_p.h         |  5 +++-
-+ .../qdeclarativerectanglemapitem.cpp          | 17 +++++++++--
-+ .../qdeclarativerectanglemapitem_p_p.h        |  2 ++
-+ src/location/location.pro                     |  9 +++++-
-+ .../itemsoverlay/qgeomapitemsoverlay.cpp      |  9 +++++-
-+ 12 files changed, 109 insertions(+), 21 deletions(-)
-+
-+diff --git a/src/location/configure.json b/src/location/configure.json
-+index 62ab029..6d01a9a 100644
-+--- a/src/location/configure.json
-++++ b/src/location/configure.json
-+@@ -9,6 +9,7 @@
-+             "label": "Qt.labs.location experimental QML plugin",
-+             "purpose": "Provides experimental QtLocation QML types",
-+             "section": "Location",
-++            "condition": "config.opengl",
-+             "output": [ "privateFeature" ]
-+         },
-+         "geoservices_osm": {
-+diff --git a/src/location/declarativemaps/qdeclarativecirclemapitem.cpp b/src/location/declarativemaps/qdeclarativecirclemapitem.cpp
-+index 841c29a..955de2c 100644
-+--- a/src/location/declarativemaps/qdeclarativecirclemapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativecirclemapitem.cpp
-+@@ -446,6 +446,7 @@ void QDeclarativeCircleMapItem::updatePolish()
-+ */
-+ void QDeclarativeCircleMapItem::possiblySwitchBackend(const QGeoCoordinate &oldCenter, qreal oldRadius, const QGeoCoordinate &newCenter, qreal newRadius)
-+ {
-++#if QT_CONFIG(opengl)
-+     if (m_backend != QDeclarativeCircleMapItem::OpenGL)
-+         return;
-+ 
-+@@ -459,6 +460,9 @@ void QDeclarativeCircleMapItem::possiblySwitchBackend(const QGeoCoordinate &oldC
-+         QScopedPointer<QDeclarativeCircleMapItemPrivate> d(static_cast<QDeclarativeCircleMapItemPrivate *>(new QDeclarativeCircleMapItemPrivateOpenGL(*this)));
-+         m_d.swap(d);
-+     }
-++#else
-++    return;
-++#endif
-+ }
-+ 
-+ /*!
-+@@ -534,9 +538,17 @@ void QDeclarativeCircleMapItem::setBackend(QDeclarativeCircleMapItem::Backend b)
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativeCircleMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativeCircleMapItemPrivate *>(new QDeclarativeCircleMapItemPrivateCPU(*this))
-+-                                                        : static_cast<QDeclarativeCircleMapItemPrivate * >(new QDeclarativeCircleMapItemPrivateOpenGL(*this)));
-++    QScopedPointer<QDeclarativeCircleMapItemPrivate> d(
-++            (m_backend == Software) ? static_cast<QDeclarativeCircleMapItemPrivate *>(
-++                    new QDeclarativeCircleMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                                    : static_cast<QDeclarativeCircleMapItemPrivate *>(
-++                                            new QDeclarativeCircleMapItemPrivateOpenGL(*this)));
-++#else
-++                                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -565,7 +577,9 @@ QDeclarativeCircleMapItemPrivate::~QDeclarativeCircleMapItemPrivate() {}
-+ 
-+ QDeclarativeCircleMapItemPrivateCPU::~QDeclarativeCircleMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativeCircleMapItemPrivateOpenGL::~QDeclarativeCircleMapItemPrivateOpenGL() {}
-++#endif
-+ 
-+ bool QDeclarativeCircleMapItemPrivate::preserveCircleGeometry (QList<QDoubleVector2D> &path,
-+                                     const QGeoCoordinate &center, qreal distance, const QGeoProjectionWebMercator &p)
-+diff --git a/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h b/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h
-+index 4cf4217..dbe6c8b 100644
-+--- a/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h
-+@@ -275,6 +275,7 @@ public:
-+     MapPolygonNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativeCircleMapItemPrivateOpenGL: public QDeclarativeCircleMapItemPrivate
-+ {
-+ public:
-+@@ -443,6 +444,7 @@ public:
-+     MapPolygonNodeGL *m_node = nullptr;
-+     MapPolylineNodeOpenGLExtruded *m_polylinenode = nullptr;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+ 
-+diff --git a/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp b/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp
-+index fa6ee17..af4f55e 100644
-+--- a/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp
-+@@ -334,6 +334,7 @@ void QGeoMapPolygonGeometry::updateScreenPoints(const QGeoMap &map, qreal stroke
-+         this->translate(QPointF(strokeWidth, strokeWidth));
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ QGeoMapPolygonGeometryOpenGL::QGeoMapPolygonGeometryOpenGL(){
-+ }
-+ 
-+@@ -344,6 +345,7 @@ void QGeoMapPolygonGeometryOpenGL::updateSourcePoints(const QGeoMap &map, const
-+         geopath.append(QWebMercator::mercatorToCoord(c));
-+     updateSourcePoints(map, geopath);
-+ }
-++#endif
-+ 
-+ // wrapPath always preserves the geometry
-+ // This one handles holes
-+@@ -452,6 +454,7 @@ static void cutPathEars(const QList<QDoubleVector2D> &wrappedPath,
-+         screenIndices << quint32(i);
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ /*!
-+     \internal
-+ */
-+@@ -594,7 +597,7 @@ void QGeoMapPolygonGeometryOpenGL::updateQuickGeometry(const QGeoProjectionWebMe
-+     sourceBounds_.setWidth(brect.width());
-+     sourceBounds_.setHeight(brect.height());
-+ }
-+-
-++#endif // QT_CONFIG(opengl)
-+ /*
-+  * QDeclarativePolygonMapItem Private Implementations
-+  */
-+@@ -603,8 +606,9 @@ QDeclarativePolygonMapItemPrivate::~QDeclarativePolygonMapItemPrivate() {}
-+ 
-+ QDeclarativePolygonMapItemPrivateCPU::~QDeclarativePolygonMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativePolygonMapItemPrivateOpenGL::~QDeclarativePolygonMapItemPrivateOpenGL() {}
-+-
-++#endif
-+ /*
-+  * QDeclarativePolygonMapItem Implementation
-+  */
-+@@ -689,9 +693,17 @@ void QDeclarativePolygonMapItem::setBackend(QDeclarativePolygonMapItem::Backend
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativePolygonMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativePolygonMapItemPrivate *>(new QDeclarativePolygonMapItemPrivateCPU(*this))
-+-                                                        : static_cast<QDeclarativePolygonMapItemPrivate * >(new QDeclarativePolygonMapItemPrivateOpenGL(*this)));
-++    QScopedPointer<QDeclarativePolygonMapItemPrivate> d(
-++            (m_backend == Software) ? static_cast<QDeclarativePolygonMapItemPrivate *>(
-++                    new QDeclarativePolygonMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                                    : static_cast<QDeclarativePolygonMapItemPrivate *>(
-++                                            new QDeclarativePolygonMapItemPrivateOpenGL(*this)));
-++#else
-++                                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -898,6 +910,7 @@ void QDeclarativePolygonMapItem::geometryChanged(const QRectF &newGeometry, cons
-+ 
-+ //////////////////////////////////////////////////////////////////////
-+ 
-++#if QT_CONFIG(opengl)
-+ QSGMaterialShader *MapPolygonMaterial::createShader() const
-+ {
-+     return new MapPolygonShader();
-+@@ -916,6 +929,7 @@ QSGMaterialType *MapPolygonMaterial::type() const
-+     static QSGMaterialType type;
-+     return &type;
-+ }
-++#endif
-+ 
-+ MapPolygonNode::MapPolygonNode() :
-+     border_(new MapPolylineNode()),
-+@@ -967,6 +981,7 @@ void MapPolygonNode::update(const QColor &fillColor, const QColor &borderColor,
-+     }
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ MapPolygonNodeGL::MapPolygonNodeGL() :
-+     //fill_material_(this),
-+     fill_material_(),
-+@@ -1052,5 +1067,5 @@ void MapPolygonShader::updateState(const QSGMaterialShader::RenderState &state,
-+     program()->setUniformValue(m_center_lowpart_id, vecCenter_lowpart);
-+     program()->setUniformValue(m_wrapOffset_id, float(newMaterial->wrapOffset()));
-+ }
-+-
-++#endif // QT_CONFIG(opengl)
-+ QT_END_NAMESPACE
-+diff --git a/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h b/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h
-+index 8d566e6..5e75deb 100644
-+--- a/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h
-+@@ -89,6 +89,7 @@ protected:
-+     bool assumeSimple_;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QGeoMapPolygonGeometryOpenGL : public QGeoMapItemGeometry
-+ {
-+ public:
-+@@ -197,6 +198,7 @@ private:
-+     int m_color_id;
-+     int m_wrapOffset_id;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ class Q_LOCATION_PRIVATE_EXPORT MapPolygonMaterial : public QSGFlatColorMaterial
-+ {
-+@@ -269,6 +271,7 @@ private:
-+     QSGGeometry geometry_;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT MapPolygonNodeGL : public MapItemGeometryNode
-+ {
-+ 
-+@@ -284,6 +287,7 @@ public:
-+     MapPolygonMaterial fill_material_;
-+     QSGGeometry geometry_;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolygonMapItemPrivate
-+ {
-+@@ -479,6 +483,7 @@ public:
-+     MapPolygonNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolygonMapItemPrivateOpenGL: public QDeclarativePolygonMapItemPrivate
-+ {
-+ public:
-+@@ -662,6 +667,7 @@ public:
-+     MapPolygonNodeGL *m_node = nullptr;
-+     MapPolylineNodeOpenGLExtruded *m_polylinenode = nullptr;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+ 
-+diff --git a/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp b/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp
-+index d59704d..83d253f 100644
-+--- a/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp
-+@@ -769,6 +769,7 @@ bool QGeoMapPolylineGeometry::contains(const QPointF &point) const
-+     return false;
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ void QGeoMapPolylineGeometryOpenGL::updateSourcePoints(const QGeoMap &map, const QGeoPolygon &poly)
-+ {
-+     if (!sourceDirty_)
-+@@ -921,6 +922,7 @@ void QGeoMapPolylineGeometryOpenGL::updateQuickGeometry(const QGeoProjectionWebM
-+     sourceBounds_.setWidth(brect.width() + strokeWidth);
-+     sourceBounds_.setHeight(brect.height() + strokeWidth);
-+ }
-++#endif // QT_CONFIG(opengl)
-+ 
-+ /*
-+  * QDeclarativePolygonMapItem Private Implementations
-+@@ -928,12 +930,13 @@ void QGeoMapPolylineGeometryOpenGL::updateQuickGeometry(const QGeoProjectionWebM
-+ 
-+ QDeclarativePolylineMapItemPrivate::~QDeclarativePolylineMapItemPrivate() {}
-+ 
-+-
-+ QDeclarativePolylineMapItemPrivateCPU::~QDeclarativePolylineMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativePolylineMapItemPrivateOpenGLLineStrip::~QDeclarativePolylineMapItemPrivateOpenGLLineStrip() {}
-+ 
-+ QDeclarativePolylineMapItemPrivateOpenGLExtruded::~QDeclarativePolylineMapItemPrivateOpenGLExtruded() {}
-++#endif
-+ 
-+ /*
-+  * QDeclarativePolygonMapItem Implementation
-+@@ -941,10 +944,12 @@ QDeclarativePolylineMapItemPrivateOpenGLExtruded::~QDeclarativePolylineMapItemPr
-+ 
-+ struct PolylineBackendSelector
-+ {
-++#if QT_CONFIG(opengl)
-+     PolylineBackendSelector()
-+     {
-+         backend = (qgetenv("QTLOCATION_OPENGL_ITEMS").toInt()) ? QDeclarativePolylineMapItem::OpenGLExtruded : QDeclarativePolylineMapItem::Software;
-+     }
-++#endif
-+     QDeclarativePolylineMapItem::Backend backend = QDeclarativePolylineMapItem::Software;
-+ };
-+ 
-+@@ -1236,11 +1241,22 @@ void QDeclarativePolylineMapItem::setBackend(QDeclarativePolylineMapItem::Backen
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativePolylineMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativePolylineMapItemPrivate *>(new QDeclarativePolylineMapItemPrivateCPU(*this))
-+-                                                        : ((m_backend == OpenGLExtruded)
-+-                                                           ? static_cast<QDeclarativePolylineMapItemPrivate * >(new QDeclarativePolylineMapItemPrivateOpenGLExtruded(*this))
-+-                                                           : static_cast<QDeclarativePolylineMapItemPrivate * >(new QDeclarativePolylineMapItemPrivateOpenGLLineStrip(*this))));
-++    QScopedPointer<QDeclarativePolylineMapItemPrivate> d(
-++            (m_backend == Software)
-++                    ? static_cast<QDeclarativePolylineMapItemPrivate *>(
-++                            new QDeclarativePolylineMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                    : ((m_backend == OpenGLExtruded)
-++                               ? static_cast<QDeclarativePolylineMapItemPrivate *>(
-++                                       new QDeclarativePolylineMapItemPrivateOpenGLExtruded(*this))
-++                               : static_cast<QDeclarativePolylineMapItemPrivate *>(
-++                                       new QDeclarativePolylineMapItemPrivateOpenGLLineStrip(
-++                                               *this))));
-++#else
-++                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -1477,6 +1493,7 @@ void MapPolylineNode::update(const QColor &fillColor,
-+     }
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ MapPolylineNodeOpenGLLineStrip::MapPolylineNodeOpenGLLineStrip()
-+ : geometry_(QSGGeometry::defaultAttributes_Point2D(), 0)
-+ {
-+@@ -2080,5 +2097,6 @@ unsigned int QGeoMapItemLODGeometry::zoomForLOD(unsigned int zoom)
-+         return res;
-+     return res + 1; // give more resolution when closing in
-+ }
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+diff --git a/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h b/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h
-+index 9cd20ea..d3d0ebd 100644
-+--- a/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h
-++++ b/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h
-+@@ -97,8 +97,10 @@ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolylineMapItem : public QDeclarativ
-+ public:
-+     enum Backend {
-+         Software = 0,
-++#if QT_CONFIG(opengl)
-+         OpenGLLineStrip = 1,
-+         OpenGLExtruded = 2,
-++#endif
-+     };
-+ 
-+     explicit QDeclarativePolylineMapItem(QQuickItem *parent = 0);
-+diff --git a/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h b/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h
-+index 2a921e2..e184391 100644
-+--- a/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h
-+@@ -213,6 +213,7 @@ protected:
-+     QSGGeometry geometry_;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QGeoMapItemLODGeometry
-+ {
-+ public:
-+@@ -566,6 +567,7 @@ protected:
-+     MapPolylineMaterialExtruded fill_material_;
-+     QSGGeometry m_geometryTriangulating;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolylineMapItemPrivate
-+ {
-+@@ -720,6 +722,7 @@ public:
-+     MapPolylineNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolylineMapItemPrivateOpenGLLineStrip: public QDeclarativePolylineMapItemPrivate
-+ {
-+ public:
-+@@ -884,7 +887,7 @@ public:
-+ 
-+     MapPolylineNodeOpenGLExtruded *m_nodeTri = nullptr;
-+ };
-+-
-++#endif // QT_CONFIG(opengl)
-+ QT_END_NAMESPACE
-+ 
-+ #endif // QDECLARATIVEPOLYLINEMAPITEM_P_P_H
-+diff --git a/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp b/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp
-+index 74d2cc1..6192be0 100644
-+--- a/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp
-+@@ -185,9 +185,18 @@ void QDeclarativeRectangleMapItem::setBackend(QDeclarativeRectangleMapItem::Back
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativeRectangleMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativeRectangleMapItemPrivate *>(new QDeclarativeRectangleMapItemPrivateCPU(*this))
-+-                                                        : static_cast<QDeclarativeRectangleMapItemPrivate * >(new QDeclarativeRectangleMapItemPrivateOpenGL(*this)));
-++    QScopedPointer<QDeclarativeRectangleMapItemPrivate> d(
-++            (m_backend == Software) ? static_cast<QDeclarativeRectangleMapItemPrivate *>(
-++                    new QDeclarativeRectangleMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                                    : static_cast<QDeclarativeRectangleMapItemPrivate *>(
-++                                            new QDeclarativeRectangleMapItemPrivateOpenGL(*this)));
-++#else
-++                                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-++
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -397,6 +406,8 @@ QDeclarativeRectangleMapItemPrivate::~QDeclarativeRectangleMapItemPrivate() {}
-+ 
-+ QDeclarativeRectangleMapItemPrivateCPU::~QDeclarativeRectangleMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativeRectangleMapItemPrivateOpenGL::~QDeclarativeRectangleMapItemPrivateOpenGL() {}
-++#endif
-+ 
-+ QT_END_NAMESPACE
-+diff --git a/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h b/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h
-+index 65d2f61..f7ecd2a 100644
-+--- a/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h
-+@@ -244,6 +244,7 @@ public:
-+     MapPolygonNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativeRectangleMapItemPrivateOpenGL: public QDeclarativeRectangleMapItemPrivate
-+ {
-+ public:
-+@@ -410,6 +411,7 @@ public:
-+     MapPolygonNodeGL *m_node = nullptr;
-+     MapPolylineNodeOpenGLExtruded *m_polylinenode = nullptr;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+ 
-+diff --git a/src/location/location.pro b/src/location/location.pro
-+index b0e2c3f..ae20271 100644
-+--- a/src/location/location.pro
-++++ b/src/location/location.pro
-+@@ -39,7 +39,14 @@ include(maps/maps.pri)
-+ include(places/places.pri)
-+ include(declarativemaps/declarativemaps.pri)
-+ include(declarativeplaces/declarativeplaces.pri)
-+-qtConfig(location-labs-plugin):include(labs/labs.pri)
-++qtConfig(location-labs-plugin) {
-++   include(labs/labs.pri)
-++} else {
-++  # FIXME: this should be moved out of plugin source code, geojson is referenced from other places
-++  # within codebase,however compilation of location-labs-plugin is optional
-++  PRIVATE_HEADERS += labs/qgeojson_p.h
-++  SOURCES += labs/qgeojson.cpp
-++}
-+ 
-+ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
-+ 
-+diff --git a/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp b/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp
-+index 1ebad08..a764438 100644
-+--- a/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp
-++++ b/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp
-+@@ -103,6 +103,7 @@ QGeoMap::Capabilities QGeoMapItemsOverlay::capabilities() const
-+ bool QGeoMapItemsOverlay::createMapObjectImplementation(QGeoMapObject *obj)
-+ {
-+ #ifndef LOCATIONLABS
-++    Q_UNUSED(obj);
-+     return false;
-+ #else
-+     Q_D(QGeoMapItemsOverlay);
-+@@ -132,7 +133,9 @@ QSGNode *QGeoMapItemsOverlay::updateSceneGraph(QSGNode *node, QQuickWindow *wind
-+ 
-+ void QGeoMapItemsOverlay::removeMapObject(QGeoMapObject *obj)
-+ {
-+-#ifdef LOCATIONLABS
-++#ifndef LOCATIONLABS
-++    Q_UNUSED(obj);
-++#else
-+     Q_D(QGeoMapItemsOverlay);
-+     d->removeMapObject(obj);
-+ #endif
-+@@ -169,7 +172,11 @@ QRectF QGeoMapItemsOverlayPrivate::visibleArea() const
-+ QGeoMapItemsOverlayPrivate::QGeoMapItemsOverlayPrivate(QGeoMappingManagerEngineItemsOverlay *engine, QGeoMapItemsOverlay *map)
-+     : QGeoMapPrivate(engine, new QGeoProjectionWebMercator)
-+ {
-++#ifndef LOCATIONLABS
-++    Q_UNUSED(map);
-++#else
-+     m_qsgSupport.m_map = map;
-++#endif
-+ }
-+ 
-+ QGeoMapItemsOverlayPrivate::~QGeoMapItemsOverlayPrivate()
-+-- 
-+2.33.1
-+
+Committed to 2021.02.x and 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
