@@ -1,75 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94491C28CF5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 17:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B1A0C2BA4C
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 18:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 473D160F4D;
-	Wed, 26 Jan 2022 17:44:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BED55416BF;
+	Wed, 26 Jan 2022 18:36:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h9v_-TgjyTjK; Wed, 26 Jan 2022 17:44:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BVi6aSBUPzwW; Wed, 26 Jan 2022 18:36:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 837A460F3E;
-	Wed, 26 Jan 2022 17:44:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DDA94168E;
+	Wed, 26 Jan 2022 18:36:22 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 521021BF417
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 17:44:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D4EED1BF4D7
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 18:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40BDE813B5
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 17:44:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C273583E5A
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 18:36:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uou5oocYLs_Y for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 17:44:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ADCC0813B0
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 17:44:52 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id u129so1032075oib.4
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 09:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=+dAn+GoicNwLHArXlrRhUWAWM6jyp7JwDjea76Wrl70=;
- b=g3BD0Ps/rSQi0dAW+0Wxlu3WzoFt/epoz8d/aAUA1xJtyKWWTMvdW03yd2A2Z61EjJ
- lY1Xwb2QACSG6S+JeO/wWbwQMkrzesBLc7bp3y3SZTbqjpNIi6gV5NtLGeTJQTv5qUH+
- AGohhWcugv9mCCp6kdV+cCfrEvkg90Bqd49IRlXp4IO4fmABs/ZzCEX1OdTYkr5Xy98L
- HKI05Nk3A6Armh0Tm++469liZZsGfRMflSZ8dMngj9cFka0Q+8PqHzVqoULtX2a+guBX
- y0+nXC+x1GT0mvk1a3QMC9c3CBIaXzsNbL7n1wsOTKAQKl70mpEEn70BGB/G6edCUI9D
- cjMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=+dAn+GoicNwLHArXlrRhUWAWM6jyp7JwDjea76Wrl70=;
- b=oZ16rOwAb8N6/BTD3NVqb5e2y7gDzisuRPTg0k9bVotlfyTbvhPETPcfYPZa0TfWh+
- vg0hTlYS+zfxtSjswD1frtFMIEqPyPIzYBUtuPfTvIuUvwyK6z7oUopTwzrKLjC0ijiE
- kMDPYra0LPdCiTTKlnYslW4DJHIrs9Fr6JrUKwPglcL83EjDQR7GO7DuJtYeufSz2rvM
- G4qCt/2G2qxY4yvjmfCX9Qx0Hb6KGv3iUzLwxAP/FeB8f5OURrKKs/SbnBFGI8kZm2ky
- B7357ahiIaC2N17G40ll+epGJivpMsCLYCTb705xhMco1waxAPxdrtsLvQgHZDF7rT2m
- LZHw==
-X-Gm-Message-State: AOAM53387mgoFZ/ut6pUGbCmET/ahhiRiSqkzQkLXIcEutJk5lTAGCkp
- OKzYRrH5zXXwxC53J5d7GUJqhEQ7FfEbPqsml5K2uZ3DEo8=
-X-Google-Smtp-Source: ABdhPJz2CgILULkgcqU1GWbX47uckoo1pnwb8QJd+otaathpRr3YuTrjlfVr0vlhcHRwvPAhu4owXk+ME1IGUQgPQR0=
-X-Received: by 2002:a05:6808:201b:: with SMTP id
- q27mr4455247oiw.73.1643219091649; 
- Wed, 26 Jan 2022 09:44:51 -0800 (PST)
-MIME-Version: 1.0
+ with ESMTP id tMmJ1GuE_H0U for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 18:36:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A2C4B83134
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 18:36:20 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6A99720004;
+ Wed, 26 Jan 2022 18:36:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nCn9U-0004Go-6Q; Wed, 26 Jan 2022 19:36:16 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
 References: <20220101000408.1538099-1-james.hilliard1@gmail.com>
  <87v8y6h8c7.fsf@dell.be.48ers.dk>
-In-Reply-To: <87v8y6h8c7.fsf@dell.be.48ers.dk>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 26 Jan 2022 10:44:40 -0700
-Message-ID: <CADvTj4rOqP1pZnp4hz=xb3Y5wBK2eJO7v9EMsd2VGcgRScAu2w@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
+ <CADvTj4rOqP1pZnp4hz=xb3Y5wBK2eJO7v9EMsd2VGcgRScAu2w@mail.gmail.com>
+Date: Wed, 26 Jan 2022 19:36:16 +0100
+In-Reply-To: <CADvTj4rOqP1pZnp4hz=xb3Y5wBK2eJO7v9EMsd2VGcgRScAu2w@mail.gmail.com>
+ (James Hilliard's message of "Wed, 26 Jan 2022 10:44:40 -0700")
+Message-ID: <87sftafiov.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
 Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiohttp: add aiosignal
  runtime dependency
 X-BeenThere: buildroot@buildroot.org
@@ -89,27 +68,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 26, 2022 at 7:36 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
->
->  > Fixes:
->  >   File "/usr/lib/python3.10/site-packages/aiohttp/__init__.py", line 6, in <module>
->  >   File "/usr/lib/python3.10/site-packages/aiohttp/client.py", line 88, in <module>
->  >   File "/usr/lib/python3.10/site-packages/aiohttp/tracing.py", line 5, in <module>
->  > ModuleNotFoundError: No module named 'aiosignal'
->
->  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> When was this introduced? Do we need to backport this to 2021.02.x /
-> 2021.11.x?
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-Looks like it's required for aiohttp v3.8.0 and newer, so we shouldn't
-need to backport.
+ > On Wed, Jan 26, 2022 at 7:36 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+ >> 
+ >> > Fixes:
+ >> >   File "/usr/lib/python3.10/site-packages/aiohttp/__init__.py", line 6, in <module>
+ >> >   File "/usr/lib/python3.10/site-packages/aiohttp/client.py", line 88, in <module>
+ >> >   File "/usr/lib/python3.10/site-packages/aiohttp/tracing.py", line 5, in <module>
+ >> > ModuleNotFoundError: No module named 'aiosignal'
+ >> 
+ >> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ >> 
+ >> When was this introduced? Do we need to backport this to 2021.02.x /
+ >> 2021.11.x?
 
->
-> --
-> Bye, Peter Korsgaard
+ > Looks like it's required for aiohttp v3.8.0 and newer, so we shouldn't
+ > need to backport.
+
+Ok, great. It is quite helpful to mention such things in the commit
+messages.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
