@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 945A1C2BA4C
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 20:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 006CDC5DF62
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 20:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37F4B409A5;
-	Wed, 26 Jan 2022 20:33:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FD8B40A16;
+	Wed, 26 Jan 2022 20:34:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ceKaJCcXkmU2; Wed, 26 Jan 2022 20:33:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jyU34pJRYNbu; Wed, 26 Jan 2022 20:34:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69DD0409AA;
-	Wed, 26 Jan 2022 20:33:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8AC44409F5;
+	Wed, 26 Jan 2022 20:34:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4378A1BF4D7
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:33:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E643A1BF4D7
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44AC560F9F
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:33:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D44C160FC3
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 20:33:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nZI4hVaWgnci for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 20:33:08 +0000 (UTC)
+ with ESMTP id 3muYZEHnVjSe for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 20:33:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74B7960FC6
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 20:33:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13CF860F9F
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 20:33:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 25CFF825DF; Wed, 26 Jan 2022 20:26:15 +0000 (UTC)
+ id BA892822E9; Wed, 26 Jan 2022 20:26:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 21:32:10 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 942ed061d76a192bcd403cb1782964a89d74ae45
-X-Git-Newrev: 6b40f28f808123748c87da7af323c26aa5dd9eee
+Date: Wed, 26 Jan 2022 21:31:34 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 896791904c14ada0b0960dc899f9491b6b045bc1
+X-Git-Newrev: e6a838d6ac61e18c97445c75d3df0196ead4e73d
 X-Patchwork-Hint: ignore
-Message-Id: <20220126202615.25CFF825DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/liburiparser:
+Message-Id: <20220126202624.BA892822E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/liburiparser:
  security bump to version 0.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b40f28f808123748c87da7af323c26aa5dd9eee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e6a838d6ac61e18c97445c75d3df0196ead4e73d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 - Fixed: [CVE-2021-46141]
   Fix a bug affecting both uriNormalizeSyntax* and uriMakeOwner*
