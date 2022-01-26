@@ -1,83 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EDE7C2BA4C
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 14:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4803C3526D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 15:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACDAF60D77;
-	Wed, 26 Jan 2022 14:55:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19A70409A0;
+	Wed, 26 Jan 2022 15:30:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G93ZHjZTR0Sa; Wed, 26 Jan 2022 14:55:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oP2rGfrDbaEb; Wed, 26 Jan 2022 15:30:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7E6B60F7E;
-	Wed, 26 Jan 2022 14:55:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D68E1BF577
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 14:55:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C740403E9;
+	Wed, 26 Jan 2022 15:30:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AD2251BF4DD
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 15:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C200829F2
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 14:55:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A97E9415EB
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 15:30:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vu7g80LBijk6 for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 14:55:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5360982DDE
- for <buildroot@busybox.net>; Wed, 26 Jan 2022 14:55:21 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- c190-20020a1c9ac7000000b0035081bc722dso4239457wme.5
- for <buildroot@busybox.net>; Wed, 26 Jan 2022 06:55:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=pvoAvcRJDnmwRFF9ITjQLPL/RrW6IplBOjf0gv6aSvg=;
- b=D2/Vvf34WRhSc/kxlHUH0k58LhsnRor8Z+x6LDi0yPmYcgI2ZedjBitfou9pmU8hI8
- FdD2ESJmLgNTjW2tuESrM2LE8MuL6nBZMiOr2pql6v0EtoUoH3JypwUShZxIoLpJC3ew
- hWo7jbiveJarohnJ/7JHDB4hm4aSCQYh+a2kifJBpfbBeH0DD6cln+LnWe4GEjfDXZxr
- /bTB13XAPL92BFpuH+WzL+GjWNsjJKICSfxAUK6ytZvGBAwTJ12RhsyuhVajc1lyOOv6
- BYlvpDAFupqEKe222gqgC4ObN7uuUoeLxZDmbFhVBWZhNsJzXRr8w26fFZoe+KB2Djgi
- qSDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=pvoAvcRJDnmwRFF9ITjQLPL/RrW6IplBOjf0gv6aSvg=;
- b=Dl7LAGzFLNqY27bAch8bbhoDnRMqTl0lfk7920nFa2WKJnPS2HIvv/ax4icG4qRmuB
- /+z6d51R3phpsAQ6PNFeNmMUXphDo/SxbX1hYh4W+3Xb05o5wcqRC5y46SCNcJxzZgy1
- VH4jLdqTVARRUAlxctocFvMZGQLkoaK/2xZW+tY7gjM0wOhAgWCFLPcI6WjfvMVWY+ZN
- 1eRcYqqDg8b+ITfb/L3Cdm3LJiqt4ingjiTSjqcRTcF+4R8jA2dRTN4L6zj0A28M+Zh2
- GzDsmcMqT3xHwOC7qhHy86m9OxcepUIL21+43xZYSaZXqrJp+n+sDz0A6WvLEL7yDHyb
- Nu2w==
-X-Gm-Message-State: AOAM531obgUGyjaWoDSc9lwuKW9iOK3NEsT9sIpo/ELy6tEypkht3T7S
- QSB1Q2s+i4Rc8h6t5+qemwcz97Aw1mg=
-X-Google-Smtp-Source: ABdhPJxj0gThVpQ2U0QTdGNNOxsHaVlbDwPnAupPvuCJd38b/HMb9hWLxxRY+HtWOVcxpChxQRRQag==
-X-Received: by 2002:a05:600c:4f07:: with SMTP id
- l7mr7853100wmq.129.1643208919492; 
- Wed, 26 Jan 2022 06:55:19 -0800 (PST)
-Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id g5sm16396591wri.108.2022.01.26.06.55.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Jan 2022 06:55:19 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Wed, 26 Jan 2022 15:55:03 +0100
-Message-Id: <20220126145503.1032630-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220126145503.1032630-1-francois.perrad@gadz.org>
-References: <20220126145503.1032630-1-francois.perrad@gadz.org>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=kalray.eu header.b="MPjZm7a9";
+ dkim=pass (1024-bit key) header.d=kalray.eu header.b="Hp48oX7K"
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IFETC4fpO_JI for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 15:30:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from fx306.security-mail.net (smtpout30.security-mail.net
+ [85.31.212.37])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8851341553
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 15:30:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by fx306.security-mail.net (Postfix) with ESMTP id B692C399432
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 16:30:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+ s=sec-sig-email; t=1643211045;
+ bh=qRGEMk95MRqch8nPr4WqAQZ/BFczPJSIaO92ctCrnCs=;
+ h=Date:From:To:Cc:In-Reply-To:References:Subject;
+ b=MPjZm7a9gZwfZt/jVwkU9iy+lWAXxxltYscy4p9EH4317wSqSuaFOdpv0XsoQ4KwI
+ 2LTYYGfxPSbVO28zRKSgXWXRHga78Q25cv+JEeAzcfZHnL4Werfo9CQdm7X+rnNV7J
+ hGxXvUnCfjZiihvrOOzsK9njhcssByB0LfN3eXkY=
+Received: from fx306 (localhost [127.0.0.1]) by fx306.security-mail.net
+ (Postfix) with ESMTP id 64053399022; Wed, 26 Jan 2022 16:30:45 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx306.security-mail.net (Postfix) with ESMTPS id DD0C939905F; Wed, 26 Jan
+ 2022 16:30:44 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id BEE0B27E03FE; Wed, 26 Jan 2022
+ 16:30:44 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id A729B27E03FF; Wed, 26 Jan 2022 16:30:44 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ sT5z1kuAmZnP; Wed, 26 Jan 2022 16:30:44 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTP id 9459427E03FE; Wed, 26 Jan 2022
+ 16:30:44 +0100 (CET)
+X-Virus-Scanned: E-securemail, by Secumail
+Secumail-id: <484c.61f16924.db30a.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu A729B27E03FF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1643211044;
+ bh=oy9BvyJNfVM+PuIYCxXXAJA/bDNvJmPtDIw5rDkQ/bM=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=Hp48oX7K2uDcyB3GErtdHFi0dJIA7Ps5W7HTcVrFofPK5DdDdvkfBRU85WkpaYMjv
+ reD1Ds1tje2tL3cLL8iIMf/G8Q8SCr68Y2valtVKlU3BvsyyDDLq9USOiOGSpKkB9+
+ nc94YkrJ/a/be2Dim50/J24kchNJIFJSuKo6AX6k=
+Date: Wed, 26 Jan 2022 16:30:44 +0100 (CET)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <608336144.1670038.1643211044586.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <20220124225356.03c1c658@windsurf>
+References: <20220124173521.2236-1-jborne@kalray.eu>
+ <87k0ep9gbx.fsf@tarshish> <20220124220238.1fa0568b@windsurf>
+ <20220124212149.GJ2502@scaer> <20220124225356.03c1c658@windsurf>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/lua: use Lua 5.4 as default
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 9.0.0_GA_4126 (ZimbraWebClient - FF90 (Linux)/9.0.0_GA_4126)
+Thread-Topic: Fix binutils/libiberty target install directory
+Thread-Index: cbBvRK4hJnWFJFoWYpxsG4MtvNNe5Q==
+X-ALTERMIMEV2_out: done
+Subject: Re: [Buildroot] [RFC PATCH 0/1] Fix binutils/libiberty target
+ install directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,60 +97,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Jonathan Borne via buildroot <buildroot@buildroot.org>
+Reply-To: Jonathan Borne <jborne@kalray.eu>
+Cc: ysionneaux@kalray.eu, jmaselbas@kalray.eu,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Baruch Siach via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/Config.in                          | 2 +-
- support/testing/tests/package/test_lua.py      | 4 ++--
- support/testing/tests/package/test_lua_sdl2.py | 1 +
- 3 files changed, 4 insertions(+), 3 deletions(-)
+Hi again, 
+thank you very much for your answers!
 
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 5d4cee5d5..309dd6eec 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
- 
- choice
- 	prompt "Lua Version"
--	default BR2_PACKAGE_LUA_5_3
-+	default BR2_PACKAGE_LUA_5_4
- 	help
- 	  Select the version of Lua API/ABI you wish to use.
- 
-diff --git a/support/testing/tests/package/test_lua.py b/support/testing/tests/package/test_lua.py
-index 573ae0100..9703dffbd 100644
---- a/support/testing/tests/package/test_lua.py
-+++ b/support/testing/tests/package/test_lua.py
-@@ -42,8 +42,8 @@ class TestLua(TestLuaBase):
- 
-     def test_run(self):
-         self.login()
--        self.version_test('Lua 5.3')
--        self.g_version_test('Lua 5.3')
-+        self.version_test('Lua 5.4')
-+        self.g_version_test('Lua 5.4')
- 
- 
- class TestLuajit(TestLuaBase):
-diff --git a/support/testing/tests/package/test_lua_sdl2.py b/support/testing/tests/package/test_lua_sdl2.py
-index 22c4087f5..b9aad15f4 100644
---- a/support/testing/tests/package/test_lua_sdl2.py
-+++ b/support/testing/tests/package/test_lua_sdl2.py
-@@ -5,6 +5,7 @@ class TestLuaLuaSDL2(TestLuaBase):
-     config = TestLuaBase.config + \
-         """
-         BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_5_3=y
-         BR2_PACKAGE_LUA_SDL2=y
-         BR2_PACKAGE_SDL2_IMAGE=y
-         BR2_PACKAGE_SDL2_MIXER=y
--- 
-2.32.0
+----- On Jan 24, 2022, at 10:53 PM, Thomas Petazzoni thomas.petazzoni@bootlin.com wrote:
+
+> On Mon, 24 Jan 2022 22:21:49 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+>> > # We just want libbfd, libiberty and libopcodes,
+>> > # not the full-blown binutils in staging
+>> > define BINUTILS_INSTALL_STAGING_CMDS
+>> >         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(STAGING_DIR) install
+>> >         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(STAGING_DIR) install
+>> >         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
+>> > endef
+>> > 
+>> > # If we don't want full binutils on target
+>> > ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+>> > define BINUTILS_INSTALL_TARGET_CMDS
+>> >         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
+>> >         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
+>> >         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
+>> > endef
+>> > endif
+>> > 
+>> > This is *extremely* suspicious. Indeed, we get the libraries
+>> > unconditionally installed in staging, so any other library or program
+>> > that we build after binutils can potentially link against thosze
+>> > libraries.
+>> > 
+>> > But we only install them conditionally in $(TARGET_DIR) if
+>> > BR2_PACKAGE_BINUTILS_TARGET=y.
+>> > 
+>> > This seems very bad to me. Both target and staging installations should
+>> > be done under the same condition.
+>> 
+>> Not really. You missed the fact that binutils is an autotools package.
+>> 
+>> As such, when BR2_PACKAGE_BINUTILS_TARGET=n, then the full binutils are
+>> instaleld in target, so the libs will be installed in target.
+
+I think you made a typo here... 
+The full binutils install to target is made when BR2_PACKAGE_BINUTILS_TARGET=y.
+
+> 
+> Aah, indeed, the condition is:
+> 
+> ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+> 
+
+Double negation is a bit confusing indeed, 
+maybe the message could be changed to 
+
+# If we don't want full binutils on target
+ifeq ($(BR2_PACKAGE_BINUTILS_TARGET),n)
+
+>> So whatever gets in staging is present in target, but target can be a
+>> superset of what is in staging, so whatever links to a binutils lib from
+>> staging will find it in target.
+
+Agreed! So if I understand correctly, as was suggested by Romain and Thomas,
+we could indeed get rid of
+
+$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
+
+in BINUTILS_INSTALL_TARGET_CMDS.
+
+Thanks again
+Best Regards.
+Jonathan.
+
+
+
 
 _______________________________________________
 buildroot mailing list
