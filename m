@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 660E5C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FE84C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F189284D96;
-	Wed, 26 Jan 2022 21:23:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1D43402BE;
+	Wed, 26 Jan 2022 21:23:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a-xe9eYKwTlV; Wed, 26 Jan 2022 21:23:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FV5zkSNQph_n; Wed, 26 Jan 2022 21:23:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DFAA84D94;
-	Wed, 26 Jan 2022 21:23:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39E161BF48B
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:23:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C11440290;
+	Wed, 26 Jan 2022 21:23:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C95971BF48B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:23:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27579409F5
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:23:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B895E40290
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:23:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JO4Jlx4OB79X for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 21:23:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29170403A4
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:23:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BBFC582127; Wed, 26 Jan 2022 21:16:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ki-J3eoOwVaB for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 21:23:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8DC3E4026E
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:23:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 583D240002;
+ Wed, 26 Jan 2022 21:23:11 +0000 (UTC)
+Date: Wed, 26 Jan 2022 22:23:09 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 22:22:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e15bd8e51ba1b72a59140c84e59971d71086431
-X-Git-Newrev: 935bd589a356f51e5c97d111877bd2052f0c9da5
-X-Patchwork-Hint: ignore
-Message-Id: <20220126211606.BBFC582127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/containerd: security bump to
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220126222309.44ad5b0f@windsurf>
+In-Reply-To: <20220124071453.16225-1-christian@paral.in>
+References: <20220124071453.16225-1-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/containerd: security bump to
  version 1.5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -53,71 +57,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2101859977336706920=="
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2101859977336706920==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=935bd589a356f51e5c97d111877bd2052f0c9da5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-CVE-2021-43816: "Unprivileged pod using `hostPath` can side-step active LSM when
-it is SELinux"
-
-Containers launched through containerd’s CRI implementation on Linux systems
-which use the SELinux security module and containerd versions since v1.5.0 can
-cause arbitrary files and directories on the host to be relabeled to match the
-container process label through the use of specially-configured bind mounts in a
-hostPath volume. This relabeling elevates permissions for the container,
-granting full read/write access over the affected files and directories.
-Kubernetes and crictl can both be configured to use containerd’s CRI
-implementation.
-
-https://github.com/advisories/GHSA-mvff-h3cj-wj9c
-https://github.com/containerd/containerd/releases/tag/v1.5.9
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index f1a6709554..d5aafe2e70 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  a41ab8d39393c9456941b477c33bb1b221a29b635f1c9a99523aab2f5e74f790  containerd-1.5.8.tar.gz
-+sha256  40c9767af3e87f2c36adf2f563f0a8374e80b30bd2b7aa80058c85912406cef4  containerd-1.5.9.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index cd975db274..8976e12f1a 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONTAINERD_VERSION = 1.5.8
-+CONTAINERD_VERSION = 1.5.9
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
-
---===============2101859977336706920==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2101859977336706920==--
+T24gU3VuLCAyMyBKYW4gMjAyMiAyMzoxNDo1MyAtMDgwMApDaHJpc3RpYW4gU3Rld2FydCB2aWEg
+YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IENWRS0yMDIxLTQz
+ODE2OiAiVW5wcml2aWxlZ2VkIHBvZCB1c2luZyBgaG9zdFBhdGhgIGNhbiBzaWRlLXN0ZXAgYWN0
+aXZlIExTTSB3aGVuCj4gaXQgaXMgU0VMaW51eCIKPiAKPiBDb250YWluZXJzIGxhdW5jaGVkIHRo
+cm91Z2ggY29udGFpbmVyZOKAmXMgQ1JJIGltcGxlbWVudGF0aW9uIG9uIExpbnV4IHN5c3RlbXMK
+PiB3aGljaCB1c2UgdGhlIFNFTGludXggc2VjdXJpdHkgbW9kdWxlIGFuZCBjb250YWluZXJkIHZl
+cnNpb25zIHNpbmNlIHYxLjUuMCBjYW4KPiBjYXVzZSBhcmJpdHJhcnkgZmlsZXMgYW5kIGRpcmVj
+dG9yaWVzIG9uIHRoZSBob3N0IHRvIGJlIHJlbGFiZWxlZCB0byBtYXRjaCB0aGUKPiBjb250YWlu
+ZXIgcHJvY2VzcyBsYWJlbCB0aHJvdWdoIHRoZSB1c2Ugb2Ygc3BlY2lhbGx5LWNvbmZpZ3VyZWQg
+YmluZCBtb3VudHMgaW4gYQo+IGhvc3RQYXRoIHZvbHVtZS4gVGhpcyByZWxhYmVsaW5nIGVsZXZh
+dGVzIHBlcm1pc3Npb25zIGZvciB0aGUgY29udGFpbmVyLAo+IGdyYW50aW5nIGZ1bGwgcmVhZC93
+cml0ZSBhY2Nlc3Mgb3ZlciB0aGUgYWZmZWN0ZWQgZmlsZXMgYW5kIGRpcmVjdG9yaWVzLgo+IEt1
+YmVybmV0ZXMgYW5kIGNyaWN0bCBjYW4gYm90aCBiZSBjb25maWd1cmVkIHRvIHVzZSBjb250YWlu
+ZXJk4oCZcyBDUkkKPiBpbXBsZW1lbnRhdGlvbi4KPiAKPiBodHRwczovL2dpdGh1Yi5jb20vYWR2
+aXNvcmllcy9HSFNBLW12ZmYtaDNjai13ajljCj4gaHR0cHM6Ly9naXRodWIuY29tL2NvbnRhaW5l
+cmQvY29udGFpbmVyZC9yZWxlYXNlcy90YWcvdjEuNS45Cj4gCj4gU2lnbmVkLW9mZi1ieTogQ2hy
+aXN0aWFuIFN0ZXdhcnQgPGNocmlzdGlhbkBwYXJhbC5pbj4KPiAtLS0KPiAgcGFja2FnZS9jb250
+YWluZXJkL2NvbnRhaW5lcmQuaGFzaCB8IDIgKy0KPiAgcGFja2FnZS9jb250YWluZXJkL2NvbnRh
+aW5lcmQubWsgICB8IDIgKy0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIg
+ZGVsZXRpb25zKC0pCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9t
+YXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdp
+bmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
