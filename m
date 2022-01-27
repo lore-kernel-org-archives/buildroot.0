@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE2DC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:13:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FEBC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC391416C7;
-	Thu, 27 Jan 2022 07:13:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A3A640B47;
+	Thu, 27 Jan 2022 07:13:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DUZq3igH8Jzf; Thu, 27 Jan 2022 07:13:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V52k0n_0zLAV; Thu, 27 Jan 2022 07:13:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1823741660;
-	Thu, 27 Jan 2022 07:13:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B67AB1C1135
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:12:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60AB740B41;
+	Thu, 27 Jan 2022 07:13:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C26A1BF470
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A395E41C5D
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:12:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3952B84ECB
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:12:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J1yZ7RVxqiq2 for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 07:12:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAC1D41C5A
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:12:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 68431814A4; Thu, 27 Jan 2022 07:05:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HWkJTKSdHVOz for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 07:12:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C8D684EC8
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:12:34 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0418620002
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:12:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>) id 1nCyxK-00026T-6q
+ for buildroot@buildroot.org; Thu, 27 Jan 2022 08:12:30 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 08:09:39 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 28d817c058aa7cbb24ccd3f67c17012fbd22f8ce
-X-Git-Newrev: 652752cb4d9b2709519198761b36c24761a30be9
-X-Patchwork-Hint: ignore
-Message-Id: <20220127070548.68431814A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/sofia-sip: bump
- version to 1.13.3
+References: <20220107232022.0E707834E4@busybox.osuosl.org>
+Date: Thu, 27 Jan 2022 08:12:30 +0100
+In-Reply-To: <20220107232022.0E707834E4@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Sat, 8 Jan 2022 00:26:21 +0100")
+Message-ID: <878rv1ejoh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] package/freeswitch: security bump
+ version to 1.10.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,133 +60,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=652752cb4d9b2709519198761b36c24761a30be9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Removed patches which were applied upstream:
-https://github.com/freeswitch/sofia-sip/commit/f6f29b483e9c31ce8d3e87419ec3deea8679312d
-https://github.com/freeswitch/sofia-sip/commit/d568475eb7291bc72f585a116319b05d80b818e1
+ > commit: https://git.buildroot.net/buildroot/commit/?id=829777c1c9a0d40c8c5753e6fe86acfc78edfc92
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7210b40c93c8c2d3ac1f51e546544b8453974a9b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ag.h-reintroduce-soatag_local_sdp_str_ref.patch | 30 -----------------
- .../sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch   | 38 ----------------------
- package/sofia-sip/sofia-sip.hash                   |  2 +-
- package/sofia-sip/sofia-sip.mk                     |  2 +-
- 4 files changed, 2 insertions(+), 70 deletions(-)
+ > Fixes the following security issues:
 
-diff --git a/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch b/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
-deleted file mode 100644
-index 57c0bfe250..0000000000
---- a/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From bcd0f17fd83f2dfe570a3ab17249a5c7290b27f2 Mon Sep 17 00:00:00 2001
--From: Pekka Pessi <Pekka.Pessi at nokia.com>
--Date: Thu, 24 Mar 2011 14:45:21 +0200
--Subject: [PATCH] soa_tag.h: reintroduce soatag_local_sdp_str_ref
--
--Thanks to Erik Habicht <e.habicht at thiesen.com> for spotting it
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[rebased for sofia-sip 1.13.1-d10a3d268c, patch sent upstream
-- https://github.com/freeswitch/sofia-sip/pull/23]
-----
-- libsofia-sip-ua/soa/sofia-sip/soa_tag.h |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
--
--diff --git a/libsofia-sip-ua/soa/sofia-sip/soa_tag.h b/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
--index 723ca02..d9448d6 100644
----- a/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
--+++ b/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
--@@ -130,7 +130,7 @@ SOFIAPUBVAR tag_typedef_t soatag_local_sdp_ref;
-- SOFIAPUBVAR tag_typedef_t soatag_local_sdp_str;
-- #define SOATAG_LOCAL_SDP_STR_REF(x) \
--   soatag_local_sdp_str_ref, tag_str_vr(&(x))
---SOFIAPUBVAR tag_typedef_t soatag_session_sdp_str_ref;
--+SOFIAPUBVAR tag_typedef_t soatag_local_sdp_str_ref;
-- 
-- #define SOATAG_AF(x)             soatag_af, tag_int_v((x))
-- SOFIAPUBVAR tag_typedef_t soatag_af;
---- 
--1.7.7
--
-diff --git a/package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch b/package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch
-deleted file mode 100644
-index a2cc412843..0000000000
---- a/package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From d66a2e55daf223737c07c59b1be45a2d91212ef6 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 26 Jul 2020 13:47:16 +0200
--Subject: [PATCH] [sofia-sip] fix s2tcase.c
--
--Fixes build error with recent libcheck:
--https://github.com/freeswitch/sofia-sip/issues/22
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- s2check/s2tcase.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/libs/sofia-sip/s2check/s2tcase.c b/libs/sofia-sip/s2check/s2tcase.c
--index 382aaa3ad7..d67694c2ce 100644
----- a/s2check/s2tcase.c
--+++ b/s2check/s2tcase.c
--@@ -57,7 +57,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
--       if (strcmp(*patterns, "*")) {
-- 	printf("%s: selected\n", name);
--       }
---      _tcase_add_test(tc, tf, name, signo, 0, start, end);
--+      _tcase_add_test(tc, tf, name, signo, start, end);
--       return;
--     }
--   }
--@@ -67,7 +67,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
--       if (strcmp(*patterns, "*")) {
-- 	printf("%s: selected\n", name);
--       }
---      _tcase_add_test(tc, tf, name, signo, 0, start, end);
--+      _tcase_add_test(tc, tf, name, signo, start, end);
--       return;
--     }
--   }
---- 
--2.27.0
--
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index 99b315e276..0484cc1501 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  4cf0de1aaa1e1737db5a8fe4104021a8e60a148a4534f92b5affdd9782e404aa  sofia-sip-1.13.1-d10a3d268c.tar.gz
-+sha256  b539444a5d03e281b829ee9133ae9e717f2d2a03399808365e5ab85574e25d95  sofia-sip-1.13.3-8071e8accd.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index ef1b35fa2c..5c383400ff 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SOFIA_SIP_VERSION = 1.13.1-d10a3d268c
-+SOFIA_SIP_VERSION = 1.13.3-8071e8accd
- SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs
- SOFIA_SIP_INSTALL_STAGING = YES
- SOFIA_SIP_DEPENDENCIES = host-pkgconf
+ > - CVE-2021-41105: FreeSWITCH susceptible to Denial of Service via invalid
+ >   SRTP packets
+
+ >   When handling SRTP calls, FreeSWITCH is susceptible to a DoS where calls
+ >   can be terminated by remote attackers.  This attack can be done
+ >   continuously, thus denying encrypted calls during the attack.
+
+ >   https://github.com/signalwire/freeswitch/security/advisories/GHSA-jh42-prph-gp36
+
+ > - CVE-2021-41157: FreeSWITCH does not authenticate SIP SUBSCRIBE requests by default
+
+ >   By default, SIP requests of the type SUBSCRIBE are not authenticated in
+ >   the affected versions of FreeSWITCH.
+
+ >   https://github.com/signalwire/freeswitch/security/advisories/GHSA-g7xg-7c54-rmpj
+
+ > - CVE-2021-37624: FreeSWITCH does not authenticate SIP MESSAGE requests,
+ >   leading to spam and message spoofing
+
+ >   By default, SIP requests of the type MESSAGE (RFC 3428) are not
+ >   authenticated in the affected versions of FreeSWITCH.  MESSAGE requests
+ >   are relayed to SIP user agents registered with the FreeSWITCH server
+ >   without requiring any authentication.  Although this behaviour can be
+ >   changed by setting the auth-messages parameter to true, it is not the
+ >   default setting.
+
+ >   https://github.com/signalwire/freeswitch/security/advisories/GHSA-mjcm-q9h8-9xv3
+
+ > - CVE-2021-41145: FreeSWITCH susceptible to Denial of Service via SIP flooding
+
+ >   When flooding FreeSWITCH with SIP messages, it was observed that after a
+ >   number of seconds the process was killed by the operating system due to
+ >   memory exhaustion
+
+ >   https://github.com/signalwire/freeswitch/security/advisories/GHSA-jvpq-23v4-gp3m
+
+ > - CVE-2021-41158: FreeSWITCH vulnerable to SIP digest leak for configured gateways
+
+ >   An attacker can perform a SIP digest leak attack against FreeSWITCH and
+ >   receive the challenge response of a gateway configured on the FreeSWITCH
+ >   server.  This is done by challenging FreeSWITCH's SIP requests with the
+ >   realm set to that of the gateway, thus forcing FreeSWITCH to respond with
+ >   the challenge response which is based on the password of that targeted
+ >   gateway.
+
+ >   https://github.com/signalwire/freeswitch/security/advisories/GHSA-3v3f-99mv-qvj4
+
+ > Release notes:
+ > https://github.com/signalwire/freeswitch/releases/tag/v1.10.7
+
+ > Removed patch, upstream applied a different fix:
+ > https://github.com/signalwire/freeswitch/commit/e9fde845de5b8885282bf5e70f4be3645c5c3e9b
+
+ > Added optional dependency to libks, needed due to upstream commit
+ > https://github.com/signalwire/freeswitch/commit/ed9851666615d283effb76edc7028cc08b07eff9
+
+ > Added upstream patches to fix build errors.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > [Peter: mention security fixes]
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2021.02.x and 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
