@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40E47C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 10:54:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC5C9C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 10:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D52B64026F;
-	Thu, 27 Jan 2022 10:54:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 92F7940641;
+	Thu, 27 Jan 2022 10:54:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lEjw0FqV-BlS; Thu, 27 Jan 2022 10:54:01 +0000 (UTC)
+	with ESMTP id qdX9iERgGnO5; Thu, 27 Jan 2022 10:54:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACDF340292;
-	Thu, 27 Jan 2022 10:54:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F1E681BF421
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3525040BA6;
+	Thu, 27 Jan 2022 10:54:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5056B1BF421
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E04D884F3C
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C6A460F3D
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:53:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id szCQ045VwmcT for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9QXn1yg8-kXK for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 10:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B3CB84F3B
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FF6460EF4
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 10:53:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5AC3A8282A; Thu, 27 Jan 2022 10:46:09 +0000 (UTC)
+ id D60308282A; Thu, 27 Jan 2022 10:46:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 11:52:20 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c88e47b3cbc0d17102f88c475e4fce5bce029427
-X-Git-Newrev: 6c0c34c6346e54ea8089a163540a45c327859082
+Date: Thu, 27 Jan 2022 11:52:14 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 5b75389cb41d133d281a9c743ab5f20ebd58bd73
+X-Git-Newrev: ae2a31295c010e94483031eb1c0b8539698f5959
 X-Patchwork-Hint: ignore
-Message-Id: <20220127104609.5AC3A8282A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/poppler: use
+Message-Id: <20220127104615.D60308282A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/poppler: use
  HTTPS for upstream URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -54,15 +54,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8948225186359045396=="
+Content-Type: multipart/mixed; boundary="===============0813255278046795098=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8948225186359045396==
+--===============0813255278046795098==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c0c34c6346e54ea8089a163540a45c327859082
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ae2a31295c010e94483031eb1c0b8539698f5959
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/145/1456f9512371ecb5a0a374943178e4bd7b0967e8/
@@ -148,7 +148,7 @@ index a5a97d974b..ae77cf2e5d 100644
  POPPLER_LICENSE = GPL-2.0+
  POPPLER_LICENSE_FILES = COPYING
 
---===============8948225186359045396==
+--===============0813255278046795098==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -159,4 +159,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8948225186359045396==--
+--===============0813255278046795098==--
