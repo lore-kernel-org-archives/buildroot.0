@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91727C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 08:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968FAC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 08:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 487B2610A7;
-	Thu, 27 Jan 2022 08:05:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52CAA610A9;
+	Thu, 27 Jan 2022 08:06:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HVP3zBqS7P7j; Thu, 27 Jan 2022 08:05:48 +0000 (UTC)
+	with ESMTP id nFwJJpvQP-_0; Thu, 27 Jan 2022 08:06:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80C31610A2;
-	Thu, 27 Jan 2022 08:05:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98E5D610A3;
+	Thu, 27 Jan 2022 08:05:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE1D51C113E
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 035041BF8A8
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C7D784D3C
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5DD584D35
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3HZvTe_Zf3-E for <buildroot@lists.busybox.net>;
+ with ESMTP id QciSz8V47G_U for <buildroot@lists.busybox.net>;
  Thu, 27 Jan 2022 08:05:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2D8884D35
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99959813DA
  for <buildroot@buildroot.org>; Thu, 27 Jan 2022 08:05:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 435948287C; Thu, 27 Jan 2022 07:58:26 +0000 (UTC)
+ id 3AD3382872; Thu, 27 Jan 2022 07:58:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 08:58:15 +0100
+Date: Thu, 27 Jan 2022 08:57:46 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 579654f570d24778d5ec86dae652cc48803cb01d
-X-Git-Newrev: fbec0270f3a5f7c0370cec64418da311f721dc89
+X-Git-Oldrev: 0b5d05b92c97053be8b45b2477e87f4c32791929
+X-Git-Newrev: 579654f570d24778d5ec86dae652cc48803cb01d
 X-Patchwork-Hint: ignore
-Message-Id: <20220127075826.435948287C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/nvidia-driver:
- add Linux in comment
+Message-Id: <20220127075826.3AD3382872@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libss7: add Linux
+ in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,7 +59,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbec0270f3a5f7c0370cec64418da311f721dc89
+commit: https://git.buildroot.net/buildroot/commit/?id=579654f570d24778d5ec86dae652cc48803cb01d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Add "Linux" before kernel in comment to be consistent with other
@@ -67,25 +67,25 @@ packages and manual
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 956cd5b9b7136344bc2641fbe3e1abfa2eff1bc8)
+(cherry picked from commit e0de6291e3fe8d9f6c572a5206b8ead3719f6829)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nvidia-driver/Config.in | 2 +-
+ package/libss7/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index 9631b3e70c..a8617a939b 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -75,7 +75,7 @@ config BR2_PACKAGE_NVIDIA_DRIVER_CUDA_PROGS
+diff --git a/package/libss7/Config.in b/package/libss7/Config.in
+index bdf5fbe3a8..d8bcf11ce7 100644
+--- a/package/libss7/Config.in
++++ b/package/libss7/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBSS7
  
- endif # BR2_PACKAGE_NVIDIA_DRIVER_CUDA
+ 	  http://www.asterisk.org/downloads/libss7
  
--comment "nvidia kernel module needs a kernel to be built"
-+comment "nvidia kernel module needs a Linux kernel to be built"
+-comment "libss7 needs a kernel to be built"
++comment "libss7 needs a Linux kernel to be built"
  	depends on !BR2_LINUX_KERNEL
  
- config BR2_PACKAGE_NVIDIA_DRIVER_MODULE
+ comment "libss7 needs a toolchain w/ threads"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
