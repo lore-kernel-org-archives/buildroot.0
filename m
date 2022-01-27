@@ -4,50 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBAD8C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 10:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40E47C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 10:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E3FF40B8C;
-	Thu, 27 Jan 2022 10:53:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D52B64026F;
+	Thu, 27 Jan 2022 10:54:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1N4E3nWh71BO; Thu, 27 Jan 2022 10:53:00 +0000 (UTC)
+	with ESMTP id lEjw0FqV-BlS; Thu, 27 Jan 2022 10:54:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49FCB4036A;
-	Thu, 27 Jan 2022 10:52:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D98761BF421
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:52:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACDF340292;
+	Thu, 27 Jan 2022 10:54:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F1E681BF421
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3D2460F3D
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:52:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E04D884F3C
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PEhOva64DWD6 for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 10:52:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5677360EF4
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 10:52:55 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2FB2F60003;
- Thu, 27 Jan 2022 10:52:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nD2Oa-0004V7-3u; Thu, 27 Jan 2022 11:52:52 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id szCQ045VwmcT for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B3CB84F3B
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 10:53:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 5AC3A8282A; Thu, 27 Jan 2022 10:46:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20220109093735.4860-1-peter@korsgaard.com>
-Date: Thu, 27 Jan 2022 11:52:52 +0100
-In-Reply-To: <20220109093735.4860-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 9 Jan 2022 10:37:33 +0100")
-Message-ID: <87wnilbgcb.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/poppler: use HTTPS for upstream URL
+Date: Thu, 27 Jan 2022 11:52:20 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: c88e47b3cbc0d17102f88c475e4fce5bce029427
+X-Git-Newrev: 6c0c34c6346e54ea8089a163540a45c327859082
+X-Patchwork-Hint: ignore
+Message-Id: <20220127104609.5AC3A8282A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/poppler: use
+ HTTPS for upstream URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +53,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8948225186359045396=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlBldGVyIiA9PSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdy
-aXRlczoKCiA+IEZpeGVzOgogPiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0
-cy8xNDUvMTQ1NmY5NTEyMzcxZWNiNWEwYTM3NDk0MzE3OGU0YmQ3YjA5NjdlOC8KCiA+IFRoZSBI
-VFRQIFVSTCByZXR1cm5zIGEgMzA4IHJlZGlyZWN0IHRvIEhUVFBTLCB3aGljaCBjb25mdXNlcyBv
-bGQgd2dldAogPiB2ZXJzaW9ucyAoRS5HLiAgcy5iLm8pOgoKID4gd2dldCAtZCBodHRwOi8vcG9w
-cGxlci5mcmVlZGVza3RvcC5vcmcvcG9wcGxlci0yMS4xMi4wLnRhci54egogPiBERUJVRyBvdXRw
-dXQgY3JlYXRlZCBieSBXZ2V0IDEuMTQgb24gbGludXgtZ251LgoKID4gVVJJIGVuY29kaW5nID0g
-4oCYVVRGLTjigJkKID4gQ29udmVydGVkIGZpbGUgbmFtZSAncG9wcGxlci0yMS4xMi4wLnRhci54
-eicgKFVURi04KSAtPiAncG9wcGxlci0yMS4xMi4wLnRhci54eicgKFVURi04KQogPiBDb252ZXJ0
-ZWQgZmlsZSBuYW1lICdwb3BwbGVyLTIxLjEyLjAudGFyLnh6JyAoVVRGLTgpIC0+ICdwb3BwbGVy
-LTIxLjEyLjAudGFyLnh6JyAoVVRGLTgpCiA+IC0tMjAyMi0wMS0wOSAwOToyODowMi0tICBodHRw
-Oi8vcG9wcGxlci5mcmVlZGVza3RvcC5vcmcvcG9wcGxlci0yMS4xMi4wLnRhci54egogPiBSZXNv
-bHZpbmcgcG9wcGxlci5mcmVlZGVza3RvcC5vcmcgKHBvcHBsZXIuZnJlZWRlc2t0b3Aub3JnKS4u
-LiAxNDcuNzUuMTk4LjE1NgogPiBDYWNoaW5nIHBvcHBsZXIuZnJlZWRlc2t0b3Aub3JnID0+IDE0
-Ny43NS4xOTguMTU2CiA+IENvbm5lY3RpbmcgdG8gcG9wcGxlci5mcmVlZGVza3RvcC5vcmcgKHBv
-cHBsZXIuZnJlZWRlc2t0b3Aub3JnKXwxNDcuNzUuMTk4LjE1Nnw6ODAuLi4gY29ubmVjdGVkLgog
-PiBDcmVhdGVkIHNvY2tldCAzLgogPiBSZWxlYXNpbmcgMHgwMDAwMDAwMDAxY2VkYTgwIChuZXcg
-cmVmY291bnQgMSkuCgogPiAtLS1yZXF1ZXN0IGJlZ2luLS0tCiA+IEdFVCAvcG9wcGxlci0yMS4x
-Mi4wLnRhci54eiBIVFRQLzEuMQogPiBVc2VyLUFnZW50OiBXZ2V0LzEuMTQgKGxpbnV4LWdudSkK
-ID4gQWNjZXB0OiAqLyoKID4gSG9zdDogcG9wcGxlci5mcmVlZGVza3RvcC5vcmcKID4gQ29ubmVj
-dGlvbjogS2VlcC1BbGl2ZQoKID4gLS0tcmVxdWVzdCBlbmQtLS0KID4gSFRUUCByZXF1ZXN0IHNl
-bnQsIGF3YWl0aW5nIHJlc3BvbnNlLi4uCiA+IC0tLXJlc3BvbnNlIGJlZ2luLS0tCiA+IEhUVFAv
-MS4xIDMwOCBQZXJtYW5lbnQgUmVkaXJlY3QKID4gRGF0ZTogU3VuLCAwOSBKYW4gMjAyMiAwOToy
-ODowMiBHTVQKID4gQ29udGVudC1UeXBlOiB0ZXh0L2h0bWwKID4gQ29udGVudC1MZW5ndGg6IDE2
-NAogPiBDb25uZWN0aW9uOiBrZWVwLWFsaXZlCiA+IExvY2F0aW9uOiBodHRwczovL3BvcHBsZXIu
-ZnJlZWRlc2t0b3Aub3JnL3BvcHBsZXItMjEuMTIuMC50YXIueHoKCiA+IC0tLXJlc3BvbnNlIGVu
-ZC0tLQogPiAzMDggUGVybWFuZW50IFJlZGlyZWN0CiA+IFJlZ2lzdGVyZWQgc29ja2V0IDMgZm9y
-IHBlcnNpc3RlbnQgcmV1c2UuCiA+IFNraXBwaW5nIDE2NCBieXRlcyBvZiBib2R5OiBbPGh0bWw+
-CiA+IDxoZWFkPjx0aXRsZT4zMDggUGVybWFuZW50IFJlZGlyZWN0PC90aXRsZT48L2hlYWQ+CiA+
-IDxib2R5PgogPiA8Y2VudGVyPjxoMT4zMDggUGVybWFuZW50IFJlZGlyZWN0PC9oMT48L2NlbnRl
-cj4KID4gPGhyPjxjZW50ZXI+bmdpbng8L2NlbnRlcj4KID4gPC9ib2R5PgogPiA8L2h0bWw+CiA+
-IF0gZG9uZS4KID4gMjAyMi0wMS0wOSAwOToyODowMiBFUlJPUiAzMDg6IFBlcm1hbmVudCBSZWRp
-cmVjdC4KCiA+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJk
-LmNvbT4KCkNvbW1pdHRlZCB0byAyMDIxLjAyLnggYW5kIDIwMjEuMTEueCwgdGhhbmtzLgoKLS0g
-CkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+--===============8948225186359045396==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=6c0c34c6346e54ea8089a163540a45c327859082
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+
+Fixes:
+http://autobuild.buildroot.net/results/145/1456f9512371ecb5a0a374943178e4bd7b0967e8/
+
+The HTTP URL returns a 308 redirect to HTTPS, which confuses old wget
+versions (E.G.  s.b.o):
+
+wget -d http://poppler.freedesktop.org/poppler-21.12.0.tar.xz
+DEBUG output created by Wget 1.14 on linux-gnu.
+
+URI encoding = ‘UTF-8’
+Converted file name 'poppler-21.12.0.tar.xz' (UTF-8) -> 'poppler-21.12.0.tar.xz' (UTF-8)
+Converted file name 'poppler-21.12.0.tar.xz' (UTF-8) -> 'poppler-21.12.0.tar.xz' (UTF-8)
+--2022-01-09 09:28:02--  http://poppler.freedesktop.org/poppler-21.12.0.tar.xz
+Resolving poppler.freedesktop.org (poppler.freedesktop.org)... 147.75.198.156
+Caching poppler.freedesktop.org => 147.75.198.156
+Connecting to poppler.freedesktop.org (poppler.freedesktop.org)|147.75.198.156|:80... connected.
+Created socket 3.
+Releasing 0x0000000001ceda80 (new refcount 1).
+
+---request begin---
+GET /poppler-21.12.0.tar.xz HTTP/1.1
+User-Agent: Wget/1.14 (linux-gnu)
+Accept: */*
+Host: poppler.freedesktop.org
+Connection: Keep-Alive
+
+---request end---
+HTTP request sent, awaiting response...
+---response begin---
+HTTP/1.1 308 Permanent Redirect
+Date: Sun, 09 Jan 2022 09:28:02 GMT
+Content-Type: text/html
+Content-Length: 164
+Connection: keep-alive
+Location: https://poppler.freedesktop.org/poppler-21.12.0.tar.xz
+
+---response end---
+308 Permanent Redirect
+Registered socket 3 for persistent reuse.
+Skipping 164 bytes of body: [<html>
+<head><title>308 Permanent Redirect</title></head>
+<body>
+<center><h1>308 Permanent Redirect</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+] done.
+2022-01-09 09:28:02 ERROR 308: Permanent Redirect.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c39e0abba945dcc52e2e9e70b92fc94f1c351c0b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/poppler/Config.in  | 2 +-
+ package/poppler/poppler.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+index 521e3e65a8..b2bc49fc75 100644
+--- a/package/poppler/Config.in
++++ b/package/poppler/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_POPPLER
+ 	  Poppler is a PDF rendering library based on the xpdf-3.0
+ 	  code base.
+ 
+-	  http://poppler.freedesktop.org/
++	  https://poppler.freedesktop.org/
+ 
+ if BR2_PACKAGE_POPPLER
+ 
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index a5a97d974b..ae77cf2e5d 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -6,7 +6,7 @@
+ 
+ POPPLER_VERSION = 0.84.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+-POPPLER_SITE = http://poppler.freedesktop.org
++POPPLER_SITE = https://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPL-2.0+
+ POPPLER_LICENSE_FILES = COPYING
+
+--===============8948225186359045396==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8948225186359045396==--
