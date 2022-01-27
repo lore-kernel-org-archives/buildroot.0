@@ -4,50 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FC93C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 18:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24CFEC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 18:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD5A560B3A;
-	Thu, 27 Jan 2022 18:31:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D290D610D9;
+	Thu, 27 Jan 2022 18:32:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NGNURDsdYlII; Thu, 27 Jan 2022 18:31:54 +0000 (UTC)
+	with ESMTP id KU9SiG0XeQZn; Thu, 27 Jan 2022 18:32:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 204C660B04;
-	Thu, 27 Jan 2022 18:31:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3C12E1BF3EA
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:31:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29C7860B04;
+	Thu, 27 Jan 2022 18:32:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D588F1BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:32:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B1AC60B04
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:31:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C44BE4171E
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:32:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xvWLmmxpcTWr for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 18:31:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0EF3760AF0
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 18:31:49 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8599220008;
- Thu, 27 Jan 2022 18:31:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nD9Yf-0000cA-QE; Thu, 27 Jan 2022 19:31:45 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o6w9m5GgyON0 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 18:32:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D70884182B
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 18:32:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 84F3C82A00; Thu, 27 Jan 2022 18:25:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220111144110.01B1D82B52@busybox.osuosl.org>
-Date: Thu, 27 Jan 2022 19:31:45 +0100
-In-Reply-To: <20220111144110.01B1D82B52@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Tue, 11 Jan 2022 15:46:59 +0100")
-Message-ID: <87sft99gj2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop Henrique Camargo
+To: buildroot@buildroot.org
+Date: Thu, 27 Jan 2022 19:31:23 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 11f988730e18fccbf3c865193ae8da929b900b40
+X-Git-Newrev: 3da77e6b2555a35ead4807e39c5520822f7142df
+X-Patchwork-Hint: ignore
+Message-Id: <20220127182510.84F3C82A00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] DEVELOPERS: drop Henrique
+ Camargo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,27 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3524950424533841006=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+--===============3524950424533841006==
+Content-Type: text/plain
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=f51be73f25bdc9b370db42996475136098ebd251
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=3da77e6b2555a35ead4807e39c5520822f7142df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
- > He has privately requested to no longer be notified regarding this
- > package.
+He has privately requested to no longer be notified regarding this
+package.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f51be73f25bdc9b370db42996475136098ebd251)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Committed to 2021.11.x, thanks.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 834419f9c5..e2c0f4d521 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1145,9 +1145,6 @@ F:	package/linuxptp/
+ F:	package/netopeer2/
+ F:	package/sysrepo/
+ 
+-N:	Henrique Camargo <henrique@henriquecamargo.com>
+-F:	package/json-glib/
+-
+ N:	Hervé Codina <herve.codina@bootlin.com>
+ F:	package/dtbocfg/
+ F:	package/libdbi/
 
--- 
-Bye, Peter Korsgaard
+--===============3524950424533841006==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3524950424533841006==--
