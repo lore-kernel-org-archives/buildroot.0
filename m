@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9D7C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 18:31:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FC93C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 18:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A870084EDB;
-	Thu, 27 Jan 2022 18:31:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD5A560B3A;
+	Thu, 27 Jan 2022 18:31:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E7_QH49uUPSi; Thu, 27 Jan 2022 18:31:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NGNURDsdYlII; Thu, 27 Jan 2022 18:31:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04E9584ED0;
-	Thu, 27 Jan 2022 18:31:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 446891BF3EA
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:31:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 204C660B04;
+	Thu, 27 Jan 2022 18:31:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C12E1BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33A0F417A8
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:31:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B1AC60B04
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:31:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c31wcpyVge0K for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 18:30:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xvWLmmxpcTWr for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 18:31:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4761841780
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 18:30:59 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0EF3760AF0
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 18:31:49 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 89C03100008;
- Thu, 27 Jan 2022 18:30:57 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8599220008;
+ Thu, 27 Jan 2022 18:31:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nD9Xn-0000XD-Sm; Thu, 27 Jan 2022 19:30:51 +0100
+ id 1nD9Yf-0000cA-QE; Thu, 27 Jan 2022 19:31:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20220110140611.2CCBF83241@busybox.osuosl.org>
-Date: Thu, 27 Jan 2022 19:30:51 +0100
-In-Reply-To: <20220110140611.2CCBF83241@busybox.osuosl.org> (Yann E. MORIN's
- message of "Mon, 10 Jan 2022 15:11:53 +0100")
-Message-ID: <87wnil9gkk.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220111144110.01B1D82B52@busybox.osuosl.org>
+Date: Thu, 27 Jan 2022 19:31:45 +0100
+In-Reply-To: <20220111144110.01B1D82B52@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 11 Jan 2022 15:46:59 +0100")
+Message-ID: <87sft99gj2.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] Developpers: remove Santosh Multhalli
- for valjson
+Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop Henrique Camargo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,15 +65,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=31fd98c6ae7c39d779e7f9729e55ec65a7f847ff
+ > commit: https://git.buildroot.net/buildroot/commit/?id=f51be73f25bdc9b370db42996475136098ebd251
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > He has privately requested to no longer be notified regarding this
+ > package.
 
-Committed to 2021.02.x and 2021.11.x, thanks.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2021.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
