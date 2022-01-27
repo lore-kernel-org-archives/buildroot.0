@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6132C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46AB5C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 17:00:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 699884023B;
-	Thu, 27 Jan 2022 16:58:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5C39416B9;
+	Thu, 27 Jan 2022 17:00:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gOX1_02e88Yj; Thu, 27 Jan 2022 16:58:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yvk7t40vwBXI; Thu, 27 Jan 2022 17:00:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8125E401D6;
-	Thu, 27 Jan 2022 16:58:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5D19E1C1135
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:58:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2B6241BD5;
+	Thu, 27 Jan 2022 17:00:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D49C21C1135
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 17:00:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 584AD401D6
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:58:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C35C960F10
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 17:00:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CEVRnzTicg8d for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 16:58:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 43925400CC
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 16:58:24 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E3D5BFF80C;
- Thu, 27 Jan 2022 16:58:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nD86H-0006dZ-90; Thu, 27 Jan 2022 17:58:21 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0qQbCbllcVn1 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 17:00:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C21E60DFD
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 17:00:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E760A829F9; Thu, 27 Jan 2022 16:53:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220109200039.3188788-1-fontaine.fabrice@gmail.com>
- <20220109200039.3188788-2-fontaine.fabrice@gmail.com>
-Date: Thu, 27 Jan 2022 17:58:21 +0100
-In-Reply-To: <20220109200039.3188788-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 9 Jan 2022 21:00:38 +0100")
-Message-ID: <875yq5azf6.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/libvirt: disable sasl
+To: buildroot@buildroot.org
+Date: Thu, 27 Jan 2022 17:58:08 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: b7e5a5a7918021697e9f309a14e4999e90059fb1
+X-Git-Newrev: cf0b5f24427dc01106d0c3c892763588dcb21b85
+X-Patchwork-Hint: ignore
+Message-Id: <20220127165358.E760A829F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/libvirt: disable
+ sasl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,29 +53,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jared Bents <jared.bents@rockwellcollins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cf0b5f24427dc01106d0c3c892763588dcb21b85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
- > sasl depends on libsasl2 (https://github.com/cyrusimap/cyrus-sasl) which
- > is not packaged yet in buildroot and will result in the following build
- > failure raised since commit fbf25acfbfd5a73b3560918bea081768abbe5723:
+sasl depends on libsasl2 (https://github.com/cyrusimap/cyrus-sasl) which
+is not packaged yet in buildroot and will result in the following build
+failure raised since commit fbf25acfbfd5a73b3560918bea081768abbe5723:
 
- > output/build/libvirt-7.7.0/meson.build:1212:2: ERROR: Dependency "libsasl2" not found, tried pkgconfig
+output/build/libvirt-7.7.0/meson.build:1212:2: ERROR: Dependency "libsasl2" not found, tried pkgconfig
 
- > Fixes:
- >  - No autobuilder failures (yet)
+Fixes:
+ - No autobuilder failures (yet)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ba2016dc04271844416088b766284f9a22a6b58d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libvirt/libvirt.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-Committed to 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index 291d892bae..e7bfe6964d 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -62,6 +62,7 @@ LIBVIRT_CONF_OPTS = \
+ 	-Dpciaccess=enabled \
+ 	-Dpm_utils=disabled \
+ 	-Dsanlock=disabled \
++	-Dsasl=disabled \
+ 	-Dsecdriver_apparmor=disabled \
+ 	-Dstorage_iscsi=disabled \
+ 	-Dstorage_iscsi_direct=disabled \
+@@ -211,13 +212,6 @@ else
+ LIBVIRT_CONF_OPTS += -Dnss=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGSASL),y)
+-LIBVIRT_CONF_OPTS += -Dsasl=enabled
+-LIBVIRT_DEPENDENCIES += libgsasl
+-else
+-LIBVIRT_CONF_OPTS += -Dsasl=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ LIBVIRT_CONF_OPTS += -Dlibssh2=enabled
+ LIBVIRT_DEPENDENCIES += libssh2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
