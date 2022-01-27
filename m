@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56DC4C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFF7FC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AFA741C6B;
-	Thu, 27 Jan 2022 07:54:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 619C640B64;
+	Thu, 27 Jan 2022 07:55:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pht7c2a2d-7b; Thu, 27 Jan 2022 07:54:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ecRQsTmqfEs8; Thu, 27 Jan 2022 07:55:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EB2F41C5A;
-	Thu, 27 Jan 2022 07:54:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 707491C1135
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:54:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52A2D40B52;
+	Thu, 27 Jan 2022 07:55:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EC3951BF470
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F9D741C66
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:54:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAE7340B52
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:54:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id baMM_iAqrbTX for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 07:54:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4498A41C64
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:54:46 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4F7AA2000B
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:54:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>) id 1nCzcB-0007CI-Ni
- for buildroot@buildroot.org; Thu, 27 Jan 2022 08:54:43 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 77k78rJlVKNc for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 07:54:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15F1240B41
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:54:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id ABDC28284B; Thu, 27 Jan 2022 07:47:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20220108172225.2F0708324A@busybox.osuosl.org>
-Date: Thu, 27 Jan 2022 08:54:43 +0100
-In-Reply-To: <20220108172225.2F0708324A@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sat, 8 Jan 2022 18:28:20 +0100")
-Message-ID: <87ilu5d35o.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/libeastl: drop duplicated
- sentence
+Date: Thu, 27 Jan 2022 08:54:35 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: c17eeadab3aaa04ac0e97bf803b280220cd4f96c
+X-Git-Newrev: acb675ec4c3c776713a9fb671aa0a1372b293174
+X-Patchwork-Hint: ignore
+Message-Id: <20220127074754.ABDC28284B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libeastl: drop
+ duplicated sentence
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,25 +53,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=acb675ec4c3c776713a9fb671aa0a1372b293174
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=59bbe7cc7418d61a5d2963f1d30e558c3111a95e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Drop duplicated sentence from Config.in
 
- > Drop duplicated sentence from Config.in
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 59bbe7cc7418d61a5d2963f1d30e558c3111a95e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libeastl/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libeastl/Config.in b/package/libeastl/Config.in
+index 7609434519..5abea8f810 100644
+--- a/package/libeastl/Config.in
++++ b/package/libeastl/Config.in
+@@ -13,7 +13,6 @@ config BR2_PACKAGE_LIBEASTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	help
+ 	  EASTL stands for Electronic Arts Standard Template
+-	  Library. EASTL stands for Electronic Arts Standard Template
+ 	  Library. It is a C++ template library of containers,
+ 	  algorithms, and iterators useful for runtime and tool
+ 	  development across multiple platforms.  It is an extensive
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
