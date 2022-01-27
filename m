@@ -1,47 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A20C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 08:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B77EC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 09:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 424BC40B52;
-	Thu, 27 Jan 2022 08:06:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E2C684E14;
+	Thu, 27 Jan 2022 09:50:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8g0a3K0I9bLt; Thu, 27 Jan 2022 08:06:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2-0LYKFSvow8; Thu, 27 Jan 2022 09:50:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 321CA40B70;
-	Thu, 27 Jan 2022 08:06:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF53A84DFC;
+	Thu, 27 Jan 2022 09:50:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 054CF1BF8A8
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DD1D81BF3F2
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 09:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5E1960F4B
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBE2560F4B
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 09:50:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wN07cNC14GXN for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 08:05:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A40A26106B
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 08:05:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 47A058287C; Thu, 27 Jan 2022 07:58:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 08:58:22 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 2628dcdd4750e7988c4491a17d5c480d4240b81f
-X-Git-Newrev: 58203964d7fb9c33228cabc3fee415f97c19e663
-X-Patchwork-Hint: ignore
-Message-Id: <20220127075831.47A058287C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/nvidia-driver:
- add Linux in comment
+ with ESMTP id Liptu8EXjx7r for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 09:50:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E46AC60F3D
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 09:50:23 +0000 (UTC)
+Date: Thu, 27 Jan 2022 09:50:12 +0000
+From: Paul Cercueil <paul@crapouillou.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-Id: <ON4D6R.ED7V0SFOL2AA@crapouillou.net>
+In-Reply-To: <20220126210039.1535791-1-fontaine.fabrice@gmail.com>
+References: <20220126210039.1535791-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/umtprd: bump to version 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,39 +50,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58203964d7fb9c33228cabc3fee415f97c19e663
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+Hi,
 
-Add "Linux" before kernel in comment to be consistent with other
-packages and manual
+Le mer., janv. 26 2022 at 22:00:39 +0100, Fabrice Fontaine =
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 956cd5b9b7136344bc2641fbe3e1abfa2eff1bc8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nvidia-driver/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<fontaine.fabrice@gmail.com> a =E9crit :
+> Update indentation in hash file (two spaces)
+> =
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index 9631b3e70c..a8617a939b 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -75,7 +75,7 @@ config BR2_PACKAGE_NVIDIA_DRIVER_CUDA_PROGS
- 
- endif # BR2_PACKAGE_NVIDIA_DRIVER_CUDA
- 
--comment "nvidia kernel module needs a kernel to be built"
-+comment "nvidia kernel module needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- 
- config BR2_PACKAGE_NVIDIA_DRIVER_MODULE
+> https://github.com/viveris/uMTP-Responder/blob/umtprd-1.6.2/Release-notes=
+.txt
+> =
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Thanks! It's been on my to-do list for too long.
+
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> ---
+>  package/umtprd/umtprd.hash | 4 ++--
+>  package/umtprd/umtprd.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> =
+
+> diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+> index 170837d84b..7cd75619ab 100644
+> --- a/package/umtprd/umtprd.hash
+> +++ b/package/umtprd/umtprd.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256	cce45c7d3df0022fc013c79de21b1f11b1027d090aeb628669f08b0c20d2afdd	=
+umtprd-1.3.10.tar.gz
+> -sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	=
+LICENSE
+> +sha256  =
+
+> 1de40511c1dd4618719cff2058dfe68a595f1b9284c80afa89d6d1a1c80aec29  =
+
+> umtprd-1.6.2.tar.gz
+> +sha256  =
+
+> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  =
+
+> LICENSE
+> diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+> index f1a4e66cff..c5e0ee512e 100644
+> --- a/package/umtprd/umtprd.mk
+> +++ b/package/umtprd/umtprd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  =
+
+> #########################################################################=
+#######
+> =
+
+> -UMTPRD_VERSION =3D 1.3.10
+> +UMTPRD_VERSION =3D 1.6.2
+>  UMTPRD_SITE =3D https://github.com/viveris/uMTP-Responder/archive
+>  UMTPRD_LICENSE =3D GPL-3.0+
+>  UMTPRD_LICENSE_FILES =3D LICENSE
+> --
+> 2.34.1
+> =
+
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
