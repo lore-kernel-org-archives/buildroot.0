@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5874AC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C622C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F08A084ED2;
-	Thu, 27 Jan 2022 07:16:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 366B161098;
+	Thu, 27 Jan 2022 07:17:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xs7Ei9O67GiP; Thu, 27 Jan 2022 07:16:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z29Ta47VsiD7; Thu, 27 Jan 2022 07:17:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 533B684ECD;
-	Thu, 27 Jan 2022 07:16:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E1F0E1BF470
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:16:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 851CB6108F;
+	Thu, 27 Jan 2022 07:17:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DA9241BF470
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:17:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0A0484ECD
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:16:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8C49416C7
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:17:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8atjF9fmvLUv for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 07:16:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFCEF84EC8
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:16:00 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 39211FF808;
- Thu, 27 Jan 2022 07:15:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nCz0e-0002Ia-GI; Thu, 27 Jan 2022 08:15:56 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F3CRnRUUFfRb for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 07:17:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2160741660
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:17:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id BF7D18285F; Thu, 27 Jan 2022 07:10:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220108111557.3CBB282A91@busybox.osuosl.org>
-Date: Thu, 27 Jan 2022 08:15:56 +0100
-In-Reply-To: <20220108111557.3CBB282A91@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 8 Jan 2022 12:21:59 +0100")
-Message-ID: <874k5pejir.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/rhash: fix activation of
- gettext
+To: buildroot@buildroot.org
+Date: Thu, 27 Jan 2022 08:15:40 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 69a02feb789d5517e4b81eb02f9ea3eb775824b8
+X-Git-Newrev: c17eeadab3aaa04ac0e97bf803b280220cd4f96c
+X-Patchwork-Hint: ignore
+Message-Id: <20220127071035.BF7D18285F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/rhash: fix
+ activation of gettext
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,27 +53,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c17eeadab3aaa04ac0e97bf803b280220cd4f96c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=5630e83c8452d3e9039feb15fd30ea005bfc6b55
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since commit ead2afda13e5541a7d8e759f5cfec4ab38605dcc, gettext is
+wrongly disabled when BR2_SYSTEM_ENABLE_NLS is set
 
- > Since commit ead2afda13e5541a7d8e759f5cfec4ab38605dcc, gettext is
- > wrongly disabled when BR2_SYSTEM_ENABLE_NLS is set
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5630e83c8452d3e9039feb15fd30ea005bfc6b55)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rhash/rhash.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
+index 92abcd29b0..d15d6f5968 100644
+--- a/package/rhash/rhash.mk
++++ b/package/rhash/rhash.mk
+@@ -15,9 +15,9 @@ RHASH_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ RHASH_ADDLDFLAGS = $(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+-RHASH_CONF_OPTS += --disable-gettext
+-else
+ RHASH_CONF_OPTS += --enable-gettext
++else
++RHASH_CONF_OPTS += --disable-gettext
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
