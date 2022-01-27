@@ -4,48 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BBE1C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 08:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06253C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 08:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 230A340B6B;
-	Thu, 27 Jan 2022 08:01:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B270940B6E;
+	Thu, 27 Jan 2022 08:05:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M_VDMj-Y7Bz3; Thu, 27 Jan 2022 08:01:47 +0000 (UTC)
+	with ESMTP id ex8v3ij9D4_k; Thu, 27 Jan 2022 08:05:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 090B740B52;
-	Thu, 27 Jan 2022 08:01:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3B5C11BF470
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:01:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FF4940B6D;
+	Thu, 27 Jan 2022 08:05:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A34FB1BF8A8
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 273D784E84
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:01:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EE8040B6D
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 08:05:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KEI0ipoM-fL5 for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 08:01:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC0C384E6E
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 08:01:43 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 128C9240015;
- Thu, 27 Jan 2022 08:01:41 +0000 (UTC)
-Date: Thu, 27 Jan 2022 09:01:41 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Christian Stewart <christian@paral.in>
-Message-ID: <20220127090141.7d0645f2@windsurf>
-In-Reply-To: <20220127062504.1835450-2-christian@paral.in>
-References: <20220127062504.1835450-1-christian@paral.in>
- <20220127062504.1835450-2-christian@paral.in>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/buildah: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z_NEDHMmY1X7 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 08:05:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB08740B64
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 08:05:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 4BF86827A2; Thu, 27 Jan 2022 07:58:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu, 27 Jan 2022 08:59:41 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: fbec0270f3a5f7c0370cec64418da311f721dc89
+X-Git-Newrev: c88e47b3cbc0d17102f88c475e4fce5bce029427
+X-Patchwork-Hint: ignore
+Message-Id: <20220127075826.4BF86827A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/hackrf: add a
+ comma between licenses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,90 +53,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c88e47b3cbc0d17102f88c475e4fce5bce029427
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-On Wed, 26 Jan 2022 22:25:04 -0800
-Christian Stewart <christian@paral.in> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4afa6fd8c1457dce95b830da3ad3b0d255ca1d09)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/hackrf/hackrf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> v1 -> v2:
-> 
->  - add package to developers
->  - add host runc dependency for host package
->  - add libgpgme runtime dependency
-
-Considering that there are runtime dependency concerns, it would be
-nice to have a simple test case in support/testing/.
-
-
-> diff --git a/package/buildah/buildah.hash b/package/buildah/buildah.hash
-> new file mode 100644
-> index 0000000000..c7e00d02a7
-> --- /dev/null
-> +++ b/package/buildah/buildah.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  d99b5187a25bc9d7385408732a0e155df0458b4d2cea6e8d002f3fa2cbaac76f  buildah-1.24.0.tar.gz
-> +sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-> diff --git a/package/buildah/buildah.mk b/package/buildah/buildah.mk
-> new file mode 100644
-> index 0000000000..658d7ef56f
-> --- /dev/null
-> +++ b/package/buildah/buildah.mk
-> @@ -0,0 +1,46 @@
-> +################################################################################
-> +#
-> +# buildah
-> +#
-> +################################################################################
-> +
-> +BUILDAH_VERSION = 1.24.0
-> +BUILDAH_SITE = $(call github,containers,buildah,v$(BUILDAH_VERSION))
-> +
-> +BUILDAH_LICENSE = Apache-2.0
-> +BUILDAH_LICENSE_FILES = LICENSE
-> +
-> +BUILDAH_DEPENDENCIES = libgpgme
-
-Is libgpgme really a runtime dependency, as noted in your changelog? If
-it is, then it's not needed in BUILDAH_DEPENDENCIES. However, it would
-be somewhat surprising for it to be only a runtime dependency. Could
-you confirm? Does it get dlopen()ed at runtime? Or it's not the library
-that is used at runtime, but some program that is installed by libgpgme?
-
-
-> +define BUILDAH_INSTALL_CONFIG
-> +	$(INSTALL) -D -m 644 $(@D)/contrib/buildroot/policy.json \
-> +		$(TARGET_DIR)/etc/containers/policy.json
-> +endef
-> +
-> +BUILDAH_POST_INSTALL_TARGET_HOOKS += BUILDAH_INSTALL_CONFIG
-> +
-> +HOST_BUILDAH_BUILD_TARGETS = $(BUILDAH_BUILD_TARGETS)
-> +HOST_BUILDAH_TAGS = $(BUILDAH_TAGS)
-> +HOST_BUILDAH_LDFLAGS = $(BUILDAH_LDFLAGS)
-> +HOST_BUILDAH_INSTALL_BINS = $(BUILDAH_INSTALL_BINS)
-
-That "repetition" also makes me think we should have some level of
-inheritance between target and host variables in the golang-package
-infrastructure. For BUILD_TARGETS, TAGS and INSTALL_BINS, it sounds
-fine to do it. However, for LDFLAGS, it's a bit weird, as normally,
-LDFLAGS are different between host and target. However here, there are
-mostly used to pass these version-related -X options, that are in fact
-the same between host and target. Should we have a separate variable to
-pass those flags ? Not sure.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
+index 391bddcdb0..d80f87e6b9 100644
+--- a/package/hackrf/hackrf.mk
++++ b/package/hackrf/hackrf.mk
+@@ -7,7 +7,7 @@
+ HACKRF_VERSION = 2018.01.1
+ HACKRF_SITE = https://github.com/mossmann/hackrf/releases/download/v$(HACKRF_VERSION)
+ HACKRF_SOURCE = hackrf-$(HACKRF_VERSION).tar.xz
+-HACKRF_LICENSE = GPL-2.0+ BSD-3-Clause
++HACKRF_LICENSE = GPL-2.0+, BSD-3-Clause
+ HACKRF_LICENSE_FILES = COPYING
+ HACKRF_DEPENDENCIES = fftw-single libusb
+ HACKRF_SUBDIR = host
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
