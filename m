@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 233D7C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 319A9C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF59360DFD;
-	Thu, 27 Jan 2022 16:48:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB73D610DF;
+	Thu, 27 Jan 2022 16:48:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CzY7HNXz5E-E; Thu, 27 Jan 2022 16:48:38 +0000 (UTC)
+	with ESMTP id pVyOZJXVrLl5; Thu, 27 Jan 2022 16:48:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEA7560AA3;
-	Thu, 27 Jan 2022 16:48:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30B2D610CA;
+	Thu, 27 Jan 2022 16:48:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BAEFF1C1135
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:48:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C86E11C1135
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9B9C410A0
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:48:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B679F410A0
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:48:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zkRBA7el5fKB for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 16:48:35 +0000 (UTC)
+ with ESMTP id GINZoc6pHPVI for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 16:48:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3EAC3409A6
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 16:48:35 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57F1D409A6
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 16:48:47 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 64379200011;
- Thu, 27 Jan 2022 16:48:33 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 276372000C;
+ Thu, 27 Jan 2022 16:48:43 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nD7wm-00069G-Qp; Thu, 27 Jan 2022 17:48:32 +0100
+ id 1nD7wx-00069j-4z; Thu, 27 Jan 2022 17:48:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220109162602.991D282DEC@busybox.osuosl.org>
-Date: Thu, 27 Jan 2022 17:48:32 +0100
 In-Reply-To: <20220109162602.991D282DEC@busybox.osuosl.org> (Thomas
  Petazzoni's message of "Sun, 9 Jan 2022 17:31:55 +0100")
-Message-ID: <87k0elazvj.fsf@dell.be.48ers.dk>
+References: <20220109162602.991D282DEC@busybox.osuosl.org>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date: Thu, 27 Jan 2022 17:48:43 +0100
+Message-ID: <87ilu5azv8.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
 Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: add
  --disable option
@@ -80,65 +81,6 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2021.02.x and 2021.11.x, thanks.
-
-Committed to 2021.11.x, thanks.
-
- > ---
- >  support/scripts/pkg-stats | 23 ++++++++++++++++-------
- >  1 file changed, 16 insertions(+), 7 deletions(-)
-
- > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
- > index 00ca5647ee..7e20ccc0da 100755
- > --- a/support/scripts/pkg-stats
- > +++ b/support/scripts/pkg-stats
- > @@ -1099,6 +1099,10 @@ def resolvepath(path):
- >      return os.path.abspath(os.path.expanduser(path))
- 
- 
- > +def list_str(values):
- > +    return values.split(',')
- > +
- > +
- >  def parse_args():
- >      parser = argparse.ArgumentParser()
- >      output = parser.add_argument_group('output', 'Output file(s)')
- > @@ -1115,6 +1119,9 @@ def parse_args():
- >                            help='List of packages (comma separated)')
- >      parser.add_argument('--nvd-path', dest='nvd_path',
- >                          help='Path to the local NVD database', type=resolvepath)
- > +    parser.add_argument('--disable', type=list_str,
- > +                        help='Features to disable, comma-separated (cve, upstream, url)',
- > +                        default=[])
- >      args = parser.parse_args()
- >      if not args.html and not args.json:
- >          parser.error('at least one of --html or --json (or both) is required')
- > @@ -1161,13 +1168,15 @@ def __main__():
- >          pkg.set_url()
- >          pkg.set_ignored_cves()
- >          pkg.set_developers(developers)
- > -    print("Checking URL status")
- > -    loop = asyncio.get_event_loop()
- > -    loop.run_until_complete(check_package_urls(packages))
- > -    print("Getting latest versions ...")
- > -    loop = asyncio.get_event_loop()
- > -    loop.run_until_complete(check_package_latest_version(packages))
- > -    if args.nvd_path:
- > +    if not "url" in args.disable:
- > +        print("Checking URL status")
- > +        loop = asyncio.get_event_loop()
- > +        loop.run_until_complete(check_package_urls(packages))
- > +    if not "upstream" in args.disable:
- > +        print("Getting latest versions ...")
- > +        loop = asyncio.get_event_loop()
- > +        loop.run_until_complete(check_package_latest_version(packages))
- > +    if not "cve" in args.disable and args.nvd_path:
- >          print("Checking packages CVEs")
- >          check_package_cves(args.nvd_path, packages)
- >          check_package_cpes(args.nvd_path, packages)
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
