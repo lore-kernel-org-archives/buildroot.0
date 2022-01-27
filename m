@@ -1,65 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEE9C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 18:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39F4C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 19:23:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7A3B84CC4;
-	Thu, 27 Jan 2022 18:50:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68DA9415CD;
+	Thu, 27 Jan 2022 19:23:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 91RORYjIHmXg; Thu, 27 Jan 2022 18:50:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y6_TH4VPpyQI; Thu, 27 Jan 2022 19:23:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 324E584C74;
-	Thu, 27 Jan 2022 18:50:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11A801BF3EA
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:50:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9438C41515;
+	Thu, 27 Jan 2022 19:23:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 89FC01BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 19:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3F9060A75
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:50:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8500D403E0
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 19:23:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CRDfsciVkkcC for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 18:50:11 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rfb2p4OjKH18 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 19:23:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1DFCD60810
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 18:50:11 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:cc8e:5bc6:13d0:52a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 2E2D12003DA;
- Thu, 27 Jan 2022 19:50:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1643309409;
- bh=rwTeJ4I56KzuRB4q+gHjXBYykIePi9xe7dIg0bGOX3w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=tpwjE5mZ94e2q1kHx5Y0PogITEBuJyuQc4PZrf6ep9mtr4LFw1uHRZ6FckttO2WLy
- VvuP9vBFnWhr2KGndhjwXhTmWULldai16qXTOtmMac5+6TiWzj5t430Vj+hGUzNTU/
- 0dwNtYI9Tjl8cvzO3do38C6eCy62a1Zi/06yBPJ5YR1+zs6RuFJntka21q5EmFYW4E
- FwV4Gh+dpqotKSZ3R5xNcvgZLbsLFGLh4zNYNh9lRDlkgMXWNAJ6vWOG0BiqdrHP+H
- JLc6tDo/d+Cjy3rhSwgcPYEwCh1h/MdEQ/kT7/8fSbzqPo6gjCbpHlBT80R5R8XxWi
- mrHGLDcxFLvuA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 27 Jan 2022 19:50:05 +0100
-Date: Thu, 27 Jan 2022 19:50:05 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220127185005.GN457876@scaer>
-References: <20220127175359.2330776-1-fontaine.fabrice@gmail.com>
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4C9A6403D6
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 19:23:43 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id e79so4822382iof.13
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 11:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=l2HnWiIPKUlQVytfaTEOHfo27HSzFiX8l1gptvIENGM=;
+ b=khxSScQG0YNzQacgWlAM6Sx+7F6i0oZ59hm/AuIyGK3Ra59Vkj1my0lk4f4f8GACVH
+ tRmHccTq4Q/Dadx66J76keswxOXFLWfB0wukQscS6QVhJM+BhnO722gyiGfp70n0f30g
+ eRp1Afgk9afVRO147VGwE8nEq1U+cFA3FTh2pD6m7MbODAWJuL5r006G9lk0o2P3EfXe
+ 2WY3e5BuSYWhkKJq3WQ6xMVQDSZH4pdhVBvPLmcuhbJdAjDb+Zp0czu5OaHsOquFhVq5
+ N5P95IDTAzObGo4ggc+ut0w6v1wSfdNDU3CuGwa2WGcuivh9X1Jv3en++1aJEfD3HnwZ
+ BOEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=l2HnWiIPKUlQVytfaTEOHfo27HSzFiX8l1gptvIENGM=;
+ b=MaA4JZZm/T7w/WDaX4Od/uLSaz9GchZ9XnDwWn1fhNTi0Db26bWRK+HUjc0ttiZOBE
+ 83zDGzauA7AbRYiNvcIm5Qq71IxEXOAKSih9kupnibOeEo+6bxzRWHrLjHs10oOmXsSR
+ ye4/P5qwInwAneh232Q49JV1TCPbr0e1pIr48zeWmVZ+7AB/cmPbiY5F2EzQFQMyFKuh
+ DJ4yxMz3PSrLOUlUKrZxL0Or7Xlsh62Z82iyBewzQP6GPZc0xbDQJNgmkAdWvb8W/+Kt
+ qF2drFlmIggGsmhfVJcRKCpS03w+oT/N+cIsOD1caQblAWMsphBMBe6kT+kU1MzkoHYI
+ teFg==
+X-Gm-Message-State: AOAM530lAii+HiwmI+cSG+vs6Vdsbc42HLkvJR9yw/X3GpZVex60nryb
+ TEWP0cpXLu9qasGZqRMbVTJocNNEcpA=
+X-Google-Smtp-Source: ABdhPJykm4z9c+5gfZe2p9OOUjiSrjJTSScNH3+wCZykoR5rpYRqE4fFGDykXHW5sUG6raWCdIm0cw==
+X-Received: by 2002:a02:a385:: with SMTP id y5mr2523079jak.307.1643311421935; 
+ Thu, 27 Jan 2022 11:23:41 -0800 (PST)
+Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
+ [71.218.245.50])
+ by smtp.gmail.com with ESMTPSA id f12sm669023ilj.47.2022.01.27.11.23.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 27 Jan 2022 11:23:41 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 27 Jan 2022 12:23:07 -0700
+Message-Id: <20220127192311.1954197-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220127175359.2330776-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/htpdate: fix install
+Subject: [Buildroot] [PATCH v2 1/5] package/serd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,67 +85,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Gilles Talis <gilles.talis@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/serd/Config.in |  8 ++++++++
+ package/serd/serd.hash |  4 ++++
+ package/serd/serd.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/serd/Config.in
+ create mode 100644 package/serd/serd.hash
+ create mode 100644 package/serd/serd.mk
 
-On 2022-01-27 18:53 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since bump to version 1.3.3 in
-> commit 163509a8e0d558e6339c5489f072dfe805e0cc34:
-> 
-> >>> htpdate 1.3.3 Installing to target
-> PATH="/home/buildroot/autobuild/instance-0/output-1/host/bin:/home/buildroot/autobuild/instance-0/output-1/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" /usr/bin/make -j4 -C /home/buildroot/autobuild/instance-0/output-1/build/htpdate-1.3.3 DESTDIR=/home/buildroot/autobuild/instance-0/output-1/target install
-> make[1]: Entering directory '/home/buildroot/autobuild/instance-0/output-1/build/htpdate-1.3.3'
-> strip -s htpdate
-> strip: Unable to recognise the format of the input file `htpdate'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f1034de5ebc2fc2c49711820077d0b6e5e13aea5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/htpdate/htpdate.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-> index 200c3207a2..54b3ec2569 100644
-> --- a/package/htpdate/htpdate.mk
-> +++ b/package/htpdate/htpdate.mk
-> @@ -19,7 +19,8 @@ define HTPDATE_BUILD_CMDS
->  endef
->  
->  define HTPDATE_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		DESTDIR=$(TARGET_DIR) install
->  endef
->  
->  define HTPDATE_INSTALL_INIT_SYSV
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fe8de1916e..6e40b0e9ae 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1335,6 +1335,7 @@ F:	package/python-tomli/
+ F:	package/python-weasyprint/
+ F:	package/python-yarl/
+ F:	package/python-zopfli/
++F:	package/serd/
+ F:	package/zchunk/
+ 
+ N:	James Knight <james.knight@collins.com>
+diff --git a/package/Config.in b/package/Config.in
+index e4ca195beb..decf523821 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1720,6 +1720,7 @@ menu "JSON/XML"
+ 	source "package/rapidjson/Config.in"
+ 	source "package/rapidxml/Config.in"
+ 	source "package/raptor/Config.in"
++	source "package/serd/Config.in"
+ 	source "package/tinyxml/Config.in"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/valijson/Config.in"
+diff --git a/package/serd/Config.in b/package/serd/Config.in
+new file mode 100644
+index 0000000000..7633a979e2
+--- /dev/null
++++ b/package/serd/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_SERD
++	bool "serd"
++	help
++	  Serd is a lightweight C library for RDF syntax which
++	  supports reading and writing Turtle, TriG, NTriples, and
++	  NQuads.
++
++	  https://drobilla.net/software/serd.html
+diff --git a/package/serd/serd.hash b/package/serd/serd.hash
+new file mode 100644
+index 0000000000..d64a2aa271
+--- /dev/null
++++ b/package/serd/serd.hash
+@@ -0,0 +1,4 @@
++# Locally calculated after checking signature
++# http://download.drobilla.net/serd-0.30.10.tar.bz2.sig
++sha256  affa80deec78921f86335e6fc3f18b80aefecf424f6a5755e9f2fa0eb0710edf  serd-0.30.10.tar.bz2
++sha256  e06562d6bcf0341b2ac2ad0f0ca36801d2ebf388d5ef297011625e4c36e963f0  COPYING
+diff --git a/package/serd/serd.mk b/package/serd/serd.mk
+new file mode 100644
+index 0000000000..85b16f6866
+--- /dev/null
++++ b/package/serd/serd.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# serd
++#
++################################################################################
++
++SERD_VERSION = 0.30.10
++SERD_SITE = https://download.drobilla.net
++SERD_SOURCE = serd-$(SERD_VERSION).tar.bz2
++SERD_LICENSE = ISC
++SERD_LICENSE_FILES = COPYING
++SERD_INSTALL_STAGING = YES
++
++SERD_CONF_OPTS += --largefile --no-coverage
++
++ifeq ($(BR2_STATIC_LIBS),y)
++SERD_CONF_OPTS += --static --no-shared --static-progs
++endif
++
++$(eval $(waf-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
