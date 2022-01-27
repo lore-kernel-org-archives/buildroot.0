@@ -1,81 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 827F9C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 17:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA31C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 18:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1EBA60A8B;
-	Thu, 27 Jan 2022 17:55:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23AEB4038D;
+	Thu, 27 Jan 2022 18:06:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2TqkRqa6SWHG; Thu, 27 Jan 2022 17:55:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HJiscsYFGI99; Thu, 27 Jan 2022 18:06:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 269F0600C9;
-	Thu, 27 Jan 2022 17:55:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B79151BF275
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 17:55:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F26484019F;
+	Thu, 27 Jan 2022 18:06:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 852951BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B36EE40899
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 17:55:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 807D84019F
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 18:06:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KvOpWPLAwOIa for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 17:55:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bk5c6wBLJqAC for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 18:06:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B38640341
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 17:55:50 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- q9-20020a7bce89000000b00349e697f2fbso6501677wmj.0
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 09:55:50 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B9D3400CC
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 18:06:43 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id e2so6311454wra.2
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 10:06:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=QBEKgccsuWpDdV36WFZxpJ7/Em7A8UkGJyRvuSB+770=;
- b=pUieFFk21VhEyJH8bVvZJDd6jNn2ZCcO5WOZF1TGQCB4f9s0TVfEguaJtteGqnXgjT
- VYpWkypu7foHgJmaleosm8hvZazvvcjQvIRprlvSUz04U2kXIhkaKxzqYTuvyfBhYUii
- bKmqjShbTzpMX0QUmZjz7i735T5wTpqm6tp01NSCSqdt9s7bBTXnLqWl5PNovkL58xrb
- n3ufKTpwMh5x6U21aoy9z6KFuNlGcJJKzGJ9veJGxv+YqxBKXOpQ+iqypNURnPxhHxF1
- /UpBYAuLb8InDGHUHO8y/UPFSfuAUXwny09u9pZ5TlvhnKp2X98qQ2LvBAoHJXKNndoJ
- uNEg==
+ bh=Iadm3vMHWfnchJjrtpid8MFI2uzK/zvDms6OCT4gH9E=;
+ b=EWx0LUIG7hk5di43FzDa5RryVI6UMrK+LZ40O2iv6kxw+CMCA8c+msL17GeYJHRn3d
+ T4nEB+ZBKw8jmTTAip8H6qIZFoRrq1ULVERXfOgXA18BGxF8l9PMI8q1OHyplyuA4SBf
+ vqZyqG745cZ3mCtsWUjlfXkh/iCcgGED5vrGiVohI3tTId1rG7a9amwGjNy2JC8618d9
+ A68VdPh3q+bw0K/6gq7TjiqLaLlpSsy3yN6ajf9GBNyUekKbY+LzyGR+nGYtdwYRvdym
+ RSrDfpp89pN6RAuBzx/OoSe4zSgcf76l9giXZRXM6zHJT7L3K3NjCOnoqD/d+RWi2zo8
+ GApA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=QBEKgccsuWpDdV36WFZxpJ7/Em7A8UkGJyRvuSB+770=;
- b=dTJFHOnM46Jjm/LGBqpkNz/QionRtS89fT1g86QxGskT+iY16ZQGeToOICycx/X7d/
- zsAdktj9TyFfcM++VlZd9Qw4UePv+ezLs2CgaF5LxFWO9BfPkN2kt3RACiaO3UZP6HDd
- hJY9TA3QvrTbrUIgOjOF/ihtS6NH+vSFJWLk5YLBm86mE8y/Wj72Xs6hS3m+UfGe4A0G
- q8TocJ7+2DGg2FcRvPJ9LhCBh5vi6Y0pNwVSyoaK14757uooaXQrx611gn4LUaVu0GAp
- YjSriYL9QCsW+rfbzfl6DfoLp/jRQYeBvEGK/cqjhtUT4SRfnDnyrnVa8qjKr5rlk0Be
- KEMg==
-X-Gm-Message-State: AOAM533g+1cBl/9E+hn+TewkK/lQVb1tInpHE0vCEeGGJg2RRICc8Hkf
- Zn5VJ1jJd5LHwN7jZPXDGEjs+O6hZFQ=
-X-Google-Smtp-Source: ABdhPJy5P9o81fDYS3+9Nt4vBgQdj9jBePv62ir/g5/qzPNyQOpXaGpndG8c9gcVm33SATF69Ly3mw==
-X-Received: by 2002:a05:600c:4e0d:: with SMTP id
- b13mr12708915wmq.99.1643306148114; 
- Thu, 27 Jan 2022 09:55:48 -0800 (PST)
+ bh=Iadm3vMHWfnchJjrtpid8MFI2uzK/zvDms6OCT4gH9E=;
+ b=gE/BaWI+1cozLlxQH+AZjBHv5epWbfBypwhfJTJkkqPLrYePytB2S0zW5iiROpHoaH
+ QwOHrq1QNj36XL1kjnMuhnTxF4eJeJwIRsDLC/Id/NkMLa6A0C57EfHtbYYPm98LDTy3
+ 2V/Ujnfgi0mA8ZCdjt0nWOjTLYErlY/Y+L0JVHWTAqIPC3gWXglJln8AxxiMLwaTdLt9
+ XRNlQN4N14M2BXc1fMZWoGIuPWheNgbB1UYzDPLIMZwE6Z3PyxiXrFRKmLP/n1DKsqDc
+ r8nJKdfgnTOxeBCUH0ByozFwD3b+kwLE2xhrifK8w5/6+Om/LxZveRKkOwJk+N8yzsov
+ Fu3g==
+X-Gm-Message-State: AOAM530gUQ3bHyIW0eF+lAHtx9wK0N8O9dFNcPlL2McpaiRQ6MCSFQ3i
+ PxBG7IjG6JECXeM07Z8mF5uegZ74YU4=
+X-Google-Smtp-Source: ABdhPJxE9m67zq0nKeGuyb5eQySmfDJ6+qOPILt37WKOKctR7KhjCnnlv0iAn+6CChOOP5VnoHJfrw==
+X-Received: by 2002:a5d:534a:: with SMTP id t10mr4114372wrv.285.1643306801120; 
+ Thu, 27 Jan 2022 10:06:41 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id 6sm3461952wry.69.2022.01.27.09.55.47
+ by smtp.gmail.com with ESMTPSA id t1sm3288262wre.45.2022.01.27.10.06.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Jan 2022 09:55:47 -0800 (PST)
+ Thu, 27 Jan 2022 10:06:40 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 18:53:59 +0100
-Message-Id: <20220127175359.2330776-1-fontaine.fabrice@gmail.com>
+Date: Thu, 27 Jan 2022 19:04:55 +0100
+Message-Id: <20220127180456.2338773-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/htpdate: fix install
+Subject: [Buildroot] [PATCH 1/2] package/jasper: use JAS_ENABLE_DOC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,44 +83,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+Cc: Michael Vetter <jubalh@iodoru.org>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump to version 1.3.3 in
-commit 163509a8e0d558e6339c5489f072dfe805e0cc34:
-
->>> htpdate 1.3.3 Installing to target
-PATH="/home/buildroot/autobuild/instance-0/output-1/host/bin:/home/buildroot/autobuild/instance-0/output-1/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" /usr/bin/make -j4 -C /home/buildroot/autobuild/instance-0/output-1/build/htpdate-1.3.3 DESTDIR=/home/buildroot/autobuild/instance-0/output-1/target install
-make[1]: Entering directory '/home/buildroot/autobuild/instance-0/output-1/build/htpdate-1.3.3'
-strip -s htpdate
-strip: Unable to recognise the format of the input file `htpdate'
-
-Fixes:
- - http://autobuild.buildroot.org/results/f1034de5ebc2fc2c49711820077d0b6e5e13aea5
+Replace CMAKE_DISABLE_FIND_PACKAGE_{DOXYGEN,LATEX} by JAS_ENABLE_DOC
+which is available (and working as expected) since version 2.0.20 and
+https://github.com/jasper-software/jasper/commit/cddb7b199a1c78f3ec0b2c6b8af705588437af4b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/htpdate/htpdate.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/jasper/jasper.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-index 200c3207a2..54b3ec2569 100644
---- a/package/htpdate/htpdate.mk
-+++ b/package/htpdate/htpdate.mk
-@@ -19,7 +19,8 @@ define HTPDATE_BUILD_CMDS
- endef
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 6ef1afcac7..59c5b3d66a 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -11,9 +11,7 @@ JASPER_LICENSE = JasPer-2.0
+ JASPER_LICENSE_FILES = LICENSE
+ JASPER_CPE_ID_VENDOR = jasper_project
+ JASPER_SUPPORTS_IN_SOURCE_BUILD = NO
+-JASPER_CONF_OPTS = \
+-	-DCMAKE_DISABLE_FIND_PACKAGE_DOXYGEN=TRUE \
+-	-DCMAKE_DISABLE_FIND_PACKAGE_LATEX=TRUE
++JASPER_CONF_OPTS = -DJAS_ENABLE_DOC=OFF
  
- define HTPDATE_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
- endef
- 
- define HTPDATE_INSTALL_INIT_SYSV
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
 -- 
 2.34.1
 
