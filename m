@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1EAEC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 315D3C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 07:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96D4540B47;
-	Thu, 27 Jan 2022 07:17:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE415416C7;
+	Thu, 27 Jan 2022 07:19:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DZ9CQcC8KMYT; Thu, 27 Jan 2022 07:17:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GsanJEN0jGtt; Thu, 27 Jan 2022 07:19:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA2C440B41;
-	Thu, 27 Jan 2022 07:17:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98E5A1BF470
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:17:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 238B74167F;
+	Thu, 27 Jan 2022 07:19:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E21BD1BF470
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 871BA61096
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:17:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD9A584DEF
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 07:19:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v-ep6vXukLMP for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 07:17:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D73C16108F
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:17:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 87B9E8285F; Thu, 27 Jan 2022 07:10:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MbglY-nyLkqf for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 07:19:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5DC884DEC
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 07:19:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1D09E2000A;
+ Thu, 27 Jan 2022 07:19:31 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nCz47-0002Rj-I7; Thu, 27 Jan 2022 08:19:31 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 08:15:30 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: ecaafd1804496ac853a710075e43c7d39f2c0695
-X-Git-Newrev: e5e649a544da652a38683b2fd40c48cbec96fc59
-X-Patchwork-Hint: ignore
-Message-Id: <20220127071040.87B9E8285F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/rhash: fix
- activation of gettext
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220108160854.2EB0F831C3@busybox.osuosl.org>
+Date: Thu, 27 Jan 2022 08:19:31 +0100
+In-Reply-To: <20220108160854.2EB0F831C3@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 8 Jan 2022 17:14:55 +0100")
+Message-ID: <87zgnhd4sc.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] package/opengl/libgbm: clarify option
+ comments
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,42 +60,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5e649a544da652a38683b2fd40c48cbec96fc59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Since commit ead2afda13e5541a7d8e759f5cfec4ab38605dcc, gettext is
-wrongly disabled when BR2_SYSTEM_ENABLE_NLS is set
+ > commit: https://git.buildroot.net/buildroot/commit/?id=2b5f7ce29288e2ba393ca7cd4768a83cdb5dec48
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5630e83c8452d3e9039feb15fd30ea005bfc6b55)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rhash/rhash.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > The comments were *after* the option they applied to, which was
+ > confusing, so bring back the comments before the option they apply to.
 
-diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
-index d19c355cbb..02af0aa57b 100644
---- a/package/rhash/rhash.mk
-+++ b/package/rhash/rhash.mk
-@@ -15,9 +15,9 @@ RHASH_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- RHASH_ADDLDFLAGS = $(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
--RHASH_CONF_OPTS += --disable-gettext
--else
- RHASH_CONF_OPTS += --enable-gettext
-+else
-+RHASH_CONF_OPTS += --disable-gettext
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ > In addition, instead of saying "this option", explicitly name the
+ > option to clear any ambiguity.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
