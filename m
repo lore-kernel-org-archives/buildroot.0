@@ -1,79 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2C9BC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 23:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797BDC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 03:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D2EB61047;
-	Wed, 26 Jan 2022 23:57:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCB7B84E38;
+	Thu, 27 Jan 2022 03:40:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kCXWHaqOWk0I; Thu, 27 Jan 2022 03:40:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB26E84E32;
+	Thu, 27 Jan 2022 03:40:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE0701BF32A
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 03:40:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BB2561073
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 03:40:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EbTh44hbO1sT; Wed, 26 Jan 2022 23:57:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04CE561048;
-	Wed, 26 Jan 2022 23:57:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 294DE1BF291
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 23:57:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2437140AED
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 23:57:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YL5XYxInuzJc for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 23:57:00 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YCXz4QepapT2 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 03:40:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 302324019D
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 23:57:00 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id s9so1687477wrb.6
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 15:56:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Qmo8VZ62aLA7yH4cQtzY/9R9BDTNOBOfg7FWNRwTmuA=;
- b=V6EmuOqZ1FOp5G8N7LCpbR0XrUVFxnlGPYlcwwpU+doKsSgS1DD02YW4JPD3xuItSm
- Soqz/CvbzOLSDqq4nSRQHqndAjm0vTQs4fr9ImWm+EoFvdrAzLs0UOubOA99vLGc+9OC
- GDdjpomLfAoXtcMOZM3sBHn9dE2pCwBubzOrFw2PsnJOgzfJUaCn9zsU3g1QUa4X1Dgm
- TQucFvl71D/CtHTKqSYuzS12/2J3YuxhrgL6oIEhdMTa4L74+GP4qsZq8SgRAJxf0rOA
- bV/wBDmloaImJvordgl2g0vFSzMttXDsgSO4QQf9/ZCo6j/DQ8I+XEEAcOnwY6lESMT9
- xnqA==
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com
+ [209.85.214.174])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B78CE6106E
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 03:40:21 +0000 (UTC)
+Received: by mail-pl1-f174.google.com with SMTP id j16so1384035plx.4
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 19:40:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Qmo8VZ62aLA7yH4cQtzY/9R9BDTNOBOfg7FWNRwTmuA=;
- b=e5XFnYp5egvYfnUKZONZ8rvhidslU16U1ReDt0kyf9UbzO63sZh2SMlGayTAbpWDr6
- 88cMIqfb8V3VOjyiWDacSMxvTtjswPxo6FTvfdmsF/wCAnGsVkWEveijCMkm2MR8lV++
- CB6ugDpuTvZlXWmYqrC+/767yrh8j6sqEo9WZKCQxDEkWuExs152oix4AEOFhejvncIW
- p9faniwmHPTC86Zj2Rzr74+yIPmqTYUn/+1QCmClcmthJBmk5xFUMKc3LPlS+LJOuLCZ
- YHBLzj4cMsjPHH8lSkiCdWFdAC6TSicjnm8vF/nYR6C+lkAAx26lopW/C0+S8SQPlHhI
- W8Ag==
-X-Gm-Message-State: AOAM530ElJX07EjuFrbK2J+MH51MIx3lFGWQvVqX5zyei1NT4sAEw3D7
- Qw+eAMZr3skvZA5n1HcTGD8wgJOOXAPB5EJg
-X-Google-Smtp-Source: ABdhPJww0mEt/Z7fIcfRVF8lbWmiS5eZGoDgtc1NE5cRB6RxuhkE3azZNuxt3f3TIw5W7pHa6O6RUA==
-X-Received: by 2002:adf:dc52:: with SMTP id m18mr774551wrj.370.1643241418281; 
- Wed, 26 Jan 2022 15:56:58 -0800 (PST)
-Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id o10sm796894wri.19.2022.01.26.15.56.57
+ bh=C7+UJHfGNVlrZl7Wf7TZwkjwGUWUtwPn2OY3MnlSUtw=;
+ b=RdE078ZG1EB6mqDX4xKT22BOsd48S3CQTroPfJHLRedOnvRi7PaYFZEKY51vy/sCjX
+ Tr3jXMFntkuUZxGEkiXhPEGKVteXPjXM48x0LwuPhGXGXD7vaWcVXejSFa5cKAaGuX5Q
+ 9N84dbjEiFv16TYBH1omyc0Ps/l96WRcKQ8AE3qFBDf2AloXm8wPoMOE0S+qw7/OSOew
+ Jwcyhr0mBVOJMTLULAGMJfe9mC+hFuKP/ULkGIWjM5MagrMjTmwM+3rlTWioM+HHsttQ
+ 0roG47w08IOZ7VqqDgFqPo0cpOZjqcMnx1e7wWtNZpeXApYNocwdLC2oCSUNTkgfjeld
+ eKlg==
+X-Gm-Message-State: AOAM533Oziti/Gh2VY+F3JN7uv6GOAKUc5sYdXIWKOUNurLjz8zKMB+e
+ eYjPaXcK4Wrel2Tlvlsfje8rqgKK2TQRgg==
+X-Google-Smtp-Source: ABdhPJybOfXGMzewuEkt8PqjgvvfYTBZD58NZPOf+0ELc26fh0iTGKVe/U540BaEP15QuCw5JWinqA==
+X-Received: by 2002:a17:90a:f198:: with SMTP id
+ bv24mr258873pjb.32.1643254820825; 
+ Wed, 26 Jan 2022 19:40:20 -0800 (PST)
+Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
+ by smtp.gmail.com with ESMTPSA id
+ q140sm18424923pgq.7.2022.01.26.19.40.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Jan 2022 15:56:57 -0800 (PST)
-From: Petr Vorel <petr.vorel@gmail.com>
+ Wed, 26 Jan 2022 19:40:20 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 00:56:52 +0100
-Message-Id: <20220126235652.25712-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 26 Jan 2022 19:40:17 -0800
+Message-Id: <20220127034017.91761-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version to
- 20220121
+Subject: [Buildroot] [PATCH 1/1] package/buildah: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,430 +73,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LTP now builds metadata directory as host target.
-It's mandatory, therefore adding HOST_CFLAGS and HOST_LDFLAGS to make
-(adding to configure does not work) to avoid adding -mlongcalls
--mauto-litpools for some targets (e.g. bootlin-xtensa-uclibc).
+Adds both host and target packages for buildah.
 
-Drop patches from this release.
+Buildah is a tool that facilitates building OCI images.
 
-Refresh 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-(still safe to carry it).
+https://github.com/containers/buildah
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
-Changes v1->v2:
-* Add missin g HOST_LDFLAGS to fix br-arm-full-static (cannot find -lc
-when compiling host target)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/Config.in.host         |  1 +
+ package/buildah/Config.in      | 21 ++++++++++++++++++
+ package/buildah/Config.in.host |  7 ++++++
+ package/buildah/buildah.hash   |  3 +++
+ package/buildah/buildah.mk     | 39 ++++++++++++++++++++++++++++++++++
+ 7 files changed, 73 insertions(+)
+ create mode 100644 package/buildah/Config.in
+ create mode 100644 package/buildah/Config.in.host
+ create mode 100644 package/buildah/buildah.hash
+ create mode 100644 package/buildah/buildah.mk
 
-Kind regards,
-Petr
-
- ...ysinfo.h-to-fix-build-with-MUSL-libc.patch | 45 ++++++--------
- .../0002-lib-fix-MemAvailable-parsing.patch   | 36 -----------
- ...-lapi-rtnetlink.h-Fix-include-guards.patch | 37 ------------
- ...f_addr.h-and-reuse-it-in-rtnetlink.h.patch | 58 ------------------
- ...0005-lapi-if_addr.h-Define-IFA_FLAGS.patch | 60 -------------------
- package/ltp-testsuite/ltp-testsuite.hash      |  6 +-
- package/ltp-testsuite/ltp-testsuite.mk        |  6 +-
- 7 files changed, 25 insertions(+), 223 deletions(-)
- delete mode 100644 package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch
- delete mode 100644 package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch
- delete mode 100644 package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch
- delete mode 100644 package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch
-
-diff --git a/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-index a167d938e1..2ceba64ed5 100644
---- a/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-+++ b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-@@ -1,4 +1,4 @@
--From bee452dfa2a34ba7df7db677e5673cbdcd23f61e Mon Sep 17 00:00:00 2001
-+From f34c6ca3d543968e900d6327d8b5900db63f08ad Mon Sep 17 00:00:00 2001
- From: Petr Vorel <petr.vorel@gmail.com>
- Date: Thu, 1 Oct 2020 23:28:39 +0200
- Subject: [PATCH] lapi: Add sysinfo.h to fix build with MUSL libc
-@@ -56,7 +56,7 @@ Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fe8de1916e..80e7c5abee 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -529,6 +529,7 @@ F:	package/python-pylibftdi/
  
- diff --git a/include/lapi/sysinfo.h b/include/lapi/sysinfo.h
- new file mode 100644
--index 000000000..d0e0e93d7
-+index 0000000000..d0e0e93d7f
- --- /dev/null
- +++ b/include/lapi/sysinfo.h
- @@ -0,0 +1,22 @@
-@@ -83,7 +83,7 @@ index 000000000..d0e0e93d7
- +
- +#endif /* SYSINFO_H__ */
- diff --git a/include/tst_safe_macros.h b/include/tst_safe_macros.h
--index d99441c86..0d26e9d45 100644
-+index d99441c86f..0d26e9d455 100644
- --- a/include/tst_safe_macros.h
- +++ b/include/tst_safe_macros.h
- @@ -12,7 +12,7 @@
-@@ -96,44 +96,33 @@ index d99441c86..0d26e9d45 100644
-  #include <libgen.h>
-  #include <signal.h>
- diff --git a/lib/safe_macros.c b/lib/safe_macros.c
--index a5b6bc504..20d01d304 100644
-+index a5b6bc5047..87d922a928 100644
- --- a/lib/safe_macros.c
- +++ b/lib/safe_macros.c
--@@ -11,7 +11,6 @@
-+@@ -11,7 +11,7 @@
-  #include <sys/wait.h>
-  #include <sys/mount.h>
-  #include <sys/xattr.h>
- -#include <sys/sysinfo.h>
-++#include "lapi/sysinfo.h"
-  #include <errno.h>
-  #include <fcntl.h>
-  #include <libgen.h>
--@@ -23,6 +22,7 @@
-- #include <malloc.h>
-- #include "test.h"
-- #include "safe_macros.h"
--+#include "lapi/sysinfo.h"
-- 
-- char *safe_basename(const char *file, const int lineno,
-- 		    void (*cleanup_fn) (void), char *path)
- diff --git a/lib/tst_memutils.c b/lib/tst_memutils.c
--index 69077861f..ae1cad29b 100644
-+index 4a49747613..000688f5a3 100644
- --- a/lib/tst_memutils.c
- +++ b/lib/tst_memutils.c
--@@ -5,11 +5,11 @@
-- 
-+@@ -6,7 +6,7 @@
-+ #include <stdio.h>
-  #include <unistd.h>
-  #include <limits.h>
- -#include <sys/sysinfo.h>
-++#include "lapi/sysinfo.h"
-  #include <stdlib.h>
-  
-  #define TST_NO_DEFAULT_MAIN
-- #include "tst_test.h"
--+#include "lapi/sysinfo.h"
-- 
-- #define BLOCKSIZE (16 * 1024 * 1024)
-- 
- diff --git a/testcases/kernel/mem/mtest01/mtest01.c b/testcases/kernel/mem/mtest01/mtest01.c
--index 9676ea4b5..33b2ac822 100644
-+index 20cb95191d..3462dc3f82 100644
- --- a/testcases/kernel/mem/mtest01/mtest01.c
- +++ b/testcases/kernel/mem/mtest01/mtest01.c
- @@ -20,7 +20,6 @@
-@@ -153,7 +142,7 @@ index 9676ea4b5..33b2ac822 100644
-  
-  #define FIVE_HUNDRED_MB         (500ULL*1024*1024)
- diff --git a/testcases/kernel/syscalls/madvise/madvise06.c b/testcases/kernel/syscalls/madvise/madvise06.c
--index 263b8e78b..4fa52e6ea 100644
-+index 263b8e78bf..4fa52e6eae 100644
- --- a/testcases/kernel/syscalls/madvise/madvise06.c
- +++ b/testcases/kernel/syscalls/madvise/madvise06.c
- @@ -46,7 +46,7 @@
-@@ -166,7 +155,7 @@ index 263b8e78b..4fa52e6ea 100644
-  #include "tst_cgroup.h"
-  
- diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo01.c b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
--index 2ea44a2be..a237345ef 100644
-+index 2ea44a2beb..a237345ef7 100644
- --- a/testcases/kernel/syscalls/sysinfo/sysinfo01.c
- +++ b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
- @@ -69,7 +69,7 @@
-@@ -179,7 +168,7 @@ index 2ea44a2be..a237345ef 100644
-  #include "test.h"
-  
- diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo02.c b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
--index 7ad0e8bdc..61fa1ab75 100644
-+index 7ad0e8bdcf..61fa1ab757 100644
- --- a/testcases/kernel/syscalls/sysinfo/sysinfo02.c
- +++ b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
- @@ -65,7 +65,7 @@
-@@ -192,7 +181,7 @@ index 7ad0e8bdc..61fa1ab75 100644
-  
-  #include "test.h"
- diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo03.c b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
--index af7cb6421..dc5ae65e3 100644
-+index af7cb6421e..dc5ae65e35 100644
- --- a/testcases/kernel/syscalls/sysinfo/sysinfo03.c
- +++ b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
- @@ -13,7 +13,7 @@
-@@ -205,7 +194,7 @@ index af7cb6421..dc5ae65e3 100644
-  #include "lapi/posix_clocks.h"
-  #include "tst_test.h"
- diff --git a/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c b/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
--index 22e7c3638..572701f9f 100644
-+index 22e7c36386..572701f9fd 100644
- --- a/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
- +++ b/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
- @@ -43,7 +43,7 @@
-@@ -218,5 +207,5 @@ index 22e7c3638..572701f9f 100644
-  
-  #include "../testfrmw/testfrmw.h"
- -- 
--2.33.0
-+2.34.1
- 
-diff --git a/package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch b/package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch
-deleted file mode 100644
-index 4a9a5b2363..0000000000
---- a/package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 29a096fe2bd356f419bd8a8404d5b652c996b92f Mon Sep 17 00:00:00 2001
--From: Ralph Siemsen <ralph.siemsen@linaro.org>
--Date: Mon, 27 Sep 2021 22:18:50 -0400
--Subject: [PATCH] lib: fix MemAvailable parsing
--
--The amount of available memory was not being returned correctly, which
--resulted in tests being executed when they should have been skipped.
--
--Fixes: 8759f4 ("lib: adjust the tmpfs size according to .dev_min_size and MemAvailable")
--Signed-off-by: Ralph Siemsen <ralph.siemsen@linaro.org>
--Signed-off-by: Li Wang <liwang@redhat.com>
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: e42149e28 ("lib: fix MemAvailable parsing") ]
-----
-- lib/tst_memutils.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/lib/tst_memutils.c b/lib/tst_memutils.c
--index ae1cad29b..a46de78f5 100644
----- a/lib/tst_memutils.c
--+++ b/lib/tst_memutils.c
--@@ -65,9 +65,9 @@ void tst_pollute_memory(size_t maxsize, int fillchar)
-- 
-- long long tst_available_mem(void)
-- {
---	long long mem_available;
--+	unsigned long long mem_available = 0;
-- 
---	if (FILE_LINES_SCANF("/proc/meminfo", "MemAvailable: %ld",
--+	if (FILE_LINES_SCANF("/proc/meminfo", "MemAvailable: %llu",
-- 		&mem_available)) {
-- 		mem_available = SAFE_READ_MEMINFO("MemFree:")
-- 			+ SAFE_READ_MEMINFO("Cached:");
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch b/package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch
-deleted file mode 100644
-index 056c769feb..0000000000
---- a/package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 881709d1e4d1bba5bf8ca365bc058f338bd72dc2 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Wed, 29 Sep 2021 19:38:42 +0200
--Subject: [PATCH] lapi/rtnetlink.h: Fix include guards
--
--Fixes: 5fea0638a ("lapi: Add missing IFA_FLAGS")
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: a2a212cf8 ("lapi/rtnetlink.h: Fix include guards") ]
-----
-- include/lapi/rtnetlink.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/include/lapi/rtnetlink.h b/include/lapi/rtnetlink.h
--index 8a1b5385b..04e9ad51a 100644
----- a/include/lapi/rtnetlink.h
--+++ b/include/lapi/rtnetlink.h
--@@ -1,8 +1,8 @@
-- // SPDX-License-Identifier: GPL-2.0-or-later
-- /* Copyright (c) 2021 Petr Vorel <petr.vorel@gmail.com> */
-- 
---#ifndef LAPI_IF_ADDR_H__
---# define LAPI_IF_ADDR_H__
--+#ifndef LAPI_RTNETLINK_H__
--+# define LAPI_RTNETLINK_H__
-- 
-- #include <linux/rtnetlink.h>
-- 
--@@ -10,4 +10,4 @@
-- # define IFA_FLAGS 8
-- #endif
-- 
---#endif	/* LAPI_IF_ADDR_H__ */
--+#endif	/* LAPI_RTNETLINK_H__ */
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch b/package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch
-deleted file mode 100644
-index 4044636e63..0000000000
---- a/package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From b13440627bd4a9f060a33d400a47a40daa2bc12e Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Wed, 29 Sep 2021 19:37:19 +0200
--Subject: [PATCH] lapi: Create if_addr.h and reuse it in rtnetlink.h
--
--There will be fix in next commit for missing IFA_F_NOPREFIXROUTE which
--requires creating lapi/if_addr.h. Thus move IFA_FLAGS to lapi/if_addr.h,
--as it belongs there and reuse lapi/if_addr.h in lapi/rtnetlink.h just
--like <linux/rtnetlink.h> includes <linux/if_addr.h>.
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: https://lore.kernel.org/ltp/20210930183058.5240-3-petr.vorel@gmail.com/T/#u ]
-----
-- include/lapi/if_addr.h   | 16 ++++++++++++++++
-- include/lapi/rtnetlink.h |  5 +----
-- 2 files changed, 17 insertions(+), 4 deletions(-)
-- create mode 100644 include/lapi/if_addr.h
--
--diff --git a/include/lapi/if_addr.h b/include/lapi/if_addr.h
--new file mode 100644
--index 000000000..4e50a0a4e
----- /dev/null
--+++ b/include/lapi/if_addr.h
--@@ -0,0 +1,16 @@
--+// SPDX-License-Identifier: GPL-2.0-or-later
--+/*
--+ * Copyright (c) 2021 Petr Vorel <petr.vorel@gmail.com>
--+ */
--+
--+#ifndef LAPI_IF_ADDR_H__
--+#define LAPI_IF_ADDR_H__
--+
--+#include <linux/if_addr.h>
--+
--+#ifndef IFA_FLAGS
--+# define IFA_FLAGS 8
--+#endif
--+
--+
--+#endif /* LAPI_IF_ADDR_H__ */
--diff --git a/include/lapi/rtnetlink.h b/include/lapi/rtnetlink.h
--index 04e9ad51a..089bf1a0d 100644
----- a/include/lapi/rtnetlink.h
--+++ b/include/lapi/rtnetlink.h
--@@ -5,9 +5,6 @@
-- # define LAPI_RTNETLINK_H__
-- 
-- #include <linux/rtnetlink.h>
---
---#ifndef IFA_FLAGS
---# define IFA_FLAGS 8
---#endif
--+#include "lapi/if_addr.h"
-- 
-- #endif	/* LAPI_RTNETLINK_H__ */
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch b/package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch
-deleted file mode 100644
-index b54e052992..0000000000
---- a/package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 9e357fb4fc00ab9c303e314b85b9ae3836141f81 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Wed, 29 Sep 2021 19:56:29 +0200
--Subject: [PATCH] lapi/if_addr.h: Define IFA_FLAGS
--
--and use it in icmp_rate_limit01.c.
--
--This fixes error on toolchains with very old kernel headers, e.g.
--Buildroot sourcery-arm:
--
--icmp_rate_limit01.c:82:3: error: 'IFA_F_NOPREFIXROUTE' undeclared (first use in this function)
--   IFA_F_NOPREFIXROUTE);
--
--Fixed because IFA_F_NOPREFIXROUTE was added in 3.14 and the oldest
--system we still support is Cent0S 7 with 3.10 kernel.
--
--NOTE: Cent0S 7 is obviously heavily patched thus it contains
--IFA_F_NOPREFIXROUTE and therefore CI build didn't catch this error.
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: https://lore.kernel.org/ltp/20210930183058.5240-4-petr.vorel@gmail.com/T/#u ]
-----
-- include/lapi/if_addr.h            | 3 +++
-- testcases/cve/icmp_rate_limit01.c | 3 ++-
-- 2 files changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/include/lapi/if_addr.h b/include/lapi/if_addr.h
--index 4e50a0a4e..0f7e44784 100644
----- a/include/lapi/if_addr.h
--+++ b/include/lapi/if_addr.h
--@@ -12,5 +12,8 @@
-- # define IFA_FLAGS 8
-- #endif
-- 
--+#ifndef IFA_F_NOPREFIXROUTE
--+# define IFA_F_NOPREFIXROUTE	0x200
--+#endif
-- 
-- #endif /* LAPI_IF_ADDR_H__ */
--diff --git a/testcases/cve/icmp_rate_limit01.c b/testcases/cve/icmp_rate_limit01.c
--index b3a237b30..3ada32675 100644
----- a/testcases/cve/icmp_rate_limit01.c
--+++ b/testcases/cve/icmp_rate_limit01.c
--@@ -27,11 +27,12 @@
-- #include <sys/socket.h>
-- #include <netinet/in.h>
-- #include <arpa/inet.h>
---#include <linux/if_addr.h>
-- #include <linux/errqueue.h>
-- 
-- #include <sched.h>
-- #include <limits.h>
--+
--+#include "lapi/if_addr.h"
-- #include "tst_test.h"
-- #include "tst_netdevice.h"
-- 
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index a9f3cfdfe1..bd648cbfdd 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,5 +1,5 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20210927/ltp-full-20210927.tar.xz.sha1
--sha1 dad7737f609e358c4060cb446b9cae5c026fc137  ltp-full-20210927.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20220121/ltp-full-20220121.tar.xz.sha1
-+sha1 211935e901afea1010ec4f70369b782fbee93ed4  ltp-full-20220121.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  779e9e5cc9af4f2b3d4cb32f5439ebd635504d2c4591bf900f0942dac290ed15  ltp-full-20210927.tar.xz
-+sha256  ad002520616fac52362229ea0f1bb9d304fc03ff0096ccb5b1820cee9fc8413a  ltp-full-20220121.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index cc6d3c63b6..d9b7133b07 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20210927
-+LTP_TESTSUITE_VERSION = 20220121
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- 
-@@ -70,6 +70,10 @@ LTP_TESTSUITE_CONF_ENV += \
- 	LIBS="$(LTP_TESTSUITE_LIBS)" \
- 	SYSROOT="$(STAGING_DIR)"
- 
-+LTP_TESTSUITE_MAKE_ENV += \
-+	HOST_CFLAGS="$(HOST_CFLAGS)" \
-+	HOST_LDFLAGS="$(HOST_LDFLAGS)"
+ N:	Christian Stewart <christian@paral.in>
+ F:	package/batman-adv/
++F:	package/buildah/
+ F:	package/containerd/
+ F:	package/delve/
+ F:	package/docker-cli/
+diff --git a/package/Config.in b/package/Config.in
+index e4ca195beb..91eb66a454 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2523,6 +2523,7 @@ menu "System tools"
+ 	source "package/audit/Config.in"
+ 	source "package/balena-engine/Config.in"
+ 	source "package/bubblewrap/Config.in"
++	source "package/buildah/Config.in"
+ 	source "package/cgroupfs-mount/Config.in"
+ 	source "package/circus/Config.in"
+ 	source "package/containerd/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 341e24926b..d2e59388ae 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -7,6 +7,7 @@ menu "Host utilities"
+ 	source "package/babeltrace2/Config.in.host"
+ 	source "package/bmap-tools/Config.in.host"
+ 	source "package/btrfs-progs/Config.in.host"
++	source "package/buildah/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
+ 	source "package/checksec/Config.in.host"
+diff --git a/package/buildah/Config.in b/package/buildah/Config.in
+new file mode 100644
+index 0000000000..f4378be679
+--- /dev/null
++++ b/package/buildah/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_BUILDAH
++	bool "buildah"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme -> libgpg-error
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # libgpgme -> libassuan
++	# gnupg is not needed to build, but at runtime.
++	select BR2_PACKAGE_LIBGPGME
++	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2
++	select BR2_PACKAGE_LIBGPG_ERROR
++	select BR2_PACKAGE_LIBASSUAN
++	help
++	  Buildah is a tool that facilitates building OCI images.
 +
- # uclibc: bessel support normally not enabled
- LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
- 	testcases/misc/math/float/bessel/ \
++	  https://github.com/containers/buildah
++
++comment "buildah needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/buildah/Config.in.host b/package/buildah/Config.in.host
+new file mode 100644
+index 0000000000..ca294e6f92
+--- /dev/null
++++ b/package/buildah/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_BUILDAH
++	bool "buildah"
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	help
++	  Buildah is a tool that facilitates building OCI images.
++
++	  https://github.com/containers/buildah
+diff --git a/package/buildah/buildah.hash b/package/buildah/buildah.hash
+new file mode 100644
+index 0000000000..c7e00d02a7
+--- /dev/null
++++ b/package/buildah/buildah.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  d99b5187a25bc9d7385408732a0e155df0458b4d2cea6e8d002f3fa2cbaac76f  buildah-1.24.0.tar.gz
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/buildah/buildah.mk b/package/buildah/buildah.mk
+new file mode 100644
+index 0000000000..87eed8b834
+--- /dev/null
++++ b/package/buildah/buildah.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# buildah
++#
++################################################################################
++
++BUILDAH_VERSION = 1.24.0
++BUILDAH_SITE = $(call github,containers,buildah,v$(BUILDAH_VERSION))
++
++BUILDAH_LICENSE = Apache-2.0
++BUILDAH_LICENSE_FILES = LICENSE
++
++BUILDAH_DEPENDENCIES = libgpgme
++
++BUILDAH_CPE_ID_VENDOR = buildah_project
++BUILDAH_CPE_ID_PRODUCT = buildah
++
++BUILDAH_TAGS = \
++	cgo \
++	exclude_graphdriver_aufs \
++	exclude_graphdriver_btrfs \
++	exclude_graphdriver_devicemapper \
++	exclude_graphdriver_zfs
++BUILDAH_BUILD_TARGETS = cmd/buildah
++BUILDAH_GOMOD = github.com/containers/buildah
++
++BUILDAH_LDFLAGS = \
++	-X $(BUILDAH_GOMOD)/cmd/buildah.GitCommit=v$(BUILDAH_VERSION) \
++	-X $(BUILDAH_GOMOD)/define.Version=v$(BUILDAH_VERSION)
++
++BUILDAH_INSTALL_BINS = $(notdir $(BUILDAH_BUILD_TARGETS))
++
++HOST_BUILDAH_BUILD_TARGETS = $(BUILDAH_BUILD_TARGETS)
++HOST_BUILDAH_TAGS = $(BUILDAH_TAGS)
++HOST_BUILDAH_LDFLAGS = $(BUILDAH_LDFLAGS)
++HOST_BUILDAH_INSTALL_BINS = $(BUILDAH_INSTALL_BINS)
++
++$(eval $(golang-package))
++$(eval $(host-golang-package))
 -- 
-2.34.1
+2.35.0
 
 _______________________________________________
 buildroot mailing list
