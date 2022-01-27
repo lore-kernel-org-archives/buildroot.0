@@ -1,47 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2953DC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 18:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A43CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 23:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6E9740457;
-	Fri, 28 Jan 2022 18:28:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 712C260BBC;
+	Thu, 27 Jan 2022 23:22:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jmx0KyyzMME9; Fri, 28 Jan 2022 18:28:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4KyN_ipBzokZ; Thu, 27 Jan 2022 23:22:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0805F4088C;
-	Fri, 28 Jan 2022 18:28:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B663560B97;
+	Thu, 27 Jan 2022 23:22:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B8C931BF2F7
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 18:28:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B4071BF352
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 23:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A548B405A8
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 18:28:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 574C94019A
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 23:22:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HvJWvEEBM1fo for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 18:28:17 +0000 (UTC)
+ with ESMTP id gDTUXs_0EKUH for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 23:22:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E42E340534
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 18:28:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5C3CB822AC; Fri, 28 Jan 2022 18:21:20 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 19:27:45 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: f541ba0cfffd5653adf1b3c36cbd046e7542f6e4
-X-Git-Newrev: 1cee7b40cab2fd5cf4c9dbe34b41d71fa75677eb
-X-Patchwork-Hint: ignore
-Message-Id: <20220128182120.5C3CB822AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/nodejs: security
- bump to version 12.22.9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64490400E5
+ for <buildroot@uclibc.org>; Thu, 27 Jan 2022 23:22:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 95C3381EBF; Thu, 27 Jan 2022 23:15:14 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Thu, 27 Jan 2022 23:22:09 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: unspecified
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: emile.cormier.jr@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-14556-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 14556] New: python-crossbar fails to build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,84 +69,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cee7b40cab2fd5cf4c9dbe34b41d71fa75677eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+https://bugs.busybox.net/show_bug.cgi?id=14556
 
-Fixes the following security issues:
+            Bug ID: 14556
+           Summary: python-crossbar fails to build
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: emile.cormier.jr@gmail.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-Improper handling of URI Subject Alternative Names (Medium)(CVE-2021-44531)
+The buildroot crossbar package does not work in the latest release/head of
+buildroot. After two days of playing dependency whac-a-mole, I've been able to
+make it work again with the following steps:
 
-Accepting arbitrary Subject Alternative Name (SAN) types, unless a PKI is
-specifically defined to use a particular SAN type, can result in bypassing
-name-constrained intermediates.  Node.js was accepting URI SAN types, which
-PKIs are often not defined to use.  Additionally, when a protocol allows URI
-SANs, Node.js did not match the URI correctly.
+1. Remove the package-crossbar/0002-Remove-idna-requirement.patch and replace
+it with another patch which does the following:
 
-Certificate Verification Bypass via String Injection (Medium)(CVE-2021-44532)
+- Change the idna requirement to >=2.5,<4 to match that of the Requests v2.27.1
+package included with the latest buildroot. The idna v3.3 package is the one
+currently bundled with buildroot.
 
-Node.js converts SANs (Subject Alternative Names) to a string format.  It
-uses this string to check peer certificates against hostnames when
-validating connections.  The string format was subject to an injection
-vulnerability when name constraints were used within a certificate chain,
-allowing the bypass of these name constraints.
+- Change the urllib3 requirement to >=1.21.1,<1.27 to match that of the
+Requests v2.27.1 package included with the latest buildroot. The urllib3
+v1.26.8 package is the one currently bundled with buildroot.
 
-Incorrect handling of certificate subject and issuer fields (Medium)(CVE-2021-44533)
+- Remove the importlib-resources>=4.1.1 requirement. The importlib-resources
+5.0 features have been merged into the CPython 3.10 included with the latest
+buildroot.
 
-Node.js did not handle multi-value Relative Distinguished Names correctly.
-Attackers could craft certificate subjects containing a single-value
-Relative Distinguished Name that would be interpreted as a multi-value
-Relative Distinguished Name, for example, in order to inject a Common Name
-that would allow bypassing the certificate subject verification.
+2. Generate a new python-zlmdb package via utility/scanpypi. scanpypi fails
+before terminating, but it generates a viable python-zlmdb package nonetheless.
 
-Prototype pollution via console.table properties (Low)(CVE-2022-21824)
+3. Add a patch for the new python-zlmdb package which removes pytest-runner
+from the setup-requirements in setup.py.
 
-Due to the formatting logic of the console.table() function it was not safe
-to allow user controlled input to be passed to the properties parameter
-while simultaneously passing a plain object with at least one property as
-the first parameter, which could be __proto__.  The prototype pollution has
-very limited control, in that it only allows an empty string to be assigned
-numerical keys of the object prototype.
+4. Bump buildroot's python-pyopenssl version to 21.0.0.
 
-For details, see the advisory:
-https://nodejs.org/en/blog/vulnerability/jan-2022-security-releases/
+5. Bump buildroot's python-snappy version to 0.6.0.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+6. Bump buildroot's python-trek version to 21.5.0.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index f31c7d5d69..11d5ec0672 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.22.7/SHASUMS256.txt
--sha256  cc6a23b44870679a94bd8f3c8d4e1f4b77bb2712a36888ab87463459e6785f6b  node-v12.22.7.tar.xz
-+# From https://nodejs.org/dist/v12.22.9/SHASUMS256.txt
-+sha256  da982c03e584c2b6e50f432cc5e46605d4e3d8451125be25a645fe716873e24a  node-v12.22.9.tar.xz
- 
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index c8c5223a0b..c6649ce993 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.22.7
-+NODEJS_VERSION = 12.22.9
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+7. Add these missing dependencies in python-crossbar/Config.in: bcrypt, cffi,
+colorama, wsaccel, zlmdb, argon_cffi, cbor2, flatbuffers, msgpack, snappy,
+ujson
+
+I will submit a patch with the above changes, but I first need some time to
+familiarize myself with your submission conventions.
+
+(Cross-posted to https://github.com/crossbario/crossbar/issues/1936)
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
