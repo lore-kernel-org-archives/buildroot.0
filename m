@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0510CC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 233D7C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97A1061037;
-	Thu, 27 Jan 2022 16:47:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF59360DFD;
+	Thu, 27 Jan 2022 16:48:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BUweCUB0igEX; Thu, 27 Jan 2022 16:47:18 +0000 (UTC)
+	with ESMTP id CzY7HNXz5E-E; Thu, 27 Jan 2022 16:48:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCB0960AA3;
-	Thu, 27 Jan 2022 16:47:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEA7560AA3;
+	Thu, 27 Jan 2022 16:48:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 28C6B1C1135
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:47:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BAEFF1C1135
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1729941C6D
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:47:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9B9C410A0
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:48:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tgEB3QAZOrPH for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 16:47:15 +0000 (UTC)
+ with ESMTP id zkRBA7el5fKB for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 16:48:35 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1D571410A0
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 16:47:14 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3EAC3409A6
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 16:48:35 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C907EC0004;
- Thu, 27 Jan 2022 16:47:12 +0000 (UTC)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 64379200011;
+ Thu, 27 Jan 2022 16:48:33 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nD7vT-00064v-V1; Thu, 27 Jan 2022 17:47:11 +0100
+ id 1nD7wm-00069G-Qp; Thu, 27 Jan 2022 17:48:32 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220109162602.909E582A93@busybox.osuosl.org>
-Date: Thu, 27 Jan 2022 17:47:11 +0100
-In-Reply-To: <20220109162602.909E582A93@busybox.osuosl.org> (Thomas
+References: <20220109162602.991D282DEC@busybox.osuosl.org>
+Date: Thu, 27 Jan 2022 17:48:32 +0100
+In-Reply-To: <20220109162602.991D282DEC@busybox.osuosl.org> (Thomas
  Petazzoni's message of "Sun, 9 Jan 2022 17:31:55 +0100")
-Message-ID: <87o83xazxs.fsf@dell.be.48ers.dk>
+Message-ID: <87k0elazvj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: account for
- unsure CVEs
+Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: add
+ --disable option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,28 +67,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=a206bbc5fe3453f8763268261c4a7aa6ba2c275d
+ > commit: https://git.buildroot.net/buildroot/commit/?id=b102352b62917b053cae1f5d0591fe6507d81522
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The .affects() method of the CVE class in support/scripts/cve.py can
- > return 3 values: CVE_AFFECTS, CVE_DOESNT_AFFECT and CVE_UNKNOWN.
+ > When debugging pkg-stats, it's quite useful to be able to disable some
+ > features that are quite long (checking upstream URL, checking latest
+ > version, checking CVE). This commit adds a --disable option, which can
+ > take a comma-separated list of features to disable, such as:
 
- > We of course properly account for CVEs where .affects() return
- > CVE_AFFECTS, but the ones for which CVE_UNKNOWN is returned are
- > currently ignored, and therefore treated as if they did not affect the
- > package.
+ >      ./support/scripts/pkg-stats --disable url,upstream
 
- > However CVE_UNKNOWN in fact indicates that the v_start/v_end fields of
- > the CPE entry could not be parsed by
- > distutils.version.LooseVersion(). Instead of ignoring such cases, this
- > commit adds support for the concept of "unsure CVEs", which will be
- > listed next to CVEs known to affect the package, so that we are aware
- > of them and can investigate the version issue.
-
- > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2021.02.x and 2021.11.x, thanks.
+
+Committed to 2021.11.x, thanks.
+
+ > ---
+ >  support/scripts/pkg-stats | 23 ++++++++++++++++-------
+ >  1 file changed, 16 insertions(+), 7 deletions(-)
+
+ > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+ > index 00ca5647ee..7e20ccc0da 100755
+ > --- a/support/scripts/pkg-stats
+ > +++ b/support/scripts/pkg-stats
+ > @@ -1099,6 +1099,10 @@ def resolvepath(path):
+ >      return os.path.abspath(os.path.expanduser(path))
+ 
+ 
+ > +def list_str(values):
+ > +    return values.split(',')
+ > +
+ > +
+ >  def parse_args():
+ >      parser = argparse.ArgumentParser()
+ >      output = parser.add_argument_group('output', 'Output file(s)')
+ > @@ -1115,6 +1119,9 @@ def parse_args():
+ >                            help='List of packages (comma separated)')
+ >      parser.add_argument('--nvd-path', dest='nvd_path',
+ >                          help='Path to the local NVD database', type=resolvepath)
+ > +    parser.add_argument('--disable', type=list_str,
+ > +                        help='Features to disable, comma-separated (cve, upstream, url)',
+ > +                        default=[])
+ >      args = parser.parse_args()
+ >      if not args.html and not args.json:
+ >          parser.error('at least one of --html or --json (or both) is required')
+ > @@ -1161,13 +1168,15 @@ def __main__():
+ >          pkg.set_url()
+ >          pkg.set_ignored_cves()
+ >          pkg.set_developers(developers)
+ > -    print("Checking URL status")
+ > -    loop = asyncio.get_event_loop()
+ > -    loop.run_until_complete(check_package_urls(packages))
+ > -    print("Getting latest versions ...")
+ > -    loop = asyncio.get_event_loop()
+ > -    loop.run_until_complete(check_package_latest_version(packages))
+ > -    if args.nvd_path:
+ > +    if not "url" in args.disable:
+ > +        print("Checking URL status")
+ > +        loop = asyncio.get_event_loop()
+ > +        loop.run_until_complete(check_package_urls(packages))
+ > +    if not "upstream" in args.disable:
+ > +        print("Getting latest versions ...")
+ > +        loop = asyncio.get_event_loop()
+ > +        loop.run_until_complete(check_package_latest_version(packages))
+ > +    if not "cve" in args.disable and args.nvd_path:
+ >          print("Checking packages CVEs")
+ >          check_package_cves(args.nvd_path, packages)
+ >          check_package_cpes(args.nvd_path, packages)
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
