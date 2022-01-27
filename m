@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FDE7C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B50CBC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 16:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1665A41654;
-	Thu, 27 Jan 2022 16:54:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60A9C403E0;
+	Thu, 27 Jan 2022 16:54:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cD4FTkoHgvy8; Thu, 27 Jan 2022 16:54:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wPW9sPTbK8fs; Thu, 27 Jan 2022 16:54:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4386F4164B;
-	Thu, 27 Jan 2022 16:54:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 494121C113E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EA4640360;
+	Thu, 27 Jan 2022 16:54:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B7EC1C1135
  for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:54:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41C0A41615
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3891960A7B
  for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 16:54:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AUuZHhYnAysM for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pTO4MKOBGj_b for <buildroot@lists.busybox.net>;
  Thu, 27 Jan 2022 16:54:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89A8241654
+ by smtp3.osuosl.org (Postfix) with ESMTP id A18C960BDB
  for <buildroot@buildroot.org>; Thu, 27 Jan 2022 16:54:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5803E821F7; Thu, 27 Jan 2022 16:47:13 +0000 (UTC)
+ id 72E46821F7; Thu, 27 Jan 2022 16:47:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jan 2022 17:46:30 +0100
+Date: Thu, 27 Jan 2022 17:54:00 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 9279040543e9d2de39d8fdf222f80c82bb9c445e
-X-Git-Newrev: c1329957bdc123cef61aa1a68772188ac4f87a69
+X-Git-Oldrev: 29e4ff33c36ca865d9940edc16b1fd82a6006ebe
+X-Git-Newrev: b7e5a5a7918021697e9f309a14e4999e90059fb1
 X-Patchwork-Hint: ignore
-Message-Id: <20220127164713.5803E821F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x]
- support/scripts/pkg-stats: account for unsure CVEs
+Message-Id: <20220127164713.72E46821F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/libvirt: fix ssh2
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,98 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1329957bdc123cef61aa1a68772188ac4f87a69
+commit: https://git.buildroot.net/buildroot/commit/?id=b7e5a5a7918021697e9f309a14e4999e90059fb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-The .affects() method of the CVE class in support/scripts/cve.py can
-return 3 values: CVE_AFFECTS, CVE_DOESNT_AFFECT and CVE_UNKNOWN.
+Fix the following build failure raised since commit
+fbf25acfbfd5a73b3560918bea081768abbe5723:
 
-We of course properly account for CVEs where .affects() return
-CVE_AFFECTS, but the ones for which CVE_UNKNOWN is returned are
-currently ignored, and therefore treated as if they did not affect the
-package.
+output/build/libvirt-7.7.0/meson.build:1:0: ERROR: Unknown options: "ssh2"
 
-However CVE_UNKNOWN in fact indicates that the v_start/v_end fields of
-the CPE entry could not be parsed by
-distutils.version.LooseVersion(). Instead of ignoring such cases, this
-commit adds support for the concept of "unsure CVEs", which will be
-listed next to CVEs known to affect the package, so that we are aware
-of them and can investigate the version issue.
+Fixes:
+ - No autobuilder failures (yet)
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a206bbc5fe3453f8763268261c4a7aa6ba2c275d)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c077b4a919d697c0b4f5c0c30d945418691e2e23)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ package/libvirt/libvirt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a435abff3d..00ca5647ee 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -101,6 +101,7 @@ class Package:
-         self.cpeid = None
-         self.cves = list()
-         self.ignored_cves = list()
-+        self.unsure_cves = list()
-         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-         self.status = {}
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index 9a4788c905..291d892bae 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -219,10 +219,10 @@ LIBVIRT_CONF_OPTS += -Dsasl=disabled
+ endif
  
-@@ -580,8 +581,11 @@ def check_package_cve_affects(cve, cpe_product_pkgs):
-         if product not in cpe_product_pkgs:
-             continue
-         for pkg in cpe_product_pkgs[product]:
--            if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid) == cve.CVE_AFFECTS:
-+            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
-+            if cve_status == cve.CVE_AFFECTS:
-                 pkg.cves.append(cve.identifier)
-+            elif cve_status == cve.CVE_UNKNOWN:
-+                pkg.unsure_cves.append(cve.identifier)
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+-LIBVIRT_CONF_OPTS += -Dssh2=enabled
++LIBVIRT_CONF_OPTS += -Dlibssh2=enabled
+ LIBVIRT_DEPENDENCIES += libssh2
+ else
+-LIBVIRT_CONF_OPTS += -Dssh2=disabled
++LIBVIRT_CONF_OPTS += -Dlibssh2=disabled
+ endif
  
- 
- def check_package_cves(nvd_path, packages):
-@@ -607,7 +611,7 @@ def check_package_cves(nvd_path, packages):
- 
-     for pkg in packages:
-         if 'cve' not in pkg.status:
--            if pkg.cves:
-+            if pkg.cves or pkg.unsure_cves:
-                 pkg.status['cve'] = ("error", "affected by CVEs")
-             else:
-                 pkg.status['cve'] = ("ok", "not affected by CVEs")
-@@ -662,8 +666,11 @@ def calculate_stats(packages):
-             stats["version-not-uptodate"] += 1
-         stats["patches"] += pkg.patch_count
-         stats["total-cves"] += len(pkg.cves)
-+        stats["total-unsure-cves"] += len(pkg.unsure_cves)
-         if len(pkg.cves) != 0:
-             stats["pkg-cves"] += 1
-+        if len(pkg.unsure_cves) != 0:
-+            stats["pkg-unsure-cves"] += 1
-         if pkg.cpeid:
-             stats["cpe-id"] += 1
-         else:
-@@ -921,6 +928,8 @@ def dump_html_pkg(f, pkg):
-     if pkg.is_status_error("cve"):
-         for cve in pkg.cves:
-             f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-+        for cve in pkg.unsure_cves:
-+            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s <i>(unsure)</i><br/>\n" % (cve, cve))
-     elif pkg.is_status_na("cve"):
-         f.write("    %s" % pkg.status['cve'][1])
-     else:
-@@ -1024,6 +1033,10 @@ def dump_html_stats(f, stats):
-             stats["pkg-cves"])
-     f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
-             stats["total-cves"])
-+    f.write("<tr><td>Packages affected by unsure CVEs</td><td>%s</td></tr>\n" %
-+            stats["pkg-unsure-cves"])
-+    f.write("<tr><td>Total number of unsure CVEs affecting all packages</td><td>%s</td></tr>\n" %
-+            stats["total-unsure-cves"])
-     f.write("<tr><td>Packages with CPE ID</td><td>%s</td></tr>\n" %
-             stats["cpe-id"])
-     f.write("<tr><td>Packages without CPE ID</td><td>%s</td></tr>\n" %
+ ifeq ($(BR2_PACKAGE_LIBVIRT_LXC),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
