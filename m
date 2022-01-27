@@ -4,81 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D52F1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 20:31:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9E8AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 21:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50ADE60BBD;
-	Thu, 27 Jan 2022 20:31:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 501A160ABB;
+	Thu, 27 Jan 2022 21:09:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sodBmNZVMbdR; Thu, 27 Jan 2022 20:31:26 +0000 (UTC)
+	with ESMTP id LOK-rzbJBPXE; Thu, 27 Jan 2022 21:09:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 978B860BBC;
-	Thu, 27 Jan 2022 20:31:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11CCB1BF317
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 20:31:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C2E060AEE;
+	Thu, 27 Jan 2022 21:09:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 933461BF369
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 21:09:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 008BF60B9C
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 20:31:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F26A2400CE
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 21:09:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gsoQkKU4eFTa for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 20:31:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com
- [IPv6:2607:f8b0:4864:20::e34])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 51F6060B3A
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 20:31:23 +0000 (UTC)
-Received: by mail-vs1-xe34.google.com with SMTP id az20so460827vsb.8
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 12:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=5yWcVJ7mCbJxOQ681Du/In/4Z60NM6jEWlmt5kJlzWk=;
- b=FmW/h/HqIXdNtNr3nfxakNOpc5yPCkeqtDIX1kyXJsJOUeT43t+V1uLRVhN10ZTxbg
- gQBzug95AbFHA1+uFWf2T6+Su4QHcVXB22ZHM3ghODpSMgZIBQtKCGK5KkZE3C/6unk+
- FU35UPuiqdAovg4fM1UWLtEdqycQYIdm4izqtcmo9Ho6isdXbqVPIOliZ0wooIeMDI8l
- NnCwRIx2lwhhdxQh/BiVl/MIaE8gYc19mnjWzs8k/Mkw1iAohnZegU9itlVALcjVF5Ou
- dXnf/nKlF8TB/wwNbv1o+8Hn62JhSHbB8q8tjsMDdadrZZzOoy5dI+MolxGyelBrosAQ
- 5GjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=5yWcVJ7mCbJxOQ681Du/In/4Z60NM6jEWlmt5kJlzWk=;
- b=37iqkUEVtabYCeVzzZOAzuEitzxlFSKg2FuSN6I0uN/vWBgn1MIqPd2cgYW1I38eno
- fq0SkT1okd+EFvACa4y9gDrpcSikWDVeI/nIfiXtXKraRNt2ZgzcOSVRy6xe5LJa4sIa
- 0WMTC+/GqXZ0ixYsNCvZyxoeI5IhA3beIfJcfqCznCzyfW9lFT1//exxVGRcDlm/bo80
- oUZpTWh2/3llPqyvZq0I+sgSj1twYGJ4JOUS2WdRz53VQggmbegNTgXRtVKyZ3ukDdLG
- znUiIK8hi4KLHZHKndnuoVaKwB5WoCK6RuVFGZPIVvIhlXxNK8q5jD2liX1DznPKpa3s
- liLw==
-X-Gm-Message-State: AOAM531AVTZxjvg8lZC2Civ0PkSaHFJcChjvsDqMqScbMeZGtdv3nQAy
- yXhgCimT4rq2MGM/4JKLOw9pChuazWV03Q==
-X-Google-Smtp-Source: ABdhPJznWJLCTkSHNBO4Ljr+gCeKrB4jUHjnSFJO6OnSaRVWBwi4CCh8g5pi3ByeEQFgAXr92r88JQ==
-X-Received: by 2002:a67:e190:: with SMTP id e16mr2545261vsl.54.1643315481815; 
- Thu, 27 Jan 2022 12:31:21 -0800 (PST)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com.
- [209.85.217.47])
- by smtp.gmail.com with ESMTPSA id g22sm897338vkm.3.2022.01.27.12.31.20
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 27 Jan 2022 12:31:20 -0800 (PST)
-Received: by mail-vs1-f47.google.com with SMTP id az20so460727vsb.8
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 12:31:20 -0800 (PST)
-X-Received: by 2002:a67:ac09:: with SMTP id v9mr2535706vse.85.1643315480081;
- Thu, 27 Jan 2022 12:31:20 -0800 (PST)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vg1Ld7RPyQHc for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 21:09:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2604240017
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 21:09:31 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:cc8e:5bc6:13d0:52a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 22ADF200385;
+ Thu, 27 Jan 2022 22:09:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1643317768;
+ bh=5C5zwZp1hZzlEO2CWuszp9KkY1U/+U+BvlyojvaxgGo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JJrWKqJJdxzDV/V+6ROEfddrmaOWa4tTtA1/9Zm1u0C01QP3hrDeUW8+5BvGUTWAp
+ kVUNqtSbNkO8xBmivt1VTPvU0ia4Q4Bps8Y6M0UyL9nq4Lh0SwmjTKpbOzs9HdpomG
+ SAg3EafRJ/oObXuIJspcerE6yWlVhk08FuSUYf1iwkaU/16JinkjTNFju5CRdLrJmF
+ nfXBem98uTeMNS0NPAL960oGB/SS5CK7K9j3il4VKh+L6IJdXRSc/FTfPktSUUTVWN
+ GMwD3i96Yn2Uzoo6JvlWWRkzW1aeoW8t64x9LsrkoG4wDdPLUKA8o4JWWwwpRtly+f
+ oFnbx3GiCtQAA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 27 Jan 2022 22:09:24 +0100
+Date: Thu, 27 Jan 2022 22:09:24 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220127210924.GQ457876@scaer>
+References: <20220127183924.1938903-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-References: <20220127062504.1835450-1-christian@paral.in>
- <20220127062504.1835450-2-christian@paral.in>
- <20220127090141.7d0645f2@windsurf>
-In-Reply-To: <20220127090141.7d0645f2@windsurf>
-Date: Thu, 27 Jan 2022 12:31:09 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2oKO-hhmn9eOQoj4fX9ZYXBCVPqqe8knbrOq46c3s6E9w@mail.gmail.com>
-Message-ID: <CA+h8R2oKO-hhmn9eOQoj4fX9ZYXBCVPqqe8knbrOq46c3s6E9w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/buildah: new package
+Content-Disposition: inline
+In-Reply-To: <20220127183924.1938903-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: migrate
+ autotools build system to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,66 +72,253 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- Buildroot Mailing List <buildroot@buildroot.org>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+James, All,
 
+On 2022-01-27 11:39 -0700, James Hilliard spake thusly:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/network-manager/Config.in          |   1 +
+>  package/network-manager/network-manager.mk | 100 ++++++++++-----------
+>  2 files changed, 48 insertions(+), 53 deletions(-)
+> 
+> diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+> index a48cb37b15..da1a7d79b3 100644
+> --- a/package/network-manager/Config.in
+> +++ b/package/network-manager/Config.in
+> @@ -40,6 +40,7 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+>  config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+>  	bool "modem-manager support"
+>  	select BR2_PACKAGE_MODEM_MANAGER
+> +	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
 
-On Thu, Jan 27, 2022 at 12:01 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Considering that there are runtime dependency concerns, it would be
-> nice to have a simple test case in support/testing/.
+It looks like this is totally unrelated to the switch to meson, and
+should be applied in its own right, and then backported to the
+maintenance branches, no?
 
-OK, something like "buildah pull" or so?
+If it is due to the switch to meson, then it should be explained in the
+commit log.
 
-> > +BUILDAH_DEPENDENCIES = libgpgme
->
-> Is libgpgme really a runtime dependency, as noted in your changelog? If
+Regards,
+Yann E. MORIN.
 
-Gpg is a runtime dependency, libgpgme is a build dependency.
+>  	help
+>  	  This option enables support for ModemManager
+>  
+> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> index 974320fce0..290333e16c 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -9,7 +9,7 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+>  NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+>  NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+>  NETWORK_MANAGER_INSTALL_STAGING = YES
+> -NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+> +NETWORK_MANAGER_DEPENDENCIES = host-pkgconf dbus udev gnutls libglib2 \
+>  	libgcrypt wireless_tools util-linux host-intltool libndp
+>  NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+>  NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+> @@ -17,129 +17,123 @@ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+>  NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+>  NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+>  
+> -NETWORK_MANAGER_CONF_ENV = \
+> -	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+> -	ac_cv_file__etc_fedora_release=no \
+> -	ac_cv_file__etc_mandriva_release=no \
+> -	ac_cv_file__etc_debian_version=no \
+> -	ac_cv_file__etc_redhat_release=no \
+> -	ac_cv_file__etc_SuSE_release=no
+> -
+>  NETWORK_MANAGER_CONF_OPTS = \
+> -	--disable-introspection \
+> -	--disable-tests \
+> -	--disable-qt \
+> -	--disable-more-warnings \
+> -	--with-crypto=gnutls \
+> -	--with-iptables=/usr/sbin/iptables \
+> -	--disable-ifupdown \
+> -	--without-nm-cloud-setup
+> +	-Dintrospection=false \
+> +	-Ddocs=false \
+> +	-Dtests=no \
+> +	-Dqt=false \
+> +	-Dcrypto=gnutls \
+> +	-Diptables=/usr/sbin/iptables \
+> +	-Difupdown=false \
+> +	-Dnm_cloud_setup=false \
+> +	-Dsession_tracking_consolekit=false
+>  
+>  ifeq ($(BR2_PACKAGE_AUDIT),y)
+>  NETWORK_MANAGER_DEPENDENCIES += audit
+> -NETWORK_MANAGER_CONF_OPTS += --with-libaudit
+> +NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=yes
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-libaudit
+> +NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=no
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+> -NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
+> +NETWORK_MANAGER_CONF_OPTS += -Ddhclient=/sbin/dhclient
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DHCPCD),y)
+> -NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
+> +NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_IWD),y)
+>  NETWORK_MANAGER_DEPENDENCIES += iwd
+> -NETWORK_MANAGER_CONF_OPTS += --with-iwd
+> +NETWORK_MANAGER_CONF_OPTS += -Diwd=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-iwd
+> +NETWORK_MANAGER_CONF_OPTS += -Diwd=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  NETWORK_MANAGER_DEPENDENCIES += libcurl
+> -NETWORK_MANAGER_CONF_OPTS += --enable-concheck
+> +NETWORK_MANAGER_CONF_OPTS += -Dconcheck=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --disable-concheck
+> +NETWORK_MANAGER_CONF_OPTS += -Dconcheck=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBPSL),y)
+>  NETWORK_MANAGER_DEPENDENCIES += libpsl
+> -NETWORK_MANAGER_CONF_OPTS += --with-libpsl
+> +NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-libpsl
+> +NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+>  NETWORK_MANAGER_DEPENDENCIES += libselinux
+> -NETWORK_MANAGER_CONF_OPTS += --with-selinux
+> +NETWORK_MANAGER_CONF_OPTS += -Dselinux=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-selinux
+> +NETWORK_MANAGER_CONF_OPTS += -Dselinux=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
+> -NETWORK_MANAGER_DEPENDENCIES += modem-manager
+> -NETWORK_MANAGER_CONF_OPTS += --with-modem-manager-1
+> +NETWORK_MANAGER_DEPENDENCIES += modem-manager mobile-broadband-provider-info
+> +NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
+> +NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
+> -NETWORK_MANAGER_CONF_OPTS += --enable-ovs
+> +NETWORK_MANAGER_CONF_OPTS += -Dovs=true
+>  NETWORK_MANAGER_DEPENDENCIES += jansson
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --disable-ovs
+> +NETWORK_MANAGER_CONF_OPTS += -Dovs=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_PPPD),y)
+>  NETWORK_MANAGER_DEPENDENCIES += pppd
+> -NETWORK_MANAGER_CONF_OPTS += --enable-ppp
+> +NETWORK_MANAGER_CONF_OPTS += -Dppp=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --disable-ppp
+> +NETWORK_MANAGER_CONF_OPTS += -Dppp=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
+>  NETWORK_MANAGER_DEPENDENCIES += newt
+> -NETWORK_MANAGER_CONF_OPTS += --with-nmtui
+> +NETWORK_MANAGER_CONF_OPTS += -Dnmtui=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-nmtui
+> +NETWORK_MANAGER_CONF_OPTS += -Dnmtui=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OFONO),y)
+>  NETWORK_MANAGER_DEPENDENCIES += ofono
+> -NETWORK_MANAGER_CONF_OPTS += --with-ofono
+> +NETWORK_MANAGER_CONF_OPTS += -Dofono=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-ofono
+> +NETWORK_MANAGER_CONF_OPTS += -Dofono=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>  NETWORK_MANAGER_DEPENDENCIES += systemd
+>  NETWORK_MANAGER_CONF_OPTS += \
+> -	--with-systemd-journal \
+> -	--with-config-logging-backend-default=journal \
+> -	--with-session-tracking=systemd \
+> -	--with-suspend-resume=systemd
+> +	-Dsystemd_journal=true \
+> +	-Dconfig_logging_backend_default=journal \
+> +	-Dsession_tracking=systemd \
+> +	-Dsuspend_resume=systemd
+>  else
+>  NETWORK_MANAGER_CONF_OPTS += \
+> -	--without-systemd-journal \
+> -	--with-config-logging-backend-default=syslog \
+> -	--without-session-tracking \
+> -	--with-suspend-resume=upower
+> +	-Dsystemd_journal=false \
+> +	-Dconfig_logging_backend_default=syslog \
+> +	-Dsession_tracking=no \
+> +	-Dsuspend_resume=upower \
+> +	-Dsystemdsystemunitdir=no
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_POLKIT),y)
+>  NETWORK_MANAGER_DEPENDENCIES += polkit
+> -NETWORK_MANAGER_CONF_OPTS += --enable-polkit
+> +NETWORK_MANAGER_CONF_OPTS += -Dpolkit=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --disable-polkit
+> +NETWORK_MANAGER_CONF_OPTS += -Dpolkit=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_READLINE),y)
+>  NETWORK_MANAGER_DEPENDENCIES += readline
+> -NETWORK_MANAGER_CONF_OPTS += --with-nmcli
+> +NETWORK_MANAGER_CONF_OPTS += -Dnmcli=true
+>  else
+> -NETWORK_MANAGER_CONF_OPTS += --without-nmcli
+> +NETWORK_MANAGER_CONF_OPTS += -Dnmcli=false
+>  endif
+>  
+>  define NETWORK_MANAGER_INSTALL_INIT_SYSV
+> @@ -152,4 +146,4 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+>  
+>  endef
+>  
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-
-> > +HOST_BUILDAH_BUILD_TARGETS = $(BUILDAH_BUILD_TARGETS)
-> > +HOST_BUILDAH_TAGS = $(BUILDAH_TAGS)
-> > +HOST_BUILDAH_LDFLAGS = $(BUILDAH_LDFLAGS)
-> > +HOST_BUILDAH_INSTALL_BINS = $(BUILDAH_INSTALL_BINS)
->
-> That "repetition" also makes me think we should have some level of
-> inheritance between target and host variables in the golang-package
-> infrastructure. For BUILD_TARGETS, TAGS and INSTALL_BINS, it sounds
-> fine to do it.
-
-Yes - unless the package overrides them - this should be fine.
-
-I was a bit surprised that it, on default, tries to build the binary
-named "host-runc" as well as a Go package named "host-runc". Of
-course, this is not the name of neither the binary nor the package.
-
-So the host-golang infra should remove the host- prefix for the
-default BUILD_TARGETS and INSTALL_BINS.
-
-This would also be fixed if those values were inherited from the target package.
-
-> However, for LDFLAGS, it's a bit weird, as normally,
-> LDFLAGS are different between host and target. However here, there are
-> mostly used to pass these version-related -X options, that are in fact
-> the same between host and target. Should we have a separate variable to
-> pass those flags ? Not sure.
-
-They are quite common for Go packages - could call them DEFINES or
-something similar.
-
-The syntax overrides the value of a global variable in a package.
-
-Best regards,
-Christian
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
