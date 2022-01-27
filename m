@@ -1,68 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AED2C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 04:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F053C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 05:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ACB3401DD;
-	Thu, 27 Jan 2022 04:03:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1FA461086;
+	Thu, 27 Jan 2022 05:46:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VXpJPidJmzPf; Thu, 27 Jan 2022 04:03:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DX7Sc_15BkxU; Thu, 27 Jan 2022 05:46:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24517401CC;
-	Thu, 27 Jan 2022 04:03:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E53941BF32A
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 04:02:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E319B6106E;
+	Thu, 27 Jan 2022 05:46:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DDA7C1BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 05:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D13C840B29
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 04:02:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB91241C56
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 05:46:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tbtSpWNbysjx for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 04:02:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com
- [209.85.215.170])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BBE0A40B25
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 04:02:54 +0000 (UTC)
-Received: by mail-pg1-f170.google.com with SMTP id 133so1208183pgb.0
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 20:02:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=VWNiQJuoJMIE2/mRoO+yuYRSL3ys/Hy9R3ILGZ85kRY=;
- b=LYwOFW15YENhlDqzTsTD9imbSc2Vhry5Tzv7pBIXR6+mq4XjvjyPiF3vguea316mTD
- XNreeMWD129VJDHxRCU+MovKrLTfx5uskZ0lDGo3mX3vpqM6j3mBzwDX60iuIjqJzXGS
- XB5GEa9MuBfeXkBnWiPx69hb42f8EPxGo2dHqcngZb8TnaqseB1pZvXBedC06vloArAk
- Rb3IlyrNE4fhGFF4IILiFDaOUGMGu2DZzqZN+mVaJHbkA5yrN5u97rUT9nTa4DP3F3eS
- xYtnciwBJC6pqWOJuu1ofvKy8bqxzaV8UGkxDa5BnH7MmbclYuQXRoVLcYmEORIbgOCe
- ngow==
-X-Gm-Message-State: AOAM5314yovbGYlG3AdvAqOgf7mHh8hiTvztb4enLWWRnU4le9UaOQkh
- GUXA86rK+bPacRnb1VHlKjPWgGIA43iQGQ==
-X-Google-Smtp-Source: ABdhPJzXaYKo35F3ikcoT+xx9+fFOXGjWzAj0gAHQC34Gu+TE1TkiRf0aC6Wt1JE6BJpEzR9jWtUPQ==
-X-Received: by 2002:a63:ef45:: with SMTP id c5mr1413269pgk.513.1643256173948; 
- Wed, 26 Jan 2022 20:02:53 -0800 (PST)
-Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
- by smtp.gmail.com with ESMTPSA id
- pj5sm681379pjb.0.2022.01.26.20.02.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Jan 2022 20:02:53 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 20:02:50 -0800
-Message-Id: <20220127040250.128604-2-christian@paral.in>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220127040250.128604-1-christian@paral.in>
-References: <20220127040250.128604-1-christian@paral.in>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tkos.co.il
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sUThuxQrTD2J for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 05:46:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mx.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E959641C30
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 05:46:29 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx.tkos.co.il (Postfix) with ESMTPS id 84910440150;
+ Thu, 27 Jan 2022 07:46:12 +0200 (IST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1643262372;
+ bh=3rA+lAfdAlRHV55TzAG77esfm7yCYk0VDgAcAFr/JkM=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=CPrJkaiWM26KSY7STHEce3iABkNu5qq3QYyqJiu2UEjkQTnMytdb6ltQrD9qF8R2x
+ JwCM1TVkLS9eWl9HnluzaHXKvrvW/vV9miNZN9ftNMVj5HQhjIdWnOALX2lIW4R6HL
+ GVygQMg9nnm8XmNtU1rQjXXI9Je4yi3g100C+t6PxE+UUEqRDb+EerGLUnyvTXwLtT
+ G6qchEnWoc1Xdk7Pw/uDrT5zb/ELX3dNPObYwFRNl/YZPL45Ebfj8HxnUna8NzxcKW
+ RhxnHG2Ab00qSE4DBOLmCkrphP1ZHD22dF5TuSZHu+NaSLAtgi5vxIi+tJibLtvGlA
+ x31IYN7I5m9FQ==
+References: <20220126235652.25712-1-petr.vorel@gmail.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 27 Jan 2022 07:39:23 +0200
+In-reply-to: <20220126235652.25712-1-petr.vorel@gmail.com>
+Message-ID: <87lez191e6.fsf@tarshish>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/2] package/buildah: new package
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version
+ to 20220121
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,182 +68,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adds both host and target packages for buildah.
+Hi Petr,
 
-Buildah is a tool that facilitates building OCI images.
+On Thu, Jan 27 2022, Petr Vorel wrote:
+> LTP now builds metadata directory as host target.
+> It's mandatory, therefore adding HOST_CFLAGS and HOST_LDFLAGS to make
+> (adding to configure does not work) to avoid adding -mlongcalls
+> -mauto-litpools for some targets (e.g. bootlin-xtensa-uclibc).
+>
+> Drop patches from this release.
+>
+> Refresh 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
+> (still safe to carry it).
+>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Changes v1->v2:
+> * Add missin g HOST_LDFLAGS to fix br-arm-full-static (cannot find -lc
+> when compiling host target)
 
-https://github.com/containers/buildah
+[...]
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+> diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+> index a9f3cfdfe1..bd648cbfdd 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.hash
+> +++ b/package/ltp-testsuite/ltp-testsuite.hash
+> @@ -1,5 +1,5 @@
+> -# From: https://github.com/linux-test-project/ltp/releases/download/20210927/ltp-full-20210927.tar.xz.sha1
+> -sha1 dad7737f609e358c4060cb446b9cae5c026fc137  ltp-full-20210927.tar.xz
+> +# From: https://github.com/linux-test-project/ltp/releases/download/20220121/ltp-full-20220121.tar.xz.sha1
+> +sha1 211935e901afea1010ec4f70369b782fbee93ed4  ltp-full-20220121.tar.xz
+>  # Locally computed
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> -sha256  779e9e5cc9af4f2b3d4cb32f5439ebd635504d2c4591bf900f0942dac290ed15  ltp-full-20210927.tar.xz
+> +sha256  ad002520616fac52362229ea0f1bb9d304fc03ff0096ccb5b1820cee9fc8413a  ltp-full-20220121.tar.xz
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index cc6d3c63b6..d9b7133b07 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LTP_TESTSUITE_VERSION = 20210927
+> +LTP_TESTSUITE_VERSION = 20220121
+>  LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+>  LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+>  
+> @@ -70,6 +70,10 @@ LTP_TESTSUITE_CONF_ENV += \
+>  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+>  	SYSROOT="$(STAGING_DIR)"
+>  
+> +LTP_TESTSUITE_MAKE_ENV += \
+> +	HOST_CFLAGS="$(HOST_CFLAGS)" \
+> +	HOST_LDFLAGS="$(HOST_LDFLAGS)"
 
----
+I think you should have TARGET_* on the right side of the assignment,
+since this is a target package.
 
-v1 -> v2:
+baruch
 
- - add package to developers
- - add host runc dependency for host package
- - add libgpgme runtime dependency
+> +
+>  # uclibc: bessel support normally not enabled
+>  LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
+>  	testcases/misc/math/float/bessel/ \
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/Config.in.host         |  1 +
- package/buildah/Config.in      | 23 ++++++++++++++++++++
- package/buildah/Config.in.host |  8 +++++++
- package/buildah/buildah.hash   |  3 +++
- package/buildah/buildah.mk     | 39 ++++++++++++++++++++++++++++++++++
- 7 files changed, 76 insertions(+)
- create mode 100644 package/buildah/Config.in
- create mode 100644 package/buildah/Config.in.host
- create mode 100644 package/buildah/buildah.hash
- create mode 100644 package/buildah/buildah.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fe8de1916e..80e7c5abee 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -529,6 +529,7 @@ F:	package/python-pylibftdi/
- 
- N:	Christian Stewart <christian@paral.in>
- F:	package/batman-adv/
-+F:	package/buildah/
- F:	package/containerd/
- F:	package/delve/
- F:	package/docker-cli/
-diff --git a/package/Config.in b/package/Config.in
-index e4ca195beb..91eb66a454 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2523,6 +2523,7 @@ menu "System tools"
- 	source "package/audit/Config.in"
- 	source "package/balena-engine/Config.in"
- 	source "package/bubblewrap/Config.in"
-+	source "package/buildah/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
- 	source "package/containerd/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 2ce015eacf..6aadb1b640 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -7,6 +7,7 @@ menu "Host utilities"
- 	source "package/babeltrace2/Config.in.host"
- 	source "package/bmap-tools/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
-+	source "package/buildah/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/checksec/Config.in.host"
-diff --git a/package/buildah/Config.in b/package/buildah/Config.in
-new file mode 100644
-index 0000000000..05bd0eec31
---- /dev/null
-+++ b/package/buildah/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_BUILDAH
-+	bool "buildah"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme -> libgpg-error
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # runc
-+	depends on BR2_USE_MMU # libgpgme -> libassuan
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc -> no fexecve
-+	# gnupg and runc are not needed to build, but at runtime.
-+	select BR2_PACKAGE_LIBGPGME
-+	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2
-+	select BR2_PACKAGE_LIBGPG_ERROR
-+	select BR2_PACKAGE_LIBASSUAN
-+	select BR2_PACKAGE_RUNC
-+	help
-+	  Buildah is a tool that facilitates building OCI images.
-+
-+	  https://github.com/containers/buildah
-+
-+comment "buildah needs a glibc or musl toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
-+		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/buildah/Config.in.host b/package/buildah/Config.in.host
-new file mode 100644
-index 0000000000..67fee6d7ac
---- /dev/null
-+++ b/package/buildah/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_BUILDAH
-+	bool "host buildah"
-+	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUNC
-+	help
-+	  Buildah is a tool that facilitates building OCI images.
-+
-+	  https://github.com/containers/buildah
-diff --git a/package/buildah/buildah.hash b/package/buildah/buildah.hash
-new file mode 100644
-index 0000000000..c7e00d02a7
---- /dev/null
-+++ b/package/buildah/buildah.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  d99b5187a25bc9d7385408732a0e155df0458b4d2cea6e8d002f3fa2cbaac76f  buildah-1.24.0.tar.gz
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/buildah/buildah.mk b/package/buildah/buildah.mk
-new file mode 100644
-index 0000000000..87eed8b834
---- /dev/null
-+++ b/package/buildah/buildah.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# buildah
-+#
-+################################################################################
-+
-+BUILDAH_VERSION = 1.24.0
-+BUILDAH_SITE = $(call github,containers,buildah,v$(BUILDAH_VERSION))
-+
-+BUILDAH_LICENSE = Apache-2.0
-+BUILDAH_LICENSE_FILES = LICENSE
-+
-+BUILDAH_DEPENDENCIES = libgpgme
-+
-+BUILDAH_CPE_ID_VENDOR = buildah_project
-+BUILDAH_CPE_ID_PRODUCT = buildah
-+
-+BUILDAH_TAGS = \
-+	cgo \
-+	exclude_graphdriver_aufs \
-+	exclude_graphdriver_btrfs \
-+	exclude_graphdriver_devicemapper \
-+	exclude_graphdriver_zfs
-+BUILDAH_BUILD_TARGETS = cmd/buildah
-+BUILDAH_GOMOD = github.com/containers/buildah
-+
-+BUILDAH_LDFLAGS = \
-+	-X $(BUILDAH_GOMOD)/cmd/buildah.GitCommit=v$(BUILDAH_VERSION) \
-+	-X $(BUILDAH_GOMOD)/define.Version=v$(BUILDAH_VERSION)
-+
-+BUILDAH_INSTALL_BINS = $(notdir $(BUILDAH_BUILD_TARGETS))
-+
-+HOST_BUILDAH_BUILD_TARGETS = $(BUILDAH_BUILD_TARGETS)
-+HOST_BUILDAH_TAGS = $(BUILDAH_TAGS)
-+HOST_BUILDAH_LDFLAGS = $(BUILDAH_LDFLAGS)
-+HOST_BUILDAH_INSTALL_BINS = $(BUILDAH_INSTALL_BINS)
-+
-+$(eval $(golang-package))
-+$(eval $(host-golang-package))
 -- 
-2.35.0
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
