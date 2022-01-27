@@ -4,59 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F053C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 05:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E512C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 06:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1FA461086;
-	Thu, 27 Jan 2022 05:46:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFD4861090;
+	Thu, 27 Jan 2022 06:25:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DX7Sc_15BkxU; Thu, 27 Jan 2022 05:46:33 +0000 (UTC)
+	with ESMTP id UkNfdjvEmFAi; Thu, 27 Jan 2022 06:25:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E319B6106E;
-	Thu, 27 Jan 2022 05:46:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DDA7C1BF8B4
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 05:46:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03F4E6108C;
+	Thu, 27 Jan 2022 06:25:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FD031BF46D
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 06:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB91241C56
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 05:46:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CF8B40B47
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 06:25:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUThuxQrTD2J for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 05:46:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E959641C30
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 05:46:29 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx.tkos.co.il (Postfix) with ESMTPS id 84910440150;
- Thu, 27 Jan 2022 07:46:12 +0200 (IST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1643262372;
- bh=3rA+lAfdAlRHV55TzAG77esfm7yCYk0VDgAcAFr/JkM=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=CPrJkaiWM26KSY7STHEce3iABkNu5qq3QYyqJiu2UEjkQTnMytdb6ltQrD9qF8R2x
- JwCM1TVkLS9eWl9HnluzaHXKvrvW/vV9miNZN9ftNMVj5HQhjIdWnOALX2lIW4R6HL
- GVygQMg9nnm8XmNtU1rQjXXI9Je4yi3g100C+t6PxE+UUEqRDb+EerGLUnyvTXwLtT
- G6qchEnWoc1Xdk7Pw/uDrT5zb/ELX3dNPObYwFRNl/YZPL45Ebfj8HxnUna8NzxcKW
- RhxnHG2Ab00qSE4DBOLmCkrphP1ZHD22dF5TuSZHu+NaSLAtgi5vxIi+tJibLtvGlA
- x31IYN7I5m9FQ==
-References: <20220126235652.25712-1-petr.vorel@gmail.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 27 Jan 2022 07:39:23 +0200
-In-reply-to: <20220126235652.25712-1-petr.vorel@gmail.com>
-Message-ID: <87lez191e6.fsf@tarshish>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HYqD3CmxOxm2 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 06:25:08 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com
+ [209.85.214.173])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 78F0B40B25
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 06:25:08 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id i1so1630043pla.9
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:25:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=T/zXhNmPok2n3dhWL5x6rhIojFHNgD9jK6whvvCwd3Q=;
+ b=xQrNi/KIBg/xKqf9aCm+wWIkWH7ZkG7iIQOzzH4kbH8gzX4DsQeaPOSDgmncfXjtAa
+ Ya/jm3JhsAiXaP9vliIbT8NBjtPCGlD0G7yUq2LNQOf/9U1wByIx3J1HcVfrg/I2i0Sr
+ u90s5QMUt/J5OopWiHv3TOsVxvwn3E3JKEdVUiwWNGCLldb3YECYMgVYDb2644JIrqz1
+ nKPGZSly1p9LIbSF4p8Z5vtKtEY8K9hWzUK3Dl/ZgMwmdkmad4vOsRjnMVUZZdv55MWu
+ A3GPFwsyq4bHA+Lqr5GzWIEMG70VqXF5LXExp+Ja2YL0kNo/PcTSdC5VluHnI3/+A3MR
+ eSWA==
+X-Gm-Message-State: AOAM531LilSbFTM/RsYJhom9DlAwSi49zf5Q7aYyD6lkEYyj3Upl8PI6
+ IDRhgVWT/xoXoZyopLQyBBFbzpaoNOWxMA==
+X-Google-Smtp-Source: ABdhPJy4RAsI1KL8w78xAQaDj/qpjkpgwp2cnuyw9SyWPCK2Ko93GMG3UBQDG2+CPleQpi3fsDSubQ==
+X-Received: by 2002:a17:902:70cb:: with SMTP id
+ l11mr2168501plt.128.1643264707615; 
+ Wed, 26 Jan 2022 22:25:07 -0800 (PST)
+Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
+ by smtp.gmail.com with ESMTPSA id
+ q21sm4328478pfu.104.2022.01.26.22.25.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Jan 2022 22:25:07 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Wed, 26 Jan 2022 22:25:03 -0800
+Message-Id: <20220127062504.1835450-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version
- to 20220121
+Subject: [Buildroot] [PATCH v3 1/2] package/runc: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,84 +73,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Petr,
+Adds support for building runc as a host package.
 
-On Thu, Jan 27 2022, Petr Vorel wrote:
-> LTP now builds metadata directory as host target.
-> It's mandatory, therefore adding HOST_CFLAGS and HOST_LDFLAGS to make
-> (adding to configure does not work) to avoid adding -mlongcalls
-> -mauto-litpools for some targets (e.g. bootlin-xtensa-uclibc).
->
-> Drop patches from this release.
->
-> Refresh 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-> (still safe to carry it).
->
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Changes v1->v2:
-> * Add missin g HOST_LDFLAGS to fix br-arm-full-static (cannot find -lc
-> when compiling host target)
+The bin name and gomod have to be specified as the pkg-golang infrastructure
+assumes the bin name will be "host-runc" on default.
 
-[...]
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/Config.in.host      | 1 +
+ package/runc/Config.in.host | 8 ++++++++
+ package/runc/runc.mk        | 8 ++++++++
+ 3 files changed, 17 insertions(+)
+ create mode 100644 package/runc/Config.in.host
 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-> index a9f3cfdfe1..bd648cbfdd 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.hash
-> +++ b/package/ltp-testsuite/ltp-testsuite.hash
-> @@ -1,5 +1,5 @@
-> -# From: https://github.com/linux-test-project/ltp/releases/download/20210927/ltp-full-20210927.tar.xz.sha1
-> -sha1 dad7737f609e358c4060cb446b9cae5c026fc137  ltp-full-20210927.tar.xz
-> +# From: https://github.com/linux-test-project/ltp/releases/download/20220121/ltp-full-20220121.tar.xz.sha1
-> +sha1 211935e901afea1010ec4f70369b782fbee93ed4  ltp-full-20220121.tar.xz
->  # Locally computed
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> -sha256  779e9e5cc9af4f2b3d4cb32f5439ebd635504d2c4591bf900f0942dac290ed15  ltp-full-20210927.tar.xz
-> +sha256  ad002520616fac52362229ea0f1bb9d304fc03ff0096ccb5b1820cee9fc8413a  ltp-full-20220121.tar.xz
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index cc6d3c63b6..d9b7133b07 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LTP_TESTSUITE_VERSION = 20210927
-> +LTP_TESTSUITE_VERSION = 20220121
->  LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
->  LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
->  
-> @@ -70,6 +70,10 @@ LTP_TESTSUITE_CONF_ENV += \
->  	LIBS="$(LTP_TESTSUITE_LIBS)" \
->  	SYSROOT="$(STAGING_DIR)"
->  
-> +LTP_TESTSUITE_MAKE_ENV += \
-> +	HOST_CFLAGS="$(HOST_CFLAGS)" \
-> +	HOST_LDFLAGS="$(HOST_LDFLAGS)"
-
-I think you should have TARGET_* on the right side of the assignment,
-since this is a target package.
-
-baruch
-
-> +
->  # uclibc: bessel support normally not enabled
->  LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
->  	testcases/misc/math/float/bessel/ \
-
-
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 341e24926b..2ce015eacf 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -81,6 +81,7 @@ menu "Host utilities"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
+ 	source "package/riscv-isa-sim/Config.in.host"
++	source "package/runc/Config.in.host"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+diff --git a/package/runc/Config.in.host b/package/runc/Config.in.host
+new file mode 100644
+index 0000000000..ce0dd518a6
+--- /dev/null
++++ b/package/runc/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_RUNC
++	bool "host runc"
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	help
++	  runC is a CLI tool for spawning and running containers
++	  according to the OCP specification.
++
++	  https://github.com/opencontainers/runc
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index c4e45a00a9..932bf39eea 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -10,6 +10,8 @@ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+ RUNC_CPE_ID_VENDOR = linuxfoundation
+ 
++RUNC_GOMOD = github.com/opencontainers/runc
++
+ RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
+ RUNC_TAGS = cgo static_build
+ 
+@@ -23,4 +25,10 @@ RUNC_TAGS += seccomp
+ RUNC_DEPENDENCIES += libseccomp host-pkgconf
+ endif
+ 
++HOST_RUNC_BIN_NAME = runc
++HOST_RUNC_LDFLAGS = $(RUNC_LDFLAGS)
++HOST_RUNC_TAGS = $(RUNC_TAGS)
++HOST_RUNC_INSTALL_BINS = $(HOST_RUNC_BIN_NAME)
++
+ $(eval $(golang-package))
++$(eval $(host-golang-package))
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.35.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
