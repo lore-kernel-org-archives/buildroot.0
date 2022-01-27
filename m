@@ -1,63 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E7FC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 10:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBAD8C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jan 2022 10:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1076884F14;
-	Thu, 27 Jan 2022 10:47:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E3FF40B8C;
+	Thu, 27 Jan 2022 10:53:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dw7wD2LHiMgS; Thu, 27 Jan 2022 10:47:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1N4E3nWh71BO; Thu, 27 Jan 2022 10:53:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B59CB84F2A;
-	Thu, 27 Jan 2022 10:47:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AAB241BF421
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:47:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49FCB4036A;
+	Thu, 27 Jan 2022 10:52:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D98761BF421
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96A0584F2A
- for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:47:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3D2460F3D
+ for <buildroot@lists.busybox.net>; Thu, 27 Jan 2022 10:52:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rSZsqR3k_T85 for <buildroot@lists.busybox.net>;
- Thu, 27 Jan 2022 10:47:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PEhOva64DWD6 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jan 2022 10:52:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de
- [134.119.228.98])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E0A9F84F14
- for <buildroot@busybox.net>; Thu, 27 Jan 2022 10:47:30 +0000 (UTC)
-Received: from [91.21.118.156] (helo=exchange.go-sys.de)
- by smtprelay08.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>) id 1nD2J3-0002Rp-MZ
- for buildroot@busybox.net; Thu, 27 Jan 2022 11:47:09 +0100
-Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
- (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2375.18; Thu, 27
- Jan 2022 11:47:26 +0100
-Received: from go-sys.de (192.168.1.113) by exchange.go-sys.de (192.168.1.17)
- with Microsoft SMTP Server id 15.1.2375.18 via Frontend Transport;
- Thu, 27 Jan 2022 11:47:26 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Thu, 27 Jan 2022 11:46:58 +0100
-Message-ID: <20220127104658.9895-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220126231432.37374caf@windsurf>
-References: <20220126231432.37374caf@windsurf>
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5677360EF4
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 10:52:55 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2FB2F60003;
+ Thu, 27 Jan 2022 10:52:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nD2Oa-0004V7-3u; Thu, 27 Jan 2022 11:52:52 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+References: <20220109093735.4860-1-peter@korsgaard.com>
+Date: Thu, 27 Jan 2022 11:52:52 +0100
+In-Reply-To: <20220109093735.4860-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 9 Jan 2022 10:37:33 +0100")
+Message-ID: <87wnilbgcb.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
-X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
-X-OrganizationHeadersPreserved: exchange.go-sys.local
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH v2 1/1] package/network-manager: add optional
- nmcli support
+Subject: Re: [Buildroot] [PATCH] package/poppler: use HTTPS for upstream URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,66 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Olivier Schonken <olivier.schonken@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The network-manager package builds the nmcli utility when the
-readline package is enabled. However, this is not necessarily
-obvious to the user. Therefore, this commit adds an explicit
-option to enable the nmcli tool, which automatically selects readline.
-
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/network-manager/Config.in          | 8 +++++++-
- package/network-manager/network-manager.mk | 2 +-
- 2 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index a48cb37b15..f61a046a95 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -37,6 +37,13 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
- 	help
- 	  This option enables terminal based UI
- 
-+config BR2_PACKAGE_NETWORK_MANAGER_CLI
-+	bool "nmcli support"
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  This option enables support for the
-+	  NetworkManager Command Line Interface
-+
- config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
- 	bool "modem-manager support"
- 	select BR2_PACKAGE_MODEM_MANAGER
-@@ -54,7 +61,6 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
- 	select BR2_PACKAGE_JANSSON
- 	help
- 	  This option enables support for OpenVSwitch
--
- endif
- 
- comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 4.6, dynamic library, wchar, threads, gcc >= 4.9"
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 974320fce0..1eb9233b44 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -135,7 +135,7 @@ else
- NETWORK_MANAGER_CONF_OPTS += --disable-polkit
- endif
- 
--ifeq ($(BR2_PACKAGE_READLINE),y)
-+ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_CLI),y)
- NETWORK_MANAGER_DEPENDENCIES += readline
- NETWORK_MANAGER_CONF_OPTS += --with-nmcli
- else
--- 
-2.20.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlBldGVyIiA9PSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdy
+aXRlczoKCiA+IEZpeGVzOgogPiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0
+cy8xNDUvMTQ1NmY5NTEyMzcxZWNiNWEwYTM3NDk0MzE3OGU0YmQ3YjA5NjdlOC8KCiA+IFRoZSBI
+VFRQIFVSTCByZXR1cm5zIGEgMzA4IHJlZGlyZWN0IHRvIEhUVFBTLCB3aGljaCBjb25mdXNlcyBv
+bGQgd2dldAogPiB2ZXJzaW9ucyAoRS5HLiAgcy5iLm8pOgoKID4gd2dldCAtZCBodHRwOi8vcG9w
+cGxlci5mcmVlZGVza3RvcC5vcmcvcG9wcGxlci0yMS4xMi4wLnRhci54egogPiBERUJVRyBvdXRw
+dXQgY3JlYXRlZCBieSBXZ2V0IDEuMTQgb24gbGludXgtZ251LgoKID4gVVJJIGVuY29kaW5nID0g
+4oCYVVRGLTjigJkKID4gQ29udmVydGVkIGZpbGUgbmFtZSAncG9wcGxlci0yMS4xMi4wLnRhci54
+eicgKFVURi04KSAtPiAncG9wcGxlci0yMS4xMi4wLnRhci54eicgKFVURi04KQogPiBDb252ZXJ0
+ZWQgZmlsZSBuYW1lICdwb3BwbGVyLTIxLjEyLjAudGFyLnh6JyAoVVRGLTgpIC0+ICdwb3BwbGVy
+LTIxLjEyLjAudGFyLnh6JyAoVVRGLTgpCiA+IC0tMjAyMi0wMS0wOSAwOToyODowMi0tICBodHRw
+Oi8vcG9wcGxlci5mcmVlZGVza3RvcC5vcmcvcG9wcGxlci0yMS4xMi4wLnRhci54egogPiBSZXNv
+bHZpbmcgcG9wcGxlci5mcmVlZGVza3RvcC5vcmcgKHBvcHBsZXIuZnJlZWRlc2t0b3Aub3JnKS4u
+LiAxNDcuNzUuMTk4LjE1NgogPiBDYWNoaW5nIHBvcHBsZXIuZnJlZWRlc2t0b3Aub3JnID0+IDE0
+Ny43NS4xOTguMTU2CiA+IENvbm5lY3RpbmcgdG8gcG9wcGxlci5mcmVlZGVza3RvcC5vcmcgKHBv
+cHBsZXIuZnJlZWRlc2t0b3Aub3JnKXwxNDcuNzUuMTk4LjE1Nnw6ODAuLi4gY29ubmVjdGVkLgog
+PiBDcmVhdGVkIHNvY2tldCAzLgogPiBSZWxlYXNpbmcgMHgwMDAwMDAwMDAxY2VkYTgwIChuZXcg
+cmVmY291bnQgMSkuCgogPiAtLS1yZXF1ZXN0IGJlZ2luLS0tCiA+IEdFVCAvcG9wcGxlci0yMS4x
+Mi4wLnRhci54eiBIVFRQLzEuMQogPiBVc2VyLUFnZW50OiBXZ2V0LzEuMTQgKGxpbnV4LWdudSkK
+ID4gQWNjZXB0OiAqLyoKID4gSG9zdDogcG9wcGxlci5mcmVlZGVza3RvcC5vcmcKID4gQ29ubmVj
+dGlvbjogS2VlcC1BbGl2ZQoKID4gLS0tcmVxdWVzdCBlbmQtLS0KID4gSFRUUCByZXF1ZXN0IHNl
+bnQsIGF3YWl0aW5nIHJlc3BvbnNlLi4uCiA+IC0tLXJlc3BvbnNlIGJlZ2luLS0tCiA+IEhUVFAv
+MS4xIDMwOCBQZXJtYW5lbnQgUmVkaXJlY3QKID4gRGF0ZTogU3VuLCAwOSBKYW4gMjAyMiAwOToy
+ODowMiBHTVQKID4gQ29udGVudC1UeXBlOiB0ZXh0L2h0bWwKID4gQ29udGVudC1MZW5ndGg6IDE2
+NAogPiBDb25uZWN0aW9uOiBrZWVwLWFsaXZlCiA+IExvY2F0aW9uOiBodHRwczovL3BvcHBsZXIu
+ZnJlZWRlc2t0b3Aub3JnL3BvcHBsZXItMjEuMTIuMC50YXIueHoKCiA+IC0tLXJlc3BvbnNlIGVu
+ZC0tLQogPiAzMDggUGVybWFuZW50IFJlZGlyZWN0CiA+IFJlZ2lzdGVyZWQgc29ja2V0IDMgZm9y
+IHBlcnNpc3RlbnQgcmV1c2UuCiA+IFNraXBwaW5nIDE2NCBieXRlcyBvZiBib2R5OiBbPGh0bWw+
+CiA+IDxoZWFkPjx0aXRsZT4zMDggUGVybWFuZW50IFJlZGlyZWN0PC90aXRsZT48L2hlYWQ+CiA+
+IDxib2R5PgogPiA8Y2VudGVyPjxoMT4zMDggUGVybWFuZW50IFJlZGlyZWN0PC9oMT48L2NlbnRl
+cj4KID4gPGhyPjxjZW50ZXI+bmdpbng8L2NlbnRlcj4KID4gPC9ib2R5PgogPiA8L2h0bWw+CiA+
+IF0gZG9uZS4KID4gMjAyMi0wMS0wOSAwOToyODowMiBFUlJPUiAzMDg6IFBlcm1hbmVudCBSZWRp
+cmVjdC4KCiA+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJk
+LmNvbT4KCkNvbW1pdHRlZCB0byAyMDIxLjAyLnggYW5kIDIwMjEuMTEueCwgdGhhbmtzLgoKLS0g
+CkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
