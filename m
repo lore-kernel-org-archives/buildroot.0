@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 248C0C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 20:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56D26C4321E
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 20:08:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C676F6116B;
-	Fri, 28 Jan 2022 20:08:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0084361169;
+	Fri, 28 Jan 2022 20:08:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k4NiGyEAGxqN; Fri, 28 Jan 2022 20:08:44 +0000 (UTC)
+	with ESMTP id ZQtVY9uFSoNz; Fri, 28 Jan 2022 20:08:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F41EA6113B;
-	Fri, 28 Jan 2022 20:08:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC0261C1162
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:08:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C6916116D;
+	Fri, 28 Jan 2022 20:08:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F6A51BF842
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:08:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6FE9405CF
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:08:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C48D61169
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:08:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3_udj9sYJ7EB for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 20:08:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oGx5QkF-l52F for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 20:08:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6EC5405C2
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 20:08:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7B5460E21
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 20:08:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3A70182B40; Fri, 28 Jan 2022 20:01:31 +0000 (UTC)
+ id 3E5DC82B40; Fri, 28 Jan 2022 20:01:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 21:06:07 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b212e4c605569c484fa7489a3b349143864e4334
-X-Git-Newrev: 3e16885b3811a827a37a017c493fdb5d9889bdbb
+Date: Fri, 28 Jan 2022 21:05:56 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 62cdd112374c7a7bf5c83e5872811e5e3d53722c
+X-Git-Newrev: a800c82206b287e147de5560d146a32f743dd1aa
 X-Patchwork-Hint: ignore
-Message-Id: <20220128200131.3A70182B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/expat: security
+Message-Id: <20220128200136.3E5DC82B40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/expat: security
  bump to version 2.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e16885b3811a827a37a017c493fdb5d9889bdbb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a800c82206b287e147de5560d146a32f743dd1aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Fix CVE-2021-45960, CVE-2021-46143 and CVE-2022-22822 to CVE-2022-22827
 
