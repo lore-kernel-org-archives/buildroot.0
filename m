@@ -4,44 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB5ABC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 19:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86942C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 20:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB6956116F;
-	Fri, 28 Jan 2022 19:35:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01E1D61173;
+	Fri, 28 Jan 2022 20:05:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id igxK3pnRRcTs; Fri, 28 Jan 2022 19:35:36 +0000 (UTC)
+	with ESMTP id wzdirDLr2VOl; Fri, 28 Jan 2022 20:05:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7ADC6116C;
-	Fri, 28 Jan 2022 19:35:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 71F361C1189
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 19:34:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A64961168;
+	Fri, 28 Jan 2022 20:05:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 562991BF842
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DB6E405C7
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 19:34:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4351A84E3B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:05:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gT5CXuxvqrKG for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 19:34:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83F66405C0
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 19:34:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DA2EE82B2E; Fri, 28 Jan 2022 19:27:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AA5qpBszSE_K for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 20:05:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A6BA684E33
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 20:05:35 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F021FC0008;
+ Fri, 28 Jan 2022 20:05:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nDXUv-0002T4-Ur; Fri, 28 Jan 2022 21:05:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 20:29:59 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: bb388212b5f337bff798e4d0af89322658dc9c18
-X-Git-Newrev: 35bd926e18efeffb2351a70333083a84caa47627
-X-Patchwork-Hint: ignore
-Message-Id: <20220128192741.DA2EE82B2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/prosody: security
- bump to 0.11.12
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220118222425.164134-1-fontaine.fabrice@gmail.com>
+Date: Fri, 28 Jan 2022 21:05:29 +0100
+In-Reply-To: <20220118222425.164134-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 18 Jan 2022 23:24:24 +0100")
+Message-ID: <87tudn62ye.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/gcc: define _REENTRANT for
+ OpenRISC when -pthread is passed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,58 +60,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Will Newton <will.newton@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35bd926e18efeffb2351a70333083a84caa47627
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-see https://blog.prosody.im/prosody-0.11.12-released/
+ > Patch added by commit eee96b0f0ad224b3e09a9b98c26d056e18f17fd5 on gcc
+ > 9.3.0 must also be applied on gcc 10 and 11 to avoid the following build
+ > failure on numerous packages (babeltrace2, pcsc-lite, tpm2-pkcs11,
+ > etc.):
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Thomas: update separator for license file hash.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2d99bd8f7e0e3694828820a5ac1e0a09425d571d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/prosody/prosody.hash | 10 +++++-----
- package/prosody/prosody.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ > configure:13774: checking whether pthreads work with -pthread
+ > configure:13868: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/bin/or1k-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g2  -std=gnu99 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c   >&5
+ > conftest.c:27:26: error: #error "_REENTRANT must be defined"
+ >    27 | #                        error "_REENTRANT must be defined"
+ >       |                          ^~~~~
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index ee459f85d8..b6fa6532a5 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5  78d01bb97a935f6a776d141873a33fd7  prosody-0.11.11.tar.gz
--sha1  ff653812fcb1789a517b55281a8d01e9e8261848  prosody-0.11.11.tar.gz
--sha256  a1af90e2d4ac2f7cf81b385475140ecee60bec1eb83003efb5aeb89765b13774  prosody-0.11.11.tar.gz
--sha512  eb9851e1b279bef894d556ca6bc6210d1cd55e0c02a9d475f74e6e6b4a2dfef704fd3de77b71cff97909925c48c60940c34cfb541e6f3801e23e90ea21d119a9  prosody-0.11.11.tar.gz
-+md5  64a99571a5de84ace24d8142a1556d68  prosody-0.11.12.tar.gz
-+sha1  64c918439c2df130204dcd86398832cb7a481eb3  prosody-0.11.12.tar.gz
-+sha256  56cd52d820f5b3ed37e02d8a2577aa064bbc04db8e87fd18a6020eba0c10560d  prosody-0.11.12.tar.gz
-+sha512  cd03ee8b02ffaa478b5329d9942d833cfed2d8bf720bf580a2082d681e7d333bc34f45041cea7234bee75f1a0e7c07983a685fe2ac9b31d51a0dbb36e87ba5d2  prosody-0.11.12.tar.gz
- 
- # Hash for license file:
--sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-+sha256  bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index 7acfa4708d..d697c85568 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROSODY_VERSION = 0.11.11
-+PROSODY_VERSION = 0.11.12
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+ > It should be noted that external bootlins will have to be rebuilt.
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/cb58d4fbaeb08d188c2f8bf05ef1604789fa8766
+ >  - http://autobuild.buildroot.org/results/7af9d4b68bd46ed260ed66ba2cc3c9c21482e741
+ >  - http://autobuild.buildroot.org/results/6f926bec146752873f8032b593f0de1cb222ea46
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x and 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
