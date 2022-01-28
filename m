@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0533C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D84C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53E4E600D1;
-	Fri, 28 Jan 2022 12:46:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6C49400C6;
+	Fri, 28 Jan 2022 12:46:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r3VsG4ZfkO_3; Fri, 28 Jan 2022 12:46:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4zJYmZ-vLXQY; Fri, 28 Jan 2022 12:46:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BE9760B4C;
-	Fri, 28 Jan 2022 12:46:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB061BF332
+	by smtp2.osuosl.org (Postfix) with ESMTP id A731B404CD;
+	Fri, 28 Jan 2022 12:46:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D4651C1162
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0858A41681
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08AB584C69
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kOnNmVzN8lOI for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2R1xGuUzqGYT for <buildroot@lists.busybox.net>;
  Fri, 28 Jan 2022 12:46:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53A184167F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4529984C64
  for <buildroot@buildroot.org>; Fri, 28 Jan 2022 12:46:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4E02B82AA2; Fri, 28 Jan 2022 12:39:16 +0000 (UTC)
+ id 3D32F818E2; Fri, 28 Jan 2022 12:39:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 13:46:09 +0100
+Date: Fri, 28 Jan 2022 12:32:38 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 17e4a53cc991150886f2f8fa901f6d630871aef2
-X-Git-Newrev: 75d2730ac1e75603509b72d711d1003799b6cdd1
+X-Git-Oldrev: bf066e053c6f0e84294dae7f5cf908064f6e7623
+X-Git-Newrev: 4d77ea65bb7e23083b0af6ea0625bb7e7a973491
 X-Patchwork-Hint: ignore
-Message-Id: <20220128123916.4E02B82AA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wireshark:
- security bump to version 3.4.11
+Message-Id: <20220128123916.3D32F818E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/gstreamer1/gst1-rtsp-server: fix introspection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +59,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75d2730ac1e75603509b72d711d1003799b6cdd1
+commit: https://git.buildroot.net/buildroot/commit/?id=4d77ea65bb7e23083b0af6ea0625bb7e7a973491
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following security issues:
-- https://www.wireshark.org/security/wnpa-sec-2021-16.html
-  (CVE-2021-4186)
-- https://www.wireshark.org/security/wnpa-sec-2021-17.html
-  (CVE-2021-4185)
-- https://www.wireshark.org/security/wnpa-sec-2021-18.html
-  (CVE-2021-4184)
-- https://www.wireshark.org/security/wnpa-sec-2021-20.html
-  (CVE-2021-4182)
-- https://www.wireshark.org/security/wnpa-sec-2021-21.html
-  (CVE-2021-4181)
+Fix the following build failure with introspection:
 
-https://www.wireshark.org/docs/relnotes/wireshark-3.4.11.html
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
+Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
+error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
+If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
+Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
+
+Fixes:
+ - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d19436b88dcea890b6a73b242e2a2cbb66e17fcd)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fa3e7a63b93620b8227d66c6a973cd6140432cf3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...1-gst-rtsp-server-meson.build-add-gst_dep.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index bc7c9f4d7e..7b67e316ed 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.10.txt
--sha1  63839abd94d3ae376f860e2d2969777680106578  wireshark-3.4.10.tar.xz
--sha256  8aa7ef4a44ae62bb8db463cf761e2cc03b97305e0e77ed5be53fa83729187cef  wireshark-3.4.10.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.11.txt
-+sha1  b656d8709b8b0b3d2a94665af6bec88495ad994c  wireshark-3.4.11.tar.xz
-+sha256  a0e227bce2cc3a51ef3301891a0243231990b52a39b68a84a6e32f69c4e75279  wireshark-3.4.11.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 91d215f183..7715680767 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.4.10
-+WIRESHARK_VERSION = 3.4.11
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
+new file mode 100644
+index 0000000000..b63f634598
+--- /dev/null
++++ b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
+@@ -0,0 +1,41 @@
++From b6bc8fbb72d6d3914c616dc64d15b961493cb9c2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 20 Dec 2021 10:09:36 +0100
++Subject: [PATCH] gst/rtsp-server/meson.build: add gst_dep
++
++Add gst_dep to gst_rtsp_server_deps, in the context of buildroot, this
++will avoid the following build failure, because the correct girdir
++location will be retrieved from gstreamer-1.0.pc:
++
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
++Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
++error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
++If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
++Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/merge_requests/217]
++---
++ gst/rtsp-server/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gst/rtsp-server/meson.build b/gst/rtsp-server/meson.build
++index 24d7c39..874da14 100644
++--- a/gst/rtsp-server/meson.build
+++++ b/gst/rtsp-server/meson.build
++@@ -55,7 +55,7 @@ rtsp_server_headers = [
++ 
++ install_headers(rtsp_server_headers, subdir : 'gstreamer-1.0/gst/rtsp-server')
++ 
++-gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep]
+++gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep, gst_dep]
++ gst_rtsp_server = library('gstrtspserver-@0@'.format(api_version),
++   rtsp_server_sources,
++   include_directories : rtspserver_incs,
++-- 
++2.33.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
