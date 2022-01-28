@@ -4,44 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D032C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 18:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00B18C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 19:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB3E2400D3;
-	Fri, 28 Jan 2022 18:38:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D9F640590;
+	Fri, 28 Jan 2022 19:20:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1qI1rCm1-U-p; Fri, 28 Jan 2022 18:38:52 +0000 (UTC)
+	with ESMTP id oYRD2OESfdpn; Fri, 28 Jan 2022 19:20:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44FE840580;
-	Fri, 28 Jan 2022 18:38:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E14C8405B4;
+	Fri, 28 Jan 2022 19:19:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 69CF21BF2F7
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 18:37:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D5FFF1BF345
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 19:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58AE061149
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 18:37:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D199360C24
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 19:19:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 65y1XJUjdpNn for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 18:37:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0BF061162
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 18:37:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6848782B2A; Fri, 28 Jan 2022 18:30:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id pHJ_q7I4k4nk for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 19:19:56 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BA64860C17
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 19:19:56 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id s1so6280716ilj.7
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 11:19:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CE02jhS7+VCt1ryB8vYj2egtbWXbrvrQJwKSG5hl1pQ=;
+ b=n1mTTcLSgvDVvrtPF6dowF4YuBJ/QixgtKE/VDtL7dAqYaMsf6mJE4ZvpVlGMMFLV4
+ 9ndC3e0oV7ELvpXhQNNQilNN6pd0cAVo/Sp/EXrDME0gXP+De6N8OppCe8cDj2zPmyyd
+ LauzBFC9qXY8GDQrFBV/DNJc/T7SuOD92DATPWxgR7a0zTjW8XuktCS1yUwa38fAeDcn
+ IKKx1jskJXXWeoXfySxY4qI4jXuhjZQvvkUQiwP/Mz2G6mGWk2ZFZYTHSy54ovtt7UnY
+ JH3fgrIIzAGDyV6PO7Zdu2kuxDr3JbjtnM+zaSFphDjkYUrJETdsDL9XvQ8CoZAoAaFx
+ I9hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CE02jhS7+VCt1ryB8vYj2egtbWXbrvrQJwKSG5hl1pQ=;
+ b=xAw9iXkeBpa0q9jc/uMBfkXUHOOg9+wdhla4LYEYUL2G/ZYqj1kYQzOH7rscALcwLV
+ iC0u7ccMVVIRfcNVzQ8QHomTu5LILbJoUCucW5OVR56lAg1UDY/H2dV5o9Qd5hF3M/d8
+ doFPdZuc/FMVihPvV5GVfUvJtzxbkAsOdqt6AsJT/5/js26m3tLd+1RihJQ270Yl743h
+ RQaDYI0XTWtYqd0ctkQUkNvE6fUcp97Rk1OSxjR9FzECc8RNAZLTYTKz/DSaev+yzRpJ
+ lmFXANAOC6Rq0tAooZ5XlgsKWtS/jEXSItpXmee7uLOzvFKaRvIINQKofoQkQL2q54c0
+ b7mg==
+X-Gm-Message-State: AOAM532eml5H/a95R8x1DaXTguuAVyj7rVjrvMs5odrykkjVwy3X0HF4
+ FW/NC5ZpVNpfIqP1QVKDa+jgLchacVI=
+X-Google-Smtp-Source: ABdhPJwfF4EaPqy3QxJndEsxV00OHBO2YgIQykfn50CXuW8ZdGYfuyNSqAMQXRvy8htaCtl+obROQA==
+X-Received: by 2002:a05:6e02:1687:: with SMTP id
+ f7mr7008388ila.182.1643397595502; 
+ Fri, 28 Jan 2022 11:19:55 -0800 (PST)
+Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
+ [71.218.245.50])
+ by smtp.gmail.com with ESMTPSA id k5sm4000081ilr.7.2022.01.28.11.19.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Jan 2022 11:19:55 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 19:35:59 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: e4390ab28726ee48226a48ed112100239427ae2e
-X-Git-Newrev: 5c5064a8b489070a46e7075be4db17f17b1e1fcf
-X-Patchwork-Hint: ignore
-Message-Id: <20220128183025.6848782B2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/qt5/qt5base: fix
- CVE-2021-38593
+Date: Fri, 28 Jan 2022 12:19:52 -0700
+Message-Id: <20220128191952.2776015-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2 1/1] package/network-manager: migrate
+ autotools build system to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,382 +87,238 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0973654411494336906=="
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0973654411494336906==
-Content-Type: text/plain
+We need to add dbus as a build dependency since the meson build system
+uses dbus pkg-config to determine install locations.
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c5064a8b489070a46e7075be4db17f17b1e1fcf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+The meson build also requires mobile-broadband-info in order to get
+the database pkg-config variable.
 
-5.15.2 is the last public release of 5.15 and does not contain this CVE
-fix. However, >=6.1.2 and >5.12.12 all contain the necessary patches so
-let's port them to 5.15.2.
-
-Technically only the first two patches are required to patch the CVE.
-However, the second patch introduces a regression that is fixed in the third
-patch.
-
-The patches are taken from KDE kde/5.15 git branch.
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9151eab3c7e4548a052be69aecba1f2b1ee6396c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...ssing-intensive-painting-of-high-number-o.patch | 163 +++++++++++++++++++++
- ...x-for-avoiding-huge-number-of-tiny-dashes.patch |  37 +++++
- ...x-for-avoiding-huge-number-of-tiny-dashes.patch | 100 +++++++++++++
- package/qt5/qt5base/qt5base.mk                     |   4 +
- 4 files changed, 304 insertions(+)
+Changes v1 -> v2:
+  - add comments on new dependencies
+---
+ package/network-manager/Config.in          |   1 +
+ package/network-manager/network-manager.mk | 100 ++++++++++-----------
+ 2 files changed, 48 insertions(+), 53 deletions(-)
 
-diff --git a/package/qt5/qt5base/0010-Avoid-processing-intensive-painting-of-high-number-o.patch b/package/qt5/qt5base/0010-Avoid-processing-intensive-painting-of-high-number-o.patch
-new file mode 100644
-index 0000000000..03287d19ca
---- /dev/null
-+++ b/package/qt5/qt5base/0010-Avoid-processing-intensive-painting-of-high-number-o.patch
-@@ -0,0 +1,163 @@
-+From 307bc02e379e63aa9b7a3d21bbcd9c84d34c600f Mon Sep 17 00:00:00 2001
-+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
-+Date: Tue, 13 Apr 2021 14:23:45 +0200
-+Subject: [PATCH] Avoid processing-intensive painting of high number of tiny
-+ dashes
-+
-+When stroking a dashed path, an unnecessary amount of processing would
-+be spent if there is a huge number of dashes visible, e.g. because of
-+scaling. Since the dashes are too small to be indivdually visible
-+anyway, just replace with a semi-transparent solid line for such
-+cases.
-+
-+Pick-to: 6.1 6.0 5.15
-+Change-Id: I9e9f7861257ad5bce46a0cf113d1a9d7824911e6
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+(cherry picked from commit f4d791b330d02777fcaf02938732892eb3167e9b)
-+
-+* asturmlechner 2021-08-21:
-+Conflict from preceding 94dd2ceb in dev branch:
-+	src/gui/painting/qpaintengineex.cpp
-+	Resolved via:
-+
-+     if (pen.style() > Qt::SolidLine) {
-+         QRectF cpRect = path.controlPointRect();
-+         const QTransform &xf = state()->matrix;
-+-        if (pen.isCosmetic()) {
-++        if (qt_pen_is_cosmetic(pen, state()->renderHints)){
-+             clipRect = d->exDeviceRect;
-+             cpRect.translate(xf.dx(), xf.dy());
-+         } else {
-+
-+FTBFS from preceding 471e4fcb in dev branch changing QVector to QList:
-+	Resolved via:
-+
-+         QRectF extentRect = cpRect.adjusted(-pw, -pw, pw, pw) & clipRect;
-+         qreal extent = qMax(extentRect.width(), extentRect.height());
-+         qreal patternLength = 0;
-+-        const QList<qreal> pattern = pen.dashPattern();
-++        const QVector<qreal> pattern = pen.dashPattern();
-+         const int patternSize = qMin(pattern.size(), 32);
-+         for (int i = 0; i < patternSize; i++)
-+             patternLength += qMax(pattern.at(i), qreal(0));
-+
-+[Retrieved from: https://invent.kde.org/qt/qt/qtbase/-/commit/081d835c040a90f8ee76807354355062ac521dfb]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/gui/painting/qpaintengineex.cpp           | 44 +++++++++++++++----
-+ .../other/lancelot/scripts/tinydashes.qps     | 34 ++++++++++++++
-+ 2 files changed, 69 insertions(+), 9 deletions(-)
-+ create mode 100644 tests/auto/other/lancelot/scripts/tinydashes.qps
-+
-+diff --git a/src/gui/painting/qpaintengineex.cpp b/src/gui/painting/qpaintengineex.cpp
-+index 5d8f89eadd..55fdb0c2a0 100644
-+--- a/src/gui/painting/qpaintengineex.cpp
-++++ b/src/gui/painting/qpaintengineex.cpp
-+@@ -385,7 +385,7 @@ QPainterState *QPaintEngineEx::createState(QPainterState *orig) const
-+ 
-+ Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
-+ 
-+-void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-++void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &inPen)
-+ {
-+ #ifdef QT_DEBUG_DRAW
-+     qDebug() << "QPaintEngineEx::stroke()" << pen;
-+@@ -403,6 +403,38 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-+         d->stroker.setCubicToHook(qpaintengineex_cubicTo);
-+     }
-+ 
-++    QRectF clipRect;
-++    QPen pen = inPen;
-++    if (pen.style() > Qt::SolidLine) {
-++        QRectF cpRect = path.controlPointRect();
-++        const QTransform &xf = state()->matrix;
-++        if (qt_pen_is_cosmetic(pen, state()->renderHints)){
-++            clipRect = d->exDeviceRect;
-++            cpRect.translate(xf.dx(), xf.dy());
-++        } else {
-++            clipRect = xf.inverted().mapRect(QRectF(d->exDeviceRect));
-++        }
-++        // Check to avoid generating unwieldy amount of dashes that will not be visible anyway
-++        QRectF extentRect = cpRect & clipRect;
-++        qreal extent = qMax(extentRect.width(), extentRect.height());
-++        qreal patternLength = 0;
-++        const QVector<qreal> pattern = pen.dashPattern();
-++        const int patternSize = qMin(pattern.size(), 32);
-++        for (int i = 0; i < patternSize; i++)
-++            patternLength += qMax(pattern.at(i), qreal(0));
-++        if (pen.widthF())
-++            patternLength *= pen.widthF();
-++        if (qFuzzyIsNull(patternLength)) {
-++            pen.setStyle(Qt::NoPen);
-++        } else if (extent / patternLength > 10000) {
-++            // approximate stream of tiny dashes with semi-transparent solid line
-++            pen.setStyle(Qt::SolidLine);
-++            QColor color(pen.color());
-++            color.setAlpha(color.alpha() / 2);
-++            pen.setColor(color);
-++        }
-++    }
-++
-+     if (!qpen_fast_equals(pen, d->strokerPen)) {
-+         d->strokerPen = pen;
-+         d->stroker.setJoinStyle(pen.joinStyle());
-+@@ -430,14 +462,8 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-+         return;
-+     }
-+ 
-+-    if (pen.style() > Qt::SolidLine) {
-+-        if (qt_pen_is_cosmetic(pen, state()->renderHints)){
-+-            d->activeStroker->setClipRect(d->exDeviceRect);
-+-        } else {
-+-            QRectF clipRect = state()->matrix.inverted().mapRect(QRectF(d->exDeviceRect));
-+-            d->activeStroker->setClipRect(clipRect);
-+-        }
-+-    }
-++    if (!clipRect.isNull())
-++        d->activeStroker->setClipRect(clipRect);
-+ 
-+     if (d->activeStroker == &d->stroker)
-+         d->stroker.setForceOpen(path.hasExplicitOpen());
-+diff --git a/tests/auto/other/lancelot/scripts/tinydashes.qps b/tests/auto/other/lancelot/scripts/tinydashes.qps
-+new file mode 100644
-+index 0000000000..d41ced7f5f
-+--- /dev/null
-++++ b/tests/auto/other/lancelot/scripts/tinydashes.qps
-+@@ -0,0 +1,34 @@
-++# Version: 1
-++# CheckVsReference: 5%
-++
-++path_addEllipse mypath 20.0 20.0 200.0 200.0
-++
-++save
-++setPen blue 20 SolidLine FlatCap
-++pen_setCosmetic true
-++pen_setDashPattern [ 0.0004 0.0004 ]
-++setBrush yellow
-++
-++drawPath mypath
-++translate 300 0
-++setRenderHint Antialiasing true
-++drawPath mypath
-++restore
-++
-++path_addEllipse bigpath 200000.0 200000.0 2000000.0 2000000.0
-++
-++setPen blue 20 DotLine FlatCap
-++setBrush yellow
-++
-++save
-++translate 0 300
-++scale 0.0001 0.00011
-++drawPath bigpath
-++restore
-++
-++save
-++translate 300 300
-++setRenderHint Antialiasing true
-++scale 0.0001 0.00011
-++drawPath bigpath
-++restore
-+-- 
-+2.34.1
-+
-diff --git a/package/qt5/qt5base/0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch b/package/qt5/qt5base/0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-new file mode 100644
-index 0000000000..16e0f20200
---- /dev/null
-+++ b/package/qt5/qt5base/0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-@@ -0,0 +1,37 @@
-+From 856d11f695fb6effe26a359f9ad0efdf24067085 Mon Sep 17 00:00:00 2001
-+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
-+Date: Fri, 23 Jul 2021 15:53:56 +0200
-+Subject: [PATCH] Improve fix for avoiding huge number of tiny dashes
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Some pathological cases were not caught by the previous fix.
-+
-+Fixes: QTBUG-95239
-+Pick-to: 6.2 6.1 5.15
-+Change-Id: I0337ee3923ff93ccb36c4d7b810a9c0667354cc5
-+Reviewed-by: Robert Löhning <robert.loehning@qt.io>
-+(cherry picked from commit 6b400e3147dcfd8cc3a393ace1bd118c93762e0c)
-+[Retrieved from: https://invent.kde.org/qt/qt/qtbase/-/commit/fed5713eeba5bf8e0ee413cb4e77109bfa7c2bce]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/gui/painting/qpaintengineex.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gui/painting/qpaintengineex.cpp b/src/gui/painting/qpaintengineex.cpp
-+index 55fdb0c2a0..19e4b23423 100644
-+--- a/src/gui/painting/qpaintengineex.cpp
-++++ b/src/gui/painting/qpaintengineex.cpp
-+@@ -426,7 +426,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &inPen)
-+             patternLength *= pen.widthF();
-+         if (qFuzzyIsNull(patternLength)) {
-+             pen.setStyle(Qt::NoPen);
-+-        } else if (extent / patternLength > 10000) {
-++        } else if (qFuzzyIsNull(extent) || extent / patternLength > 10000) {
-+             // approximate stream of tiny dashes with semi-transparent solid line
-+             pen.setStyle(Qt::SolidLine);
-+             QColor color(pen.color());
-+-- 
-+2.34.1
-+
-diff --git a/package/qt5/qt5base/0012-Refix-for-avoiding-huge-number-of-tiny-dashes.patch b/package/qt5/qt5base/0012-Refix-for-avoiding-huge-number-of-tiny-dashes.patch
-new file mode 100644
-index 0000000000..ca3c2736ae
---- /dev/null
-+++ b/package/qt5/qt5base/0012-Refix-for-avoiding-huge-number-of-tiny-dashes.patch
-@@ -0,0 +1,100 @@
-+From 3b1a60f651776a7b2d155803b07a52a9e27bdf78 Mon Sep 17 00:00:00 2001
-+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
-+Date: Fri, 30 Jul 2021 13:03:49 +0200
-+Subject: [PATCH] Refix for avoiding huge number of tiny dashes
-+
-+Previous fix hit too widely so some valid horizontal and vertical
-+lines were affected; the root problem being that such lines have an
-+empty control point rect (width or height is 0). Fix by caculating in
-+the pen width.
-+
-+Pick-to: 6.2 6.1 5.15
-+Change-Id: I7a436e873f6d485028f6759d0e2c6456f07eebdc
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+(cherry picked from commit 84aba80944a2e1c3058d7a1372e0e66676411884)
-+[Retrieved from: https://invent.kde.org/qt/qt/qtbase/-/commit/427df34efdcb56582a9ae9f7d2d1f39eeff70328]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/gui/painting/qpaintengineex.cpp           |  8 ++---
-+ .../gui/painting/qpainter/tst_qpainter.cpp    | 31 +++++++++++++++++++
-+ 2 files changed, 35 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/gui/painting/qpaintengineex.cpp b/src/gui/painting/qpaintengineex.cpp
-+index 19e4b23423..9fe510827a 100644
-+--- a/src/gui/painting/qpaintengineex.cpp
-++++ b/src/gui/painting/qpaintengineex.cpp
-+@@ -415,18 +415,18 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &inPen)
-+             clipRect = xf.inverted().mapRect(QRectF(d->exDeviceRect));
-+         }
-+         // Check to avoid generating unwieldy amount of dashes that will not be visible anyway
-+-        QRectF extentRect = cpRect & clipRect;
-++        qreal pw = pen.widthF() ? pen.widthF() : 1;
-++        QRectF extentRect = cpRect.adjusted(-pw, -pw, pw, pw) & clipRect;
-+         qreal extent = qMax(extentRect.width(), extentRect.height());
-+         qreal patternLength = 0;
-+         const QVector<qreal> pattern = pen.dashPattern();
-+         const int patternSize = qMin(pattern.size(), 32);
-+         for (int i = 0; i < patternSize; i++)
-+             patternLength += qMax(pattern.at(i), qreal(0));
-+-        if (pen.widthF())
-+-            patternLength *= pen.widthF();
-++        patternLength *= pw;
-+         if (qFuzzyIsNull(patternLength)) {
-+             pen.setStyle(Qt::NoPen);
-+-        } else if (qFuzzyIsNull(extent) || extent / patternLength > 10000) {
-++        } else if (extent / patternLength > 10000) {
-+             // approximate stream of tiny dashes with semi-transparent solid line
-+             pen.setStyle(Qt::SolidLine);
-+             QColor color(pen.color());
-+diff --git a/tests/auto/gui/painting/qpainter/tst_qpainter.cpp b/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
-+index 42e98ce363..d7c3f95f1d 100644
-+--- a/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
-++++ b/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
-+@@ -308,6 +308,7 @@ private slots:
-+     void fillPolygon();
-+ 
-+     void drawImageAtPointF();
-++    void scaledDashes();
-+ 
-+ private:
-+     void fillData();
-+@@ -5468,6 +5469,36 @@ void tst_QPainter::drawImageAtPointF()
-+     paint.end();
-+ }
-+ 
-++void tst_QPainter::scaledDashes()
-++{
-++    // Test that we do not hit the limit-huge-number-of-dashes path
-++    QRgb fore = qRgb(0, 0, 0xff);
-++    QRgb back = qRgb(0xff, 0xff, 0);
-++    QImage image(5, 32, QImage::Format_RGB32);
-++    image.fill(back);
-++    QPainter p(&image);
-++    QPen pen(QColor(fore), 3, Qt::DotLine);
-++    p.setPen(pen);
-++    p.scale(1, 2);
-++    p.drawLine(2, 0, 2, 16);
-++    p.end();
-++
-++    bool foreFound = false;
-++    bool backFound = false;
-++    int i = 0;
-++    while (i < 32 && (!foreFound || !backFound)) {
-++        QRgb pix = image.pixel(3, i);
-++        if (pix == fore)
-++            foreFound = true;
-++        else if (pix == back)
-++            backFound = true;
-++        i++;
-++    }
-++
-++    QVERIFY(foreFound);
-++    QVERIFY(backFound);
-++}
-++
-+ QTEST_MAIN(tst_QPainter)
-+ 
-+ #include "tst_qpainter.moc"
-+-- 
-+2.34.1
-+
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 9da3de468a..ddeab204f7 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -11,6 +11,10 @@ QT5BASE_SOURCE = qtbase-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5BASE_VERSION).tar.xz
- QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
- QT5BASE_INSTALL_STAGING = YES
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index a48cb37b15..da1a7d79b3 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -40,6 +40,7 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+ config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+ 	bool "modem-manager support"
+ 	select BR2_PACKAGE_MODEM_MANAGER
++	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+ 	help
+ 	  This option enables support for ModemManager
  
-+# 0010-Avoid-processing-intensive-painting-of-high-number-o.patch
-+# 0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-+QT5BASE_IGNORE_CVES += CVE-2021-38593
-+
- # A few comments:
- #  * -no-pch to workaround the issue described at
- #     http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
-
---===============0973654411494336906==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 974320fce0..290333e16c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -9,7 +9,7 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+-NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
++NETWORK_MANAGER_DEPENDENCIES = host-pkgconf dbus udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+@@ -17,129 +17,123 @@ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+ 
+-NETWORK_MANAGER_CONF_ENV = \
+-	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+-	ac_cv_file__etc_fedora_release=no \
+-	ac_cv_file__etc_mandriva_release=no \
+-	ac_cv_file__etc_debian_version=no \
+-	ac_cv_file__etc_redhat_release=no \
+-	ac_cv_file__etc_SuSE_release=no
+-
+ NETWORK_MANAGER_CONF_OPTS = \
+-	--disable-introspection \
+-	--disable-tests \
+-	--disable-qt \
+-	--disable-more-warnings \
+-	--with-crypto=gnutls \
+-	--with-iptables=/usr/sbin/iptables \
+-	--disable-ifupdown \
+-	--without-nm-cloud-setup
++	-Dintrospection=false \
++	-Ddocs=false \
++	-Dtests=no \
++	-Dqt=false \
++	-Dcrypto=gnutls \
++	-Diptables=/usr/sbin/iptables \
++	-Difupdown=false \
++	-Dnm_cloud_setup=false \
++	-Dsession_tracking_consolekit=false
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ NETWORK_MANAGER_DEPENDENCIES += audit
+-NETWORK_MANAGER_CONF_OPTS += --with-libaudit
++NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=yes
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-libaudit
++NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
++NETWORK_MANAGER_CONF_OPTS += -Ddhclient=/sbin/dhclient
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
++NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_IWD),y)
+ NETWORK_MANAGER_DEPENDENCIES += iwd
+-NETWORK_MANAGER_CONF_OPTS += --with-iwd
++NETWORK_MANAGER_CONF_OPTS += -Diwd=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-iwd
++NETWORK_MANAGER_CONF_OPTS += -Diwd=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libcurl
+-NETWORK_MANAGER_CONF_OPTS += --enable-concheck
++NETWORK_MANAGER_CONF_OPTS += -Dconcheck=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-concheck
++NETWORK_MANAGER_CONF_OPTS += -Dconcheck=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPSL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libpsl
+-NETWORK_MANAGER_CONF_OPTS += --with-libpsl
++NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-libpsl
++NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ NETWORK_MANAGER_DEPENDENCIES += libselinux
+-NETWORK_MANAGER_CONF_OPTS += --with-selinux
++NETWORK_MANAGER_CONF_OPTS += -Dselinux=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-selinux
++NETWORK_MANAGER_CONF_OPTS += -Dselinux=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
+-NETWORK_MANAGER_DEPENDENCIES += modem-manager
+-NETWORK_MANAGER_CONF_OPTS += --with-modem-manager-1
++NETWORK_MANAGER_DEPENDENCIES += modem-manager mobile-broadband-provider-info
++NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
++NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
+-NETWORK_MANAGER_CONF_OPTS += --enable-ovs
++NETWORK_MANAGER_CONF_OPTS += -Dovs=true
+ NETWORK_MANAGER_DEPENDENCIES += jansson
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-ovs
++NETWORK_MANAGER_CONF_OPTS += -Dovs=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_PPPD),y)
+ NETWORK_MANAGER_DEPENDENCIES += pppd
+-NETWORK_MANAGER_CONF_OPTS += --enable-ppp
++NETWORK_MANAGER_CONF_OPTS += -Dppp=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-ppp
++NETWORK_MANAGER_CONF_OPTS += -Dppp=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
+ NETWORK_MANAGER_DEPENDENCIES += newt
+-NETWORK_MANAGER_CONF_OPTS += --with-nmtui
++NETWORK_MANAGER_CONF_OPTS += -Dnmtui=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-nmtui
++NETWORK_MANAGER_CONF_OPTS += -Dnmtui=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OFONO),y)
+ NETWORK_MANAGER_DEPENDENCIES += ofono
+-NETWORK_MANAGER_CONF_OPTS += --with-ofono
++NETWORK_MANAGER_CONF_OPTS += -Dofono=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-ofono
++NETWORK_MANAGER_CONF_OPTS += -Dofono=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ NETWORK_MANAGER_DEPENDENCIES += systemd
+ NETWORK_MANAGER_CONF_OPTS += \
+-	--with-systemd-journal \
+-	--with-config-logging-backend-default=journal \
+-	--with-session-tracking=systemd \
+-	--with-suspend-resume=systemd
++	-Dsystemd_journal=true \
++	-Dconfig_logging_backend_default=journal \
++	-Dsession_tracking=systemd \
++	-Dsuspend_resume=systemd
+ else
+ NETWORK_MANAGER_CONF_OPTS += \
+-	--without-systemd-journal \
+-	--with-config-logging-backend-default=syslog \
+-	--without-session-tracking \
+-	--with-suspend-resume=upower
++	-Dsystemd_journal=false \
++	-Dconfig_logging_backend_default=syslog \
++	-Dsession_tracking=no \
++	-Dsuspend_resume=upower \
++	-Dsystemdsystemunitdir=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POLKIT),y)
+ NETWORK_MANAGER_DEPENDENCIES += polkit
+-NETWORK_MANAGER_CONF_OPTS += --enable-polkit
++NETWORK_MANAGER_CONF_OPTS += -Dpolkit=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-polkit
++NETWORK_MANAGER_CONF_OPTS += -Dpolkit=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ NETWORK_MANAGER_DEPENDENCIES += readline
+-NETWORK_MANAGER_CONF_OPTS += --with-nmcli
++NETWORK_MANAGER_CONF_OPTS += -Dnmcli=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-nmcli
++NETWORK_MANAGER_CONF_OPTS += -Dnmcli=false
+ endif
+ 
+ define NETWORK_MANAGER_INSTALL_INIT_SYSV
+@@ -152,4 +146,4 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+ 
+ endef
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0973654411494336906==--
