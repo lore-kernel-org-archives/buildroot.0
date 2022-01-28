@@ -1,81 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E913C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 08:42:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA28C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 09:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3CE54031F;
-	Fri, 28 Jan 2022 08:42:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6B4841677;
+	Fri, 28 Jan 2022 09:15:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0AP-NGSt0oJu; Fri, 28 Jan 2022 08:42:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rZu6lxp8VKaJ; Fri, 28 Jan 2022 09:15:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 731FB40328;
-	Fri, 28 Jan 2022 08:42:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D86661BF867
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 08:42:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D2D941663;
+	Fri, 28 Jan 2022 09:15:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B6E3A1BF3A1
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 09:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6A6B84D5F
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 08:42:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A57D6605B5
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 09:15:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ebxiaA6w6tV1 for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 08:42:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7495484D62
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 08:42:51 +0000 (UTC)
-Received: by mail-lj1-x232.google.com with SMTP id q127so8026346ljq.2
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 00:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version:organization
- :content-transfer-encoding;
- bh=9TQEUWIZPRqwgmcYXMzj/16Gx6bpn2tim9G4yHP2lYk=;
- b=IzvIIYZdy/t27hoW8BkzJ8Xqh+/k6izQBhOmFq/24xMxpYE3nsOOXBCNiE/6jq23W0
- 0Tu3j3b0x50rhQdJQgbgmaUE8pkSMDmG+m9g4c4ZxIhimTPa0IAXqgx7CWm14nw2w/DE
- iHnGMNOWddjZPEUJNPnt2f8QQLE2WYrC0jhS9o2/sNVis71dESTPo3EEvoKzFeqEdN95
- 0UNhRjKIsc7QK9jZ89fj1x0nxDzHOpnLz34Gn3qYFl79SiRj1qOzo9QkFBgbB9ETzcOf
- VZvSuaIQkYz8h1uS3NSZpNSvttwH2QR+3+I/eD3FJS57c7+EhWiHwv4+eBBkDc8hL2GT
- gO2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :organization:content-transfer-encoding;
- bh=9TQEUWIZPRqwgmcYXMzj/16Gx6bpn2tim9G4yHP2lYk=;
- b=rb+/ATpTWQj+PgwUNd4cW4IKJSDxR7hwJZC4ejm1HsgzSU8eCptyCSAufgd80rR/Tt
- oaBmQUBarmSyuGGTpZKM9t7Jv/Rp/tMKepbz7C+ohZoQvtNTd9l5bPpRrAycbYdSEvB1
- 0twZdIyeTRAjCNfv/ZthIFJKdOkWATxOofqjc71HiD0rVRC5HklTcNgkOZi+hm+RTHm/
- 1rN8BBRybKB6H97+t+IE0yt9UFsbHTbOA9JChnAWElSMhJQcM8xVN0qqC51r73oFbAM0
- aVRDaHeiNMvgb4YXV2nrVFub+xDlht9V1iUZ5lTU+2rpxmNeV8dOMiiJBqC/C9JhyMch
- lQlA==
-X-Gm-Message-State: AOAM5339AsWY5mMistVZq7FWthZMaV6J5M27TnY8dtEcSZhhhgGt3egP
- TVsfJZl7pQ5qyuO70REJyC6RRM+9oEY=
-X-Google-Smtp-Source: ABdhPJyRbyrHh9Rtwse2cqv3jvEt0MQavUGzdtCn+BL/tRTW+8H2TBlESvvAk7Ox/ryalwW+4rZ8fg==
-X-Received: by 2002:a2e:80d2:: with SMTP id r18mr718821ljg.474.1643359368697; 
- Fri, 28 Jan 2022 00:42:48 -0800 (PST)
-Received: from wbg.labs.westermo.se (static-193-12-47-89.cust.tele2.se.
- [193.12.47.89])
- by smtp.gmail.com with ESMTPSA id o8sm2452647lft.135.2022.01.28.00.42.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Jan 2022 00:42:47 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 09:42:44 +0100
-Message-Id: <20220128084244.2258811-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=kalray.eu header.b="ugYGiEPz";
+ dkim=pass (1024-bit key) header.d=kalray.eu header.b="C/clWrV3"
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iamEIywCruUR for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 09:15:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from fx405.security-mail.net (smtpout140.security-mail.net
+ [85.31.212.145])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4404560597
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 09:15:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by fx405.security-mail.net (Postfix) with ESMTP id 933BE323864
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 10:15:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+ s=sec-sig-email; t=1643361304;
+ bh=dJt8nvFvwFKbe8BtZvZE17UFPPbxMk0GCt15aYoSCBA=;
+ h=Date:From:To:Cc:In-Reply-To:References:Subject;
+ b=ugYGiEPziWxaJgeJ7Y8oA8tut+QJ02MsBr/hUlkHCtM6eMF63BJQHHaeSt4jMOB4p
+ nd2StebVMLqiqnCGS7/nMho4ra5o1RJ+y+dqzmTqIOuq2Plkmj127IMzWzzwAUIBbi
+ cQsaDvFZEz7cc4nPwxkaUGDFeyPYKkAwWTaFfl1s=
+Received: from fx405 (localhost [127.0.0.1]) by fx405.security-mail.net
+ (Postfix) with ESMTP id D751C3238EA; Fri, 28 Jan 2022 10:15:03 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx405.security-mail.net (Postfix) with ESMTPS id 71382323701; Fri, 28 Jan
+ 2022 10:15:02 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 50B5727E034A; Fri, 28 Jan 2022
+ 10:15:02 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id 3711027E03FE; Fri, 28 Jan 2022 10:15:02 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ QF2L3yDJRvLv; Fri, 28 Jan 2022 10:15:02 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTP id 2552227E034A; Fri, 28 Jan 2022
+ 10:15:02 +0100 (CET)
+X-Virus-Scanned: E-securemail, by Secumail
+Secumail-id: <1b20.61f3b416.6fc5f.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 3711027E03FE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1643361302;
+ bh=5lKpau1Y7ooQAGTaJKU2hRg8Pou3ZWqwyiybwzvj90I=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=C/clWrV3r3M+GeHSkmaNduBKVCStkwwuyRMT/edLhx0fvo+zL2CyEckcLIPHX30Qg
+ vmkqd8mdXqtF6j4IirzV4hBc2eIS3EMFHfX0JND3QsICXq3X3F/dMfwduBYq3g2heJ
+ 8t5an9qCD82f2CbS73UesD5o5svniLwJgt82xUZ8=
+Date: Fri, 28 Jan 2022 10:15:02 +0100 (CET)
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <519255027.1854303.1643361302026.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <20220127211819.GR457876@scaer>
+References: <20220127135339.25430-1-jborne@kalray.eu>
+ <20220127135339.25430-2-jborne@kalray.eu> <20220127211819.GR457876@scaer>
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Subject: [Buildroot] [PATCH 1/1] package/gdb: backport fix for gdbserver
- 11.1 on aarch64
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 9.0.0_GA_4126 (ZimbraWebClient - FF95 (Linux)/9.0.0_GA_4126)
+Thread-Topic: package/binutils: remove libiberty from target install
+Thread-Index: ekv7Dor2HROHRHOpTzYWrCTrFY/qfQ==
+X-ALTERMIMEV2_out: done
+Subject: Re: [Buildroot] [PATCH 1/1] package/binutils: remove libiberty from
+ target install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,355 +96,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Jonathan Borne via buildroot <buildroot@buildroot.org>
+Reply-To: Jonathan Borne <jborne@kalray.eu>
+Cc: ysionneau@kalray.eu, jmaselbas <jmaselbas@kalray.eu>,
+ Baruch Siach via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backported from upstream GDB geb79b23, with ChangeLogs stripped so the
-patch applies properly on Buildroot.
 
-    https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=eb79b23
 
-Fixes the following issue:
+----- On Jan 27, 2022, at 10:18 PM, Yann E. MORIN yann.morin.1998@free.fr wrote:
 
-    # gdbserver /dev/hvc1 inadyn -n -l debug
-    Process inadyn created; pid = 675
-    Remote debugging using /dev/hvc1
-    ../../gdbserver/regcache.cc:257: A problem internal to GDBserver has been detected.
-    Unknown register tag_ctl requested
+> Jonathan, All,
+> 
+> Thanks for this new iteration. :-)
+> 
+> On 2022-01-27 14:53 +0100, Jonathan Borne via buildroot spake thusly:
+>> In BINUTILS_INSTALL_TARGET_CMDS, libiberty is installed
+>> to STAGING_DIR
+>> 
+>> This is not necessary since libiberty is already
+>> unconditionally installed to staging in
+>> BINUTILS_INSTALL_STAGING_CMDS. Furthermore the presence
+>> of STAGING_DIR path in TARGET_CMDS is confusing.
+>> 
+>> Moreover libiberty is static only. Static libraries
+>> are only used at build time, not at run time so
+>> we do not want to install libiberty on target.
+>> 
+>> This commit removes the unnecessary libiberty
+>> install in TARGET_CMDS and add a comment to clarify
+>> why we do not see libiberty installed on target.
+> 
+> I've slightly reworded the commit log, and rewrapped it closer to the
+> usual 72-char width.
+> 
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
----
- .../11.1/0010-gdbserver-aarch64-support.patch | 317 ++++++++++++++++++
- 1 file changed, 317 insertions(+)
- create mode 100644 package/gdb/11.1/0010-gdbserver-aarch64-support.patch
+That's perfect. I will think about the wrapping next time.
 
-diff --git a/package/gdb/11.1/0010-gdbserver-aarch64-support.patch b/package/gdb/11.1/0010-gdbserver-aarch64-support.patch
-new file mode 100644
-index 0000000000..c915b8fe6f
---- /dev/null
-+++ b/package/gdb/11.1/0010-gdbserver-aarch64-support.patch
-@@ -0,0 +1,317 @@
-+From eb79b2318066cafb75ffdce310e3bbd44f7c79e3 Mon Sep 17 00:00:00 2001
-+From: Luis Machado <luis.machado@linaro.org>
-+Date: Fri, 29 Oct 2021 14:54:36 -0300
-+Subject: [PATCH] [AArch64] Make gdbserver register set selection dynamic
-+
-+The current register set selection mechanism for AArch64 is static, based
-+on a pre-populated array of register sets.
-+
-+This means that we might potentially probe register sets that are not
-+available. This is OK if the kernel errors out during ptrace, but probing the
-+tag_ctl register, for example, does not result in a ptrace error if the kernel
-+supports the tagged address ABI but not MTE (PR 28355).
-+
-+Making the register set selection dynamic, based on feature checks, solves
-+this and simplifies the code a bit. It allows us to list all of the register
-+sets only once, and pick and choose based on HWCAP/HWCAP2 or other properties.
-+
-+gdb/ChangeLog:
-+
-+2021-11-03  Luis Machado  <luis.machado@linaro.org>
-+
-+	PR gdb/28355
-+
-+	* arch/aarch64.h (struct aarch64_features): New struct.
-+
-+gdbserver/ChangeLog:
-+
-+2021-11-03  Luis Machado  <luis.machado@linaro.org>
-+
-+	PR gdb/28355
-+
-+	* linux-aarch64-low.cc (is_sve_tdesc): Remove.
-+	(aarch64_target::low_arch_setup): Rework to adjust the register sets.
-+	(aarch64_regsets): Update to list all register sets.
-+	(aarch64_regsets_info, regs_info_aarch64): Replace NULL with nullptr.
-+	(aarch64_sve_regsets, aarch64_sve_regsets_info)
-+	(regs_info_aarch64_sve): Remove.
-+	(aarch64_adjust_register_sets): New.
-+	(aarch64_target::get_regs_info): Remove references to removed structs.
-+	(initialize_low_arch): Likewise.
-+---
-+ gdb/arch/aarch64.h             |   9 ++
-+ gdbserver/linux-aarch64-low.cc | 186 ++++++++++++++++++---------------
-+ 4 files changed, 130 insertions(+), 85 deletions(-)
-+
-+diff --git a/gdb/arch/aarch64.h b/gdb/arch/aarch64.h
-+index 0eb702c5b5e..95edb664b55 100644
-+--- a/gdb/arch/aarch64.h
-++++ b/gdb/arch/aarch64.h
-+@@ -22,6 +22,15 @@
-+ 
-+ #include "gdbsupport/tdesc.h"
-+ 
-++/* Holds information on what architectural features are available.  This is
-++   used to select register sets.  */
-++struct aarch64_features
-++{
-++  bool sve = false;
-++  bool pauth = false;
-++  bool mte = false;
-++};
-++
-+ /* Create the aarch64 target description.  A non zero VQ value indicates both
-+    the presence of SVE and the Vector Quotient - the number of 128bit chunks in
-+    an SVE Z register.  HAS_PAUTH_P indicates the presence of the PAUTH
-+diff --git a/gdbserver/linux-aarch64-low.cc b/gdbserver/linux-aarch64-low.cc
-+index daccfef746e..9a8cb4169a7 100644
-+--- a/gdbserver/linux-aarch64-low.cc
-++++ b/gdbserver/linux-aarch64-low.cc
-+@@ -196,16 +196,6 @@ is_64bit_tdesc (void)
-+   return register_size (regcache->tdesc, 0) == 8;
-+ }
-+ 
-+-/* Return true if the regcache contains the number of SVE registers.  */
-+-
-+-static bool
-+-is_sve_tdesc (void)
-+-{
-+-  struct regcache *regcache = get_thread_regcache (current_thread, 0);
-+-
-+-  return tdesc_contains_feature (regcache->tdesc, "org.gnu.gdb.aarch64.sve");
-+-}
-+-
-+ static void
-+ aarch64_fill_gregset (struct regcache *regcache, void *buf)
-+ {
-+@@ -680,40 +670,6 @@ aarch64_target::low_new_fork (process_info *parent,
-+   *child->priv->arch_private = *parent->priv->arch_private;
-+ }
-+ 
-+-/* Matches HWCAP_PACA in kernel header arch/arm64/include/uapi/asm/hwcap.h.  */
-+-#define AARCH64_HWCAP_PACA (1 << 30)
-+-
-+-/* Implementation of linux target ops method "low_arch_setup".  */
-+-
-+-void
-+-aarch64_target::low_arch_setup ()
-+-{
-+-  unsigned int machine;
-+-  int is_elf64;
-+-  int tid;
-+-
-+-  tid = lwpid_of (current_thread);
-+-
-+-  is_elf64 = linux_pid_exe_is_elf_64_file (tid, &machine);
-+-
-+-  if (is_elf64)
-+-    {
-+-      uint64_t vq = aarch64_sve_get_vq (tid);
-+-      unsigned long hwcap = linux_get_hwcap (8);
-+-      unsigned long hwcap2 = linux_get_hwcap2 (8);
-+-      bool pauth_p = hwcap & AARCH64_HWCAP_PACA;
-+-      /* MTE is AArch64-only.  */
-+-      bool mte_p = hwcap2 & HWCAP2_MTE;
-+-
-+-      current_process ()->tdesc
-+-	= aarch64_linux_read_description (vq, pauth_p, mte_p);
-+-    }
-+-  else
-+-    current_process ()->tdesc = aarch32_linux_read_description ();
-+-
-+-  aarch64_linux_get_debug_reg_capacity (lwpid_of (current_thread));
-+-}
-+-
-+ /* Wrapper for aarch64_sve_regs_copy_to_reg_buf.  */
-+ 
-+ static void
-+@@ -730,21 +686,36 @@ aarch64_sve_regs_copy_from_regcache (struct regcache *regcache, void *buf)
-+   return aarch64_sve_regs_copy_from_reg_buf (regcache, buf);
-+ }
-+ 
-++/* Array containing all the possible register sets for AArch64/Linux.  During
-++   architecture setup, these will be checked against the HWCAP/HWCAP2 bits for
-++   validity and enabled/disabled accordingly.
-++
-++   Their sizes are set to 0 here, but they will be adjusted later depending
-++   on whether each register set is available or not.  */
-+ static struct regset_info aarch64_regsets[] =
-+ {
-++  /* GPR registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_PRSTATUS,
-+-    sizeof (struct user_pt_regs), GENERAL_REGS,
-++    0, GENERAL_REGS,
-+     aarch64_fill_gregset, aarch64_store_gregset },
-++  /* Floating Point (FPU) registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_FPREGSET,
-+-    sizeof (struct user_fpsimd_state), FP_REGS,
-++    0, FP_REGS,
-+     aarch64_fill_fpregset, aarch64_store_fpregset
-+   },
-++  /* Scalable Vector Extension (SVE) registers.  */
-++  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_SVE,
-++    0, EXTENDED_REGS,
-++    aarch64_sve_regs_copy_from_regcache, aarch64_sve_regs_copy_to_regcache
-++  },
-++  /* PAC registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_PAC_MASK,
-+-    AARCH64_PAUTH_REGS_SIZE, OPTIONAL_REGS,
-+-    NULL, aarch64_store_pauthregset },
-++    0, OPTIONAL_REGS,
-++    nullptr, aarch64_store_pauthregset },
-++  /* Tagged address control / MTE registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_TAGGED_ADDR_CTRL,
-+-    AARCH64_LINUX_SIZEOF_MTE, OPTIONAL_REGS, aarch64_fill_mteregset,
-+-    aarch64_store_mteregset },
-++    0, OPTIONAL_REGS,
-++    aarch64_fill_mteregset, aarch64_store_mteregset },
-+   NULL_REGSET
-+ };
-+ 
-+@@ -752,47 +723,95 @@ static struct regsets_info aarch64_regsets_info =
-+   {
-+     aarch64_regsets, /* regsets */
-+     0, /* num_regsets */
-+-    NULL, /* disabled_regsets */
-++    nullptr, /* disabled_regsets */
-+   };
-+ 
-+ static struct regs_info regs_info_aarch64 =
-+   {
-+-    NULL, /* regset_bitmap */
-+-    NULL, /* usrregs */
-++    nullptr, /* regset_bitmap */
-++    nullptr, /* usrregs */
-+     &aarch64_regsets_info,
-+   };
-+ 
-+-static struct regset_info aarch64_sve_regsets[] =
-++/* Given FEATURES, adjust the available register sets by setting their
-++   sizes.  A size of 0 means the register set is disabled and won't be
-++   used.  */
-++
-++static void
-++aarch64_adjust_register_sets (const struct aarch64_features &features)
-+ {
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_PRSTATUS,
-+-    sizeof (struct user_pt_regs), GENERAL_REGS,
-+-    aarch64_fill_gregset, aarch64_store_gregset },
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_SVE,
-+-    SVE_PT_SIZE (AARCH64_MAX_SVE_VQ, SVE_PT_REGS_SVE), EXTENDED_REGS,
-+-    aarch64_sve_regs_copy_from_regcache, aarch64_sve_regs_copy_to_regcache
-+-  },
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_PAC_MASK,
-+-    AARCH64_PAUTH_REGS_SIZE, OPTIONAL_REGS,
-+-    NULL, aarch64_store_pauthregset },
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_TAGGED_ADDR_CTRL,
-+-    AARCH64_LINUX_SIZEOF_MTE, OPTIONAL_REGS, aarch64_fill_mteregset,
-+-    aarch64_store_mteregset },
-+-  NULL_REGSET
-+-};
-++  struct regset_info *regset;
-+ 
-+-static struct regsets_info aarch64_sve_regsets_info =
-+-  {
-+-    aarch64_sve_regsets, /* regsets.  */
-+-    0, /* num_regsets.  */
-+-    NULL, /* disabled_regsets.  */
-+-  };
-++  for (regset = aarch64_regsets; regset->size >= 0; regset++)
-++    {
-++      switch (regset->nt_type)
-++	{
-++	case NT_PRSTATUS:
-++	  /* General purpose registers are always present.  */
-++	  regset->size = sizeof (struct user_pt_regs);
-++	  break;
-++	case NT_FPREGSET:
-++	  /* This is unavailable when SVE is present.  */
-++	  if (!features.sve)
-++	    regset->size = sizeof (struct user_fpsimd_state);
-++	  break;
-++	case NT_ARM_SVE:
-++	  if (features.sve)
-++	    regset->size = SVE_PT_SIZE (AARCH64_MAX_SVE_VQ, SVE_PT_REGS_SVE);
-++	  break;
-++	case NT_ARM_PAC_MASK:
-++	  if (features.pauth)
-++	    regset->size = AARCH64_PAUTH_REGS_SIZE;
-++	  break;
-++	case NT_ARM_TAGGED_ADDR_CTRL:
-++	  if (features.mte)
-++	    regset->size = AARCH64_LINUX_SIZEOF_MTE;
-++	  break;
-++	default:
-++	  gdb_assert_not_reached ("Unknown register set found.");
-++	}
-++    }
-++}
-+ 
-+-static struct regs_info regs_info_aarch64_sve =
-+-  {
-+-    NULL, /* regset_bitmap.  */
-+-    NULL, /* usrregs.  */
-+-    &aarch64_sve_regsets_info,
-+-  };
-++/* Matches HWCAP_PACA in kernel header arch/arm64/include/uapi/asm/hwcap.h.  */
-++#define AARCH64_HWCAP_PACA (1 << 30)
-++
-++/* Implementation of linux target ops method "low_arch_setup".  */
-++
-++void
-++aarch64_target::low_arch_setup ()
-++{
-++  unsigned int machine;
-++  int is_elf64;
-++  int tid;
-++
-++  tid = lwpid_of (current_thread);
-++
-++  is_elf64 = linux_pid_exe_is_elf_64_file (tid, &machine);
-++
-++  if (is_elf64)
-++    {
-++      struct aarch64_features features;
-++
-++      uint64_t vq = aarch64_sve_get_vq (tid);
-++      features.sve = (vq > 0);
-++      /* A-profile PAC is 64-bit only.  */
-++      features.pauth = linux_get_hwcap (8) & AARCH64_HWCAP_PACA;
-++      /* A-profile MTE is 64-bit only.  */
-++      features.mte = linux_get_hwcap2 (8) & HWCAP2_MTE;
-++
-++      current_process ()->tdesc
-++	= aarch64_linux_read_description (vq, features.pauth, features.mte);
-++
-++      /* Adjust the register sets we should use for this particular set of
-++	 features.  */
-++      aarch64_adjust_register_sets (features);
-++    }
-++  else
-++    current_process ()->tdesc = aarch32_linux_read_description ();
-++
-++  aarch64_linux_get_debug_reg_capacity (lwpid_of (current_thread));
-++}
-+ 
-+ /* Implementation of linux target ops method "get_regs_info".  */
-+ 
-+@@ -802,9 +821,7 @@ aarch64_target::get_regs_info ()
-+   if (!is_64bit_tdesc ())
-+     return &regs_info_aarch32;
-+ 
-+-  if (is_sve_tdesc ())
-+-    return &regs_info_aarch64_sve;
-+-
-++  /* AArch64 64-bit registers.  */
-+   return &regs_info_aarch64;
-+ }
-+ 
-+@@ -3294,5 +3311,4 @@ initialize_low_arch (void)
-+   initialize_low_arch_aarch32 ();
-+ 
-+   initialize_regsets_info (&aarch64_regsets_info);
-+-  initialize_regsets_info (&aarch64_sve_regsets_info);
-+ }
-+-- 
-+2.27.0
-+
+>> Signed-off-by: Jonathan Borne <jborne@kalray.eu>
+>> ---
+>>  package/binutils/binutils.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+>> index 13f61be035..32ca70d325 100644
+>> --- a/package/binutils/binutils.mk
+>> +++ b/package/binutils/binutils.mk
+>> @@ -95,6 +95,8 @@ BINUTILS_MAKE_ENV = $(TARGET_CONFIGURE_ARGS)
+>>  
+>>  # We just want libbfd, libiberty and libopcodes,
+>>  # not the full-blown binutils in staging
+>> +# Static-only libraries such as libiberty are used at buildtime in staging
+>> +# but are not installed to target.
+> 
+> I believe the comment in fact makes more sense closer to the
+> _ISNTALL_TARGET_CMDS, so I moved it there, and reworded it
+> appropriately.
+> 
+
+I hesitated a bit about the right place to put this comment but
+that's definitively cleaner this way.
+
+> Applied to master, thanks.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+Nice! Thank you very much!
+
+Best regards,
+Jonathan
+
+>>  define BINUTILS_INSTALL_STAGING_CMDS
+>>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(STAGING_DIR) install
+>>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(STAGING_DIR) install
+>> @@ -106,7 +108,6 @@ ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+>>  define BINUTILS_INSTALL_TARGET_CMDS
+>>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
+>>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
+>> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
+>>  endef
+>>  endif
+>>  
+>> --
+>> 2.17.1
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+>|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> 
+> 
+> To declare a filtering error, please use the following link :
+> https://www.security-mail.net/reporter.php?mid=16157.61f30c1f.e3bf2.0&r=jborne%40kalray.eu&s=yann.morin.1998%40free.fr&o=Re%3A+%5BBuildroot%5D+%5BPATCH+1%2F1%5D+package%2Fbinutils%3A+remove+libiberty+from+target+install&verdict=C&c=175bda5746a47a6dc86efbf686983009e1fe0acd
+
+
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
