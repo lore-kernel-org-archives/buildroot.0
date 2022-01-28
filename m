@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BB93C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9C72C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1053441D65;
-	Fri, 28 Jan 2022 21:19:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F67841D12;
+	Fri, 28 Jan 2022 21:19:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aZsCQJ8G-zTe; Fri, 28 Jan 2022 21:19:35 +0000 (UTC)
+	with ESMTP id FZwDvXbNcdBF; Fri, 28 Jan 2022 21:19:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 417B741D73;
-	Fri, 28 Jan 2022 21:19:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 94A451BF345
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:19:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79E8D41D40;
+	Fri, 28 Jan 2022 21:19:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 075901BF345
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7EFBE40B1F
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:19:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB05684C8E
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:19:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cgtq0QPWUZ_a for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 21:19:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N6MuZiXBKoIH for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 21:19:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8824340BC8
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:19:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2210982F31
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:19:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B619382B52; Fri, 28 Jan 2022 21:12:07 +0000 (UTC)
+ id 50C2182A96; Fri, 28 Jan 2022 21:12:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 22:17:15 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b26a86ffa2e7dd1a2896e0717b890fb8f309046f
-X-Git-Newrev: d146485de18f807015a17926918c7c4a02de48a5
+Date: Fri, 28 Jan 2022 22:12:34 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: deacc25cd63e24614b9d27dae47762b45c205c6a
+X-Git-Newrev: ece7b2f709aab572304174413c0e495bb016cdcf
 X-Patchwork-Hint: ignore
-Message-Id: <20220128211207.B619382B52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mongodb: security
- bump to version 4.2.18
+Message-Id: <20220128211214.50C2182A96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/clamav: security
+ bump to version 0.103.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d146485de18f807015a17926918c7c4a02de48a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ece7b2f709aab572304174413c0e495bb016cdcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Fix CVE-2021-20330: An attacker with basic CRUD permissions on a
-replicated collection can run the applyOps command with specially
-malformed oplog entries, resulting in a potential denial of service on
-secondaries. This issue affects MongoDB Server v4.0 versions prior to
-4.0.25; MongoDB Server v4.2 versions prior to 4.2.14; MongoDB Server
-v4.4 versions prior to 4.4.6.
+ClamAV 0.103.5 is a critical patch release with the following fix:
 
-Drop third patch (already in version)
+ - CVE-2022-20698: Fix for invalid pointer read that may cause a crash.
+   Affects 0.104.1, 0.103.4 and prior when ClamAV is compiled with
+   libjson-c and the CL_SCAN_GENERAL_COLLECT_METADATA scan option (the
+   clamscan --gen-json option) is enabled.
 
-https://docs.mongodb.com/master/release-notes/4.2/
+https://github.com/Cisco-Talos/clamav/blob/clamav-0.103.5/NEWS.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 49bbf644d4acd3dfe6f3fd0db39e6fed78abf58f)
+(cherry picked from commit f92c093c7a39b8e0d6754c452268b0af20ef860b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongodb/mongodb.hash | 2 +-
- package/mongodb/mongodb.mk   | 2 +-
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-index 3b2580cc43..02da8ad452 100644
---- a/package/mongodb/mongodb.hash
-+++ b/package/mongodb/mongodb.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  ab5a8b6e967614a8ad67c0ca87124c4f380d4a476508973a7995d54ed902b02e  mongodb-src-r4.2.11.tar.gz
-+sha256  5bbb9567cc1f358ac7d9f37d9fe749862728bdf9f742d1dfc5e35a8b6c2985ba  mongodb-src-r4.2.18.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
- sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index 377484a00b..8220999df7 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index d68b04af76..73f4ff88f1 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  def0ad15500fa6aff81d8e68b9f83aa75ee5b607a01335c1d26dbcc959932f85  clamav-0.103.4.tar.gz
++sha256  1e74b1e1d2a8a9056449c313f48a6983b9d5ba0d6fb5ef0b2be6ad3c841a5426  clamav-0.103.5.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 94b589b975..cd2d06e6b3 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONGODB_VERSION = 4.2.11
-+MONGODB_VERSION = 4.2.18
- MONGODB_SITE = https://fastdl.mongodb.org/src
- MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
- 
+-CLAMAV_VERSION = 0.103.4
++CLAMAV_VERSION = 0.103.5
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
