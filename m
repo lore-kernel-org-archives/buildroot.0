@@ -4,68 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE1A9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 03:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A90EC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 04:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EAA241649;
-	Fri, 28 Jan 2022 03:59:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 941D84170A;
+	Fri, 28 Jan 2022 04:51:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xWOzMCrKxCmC; Fri, 28 Jan 2022 03:59:39 +0000 (UTC)
+	with ESMTP id bUri1jNkg44o; Fri, 28 Jan 2022 04:51:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05F6E41632;
-	Fri, 28 Jan 2022 03:59:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8634E1BF275
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 03:59:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 731F14154A;
+	Fri, 28 Jan 2022 04:51:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 07FDA1BF86D
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 04:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 750898340C
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 03:59:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E99BD60ABB
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 04:51:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fHiUnoHXNBca for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 03:59:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com
- [IPv6:2607:f8b0:4864:20::936])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A6CEA833D3
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 03:59:35 +0000 (UTC)
-Received: by mail-ua1-x936.google.com with SMTP id n15so6984298uaq.5
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 19:59:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to;
- bh=Fcv3sXYmP0dLVPCBb6AezHSzk2nluP2td9g6AcdZ7oE=;
- b=Jj7vSwptNhR54qhjoac4VnOZ657+onha5mwUX3FSxY8zPhr83vNNXYMc7+6+QoZsgT
- vd8cGnJREKicHhJHaGKtsgVDlsHLYHI13nUS4lik3Jfj5Zw1Z5WKCCb8MQu+lrM25rsK
- Gm4vVsPbSK81/rkkwdtZJ7sBOigQYvd1hlB3gfxm57Khs6ZnUKUT58Xc+SPCvHI/Ntxm
- YDndHyaIjLytmOPOlHFs8jtq/i7uMJldE3Ej60bb685HsorCk5lLdtbObL4KIlxbi+qA
- az8TC+SKr91T5i45Iy+4MX1rHDwNJYIiJbeC9b4uITaRjpgr9wzg2Nyi8bGBhk7nyD+L
- fB1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=Fcv3sXYmP0dLVPCBb6AezHSzk2nluP2td9g6AcdZ7oE=;
- b=YLcMOWtz+qPfLP3tW7HCbOtjjZV6XoXxLxdODOumYY+dcpOSUShsH2zjJSIFVxIC8J
- 8tdTO9LRsHCeAzLQ9ACDWtcL5XXzICthnswtGJHyeoX96+DY9yGti8lLi4U4VKCX7WNP
- gZqmgNkaVhJBmclsC7Gnav962EdwbLkUns1aYDVgO8x3lyfO8I9k0qsY0Ze4zcvz09tf
- 3cwn0HGCSthqo8BhYWuTXSSUs5YthinKnpAQBsinWG4D8wMaw8TvifS5gCEOIN0EbPe7
- CpgqmoPr5nu/gaqjPbwtltf9eQPk633op441R8AwdcNdA/oFcnqoO/vHw6fwAjslCWMv
- I35g==
-X-Gm-Message-State: AOAM533cmZAmiaMNd8Wjhmn7InXXlVGFZbUlxzf/c3fb554IvDFFQs2k
- +gGSLEZJwpzTYI5EIZEXjxasfHC745PSBCLk6t2mjgFN3RM=
-X-Google-Smtp-Source: ABdhPJw00LqPTFoLqRgEXdYNsCFEvPu4FzrYUn1I940NPD87vhJEP+QB25IcWMGegoD80olGY1TnNAR70hXtBiEjIU4=
-X-Received: by 2002:a9f:26a6:: with SMTP id 35mr3333250uay.98.1643342374334;
- Thu, 27 Jan 2022 19:59:34 -0800 (PST)
-MIME-Version: 1.0
-From: Chris <cheart0@gmail.com>
-Date: Fri, 28 Jan 2022 12:59:23 +0900
-Message-ID: <CAA6F-SOWP+gotpC8jtANa8-GZRu7ZvwcQuEMH_uNc54Yb0ibPQ@mail.gmail.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=inbox.ru
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HZxtw3QSTLKs for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 04:51:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C740860810
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 04:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru;
+ s=mail4; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=vklKrp5ozAdRQJJS963hh+BIghu4BOn+kNAoHyA6j3o=; 
+ t=1643345506;x=1643950906; 
+ b=mmJ368QlY3ducstMZEDZNVStbw+zAM0CCbRhNWwHkLrympME9zIhbF6PJx1VfDvHdJV9L/82jyg8BPRySnboqThHbCNZOhKRe610wvuqfFj2BG6nZ90HlquvRFquaYeaBQZhBOeX7rFJuRjZKzAZ4/zGLOyZE7jfjVPGKBXH2jzIaLqGvKukRo678xfc7o3erENWKsEolYBZyM+FpoeDeJOX5l9iPwjoQhg7iyIGBzg8gCoOnCtbUsU7hRl2LiHs82hx4PcQnTjzwavFDIp0jsEnH8y4FhPKrVGnXQDcQp5ueLkESUipqPXwGi87ZvWBZogXAXnXiFVletBDE3LZbw==;
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1nDJEd-0001nD-DL; Fri, 28 Jan 2022 07:51:43 +0300
 To: buildroot@buildroot.org
-Subject: [Buildroot] swupdate suricatta build error
+Date: Fri, 28 Jan 2022 07:51:40 +0300
+Message-Id: <20220128045140.272465-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Authentication-Results: smtpng1.m.smailru.net;
+ auth=pass smtp.auth=fido_max@inbox.ru
+ smtp.mailfrom=fido_max@inbox.ru
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9AA78FDF62ECAE61FBB8882B9C1ED1FCA269E871F1A847370182A05F538085040FDF5ADBFA3F965992D56C779C6A87A69DA1870F5A1D7EE4FAAFA06293917FB6A
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7678D195E6F08FCA2EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063795DC1BB912715AE68638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D85473A3FF328E3FAACA1C220BE500E5BF6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE7A4F00A9E8C511CEB9FA2833FD35BB23D9E625A9149C048EE9ECD01F8117BC8BEA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F446042972877693876707352033AC447995A7AD18C26CFBAC0749D213D2E47CDBA5A96583BA9C0B312567BB231DD303D21008E29813377AFFFEAFD269A417C69337E82CC2E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B6AC294AFEFA671E80089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C86C5B328D8C3BEB6DBD1ECF7A682B2D1ADC66B84B842D0499C2B6934AE262D3EE7EAB7254005DCED556CBE7F905700A49510FB958DCE06DB6ED91DBE5ABE359ADBCB5631A0A9D21F69F8FEF10F1C2C2993EDB24507CE13387DFF0A840B692CF8
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D343536C6A4332D8B8A44FB8079D7E6E79A6E03D25947FD0DEE3A885DD93CB8D4A7AA9DBC6BBF8CB6D91D7E09C32AA3244C726F5B3866281C78DF13818397B9626324AF4FAF06DA24FD729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojqLK0kLh8sGc5CrtDwmdalw==
+X-Mailru-Sender: 689FA8AB762F739339CABD9B3CA9A7D644367A1E3395B98B289B3BDCB271856B98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+Subject: [Buildroot] [PATCH 1/1] package/protozero: bump version to 1.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,148 +70,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6748048870440827360=="
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6748048870440827360==
-Content-Type: multipart/alternative; boundary="00000000000077775205d69c7617"
+Drop upstream patch.
+Release-notes: https://github.com/mapbox/protozero/releases/tag/v1.7.1
 
---00000000000077775205d69c7617
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ ...CMakeLists.txt-respect-BUILD_TESTING.patch | 47 -------------------
+ package/protozero/protozero.hash              |  2 +-
+ package/protozero/protozero.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
+ delete mode 100644 package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
 
-Hi, there
-Did anybody ever see the same issue? When build 2021.11 for raspberry pi,
-we added swupdate package and enabled suricatta mode by "make
-swupdate-menuconfig", then we got error as below,
-
-suricatta/common.c:79:26: error: storage size of =E2=80=98json_res=E2=80=99=
- isn=E2=80=99t known
-   79 |  enum json_tokener_error json_res;
-      |                          ^~~~~~~~
-suricatta/common.c:82:15: warning: implicit declaration of function
-=E2=80=98json_tokener_parse_ex=E2=80=99 [-Wimplicit-function-declaration]
-   82 |   json_root =3D json_tokener_parse_ex(
-      |               ^~~~~~~~~~~~~~~~~~~~~
-suricatta/common.c:82:13: warning: assignment to =E2=80=98struct json_objec=
-t *=E2=80=99
-from =E2=80=98int=E2=80=99 makes pointer from integer without a cast [-Wint=
--conversion]
-   82 |   json_root =3D json_tokener_parse_ex(
-      |             ^
-suricatta/common.c:84:23: warning: implicit declaration of function
-=E2=80=98json_tokener_get_error=E2=80=99 [-Wimplicit-function-declaration]
-   84 |  } while ((json_res =3D json_tokener_get_error(json_tokenizer)) =3D=
-=3D
-      |                       ^~~~~~~~~~~~~~~~~~~~~~
-suricatta/common.c:85:4: error: =E2=80=98json_tokener_continue=E2=80=99 und=
-eclared (first
-use in this function)
-   85 |    json_tokener_continue);
-      |    ^~~~~~~~~~~~~~~~~~~~~
-suricatta/common.c:85:4: note: each undeclared identifier is reported only
-once for each function it appears in
-suricatta/common.c:86:18: error: =E2=80=98json_tokener_success=E2=80=99 und=
-eclared (first
-use in this function); did you mean =E2=80=98json_tokener_error=E2=80=99?
-   86 |  if (json_res !=3D json_tokener_success) {
-      |                  ^~~~~~~~~~~~~~~~~~~~
-      |                  json_tokener_error
-suricatta/suricatta.c:17:10: fatal error: json-c/json.h: No such file or
-directory
-   17 | #include <json-c/json.h>
-
-
-   - host machine (OS/release) --Linux MINT20
-   - version of Buildroot--2021.11
-   - target for which the build fails--raspberry pi b
-   - package(s) for which the build fails--swupdate
-   - the command that fails and its output--as posted above
-   - any information you think that may be relevant
-
-
-Thanks
-Chris
-
---00000000000077775205d69c7617
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi, there<div>Did anybody ever see the same issue? When bu=
-ild 2021.11 for raspberry pi, we added swupdate package and enabled=C2=A0su=
-ricatta mode by &quot;make swupdate-menuconfig&quot;, then we got error as =
-below,</div><div><br></div><div>suricatta/common.c:79:26: error: storage si=
-ze of =E2=80=98json_res=E2=80=99 isn=E2=80=99t known<br>=C2=A0 =C2=A079 | =
-=C2=A0enum json_tokener_error json_res;<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0^~~~~~~~<br>suricatta/common.c:82:15: warning: implicit declarati=
-on of function =E2=80=98json_tokener_parse_ex=E2=80=99 [-Wimplicit-function=
--declaration]<br>=C2=A0 =C2=A082 | =C2=A0 json_root =3D json_tokener_parse_=
-ex(<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 ^~~~~~~~~~~~~~~~~~~~~<br>suricatta/common.c:82:13: warning: assignment =
-to =E2=80=98struct json_object *=E2=80=99 from =E2=80=98int=E2=80=99 makes =
-pointer from integer without a cast [-Wint-conversion]<br>=C2=A0 =C2=A082 |=
- =C2=A0 json_root =3D json_tokener_parse_ex(<br>=C2=A0 =C2=A0 =C2=A0 | =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ^<br>suricatta/common.c:84:23: warni=
-ng: implicit declaration of function =E2=80=98json_tokener_get_error=E2=80=
-=99 [-Wimplicit-function-declaration]<br>=C2=A0 =C2=A084 | =C2=A0} while ((=
-json_res =3D json_tokener_get_error(json_tokenizer)) =3D=3D<br>=C2=A0 =C2=
-=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 ^~~~~~~~~~~~~~~~~~~~~~<br>suricatta/common.c:85:4: error: =
-=E2=80=98json_tokener_continue=E2=80=99 undeclared (first use in this funct=
-ion)<br>=C2=A0 =C2=A085 | =C2=A0 =C2=A0json_tokener_continue);<br>=C2=A0 =
-=C2=A0 =C2=A0 | =C2=A0 =C2=A0^~~~~~~~~~~~~~~~~~~~~<br>suricatta/common.c:85=
-:4: note: each undeclared identifier is reported only once for each functio=
-n it appears in<br>suricatta/common.c:86:18: error: =E2=80=98json_tokener_s=
-uccess=E2=80=99 undeclared (first use in this function); did you mean =E2=
-=80=98json_tokener_error=E2=80=99?<br>=C2=A0 =C2=A086 | =C2=A0if (json_res =
-!=3D json_tokener_success) {<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^~~~~~~~~~~~~~~~~~~~<br>=C2=A0 =
-=C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0json_tokener_error<br>suricatta/suricatta.c:17:10: fatal error: json-c/j=
-son.h: No such file or directory<br>=C2=A0 =C2=A017 | #include &lt;json-c/j=
-son.h&gt;<br></div><div><br></div><div><ul style=3D"box-sizing:inherit;marg=
-in:0.9375rem 0px 0px;padding-left:1.875rem;color:rgb(32,33,36);font-family:=
-&quot;SF Pro Display&quot;,&quot;Segoe UI&quot;,&quot;Open Sans&quot;,&quot=
-;Clear Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Oxygen-Sans,Oxygen,U=
-buntu,&quot;Droid Sans&quot;,Tahoma,Roboto,-apple-system,BlinkMacSystemFont=
-,&quot;Hiragino Sans GB&quot;,Cantarell,Arial,STHeiti,sans-serif,&quot;Appl=
-e Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;=
-font-size:18px"><li style=3D"box-sizing:inherit">host machine (OS/release) =
---Linux MINT20</li><li style=3D"box-sizing:inherit">version of Buildroot--2=
-021.11</li><li style=3D"box-sizing:inherit">target for which the build fail=
-s--raspberry pi b</li><li style=3D"box-sizing:inherit">package(s) for which=
- the build fails--swupdate</li><li style=3D"box-sizing:inherit">the command=
- that fails and its output--as posted above</li><li style=3D"box-sizing:inh=
-erit">any information you think that may be relevant</li></ul><div><font co=
-lor=3D"#202124" face=3D"SF Pro Display, Segoe UI, Open Sans, Clear Sans, He=
-lvetica Neue, Helvetica, Oxygen-Sans, Oxygen, Ubuntu, Droid Sans, Tahoma, R=
-oboto, -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Cantarell, Aria=
-l, STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"=
-><span style=3D"font-size:18px"><br></span></font></div></div><div><font co=
-lor=3D"#202124" face=3D"SF Pro Display, Segoe UI, Open Sans, Clear Sans, He=
-lvetica Neue, Helvetica, Oxygen-Sans, Oxygen, Ubuntu, Droid Sans, Tahoma, R=
-oboto, -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Cantarell, Aria=
-l, STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"=
-><span style=3D"font-size:18px">Thanks</span></font></div><div><font color=
-=3D"#202124" face=3D"SF Pro Display, Segoe UI, Open Sans, Clear Sans, Helve=
-tica Neue, Helvetica, Oxygen-Sans, Oxygen, Ubuntu, Droid Sans, Tahoma, Robo=
-to, -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Cantarell, Arial, =
-STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"><s=
-pan style=3D"font-size:18px">Chris</span></font></div></div>
-
---00000000000077775205d69c7617--
-
---===============6748048870440827360==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch b/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
+deleted file mode 100644
+index d0267e3283..0000000000
+--- a/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 03daae49c8fa94513b508bd12f1597e8e5e086f2 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 17 Apr 2021 13:06:44 +0200
+-Subject: [PATCH] CMakeLists.txt: respect BUILD_TESTING
+-
+-Don't build tests if the standard cmake BUILD_TESTING variable is set to
+-OFF.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/mapbox/protozero/pull/105]
+----
+- CMakeLists.txt | 9 +++++----
+- 1 file changed, 5 insertions(+), 4 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index f9702d6..7a40212 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -23,6 +23,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+- 
+- #-----------------------------------------------------------------------------
+- 
+-+option(BUILD_TESTING "Build tests" ON)
+- option(WERROR "Add -Werror flag to build (turns warnings into errors)" ON)
+- 
+- if(MSVC)
+-@@ -134,13 +135,13 @@ install(DIRECTORY include/protozero DESTINATION include)
+- 
+- #-----------------------------------------------------------------------------
+- 
+--enable_testing()
+--
+- add_subdirectory(doc)
+- 
+- add_subdirectory(tools)
+- 
+--add_subdirectory(test)
+--
+-+if(BUILD_TESTING)
+-+    enable_testing()
+-+    add_subdirectory(test)
+-+endif()
+- 
+- #-----------------------------------------------------------------------------
+--- 
+-2.30.2
+-
+diff --git a/package/protozero/protozero.hash b/package/protozero/protozero.hash
+index 5453e01ecf..f0b8e39009 100644
+--- a/package/protozero/protozero.hash
++++ b/package/protozero/protozero.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  beffbdfab060854fd770178a8db9c028b5b6ee4a059a2fed82c46390a85f3f31  protozero-1.7.0.tar.gz
++sha256  27e0017d5b3ba06d646a3ec6391d5ccc8500db821be480aefd2e4ddc3de5ff99  protozero-1.7.1.tar.gz
+ sha256  1f4d477e3c2d74d8706c8f05437bd86804abe46853b1f233ce1549a4de76fa49  LICENSE.md
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.from_folly
+diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
+index 80d16192e3..a46e37d69b 100644
+--- a/package/protozero/protozero.mk
++++ b/package/protozero/protozero.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOZERO_VERSION = 1.7.0
++PROTOZERO_VERSION = 1.7.1
+ PROTOZERO_SITE = $(call github,mapbox,protozero,v$(PROTOZERO_VERSION))
+ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
+ PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
+-- 
+2.33.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6748048870440827360==--
