@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90477C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 20:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D099C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 20:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4956C84BF9;
-	Fri, 28 Jan 2022 20:50:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD3AD405CF;
+	Fri, 28 Jan 2022 20:53:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hqDyVFS9RifU; Fri, 28 Jan 2022 20:50:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cZd6e_p3sAcx; Fri, 28 Jan 2022 20:53:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A373384C01;
-	Fri, 28 Jan 2022 20:50:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C4691BF842
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:50:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFC1940253;
+	Fri, 28 Jan 2022 20:53:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CE8E1BF842
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A11584BF9
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:50:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5894840253
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 20:53:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qbQflqPSRF9n for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 20:50:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA85D84BF4
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 20:50:22 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id E60D3200005;
- Fri, 28 Jan 2022 20:50:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nDYCK-0004H5-CN; Fri, 28 Jan 2022 21:50:20 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20220124205811.15913-1-ps.report@gmx.net>
-Date: Fri, 28 Jan 2022 21:50:20 +0100
-In-Reply-To: <20220124205811.15913-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Mon, 24 Jan 2022 21:58:11 +0100")
-Message-ID: <87zgnf4mb7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KSup2t8zzl1U for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 20:53:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 22E6E4012E
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 20:53:54 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id s9so13101933wrb.6
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 12:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Kgbrwd3xCnSzpxda24wbaUe5EY+jS19PHFckVvmC3b8=;
+ b=ABWyfdByI+3L9BeZjdL99hG74aigq2M5wuIJIU0cLC0osAC+HDLIjl/nw01X6vCJBY
+ NlPH2te4C0nU3h2dHpoyu1PUFNAsH9s2Io8WI89HmqztPtMrdbNdweEn22PZBgYyZYHA
+ dSgZvJynq2Qry/r6spsKpZZi7U++ZUizFJvkp+f4NoEzx513aAhrxH+EX+YXl1Q8+9JW
+ gBtAPis+/B9KUrx0xq52vmexpalB9uVyY4bQx5bi5FXNu3cz/yfANCjoG/ed5nQ9ekrE
+ j6fb227i9vefZhRYy9CdRZM1p5URmzhFUJyJpu7ZE1wHt9r1+Fay8QKH9880y/YLiXEn
+ kU3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Kgbrwd3xCnSzpxda24wbaUe5EY+jS19PHFckVvmC3b8=;
+ b=eLwb4sAZ5i0Munuay8mL/YdqyndnKdioGvhnvVbZTw59VO0iWS/MEmH4a7Fct0P7fB
+ IwIXjZuRZ8z0EEU7uj/drqvnQpiTPnWJmFlfxAfBiNYHN5S+0jzbILS2JHYZrAsWsMks
+ YibVE8RKdoN74vAqFWrYaJ7f0CPeidg+aGJj2b8hiccqKYRnwu6DLBz5kruTjoPAHFxW
+ LdfQ+56zS01EaaHFSe3rveGNEt6PYmjBqAgrLWub3ecJ35GrEANVdCqu92W3yiwn7YqB
+ odIhW9nWMth9FjmlOm5NlCzKD9K/Cv1APNwWwUvDXPiYsCfM7IueZ4yYY+wg2ocpO/zE
+ w6Zg==
+X-Gm-Message-State: AOAM531MVwStfka+u4FzCLk4gJ6HKMF9HS8gb1i5N2xNAUCCri+lHlGn
+ BlM1gmRKkDz3eAmozeHKjJNuLgSS50I=
+X-Google-Smtp-Source: ABdhPJyTskUxiySxqwjAOkp4goXiSRwrZzV0SlOmMqO5GLnW0x7BaGbq4kuv8b/l1YZFQ2swWtQIwA==
+X-Received: by 2002:a5d:6e88:: with SMTP id k8mr8248892wrz.384.1643403232066; 
+ Fri, 28 Jan 2022 12:53:52 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id s9sm5337243wrr.84.2022.01.28.12.53.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Jan 2022 12:53:51 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 28 Jan 2022 21:52:00 +0100
+Message-Id: <20220128205201.2798205-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/gst1-interpipe: bump version to
- 1.1.8
+Subject: [Buildroot] [PATCH 1/2] package/glslsandbox: kms needs gbm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,31 +83,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Obviously, KMS/DRM/GBM needs gbm so add a dependency on libgbm which was
+added by commit 4a541ee93242e67f7fab625607f5501c6925d451:
 
- > Changelog (since 1.1.7):
- >   8b70f08 Add definition of new event GstAppSinkCallbacks for interpipesink element
- >   ddaa9b5 Add conditional build according to GST_VERSION_MINOR
- >   730dea6 Bump project version
- >   8718b12 Add initialization for the GstAppSinkCallbacks struct
- >   f015ff7 Remove redundant initialization of new_event callback
- >   530da92 Update copyright year in README file
- >   e8ce826 Add explanatory comment on the memset of GstAppSinkCallbacks struct
- >   f0f3b8e Fix README copyright date to 2016-2022
- >   814982e Merge branch 'hotfix/add-new-event-callback'
+checking for gbm... no
+configure: error: Package requirements (gbm) were not met:
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Package 'gbm', required by 'virtual:world', not found
 
-Committed to 2021.02.x and 2021.11.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/31b3fff9748300e293b4efb5615176ccce48dd15
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/glslsandbox-player/Config.in             | 1 +
+ package/glslsandbox-player/glslsandbox-player.mk | 4 +---
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
+index 3aa6049dfb..e36e8d74c8 100644
+--- a/package/glslsandbox-player/Config.in
++++ b/package/glslsandbox-player/Config.in
+@@ -70,6 +70,7 @@ choice
+ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS
+ 	bool "KMS/DRM/GBM"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	depends on BR2_PACKAGE_HAS_LIBGBM
+ 	select BR2_PACKAGE_LIBDRM
+ 
+ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI
+diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
+index c5fbf062b7..8886788587 100644
+--- a/package/glslsandbox-player/glslsandbox-player.mk
++++ b/package/glslsandbox-player/glslsandbox-player.mk
+@@ -37,9 +37,7 @@ GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-install-scripts
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS),y)
+-# gbm dependency is not needed, as it is normally packaged with
+-# libegl/libgles drivers.
+-GLSLSANDBOX_PLAYER_DEPENDENCIES += libdrm
++GLSLSANDBOX_PLAYER_DEPENDENCIES += libdrm libgbm
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=kms
+ else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI),y)
+ GLSLSANDBOX_PLAYER_DEPENDENCIES += sunxi-mali-utgard
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
