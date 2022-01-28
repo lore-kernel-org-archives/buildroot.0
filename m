@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41069C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 998CCC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:10:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF93E405D0;
-	Fri, 28 Jan 2022 21:10:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64CFA41D04;
+	Fri, 28 Jan 2022 21:10:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K1S8bI_6SNHm; Fri, 28 Jan 2022 21:10:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FWgPNQQ-jqo4; Fri, 28 Jan 2022 21:10:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3B3C40253;
-	Fri, 28 Jan 2022 21:10:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACBAA41CD4;
+	Fri, 28 Jan 2022 21:10:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E64551BF5DC
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:10:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4A1001BF5DC
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D483F41D54
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:10:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3874241D54
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:10:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NkDFfoQD78oE for <buildroot@lists.busybox.net>;
+ with ESMTP id I0k67KUp3ls4 for <buildroot@lists.busybox.net>;
  Fri, 28 Jan 2022 21:10:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17F3F41D5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1163141CD4
  for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:10:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4A03B82B50; Fri, 28 Jan 2022 21:03:09 +0000 (UTC)
+ id 3F0B682964; Fri, 28 Jan 2022 21:03:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 22:08:56 +0100
+Date: Fri, 28 Jan 2022 22:08:54 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 177b477df76429571ba3d0957991b5147546476a
-X-Git-Newrev: 42d642acc16c69783a40d1d00d5e5419ae850232
+X-Git-Oldrev: 2784581a7d62a36da07b6460b7ae6f42aa1efd11
+X-Git-Newrev: 177b477df76429571ba3d0957991b5147546476a
 X-Patchwork-Hint: ignore
-Message-Id: <20220128210309.4A03B82B50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-cli: bump
- to version 20.10.12
+Message-Id: <20220128210309.3F0B682964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
+ bump to version 20.10.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42d642acc16c69783a40d1d00d5e5419ae850232
+commit: https://git.buildroot.net/buildroot/commit/?id=177b477df76429571ba3d0957991b5147546476a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 70d1858353029d4a45e5f0d4a705b07837736c21)
+(cherry picked from commit 64cf3dc6c46c7b04d5d0ca1c024b9cf3d0efeaf1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index fbcda5753e..f2fe316540 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index d1323f507d..ec3a242629 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  55d55fdead906cbea8608ef39d5a62d54d1118e604a5ae7e2d58b4fb54a599a7  docker-cli-20.10.11.tar.gz
-+sha256  d86e3e6e10669634ee02b5e071e5ee504457a9d03941bbc5b7f2bd3683ebdb19  docker-cli-20.10.12.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 0e35a60d43..d5cca34efc 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+-sha256  6fa7835bf7c17c293621967bd5096642fa1e3e1b597fbc7d7bd35f455d886495  docker-engine-20.10.11.tar.gz
++sha256  a8ee80d31c7b74f687a837cd2a8570578f118179fba0844c5ee88f90fe180155  docker-engine-20.10.12.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 45fa7fa53e..2a1239b676 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.11
-+DOCKER_CLI_VERSION = 20.10.12
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+-DOCKER_ENGINE_VERSION = 20.10.11
++DOCKER_ENGINE_VERSION = 20.10.12
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
