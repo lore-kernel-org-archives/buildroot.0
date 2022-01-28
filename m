@@ -1,57 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 680A9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 07:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D01FC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 07:50:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA2A2606E7;
-	Fri, 28 Jan 2022 07:08:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8574941687;
+	Fri, 28 Jan 2022 07:50:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cFH1x6Tw6Gac; Fri, 28 Jan 2022 07:08:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBDB860AD1;
-	Fri, 28 Jan 2022 07:08:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B1C371BF3BC
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 07:08:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FB3F410CB
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 07:08:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rndfU4te6z7r for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 07:08:23 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R0aPBBZIAEtX; Fri, 28 Jan 2022 07:50:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D255417D2;
+	Fri, 28 Jan 2022 07:50:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 879711BF3BC
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 07:50:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 75EFF60B9A
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 07:50:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0QHDSiT6-oyv for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 07:50:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C4AF2402A9
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 07:08:22 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 287EF240005
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 07:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643353701; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=P2ZzeUuwWA8UYbmRkLoJPGLLdskzU+SHriEQkMp7vW4=;
- b=Z8DqIAud3viyEYPaGeu8Wtb1Th268yjXRedQuyDjLABxfoQsJpCbkPAUUwbS+lpftY7ZPy
- EIOVH7gDAkEMdtR024E4jwlY7QlN/E5odf6NOyhiyJL7dw+1OHfmQFjhtuySrbx/FWqLaq
- MYsYeEuO9E+aDXuuKsppu4hBuI/YgQMAzm/K3t6tPB+CEYNyA4y4o+7CN1gk5azo4ruBMW
- HEf3LvUEeQmyplNGlIJqbMqQ8AAKYSofxhZUP/0CRpaREbyqcQB0vT9vSbsXfFPmINFIH9
- JvoL3/9raMuY1x756OvyyWyIO60E2OPEwtaeznJBQRWhVvXBRKOHT81/STVMUw==
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C76E060B49
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 07:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1643356218;
+ bh=kLcd32NI9ft0/i4Qvh9L/rAhNXEZVCDzoo33WMZrY44=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=azV8UHlwyrq5Xi1cf6K5IFgmjRH1krJSj3t47w563gnVqxy2duWhzVkuwWTx6RUjz
+ nSDVgAjBXNy4LNEECSiQMC8Wg1aIWj52269y3Bv0qaN0y6chjaexyiIAJcP0DpTS/M
+ 9A0ATJMNBVfLiPMQywOGSQzeOtH+p1nipDx5H4Qc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.233]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBlxM-1n7phe2f6a-00CBgS; Fri, 28
+ Jan 2022 08:50:18 +0100
+Date: Fri, 28 Jan 2022 08:50:17 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220128085017.786b1c13@gmx.net>
+In-Reply-To: <20220127210924.GQ457876@scaer>
+References: <20220127183924.1938903-1-james.hilliard1@gmail.com>
+ <20220127210924.GQ457876@scaer>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 07:08:20 -0000
-Message-Id: <20220128070824.9FB3F410CB@smtp4.osuosl.org>
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-01-27
+X-Provags-ID: V03:K1:aLXq6i/eVV6JfQKemg0Ln4Hjf+TkdZ+n6RbsNS65ydfrdwSMmeQ
+ JA9NsTcWgcrDwj5Zi+hiImabe/dQ741CzDwjxYTG6yk5Fmxq4f/XHJHQO9VFgDnyuW5RqWK
+ eeAo5pio3qcmdC0S9OocZp/ULuXwhPljfoW70+pIqi483HRIGu4Ixb8GVODsR9m6khud0WS
+ OsRjaExwJirxyqZ1iWleQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NXSIvQputoI=:7yUtgrSUbebbFTIisACSWb
+ jXp2ApZ3/RZmgqz8bQ7wLsbYEQxUtQWhB1N4U9QAQBY4Khwi2aiyTkdMNvTiCbRAseb8pdKjI
+ oWHsuHMJQkQ4W6qQICWHl4OwN8Mty73lppgP0C5XkxgdbhQgbRscO0kddw6wMPvdqYXgw2YYF
+ gvhaEUAjl4iLeWuOeh5CKtQXwXvorCLLFAPDsYRi1Fym763pPLb532//QrOF1O9lOXV8AytQc
+ v10ipMY+BsGomAvE5qaXjJeFxiwsIrS1yBPb/BzqE3ICUCzW5E8/EkR0A56lAblJ3mcfrKHCx
+ bz75Gi9Z+fgNHY6AssuaqikPaFR3wdPiQLjwLZgtTHEsaifhXMK0uB8IjKJCmZsE8usXGqnw0
+ I1JsSVCyAjirK/Uu2pt+eQuvZFXvJbGIFXK+bwifyvd1o9u93vwf034dhE3WZZm3s/T41h1rp
+ N86+6mDZVXWR2GmiPT493aToKFPhwlTbUvXZg6iabQMZF+Yk9uxqj2cyrZN1+Ml2lFp+zgET4
+ 656p4Xs8fSkVQQaJlaOCDaiM2ZZKXi3sQiICP+khwCam0OQkD0cffyrQ6VVJq2vXfBla265EU
+ jlTzxQp1/fUjQkFg4VjiZUaSIgD8H9Uz0rtrRUEqyJxdfzUSt+zF/9jNHzQQ9HoAyTGyoeNSF
+ labOEhG9dW6QvyYcrSCtzti92YZROI33xZ7nQkawphEECptU8sk1Alr2EmqTRB+d0afO+31x+
+ pgps2eYwzQS5FNu3UC/Rbjp5CHzbQ8tqLRHQtKJ+FJq7RVOkShwgnbf24ozhZrOSj9xhtQnZS
+ nIFiwlsQj4doKdBJcQyS8i0rXl8M3oOKBvjs7LAkLV/1FA0TcV0K6MCLSXipjJ5A9i6W7Vwgj
+ BmC7SRIt3oUzHO0tfF0yFODyAavZ7YogKVS4ng4futAKWRTHed37V3LmpCyuenxRt2W6PMpma
+ WMZWSrH2t3CtY7J7lCV86N/F6mkoOLOezYrOzMM7O5KQO6lmdKdpjOsIn1/IfaB1QRAVOFtRv
+ K4PABgUY5Tyccmblxs77lYQdaHfWPi853G9tBkl4TDMwZ2FcS3CyZ1rgJS/ecKld3cZ97Vdjo
+ CYWzrRpjj7cZbE=
+Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: migrate
+ autotools build system to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,170 +87,258 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hello James, Yann,
 
-Autobuild statistics for 2022-01-27
-===================================
+On Thu, 27 Jan 2022 22:09:24 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 51  | 14  |  0  | 65  |
-  2021.11.x  | 21  |  7  |  0  | 28  |
-    master   | 85  | 44  |  0  | 129 |
+> James, All,
+>
+> On 2022-01-27 11:39 -0700, James Hilliard spake thusly:
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/network-manager/Config.in          |   1 +
+> >  package/network-manager/network-manager.mk | 100 ++++++++++-----------
+> >  2 files changed, 48 insertions(+), 53 deletions(-)
+> >
+> > diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+> > index a48cb37b15..da1a7d79b3 100644
+> > --- a/package/network-manager/Config.in
+> > +++ b/package/network-manager/Config.in
+> > @@ -40,6 +40,7 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+> >  config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+> >  	bool "modem-manager support"
+> >  	select BR2_PACKAGE_MODEM_MANAGER
+> > +	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+>
+> It looks like this is totally unrelated to the switch to meson, and
+> should be applied in its own right, and then backported to the
+> maintenance branches, no?
+>
+> If it is due to the switch to meson, then it should be explained in the
+> commit log.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  	help
+> >  	  This option enables support for ModemManager
+> >
+> > diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> > index 974320fce0..290333e16c 100644
+> > --- a/package/network-manager/network-manager.mk
+> > +++ b/package/network-manager/network-manager.mk
+> > @@ -9,7 +9,7 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+> >  NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+> >  NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+> >  NETWORK_MANAGER_INSTALL_STAGING = YES
+> > -NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+> > +NETWORK_MANAGER_DEPENDENCIES = host-pkgconf dbus udev gnutls libglib2 \
 
-Classification of failures by reason for master
------------------------------------------------
+Same comment as Yann beofore, here for added dbus dependency...
 
-                 htpdate-1.3.3 | 5 
-                  rygel-0.40.2 | 5 
-                       unknown | 5 
-                       frr-8.1 | 4 
-                   guile-3.0.7 | 2 
-              host-delve-1.8.0 | 2 
-                log4cxx-0.12.0 | 2 
-                rtorrent-0.9.8 | 2 
-                    bird-2.0.8 | 1 
-             bluez5_utils-5.63 | 1 
-              cryptsetup-2.4.2 | 1 
-                  dnsmasq-2.86 | 1 
- glslsandbox-player-2021.08.24 | 1 
-                 hiawatha-11.1 | 1 
-                 jasper-2.0.28 | 1 
-                mongodb-4.2.18 | 1 
-               mongrel2-1.13.0 | 1 
-                   mp4v2-5.0.1 | 1 
-                nodejs-14.18.3 | 1 
-pistache-f2f5a50fbfb5b8ef6c... | 1 
-               pulseview-0.4.2 | 1 
-                     vdr-2.6.0 | 1 
-                    vlc-3.0.16 | 1 
-                 wavemon-0.9.4 | 1 
-                  xvisor-0.3.1 | 1 
+Regards,
+Peter
 
+> >  	libgcrypt wireless_tools util-linux host-intltool libndp
+> >  NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+> >  NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+> > @@ -17,129 +17,123 @@ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+> >  NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+> >  NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+> >
+> > -NETWORK_MANAGER_CONF_ENV = \
+> > -	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+> > -	ac_cv_file__etc_fedora_release=no \
+> > -	ac_cv_file__etc_mandriva_release=no \
+> > -	ac_cv_file__etc_debian_version=no \
+> > -	ac_cv_file__etc_redhat_release=no \
+> > -	ac_cv_file__etc_SuSE_release=no
+> > -
+> >  NETWORK_MANAGER_CONF_OPTS = \
+> > -	--disable-introspection \
+> > -	--disable-tests \
+> > -	--disable-qt \
+> > -	--disable-more-warnings \
+> > -	--with-crypto=gnutls \
+> > -	--with-iptables=/usr/sbin/iptables \
+> > -	--disable-ifupdown \
+> > -	--without-nm-cloud-setup
+> > +	-Dintrospection=false \
+> > +	-Ddocs=false \
+> > +	-Dtests=no \
+> > +	-Dqt=false \
+> > +	-Dcrypto=gnutls \
+> > +	-Diptables=/usr/sbin/iptables \
+> > +	-Difupdown=false \
+> > +	-Dnm_cloud_setup=false \
+> > +	-Dsession_tracking_consolekit=false
+> >
+> >  ifeq ($(BR2_PACKAGE_AUDIT),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += audit
+> > -NETWORK_MANAGER_CONF_OPTS += --with-libaudit
+> > +NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=yes
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-libaudit
+> > +NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=no
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+> > -NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
+> > +NETWORK_MANAGER_CONF_OPTS += -Ddhclient=/sbin/dhclient
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_DHCPCD),y)
+> > -NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
+> > +NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_IWD),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += iwd
+> > -NETWORK_MANAGER_CONF_OPTS += --with-iwd
+> > +NETWORK_MANAGER_CONF_OPTS += -Diwd=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-iwd
+> > +NETWORK_MANAGER_CONF_OPTS += -Diwd=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += libcurl
+> > -NETWORK_MANAGER_CONF_OPTS += --enable-concheck
+> > +NETWORK_MANAGER_CONF_OPTS += -Dconcheck=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --disable-concheck
+> > +NETWORK_MANAGER_CONF_OPTS += -Dconcheck=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_LIBPSL),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += libpsl
+> > -NETWORK_MANAGER_CONF_OPTS += --with-libpsl
+> > +NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-libpsl
+> > +NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += libselinux
+> > -NETWORK_MANAGER_CONF_OPTS += --with-selinux
+> > +NETWORK_MANAGER_CONF_OPTS += -Dselinux=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-selinux
+> > +NETWORK_MANAGER_CONF_OPTS += -Dselinux=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
+> > -NETWORK_MANAGER_DEPENDENCIES += modem-manager
+> > -NETWORK_MANAGER_CONF_OPTS += --with-modem-manager-1
+> > +NETWORK_MANAGER_DEPENDENCIES += modem-manager mobile-broadband-provider-info
+> > +NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
+> > +NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
+> > -NETWORK_MANAGER_CONF_OPTS += --enable-ovs
+> > +NETWORK_MANAGER_CONF_OPTS += -Dovs=true
+> >  NETWORK_MANAGER_DEPENDENCIES += jansson
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --disable-ovs
+> > +NETWORK_MANAGER_CONF_OPTS += -Dovs=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_PPPD),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += pppd
+> > -NETWORK_MANAGER_CONF_OPTS += --enable-ppp
+> > +NETWORK_MANAGER_CONF_OPTS += -Dppp=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --disable-ppp
+> > +NETWORK_MANAGER_CONF_OPTS += -Dppp=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += newt
+> > -NETWORK_MANAGER_CONF_OPTS += --with-nmtui
+> > +NETWORK_MANAGER_CONF_OPTS += -Dnmtui=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-nmtui
+> > +NETWORK_MANAGER_CONF_OPTS += -Dnmtui=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_OFONO),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += ofono
+> > -NETWORK_MANAGER_CONF_OPTS += --with-ofono
+> > +NETWORK_MANAGER_CONF_OPTS += -Dofono=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-ofono
+> > +NETWORK_MANAGER_CONF_OPTS += -Dofono=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += systemd
+> >  NETWORK_MANAGER_CONF_OPTS += \
+> > -	--with-systemd-journal \
+> > -	--with-config-logging-backend-default=journal \
+> > -	--with-session-tracking=systemd \
+> > -	--with-suspend-resume=systemd
+> > +	-Dsystemd_journal=true \
+> > +	-Dconfig_logging_backend_default=journal \
+> > +	-Dsession_tracking=systemd \
+> > +	-Dsuspend_resume=systemd
+> >  else
+> >  NETWORK_MANAGER_CONF_OPTS += \
+> > -	--without-systemd-journal \
+> > -	--with-config-logging-backend-default=syslog \
+> > -	--without-session-tracking \
+> > -	--with-suspend-resume=upower
+> > +	-Dsystemd_journal=false \
+> > +	-Dconfig_logging_backend_default=syslog \
+> > +	-Dsession_tracking=no \
+> > +	-Dsuspend_resume=upower \
+> > +	-Dsystemdsystemunitdir=no
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_POLKIT),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += polkit
+> > -NETWORK_MANAGER_CONF_OPTS += --enable-polkit
+> > +NETWORK_MANAGER_CONF_OPTS += -Dpolkit=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --disable-polkit
+> > +NETWORK_MANAGER_CONF_OPTS += -Dpolkit=false
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_READLINE),y)
+> >  NETWORK_MANAGER_DEPENDENCIES += readline
+> > -NETWORK_MANAGER_CONF_OPTS += --with-nmcli
+> > +NETWORK_MANAGER_CONF_OPTS += -Dnmcli=true
+> >  else
+> > -NETWORK_MANAGER_CONF_OPTS += --without-nmcli
+> > +NETWORK_MANAGER_CONF_OPTS += -Dnmcli=false
+> >  endif
+> >
+> >  define NETWORK_MANAGER_INSTALL_INIT_SYSV
+> > @@ -152,4 +146,4 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+> >
+> >  endef
+> >
+> > -$(eval $(autotools-package))
+> > +$(eval $(meson-package))
+> > --
+> > 2.25.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/5a1a94efe3eab09050ab56caec88b411cae451ed |     
-    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/1e52863f27ef19b2555d5bf360812e1cb4a48725 |     
-microblazeel |        cryptsetup-2.4.2        | NOK | http://autobuild.buildroot.net/results/dc74e318564f642bd8fddcca2721a650f21af3c5 |     
-    arm      |          dnsmasq-2.86          | NOK | http://autobuild.buildroot.net/results/9c09a31cef5abfeaf774c025df678a33c18aad5e |     
-  mips64el   |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/6fc95af66fd39481fac5c0e06a46f7a56c931d64 |     
-  mips64el   |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/bf6d2615526a84e91110bce13f57779478a285e9 |     
-    arc      |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/8b700fe2442a56fd47c8a01a8ba1a2dd57f65a8f |     
-  mips64el   |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/bc109f875ced91c99aeecf7a102f1453b99d1270 |     
-    arc      | glslsandbox-player-2021.08.24  | NOK | http://autobuild.buildroot.net/results/8c153d9082b0193ca4db6f2a7f879e49f27dff2f |     
-    arm      |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/6ff930a94023e3b4b787c99d10ea3bb4b606b4b7 | ORPH
-    arm      |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/2dfbb7f8de52247fbce64037deaabec5f06c75a4 | ORPH
-    arm      |         hiawatha-11.1          | NOK | http://autobuild.buildroot.net/results/ec6ca34a8b00204ee5f14cda17a3f38a95e509a1 |     
-    arm      |        host-delve-1.8.0        | NOK | http://autobuild.buildroot.net/results/ba9d5d02f0394abcd1c346d716812bf5f86da452 |     
-    arm      |        host-delve-1.8.0        | NOK | http://autobuild.buildroot.net/results/4fecb2e4d8de4669f52ceaa25771468de2f2b9d8 |     
-    arc      |         htpdate-1.3.3          | NOK | http://autobuild.buildroot.net/results/2084229fd67cc7d340c3e64ab2836825e629f817 |     
-  riscv64    |         htpdate-1.3.3          | NOK | http://autobuild.buildroot.net/results/f1034de5ebc2fc2c49711820077d0b6e5e13aea5 |     
-   nios2     |         htpdate-1.3.3          | NOK | http://autobuild.buildroot.net/results/e800b73900ae957436f7b93db00706e7f157b188 |     
-  powerpc    |         htpdate-1.3.3          | NOK | http://autobuild.buildroot.net/results/28cc14f488c92ff982271a03795b44d9a241e6fb |     
-  riscv64    |         htpdate-1.3.3          | NOK | http://autobuild.buildroot.net/results/f0b64c97e7333ba9ce2276d76ae139d44ab8b0f5 |     
-   x86_64    |         jasper-2.0.28          | NOK | http://autobuild.buildroot.net/results/4e965c07f607bc75e980e613267cedc1c4febd91 |     
-   x86_64    |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/8d49ab7cd9952f6a13bdd330e875012d0601f1d2 |     
-   s390x     |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/ea0cd0ef5a6c625072504e6c631af77808628578 |     
-   x86_64    |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/cfedb7f6432dd1ed1f4d4000541b5c76de65f5d4 |     
-    mips     |        mongrel2-1.13.0         | NOK | http://autobuild.buildroot.net/results/fb95b2472a6e7c60115048fbf1c6e1d19d09fa3c |     
-    arm      |          mp4v2-5.0.1           | NOK | http://autobuild.buildroot.net/results/b2d4e16a7984528b8179abe4774aced433a7572c | ORPH
-   mipsel    |         nodejs-14.18.3         | NOK | http://autobuild.buildroot.net/results/b2e204a84747949d7b0c1422f2c2310fc03fbdd4 |     
-   nios2     | pistache-f2f5a50fbfb5b8ef6c... | NOK | http://autobuild.buildroot.net/results/0e7b74c5a07ced2bbae1a0a8c7d7ba26dfa04031 | ORPH
-    sh4      |        pulseview-0.4.2         | NOK | http://autobuild.buildroot.net/results/f5f51d043d088256ed455c205d8355ddcc1f6f8f |     
-    m68k     |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/8dfad4391d8c89cf2448cf32bb6635d2a870d5f1 | ORPH
-   x86_64    |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/c8e77d3a44bdf4b241ead03f773b9695718d5570 | ORPH
-  aarch64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/a5aa04382491043ddc6c79126668041a5b39b855 |     
-   x86_64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/d58f5f005db0a82c430deecdc6a38da84e2f25c3 |     
-    arm      |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/deeda871e1b6ed50cf0b2ccc354fe6ae27886cc4 |     
-   mipsel    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/a4576f1a9cb5a2485c8e58fc0f638315c6f6317c |     
-  riscv64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/ef595d1ec24bcd565da3f80ca2781a0e830cc9ab |     
-  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/97b6dff3278abe3909cf92c9e31604bf3eb6e955 |     
-powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/bb64b1ec66cc5eed4e33d84e3bed6dfdf8c4a22a |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/e308a4103ccc05cfe1d7ddda2162163930c55056 |     
-    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/34d04685f7438baa019ed49f5ec7e90c82a4022c |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/339c5e66414d83025051e6389f25f432b6d73fe6 |     
-    m68k     |           vdr-2.6.0            | NOK | http://autobuild.buildroot.net/results/427830ab64583961552038dc98cec5a4da35b83e |     
-    arm      |           vlc-3.0.16           | NOK | http://autobuild.buildroot.net/results/fbfa6428d05c9c26cdded044cb560583f8aad1a9 |     
-  powerpc    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/93963b2602145bafac21349a46e274638f87b36a |     
-    arm      |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/c63e8279de9f033aacb94f4bac1cbceb33d2d949 |     
-
-
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-        host-sentry-cli-1.57.0 | 2 
-monkey-f54856ce250c4e257354... | 2 
-              asterisk-16.21.1 | 1 
-              libostree-2020.8 | 1 
-               libtheora-1.1.1 | 1 
-                 mesa3d-20.3.5 | 1 
-                  ndisc6-1.0.4 | 1 
-                 openal-1.20.1 | 1 
-               openldap-2.4.59 | 1 
-   openvmtools-10.3.5-10430147 | 1 
-           uboot-tools-2020.04 | 1 
-                  zeromq-4.3.4 | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |        asterisk-16.21.1        | NOK | http://autobuild.buildroot.net/results/51014e9a47cad500dc075f98cfeba4802f8c8cf4 |     
-    m68k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/bdaab2422c3e9187b18a1ed791d7f91c45e51ca1 |     
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/36fe55fa88d2dd2472d1761a76fd40f228faeb73 |     
-    mips     |        libostree-2020.8        | NOK | http://autobuild.buildroot.net/results/14f1cff870f5322350810d8a2729fd2a47a2e7b3 |     
-    or1k     |        libtheora-1.1.1         | NOK | http://autobuild.buildroot.net/results/7ac2c2c43c51f597caafe8350aa3239da2a9166d | ORPH
-    arm      |         mesa3d-20.3.5          | NOK | http://autobuild.buildroot.net/results/4e882b11ee3debaa9b74ea15acf85bc9f161419a |     
-    arm      | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/e4bb49b02ecb5482155f2026b527ef68981172fe |     
-    arm      | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/803b992736c3b75985a679bd586f1054f57cd39c |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/19244f86c21a334cf395b6c2f72daac61782f342 | ORPH
-    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/a0a98d274ca48139d2b044ce09f02ef99bc2be7b |     
-  riscv32    |        openldap-2.4.59         | NOK | http://autobuild.buildroot.net/results/e3f8ecbdd3d5755f1daf840f26869fb3f24951ca |     
-   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/026acc7d45f1836f0bde034d0edb51f38d4ed873 |     
-    arm      |      uboot-tools-2020.04       | NOK | http://autobuild.buildroot.net/results/9e7938479794fba5eaf22b42b69f57112b68a16d |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/8af4e0d735069ccceac76fdc1b02d1c378cbab10 |     
-
-
-Classification of failures by reason for 2021.11.x
---------------------------------------------------
-
-              host-erlang-22.2 | 5 
-                log4cxx-0.12.0 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2021.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/0b5ce47d0d1e94016065913b11c2720d50969f47 |     
-   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/10a8920847fc2df0f82bb89d62d81ca24de8328c |     
-   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/d22b59163b0666ab33012acbeb2fd6fa7fa30127 |     
-   mipsel    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/1bee2e1ad6bee97f0c4cf572fb320cc6a005e9cd |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/564eabd8125899113e960fdcdd19157bad20ea67 |     
-   xtensa    |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/9d38cc6d8af874d61390b2daa5eb53f7e1d4e225 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/d39a15f1a2cf4d0e730ddc6e992037468e94a677 |     
-
-
-Gitlab CI results for 2022-01-27
-================================
-
-
--- 
-http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
