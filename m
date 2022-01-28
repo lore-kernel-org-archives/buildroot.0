@@ -1,54 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF6EDC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACAE0C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7449A4012E;
-	Fri, 28 Jan 2022 21:05:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AFC284C78;
+	Fri, 28 Jan 2022 21:07:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7cksGSHbVSBB; Fri, 28 Jan 2022 21:05:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xE1SE69XCJ3w; Fri, 28 Jan 2022 21:07:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74AD04014C;
-	Fri, 28 Jan 2022 21:05:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A51BE1BF5DC
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:05:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9311B84C73;
+	Fri, 28 Jan 2022 21:07:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 62B191BF5DC
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:07:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9252260C24
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:05:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50EE341CD4
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:07:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oaLFSzvEbKlC for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 21:05:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NqO3KjcuZvDU for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 21:07:51 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4E0060BF1
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:05:36 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57F5641CD3
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:07:51 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7BB6FFF803;
- Fri, 28 Jan 2022 21:05:34 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5825260006;
+ Fri, 28 Jan 2022 21:07:49 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nDYR3-0004jM-R5; Fri, 28 Jan 2022 22:05:33 +0100
+ id 1nDYTE-0004oU-M8; Fri, 28 Jan 2022 22:07:48 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220123134751.703269-1-fontaine.fabrice@gmail.com>
-Date: Fri, 28 Jan 2022 22:05:33 +0100
-In-Reply-To: <20220123134751.703269-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 23 Jan 2022 14:47:50 +0100")
-Message-ID: <87r18r4llu.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220124071453.16225-1-christian@paral.in>
+ <20220126222309.44ad5b0f@windsurf>
+Date: Fri, 28 Jan 2022 22:07:48 +0100
+In-Reply-To: <20220126222309.44ad5b0f@windsurf> (Thomas Petazzoni's message of
+ "Wed, 26 Jan 2022 22:23:09 +0100")
+Message-ID: <87mtjf4li3.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/libpjsip: update
- LIBPJSIP_CPE_ID_VENDOR
+Subject: Re: [Buildroot] [PATCH 1/1] package/containerd: security bump to
+ version 1.5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,26 +61,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-
- > pjsip:pjsip has been deprecated by teluu:pjsip since September 2021:
- >  <cpe-23:cpe23-item name="cpe:2.3:a:pjsip:pjsip:2.7.1:*:*:*:*:*:*:*">
- >         <cpe-23:deprecated-by name="cpe:2.3:a:teluu:pjsip:2.7.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
- >   <cpe-item name="cpe:/a:pjsip:pjsip:2.7.2" deprecated="true" deprecation_date="2021-09-02T14:49:19.527Z">
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlRob21hcyIgPT0gVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290
+bGluLmNvbT4gd3JpdGVzOgoKID4gT24gU3VuLCAyMyBKYW4gMjAyMiAyMzoxNDo1MyAtMDgwMAog
+PiBDaHJpc3RpYW4gU3Rld2FydCB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9y
+Zz4gd3JvdGU6CgogPj4gQ1ZFLTIwMjEtNDM4MTY6ICJVbnByaXZpbGVnZWQgcG9kIHVzaW5nIGBo
+b3N0UGF0aGAgY2FuIHNpZGUtc3RlcCBhY3RpdmUgTFNNIHdoZW4KID4+IGl0IGlzIFNFTGludXgi
+CiA+PiAKID4+IENvbnRhaW5lcnMgbGF1bmNoZWQgdGhyb3VnaCBjb250YWluZXJk4oCZcyBDUkkg
+aW1wbGVtZW50YXRpb24gb24gTGludXggc3lzdGVtcwogPj4gd2hpY2ggdXNlIHRoZSBTRUxpbnV4
+IHNlY3VyaXR5IG1vZHVsZSBhbmQgY29udGFpbmVyZCB2ZXJzaW9ucyBzaW5jZSB2MS41LjAgY2Fu
+CiA+PiBjYXVzZSBhcmJpdHJhcnkgZmlsZXMgYW5kIGRpcmVjdG9yaWVzIG9uIHRoZSBob3N0IHRv
+IGJlIHJlbGFiZWxlZCB0byBtYXRjaCB0aGUKID4+IGNvbnRhaW5lciBwcm9jZXNzIGxhYmVsIHRo
+cm91Z2ggdGhlIHVzZSBvZiBzcGVjaWFsbHktY29uZmlndXJlZCBiaW5kIG1vdW50cyBpbiBhCiA+
+PiBob3N0UGF0aCB2b2x1bWUuIFRoaXMgcmVsYWJlbGluZyBlbGV2YXRlcyBwZXJtaXNzaW9ucyBm
+b3IgdGhlIGNvbnRhaW5lciwKID4+IGdyYW50aW5nIGZ1bGwgcmVhZC93cml0ZSBhY2Nlc3Mgb3Zl
+ciB0aGUgYWZmZWN0ZWQgZmlsZXMgYW5kIGRpcmVjdG9yaWVzLgogPj4gS3ViZXJuZXRlcyBhbmQg
+Y3JpY3RsIGNhbiBib3RoIGJlIGNvbmZpZ3VyZWQgdG8gdXNlIGNvbnRhaW5lcmTigJlzIENSSQog
+Pj4gaW1wbGVtZW50YXRpb24uCiA+PiAKID4+IGh0dHBzOi8vZ2l0aHViLmNvbS9hZHZpc29yaWVz
+L0dIU0EtbXZmZi1oM2NqLXdqOWMKID4+IGh0dHBzOi8vZ2l0aHViLmNvbS9jb250YWluZXJkL2Nv
+bnRhaW5lcmQvcmVsZWFzZXMvdGFnL3YxLjUuOQogPj4gCiA+PiBTaWduZWQtb2ZmLWJ5OiBDaHJp
+c3RpYW4gU3Rld2FydCA8Y2hyaXN0aWFuQHBhcmFsLmluPgogPj4gLS0tCiA+PiBwYWNrYWdlL2Nv
+bnRhaW5lcmQvY29udGFpbmVyZC5oYXNoIHwgMiArLQogPj4gcGFja2FnZS9jb250YWluZXJkL2Nv
+bnRhaW5lcmQubWsgICB8IDIgKy0KID4+IDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCsp
+LCAyIGRlbGV0aW9ucygtKQoKQ29tbWl0dGVkIHRvIDIwMjEuMTEueCwgdGhhbmtzICgyMDIxLjAy
+Lnggbm90IGFmZmVjdGVkKS4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
