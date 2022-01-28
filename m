@@ -1,64 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42D40C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 11:05:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 710C2C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 11:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0DAD60B0E;
-	Fri, 28 Jan 2022 11:05:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17FC784C15;
+	Fri, 28 Jan 2022 11:06:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wy198FeHLtFy; Fri, 28 Jan 2022 11:05:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6XYCaeA7oZFe; Fri, 28 Jan 2022 11:06:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ADB460AF1;
-	Fri, 28 Jan 2022 11:05:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A0DC41BF338
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47B9284C10;
+	Fri, 28 Jan 2022 11:06:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E70561BF338
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 11:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CDCC401CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id E344141517
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 11:05:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UaRGLLqyCjFR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Q_ulS1laPB7 for <buildroot@lists.busybox.net>;
  Fri, 28 Jan 2022 11:05:48 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0539940167
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03CBA41504
  for <buildroot@buildroot.org>; Fri, 28 Jan 2022 11:05:47 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id DP4anjjgTc6LXDP4cnuiLj; Fri, 28 Jan 2022 12:05:46 +0100
+ id DP4anjjgTc6LXDP4anuiI9; Fri, 28 Jan 2022 12:05:46 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643367946; bh=0Vdnzm0JeS238e5aEiAiBWeGsD5I5TjYCf5wei042WM=;
+ t=1643367946; bh=OrkMd4YdttfTCkUkNcdQAJPkOjKndXqdmUi5HpBxZhk=;
  h=From:To:Subject:Date:MIME-Version;
- b=iw9W3LB+aXV8vEqHTq+FafBRPDGtDkL0Xo/jReU8BljFRNSP2prWbKO0O+76cLkzR
- JLH1syylsSURrjn5BFOaDgQ51DC8jb299hV+r0pZjaKPWTaYo6Wsa3cRlx1x8zIu/0
- zKsXgXkE8DA41EnaCItxNavNsnep5aUUwNqg5x2ym8l/iK2xhaOjVrR2UhvGIVbIRs
- 34jB1RQIrhmFSVz/jKrqcGyS+W3ss6MnXwUUZJOM6gVqc7zm7m0T5fmTZOqukzrEyr
- WlpaMbwugfTDgRU9w3/8HB//Zys2c2DE1EKB3h0UIojAubsYAo3LfAZYK3Mxy8hJEa
- TJTI5dHt5aEEw==
+ b=AzFt3CazE92GcN9idNCE95yqBmicB86OscdY6BNB2rPlnW39oRG+ZkNo8asC0MZEE
+ 0IUPCTDnoMmeey1BIplkUw+MkBwx7RXhqaJvFSIKZCcdjGYVvh2Ca5/0JfMxxLbfvW
+ 9MIidAOfsNB1QwudZC7eoTmtbyeiGo4HQ2jnjow4ZmLgp8O1Tl28RP0N1FXcZM3L2m
+ lZ5qpUekvskeJWFlFWVhyRt7n0RHT1rua/goEw6+hQ4egrLph302VHt52lqNw+acQu
+ oKCvQz05J0G3MEgkC0D3x56ys+6H1bjOf9o0EhoFs0a9IeapzkVKmJ6VQ/O4KZlgdX
+ ZDur4DkGoLb2g==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 12:05:41 +0100
-Message-Id: <20220128110542.1101197-2-giulio.benetti@benettiengineering.com>
+Date: Fri, 28 Jan 2022 12:05:40 +0100
+Message-Id: <20220128110542.1101197-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220128110542.1101197-1-giulio.benetti@benettiengineering.com>
-References: <20220128110542.1101197-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4wfPjVGYSujVgPPbDQrgVzdxD2IPUDYZr3P1YFH8zAx5hS0iS0JU8VdTawB5cJNofezdHDdw3cODKHtpoA3UqP9mUViux2Mkun0Gp3xXIOEbVztTf62KLY
  ZAdnucxeuRlHdr56eMl+j/+IMcGj0vQbe4eITe+zrbVPN6Z/qf7GyF/40639Gu7u+l9i2xD9aVfJsnIhFeqZu+bLv2kIWFlCVbRFkQg6XxJMTBYKiSSEq3qN
  1S+LlomipzyuooMuXHCUjRJsBAvvk6nOPUjQI3+oJkapxOI1vy94BbZRrryTnkttgvk5TssnMpmxOF0Mg4td+YCZG+jovg4pjPpL6drxGsU6E/LSM3SmCZSL
  JxvWXODZ
-Subject: [Buildroot] [PATCH] package/libcamera: fix missing comment for
- binutils-bug-27597
+Subject: [Buildroot] [PATCH] package/kf5/kf5-kcoreaddons: add missing
+ comment dependency for binutils-bug-27597
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,22 +78,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libcamera/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kf5/kf5-kcoreaddons/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 23a0040abf..88db054975 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -92,7 +92,7 @@ comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads
+diff --git a/package/kf5/kf5-kcoreaddons/Config.in b/package/kf5/kf5-kcoreaddons/Config.in
+index 02bd38e395..eef43101a2 100644
+--- a/package/kf5/kf5-kcoreaddons/Config.in
++++ b/package/kf5/kf5-kcoreaddons/Config.in
+@@ -13,3 +13,6 @@ config BR2_PACKAGE_KF5_KCOREADDONS
+ 	  on top of QtCore to perform various tasks.
  
- endif # BR2_PACKAGE_LIBCAMERA
- 
--comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7, not binutils bug 27597"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 	  https://api.kde.org/frameworks/kcoreaddons/html/index.html
++
++comment "kf5-kcoreaddons needs a toolchain w/o bug 27597"
++	depends on BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
 -- 
 2.25.1
 
