@@ -1,47 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1459DC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D199AC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 13:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD7E260B6A;
-	Fri, 28 Jan 2022 12:48:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51B1884D16;
+	Fri, 28 Jan 2022 13:40:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OSGSCPPnndYn; Fri, 28 Jan 2022 12:48:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ISXxInKH6MEq; Fri, 28 Jan 2022 13:40:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF57160B0E;
-	Fri, 28 Jan 2022 12:48:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8489F82B24;
+	Fri, 28 Jan 2022 13:40:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A8A51C1162
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 994441BF316
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 13:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 67F5684C64
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8811282B24
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 13:40:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Na9SS8mkphgA for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 12:46:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABFF284C68
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 12:46:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A5BA6829FC; Fri, 28 Jan 2022 12:39:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id mm3f1o4w28Qm for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 13:40:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B21382B1E
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 13:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1643377222;
+ bh=NvkbMruJdLhWBmwaNwQHnZg68t6XpZLTAJEUsIo4RBg=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=a8MclhGg+5NcQTN/Ozov8O5Bx69yX3qI3XYdU9eNnPnEbZAChH3dyG+a/Bovt/oue
+ W3QBhJUtHXGFvbpXykD6IC6QFAPwANHdzfqa4Gi8TsKc84n1TLPOtTgKO/ZKAviI96
+ iw9AGQkC5hguiKUqhtUrCzXxMOY75tu4JZg2QV3s=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.233]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2aD-1mVYIL11NP-00k4X5; Fri, 28
+ Jan 2022 14:40:22 +0100
+Date: Fri, 28 Jan 2022 14:40:21 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 13:45:56 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: cd8f975dc0c526ec8761fc89f222e95c29b009c7
-X-Git-Newrev: 5dd97c860cfa2109b58b5f2aa5e9d68495f79652
-X-Patchwork-Hint: ignore
-Message-Id: <20220128123934.A5BA6829FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/wireshark:
- security bump to version 3.4.11
+Message-ID: <20220128144021.543b2a0b@gmx.net>
+In-Reply-To: <20220128124538.31789-2-ps.report@gmx.net>
+References: <20220128124538.31789-1-ps.report@gmx.net>
+ <20220128124538.31789-2-ps.report@gmx.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:4bs9CMEdD9N6nG991k5XYzT3q2nNvj41hmKSi8kedfkgBsm9p6C
+ v/+uFdzl03TSCh3LBDzxC4vvxO2Yl5vIRphAGKWIlSY3Xj4CP59EqpbEa6hPnqacJb7WGow
+ pbf/Z2U7e+LNFw/NROWlB2MlixtvQbN1UrMZeQmK/yDCeSo6hi5QxGzjZ4tNCwVbm1YH24x
+ 6UdxSbNCZz+9w2SHiSOcw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wAMCGqpweBA=:/EspMWjfNUK5Da2VOQ+erL
+ a5Izlko7PHVXrkpl7qzF8V1qjol5WyVTvjxtQPCM6GV9xkD8rzHmoAtjDc1RGVgJiP+mJJQxk
+ KTBl765xrSZ+q4LIj831fm6n2VkIxpXc97XVBJ4C3cqlWXHjYuV/U/Ocp+iOiyAgF3tZQUspY
+ cidr6re6s41dbk6Ttfyt4io3vy3M+Yh8T8qA/YGScRiPtBC+MUDBtBbQzd+b5vHBfwgydK0VY
+ 7rSD3B7A4JWH0Rl4u/dt3UJO3q/X/sOpX9FLSBvIKnajHbAlxxaN89dmhnecujMvtcOKl9vhb
+ Zi21s5L3ETiRyTH7FQYSnlJOJb5vqnWQUem35ErrmdGZTpThpTJbLw7X+7jTLQmw3ZazQNanZ
+ Chhvtm9Od5UMpuy1RGILZNhkeFB2VwOaRQQzXFVOAqiqpx7G/zZWEYUBfZRoXNNCzxfCbxxb8
+ XfIwQqUF0w56lKM+sGwl7H3lxhhlud8gXP/zdcbroDvSj00M3cQuJxfy53cyrJaHqQ2zOjffl
+ x+erCHVqoNOGvYFJnzgeNXAjUy03wOtTTBSBquk/M2k56OiJxdqt1Hrp4YC3VOsyoLGbOQF+i
+ 1Mwy9AJOuWecABYKNbp18lqi6pquQqYerfcy9K9MNwhGDF8OySEh24geC2VGSmOeNhkpd4mKe
+ Zvl3R2aOqzvoS79eLDoh9HPuu4MtrBDg2cBr9QYuxuXIjMxzw0mwsDRNML8lCGBote6jIr5L7
+ rJ9/FI3viHkoRCBkWJGJXKA8UzPa9oe95WVtJUhg7/qsUvcGJ2s4qtHkA+h5LQz4L6gwU+y6N
+ Utyu5RAvLL2dgrQ5+5FB9CtYaaCtQqn86Y/yeM/BJ7nv7HZlKT9BqJO2tIPQc9jFLAjaLMNP7
+ Xwb85+SlFaXCpgDPyjbYIP1O8XAyLZT8kmW/rIWftl5DUnWwdKOhJBK0ZfXraTf5c6wXbxq3e
+ /w0lgl/84PvV76SXbmRT8Dyr1QSzY5eZs0mT+fc+cR46ds2arsbGJ+z4bEryG5oSb9sPoPSvA
+ UI89qdMy/a/ZMNRM5MKSxhXba0WLJAYj8M4gtd8ho9KhfcpkxGeluN97asJYTpRGnoYouPYR/
+ fzq2ASgoSfLTFs=
+Subject: Re: [Buildroot] [PATCH v1 2/3] package/log4cxx: fix boost-fallback
+ (only check for boost if really needed)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,65 +85,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dd97c860cfa2109b58b5f2aa5e9d68495f79652
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+On Fri, 28 Jan 2022 13:45:37 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-Fix the following security issues:
-- https://www.wireshark.org/security/wnpa-sec-2021-16.html
-  (CVE-2021-4186)
-- https://www.wireshark.org/security/wnpa-sec-2021-17.html
-  (CVE-2021-4185)
-- https://www.wireshark.org/security/wnpa-sec-2021-18.html
-  (CVE-2021-4184)
-- https://www.wireshark.org/security/wnpa-sec-2021-20.html
-  (CVE-2021-4182)
-- https://www.wireshark.org/security/wnpa-sec-2021-21.html
-  (CVE-2021-4181)
+> - add patch 0002-boost-fallback-only-check-for-boost-if-really-needed.patch
+>   to check for boost if really needed (in case of legacy c++ standard < c++17)
+>
+> Fixes:
+>
+>   - http://autobuild.buildroot.net/results/8d49ab7cd9952f6a13bdd330e875012d0601f1d2
+>
+>   -- Found Boost: .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include (found version "1.78.0") found components: thread chrono missing components: date_time atomic
+>   CMake Error at .../build/log4cxx-0.12.0/boost-fallback-compile-tests/CMakeFiles/CMakeTmp/CMakeLists.txt:19 (add_executable):
+>     Target "cmTC_aac37" links to target "Boost::date_time" but the target was
+>     not found.  Perhaps a find_package() call is missing for an IMPORTED
+>     target, or an ALIAS target is missing?
+>
+>   CMake Error at .../build/log4cxx-0.12.0/boost-fallback-compile-tests/CMakeFiles/CMakeTmp/CMakeLists.txt:19 (add_executable):
+>     Target "cmTC_aac37" links to target "Boost::atomic" but the target was not
+>     found.  Perhaps a find_package() call is missing for an IMPORTED target, or
+>     an ALIAS target is missing?
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...nly-check-for-boost-if-really-needed.patch | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/log4cxx/0002-boost-fallback-only-check-for-boost-if-really-needed.patch
+>
+> diff --git a/package/log4cxx/0002-boost-fallback-only-check-for-boost-if-really-needed.patch b/package/log4cxx/0002-boost-fallback-only-check-for-boost-if-really-needed.patch
+> new file mode 100644
+> index 0000000000..7df29ea120
+> --- /dev/null
+> +++ b/package/log4cxx/0002-boost-fallback-only-check-for-boost-if-really-needed.patch
+> @@ -0,0 +1,36 @@
+> +From 24e7adc8d67b3c8f7d275b4f9a7e70a61b73fcd4 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Fri, 28 Jan 2022 13:11:01 +0100
+> +Subject: [PATCH] boost-fallback: only check for boost if really needed
+> +
+> +- only check for boost if really needed (in case of legacy c++ standard < c++17)
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-https://www.wireshark.org/docs/relnotes/wireshark-3.4.11.html
+Upstream: https://github.com/apache/logging-log4cxx/pull/107
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d19436b88dcea890b6a73b242e2a2cbb66e17fcd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+And https://patchwork.ozlabs.org/project/buildroot/patch/20211119175553.2413433-2-fontaine.fabrice@gmail.com/
+for previous attempt to fix a similar/same failure...
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index bc7c9f4d7e..7b67e316ed 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.10.txt
--sha1  63839abd94d3ae376f860e2d2969777680106578  wireshark-3.4.10.tar.xz
--sha256  8aa7ef4a44ae62bb8db463cf761e2cc03b97305e0e77ed5be53fa83729187cef  wireshark-3.4.10.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.11.txt
-+sha1  b656d8709b8b0b3d2a94665af6bec88495ad994c  wireshark-3.4.11.tar.xz
-+sha256  a0e227bce2cc3a51ef3301891a0243231990b52a39b68a84a6e32f69c4e75279  wireshark-3.4.11.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 2ba81d1f39..0361d0bb64 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.4.10
-+WIRESHARK_VERSION = 3.4.11
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+Regards,
+Peter
+
+> +---
+> + src/cmake/boost-fallback/boost-fallback.cmake | 3 +++
+> + 1 file changed, 3 insertions(+)
+> +
+> +diff --git a/src/cmake/boost-fallback/boost-fallback.cmake b/src/cmake/boost-fallback/boost-fallback.cmake
+> +index 8285b0b9..0ecf8c6c 100644
+> +--- a/src/cmake/boost-fallback/boost-fallback.cmake
+> ++++ b/src/cmake/boost-fallback/boost-fallback.cmake
+> +@@ -55,6 +55,8 @@ try_compile(STD_SHARED_PTR_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tes
+> + try_compile(STD_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
+> +     "${CMAKE_CURRENT_LIST_DIR}/test-stdatomic.cpp")
+> +
+> ++# search for boost only in case needed for legacy c++ standard < c++17
+> ++if(NOT ${STD_THREAD_FOUND} OR NOT ${STD_MUTEX_FOUND} OR NOT ${STD_SHARED_MUTEX_FOUND} OR NOT ${STD_SHARED_PTR_FOUND} OR NOT ${STD_ATOMIC_FOUND})
+> + find_package(Boost COMPONENTS thread)
+> + if( ${Boost_FOUND} )
+> +     try_compile(Boost_SHARED_PTR_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
+> +@@ -67,6 +69,7 @@ if( ${Boost_FOUND} )
+> +     try_compile(Boost_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
+> +         "${CMAKE_CURRENT_LIST_DIR}/test-boostatomic.cpp")
+> + endif( ${Boost_FOUND} )
+> ++endif()
+> +
+> + # Link the target with the appropriate boost libraries(if required)
+> + function(boostfallback_link target)
+> +--
+> +2.34.1
+> +
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
