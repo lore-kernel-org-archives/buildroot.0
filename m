@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7144BC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD8BDC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26D4B84C6B;
-	Fri, 28 Jan 2022 12:47:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7199184C71;
+	Fri, 28 Jan 2022 12:47:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Hktd9P9vkPY; Fri, 28 Jan 2022 12:47:29 +0000 (UTC)
+	with ESMTP id 5cPCj6LY7XD5; Fri, 28 Jan 2022 12:47:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58C4984C68;
-	Fri, 28 Jan 2022 12:47:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 55E381BF332
+	by smtp1.osuosl.org (Postfix) with ESMTP id 915D684C9F;
+	Fri, 28 Jan 2022 12:47:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AD001C1162
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5289D41670
+ by smtp3.osuosl.org (Postfix) with ESMTP id 495CA60B4C
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lzO9VQak-lpD for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xnbZ_hMFGQky for <buildroot@lists.busybox.net>;
  Fri, 28 Jan 2022 12:46:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9397941622
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A367600D1
  for <buildroot@buildroot.org>; Fri, 28 Jan 2022 12:46:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8CEB8829FC; Fri, 28 Jan 2022 12:39:34 +0000 (UTC)
+ id 9559A82A99; Fri, 28 Jan 2022 12:39:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 12:30:00 +0100
+Date: Fri, 28 Jan 2022 12:37:38 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: fa7f960200be32f6443f4684e721dd1142375345
-X-Git-Newrev: 598b97465ae61a8f07adfcc81cbd503646175081
+X-Git-Oldrev: 598b97465ae61a8f07adfcc81cbd503646175081
+X-Git-Newrev: 7261f8e7a05729cb689be2539965833824d2db25
 X-Patchwork-Hint: ignore
-Message-Id: <20220128123934.8CEB8829FC@busybox.osuosl.org>
+Message-Id: <20220128123934.9559A82A99@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.11.x]
- package/gstreamer1/gst1-rtsp-server: fix introspection
+ package/util-linux/util-linux-libs: add a missing patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +59,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=598b97465ae61a8f07adfcc81cbd503646175081
+commit: https://git.buildroot.net/buildroot/commit/?id=7261f8e7a05729cb689be2539965833824d2db25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Fix the following build failure with introspection:
+The commit 2f5068640161f7b267099e28b69d4c2280b4ded3 added a patch for
+util-linux, but forgot to create a symlink to util-linux-libs. This
+results in inconsistent libblkid.so builds from util-linux and
+util-linux-libs.
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
-Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
-error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
-If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
-Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
+If you enable BR2_PER_PACKAGE_DIRECTORIES, you will find that different
+libblkid.so is used in different
+$(BASE_DIR)/per-package/$(PKG)_NAME/target.
 
-Fixes:
- - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fa3e7a63b93620b8227d66c6a973cd6140432cf3)
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 93d23ef91fcfd8bf7f5a3ffc23d82bad8e868b34)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-gst-rtsp-server-meson.build-add-gst_dep.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch  | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-new file mode 100644
-index 0000000000..b63f634598
+diff --git a/package/util-linux/util-linux-libs/0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch b/package/util-linux/util-linux-libs/0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch
+new file mode 120000
+index 0000000000..2f3c482144
 --- /dev/null
-+++ b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-@@ -0,0 +1,41 @@
-+From b6bc8fbb72d6d3914c616dc64d15b961493cb9c2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 Dec 2021 10:09:36 +0100
-+Subject: [PATCH] gst/rtsp-server/meson.build: add gst_dep
-+
-+Add gst_dep to gst_rtsp_server_deps, in the context of buildroot, this
-+will avoid the following build failure, because the correct girdir
-+location will be retrieved from gstreamer-1.0.pc:
-+
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
-+Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
-+error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
-+If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
-+Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/merge_requests/217]
-+---
-+ gst/rtsp-server/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gst/rtsp-server/meson.build b/gst/rtsp-server/meson.build
-+index 24d7c39..874da14 100644
-+--- a/gst/rtsp-server/meson.build
-++++ b/gst/rtsp-server/meson.build
-+@@ -55,7 +55,7 @@ rtsp_server_headers = [
-+ 
-+ install_headers(rtsp_server_headers, subdir : 'gstreamer-1.0/gst/rtsp-server')
-+ 
-+-gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep]
-++gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep, gst_dep]
-+ gst_rtsp_server = library('gstrtspserver-@0@'.format(api_version),
-+   rtsp_server_sources,
-+   include_directories : rtspserver_incs,
-+-- 
-+2.33.0
-+
++++ b/package/util-linux/util-linux-libs/0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch
+@@ -0,0 +1 @@
++../0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch
+\ No newline at end of file
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
