@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E274DC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 17:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C019C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 18:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8691E41D24;
-	Fri, 28 Jan 2022 17:47:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 226D784C5E;
+	Fri, 28 Jan 2022 18:11:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u91gmx0m-4fP; Fri, 28 Jan 2022 17:47:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v0Rs0R9E6gfQ; Fri, 28 Jan 2022 18:11:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6D9D41D20;
-	Fri, 28 Jan 2022 17:47:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FD341BF3B8
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 17:47:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C32084C5B;
+	Fri, 28 Jan 2022 18:11:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 176BC1BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 18:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E52041D20
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 17:47:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05F0961141
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 18:11:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Pi5znRsG4DF for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 17:47:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 843C841CEF
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 17:47:30 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id n8so4990975wmk.3
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 09:47:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PNT3BpTVZqKjtogEUtWar75F/9pQrRG23kL6CHpKpKg=;
- b=Zvy+tagFxPSRN6DHavxmrMF4sgTXiriXr674cGAlTyCcA4LE2KJnKzun/iIL25XDlx
- nFDQUZ0ambSbGwV1fkZ8Vmfi2HLuWiuLgzUPFrYoxe6hkxVwiKB6Sc59DaXUPhgyQ+TG
- ieRMJ+7DiG87yJ3aYRRR6BVnFMux+a+20WnDJtlC4BxBQsEbL3gqieN+mCoHkkDbDlzw
- mvoiJ9NWBLbF4jBacBQxLUtR9TcM7MqT9bnTGFmGs6mfsf7EKQKnEf4kV+khzcHj1VeS
- zrG8KShZ1BeE43DEN30X3jDjTtaomD7SLOZJQEy+J8/ony8sYt2owVhbQTJ3mek3EexI
- MtAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PNT3BpTVZqKjtogEUtWar75F/9pQrRG23kL6CHpKpKg=;
- b=vEhlcSdlmUMb9Dx8NQeckABc87jt/YCga7oxw24wPIjwI1gJpq5GYMwTe8gIx+zTrm
- pMGQ1Mczp/KUdev+zJqxNni+9weaRk75F0QQ6jdr5WsrPPRGSNMKIeFlhh0lNrGQodYU
- j8iGZIF42hgvSQlU+v4m8ryK2EGUUB2nt9kHq/Umpgt/44VeGmbSRYHa8tVutYOOdYXB
- 3P7NWHDIYe8ijc0Y8bD9T/I4v8z8/ujkIbIB5VEGTPBG/DotEUFnYcjvf5Gr5p7cFU9w
- B8yYQa4iTli9RIiQ9ejB//n5RqG3/qp3sbvl3Lj7PNJQNvlymkPhf7vJmohhqb7T0rbO
- aAmQ==
-X-Gm-Message-State: AOAM5310QzfTWA4iyRLBECzlPj5NHdai77hpUzX+xdRETF4IEzziJxlY
- ya68vyvVWavshOgTjrnG6QCiuKGx9v0=
-X-Google-Smtp-Source: ABdhPJyO+AXwg369am4QgR3t3EW+l65dJA8fuKBaZj0Fvci+3KKUzWdMUfWR20MUDCwmUmm8D9sIXw==
-X-Received: by 2002:a05:600c:1d17:: with SMTP id
- l23mr8324045wms.174.1643392048351; 
- Fri, 28 Jan 2022 09:47:28 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id a26sm2400630wmb.37.2022.01.28.09.47.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Jan 2022 09:47:27 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 18:45:40 +0100
-Message-Id: <20220128174540.2502417-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NZ3ppKXRUQJH for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 18:11:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A301461140
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 18:11:15 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CDA16100004;
+ Fri, 28 Jan 2022 18:11:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nDViI-0006Yp-UR; Fri, 28 Jan 2022 19:11:10 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+References: <20220128105917.30421-1-thomas.devoogdt@barco.com>
+Date: Fri, 28 Jan 2022 19:11:10 +0100
+In-Reply-To: <20220128105917.30421-1-thomas.devoogdt@barco.com> (Thomas
+ Devoogdt's message of "Fri, 28 Jan 2022 11:59:16 +0100")
+Message-ID: <87sft77mtd.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/htpdate: fix static openssl build
+Subject: Re: [Buildroot] [PATCH 1/2] package/libglib2: bump version to 2.69.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,80 +58,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following static build failure with openssl raised since bump to
-version 1.3.3 in commit 163509a8e0d558e6339c5489f072dfe805e0cc34:
+>>>>> "Thomas" == Thomas Devoogdt <thomas.devoogdt@gmail.com> writes:
 
-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/10.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/sh4-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a(rec_layer_d1.o): in function `DTLS_RECORD_LAYER_new':
-rec_layer_d1.c:(.text+0x124): undefined reference to `CRYPTO_malloc'
+ > The internal_pcre option was dropped in:
+ > https://gitlab.gnome.org/GNOME/glib/-/commit/9fbd7f3dc1f029b64b6991a540402b2bfa98de5c
 
-Fixes:
- - http://autobuild.buildroot.org/results/75ad8515916dfa056b17c97fdd95c7eb4d83a304
+ > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ > ---
+ >  package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
+ >  package/libglib2/libglib2.hash                     | 4 ++--
+ >  package/libglib2/libglib2.mk                       | 6 ++----
+ >  3 files changed, 5 insertions(+), 7 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-config-to-determine-openssl-LDFLAGS.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
+ > +++ b/package/libglib2/libglib2.mk
+ > @@ -4,8 +4,8 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LIBGLIB2_VERSION_MAJOR = 2.68
+ > -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ > +LIBGLIB2_VERSION_MAJOR = 2.69
+ > +LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
 
-diff --git a/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch b/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
-new file mode 100644
-index 0000000000..c229ca6d89
---- /dev/null
-+++ b/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
-@@ -0,0 +1,43 @@
-+From 81fd178abed833defce18562e8122d5c85822ccb Mon Sep 17 00:00:00 2001
-+From: Titouan Christophe <titouan.christophe@railnova.eu>
-+Date: Fri, 28 Jan 2022 18:37:24 +0100
-+Subject: [PATCH] Use pkg-config to determine openssl LDFLAGS
-+
-+Depending on its build configuration, openssl might not be compiled with
-+dynamic zlib support, and programs that link against openssl need to link
-+against zlib as well, as illustrated in this build failure:
-+http://autobuild.buildroot.net/results/ae9/ae946ca72238840b3eaa5fe823e8d620618f7462/
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+[Retrieved (and slightly updated) from:
-+https://github.com/angeloc/htpdate/commit/72fcf9f82770e927e058a2eaa327d0eecb1e3c8d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/twekkel/htpdate/pull/17]
-+---
-+ Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 4796efa..46c8681 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -4,6 +4,7 @@ mandir = ${prefix}/share/man
-+ 
-+ CC     ?= gcc
-+ CFLAGS += -Wall -std=c11 -pedantic -O2
-++PKG_CONFIG ?= pkg-config
-+ 
-+ INSTALL ?= install -c
-+ STRIP   ?= strip -s
-+@@ -14,7 +15,7 @@ htpdate: htpdate.c
-+ 	$(CC) $(CFLAGS) -o htpdate htpdate.c
-+ 
-+ https: htpdate.c
-+-	$(CC) $(CFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c -lssl
-++	$(CC) $(CFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c  $(shell $(PKG_CONFIG) --libs libssl)
-+ 
-+ install: all
-+ 	$(STRIP) htpdate
-+-- 
-+2.34.1
-+
+The "odd" libglib versions numbers are afaik development versions. We
+normally only use stable versions in Buildroot. Do you have any idea
+when 2.70 is planned?
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
