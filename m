@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C358C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D92A4C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 022B840569;
-	Fri, 28 Jan 2022 21:12:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83CBD405E3;
+	Fri, 28 Jan 2022 21:15:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HtMjG9wepWGe; Fri, 28 Jan 2022 21:12:58 +0000 (UTC)
+	with ESMTP id d6xOra658XSf; Fri, 28 Jan 2022 21:15:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11DBB40253;
-	Fri, 28 Jan 2022 21:12:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E4041BF5DC
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:12:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A61EB405D4;
+	Fri, 28 Jan 2022 21:15:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 810171BF5DC
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BD3540253
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:12:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D57C41D56
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:15:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LKJFXLerLNJV for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 21:12:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e1wIQU6BZan4 for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 21:15:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6159A4014C
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:12:54 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8B2241D54
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:15:52 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3674560005;
- Fri, 28 Jan 2022 21:12:52 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 63A3E100002;
+ Fri, 28 Jan 2022 21:15:49 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nDYY7-00055N-Is; Fri, 28 Jan 2022 22:12:51 +0100
+ id 1nDYay-0005Tr-CN; Fri, 28 Jan 2022 22:15:48 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220124221047.2597699-1-fontaine.fabrice@gmail.com>
-Date: Fri, 28 Jan 2022 22:12:51 +0100
-In-Reply-To: <20220124221047.2597699-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 24 Jan 2022 23:10:47 +0100")
-Message-ID: <87a6ff4l9o.fsf@dell.be.48ers.dk>
+References: <20220126203733.1531511-1-fontaine.fabrice@gmail.com>
+Date: Fri, 28 Jan 2022 22:15:48 +0100
+In-Reply-To: <20220126203733.1531511-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 26 Jan 2022 21:37:33 +0100")
+Message-ID: <875yq34l4r.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: security bump to
- version 0.103.5
+Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
+ 8.2.4224
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,7 +60,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -68,13 +68,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > ClamAV 0.103.5 is a critical patch release with the following fix:
- >  - CVE-2022-20698: Fix for invalid pointer read that may cause a crash.
- >    Affects 0.104.1, 0.103.4 and prior when ClamAV is compiled with
- >    libjson-c and the CL_SCAN_GENERAL_COLLECT_METADATA scan option (the
- >    clamscan --gen-json option) is enabled.
-
- > https://github.com/Cisco-Talos/clamav/blob/clamav-0.103.5/NEWS.md
+ > Fix CVE-2022-0261: Heap-based Buffer Overflow in GitHub repository
+ > vim/vim prior to 8.2.4120
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
