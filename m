@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D84C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85004C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 12:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6C49400C6;
-	Fri, 28 Jan 2022 12:46:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2ECEC40286;
+	Fri, 28 Jan 2022 12:47:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4zJYmZ-vLXQY; Fri, 28 Jan 2022 12:46:49 +0000 (UTC)
+	with ESMTP id m3G0nkcu5sM0; Fri, 28 Jan 2022 12:47:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A731B404CD;
-	Fri, 28 Jan 2022 12:46:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D4651C1162
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6FAD404D1;
+	Fri, 28 Jan 2022 12:47:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 583B21BF332
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08AB584C69
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46CCC409A3
  for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 12:46:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2R1xGuUzqGYT for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LQ4eMxMDBSmG for <buildroot@lists.busybox.net>;
  Fri, 28 Jan 2022 12:46:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4529984C64
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D397404D5
  for <buildroot@buildroot.org>; Fri, 28 Jan 2022 12:46:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3D32F818E2; Fri, 28 Jan 2022 12:39:16 +0000 (UTC)
+ id 4589F82A99; Fri, 28 Jan 2022 12:39:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 12:32:38 +0100
+Date: Fri, 28 Jan 2022 13:44:45 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: bf066e053c6f0e84294dae7f5cf908064f6e7623
-X-Git-Newrev: 4d77ea65bb7e23083b0af6ea0625bb7e7a973491
+X-Git-Oldrev: 4d77ea65bb7e23083b0af6ea0625bb7e7a973491
+X-Git-Newrev: 17e4a53cc991150886f2f8fa901f6d630871aef2
 X-Patchwork-Hint: ignore
-Message-Id: <20220128123916.3D32F818E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/gstreamer1/gst1-rtsp-server: fix introspection
+Message-Id: <20220128123916.4589F82A99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/vim: security
+ bump to version 8.2.4092
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d77ea65bb7e23083b0af6ea0625bb7e7a973491
+commit: https://git.buildroot.net/buildroot/commit/?id=17e4a53cc991150886f2f8fa901f6d630871aef2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following build failure with introspection:
-
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
-Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
-error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
-If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
-Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
-
-Fixes:
- - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
+Fix CVE-2021-4192: vim is vulnerable to Use After Free
+Fix CVE-2021-4193: vim is vulnerable to Out-of-bounds Read
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fa3e7a63b93620b8227d66c6a973cd6140432cf3)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 33a3f1f30dedaf613dccac5b86ec909a1f404957)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-gst-rtsp-server-meson.build-add-gst_dep.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-new file mode 100644
-index 0000000000..b63f634598
---- /dev/null
-+++ b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-@@ -0,0 +1,41 @@
-+From b6bc8fbb72d6d3914c616dc64d15b961493cb9c2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 Dec 2021 10:09:36 +0100
-+Subject: [PATCH] gst/rtsp-server/meson.build: add gst_dep
-+
-+Add gst_dep to gst_rtsp_server_deps, in the context of buildroot, this
-+will avoid the following build failure, because the correct girdir
-+location will be retrieved from gstreamer-1.0.pc:
-+
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
-+Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
-+error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
-+If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
-+Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/merge_requests/217]
-+---
-+ gst/rtsp-server/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gst/rtsp-server/meson.build b/gst/rtsp-server/meson.build
-+index 24d7c39..874da14 100644
-+--- a/gst/rtsp-server/meson.build
-++++ b/gst/rtsp-server/meson.build
-+@@ -55,7 +55,7 @@ rtsp_server_headers = [
-+ 
-+ install_headers(rtsp_server_headers, subdir : 'gstreamer-1.0/gst/rtsp-server')
-+ 
-+-gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep]
-++gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep, gst_dep]
-+ gst_rtsp_server = library('gstrtspserver-@0@'.format(api_version),
-+   rtsp_server_sources,
-+   include_directories : rtspserver_incs,
-+-- 
-+2.33.0
-+
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 6fa5d1bef0..fff5072063 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  39579f7d50a6e8d7c13105a288fd85f4cdfad7f11df49706bd8f16ab37fe43b8  vim-8.2.3930.tar.gz
++sha256  2464110940c3d8d53bfef6d16912653c85187132fc0f87e937a382cafc4c6370  vim-8.2.4092.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 6643ef0841..408b33a409 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 8.2.3930
++VIM_VERSION = 8.2.4092
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
