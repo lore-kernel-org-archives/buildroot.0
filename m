@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED029C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C358C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83A8141D4A;
-	Fri, 28 Jan 2022 21:10:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 022B840569;
+	Fri, 28 Jan 2022 21:12:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cF5yFf_CDlp6; Fri, 28 Jan 2022 21:10:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HtMjG9wepWGe; Fri, 28 Jan 2022 21:12:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDD7E41D0E;
-	Fri, 28 Jan 2022 21:10:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 704051BF5DC
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:10:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11DBB40253;
+	Fri, 28 Jan 2022 21:12:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E4041BF5DC
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E57D61176
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:10:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BD3540253
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:12:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 45xyZkdEQF2N for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 21:10:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44DBD61131
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:10:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7845182B52; Fri, 28 Jan 2022 21:03:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LKJFXLerLNJV for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 21:12:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6159A4014C
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:12:54 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3674560005;
+ Fri, 28 Jan 2022 21:12:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nDYY7-00055N-Is; Fri, 28 Jan 2022 22:12:51 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 22:08:47 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: e6f7d795751a16a86026e31432dd48a11c7a3894
-X-Git-Newrev: deacc25cd63e24614b9d27dae47762b45c205c6a
-X-Patchwork-Hint: ignore
-Message-Id: <20220128210314.7845182B52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/docker-cli: bump
- to version 20.10.12
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220124221047.2597699-1-fontaine.fabrice@gmail.com>
+Date: Fri, 28 Jan 2022 22:12:51 +0100
+In-Reply-To: <20220124221047.2597699-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 24 Jan 2022 23:10:47 +0100")
+Message-ID: <87a6ff4l9o.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: security bump to
+ version 0.103.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,46 +60,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=deacc25cd63e24614b9d27dae47762b45c205c6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 70d1858353029d4a45e5f0d4a705b07837736c21)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > ClamAV 0.103.5 is a critical patch release with the following fix:
+ >  - CVE-2022-20698: Fix for invalid pointer read that may cause a crash.
+ >    Affects 0.104.1, 0.103.4 and prior when ClamAV is compiled with
+ >    libjson-c and the CL_SCAN_GENERAL_COLLECT_METADATA scan option (the
+ >    clamscan --gen-json option) is enabled.
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index fbcda5753e..f2fe316540 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  55d55fdead906cbea8608ef39d5a62d54d1118e604a5ae7e2d58b4fb54a599a7  docker-cli-20.10.11.tar.gz
-+sha256  d86e3e6e10669634ee02b5e071e5ee504457a9d03941bbc5b7f2bd3683ebdb19  docker-cli-20.10.12.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 0e35a60d43..d5cca34efc 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 20.10.11
-+DOCKER_CLI_VERSION = 20.10.12
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+ > https://github.com/Cisco-Talos/clamav/blob/clamav-0.103.5/NEWS.md
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x and 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
