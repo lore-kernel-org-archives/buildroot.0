@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25B49C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 902BCC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 21:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC61B60D5C;
-	Fri, 28 Jan 2022 21:58:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9Pc3xJDmz7-W; Fri, 28 Jan 2022 21:58:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED94460D4F;
-	Fri, 28 Jan 2022 21:58:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D614F1BF345
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:58:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE99B40148
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:58:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2080D40105;
+	Fri, 28 Jan 2022 21:58:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qsdSoREYLQz1 for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 21:58:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9BE5040105
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:58:09 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id C8CCD200002;
- Fri, 28 Jan 2022 21:58:05 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nDZFs-0006n4-Tm; Fri, 28 Jan 2022 22:58:04 +0100
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vxd9NMYYVCZb; Fri, 28 Jan 2022 21:58:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB0A40148;
+	Fri, 28 Jan 2022 21:58:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 095D51BF345
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:58:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04DD940321
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 21:58:16 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S60GTEKwEV0v for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 21:58:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F11BB402C3
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 21:58:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 14EC182B53; Fri, 28 Jan 2022 21:51:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220126210226.1689899-1-yann.morin.1998@free.fr>
-Date: Fri, 28 Jan 2022 22:58:04 +0100
-In-Reply-To: <20220126210226.1689899-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Wed, 26 Jan 2022 22:02:26 +0100")
-Message-ID: <87o83v34lv.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2021.02.x] package/polkit: backport upstream
- patch to fix CVE-2021-4034
+To: buildroot@buildroot.org
+Date: Fri, 28 Jan 2022 22:55:55 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: d146485de18f807015a17926918c7c4a02de48a5
+X-Git-Newrev: 90cf9188c96f391ac56788100af326df923b4c37
+X-Patchwork-Hint: ignore
+Message-Id: <20220128215117.14EC182B53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/polkit: backport
+ upstream patch to fix CVE-2021-4034
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,43 +53,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Marek Belisko <marek.belisko@open-nandra.com>,
- Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=90cf9188c96f391ac56788100af326df923b4c37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Marek Belisko <marek.belisko@open-nandra.com>
- > Cc: Adam Duskett <aduskett@gmail.com>
- > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  ...l-privilege-escalation-CVE-2021-4034.patch | 79 +++++++++++++++++++
- >  package/polkit/polkit.mk                      |  3 +
- >  2 files changed, 82 insertions(+)
- >  create mode 100644 package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Marek Belisko <marek.belisko@open-nandra.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-local-privilege-escalation-CVE-2021-4034.patch | 80 ++++++++++++++++++++++
+ package/polkit/polkit.mk                           |  3 +
+ 2 files changed, 83 insertions(+)
 
- > diff --git a/package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch b/package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch
- > new file mode 100644
- > index 0000000000..8c01eed775
- > --- /dev/null
- > +++ b/package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch
- > @@ -0,0 +1,79 @@
- > +From a2bf5c9c83b6ae46cbd5c779d3055bff81ded683 Mon Sep 17 00:00:00 2001
- > +From: Jan Rybar <jrybar@redhat.com>
- > +Date: Tue, 25 Jan 2022 17:21:46 +0000
- > +Subject: [PATCH] pkexec: local privilege escalation (CVE-2021-4034)
- > +
-
-Added your s-o-b to make check-package happy and applied to 2021.02.x,
-thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch b/package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch
+new file mode 100644
+index 0000000000..515fdb81c1
+--- /dev/null
++++ b/package/polkit/0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch
+@@ -0,0 +1,80 @@
++From a2bf5c9c83b6ae46cbd5c779d3055bff81ded683 Mon Sep 17 00:00:00 2001
++From: Jan Rybar <jrybar@redhat.com>
++Date: Tue, 25 Jan 2022 17:21:46 +0000
++Subject: [PATCH] pkexec: local privilege escalation (CVE-2021-4034)
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ src/programs/pkcheck.c |  5 +++++
++ src/programs/pkexec.c  | 23 ++++++++++++++++++++---
++ 2 files changed, 25 insertions(+), 3 deletions(-)
++
++diff --git a/src/programs/pkcheck.c b/src/programs/pkcheck.c
++index f1bb4e1..768525c 100644
++--- a/src/programs/pkcheck.c
+++++ b/src/programs/pkcheck.c
++@@ -363,6 +363,11 @@ main (int argc, char *argv[])
++   local_agent_handle = NULL;
++   ret = 126;
++ 
+++  if (argc < 1)
+++    {
+++      exit(126);
+++    }
+++
++   /* Disable remote file access from GIO. */
++   setenv ("GIO_USE_VFS", "local", 1);
++ 
++diff --git a/src/programs/pkexec.c b/src/programs/pkexec.c
++index 7698c5c..84e5ef6 100644
++--- a/src/programs/pkexec.c
+++++ b/src/programs/pkexec.c
++@@ -488,6 +488,15 @@ main (int argc, char *argv[])
++   pid_t pid_of_caller;
++   gpointer local_agent_handle;
++ 
+++
+++  /*
+++   * If 'pkexec' is called THIS wrong, someone's probably evil-doing. Don't be nice, just bail out.
+++   */
+++  if (argc<1)
+++    {
+++      exit(127);
+++    }
+++
++   ret = 127;
++   authority = NULL;
++   subject = NULL;
++@@ -614,10 +623,10 @@ main (int argc, char *argv[])
++ 
++       path = g_strdup (pwstruct.pw_shell);
++       if (!path)
++-	{
+++        {
++           g_printerr ("No shell configured or error retrieving pw_shell\n");
++           goto out;
++-	}
+++        }
++       /* If you change this, be sure to change the if (!command_line)
++ 	 case below too */
++       command_line = g_strdup (path);
++@@ -636,7 +645,15 @@ main (int argc, char *argv[])
++           goto out;
++         }
++       g_free (path);
++-      argv[n] = path = s;
+++      path = s;
+++
+++      /* argc<2 and pkexec runs just shell, argv is guaranteed to be null-terminated.
+++       * /-less shell shouldn't happen, but let's be defensive and don't write to null-termination
+++       */
+++      if (argv[n] != NULL)
+++      {
+++        argv[n] = path;
+++      }
++     }
++   if (access (path, F_OK) != 0)
++     {
++-- 
++2.25.1
++
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index e00b634b7f..3fd041a813 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -12,6 +12,9 @@ POLKIT_CPE_ID_VENDOR = polkit_project
+ POLKIT_AUTORECONF = YES
+ POLKIT_INSTALL_STAGING = YES
+ 
++# 0004-pkexec-local-privilege-escalation-CVE-2021-4034.patch
++POLKIT_IGNORE_CVE = CVE-2021-4034
++
+ POLKIT_DEPENDENCIES = \
+ 	libglib2 host-intltool expat spidermonkey $(TARGET_NLS_DEPENDENCIES)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
