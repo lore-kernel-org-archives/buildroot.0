@@ -4,80 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49F73C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 01:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE1A9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 03:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D311B417D2;
-	Fri, 28 Jan 2022 01:46:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EAA241649;
+	Fri, 28 Jan 2022 03:59:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gzgXDiooYdNB; Fri, 28 Jan 2022 01:46:11 +0000 (UTC)
+	with ESMTP id xWOzMCrKxCmC; Fri, 28 Jan 2022 03:59:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35A3A41781;
-	Fri, 28 Jan 2022 01:46:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05F6E41632;
+	Fri, 28 Jan 2022 03:59:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89E371C1148
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 01:46:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8634E1BF275
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 03:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7870784DB1
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 01:46:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 750898340C
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 03:59:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pmwaeNhgej9j for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 01:46:06 +0000 (UTC)
+ with ESMTP id fHiUnoHXNBca for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 03:59:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 575F684D65
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 01:46:06 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id d10so10641688eje.10
- for <buildroot@buildroot.org>; Thu, 27 Jan 2022 17:46:06 -0800 (PST)
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com
+ [IPv6:2607:f8b0:4864:20::936])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A6CEA833D3
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 03:59:35 +0000 (UTC)
+Received: by mail-ua1-x936.google.com with SMTP id n15so6984298uaq.5
+ for <buildroot@buildroot.org>; Thu, 27 Jan 2022 19:59:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
- :content-disposition:in-reply-to;
- bh=SGp1FH/+5SOIXbZdFu6A9ywkD9xu/vqRNTDZtyYQ+SM=;
- b=S3Bx8H/BPvqSZCsCiVly/tIogGbFXONXm1yuTxks7Kgdq2V+ZACpTlFfHwxu5ne92y
- UdwF4bPtdslqW1z5o85rXGJuUxOVxV9+rKTGeZrMHrLRB2M1d5x+Tl10TMDnwLgQXjRE
- K1sh+dywPVdVIthLHVSQBWIcTuGm21rluXuwO+tJIybBQc19GAlF1JbkxgV3UzBrmeoq
- Rq4L7RinmBiQalUeJjac8NnPGkAjV31FJszaB+CQz3MIcayMI5OGFRBISeqIMCddTb5/
- AlYuCfvb1u2ngqOZr4A5+fPe/rZeOUJO3IYxQ301ZMIB69HMOhA/e1eRmZ8Z1AnP7lUs
- RtjA==
+ h=mime-version:from:date:message-id:subject:to;
+ bh=Fcv3sXYmP0dLVPCBb6AezHSzk2nluP2td9g6AcdZ7oE=;
+ b=Jj7vSwptNhR54qhjoac4VnOZ657+onha5mwUX3FSxY8zPhr83vNNXYMc7+6+QoZsgT
+ vd8cGnJREKicHhJHaGKtsgVDlsHLYHI13nUS4lik3Jfj5Zw1Z5WKCCb8MQu+lrM25rsK
+ Gm4vVsPbSK81/rkkwdtZJ7sBOigQYvd1hlB3gfxm57Khs6ZnUKUT58Xc+SPCvHI/Ntxm
+ YDndHyaIjLytmOPOlHFs8jtq/i7uMJldE3Ej60bb685HsorCk5lLdtbObL4KIlxbi+qA
+ az8TC+SKr91T5i45Iy+4MX1rHDwNJYIiJbeC9b4uITaRjpgr9wzg2Nyi8bGBhk7nyD+L
+ fB1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
- :references:mime-version:content-disposition:in-reply-to;
- bh=SGp1FH/+5SOIXbZdFu6A9ywkD9xu/vqRNTDZtyYQ+SM=;
- b=AYsAEYAIBM6GuexvBcb9LykFfP3srEj+rGGni4CFPohfhcfIk3HEKjQX/ARyHqanW4
- FHZvNTeIi/i//NN6T0N5F3PWjdMkRgmpd7KQUZq2I5CqylDt5rO+7XoHEmVdRs9xc4NO
- TLLPR6nHN8bthILE588jW+papUPl0cieJHvZSm8e7yCpu7JOHRxONMpJ59XtDyvGB/lD
- cZKBmtQgPDElJdykwk9cs7Q4BqaZkRmqd8hzMbg/EWwEAWo7W5BXWv7Xk4M2h2gHfR+F
- p2VH5j/oUsmo6ZSqMvgy/dDp6Q0KGtdGStUVw97T487S/ZkTGnYEC/476jNbXE5pBNj3
- nNZg==
-X-Gm-Message-State: AOAM532Zp5Q3gAVY+AeRsi+AHuCq27JP3ygW849nznCwmYUlQKO0sP4Z
- O+mYB7BeDMUtlQN8Qi5GNyItrZTJpq8KrdIP
-X-Google-Smtp-Source: ABdhPJzxo+84FXYSt5YScF8ksjs6wULSZ2+JB4Z+Lgy9YLswwTeU4rVmHvFtB15bNnaBlcq35KuCzQ==
-X-Received: by 2002:a17:907:7f8f:: with SMTP id
- qk15mr176345ejc.287.1643334364532; 
- Thu, 27 Jan 2022 17:46:04 -0800 (PST)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id o11sm12049687edq.5.2022.01.27.17.46.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Jan 2022 17:46:03 -0800 (PST)
-Date: Fri, 28 Jan 2022 02:46:02 +0100
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <YfNK2vDk+noFqzO3@pevik>
-References: <20220126235652.25712-1-petr.vorel@gmail.com>
- <87lez191e6.fsf@tarshish>
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=Fcv3sXYmP0dLVPCBb6AezHSzk2nluP2td9g6AcdZ7oE=;
+ b=YLcMOWtz+qPfLP3tW7HCbOtjjZV6XoXxLxdODOumYY+dcpOSUShsH2zjJSIFVxIC8J
+ 8tdTO9LRsHCeAzLQ9ACDWtcL5XXzICthnswtGJHyeoX96+DY9yGti8lLi4U4VKCX7WNP
+ gZqmgNkaVhJBmclsC7Gnav962EdwbLkUns1aYDVgO8x3lyfO8I9k0qsY0Ze4zcvz09tf
+ 3cwn0HGCSthqo8BhYWuTXSSUs5YthinKnpAQBsinWG4D8wMaw8TvifS5gCEOIN0EbPe7
+ CpgqmoPr5nu/gaqjPbwtltf9eQPk633op441R8AwdcNdA/oFcnqoO/vHw6fwAjslCWMv
+ I35g==
+X-Gm-Message-State: AOAM533cmZAmiaMNd8Wjhmn7InXXlVGFZbUlxzf/c3fb554IvDFFQs2k
+ +gGSLEZJwpzTYI5EIZEXjxasfHC745PSBCLk6t2mjgFN3RM=
+X-Google-Smtp-Source: ABdhPJw00LqPTFoLqRgEXdYNsCFEvPu4FzrYUn1I940NPD87vhJEP+QB25IcWMGegoD80olGY1TnNAR70hXtBiEjIU4=
+X-Received: by 2002:a9f:26a6:: with SMTP id 35mr3333250uay.98.1643342374334;
+ Thu, 27 Jan 2022 19:59:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87lez191e6.fsf@tarshish>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version
- to 20220121
+From: Chris <cheart0@gmail.com>
+Date: Fri, 28 Jan 2022 12:59:23 +0900
+Message-ID: <CAA6F-SOWP+gotpC8jtANa8-GZRu7ZvwcQuEMH_uNc54Yb0ibPQ@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: [Buildroot] swupdate suricatta build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,75 +77,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6748048870440827360=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+--===============6748048870440827360==
+Content-Type: multipart/alternative; boundary="00000000000077775205d69c7617"
 
-FYI tested:
+--00000000000077775205d69c7617
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Hi, there
+Did anybody ever see the same issue? When build 2021.11 for raspberry pi,
+we added swupdate package and enabled suricatta mode by "make
+swupdate-menuconfig", then we got error as below,
 
-                             andes-nds32 [ 1/45]: OK
-                             arm-aarch64 [ 2/45]: OK
-                   bootlin-aarch64-glibc [ 3/45]: OK
-               bootlin-arcle-hs38-uclibc [ 4/45]: OK
-                    bootlin-armv5-uclibc [ 5/45]: OK
-                     bootlin-armv7-glibc [ 6/45]: OK
-                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
-                      bootlin-armv7-musl [ 8/45]: OK
-             bootlin-microblazeel-uclibc [ 9/45]: OK
-                   bootlin-mipsel-uclibc [10/45]: OK
-                bootlin-mipsel32r6-glibc [11/45]: OK
-                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
-               bootlin-m68k-68040-uclibc [13/45]: OK
-                     bootlin-nios2-glibc [14/45]: SKIPPED
-                 bootlin-openrisc-uclibc [15/45]: OK
-           bootlin-powerpc-e500mc-uclibc [16/45]: OK
-        bootlin-powerpc64le-power8-glibc [17/45]: OK
-                   bootlin-riscv32-glibc [18/45]: OK
-                   bootlin-riscv64-glibc [19/45]: OK
-                    bootlin-riscv64-musl [20/45]: OK
-                      bootlin-sh4-uclibc [21/45]: OK
-                    bootlin-sparc-uclibc [22/45]: SKIPPED
-                   bootlin-sparc64-glibc [23/45]: OK
-                   bootlin-xtensa-uclibc [24/45]: OK
-                    bootlin-x86-64-glibc [25/45]: OK
-                     bootlin-x86-64-musl [26/45]: OK
-                   bootlin-x86-64-uclibc [27/45]: OK
-                            br-arm-basic [28/45]: OK
-                    br-arm-full-nothread [29/45]: SKIPPED
-                      br-arm-full-static [30/45]: OK
-                br-i386-pentium-mmx-musl [31/45]: OK
-                   br-i386-pentium4-full [32/45]: OK
-                      br-mips64-n64-full [33/45]: OK
-                 br-mips64r6-el-hf-glibc [34/45]: OK
-               br-powerpc-603e-basic-cpp [35/45]: OK
-               br-powerpc64-power7-glibc [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                           sourcery-mips [43/45]: OK
-                         sourcery-mips64 [44/45]: OK
-                          sourcery-nios2 [45/45]: SKIPPED
-45 builds, 6 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+suricatta/common.c:79:26: error: storage size of =E2=80=98json_res=E2=80=99=
+ isn=E2=80=99t known
+   79 |  enum json_tokener_error json_res;
+      |                          ^~~~~~~~
+suricatta/common.c:82:15: warning: implicit declaration of function
+=E2=80=98json_tokener_parse_ex=E2=80=99 [-Wimplicit-function-declaration]
+   82 |   json_root =3D json_tokener_parse_ex(
+      |               ^~~~~~~~~~~~~~~~~~~~~
+suricatta/common.c:82:13: warning: assignment to =E2=80=98struct json_objec=
+t *=E2=80=99
+from =E2=80=98int=E2=80=99 makes pointer from integer without a cast [-Wint=
+-conversion]
+   82 |   json_root =3D json_tokener_parse_ex(
+      |             ^
+suricatta/common.c:84:23: warning: implicit declaration of function
+=E2=80=98json_tokener_get_error=E2=80=99 [-Wimplicit-function-declaration]
+   84 |  } while ((json_res =3D json_tokener_get_error(json_tokenizer)) =3D=
+=3D
+      |                       ^~~~~~~~~~~~~~~~~~~~~~
+suricatta/common.c:85:4: error: =E2=80=98json_tokener_continue=E2=80=99 und=
+eclared (first
+use in this function)
+   85 |    json_tokener_continue);
+      |    ^~~~~~~~~~~~~~~~~~~~~
+suricatta/common.c:85:4: note: each undeclared identifier is reported only
+once for each function it appears in
+suricatta/common.c:86:18: error: =E2=80=98json_tokener_success=E2=80=99 und=
+eclared (first
+use in this function); did you mean =E2=80=98json_tokener_error=E2=80=99?
+   86 |  if (json_res !=3D json_tokener_success) {
+      |                  ^~~~~~~~~~~~~~~~~~~~
+      |                  json_tokener_error
+suricatta/suricatta.c:17:10: fatal error: json-c/json.h: No such file or
+directory
+   17 | #include <json-c/json.h>
 
-Kind regards,
-Petr
+
+   - host machine (OS/release) --Linux MINT20
+   - version of Buildroot--2021.11
+   - target for which the build fails--raspberry pi b
+   - package(s) for which the build fails--swupdate
+   - the command that fails and its output--as posted above
+   - any information you think that may be relevant
+
+
+Thanks
+Chris
+
+--00000000000077775205d69c7617
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi, there<div>Did anybody ever see the same issue? When bu=
+ild 2021.11 for raspberry pi, we added swupdate package and enabled=C2=A0su=
+ricatta mode by &quot;make swupdate-menuconfig&quot;, then we got error as =
+below,</div><div><br></div><div>suricatta/common.c:79:26: error: storage si=
+ze of =E2=80=98json_res=E2=80=99 isn=E2=80=99t known<br>=C2=A0 =C2=A079 | =
+=C2=A0enum json_tokener_error json_res;<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0^~~~~~~~<br>suricatta/common.c:82:15: warning: implicit declarati=
+on of function =E2=80=98json_tokener_parse_ex=E2=80=99 [-Wimplicit-function=
+-declaration]<br>=C2=A0 =C2=A082 | =C2=A0 json_root =3D json_tokener_parse_=
+ex(<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 ^~~~~~~~~~~~~~~~~~~~~<br>suricatta/common.c:82:13: warning: assignment =
+to =E2=80=98struct json_object *=E2=80=99 from =E2=80=98int=E2=80=99 makes =
+pointer from integer without a cast [-Wint-conversion]<br>=C2=A0 =C2=A082 |=
+ =C2=A0 json_root =3D json_tokener_parse_ex(<br>=C2=A0 =C2=A0 =C2=A0 | =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ^<br>suricatta/common.c:84:23: warni=
+ng: implicit declaration of function =E2=80=98json_tokener_get_error=E2=80=
+=99 [-Wimplicit-function-declaration]<br>=C2=A0 =C2=A084 | =C2=A0} while ((=
+json_res =3D json_tokener_get_error(json_tokenizer)) =3D=3D<br>=C2=A0 =C2=
+=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 ^~~~~~~~~~~~~~~~~~~~~~<br>suricatta/common.c:85:4: error: =
+=E2=80=98json_tokener_continue=E2=80=99 undeclared (first use in this funct=
+ion)<br>=C2=A0 =C2=A085 | =C2=A0 =C2=A0json_tokener_continue);<br>=C2=A0 =
+=C2=A0 =C2=A0 | =C2=A0 =C2=A0^~~~~~~~~~~~~~~~~~~~~<br>suricatta/common.c:85=
+:4: note: each undeclared identifier is reported only once for each functio=
+n it appears in<br>suricatta/common.c:86:18: error: =E2=80=98json_tokener_s=
+uccess=E2=80=99 undeclared (first use in this function); did you mean =E2=
+=80=98json_tokener_error=E2=80=99?<br>=C2=A0 =C2=A086 | =C2=A0if (json_res =
+!=3D json_tokener_success) {<br>=C2=A0 =C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^~~~~~~~~~~~~~~~~~~~<br>=C2=A0 =
+=C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0json_tokener_error<br>suricatta/suricatta.c:17:10: fatal error: json-c/j=
+son.h: No such file or directory<br>=C2=A0 =C2=A017 | #include &lt;json-c/j=
+son.h&gt;<br></div><div><br></div><div><ul style=3D"box-sizing:inherit;marg=
+in:0.9375rem 0px 0px;padding-left:1.875rem;color:rgb(32,33,36);font-family:=
+&quot;SF Pro Display&quot;,&quot;Segoe UI&quot;,&quot;Open Sans&quot;,&quot=
+;Clear Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Oxygen-Sans,Oxygen,U=
+buntu,&quot;Droid Sans&quot;,Tahoma,Roboto,-apple-system,BlinkMacSystemFont=
+,&quot;Hiragino Sans GB&quot;,Cantarell,Arial,STHeiti,sans-serif,&quot;Appl=
+e Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;=
+font-size:18px"><li style=3D"box-sizing:inherit">host machine (OS/release) =
+--Linux MINT20</li><li style=3D"box-sizing:inherit">version of Buildroot--2=
+021.11</li><li style=3D"box-sizing:inherit">target for which the build fail=
+s--raspberry pi b</li><li style=3D"box-sizing:inherit">package(s) for which=
+ the build fails--swupdate</li><li style=3D"box-sizing:inherit">the command=
+ that fails and its output--as posted above</li><li style=3D"box-sizing:inh=
+erit">any information you think that may be relevant</li></ul><div><font co=
+lor=3D"#202124" face=3D"SF Pro Display, Segoe UI, Open Sans, Clear Sans, He=
+lvetica Neue, Helvetica, Oxygen-Sans, Oxygen, Ubuntu, Droid Sans, Tahoma, R=
+oboto, -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Cantarell, Aria=
+l, STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"=
+><span style=3D"font-size:18px"><br></span></font></div></div><div><font co=
+lor=3D"#202124" face=3D"SF Pro Display, Segoe UI, Open Sans, Clear Sans, He=
+lvetica Neue, Helvetica, Oxygen-Sans, Oxygen, Ubuntu, Droid Sans, Tahoma, R=
+oboto, -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Cantarell, Aria=
+l, STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"=
+><span style=3D"font-size:18px">Thanks</span></font></div><div><font color=
+=3D"#202124" face=3D"SF Pro Display, Segoe UI, Open Sans, Clear Sans, Helve=
+tica Neue, Helvetica, Oxygen-Sans, Oxygen, Ubuntu, Droid Sans, Tahoma, Robo=
+to, -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Cantarell, Arial, =
+STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"><s=
+pan style=3D"font-size:18px">Chris</span></font></div></div>
+
+--00000000000077775205d69c7617--
+
+--===============6748048870440827360==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6748048870440827360==--
