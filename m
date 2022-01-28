@@ -1,47 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 715DEC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 10:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A970C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 10:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 162C384D29;
-	Fri, 28 Jan 2022 10:28:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3380940463;
+	Fri, 28 Jan 2022 10:59:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xX425T00qr2p; Fri, 28 Jan 2022 10:28:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qJZmzsxGdLTn; Fri, 28 Jan 2022 10:59:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D0D884D23;
-	Fri, 28 Jan 2022 10:28:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A55F11BF380
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 10:28:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17A53403F9;
+	Fri, 28 Jan 2022 10:59:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 81FCD1BF275
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 10:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90E0741687
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 10:28:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EAC6403F9
+ for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 10:59:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H9V4f3HefInQ for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 10:28:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8E3F40246
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 10:28:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EE47582858; Fri, 28 Jan 2022 10:21:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KZwIYx2pJUoq for <buildroot@lists.busybox.net>;
+ Fri, 28 Jan 2022 10:59:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 55EDA40167
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 10:59:50 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id u18so9022051edt.6
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 02:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=53K3o6eBXWCrJJvrjMHeRX4XapdYwPu73vDjrYjfbok=;
+ b=g3sGsSVbCDYd3zqPSWl8tybn6CnYq8Lv4A6QY4ArmDA7H70lmdb9CyS3bowgCQh/Mu
+ Wj610eV8Q7OCuKADj3G4P5Lig9sU/VuzataM00cgxicgZRGLxW/25GarRgn1t4vkI3X1
+ cQlwfB99mVnpq2uqKHt2P28Xa7zOIMZhle2xRm1wD4NXZUXY5aZv289s4LEMQVx8+bQi
+ kKAh5T/9yEZ3kLiAZ4OupKIZVmd/iCfO3b8mmITS2urFicGgtJTBTA4UY59E19vbx3ko
+ 4JQXXEH51w7SLvKImEUoOTMQHYYCopmfTsFpSxFDBuatfBFyKZbnalUp2oh+opcHMZ+9
+ 2Qvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=53K3o6eBXWCrJJvrjMHeRX4XapdYwPu73vDjrYjfbok=;
+ b=BbeonqLZVgX3/7h5QxVI145Q/LPL08P1BNndjcAUSW9COqXW+3tKr9fJsvgGB0a0A3
+ HRRW8ydENFoq/E1z9+1tt1roZfqy6aoUbIfHnMrPzI5tTQrX8LScbTmBXdf7Cm/rAgBR
+ C45mbmLcfP7nFOq6++gS3FKXYueM2NWJRE6FxfmA+33aRqxTwXx5Uu5ccoWHrUt4oU/l
+ qgqnxjOF7wWG3Gb/n6gzu57awNwD8f19xyMWmdXxmmR4gLFLb+wi7jcETwh3Mt/vHDUo
+ bqasiA0yb4RclU14PX7P7cB9st4XYTPAXMlTR5KBarke0zwaM/Yqazqb706OvaKHey1i
+ 633w==
+X-Gm-Message-State: AOAM532AheTD4OL0QG0VMQUZ3a/on3+nO+ayeeZCZK8wZRjqNXzXQVjP
+ xBB3k/Zg5BhN86mJyxpCn19n57lO0CWbCluC
+X-Google-Smtp-Source: ABdhPJys/r7Gqkd62woPV1cH/CoxA8MtLViltn69L6nvAwRKhXN9cE1QVYlC72ck1tXDrhGX7fEmCA==
+X-Received: by 2002:aa7:c647:: with SMTP id z7mr7691804edr.55.1643367588131;
+ Fri, 28 Jan 2022 02:59:48 -0800 (PST)
+Received: from thomas-Latitude-5590.barco.com ([87.66.230.131])
+ by smtp.googlemail.com with ESMTPSA id v14sm9873576ejy.77.2022.01.28.02.59.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Jan 2022 02:59:47 -0800 (PST)
+From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 11:27:43 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 35baab9abf3ffa44d2318eb5d2063cfd5547b88d
-X-Git-Newrev: bf066e053c6f0e84294dae7f5cf908064f6e7623
-X-Patchwork-Hint: ignore
-Message-Id: <20220128102110.EE47582858@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 15}.x series
+Date: Fri, 28 Jan 2022 11:59:16 +0100
+Message-Id: <20220128105917.30421-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.17.1
+Subject: [Buildroot] [PATCH 1/2] package/libglib2: bump version to 2.69.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,84 +80,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf066e053c6f0e84294dae7f5cf908064f6e7623
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+The internal_pcre option was dropped in:
+https://gitlab.gnome.org/GNOME/glib/-/commit/9fbd7f3dc1f029b64b6991a540402b2bfa98de5c
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit db14f7d71505aad2ae1e4aefc5c0ece97f5eacec)
-[Peter: drop 5.15.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 6 ++----
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a60ff7d1fa..e7addf1810 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
+index c402cbafa5..ce73d54f16 100644
+--- a/package/libglib2/0002-remove-cpp-requirement.patch
++++ b/package/libglib2/0002-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.68.4',
++   version : '2.69.1',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index d421e025ff..0363b6e081 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.68/glib-2.68.4.sha256sum
+-sha256  62fd061d08a75492617e625a73e2c05e259f831acbb8e1f8b9c81f23f7993a3b  glib-2.68.4.tar.xz
++# https://download.gnome.org/sources/glib/2.69/glib-2.69.1.sha256sum
++sha256  f92f34057a091fc8638d91f10cece842cb8618e9a1090b0ddb19cc15a21bf39c  glib-2.69.1.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index af73aeb3bf..46bbba18ad 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.10.83" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.10.90" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 8246c7dc09..e22ac924bc 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70  linux-5.10.83.tar.xz
--sha256  6246fe1776d83039d71f74eb839f38ebdec23e1b37a7bf76f3bce13cbf0290be  linux-5.4.163.tar.xz
-+sha256  945e4264c014a3d9dfc0a4639309dd1ec2fb545416556421f931b95da78c2725  linux-5.10.90.tar.xz
-+sha256  b09f74e0cf5fc7cf5de6aa932fe654c962cb10118bdbbdddb397022c6e6d382c  linux-5.4.170.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  6d2f83619493e656276dbf22afcdb80f42320e697570419380773bb4916130fd  linux-4.4.293.tar.xz
--sha256  b55d77774ed631f57f736bcdab021f68167455c9daede7e9e4161b4d564d8b53  linux-4.9.291.tar.xz
--sha256  9784204f95cfc7de1c933088e6f9364e99a29988ae4e6b9353677637eb171aa0  linux-4.14.256.tar.xz
--sha256  8f4ecd71fbcdd733c2849e2e5afe59d351c463c9a699bdbf428d88fa911009db  linux-4.19.219.tar.xz
-+sha256  86c9ed59b120fad14d207470446086ac46099cd7bb9e58682e368e721164a6e0  linux-4.4.298.tar.xz
-+sha256  fd4bdbc8be3472d6324fa0f5f57a17f5c3f509d5f5b4fa4f1a9797d982d0bca8  linux-4.9.296.tar.xz
-+sha256  bffaaa4c93ab4ed1de61f804c26c92b82dd80f92793e20194b62497d7b8b4723  linux-4.14.261.tar.xz
-+sha256  01ccfc3413c3bb305653ceb0aa528aba0caa61b326e43709bf1f8b624f211031  linux-4.19.224.tar.xz
- # Locally computed
- sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
- sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 740ed6c09d..fb9867525c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -346,12 +346,12 @@ endchoice
+-LIBGLIB2_VERSION_MAJOR = 2.68
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
++LIBGLIB2_VERSION_MAJOR = 2.69
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
+@@ -30,7 +30,6 @@ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Dselinux=disabled \
+ 	-Dsystemtap=false \
+ 	-Dxattr=false \
+-	-Dinternal_pcre=false \
+ 	-Dtests=false \
+ 	-Doss_fuzz=disabled
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.293"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.291"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.256"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.219"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.163"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.83"	if BR2_KERNEL_HEADERS_5_10
-+	default "4.4.298"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.296"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.261"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.224"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.170"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.90"	if BR2_KERNEL_HEADERS_5_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+@@ -52,7 +51,6 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ # bogus installation path once combined with $(DESTDIR).
+ LIBGLIB2_CONF_OPTS = \
+ 	-Dglib_debug=disabled \
+-	-Dinternal_pcre=false \
+ 	-Dlibelf=disabled \
+ 	-Dgio_module_dir=/usr/lib/gio/modules \
+ 	-Dtests=false \
+-- 
+2.17.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
