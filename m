@@ -1,74 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61DA5C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 13:04:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 118CBC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 13:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D150881ABA;
-	Sat, 29 Jan 2022 13:04:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C1DC60625;
+	Sat, 29 Jan 2022 13:32:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L_e-88hbvxSe; Sat, 29 Jan 2022 13:04:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AWoTSujLo5SQ; Sat, 29 Jan 2022 13:32:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2E9081A29;
-	Sat, 29 Jan 2022 13:04:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD9251BF38E
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 13:04:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D835607C9;
+	Sat, 29 Jan 2022 13:32:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 19B101BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 13:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA39081A29
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 13:04:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0729E408EA
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 13:32:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ld6BeItEa7zT for <buildroot@lists.busybox.net>;
- Sat, 29 Jan 2022 13:04:00 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 71048818A7
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 13:04:00 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id v13so16115268wrv.10
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 05:04:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=uaTjdixRLq5T3WZNzqkDIF++IRsw/nw/REpTBj4Y6vE=;
- b=NmECWV1g+1OhUYuh8IpRNFgTFe6VQWkqNFl/BZZ2/ZgLNk8by7UifcTpxw7RovzTF+
- DIlDatRSbR0vGwEbyIMpMhRQ8gxhuNjFa/yGa+wx78Ahlzvh1WuOZhTiHJ9qfHjUt6sy
- z+ysXE5NrrNJmZZeVRN7gU+zWGgg43VXV3vEY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=uaTjdixRLq5T3WZNzqkDIF++IRsw/nw/REpTBj4Y6vE=;
- b=f4Nf583EMRsESx4z8X60lnI/OpoR79Ppxq8cWOHkLQzN3D/fF3MRIjvMtiPbRgseP0
- 8+TBPfzZ/1LWprlK+xuk3F1e/FsLWvKGNxJm+2B4Ghf46M9cMmrP0T6ZQrqd8hKumTIb
- Rj3gNFzevMXEVKN43ZdQ2LGQIHYk4nm74m7PF+X7rmdCBU3xKqwsbFJau43fILdxtIbD
- nud7XvwfW5uscmte+akWQF0m9Kv6tEB6JdXsNGiauDaOapRDdG/HVmd5YuTTMFwRPxuk
- 1fXy9YGTVJ/hCxDfdZWWzF2fgas1RuwbUgfwtMdYSE11w6PWGY0vprbEo+QY98kdd5o9
- dSSw==
-X-Gm-Message-State: AOAM531MzzNahc7QB4BtBkR2cxC9qgQnRtm5hQnGZoaogD0eU25MrfZp
- yB9LzPXqT+YzpWV8YwT9R1ocvSUSI2wAhg==
-X-Google-Smtp-Source: ABdhPJxBoFn4/1MZpIhZxYRUSK25rDfplrCVgDCfuBAdbjCXRXnXDNXmdVIqgZ+6uPR5zCE9XmBOuA==
-X-Received: by 2002:a5d:64e3:: with SMTP id g3mr2259400wri.90.1643461437832;
- Sat, 29 Jan 2022 05:03:57 -0800 (PST)
-Received: from panicking.amarulasolutions.com ([62.18.234.10])
- by smtp.gmail.com with ESMTPSA id t4sm7076387wro.71.2022.01.29.05.03.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Jan 2022 05:03:57 -0800 (PST)
-From: Michael Trimarchi <michael@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Sat, 29 Jan 2022 14:03:54 +0100
-Message-Id: <20220129130354.1094543-1-michael@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] board: Add support for iMX8MN BSH SMM S2 PRO
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ny1ff3Td1zko for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 13:32:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9959C40867
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 13:32:24 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id Dnq2np7oiQUuPDnq2nzaI0; Sat, 29 Jan 2022 14:32:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1643463142; bh=A0yTNTtpK03/0c49IhjB0KGAL/rykrtHdg2foCecy2Y=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=Jm8+WdoGg/9DteW8hvd9FL4lUEsGsgQ9kfQqQeIjYgtbjscy5Ia4iMifw/sc+tghH
+ F86eoOslSbgN99f7b1RBvF2xJHxCOA/mh03qSXBn5Filz0SNLU6wgXReWpZ6QZRDXQ
+ FlttbdKZ0W6KiKBcAHPZcORk93Sy5veeCzH1eaG+o72bSQ7FXo+OznRNOUVQ38i2AM
+ 8MFs+uPBbIXLuxbnCQJvm6LFTgepRbtfZnjoGc37rRTwu3Td3clU7/Uti5bzuCIi2U
+ FYhw2KQrCGtRM9n33CUdKWXc/tVoHh7Sl95lQ0NTeut7VT6b4pp2sBZUsdB/nHl5nP
+ daNYP1cwP8Qpg==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sat, 29 Jan 2022 14:32:21 +0100
+Message-Id: <00DCA0AA-C62D-4A45-8DDF-7E275F75047C@benettiengineering.com>
+References: <20220129130354.1094543-1-michael@amarulasolutions.com>
+In-Reply-To: <20220129130354.1094543-1-michael@amarulasolutions.com>
+To: Michael Trimarchi <michael@amarulasolutions.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfE2w6CV7dCCEEHLZKqWOYFmhQHxVZ2fnagW5IEp35HAkcJkn5tL2mHmyr/bscVp+rxQ+RKrPy8Tvnih0KenNIRSvaMXCTBEI9WyDhMLrPMraDNyVb1mD
+ TU46pEWDGH3Nb4m8WQYW8TPe648TP+9Ct5HrmJB2pJqFdG4+1URhsB0QA9t5bEysBX0pEF9E3VF9dTKPKUhRgX7uvLZt4C5a3yE60b6Jmwnqj38IsSseCZDQ
+ AmzVvtgvYOZj5UAnp8aEPwSOx95n52M/6wGrB65zJ114K9Zls7CQNdvCh0bmo1Tuln2fU5a//9dUZxT1sZAq7aYk/Vl6u0WkrPlSO/eujG4=
+Subject: Re: [Buildroot] [PATCH] board: Add support for iMX8MN BSH SMM S2 PRO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,131 +69,497 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
- Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1495186020496932370=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIGluaXRpYWwgc3VwcG9ydCBmb3IgaU1YOE1OIEJTSCBTTU0gUzIgUFJPIGJvYXJkOgoKLSBM
-aW51eDogdjUuMTctcmMxCi0gVWJvb3QgMjAyMi0wMS1yYzEgKHJlZmVyZW5jZSB0cmVlKQotIERl
-ZmF1bHQgcGFja2FnZXMgZnJvbSBidWlsZHJvb3QKCkNjOiBBcmllbCBEJ0FsZXNzYW5kcm8gPGFy
-aWVsLmRhbGVzc2FuZHJvQGNvbGxhYm9yYS5jb20+CkNjOiBKYWdhbiBUZWtpIDxqYWdhbkBhbWFy
-dWxhc29sdXRpb25zLmNvbT4KU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUcmltYXJjaGkgPG1pY2hh
-ZWxAYW1hcnVsYXNvbHV0aW9ucy5jb20+Ci0tLQogREVWRUxPUEVSUyAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICAyICsKIGJvYXJkL2JzaC9ic2gtaW14OG1uL2V4dGxpbnV4LmNvbmYgfCAgNCAr
-KwogYm9hcmQvYnNoL2JzaC1pbXg4bW4vZ2VuaW1hZ2UuY2ZnICB8IDE3ICsrKysrKysrKwogYm9h
-cmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1idWlsZC5zaCB8ICA3ICsrKysKIGJvYXJkL2JzaC9ic2gt
-aW14OG1uL3Bvc3QtaW1hZ2Uuc2ggfCAgMyArKwogYm9hcmQvYnNoL2JzaC1pbXg4bW4vcmVhZG1l
-LnR4dCAgICB8IDYwICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogY29uZmlncy9ic2hf
-c21tczJwcm9fZGVmY29uZmlnICAgICB8IDQyICsrKysrKysrKysrKysrKysrKysrKwogNyBmaWxl
-cyBjaGFuZ2VkLCAxMzUgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2Jz
-aC9ic2gtaW14OG1uL2V4dGxpbnV4LmNvbmYKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9ic2gv
-YnNoLWlteDhtbi9nZW5pbWFnZS5jZmcKIGNyZWF0ZSBtb2RlIDEwMDc1NSBib2FyZC9ic2gvYnNo
-LWlteDhtbi9wb3N0LWJ1aWxkLnNoCiBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvYnNoL2JzaC1p
-bXg4bW4vcG9zdC1pbWFnZS5zaAogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2JzaC9ic2gtaW14
-OG1uL3JlYWRtZS50eHQKIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2JzaF9zbW1zMnByb19k
-ZWZjb25maWcKCmRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCBmZThk
-ZTE5MTZlLi5mYzY2ZmI2YjgzIDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BF
-UlMKQEAgLTIyMCw2ICsyMjAsNyBAQCBGOgljb25maWdzL3NucHNfYXJjaHMzOF9oc2RrX2RlZmNv
-bmZpZwogRjoJY29uZmlncy9zbnBzX2FyY2hzMzhfdmRrX2RlZmNvbmZpZwogCiBOOglBcmllbCBE
-J0FsZXNzYW5kcm8gPGFyaWVsQHZhbmd1YXJkaWFzdXIuY29tLmFyPgorRjoJYm9hcmQvYnNoLwog
-RjoJcGFja2FnZS9heGZzdXRpbHMvCiBGOglwYWNrYWdlL21hbGktdDc2eC8KIApAQCAtMjAxOCw2
-ICsyMDE5LDcgQEAgRjoJcGFja2FnZS9weXRob24tY3JjMTYvCiBGOglwYWNrYWdlL3B5dGhvbi1w
-eXptcS8KIAogTjoJTWljaGFlbCBUcmltYXJjaGkgPG1pY2hhZWxAYW1hcnVsYXNvbHV0aW9ucy5j
-b20+CitGOglib2FyZC9ic2gvCiBGOglwYWNrYWdlL3B5dGhvbi1zcGlkZXYvCiAKIE46CU1pY2hh
-ZWwgVmV0dGVyIDxqdWJhbGhAaW9kb3J1Lm9yZz4KZGlmZiAtLWdpdCBhL2JvYXJkL2JzaC9ic2gt
-aW14OG1uL2V4dGxpbnV4LmNvbmYgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9leHRsaW51eC5jb25m
-Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjkxMTEzNTQ3NDIKLS0tIC9k
-ZXYvbnVsbAorKysgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9leHRsaW51eC5jb25mCkBAIC0wLDAg
-KzEsNCBAQAorbGFiZWwgYnVpbGRyb290CisgIGtlcm5lbCAvYm9vdC9JbWFnZQorICBkZXZpY2V0
-cmVlIC9ib290L2ZyZWVzY2FsZS9pbXg4bW4tYnNoLXNtbS1zMnByby5kdGIKKyAgYXBwZW5kIHJv
-b3Q9UEFSVFVVSUQ9JVBBUlRVVUlEJSByb290d2FpdCBydwpkaWZmIC0tZ2l0IGEvYm9hcmQvYnNo
-L2JzaC1pbXg4bW4vZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvYnNoL2JzaC1pbXg4bW4vZ2VuaW1hZ2Uu
-Y2ZnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjRhMGFhMTE3ZmIKLS0t
-IC9kZXYvbnVsbAorKysgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9nZW5pbWFnZS5jZmcKQEAgLTAs
-MCArMSwxNyBAQAoraW1hZ2Ugc2RjYXJkLmltZyB7CisJaGRpbWFnZSB7CisJCXBhcnRpdGlvbi10
-YWJsZS10eXBlID0gImdwdCIKKwl9CisKKwlwYXJ0aXRpb24gaW14LWJvb3QgeworCQlpbi1wYXJ0
-aXRpb24tdGFibGUgPSAibm8iCisJCWltYWdlID0gImlteDgtYm9vdC1zZC5iaW4iCisJCW9mZnNl
-dCA9IDMzSworCX0KKworCXBhcnRpdGlvbiByb290ZnMgeworCQlvZmZzZXQgPSA4TQorCQlpbWFn
-ZSA9ICJyb290ZnMuZXh0NCIKKwkJcGFydGl0aW9uLXV1aWQgPSAlUEFSVFVVSUQlCisJfQorfQpk
-aWZmIC0tZ2l0IGEvYm9hcmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1idWlsZC5zaCBiL2JvYXJkL2Jz
-aC9ic2gtaW14OG1uL3Bvc3QtYnVpbGQuc2gKbmV3IGZpbGUgbW9kZSAxMDA3NTUKaW5kZXggMDAw
-MDAwMDAwMC4uYmY4ODYxZjZhOQotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL2JzaC9ic2gtaW14
-OG1uL3Bvc3QtYnVpbGQuc2gKQEAgLTAsMCArMSw3IEBACisjIS9iaW4vc2gKK0JPQVJEX0RJUj0i
-JChkaXJuYW1lICQwKSIKK1BBUlRVVUlEPSIkKCRIT1NUX0RJUi9iaW4vdXVpZGdlbikiCisKK2lu
-c3RhbGwgLWQgIiRUQVJHRVRfRElSL2Jvb3QvZXh0bGludXgvIgorc2VkICJzLyVQQVJUVVVJRCUv
-JFBBUlRVVUlEL2ciICIkQk9BUkRfRElSL2V4dGxpbnV4LmNvbmYiID4gIiRUQVJHRVRfRElSL2Jv
-b3QvZXh0bGludXgvZXh0bGludXguY29uZiIKK3NlZCAicy8lUEFSVFVVSUQlLyRQQVJUVVVJRC9n
-IiAiJEJPQVJEX0RJUi9nZW5pbWFnZS5jZmciID4gIiRCSU5BUklFU19ESVIvZ2VuaW1hZ2UuY2Zn
-IgpkaWZmIC0tZ2l0IGEvYm9hcmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1pbWFnZS5zaCBiL2JvYXJk
-L2JzaC9ic2gtaW14OG1uL3Bvc3QtaW1hZ2Uuc2gKbmV3IGZpbGUgbW9kZSAxMDA3NTUKaW5kZXgg
-MDAwMDAwMDAwMC4uMzQ1MmZkNDUwMQotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL2JzaC9ic2gt
-aW14OG1uL3Bvc3QtaW1hZ2Uuc2gKQEAgLTAsMCArMSwzIEBACisjIS9iaW4vc2gKKworc3VwcG9y
-dC9zY3JpcHRzL2dlbmltYWdlLnNoIC1jICR7QklOQVJJRVNfRElSfS9nZW5pbWFnZS5jZmcKZGlm
-ZiAtLWdpdCBhL2JvYXJkL2JzaC9ic2gtaW14OG1uL3JlYWRtZS50eHQgYi9ib2FyZC9ic2gvYnNo
-LWlteDhtbi9yZWFkbWUudHh0Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAu
-LmI4NGYyZmY0YmUKLS0tIC9kZXYvbnVsbAorKysgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9yZWFk
-bWUudHh0CkBAIC0wLDAgKzEsNjAgQEAKK0hvdyB0byBidWlsZCBpdAorPT09PT09PT09PT09PT09
-CisKK0NvbmZpZ3VyZSBidWlsZHJvb3Q6CisKKyAgJCBtYWtlIGJzaF9zbW1zMnByb19kZWZjb25m
-aWcKKworQ2hhbmdlIHNldHRpbmdzIHRvIGZpdCB5b3VyIG5lZWRzIChvcHRpb25hbCk6CisKKyAg
-JCBtYWtlIG1lbnVjb25maWcKKworQ29tcGlsZSBldmVyeXRoaW5nIGFuZCBidWlsZHIgdGhlIHJv
-b3RmcyBpbWFnZToKKworICAkIG1ha2UKKworCitSZXN1bHQgb2YgdGhlIGJ1aWxkCis9PT09PT09
-PT09PT09PT09PT09CisKK0FmdGVyIGJ1aWxkaW5nLCB0aGUgb3V0cHV0L2ltYWdlcyBkaXJlY3Rv
-cnkgY29udGFpbnM6CisKKyAgb3V0cHV0L2ltYWdlcy8KKyAgICDilJzilIDilIAgYmwzMS5iaW4K
-KyAgICDilJzilIDilIAgYm9vdC5zY3IKKyAgICDilJzilIDilIAgZGRyX2Z3LmJpbgorICAgIOKU
-nOKUgOKUgCBJbWFnZQorICAgIOKUnOKUgOKUgCBpbXg4LWJvb3Qtc2QuYmluCisgICAg4pSc4pSA
-4pSAIGlteDhtbi1ic2gtc21tLXMycHJvLmR0YgorICAgIOKUnOKUgOKUgCBkZHJfZncuYmluCisg
-ICAg4pSc4pSA4pSAIHJvb3Rmcy5leHQyCisgICAg4pSc4pSA4pSAIHJvb3Rmcy5leHQ0IC0+IHJv
-b3Rmcy5leHQyCisgICAg4pSc4pSA4pSAIHJvb3Rmcy50YXIKKyAgICDilJzilIDilIAgc2RjYXJk
-LmltZworICAgIOKUnOKUgOKUgCB1LWJvb3QuYmluCisgICAg4pSc4pSA4pSAIHUtYm9vdC5pdGIK
-KyAgICDilJzilIDilIAgdS1ib290LW5vZHRiLmJpbgorICAgIOKUnOKUgOKUgCB1LWJvb3Qtc3Bs
-LmJpbgorICAgIOKUlOKUgOKUgCB1LWJvb3Qtc3BsLWRkci5iaW4KKworCitGbGFzaGluZyB0aGUg
-ZW1tYyBjYXJkIGltYWdlCis9PT09PT09PT09PT09PT09PT09PT09PT09PQorCitUbyBpbnN0YWxs
-IHRoZSBpbWFnZSBvbiBvbiBlTU1DCisKKyAgJCBzdWRvIHV1dSAtYiBlbW1jX2FsbCBvdXRwdXQv
-aW1hZ2VzL2ZsYXNoLmJpbiBvdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcKKworCitQcmVwYXJpbmcg
-dGhlIGJvYXJkCis9PT09PT09PT09PT09PT09PT09CisKKyAqIENvbm5lY3QgYSBzZXJpYWwgbGlu
-ZSB0byB0aGUgYm9hcmQKKyAqIFBvd2VyLXVwIHRoZSBib2FyZAorCisKK0Jvb3RpbmcgdGhlIGJv
-YXJkCis9PT09PT09PT09PT09PT09PQorCitCeSBkZWZhdWx0IHRoZSBib290bG9hZGVyIHdpbGwg
-c2VhcmNoIGZvciB0aGUgZmlyc3QgdmFsaWQgaW1hZ2UsIHN0YXJ0aW5nCit3aXRoIHRoZSBpbnRl
-cm5hbCBlTU1DLgpkaWZmIC0tZ2l0IGEvY29uZmlncy9ic2hfc21tczJwcm9fZGVmY29uZmlnIGIv
-Y29uZmlncy9ic2hfc21tczJwcm9fZGVmY29uZmlnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IDAwMDAwMDAwMDAuLjVmNThkMTg0YjIKLS0tIC9kZXYvbnVsbAorKysgYi9jb25maWdzL2JzaF9z
-bW1zMnByb19kZWZjb25maWcKQEAgLTAsMCArMSw0MiBAQAorQlIyX2FhcmNoNjQ9eQorQlIyX1RB
-UkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eW14YzMiCitCUjJfUk9PVEZTX1BPU1RfQlVJTERf
-U0NSSVBUPSJib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9pbXg4LWJvb3Rsb2FkZXItcHJlcGFy
-ZS5zaCBib2FyZC9ic2gvYnNoLWlteDhtbi9wb3N0LWJ1aWxkLnNoIgorQlIyX1JPT1RGU19QT1NU
-X0lNQUdFX1NDUklQVD0iYm9hcmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1pbWFnZS5zaCIKK0JSMl9S
-T09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJHtVQk9PVF9ESVJ9L2FyY2gvYXJtL2R0cy9pbXg4bW4t
-YnNoLXNtbS1zMnByby5kdGIiCitCUjJfTElOVVhfS0VSTkVMPXkKK0JSMl9MSU5VWF9LRVJORUxf
-Q1VTVE9NX0dJVD15CitCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9SRVBPX1VSTD0iaHR0cHM6Ly9n
-aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0
-IgorQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fUkVQT19WRVJTSU9OPSJ2NS4xNy1yYzEiCitCUjJf
-TElOVVhfS0VSTkVMX1VTRV9BUkNIX0RFRkFVTFRfQ09ORklHPXkKK0JSMl9MSU5VWF9LRVJORUxf
-RFRTX1NVUFBPUlQ9eQorQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9ImZyZWVzY2Fs
-ZS9pbXg4bW4tYnNoLXNtbS1zMnBybyIKK0JSMl9MSU5VWF9LRVJORUxfRFRCX0tFRVBfRElSTkFN
-RT15CitCUjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFSR0VUPXkKK0JSMl9MSU5VWF9LRVJORUxf
-TkVFRFNfSE9TVF9PUEVOU1NMPXkKK0JSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVg9eQorQlIyX1BB
-Q0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TU49eQorQlIyX1BBQ0tBR0VfRklSTVdB
-UkVfSU1YPXkKK0JSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9ERFIzPXkKK0JSMl9UQVJHRVRfUk9P
-VEZTX0VYVDI9eQorQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKK0JSMl9UQVJHRVRfUk9PVEZT
-X0VYVDJfU0laRT0iMTIwTSIKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQorQlIy
-X1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTj15CitCUjJfVEFSR0VU
-X0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi41IgorQlIyX1RB
-UkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0iaW14OG1uIgorQlIyX1RBUkdFVF9B
-Uk1fVFJVU1RFRF9GSVJNV0FSRV9CTDMxPXkKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdB
-UkVfQURESVRJT05BTF9WQVJJQUJMRVM9IklNWF9CT09UX1VBUlRfQkFTRT0weDMwYTYwMDAwIgor
-QlIyX1RBUkdFVF9VQk9PVD15CitCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklH
-PXkKK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX0dJVD15CitCUjJfVEFSR0VUX1VCT09UX0NVU1RP
-TV9SRVBPX1VSTD0iaHR0cHM6Ly9naXRsYWIuYXBlcnRpcy5vcmcvYWRhbGVzc2FuZHJvL3UtYm9v
-dC5naXQiCitCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9SRVBPX1ZFUlNJT049IndpcC9hZGFsZXNz
-YW5kcm8vYnNoLXNtbTItcHJvIgorQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9Imlt
-eDhtbl9ic2hfc21tX3MycHJvIgorQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQorQlIyX1RB
-UkdFVF9VQk9PVF9GT1JNQVRfQ1VTVE9NPXkKK0JSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RP
-TV9OQU1FPSJ1LWJvb3Qtbm9kdGIuYmluIgorQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQorQlIyX1BB
-Q0tBR0VfSE9TVF9HRU5JTUFHRT15CitCUjJfUEFDS0FHRV9IT1NUX0lNWF9NS0lNQUdFPXkKK0JS
-Ml9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFM9eQorQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9UT09M
-U19GSVRfU1VQUE9SVD15Ci0tIAoyLjI1LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+
+--===============1495186020496932370==
+Content-Type: multipart/alternative; boundary=Apple-Mail-F10A349A-2A61-476A-A263-A2DCA5443CD1
+Content-Transfer-Encoding: 7bit
+
+
+--Apple-Mail-F10A349A-2A61-476A-A263-A2DCA5443CD1
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Michael, Ariel,
+
+happy to meet you here :-),
+
+> Il giorno 29 gen 2022, alle ore 14:04, Michael Trimarchi <michael@amarulas=
+olutions.com> ha scritto:
+>=20
+> =EF=BB=BFAdd initial support for iMX8MN BSH SMM S2 PRO board:
+>=20
+> - Linux: v5.17-rc1
+> - Uboot 2022-01-rc1 (reference tree)
+
+I=E2=80=99m not very sure it=E2=80=99s a good idea using an -rc1 version. I s=
+ee 3 chances:
+1) backport to previous versions(it would be a mess)
+2) wait until v5.17 is released in 7 weeks :-/
+3) keep as is while someone else gives his Tested-by:
+For example Ariel, that will also be one of the two maintainers of this boar=
+d as I read below.
+And later bump uboot and Linux versions as soon as they are released.
+
+> - Default packages from buildroot
+
+Here please specify a https URL for the board like this:
+https://www.apertis.org/reference_hardware/imx8mn_bsh_smm_s2pro_setup/
+
+>=20
+> Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+> Cc: Jagan Teki <jagan@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+> DEVELOPERS                         |  2 +
+> board/bsh/bsh-imx8mn/extlinux.conf |  4 ++
+> board/bsh/bsh-imx8mn/genimage.cfg  | 17 +++++++++
+> board/bsh/bsh-imx8mn/post-build.sh |  7 ++++
+> board/bsh/bsh-imx8mn/post-image.sh |  3 ++
+> board/bsh/bsh-imx8mn/readme.txt    | 60 ++++++++++++++++++++++++++++++
+> configs/bsh_smms2pro_defconfig     | 42 +++++++++++++++++++++
+> 7 files changed, 135 insertions(+)
+> create mode 100644 board/bsh/bsh-imx8mn/extlinux.conf
+> create mode 100644 board/bsh/bsh-imx8mn/genimage.cfg
+> create mode 100755 board/bsh/bsh-imx8mn/post-build.sh
+> create mode 100755 board/bsh/bsh-imx8mn/post-image.sh
+> create mode 100644 board/bsh/bsh-imx8mn/readme.txt
+> create mode 100644 configs/bsh_smms2pro_defconfig
+>=20
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index fe8de1916e..fc66fb6b83 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -220,6 +220,7 @@ F:    configs/snps_archs38_hsdk_defconfig
+> F:    configs/snps_archs38_vdk_defconfig
+>=20
+> N:    Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+> +F:    board/bsh/
+> F:    package/axfsutils/
+> F:    package/mali-t76x/
+>=20
+> @@ -2018,6 +2019,7 @@ F:    package/python-crc16/
+> F:    package/python-pyzmq/
+>=20
+> N:    Michael Trimarchi <michael@amarulasolutions.com>
+> +F:    board/bsh/
+> F:    package/python-spidev/
+>=20
+> N:    Michael Vetter <jubalh@iodoru.org>
+> diff --git a/board/bsh/bsh-imx8mn/extlinux.conf b/board/bsh/bsh-imx8mn/ext=
+linux.conf
+> new file mode 100644
+> index 0000000000..9111354742
+> --- /dev/null
+> +++ b/board/bsh/bsh-imx8mn/extlinux.conf
+> @@ -0,0 +1,4 @@
+> +label buildroot
+> +  kernel /boot/Image
+> +  devicetree /boot/freescale/imx8mn-bsh-smm-s2pro.dtb
+> +  append root=3DPARTUUID=3D%PARTUUID% rootwait rw
+> diff --git a/board/bsh/bsh-imx8mn/genimage.cfg b/board/bsh/bsh-imx8mn/geni=
+mage.cfg
+> new file mode 100644
+> index 0000000000..4a0aa117fb
+> --- /dev/null
+> +++ b/board/bsh/bsh-imx8mn/genimage.cfg
+> @@ -0,0 +1,17 @@
+> +image sdcard.img {
+> +    hdimage {
+> +        partition-table-type =3D "gpt"
+> +    }
+> +
+> +    partition imx-boot {
+> +        in-partition-table =3D "no"
+> +        image =3D "imx8-boot-sd.bin"
+> +        offset =3D 33K
+> +    }
+> +
+> +    partition rootfs {
+> +        offset =3D 8M
+> +        image =3D "rootfs.ext4"
+> +        partition-uuid =3D %PARTUUID%
+> +    }
+> +}
+> diff --git a/board/bsh/bsh-imx8mn/post-build.sh b/board/bsh/bsh-imx8mn/pos=
+t-build.sh
+> new file mode 100755
+> index 0000000000..bf8861f6a9
+> --- /dev/null
+> +++ b/board/bsh/bsh-imx8mn/post-build.sh
+> @@ -0,0 +1,7 @@
+> +#!/bin/sh
+> +BOARD_DIR=3D"$(dirname $0)"
+> +PARTUUID=3D"$($HOST_DIR/bin/uuidgen)"
+> +
+> +install -d "$TARGET_DIR/boot/extlinux/"
+> +sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/extlinux.conf" > "$TARGET_DIR/=
+boot/extlinux/extlinux.conf"
+> +sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/genimage.cfg" > "$BINARIES_DIR=
+/genimage.cfg"
+> diff --git a/board/bsh/bsh-imx8mn/post-image.sh b/board/bsh/bsh-imx8mn/pos=
+t-image.sh
+> new file mode 100755
+> index 0000000000..3452fd4501
+> --- /dev/null
+> +++ b/board/bsh/bsh-imx8mn/post-image.sh
+> @@ -0,0 +1,3 @@
+> +#!/bin/sh
+> +
+> +support/scripts/genimage.sh -c ${BINARIES_DIR}/genimage.cfg
+> diff --git a/board/bsh/bsh-imx8mn/readme.txt b/board/bsh/bsh-imx8mn/readme=
+.txt
+> new file mode 100644
+> index 0000000000..b84f2ff4be
+> --- /dev/null
+> +++ b/board/bsh/bsh-imx8mn/readme.txt
+> @@ -0,0 +1,60 @@
+> +How to build it
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Configure buildroot:
+> +
+> +  $ make bsh_smms2pro_defconfig
+> +
+> +Change settings to fit your needs (optional):
+> +
+> +  $ make menuconfig
+> +
+> +Compile everything and buildr the rootfs image:
+> +
+> +  $ make
+> +
+> +
+> +Result of the build
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +After building, the output/images directory contains:
+> +
+> +  output/images/
+> +    =E2=94=9C=E2=94=80=E2=94=80 bl31.bin
+> +    =E2=94=9C=E2=94=80=E2=94=80 boot.scr
+> +    =E2=94=9C=E2=94=80=E2=94=80 ddr_fw.bin
+> +    =E2=94=9C=E2=94=80=E2=94=80 Image
+> +    =E2=94=9C=E2=94=80=E2=94=80 imx8-boot-sd.bin
+> +    =E2=94=9C=E2=94=80=E2=94=80 imx8mn-bsh-smm-s2pro.dtb
+> +    =E2=94=9C=E2=94=80=E2=94=80 ddr_fw.bin
+> +    =E2=94=9C=E2=94=80=E2=94=80 rootfs.ext2
+> +    =E2=94=9C=E2=94=80=E2=94=80 rootfs.ext4 -> rootfs.ext2
+> +    =E2=94=9C=E2=94=80=E2=94=80 rootfs.tar
+> +    =E2=94=9C=E2=94=80=E2=94=80 sdcard.img
+> +    =E2=94=9C=E2=94=80=E2=94=80 u-boot.bin
+> +    =E2=94=9C=E2=94=80=E2=94=80 u-boot.itb
+> +    =E2=94=9C=E2=94=80=E2=94=80 u-boot-nodtb.bin
+> +    =E2=94=9C=E2=94=80=E2=94=80 u-boot-spl.bin
+> +    =E2=94=94=E2=94=80=E2=94=80 u-boot-spl-ddr.bin
+> +
+> +
+> +Flashing the emmc card image
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> +
+> +To install the image on on eMMC
+> +
+> +  $ sudo uuu -b emmc_all output/images/flash.bin output/images/sdcard.img=
+
+> +
+> +
+> +Preparing the board
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> + * Connect a serial line to the board
+> + * Power-up the board
+> +
+> +
+> +Booting the board
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +By default the bootloader will search for the first valid image, starting=
+
+> +with the internal eMMC.
+> diff --git a/configs/bsh_smms2pro_defconfig b/configs/bsh_smms2pro_defconf=
+ig
+> new file mode 100644
+> index 0000000000..5f58d184b2
+> --- /dev/null
+> +++ b/configs/bsh_smms2pro_defconfig
+> @@ -0,0 +1,42 @@
+> +BR2_aarch64=3Dy
+> +BR2_TARGET_GENERIC_GETTY_PORT=3D"ttymxc3"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/freescale/common/imx/imx8-bootloade=
+r-prepare.sh board/bsh/bsh-imx8mn/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"board/bsh/bsh-imx8mn/post-image.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS=3D"${UBOOT_DIR}/arch/arm/dts/imx8mn-bsh-smm-s=
+2pro.dtb"
+> +BR2_LINUX_KERNEL=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL=3D"https://git.kernel.org/pub/scm/linux/=
+kernel/git/torvalds/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION=3D"v5.17-rc1"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"freescale/imx8mn-bsh-smm-s2pro"
+> +BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=3Dy
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy
+> +BR2_PACKAGE_FREESCALE_IMX=3Dy
+> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=3Dy
+> +BR2_PACKAGE_FIRMWARE_IMX=3Dy
+> +BR2_PACKAGE_FIRMWARE_IMX_DDR3=3Dy
+> +BR2_TARGET_ROOTFS_EXT2=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_4=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_SIZE=3D"120M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D"v2.5"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D"imx8mn"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES=3D"IMX_BOOT_UART_BAS=
+E=3D0x30a60000"
+> +BR2_TARGET_UBOOT=3Dy
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL=3D"https://gitlab.apertis.org/adalessand=
+ro/u-boot.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION=3D"wip/adalessandro/bsh-smm2-pro"
+
+This ^^^ wip name doesn=E2=80=99t sound that good to me. Ariel, is it possib=
+le to give a tag with a version like v0.1? So something shorter and more cle=
+ar.
+
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"imx8mn_bsh_smm_s2pro"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=3Dy
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME=3D"u-boot-nodtb.bin"
+> +BR2_TARGET_UBOOT_SPL=3Dy
+
+Have you given a go with latest Buildroot docker to check if uboot needs lib=
+fdtpy, python3 etc.?
+It=E2=80=99s highly probable it needs them.
+
+Kind regards
+=E2=80=94-
+Giulio Benetti
+Benetti Engineering sas
+
+> +BR2_PACKAGE_HOST_GENIMAGE=3Dy
+> +BR2_PACKAGE_HOST_IMX_MKIMAGE=3Dy
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=3Dy
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=3Dy
+> --=20
+> 2.25.1
+>=20
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--Apple-Mail-F10A349A-2A61-476A-A263-A2DCA5443CD1
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Michael, Ariel,<div><br></div><div>happy=
+ to meet you here :-),<br><div dir=3D"ltr"><br><blockquote type=3D"cite">Il g=
+iorno 29 gen 2022, alle ore 14:04, Michael Trimarchi &lt;michael@amarulasolu=
+tions.com&gt; ha scritto:<br><br></blockquote></div><blockquote type=3D"cite=
+"><div dir=3D"ltr">=EF=BB=BF<span>Add initial support for iMX8MN BSH SMM S2 P=
+RO board:</span><br><span></span><br><span>- Linux: v5.17-rc1</span><br><spa=
+n>- Uboot 2022-01-rc1 (reference tree)</span><br></div></blockquote><div><br=
+></div><div>I=E2=80=99m not very sure it=E2=80=99s a good idea using an -rc1=
+ version. I see 3 chances:</div><div>1) backport to previous versions(it wou=
+ld be a mess)</div><div>2) wait until v5.17 is released in 7 weeks :-/</div>=
+<div>3) keep as is while someone else gives his Tested-by:</div><div>For exa=
+mple Ariel, that will also be one of the two maintainers of this board as I r=
+ead below.</div><div>And later bump uboot and Linux versions as soon as they=
+ are released.</div><br><blockquote type=3D"cite"><div dir=3D"ltr"><span>- D=
+efault packages from buildroot</span><br></div></blockquote><div><br></div><=
+div>Here please specify a https URL for the board like this:</div><div><a hr=
+ef=3D"https://www.apertis.org/reference_hardware/imx8mn_bsh_smm_s2pro_setup/=
+">https://www.apertis.org/reference_hardware/imx8mn_bsh_smm_s2pro_setup/</a>=
+</div><br><blockquote type=3D"cite"><div dir=3D"ltr"><span></span><br><span>=
+Cc: Ariel D'Alessandro &lt;ariel.dalessandro@collabora.com&gt;</span><br><sp=
+an>Cc: Jagan Teki &lt;jagan@amarulasolutions.com&gt;</span><br><span>Signed-=
+off-by: Michael Trimarchi &lt;michael@amarulasolutions.com&gt;</span><br><sp=
+an>---</span><br><span> DEVELOPERS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;2 +</span><br><span> board/bsh/bsh-imx8mn=
+/extlinux.conf | &nbsp;4 ++</span><br><span> board/bsh/bsh-imx8mn/genimage.c=
+fg &nbsp;| 17 +++++++++</span><br><span> board/bsh/bsh-imx8mn/post-build.sh |=
+ &nbsp;7 ++++</span><br><span> board/bsh/bsh-imx8mn/post-image.sh | &nbsp;3 +=
++</span><br><span> board/bsh/bsh-imx8mn/readme.txt &nbsp;&nbsp;&nbsp;| 60 ++=
+++++++++++++++++++++++++++++</span><br><span> configs/bsh_smms2pro_defconfig=
+ &nbsp;&nbsp;&nbsp;&nbsp;| 42 +++++++++++++++++++++</span><br><span> 7 files=
+ changed, 135 insertions(+)</span><br><span> create mode 100644 board/bsh/bs=
+h-imx8mn/extlinux.conf</span><br><span> create mode 100644 board/bsh/bsh-imx=
+8mn/genimage.cfg</span><br><span> create mode 100755 board/bsh/bsh-imx8mn/po=
+st-build.sh</span><br><span> create mode 100755 board/bsh/bsh-imx8mn/post-im=
+age.sh</span><br><span> create mode 100644 board/bsh/bsh-imx8mn/readme.txt</=
+span><br><span> create mode 100644 configs/bsh_smms2pro_defconfig</span><br>=
+<span></span><br><span>diff --git a/DEVELOPERS b/DEVELOPERS</span><br><span>=
+index fe8de1916e..fc66fb6b83 100644</span><br><span>--- a/DEVELOPERS</span><=
+br><span>+++ b/DEVELOPERS</span><br><span>@@ -220,6 +220,7 @@ F: &nbsp; &nbs=
+p;configs/snps_archs38_hsdk_defconfig</span><br><span> F: &nbsp; &nbsp;confi=
+gs/snps_archs38_vdk_defconfig</span><br><span></span><br><span> N: &nbsp; &n=
+bsp;Ariel D'Alessandro &lt;ariel@vanguardiasur.com.ar&gt;</span><br><span>+F:=
+ &nbsp; &nbsp;board/bsh/</span><br><span> F: &nbsp; &nbsp;package/axfsutils/=
+</span><br><span> F: &nbsp; &nbsp;package/mali-t76x/</span><br><span></span>=
+<br><span>@@ -2018,6 +2019,7 @@ F: &nbsp; &nbsp;package/python-crc16/</span>=
+<br><span> F: &nbsp; &nbsp;package/python-pyzmq/</span><br><span></span><br>=
+<span> N: &nbsp; &nbsp;Michael Trimarchi &lt;michael@amarulasolutions.com&gt=
+;</span><br><span>+F: &nbsp; &nbsp;board/bsh/</span><br><span> F: &nbsp; &nb=
+sp;package/python-spidev/</span><br><span></span><br><span> N: &nbsp; &nbsp;=
+Michael Vetter &lt;jubalh@iodoru.org&gt;</span><br><span>diff --git a/board/=
+bsh/bsh-imx8mn/extlinux.conf b/board/bsh/bsh-imx8mn/extlinux.conf</span><br>=
+<span>new file mode 100644</span><br><span>index 0000000000..9111354742</spa=
+n><br><span>--- /dev/null</span><br><span>+++ b/board/bsh/bsh-imx8mn/extlinu=
+x.conf</span><br><span>@@ -0,0 +1,4 @@</span><br><span>+label buildroot</spa=
+n><br><span>+ &nbsp;kernel /boot/Image</span><br><span>+ &nbsp;devicetree /b=
+oot/freescale/imx8mn-bsh-smm-s2pro.dtb</span><br><span>+ &nbsp;append root=3D=
+PARTUUID=3D%PARTUUID% rootwait rw</span><br><span>diff --git a/board/bsh/bsh=
+-imx8mn/genimage.cfg b/board/bsh/bsh-imx8mn/genimage.cfg</span><br><span>new=
+ file mode 100644</span><br><span>index 0000000000..4a0aa117fb</span><br><sp=
+an>--- /dev/null</span><br><span>+++ b/board/bsh/bsh-imx8mn/genimage.cfg</sp=
+an><br><span>@@ -0,0 +1,17 @@</span><br><span>+image sdcard.img {</span><br>=
+<span>+ &nbsp; &nbsp;hdimage {</span><br><span>+ &nbsp; &nbsp; &nbsp; &nbsp;=
+partition-table-type =3D "gpt"</span><br><span>+ &nbsp; &nbsp;}</span><br><s=
+pan>+</span><br><span>+ &nbsp; &nbsp;partition imx-boot {</span><br><span>+ &=
+nbsp; &nbsp; &nbsp; &nbsp;in-partition-table =3D "no"</span><br><span>+ &nbs=
+p; &nbsp; &nbsp; &nbsp;image =3D "imx8-boot-sd.bin"</span><br><span>+ &nbsp;=
+ &nbsp; &nbsp; &nbsp;offset =3D 33K</span><br><span>+ &nbsp; &nbsp;}</span><=
+br><span>+</span><br><span>+ &nbsp; &nbsp;partition rootfs {</span><br><span=
+>+ &nbsp; &nbsp; &nbsp; &nbsp;offset =3D 8M</span><br><span>+ &nbsp; &nbsp; &=
+nbsp; &nbsp;image =3D "rootfs.ext4"</span><br><span>+ &nbsp; &nbsp; &nbsp; &=
+nbsp;partition-uuid =3D %PARTUUID%</span><br><span>+ &nbsp; &nbsp;}</span><b=
+r><span>+}</span><br><span>diff --git a/board/bsh/bsh-imx8mn/post-build.sh b=
+/board/bsh/bsh-imx8mn/post-build.sh</span><br><span>new file mode 100755</sp=
+an><br><span>index 0000000000..bf8861f6a9</span><br><span>--- /dev/null</spa=
+n><br><span>+++ b/board/bsh/bsh-imx8mn/post-build.sh</span><br><span>@@ -0,0=
+ +1,7 @@</span><br><span>+#!/bin/sh</span><br><span>+BOARD_DIR=3D"$(dirname $=
+0)"</span><br><span>+PARTUUID=3D"$($HOST_DIR/bin/uuidgen)"</span><br><span>+=
+</span><br><span>+install -d "$TARGET_DIR/boot/extlinux/"</span><br><span>+s=
+ed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/extlinux.conf" &gt; "$TARGET_DIR/b=
+oot/extlinux/extlinux.conf"</span><br><span>+sed "s/%PARTUUID%/$PARTUUID/g" "=
+$BOARD_DIR/genimage.cfg" &gt; "$BINARIES_DIR/genimage.cfg"</span><br><span>d=
+iff --git a/board/bsh/bsh-imx8mn/post-image.sh b/board/bsh/bsh-imx8mn/post-i=
+mage.sh</span><br><span>new file mode 100755</span><br><span>index 000000000=
+0..3452fd4501</span><br><span>--- /dev/null</span><br><span>+++ b/board/bsh/=
+bsh-imx8mn/post-image.sh</span><br><span>@@ -0,0 +1,3 @@</span><br><span>+#!=
+/bin/sh</span><br><span>+</span><br><span>+support/scripts/genimage.sh -c ${=
+BINARIES_DIR}/genimage.cfg</span><br><span>diff --git a/board/bsh/bsh-imx8mn=
+/readme.txt b/board/bsh/bsh-imx8mn/readme.txt</span><br><span>new file mode 1=
+00644</span><br><span>index 0000000000..b84f2ff4be</span><br><span>--- /dev/=
+null</span><br><span>+++ b/board/bsh/bsh-imx8mn/readme.txt</span><br><span>@=
+@ -0,0 +1,60 @@</span><br><span>+How to build it</span><br><span>+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</span><br><span>+</span><br><span>+Configu=
+re buildroot:</span><br><span>+</span><br><span>+ &nbsp;$ make bsh_smms2pro_=
+defconfig</span><br><span>+</span><br><span>+Change settings to fit your nee=
+ds (optional):</span><br><span>+</span><br><span>+ &nbsp;$ make menuconfig</=
+span><br><span>+</span><br><span>+Compile everything and buildr the rootfs i=
+mage:</span><br><span>+</span><br><span>+ &nbsp;$ make</span><br><span>+</sp=
+an><br><span>+</span><br><span>+Result of the build</span><br><span>+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</span><br><span>+</span><br=
+><span>+After building, the output/images directory contains:</span><br><spa=
+n>+</span><br><span>+ &nbsp;output/images/</span><br><span>+ &nbsp;&nbsp;&nb=
+sp;=E2=94=9C=E2=94=80=E2=94=80 bl31.bin</span><br><span>+ &nbsp;&nbsp;&nbsp;=
+=E2=94=9C=E2=94=80=E2=94=80 boot.scr</span><br><span>+ &nbsp;&nbsp;&nbsp;=E2=
+=94=9C=E2=94=80=E2=94=80 ddr_fw.bin</span><br><span>+ &nbsp;&nbsp;&nbsp;=E2=94=
+=9C=E2=94=80=E2=94=80 Image</span><br><span>+ &nbsp;&nbsp;&nbsp;=E2=94=9C=E2=
+=94=80=E2=94=80 imx8-boot-sd.bin</span><br><span>+ &nbsp;&nbsp;&nbsp;=E2=94=9C=
+=E2=94=80=E2=94=80 imx8mn-bsh-smm-s2pro.dtb</span><br><span>+ &nbsp;&nbsp;&n=
+bsp;=E2=94=9C=E2=94=80=E2=94=80 ddr_fw.bin</span><br><span>+ &nbsp;&nbsp;&nb=
+sp;=E2=94=9C=E2=94=80=E2=94=80 rootfs.ext2</span><br><span>+ &nbsp;&nbsp;&nb=
+sp;=E2=94=9C=E2=94=80=E2=94=80 rootfs.ext4 -&gt; rootfs.ext2</span><br><span=
+>+ &nbsp;&nbsp;&nbsp;=E2=94=9C=E2=94=80=E2=94=80 rootfs.tar</span><br><span>=
++ &nbsp;&nbsp;&nbsp;=E2=94=9C=E2=94=80=E2=94=80 sdcard.img</span><br><span>+=
+ &nbsp;&nbsp;&nbsp;=E2=94=9C=E2=94=80=E2=94=80 u-boot.bin</span><br><span>+ &=
+nbsp;&nbsp;&nbsp;=E2=94=9C=E2=94=80=E2=94=80 u-boot.itb</span><br><span>+ &n=
+bsp;&nbsp;&nbsp;=E2=94=9C=E2=94=80=E2=94=80 u-boot-nodtb.bin</span><br><span=
+>+ &nbsp;&nbsp;&nbsp;=E2=94=9C=E2=94=80=E2=94=80 u-boot-spl.bin</span><br><s=
+pan>+ &nbsp;&nbsp;&nbsp;=E2=94=94=E2=94=80=E2=94=80 u-boot-spl-ddr.bin</span=
+><br><span>+</span><br><span>+</span><br><span>+Flashing the emmc card image=
+</span><br><span>+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D</span><br><span>+</span><br><span>+To install the image o=
+n on eMMC</span><br><span>+</span><br><span>+ &nbsp;$ sudo uuu -b emmc_all o=
+utput/images/flash.bin output/images/sdcard.img</span><br><span>+</span><br>=
+<span>+</span><br><span>+Preparing the board</span><br><span>+=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</span><br><span>+</span><br><span=
+>+ * Connect a serial line to the board</span><br><span>+ * Power-up the boa=
+rd</span><br><span>+</span><br><span>+</span><br><span>+Booting the board</s=
+pan><br><span>+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</span><br=
+><span>+</span><br><span>+By default the bootloader will search for the firs=
+t valid image, starting</span><br><span>+with the internal eMMC.</span><br><=
+span>diff --git a/configs/bsh_smms2pro_defconfig b/configs/bsh_smms2pro_defc=
+onfig</span><br><span>new file mode 100644</span><br><span>index 0000000000.=
+.5f58d184b2</span><br><span>--- /dev/null</span><br><span>+++ b/configs/bsh_=
+smms2pro_defconfig</span><br><span>@@ -0,0 +1,42 @@</span><br><span>+BR2_aar=
+ch64=3Dy</span><br><span>+BR2_TARGET_GENERIC_GETTY_PORT=3D"ttymxc3"</span><b=
+r><span>+BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/freescale/common/imx/imx8-boo=
+tloader-prepare.sh board/bsh/bsh-imx8mn/post-build.sh"</span><br><span>+BR2_=
+ROOTFS_POST_IMAGE_SCRIPT=3D"board/bsh/bsh-imx8mn/post-image.sh"</span><br><s=
+pan>+BR2_ROOTFS_POST_SCRIPT_ARGS=3D"${UBOOT_DIR}/arch/arm/dts/imx8mn-bsh-smm=
+-s2pro.dtb"</span><br><span>+BR2_LINUX_KERNEL=3Dy</span><br><span>+BR2_LINUX=
+_KERNEL_CUSTOM_GIT=3Dy</span><br><span>+BR2_LINUX_KERNEL_CUSTOM_REPO_URL=3D"=
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"</span></=
+div></blockquote><blockquote type=3D"cite"><div dir=3D"ltr"><span>+BR2_LINUX=
+_KERNEL_CUSTOM_REPO_VERSION=3D"v5.17-rc1"</span></div></blockquote><blockquo=
+te type=3D"cite"><div dir=3D"ltr"><span>+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_C=
+ONFIG=3Dy</span><br><span>+BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy</span><br><span>=
++BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"freescale/imx8mn-bsh-smm-s2pro"</span><=
+br><span>+BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=3Dy</span><br><span>+BR2_LINUX_K=
+ERNEL_INSTALL_TARGET=3Dy</span><br><span>+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSS=
+L=3Dy</span><br><span>+BR2_PACKAGE_FREESCALE_IMX=3Dy</span><br><span>+BR2_PA=
+CKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=3Dy</span><br><span>+BR2_PACKAGE_FIRMWAR=
+E_IMX=3Dy</span><br><span>+BR2_PACKAGE_FIRMWARE_IMX_DDR3=3Dy</span><br><span=
+>+BR2_TARGET_ROOTFS_EXT2=3Dy</span><br><span>+BR2_TARGET_ROOTFS_EXT2_4=3Dy</=
+span><br><span>+BR2_TARGET_ROOTFS_EXT2_SIZE=3D"120M"</span><br><span>+BR2_TA=
+RGET_ARM_TRUSTED_FIRMWARE=3Dy</span><br><span>+BR2_TARGET_ARM_TRUSTED_FIRMWA=
+RE_CUSTOM_VERSION=3Dy</span><br><span>+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTO=
+M_VERSION_VALUE=3D"v2.5"</span><br><span>+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PL=
+ATFORM=3D"imx8mn"</span><br><span>+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=3Dy<=
+/span><br><span>+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES=3D"IMX=
+_BOOT_UART_BASE=3D0x30a60000"</span><br><span>+BR2_TARGET_UBOOT=3Dy</span><b=
+r><span>+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy</span><br><span>+BR2_TARG=
+ET_UBOOT_CUSTOM_GIT=3Dy</span><br><span>+BR2_TARGET_UBOOT_CUSTOM_REPO_URL=3D=
+"https://gitlab.apertis.org/adalessandro/u-boot.git"</span><br><span>+BR2_TA=
+RGET_UBOOT_CUSTOM_REPO_VERSION=3D"wip/adalessandro/bsh-smm2-pro"</span><br><=
+/div></blockquote><div><br></div><div>This ^^^ wip name doesn=E2=80=99t soun=
+d that good to me. Ariel, is it possible to give a tag with a version like v=
+0.1? So something shorter and more clear.</div><br><blockquote type=3D"cite"=
+><div dir=3D"ltr"><span>+BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"imx8mn_bsh_smm_=
+s2pro"</span><br><span>+BR2_TARGET_UBOOT_NEEDS_DTC=3Dy</span><br><span>+BR2_=
+TARGET_UBOOT_FORMAT_CUSTOM=3Dy</span><br><span>+BR2_TARGET_UBOOT_FORMAT_CUST=
+OM_NAME=3D"u-boot-nodtb.bin"</span><br><span>+BR2_TARGET_UBOOT_SPL=3Dy</span=
+><br></div></blockquote><div><br></div><div>Have you given a go with latest B=
+uildroot docker to check if uboot needs libfdtpy, python3 etc.?</div><div>It=
+=E2=80=99s highly probable it needs them.</div><div><br></div><div>Kind rega=
+rds</div><div>=E2=80=94-</div><div>Giulio Benetti</div><div>Benetti Engineer=
+ing sas</div><br><blockquote type=3D"cite"><div dir=3D"ltr"><span>+BR2_PACKA=
+GE_HOST_GENIMAGE=3Dy</span><br><span>+BR2_PACKAGE_HOST_IMX_MKIMAGE=3Dy</span=
+><br><span>+BR2_PACKAGE_HOST_UBOOT_TOOLS=3Dy</span><br><span>+BR2_PACKAGE_HO=
+ST_UBOOT_TOOLS_FIT_SUPPORT=3Dy</span><br><span>-- </span><br><span>2.25.1</s=
+pan><br><span></span><br><span>_____________________________________________=
+__</span><br><span>buildroot mailing list</span><br><span>buildroot@buildroo=
+t.org</span><br><span>https://lists.buildroot.org/mailman/listinfo/buildroot=
+</span><br></div></blockquote></div></body></html>=
+
+--Apple-Mail-F10A349A-2A61-476A-A263-A2DCA5443CD1--
+
+--===============1495186020496932370==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1495186020496932370==--
