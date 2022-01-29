@@ -1,47 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E09BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 08:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E3E8C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 08:31:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C641983187;
-	Sat, 29 Jan 2022 08:31:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E38B6107D;
+	Sat, 29 Jan 2022 08:31:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJlsETjvSkIw; Sat, 29 Jan 2022 08:31:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ta3hssWAIDqM; Sat, 29 Jan 2022 08:31:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01D4E83123;
-	Sat, 29 Jan 2022 08:31:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE9081BF831
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 08:30:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CBC560BA8;
+	Sat, 29 Jan 2022 08:31:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B0E351BF831
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 08:31:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7160400AF
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 08:30:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F38C4094E
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 08:31:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v5klB00JcNil for <buildroot@lists.busybox.net>;
- Sat, 29 Jan 2022 08:30:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B79C40116
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 08:30:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 917AD82707; Sat, 29 Jan 2022 08:23:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hA2pImouQxWy for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 08:31:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE5E94094D
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 08:31:28 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 4922B200002;
+ Sat, 29 Jan 2022 08:31:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nDj8m-0001bX-JT; Sat, 29 Jan 2022 09:31:24 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 29 Jan 2022 09:30:31 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: c9a07a5887b422c9459bb6e80770c8a5d6c8514c
-X-Git-Newrev: d1e6c004d0707a3c024356cad0bfc820da9a5ebf
-X-Patchwork-Hint: ignore
-Message-Id: <20220129082339.917AD82707@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/polkit: bump to
- fix CVE-2021-4034
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220126202236.1399934-1-yann.morin.1998@free.fr>
+Date: Sat, 29 Jan 2022 09:31:24 +0100
+In-Reply-To: <20220126202236.1399934-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 26 Jan 2022 21:22:36 +0100")
+Message-ID: <87k0ej2bab.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/polkit: bump to fix CVE-2021-4034
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,74 +58,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>,
+ Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1e6c004d0707a3c024356cad0bfc820da9a5ebf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-We are currently using the fork by Adam, with support for duktape as a
-JS engine. But upstream has finally merged that just a day ago. Woohoo!
+ > We are currently using the fork by Adam, with support for duktape as a
+ > JS engine. But upstream has finally merged that just a day ago. Woohoo!
 
-Between the fork we were using and upstream, there are very little
-changes, mostly centered around:
-  - translations
-  - buildsystem
-  - duktape
-  - CVE-2021-4034
+ > Between the fork we were using and upstream, there are very little
+ > changes, mostly centered around:
+ >   - translations
+ >   - buildsystem
+ >   - duktape
+ >   - CVE-2021-4034
 
-So, we just switch to using the HEAD of the repo: it has not much more
-than the two important changes: duktape and the CVE fix.
+ > So, we just switch to using the HEAD of the repo: it has not much more
+ > than the two important changes: duktape and the CVE fix.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Marek Belisko <marek.belisko@open-nandra.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4aecb964aff92e5cc956b2d3b700ac7841041463)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/polkit/polkit.hash | 2 +-
- package/polkit/polkit.mk   | 7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Marek Belisko <marek.belisko@open-nandra.com>
+ > Cc: Adam Duskett <aduskett@gmail.com>
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
-index f108ac19ec..1fedb5a707 100644
---- a/package/polkit/polkit.hash
-+++ b/package/polkit/polkit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  0a30dbc0ff798ff45f5bb303b4b40160f56679e81b139287cc0efb32aa5dfc1b  polkit-0.120.tar.gz
-+sha256  243fa69d1e480510c504723487716cda7d6fb588360c7c8f7ec6ba4a3f6ae60e  polkit-a2bf5c9c83b6ae46cbd5c779d3055bff81ded683.tar.gz
- 
- # Locally calculated
- sha256  d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8  COPYING
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index a7ab725c81..61666594a2 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -4,13 +4,16 @@
- #
- ################################################################################
- 
--POLKIT_VERSION = 0.120
--POLKIT_SITE = $(call github,aduskett,polkit-duktape,v$(POLKIT_VERSION))
-+POLKIT_VERSION = a2bf5c9c83b6ae46cbd5c779d3055bff81ded683
-+POLKIT_SITE = https://gitlab.freedesktop.org/polkit/polkit/-/archive/$(POLKIT_VERSION)
- POLKIT_LICENSE = GPL-2.0
- POLKIT_LICENSE_FILES = COPYING
- POLKIT_CPE_ID_VENDOR = polkit_project
- POLKIT_INSTALL_STAGING = YES
- 
-+# Fix was comitted in a2bf5c9c83b6ae46cbd5c779d3055bff81ded683
-+POLKIT_IGNORE_CVE = CVE-2021-4034
-+
- POLKIT_DEPENDENCIES = \
- 	duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
- 
+Committed to 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
