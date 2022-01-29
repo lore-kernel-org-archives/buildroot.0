@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C3EC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 21:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAC15C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 22:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F22C400CD;
-	Sat, 29 Jan 2022 21:43:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 466A040890;
+	Sat, 29 Jan 2022 22:47:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 105LxNiEYkAo; Sat, 29 Jan 2022 21:43:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cAXsVCyt9nnH; Sat, 29 Jan 2022 22:47:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4934A400FE;
-	Sat, 29 Jan 2022 21:43:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 083AF1BF4E3
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 21:43:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85C9D40611;
+	Sat, 29 Jan 2022 22:47:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 25BD31BF357
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 22:46:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9B09400F6
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 21:43:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 143E860AE0
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 22:46:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oxjPUCW3lroD for <buildroot@lists.busybox.net>;
- Sat, 29 Jan 2022 21:43:02 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iAT2YbbYc9ct for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 22:46:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 874E4400CD
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 21:43:02 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id u24so18003780eds.11
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 13:43:02 -0800 (PST)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 04D9C60A78
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 22:46:57 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id w11so17943646wra.4
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 14:46:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references;
- bh=h+Fw3dWQatzsz4sm6fJRx08K1LSpJqcfd4K3RpHGprk=;
- b=nE+Y6QLIl0YitLu0fIlgoxf8mYVRbTrJRfP3Z2KugxxIdTzIhwKSrCkRKo2L6hxksf
- 214hh/YvhtyEhI0KPl0WGCZGAQHwDNq4gUaYtJbDesO3mhB8iAfRg202lQovTh75BnnA
- d9dLadqGqdADUEDVAye/RpZhZHKM+GQbfmkUTLK57WI0dMFQdH/ovzqqbP1Hah4dpPo9
- guT/0kpkGd9Fo76ahX/L13h8otMi0BkJAkgUVmcvAjSzpSi5G3yU18nwTuntgCAKIA6w
- ZvX2PYkAvnwHAI8uaRG3DtJLZOYCgzg8agej0Diy8Iwu6DG+kNo8tisCD9LZ6E2G89Id
- +Rhg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YBtw4vAFkkZUfSig90+RSioktveRGKYsLLFApy0b0c8=;
+ b=SnKOJs0AEwPDfIRklZl+LLqugOXeR4KHnPJnL8BCadq1B0wK0kX+/OjlSzig/dDR1f
+ D3Jsyhb3ZD/iiXgPvPyN0ga1L6U3Q7DJbT26jnYRFroqJuIXbpjmCI+zTVmc8xfR/6pp
+ etoUrHmoAqUPhO6xf8fQl1mSqPs/MXrmsTPjQrT0gvHZdbfn2K3Q32N6Cb5qwO+mWUYy
+ 5rD36z41zGPFzZztzgEjS2cOLsgRpXaBmCoYz4Ht+K46xVbtPgCFz9Sd5hw0VEE69wuz
+ vxZ9mj2ip/44qcG/5q1+pCxr/Vs1GMzR/Q3r4001Qxr7VPKsiDoN9s8XqiA4YxTcrCWm
+ Bmfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references;
- bh=h+Fw3dWQatzsz4sm6fJRx08K1LSpJqcfd4K3RpHGprk=;
- b=ZiY5KhIp9Sms2L/eR0vfjielAZcZTS8s5rfA13t6tv+vqSlAMVnivfckQ+xa4sLA6V
- KF808YAs66Fddpj2OQWgtPYOw7XsC2796on4oE08Vr4CWRcbz5TphylEL7xO2BDenAZn
- KjFTF7yTBYVnjSN/hAZDQAKo4N0A8kjhqEzOQnXwbq/NoHIadUr83udtXvqMTUVbP7bF
- f+3/Ri4T632dFhWp1bWl+QxKFdMYMBjH+Y0T9gkD7ozjyn8v6yMuQQJsiQfmtL+GOFlk
- OI/ESAB+T+Y3kNm5JZjXWW5M0mAmwnHKl0y86QOH5JcSUWEwzSmcxYyEqk0zS0NToSuE
- e8jA==
-X-Gm-Message-State: AOAM532VLXHbwS9XwAtD4fRJZIV5U8otRNYdfPJj3LjcxlJNjrHU1cNk
- eC87ybnjf3Ez79p+xOvWpq4G/fvPbrIFTZ9P
-X-Google-Smtp-Source: ABdhPJxgba0I3A1KICClk0nsFQsLkCjmF1zZ0p9JKNwGi1WSLkZpChuatB77dK73PfmyFqpHu+o8Ow==
-X-Received: by 2002:aa7:d9d1:: with SMTP id v17mr14006897eds.105.1643492580498; 
- Sat, 29 Jan 2022 13:43:00 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:88ae:3d08:e368:36])
- by smtp.googlemail.com with ESMTPSA id
- d2sm11514639ejw.79.2022.01.29.13.42.59
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YBtw4vAFkkZUfSig90+RSioktveRGKYsLLFApy0b0c8=;
+ b=ZxC8BuRL4hSN78SknxCFTsuxVR6SHXTQDCJHLL4DFc+VapFViAG8V9PzFumLt12Cuq
+ 5Qyx40JhaNTngYvhZUKp3djnMhK0Yqc/EcW2NSgTBs85YXmxACF5bTqA7XiGVUWn/zo9
+ tBgR1nZfynmN+SeI/jdTl08JW6oiEskbTcFZVFZCcCesVJMC7mZdpYZct/Zn3xjlO9Ro
+ GfibFxZyhhNxtkKgbK7PR5VLKls3LYljWkSbLPrkT1UkPzLyjcNHaWva/K1XdgElR2QU
+ D6jmR6D62Hf8z+5hAD9m1/AjmSzqtQ1CLsxM2BXdF3Lnucxv9r+KR/u0aGDFB0V5NDz/
+ Zz5Q==
+X-Gm-Message-State: AOAM5318dqyr4wxdOBpDB/QWcqu0qdcEFhuy9Fl+nOQEgH2ZjFWmG8IN
+ XERYSs/DzD5OJLa3GypvMwsA9QgzaQA=
+X-Google-Smtp-Source: ABdhPJxbxkiQHjhNTk/WZoKzJ7y3Ay+MAFobjc4gQ7lUzTmnfFk1W0DOyRcc9j67enbKi2UeEqbWgw==
+X-Received: by 2002:a05:6000:385:: with SMTP id
+ u5mr11850921wrf.62.1643496416174; 
+ Sat, 29 Jan 2022 14:46:56 -0800 (PST)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id l24sm5101278wme.17.2022.01.29.14.46.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Jan 2022 13:43:00 -0800 (PST)
-From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+ Sat, 29 Jan 2022 14:46:55 -0800 (PST)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Jan 2022 22:42:35 +0100
-Message-Id: <20220129214235.5133-2-thomas.devoogdt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220129214235.5133-1-thomas.devoogdt@gmail.com>
-References: <20220129214235.5133-1-thomas.devoogdt@gmail.com>
-Subject: [Buildroot] [PATCH 2/2] package/libsoup: add choice between
- libsoup2 and libsoup3
+Date: Sat, 29 Jan 2022 23:46:47 +0100
+Message-Id: <20220129224651.1282263-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/5] package/efl: bump to version 1.26.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,120 +87,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Libsoup3 has a new API [1], packages using libsoup2 may not
-compile with libsoup3 or may crash at runtime in unexpected
-ways. So the default will (for now) stay on libsoup2.
-A tracking table for the migration can be found here [2].
+This is a bug-fix release.
 
-Changes for libsoup3:
-- "0001-meson.build-set-c_std-to-gnu99.patch" is upstream now [3].
-- The "gnome" option was dropped in [4].
-- A new "libnghttp2" dependency is added since libsoup 2.99.6 (HTTP2 backend) [5].
+See: https://www.enlightenment.org/news/2022-01-03-efl-1.26.1
 
-[1] https://libsoup.org/libsoup-3.0/ch02.html
-[2] https://gitlab.gnome.org/GNOME/libsoup/-/issues/218
-[3] https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c3d431bdb094c59997f2a23e31e83f815ab667c
-[4] https://gitlab.gnome.org/GNOME/libsoup/-/commit/3fcaa882c4eb29fd754cdb6dd06195632cb4b52a
-[5] https://gitlab.gnome.org/GNOME/libsoup/-/commit/1a1d29c3114ca86c673d0c0b02a492d0962dcfe8
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../0001-meson.build-set-c_std-to-gnu99.patch    |  0
- package/libsoup/Config.in                        | 16 ++++++++++++++++
- package/libsoup/libsoup.hash                     |  2 ++
- package/libsoup/libsoup.mk                       | 11 +++++++++++
- 4 files changed, 29 insertions(+)
- rename package/libsoup/{ => 2.74.0}/0001-meson.build-set-c_std-to-gnu99.patch (100%)
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/2.74.0/0001-meson.build-set-c_std-to-gnu99.patch
-similarity index 100%
-rename from package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-rename to package/libsoup/2.74.0/0001-meson.build-set-c_std-to-gnu99.patch
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 02e8e8b578..959ddedef5 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -16,8 +16,24 @@ config BR2_PACKAGE_LIBSOUP
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 6364d276c0..8d50400eb7 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.enlightenment.org/news/2021-12-26-efl-1.26.0
+-sha256  a4a9bce45fd27f8541874e44a130f64550bee1f2f72feaa6c8a758d92eaf204c  efl-1.26.0.tar.xz
++# From https://www.enlightenment.org/news/2022-01-03-efl-1.26.1
++sha256  86a9677e3d48dd0c13a399ebb417bd417bd8d150d6b06cc491bc92275c88a642  efl-1.26.1.tar.xz
  
- if BR2_PACKAGE_LIBSOUP
- 
-+choice
-+	prompt "libsoup version"
-+	default BR2_PACKAGE_LIBSOUP_VERSION_2
-+	help
-+	  Select the version of libsoup you wish to use.
-+
-+config BR2_PACKAGE_LIBSOUP_VERSION_3
-+	select BR2_PACKAGE_NGHTTP2
-+	bool "libsoup3"
-+
-+config BR2_PACKAGE_LIBSOUP_VERSION_2
-+	bool "libsoup2"
-+
-+endchoice
-+
- config BR2_PACKAGE_LIBSOUP_GNOME
- 	bool "libsoup-gnome"
-+	depends on BR2_PACKAGE_LIBSOUP_VERSION_2
- 	help
- 	  Build libsoup-gnome library.
- 
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 95c1c26eb4..6d87cc67e8 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
-@@ -1,3 +1,5 @@
-+# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/3.0/libsoup-3.0.0.sha256sum
-+sha256  cde05f3e20114ce985cbd03d575ff74e5e41e70a218e5eb3068c4bf4710dbf2b  libsoup-3.0.0.tar.xz
- # From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.74/libsoup-2.74.0.sha256sum
- sha256  33b1d4e0d639456c675c227877e94a8078d731233e2d57689c11abcef7d3c48e  libsoup-2.74.0.tar.xz
- # Locally calculated
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 1a26714992..bd8ce40643 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,8 +4,13 @@
+ sha256  d666b6b2df9f5b791f85c299c65516cb55528b02a807603de246f65f4918ae22  COMPLIANCE
+ sha256  5bceb52d65debe420bc520f2992807740dc928b7fdc3c2e9a74b5889177ddf4c  COPYING
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index ed0a8acc1d..43a2dc4fcb 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_3),y)
-+LIBSOUP_VERSION_MAJOR = 3.0
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
-+else
- LIBSOUP_VERSION_MAJOR = 2.74
- LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
-+endif
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPL-2.0+
-@@ -55,10 +60,16 @@ else
- LIBSOUP_CONF_OPTS += -Dgssapi=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_2),y)
- ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
- LIBSOUP_CONF_OPTS += -Dgnome=true
- else
- LIBSOUP_CONF_OPTS += -Dgnome=false
- endif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_3),y)
-+LIBSOUP_DEPENDENCIES += nghttp2
-+endif
- 
- $(eval $(meson-package))
+-EFL_VERSION = 1.26.0
++EFL_VERSION = 1.26.1
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = https://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
 -- 
-2.17.1
+2.31.1
 
 _______________________________________________
 buildroot mailing list
