@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F429C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 14:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 752F7C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 14:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF692812C8;
-	Sat, 29 Jan 2022 14:08:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1ADE60D73;
+	Sat, 29 Jan 2022 14:24:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OJRdtGYDtJZX; Sat, 29 Jan 2022 14:08:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0bJCwSVP9aBX; Sat, 29 Jan 2022 14:24:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FCB181275;
-	Sat, 29 Jan 2022 14:08:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8BE51BF681
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 14:08:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3887E60BC6;
+	Sat, 29 Jan 2022 14:24:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DA4E1BF681
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 14:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7A2181275
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 14:08:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B54040337
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 14:23:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJ4M_BHo-mbE for <buildroot@lists.busybox.net>;
- Sat, 29 Jan 2022 14:08:38 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bnkBsrKsSCw5 for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 14:23:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E4D481255
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 14:08:37 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- f22-20020a1c1f16000000b003525bf08b1eso1627226wmf.0
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 06:08:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B700040238
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 14:23:57 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id s18so16400187wrv.7
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 06:23:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ziEjfAuin1YZ0oAKoGs0+1ng4IKa5vve3Qqu6lyVf/M=;
- b=CiwRXwAMu24iErU0mpIItI4KFu+FIL5eLzH1TRhKTAEdTZx7pumRHJtTlO//3KfuPQ
- DQo7BKXerx21jrdwpFnqmMs5vUd+8FFyn6Ar0hRq8mCbpX0bkYNU0FWANGWoihVWOI3h
- KSYX1/Jc4nMNXc8nEVwYc+q9sza5poocr9ET4=
+ bh=6GunBrIs4iR/oKlliHBM8rSJwB0TwkTaL0vlHi/SLZ4=;
+ b=eJqty6ClZjZd77eC9GsiXY38LMeQNiQk97o0VptBAheOq3EKtzBEfrrcxqGLWIBKHh
+ bmQQfElHC5Q9M3D2n0tz2Ica8289x+j3Xsj/Qsp34KHKg0BRX39qub1Kml/9jNiYQ9+y
+ vP/2fMMDpjz0PCe/LIoPFjPNYj/7Jlba9o0CSHazKoZ2UVqQzL40ZwmBFup/QuYpOIwM
+ ORjWZcW/XFMkgS6mV9jtAz7jwVJfzsp4csGH0iVAv9sRQXY4QVyYLlLlSBQNkVq5FZS+
+ +w4DI70sOzPq3pLTw+WQGpSJF30LQzChjvCaziTCxXorvj/VTQjf2Oe3pH4LEK4MgTKx
+ 56MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ziEjfAuin1YZ0oAKoGs0+1ng4IKa5vve3Qqu6lyVf/M=;
- b=Id8CxFVr/ikvhYXc2W9elrjsS4Rbk0jaGeT2s7Ecdw5UOpnJKdaAS7N8lUlLVMtUc/
- hyBPRG7k6dvOLphcqpYwBIJEYtcwv8P6L2n6PhoHtrGEvxIfWFNpFzTHsl1lk2cSChfn
- HWuM/BhTnISUunUDgag2kmmMCcr3TjNqmnXvNnKpxEJ71WADqBr0OvY1QxVkMZ9HR2Vi
- iemODlyaXCdp2u28WHNZ5uxA1/rFQIA7bEQ8A9/FNyitc6Cb2iiSfJbqN6AsrwEuripb
- FoNb3GZIX1K3N9RVxtvDf5n5lKGFpMCscdpN/Co0EO+0ue/4nN93QA8g2n4sHtXaCB93
- u+dA==
-X-Gm-Message-State: AOAM533DqAdkGKVAvwnG4uhSNtTeokQyxPR8cpS/1gyQGuxH15GjPN1R
- GP2Cqt5vreht6VSb/FgrodB1V/PyDp/rGg==
-X-Google-Smtp-Source: ABdhPJwPPoreoobZQRBe2R+cvHkfI1yeNy9NBIlgwbZQfPba+k6GlrT0U4VrbGq8ttDicuZahadzaw==
-X-Received: by 2002:a05:600c:1d8b:: with SMTP id
- p11mr19874411wms.115.1643465315833; 
- Sat, 29 Jan 2022 06:08:35 -0800 (PST)
-Received: from panicking.amarulasolutions.com ([62.18.234.10])
- by smtp.gmail.com with ESMTPSA id m25sm4150707wml.47.2022.01.29.06.08.33
+ bh=6GunBrIs4iR/oKlliHBM8rSJwB0TwkTaL0vlHi/SLZ4=;
+ b=RCtN8Nz/s6+hlwBsybUzkBa3+p6KUsGJ5hDRC9FS4CVBS0v58DTgyb1yJHdLClLsVS
+ 9Bmkb7zaHqTGWykiQNNCjD0P9cR1aY/DVyQfVt/mEey3c1HVy2TI2yAUdswphCx0ApFn
+ tHBc+JbFyziqa2HaDiMswOkvy4Dm1aW4sDNRc0+FykhJAY41ndEpf0stZu5/GzQKByKY
+ RC174QEInGZnqj3cK6TvrvDkJHKNqKWGRAHeXS5lY+v6mgG5qWGsu4fIMKtDJl2Ms6Wj
+ m/57ll14CH/M6L8DQPHvHpxO4o3ABtzPjOmoRN8ZMuyun9O7AJF3sfmcO2dBl47UjCYM
+ Ei9Q==
+X-Gm-Message-State: AOAM532o/HudYI8WT1TBEO1eqo12Jx+Nj0TcuUOkCuV8DYdBt+6afM11
+ hVxKXlt+xTViqmSwlM9AIDtL81lODCU=
+X-Google-Smtp-Source: ABdhPJwAUXnGIsLCAUz7YURdaOb6gfDcI3tgTnOTdYEugLVnFKm5f7a/fC4ShmSRRIcw9P1Fdv+X4Q==
+X-Received: by 2002:adf:fc8f:: with SMTP id g15mr11173484wrr.253.1643466235872; 
+ Sat, 29 Jan 2022 06:23:55 -0800 (PST)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id m11sm4101052wmi.16.2022.01.29.06.23.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Jan 2022 06:08:34 -0800 (PST)
-From: Michael Trimarchi <michael@amarulasolutions.com>
+ Sat, 29 Jan 2022 06:23:55 -0800 (PST)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Jan 2022 15:08:31 +0100
-Message-Id: <20220129140831.1284832-1-michael@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sat, 29 Jan 2022 15:23:50 +0100
+Message-Id: <20220129142352.1197168-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/freescale-imx: Add installation of
- easrc-imx8mn.bin firmware
+Subject: [Buildroot] [PATCH 1/3] package/poke: install libpoke.so to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,68 +86,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The easrc firmware is used for audio resampling. The firmware for now
-exists only for imx8mn device
+Poke generate a library libpoke.so, so install it to staging.
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/freescale-imx/firmware-imx/Config.in       |  4 ++++
- package/freescale-imx/firmware-imx/firmware-imx.mk | 12 ++++++++++++
- 2 files changed, 16 insertions(+)
+ package/poke/poke.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index df266fb28e..06c4d8036c 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -39,6 +39,10 @@ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
- 	bool
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+diff --git a/package/poke/poke.mk b/package/poke/poke.mk
+index fed023e954..ddd03ae3b0 100644
+--- a/package/poke/poke.mk
++++ b/package/poke/poke.mk
+@@ -13,6 +13,7 @@ POKE_LICENSE_FILES = COPYING jitter/COPYING
+ # 0001-configure.ac-HELP2MAN-replace-by-false-when-cross-co.patch
+ POKE_AUTORECONF = YES
  
-+config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_EASRC_FW
-+	bool
-+	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
-+
- config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_EPDC_FW
- 	bool
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 3acd053d0f..211a43c4ca 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -113,6 +113,17 @@ define FIRMWARE_IMX_INSTALL_IMAGE_HDMI_FW
- endef
- endif
++POKE_INSTALL_STAGING = YES
+ POKE_DEPENDENCIES = host-flex host-bison host-pkgconf bdwgc readline
  
-+#
-+# EASRC firmware
-+#
-+
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_EASRC_FW),y)
-+define FIRMWARE_IMX_INSTALL_TARGET_EASRC_FW
-+	mkdir -p $(TARGET_DIR)/lib/firmware/imx
-+	cp -r $(@D)/firmware/easrc $(TARGET_DIR)/lib/firmware/imx
-+endef
-+endif
-+
- #
- # EPDC firmware
- #
-@@ -160,6 +171,7 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
- endef
- 
- define FIRMWARE_IMX_INSTALL_TARGET_CMDS
-+	$(FIRMWARE_IMX_INSTALL_TARGET_EASRC_FW)
- 	$(FIRMWARE_IMX_INSTALL_TARGET_EPDC_FW)
- 	$(FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW)
- 	$(FIRMWARE_IMX_INSTALL_TARGET_VPU_FW)
+ # poke bundle gnulib that doesn't support the case where
 -- 
-2.25.1
+2.31.1
 
 _______________________________________________
 buildroot mailing list
