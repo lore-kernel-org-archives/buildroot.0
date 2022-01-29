@@ -1,46 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF0DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 23:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 298C4C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 23:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7E1960AFE;
-	Sat, 29 Jan 2022 23:09:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACEDF81435;
+	Sat, 29 Jan 2022 23:14:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6RJVRp8tHiEI; Sat, 29 Jan 2022 23:09:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qytdxgpLTIPW; Sat, 29 Jan 2022 23:14:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11C7160AE0;
-	Sat, 29 Jan 2022 23:09:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A3EA1BF370
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 23:09:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA5E681422;
+	Sat, 29 Jan 2022 23:14:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B4CA1BF370
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 23:14:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 56ADA60AE0
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 23:09:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EDCD481422
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 23:14:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 09MZAK5FjhiJ for <buildroot@lists.busybox.net>;
- Sat, 29 Jan 2022 23:09:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 259E260A78
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 23:09:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DE9B6822BA; Sat, 29 Jan 2022 23:02:45 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FJweJS7mZ3_z for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 23:14:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38FA48140D
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 23:14:28 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id DwvFn644tBBmwDwvFnaKqe; Sun, 30 Jan 2022 00:14:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1643498062; bh=DO0vRICkFKlG49bOPUpDYGqEUGa0pwqz9nkxrObTPSI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Ar4p1Dy1zr2kaY1ChpddyiltanOZ/2KghTbtHk5/2rm6Idx5i94cga/hKlyJtgeah
+ kleCNdZtrHm5YqX6kcAcxNlFzLqAoLRVi4+8Ps1a795+QuMvXjiX+mvqm7O9cY+WuQ
+ 95i7HV74cEP6cNlBYi2wLJ1neDNrO4X0YH6feKamxdG2KBMVN/V/dwT4BMIA+13ucF
+ Q2AwF9JC7AWW9X+T1Hhc6MGp8dvhEl7Vh8xsYtmhR0L/j/yL8AB72O/N9qggBjsv9L
+ Qxtrbi2Ric+goUeEk5X04hfGCbZ7Elt4iamep+OD6lxRucjy0BOJ0RyUBgYHBDAjXt
+ YselwUoOu7a3A==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Jan 2022 00:09:05 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: d1e6c004d0707a3c024356cad0bfc820da9a5ebf
-X-Git-Newrev: 323ae1e681c24babfb375cb46bc81df551a3e0b7
-X-Patchwork-Hint: ignore
-Message-Id: <20220129230245.DE9B6822BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] Update for 2021.11.1
+Date: Sun, 30 Jan 2022 00:14:20 +0100
+Message-Id: <20220129231420.3470589-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4wfPLdmYjMl2RnsqorQSkd//YxLB9v3UuOS1d7irx8JqxPVlsxee6zZ1UX+ZSH8Mxc5RbDo2IgU1ESReH264yrQ2+ApYSgGw2IL8sxZVVw1QSlraE8DPTs
+ htz13uPc0WcglbiSWRk3YTwI1k1dlOxnUdtWMpZKvZMQV6kps31QwZoEYAdkr0+IATYEsoxIZAfJW5gy9uQsnWeVNsgu/9fzPUXrWjYIyjqrXaPogFdCovsK
+ A66KeFm/JR175uxdlDYc1dTQgCzBeAv8qbLc3FZGT4XVj7KuEGeD8JLdKHvkkFYV
+Subject: [Buildroot] [PATCH] board/andes: fix build failure with host gcc >=
+ 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,95 +65,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Nylon Chen <nylon7@andestech.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=323ae1e681c24babfb375cb46bc81df551a3e0b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+Add patch to fix linux bug:
+```
+  HOSTLD  scripts/dtc/dtc
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+collect2: error: ld returned 1 exit status
+```
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2021478164
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- CHANGES                  | 36 ++++++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 39 insertions(+), 3 deletions(-)
+ ...ve-redundant-YYLOC-global-declaratio.patch | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 board/andes/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
 
-diff --git a/CHANGES b/CHANGES
-index 698d5d72a6..1e1c060107 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,39 @@
-+2021.11.1, released January 29th, 2022
+diff --git a/board/andes/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch b/board/andes/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
+new file mode 100644
+index 0000000000..71ae991816
+--- /dev/null
++++ b/board/andes/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
+@@ -0,0 +1,52 @@
++From f9df4186c17d686f1ca38f973d7a3a49e8e37c01 Mon Sep 17 00:00:00 2001
++From: Dirk Mueller <dmueller@suse.com>
++Date: Tue, 14 Jan 2020 18:53:41 +0100
++Subject: [PATCH] scripts/dtc: Remove redundant YYLOC global declaration
 +
-+	Important / security related fixes.
++gcc 10 will default to -fno-common, which causes this error at link
++time:
 +
-+	check-package: Improve variable override check
++  (.text+0x0): multiple definition of `yylloc'; dtc-lexer.lex.o (symbol from plugin):(.text+0x0): first defined here
 +
-+	pkg-stats: List CVEs where the version info cannot be parsed
-+	as unsure rather than completely ignoring them.
++This is because both dtc-lexer as well as dtc-parser define the same
++global symbol yyloc. Before with -fcommon those were merged into one
++defintion. The proper solution would be to to mark this as "extern",
++however that leads to:
 +
-+	Defconfigs: Beaglebone: Support BeagleBone black wireless,
-+	stm32f469_xip_disco: Fix kernel boot
++  dtc-lexer.l:26:16: error: redundant redeclaration of 'yylloc' [-Werror=redundant-decls]
++   26 | extern YYLTYPE yylloc;
++      |                ^~~~~~
++In file included from dtc-lexer.l:24:
++dtc-parser.tab.h:127:16: note: previous declaration of 'yylloc' was here
++  127 | extern YYLTYPE yylloc;
++      |                ^~~~~~
++cc1: all warnings being treated as errors
 +
-+	Updated/fixed packages: alsa-utils, apache, binutils, cage,
-+	capnproto, civetweb, clamav, collectd, connman, containerd,
-+	coreutils, dav1d, docker-cli, docker-engine, erlang,
-+	erlang-rebar, expat, findutils, flare-engine, flare-game,
-+	font-awesome, freeswitch, gcc, ghostscript, glibc, gnuchess,
-+	go, grpc, gst1-interpipe, gst1-rtsp-server, gupnp-tools,
-+	hackrf, icu, imagemagick, janus-gateway, json-for-modern-cpp,
-+	keepalived, lapack, libdbi, libiio, libjpeg, libmbim, libnss,
-+	libopenssl, libpjsip, libqmi, liburiparser, libvirt,
-+	linux-pam, lxc, mbedtls, mender, mongodb, mpd-mpc, mutt,
-+	nodejs, openblas, pcre2, php, pipewire, polkit, privoxy,
-+	prosody, python-charset-normalizer, python-django,
-+	python-idna, python-lxml, python-pyqt5, python-requests,
-+	python-urllib3, python3, qt5base, qt5location, rhash,
-+	rng-tools, ruby, runc, rustc, samba4, sofia-sip, targetcli-fb,
-+	tcpreplay, tinyxml, tor, tpm2-tss, util-linux-libs, vim, vlc,
-+	wireshark, xapp_xauth, xapp_xinput-calibrator, xen, xenomai,
-+	xlib_libX11, xserver_xorg-server
++which means the declaration is completely redundant and can just be
++dropped.
 +
-+	Issues resolved (http://bugs.uclibc.org):
++Signed-off-by: Dirk Mueller <dmueller@suse.com>
++Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
++[robh: cherry-pick from upstream]
++Cc: stable@vger.kernel.org
++Signed-off-by: Rob Herring <robh@kernel.org>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ scripts/dtc/dtc-lexer.l | 1 -
++ 1 file changed, 1 deletion(-)
 +
-+	#14451: nodejs won't build on Fedora 35
-+	#14471: alsa_utils wrong deployment
++diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
++index 06c040902444..d1b3810156c7 100644
++--- a/scripts/dtc/dtc-lexer.l
+++++ b/scripts/dtc/dtc-lexer.l
++@@ -38,7 +38,6 @@ LINECOMMENT	"//".*\n
++ #include "srcpos.h"
++ #include "dtc-parser.tab.h"
++ 
++-YYLTYPE yylloc;
++ extern bool treesource_error;
++ 
++ /* CAUTION: this will stop working if we ever use yyless() or yyunput() */
++-- 
++2.25.1
 +
- 2021.11, released December 5th, 2021
- 
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index 386b4f4e44..45fd44dd62 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2021.11
-+export BR2_VERSION := 2021.11.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1638734000
-+BR2_VERSION_EPOCH = 1643497000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 2bcb59c08b..eb312081fe 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2021.11'
-+RELEASE='2021.11.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
