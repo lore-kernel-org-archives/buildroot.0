@@ -1,83 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D103BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 22:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F6C1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 22:47:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C21840761;
-	Sat, 29 Jan 2022 22:47:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A676A60AFE;
+	Sat, 29 Jan 2022 22:47:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NpVdR5Lq_w3x; Sat, 29 Jan 2022 22:47:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r_zhFOnwhokh; Sat, 29 Jan 2022 22:47:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B037240893;
-	Sat, 29 Jan 2022 22:47:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCE6860AE0;
+	Sat, 29 Jan 2022 22:47:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F181B1BF357
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 22:46:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 048A01BF357
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 22:47:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED30A83134
- for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 22:46:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E789183134
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 22:47:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PTcQ5iJ4RRSB for <buildroot@lists.busybox.net>;
- Sat, 29 Jan 2022 22:46:59 +0000 (UTC)
+ with ESMTP id eWjgjOzoPPo7 for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 22:47:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15E2783131
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 22:46:59 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id m14so17706999wrg.12
- for <buildroot@buildroot.org>; Sat, 29 Jan 2022 14:46:58 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3555283131
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 22:47:00 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id s18so17925074wrv.7
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 14:47:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=hTrdK/jAi2qX/ZwVnu7Hex9jpbfXVOVHz6avcpSKBmU=;
- b=YDh+13/5VriQBbj67H2vS8IxNKdLWdGaadUCBEamE/pQb70TUEck/XCBV+gKmAjZGx
- CguWfMyq7oPeKlY+dHWDNNiLCHbml41dbquOlnjF2Re2P7xToNHpFfcmL6u2sPr7v0fg
- A2XfJASXsBYr+04qI1/0oQv2/p/wBbwc0i2ovEuW9CvwyvkVb5efrZuXKhH8kNYqQdQW
- Aa+rbhkHGBNxUaWNVQGxRDXrjhgu2jP9RyzvDNvdujc1Piao/JGyI1scBExqMERbZ+7t
- i6h0ZaIuiPlf14eCGdT9FZg8ASvwZ7Lkwrb5lb+hY4EbO9ok57o9siTugk+XTO2xCiR1
- xRrw==
+ bh=MY4HsmFhBhseu4oYqDwgeqRe4M9Kor6qh1M5YtYBtbI=;
+ b=GqCWYSR+Hwj8vMzdY+ovdR1Vwnz5ZjN98j9/cCcQMI/sHXu8Gcyz9F4eAx1O5tz70I
+ ezxZKbUSKYopa2bgPPhq5RBehb9EnYvcZOS3P73KLBXYLsrhxFEc8JPRf+41lsancT7U
+ zo7WkGKBN2W2H6eOC0c+i1Is6qbxHfZGcoUIXOOf9ATEuDFzGka14JJTMdeDTT1Te3yQ
+ 3tBxX1m25sxmCvCPCdt0mOX8voa8bJIN5rkQcYXtbRE7ClabhcXLleB2cb3KRzcziZBB
+ fj93W7lDjfWFg4rQPRML1SqHAO6J3/LCnXooNmU0neYWW9CZqp0UFIg0lh4GAnGtPGCc
+ Z2yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=hTrdK/jAi2qX/ZwVnu7Hex9jpbfXVOVHz6avcpSKBmU=;
- b=4hmanwuM3JSguGzNaV1BHpjG6O4l3Sn9tWPS4sMRRaLTB0WgzaNLC72p6QIswLsOZF
- kOLMxn+NEnfjBODCLGTmUWYL7hfesH2pCzimd0fc7AV6xKsAqzkDLXsScZFmZI/u80Gp
- /13KxtY2xwZDehVm1r6alNGuAw74xoBHHlagvcYHey9ti6CN+1wsTuZ4+GF3BZlmrIZo
- 7T0b892o8gPmWvC6yACSQee04snLOeUMfVdSsh6MlNcRG45t2KmHZ8caqGJD1YwI/nHJ
- UlgT5W6m20XMKJ8auOxwgqjqK1K6tPOGNgAoGCBFyLOqGwS/ps0P/DydW1R8GqK8TpZA
- 08oA==
-X-Gm-Message-State: AOAM532cK7/hCUEBSx0o6yUG/dIli1Ed9Y/kmzxGuoWEhARFCKC2CRV9
- 20YQDxLBy2h6+O/NVnzw9twU3x2L41w=
-X-Google-Smtp-Source: ABdhPJxa86nH0IMZes/ysOjFTxmLm/QNfVT4pxJr/HBSQazoGX4MqhSo3/hUBC8c/llt0zoPmv+p1Q==
-X-Received: by 2002:a5d:6049:: with SMTP id j9mr11891809wrt.562.1643496417313; 
- Sat, 29 Jan 2022 14:46:57 -0800 (PST)
+ bh=MY4HsmFhBhseu4oYqDwgeqRe4M9Kor6qh1M5YtYBtbI=;
+ b=bK5s32MWAaJp2HiebcCzkJt7r2hAops0eCpw3S7qsRlBG8+Tb8r7T1svQmD0EfOfLS
+ vEfAefDEHPrTyo7iDI7LbeYQzDE/R0oQBV1V1f8l0rS+FL4DXq/fMxrcMycRRxwlwFkz
+ nY1kEEDpXazHIjVT+RFgfXN/I0kofV7fMMsmlJCLnfL2LxmBkRT5fZPmbKo3W5LK++U6
+ gqlCxhbs7TB8hjxTapogdMvpPfLeshdvdeSHvx94Gns2TEAYmRGRJmoSxEGKt5NsRdPF
+ ZeCaRT5VSgfqafoL0vUThD20dAEBKkuYMJIDFI4wkuz6SavvCThek+XtVK19N4Yh6P+5
+ N0uQ==
+X-Gm-Message-State: AOAM533p5j6ity26XE4ybtVAkOJ1kLFAog6hL7sU7HLgLf8AjFdeBGTe
+ kjrH/BAzCLDtE4011lv/vc6TZo75HIg=
+X-Google-Smtp-Source: ABdhPJzSPVbhKPo8+7uE0QEhpM2DekqMp03/9xgMo2DPfVDLROVIvX4/ZB5wxE29OIXvMEDniPr3SQ==
+X-Received: by 2002:adf:fb4a:: with SMTP id c10mr11455373wrs.243.1643496418303; 
+ Sat, 29 Jan 2022 14:46:58 -0800 (PST)
 Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id l24sm5101278wme.17.2022.01.29.14.46.56
+ by smtp.gmail.com with ESMTPSA id l24sm5101278wme.17.2022.01.29.14.46.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Jan 2022 14:46:56 -0800 (PST)
+ Sat, 29 Jan 2022 14:46:57 -0800 (PST)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Jan 2022 23:46:48 +0100
-Message-Id: <20220129224651.1282263-2-romain.naour@gmail.com>
+Date: Sat, 29 Jan 2022 23:46:49 +0100
+Message-Id: <20220129224651.1282263-3-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220129224651.1282263-1-romain.naour@gmail.com>
 References: <20220129224651.1282263-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/5] package/enlightenment: bump to version
- 0.25.1
+Subject: [Buildroot] [PATCH 3/5] package/efl: rework eeze handling in Kconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,41 +94,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is the a bugfix release.
+Commit [1] added eeze dependency using "depends on" to several efl
+options (drm, libmount) instead of selecting eeze and propagate the
+udev reverse dependency.
 
-See:
-https://www.enlightenment.org/news/2022-01-03-enlightenment-0.25.1
+The dependency between eeze, libinput, efl drm requires to add a new
+libinput option.
+
+Rework eeze handling to use select BR2_PACKAGE_EFL_EEZE since the
+user is already aware of the udev dependency (BR2_PACKAGE_HAS_UDEV).
+
+[1] e026c3bdb8f493b3fc21de7c45e3edbc47e03128
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/efl/Config.in | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index dd4c4d78c0..2d977b86f7 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,4 +1,4 @@
--# From https://www.enlightenment.org/news/2021-12-26-enlightenment-0.25.0
--sha256  7d6e72ceed5aca135b7a49c2a1c1eb9d8fde1318613517401d0418e0e5f6df06  enlightenment-0.25.0.tar.xz
-+# From https://www.enlightenment.org/news/2022-01-03-enlightenment-0.25.1
-+sha256  2cf05fe3d96ef35e823619dbc0ac513ecabcae2186800ecd804924a637112444  enlightenment-0.25.1.tar.xz
- sha256  8d2fbc393e967cd6f5b8559d1744881a6a1ceb3ec6e1c2368c3916809ffccb8d  COPYING
- sha256  cdc77ee1732455b203610f923fe4196046b3f7509038c48dc0b0c7e3492c23f3  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 24bbd96cd0..95670e800d 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index eb9c7aebd9..21845ba306 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -115,7 +115,8 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
+ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 	bool "Enable libmount support (recommended)"
+ 	default y
+-	depends on BR2_PACKAGE_EFL_EEZE
++	depends on BR2_PACKAGE_HAS_UDEV # eeze
++	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	# libblkid is part of required tools, see EFL's README.
+@@ -126,7 +127,7 @@ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 	  Enlightenment and its filemanager.
  
--ENLIGHTENMENT_VERSION = 0.25.0
-+ENLIGHTENMENT_VERSION = 0.25.1
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = https://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2-Clause, OFL-1.1 (font)
+ comment "efl's libmount support needs udev /dev management (eeze)"
+-	depends on !BR2_PACKAGE_EFL_EEZE
++	depends on !BR2_PACKAGE_HAS_UDEV
+ 
+ config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ 	bool
+@@ -173,7 +174,7 @@ config BR2_PACKAGE_EFL_WAYLAND
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # Evas DRM Engine -> libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
+-	depends on BR2_PACKAGE_EFL_EEZE # efl drm
++	depends on BR2_PACKAGE_HAS_UDEV # efl drm (eeze)
+ 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
+ 	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
+ 	select BR2_PACKAGE_EFL_DRM
+@@ -182,7 +183,7 @@ config BR2_PACKAGE_EFL_WAYLAND
+ comment "Wayland support needs udev /dev management (eeze), OpenGL ES w/ EGL, threads, locales"
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
+-		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE \
++		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_HAS_UDEV \
+ 		|| !BR2_ENABLE_LOCALE
+ 
+ choice
+@@ -215,9 +216,10 @@ endchoice # OpenGL support
+ 
+ config BR2_PACKAGE_EFL_DRM
+ 	bool "Evas DRM Engine"
+-	depends on BR2_PACKAGE_EFL_EEZE
++	depends on BR2_PACKAGE_HAS_UDEV (eeze)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBINPUT # For elput
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+@@ -232,7 +234,7 @@ config BR2_PACKAGE_EFL_DRM
+ 
+ comment "Evas DRM Engine needs udev /dev management (eeze), mesa3d w/ EGL support, threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
+-		|| !BR2_PACKAGE_EFL_EEZE
++		|| !BR2_PACKAGE_HAS_UDEV
+ 
+ comment "libevas loaders"
+ 
 -- 
 2.31.1
 
