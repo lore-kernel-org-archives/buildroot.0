@@ -1,80 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF8DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jan 2022 22:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 951BAC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jan 2022 00:39:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11744408B1;
-	Fri, 28 Jan 2022 22:09:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06983817AF;
+	Sat, 29 Jan 2022 00:39:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SD51ExIqRJ0o; Fri, 28 Jan 2022 22:09:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F6CD408AA;
-	Fri, 28 Jan 2022 22:09:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51FB21BF40A
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 22:09:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EB9583410
- for <buildroot@lists.busybox.net>; Fri, 28 Jan 2022 22:09:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yvmQBym4wmo0 for <buildroot@lists.busybox.net>;
- Fri, 28 Jan 2022 22:09:28 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NrW9Iic1TYRe; Sat, 29 Jan 2022 00:39:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54302817A4;
+	Sat, 29 Jan 2022 00:39:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 220E01C1190
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 00:39:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D61F60879
+ for <buildroot@lists.busybox.net>; Sat, 29 Jan 2022 00:39:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EJ60APc0n-wK for <buildroot@lists.busybox.net>;
+ Sat, 29 Jan 2022 00:39:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5209D830E3
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 22:09:28 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id c23so13416405wrb.5
- for <buildroot@buildroot.org>; Fri, 28 Jan 2022 14:09:28 -0800 (PST)
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com
+ [IPv6:2607:f8b0:4864:20::c34])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC6756080B
+ for <buildroot@buildroot.org>; Sat, 29 Jan 2022 00:39:09 +0000 (UTC)
+Received: by mail-oo1-xc34.google.com with SMTP id
+ b15-20020a4a878f000000b002dccc412166so1818612ooi.11
+ for <buildroot@buildroot.org>; Fri, 28 Jan 2022 16:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=x6uuWR/Hb1UqLnh7/xrQjp35tCtWV0kfyNFWlSK5054=;
- b=LVRB1Kqmv/7MN8QzwY3MmgQyztH7FoaPW6ExvCfoHLijPOoKSEu+EFwKV5Q6n7so+5
- g8RBQ4ypewCDffTyFw2q9U9/auLea0Fno+Ov+p7WeNR4sRq2jX+3JQKQqrvLmWV/HStK
- DkJya6lOT8O/NfmNfEAlxO8Fb5PbIcSQ5YQgx83psLrXGK3MnshnbVVjw477hMvMsDy5
- LrL95UO9HX5VCA9lsIyHtFAF4XC2blScAVEKB5uJuS++MGzOGry2gy2/q3/eUhJ+4C2g
- qJWcwVjyCcNSQdw3EuCKvnJgV5JxG7gm5OZTXJwm/UH+dVY/oMsfeojxR7NHndu58hom
- xygg==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=HKQuEQbjS8LkkDihqmE4OsQNKXlUp5O2s7kneJtTD3U=;
+ b=CrOUuI9ShDK/cqSoclGWfguScCxtPqLqAV25lHtrz0VwAVT3EOcT4xrf+L1AT0fWKj
+ JnoTlJ84F0D1wJv7pKCmJq3P1BoC2aAKrcKbR5RkFKWkLkBW1cu0u9bktRUz5QfLrSvA
+ ++MtJ/ppgpDldJgulbDlSl/mn15Qr/LepKRovx9x3vOj2cgMmqAJEbOcPwPICUViQOSn
+ vAVY0qYY9MQaAdBkEu5rehE5u9eSiy5cleBhpFfb1wVjhZJQCAHxyrp4athukjN9NtmX
+ jpTGodAQA6Lhps8dRC2FooYkDxVGY2xv8By7O2oaLDRgRRrTujBWifbcJ01FM09kej5b
+ O2fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=x6uuWR/Hb1UqLnh7/xrQjp35tCtWV0kfyNFWlSK5054=;
- b=5dtaPIoSw2qsKcfMpr4GAZTWy7PkWUBFP92wTEUMyJRog9xGtp2uuEC0LRCmUnOYD4
- q+o+mYIGgR6lJ2LKInpxcNH+rRWjGKtagpbxOWYCt9puHyRjCnjR0RglpxaJvkV3OVfU
- rT4PwVdOmlFQS0hxa0vM2cRsyQMB2z8wAicFmbRI42IVVgitAm0No24QMJOSST5EESbB
- whDUtuP53g5N2t3mJKVs0/tFBCtPToXFRVC82pfU+JhN2z5Omlhk+GyU8P94dHHioHt5
- KzWElJoU3F0Nq8tUnz/gPD5RqZ03+a0kUksNy5/YHhcZrAa1MSS9aN1p3JrH1ojJDZji
- A9GQ==
-X-Gm-Message-State: AOAM530oHZPl9pmb/s4TEEI3VQMbIDUZmA8pf+rUS1obc5yRki0ZGcLC
- Cbw90VLZfX0YO8gH1bIbySAAKg299pk=
-X-Google-Smtp-Source: ABdhPJxfq3n8Q32VSpW2c9tniI/WcMmaxNB58RMGCq+F3MHr7LMDWajKxiH2LzIIWvoxkWq0sGd0gA==
-X-Received: by 2002:a05:6000:1c01:: with SMTP id
- ba1mr8776761wrb.28.1643407766401; 
- Fri, 28 Jan 2022 14:09:26 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id i11sm6899712wry.102.2022.01.28.14.09.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Jan 2022 14:09:26 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jan 2022 23:07:38 +0100
-Message-Id: <20220128220738.3028614-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=HKQuEQbjS8LkkDihqmE4OsQNKXlUp5O2s7kneJtTD3U=;
+ b=Ia59Wz4ELQzdD8cyCXVL9yRkEF3KO+CgslnB2Of4iJZhxFjMddnW96Kh+hxVL3om6J
+ VBbRjWAm9uWcbdUVAJ0sVOGn02R6GU1oPVAlOv+ClCGC+qRviTQPrqWvd83IdajwqDke
+ NBIATlrHtVVFDiLrQAqUxXlGlMB4vlzQJ8YyPrMbxs5j8ED2a5xh03xEzIgn04eXA4OE
+ nVdgppAAFejyPDee44pz2cpIlE8xmIJuoHsbIX+N8UzNi7sI3CwujufiiYM6GUqUGerF
+ 5LyLKXodPz3b6jtqrbMcQyrzUMXw0zoeAhNJBumKgCkcrsNeHJOBnbBDXNz1yFiBiGDE
+ xAwQ==
+X-Gm-Message-State: AOAM532FaYcmnTCCSGKeu0ec6TyUh/GefNeyPhgHxV5hNWA4stmPAK4F
+ zShaLH9Q/K3eeNQti3R4/3Ob2JOU/G2BUMn8usM=
+X-Google-Smtp-Source: ABdhPJwdoXJA8jthSUqL4i8nFSLDDOt0Mnp7bJStL9x686d8U7ElVDZgZh8eUhUKmxffJdWSUTw/8rkbEx/PCO8d3Bg=
+X-Received: by 2002:a4a:e965:: with SMTP id i5mr5532844ooe.22.1643416748859;
+ Fri, 28 Jan 2022 16:39:08 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump to version 3.14.1
+References: <20220116214955.3231899-1-fontaine.fabrice@gmail.com>
+ <20220116214955.3231899-2-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220116214955.3231899-2-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 28 Jan 2022 17:38:57 -0700
+Message-ID: <CADvTj4oZCjtb9pNt-UzzJhpK4eqGatW1sGbrJBdJNDop7jys7A@mail.gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 2/3] package/qt5/qt5webkit: fix build
+ without opengl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,105 +83,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>, Peter Seiderer <ps.report@gmx.net>,
+ =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
-
-https://github.com/zhaojh329/libuhttpd/releases/tag/v3.14.1
-https://github.com/zhaojh329/libuhttpd/releases/tag/v3.14.0
-https://github.com/zhaojh329/libuhttpd/releases/tag/v3.13.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...001-openssl.c-fix-build-with-wolfssl.patch | 47 -------------------
- package/libuhttpd/libuhttpd.hash              |  2 +-
- package/libuhttpd/libuhttpd.mk                |  2 +-
- 3 files changed, 2 insertions(+), 49 deletions(-)
- delete mode 100644 package/libuhttpd/0001-openssl.c-fix-build-with-wolfssl.patch
-
-diff --git a/package/libuhttpd/0001-openssl.c-fix-build-with-wolfssl.patch b/package/libuhttpd/0001-openssl.c-fix-build-with-wolfssl.patch
-deleted file mode 100644
-index deb1a0f93b..0000000000
---- a/package/libuhttpd/0001-openssl.c-fix-build-with-wolfssl.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From e5c5ed1c64cfc715729c9bfbfdcc4be225f344ff Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 4 Aug 2021 11:32:39 +0200
--Subject: [PATCH] openssl.c: fix build with wolfssl
--
--Fix the following build failure with wolfssl:
--
--/tmp/instance-4/output-1/build/libuhttpd-3.12.1/src/ssl/openssl.c: In function 'ssl_context_new':
--/tmp/instance-4/output-1/build/libuhttpd-3.12.1/src/ssl/openssl.c:174:33: error: 'tls13_ciphersuites' undeclared (first use in this function)
--  174 |     SSL_CTX_set_ciphersuites(c, tls13_ciphersuites);
--      |                                 ^~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/d0fb629b40b05ad828775894fabed878692bb222
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/zhaojh329/ssl/pull/1]
-----
-- openssl.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/openssl.c b/openssl.c
--index 8f3d8b7..c42638c 100644
----- a/src/ssl/openssl.c
--+++ b/src/ssl/openssl.c
--@@ -71,14 +71,14 @@
--                 "TLS13-AES256-GCM-SHA384:"		\
--                 ecdhe_aead_ciphers
-- #else
---# define tls13_ciphersuites	"TLS_CHACHA20_POLY1305_SHA256:"		\
---                "TLS_AES_128_GCM_SHA256:"		\
---                "TLS_AES_256_GCM_SHA384"
---
-- # define top_ciphers							\
--                 ecdhe_aead_ciphers
-- #endif
-- 
--+# define tls13_ciphersuites	"TLS_CHACHA20_POLY1305_SHA256:"		\
--+                "TLS_AES_128_GCM_SHA256:"		\
--+                "TLS_AES_256_GCM_SHA384"
--+
-- #define ecdhe_aead_ciphers						\
--                 "ECDHE-ECDSA-CHACHA20-POLY1305:"	\
--                 "ECDHE-ECDSA-AES128-GCM-SHA256:"	\
---- 
--2.30.2
--
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 98bd6e513b..e4fde4eb64 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c234dd3d491c4daa047e28870c6e740529b2eff2dd027dafb6bf02d8dba286b0  libuhttpd-3.12.1.tar.gz
-+sha256  512d4abfced0ec916d985d3d1eac7528e6676eecae6aca27fdaf313374e29f16  libuhttpd-3.14.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 3a99fe0613..b8cf935d01 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUHTTPD_VERSION = 3.12.1
-+LIBUHTTPD_VERSION = 3.14.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
--- 
-2.34.1
-
+On Sun, Jan 16, 2022 at 2:51 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fix the following build failure without opengl raised since bump to
+> version 5.212.0-alpha4 in commit
+> df0b0fe6919c0d0f3750f439a3cfa765232bd569:
+>
+> CMake Error at Source/cmake/OptionsQt.cmake:592 (message):
+>   Qt with OpenGL support is required for ENABLE_OPENGL
+>
+> WebKit2 unconditionally depends on TextureMapperGL.h and tools builds
+> QtTestBrowser which unconditionally depends on QtOpenGL
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5604555279f99ba0221dd8d0baf9ab4d7cca3aed
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/qt5/qt5webkit/qt5webkit.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+> index 3af1918a46..de3c428fbe 100644
+> --- a/package/qt5/qt5webkit/qt5webkit.mk
+> +++ b/package/qt5/qt5webkit/qt5webkit.mk
+> @@ -20,6 +20,16 @@ QT5WEBKIT_LICENSE = LGPL-2.1+, BSD-3-Clause, BSD-2-Clause
+>  # in the archive.
+>  QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21
+>
+> +ifeq ($(BR2_PACKAGE_QT5BASE_OPENGL),y)
+> +QT5WEBKIT_CONF_OPTS += \
+> +       -DENABLE_OPENGL=ON \
+> +       -DENABLE_WEBKIT2=ON
+> +else
+> +QT5WEBKIT_CONF_OPTS += \
+> +       -DENABLE_OPENGL=OFF \
+> +       -DENABLE_WEBKIT2=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+>  QT5WEBKIT_DEPENDENCIES += xlib_libXcomposite xlib_libXext xlib_libXrender
+>  endif
+> @@ -29,6 +39,7 @@ QT5WEBKIT_DEPENDENCIES += qt5declarative
+>  endif
+>
+>  QT5WEBKIT_CONF_OPTS += \
+> +       -DENABLE_TOOLS=OFF \
+>         -DPORT=Qt \
+>         -DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
+>         -DUSE_LIBHYPHEN=OFF
+> --
+> 2.34.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
