@@ -1,64 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAFD2C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 17:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B38CC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 17:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4893B40239;
-	Sun, 30 Jan 2022 17:18:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 041E760DFE;
+	Sun, 30 Jan 2022 17:19:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7svC-3LmkuS9; Sun, 30 Jan 2022 17:19:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 378D560C22;
+	Sun, 30 Jan 2022 17:19:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 883191BF57B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:19:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 759D7405E2
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:19:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jyf-qMc1xRx6; Sun, 30 Jan 2022 17:18:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AC4E40160;
-	Sun, 30 Jan 2022 17:18:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AAD2E1BF57B
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:18:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9924A402B2
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:18:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TAQ5-B0ynwMt for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 17:18:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2BE0402C3
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 17:18:33 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9250A240007;
- Sun, 30 Jan 2022 17:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643563111;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=eMi9n5qeehrRSRD9wQbsLpHob0OMe9ahmMExoBg4YQU=;
- b=e5859G4+f0nMnDNzI8h1Cxqvy/0OQ2wijqEd3gZvN77OWVUbFrEZmE5Bb7dt838AGepw6x
- +IbpgS070NyDvhBKUD8zLPMYg/otSuD5AlaSCyjyICJcoF6DXXmKld74Crk5zcXYYKRBlJ
- GuCE8ddtd9tY942eSBOKrk2p/+qtNfl7zabrsimCddtaNt44da/nXpywiPUw7nBYFzgndx
- e4ScVXa7ePjr8HWDDZuK44b0xjRxDpx/CRKeIzevQXGd49n9MYOgqegA9kauQkQQCLb53H
- PNBFAMYq6iUJjX8WefVudsIjCH3A2p8Rn+AWnLFainZGQElNHprVZx7syEYAjA==
-Date: Sun, 30 Jan 2022 18:18:30 +0100
-To: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Message-ID: <20220130181830.3170d14f@windsurf>
-In-Reply-To: <20220129111731.736265-1-peron.clem@gmail.com>
-References: <20220129111731.736265-1-peron.clem@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/2] configs/beelink_gs1: increase rootfs
- size to 120M
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H4a4SpIPXr6I for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 17:19:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87DAC40194
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 17:19:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 94A0B81933; Sun, 30 Jan 2022 17:12:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 18:19:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 87ee52a205ec0a250cd448ab6c12f40a7c85a272
+X-Git-Newrev: 75bea7b215675da9e097f9105d9b97aa4fc4f5b1
+X-Patchwork-Hint: ignore
+Message-Id: <20220130171212.94A0B81933@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/midori: drop select of
+ libsoup-gnome
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,31 +54,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCAyOSBKYW4gMjAyMiAxMjoxNzozMCArMDEwMApDbMOpbWVudCBQw6lyb24gPHBlcm9u
-LmNsZW1AZ21haWwuY29tPiB3cm90ZToKCj4gRm9yIHRoZSBtb21lbnQgQmVlbGluayBHUzEgdXNl
-IGEgZGVmYXVsdCByb290ZnMgc2l6ZSBvZiA2ME0sCj4gd2hpY2ggaXMgYSBiaXQgbG93IGlmIHlv
-dSB3YW50IHRvIGFkZCBzb21lIHBhY2thZ2VzIGxpa2UgYQo+IGdyYXBoaWMgc3RhY2suCj4gCj4g
-SW5jcmVhc2UgdGhlIHJvb3RmcyBzaXplIHRvIDEyME0uCj4gCj4gUmV2aWV3ZWQtYnk6IEdpdWxp
-byBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+IFNpZ25l
-ZC1vZmYtYnk6IENsw6ltZW50IFDDqXJvbiA8cGVyb24uY2xlbUBnbWFpbC5jb20+Cj4gLS0tCj4g
-IGNvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnIHwgMSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAx
-IGluc2VydGlvbigrKQoKSSBoYXZlIG5vdCBhcHBsaWVkIHRoaXMgb25lLiBJbmRlZWQsIGFueSBk
-ZWZjb25maWcgdGhhdCB1c2VzIHRoZQpkZWZhdWx0IHJvb3RmcyBzaXplIG9mIDYwTSB3b3VsZCBo
-YXZlIHRoZSBwcm9ibGVtIG9mICJpZiBJIGFkZCBtb3JlCnBhY2thZ2VzLCBpdCBkb2Vzbid0IGZp
-dCBpbiB0aGUgaW1hZ2UiLiBUaGUgZGVmY29uZmlncyBhcmUgbWVhbnQgdG8gYmUKbWluaW1hbCwg
-c28gaXQgZG9lc24ndCBtYWtlIHNlbnNlIHRvIGluY3JlYXNlIHRoZSBzaXplIHRvIDEyME0gdG8K
-YWNjb21tb2RhdGUgc29tZSBwb3NzaWJsZSBwYWNrYWdlIGFkZGl0aW9ucy4gTWF5YmUgZXZlbiAx
-MjBNIGlzIG5vdApnb2luZyB0byBiZSBlbm91Z2ggZGVwZW5kaW5nIG9uIGhvdyBtYW55IHBhY2th
-Z2VzIHlvdSBhZGQgKGFuZCBob3cKbGFyZ2UgdGhleSBhcmUpLgoKU28gSSd2ZSBtYXJrZWQgdGhp
-cyBwYXRjaCBhcyBSZWplY3RlZC4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBC
-b290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290
-bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=75bea7b215675da9e097f9105d9b97aa4fc4f5b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+libsoup-gnome is not used by midori since bump to version 9.0 in commit
+42f19d49fb2da891be9266a2f843292d24847f18 and
+https://github.com/midori-browser/core/commit/0c2d8f0ea61f20476542e861bc1772a878a54d32
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/midori/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index d98d7cb161..715295e5a6 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -41,7 +41,6 @@ config BR2_PACKAGE_MIDORI
+ 	select BR2_PACKAGE_LIBPEAS
+ 	select BR2_PACKAGE_LIBPEAS_WIDGETS
+ 	select BR2_PACKAGE_LIBSOUP
+-	select BR2_PACKAGE_LIBSOUP_GNOME
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_PYTHON3 # gobject-introspection
+ 	select BR2_PACKAGE_SQLITE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
