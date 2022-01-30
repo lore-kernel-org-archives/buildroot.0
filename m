@@ -4,62 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 962ABC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B42D3C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:44:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B9B260EA8;
-	Sun, 30 Jan 2022 22:43:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C062605C9;
+	Sun, 30 Jan 2022 22:44:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ed-ksdhIzHKV; Sun, 30 Jan 2022 22:43:17 +0000 (UTC)
+	with ESMTP id k9V8xqjiWVXp; Sun, 30 Jan 2022 22:44:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5160860EA4;
-	Sun, 30 Jan 2022 22:43:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0B6EE1BF4DA
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:42:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86994605E9;
+	Sun, 30 Jan 2022 22:44:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 191051BF95D
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07F8640211
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:42:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0610D8294A
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hb6rRy27OLBe for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 22:42:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D7913401D1
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:42:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 41CB440002;
- Sun, 30 Jan 2022 22:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643582574;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lLqlLTQ6XabaFz7YThin7Al3g07sbAdn766HrVlD+Sg=;
- b=fb4/PnPH2MvLTDQSHZ+NvcpyWyvBb1tp1uN3QiZNxWrY4+UgJOIsUxPY070yzvTBQ94umU
- d86Uq5keUTLEPAo2FS5IhAkQR2M1NfI3oCJNJbJilG4qErXC9+I2OPtEG3KhcmyMmmoCO/
- 3HA1TmQvFGqa2nS/NRgGF/mgqpgi205dV0ENcQsEoz8DO0JHBqdj/l3Tc74v6ImXcIAi7G
- fSnyuX8tDlPGuRer3U4FtGKEWifCw2QvfQSlO9FE4K5NJ16qTlQFCsNK5LiLirbg70hye1
- FJrzNFYpwcLUht1OEY4f73QiRpYb0fZHaq6L3CjRubTo5e7rDN2QssbjVKq+ig==
-Date: Sun, 30 Jan 2022 23:42:53 +0100
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20220130234253.2023aa22@windsurf>
-In-Reply-To: <20220128124538.31789-3-ps.report@gmx.net>
-References: <20220128124538.31789-1-ps.report@gmx.net>
- <20220128124538.31789-3-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 3/3] package/log4cxx: bump version to
- 0.12.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3VDBvKowiRjN for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 22:44:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53B7382919
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:44:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id DD10981E03; Sun, 30 Jan 2022 22:37:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 23:43:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8f54d6d7859c0eabf303a44b26e6fafb1cb50143
+X-Git-Newrev: 35a3c018246813597db52ef65b36a295ebdd9285
+X-Patchwork-Hint: ignore
+Message-Id: <20220130223703.DD10981E03@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/connman: bump to version 1.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,47 +53,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 28 Jan 2022 13:45:38 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=35a3c018246813597db52ef65b36a295ebdd9285
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - drop 0001-LOGCXX-528.patch (from upstream [1])
-> - renumber remainnig patch
-> 
-> Changelog (for deteils see [2]):
-> 
-> - This is a minor bugfix release to fix issues found with 0.12.0. Notably,
->   this version fixes a bug where a multithreaded application would crash
->   when using a rolling file.
-> 
->   [LOGCXX-534] - Crashed in log->forcedLog function when running with multi-thread
->   [LOGCXX-528] - log4cxx fails to build on Centos 7.6 / g++ 4.8.5 / Boost 1.53
-> 
-> [1] https://github.com/apache/logging-log4cxx/commit/249dd85494a430d95fd69d89f42b02fd950cda51
-> [2] https://logging.apache.org/log4cxx/latest_stable/changelog.html#0.12.1
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/log4cxx/0001-LOGCXX-528.patch         | 189 ------------------
->  ...ly-check-for-boost-if-really-needed.patch} |   0
->  package/log4cxx/log4cxx.hash                  |   4 +-
->  package/log4cxx/log4cxx.mk                    |   2 +-
->  4 files changed, 3 insertions(+), 192 deletions(-)
->  delete mode 100644 package/log4cxx/0001-LOGCXX-528.patch
->  rename package/log4cxx/{0002-boost-fallback-only-check-for-boost-if-really-needed.patch => 0001-boost-fallback-only-check-for-boost-if-really-needed.patch} (100%)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index 797448337c..6fc5edf29a 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256  1a57ae7ce234aa3a1744aac3be5c2121d98dce999440ef8ab9cc4edfd5edcb12  connman-1.40.tar.xz
++sha256  79fb40f4fdd5530c45aa8e592fb16ba23d3674f3a98cf10b89a6576f198de589  connman-1.41.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 8c66a69882..61851bd2dc 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.40
++CONNMAN_VERSION = 1.41
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
