@@ -1,63 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8492EC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97BF4C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AEE960EA4;
-	Sun, 30 Jan 2022 22:44:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CAAE831FB;
+	Sun, 30 Jan 2022 22:45:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eIjNQQTCBuUP; Sun, 30 Jan 2022 22:44:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 34PPK4BC8EK1; Sun, 30 Jan 2022 22:45:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BE6D606EC;
-	Sun, 30 Jan 2022 22:44:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F08D1BF4DA
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8877782F4A;
+	Sun, 30 Jan 2022 22:44:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 29DF91BF4DA
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D9F640352
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1892B82F4A
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 17uCUxDlnEJn for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 22:44:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g2-pEwbwYS7Y for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 22:44:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 63B4540350
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:44:44 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A858582951
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:44:48 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A6167240003;
- Sun, 30 Jan 2022 22:44:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 644F840002;
+ Sun, 30 Jan 2022 22:44:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643582682;
+ t=1643582686;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=gn6EgOAhM2/7jxB29UwjwykMGCxZk9EhQzt8gSKjJuU=;
- b=f2Pq71pB4KBudxkFlBPu3PjkD2qanTTrKnc9vVIXs5Azhyc0qEzuBvjueheig2frKI9B2p
- v2hhqMqwxyxVVQmCNHSpRWHlAjXgesIDMIEfCliZdi+RvNv6WR6klAT7BvMcYBEBTK1DOn
- v7o1UJZ/ruwDJBkv78tmBntFk/x3wUULBfCN8z98fDlTh564iPtn6eM1G1jHjVFAXus4Ig
- kAYXdVP3K2FahvGwiV5pz1xabK6HufnmroGgl5vV+1puwA8JKr8/bwjdviIk61w9rndY5K
- GZDjxOr4rjcIgxy0frvmsFL8GH5txpK3t3qIcOyMOCjwMmqjloL7c3Qwk41YQQ==
-Date: Sun, 30 Jan 2022 23:44:41 +0100
+ bh=8vX0uallHCEE0t4L9bb+m1ujDxumiwE0+hLtVecx+ms=;
+ b=AlJdp3BfJAfS/LRPQGxMhg6Nprku3SC1+JsjmiY0POB6/3IsfBHvc/UwCcSBsNnLqp2r0c
+ 6Pmuzyt5Q3VNszSmT0RP1vBF6CQrO1WARpEHHH/+GqiOjHV1Gr0bpVwkUDr5AM0FtjBmFo
+ DKJUszV0cq71Qy7TgokukN4mqQqR2q2DiYUYyXelKWmGr7xzHyOMuLYxQQ+fNj1RMprkFS
+ dYS0q2TBcY51q/YYv8dkMPRe/QBw5GAjXmyPworCwWRWkxK3l9HvCgJnXDepr0lrV0Kl2a
+ OtMsRz4zDEAmZNSwoCWrLLIhdG7uoD/G5j0xeJWWOjdb10SscEW0t19DAxDw6w==
+Date: Sun, 30 Jan 2022 23:44:45 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220130234441.52a7ff99@windsurf>
-In-Reply-To: <20220130215729.2653219-1-james.hilliard1@gmail.com>
-References: <20220130215729.2653219-1-james.hilliard1@gmail.com>
+Message-ID: <20220130234445.7ec336b4@windsurf>
+In-Reply-To: <20220130222317.2830755-1-james.hilliard1@gmail.com>
+References: <20220130222317.2830755-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump to version 5.16.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/connman: bump to version 1.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,19 +69,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Martin Bark <martin@barkynet.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 30 Jan 2022 14:57:29 -0700
+On Sun, 30 Jan 2022 15:23:17 -0700
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/iproute2/iproute2.hash | 2 +-
->  package/iproute2/iproute2.mk   | 2 +-
+>  package/connman/connman.hash | 2 +-
+>  package/connman/connman.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
