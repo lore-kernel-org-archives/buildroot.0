@@ -1,81 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CF1C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 09:05:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36D9FC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 09:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7E1182B24;
-	Sun, 30 Jan 2022 09:05:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE7D9405CE;
+	Sun, 30 Jan 2022 09:46:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ehgynsB0jRnR; Sun, 30 Jan 2022 09:46:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E41AD405AA;
+	Sun, 30 Jan 2022 09:45:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB2411BF2BF
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 09:45:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 938AF82A87
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 09:45:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NtXiuiMzmfRD; Sun, 30 Jan 2022 09:05:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1430C81AEA;
-	Sun, 30 Jan 2022 09:05:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80F641BF2BF
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 09:05:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CE0460B37
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 09:05:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gDaeW_VGEPFJ for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 09:05:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3BFE860B15
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 09:05:46 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id x193so21120039oix.0
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 01:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=3uuTQ5JlkN0134f3ju+Yk0puApDSLdgx1pvqqFMZ+ho=;
- b=iTz2kfSu5VbVdV9HoeKf9Rzg9yLFBj365jkVbFg0JrFvNMib/9cyREHF0o2NV+/YTf
- eO+7m9+mylS9oUG23sBn4HIIXjD7Sk0zQhQwJ7KOvWp7So5osqssPFZUe1Z8G5DY0IYe
- FaSXcQ+Zeasj8PZRghi/CxS2ZPjSMTXK57tLpaMuDxq3LNd/ehTX8+dkbmel9gammpll
- C3x+xo6QPNDlQuxqchb0/A7NMaXH9uVvd0NPpVXejKFlFDfnrxk1F22w+gNmvQOI+4l6
- QMMSxZOdKT8gLZVhOYVAPnrbDp8XuXfX51dOf+8jZFG8hyxkw1WaiCQmC/hjXN/VqqX0
- GJNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=3uuTQ5JlkN0134f3ju+Yk0puApDSLdgx1pvqqFMZ+ho=;
- b=Pw2ZQ289Q5Y+9CKeOd+DhqKaV9FNc5UGPkS0Pq4XD2Wbo8RmcK9toCQezT27vjRMCv
- cYEcWHH3fvMqqXmc3SUXa3cMJdZ8rFrTkvlt6gw6SkKn35DzZ4q0i9Gmrw/8F4JIQXu8
- sQAiup9cE7LAU3NHeZhTLk4vdWNHS62djQ4ZrKGPvFMl5ZE7usTyn7jmcuixeCi/atWb
- Y1IYlw6wcO5mY9X8tglNckf7kedIO40cZEIy6HPhGof6RDZ5u3WAPCVvH0tTvvancqkt
- F50oODxakQf960wmenwCOlQdWr0MvGMwTCrEwFe+GMZF7vcn7d6asx71T8c18nTPmpld
- Jy6g==
-X-Gm-Message-State: AOAM531hfYLXr91eRJAK54rqdFGIv6sIlgmCQPr99yd27E45fBSUt0zi
- s/E3/t9SJYixaW9hdKE4j14Z8lSGwEY=
-X-Google-Smtp-Source: ABdhPJzDpM5pJW0B7DURyS7PfZCdJIQd/6w6FXOevmMrIZlS9PxT5Bp5vHNkqZAJje7GKYTxfrliXw==
-X-Received: by 2002:a05:6808:14c1:: with SMTP id
- f1mr15054624oiw.129.1643533545093; 
- Sun, 30 Jan 2022 01:05:45 -0800 (PST)
-Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
- [71.218.245.50])
- by smtp.gmail.com with ESMTPSA id h9sm4396700otk.42.2022.01.30.01.05.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Jan 2022 01:05:44 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r7iCSR5cu1S9 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 09:45:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 303A882A7F
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 09:45:54 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5CADB100002
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 09:45:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>) id 1nE6mL-0006SY-9X
+ for buildroot@buildroot.org; Sun, 30 Jan 2022 10:45:49 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Jan 2022 02:05:35 -0700
-Message-Id: <20220130090535.404853-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun, 30 Jan 2022 10:45:49 +0100
+Message-ID: <87a6fd36b6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python: fix get_platform for
- target builds
+Subject: [Buildroot] Buildroot 2021.11.1 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,67 +56,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replicate the logic used to set _PYTHON_HOST_PLATFORM in configure.ac:
-https://github.com/python/cpython/blob/v3.10.2/configure.ac#L441-L446
-
-This should correctly set the sysconfig platform for cross builds:
-https://github.com/python/cpython/blob/v3.10.2/Lib/sysconfig.py#L704-L706
-
-Not setting this appears to cause distutils/setuptools to use the
-wrong build directory names for c extensions, however this doesn't
-seem to cause build or runtime errors as the installation paths still
-appear to be correct for staging/target installs.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/pkg-python.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 22ea77352c..d751311791 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -20,6 +20,13 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+PKG_PYTHON_ARCH = arm
-+else
-+PKG_PYTHON_ARCH = $(ARCH)
-+endif
-+PKG_PYTHON_HOST_PLATFORM = linux-$(PKG_PYTHON_ARCH)
-+
- # basename does not evaluate if a file exists, so we must check to ensure
- # the _sysconfigdata__linux_*.py file exists. The "|| true" is added to return
- # an empty string if the file does not exist.
-@@ -33,6 +40,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
- 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
- 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
- 	PYTHONNOUSERSITE=1 \
-+	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
- 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
- 	_python_sysroot=$(STAGING_DIR) \
- 	_python_prefix=/usr \
-@@ -60,6 +68,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
- 
- # Target setuptools-based packages
- PKG_PYTHON_SETUPTOOLS_ENV = \
-+	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
- 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
- 	PATH=$(BR_PATH) \
- 	$(TARGET_CONFIGURE_OPTS) \
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
+ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
+MjEuMDguMSBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
+dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIxLjExLjEudGFyLmd6CgpvcgoKaHR0cDovL2J1
+aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIxLjExLjEudGFyLnh6CgpPciBnZXQg
+aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
+dCAyMDIxLjExLjEgaXMgYSBidWdmaXggcmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9y
+dGFudCAvCnNlY3VyaXR5IHJlbGF0ZWQgaXNzdWVzIGRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjEu
+MTEgcmVsZWFzZS4KCi0gRGVmY29uZmlnczogQmVhZ2xlYm9uZTogU3VwcG9ydCBCZWFnbGVCb25l
+IGJsYWNrIHdpcmVsZXNzLAogIHN0bTMyZjQ2OV94aXBfZGlzY286IEZpeCBrZXJuZWwgYm9vdAoK
+LSBTZWN1cml0eSBmaXhlcyBmb3IgYXBhY2hlLCBjbGFtYXYsIGNvbnRhaW5lcmQsIGV4cGF0LCBm
+cmVlc3dpdGNoLAogIGdob3N0c2NyaXB0LCBnbnVjaGVzcywgZ28sIGphbnVzLWdhdGV3YXksIGtl
+ZXBhbGl2ZWQsIGxhcGFjaywgbGlianBlZywKICBsaWJwanNpcCwgbGlidXJpcGFyc2VyLCBtYmVk
+dGxzLCBtb25nb2RiLCBub2RlanMsIG9wZW5ibGFzLCBwb2xraXQsCiAgcHJpdm94eSwgcHJvc29k
+eSwgcHl0aG9uLWRqYW5nbywgcHl0aG9uLWx4bWwsIHF0NWJhc2UsIHJ1YnksIHJ1bmMsCiAgdGFy
+Z2V0Y2xpLWZiLCB0Y3ByZXBsYXksIHRpbnl4bWwsIHZpbSwgd2lyZXNoYXJrLCB4ZW4sCiAgeHNl
+cnZlcl94b3JnLXNlcnZlcgoKLSBGaXhlcyBmb3IgZG93bmxvYWQvY29tcGlsYXRpb24vcnVudGlt
+ZS9saWNlbnNlIGlzc3VlcyBpbiBhbHNhLXV0aWxzLAogIGJpbnV0aWxzLCBjYWdlLCBjYXBucHJv
+dG8sIGNpdmV0d2ViLCBjb25ubWFuLCBjb3JldXRpbHMsIGRhdjFkLAogIGRvY2tlci1jbGksIGRv
+Y2tlci1lbmdpbmUsIGVybGFuZywgZXJsYW5nLXJlYmFyLCBmaW5kdXRpbHMsCiAgZmxhcmUtZW5n
+aW5lLCBmbGFyZS1nYW1lLCBmb250LWF3ZXNvbWUsIGdjYywgZ2xpYmMsIGdycGMsCiAgZ3N0MS1y
+dHNwLXNlcnZlciwgZ3N0MS1pbnRlcnBpcGUsIGd1cG5wLXRvb2xzLCBoYWNrcmYsIGljdSwKICBp
+bWFnZW1hZ2ljaywganNvbi1mb3ItbW9kZXJuLWNwcCwgbGliZGJpLCBsaWJpaW8sIGxpYm1iaW0s
+IGxpYm5zcywKICBsaWJvcGVuc3NsLCBsaWJxbWksIGxpYnZpcnQsIGxpbnV4LXBhbSwgbHhjLCBt
+ZW5kZXIsIG1wZC1tcGMsIG11dHQsCiAgcGNyZTIsIHBocCwgcGlwZXdpcmUsIHB5dGhvbi1weXF0
+NSwgcHl0aG9uLXJlcXVlc3RzLCBweXRob24zLAogIHF0NWxvY2F0aW9uLCByaGFzaCwgcm5nLXRv
+b2xzLCBydXN0Yywgc2FtYmE0LCB0b3IsIHRwbTItdHNzLAogIHV0aWwtbGludXgtbGlicywgdmxj
+LCB4YXBwX3hhdXRoLCB4ZW5vbWFpLCB4bGliX2xpYlgxMQoKRm9yIG1vcmUgZGV0YWlscywgc2Vl
+IHRoZSBDSEFOR0VTIGZpbGU6CgpodHRwczovL2dpdC5idWlsZHJvb3QubmV0L2J1aWxkcm9vdC9w
+bGFpbi9DSEFOR0VTP2lkPTIwMjEuMTEuMQoKVXNlcnMgb2YgdGhlIGFmZmVjdGVkIHBhY2thZ2Vz
+IGFyZSBzdHJvbmdseSBlbmNvdXJhZ2VkIHRvIHVwZ3JhZGUuCgpNYW55IHRoYW5rcyB0byBhbGwg
+dGhlIHBlb3BsZSBjb250cmlidXRpbmcgdG8gdGhpcyByZWxlYXNlOgoKZ2l0IHNob3J0bG9nIC1z
+biAyMDIxLjExLi4KCiAgICA3MyAgRmFicmljZSBGb250YWluZQogICAgMTQgIFRob21hcyBQZXRh
+enpvbmkKICAgIDEyICBQZXRlciBLb3JzZ2FhcmQKICAgIDEwICBCZXJuZCBLdWhscwogICAgIDcg
+IENocmlzdGlhbiBTdGV3YXJ0CiAgICAgNiAgSmFtZXMgSGlsbGlhcmQKICAgICA1ICBQZXRlciBT
+ZWlkZXJlcgogICAgIDQgIEFkYW0gRHVza2V0dAogICAgIDMgIEZhYmlvIEVzdGV2YW0KICAgICAz
+ICBHaXVsaW8gQmVuZXR0aQogICAgIDMgIFJvbWFpbiBOYW91cgogICAgIDMgIFlhbm4gRS4gTU9S
+SU4KICAgICAyICBBbmRyZWFzIFppZWdsZXIKICAgICAyICBBcm5vdXQgVmFuZGVjYXBwZWxsZSAo
+RXNzZW5zaXVtL01pbmQpCiAgICAgMiAgRGFyaW8gQmluYWNjaGkKICAgICAyICBGcmFuY29pcyBQ
+ZXJyYWQKICAgICAyICBSaWNhcmRvIE1hcnRpbmNvc2tpCiAgICAgMSAgQW5zc2kgSGFubnVsYQog
+ICAgIDEgIEN5cmlsIEJ1cgogICAgIDEgIEVyaWsgTGFyc3NvbgogICAgIDEgIEZsb3JlbnQgQVVN
+QUlUUkUKICAgICAxICBHcmVnb3J5IENMRU1FTlQKICAgICAxICBLaG9hIEhvYW5nCiAgICAgMSAg
+TG90aGFyIEZlbHRlbgogICAgIDEgIE1hcmt1cyBNYXllcgogICAgIDEgIE1heCBGaWxpcHBvdgog
+ICAgIDEgIE1heGltZSBDaGV2YWxsaWVyCiAgICAgMSAgTWljaGFlbCBOb3N0aG9mZgogICAgIDEg
+IE51bm8gR29uw6dhbHZlcwogICAgIDEgIFF1ZW50aW4gU2NodWx6CiAgICAgMSAgU2FudG9zaCBN
+dWx0aGFsbGkKICAgICAxICBUSUFOIFl1YW5oYW8KICAgICAxICBUaWxtYW4gS2Vza2luw7Z6CiAg
+ICAgMSAgV2FsZGVtYXIgQnJvZGtvcmIKICAgICAxICBZZWdvciBZZWZyZW1vdgogICAgIDEgIFl1
+bmhhbyBUaWFuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
