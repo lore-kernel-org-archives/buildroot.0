@@ -1,64 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74669C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 14:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 795A4C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 15:01:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3698860AF4;
-	Sun, 30 Jan 2022 14:57:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24560403F8;
+	Sun, 30 Jan 2022 15:01:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D1zR8i6h2Fle; Sun, 30 Jan 2022 14:57:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 85OxN_oy-JJG; Sun, 30 Jan 2022 15:00:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8496260692;
-	Sun, 30 Jan 2022 14:57:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43BA640332;
+	Sun, 30 Jan 2022 15:00:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4947F1BF425
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:57:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A6F591BF425
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 15:00:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34E6F40332
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:57:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A207A40332
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 15:00:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UiKVYWTnEiX0 for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 14:57:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D61384053C
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 14:57:32 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7BEB4240002;
- Sun, 30 Jan 2022 14:57:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643554649;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=78ysgwqPr4lK+bHAXDqA4+nD+MIG5mAOhiNA4fz6lJ0=;
- b=aadB2P/P1sIWNBPaDwKlRLcKwNt7v9J+sNXzookpONQUicyPnMhucBuZtugGWpiP4jtNSI
- 7flib3/K5oji1iCUlkSxo6hDCbcocNfI3pFxpmHeyn1Bfmj0q1c2eC+0AYVmXQcJc7VTjP
- MHeblr2VIEFsRiO0HvNGq8C7W52y1EuGzhjlvbMVrigcHwFVkqE0c3tqdrQ3s/frDmtkpb
- ps2tOdQYuk85ZWvPZr/h3EagsZIspGByDHn7rhRJ6ZjM78Oq4WZXsAhVCTmN571P/iN9eQ
- MpMHxUNzlUnMgBdKCSncaIscmOOQs9reNIcGjDeYXZ2mVlu5LF7Ipvz+m1IRbg==
-Date: Sun, 30 Jan 2022 15:57:28 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220130155728.7f171314@windsurf>
-In-Reply-To: <20220128220738.3028614-1-fontaine.fabrice@gmail.com>
-References: <20220128220738.3028614-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libuhttpd: bump to version
- 3.14.1
+ with ESMTP id RShCcsOPHEEM for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 15:00:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A26AC4017C
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 15:00:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id DEC2882AEC; Sun, 30 Jan 2022 14:53:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 16:00:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 61797c52f5deef2cb67e60cf075ca243078c8855
+X-Git-Newrev: 1ad05acb1e8c83da6c31b88ea2d543f4fe210004
+X-Patchwork-Hint: ignore
+Message-Id: <20220130145353.DEC2882AEC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/htpdate: fix static openssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,36 +53,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 28 Jan 2022 23:07:38 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1ad05acb1e8c83da6c31b88ea2d543f4fe210004
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop patch (already in version)
-> 
-> https://github.com/zhaojh329/libuhttpd/releases/tag/v3.14.1
-> https://github.com/zhaojh329/libuhttpd/releases/tag/v3.14.0
-> https://github.com/zhaojh329/libuhttpd/releases/tag/v3.13.0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...001-openssl.c-fix-build-with-wolfssl.patch | 47 -------------------
->  package/libuhttpd/libuhttpd.hash              |  2 +-
->  package/libuhttpd/libuhttpd.mk                |  2 +-
->  3 files changed, 2 insertions(+), 49 deletions(-)
->  delete mode 100644 package/libuhttpd/0001-openssl.c-fix-build-with-wolfssl.patch
+Fix the following static build failure with openssl raised since bump to
+version 1.3.3 in commit 163509a8e0d558e6339c5489f072dfe805e0cc34:
 
-Applied to master, thanks.
+/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/10.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/sh4-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a(rec_layer_d1.o): in function `DTLS_RECORD_LAYER_new':
+rec_layer_d1.c:(.text+0x124): undefined reference to `CRYPTO_malloc'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/75ad8515916dfa056b17c97fdd95c7eb4d83a304
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...SL_LIBS-to-be-configured-from-environment.patch | 37 ++++++++++++++++++++++
+ package/htpdate/htpdate.mk                         |  4 ++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch b/package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch
+new file mode 100644
+index 0000000000..6dca2babab
+--- /dev/null
++++ b/package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch
+@@ -0,0 +1,37 @@
++From 4ba90fedd553c3b06c925fb6ff5245a5dcabace9 Mon Sep 17 00:00:00 2001
++From: Eddy Vervest <eddy@vervest.org>
++Date: Sat, 29 Jan 2022 10:58:13 +0100
++Subject: [PATCH] Allow SSL_LIBS to be configured from environment
++
++[Retrieved from:
++https://github.com/twekkel/htpdate/commit/4ba90fedd553c3b06c925fb6ff5245a5dcabace9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 4796efa..cf077e6 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -2,8 +2,9 @@ prefix = $(DESTDIR)/usr
++ bindir = ${prefix}/sbin
++ mandir = ${prefix}/share/man
++ 
++-CC     ?= gcc
++-CFLAGS += -Wall -std=c11 -pedantic -O2
+++CC       ?= gcc
+++CFLAGS   += -Wall -std=c11 -pedantic -O2
+++SSL_LIBS ?= -lssl
++ 
++ INSTALL ?= install -c
++ STRIP   ?= strip -s
++@@ -14,7 +15,7 @@ htpdate: htpdate.c
++ 	$(CC) $(CFLAGS) -o htpdate htpdate.c
++ 
++ https: htpdate.c
++-	$(CC) $(CFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c -lssl
+++	$(CC) $(CFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c $(SSL_LIBS)
++ 
++ install: all
++ 	$(STRIP) htpdate
+diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
+index 54b3ec2569..e32480fc85 100644
+--- a/package/htpdate/htpdate.mk
++++ b/package/htpdate/htpdate.mk
+@@ -10,7 +10,9 @@ HTPDATE_LICENSE = GPL-2.0+
+ HTPDATE_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-HTPDATE_BUILD_OPTS = https
++HTPDATE_BUILD_OPTS = \
++	https \
++	SSL_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
+ HTPDATE_DEPENDENCIES += openssl host-pkgconf
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
