@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31F67C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 13:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 048EDC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 14:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6220600B4;
-	Sun, 30 Jan 2022 13:54:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0D6360BF2;
+	Sun, 30 Jan 2022 14:00:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CFJdAycc43BU; Sun, 30 Jan 2022 13:54:12 +0000 (UTC)
+	with ESMTP id NQkmxldPLokI; Sun, 30 Jan 2022 14:00:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2987C60E73;
-	Sun, 30 Jan 2022 13:54:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5544B1BF592
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 13:53:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0408F60B45;
+	Sun, 30 Jan 2022 14:00:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6169D1BF592
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41A6640296
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 13:53:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4217760B45
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:00:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aBKVm9a1MdWO for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 13:53:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E5313408A1
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 13:53:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b7nRtn6ttWuC for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 14:00:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 14AEE60B15
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 14:00:20 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0AD8FE0007;
- Sun, 30 Jan 2022 13:53:31 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 08B921C0004;
+ Sun, 30 Jan 2022 14:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643550812;
+ t=1643551218;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=80hjkw+B0ocHWmvy3zwqZniRIbpcMHLhRG9IDUzY3sE=;
- b=pPeNGYHy6aoz0ITnG9JM2brky2guF91hIggoDuDCRt5N2TC7rZzwXRCD91/JVeOlqvzJE6
- 11wmIdC85p1OyWovvy2mK1vNJqvSMXULWYAInKbSPjG+BH0DthQ0l7cp2UlH9MgqXM++ZE
- /0idQqVJLo243piDpG8HGQrRyga2Ux7mmA4C4w4AwiFJQ47LWHsseBVuRB1+dVUgBhAnho
- LRoQ/MFiS005T6cTDYka9GMkpRCu1MQ9rvbCsZ6TAWuP+9Il8t6k1fsMLKEEY09yaOARAu
- dCFXORV6TRA4L2qeLHUOMpvsmNIsKJFuHNOkBZPAy7erFn1XHtcjdc9b3NN9sw==
-Date: Sun, 30 Jan 2022 14:53:31 +0100
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220130145331.5474ffa9@windsurf>
-In-Reply-To: <20220130123435.13149-1-bernd.kuhls@t-online.de>
-References: <20220130123435.13149-1-bernd.kuhls@t-online.de>
+ bh=c+jPjnk71GN+8PGktnthl3b+vRq5z5O48jTTP+ybXQI=;
+ b=MNzjP6TvusdO6/CprFRowyckkkLV6U/lEKF+LniFnri9KpiQVB1aWJBTYwUKIddhYpp4UU
+ ARxiGyiviGAmwMgNPbIlwThGSQPhbvk0UrBTJMtQ+wa2MuFkxgCvn6pNhwUoTRrc4mMVdP
+ OoEWecYalHkeZI2EdZG6TIX+b/wzyVhqmk4aPNxqybpyoemY+IgRotLt+5H0861ixLLogA
+ pQWI51ty31AHbRgv7ZG2i90XASWwhcrNH/GQ64dVqwIL4z/SSJ56EryZ46OO8KElo9g5ai
+ pJQMXRL1zD/SimR+HvErzz67ITths3Hb+CMv9hXxG7xwK5nYXaJaCdK9gBiheA==
+Date: Sun, 30 Jan 2022 15:00:17 +0100
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20220130150017.5914a95a@windsurf>
+In-Reply-To: <20220129224651.1282263-1-romain.naour@gmail.com>
+References: <20220129224651.1282263-1-romain.naour@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/xmrig: bump version to 6.16.3
+Subject: Re: [Buildroot] [PATCH 1/5] package/efl: bump to version 1.26.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,17 +75,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 30 Jan 2022 13:34:35 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 29 Jan 2022 23:46:47 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> Changelog:
-> https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
+> This is a bug-fix release.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> See: https://www.enlightenment.org/news/2022-01-03-efl-1.26.1
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/xmrig/xmrig.hash | 2 +-
->  package/xmrig/xmrig.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/efl/efl.hash | 4 ++--
+>  package/efl/efl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
