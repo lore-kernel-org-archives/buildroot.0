@@ -1,45 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 714CCC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:44:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8492EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 207724035A;
-	Sun, 30 Jan 2022 22:44:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AEE960EA4;
+	Sun, 30 Jan 2022 22:44:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V7v_D-8m7psT; Sun, 30 Jan 2022 22:44:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eIjNQQTCBuUP; Sun, 30 Jan 2022 22:44:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6ED2240352;
-	Sun, 30 Jan 2022 22:44:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BE6D606EC;
+	Sun, 30 Jan 2022 22:44:47 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16EAA1BF4DA
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F08D1BF4DA
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 056BF40352
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D9F640352
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:44:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rEz6t4mgySRH for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 22:44:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E60B40350
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:44:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D483381DF3; Sun, 30 Jan 2022 22:37:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Jan 2022 23:43:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38659ff0cb5b3d8a340adf5ff631200103f53e67
-X-Git-Newrev: 8f54d6d7859c0eabf303a44b26e6fafb1cb50143
-X-Patchwork-Hint: ignore
-Message-Id: <20220130223703.D483381DF3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iproute2: bump to version 5.16.0
+ with ESMTP id 17uCUxDlnEJn for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 22:44:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 63B4540350
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:44:44 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A6167240003;
+ Sun, 30 Jan 2022 22:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1643582682;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gn6EgOAhM2/7jxB29UwjwykMGCxZk9EhQzt8gSKjJuU=;
+ b=f2Pq71pB4KBudxkFlBPu3PjkD2qanTTrKnc9vVIXs5Azhyc0qEzuBvjueheig2frKI9B2p
+ v2hhqMqwxyxVVQmCNHSpRWHlAjXgesIDMIEfCliZdi+RvNv6WR6klAT7BvMcYBEBTK1DOn
+ v7o1UJZ/ruwDJBkv78tmBntFk/x3wUULBfCN8z98fDlTh564iPtn6eM1G1jHjVFAXus4Ig
+ kAYXdVP3K2FahvGwiV5pz1xabK6HufnmroGgl5vV+1puwA8JKr8/bwjdviIk61w9rndY5K
+ GZDjxOr4rjcIgxy0frvmsFL8GH5txpK3t3qIcOyMOCjwMmqjloL7c3Qwk41YQQ==
+Date: Sun, 30 Jan 2022 23:44:41 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220130234441.52a7ff99@windsurf>
+In-Reply-To: <20220130215729.2653219-1-james.hilliard1@gmail.com>
+References: <20220130215729.2653219-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump to version 5.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,44 +71,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f54d6d7859c0eabf303a44b26e6fafb1cb50143
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 30 Jan 2022 14:57:29 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/iproute2/iproute2.hash | 2 +-
+>  package/iproute2/iproute2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index d8d619cbda..f7e7f682a9 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  38e3e4a5f9a7f5575c015027a10df097c149111eeb739993128e5b2b35b291ff  iproute2-5.15.0.tar.xz
-+sha256  c064b66f6b001c2a35aa5224b5b1ac8aa4bee104d7dce30d6f10a84cb8b01e2f  iproute2-5.16.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 4162e38eb7..a51b5b2996 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPROUTE2_VERSION = 5.15.0
-+IPROUTE2_VERSION = 5.16.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
