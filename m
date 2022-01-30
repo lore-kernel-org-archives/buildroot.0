@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C8B1C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 14:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00B7C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 14:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4E7E408F8;
-	Sun, 30 Jan 2022 14:02:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F3AA408C3;
+	Sun, 30 Jan 2022 14:05:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wewsF9ZpFmCR; Sun, 30 Jan 2022 14:02:50 +0000 (UTC)
+	with ESMTP id hexByGpMxe3X; Sun, 30 Jan 2022 14:05:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE745408F2;
-	Sun, 30 Jan 2022 14:02:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D523408DE;
+	Sun, 30 Jan 2022 14:05:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A0CC21BF592
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:02:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E32031BF425
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A030408F2
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:02:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D0E98408DE
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:05:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3C5U_ZgKf8p5 for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 14:02:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B9F8408E7
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 14:02:46 +0000 (UTC)
+ with ESMTP id 1ddiaVHopUyU for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 14:05:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B1CE3408C3
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 14:05:31 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0FC981C0004;
- Sun, 30 Jan 2022 14:02:43 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id A5B2D1BF204;
+ Sun, 30 Jan 2022 14:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643551364;
+ t=1643551529;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ejOo5oEKXeK9XPe0aAV3ai/wREFM6vDBW4qkqYPpuKk=;
- b=NOD6E4bACJJLLgXFWpwWmN7siSuJ8Q7Duaqk7o3biIfoIGmyFbWejPZbqcfICy8pIuO/JJ
- BrJschyrWuugSOy98t3FVQLaIFvN4hyz/DyFEz58fC7MbKRZHEcnLmHzOVDBDx/iQRe7Tv
- lC8Ccc7md0uCiqRCp6Vsof++NZLJbi2C+Bzg/3xx5TsK46+sf5foMhzod76cqEkuhrNvbG
- qGe4oXZA5lp9vaeZLlSGfrQLRiUGAqVFBKraCT9/0V7+TQqJILg45jyQ40nmlHGFEz9QZ+
- +jp0N2PChWgC3vCvCUifJxqdmtFIHpUb4lbrJirax5Qf08U62/JbJsplUi+40w==
-Date: Sun, 30 Jan 2022 15:02:43 +0100
+ bh=qWhPZFf6Nruof7rxY+YBRizpcjZ5RvkLX3q4SNJntCo=;
+ b=RUzCP6g8Coib60R8msSihR4xaDB5OESzPx3laugcSSPXuprEvTWEGjUKGB8Uu1vfY9jY5r
+ POBWIWPeVhVLPfDfCWDiTj71th+Mmt2zm7eI9ABRr/vS/fY3Sd2FtxxgGE1yQNzaaiU2H/
+ UCgA/jzFDHavmpwPD2xhE56E0NE6i/BYTOQlObzHKrQN6y9FwKH6dFH3clG0/vSBIpC23+
+ C1nqfiEZ+ul/O7rSLVnn7Am2CuXQZ9Hdg3G8W/afw3GVdcigE8hU++Z8yu/Jm5dZ8cDgNW
+ sNa8S9Wxf03JMYnz5J0ZToHR4kJYhOTjj5RPQvwrlruAfgBRDrl9l7W5j/maAw==
+Date: Sun, 30 Jan 2022 15:05:27 +0100
 To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20220130150243.5795f1fa@windsurf>
-In-Reply-To: <20220129224651.1282263-3-romain.naour@gmail.com>
+Message-ID: <20220130150527.12c67565@windsurf>
+In-Reply-To: <20220129224651.1282263-4-romain.naour@gmail.com>
 References: <20220129224651.1282263-1-romain.naour@gmail.com>
- <20220129224651.1282263-3-romain.naour@gmail.com>
+ <20220129224651.1282263-4-romain.naour@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/5] package/efl: rework eeze handling in
- Kconfig
+Subject: Re: [Buildroot] [PATCH 4/5] package/efl: handle input option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,87 +70,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 29 Jan 2022 23:46:49 +0100
+Hello,
+
+On Sat, 29 Jan 2022 23:46:50 +0100
 Romain Naour <romain.naour@gmail.com> wrote:
 
-> Commit [1] added eeze dependency using "depends on" to several efl
-> options (drm, libmount) instead of selecting eeze and propagate the
-> udev reverse dependency.
+> +config BR2_PACKAGE_EFL_LIBINPUT
+> +	bool "Enable libinput support (recommended)"
+> +	default y
+> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
 
-I do agree with changing from a "depends on BR2_PACKAGE_EFL_EEZE" to a
-"depends BR2_PACKAGE_HAS_UDEV" + "select BR2_PACKAGE_EFL_EEZE".
-However...
+Should be:
 
-> The dependency between eeze, libinput, efl drm requires to add a new
-> libinput option.
+	depends on BR2_PACKAGE_HAS_UDEV # libinput, efl-eeze
 
-... I don't understand this justification. Could you clarify. Even
-after reading PATCH 4/5, I don't get the relationship. PATCH 4/5 could
-have been done (I guess using the same principle of "depends on
-BR2_PACKAGE_EFL_EEZE".
+> +comment "libinput needs udev /dev management (eeze)"
 
-> Rework eeze handling to use select BR2_PACKAGE_EFL_EEZE since the
-> user is already aware of the udev dependency (BR2_PACKAGE_HAS_UDEV).
+Drop "eeze" between parenthesis.
 
-I don't understand why you say the user is already aware of the udev
-dependency? Thanks to the comments?
-
->  comment "efl's libmount support needs udev /dev management (eeze)"
-
-Remove the "eeze" between parenthesis here I believe.
-
-> -	depends on !BR2_PACKAGE_EFL_EEZE
 > +	depends on !BR2_PACKAGE_HAS_UDEV
->  
->  config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
->  	bool
-> @@ -173,7 +174,7 @@ config BR2_PACKAGE_EFL_WAYLAND
->  	depends on BR2_PACKAGE_WAYLAND
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # Evas DRM Engine -> libdrm
->  	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
-> -	depends on BR2_PACKAGE_EFL_EEZE # efl drm
-> +	depends on BR2_PACKAGE_HAS_UDEV # efl drm (eeze)
->  	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
->  	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
->  	select BR2_PACKAGE_EFL_DRM
-> @@ -182,7 +183,7 @@ config BR2_PACKAGE_EFL_WAYLAND
->  comment "Wayland support needs udev /dev management (eeze), OpenGL ES w/ EGL, threads, locales"
-
-Ditto.
-
->  	depends on BR2_PACKAGE_WAYLAND
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
-> -		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE \
-> +		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_HAS_UDEV \
->  		|| !BR2_ENABLE_LOCALE
->  
->  choice
-> @@ -215,9 +216,10 @@ endchoice # OpenGL support
+> +
+>  config BR2_PACKAGE_EFL_LIBSNDFILE
+>  	bool "Enable libsndfile support (recommended)"
+>  	default y
+> @@ -216,13 +229,11 @@ endchoice # OpenGL support
 >  
 >  config BR2_PACKAGE_EFL_DRM
 >  	bool "Evas DRM Engine"
-> -	depends on BR2_PACKAGE_EFL_EEZE
-> +	depends on BR2_PACKAGE_HAS_UDEV (eeze)
+> -	depends on BR2_PACKAGE_HAS_UDEV (eeze)
+> +	depends on BR2_PACKAGE_HAS_UDEV # elput, eeze
 
-Does this line really parses correctly?
+You fixed a bug from the previous commit here. What is "elput" ?
 
 >  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
 >  	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
-> +	select BR2_PACKAGE_EFL_EEZE
->  	select BR2_PACKAGE_LIBDRM
->  	select BR2_PACKAGE_LIBINPUT # For elput
->  	select BR2_PACKAGE_LIBXKBCOMMON
-> @@ -232,7 +234,7 @@ config BR2_PACKAGE_EFL_DRM
->  
->  comment "Evas DRM Engine needs udev /dev management (eeze), mesa3d w/ EGL support, threads"
+> -	select BR2_PACKAGE_EFL_EEZE
+> +	select BR2_PACKAGE_EFL_LIBINPUT
 
-Remove the "eeze" between parenthesis.
+Is that the explanation for PATCH 3/5 ? But even that doesn't seem to
+justify PATCH 3/5: you could have done the same with a "depends on
+BR2_PACKAGE_EFL_EEZE".
+
+Again: I agree with PATCH 3/5, and I think it's the right patch. I just
+don't understand the justification it has in its commit log.
+
+>  	select BR2_PACKAGE_LIBDRM
+> -	select BR2_PACKAGE_LIBINPUT # For elput
+
+What is "elput" ?
 
 Thanks!
 
