@@ -1,64 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD2F5C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:19:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D9E9C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 22:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60D1860E8A;
-	Sun, 30 Jan 2022 22:19:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C76CD402E1;
+	Sun, 30 Jan 2022 22:19:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YE0AMqIYCRIb; Sun, 30 Jan 2022 22:19:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D74104019C;
+	Sun, 30 Jan 2022 22:19:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D64381BF4DA
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:19:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C498D60EA4
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:19:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j2M3y0X6kcMZ; Sun, 30 Jan 2022 22:19:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF5A960E89;
-	Sun, 30 Jan 2022 22:19:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B9DA01BF4DA
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:19:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B25D4401CB
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 22:19:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id myiO9gYZfX8O for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 22:19:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 98E35401AF
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:19:33 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B123B40002;
- Sun, 30 Jan 2022 22:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643581170;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PgSi5QNO0A2jjXXISaL7TIGp0d/kpYpHYAOG12lnN8s=;
- b=efWYe6ElOH3RnWBea9pFE7TV/7DGhszXKf+Sl25wOnz9vKGl9q9oMk9SsrAZvgdcr5ORmF
- bmxSrHC9sFs+OnJf40q5WYztjIo8kPoCHFiSON//hiFP7PLfOFoYfUcjSL0TiGzQ7KJDCX
- E9HGuCpEhGyjzAnYg5dE7VfYvYWzGSc2r8TsJgww6hpfmeLnIsdUejZQ2Xo4601ZoLhJ/9
- EgKTU0/ADJUWeZXYISx1HHP4T5Pi6VKS9S+aihyQXdpjZ7Hwnynqee1uFQLf6k45Oci33m
- mGPu0fhfwOVet6XKqXu+8cewFFI3FQe2Pa6b0PkyDYUP/7gociD175oke3m7vQ==
-Date: Sun, 30 Jan 2022 23:19:29 +0100
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20220130231929.166d6ad7@windsurf>
-In-Reply-To: <20220128124538.31789-1-ps.report@gmx.net>
-References: <20220128124538.31789-1-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/3] package/log4cxx: change download URL
- to https
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2ug88ncGaDKd for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 22:19:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FC0960E8A
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 22:19:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id BF76481402; Sun, 30 Jan 2022 22:12:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 23:13:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d5b08f37a4c3fb4f56f2ca440bafc865bdf04bfe
+X-Git-Newrev: 0876da5ea1a9bd74737a4ccef2995f124368bb86
+X-Patchwork-Hint: ignore
+Message-Id: <20220130221235.BF76481402@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/log4cxx: change download URL to
+ https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,29 +54,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 28 Jan 2022 13:45:36 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0876da5ea1a9bd74737a4ccef2995f124368bb86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - change download URL to https
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/log4cxx/log4cxx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+- change download URL to https
 
-Applied to master, thanks.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/log4cxx/log4cxx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+index e799b0fb16..7612774583 100644
+--- a/package/log4cxx/log4cxx.mk
++++ b/package/log4cxx/log4cxx.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LOG4CXX_VERSION = 0.12.0
+-LOG4CXX_SITE = http://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
++LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
+ LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
+ LOG4CXX_INSTALL_STAGING = YES
+ LOG4CXX_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
