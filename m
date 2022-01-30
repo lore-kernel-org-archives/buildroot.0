@@ -1,64 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65176C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 17:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CBDAC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 17:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6CCD83F36;
-	Sun, 30 Jan 2022 17:07:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D78B60DFE;
+	Sun, 30 Jan 2022 17:16:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UbrHpR7yJypT; Sun, 30 Jan 2022 17:07:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FymO8CK8_Wwr; Sun, 30 Jan 2022 17:16:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2ACDB83F33;
-	Sun, 30 Jan 2022 17:07:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 944F91BF57B
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:07:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6013760BD8;
+	Sun, 30 Jan 2022 17:16:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 296341BF57B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FDE24090E
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:07:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13C1F60BD8
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 17:16:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qAiHY4hPFaJU for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 17:07:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2CBE240908
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 17:07:12 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ED8A8240007;
- Sun, 30 Jan 2022 17:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643562431;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IHEKACPb9Vi/zmIyTrzmTa3/g2wbc1zcPV4kyS1xgJc=;
- b=XrVr43w4RRkIt5nJZvw0zn7a8hs6wEZpC1BEEWOzdry3FwdDSuyB7aSD6NISPXX/CiTy4Q
- u73DovklOXIZNmMGTM9hwd8egkUMv5EIpV1dbNYtrVqs9dnKjgs7mLuHdJPFG8JUrmHsa5
- O8qfE8midNhcLmfI4tarD+yw+UloeV8PMi5YOgRv6OyvjEnErJhds16VFrzeSOeNMRIAj9
- b+qfe5KbbHKDrXCThJVJJattDvxAOY93YD2ETqSVJxQ5IbchE08qkVO8yNeBY3sC+lzg1Z
- QOWl/16EhvMkCjdGRkQSrReY6Cpi9Bl5SXJ0kueZLbm8sVJlp0gE15kwDLHrpw==
-Date: Sun, 30 Jan 2022 18:07:10 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220130180710.0634772d@windsurf>
-In-Reply-To: <20220129110734.3737599-1-fontaine.fabrice@gmail.com>
-References: <20220129110734.3737599-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: fix static build with
- openipmi
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zFfIkJIMXicA for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 17:16:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B34D60644
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 17:16:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 6693882626; Sun, 30 Jan 2022 17:09:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 18:16:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7bc68d9b10aba88f74095aff85dfd8a730d05348
+X-Git-Newrev: 87ee52a205ec0a250cd448ab6c12f40a7c85a272
+X-Patchwork-Hint: ignore
+Message-Id: <20220130170940.6693882626@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beelink_gs1: bump to linux 5.15,
+ atf 2.5 and u-boot 2021.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,38 +54,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0476921669269377438=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 29 Jan 2022 12:07:34 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============0476921669269377438==
+Content-Type: text/plain
 
-> Fix the following static build failure with openipmi raised since commit
-> 8f6b346a34bdb344c4a001d8bd66f5e973013c17:
-> 
-> /home/peko/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-musleabihf/sysroot/usr/lib/libfreeipmi.a(libfreeipmi_la-ipmi-md5.o): in function `md5_init':
-> ipmi-md5.c:(.text+0xa7c): multiple definition of `md5_init'; ../lib/.libs/libipmitool.a(md5.o):md5.c:(.text+0xab0): first defined here
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/01b22faf08a798ecc5d5465e1c0c13fa024f1096
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-rename-md2-and-md5-functions-macros.patch | 695 ++++++++++++++++++
->  1 file changed, 695 insertions(+)
->  create mode 100644 package/freeipmi/0001-libfreeipmi-rename-md2-and-md5-functions-macros.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=87ee52a205ec0a250cd448ab6c12f40a7c85a272
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+U-boot libfdt fails to compile on CI.
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+collect2: error: ld returned 1 exit status
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2021478208
+
+As this fix has been already upstreamed just bump U-boot package.
+
+Let's also bump Kernel and ATF as the board is properly supported upstream.
+
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/beelink_gs1_defconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+index b461574a98..aa8a2cfb6b 100644
+--- a/configs/beelink_gs1_defconfig
++++ b/configs/beelink_gs1_defconfig
+@@ -9,11 +9,11 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
+ 
+-# Kernel Linux headers same as kernel, a 5.5 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_5=y
++# Kernel Linux headers same as kernel, 5.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.5.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h6-beelink-gs1"
+@@ -24,14 +24,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h6"
+ 
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beelink_gs1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+
+--===============0476921669269377438==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0476921669269377438==--
