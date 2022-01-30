@@ -1,62 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00B7C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 14:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E28C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jan 2022 14:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F3AA408C3;
-	Sun, 30 Jan 2022 14:05:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 481964017C;
+	Sun, 30 Jan 2022 14:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hexByGpMxe3X; Sun, 30 Jan 2022 14:05:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NxQk5tT_Y_Yg; Sun, 30 Jan 2022 14:12:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D523408DE;
-	Sun, 30 Jan 2022 14:05:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E32031BF425
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:05:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5231F40111;
+	Sun, 30 Jan 2022 14:12:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DAD91BF425
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:12:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D0E98408DE
- for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:05:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D67B60B27
+ for <buildroot@lists.busybox.net>; Sun, 30 Jan 2022 14:12:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1ddiaVHopUyU for <buildroot@lists.busybox.net>;
- Sun, 30 Jan 2022 14:05:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B1CE3408C3
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 14:05:31 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A5B2D1BF204;
- Sun, 30 Jan 2022 14:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1643551529;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qWhPZFf6Nruof7rxY+YBRizpcjZ5RvkLX3q4SNJntCo=;
- b=RUzCP6g8Coib60R8msSihR4xaDB5OESzPx3laugcSSPXuprEvTWEGjUKGB8Uu1vfY9jY5r
- POBWIWPeVhVLPfDfCWDiTj71th+Mmt2zm7eI9ABRr/vS/fY3Sd2FtxxgGE1yQNzaaiU2H/
- UCgA/jzFDHavmpwPD2xhE56E0NE6i/BYTOQlObzHKrQN6y9FwKH6dFH3clG0/vSBIpC23+
- C1nqfiEZ+ul/O7rSLVnn7Am2CuXQZ9Hdg3G8W/afw3GVdcigE8hU++Z8yu/Jm5dZ8cDgNW
- sNa8S9Wxf03JMYnz5J0ZToHR4kJYhOTjj5RPQvwrlruAfgBRDrl9l7W5j/maAw==
-Date: Sun, 30 Jan 2022 15:05:27 +0100
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20220130150527.12c67565@windsurf>
-In-Reply-To: <20220129224651.1282263-4-romain.naour@gmail.com>
-References: <20220129224651.1282263-1-romain.naour@gmail.com>
- <20220129224651.1282263-4-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/5] package/efl: handle input option
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YdNSMBBfQEjH for <buildroot@lists.busybox.net>;
+ Sun, 30 Jan 2022 14:12:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78081607A1
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 14:12:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id CDF857FEA9; Sun, 30 Jan 2022 14:05:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 14:53:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8aa81ad9f129f8aa3ccd5bdb1207c0ecc3de147a
+X-Git-Newrev: e889bc8db5ac67031abec8a55ba12abb3c443555
+X-Patchwork-Hint: ignore
+Message-Id: <20220130140530.CDF857FEA9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/enlightenment: bump to version
+ 0.25.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,68 +54,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e889bc8db5ac67031abec8a55ba12abb3c443555
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Jan 2022 23:46:50 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+This is the a bugfix release.
 
-> +config BR2_PACKAGE_EFL_LIBINPUT
-> +	bool "Enable libinput support (recommended)"
-> +	default y
-> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+See:
+https://www.enlightenment.org/news/2022-01-03-enlightenment-0.25.1
 
-Should be:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-	depends on BR2_PACKAGE_HAS_UDEV # libinput, efl-eeze
-
-> +comment "libinput needs udev /dev management (eeze)"
-
-Drop "eeze" between parenthesis.
-
-> +	depends on !BR2_PACKAGE_HAS_UDEV
-> +
->  config BR2_PACKAGE_EFL_LIBSNDFILE
->  	bool "Enable libsndfile support (recommended)"
->  	default y
-> @@ -216,13 +229,11 @@ endchoice # OpenGL support
->  
->  config BR2_PACKAGE_EFL_DRM
->  	bool "Evas DRM Engine"
-> -	depends on BR2_PACKAGE_HAS_UDEV (eeze)
-> +	depends on BR2_PACKAGE_HAS_UDEV # elput, eeze
-
-You fixed a bug from the previous commit here. What is "elput" ?
-
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
->  	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
-> -	select BR2_PACKAGE_EFL_EEZE
-> +	select BR2_PACKAGE_EFL_LIBINPUT
-
-Is that the explanation for PATCH 3/5 ? But even that doesn't seem to
-justify PATCH 3/5: you could have done the same with a "depends on
-BR2_PACKAGE_EFL_EEZE".
-
-Again: I agree with PATCH 3/5, and I think it's the right patch. I just
-don't understand the justification it has in its commit log.
-
->  	select BR2_PACKAGE_LIBDRM
-> -	select BR2_PACKAGE_LIBINPUT # For elput
-
-What is "elput" ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index dd4c4d78c0..2d977b86f7 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,4 +1,4 @@
+-# From https://www.enlightenment.org/news/2021-12-26-enlightenment-0.25.0
+-sha256  7d6e72ceed5aca135b7a49c2a1c1eb9d8fde1318613517401d0418e0e5f6df06  enlightenment-0.25.0.tar.xz
++# From https://www.enlightenment.org/news/2022-01-03-enlightenment-0.25.1
++sha256  2cf05fe3d96ef35e823619dbc0ac513ecabcae2186800ecd804924a637112444  enlightenment-0.25.1.tar.xz
+ sha256  8d2fbc393e967cd6f5b8559d1744881a6a1ceb3ec6e1c2368c3916809ffccb8d  COPYING
+ sha256  cdc77ee1732455b203610f923fe4196046b3f7509038c48dc0b0c7e3492c23f3  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 24bbd96cd0..95670e800d 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.25.0
++ENLIGHTENMENT_VERSION = 0.25.1
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = https://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause, OFL-1.1 (font)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
