@@ -1,74 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFF04C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 07:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC52EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 07:43:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58E2860B03;
-	Mon, 31 Jan 2022 07:32:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53EA640018;
+	Mon, 31 Jan 2022 07:43:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gLhpxjurBQhP; Mon, 31 Jan 2022 07:32:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0Yrk3FeEsYiI; Mon, 31 Jan 2022 07:43:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F33A60AAB;
-	Mon, 31 Jan 2022 07:32:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3527D1BF3C6
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 07:32:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50D1740184;
+	Mon, 31 Jan 2022 07:42:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 073151BF3C6
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 07:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23B44408C4
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 07:32:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0366783EE2
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 07:42:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z_maZ7RlbBRz for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 07:32:10 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I0OOutR1RnOr for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 07:42:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
- [IPv6:2607:f8b0:4864:20::1033])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EF138408BD
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 07:32:09 +0000 (UTC)
-Received: by mail-pj1-x1033.google.com with SMTP id h12so13094180pjq.3
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 23:32:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=QIHQ0LQ4a8QGAiqmcBhja3n53PsbVOgyZ3B29K0Y4Wo=;
- b=PfhZB3k7267tnk7s7Tj9F/0yCm2Z6yTNZUh6WDSzYdxQxHsRbDfGIS/Amk3YQBifbj
- 14ZYJBQHtPsjpOWZpP428s7B5+NaX18LxDNR/MkGsMHIuKnhvgUcWZEOu8N1g6oPPj4P
- MI62a0muHXSKHuXcbiG3qfQpdrX4YqPPfy0E0=
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5A8E683EE1
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 07:42:56 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id w25so24094094edt.7
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 23:42:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=WeSB0GnNzhR7+/clq/QF90nsNy1sOHSuziGWjfcl0no=;
+ b=CzocouJbTw39+Tzfy1/VUjhJ535aRonCd9n6Chp48ACLdgrsS7evI9JOzc5EPgr77g
+ 7WmQ6420vNfqlrAKOBIDK2OgvD0G8usP3v4jZRieSMIWZueeFQIoycZZTglCZC2CLvFI
+ qgTzVivhZPFUWG4kSUYhO9i/IIlMvT38xbpdmXtkJMKZQ5IN1Unv6/GqjJbZx3EM8F6Z
+ zBvpnmcvyQDSjQbnWPMK+IIHEJ8p4zUcEObDkQ46NdV5UuWIZgsTpFySflhH0A6z3KYK
+ 1T2THbwY8GGjNBx2FzcJ6Wnxe93myFkwrl3oi04o3AQoHqCCe1Adrq8nXKIlpz5LJcWu
+ NHbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=QIHQ0LQ4a8QGAiqmcBhja3n53PsbVOgyZ3B29K0Y4Wo=;
- b=b8/CWWsXvgZNWdCk0V8RhaGYOjGddw4nrnjgoVbc7UAfnzkom/y6KU2RfYSeKVsgSO
- i+6/O+9kZA5YZZZSGDmNUE6AseGX8tv3MSi5/2JkYZtrSq7/kO6dKoYil/LoFR3fEVZI
- b+LepoIxvCc5kygrmnA1qCUN2qg3TnWCxshjVNVSi0ngoVDfK5wl8JEDQbcxDWPEbxkZ
- W4E8jH1UVjrkkgFlEmXv6Zgm6nXab6ih+TzpSEqOlTvbV5vknXZEoPivwoKEu2feUoZr
- BhpQF/PuP57L2EXHxFad5vX6k7WQQ75+LNZfmcr5HIjhJVfT9irPetSspXsUaq26IxxX
- 5RaQ==
-X-Gm-Message-State: AOAM53032aYFnVg+JfIK+6wsjope+1Vj64u8TfFDfxOlaF3+VLDxn17s
- K11GsOoXm05WJlR8O1tPkPnef0xAzzBrZkjeIWE4Yg==
-X-Google-Smtp-Source: ABdhPJz8eubOjOjq46Wmyhc7jb7w4EaDqyGS3+id6AXjSYICWriqoJTIp+7PJCXfdLt08V14oIj3+l+9cXO/PB1OMqg=
-X-Received: by 2002:a17:90b:4b05:: with SMTP id
- lx5mr23276444pjb.171.1643614329272; 
- Sun, 30 Jan 2022 23:32:09 -0800 (PST)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=WeSB0GnNzhR7+/clq/QF90nsNy1sOHSuziGWjfcl0no=;
+ b=lmcvOhObNjtLGvc5fP3jcs0bTxC7gNhWmKvHwkt0ZlDSr+lzP6zNCDoha/ti4FzpMc
+ PW5NnuYPXaawVBDQo8dH6f/Ks0LDh+IjPQFbRgW15frFSHXddH3R3TsEOdd1rnxxKJoe
+ 5MVzpiiWlCyNFftJS80SvUlzVThXInB47+QlGles6/zK/hbJJm7Eg7v5oa2m0n/BtkCs
+ T16DAqqQboGqHO1iFu9HfbFk9L1ybit/CqZb8tcGnphttilq42x1tss4UgZSGxbjn2nL
+ ymyix7BvvXlVknO41FtLduy5Rf658PaIlZSCEJWn3DEbNZD7bhEZuDROAD3dTiKUnbdJ
+ 9bPw==
+X-Gm-Message-State: AOAM533hVPhpZy61cKH6A9Syjhjfcxpo1T8UXIpOYisRFUjVAjUncMLC
+ h3PnZ7KPe5P45RPFFY1YVRE2AQ==
+X-Google-Smtp-Source: ABdhPJzS0KmnvKKkMYVFOaLmvskHeS02SMlHF+gUoZwXFmRWqrAnNm6/gN+Q9PRD3ONJOVr2urD7Vw==
+X-Received: by 2002:a05:6402:2071:: with SMTP id
+ bd17mr19641904edb.330.1643614974283; 
+ Sun, 30 Jan 2022 23:42:54 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id fv33sm3905841ejc.207.2022.01.30.23.42.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 30 Jan 2022 23:42:53 -0800 (PST)
+Message-ID: <45a93a2b-2172-2cd2-8ccb-77f251e55dbc@mind.be>
+Date: Mon, 31 Jan 2022 08:42:52 +0100
 MIME-Version: 1.0
-References: <D7F1931E-9222-48C8-A285-4C1F5D215078@benettiengineering.com>
-In-Reply-To: <D7F1931E-9222-48C8-A285-4C1F5D215078@benettiengineering.com>
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Mon, 31 Jan 2022 08:31:57 +0100
-Message-ID: <CAOf5uwnKNxCW8UHZwcemz4Lspvpo9W3by48XY5CyB2+iv5vmFA@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] board: Add support for iMX8MN BSH SMM S2 PRO
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <cover.1643577025.git.yann.morin.1998@free.fr>
+ <cb658b0784b6174058f01eb1db7ffb44885952f1.1643577025.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <cb658b0784b6174058f01eb1db7ffb44885952f1.1643577025.git.yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH 1/2] boot/uboot: fix build with host-gcc 10+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,62 +95,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJpZWwKCk9uIE1vbiwgSmFuIDMxLCAyMDIyIGF0IDEyOjQ4IEFNIEdpdWxpbyBCZW5ldHRp
-CjxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPiB3cm90ZToKPgo+IO+7v0hp
-IE1pY2hhZWwsCj4KPiArQ2MKPgo+IElsIGdpb3JubyAzMSBnZW4gMjAyMiwgYWxsZSBvcmUgMDA6
-MjcsIE1pY2hhZWwgTmF6emFyZW5vIFRyaW1hcmNoaSA8bWljaGFlbEBhbWFydWxhc29sdXRpb25z
-LmNvbT4gaGEgc2NyaXR0bzoKPgo+IO+7v0hpIEdpdWxpbwo+Cj4gT24gU2F0LCBKYW4gMjksIDIw
-MjIgYXQgODo0NiBQTSBHaXVsaW8gQmVuZXR0aQo+IDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5n
-aW5lZXJpbmcuY29tPiB3cm90ZToKPgo+Cj4gSGkgTWljaGFlbCwKPgo+Cj4gT24gMjkvMDEvMjIg
-MTQ6NTQsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+Cj4gW1NOSVBdCj4KPgo+IEhhdmUgeW91IGdp
-dmVuIGEgZ28gd2l0aCBsYXRlc3QgQnVpbGRyb290IGRvY2tlciB0byBjaGVjayBpZiB1Ym9vdAo+
-Cj4gbmVlZHMgbGliZmR0cHksIHB5dGhvbjMgZXRjLj8KPgo+IEl04oCZcyBoaWdobHkgcHJvYmFi
-bGUgaXQgbmVlZHMgdGhlbS4KPgo+Cj4gU3VnZ2VzdGlvbiwgc2hvdWxkIGJlIGdpdmVuIHRvIHRo
-ZSBvdGhlciBuZXdlc3QgYm9hcmQgdGhhdCB3YXMgYWRkZWQuCj4KPgo+IENvcnJlY3QsIEnigJlt
-IGdvaW5nIHRvIGNoZWNrIG15IGxhdGVzdCBib2FyZCByZXZpZXdzIGFib3V0IHRoaXMKPgo+Cj4g
-SSd2ZSBwb2ludGVkIHRoZW0gdGJoCj4KPgo+IEkgdGhpbmsgdGhhdCB5b3UgYXJlIHRhbGtpbmcg
-YWJvdXQKPgo+IGhvc3QtdG9vbHMgaGVyZS4KPgo+Cj4gWWVzCj4KPgo+IFBsZWFzZSBwb2ludCBt
-ZSB0byB0aGlzIGJ1aWxkcm9vdCBkb2NrZXIKPgo+Cj4gaHR0cHM6Ly9odWIuZG9ja2VyLmNvbS9y
-L2J1aWxkcm9vdC9iYXNlL3RhZ3MKPgo+IDxodHRwczovL2h1Yi5kb2NrZXIuY29tL3IvYnVpbGRy
-b290L2Jhc2UvdGFncz4KPgo+ICMgZG9ja2VyIHB1bGwgYnVpbGRyb290L2Jhc2U6MjAyMTExMjAu
-MTkyNQo+Cj4KPiBUaGlzIGlzIG5vdCBjb3JyZWN0LCBzb3JyeSwgSSd2ZSBqdXN0IGdpdmVuIGEg
-dHJ5IGFuZCBpdCBidWlsZHMKPgo+IGNvcnJlY3RseSBldmVuIGlmIGl0IGZhaWxzIHdpdGggZ2l0
-bGFiIENJLgo+Cj4gWW91IGhhdmUgdG8gdXNlIHRoaXMgZG9ja2VyOgo+Cj4gZG9ja2VyIHB1bGwg
-YnVpbGRyb290L2Jhc2U6MjAyMTA5MjIuMjIwMAo+Cj4KPgo+IEkgd2lsbCByZXNlbmQuIEkgZm91
-bmQgc29tZSB3cm9uZyBhcnRpZmFjdHMgYW5kIEkgbmVlZCB0byB0ZXN0IGl0IGFnYWluCj4KPgo+
-IE9rLiBJIHdhcyB3cm9uZyBhbnl3YXkgYWdhaW4gd2l0aCB0aGUgZG9ja2VyLgo+IEluIElSQyBZ
-YW5uIHBvaW50ZWQgbWUgdGhhdCB3ZSBoYXZlIHRvIHVzZSB0aGUgb25lIGluOgo+IGh0dHBzOi8v
-Z2l0aHViLmNvbS9idWlsZHJvb3QvYnVpbGRyb290L2Jsb2IvbWFzdGVyLy5naXRsYWItY2kueW1s
-Cj4KPiBTbyBwbGVhc2UgdXNlOgo+ICMgZG9ja2VyIHB1bGwgcmVnaXN0cnkuZ2l0bGFiLmNvbS9i
-dWlsZHJvb3Qub3JnL2J1aWxkcm9vdC9iYXNlOjIwMjIwMTA1LjIzMTQKPgoKQXBhcnQgZnJvbSB0
-aGUgZG9ja2VyLiBJIGhhdmUgdXBkYXRlZCB0aGUgcGF0Y2ggYW5kIEkgd2lsbCByZXNlbmQgd2l0
-aAp0aGUgZml4LiBDYW4gd2UgbW92ZSB0aGUgdS1ib290Cm9uIHNvbWUgb3RoZXIgcG9pbnQ/CgpN
-aWNoYWVsCgoKPiBBbnl3YXkgdGhleeKAmXJlIHByZXR0eSBjb21wYXRpYmxlIGFzIEnigJl2ZSBz
-ZWVuIGF0IHVib290IGFuZCBMaW51eCBob3N0IGxldmVsLAo+IHNvIHRoZSBwcm9ibGVtcyB5b3Xi
-gJl2ZSBmb3VuZCB0aGVyZSB3aWxsIHN0aWxsIGJlIG9uIHRoaXMgb3RoZXIgZG9ja2VyLgo+Cj4g
-SGXigJlzIGdvaW5nIHRvIHN5bmMgZG9ja2VyIGh1YiB3aXRoIHRoYXQgdmVyc2lvbi4KPgo+IFNv
-cnJ5IGZvciBodG1sIGJ1dCBJ4oCZbSBvbiBtb2JpbGUgOi0vCj4KPiBCZXN0IHJlZ2FyZHMKPiDi
-gJQtCj4gR2l1bGlvIEJlbmV0dGkKPiBCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwo+Cj4KPiBNaWNo
-YWVsCj4KPiBCZXN0IHJlZ2FyZHMhCj4KPiAtLQo+Cj4gR2l1bGlvIEJlbmV0dGkKPgo+IEJlbmV0
-dGkgRW5naW5lZXJpbmcgc2FzCj4KPgo+Cj4KPiAtLQo+IE1pY2hhZWwgTmF6emFyZW5vIFRyaW1h
-cmNoaQo+IENvLUZvdW5kZXIgJiBDaGllZiBFeGVjdXRpdmUgT2ZmaWNlcgo+IE0uICszOSAzNDcg
-OTEzIDIxNzAKPiBtaWNoYWVsQGFtYXJ1bGFzb2x1dGlvbnMuY29tCj4gX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+Cj4gQW1hcnVsYSBTb2x1dGlvbnMgQlYKPiBKb29wIEdlZXNp
-bmt3ZWcgMTI1LCAxMTE0IEFCLCBBbXN0ZXJkYW0sIE5MCj4gVC4gKzMxICgwKTg1IDExMSA5MTcy
-Cj4gaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQo+IHd3dy5hbWFydWxhc29sdXRpb25zLmNvbQoK
-CgotLSAKTWljaGFlbCBOYXp6YXJlbm8gVHJpbWFyY2hpCkNvLUZvdW5kZXIgJiBDaGllZiBFeGVj
-dXRpdmUgT2ZmaWNlcgpNLiArMzkgMzQ3IDkxMyAyMTcwCm1pY2hhZWxAYW1hcnVsYXNvbHV0aW9u
-cy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwoKQW1hcnVsYSBTb2x1dGlv
-bnMgQlYKSm9vcCBHZWVzaW5rd2VnIDEyNSwgMTExNCBBQiwgQW1zdGVyZGFtLCBOTApULiArMzEg
-KDApODUgMTExIDkxNzIKaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQp3d3cuYW1hcnVsYXNvbHV0
-aW9ucy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 30/01/2022 22:10, Yann E. MORIN wrote:
+> Some older versions of U-Boot, or custom versions (like forks for some
+> boards), fail to build with host-gcc 10+, because of redefined symbols:
+> 
+>        HOSTLD  scripts/dtc/dtc
+>      /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition
+>      of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+>      collect2: error: ld returned 1 exit status
+>      make[4]: *** [scripts/Makefile.host:106: scripts/dtc/dtc] E
+> 
+> Since this has been fixed in recent-ish versions, we can't use an
+> unconditionaly patch, so we must have a conditional patch. However, a
+> patch may not always apply to arbitrary U-Boot versions or forks.
+> 
+> Upstream just dropped that line altogether:
+>      https://source.denx.de/u-boot/u-boot/-/commit/018921ee79d3f30893614b3b2b63b588d8544f73
+> 
+> So, we use a little sed-grep combo to do the exact same change.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>   boot/uboot/uboot.mk | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 574fc7089a..9415c4722a 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -244,6 +244,12 @@ endef
+>   UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+>   UBOOT_POST_RSYNC_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+>   
+> +# Older versions break on gcc 10+ because of redefined symbols
+> +define UBOOT_DROP_YYLLOC
+> +	$(SED) '/^YYLTYPE yylloc;$$/d' `grep -l -r -E '^YYLTYPE yylloc;$$' $(@D)`
+
+  Why not use
+	grep ... | xargs --no-run-if-empty $(SED) ...
+
+which also avoids the "no input files" problem.
+
+  Also:
+- Isn't it enough to search in $(@D)/scripts?
+- I guess we should use -Z to make is 0-separated. I'm not a 100% sure, but I 
+vaguely remember encountering a U-Boot or Linux vendor fork which had file names 
+with spaces in them.
+
+  Regards,
+  Arnout
+
+
+> +endef
+> +UBOOT_POST_PATCH_HOOKS += UBOOT_DROP_YYLLOC
+> +
+>   ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
+>   define UBOOT_XTENSA_OVERLAY_EXTRACT
+>   	$(call arch-xtensa-overlay-extract,$(@D),u-boot)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
