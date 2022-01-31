@@ -1,77 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC644C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 02:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1990C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 02:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 565F783F6E;
-	Mon, 31 Jan 2022 02:45:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 410F94091C;
+	Mon, 31 Jan 2022 02:45:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UTeaucpLT0Ne; Mon, 31 Jan 2022 02:45:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q8Ke4SzPK-Xr; Mon, 31 Jan 2022 02:45:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DBDB83F13;
-	Mon, 31 Jan 2022 02:45:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EDF381BF471
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:45:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D0C240908;
+	Mon, 31 Jan 2022 02:45:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DC591BF471
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E449483F13
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:45:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CE0E40908
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R8VRJZwJlcSO for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 02:45:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f32r7inycCLp for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 02:45:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
- [IPv6:2607:f8b0:4864:20::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B361F83F0B
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 02:45:36 +0000 (UTC)
-Received: by mail-oi1-x231.google.com with SMTP id t199so7603666oie.10
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 18:45:36 -0800 (PST)
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
+ [IPv6:2607:f8b0:4864:20::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6CF57408FF
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 02:45:38 +0000 (UTC)
+Received: by mail-oi1-x229.google.com with SMTP id s9so24162778oib.11
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 18:45:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=S0yvDWvsJ4kF7rSJaL+q7bmGij0M1xwcHoNVTmhbvqU=;
- b=Cgh7S+wNsdwnU5Riw0QwPNo7RWGsahL5vdYJscVoh3tlrntGqGyvP8R8+OsKOiuYjc
- WhKeIrAc/47OI80k+oKwmvwe6sRfOe+YTsuGV/V1zpJkYMCpYgRJug+1N1kLLWY90587
- u3KqhkevzWzI7D39bKhfHfWgYBsqKMaEFPQRSASGqt5Zi3TtgAG34JdAsBuIKCuPC95j
- PAdyntsr54cwOA0qxoqE321ICEAW0jbxBSroU42UapzY+lESs6zcYs6h7AixJJ/mu8kd
- 7DbryHFzJVhOuJuLP6yZP6CKbEL11dRQwM6Quq0bnywHTpzT9uUid6UkvjgyX64HMGeE
- ge/w==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=UGU152CI6fcFQ22X/1gULakkRHoWnVdSoT+7fNmwJao=;
+ b=o6yb/qHxoGrj3XPguSX2j0/kZ3WTjzSw057tGEZVAu8dYAExT1L04Tl+Q9PnUCtR+Z
+ /TT1FVIiLX8L2R+zBCvYtiWgG+iMDpQqJ3o+tgOUEBlfeEpldeNSCWKZmkbywBGjRgqH
+ Ncyh1B+TixQyl34IlrSdXIl3E/U7YrMc40mrXoaozMQhVU2Vnxg/XQ1l543kF/HII6Y0
+ 3z9POy7daymMwIqqet7YcMRti/kqUEeomvLVD+zgfOycegOUsemy2ci5RadtrAMrbVey
+ zAc+nUJbTeDaLnajsBk0B+QYrJ6wBTbblYYgrp2tunQd8SiDYnUvwkLTJo35uOGB9RqG
+ RZvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=S0yvDWvsJ4kF7rSJaL+q7bmGij0M1xwcHoNVTmhbvqU=;
- b=HziIt/MixCb7jklwt8s7hBH8jysegzhgYhpVLRCtxT5pml1sY+2UjhqYNQILbSeU/w
- ZgPxyA0uCSgIvbkF2EVqZ/D+RWjjQTAKQBf2up5PsqXKD7uEeXeDaCuLfRLLQFkoG/Yd
- ms8ZMJCsDw9h5v8Ihyyg4UcLODY6qE+a9MOkfJ+OiNvzB4IXG5JpAY4dRTQIFLihxSow
- JoEOJtgriD9MD7UPguDHUcnhuGKxlk7rPlipmAHOfZglA1l7egDs8iYFC4wSezsQjyo4
- TbMl20nM6fPfp9RARaAC8V2lsENQEO6yXIzj4sDfbJueyGm9CDVTNb1FovifDvb3p6Hb
- abxg==
-X-Gm-Message-State: AOAM531au/Zm0DcWPZRCu+Ur531vxu8176r+7UW/if17+ZMePFtF9a57
- +THic1ixQV8EEV04LCqGNeojYaWpH9U=
-X-Google-Smtp-Source: ABdhPJw614tWpBw1I+A5JdvoXMTz4vfEHT6imfvIchuBWIePv753/KJCLOAY+PGY72MVmjHRaGrSsg==
-X-Received: by 2002:a05:6808:170d:: with SMTP id
- bc13mr17321273oib.175.1643597135700; 
- Sun, 30 Jan 2022 18:45:35 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=UGU152CI6fcFQ22X/1gULakkRHoWnVdSoT+7fNmwJao=;
+ b=lRNbZEFeJJr2IcDf6XG99TOxEh8GVA0xcIQeP4iFkf0cvdikrmpNxXLry/Am5Ng/Ac
+ oG1R2T8gfjmq6qxUcMjNYaRJL1t791i6Rhly1enCYgsf2E9aytkJaJ0hlWB0joSnWYQu
+ yhcbrpmcwKc8312GR+5FAuXGW9gBicJl7iJh+L4Xj7yKnvThGIA0Tee9uIyiPX6xyOzn
+ NJXdzo16Y/+BPUhQX7oP9kLacJ/zQ+pbY6LuR7CX8ujXmvKcsK4IUMnTa1ItZS8f3mvD
+ xlnlw+1RbuaZSWXJ5X2nh777nTrKxwo8i1Nf5g/ti7EAmQCvVIstkRPTw/FhuxMsayZA
+ IEeA==
+X-Gm-Message-State: AOAM531WyyPQO2YovwgFEDpWEKH7EdYZsOWH1hJ4yMGmYEOTs9pPEo6c
+ XJcYZZgXkJ4BnJtn0mvc3FsEgUozi7s=
+X-Google-Smtp-Source: ABdhPJzodKglE1DGBAqNZrsyunsoPQNhOBH0PceDwMvKQrZ/2zdte+fk/ZWzDSqdLE3CKjboh+0usA==
+X-Received: by 2002:a05:6808:e8c:: with SMTP id
+ k12mr11393775oil.66.1643597137507; 
+ Sun, 30 Jan 2022 18:45:37 -0800 (PST)
 Received: from localhost.localdomain ([201.37.117.8])
- by smtp.gmail.com with ESMTPSA id v4sm10363585oou.1.2022.01.30.18.45.33
+ by smtp.gmail.com with ESMTPSA id v4sm10363585oou.1.2022.01.30.18.45.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Jan 2022 18:45:35 -0800 (PST)
+ Sun, 30 Jan 2022 18:45:37 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Jan 2022 23:44:50 -0300
-Message-Id: <20220131024451.2580165-1-ricardo.martincoski@gmail.com>
+Date: Sun, 30 Jan 2022 23:44:51 -0300
+Message-Id: <20220131024451.2580165-2-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220131024451.2580165-1-ricardo.martincoski@gmail.com>
+References: <20220131024451.2580165-1-ricardo.martincoski@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/thermald: update URL in the docs
+Subject: [Buildroot] [PATCH 2/2] package/thermald: bump to 2.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,29 +91,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Old project homepage was removed, so switch to github, already in use to
-download the sources.
+Two source files had their header updated to correctly state the licence
+is GPL-2.0+, not GPL-2.0. There is no real licensing change to the
+project in this bump.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-This commit can be backported to maintenance branches
----
- package/thermald/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It is a bugfix release, so it is only for master:
 
-diff --git a/package/thermald/Config.in b/package/thermald/Config.in
-index 6d74a164b6..e5e15b9b8d 100644
---- a/package/thermald/Config.in
-+++ b/package/thermald/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_THERMALD
- 	  reaches a certain threshold, the Linux daemon activates
- 	  various cooling methods to try to cool the system.
+Release 2.4.8
+-Fix Ideapad thermal shutdown issue #328
+
+Release 2.4.7
+- Fix AC/DC power limit issue in some HP TigerLake systems
+- Regression fix for RAPL MSR usage in xml config file
+- Added Japer Lake and Alder Lake CPU models
+- Debug scripts for log collection to upload
+---
+test-pkg config 1:
+BR2_PACKAGE_THERMALD=y
+BR2_INIT_SYSTEMD=y
+https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/459263710
+
+test-pkg config 2:
+BR2_PACKAGE_THERMALD=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/459264537
+---
+ package/thermald/thermald.hash | 2 +-
+ package/thermald/thermald.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/thermald/thermald.hash b/package/thermald/thermald.hash
+index 0a37f0e413..3a7c0f6952 100644
+--- a/package/thermald/thermald.hash
++++ b/package/thermald/thermald.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  80c92902a89b72a9df85c51a8b5fc472cc01b4410600ef1f56d62c4ac23890c1  thermald-2.4.6.tar.gz
++sha256  3e5a5033339c021de41ed4f946dd39e13f79f722fb5bd98d798e83658184c39b  thermald-2.4.8.tar.gz
+ sha256  e98be8bc482e038a14bfbc01caf800bbd0024fff275ef14cd999db6560254a8d  COPYING
+diff --git a/package/thermald/thermald.mk b/package/thermald/thermald.mk
+index 9b303104e3..4e43277128 100644
+--- a/package/thermald/thermald.mk
++++ b/package/thermald/thermald.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  https://01.org/linux-thermal-daemon
-+	  https://github.com/intel/thermal_daemon
- 
- comment "thermald needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
- 	depends on BR2_i386 || BR2_x86_64
+-THERMALD_VERSION = 2.4.6
++THERMALD_VERSION = 2.4.8
+ THERMALD_SITE = $(call github,intel,thermal_daemon,v$(THERMALD_VERSION))
+ # fetched from Github, with no configure script
+ THERMALD_AUTORECONF = YES
 -- 
 2.25.1
 
