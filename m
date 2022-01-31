@@ -1,77 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E24C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 19:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F126BC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 19:48:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 448AB401D6;
-	Mon, 31 Jan 2022 19:48:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90A4060B03;
+	Mon, 31 Jan 2022 19:48:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TsDVpdk9iUaW; Mon, 31 Jan 2022 19:48:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id igFSLItRouBr; Mon, 31 Jan 2022 19:48:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FBF5401DF;
-	Mon, 31 Jan 2022 19:48:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 28F7C1BF379
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B82860EA4;
+	Mon, 31 Jan 2022 19:48:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E25E91BF379
  for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 19:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 171274022F
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF2F340621
  for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 19:48:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GpJ3sGWqngtG for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 19:48:23 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ut7eEs5S5uYg for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 19:48:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8CFFA4017A
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C49B405BB
  for <buildroot@buildroot.org>; Mon, 31 Jan 2022 19:48:23 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id i34so8796248lfv.2
+Received: by mail-lf1-x12b.google.com with SMTP id a28so29086359lfl.7
  for <buildroot@buildroot.org>; Mon, 31 Jan 2022 11:48:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ZOjm16yekKaAdsBzWZ1ZQMmt09TXP8LuIiVTBNduOkk=;
- b=hpq1g/K0Bc62VRNFuF46wbPdJk9RTagoSDWO3JHWEPX+XVBEGLU7Ch4CIkC+T8yFhE
- cbTIkWrriH5Y4m82/ub5volVvDfiRpMiUBq4RnWd6n/JREJrrKxBmb/5BLYZulqDSXHb
- UbfBOd8N/R0VrseAPpqDsThQpfU0s+t3WpI461VQJy2OE2sHPoUBReycbVhrj0U6HLuj
- MT8U+Ia0tgNcSO5swWTtuOES6mBnU3wQz8wo/aJxAVXstWZ1SIMyLu7c8bU9Jg2AXM6A
- KSMSvLK8lyIBOH57W1FYYy7CK1E1TCE3/oJ7WXlROxxhpKIxlCnZNmqq2cS+514fzc7v
- 1eAg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=/MG+r6CtdBnKstI7BuC3l66pjjqHefOAiE8piGBHjPI=;
+ b=KuTATlI90A/waMY9k4d6ouJ9AH2h8pf0LGcvBE9PqXybhcOPJKIgySOctif/RWHFAp
+ ODFXd7c+5li9deemiXnBSWpWqNTjVO5Y4mTMDtbM18eXYcatsPhH5d+0t5PLoaqChd/m
+ Xf/FbtNVLf+KzrXlWzZp++Z14Yv7DuudTi3rO5rCR32UpimoAzLlDOAhKBe4nyyrh1Zv
+ Raf/9ASYu/wwLs5MLPJGaHUV8LEDbwmryt506ySOsyWSVuHofQdu2O07NZUrLm7UnCtL
+ a8gBux8ZceyjEuwdicXmI6rssjQi/u696X3iefQcfllZVxCq0eb8zoXZIrNJJvLORTr0
+ +5Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ZOjm16yekKaAdsBzWZ1ZQMmt09TXP8LuIiVTBNduOkk=;
- b=gidbxQgCHG2m9q+XS9zI2DXtd7oUY820xWtJEN0UwS2PVG0d6GFn1PZc1+XKN0SrHU
- iZ7sKv5MW3hMEB7TcsH0NGP9oV17TvcSKUNWL/bHyimhRHxWxomjDrT9CLqrY2h8Y68z
- Th2siChYp7nlFYTdPKS/e+a303QzAHi9654l8BASV4pxz6uILMHvUl/Ql3nCyvzBdj4E
- fWuqGiw/EyTjD+nk7csO0cuCGfwizuu9X19SaWm/6VpjCtcSAM7a1/pK0+oKl/qUCeyV
- x0h2Ou3pPpPPdAWzcBVfSWogoTobDN0SyOns2zMUgSOAVmZPOHmQE5WoLG7XRnra77Hb
- f13w==
-X-Gm-Message-State: AOAM531H0iv58sXRc0c2GYC25IzplIbAXWn3Yik4MrweHASPFHgxUAWQ
- lGOt0IydJTQB9Jaamp1iF71yYMPyUl8=
-X-Google-Smtp-Source: ABdhPJzc0ZoCXsVQ1V4IDh0UBxosMzVLSG0E0w2WKg2Naex/jqqlztLNQzAi4MkC5cTPgIc5AGweNQ==
-X-Received: by 2002:a05:6512:31c7:: with SMTP id
- j7mr15939810lfe.109.1643658500899; 
- Mon, 31 Jan 2022 11:48:20 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=/MG+r6CtdBnKstI7BuC3l66pjjqHefOAiE8piGBHjPI=;
+ b=ivzJ04e51rfOB+mxar4+IrWYHBAViZl2WEVtOz1krod103vsiMG/eFUq40V8nJxS6V
+ xIf2uR+iCzlR5jFkXMupcwJqUSM5I9D0KzMJ6BnN6W6jZsW/FzTYgfE6FR2mQvLZNkay
+ Vp3LJYvQbk+SZNUmh5BQ1UL7AF3hSaTvw/qgLZjU2Azh8PE9bEh3MXI1OrOEFthlD8L2
+ RH7fYyv0+BKK/y2X7kvWPreevOTjCXeXL/93UdtCL4grJ9fKNpdiWnXL1hdpkbEaDmkc
+ 0SdbLmKw44YYhcyRP/wjlu2sltUaiKimWoEKJS8KRyYmjofzdGw5IqSavXcxuAP/u3rw
+ +AJg==
+X-Gm-Message-State: AOAM5307lm5+bjWienCCE9GHGCxzYgHrrA3In1IIPiGgxK0HAP7+kt3A
+ 0jy8J8TUu02mFIBPp87MQinawnesrxY=
+X-Google-Smtp-Source: ABdhPJyBMCGoD6f23IrTSSQ3kgG5e6FwNe9h9mrY5m6SQwwDVg44NqJQ71sXK+7SXhLj2OC/REVkAw==
+X-Received: by 2002:a05:6512:33d1:: with SMTP id
+ d17mr9006241lfg.455.1643658501494; 
+ Mon, 31 Jan 2022 11:48:21 -0800 (PST)
 Received: from localhost.localdomain ([5.188.167.245])
  by smtp.googlemail.com with ESMTPSA id h6sm2316860ljg.58.2022.01.31.11.48.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Jan 2022 11:48:20 -0800 (PST)
+ Mon, 31 Jan 2022 11:48:21 -0800 (PST)
 From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 31 Jan 2022 22:48:17 +0300
-Message-Id: <20220131194818.2084092-1-geomatsi@gmail.com>
+Date: Mon, 31 Jan 2022 22:48:18 +0300
+Message-Id: <20220131194818.2084092-2-geomatsi@gmail.com>
 X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20220131194818.2084092-1-geomatsi@gmail.com>
+References: <20220131194818.2084092-1-geomatsi@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/wpa_supplicant: bump version to 2.10
+Subject: [Buildroot] [PATCH 2/2] package/hostapd: bump version to 2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,9 +94,9 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update wpa_supplicant to the latest release v2.10. Drop all the patches
-as they have already been upstreamed. Remove from .mk file all the
-WPA_SUPPLICANT_IGNORE_CVES records since those CVEs will not be
+Update hostapd to the latest release v2.10. Drop all the patches
+as they have already been upstreamed. Remove from .mk file all
+the HOSTAPD_IGNORE_CVES records since those CVEs will not be
 reported against the new version.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
@@ -101,18 +105,18 @@ Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
  ...DigestAlgorithmIdentifier-parameters.patch | 116 ------------------
  ...dbool.h-to-allow-C99-bool-to-be-used.patch |  32 -----
  ...-functions-for-recognizing-tag-value.patch |  37 ------
- package/wpa_supplicant/wpa_supplicant.hash    |   4 +-
- package/wpa_supplicant/wpa_supplicant.mk      |  14 +--
- 6 files changed, 2 insertions(+), 278 deletions(-)
- delete mode 100644 package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
- delete mode 100644 package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
- delete mode 100644 package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
- delete mode 100644 package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+ package/hostapd/hostapd.hash                  |   6 +-
+ package/hostapd/hostapd.mk                    |  19 +--
+ 6 files changed, 2 insertions(+), 285 deletions(-)
+ delete mode 100644 package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+ delete mode 100644 package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
+ delete mode 100644 package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+ delete mode 100644 package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
 
-diff --git a/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+diff --git a/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 deleted file mode 100644
 index 959788c2e9..0000000000
---- a/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+--- a/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 +++ /dev/null
 @@ -1,77 +0,0 @@
 -From 8c07fa9eda13e835f3f968b2e1c9a8be3a851ff9 Mon Sep 17 00:00:00 2001
@@ -192,10 +196,10 @@ index 959788c2e9..0000000000
 --- 
 -2.20.1
 -
-diff --git a/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch b/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
+diff --git a/package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch b/package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
 deleted file mode 100644
 index 5dcfed9406..0000000000
---- a/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
+--- a/package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
 +++ /dev/null
 @@ -1,116 +0,0 @@
 -From a0541334a6394f8237a4393b7372693cd7e96f15 Mon Sep 17 00:00:00 2001
@@ -314,10 +318,10 @@ index 5dcfed9406..0000000000
 --- 
 -2.20.1
 -
-diff --git a/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
 deleted file mode 100644
 index e52dbdb694..0000000000
---- a/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+--- a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
 +++ /dev/null
 @@ -1,32 +0,0 @@
 -From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
@@ -352,10 +356,10 @@ index e52dbdb694..0000000000
 --- 
 -2.25.1
 -
-diff --git a/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+diff --git a/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
 deleted file mode 100644
 index a5415e7daf..0000000000
---- a/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+--- a/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
 +++ /dev/null
 @@ -1,37 +0,0 @@
 -From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
@@ -395,50 +399,57 @@ index a5415e7daf..0000000000
 --- 
 -2.25.1
 -
-diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
-index 2387391a3c..b442be6ed5 100644
---- a/package/wpa_supplicant/wpa_supplicant.hash
-+++ b/package/wpa_supplicant/wpa_supplicant.hash
-@@ -1,5 +1,3 @@
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index 9ac5f4b392..f8183d1620 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,7 +1,3 @@
  # Locally calculated
--sha256  fcbdee7b4a64bea8177973299c8c824419c413ec2e3a95db63dd6a5dc3541f17  wpa_supplicant-2.9.tar.gz
-+sha256  20df7ae5154b3830355f8ab4269123a87affdea59fe74fe9292a91d0d7e17b2f  wpa_supplicant-2.10.tar.gz
- sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
--sha256  c4d65cc13863e0237d0644198558e2c47b4ed91e2b2be4516ff590724187c4a5  0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch
+-sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
+-sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
+-sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
+-sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
 -sha256  7f40cfec5faf5e927ea9028ab9392cd118685bde7229ad24210caf0a8f6e9611  0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 3c0b0c1dfc..b414144774 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -4,11 +4,8 @@
++sha256  206e7c799b678572c2e3d12030238784bc4a9f82323b0156b4c9466f1498915d  hostapd-2.10.tar.gz
+ sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index e988999d3e..075cb2a8d0 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,32 +4,15 @@
  #
  ################################################################################
  
--WPA_SUPPLICANT_VERSION = 2.9
-+WPA_SUPPLICANT_VERSION = 2.10
- WPA_SUPPLICANT_SITE = http://w1.fi/releases
--WPA_SUPPLICANT_PATCH = \
--	https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch \
+-HOSTAPD_VERSION = 2.9
++HOSTAPD_VERSION = 2.10
+ HOSTAPD_SITE = http://w1.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+-HOSTAPD_PATCH = \
+-	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
+-	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
+-	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch \
 -	https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
- WPA_SUPPLICANT_LICENSE = BSD-3-Clause
- WPA_SUPPLICANT_LICENSE_FILES = README
- WPA_SUPPLICANT_CPE_ID_VENDOR = w1.fi
-@@ -19,15 +16,6 @@ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
+ HOSTAPD_DEPENDENCIES = host-pkgconf
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
+ HOSTAPD_LICENSE = BSD-3-Clause
+ HOSTAPD_LICENSE_FILES = README
  
 -# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
--WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+-HOSTAPD_IGNORE_CVES += CVE-2019-16275
 -
--# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
--WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
+-# 0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
+-HOSTAPD_IGNORE_CVES += CVE-2020-12695
 -
 -# 0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
--WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-30004
+-HOSTAPD_IGNORE_CVES += CVE-2021-30004
 -
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
- 
+-# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
+-HOSTAPD_IGNORE_CVES += CVE-2021-27803
+-
+ HOSTAPD_CPE_ID_VENDOR = w1.fi
+ HOSTAPD_SELINUX_MODULES = hostapd
+ HOSTAPD_CONFIG_SET =
 -- 
 2.35.0
 
