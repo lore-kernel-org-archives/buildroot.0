@@ -1,60 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54B37C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 12:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B498C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 12:39:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC172404E7;
-	Mon, 31 Jan 2022 12:34:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1A7460BDA;
+	Mon, 31 Jan 2022 12:39:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WUPbZodW4IQn; Mon, 31 Jan 2022 12:34:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VCm6f2jSw468; Mon, 31 Jan 2022 12:39:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37C88408E5;
-	Mon, 31 Jan 2022 12:34:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4BCF1BF3A8
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 12:34:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D39CA60EB2;
+	Mon, 31 Jan 2022 12:39:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E1D031BF3A8
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 12:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF3D04092C
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 12:34:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEA0D82FE4
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 12:39:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wgFSCkAG7G3c for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 12:34:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TQ8f3A-32fRl for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 12:39:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3843840886
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 12:34:44 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.179.156])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5225182E22
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 12:39:10 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id EVtKnXJMR0FuyEVtLnToYK; Mon, 31 Jan 2022 13:34:43 +0100
+ id EVxcnXRRf0FuyEVxdnTsIg; Mon, 31 Jan 2022 13:39:09 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643632483; bh=O+EFYzzj3HSpNj2KZWOOpIRhzUMxySfHu4MFodwyS7U=;
- h=From:To:Subject:Date:MIME-Version;
- b=RjlofSViP3NgDC+Vbu3XX12zaLce8yqP+nB3CDMNSpfKz3vX3wq+lxn9BdNkfa0gy
- 4O3OrvZPDiGvrvpAUh9TQM2bUwXQJ0zUp0TaOFQUXLop5S8FMr5r8sq/qBFXWNPnxi
- yvPMGFlmBBvEE/jTG7dhQUx5kSz7AjRbo/GIVMwDp9TFNbf75eSBrdQ2ZlVHvX47Am
- aDvlv1r1IVB1teE64Kq7JDtDvukBbteZcy4JAyd6eQkZsof3+AfkYgrq40FmC4Rd+i
- Z919rfJVH0WCJw+i1qFS7Fo/zrckxtS/iOs5oJtfsUM7vTAbHSl8UTCDWVgXM/7gi/
- YVUVTGyw70eUQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Mon, 31 Jan 2022 13:34:41 +0100
-Message-Id: <20220131123441.3645526-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+ t=1643632749; bh=TwymTFtZQFv9kqOq1hh6MG4Xr+qQpC2g9PpGjO/T8J4=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=OoI1Qry2ACQPeDUdbaqs5j6+y6gHf+pk5xLeiZnTSVkXVlpZ4uc4trlTV99Seo3hR
+ jIAErExzqMlCu7Mq1ZUxeXnTZoDZ6rayLHBePQ74zvBRB7SvQec+VEaliodZkmOrgT
+ eO7pAf19sZXcQqczY93/3Qd8o5IeoCa1n24+HNc0bdqFEXA4Ab06uw5iEe6ZSgykgn
+ ERgabGd0eVfuOo0DnYIPYp1LsA+CoheqfSYOj7jEu3uX6UbZICr8KycceayEzx7Nt2
+ VPLqibkvx1Q+RTYh7jmTBIfFUMOTYWYKapioiAD6lN9AihsQhTk+ZRs0lDM88ablYy
+ l/7otyEEXGElQ==
+Message-ID: <d22d965f-7814-6e25-3e76-a76d16341346@benettiengineering.com>
+Date: Mon, 31 Jan 2022 13:39:08 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfKyIivI7CoTESKavN6rS/Yq1MM+ucPON+EZSNUN6Vg5VrefMNOWtLsBsZTbT6ORbupdrN9QO/6B+CzBmQm4jMWCRrvr9Br7I/Y27/rdUnKbWlsscJIpI
- xG51hiMgPYLoIR3s9atxG4bRV0SwBhTGcADHayC/wqmSlM0EyxeHZFK3TaTjFIyPSh2JvKc8G0eQxWhukxGwO2xOAqf3iRM2nNgKfNwKOrH2Zhl+d8Li0Sxi
- K6IK0+R8TwO7yt7Mul+U5Vh+PrULv7CSZbF9QfDVOEU=
-Subject: [Buildroot] [PATCH] package/at: bump version to 3.2.4
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>
+References: <20220131085216.1256242-1-michael@amarulasolutions.com>
+ <CAEyMn7ZxrTcZG1-UXGM2DEG9aK2pJwZ3YAmk7tDAh=GV9b1kcw@mail.gmail.com>
+ <CAOf5uwnugp+xwjmNTdNUVwRRA3EkqoPQK-WZaEJHokXPVDJH2Q@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <CAOf5uwnugp+xwjmNTdNUVwRRA3EkqoPQK-WZaEJHokXPVDJH2Q@mail.gmail.com>
+X-CMAE-Envelope: MS4wfCRYwLyX8c+ZiYmSkYUZoREuEKHno4YjbAR32JYLyepJFsKKrcwoQeDPhJm4AkZCCxYXzaO+dLHI8+4YY24D0Hatprx9O8NMs0JZJO//O1H96E6ZIa3Z
+ CedTmgchzuwn8NyntYU1VwmUAaHjH0OlOMAXlHOsOwt0Y6ZCcJ1zXZIOKZKcWsbj/1k7o5kq3yXuMKabjnsnZn4EXfmL4UARTD0lWyo/+WsEDMAGClwan2f8
+ 706atlAds5yiPo7B2IwMxQuYWpqPFmEKmFMwCqiXB/jQ2sHA0DuGFAWqejrkwVd23WYJxor7toLP2S9IEw42Urlp0T7YUNjB9pBcsXVCEeEmYpiOVlB/rVQK
+ pwnL8jHxyXKzU3XAof4n9l38pZqW7/gW2P6X0BU+ZBU7yReOmLY=
+Subject: Re: [Buildroot] [PATCH V2] board: Add support for iMX8MN BSH SMM S2
+ PRO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,315 +75,175 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org,
+ Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All local patches except on have been upstreamed, so let's remove them and
-rename/rebase the remaining one.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...ake-install-for-non-root-don-t-stri.patch} |  24 +++-
- ...Makefile.in-replace-IROOT-by-DESTDIR.patch | 113 ------------------
- ...etloadavg.c-compilation-revert-to-3..patch |  39 ------
- ...-Makefile-fix-parallel-build-failure.patch |  41 -------
- package/at/at.hash                            |   2 +-
- package/at/at.mk                              |   2 +-
- 6 files changed, 20 insertions(+), 201 deletions(-)
- rename package/at/{0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch => 0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch} (89%)
- delete mode 100644 package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
- delete mode 100644 package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch
- delete mode 100644 package/at/0004-Makefile-fix-parallel-build-failure.patch
-
-diff --git a/package/at/0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch b/package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
-similarity index 89%
-rename from package/at/0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
-rename to package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
-index f6c07e9fe2..74972d5dd3 100644
---- a/package/at/0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
-+++ b/package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
-@@ -1,4 +1,4 @@
--From 71d9a23ab6a73ec1287acc683716481090095de0 Mon Sep 17 00:00:00 2001
-+From d3ebf63f0e1274eb7835983cb7d79216aa0a0137 Mon Sep 17 00:00:00 2001
- From: Peter Korsgaard <jacmet@sunsite.dk>
- Date: Fri, 23 Jul 2021 16:47:56 +0200
- Subject: [PATCH] Makefile.in: fix make install for non-root, don't strip
-@@ -10,16 +10,28 @@ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- [Vincent: tweak the patch for the new version]
- Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Giulio: convert patch to git format and rebase to version 3.2.2]
-+[Giulio: convert patch to git format and rebase to version 3.2.2 and
-+3.2.4]
- ---
-- Makefile.in | 47 +++++++++++++++++++++++------------------------
-- 1 file changed, 23 insertions(+), 24 deletions(-)
-+ Makefile.in | 51 +++++++++++++++++++++++++++------------------------
-+ 1 file changed, 27 insertions(+), 24 deletions(-)
- 
- diff --git a/Makefile.in b/Makefile.in
--index a7197f2..0b35a67 100644
-+index 4ae194f..e6892d9 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -99,43 +99,42 @@ atrun: atrun.in
-+@@ -25,6 +25,10 @@ DESTDIR 	= $(IROOT)
-+ $(warning IROOT is deprecated, you should use DESTDIR instead)
-+ endif
-+ 
-++ifdef IROOT
-++DESTDIR		= $(DESTDIR)
-++endif
-++
-+ DAEMON_USERNAME	= @DAEMON_USERNAME@
-+ DAEMON_GROUPNAME= @DAEMON_GROUPNAME@
-+ LOADAVG_MX	= @LOADAVG_MX@
-+@@ -102,43 +106,42 @@ atrun: atrun.in
-  	$(CC) -c $(CFLAGS) $(DEFS) $*.c
-  
-  install: all
-diff --git a/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch b/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
-deleted file mode 100644
-index a9538589c1..0000000000
---- a/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
-+++ /dev/null
-@@ -1,113 +0,0 @@
--From cbfd3296d7d0742d9e35b01ec9e433afe2c36c63 Mon Sep 17 00:00:00 2001
--From: Marc Kleine-Budde <mkl@pengutronix.de>
--Date: Tue, 1 Dec 2009 20:57:45 +0100
--Subject: [PATCH] Makefile.in: replace IROOT by DESTDIR
--
--This patch replaces IROOT by DESTDIR, which is the autotools standard
--variable. For backwards compatibilty IROOT overwrites the DESTDIR.
--
--Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--[Vincent: tweak the patch for the new version]
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Giulio: convert patch to git format and rebase to version 3.2.2]
-----
-- Makefile.in | 72 ++++++++++++++++++++++++++++-------------------------
-- 1 file changed, 38 insertions(+), 34 deletions(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 3e8303c..a7197f2 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -20,6 +20,10 @@ etcdir		= @ETCDIR@
-- atjobdir	= @ATJBD@
-- systemdsystemunitdir = @systemdsystemunitdir@
-- 
--+ifdef IROOT
--+DESTDIR		= $(DESTDIR)
--+endif
--+
-- DAEMON_USERNAME	= @DAEMON_USERNAME@
-- DAEMON_GROUPNAME= @DAEMON_GROUPNAME@
-- LOADAVG_MX	= @LOADAVG_MX@
--@@ -95,43 +99,43 @@ atrun: atrun.in
-- 	$(CC) -c $(CFLAGS) $(DEFS) $*.c
-- 
-- install: all
---	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(etcdir)
---	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(bindir)
---	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(sbindir)
---	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(atdatadir)
---	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(docdir)
---	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(atdocdir)
---	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 755 -d $(IROOT)$(ATSPOOL_DIR) $(IROOT)$(ATJOB_DIR)
---	chmod 1770 $(IROOT)$(ATSPOOL_DIR) $(IROOT)$(ATJOB_DIR)
---	touch $(IROOT)$(LFILE)
---	chmod 600 $(IROOT)$(LFILE)
---	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(IROOT)$(LFILE)
---	test -f $(IROOT)$(etcdir)/at.allow || test -f $(IROOT)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(IROOT)$(etcdir)/
---	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(IROOT)$(bindir)
---	$(LN_S) -f at $(IROOT)$(bindir)/atq
---	$(LN_S) -f at $(IROOT)$(bindir)/atrm
---	$(INSTALL) -g root -o root -m 755 batch $(IROOT)$(bindir)
---	$(INSTALL) -g root -o root -m 755 batch-job $(IROOT)$(atdatadir)
---	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man1dir)
---	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man5dir)
---	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man8dir)
---	$(INSTALL) -g root -o root -m 755 atd $(IROOT)$(sbindir)
---	$(INSTALL) -g root -o root -m 755 atrun $(IROOT)$(sbindir)
---	$(INSTALL) -g root -o root -m 644 at.1 $(IROOT)$(man1dir)/
---	cd $(IROOT)$(man1dir) && $(LN_S) -f at.1 atq.1 && $(LN_S) -f at.1 batch.1 && $(LN_S) -f at.1 atrm.1
---	$(INSTALL) -g root -o root -m 644 atd.8 $(IROOT)$(man8dir)/
--+	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(etcdir)
--+	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(bindir)
--+	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(sbindir)
--+	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(atdatadir)
--+	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(docdir)
--+	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(atdocdir)
--+	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 755 -d $(DESTDIR)$(ATSPOOL_DIR) $(DESTDIR)$(ATJOB_DIR)
--+	chmod 1770 $(DESTDIR)$(ATSPOOL_DIR) $(DESTDIR)$(ATJOB_DIR)
--+	touch $(DESTDIR)$(LFILE)
--+	chmod 600 $(DESTDIR)$(LFILE)
--+	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(DESTDIR)$(LFILE)
--+	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(DESTDIR)$(etcdir)/
--+	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(DESTDIR)$(bindir)
--+	$(LN_S) -f at $(DESTDIR)$(bindir)/atq
--+	$(LN_S) -f at $(DESTDIR)$(bindir)/atrm
--+	$(INSTALL) -g root -o root -m 755 batch $(DESTDIR)$(bindir)
--+	$(INSTALL) -g root -o root -m 755 batch-job $(DESTDIR)$(atdatadir)
--+	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man1dir)
--+	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man5dir)
--+	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man8dir)
--+	$(INSTALL) -g root -o root -m 755 atd $(DESTDIR)$(sbindir)
--+	$(INSTALL) -g root -o root -m 755 atrun $(DESTDIR)$(sbindir)
--+	$(INSTALL) -g root -o root -m 644 at.1 $(DESTDIR)$(man1dir)/
--+	cd $(DESTDIR)$(man1dir) && $(LN_S) -f at.1 atq.1 && $(LN_S) -f at.1 batch.1 && $(LN_S) -f at.1 atrm.1
--+	$(INSTALL) -g root -o root -m 644 atd.8 $(DESTDIR)$(man8dir)/
-- 	sed "s,\$${exec_prefix},$(exec_prefix),g" <atrun.8>tmpman
---	$(INSTALL) -g root -o root -m 644 tmpman $(IROOT)$(man8dir)/atrun.8
--+	$(INSTALL) -g root -o root -m 644 tmpman $(DESTDIR)$(man8dir)/atrun.8
-- 	rm -f tmpman
---	$(INSTALL) -g root -o root -m 644 at.allow.5 $(IROOT)$(man5dir)/
---	cd $(IROOT)$(man5dir) && $(LN_S) -f at.allow.5 at.deny.5
---	$(INSTALL) -g root -o root -m 644 $(DOCS) $(IROOT)$(atdocdir)
---	rm -f $(IROOT)$(mandir)/cat1/at.1* $(IROOT)$(mandir)/cat1/batch.1* \
---		$(IROOT)$(mandir)/cat1/atq.1*
---	rm -f $(IROOT)$(mandir)/cat1/atd.8*
--+	$(INSTALL) -g root -o root -m 644 at.allow.5 $(DESTDIR)$(man5dir)/
--+	cd $(DESTDIR)$(man5dir) && $(LN_S) -f at.allow.5 at.deny.5
--+	$(INSTALL) -g root -o root -m 644 $(DOCS) $(DESTDIR)$(atdocdir)
--+	rm -f $(DESTDIR)$(mandir)/cat1/at.1* $(DESTDIR)$(mandir)/cat1/batch.1* \
--+		$(DESTDIR)$(mandir)/cat1/atq.1*
--+	rm -f $(DESTDIR)$(mandir)/cat1/atd.8*
-- 	if test x"$(systemdsystemunitdir)" != xno; then \
---		$(INSTALL) -o root -g root -m 755 -d $(IROOT)$(systemdsystemunitdir); \
---		$(INSTALL) -o root -g root -m 644 atd.service $(IROOT)$(systemdsystemunitdir); \
--+		$(INSTALL) -o root -g root -m 755 -d $(DESTDIR)$(systemdsystemunitdir); \
--+		$(INSTALL) -o root -g root -m 644 atd.service $(DESTDIR)$(systemdsystemunitdir); \
-- 	fi
-- 
-- dist: checkin $(DIST) $(LIST) Filelist.asc
---- 
--2.25.1
--
-diff --git a/package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch b/package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch
-deleted file mode 100644
-index fb515af8d9..0000000000
---- a/package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 4eda31cea9fb3c77fe2748a65960f24ffb42f9ff Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <jacmet@sunsite.dk>
--Date: Fri, 23 Jul 2021 16:51:17 +0200
--Subject: [PATCH] getloadavg: fix getloadavg.c compilation, revert to 3.1.10
-- version
--
--getloadavg.c shipped with 3.1.13 doesn't compile because it references
--headers not shipped. Fix it by simply reverting to the 3.1.10 version.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Giulio: convert patch to git format]
-----
-- getloadavg.c | 7 ++++---
-- 1 file changed, 4 insertions(+), 3 deletions(-)
--
--diff --git a/getloadavg.c b/getloadavg.c
--index cf5869f..23d18eb 100644
----- a/getloadavg.c
--+++ b/getloadavg.c
--@@ -66,11 +66,12 @@ Boston, MA  02110-1301  USA */
-- 
-- /* This should always be first.  */
-- #ifdef HAVE_CONFIG_H
---#include <config.h>
--+#include "config.h"
-- #endif
-- 
---#include "lisp.h"
---#include "sysfile.h" /* for encapsulated open, close, read, write */
--+#include <sys/types.h>
--+#include <sys/stat.h>
--+#include <fcntl.h>
-- 
-- #ifndef HAVE_GETLOADAVG
-- 
---- 
--2.25.1
--
-diff --git a/package/at/0004-Makefile-fix-parallel-build-failure.patch b/package/at/0004-Makefile-fix-parallel-build-failure.patch
-deleted file mode 100644
-index 6e3dc24ca4..0000000000
---- a/package/at/0004-Makefile-fix-parallel-build-failure.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 3ace0b57e2aacb784c01a3c7694c6c92461937ff Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Thu, 20 Feb 2020 22:00:11 +0100
--Subject: [PATCH] Makefile: fix parallel build failure
--
--At the moment parallel build fails due to 2 causes:
--1) parsetime.l tries to include incomplete y.tab.h, since y.tab.h is the
--result of yacc -d parsetime.y
--2) when compiling y.tab.c, y.tab.c itself is not complete, since it is
--the result of yacc -d parsetime.y
--
--So fix it by:
--1) making parsetime.l to wait for y.tab.h to be created by yacc
--2) waiting for y.tab.c and y.tab.h to be created before compile them
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- Makefile.in | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/Makefile.in b/Makefile.in
--index 4c11913..57c3a0c 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -83,6 +83,8 @@ y.tab.c y.tab.h: parsetime.y
-- lex.yy.c: parsetime.l
-- 	$(LEX) -i parsetime.l
-- 
--+parsetime.l: y.tab.h
--+
-- atd.service: atd.service.in
-- 	cat $< | sed -e 's![@]sbindir[@]!$(sbindir)!g' | sed -e 's![@]atjobdir[@]!$(atjobdir)!g' > $@
-- 
--@@ -173,3 +175,4 @@ perm.o: perm.c config.h privs.h at.h
-- posixtm.o: posixtm.c posixtm.h
-- daemon.o: daemon.c config.h daemon.h privs.h
-- getloadavg.o: getloadavg.c config.h getloadavg.h
--+y.tab.o: y.tab.c y.tab.h
---- 
--2.20.1
--
-diff --git a/package/at/at.hash b/package/at/at.hash
-index 88a9e8a91d..d4ad9aa436 100644
---- a/package/at/at.hash
-+++ b/package/at/at.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  2211da14914fde1f9cc83592838fb6385a32fb11fcecb7816c77700df6559088  at_3.2.2.orig.tar.gz
-+sha256  76990cbb6f4b9bfedb926637904fdcc0d4fa20b6596b9c932117a49a0624c684  at_3.2.4.orig.tar.gz
- 
- sha256  01dccc0975aa9ba1a9f83e7c5e04f16077353d3c72a0a759b8846ee7a5b2b616  Copyright
- sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-diff --git a/package/at/at.mk b/package/at/at.mk
-index bbeed2a0e8..6637f0df64 100644
---- a/package/at/at.mk
-+++ b/package/at/at.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AT_VERSION = 3.2.2
-+AT_VERSION = 3.2.4
- AT_SOURCE = at_$(AT_VERSION).orig.tar.gz
- AT_SITE = http://software.calhariz.com/at
- AT_AUTORECONF = YES
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTWljaGFlbCwgSGVpa28sIEFsbCwKCk9uIDMxLzAxLzIyIDEyOjQ4LCBNaWNoYWVsIE5henph
+cmVubyBUcmltYXJjaGkgd3JvdGU6Cj4gSGkgSGVpa28KPiAKPiBPbiBNb24sIEphbiAzMSwgMjAy
+MiBhdCAxMjo0MiBQTSBIZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+IHdyb3Rl
+Ogo+Pgo+PiBIaSBNaWNoYWVsLAo+Pgo+PiBBbSBNby4sIDMxLiBKYW4uIDIwMjIgdW0gMDk6NTIg
+VWhyIHNjaHJpZWIgTWljaGFlbCBUcmltYXJjaGkKPj4gPG1pY2hhZWxAYW1hcnVsYXNvbHV0aW9u
+cy5jb20+Ogo+Pj4KPj4+IEFkZCBpbml0aWFsIHN1cHBvcnQgZm9yIGlNWDhNTiBCU0ggU01NIFMy
+IFBSTyBib2FyZDoKPj4+Cj4+PiAtIExpbnV4OiB2NS4xNy1yYzEKPj4+IC0gVWJvb3QgMjAyMi0w
+MS1yYzEgKHJlZmVyZW5jZSB0cmVlKQo+Pj4gLSBEZWZhdWx0IHBhY2thZ2VzIGZyb20gYnVpbGRy
+b290Cj4+Pgo+Pj4gaHR0cHM6Ly93d3cuYXBlcnRpcy5vcmcvcmVmZXJlbmNlX2hhcmR3YXJlL2lt
+eDhtbl9ic2hfc21tX3MycHJvX3NldHVwLwo+Pj4KPj4+IEFkZCBBcmllbCBEJ0FsZXNzYW5kcm8g
+YXMgY28tbWFpbnRhaW5lciwgd2Ugd29yayB0b2dldGhlciBvbgo+Pj4gcGxhdGZvcm0gbWFpbmxp
+bmUKPj4+Cj4+PiBCdWlsZCBhbmQgdGVzdGVkIHVzaW5nOgo+Pj4gZG9ja2VyIHB1bGwgcmVnaXN0
+cnkuZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC9iYXNlOjIwMjIwMTA1LjIzMTQK
+Pj4+Cj4+PiBDYzogQXJpZWwgRCdBbGVzc2FuZHJvIDxhcmllbC5kYWxlc3NhbmRyb0Bjb2xsYWJv
+cmEuY29tPgo+Pj4gQ2M6IEphZ2FuIFRla2kgPGphZ2FuQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+
+Pj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUcmltYXJjaGkgPG1pY2hhZWxAYW1hcnVsYXNvbHV0
+aW9ucy5jb20+Cj4+PiAtLS0KPj4+IENoYW5nZXMgVjEtPlYyOgo+Pj4gICAgICAgICAgLSBhZGQg
+dGhlIGJvYXJkIHJlZmVyZW5jZSBwYWdlCj4+PiAgICAgICAgICAtIHRlc3Qgd2l0aCBkb2NrZXIK
+Pj4+ICAgICAgICAgIC0gYWRqdXN0IHRoZSBidWlsZHJvb3QgY29uZmlnIGluIG9yZGVyIHRvIHVz
+ZSBidWlsZG1hbgo+Pj4gLS0tCj4+PiAgIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgMiArKwo+Pj4gICBib2FyZC9ic2gvYnNoLWlteDhtbi9leHRsaW51eC5jb25mIHwgIDQg
+KysrCj4+PiAgIGJvYXJkL2JzaC9ic2gtaW14OG1uL2dlbmltYWdlLmNmZyAgfCAxNyArKysrKysr
+KysKPj4+ICAgYm9hcmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1idWlsZC5zaCB8ICA3ICsrKysKPj4+
+ICAgYm9hcmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1pbWFnZS5zaCB8ICAzICsrCj4+PiAgIGJvYXJk
+L2JzaC9ic2gtaW14OG1uL3JlYWRtZS50eHQgICAgfCA1NSArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysKPj4+ICAgY29uZmlncy9ic2hfc21tczJwcm9fZGVmY29uZmlnICAgICB8IDQ2ICsr
+KysrKysrKysrKysrKysrKysrKysrKysKPj4+ICAgNyBmaWxlcyBjaGFuZ2VkLCAxMzQgaW5zZXJ0
+aW9ucygrKQo+Pj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvYnNoL2JzaC1pbXg4bW4vZXh0
+bGludXguY29uZgo+Pj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvYnNoL2JzaC1pbXg4bW4v
+Z2VuaW1hZ2UuY2ZnCj4+PiAgIGNyZWF0ZSBtb2RlIDEwMDc1NSBib2FyZC9ic2gvYnNoLWlteDht
+bi9wb3N0LWJ1aWxkLnNoCj4+PiAgIGNyZWF0ZSBtb2RlIDEwMDc1NSBib2FyZC9ic2gvYnNoLWlt
+eDhtbi9wb3N0LWltYWdlLnNoCj4+PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9ic2gvYnNo
+LWlteDhtbi9yZWFkbWUudHh0Cj4+PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2JzaF9z
+bW1zMnByb19kZWZjb25maWcKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVM
+T1BFUlMKPj4+IGluZGV4IGZlOGRlMTkxNmUuLmZjNjZmYjZiODMgMTAwNjQ0Cj4+PiAtLS0gYS9E
+RVZFTE9QRVJTCj4+PiArKysgYi9ERVZFTE9QRVJTCj4+PiBAQCAtMjIwLDYgKzIyMCw3IEBAIEY6
+ICBjb25maWdzL3NucHNfYXJjaHMzOF9oc2RrX2RlZmNvbmZpZwo+Pj4gICBGOiAgICAgY29uZmln
+cy9zbnBzX2FyY2hzMzhfdmRrX2RlZmNvbmZpZwo+Pj4KPj4+ICAgTjogICAgIEFyaWVsIEQnQWxl
+c3NhbmRybyA8YXJpZWxAdmFuZ3VhcmRpYXN1ci5jb20uYXI+Cj4+PiArRjogICAgIGJvYXJkL2Jz
+aC8KPj4+ICAgRjogICAgIHBhY2thZ2UvYXhmc3V0aWxzLwo+Pj4gICBGOiAgICAgcGFja2FnZS9t
+YWxpLXQ3NngvCj4+Pgo+Pj4gQEAgLTIwMTgsNiArMjAxOSw3IEBAIEY6ICAgICAgICBwYWNrYWdl
+L3B5dGhvbi1jcmMxNi8KPj4+ICAgRjogICAgIHBhY2thZ2UvcHl0aG9uLXB5em1xLwo+Pj4KPj4+
+ICAgTjogICAgIE1pY2hhZWwgVHJpbWFyY2hpIDxtaWNoYWVsQGFtYXJ1bGFzb2x1dGlvbnMuY29t
+Pgo+Pj4gK0Y6ICAgICBib2FyZC9ic2gvCj4+PiAgIEY6ICAgICBwYWNrYWdlL3B5dGhvbi1zcGlk
+ZXYvCj4+Pgo+Pj4gICBOOiAgICAgTWljaGFlbCBWZXR0ZXIgPGp1YmFsaEBpb2RvcnUub3JnPgo+
+Pj4gZGlmZiAtLWdpdCBhL2JvYXJkL2JzaC9ic2gtaW14OG1uL2V4dGxpbnV4LmNvbmYgYi9ib2Fy
+ZC9ic2gvYnNoLWlteDhtbi9leHRsaW51eC5jb25mCj4+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+Pj4gaW5kZXggMDAwMDAwMDAwMC4uOTExMTM1NDc0Mgo+Pj4gLS0tIC9kZXYvbnVsbAo+Pj4gKysr
+IGIvYm9hcmQvYnNoL2JzaC1pbXg4bW4vZXh0bGludXguY29uZgo+Pj4gQEAgLTAsMCArMSw0IEBA
+Cj4+PiArbGFiZWwgYnVpbGRyb290Cj4+PiArICBrZXJuZWwgL2Jvb3QvSW1hZ2UKPj4+ICsgIGRl
+dmljZXRyZWUgL2Jvb3QvZnJlZXNjYWxlL2lteDhtbi1ic2gtc21tLXMycHJvLmR0Ygo+Pj4gKyAg
+YXBwZW5kIHJvb3Q9UEFSVFVVSUQ9JVBBUlRVVUlEJSByb290d2FpdCBydwo+Pj4gZGlmZiAtLWdp
+dCBhL2JvYXJkL2JzaC9ic2gtaW14OG1uL2dlbmltYWdlLmNmZyBiL2JvYXJkL2JzaC9ic2gtaW14
+OG1uL2dlbmltYWdlLmNmZwo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAwMDAw
+MDAwMDAuLmJjMTAwYjE3MWQKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2JvYXJkL2JzaC9i
+c2gtaW14OG1uL2dlbmltYWdlLmNmZwo+Pj4gQEAgLTAsMCArMSwxNyBAQAo+Pj4gK2ltYWdlIHNk
+Y2FyZC5pbWcgewo+Pj4gKyAgICAgICBoZGltYWdlIHsKPj4+ICsgICAgICAgICAgICAgICBwYXJ0
+aXRpb24tdGFibGUtdHlwZSA9ICJncHQiCj4+PiArICAgICAgIH0KPj4+ICsKPj4+ICsgICAgICAg
+cGFydGl0aW9uIGlteC1ib290IHsKPj4+ICsgICAgICAgICAgICAgICBpbi1wYXJ0aXRpb24tdGFi
+bGUgPSAibm8iCj4+PiArICAgICAgICAgICAgICAgaW1hZ2UgPSAiZmxhc2guYmluIgo+Pj4gKyAg
+ICAgICAgICAgICAgIG9mZnNldCA9IDMzSwo+Pj4gKyAgICAgICB9Cj4+PiArCj4+PiArICAgICAg
+IHBhcnRpdGlvbiByb290ZnMgewo+Pj4gKyAgICAgICAgICAgICAgIG9mZnNldCA9IDhNCj4+PiAr
+ICAgICAgICAgICAgICAgaW1hZ2UgPSAicm9vdGZzLmV4dDQiCj4+PiArICAgICAgICAgICAgICAg
+cGFydGl0aW9uLXV1aWQgPSAlUEFSVFVVSUQlCj4+PiArICAgICAgIH0KPj4+ICt9Cj4+PiBkaWZm
+IC0tZ2l0IGEvYm9hcmQvYnNoL2JzaC1pbXg4bW4vcG9zdC1idWlsZC5zaCBiL2JvYXJkL2JzaC9i
+c2gtaW14OG1uL3Bvc3QtYnVpbGQuc2gKPj4+IG5ldyBmaWxlIG1vZGUgMTAwNzU1Cj4+PiBpbmRl
+eCAwMDAwMDAwMDAwLi5iZjg4NjFmNmE5Cj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9ib2Fy
+ZC9ic2gvYnNoLWlteDhtbi9wb3N0LWJ1aWxkLnNoCj4+PiBAQCAtMCwwICsxLDcgQEAKPj4+ICsj
+IS9iaW4vc2gKPj4+ICtCT0FSRF9ESVI9IiQoZGlybmFtZSAkMCkiCj4+PiArUEFSVFVVSUQ9IiQo
+JEhPU1RfRElSL2Jpbi91dWlkZ2VuKSIKPj4+ICsKPj4+ICtpbnN0YWxsIC1kICIkVEFSR0VUX0RJ
+Ui9ib290L2V4dGxpbnV4LyIKPj4+ICtzZWQgInMvJVBBUlRVVUlEJS8kUEFSVFVVSUQvZyIgIiRC
+T0FSRF9ESVIvZXh0bGludXguY29uZiIgPiAiJFRBUkdFVF9ESVIvYm9vdC9leHRsaW51eC9leHRs
+aW51eC5jb25mIgo+Pj4gK3NlZCAicy8lUEFSVFVVSUQlLyRQQVJUVVVJRC9nIiAiJEJPQVJEX0RJ
+Ui9nZW5pbWFnZS5jZmciID4gIiRCSU5BUklFU19ESVIvZ2VuaW1hZ2UuY2ZnIgo+Pj4gZGlmZiAt
+LWdpdCBhL2JvYXJkL2JzaC9ic2gtaW14OG1uL3Bvc3QtaW1hZ2Uuc2ggYi9ib2FyZC9ic2gvYnNo
+LWlteDhtbi9wb3N0LWltYWdlLnNoCj4+PiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+Pj4gaW5kZXgg
+MDAwMDAwMDAwMC4uMzQ1MmZkNDUwMQo+Pj4gLS0tIC9kZXYvbnVsbAo+Pj4gKysrIGIvYm9hcmQv
+YnNoL2JzaC1pbXg4bW4vcG9zdC1pbWFnZS5zaAo+Pj4gQEAgLTAsMCArMSwzIEBACj4+PiArIyEv
+YmluL3NoCj4+PiArCj4+PiArc3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoIC1jICR7QklOQVJJ
+RVNfRElSfS9nZW5pbWFnZS5jZmcKPj4+IGRpZmYgLS1naXQgYS9ib2FyZC9ic2gvYnNoLWlteDht
+bi9yZWFkbWUudHh0IGIvYm9hcmQvYnNoL2JzaC1pbXg4bW4vcmVhZG1lLnR4dAo+Pj4gbmV3IGZp
+bGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAwMDAwMDAwMDAuLmFlMzA2NjZjZDAKPj4+IC0tLSAv
+ZGV2L251bGwKPj4+ICsrKyBiL2JvYXJkL2JzaC9ic2gtaW14OG1uL3JlYWRtZS50eHQKPj4+IEBA
+IC0wLDAgKzEsNTUgQEAKPj4+ICtIb3cgdG8gYnVpbGQgaXQKPj4+ICs9PT09PT09PT09PT09PT0K
+Pj4+ICsKPj4+ICtDb25maWd1cmUgYnVpbGRyb290Ogo+Pj4gKwo+Pj4gKyAgJCBtYWtlIGJzaF9z
+bW1zMnByb19kZWZjb25maWcKPj4+ICsKPj4+ICtDaGFuZ2Ugc2V0dGluZ3MgdG8gZml0IHlvdXIg
+bmVlZHMgKG9wdGlvbmFsKToKPj4+ICsKPj4+ICsgICQgbWFrZSBtZW51Y29uZmlnCj4+PiArCj4+
+PiArQ29tcGlsZSBldmVyeXRoaW5nIGFuZCBidWlsZHIgdGhlIHJvb3RmcyBpbWFnZToKPj4+ICsK
+Pj4+ICsgICQgbWFrZQo+Pj4gKwo+Pj4gKwo+Pj4gK1Jlc3VsdCBvZiB0aGUgYnVpbGQKPj4+ICs9
+PT09PT09PT09PT09PT09PT09Cj4+PiArCj4+PiArQWZ0ZXIgYnVpbGRpbmcsIHRoZSBvdXRwdXQv
+aW1hZ2VzIGRpcmVjdG9yeSBjb250YWluczoKPj4+ICsKPj4+ICsgIG91dHB1dC9pbWFnZXMvCj4+
+PiArICAgIOKUnOKUgOKUgCBibDMxLmJpbgo+Pj4gKyAgICDilJzilIDilIAgSW1hZ2UKPj4+ICsg
+ICAg4pSc4pSA4pSAIGZsYXNoLmJpbgo+Pj4gKyAgICDilJzilIDilIAgZGRyMyoKPj4+ICsgICAg
+4pSc4pSA4pSAIHJvb3Rmcy5leHQyCj4+PiArICAgIOKUnOKUgOKUgCByb290ZnMuZXh0NCAtPiBy
+b290ZnMuZXh0Mgo+Pj4gKyAgICDilJzilIDilIAgcm9vdGZzLnRhcgo+Pj4gKyAgICDilJzilIDi
+lIAgc2RjYXJkLmltZwo+Pj4gKyAgICDilJzilIDilIAgdS1ib290LmJpbgo+Pj4gKyAgICDilJzi
+lIDilIAgdS1ib290LW5vZHRiLmJpbgo+Pj4gKyAgICDilJTilIDilIAgdS1ib290LXNwbC5iaW4K
+Pj4+ICsKPj4+ICsKPj4+ICtGbGFzaGluZyB0aGUgZW1tYyBjYXJkIGltYWdlCj4+PiArPT09PT09
+PT09PT09PT09PT09PT09PT09PT0KPj4+ICsKPj4+ICtUbyBpbnN0YWxsIHRoZSBpbWFnZSBvbiBv
+biBlTU1DCj4+PiArCj4+PiArICAkIHN1ZG8gdXV1IC1iIGVtbWNfYWxsIG91dHB1dC9pbWFnZXMv
+Zmxhc2guYmluIG91dHB1dC9pbWFnZXMvc2RjYXJkLmltZwo+Pj4gKwo+Pj4gKwo+Pj4gK1ByZXBh
+cmluZyB0aGUgYm9hcmQKPj4+ICs9PT09PT09PT09PT09PT09PT09Cj4+PiArCj4+PiArICogQ29u
+bmVjdCBhIHNlcmlhbCBsaW5lIHRvIHRoZSBib2FyZAo+Pj4gKyAqIFBvd2VyLXVwIHRoZSBib2Fy
+ZAo+Pj4gKwo+Pj4gKwo+Pj4gK0Jvb3RpbmcgdGhlIGJvYXJkCj4+PiArPT09PT09PT09PT09PT09
+PT0KPj4+ICsKPj4+ICtCeSBkZWZhdWx0IHRoZSBib290bG9hZGVyIHdpbGwgc2VhcmNoIGZvciB0
+aGUgZmlyc3QgdmFsaWQgaW1hZ2UsIHN0YXJ0aW5nCj4+PiArd2l0aCB0aGUgaW50ZXJuYWwgZU1N
+Qy4KPj4+IGRpZmYgLS1naXQgYS9jb25maWdzL2JzaF9zbW1zMnByb19kZWZjb25maWcgYi9jb25m
+aWdzL2JzaF9zbW1zMnByb19kZWZjb25maWcKPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+PiBp
+bmRleCAwMDAwMDAwMDAwLi44NDcyYzZkYjJiCj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9j
+b25maWdzL2JzaF9zbW1zMnByb19kZWZjb25maWcKPj4+IEBAIC0wLDAgKzEsNDYgQEAKPj4+ICtC
+UjJfYWFyY2g2ND15Cj4+PiArQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eW14YzMi
+Cj4+PiArQlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVD0iYm9hcmQvYnNoL2JzaC1pbXg4bW4v
+cG9zdC1idWlsZC5zaCIKPj4+ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9i
+c2gvYnNoLWlteDhtbi9wb3N0LWltYWdlLnNoIgo+Pj4gK0JSMl9ST09URlNfUE9TVF9TQ1JJUFRf
+QVJHUz0iJHtVQk9PVF9ESVJ9L2FyY2gvYXJtL2R0cy9pbXg4bW4tYnNoLXNtbS1zMnByby5kdGIi
+Cj4+PiArQlIyX0xJTlVYX0tFUk5FTD15Cj4+PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fR0lU
+PXkKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9SRVBPX1VSTD0iaHR0cHM6Ly9naXQua2Vy
+bmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0Igo+Pj4g
+K0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1JFUE9fVkVSU0lPTj0idjUuMTctcmMxIgo+Pj4gK0JS
+Ml9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQo+Pj4gK0JSMl9MSU5VWF9L
+RVJORUxfRFRTX1NVUFBPUlQ9eQo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1F
+PSJmcmVlc2NhbGUvaW14OG1uLWJzaC1zbW0tczJwcm8iCj4+PiArQlIyX0xJTlVYX0tFUk5FTF9E
+VEJfS0VFUF9ESVJOQU1FPXkKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFSR0VUPXkK
+Pj4+ICtCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4+PiArQlIyX1BBQ0tB
+R0VfRlJFRVNDQUxFX0lNWD15Cj4+PiArQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9S
+TV9JTVg4TU49eQo+Pj4gK0JSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWD15Cj4+PiArQlIyX1BBQ0tB
+R0VfRklSTVdBUkVfSU1YX0REUjM9eQo+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+Pj4g
+K0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4+PiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl9T
+SVpFPSIxMjBNIgo+Pj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQo+Pj4gK0JS
+Ml9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT049eQo+Pj4gK0JSMl9U
+QVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9InYyLjUiCj4+
+PiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0iaW14OG1uIgo+Pj4g
+K0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQURESVRJT05BTF9WQVJJQUJMRVM9IklN
+WF9CT09UX1VBUlRfQkFTRT0weDMwYTYwMDAwIgo+Pj4gK0JSMl9UQVJHRVRfVUJPT1Q9eQo+Pj4g
+K0JSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+Pj4gK0JSMl9UQVJHRVRf
+VUJPT1RfQ1VTVE9NX0dJVD15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fUkVQT19VUkw9
+Imh0dHBzOi8vZ2l0bGFiLmFwZXJ0aXMub3JnL2FkYWxlc3NhbmRyby91LWJvb3QuZ2l0Igo+Pj4g
+K0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1JFUE9fVkVSU0lPTj0id2lwL2FkYWxlc3NhbmRyby9i
+c2gtc21tMi1wcm8iCj4+PiArQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9ImlteDht
+bl9ic2hfc21tX3MycHJvIgo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKPj4+ICtC
+UjJfVEFSR0VUX1VCT09UX05FRURTX1BZVEhPTjM9eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVF
+RFNfUFlMSUJGRFQ9eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BFTlNTTD15Cj4+PiAr
+QlIyX1RBUkdFVF9VQk9PVF9ORUVEU19BVEZfQkwzMT15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9O
+RUVEU19JTVhfRklSTVdBUkU9eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RPTT15
+Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9GT1JNQVRfQ1VTVE9NX05BTUU9ImZsYXNoLmJpbiIKPj4+
+ICtCUjJfVEFSR0VUX1VCT09UX1NQTD15Cj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15
+Cj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9JTVhfTUtJTUFHRT15Cj4+Cj4+IFdoZW4gYnVpbGRpbmcg
+dGhlIGZpbmFsIGlteCBmbGFzaC5iaW4gaW1hZ2Ugd2l0aCBiaW5tYW4gdGhpcyBob3N0IHRvb2wK
+Pj4gaXMgbm8gbG9uZ2VyIHJlcXVpcmVkLgo+Pgo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfVUJPT1Rf
+VE9PTFM9eQo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFNfRklUX1NVUFBPUlQ9eQo+
+Pgo+PiBTYW1lIGhlcmUuCj4gCj4gWW91IG1lYW4gdGhlIFVCT09UX1RPT0xTKiBwYWNrYWdlLiBJ
+IHdpbGwgZHJvcCBhcyBzb29uIGFzIEkgaGF2ZSBhCj4gdWJvb3QgZG93bmxvYWRpbmcgcG9pbnQg
+aW4gYXBlcnRpcyAoYmV0dGVyIHRoZSB0aGlzIG9uZSkKCkkgdGhpbmsgSGVpa28gbWVhbnMgQlIy
+X1BBQ0tBR0VfSE9TVF9JTVhfTUtJTUFHRT15LCBpbmRlZWQgSSd2ZSBqdXN0IApidWlsdCBzdWNj
+ZXNzZnVsbHkgdGhlIGRlZmNvbmZpZy4KClNvIEkgZ2l2ZSB5b3UgYToKUmV2aWV3ZWQtYnk6IEdp
+dWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgoKcmVt
+b3ZpbmcgQlIyX1BBQ0tBR0VfSE9TVF9JTVhfTUtJTUFHRT15CgphbmQgd2l0aCB0aGUgcHJvbWlz
+ZSB0byBidW1wIExpbnV4IGFuZCBVLUJvb3QgdmVyc2lvbnMgYXMgc29vbiBhcyBuZXcgCnZlcnNp
+b25zIGFyZSByZWxlYXNlZCB3aXRoIHRoZSBnb2FsIG9mIHJlbW92aW5nIHRoZSAtcmMxIHZlcnNp
+b25zLgoKS2luZCByZWdhcmRzIHRvIGV2ZXJ5Ym9keSEKLS0gCkdpdWxpbyBCZW5ldHRpCkJlbmV0
+dGkgRW5naW5lZXJpbmcgc2FzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
