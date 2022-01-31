@@ -1,78 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA459C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 22:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AC65C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 22:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7410260F2A;
-	Mon, 31 Jan 2022 22:11:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B9AC82B3E;
+	Mon, 31 Jan 2022 22:30:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T8txlpmxgPMB; Mon, 31 Jan 2022 22:11:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sqrM3A3Fk0po; Mon, 31 Jan 2022 22:30:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFE7E60F26;
-	Mon, 31 Jan 2022 22:10:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 657481BF2A3
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:10:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 724FB82B24;
+	Mon, 31 Jan 2022 22:30:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B69EB1BF836
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:30:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 543C260F1C
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:10:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4FFA82B24
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:30:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KcmKltSoMsai for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 22:10:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tTWFLpiS5aoP for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 22:30:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 11CF960AC6
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 22:10:47 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D51281409
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 22:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1643667044;
- bh=904uVjeg2OJ+5WVnJeM7V3gAijPWN01BjQSMhJiTN08=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=XBdiFzti8Waxj4g3Ix226vcRwK8pukCvr4xYdAXzn1zPR628g8fT7+FQLyzpXkS75
- uTxJU9qSQVdDubNyMlOI8uq7IU4InmVXf1DUze2JGeR1TcCtyjt0hen+tVuc0paNPB
- hyOL8WSfz/Uq3GYXqQzroB1HetNIhBG29+gAEX6c=
+ s=badeba3b8450; t=1643668227;
+ bh=xzst2jjmrnKFZS7886IH/iUNClLEohGbPWwMYAwHf5Y=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=EhRVsUBfyAzZhbTu3Vs7CgNIQwmNiIzzNY4UKGn7OuoLW7FuKlGJ3oRUFeZFWAx15
+ Oh8+8mGlundp7qKy3yLeZe6QnTntsQjG5UO5khQsvJtJUYzBxN7CyjbocFelV379TR
+ /t9fjUAPUbZVlST/Zm0TM/exjnK7HQp/gVjgCVxA=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.249]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5fMe-1n8a5837TG-007D2y; Mon, 31
- Jan 2022 23:10:44 +0100
-Date: Mon, 31 Jan 2022 23:10:43 +0100
+Received: from localhost.fritz.box ([62.216.209.249]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M3UV8-1nFD9d2QB0-000YjD; Mon, 31 Jan 2022 23:30:27 +0100
 From: Peter Seiderer <ps.report@gmx.net>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220131231043.615b992b@gmx.net>
-In-Reply-To: <c9dcef5830fdb5a83a625962702dccc093bb9a6c.1643665029.git.yann.morin.1998@free.fr>
-References: <cover.1643665029.git.yann.morin.1998@free.fr>
- <c9dcef5830fdb5a83a625962702dccc093bb9a6c.1643665029.git.yann.morin.1998@free.fr>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
+To: buildroot@buildroot.org
+Date: Mon, 31 Jan 2022 23:30:24 +0100
+Message-Id: <20220131223024.22386-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ZbLCFeNvCj350LpxnWSS5W0LI8fO9Y1cqT9cp6EqZ2icvYoGSEy
- XppGbouBFzBwqQWuthCRfFI9+OXotSP2e8gpvQNjhD9lXQfEu3LqDSr2fbORJY9Hc0qiYfR
- ztFolA9u/cHlK3rL8wGf7/+g91XQZyjcRfZJ5k9U8Jml4M65iK1pVvhVl0GJOtpWzZ+bvVQ
- iTsZzjU1+ijjBGSDSAGYQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:U8lxBFJtZIU=:zt58kMIj15lzLbWVwVjnTL
- MyGodsywReRZVOuH/dpUNa6H4DmNTDpldFeRpYOE5mbr/kuDMP2BHy/6mGf1fX84SHCmmHQ/t
- gyonVOyuradU+banv5Lh8+Uavr0OBZlfg/hQlFb5AmrAfrRh2DHDL4NnZQaeJXw6dq6Wo45Mv
- N2Oe2Id3JsfgqiWU0Hgdw1Bijh+GYuenTPJDD8QTI8qCfj5+SGcuCR5iYB9xjp1ItcpOhDoJB
- iMLgScY0yAhwwpAhR3W3Kua+HsiquFGmEOel66Ep3dwWLOYKQ8KvEVXjkreEzrr9PR+f7gr53
- T8Qq2rjj41d4f9E9I56hKt46VN/1FkdCBXiCO+z/7IyfTmK4+QzcEyI0TS6eIA0XfU07pr19v
- R2C50fp947zS0io5qepvpA4sz0MLfEzvjzrwD/iPyBpkn9cx4t+Q50WajEzkHR8iXCqqyynln
- RqkxdwlFwU8U/878OV8vYnkHJ3Au5tP7wBOVKe8LKhrO7rigQKbPDb6qdQyebOrviAz538J1Z
- WXDOCuQ4zeulpyu9xIaqkLCPT1w8REY7abyQFvVxZQr3y+X89qCP1W+Z4YOuVlexQi2+ZDmW6
- /D/1ab0nCv6WtO9IqQRitxUxFJdFfxOShIQeVv0eFi5+EDBiqeiNN1vuKTjPyaC1YSR+dVtsV
- EgVF/93tFyu8gblSh3GLpz00qJEmBagOP21UHAFa8m+hXw1W+WUM2KIZ9wcn61UMFDAkAuCGH
- UJmUY/dVz88vAvGFjR79cYhyP7BqEwx7bWApqS3umlXuns8cE99j99ki0p69tXgGtruYDwjQU
- 1YQNIWDf0K/snnTj2PInwGvVpGDLWrxoTb4n3E0O4IzmwWpDxZ7vIaSFT8JBBOIK43F4U1njO
- +LmbU6Z/nQpLaBVmwvBEJY+D3vaXKtsA+ERkvH1fNm3+sLYNWtazYkGd5iYGqYempWfTvuLSe
- 20CsqeR6FQkCXXUFZKEJrebnlfzzTXz2FcNxlo6NNBnUZuY7N/E4mfxmV0HuyEB6N8qpmkR8x
- 535DGNA0HvpvgK88e9wb9RrOcDjx+/F4f8Z2UISKLCiqzE79hJlYrwCVHBh61F4ZOzNZyZScr
- gRSJYvl344LOzs=
-Subject: Re: [Buildroot] [PATCH 2/2 v2] linux: fix build with host-gcc 10+
+X-Provags-ID: V03:K1:hamuH7ZF9AttsTR+8gVCLi6DZEtRLuZmi29Q2iwqdCtN1UNmXtB
+ dCzHhOqIYAsHYY2G5p2iN+aBPBZPWkBbq6DcpbNolNQbpLENN3cF7oP2M9LRB1qpasRgyLD
+ Q9mI2CA2aHowy3qDbB73nidayoEw9mZxq1jXTlceJChkUdJmfDOIGIylcoyUP9xh8THfpZX
+ U4cCt7Nq9eQR5hNSaC81w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/EsZLB1+x8g=:xDa/JMnFHtveVImK5ZV633
+ BxEgbvI3qnyhNUS11VBeji5YwTGai+t/JpAoo2hcjxNWtn3RK8nwL1PG/tEjK4g6CDW48XJW2
+ jihRaZ3vty1xTj0sm2maxImg4QnTafGIhKVsWSk/fQROONV0eEqtIVPhSPTZrEHrleiTyoKsB
+ IeYGkntbSCPl2gEDSmMRpJv4P1tLcWO+E9bWK8aJwqW/HqG9Qn287ycFjj4WeUepM67ZRMIOr
+ 8fbicI4P76m7b36vRPGUdLo8aPcrMWSIqZ2TWvqo/4Ew0FqGbqeQZ2xWZBgM9UZC1F0bwQIa3
+ 3xjFszZtjcRhJw5Kg0maicJi65ahYo2MWnxtQzlIUW9QvqzCzdLNFxBW8/GoQMJbBZ/VgFPcO
+ XMINw5FvUOEkywM4xXx5ufjstIAHbu7oe8XAXSgvbrausY7QUrm4NWpE+RrEnwsK0P22dhsYs
+ TOtwlelrXoQRmMXl+ZAcFj3gPYJSvZCD88D4Jo84JOh6Z+iyeeMorOYeA0cfQN3Oz26YoPRvc
+ Oc7dT0nbBxIpp6ODHPuH+FnuduR0baKCIq+uyVsBtYeH7J+/fOpnUNwoU5bdyoy0Fv9/EGxrG
+ IV9P0OqPdG1P0wmSao3r7rzqa8xjFwiMhwo9a6C7dkEkXR58inFfwBPPEJmnXvConT8CZLRNY
+ 8rKUnz5nudX7QgUiPVaVaeuK/KgZ6S460hckEQcpUJVc4bngqyvIj1zTubEsaV5NJyNWvvVC2
+ inpk71quF2VJn2kqcGHxy3scBqC6p6MC511d6xs/MKUFwnyVcFBLmTOHVGkxj9WpxlP4bLldW
+ mcyyZc9MTIVM4uo7RvAoXihvAe/sxqEFD7fCeNZtUvmF7fHFFtzViosdVYwkXPA5AaYZKgTkj
+ YXs3kQ9DI/3zkw8vauJ/4PuxilfwjchBWnpfbgr6dlNy9l7ukZcxLaXIsGoTjsmadeQyOnIoc
+ eI1h/fYZAfqpmIKH1urTfbYCM8W1lJe20kqIt4eoR8RJgLYgrYjKGF93z7+CJ+pQ771azbpxe
+ Gz61QAaTfdLtClMEpMd1wfecj71LsaxbVDnRSM/U8fQ+0Amet4hd4U/FXT6f9qQkgp9LON2OA
+ GXCET7CTxSUghc=
+Subject: [Buildroot] [PATCH v1] package/qt5base: fix uclibc/musl compile
+ with libexecinfo enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,70 +82,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
+- depend and link against libexecinfo if enabled to fix linking failure
+  in case execinfo.h is detected for qlogging:
 
-one nitpick...
+  qt5base-5.15.2/src/corelib/global/qlogging.cpp:110 - __has_include(<execinfo.h>)
 
-On Mon, 31 Jan 2022 22:38:09 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+- libexecinfo already depends on !BR2_TOOLCHAIN_USES_GLIBC
 
-> Some older versions of linux, or custom versions (like forks for some
-> boards), fail to build with host-gcc 10+, because of redefined symbols:
->
->       HOSTLD  scripts/dtc/dtc
->     /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition
->     of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
->     collect2: error: ld returned 1 exit status
->
-> Since this has been fixed in recent-ish versions, we can't use an
-> unconditionaly patch, so we must have a conditional patch. However, a
-> patch may not always apply to arbitrary U-Boot versions or forks.
+- rename plain QT5BASE_CONFIGURE_ARCH_CONFIG to QT5BASE_CONFIGURE_ARCH_CONFIG_LIBATOMIC
 
-s/U-Boot/Linux kernel/
+Fixes:
 
-Regards,
-Peter
+  - http://autobuild.buildroot.net/results/e7c685744b1f1bebb7fec9835bda534a72b7b7c2
 
->
-> Upstream just dropped that line altogether:
->     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33a814e772cdc36436c8c188d8c42d019fda639
->
-> So, we use a little sed-grep combo to do the exact same change.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> ---
-> Changes v1 -> v2:
->   - don't fail if no file to fix: use 'grep -Z |xargs -0 -r' (Arnout)
-> ---
->  linux/linux.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index dd2eebd446..410b714360 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -268,6 +268,13 @@ endef
->
->  LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
->
-> +# Older versions break on gcc 10+ because of redefined symbols
-> +define LINUX_DROP_YYLLOC
-> +	$(Q)grep -Z -l -r -E '^YYLTYPE yylloc;$$' $(@D) \
-> +	|xargs -0 -r $(SED) '/^YYLTYPE yylloc;$$/d'
-> +endef
-> +LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
-> +
->  # Older linux kernels use deprecated perl constructs in timeconst.pl
->  # that were removed for perl 5.22+ so it breaks on newer distributions
->  # Try a dry-run patch to see if this applies, if it does go ahead
+  .../riscv64-buildroot-linux-musl/bin/ld: .../build/qt5base-5.15.2/src/corelib/global/qlogging.cpp:1398: undefined reference to `backtrace_symbols'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5base/qt5base.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 4ef3759566..59c423c49c 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -234,6 +234,14 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
+ 
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES),-make,-nomake) examples
+ 
++# see qt5base-5.15.2/src/corelib/global/qlogging.cpp:110 - __has_include(<execinfo.h>)
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++QT5BASE_DEPENDENCIES += libexecinfo
++define QT5BASE_CONFIGURE_ARCH_CONFIG_LIBEXECINFO
++	printf '!host_build { \n LIBS += -lexecinfo\n }' >$(QT5BASE_ARCH_CONFIG_FILE)
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBINPUT),y)
+ QT5BASE_CONFIGURE_OPTS += -libinput
+ QT5BASE_DEPENDENCIES += libinput
+@@ -282,7 +290,7 @@ endif
+ QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ # Qt 5.8 needs atomics, which on various architectures are in -latomic
+-define QT5BASE_CONFIGURE_ARCH_CONFIG
++define QT5BASE_CONFIGURE_ARCH_CONFIG_LIBATOMIC
+ 	printf '!host_build { \n LIBS += -latomic\n }' >$(QT5BASE_ARCH_CONFIG_FILE)
+ endef
+ endif
+@@ -305,7 +313,8 @@ define QT5BASE_CONFIGURE_CMDS
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+ 	touch $(QT5BASE_ARCH_CONFIG_FILE)
+-	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
++	$(QT5BASE_CONFIGURE_ARCH_CONFIG_LIBATOMIC)
++	$(QT5BASE_CONFIGURE_ARCH_CONFIG_LIBEXECINFO)
+ 	$(QT5BASE_CONFIGURE_HOSTCC)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) \
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
