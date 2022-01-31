@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D68FBC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 02:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC644C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 02:45:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E3AF83F73;
-	Mon, 31 Jan 2022 02:22:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 565F783F6E;
+	Mon, 31 Jan 2022 02:45:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S66vuyxZCdgC; Mon, 31 Jan 2022 02:22:37 +0000 (UTC)
+	with ESMTP id UTeaucpLT0Ne; Mon, 31 Jan 2022 02:45:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C613583F6E;
-	Mon, 31 Jan 2022 02:22:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E2CAD1BF471
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:22:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DBDB83F13;
+	Mon, 31 Jan 2022 02:45:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EDF381BF471
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D06F94047C
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:22:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E449483F13
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 02:45:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IBislqZtg95c for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 02:22:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R8VRJZwJlcSO for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 02:45:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
- [IPv6:2607:f8b0:4864:20::22a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB4AE40420
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 02:22:34 +0000 (UTC)
-Received: by mail-oi1-x22a.google.com with SMTP id v67so24110738oie.9
- for <buildroot@buildroot.org>; Sun, 30 Jan 2022 18:22:34 -0800 (PST)
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
+ [IPv6:2607:f8b0:4864:20::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B361F83F0B
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 02:45:36 +0000 (UTC)
+Received: by mail-oi1-x231.google.com with SMTP id t199so7603666oie.10
+ for <buildroot@buildroot.org>; Sun, 30 Jan 2022 18:45:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=XWQdfIWeKQ2eekjWyNJnweo8WP24mNddL4RiIKmW6Ko=;
- b=BtL7PViYh9WjVbojz3It0Jm4tuwQCyCz7yMS1hh5Teh0f8eHnF5Tn/t4Pt3cPW0PZZ
- OzCnVwoMFsjXVRwRG/eya0B8TOGuJADFci7fy/g6BhD/nEKQLrwib5h2cR5gO+Hiw+AC
- rHHyo2GOZpEYuNyFt5Og+rHidGZi5xqs54NLzMqRv2oAwJNnqisjgdM4Yf47YPoN4WrH
- +QE/EUefcK631H4JNbZ1JzV64hT2IG8pmKYKi44SfM8If4xvo7sc3ZIxY+V4ocV1AaWu
- e7IxbMaDszdeBmanxQf2ZxPhFZMNUx290Mntocyrm5SnBXWdcVTnPU+JRar2EtBuZyRv
- REQQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=S0yvDWvsJ4kF7rSJaL+q7bmGij0M1xwcHoNVTmhbvqU=;
+ b=Cgh7S+wNsdwnU5Riw0QwPNo7RWGsahL5vdYJscVoh3tlrntGqGyvP8R8+OsKOiuYjc
+ WhKeIrAc/47OI80k+oKwmvwe6sRfOe+YTsuGV/V1zpJkYMCpYgRJug+1N1kLLWY90587
+ u3KqhkevzWzI7D39bKhfHfWgYBsqKMaEFPQRSASGqt5Zi3TtgAG34JdAsBuIKCuPC95j
+ PAdyntsr54cwOA0qxoqE321ICEAW0jbxBSroU42UapzY+lESs6zcYs6h7AixJJ/mu8kd
+ 7DbryHFzJVhOuJuLP6yZP6CKbEL11dRQwM6Quq0bnywHTpzT9uUid6UkvjgyX64HMGeE
+ ge/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=XWQdfIWeKQ2eekjWyNJnweo8WP24mNddL4RiIKmW6Ko=;
- b=n9SqLpuy1fKV0W1Xvo3P8yyhODt8dcB9w3LqUYhUqXxhyRaJ6qSv+cI7qJ+EMq0w/J
- w73uM3vXmnULRo32mDzwA9cb8kfsZBBAd2wzSTYmVKOYnxb/ItLOGtEZCEwXKn4vQye3
- OYiWaEnYJcYnO86UsZN8KminzzX4BHeRmwvXyJScfnddnVi8mEG2rUnfy87KPUYGzJr7
- VudDEZvUV76daNEJj9BkVzcpCtrKpIQYmVXUcfSPuv0krKHI/cGQ9ZRm1N4opyQFpDNO
- 1l00feXz/Zpl4C3eNeHvXBGujHhvu1QfiwCdH7CQJccJWL/PmrcJk36SLlJ4QDdydvD7
- J70w==
-X-Gm-Message-State: AOAM53112UevqM4STwZYTo9z4N1sSwAPzHzQnmmN/5mBUR/R/2YW1Pc9
- qjx9WWojsYRznwJXrobBEyabli06p/lxD+Vo+F0=
-X-Google-Smtp-Source: ABdhPJywF4SMg2ENABBA9N7WzXeJ+oKu1g0XCJL9hDLk0AuoHjvWtyB2n3ws1BcXE1m62IWEskD95cYEJHnOAgJQjY4=
-X-Received: by 2002:a05:6808:154:: with SMTP id
- h20mr12326533oie.103.1643595753441; 
- Sun, 30 Jan 2022 18:22:33 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=S0yvDWvsJ4kF7rSJaL+q7bmGij0M1xwcHoNVTmhbvqU=;
+ b=HziIt/MixCb7jklwt8s7hBH8jysegzhgYhpVLRCtxT5pml1sY+2UjhqYNQILbSeU/w
+ ZgPxyA0uCSgIvbkF2EVqZ/D+RWjjQTAKQBf2up5PsqXKD7uEeXeDaCuLfRLLQFkoG/Yd
+ ms8ZMJCsDw9h5v8Ihyyg4UcLODY6qE+a9MOkfJ+OiNvzB4IXG5JpAY4dRTQIFLihxSow
+ JoEOJtgriD9MD7UPguDHUcnhuGKxlk7rPlipmAHOfZglA1l7egDs8iYFC4wSezsQjyo4
+ TbMl20nM6fPfp9RARaAC8V2lsENQEO6yXIzj4sDfbJueyGm9CDVTNb1FovifDvb3p6Hb
+ abxg==
+X-Gm-Message-State: AOAM531au/Zm0DcWPZRCu+Ur531vxu8176r+7UW/if17+ZMePFtF9a57
+ +THic1ixQV8EEV04LCqGNeojYaWpH9U=
+X-Google-Smtp-Source: ABdhPJw614tWpBw1I+A5JdvoXMTz4vfEHT6imfvIchuBWIePv753/KJCLOAY+PGY72MVmjHRaGrSsg==
+X-Received: by 2002:a05:6808:170d:: with SMTP id
+ bc13mr17321273oib.175.1643597135700; 
+ Sun, 30 Jan 2022 18:45:35 -0800 (PST)
+Received: from localhost.localdomain ([201.37.117.8])
+ by smtp.gmail.com with ESMTPSA id v4sm10363585oou.1.2022.01.30.18.45.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 30 Jan 2022 18:45:35 -0800 (PST)
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 30 Jan 2022 23:44:50 -0300
+Message-Id: <20220131024451.2580165-1-ricardo.martincoski@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210810064547.2579380-1-james.hilliard1@gmail.com>
- <20211228233314.7dfb8575@windsurf>
-In-Reply-To: <20211228233314.7dfb8575@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 30 Jan 2022 19:22:22 -0700
-Message-ID: <CADvTj4pVpK+chqNO0aP_EoW4vkOV_Qeo3m-G7aE34411T5YwrA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: enable host build
+Subject: [Buildroot] [PATCH 1/2] package/thermald: update URL in the docs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,71 +83,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Dec 28, 2021 at 3:33 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Tue, 10 Aug 2021 00:45:46 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > This will be used for building tools that are included with the kernel,
-> > such as host-bpftool.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> I'm sorry, but I fail to see how this can make sense, for a number of
-> reasons:
->
->  * For external toolchains, package/linux-headers/Config.in.host is not
->    even included, which means that no version of kernel headers are
->    defined.
->
->  * Even for internal toolchains, the kernel headers version selected
->    for the target, which you re-use here for the host kernel headers,
->    has no correlation with the actual kernel running on the build
->    machine. If you are running an oldish 3.10 kernel on your build
->    machine, install host-linux-headers 5.15, and build host-bpftool
->    based on that, you'll run into issue.
+Old project homepage was removed, so switch to github, already in use to
+download the sources.
 
-Yeah, I wasn't sure if this would work, previously this tool was only available
-integrated with the kernel, but it has now been separated like libbpf so we
-can use that version instead which shouldn't require building from the kernel
-tree anymore.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+This commit can be backported to maintenance branches
+---
+ package/thermald/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> So, perhaps the first thing is to figure out why the host variant of
-> bpftool needs kernel headers. What are these tool doing on the host?
-> What is the use case?
+diff --git a/package/thermald/Config.in b/package/thermald/Config.in
+index 6d74a164b6..e5e15b9b8d 100644
+--- a/package/thermald/Config.in
++++ b/package/thermald/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_THERMALD
+ 	  reaches a certain threshold, the Linux daemon activates
+ 	  various cooling methods to try to cool the system.
+ 
+-	  https://01.org/linux-thermal-daemon
++	  https://github.com/intel/thermal_daemon
+ 
+ comment "thermald needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_i386 || BR2_x86_64
+-- 
+2.25.1
 
-This tool is needed to generate bpf skeleton files, systemd needs this for
-example to enable bpf-framework support.
-
->
-> Then if we really want to build them for the host, I guess the only
-> solution is to ask the user to install the kernel headers matching their
-> build machine (so with some hidden option
-> BR2_NEEDS_HOST_KERNEL_HEADERS, which is selected by your package, and
-> then with logic in support/dependencies/ to check that).
-
-I've made a patch to use the new stand-alone bpftool package instead:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220131021609.4117295-1-james.hilliard1@gmail.com/
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
