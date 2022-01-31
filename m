@@ -1,76 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AC65C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 22:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E7E8C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 22:43:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B9AC82B3E;
-	Mon, 31 Jan 2022 22:30:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97D2860804;
+	Mon, 31 Jan 2022 22:43:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sqrM3A3Fk0po; Mon, 31 Jan 2022 22:30:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id buGTEbCa_fdp; Mon, 31 Jan 2022 22:43:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 724FB82B24;
-	Mon, 31 Jan 2022 22:30:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B69EB1BF836
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:30:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B010160F27;
+	Mon, 31 Jan 2022 22:43:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 522C51BF836
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4FFA82B24
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:30:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 404CE60F22
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:43:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tTWFLpiS5aoP for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 22:30:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D51281409
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 22:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1643668227;
- bh=xzst2jjmrnKFZS7886IH/iUNClLEohGbPWwMYAwHf5Y=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=EhRVsUBfyAzZhbTu3Vs7CgNIQwmNiIzzNY4UKGn7OuoLW7FuKlGJ3oRUFeZFWAx15
- Oh8+8mGlundp7qKy3yLeZe6QnTntsQjG5UO5khQsvJtJUYzBxN7CyjbocFelV379TR
- /t9fjUAPUbZVlST/Zm0TM/exjnK7HQp/gVjgCVxA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.249]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M3UV8-1nFD9d2QB0-000YjD; Mon, 31 Jan 2022 23:30:27 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Mon, 31 Jan 2022 23:30:24 +0100
-Message-Id: <20220131223024.22386-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jpmjXmkKkHM8 for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 22:43:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9629F60804
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 22:43:50 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id j2so29717839edj.8
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 14:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=05FZpa8uzE9whYYYYGPX8yT1wdcGs9MgzyPPP4wjegE=;
+ b=igQA9wcglBl/ATLpIFWNzvZ0xuY16wa56Gl+kofMpaQ78O9sKUXsWA/U/j0fwRvQxj
+ c0Hj3kgKiohjZNHt89qGDKlknt+sbcvQgqhlZhrCFo4ozTU35jJZnTm3Nol2P70nnQRb
+ RUfiQjewQTPBsVdMTqJGXOHe7YGc9WdmrJrujVpf5TiOmv8xc2nP/zytz0FUDeyHmhB+
+ 7E18v3Nf8x1fO4PjOu99IMEt1TZqrAuh+KRDfdogcJRWvEzXZ/oG52MfNA0NVmoISZZk
+ TCOFhV61FyJJjw9PA3D1gNd580s5CEqtNgiClFCyi1fHyr3MuudjVbOszEHcC21Yfnqc
+ cEXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=05FZpa8uzE9whYYYYGPX8yT1wdcGs9MgzyPPP4wjegE=;
+ b=ICOXPowghUs4RfT9DZLVacyGAgEq83UWBXigMOyoC8A0IAO/GE1fqz1Bw0W5vkKso8
+ L3C8aA0dcOew7QvSbJ9lExvJq8w4+NxxSg5sg5FXl1Z475SgJ+FOJUWDOutgyZUsPuaP
+ bUQupB0Fo0AuxwDEhkOkVlql67ze9R8aVFYqbvxIa/PR1LIwSGK659J5I2UQKrgRG0Hj
+ SIo5YtX/gErGee6ohqXQjJbkslMmS4t19RlNGISGvfW+XzfKgeyjRGzxI78VL47JET5S
+ 5poyNFNV8cvZnwRjhBQJRKgVDxGOV+g+nyeHtmzFSIliCAm/TrMHID/kLmrpzDPOkoHE
+ HgBg==
+X-Gm-Message-State: AOAM533ZXS0sP4oKR62IUGvMU2yF0gjVahV0w9dHF/x8nlnWXJbnKycT
+ 4CaRxnh0zMzKZW5xMYYH+BpwnWziL+5Mnw==
+X-Google-Smtp-Source: ABdhPJwim2u0j5pbPk68DHkkfOvq6TqCwBWhYanVidBdeWbbyoEBMH3bsntnMrdpjaiY1xqIJl90fA==
+X-Received: by 2002:aa7:d702:: with SMTP id t2mr22283173edq.20.1643669028721; 
+ Mon, 31 Jan 2022 14:43:48 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id d2sm13875546ejw.79.2022.01.31.14.43.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 31 Jan 2022 14:43:48 -0800 (PST)
+Message-ID: <077c8dc8-eb09-1672-615f-d86e15abf87e@mind.be>
+Date: Mon, 31 Jan 2022 23:43:46 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:hamuH7ZF9AttsTR+8gVCLi6DZEtRLuZmi29Q2iwqdCtN1UNmXtB
- dCzHhOqIYAsHYY2G5p2iN+aBPBZPWkBbq6DcpbNolNQbpLENN3cF7oP2M9LRB1qpasRgyLD
- Q9mI2CA2aHowy3qDbB73nidayoEw9mZxq1jXTlceJChkUdJmfDOIGIylcoyUP9xh8THfpZX
- U4cCt7Nq9eQR5hNSaC81w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/EsZLB1+x8g=:xDa/JMnFHtveVImK5ZV633
- BxEgbvI3qnyhNUS11VBeji5YwTGai+t/JpAoo2hcjxNWtn3RK8nwL1PG/tEjK4g6CDW48XJW2
- jihRaZ3vty1xTj0sm2maxImg4QnTafGIhKVsWSk/fQROONV0eEqtIVPhSPTZrEHrleiTyoKsB
- IeYGkntbSCPl2gEDSmMRpJv4P1tLcWO+E9bWK8aJwqW/HqG9Qn287ycFjj4WeUepM67ZRMIOr
- 8fbicI4P76m7b36vRPGUdLo8aPcrMWSIqZ2TWvqo/4Ew0FqGbqeQZ2xWZBgM9UZC1F0bwQIa3
- 3xjFszZtjcRhJw5Kg0maicJi65ahYo2MWnxtQzlIUW9QvqzCzdLNFxBW8/GoQMJbBZ/VgFPcO
- XMINw5FvUOEkywM4xXx5ufjstIAHbu7oe8XAXSgvbrausY7QUrm4NWpE+RrEnwsK0P22dhsYs
- TOtwlelrXoQRmMXl+ZAcFj3gPYJSvZCD88D4Jo84JOh6Z+iyeeMorOYeA0cfQN3Oz26YoPRvc
- Oc7dT0nbBxIpp6ODHPuH+FnuduR0baKCIq+uyVsBtYeH7J+/fOpnUNwoU5bdyoy0Fv9/EGxrG
- IV9P0OqPdG1P0wmSao3r7rzqa8xjFwiMhwo9a6C7dkEkXR58inFfwBPPEJmnXvConT8CZLRNY
- 8rKUnz5nudX7QgUiPVaVaeuK/KgZ6S460hckEQcpUJVc4bngqyvIj1zTubEsaV5NJyNWvvVC2
- inpk71quF2VJn2kqcGHxy3scBqC6p6MC511d6xs/MKUFwnyVcFBLmTOHVGkxj9WpxlP4bLldW
- mcyyZc9MTIVM4uo7RvAoXihvAe/sxqEFD7fCeNZtUvmF7fHFFtzViosdVYwkXPA5AaYZKgTkj
- YXs3kQ9DI/3zkw8vauJ/4PuxilfwjchBWnpfbgr6dlNy9l7ukZcxLaXIsGoTjsmadeQyOnIoc
- eI1h/fYZAfqpmIKH1urTfbYCM8W1lJe20kqIt4eoR8RJgLYgrYjKGF93z7+CJ+pQ771azbpxe
- Gz61QAaTfdLtClMEpMd1wfecj71LsaxbVDnRSM/U8fQ+0Amet4hd4U/FXT6f9qQkgp9LON2OA
- GXCET7CTxSUghc=
-Subject: [Buildroot] [PATCH v1] package/qt5base: fix uclibc/musl compile
- with libexecinfo enabled
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+References: <20211203215438.213437-1-nolange79@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211203215438.213437-1-nolange79@gmail.com>
+Subject: Re: [Buildroot] [PATCH v3 1/2] package/pkg-meson: separate
+ infrastructure logic from package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,73 +92,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- depend and link against libexecinfo if enabled to fix linking failure
-  in case execinfo.h is detected for qlogging:
 
-  qt5base-5.15.2/src/corelib/global/qlogging.cpp:110 - __has_include(<execinfo.h>)
 
-- libexecinfo already depends on !BR2_TOOLCHAIN_USES_GLIBC
+On 03/12/2021 22:54, Norbert Lange wrote:
+> Move all logic related to handling meson packages to the
+> package/pkg-meson file. This now mirrors the other build
+> systems and keeps the package itself clean.
+> 
+> Correctly prefix variables with PKG_MESON_
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+> v2->v3:
+> -   rebase, split up the moving
+> 
+> v1->v2:
+> -   squash 2 commits, really hard to separate as moving and renaming
+>      variables from 2 to one location affects alot code.
+> -   use TOOLCHAIN_POST_INSTALL_STAGING_HOOKS again.
+> -   consistently use double quotes for sed patterns
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>   package/meson/meson.mk | 38 --------------------------------------
+>   package/pkg-meson.mk   | 40 +++++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 39 insertions(+), 39 deletions(-)
+> 
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index a8c846126a..5553c15d91 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -13,44 +13,6 @@ MESON_SETUP_TYPE = setuptools
+>   HOST_MESON_DEPENDENCIES = host-ninja
+>   HOST_MESON_NEEDS_HOST_PYTHON = python3
+>   
+> -HOST_MESON_TARGET_ENDIAN = $(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))
+> -HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
+> -
+> -# https://mesonbuild.com/Reference-tables.html#cpu-families
+> -ifeq ($(BR2_arcle)$(BR2_arceb),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = arc
+> -else ifeq ($(BR2_arm)$(BR2_armeb),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = arm
+> -else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = aarch64
+> -else ifeq ($(BR2_i386),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = x86
+> -else ifeq ($(BR2_m68k),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = m68k
+> -else ifeq ($(BR2_microblazeel)$(BR2_microblazebe),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = microblaze
+> -else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = mips
+> -else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = mips64
+> -else ifeq ($(BR2_powerpc),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = ppc
+> -else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = ppc64
+> -else ifeq ($(BR2_riscv),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = riscv64
+> -else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = sh4
+> -else ifeq ($(BR2_sparc),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = sparc
+> -else ifeq ($(BR2_sparc64),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = sparc64
+> -else ifeq ($(BR2_x86_64),y)
+> -HOST_MESON_TARGET_CPU_FAMILY = x86_64
+> -else
+> -HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+> -endif
+> -
+>   # Avoid interpreter shebang longer than 128 chars
+>   define HOST_MESON_SET_INTERPRETER
+>   	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 16a90d157b..4914486665 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -185,9 +185,47 @@ meson-package = $(call inner-meson-package,$(pkgname),$(call UPPERCASE,$(pkgname
+>   host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+>   
+>   ################################################################################
+> -# Generation of the Meson cross-compilation.conf file
+> +# Generation of the Meson compile flags and cross-compilation file
+>   ################################################################################
+>   
+> +# https://mesonbuild.com/Reference-tables.html#cpu-families
+> +ifeq ($(BR2_arcle)$(BR2_arceb),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = arc
+> +else ifeq ($(BR2_arm)$(BR2_armeb),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = arm
+> +else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = aarch64
+> +else ifeq ($(BR2_i386),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = x86
+> +else ifeq ($(BR2_m68k),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = m68k
+> +else ifeq ($(BR2_microblazeel)$(BR2_microblazebe),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = microblaze
+> +else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = mips
+> +else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = mips64
+> +else ifeq ($(BR2_powerpc),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = ppc
+> +else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = ppc64
+> +else ifeq ($(BR2_riscv),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = riscv64
+> +else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = sh4
+> +else ifeq ($(BR2_sparc),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = sparc
+> +else ifeq ($(BR2_sparc64),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = sparc64
+> +else ifeq ($(BR2_x86_64),y)
+> +PKG_MESON_TARGET_CPU_FAMILY = x86_64
+> +else
+> +PKG_MESON_TARGET_CPU_FAMILY = $(ARCH)
+> +endif
+> +
+> +HOST_MESON_TARGET_ENDIAN = $(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))
+> +HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
 
-- rename plain QT5BASE_CONFIGURE_ARCH_CONFIG to QT5BASE_CONFIGURE_ARCH_CONFIG_LIBATOMIC
+  I moved all this to the beginning of the file, since it's (indirectly) used 
+within inner-meson-package.
 
-Fixes:
+  Applied to master with that changed, thanks.
 
-  - http://autobuild.buildroot.net/results/e7c685744b1f1bebb7fec9835bda534a72b7b7c2
+  Regards,
+  Arnout
 
-  .../riscv64-buildroot-linux-musl/bin/ld: .../build/qt5base-5.15.2/src/corelib/global/qlogging.cpp:1398: undefined reference to `backtrace_symbols'
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5base/qt5base.mk | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 4ef3759566..59c423c49c 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -234,6 +234,14 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
- 
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES),-make,-nomake) examples
- 
-+# see qt5base-5.15.2/src/corelib/global/qlogging.cpp:110 - __has_include(<execinfo.h>)
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+QT5BASE_DEPENDENCIES += libexecinfo
-+define QT5BASE_CONFIGURE_ARCH_CONFIG_LIBEXECINFO
-+	printf '!host_build { \n LIBS += -lexecinfo\n }' >$(QT5BASE_ARCH_CONFIG_FILE)
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBINPUT),y)
- QT5BASE_CONFIGURE_OPTS += -libinput
- QT5BASE_DEPENDENCIES += libinput
-@@ -282,7 +290,7 @@ endif
- QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- # Qt 5.8 needs atomics, which on various architectures are in -latomic
--define QT5BASE_CONFIGURE_ARCH_CONFIG
-+define QT5BASE_CONFIGURE_ARCH_CONFIG_LIBATOMIC
- 	printf '!host_build { \n LIBS += -latomic\n }' >$(QT5BASE_ARCH_CONFIG_FILE)
- endef
- endif
-@@ -305,7 +313,8 @@ define QT5BASE_CONFIGURE_CMDS
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
- 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
- 	touch $(QT5BASE_ARCH_CONFIG_FILE)
--	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
-+	$(QT5BASE_CONFIGURE_ARCH_CONFIG_LIBATOMIC)
-+	$(QT5BASE_CONFIGURE_ARCH_CONFIG_LIBEXECINFO)
- 	$(QT5BASE_CONFIGURE_HOSTCC)
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) \
--- 
-2.34.1
-
+> +
+>   # Generate a Meson cross-compilation.conf suitable for use with the
+>   # SDK; also install the file as a template for users to add their
+>   # own flags if they need to.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
