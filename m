@@ -1,47 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56652C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 20:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AAB1C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 20:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0701240337;
-	Mon, 31 Jan 2022 20:38:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 133EB60F0E;
+	Mon, 31 Jan 2022 20:38:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2DJ5EtvisFsa; Mon, 31 Jan 2022 20:38:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eVxE5ciOFsnY; Mon, 31 Jan 2022 20:38:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 367F340324;
-	Mon, 31 Jan 2022 20:38:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BF90D1BF36A
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 20:38:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DE6760B50;
+	Mon, 31 Jan 2022 20:38:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DD3B21BF36A
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 20:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC77440120
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 20:38:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB586813BB
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 20:38:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j985e0sNHnYY for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 20:38:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B791400C7
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 20:38:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0BEB382826; Mon, 31 Jan 2022 20:31:16 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 31 Jan 2022 21:32:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e9b1dffa5d17c7af5d6171de88348431a6260308
-X-Git-Newrev: 391f70b6893e0b502b69f40c69df412f24519060
-X-Patchwork-Hint: ignore
-Message-Id: <20220131203116.0BEB382826@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/size-stats-compare: add package name
- in detail output
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fb3VhZs_1DLj for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 20:38:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8577A8139D
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 20:38:39 +0000 (UTC)
+Received: by mail-lj1-x230.google.com with SMTP id z20so21101880ljo.6
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 12:38:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=5NudbMurzfYzXfqYC75HsOUWwHJs5U2kmLyXXzbUdTE=;
+ b=q7SFOB5XIBi/jpiLyFqhbmsd4XXkLOfJzkpe4J9xs3HjOcC+x19M9PgoGHN+x8CEBY
+ /+05BHghWyOAIHLpyZRJKvYYiR7jtT2fyr+KuXFFcKIr+uoUa/NT0AahrBVGh5ojkbVX
+ VcK+CHyxCx54fJ1qWBo0+nSP4m5gy4pEX5WrMJUb0Godtlcx/UA1i51qBrOnq+nVl13s
+ ZPOJyahoGLVRHUZIRH6qQ5b7omVi7W2YINSJ1Bn5vX74VIidry0JUtNUSwSgpqPaqdSH
+ zNHwmYonhfynXDNAo6qS9NQl9G5Ay90CV/LxlsMfoRrTLa1qJm6srKcnGawH3AJsBGId
+ 8Tyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=5NudbMurzfYzXfqYC75HsOUWwHJs5U2kmLyXXzbUdTE=;
+ b=41MobZRWWIWggK9oiaUy4JQuFtse/FUrKqNM99sUu0C02LcMyAu0CTaU6nPCCZWo1h
+ rkvp9w1U9VToQrQSJfQuE3iD3T3JhZdQvF4IYApsS9tZwOekhmI4xfIMdx69zVwxY34K
+ mSVzzzoAIB5OQbMcvxkX0pNd/PZ7eTwoojHRlwRhAsxVpdVGlxKsbKHXj02TtWhU9OOM
+ JxcMON0yPLZ6c9v0yG5jfXL0Kx12ho6SLmtwCR64NgiDMb6IDKvP6hktlz6hWTVICcdF
+ 2jtF+Sxr3yS/nZ7luKtt/LtaS6GbFq9jXV+4IrWZi9k8/dtbfDZ/wf+j72ejgLjcBF8U
+ 6P9w==
+X-Gm-Message-State: AOAM530W3n3EO2gLb27kEHC6Rg3vfEWdyV5NvWYGLQVsF3q3xUHbD7O6
+ 28eilXF3JaDqxBDbUmx6SMQUSwfKxeY=
+X-Google-Smtp-Source: ABdhPJyuA1dksJBWwW4AvOGS2dOareNXfWrGDZr3e4LtLjbXlG97i/mDBxcfMfrXBEJNFoU017XS1w==
+X-Received: by 2002:a05:651c:214:: with SMTP id
+ y20mr13921472ljn.223.1643661517441; 
+ Mon, 31 Jan 2022 12:38:37 -0800 (PST)
+Received: from curiosity ([5.188.167.245])
+ by smtp.gmail.com with ESMTPSA id bq7sm3767328lfb.210.2022.01.31.12.38.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 31 Jan 2022 12:38:37 -0800 (PST)
+Date: Mon, 31 Jan 2022 23:38:36 +0300
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Message-ID: <YfhIzDNP6sIsaG7J@curiosity>
+References: <20220131194818.2084092-1-geomatsi@gmail.com>
+ <CAGm1_ktBCO3mnWL2LBF-zEqG0pf4wBr7KKF_Gsjs5HPg+kx3tA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CAGm1_ktBCO3mnWL2LBF-zEqG0pf4wBr7KKF_Gsjs5HPg+kx3tA@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/wpa_supplicant: bump version to
+ 2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,120 +89,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=391f70b6893e0b502b69f40c69df412f24519060
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yegor,
 
-size-stats-compare gives an overview of the size increase/decrease between
-two cases, based on packages-file-list.txt. The 'detail' mode gives info per
-file, otherwise per package.
+> Hi Sergey,
+> 
+> On Mon, Jan 31, 2022 at 8:48 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+> >
+> > Update wpa_supplicant to the latest release v2.10. Drop all the patches
+> > as they have already been upstreamed. Remove from .mk file all the
+> > WPA_SUPPLICANT_IGNORE_CVES records since those CVEs will not be
+> > reported against the new version.
+> >
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-But sometimes, you want the detailed per-file info, but only for a specific
-package. Since the detailed output no longer lists the package name, you
-cannot simply grep for it. A workaround was to filter the input
-packages-file-list.txt's first, and then pass these filtered versions to
-size-stats-compare.
+...
 
-Make this easier by adding the package name next to the filename in detailed
-output. This allows grep'ing normally.
-For example:
+> Have you tried to build wpa_supplicant without
+> BR2_PACKAGE_WPA_SUPPLICANT_WPA3 and enabled
+> BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING? I've got a linking error.
+> I have also sent a quick and dirty patch to the hostap mailing list
+> [1] but still got no answer.
+> 
+> [1] http://lists.infradead.org/pipermail/hostap/2022-January/040181.html
 
-  $ utils/size-stats-compare orig new  -t 100 -d | grep ebtables
+So far I have not observed that problem. I think we can handle it
+independently from the revision update, adding fixup patches if needed.
 
-      -67712 removed ebtables             lib/ebtables/libebtc.so
-      -66764 removed ebtables             lib/ebtables/libebt_nat.so
-      -66752 removed ebtables             sbin/ebtables
-      -66704 removed ebtables             lib/ebtables/libebt_arp.so
-      -66700 removed ebtables             lib/ebtables/libebt_stp.so
-      -66700 removed ebtables             lib/ebtables/libebt_among.so
-      -66684 removed ebtables             lib/ebtables/libebt_ip.so
-      -66676 removed ebtables             lib/ebtables/libebt_limit.so
-      -66656 removed ebtables             lib/ebtables/libebt_log.so
-      -66648 removed ebtables             lib/ebtables/libebt_mark.so
-      -66636 removed ebtables             lib/ebtables/libebt_pkttype.so
-      -66604 removed ebtables             lib/ebtables/libebt_vlan.so
-      -66588 removed ebtables             lib/ebtables/libebt_ulog.so
-      -66588 removed ebtables             lib/ebtables/libebt_nflog.so
-      -66584 removed ebtables             lib/ebtables/libebt_arpreply.so
-      -66544 removed ebtables             lib/ebtables/libebt_ip6.so
-      -66540 removed ebtables             lib/ebtables/libebt_802_3.so
-      -66536 removed ebtables             lib/ebtables/libebt_standard.so
-      -66524 removed ebtables             lib/ebtables/libebt_mark_m.so
-      -66524 removed ebtables             lib/ebtables/libebt_redirect.so
-      -66452 removed ebtables             lib/ebtables/libebtable_filter.so
-      -66452 removed ebtables             lib/ebtables/libebtable_broute.so
-      -66452 removed ebtables             lib/ebtables/libebtable_nat.so
-          45         ebtables             etc/ethertypes
-       66752 added   ebtables             usr/sbin/ebtablesd
-       66752 added   ebtables             usr/sbin/ebtables-legacy
-       66752 added   ebtables             usr/sbin/ebtablesu
-      200840 added   ebtables             usr/lib/libebtc.so.0.0.0
+I tried to reproduce it using the following wpa_supplicant configuration:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- utils/size-stats-compare | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING=y
 
-diff --git a/utils/size-stats-compare b/utils/size-stats-compare
-index c679150654..2ccbe7d191 100755
---- a/utils/size-stats-compare
-+++ b/utils/size-stats-compare
-@@ -40,9 +40,9 @@ def read_file_size_csv(inputf, detail=None):
- 
-     for row in reader:
-         if detail:
--            sizes[row[0]] = int(row[2])
-+            sizes[(row[0], row[1])] = int(row[2])
-         else:
--            sizes[row[1]] = int(row[3])
-+            sizes[(None, row[1])] = int(row[3])
- 
-     return sizes
- 
-@@ -73,19 +73,27 @@ def print_results(result, threshold):
- 
-     from six import iteritems
-     list_result = list(iteritems(result))
--    # result is a dictionary: name -> (flag, size difference)
--    # list_result is a list of tuples: (name, (flag, size difference))
-+    # result is a dictionary: (filename, pkgname) -> (flag, size difference)
-+    # list_result is a list of tuples: ((filename, pkgname), (flag, size difference))
-+    # filename may be None if no detail is requested.
-+
-+    maxpkgname=max(len(pkgname) for filename, pkgname in result)
- 
-     for entry in sorted(list_result, key=lambda entry: entry[1][1]):
-         data = dict(
--            name=entry[0],
-+            filename=entry[0][0],
-+            pkgname=entry[0][1],
-             action=entry[1][0],
-             size=entry[1][1],
-+            maxpkgname=maxpkgname,
-         )
- 
-         if threshold is not None and abs(data['size']) <= threshold:
-             continue
--        print('{size:12d} {action:7s} {name}'.format(**data))
-+        if data['filename']:
-+            print('{size:12d} {action:7s} {pkgname:{maxpkgname}s} {filename}'.format(**data))
-+        else:
-+            print('{size:12d} {action:7s} {pkgname}'.format(**data))
- 
- 
- # main #########################################################################
-@@ -132,5 +140,5 @@ print('Size difference per %s (bytes), threshold = %s' % (keyword, args.threshol
- print(80*'-')
- print_results(delta, args.threshold)
- print(80*'-')
--print_results({'TOTAL': ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
-+print_results({(None, 'TOTAL'): ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
-               threshold=None)
+However build succeeded. Could you please post your wpa_supplicant
+configuration snippet ? Probably the root cause is in openssl and some
+of its features need to be enabled in package/wpa_supplicant/Config.in.
+
+Regards,
+Sergey
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
