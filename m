@@ -1,88 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00CFC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 11:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB21C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 11:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 467B7410B5;
-	Mon, 31 Jan 2022 11:37:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE560400C9;
+	Mon, 31 Jan 2022 11:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DVaI84jEYuZ6; Mon, 31 Jan 2022 11:37:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EdeMP35K9RlG; Mon, 31 Jan 2022 11:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 524264049C;
-	Mon, 31 Jan 2022 11:37:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B9D61BF322
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 11:37:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8544540549;
+	Mon, 31 Jan 2022 11:37:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FEF91BF322
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 11:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8899C4049C
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 11:37:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D22160BD7
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 11:37:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xTfvCG7P1Sh0 for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 11:36:59 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BcaX6AjctgKy for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 11:37:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 39286403C7
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 11:36:58 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id v13so24748578wrv.10
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 03:36:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=FF2NhiZ/o5Mgsw4jxEP6hpdH87CuKh7kHziFSB3x5XY=;
- b=0sMefb91DW19zFDmeUuV4KCmp8iXLNuvcztEyEZ/3/xnk3aKYVJH9ay1KL2w1+xbnD
- ALhPIwfr8pLHPj2nKYXWpyhbEzeZ9qUKC7mxV8JJYc/V6lDrLSNf55UwuKFDdrTYEYWV
- X/fmA5LwabAhognGXNWcTIC/GsrpsVtkbYvnjzAa8voQFEwtnFpqURuqdsXNWrPk5nht
- EcRqYwgrjlZt/kzYSRUJHxyhSyfZHyxXklML0mLoZRi3wM0qiha5o55ugWBGg2ShuFK0
- 5ANNOkh8JlZYny2YmOhh6pOFV3WPFgUwT6UTcq6XcqafNofJmJQ1zKZIu1c7h0Q/XuAF
- jsXw==
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
+ [IPv6:2607:f8b0:4864:20::102d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E366660B73
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 11:37:34 +0000 (UTC)
+Received: by mail-pj1-x102d.google.com with SMTP id
+ z10-20020a17090acb0a00b001b520826011so18088162pjt.5
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 03:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Dk/8RASwWak52VroyhyFzxmjOCIyJDXK5bbfu7EjjBM=;
+ b=UWc7MVH3E3+Ejg4a/ULeThYSy2QpDsUyzQ7mGdgG5wA5UNAzslqvgKBlWQsbVfkm/A
+ n0uiwgv0FCP+CaNvEw22hiYPnkbd+pc2lOdIY5NhLQVKePUcwyhMXsZhjoVNNBbi2eln
+ 2R5f19TYH1CrDlmbfV3ockPJ1fQrYrSZZCbwOnNV2ePd1NR5J/5IZnSjwnylRmFqukKd
+ 1TobPBv6jwn7W+mnhRkDWCnv4SxfgdQWdDRhbMtzb3MoFg0LsOiiDW5p0R9vWA5/BOmj
+ aPcukslhvSoa1KQ0hlYS9DNi0e9CAtjzvVNTYKbKSIB9tMZZ8Q1IDpbekdgX1D/4P0Xa
+ XCTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=FF2NhiZ/o5Mgsw4jxEP6hpdH87CuKh7kHziFSB3x5XY=;
- b=fnsIPxKRE0cQShp704YskCgKE1SGs78Ciglu/Cytgn+WF4MKIuTgwHY1f4N6Z9t4cZ
- RHiLKv8Me+jqiaaN7cmGoAysExyG6qRHfXiBqyqRazRMLDGUZmUdVNboGzz6ZRacIcOM
- nZwaikUAeRbF/ADMZBOtfWIAWyvW+IK0eGlrcJAlX/L58+EMzMkmf5bG+DBCi97+TPz/
- 7HI4VXfsdJPlV5PVdOtMygqJHW9C1qWch8gvDABDgI092BN7o7ec6s//hYFpI42281oy
- BbXZU9D5wL2ZA5NhZLhT7XxCuoWcFtQz02ZqH2yHc6ThLIdKtUdoNQ0ywZJkBznqc9nj
- vIKA==
-X-Gm-Message-State: AOAM5315KcCr+1ULYIpAF+jwtGHg/fB/dmSiA6TxuFQEu70Tdk8mqR/8
- aEIxb7BGe10ti2zBpzCzUWpC8g==
-X-Google-Smtp-Source: ABdhPJxM4phiZ5piHut85GA947+HBcbsN0ho3sB70o98h5hToC1Bgx8kdMWph4lKYx54pTfpwJBI/w==
-X-Received: by 2002:a05:6000:1b81:: with SMTP id
- r1mr16867733wru.609.1643629017326; 
- Mon, 31 Jan 2022 03:36:57 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
- (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
- by smtp.gmail.com with ESMTPSA id k20sm5471815wmi.36.2022.01.31.03.36.56
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 31 Jan 2022 03:36:56 -0800 (PST)
-Message-ID: <731c2ec5-e693-f2d4-5f48-0eaf376c57d1@smile.fr>
-Date: Mon, 31 Jan 2022 12:36:56 +0100
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Dk/8RASwWak52VroyhyFzxmjOCIyJDXK5bbfu7EjjBM=;
+ b=Z5csFvkZtV01mNR3RazSYVLYIE1ayoklpriyUtxx5qaZk5X32TGDHt403YAPfw1/aA
+ sLOE7n+xwZcL4uajcWCwt4C7lQ50iNIuRQliki2w4aK+rg0+DWOWAN0zC4HT+3XmZm+I
+ /YciwwPZDlotLJuCZ1MDoZnar97DWYfR51nq+96R8eKpeNp+kVWu5uCmBML7VF72Y/Zi
+ I9YXTALwsujVqeHN6ACa+UZSe2Oc94FHSyOWrNf+VRbvXf47fln3O+HZ4WQ8JfDyqMda
+ d836HCFX2Ov2WOtateU4ddFwbuv/RKEceWR8UQ3JFM7LREDnDKdRIJXengUc3m7HK4N2
+ n/lQ==
+X-Gm-Message-State: AOAM530OUY+MLfSIlIN+nhAmMWEdjZs+N4GkGKFyx0ynUUPOfOqpPNCg
+ Sek/4a+5AOagni8k1QACRrKcbOtZ/s6FYqCy3yc=
+X-Google-Smtp-Source: ABdhPJwYoeYhc7vw8ZmINjWoa5Rv8gWu6s9JZehuQz5fgj9scCa8Rm1D7xM558ljB/vkJ1iQs6nysaSM4jrMv88zyB8=
+X-Received: by 2002:a17:90a:bb92:: with SMTP id
+ v18mr9506256pjr.177.1643629054216; 
+ Mon, 31 Jan 2022 03:37:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- James Hilliard <james.hilliard1@gmail.com>
-References: <20220131015937.4113728-1-james.hilliard1@gmail.com>
- <20220131104553.715b97ce@windsurf>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20220131104553.715b97ce@windsurf>
-Subject: Re: [Buildroot] [PATCH 1/1] package:{clang, lld,
- llvm}: bump to version 11.1.0
+References: <20220129214235.5133-1-thomas.devoogdt@gmail.com>
+ <20220129214235.5133-2-thomas.devoogdt@gmail.com>
+ <20220130154908.0ff0f0b6@windsurf>
+ <20220131000221.GC987440@momiji> <20220130231706.3f6d7a66@windsurf>
+In-Reply-To: <20220130231706.3f6d7a66@windsurf>
+From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Date: Mon, 31 Jan 2022 12:37:23 +0100
+Message-ID: <CACXRmJiCb10jOtS_eq=-6TYc=Z_yJdQmvHsxV_L9XyTKRJzm6Q@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 2/2] package/libsoup: add choice between
+ libsoup2 and libsoup3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,31 +86,158 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org,
- Matthew Weber <matthew.weber@collins.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6042807598538474887=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsIFRob21hcywgQWxsLAoKTGUgMzEvMDEvMjAyMiDDoCAxMDo0NSwgVGhvbWFz
-IFBldGF6em9uaSB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gT24gU3VuLCAzMCBKYW4gMjAy
-MiAxODo1OTozNyAtMDcwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwu
-Y29tPiB3cm90ZToKPiAKPj4gVGhpcyBhcHBlYXJzIHRvIGJlIHRoZSBsYXRlc3QgdmVyc2lvbiB0
-aGF0IGhhcyBhIHdvcmtpbmcgbGxkIGJ1aWxkLgo+Pgo+PiBWZXJzaW9uIDEyLjAuMCBhbmQgbmV3
-ZXIgaGF2ZSBicm9rZW4gbGxkIHN0YW5kLWFsb25lIGJ1aWxkczoKPj4gaHR0cHM6Ly9idWdzLmxs
-dm0ub3JnL3Nob3dfYnVnLmNnaT9pZD00OTIyOAo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBI
-aWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KPiAKPiBJcyB0aGlzIHJlYWxseSBl
-bm91Z2g/IEkgcmVtZW1iZXIgc2VlaW5nIHBhdGNoZXMgYSBsb25nIHRpbWUgYWdvIGRvaW5nCj4g
-YnVtcHMgb24gTExWTS9DbGFuZyBhbmQgdGhhdCB3YXMgbXVjaCBtb3JlIGludm9sdmVkLCB3aGlj
-aCBJIHRoaW5rCj4gZXhwbGFpbnMgd2h5IHdlJ3JlIHN0aWxsIGF0IHZlcnNpb24gOS54Lgo+IAo+
-IFJvbWFpbiwgYW55IGNvbW1lbnRzIG9uIHRoaXM/CgpBZGRpbmcgTWF0dCBpbiBDYzoKCklJUkMs
-IHRoZXJlIGlzIGFuIGlzc3VlIHdpdGggbGliY2xjIHBhY2thZ2Ugd2hpY2ggaXMgcGFydCBvZiB0
-aGUgbGx2bSBwcm9qZWN0LgoKRHVlIHRvIHRoZSBnYXAgYmV0d2VlbiB0aGUgdHdvIHZlcnNpb24s
-IGFsbCBDTWFrZSBvcHRpb25zIG11c3QgYmUgcmV2aWV3ZWQgKGxvbmcKYW5kIGJvcmluZyB0YXNr
-IEkgYWdyZWUpLgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gCj4gVGhvbWFzCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============6042807598538474887==
+Content-Type: multipart/alternative; boundary="000000000000eb4ec105d6df358a"
+
+--000000000000eb4ec105d6df358a
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Adri=C3=A1n, Thomas, and all,
+
+Adri=C3=A1n:
+> Yes, libsoup2 and libsoup3 are parallel-installable, both can coexist in
+> the same system. The only caveat is, as I mentioned in a previous email,
+> that having both versions loaded in the same process will result in odd
+> crashes and assorted failures due to symbols clashing.
+
+Thomas:
+> If both libsoup2 and libsoup3 are enabled in the same build, it's going
+> to be difficult to guarantee that one application doesn't end up
+> loading both, by the usage of separate shared libraries that
+> independently use a different version of libsoup.
+
+After reading all those opinions, do we need to go that path?
+ - From what I see, most packages do not yet support libsoup3.
+ - Packages that do, will also support libsoup2 for a while.
+
+So why not proceed whit libsoup2 as default, but allow to select libsoup3.
+We can explicitly mark some packages with `depends on
+!BR2_PACKAGE_LIBSOUP_VERSION_3`.
+By this, developers can at least start integrating libsoup3 in their custom
+packages.
+
+I didn't add `depends on !BR2_PACKAGE_LIBSOUP_VERSION_3` to this path yet.
+I think that such flags should be added by the respective package
+maintainers (in the next bump cycle).
+
+--> For me, libsoup3 support is important for the additional APIs that
+webkitgtk 2.34.4 is providing.
+
+kr,
+Thomas
+
+Op zo 30 jan. 2022 om 23:17 schreef Thomas Petazzoni <
+thomas.petazzoni@bootlin.com>:
+
+> On Mon, 31 Jan 2022 00:02:21 +0200
+> Adrian Perez de Castro <aperez@igalia.com> wrote:
+>
+> > > Is it possible to install both libsoup2 and libsoup3 side-by-side in
+> > > the same system? This requires them having a different library name a=
+nd
+> > > a different location for header files.
+> >
+> > Yes, libsoup2 and libsoup3 are parallel-installable, both can coexist i=
+n
+> > the same system. The only caveat is, as I mentioned in a previous email=
+,
+> > that having both versions loaded in the same process will result in odd
+> > crashes and assorted failures due to symbols clashing.
+>
+> If both libsoup2 and libsoup3 are enabled in the same build, it's going
+> to be difficult to guarantee that one application doesn't end up
+> loading both, by the usage of separate shared libraries that
+> independently use a different version of libsoup.
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+
+--000000000000eb4ec105d6df358a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">Hi Adri=C3=A1n, Thomas, and all,<br></div=
+><div dir=3D"ltr"><br></div><div dir=3D"ltr">Adri=C3=A1n:=C2=A0<br></div><d=
+iv dir=3D"ltr">&gt; Yes, libsoup2 and libsoup3 are parallel-installable, bo=
+th can coexist in<br>&gt;=C2=A0the same system. The only caveat is, as I me=
+ntioned in a previous email,<br>&gt;=C2=A0that having both versions loaded =
+in the same process will result in odd<br>&gt;=C2=A0crashes and assorted fa=
+ilures due to symbols clashing.<br></div><div dir=3D"ltr"><br></div><div>Th=
+omas:</div><div>&gt; If both libsoup2 and libsoup3 are enabled in the same =
+build, it&#39;s going<br>&gt;=C2=A0to be difficult to guarantee that one ap=
+plication doesn&#39;t end up<br>&gt;=C2=A0loading both, by the usage of sep=
+arate shared libraries that<br>&gt;=C2=A0independently use a different vers=
+ion of libsoup.<br></div><div><br></div><div>After reading all those opinio=
+ns, do we need to go that path?<br>=C2=A0- From what I see, most packages d=
+o not yet support libsoup3.<br>=C2=A0- Packages that do, will also support =
+libsoup2 for a while.<br><br>So why not proceed whit libsoup2 as default, b=
+ut allow to select libsoup3. <br>We can explicitly mark some packages with =
+`depends on !BR2_PACKAGE_LIBSOUP_VERSION_3`.<br>By this, developers can at =
+least start integrating libsoup3 in their custom packages.</div><div><br></=
+div><div>I didn&#39;t add `depends on !BR2_PACKAGE_LIBSOUP_VERSION_3` to th=
+is path yet.</div><div>I think that such flags should be added by the respe=
+ctive package maintainers (in the next bump cycle).<br></div><div><br></div=
+><div>--&gt; For me, libsoup3 support is important for the additional APIs =
+that webkitgtk 2.34.4 is providing.</div><div><br></div><div>kr,</div><div>=
+Thomas</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_=
+attr">Op zo 30 jan. 2022 om 23:17 schreef Thomas Petazzoni &lt;<a href=3D"m=
+ailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt;:<b=
+r></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex=
+;border-left:1px solid rgb(204,204,204);padding-left:1ex">On Mon, 31 Jan 20=
+22 00:02:21 +0200<br>
+Adrian Perez de Castro &lt;<a href=3D"mailto:aperez@igalia.com" target=3D"_=
+blank">aperez@igalia.com</a>&gt; wrote:<br>
+<br>
+&gt; &gt; Is it possible to install both libsoup2 and libsoup3 side-by-side=
+ in<br>
+&gt; &gt; the same system? This requires them having a different library na=
+me and<br>
+&gt; &gt; a different location for header files.=C2=A0 <br>
+&gt; <br>
+&gt; Yes, libsoup2 and libsoup3 are parallel-installable, both can coexist =
+in<br>
+&gt; the same system. The only caveat is, as I mentioned in a previous emai=
+l,<br>
+&gt; that having both versions loaded in the same process will result in od=
+d<br>
+&gt; crashes and assorted failures due to symbols clashing.<br>
+<br>
+If both libsoup2 and libsoup3 are enabled in the same build, it&#39;s going=
+<br>
+to be difficult to guarantee that one application doesn&#39;t end up<br>
+loading both, by the usage of separate shared libraries that<br>
+independently use a different version of libsoup.<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div></div>
+
+--000000000000eb4ec105d6df358a--
+
+--===============6042807598538474887==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6042807598538474887==--
