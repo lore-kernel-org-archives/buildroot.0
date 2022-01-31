@@ -1,47 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC1AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 23:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 512FFC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 23:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A609282C9C;
-	Mon, 31 Jan 2022 23:01:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IEoQ5gODirxs; Mon, 31 Jan 2022 23:01:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACD0E82B34;
-	Mon, 31 Jan 2022 23:01:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 084281BF973
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 23:01:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDAC840189
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 23:01:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D805B4036F;
+	Mon, 31 Jan 2022 23:02:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zQEHFmGAB2dF for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 23:01:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2A2F40932
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 23:01:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DEC9B80F72; Mon, 31 Jan 2022 22:54:16 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oq8cV-IuzOna; Mon, 31 Jan 2022 23:02:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD019401E1;
+	Mon, 31 Jan 2022 23:02:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B08651BF836
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 23:02:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC68E82C84
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 23:02:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gRYrANM0oec1 for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 23:02:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A0EB482B34
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 23:02:29 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id a13so28372296wrh.9
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 15:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B+DQAL48IbjdBZm0GV+yHxotPJCYmpXpUDYYjFQ6uqc=;
+ b=Sz8wXxIWLOH/A8NVHJttVPTBbWkkeIFEo86Ua74IkSXgBAZwYCAsQiC2tfwm37sxai
+ fx5Eh3l6gW5HBEBkOpc+PL6BPob0hxmu6wW+trxEcY3dQxV1s+mV21D9l+DsMKHb29no
+ ykUJmw88ZIatByGt2NLoUwczs1Es5vRawdCDNP4EHQT832hl+LCWuvAPt2HVfynpkg5Y
+ QSaagyyD8u+ARFUWUW8bBxthxEZk6JxegNUjwpduGYADAC1kBEuf27E8O787rTrYeGJ5
+ 3Ii8fz8QfSqX4dsEb3qc5ptnagzit552fQ4kxNCMuv32HWNleOG21OYczrwer2SgMl3b
+ dujA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B+DQAL48IbjdBZm0GV+yHxotPJCYmpXpUDYYjFQ6uqc=;
+ b=q7s/jtnfg38/X20ahVsyGNylhdnqlpPkA7xs/YKHz0w2nTPqljnt9PYPMX0rUfQbGU
+ dO8O1lE58y1+xeVpfN9434+qsfW8QdZzu9PnPvXUh6qlubImPNxI0x1UrzctZIazHYc4
+ 3gla6FUE1EBTFBvPo9RVqhtHFpRN8IdA69Rt1RV6svBV+f80R+KNI6pbsdFR7QpUPiTR
+ bKk6A75DvPlkCxwl2ZUGgntB8+jzeMKSsqI5vx1Z4CJOULpKjjgRAakiVdU1FJF1sxlr
+ tkNcXF64rJViQ36kkA3DbegfmALhYJy3kRMCPfTS6MCNGMe+bNerJu3ULh2aCnwDk6mB
+ Zf4w==
+X-Gm-Message-State: AOAM532GKYsWgkl1E56wx2PCkjYhiyjl3lA7kNs493tK6AinowFG/Jfh
+ 1Xx1y1VlBQGhPVQwsTjGXaxY5oJt/Ss=
+X-Google-Smtp-Source: ABdhPJxi32WW6Kcgpc0zFfUxnN1ll0wXzpnolcgurglTQqh5MSpu1KZjar8OIP5RofoxcHP1+I/JnA==
+X-Received: by 2002:a5d:6c61:: with SMTP id r1mr19717003wrz.414.1643670147565; 
+ Mon, 31 Jan 2022 15:02:27 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id bg17sm926458wmb.2.2022.01.31.15.02.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 31 Jan 2022 15:02:27 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 31 Jan 2022 23:36:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 56e31ff9dbbff8774c29875cf4316e403cb89691
-X-Git-Newrev: 675f02fd3f0b11b24eab62b781038e492c40bf90
-X-Patchwork-Hint: ignore
-Message-Id: <20220131225416.DEC9B80F72@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-meson: improve generation of
- cross-compilation file
+Date: Tue,  1 Feb 2022 00:00:15 +0100
+Message-Id: <20220131230015.181368-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,146 +85,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=675f02fd3f0b11b24eab62b781038e492c40bf90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix the following musl build failure raised since bump to version 5.16.0
+in commit 8f54d6d7859c0eabf303a44b26e6fafb1cb50143:
 
-Removed a few variables, as they were only used to communicate
-between the meson package and pkg-meson.mk and are not needed
-anymore.
+ax25_ntop.c:5:10: fatal error: netax25/ax25.h: No such file or directory
+    5 | #include <netax25/ax25.h>
+      |          ^~~~~~~~~~~~~~~~
 
-Moved cross-compilation.conf.in out of meson package.
+Fixes:
+ - http://autobuild.buildroot.org/results/455840288bbe13ed585b0e2dc7b20a294dd1eee1
 
-Creating the cross-compilation.conf files for packages is now
-using the original template.
-To avoid duplicate code, the common sed pattern is stored in
-a make variable.
-
-Use explicit Buildroot variables for compiler tools,
-and some fixes. (TARGET_LDFLAGS and TARGET_CXXFLAGS
-were mixed up with PKG_TARGET_CFLAGS)
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-[Arnout: keep PKG_MESON_INSTALL_CROSS_CONF in
-TOOLCHAIN_TARGET_FINALIZE_HOOKS]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-meson.mk                               | 56 +++++++++++-----------
- .../misc}/cross-compilation.conf.in                | 10 ++--
- 2 files changed, 32 insertions(+), 34 deletions(-)
+ ...0001-lib-fix-ax25-h-include-for-musl.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 91f0f3244b..85de98e03a 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -64,8 +64,26 @@ else
- PKG_MESON_TARGET_CPU_FAMILY = $(ARCH)
- endif
- 
--HOST_MESON_TARGET_ENDIAN = $(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))
--HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
-+# Generates sed patterns for patching the cross-compilation.conf template,
-+# since Flags might contain commas the arguments are passed indirectly by
-+# variable name (stripped to deal with whitespaces).
-+# Arguments are variable containing cflags, cxxflags, ldflags.
-+define PKG_MESON_CROSSCONFIG_SED
-+        -e "s%@TARGET_CC@%$(TARGET_CC)%g" \
-+        -e "s%@TARGET_CXX@%$(TARGET_CXX)%g" \
-+        -e "s%@TARGET_AR@%$(TARGET_AR)%g" \
-+        -e "s%@TARGET_STRIP@%$(TARGET_STRIP)%g" \
-+        -e "s%@TARGET_ARCH@%$(PKG_MESON_TARGET_CPU_FAMILY)%g" \
-+        -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
-+        -e "s%@TARGET_ENDIAN@%$(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))%g" \
-+        -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$($(strip $(1))))%g" \
-+        -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$($(strip $(3))))%g" \
-+        -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
-+        -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
-+        -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
-+        -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
-+        $(TOPDIR)/support/misc/cross-compilation.conf.in
-+endef
- 
- ################################################################################
- # inner-meson-package -- defines how the configuration, compilation and
-@@ -101,19 +119,9 @@ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
- define $(2)_CONFIGURE_CMDS
- 	rm -rf $$($$(PKG)_SRCDIR)/build
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
--	sed -e 's%@TARGET_CROSS@%$$(TARGET_CROSS)%g' \
--	    -e 's%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
--	    -e 's%@TARGET_CPU@%$$(HOST_MESON_TARGET_CPU)%g' \
--	    -e 's%@TARGET_ENDIAN@%$$(HOST_MESON_TARGET_ENDIAN)%g' \
--	    -e "s%@TARGET_CFLAGS@%$$(call make-sq-comma-list,$$($(2)_CFLAGS))%g" \
--	    -e "s%@TARGET_LDFLAGS@%$$(call make-sq-comma-list,$$($(2)_LDFLAGS))%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$$(call make-sq-comma-list,$$($(2)_CXXFLAGS))%g" \
--	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
--	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
--	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
--	    -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
-+	sed -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
- 	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
--	    package/meson/cross-compilation.conf.in \
-+	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS) \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
- 	CC_FOR_BUILD="$$(HOSTCC)" \
-@@ -227,22 +235,12 @@ host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE
- # own flags if they need to.
- define PKG_MESON_INSTALL_CROSS_CONF
- 	mkdir -p $(HOST_DIR)/etc/meson
--	sed -e 's%@TARGET_CROSS@%$(TARGET_CROSS)%g' \
--	    -e 's%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
--	    -e 's%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g' \
--	    -e 's%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g' \
--	    -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g" \
--	    -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g" \
--	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
--	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
--	    -e 's%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g' \
--	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-+	sed -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_LDFLAGS@%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CXXFLAGS@%g" \
-+	    $(call PKG_MESON_CROSSCONFIG_SED) \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
--	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
--	    -e 's%@PKG_TARGET_LDFLAGS@%%g' \
--	    -e 's%@PKG_TARGET_CXXFLAGS@%%g' \
--	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
-+	sed $(call PKG_MESON_CROSSCONFIG_SED,TARGET_CFLAGS,TARGET_CXXFLAGS,TARGET_LDFLAGS) \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
- endef
- 
-diff --git a/package/meson/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
-similarity index 84%
-rename from package/meson/cross-compilation.conf.in
-rename to support/misc/cross-compilation.conf.in
-index 7a7ece97ae..18cf258a8e 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/support/misc/cross-compilation.conf.in
-@@ -4,11 +4,11 @@
- # - Buildroot's 'target' is Meson's 'host'
- 
- [binaries]
--c = '@TARGET_CROSS@gcc'
--cpp = '@TARGET_CROSS@g++'
--ar = '@TARGET_CROSS@ar'
--strip = '@TARGET_CROSS@strip'
--pkgconfig = '@HOST_DIR@/bin/pkgconf'
-+c = '@TARGET_CC@'
-+cpp = '@TARGET_CXX@'
-+ar = '@TARGET_AR@'
-+strip = '@TARGET_STRIP@'
-+pkgconfig = '@PKGCONF_HOST_BINARY@'
- g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
- g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
- 
+diff --git a/package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch b/package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch
+new file mode 100644
+index 0000000000..1f8860c5d8
+--- /dev/null
++++ b/package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch
+@@ -0,0 +1,37 @@
++From 8bced38a941a181f1468fa39541e872e51b6022f Mon Sep 17 00:00:00 2001
++From: Sam James <sam@gentoo.org>
++Date: Thu, 13 Jan 2022 08:14:13 +0000
++Subject: [PATCH] lib: fix ax25.h include for musl
++
++ax25.h isn't guaranteed to be avilable in netax25/*;
++it's dependent on our choice of libc (it's not available
++on musl at least) [0].
++
++Let's use the version from linux-headers.
++
++[0] https://sourceware.org/glibc/wiki/Synchronizing_Headers
++Bug: https://bugs.gentoo.org/831102
++
++Signed-off-by: Sam James <sam@gentoo.org>
++Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
++
++[Retrieved from:
++https://github.com/shemminger/iproute2/commit/8bced38a941a181f1468fa39541e872e51b6022f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/ax25_ntop.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/ax25_ntop.c b/lib/ax25_ntop.c
++index cfd0e04b0..3a72a43e9 100644
++--- a/lib/ax25_ntop.c
+++++ b/lib/ax25_ntop.c
++@@ -2,7 +2,7 @@
++ 
++ #include <errno.h>
++ #include <sys/socket.h>
++-#include <netax25/ax25.h>
+++#include <linux/ax25.h>
++ 
++ #include "utils.h"
++ 
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
