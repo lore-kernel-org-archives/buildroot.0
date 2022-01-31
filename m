@@ -1,70 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7540CC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 17:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADDDEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 17:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16B4A40142;
-	Mon, 31 Jan 2022 17:11:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26A2740242;
+	Mon, 31 Jan 2022 17:14:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bR01WcF_H1Lr; Mon, 31 Jan 2022 17:11:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFED0403E9;
-	Mon, 31 Jan 2022 17:11:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A1BFA1BF35C
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 17:11:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9006A41497
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 17:11:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VsR957RsjzSo for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 17:11:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CED64148D
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 17:11:49 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id EaDQnee6V0FuyEaDQnXiHr; Mon, 31 Jan 2022 18:11:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643649106; bh=3kBBRZt+fJVD2yfnvtkPuYM2N+Y13FuzbbIH3gp3R0k=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=ULpJBivqg5w9MCQY+jhe2B4D9teHcwdRBDfCnHEoUjOEmepODucOi5+8o3kFY80nk
- /Tl1KpDlOIS/3BVr/7POWaSxOx6ph0Aza/Gi9fIS0ShTxP+c7SdHsL6rdeAa7Cx7Wp
- vvxnNWAo8y7Wra/9z5R6fUTow7dmVAUFPijU2BF8Y8aRLCaGyWbHdXqAJz1kEHLEDF
- F7qahQOSNTD1zqcGCohzn7q4nFzKGztZImQ6KY2xrY6ik+80+VgEQElxP13qAkvQPT
- xUdG9YmpPXf/iQqYblbALwHL2cGql5fxEKUSziY7PDm7bLpJSfgcbgGfYPfd1CctJK
- 01MVoONg3g7Qg==
-Message-ID: <86bf975a-1599-005a-5ebc-a149cc973da4@benettiengineering.com>
-Date: Mon, 31 Jan 2022 18:11:44 +0100
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uUIhgSKnioqu; Mon, 31 Jan 2022 17:14:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E8224027A;
+	Mon, 31 Jan 2022 17:14:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C5BAB1BF35C
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 17:14:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B553781C93
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 17:14:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kXJzVCuDXMR7 for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 17:14:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7071F81AD7
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 17:14:02 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b1b4:bb20:1902:cd8e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 00CBC2003C6;
+ Mon, 31 Jan 2022 18:13:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1643649239;
+ bh=sRARqBp9nnxmkutaYAUBMA1zrAp5J1E0IYmImEPOKmA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=erQqjiz0y+sgXnp8+0OCKHh51LbERpcd3povBCrmnrrT3w8eT+Jw6nIK3V5Wok91a
+ ZbJhT1/0AhTETPZ+m3eEUO2k/keulFhU4DyuF1TYosw6KGL9AnkDbVBEhpDy6QE5l5
+ m5a8lGBEjZAkMIMZxBjJjWhXWgYm0ORSjbLMTFsSZPKI/fdrliXc2xlgJJgrHWMu9l
+ sNki1SID9GqZ8hzP0tCdqo11YbKNTOtJxDwyuWS/I0lT40f+fqUe95sYD1N+zyGG+x
+ u/eNkklnMuG7o1c5Zwbrcjd+CJSFicEHS5vU4LD2YM3QTMDmPqvnj2H0PRJB9lY3Qr
+ jMfJ63LmIcjbw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 31 Jan 2022 18:13:55 +0100
+Date: Mon, 31 Jan 2022 18:13:55 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220131171355.GU457876@scaer>
+References: <cover.1643577025.git.yann.morin.1998@free.fr>
+ <cb658b0784b6174058f01eb1db7ffb44885952f1.1643577025.git.yann.morin.1998@free.fr>
+ <45a93a2b-2172-2cd2-8ccb-77f251e55dbc@mind.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-References: <20220131153022.351662-1-heiko.thiery@gmail.com>
- <CAOf5uwkFjQCGBOD4JMn4MG_SR74-bW1SHoDFiEC7mqH_C8Xq7w@mail.gmail.com>
- <CAEyMn7aDyH24AYVMZaLvt9SQMtVu9yhzftPqbSsuJ671tY-kNQ@mail.gmail.com>
- <12be81a6-7f2e-35b8-4f44-d8a20fce74f1@benettiengineering.com>
- <CAOf5uwmeT8WVUc3xvP0DjrVDLj9egvJz0+JEvWhgojnEVhyTyw@mail.gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CAOf5uwmeT8WVUc3xvP0DjrVDLj9egvJz0+JEvWhgojnEVhyTyw@mail.gmail.com>
-X-CMAE-Envelope: MS4wfLQA3Yp2ux8bODvORAUa+2lUhDDsc1dMi2+qDT7UHSE8J2DpGGa1hOP7/LHlD2dcu0b5Orb9jRNsaX85oEVHau9Kh68sZY4NqpaeyWyccKDbHiepqFcU
- D7zNnIIFHPbFKJEOJbXoHwJyjnvuNjuizQSmLyKlnAoUOLtZt/SyNaw9tCYeiI5KDsItey3tDrBkWrojiz4mnkBYnGP6yhRqT2EGlXCPtqdP2JDNbVL3NHgP
- r/ShUmLE97RqSzpAspR/3QdjSPmrCAPJLL2yVyZJTDhXWp8N40IYWUI5zSmWtP2usPNCl0v08Px8Ma21bw/FmgsaQ/+2ONK6XskoR2BnRrZMaYmD04KsOC6n
- i6tI9BOjhp1v2ht6BpHF6j/XZpO9Lc/K9vkEJQhMqCr0O8S7ACwENDgg2t3egkswst56MJIEZ0qydB1N+5hx30nD70psa9I0tbdqbTxCbgoyPLaCQtA=
-Subject: Re: [Buildroot] [PATCH v5] configs/kontron_bl_imx8mm_defconfig: new
- defconfig
+Content-Disposition: inline
+In-Reply-To: <45a93a2b-2172-2cd2-8ccb-77f251e55dbc@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/2] boot/uboot: fix build with host-gcc 10+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,116 +73,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
- Michael Walle <michael@walle.cc>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Heiko Thiery <heiko.thiery@gmail.com>, Fabio Estevam <festevam@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 31/01/22 17:42, Michael Nazzareno Trimarchi wrote:
+Arnout, All,
 
-[SNIP]
-
->>>>> diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
->>>>> new file mode 100644
->>>>> index 0000000000..0cf0115bfa
->>>>> --- /dev/null
->>>>> +++ b/configs/kontron_bl_imx8mm_defconfig
->>>>> @@ -0,0 +1,58 @@
->>>>> +# Architecture
->>>>> +BR2_aarch64=y
->>>>> +BR2_ARM_FPU_VFPV3=y
->>>>> +
->>>>> +BR2_GLOBAL_PATCH_DIR="board/kontron/bl-imx8mm/patches"
->>>>> +
->>>>> +# System
->>>>> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
->>>>> +
->>>>> +# Kernel
->>>>> +BR2_LINUX_KERNEL=y
->>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
->>>>> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->>>>> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->>>>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-kontron-n801x-s"
->>>>> +BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
->>>>> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
->>>>> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->>>>> +
->>>>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
->>>>> +
->>>>> +BR2_PACKAGE_FREESCALE_IMX=y
->>>>> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
->>>>> +BR2_PACKAGE_FIRMWARE_IMX=y
->>>>> +
->>>>> +# Filesystem / image
->>>>> +BR2_TARGET_ROOTFS_EXT2=y
->>>>> +BR2_TARGET_ROOTFS_EXT2_4=y
->>>>> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->>>>> +
->>>>> +# Bootloader
->>>>> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
->>>>> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
->>>>> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
->>>>> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
->>>>> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
->>>>> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880000"
->>>>> +BR2_TARGET_UBOOT=y
->>>>> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->>>>> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->>>>> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
->>>>> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
->>>>> +BR2_TARGET_UBOOT_NEEDS_DTC=y
->>>>> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->>>>> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->>>>> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->>>>> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
->>>>> +BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
->>>>> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
->>>>> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
->>>>> +BR2_TARGET_UBOOT_SPL=y
->>>>> +
->>>>> +# Required host tools to create the SD/eMMC image
->>>>> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/bl-imx8mm/post-build.sh"
->>>>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->>>>> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
->>>>> +BR2_PACKAGE_HOST_GENIMAGE=y
->>>>
->>>> I have seen that some people like to have this organization but it's
->>>> not really nice to maintain. I would like
->>>> to savedefconfig and use that one instead of having nice commented
->>>> part. Is this mandatory?
->>>
->>> As far as I know there is no rule how to do that. For me it seems to
->>> be more readable and clean. But this is only my opinion.
->>
->> As Heiko pointed it's a very good habit.
->>
->> One thing that must be taken into account while doing it, is to keep the
->> various BR2_* configs ordered as they are ordere inside the various
->> Config.in
+On 2022-01-31 08:42 +0100, Arnout Vandecappelle spake thusly:
+> On 30/01/2022 22:10, Yann E. MORIN wrote:
+[--SNIP--]
+> >Upstream just dropped that line altogether:
+> >     https://source.denx.de/u-boot/u-boot/-/commit/018921ee79d3f30893614b3b2b63b588d8544f73
+> >So, we use a little sed-grep combo to do the exact same change.
+[--SNIP--]
+> >+# Older versions break on gcc 10+ because of redefined symbols
+> >+define UBOOT_DROP_YYLLOC
+> >+	$(SED) '/^YYLTYPE yylloc;$$/d' `grep -l -r -E '^YYLTYPE yylloc;$$' $(@D)`
 > 
-> There are good information indeed but even those information must be
-> keep updated. Daily work show me that work on
-> savedefconfig make things nicely. Some of your option can be at some
-> point autoselect by another one and so on.
+>  Why not use
+> 	grep ... | xargs --no-run-if-empty $(SED) ...
+> 
+> which also avoids the "no input files" problem.
 
-Yes, you're right, I've noticed that too. It's "not that automatic", but 
-if you check the first 25 defconfigs you can see that more or less the 
-70% use the "descriptive" way. So basically one should savedefconfig to 
-another file and compare to the configs/*_defconfig and eventually modify.
+Yes, this is the obviously correct solution; I just did not have time to
+handle it this morning... ;-)
 
-Anyway there is still not a standard decided. So maintainers will accept 
-both ways.
+>  Also:
+> - Isn't it enough to search in $(@D)/scripts?
 
-Cheers
+I was also a bit conflicted on that one. It should even be enough to
+look up scripts/dtc/ (kconfig was never impacted).
+
+> - I guess we should use -Z to make is 0-separated. I'm not a 100% sure, but
+> I vaguely remember encountering a U-Boot or Linux vendor fork which had file
+> names with spaces in them.
+
+Whether that exists or not, I am now trying to always use -Z et al. when
+dealing with lists of files in shell.
+
+Thanks for the input; v2 incoming shortly...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
