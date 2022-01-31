@@ -1,82 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E82E9C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 21:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E249C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 22:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 924E160F1E;
-	Mon, 31 Jan 2022 21:38:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2DF940761;
+	Mon, 31 Jan 2022 22:04:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5dPMWFSiTO8p; Mon, 31 Jan 2022 21:38:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C29E660F1C;
-	Mon, 31 Jan 2022 21:38:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 321131BF362
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 21:38:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2060B400A9
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 21:38:17 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VplLUTfokDbg for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 21:38:13 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sKH3BDsar6mf; Mon, 31 Jan 2022 22:04:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1552A404CC;
+	Mon, 31 Jan 2022 22:04:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 701B21BF2A3
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:04:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BDB760A9B
+ for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 22:04:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GDK51vFrZf1j for <buildroot@lists.busybox.net>;
+ Mon, 31 Jan 2022 22:04:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 09381400A0
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 21:38:12 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- l129-20020a1c2587000000b0035394fedf14so257093wml.5
- for <buildroot@buildroot.org>; Mon, 31 Jan 2022 13:38:12 -0800 (PST)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 839D6605B5
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 22:04:40 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id e2so28221995wra.2
+ for <buildroot@buildroot.org>; Mon, 31 Jan 2022 14:04:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=7/yDnrpwRWHXPVdNQ/56b/N5ZzBiZAWTutGV8fejGmY=;
- b=g8mX2FLn6uBPtFBG/dM6JqHeaZQXZsa4LAoa9ymUfWXjBd1h29X92VDQTRh3hHeW6p
- VYlks7F70UdQQRU0rMW/+/fQdcAnR6RcwyJVF44PsyPTDQOkzn6ihBTYMMa2/p+21+sm
- Uv2RanWtTqhrQpyTyMmW7+ffeinFEEQd+2E0GVHfLRiuqzr0yKBf/GLuidhCcFgF6BOk
- EdRRAacIBe2FAKJr8BCPcJbn6dhjrH4C64FccUXsxlBZGPg6La7TpbRtDF0OAWdhqzcn
- B0E3YQpKMqsHySl+eIGjhpfOpgr/ZfnSTnVO7xfpw9w6x63WwJLMOhfFBQl0di1vOSXn
- MRnw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=g9WCJP/HJGlqRv1sDrpUzJgKMk0T/afhPM1xEBT0mjE=;
+ b=grb0HGgOwPZxFm4HQxt468nOVOn9LSxnt2kqHGYdhaXI+HTcZzNKudGG708f4Sleol
+ GjbDuGRlvX/rEL0HU+h6yJbw2vBbbAyWg52UK+/MWxDJ8s0Ev8HQ1VqtT2hWM5zYzkB7
+ ZzVoYZsYsa3Ha/I3bOeh2eTcUFwSPsNISM0vPRUHbi405kt/r4Aged04ApHPQkkhFBAr
+ 1E/i87RwBSSjbfFNfTf+prrK6zthbb0tYSedNrc2Ir+Dn06xtDkj4LaKbAzRbpRDypMP
+ LuzujWkEZ2utpNUa1p6+BbSiBHyTrMR5u1UCqWdRHYgvdn1ea/nqG/2/MfzrEkJa1LSo
+ m1/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=7/yDnrpwRWHXPVdNQ/56b/N5ZzBiZAWTutGV8fejGmY=;
- b=zE8wuzRu6wB0dp1SK1XiNyV/AT+gmIgPEe5ItwKONSjO8+4dGUbn5Itx3O6XiwAV7p
- df1C4gLMhmfChgJrgkwEgRcoNn4tWQtxtQM+DMuEil+wuK2aemQL4y61o+qZdmjJvZud
- Wz/6r2PdOWnb46IbrrMJt+q5IdApgjPLH+Pxh8fXIJ1UM4n0nlgmd0rysPfZltWWtzE/
- sixi4WIhEhqq2kqsDGpuODimqbnm6HOj6Mkoeny4IfgJnT2kvBeKHJPFUc4Z9SDGrIkU
- qzEBmjNxHn9Zje8sWAVRC2knzyqLUEUTXVL2GDgoD5ilDqboUkM52WINLWUD/VwZ0hXR
- LCMA==
-X-Gm-Message-State: AOAM5306cX1u3Lk0E/wUuzIn4FnybXlFFke3GFuKM6NsEJMLvvDqTYQz
- WJePwSh0B2xkEIb3xfqytQWU1IoUmfo=
-X-Google-Smtp-Source: ABdhPJzvFL8fRhQ3P5tF2R4x09JJ9ZdYZ1MWTPurcHm7qpRBWjKM7UQB+rtYZIeFU6Ed14qYpg1qmg==
-X-Received: by 2002:a05:600c:643:: with SMTP id
- p3mr20138453wmm.164.1643665091172; 
- Mon, 31 Jan 2022 13:38:11 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:b1b4:bb20:1902:cd8e])
- by smtp.gmail.com with ESMTPSA id 11sm416713wmx.5.2022.01.31.13.38.10
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=g9WCJP/HJGlqRv1sDrpUzJgKMk0T/afhPM1xEBT0mjE=;
+ b=BNyl/ow3DGO4yIQEk77zsFUXnDuJRqWThDEjKGYcID3ZW1Z+fQZ+mj9v4puy/Mx3ZC
+ gTGUvOLUrOYI1tUUhyN+6OG1kpfvHm8GcEAFjQtN0YA2Oo1nPJaF2lJcPZAx6TKwQrLJ
+ KAr+lIeGQnoHk3/DPlFIzDO8GSQqPaxrOuPlZKGtt0M66Y085jbOP0W+CSbDdeIa8eOP
+ gnpNKo6BenjcrqWaz5o1f/IAjo1O9XnKGh713UX7MMhdZZnDpjldPeKMX6gO/7XNUKpM
+ 6gk2YwUZi+FNzYOGinQ0yViHVtxHVSLGOW7ydSWFhSWnILhewIuw9wJT6R6ahvy8xpoh
+ KO3A==
+X-Gm-Message-State: AOAM531JAblfW4Dp8ZGn8ks/OqSX4w9s5dZABq1GsjomM00KkmtljvD/
+ mhz285ivW4zov7RjDUsnEDxpOLiW3ao=
+X-Google-Smtp-Source: ABdhPJxjojsMAWlqbNgPLcYqXYI2oWScQ/996cavWKiQToBaf+Lii1WX/puiVXFVuVqbeFbyTnPAuA==
+X-Received: by 2002:a05:6000:1707:: with SMTP id
+ n7mr19016159wrc.662.1643666678547; 
+ Mon, 31 Jan 2022 14:04:38 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id n8sm437294wmq.42.2022.01.31.14.04.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Jan 2022 13:38:10 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Mon, 31 Jan 2022 14:04:38 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 31 Jan 2022 22:38:09 +0100
-Message-Id: <c9dcef5830fdb5a83a625962702dccc093bb9a6c.1643665029.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1643665029.git.yann.morin.1998@free.fr>
-References: <cover.1643665029.git.yann.morin.1998@free.fr>
+Date: Mon, 31 Jan 2022 23:02:40 +0100
+Message-Id: <20220131220240.127249-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2 v2] linux: fix build with host-gcc 10+
+Subject: [Buildroot] [PATCH 1/1] package/cgilua: add CGILUA_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,61 +86,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some older versions of linux, or custom versions (like forks for some
-boards), fail to build with host-gcc 10+, because of redefined symbols:
+cpe:2.3:a:keplerproject:cgilua is a valid CPE identifier for this
+package:
 
-      HOSTLD  scripts/dtc/dtc
-    /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition
-    of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-    collect2: error: ld returned 1 exit status
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akeplerproject%3Acgilua
 
-Since this has been fixed in recent-ish versions, we can't use an
-unconditionaly patch, so we must have a conditional patch. However, a
-patch may not always apply to arbitrary U-Boot versions or forks.
-
-Upstream just dropped that line altogether:
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33a814e772cdc36436c8c188d8c42d019fda639
-
-So, we use a little sed-grep combo to do the exact same change.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - don't fail if no file to fix: use 'grep -Z |xargs -0 -r' (Arnout)
----
- linux/linux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/cgilua/cgilua.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index dd2eebd446..410b714360 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -268,6 +268,13 @@ endef
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index 7471be3da0..8061eaf3a6 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -8,5 +8,6 @@ CGILUA_VERSION = 6.0.2-0
+ CGILUA_SUBDIR = cgilua
+ CGILUA_LICENSE = MIT
+ CGILUA_LICENSE_FILES = $(CGILUA_SUBDIR)/doc/us/license.html
++CGILUA_CPE_ID_VENDOR = keplerproject
  
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
- 
-+# Older versions break on gcc 10+ because of redefined symbols
-+define LINUX_DROP_YYLLOC
-+	$(Q)grep -Z -l -r -E '^YYLTYPE yylloc;$$' $(@D) \
-+	|xargs -0 -r $(SED) '/^YYLTYPE yylloc;$$/d'
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
-+
- # Older linux kernels use deprecated perl constructs in timeconst.pl
- # that were removed for perl 5.22+ so it breaks on newer distributions
- # Try a dry-run patch to see if this applies, if it does go ahead
+ $(eval $(luarocks-package))
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
