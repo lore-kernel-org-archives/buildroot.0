@@ -1,79 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC086C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:08:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0DB4C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF2F780C22;
-	Tue,  1 Feb 2022 22:08:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F44560EE9;
+	Tue,  1 Feb 2022 22:09:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bJULRzTHYmOj; Tue,  1 Feb 2022 22:08:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LXz75dlQvtmQ; Tue,  1 Feb 2022 22:09:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC04D80BFF;
-	Tue,  1 Feb 2022 22:08:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2736607B5;
+	Tue,  1 Feb 2022 22:09:13 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 408301BF3BE
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:08:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B00411BF97F
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BB0940250
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:08:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC0C140168
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:09:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4VjPWSytgwH1 for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 22:08:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 51E6D40168
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 22:08:27 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id m14so34447921wrg.12
- for <buildroot@buildroot.org>; Tue, 01 Feb 2022 14:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nk0WhlWQIhILgUV45PBJVCD+RUXUN3g5er74ljev9Ek=;
- b=RZp4AwihK+zhVARZrnkUpizC9X1+wGXS2ub3RlpMm2tgZiSrwXMTtcMXebR0hiJatt
- B2pb11Kl6DAPWgDTU+LaigVTt5Q8/i5mg1UnMB9U326EGIT9+P1IErXWJyCkHRnbATSY
- 474ht9zBnMSJJT/tce3QKFtNHkCYd+ADo1DtBzb9/E/+/12SLTQXllb465FS+6lby0AT
- SoMniMzllsntaQdGvRVFkmotnvfq53iKi9QZs5otZJ2NLuDRSf79OuW6/ud/v8q8mx6+
- /iakCVQ2pdphwhcWQe8ObA7p0CAgMV9v0GrCUP/P1+wyqLs+L7tGifAP4BrjKgCY96xN
- OeWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nk0WhlWQIhILgUV45PBJVCD+RUXUN3g5er74ljev9Ek=;
- b=oOnAtpJFWLYAs9Ru2tMYQPa3siWc1Mt407uCAMxAkZT3044zZ09Wra1boO3WkmyfBp
- IeqInGPwCBc2XsgYQGTqWpmvN5jC/CPcCYd9aF+CIQtAN18DQQHeF9ETCOk3MJBfFWP1
- KlNmdTqUYtMmHyxWvf1KLUitGX3w0Z/mbRHCRZs1yZY0LWyiKUAAbXaS1TjvrQxvDq7s
- R4EGPhMFSgScvgtsUW75Il4/TwdlILeN93HgS4C11r8hpdG0uvaNU+JoMzlpN+4QkTiU
- bDiObQxg6/6pfd3kFJSVPrjmOD5L1oUReaQ7FGWlhbwqUz9Z1Jp7fDNZHUh9i78s51na
- i6fQ==
-X-Gm-Message-State: AOAM530veiAgzKdd0krNyfW6iZLD8R9vI3M3regN30bk3sNIrbGUjrJu
- B+cccv6GRrtiJ8fFNIPBmJG+7i+ZeUQ=
-X-Google-Smtp-Source: ABdhPJxvepT3T2SoLcuuReYRIttupXQCWzEN2HNiTmDIalmgOffNq6TI/HEX6rw8Dn+P6E+pAYYJtg==
-X-Received: by 2002:adf:f50e:: with SMTP id q14mr23153523wro.647.1643753305405; 
- Tue, 01 Feb 2022 14:08:25 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id 14sm19227057wrz.100.2022.02.01.14.08.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Feb 2022 14:08:24 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  1 Feb 2022 23:06:26 +0100
-Message-Id: <20220201220626.350423-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: add or1k support
+ with ESMTP id h5ReuF1sGuGD for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 22:09:11 +0000 (UTC)
+X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
+Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E63624014E
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 22:09:10 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id F1DxnJO2eo6PDF1DxnoU6z; Tue, 01 Feb 2022 23:02:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1643752925; bh=VUnIy2gl2df+jdIa7WHB2b8APyf2uxHNvtQiGfXSHMc=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=eiHior14OshDiU3Z8mbYOnYPonVqVOUjmE9CcS0uBT4FdOHdbtJx8eyfNvKhb6t6v
+ NCUm3SZ4/VJXR1g4Z9w8wJ86PsVV3epCXCqOcbwPwM5JnwNbTbQJWtOTiCPDypeduN
+ iWo9UpLIX55sRBv3WcOYgOGLCOqIRQNZcWpdHHBQhDeWv1ZlQ1NWPKxFuWdURi2nxe
+ tKk7MAmGZjy9rNsldXeOTfbL5Hkr1K0ai6dkbQ02tqGD/MyOMbCezEcoeypP+0jaDE
+ S/nYh3K/6oNlHlaHjt62czHYW/9SEXzGGjapyHESRiytQQDxeRSz5G3Xy6nMuixHBo
+ ISUdIIVFclZog==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Tue, 1 Feb 2022 23:02:04 +0100
+Message-Id: <CD04B430-5777-49D1-85BA-BB174708E3C8@benettiengineering.com>
+References: <168006d0-d098-07e2-7203-489d7573a3ec@mind.be>
+In-Reply-To: <168006d0-d098-07e2-7203-489d7573a3ec@mind.be>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfKeqCKF5ECTfoigXPMHB/XpG9QvwGhaU4c5cAo4uv+s+Tc75P8MZCLmzydTPUTEMbRdqPigkxlA/msrG6SMghkzvi1P6u+JXAG7Z1DqehWs39e23D6yf
+ QHX951wNmlHpDqvn9TYFyCvszr4JS1CcJmkmoiFdt6yovTBIOlOC7Md585TyVOqxbFOf8MzZuzdWHtYfYcZJvUiFBnPBh/S3Wh068DowWAPkjzA1qNo4eRkO
+ KSu3ujnaaphVGmmih7WyykRrJRBuXJ3fjyJ9i7KqUb2o9Zj6vPDIP2loE0lO33lqldrE9OtMdwafmjHyRV4sEw==
+Subject: Re: [Buildroot] [PATCH] package/efl: fix build failure with eeze
+ disabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,65 +69,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-or1k is supported since version 1.18 and
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commit;h=c143fa81462584ad39ea780908266bce3fb9a49e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libgpg-error/Config.in | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
-
-diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-index 44e9d67aaf..03157dd9fe 100644
---- a/package/libgpg-error/Config.in
-+++ b/package/libgpg-error/Config.in
-@@ -2,14 +2,19 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	bool
- 	# see src/syscfg/
- 	default y if \
--		BR2_aarch64	|| BR2_aarch64_eb	|| BR2_arm	|| \
--		BR2_armeb	|| BR2_i386		|| BR2_mips	|| \
--		BR2_mipsel	|| BR2_mips64		|| BR2_mips64el	|| \
--		BR2_m68k	|| BR2_nios2		|| BR2_powerpc	|| \
--		BR2_powerpc64 	|| BR2_powerpc64le 	|| BR2_RISCV_64	|| \
--		BR2_RISCV_32	|| BR2_s390x		|| BR2_sh4	|| \
--		BR2_sh4eb	|| BR2_sh4a		|| BR2_sh4aeb	|| \
--		BR2_sparc	|| BR2_sparc64		|| BR2_x86_64
-+		BR2_aarch64	|| BR2_aarch64_eb	|| \
-+		BR2_arm		|| BR2_armeb		|| \
-+		BR2_i386	|| BR2_mips		|| \
-+		BR2_mipsel	|| BR2_mips64		|| \
-+		BR2_mips64el	|| BR2_m68k		|| \
-+		BR2_nios2	|| BR2_or1k		|| \
-+		BR2_powerpc	|| BR2_powerpc64 	|| \
-+		BR2_powerpc64le	|| BR2_RISCV_64		|| \
-+		BR2_RISCV_32	|| BR2_s390x		|| \
-+		BR2_sh4		|| BR2_sh4eb		|| \
-+		BR2_sh4a	|| BR2_sh4aeb		|| \
-+		BR2_sparc	|| BR2_sparc64		|| \
-+		BR2_x86_64
- 
- config BR2_PACKAGE_LIBGPG_ERROR
- 	bool "libgpg-error"
-@@ -36,6 +41,8 @@ config BR2_PACKAGE_LIBGPG_ERROR_SYSCFG
- 		if BR2_m68k
- 	default "nios2-unknown-linux-gnu" \
- 		if BR2_nios2
-+	default "or1k-unknown-linux-gnu" \
-+		if BR2_or1k
- 	default "powerpc-unknown-linux-gnu" \
- 		if BR2_powerpc
- 	default "powerpc64-unknown-linux-gnu" \
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LAoKPiBJbCBnaW9ybm8gMSBmZWIgMjAyMiwgYWxsZSBvcmUgMjI6NTMsIEFybm91
+dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4gaGEgc2NyaXR0bzoKPiAKPiDvu78KPiAK
+Pj4gT24gMjQvMDEvMjAyMiAxMTowOSwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IEVscHV0IGRl
+cGVuZHMgb24gZWV6ZSwgc28gaWYgd2UgZGlzYWJsZSBlZXplIHdlIGFsc28gbmVlZCB0byBkaXNh
+YmxlIGVscHV0Cj4+IGJ5IHNldHRpbmcgdGhlIG9wdGlvbiAiaW5wdXQiIHRvIGZhbHNlLgo+PiBG
+aXhlczoKPj4gaHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNDUzMQo+
+IAo+IFRoZXJlIGFyZSB0d28gb3RoZXIgcGF0Y2hlcyB0aGF0IHNvbWVob3cgZGVhbCB3aXRoIHRo
+aXMgaXNzdWUgWzFdWzJdIGluIGFkZGl0aW9uIHRvIHRoaXMgb25lIFszXS4KPiAKPiBDb3VsZCBz
+b21lb25lIGNob29zZSBiZXR3ZWVuIHRoZSBhbmQgbWFyayB0aGUgcmVzdCBhcyBTdXBlcnNlZGVk
+IGluIHBhdGNod29yaz8KCkZhYnJpY2UgY29tbWVudGVkIG9uIG1pbmUgdGhhdCBtaW5lIHdhcyBi
+ZXR0ZXIuClRoZW4gdGhlIFJvbWFpbiBvbmUgY2FtZSBvdXQgZmV3IGRheXMgYWdvIGFuZCBJIGNh
+biB0ZWxsIGhpcyBvbmUgaXMgYmV0dGVyLgoKU28gSSB3b3VsZCBnbyBmb3IgdGhlIFJvbWFpbiBw
+YXRjaC4KCkkgc2V0IG1pbmUgYXMgc3VwZXJzZWRlZCBhbmQgRmFicmljZSBjYW4gZG8gdGhlIGJl
+Zm9yZS4KCkJlc3QgcmVnYXJkcwpHaXVsaW8KCj4gCj4gCj4gUmVnYXJkcywKPiBBcm5vdXQKPiAK
+PiBbMV0gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRj
+aC8yMDIxMTIzMDIyMTkwNC4zMDY0MDIyLTEtZm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20vCj4g
+WzJdIGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gv
+MjAyMjAxMjkyMjQ2NTEuMTI4MjI2My00LXJvbWFpbi5uYW91ckBnbWFpbC5jb20vCj4gWzNdIGh0
+dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyMjAx
+MjQxMDA5MjAuMzAwNTU2NC0xLWdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20v
+Cj4gCj4gCj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBi
+ZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+PiAtLS0KPj4gIHBhY2thZ2UvZWZsL2VmbC5tayB8IDIg
+KysKPj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZWZsL2VmbC5tayBiL3BhY2thZ2UvZWZsL2VmbC5tawo+PiBpbmRleCBlZDBhOGFjYzFk
+Li5jOTM5NjE0NzVkIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL2VmbC9lZmwubWsKPj4gKysrIGIv
+cGFja2FnZS9lZmwvZWZsLm1rCj4+IEBAIC02NSw2ICs2NSw4IEBAIEVGTF9ERVBFTkRFTkNJRVMg
+Kz0gdWRldgo+PiAgRUZMX0NPTkZfT1BUUyArPSAtRGVlemU9dHJ1ZQo+PiAgZWxzZQo+PiAgRUZM
+X0NPTkZfT1BUUyArPSAtRGVlemU9ZmFsc2UKPj4gKyMgaW5wdXQoZWxwdXQpIHJlcXVpcmVzIGVl
+emUsIHNvIGRpc2FibGUgaXQgYWNjb3JkaW5nbHkKPj4gK0VGTF9DT05GX09QVFMgKz0gLURpbnB1
+dD1mYWxzZQo+PiAgZW5kaWYKPj4gICAgaWZlcSAoJChCUjJfUEFDS0FHRV9FRkxfVVRJTF9MSU5V
+WF9MSUJNT1VOVCkseSkKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
+Zwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
