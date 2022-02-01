@@ -1,62 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 148B3C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 20:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80C03C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 20:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 847754019F;
-	Tue,  1 Feb 2022 20:25:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1820C605A9;
+	Tue,  1 Feb 2022 20:42:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 97vDOA6xopfL; Tue,  1 Feb 2022 20:25:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vgPxV1xGVEVN; Tue,  1 Feb 2022 20:42:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D2A3400D2;
-	Tue,  1 Feb 2022 20:25:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E5E241BF4E7
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 20:25:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 224C860B08;
+	Tue,  1 Feb 2022 20:42:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 161471BF4E2
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 20:42:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1F06400D2
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 20:25:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11D06415A2
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 20:42:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R6heXJnV9JDl for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 20:25:20 +0000 (UTC)
-X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
-Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF155400CC
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 20:25:19 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPA
- id EzbTnFXsDo6PDEzbTnn51i; Tue, 01 Feb 2022 21:18:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643746696; bh=V2Qu59kp9317YLPKofO3YCSRCTUgXh1sILi83jb0+aA=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=T3EZZwpAyIEnlYnGq4Of80A4O1eq1VAPRBUFkFLn/ZMPsA6SjRJkMOhOPa8UphsH9
- Slrtk5Hz/CV13AGe90gzaJAzYRXRQihikg8RuU0yw3lMrdSxF7tshAxeqjBHeQxfu9
- XGjx84dJDSV0ld7iWA2Kguu4j1P8bNuu8NizjB84MyBc/APAPiFcjCY1cu05G6sMy5
- QA7k8gRWCyFng9JQjx2haPF2oWiRlGeJzmwmfDYv67Is5soF3zm2mj/hOFrbU3ijcW
- kyp5IsssxKa8Ap41MnYlm1qOkYDC9UFuHx9uCwuB6QR90wG8PQ9XuPVw4oXTwjHZPE
- Sq1TgmXb2tlzA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Tue, 1 Feb 2022 21:18:14 +0100
-Message-Id: <93CEDCC7-8859-4CBD-B21F-C07DA101A204@benettiengineering.com>
-References: <CAOf5uwk-4AHxxdbzuLYcEUx+NQQDJXfCtg-5_WmGzWPG0vVAsA@mail.gmail.com>
-In-Reply-To: <CAOf5uwk-4AHxxdbzuLYcEUx+NQQDJXfCtg-5_WmGzWPG0vVAsA@mail.gmail.com>
-To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfM/AKe6E4KZKPNgFhSfSo1kOjRIc00NtM64Vai8+3gDMdBv/At9SGp+Dtvy/26wa0EaG/HTqZFv3axXpwgT3Z0FUZRWvC+Tc5s6/wQKjaZBEIKiXE/Hz
- oTCsaSfgNVHwzQY+bQaM5txMbQvJMh/flinfmRuD0xexEAVkVS8vfRPb5/kTC7u4a9EUiQXJ0ah+bHmxDL2FMtZGEcyXM02tDfcm6WnJv5VUID1gjB4LFDpg
- g1vFjP2Tg3ma2l/yO4lT8VA+RmhHe1NOAwGbyT4WkgMyt9GY740JnnFEQBubhGEvKGPzrlaTDjz3a1tHjgONyPrEI8HEdumy/cDkWmwxushf8HhU7XiEWtDX
- 4sgomHLlEUJDoHUmzhG+rK96fiHRZebdGEytkgQ7OVUOuqIUy6O6gxCuoP8iCYPee0WC+kex
-Subject: Re: [Buildroot] [PATCH 3/6]
- configs/microchip_sama5d2_icp_mmc_defconfig: linux needs host openssl
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FoXd3AIyoYlL for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 20:42:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 26D534159D
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 20:42:20 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id k25so57549853ejp.5
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 12:42:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=43m32BD4H3/8jNLXDB/EpDY4XqSSs2l3WB9L1KQxP0s=;
+ b=U0m/HC78Am/E+Z6sHHZHQJ34c4KQttXYp+0M+3mNE0eErfw3Bvvv5KIQNfd0FPsJj4
+ z4PYexfim4LY7AaQRHwdXaigWRJixoYnZoJ8OLS0s1WbmtbyHONiieo/oewK/dXsDZ1e
+ if/Kybk3v5ji3lNigMU/4NlW5ixKgd4sJHC2CjnEonPFwGsPeWDEtC5JbX4G3p1SEpDW
+ XKLUw1IktwguEObYVJeROdJOQZGTZML1Xi5w8KMux4QqycXXT7RIZ+FmCK+tvOt8u0eo
+ Cgyg9XK5FNLOzLfnfOpaFUEDOJjs8EdH3R9qcOB9ICjfD+hY2yc5t/9GIgfIjF/dlcN4
+ tq2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=43m32BD4H3/8jNLXDB/EpDY4XqSSs2l3WB9L1KQxP0s=;
+ b=wkYD3SzmpiTSJ99Lk25Wwfc5A0qfN3C9SO4L4hb02MdUY8vcaJrZVQS8I4h1/9YoZ1
+ 0hqrM7X0FWpt2q9PkAWhdBymT/1eK+/it9nkFzvwZE0TVKu64KLxtUdU9zfezS2uX66p
+ rSNRqpXFIWDjVzojiU0KtQYWF9S+pvTbfZNP32kN3BEt/jUAhKzEtOBFKDXzbxE3hO7G
+ nBsppz0bOdkmyXgp2r2+CDP/gIkp89Q/mFmOm7Z0ycTlaaTbtIEux0MwTqJrMzgIrnMZ
+ rdkaOpl3xjmebfKfjxEewBlH/WeSvTi5u3JKO/9+iKpimwuc3gb8oCwd5YovE5hGO9O5
+ x7Iw==
+X-Gm-Message-State: AOAM531Iejji7d9e1uR9IM0PNPJPDZYpYY2RHOmOeKmFIUT03/Ga2OlK
+ f/I//4GV//aw5oVZ32ypf9jM4Q==
+X-Google-Smtp-Source: ABdhPJyL/dBWJehM/E+X7HkDUjz3M5iFhaO1Ik1UcvOKjjuWf2B0deVKjyFOJqGGAdTRuZUB+zM1mQ==
+X-Received: by 2002:a17:906:974c:: with SMTP id
+ o12mr13963155ejy.340.1643748139099; 
+ Tue, 01 Feb 2022 12:42:19 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id z10sm20339738edl.54.2022.02.01.12.42.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 01 Feb 2022 12:42:18 -0800 (PST)
+Message-ID: <46ea7193-ea68-c8b6-9b43-d5b17bb8144f@mind.be>
+Date: Tue, 1 Feb 2022 21:42:17 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: yann.morin@orange.com, Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+References: <12945_1643724020_61F93CE8_12945_430_1_dfe1b340bf9e8e2c47987f28f8fd40cca7d16b3b.1643724006.git.yann.morin@orange.com>
+ <MWHPR1201MB0239B756E843D8604AD86625A1269@MWHPR1201MB0239.namprd12.prod.outlook.com>
+ <22491_1643728190_61F94D3E_22491_62_1_20220201150948.GB3216@tl-lnx-nyma7486>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <22491_1643728190_61F94D3E_22491_62_1_20220201150948.GB3216@tl-lnx-nyma7486>
+Subject: Re: [Buildroot] [PATCH] package/glibc: allow runing on kernel older
+ than used for the headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,48 +97,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Frederic GARDES <frederic.gardes@orange.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTWljaGFlbCwKCj4gSWwgZ2lvcm5vIDEgZmViIDIwMjIsIGFsbGUgb3JlIDIxOjA0LCBNaWNo
-YWVsIE5henphcmVubyBUcmltYXJjaGkgPG1pY2hhZWxAYW1hcnVsYXNvbHV0aW9ucy5jb20+IGhh
-IHNjcml0dG86Cj4gCj4g77u/SGkgR2l1bGlvCj4gCj4+IE9uIFR1ZSwgRmViIDEsIDIwMjIgYXQg
-NzozNCBQTSBHaXVsaW8gQmVuZXR0aQo+PiA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVy
-aW5nLmNvbT4gd3JvdGU6Cj4+IAo+PiBGaXhlczoKPj4gaHR0cHM6Ly9naXRsYWIuY29tL3ltb3Jp
-bi9idWlsZHJvb3QvLS9qb2JzLzIwMzU4MjEwOTQKPj4gCj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxp
-byBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+PiAtLS0K
-Pj4gY29uZmlncy9taWNyb2NoaXBfc2FtYTVkMl9pY3BfbW1jX2RlZmNvbmZpZyB8IDEgKwo+PiAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPj4gCj4+IGRpZmYgLS1naXQgYS9jb25maWdz
-L21pY3JvY2hpcF9zYW1hNWQyX2ljcF9tbWNfZGVmY29uZmlnIGIvY29uZmlncy9taWNyb2NoaXBf
-c2FtYTVkMl9pY3BfbW1jX2RlZmNvbmZpZwo+PiBpbmRleCA0YmIzNjI1ZjgzLi4yN2VhNDk3MGYx
-IDEwMDY0NAo+PiAtLS0gYS9jb25maWdzL21pY3JvY2hpcF9zYW1hNWQyX2ljcF9tbWNfZGVmY29u
-ZmlnCj4+ICsrKyBiL2NvbmZpZ3MvbWljcm9jaGlwX3NhbWE1ZDJfaWNwX21tY19kZWZjb25maWcK
-Pj4gQEAgLTEyLDYgKzEyLDcgQEAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NB
-VElPTj0iJChjYWxsIGdpdGh1YixsaW51eDRtaWNyb2NoaXAsbGludXgsbGkKPj4gQlIyX0xJTlVY
-X0tFUk5FTF9ERUZDT05GSUc9InNhbWE1Igo+PiBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JU
-PXkKPj4gQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9ImF0OTEtc2FtYTVkMl9pY3Ai
-Cj4+ICtCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4gCj4gSSBjYW4gc2Vl
-IHRoYXQgbXkgc3VibWlzc2lvbiBoZWxwIG9uIHRob3NlIHBhdGNoZXMKCktlZXAgc3VibWl0dGlu
-ZyEKQW5kIHRoYW5rIHlvdSBmb3IgdGhlIHJldmlldyA6LSkKSXQgd291bGQgYmUgZ3JlYXQgaWYg
-eW91IHNlbmQgdGhlIFJldmlld2VkLWJ5IHRvIGFsbCBwYXRjaGVzIG9mIHRoaXMgcGF0Y2hzZXQu
-CgpHaXVsaW8KCj4gCj4gUmV2aWV3ZWQtYnk6IE1pY2hhZWwgVHJpbWFyY2hpIDxtaWNoYWVsQGFt
-YXJ1bGFzb2x1dGlvbnMuY29tPgo+IAo+IE1pY2hhZWwKPiAKPj4gQlIyX1RBUkdFVF9ST09URlNf
-RVhUMj15Cj4+IEJSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4+IEJSMl9UQVJHRVRfUk9PVEZT
-X0VYVDJfU0laRT0iMTIwTSIKPj4gLS0KPj4gMi4yNS4xCj4+IAo+PiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
-Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+IAo+IAo+IAo+IC0tIAo+IE1pY2hhZWwgTmF6
-emFyZW5vIFRyaW1hcmNoaQo+IENvLUZvdW5kZXIgJiBDaGllZiBFeGVjdXRpdmUgT2ZmaWNlcgo+
-IE0uICszOSAzNDcgOTEzIDIxNzAKPiBtaWNoYWVsQGFtYXJ1bGFzb2x1dGlvbnMuY29tCj4gX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IAo+IEFtYXJ1bGEgU29sdXRpb25zIEJW
-Cj4gSm9vcCBHZWVzaW5rd2VnIDEyNSwgMTExNCBBQiwgQW1zdGVyZGFtLCBOTAo+IFQuICszMSAo
-MCk4NSAxMTEgOTE3Mgo+IGluZm9AYW1hcnVsYXNvbHV0aW9ucy5jb20KPiB3d3cuYW1hcnVsYXNv
-bHV0aW9ucy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 01/02/2022 16:09, yann.morin@orange.com wrote:
+> Alexey, All,
+> 
+> On 2022-02-01 14:23 +0000, Alexey Brodkin spake thusly:
+> [--SNIP--]
+>>> +config BR2_PACKAGE_GLIBC_KERNEL_COMPAT
+>>> +       string "Oldest kernel version supported"
+>>> +       help
+>>> +         If you plan on running on various kernel versions, enter the
+>>> +         oldest version you expect to run on here.
+>>> +
+>>> +         Note that the older the version, the more backward compatibility
+>>> +         code is added, and the slower the code may get.
+>>> +
+>>> +         Leave it empty (the default) to use the same version as used for
+>>> +         the kernel headers.
+>> I'd say there's the third option and frankly I like this one the most - default
+>> oldest version assumed by the glibc itself. The beauty of it is it's really the
+>> oldest version of the kernel which is supported by a given glibc version for
+>> a particular architecture.
+> 
+> I also considered that, but I believe that a user should explicitly
+> request the oldest kernel they want to support (yes, they'd have to do
+> their homework to see what that version can be for their architecture).
+
+  I'm doubting if the added value of this is sufficient to warrant the complexity.
+
+  I could be swayed if it would give a build-time error if we know that it's not 
+going to run on such an old kernel. But as mentioned below, there's just a warning.
+
+  In addition, if you build a userspace with recent headers, this is going to 
+allow packages that depend on TOOLCHAIN_HEADERS_AT_LEAST_... Which may cause 
+runtime failures when running those packages on an older kernel. So the whole 
+concept of allowing older kernels is already a bit shaky.
+
+
+  So I think that a simple boolean config (still called 
+BR2_PACKAGE_GLIBC_KERNEL_COMPAT) would be sufficient. Doesn't solve the 
+TOOLCHAIN_HEADERS_AT_LEAST problem, but at least init will be running (well, 
+except if it's systemd and you try to run on 3.4...)
+
+
+  For context, this is the commit that originally introduced --enable-kernel:
+
+commit fd5bcd0eda8fb21f639c34a09b212e6f9b066a04
+Author: Sam bobroff <sam.bobroff@au1.ibm.com>
+Date:   Thu Jan 28 04:51:23 2016
+
+     package/glibc: set --enable-kernel to match kernel
+
+     Glibc is currently configured without any "--enable-kernel" option.
+     This causes it to use the oldest possible kernel API, slowing it down
+     and preventing it from using any kernel features from later versions.
+
+     Since we are likely building a kernel and matching glibc together,
+     backwards compatability is probably unnecessary so this patch
+     unconditionally configures glibc with --enable-kernel set to
+     BR2_TOOLCHAIN_HEADERS_AT_LEAST.
+
+
+  It's true that the slowdown will probably be smaller if you only have a 
+partial fallback, but is that really going to be significant? You can convince 
+me with numbers :-)
+
+
+  Regards,
+  Arnout
+
+
+
+> Letting the system decide on itself is prone to providing some
+> surprises... However, letting the user provide an explicit version is
+> also prone to surprises, because if that version is too old, glibc
+> resets it to the oldest it actually supports, and just merely emits a
+> warning message, which does not prevent the build to succeed (it still
+> fails at runtime in the usual way then)...
+> 
+> So, in either case, meh...
+> 
+> So, we'd have to differentiate between the three cases:
+>    - use same as headers (should be the default to keep current
+>      behaviour)
+>    - use oldest supported by glibc
+>    - use explcitly specified version
+> 
+> So, two options there:
+> 
+>    - recognise a magical value in BR2_PACKAGE_GLIBC_KERNEL_COMPAT, like
+>      'oldest' (bikeshed, go) to mean the oldest glibc can support, empty
+>      to mean "same as headers", or an actual value.
+> 
+>    - add a boolean "Specify oldest kernel supported", and hide
+>      BR2_PACKAGE_GLIBC_KERNEL_COMPAT behind that boolean; then if the
+>      boolean is not set, use same as headers (as today); if it is set,
+>      then use BR2_PACKAGE_GLIBC_KERNEL_COMPAT is set, or let glibc decide
+>      if not set.
+> 
+> Thoughts?
+> 
+> Needless to say, I don't have much sympathy for the first option,
+> magical values are bad... But I am not too fond of the second option
+> either, but I can't see a better way to provide for the three different
+> cases...
+> 
+>> [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=configure;h=8e5bee775a651fcbaaa96ede8039ae1f049e296e;hb=HEAD#l3529
+>> [2] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/configure.ac;h=197b7e66c8fe6eb0a1136c992478b9a2272713e7;hb=HEAD#l30
+> 
+> Yeah, I already had a look at those for various archs.
+> 
+> Thanks!
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
