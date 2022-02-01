@@ -1,57 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6244AC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 17:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 831DEC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 17:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18247825B9;
-	Tue,  1 Feb 2022 17:41:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21B15415E2;
+	Tue,  1 Feb 2022 17:42:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A-xVpi0o_07y; Tue,  1 Feb 2022 17:41:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nzYouPn_1GUx; Tue,  1 Feb 2022 17:42:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 548A181839;
-	Tue,  1 Feb 2022 17:41:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5BA001BF396
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 17:41:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 753BA4162D;
+	Tue,  1 Feb 2022 17:42:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 41BAD1BF396
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 17:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C13D81839
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 17:41:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E6D8415D9
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 17:42:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8R86HLH4qudU for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 17:41:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BZEAxwxasgYu for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 17:42:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC9D6817C3
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 17:41:21 +0000 (UTC)
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4EEE415D5
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 17:42:04 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id Ex9bnfDjtQUuPEx9bnj43t; Tue, 01 Feb 2022 18:41:20 +0100
+ id ExAInsdi7roAhExAJnY9t4; Tue, 01 Feb 2022 18:42:03 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643737280; bh=z7pYeUxnV7epkvpIioiFXcrozG98XalOdziWhzUOYpE=;
+ t=1643737323; bh=z7pYeUxnV7epkvpIioiFXcrozG98XalOdziWhzUOYpE=;
  h=From:To:Subject:Date:MIME-Version;
- b=LLZ69nBhF9iWKoFfoaSVC3FFNf/YZcffJ8n8EmMt3r58z/bJl1plcevYP6gdoa1GX
- 5EXpmgDdevupgtC6uJE9TQlxVXSDZAF3viQ3+MoEJ9cTNmj9ZwwYAyV4FRVc5f4KkZ
- JuMEGdaC7z94DC62RNC7Aiy7Y7nx/RMGwqS0GazCAOUR5l+8LVKDkNa6teIdXfnRFU
- IZ4W7v/0ROGKFNMJaguq7VY2S9UnbZwS/cHg/s1OksI8qyCn2UFLkMyBiy+8YKDUB0
- db4IuqKnWS9vs1E4FjogQXxo8DMBdWZfzR6iVn08NOn95RIUXmvHuuuq+CZO8fpE2+
- 01CjN9OoRahlg==
+ b=Ivz7rDF5kW1bx9uN/uICYcAJ6zk/0qrt+AgHENeoEgTLsxoiosx7WtQAwZW+S8gRN
+ z+N9MubD7V2sNBvYS3qGIfDj9PAognHL8NmAoHHAVBlu82CgRxdSe3rsk08mNaIosA
+ CI7ImYDc9HqQIGRFGht8MDunhtkAqk/c6JkmGlCDEkE/vdhSMHdbrGD1ksPJNQ1R1W
+ FOKYvTZ8aPljiWlxr8b1U/PTpk2fTDrEwYyh5UVy13DgPLyFz+D3Y+XnqmQU3gKlUd
+ W2Lf0MI54cDWElAiz3Lqk7HppRwgq7SZxfpcYwLyvcK97QzewJSsnI3jrfsFG07Gge
+ bDd2Okak6kh3A==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue,  1 Feb 2022 18:41:18 +0100
-Message-Id: <20220201174118.277366-1-giulio.benetti@benettiengineering.com>
+Date: Tue,  1 Feb 2022 18:42:02 +0100
+Message-Id: <20220201174202.286878-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfBre3b0m2GPkVR8HBRTPTnulurSJ2dSYmd1EVz3GSu+3TV2/v2YOZfEpZdBxxXcMR/8wa5Tu0+6x5RSbwe9vAHVSMjlKriDL8Q0ERTqWBMOBdgl43Ogk
- RSQl42TsSvkHug6HWlj3Xuz9GmeutVcLOExkRNVE7ERGPLJj2WL4y1fFyf30gPJzC1Ve/tM0G6cwg4U+d0xLBq2AIoF7jEhHljBJD8ywSIfcrw77jpK0Ulay
- 9GVRjqWakGjcHGj3ou5Mg4mA8B3KNa4VIwJhrBwDMhs=
+X-CMAE-Envelope: MS4wfGYc07N90Gy9oXtM+qFjSz7pdp+376opJKHHXTARo+/gs9uYdYppDRtSoDvmo5kaD2XHwurs0AfDLRl+OFeUXHT2heWliaGASMlmRklnn/4b+xuhzKB6
+ yDXZf7dE8cIvtuIV/jkHJn2fw7f/VyVBAPH8HBPKgI4j76IhzISXx+Wgt0wYMJc0qXD5BMcwho953CTRzX0R+RsrgiYcnBgyejgHxhI3rejDD74qfSA38t2d
+ e8ITUUb1Ia5ktYilTju16OrrVa6uYT/IKC2gwdinVj1LXbi4E768VNcVKtooGSRU
 Subject: [Buildroot] [PATCH] DEVELOPERS: remove Martin Hicks from file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,7 +64,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Martin Hicks <mort@bork.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
