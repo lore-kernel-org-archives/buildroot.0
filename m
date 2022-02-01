@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02FA9C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 908E3C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADA2D40524;
-	Tue,  1 Feb 2022 22:07:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50C7840168;
+	Tue,  1 Feb 2022 22:08:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wOP1RI8qaH_6; Tue,  1 Feb 2022 22:07:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EAHQbz152bvx; Tue,  1 Feb 2022 22:07:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6BCA9401DD;
-	Tue,  1 Feb 2022 22:07:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 488891BF989
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:05:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84EFB4014C;
+	Tue,  1 Feb 2022 22:07:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58A0D1BF3BE
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B85C83342
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:05:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5A7641594
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:05:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NH2q73wEx6Ov for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 22:05:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lEtT5fcW0ROV for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 22:05:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D445832EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id D21FD41598
  for <buildroot@buildroot.org>; Tue,  1 Feb 2022 22:05:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 233938285F; Tue,  1 Feb 2022 21:58:22 +0000 (UTC)
+ id E60D38285F; Tue,  1 Feb 2022 21:58:21 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 1 Feb 2022 22:58:55 +0100
+Date: Tue, 1 Feb 2022 22:23:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b292f1d41a8734b6cdcbcf2ae726b51f9e1338a9
-X-Git-Newrev: 789e84b5dacbb39a34fe0ea873f044690a0944a2
+X-Git-Oldrev: 67126ef063a9a502bddb016be89e40bcaefc74c2
+X-Git-Newrev: c97e139924c28f98dae13b3c0ef2f5c1f75e1d70
 X-Patchwork-Hint: ignore
-Message-Id: <20220201215822.233938285F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tesseract-ocr: override neon check
+Message-Id: <20220201215821.E60D38285F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtd: fix build with libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,51 +58,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=789e84b5dacbb39a34fe0ea873f044690a0944a2
+commit: https://git.buildroot.net/buildroot/commit/?id=c97e139924c28f98dae13b3c0ef2f5c1f75e1d70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Override neon check to avoid the following build failure with uclibc-ng
-raised since bump to version 5.0.1 in commit
-df3f0c226fccd8d6143b09a1e05a0f5f23587136:
+Fix the following build failure raised on uclibc and musl since the
+addition of libexecinfo package in commit
+eea8ba446c10701a273432552108d80fb2224ef4:
 
-src/arch/simddetect.cpp:61:14: fatal error: sys/auxv.h: No such file or directory
-   61 | #    include <sys/auxv.h>
-      |              ^~~~~~~~~~~~
-
-It should be noted that a patch to properly fix this build failure was
-rejected by upstream as "ARM support without NEON would result in a very
-slow Tesseract": https://github.com/tesseract-ocr/tesseract/pull/3717
-
-So, a follow-up patch adding a dependency on !BR2_TOOLCHAIN_USES_UCLIBC
-for all CPU architectures or only for ARM without NEON could be
-approriate.
+/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: tests/fs-tests/integrity/integck-integck.o: in function `check_failed.constprop.0':
+integck.c:(.text+0x96c): undefined reference to `backtrace'
 
 Fixes:
- - http://autobuild.buildroot.org/results/0bac6491188b6681df2ca13eb230706e83cbb130
+ - http://autobuild.buildroot.org/results/9409ebf6517db87672f3f4df5909a8ac4abfe8af
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tesseract-ocr/tesseract-ocr.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/mtd/mtd.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
-index 7e23e64136..a7498931fb 100644
---- a/package/tesseract-ocr/tesseract-ocr.mk
-+++ b/package/tesseract-ocr/tesseract-ocr.mk
-@@ -24,6 +24,12 @@ TESSERACT_OCR_CONF_ENV = \
- TESSERACT_OCR_CONF_OPTS = \
- 	--disable-opencl
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 9f4cc27ef1..45e7c0c61c 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -13,6 +13,15 @@ MTD_CPE_ID_VENDOR = mtd-utils_project
+ MTD_CPE_ID_PRODUCT = mtd-utils
+ MTD_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+TESSERACT_OCR_CONF_ENV += ax_cv_check_cxxflags__mfpu_neon=yes
-+else
-+TESSERACT_OCR_CONF_ENV += ax_cv_check_cxxflags__mfpu_neon=no
++MTD_LDFLAGS = $(TARGET_LDFLAGS)
++
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++MTD_DEPENDENCIES += libexecinfo
++MTD_LDFLAGS += -lexecinfo
 +endif
 +
- # Language data files download
- ifeq ($(BR2_PACKAGE_TESSERACT_OCR_LANG_ENG),y)
- TESSERACT_OCR_DATA_FILES += eng.traineddata
++MTD_CONF_ENV += LDFLAGS="$(MTD_LDFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_MTD_JFFS_UTILS),y)
+ MTD_DEPENDENCIES += zlib lzo host-pkgconf
+ MTD_CONF_OPTS += --with-jffs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
