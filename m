@@ -1,89 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C562AC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 21:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C63EFC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 21:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CFDE40477;
-	Tue,  1 Feb 2022 21:44:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62FFC83260;
+	Tue,  1 Feb 2022 21:46:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hs91vMKXCe4S; Tue,  1 Feb 2022 21:44:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qah_luOr0SBm; Tue,  1 Feb 2022 21:46:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B4794019F;
-	Tue,  1 Feb 2022 21:44:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 590571BF424
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 21:44:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 909788322A;
+	Tue,  1 Feb 2022 21:46:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A47CD1BF424
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 21:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5560A60B79
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 21:44:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92C028322A
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 21:46:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id txQwmbgPnpXY for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 21:44:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 16cQ777BWRFl for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 21:46:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5590460C33
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 21:44:39 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id b13so37510277edn.0
- for <buildroot@buildroot.org>; Tue, 01 Feb 2022 13:44:39 -0800 (PST)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 313B283227
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 21:46:23 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id p12so37330440edq.9
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 13:46:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=6QS4wxxAVLqv++Ux82FewEMwax65+eDNvZaXevw7nP0=;
- b=Pq8XI72Y6VvCnqCTzk7x0gFJBT7ew+zZufmHM9C35VcO+NJW+HyJCRGvKg5qspHab5
- BkYlTz+fqoo1QhonYN+RFji7HDKQ4BnBZl3WpIOSC7tIyIWhGGzd6BBlxAEeGgXQmEw4
- tonQ3YXDq3V5fZjTe/S53znRRkb/PZ+64LtVrjzqOqL+0Dpr9IyK8B6KqL35wyPArcoY
- JzQJN302/v0HYW828lR+nCImkHoOHlnRM+aKcS4xQUmDdCxRad0UFIH2/diLyj3FYgH2
- UvfRC8QQCe8mcZ13z2Ichul47c/1fyevXAk6yvcuqmBiykqoMJOCshfd0ieRH+4E4THN
- Vmzg==
+ bh=p0nIYyuNeAxS4J4Rx1UJOxf1YFY1MTT9j/JVcOGpCfo=;
+ b=PEib+canngOdfsWZt8j6od0vNH42mwOQjWqF+hScn1KZPJqVjcLHQEW2sRu9Q/QFTk
+ yHPtVdn0CUO3eb0zjNgrp9n7ErkIIs1SppYNrHQ9NsEiVoQSSNNUJ8Mvz1vZJoQYQgbd
+ ZV0lbJeg+boQzv+b71qvhWcwQm4MskPhhVWL9uO4hsHkc8CaMLsP9gjpFD3KpHb4byl1
+ /MNlHewhBo0EJE0e/ruKI3WKmrBEMpQ4tUTqYmRFZWi9J14IWCfINXIXgZQS17XCmkaE
+ +SaWdLl7FR0GC9xHbzcSBjRiJ8pGj1Ql+Hm6BM9rqKQmsAdf8VBFY49q02fJMJba/5Xu
+ +uyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=6QS4wxxAVLqv++Ux82FewEMwax65+eDNvZaXevw7nP0=;
- b=BjtKEXOMRxZh466r+MdJL4obwHFn27Nc1vw+4OxnOLRh03qYYqt5fq7yhnfFrAv54I
- B7HbBhoBCpZCBbipDUcByUBmmgxf3CrqZAJeOVuMj+JjXStB7U5U/ElwPws4AWDue6Cb
- A3A1HpvPozQEuBnF4rVvWrAI1U7EWVM1ytNp4GLs7ulUwGFDe9TqVaIFqz2Z+SjaA3jN
- dE2SY+W8v/WPlgzvJsIAyCOXVBLkwF+4Ntm8VVpxHQyvHuwgPvCpLEd2CoWhYJl946Rc
- pxSQexWTJFkTBEKQeSpk/XQi26yMS60j15AlDk6JG3SwQa78x7PcoGZdi7np2SzTERjx
- AeKA==
-X-Gm-Message-State: AOAM532C8FSJ1ZMitBoI/2k5jvfl+jyaJEDyr46HhlX+W1t11kqsxhkM
- BjO1Pw6bd0PX+bDsxw7kntkp3t2sXtELlA==
-X-Google-Smtp-Source: ABdhPJyDWEC981ICzH4QylxeulteF6depIcFJltBoMumb4fTxQQQ98cd9x0nYRh4GGC/MIQVMpq8aA==
-X-Received: by 2002:a05:6402:270b:: with SMTP id
- y11mr27566812edd.350.1643751877612; 
- Tue, 01 Feb 2022 13:44:37 -0800 (PST)
+ bh=p0nIYyuNeAxS4J4Rx1UJOxf1YFY1MTT9j/JVcOGpCfo=;
+ b=Bm7WMs9mZdvJu3yyYjjGIU5XKZWyWUCdG6w387eBgDkMgy/Dag3mIDTE8iebVL7Ow9
+ 8tyPcsANr51xK2iMbvJwfMOKNQeQ+/dIeechlWDxgykUlyHTeEPqU54tLkpM8h74tJHh
+ e7iinTfALmrhijQvpUISrS29mqr5v0MmMfQFcRcj3twNk5itUqxsURGnf2F5xGJHccbR
+ Erz/ubxx3X+qj9UNzwFfferl/IbAu1fk3+5kB4wpYpMmHgAlaKMd8P+eIi6Cyr4LDQjq
+ nAMbJdxaaC0VaMMH4ZBdEm8PrPe0GPN+hmdlDUEawAKs9ioDL1ztJk4H1xHgnQsto2il
+ bS0g==
+X-Gm-Message-State: AOAM5302HMTc7dgdvER6S0Oe2FZwPVoHQxgO5knXSUxSc8eoxirpVjnX
+ 5NtaTw3J8JkuOLdAPEHYf10gIQ==
+X-Google-Smtp-Source: ABdhPJwmdYfVd7y/lvCKG0mC1AA4P5rDptbBkzfKrVLEBUbA46e1X6qmWf8hfBJKkc18lRfDS47T2Q==
+X-Received: by 2002:aa7:c04e:: with SMTP id k14mr26825324edo.131.1643751981474; 
+ Tue, 01 Feb 2022 13:46:21 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id g24sm15122593ejx.11.2022.02.01.13.44.36
+ by smtp.gmail.com with ESMTPSA id bx18sm16666809edb.93.2022.02.01.13.46.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 01 Feb 2022 13:44:37 -0800 (PST)
-Message-ID: <8892c3ac-c187-2ac4-9355-9c79b6a84194@mind.be>
-Date: Tue, 1 Feb 2022 22:44:36 +0100
+ Tue, 01 Feb 2022 13:46:21 -0800 (PST)
+Message-ID: <e94e8288-9585-8f02-8e30-fb88dc7a13c5@mind.be>
+Date: Tue, 1 Feb 2022 22:46:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220115111622.1910388-1-fontaine.fabrice@gmail.com>
+References: <20220115150610.2084070-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220115111622.1910388-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/php-apcu: fix build without
- __sync_*_4 intrinsics
+In-Reply-To: <20220115150610.2084070-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mtd: fix build with libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +91,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?Herv=c3=a9_Codina?= <herve.codina@bootlin.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,18 +99,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/01/2022 12:16, Fabrice Fontaine wrote:
-> Fix the following build failure raised since the addition of the package
-> in commit 8ddeeffa186d8bce875ac713c1e71483c618842a:
+On 15/01/2022 16:06, Fabrice Fontaine wrote:
+> Fix the following build failure raised on uclibc and musl since the
+> addition of libexecinfo package in commit
+> eea8ba446c10701a273432552108d80fb2224ef4:
 > 
-> configure: error: Compiler does not support atomics
-> 
-> --enable-apcu-rwlocks can't be used until
-> https://github.com/krakjoe/apcu/pull/430 is merged (and autoreconf does
-> not work either)
+> /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: tests/fs-tests/integrity/integck-integck.o: in function `check_failed.constprop.0':
+> integck.c:(.text+0x96c): undefined reference to `backtrace'
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/efa/efa3b4406f87a1e9521b66f392a6fa19ac01f0cd/build-end.log
+>   - http://autobuild.buildroot.org/results/9409ebf6517db87672f3f4df5909a8ac4abfe8af
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -124,22 +118,29 @@ On 15/01/2022 12:16, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/php-apcu/php-apcu.mk | 4 ++++
->   1 file changed, 4 insertions(+)
+>   package/mtd/mtd.mk | 9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> diff --git a/package/php-apcu/php-apcu.mk b/package/php-apcu/php-apcu.mk
-> index ce59611d8f..3ac062e772 100644
-> --- a/package/php-apcu/php-apcu.mk
-> +++ b/package/php-apcu/php-apcu.mk
-> @@ -22,4 +22,8 @@ define PHP_APCU_PHPIZE
->   endef
->   PHP_APCU_PRE_CONFIGURE_HOOKS += PHP_APCU_PHPIZE
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 9f4cc27ef1..45e7c0c61c 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -13,6 +13,15 @@ MTD_CPE_ID_VENDOR = mtd-utils_project
+>   MTD_CPE_ID_PRODUCT = mtd-utils
+>   MTD_INSTALL_STAGING = YES
 >   
-> +ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),)
-> +PHP_APCU_CONF_OPTS += --disable-apcu-rwlocks
+> +MTD_LDFLAGS = $(TARGET_LDFLAGS)
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+> +MTD_DEPENDENCIES += libexecinfo
+> +MTD_LDFLAGS += -lexecinfo
 > +endif
 > +
->   $(eval $(autotools-package))
+> +MTD_CONF_ENV += LDFLAGS="$(MTD_LDFLAGS)"
+> +
+>   ifeq ($(BR2_PACKAGE_MTD_JFFS_UTILS),y)
+>   MTD_DEPENDENCIES += zlib lzo host-pkgconf
+>   MTD_CONF_OPTS += --with-jffs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
