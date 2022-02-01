@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8A2EC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 21:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD51C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94ADE60C20;
-	Tue,  1 Feb 2022 21:55:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30892400CC;
+	Tue,  1 Feb 2022 22:00:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gylbKAfepq-7; Tue,  1 Feb 2022 21:55:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EWDltAn91-tF; Tue,  1 Feb 2022 22:00:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE33360767;
-	Tue,  1 Feb 2022 21:54:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 845FD1BF424
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 21:54:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED45F401DD;
+	Tue,  1 Feb 2022 22:00:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C71C1BF424
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D72C60767
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 21:54:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55B12401DD
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:00:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IDWxj3ukT68F for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 21:54:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iBOb2uFMLxhM for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 22:00:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F2E3606E7
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 21:54:57 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id j2so57772292ejk.6
- for <buildroot@buildroot.org>; Tue, 01 Feb 2022 13:54:57 -0800 (PST)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B02FC400CC
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 22:00:09 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id ah7so58313709ejc.4
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 14:00:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=PiSDQyptjYFK0m6HzPV/p6EmXy5HCCMWMdSHK/v5d+E=;
- b=PyZGZlgg/pgBt7/62JuRnNDVdrFfbiObG5vXPos8oct7wrGftzblBEQOO3IMh20iOI
- D+zZah7CtnxFbZKaqZNnk5ELwMy3Oawpe5QLH3TOEkZy1SXnWcwT3FTry9abBb5Tay+T
- PLWj93OG5Nij/TQZjq4hWEqfvBeWVBA86EqVYYIAQNz1QY8F2mRh0HjEBA8lB/1RPEx1
- aqDUJtqhKBZ74aC6mmQtFZ010AhxYS5Buam+CFIpYl+TkxEZ5tQUgTijj1+nF9CuNi3T
- tmKgoE6UD5uN3znW2aRbVEkqxzavEEe5Iv5U68XvyrsbCEXJkm0jscJKmAkhO/GbJIo6
- KDUA==
+ bh=cJV6oUMTLtNWlE8RwcbxANJPwXSG0ZstCW9dicOvSo0=;
+ b=MVsB2sHsZtH/TqWFD1UVE9LGdlqxf7uVJwEA8z1aFnkKgyufMZO2kbQdnHZHuGf8Ys
+ hIyBYn0aUiXlqc3Sfw4H9W1ydRzGw/QrjrZRdMCFNFkKZgeJ4kTmGyFqmqKd9ImpT9Cc
+ uahydk3sJRKpxPRMXxUomfpdE6CVYc4YgOv/vDMct0XZmJugrj3c5gBHafmZYZvIDHgz
+ gd/9hgo2ZyR/xH6LmA/2mSWJ77c9fxfeAiVgjRstGJ5iWNxMkTOAWjAb2lVMNNO9QX3h
+ xdGW9/fXjZD7PFVLt0YGVqrRzRnG9tYiPhi8oA8EpRCL2ZOe4rrhmUeMJT07amsdoVjZ
+ p2iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=PiSDQyptjYFK0m6HzPV/p6EmXy5HCCMWMdSHK/v5d+E=;
- b=tVR35D3GEgfI1rjbCQaE97iJHOarlmuMeLYxdABqnKUSJq47gzdcPBmrJL4LbK4JNV
- /RUNujeNiALgEsngvzZavd7ouFm7DnRmpYO5Ys23YeGNfb0fsXuqpObGO/kQFpSdfewr
- bWgBGqVnHBBeLDOQ+cq63Cb5OlApKcnB+itZ5L3u0yZxHTcdOOGewgy6Ze7Vqvk8/VC3
- 5+YTPaN1CR9cVT3OnCYD3ZZDknIFUnY5Rv2+blcHEs5jOVYpx5wgujj56PHMFl3myd/T
- iW4/86nrDOMYGfqEkQiZC4YGuBINW7uETqntYYqy1qyIjWYv437DynDSTac3sAYZDaX2
- MLVg==
-X-Gm-Message-State: AOAM5328+WdIOIWdAwFhpFYtkZoSbuEsz0lquxqUL5K1McfIYuP2Su1J
- F7DsSPUW1W/YgkuX41xhHvZ32PqJJPWTOQ==
-X-Google-Smtp-Source: ABdhPJz5+OJKJNTv7fF6+kPLTNpXHamUkJzbUgDUDY9l9dyPEneI2+YBPXVHMCPqirBKYvIpiZrA9w==
-X-Received: by 2002:a17:906:bc97:: with SMTP id
- lv23mr23135438ejb.154.1643752495438; 
- Tue, 01 Feb 2022 13:54:55 -0800 (PST)
+ bh=cJV6oUMTLtNWlE8RwcbxANJPwXSG0ZstCW9dicOvSo0=;
+ b=dVCXSAfpa2F+zxapSTAfpHXO/WtWICAC/Ec5FTZoRo/6Cljh8+/zXZ2MAffwWPNOJq
+ KqAuvVIohbmPjgei5RWMNSSwQc2Rm8uzqIJG82ty745hjY0KkciBpGFq1VBxqDB8uKhw
+ NFuBcMnbNKh5ZjNd7lp4tXKkQEtj9agDMuQu+zw1j/ZoxE/YTa6QtAC0llS79CuxnfSH
+ gTlyZ9778JgCMToPjcy2rG4QGqQ85/en68VoP8wqgTiDugI5ylfUV0b8CyPLxnvHTL5S
+ IczownZOAfhMqA/kFENDggbgIw+8R9h0cI+3mGIjInSNIS0hiPTVsOyLkJJ/jPy6rtvp
+ hKPg==
+X-Gm-Message-State: AOAM533/KSb29WK6J01S2FTrN2Y6ehsvP7bulv936Os4iPBR7FVEJi4i
+ zcCgBxw8LfWVucXVGT3pt/NIRw==
+X-Google-Smtp-Source: ABdhPJyaYucrp2ZJo4BYxdQeZCuzZ16d7zPPE19ZmjqanRcyqRQ4yhbxtwGlMIT9OjbDx2cAZa1+cw==
+X-Received: by 2002:a17:907:c003:: with SMTP id
+ ss3mr22509881ejc.349.1643752807778; 
+ Tue, 01 Feb 2022 14:00:07 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id u19sm15274708ejy.171.2022.02.01.13.54.54
+ by smtp.gmail.com with ESMTPSA id s7sm14957615ejo.53.2022.02.01.14.00.06
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 01 Feb 2022 13:54:55 -0800 (PST)
-Message-ID: <e5a05cd9-e70b-e111-3eda-0f0b35636f2b@mind.be>
-Date: Tue, 1 Feb 2022 22:54:54 +0100
+ Tue, 01 Feb 2022 14:00:07 -0800 (PST)
+Message-ID: <df787435-b1b1-30aa-dc11-3fff9787c86d@mind.be>
+Date: Tue, 1 Feb 2022 23:00:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220125210800.299916-1-fontaine.fabrice@gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+References: <20220125221533.17535-1-ps.report@gmx.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220125210800.299916-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/netopeer2: disable tests
+In-Reply-To: <20220125221533.17535-1-ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH v2] package/util-linux: bump version to
+ 2.37.3 (fixes CVE-2021-3996, CVE-2021-3995)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,7 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -100,50 +101,80 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/01/2022 22:08, Fabrice Fontaine wrote:
-> Disable tests which are enabled since bump to version 2.0.35 in commit
-> 13d4856b916d797c3c771669edd3eb883336766f and
-> https://github.com/CESNET/netopeer2/commit/466a0b3c268ee319b4f65980404715a2723b4c0a
-> to avoid the following build failure if cmocka is built before
-> netopeer2:
+On 25/01/2022 23:15, Peter Seiderer wrote:
+> - add 'touch' workaround for missing disk-utils/raw.8 file ([1], [2]) in
+>    util-linux-2.37.4 release download package
+
+2.37.3 I assume.
+
 > 
-> In file included from /home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/stdint.h:20,
->                   from /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/lib/gcc/riscv64-buildroot-linux-musl/10.3.0/include/stdint.h:9,
->                   from /home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/libyang/libyang.h:18,
->                   from /home/buildroot/autobuild/instance-2/output-1/build/netopeer2-2.0.35/tests/test_sub_ntf.c:27:
-> /home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:53:24: error: conflicting types for 'uintptr_t'
->     53 | typedef unsigned _Addr uintptr_t;
->        |                        ^~~~~~~~~
+> For details see [1].
 > 
-> Fixes:
->   - http://autobuild.buildroot.org/results/0660a4f767d5cdaf07b28a508101b87f0300850f
+> [1] https://www.spinics.net/lists/util-linux-ng/msg17037.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Changes v1 -> v2:
+>    - add workaround for missing disk-utils/raw.8 file
+> ---
+>   package/util-linux/util-linux.hash | 2 +-
+>   package/util-linux/util-linux.mk   | 9 ++++++++-
+>   2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+> index eafbe9254a..9c10a42dca 100644
+> --- a/package/util-linux/util-linux.hash
+> +++ b/package/util-linux/util-linux.hash
+> @@ -1,5 +1,5 @@
+>   # From https://www.kernel.org/pub/linux/utils/util-linux/v2.37/sha256sums.asc
+> -sha256  6a0764c1aae7fb607ef8a6dd2c0f6c47d5e5fd27aa08820abaad9ec14e28e9d9  util-linux-2.37.2.tar.xz
+> +sha256  590c592e58cd6bf38519cb467af05ce6a1ab18040e3e3418f24bcfb2f55f9776  util-linux-2.37.3.tar.xz
+>   # License files, locally calculated
+>   sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
+>   sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index cf0fee409b..baf9ed3406 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -8,7 +8,7 @@
+>   # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+>   
+>   UTIL_LINUX_VERSION_MAJOR = 2.37
+> -UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
+> +UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
+>   UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+>   UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+>   
+> @@ -267,6 +267,13 @@ else
+>   UTIL_LINUX_CONF_OPTS += --without-libmagic
+>   endif
+>   
+> +# workaround missing disk-utils/raw.8 file in util-linux-2.37.4
+
+  2.37.3 as well.
+
+  I moved this hunk to the beginning of the file, to increase the chance that it 
+is noticed on next bump (which hopefully makes it unneeded).
+
+> +# release download package
+> +define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
+> +	touch $(@D)/disk-utils/raw.8
+> +endef
+> +UTIL_LINUX_PRE_BUILD_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
+
+  I moved this to a post-patch instead of pre-build hook.
+
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> ---
->   package/netopeer2/netopeer2.mk | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-> index c8b6763313..43f22b7e4c 100644
-> --- a/package/netopeer2/netopeer2.mk
-> +++ b/package/netopeer2/netopeer2.mk
-> @@ -11,7 +11,9 @@ NETOPEER2_LICENSE = BSD-3-Clause
->   NETOPEER2_LICENSE_FILES = LICENSE
->   NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo host-sysrepo
->   
-> -NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
-> +NETOPEER2_CONF_OPTS = \
-> +	-DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF) \
-> +	-DENABLE_TESTS=OFF
->   
->   # Set a build specific SYSREPO_SHM_PREFIX to ensure we can safely delete the
->   # files. This also ensures that concurrent parallel builds will not be
+> +
+>   # Install PAM configuration files
+>   ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
+>   define UTIL_LINUX_INSTALL_PAMFILES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
