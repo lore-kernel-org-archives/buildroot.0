@@ -4,61 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBE36C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jan 2022 18:11:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 836B7C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 19:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7615F60EE8;
-	Mon, 31 Jan 2022 18:11:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F131D60F6A;
+	Tue,  1 Feb 2022 19:01:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UwhqCeE7yM6d; Mon, 31 Jan 2022 18:11:03 +0000 (UTC)
+	with ESMTP id rsYVld-6CY1Q; Tue,  1 Feb 2022 19:01:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6FAB60EB0;
-	Mon, 31 Jan 2022 18:11:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B44D71BF2B7
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 18:11:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 370F760B1B;
+	Tue,  1 Feb 2022 19:01:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A8871BF5D7
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 19:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1D9B60EDA
- for <buildroot@lists.busybox.net>; Mon, 31 Jan 2022 18:11:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95E35401D6
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 19:01:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0hUcijZ86CqE for <buildroot@lists.busybox.net>;
- Mon, 31 Jan 2022 18:10:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9CBC60EA4
- for <buildroot@uclibc.org>; Mon, 31 Jan 2022 18:10:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id A0193801A2; Mon, 31 Jan 2022 18:03:55 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Mon, 31 Jan 2022 18:10:58 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.11
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: colin.foster@in-advantage.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14561-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S0DFv3wMgt-J for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 19:01:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 71188400C4
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 19:01:36 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:1171:7d10:f9ea:da54])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 33F39B005AB;
+ Tue,  1 Feb 2022 20:01:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1643742093;
+ bh=Bjl73JdcRdoGb5lifcs4roDk/ir2ocpEodn+mo5OBXs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=HulLyl/rEHJk2TcqXPYY69B38QU7TQvxAWTiWpDKrc9eOE67K0eeMF57UZuOIyxcp
+ 9+RNAhtMq8shKCmmGuKEGocniUWyYTc5x7EDwv4mvF4aSjRo57ADC2W0zsDEmJ+afE
+ mVF3erqQC2J3790Wtl1Qn3pSSkKC1YKtQhtl1HlA2e2Zn3lWsElX51cr9P/1ZD8SNk
+ lYlzsgOWfiM4uyMCtiQrupxr3SjATEXOdudP4Ky/3sbvbSKpk3VJIOkcQX3SxFO026
+ DvmiTQY1RahSTPQde2wgMgdqVUge9HoR5e/rimL2wR2ch2dk6Pt2zK24oyAv7m/k3F
+ ifhjD9XvwKB3g==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 01 Feb 2022 20:01:26 +0100
+Date: Tue, 1 Feb 2022 20:01:26 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Message-ID: <20220201190126.GW457876@scaer>
+References: <20220201091342.143010-1-michael@amarulasolutions.com>
+ <20220201171441.GV457876@scaer>
+ <CAOf5uwmK-+jU3eRRPQ4NqKaFq=OUSBTK-_kRXTc6cEsGiwm=Gg@mail.gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14561] New: OpenJDK does not compile when building
- in WSL
+Content-Disposition: inline
+In-Reply-To: <CAOf5uwmK-+jU3eRRPQ4NqKaFq=OUSBTK-_kRXTc6cEsGiwm=Gg@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] boot/uboot: add support for bundling TEE in
+ BIN format into U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,68 +74,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+ Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14561
+Michael, All,
 
-            Bug ID: 14561
-           Summary: OpenJDK does not compile when building in WSL
-           Product: buildroot
-           Version: 2021.11
-          Hardware: All
-                OS: Windows
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: colin.foster@in-advantage.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+On 2022-02-01 18:57 +0100, Michael Nazzareno Trimarchi spake thusly:
+> On Tue, Feb 1, 2022 at 6:14 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2022-02-01 10:13 +0100, Michael Trimarchi spake thusly:
+> > > Some U-Boot platforms (e.g. nxp) can bundle OPTEE's tee.bin
+> > > into the U-Boot image using binman. This patch brings the necessary changes to
+> > > enable this feature.
 
-Tested in 2021.11. As the summary suggests, when building in WSLv2, OpenJDK
-fails. If I were to wager a guess, OpenJDK is trying to be too smart about the
-fact that it is building on a Windows OS. Jumping to a Linux machine and
-compiling with the same config works as expected.
+Also, comit log not nicely formatted: it should be wrapped at ~72 chars
+on every lines.
 
-checking for egrep... /usr/bin/grep -E
-checking for fgrep... /usr/bin/grep -F
-checking for a sed that does not truncate output... /usr/bin/sed
-checking for df... /usr/bin/df
-checking for nice... /usr/bin/nice
-checking for greadlink... [not found]
-checking for readlink... /usr/bin/readlink
-checking for cygpath... [not found]
-checking for wslpath... /usr/bin/wslpath
-checking for lsb_release... /usr/bin/lsb_release
-checking for cmd.exe... /mnt/c/Windows/system32/cmd.exe
-checking for cmp... /usr/bin/cmp
-checking for uniq... /usr/bin/uniq
-checking build system type... x86_64-pc-wsl
-checking host system type... arm-buildroot-linux-gnueabihf
-checking target system type... arm-buildroot-linux-gnueabihf
-checking openjdk-build os-cpu... windows-x86_64
-checking openjdk-target os-cpu... linux-arm
-checking openjdk-target C library... default
-checking compilation type... cross
-/home/colin/src/buildroot/output/build/openjdk-17.0.1+12/build/.configure-support/generated-configure.sh:
-line 34833: import: command not found
-/home/colin/src/buildroot/output/build/openjdk-17.0.1+12/build/.configure-support/generated-configure.sh:
-line 34834: verify: command not found
-configure: error: The path of TOPDIR, which resolves as
-"/home/colin/src/buildroot/output/build/openjdk-17.0.1+12", could not be
-imported.
-configure exiting with result code 1
-make: *** [package/pkg-generic.mk:285:
-/home/colin/src/buildroot/output/build/openjdk-17.0.1+12/.stamp_configured]
-Error 1
+> > > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > > ---
+[--SNIP--]
+> > >  ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
+> > >  UBOOT_DEPENDENCIES += optee-os
+> > > +ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_ELF),y)
+> > >  UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
+                         ,^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Note this for later ----/
+
+> > > +define UBOOT_COPY_TEE_FIRMWARE
+> > > +     cp $(BINARIES_DIR)/tee.elf $(@D)/
+> > Why do you need to copy it, when TEE is pointing to the original in
+> > $(BINARIESD_DIR), just above, and that has worked well so far?
+> The copy are needed to binman to include it
+
+As far as I understand it, BR2_TARGET_UBOOT_NEEDS_OPTEE_ELF is supposed
+to behave like the code we had so far, and so far we did not have the
+copy, and that seems that it worked OK without the copy.
+
+Now you are adding the copy: why was it not needed before, and why is it
+needed now?
+
+And if binman needs it in the source tree, then why do we point the TEE
+variable to the original location in BINARIES_DIR, as I highlighted
+above?
+
+> > > +endef
+> > > +UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_TEE_FIRMWARE
+> > > +else
+> > > +UBOOT_MAKE_OPTS += BL32=$(BINARIES_DIR)/tee.bin
+> > > +define UBOOT_COPY_TEE_FIRMWARE
+> > > +     cp $(BINARIES_DIR)/tee-raw.bin $(@D)/tee.bin
+> > Ditto: why do you need to copy it, when TEE, just above, also points to
+> > the original in $(BINARIES_DIR) ?
+> Same as above
+
+Ditto.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
