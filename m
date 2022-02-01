@@ -4,62 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0BC4C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 18:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27CF0C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 18:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32EFE60F36;
-	Tue,  1 Feb 2022 18:06:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBA7260F96;
+	Tue,  1 Feb 2022 18:11:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A3knDCoadPKB; Tue,  1 Feb 2022 18:06:07 +0000 (UTC)
+	with ESMTP id f_u7YrYVmSsp; Tue,  1 Feb 2022 18:11:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 731C060EE9;
-	Tue,  1 Feb 2022 18:06:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E92D60EE9;
+	Tue,  1 Feb 2022 18:11:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1411BF5D7
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:06:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B0BA01BF5D7
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4AF61415A3
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:06:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EDB0415D9
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:11:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4o3U1b_7fM_x for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 18:06:04 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp4.osuosl.org (Postfix) with ESMTP id 451774159D
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 18:06:04 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id ExXWng7H1QUuPExXWnjUyy; Tue, 01 Feb 2022 19:06:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643738763; bh=UoqZp1cG9w9YCUcsrq9Q5bSuS3cmf0GqhTreKhP1x8c=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Xk3i2tNhi6RhY0NaQUcekhWec+k0lTfBl8jRFUtV4FKDcruS9SHz6Q8BfCByfqfUL
- nDB+0O5yOKjqa5RAeJzS3suNBVvRbJAvpBnTATL6AyqDzemt68ZTu6fyXuhQBmo2g3
- q+iDHPl6NtpBe2kbHWfZQuK2HijgmvOyWAqR/XPMBGKYnQpnWbrFPIyj2jI3ICDjFQ
- lTVErh40uDYVywsUEASqKKUo+9nnE0nZr7C0PA5BXlYHz6Re9fNjMnLkv9nikQKFbF
- PPXhQnhmAMMcuKMgLyS0m3b6OYItC4N80r9Tqz+l98luoDbHNuQLjfR5tPdUg5sWOf
- QHZuajb80fCGw==
-Message-ID: <df918065-86d0-baf1-959b-1ff91163de1c@benettiengineering.com>
-Date: Tue, 1 Feb 2022 19:06:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+ with ESMTP id 9xrHFVFJRRba for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 18:11:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7E55415A3
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 18:11:30 +0000 (UTC)
+Received: by mail-lj1-x233.google.com with SMTP id t14so25271512ljh.8
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 10:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=i9dOnSCiYbHV+EStKUEX12SYazON0g6DAY5ZnTcq6g8=;
+ b=fntFN9wDIH0ry9PyjzwBqoEG/Kgz3AUtFpdvK73PMxl9p5OxfIwPudpCOn4clZ4I+d
+ rIHzPIYTu6u7a4YFpmzy1jm/s4MIfF9xG6pMgyhDLsHThJbhtc7jdhPkccBWkyDLFngA
+ THLMoJJ4J8W7OfcfbwtNAUonItCViiMTL0iYLGpFgz8zfufItEb9uyvb9ice4YmZoW4w
+ VrnlSHPm9aD0mqy0tVvc20A3YozcuSdA2pbVkW/q46ElxXL4o/s5E5Dt8MM7zNjTxNPI
+ 6ijoJSZeDYisgJ2Wgkf6YXP8r+AUuSqY/eyKxwWaMAsfVlvbcD2B5QxGMtdgEvDmKiQs
+ kbEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=i9dOnSCiYbHV+EStKUEX12SYazON0g6DAY5ZnTcq6g8=;
+ b=B60r57X4gaQAEjNjeYRGhoBB3u8vTGpfb0jQ63x6rJHW8kMy1mVKsD5WZLG6j5PRdB
+ cO9kTXb0AWpbcNb/K8QSa0zcoVnit3Zclk5SuT4Ch2tRrL/KZhTusSRqroDuIsf/jYKQ
+ /RzntuH9EeVibFDbZS6G50MFCJqoRdJxhCOXKbJtqMSGZbFiOfyQ2mZ2S5I61DJB1AbA
+ fOSOEPO0JzFx74dhw1cyQyzJwPPjv+nYPk5/Dl+QqzpnzvdkL0EFON/WUdqjwooc3zeR
+ i6LZ+/iZWmYoVIGQkPbvJRgYM9B/1Fan744fnZp1OnfLnA7qkTVucCzoowRG2pRtdQHZ
+ gGxA==
+X-Gm-Message-State: AOAM5329cIb6nUhBzJ9tbgkzHws6yxr4YpXjrUbcER1h+LnGK530ftSr
+ ao4kAWqMJ/sxD+HEq/6nZ3FIeFyOyIs=
+X-Google-Smtp-Source: ABdhPJygAHVKirwlguOUQOm2MaX1pN+ctEDXzjUhlVKQvP/wbZzr/M2u+oQ7rQeDDV+F4S+IoPddHA==
+X-Received: by 2002:a05:651c:105b:: with SMTP id
+ x27mr17035596ljm.7.1643739088547; 
+ Tue, 01 Feb 2022 10:11:28 -0800 (PST)
+Received: from curiosity ([5.188.167.245])
+ by smtp.gmail.com with ESMTPSA id b5sm3079049ljk.123.2022.02.01.10.11.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Feb 2022 10:11:28 -0800 (PST)
+Date: Tue, 1 Feb 2022 21:11:27 +0300
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <Yfl3z9eL3D9nmplt@curiosity>
 References: <20220131212456.3176156-1-geomatsi@gmail.com>
- <20220131212456.3176156-2-geomatsi@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220131212456.3176156-2-geomatsi@gmail.com>
-X-CMAE-Envelope: MS4wfA4Gzkb+H2Eful+9gQxch3M5jGwT2MMwHj5KlP5qedj8g5N974fRlGWB8BOLEfOQfwcnJLR69DVdcToMlEUcXVXwQaxg+iRpOdUvf1q4wf1y0kFVdPqu
- XzmgR2Ds6lcXvqMrpZGCEUmyIVYUXE+N7M0kT6eHd96pk3nc29B7lB5kostF1oGD8CPwlYnMKnDbk0kIP/xAEN6kGG8Zd1P+r6a/djeZ9QnyfjPxqH6Ci3x5
- grJ8tpZ4Sv6Xj3QHmd9A54M72WvVUM+NmvIaZeRl1Ng=
-Subject: Re: [Buildroot] [PATCH 2/2] configs/orangepi_zero_plus2: BSP update
+ <df90dc24-b44e-fcb9-ed82-7b517604f4b0@benettiengineering.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <df90dc24-b44e-fcb9-ed82-7b517604f4b0@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH 1/2] board/orangepi/orangepi-zero-plus2: fix
+ build after genimage update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,86 +89,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Sergey,
-
-On 31/01/22 22:24, Sergey Matyukevich wrote:
-> Bump Linux kernel to 5.16.1 and U-Boot to 2022.01. Select option
-> BR2_TARGET_UBOOT_NEEDS_OPENSSL since U-Boot requires openssl.
-> Root filesystem does not fit into default 60M anymore,
-> so increase its size.
-
-Same as previous patch we need a:
-Fixes:
-url where you point the failure
-
-There is the latest gitlab pipeline here, especially this board build 
-failure:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2021478371
-But this was for previous patch, sorry, so please point this ^^^ URL there.
-And here probably you've found the bug by yourself, correct?
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->   configs/orangepi_zero_plus2_defconfig | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
+> Hi Sergey,
 > 
-> diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-> index da2d3b4178..9d88b37ac9 100644
-> --- a/configs/orangepi_zero_plus2_defconfig
-> +++ b/configs/orangepi_zero_plus2_defconfig
-> @@ -2,7 +2,7 @@ BR2_aarch64=y
->   BR2_cortex_a53=y
->   BR2_ARM_FPU_VFPV4=y
->   
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
->   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
->   BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
->   
-> @@ -17,9 +17,10 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
->   BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->   BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> @@ -33,7 +34,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-pl
->   # Kernel
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
->   BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
-> @@ -56,6 +57,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
->   BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero Plus2"
->   BR2_TARGET_ROOTFS_EXT2=y
->   BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->   BR2_PACKAGE_HOST_DOSFSTOOLS=y
->   BR2_PACKAGE_HOST_GENIMAGE=y
->   BR2_PACKAGE_HOST_MTOOLS=y
+> On 31/01/22 22:24, Sergey Matyukevich wrote:
+> > ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid for mbr and hybrid partition-table-type
+> > 
+> > To fix the first genimage error report, change 'partition-type' entries
+> > to the appropriate 'partition-type-uuid'. Then genimage starts to
+> > complain about overlaps:
+> > 
+> > ERROR: hdimage(sdcard.img): partition [GPT array] (offset 0x100000, size 0x4000) overlaps previous partition u-boot (offset 0x2000, size 0x102000)
+> > ERROR: hdimage(sdcard.img): bootloaders, etc. that overlap with the partition table must declare the overlapping area as a hole.
+> > 
+> > To fix the second genimage error report, update the size of bootloader
+> > file. Do not reserve additional space for GPT partition table since
+> > new genimage is able to keep track of it.
+> 
+> Here we need a:
+> Fixes:
+> url where you point the failure
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+You are right. But I don't have a CI report for this. I noticed the problem when
+building images locally.
+
+Regards,
+Sergey
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
