@@ -4,64 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1DB6C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 18:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD55CC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 18:26:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FC4881ADE;
-	Tue,  1 Feb 2022 18:18:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E092831C1;
+	Tue,  1 Feb 2022 18:26:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rrDjZbxbAZr9; Tue,  1 Feb 2022 18:18:57 +0000 (UTC)
+	with ESMTP id Nct761KWjpGh; Tue,  1 Feb 2022 18:26:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7C1D80B6F;
-	Tue,  1 Feb 2022 18:18:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F9851BF5D7
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:18:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF58682F49;
+	Tue,  1 Feb 2022 18:26:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ABEA21BF5D7
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CE46401DD
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:18:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99BDA82F49
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 18:26:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lehfK_2KYzH9 for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 18:18:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F286400C4
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 18:18:53 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id ExjvngY4IQUuPExjvnjiEY; Tue, 01 Feb 2022 19:18:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643739531; bh=yO90fZvUjz72IEqTDtSebMR05Opp4Lkk0ocwyfgsTJQ=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Quge3jRhlDjx1XLrwkpgD7SwiY9fEGC69ibAt6qR7N0jWGFiPtplIcxrLQGPWO+RW
- C+ylZqeEzgQsZgT0AwEjAbY/WQq5el5gog/aONRA9DiCOoc8ei0oYO6NTTcs4hpEP4
- 0x2xxsxSnSr06BXDRqJk1PhR/m0BQYnOSbXljBySx2KWOG7q6Ir5ibNeRVnjqqHhZo
- 6KeDYRJ+KaD2XFdzqI+LUjLyR6zYY9WvnPk7ResmvW5Z27qHmAFZAkyjKyAckxjZLg
- tOFMHM/nHQb+eaibTOSzjP1HxHR8yOoPNsq0NaYntddL1Li6akvj07Za0eSejEhC1b
- 1zE6d++RwTJCQ==
-Message-ID: <260964d9-46f6-cb5d-8779-9559f0a2d0a8@benettiengineering.com>
-Date: Tue, 1 Feb 2022 19:18:51 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id obaTf85Nnl0M for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 18:26:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 89D0182F40
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 18:26:00 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id u18so35893990edt.6
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 10:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to:cc;
+ bh=+aXwDlSdPrYiqYRiGiR29esi6mI3TDnyNJ7vO9GrowI=;
+ b=Xtbbhh99p98GDLdNgybjKyQOXYxO+0w5lw0bn88a9FlwZUDbMvOLij8BR0UPeE8E0t
+ BgnEcWKwIxlkYYXnOaTTLOtJ1BFccMAkulPLTvm4rwFjEFPLL2T3Jb85syIKbyIy4zXt
+ Dl9kmF72dUhaDyM7EQi+a2y4mBZ39DDZyM6jNihv6w3ayiVIMklIuoHv4ui6juVD4Wb/
+ zqPq6u/VpBrQDf3JybEjZi97ZlsJ7Dbvjk4vLlXclTdvodMfMvQOpbmBJy6qh61ezTne
+ 3Yzt1NyCjHJax6zLmR0ys9rzaJhLGfTl2WuNXL5UPKj8j6r0WhUTbkangcHeJcSDfAyT
+ 9K5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+ bh=+aXwDlSdPrYiqYRiGiR29esi6mI3TDnyNJ7vO9GrowI=;
+ b=MWKZGUyHKqOQgiqRqDggwXGUDg06P7WRYQO7fvdwnPDLSpYVSLgg7VbwjG94/MhgDx
+ jzbYyDGSmOQTHZKROgbW7WBDr2Ri8nyooL0glZnK1X9OigGCVYwjEAI2Msmt+Lkb8L2f
+ McJum9MbmVeqmyaJy6zcTlY9OWU5p0+I/Qi+BMsA4PA56tTKA7Yg3ziT/GkeY2Qo4pUl
+ Kh+8o1iGJQYWiuKIghD2Sf8ry9XQ3mQbDUtOc18fox0P8SlphxpJXjymn5BpCAj0RxfZ
+ UdPNfhWA//V0sHvWdPrHPHp4EF6rfMrhxO2fkKT/m82+x2kXuXziRh9bMXensJ6uL49w
+ pc1A==
+X-Gm-Message-State: AOAM532YULvpm1zFN/0D9yIes6Y0C0eZaEpmAQ1iY+iWYdzml3y/rcc4
+ DI1kO4b5G2PPQ2kW1yusuAvt3abzd4gcYXWy2tk=
+X-Google-Smtp-Source: ABdhPJxpKwCAbejEvtuOKX/WqqosPKIvoAMxOIdEXd4sM9SAZ5Uj0mhrqvN6hs7FVN9Lm4RrET+lNxegiUwVxrfPh30=
+X-Received: by 2002:a05:6402:358e:: with SMTP id
+ y14mr26662819edc.136.1643739958654; 
+ Tue, 01 Feb 2022 10:25:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Sergey Matyukevich <geomatsi@gmail.com>
-References: <20220131212456.3176156-1-geomatsi@gmail.com>
- <df90dc24-b44e-fcb9-ed82-7b517604f4b0@benettiengineering.com>
- <Yfl3z9eL3D9nmplt@curiosity>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <Yfl3z9eL3D9nmplt@curiosity>
-X-CMAE-Envelope: MS4wfD4PJ6xpFlPkroEmyn/QgGc7jSUmGiSBwHbLxhNi62Rg/LOFabQSzwLLciYCdW9AU8nA4iccyHEgG72Zz8VdeUptktgxIpkXL1cXHYd61x/4FxEhayUz
- x0Z2K3X0/9RV8JA/rlEPn7xXIaBn8qBAeUD6zFwLgQusBXIlcm7pK1SiXRE82raU4OZqcCWNGztUKfcpEBWsDX+cVz+d4gfZOh5aMEqQpGa/UnkIV6+4BqY1
- SQZciJ/Qgo00uuY+6NE7Y/sMO4VQjIPlWjEoJQVTfXU=
-Subject: Re: [Buildroot] [PATCH 1/2] board/orangepi/orangepi-zero-plus2: fix
- build after genimage update
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 1 Feb 2022 15:25:48 -0300
+Message-ID: <CAOMZO5B55thnNGy779AxyLEznGqOPZZfzzwn2NwF=v48aHnKfQ@mail.gmail.com>
+To: Rob Clark <robdclark@gmail.com>
+Subject: [Buildroot] kmscube: GLES3/gl3.h: No such file or directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,46 +76,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+Cc: Carlos Rafael Giani <crg7475@mailbox.org>, dhobsong@igel.co.jp,
+ DRI mailing list <dri-devel@lists.freedesktop.org>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Rob,
 
+We are getting the following kmscube build error in Buildroot:
 
-On 01/02/22 19:11, Sergey Matyukevich wrote:
->> Hi Sergey,
->>
->> On 31/01/22 22:24, Sergey Matyukevich wrote:
->>> ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid for mbr and hybrid partition-table-type
->>>
->>> To fix the first genimage error report, change 'partition-type' entries
->>> to the appropriate 'partition-type-uuid'. Then genimage starts to
->>> complain about overlaps:
->>>
->>> ERROR: hdimage(sdcard.img): partition [GPT array] (offset 0x100000, size 0x4000) overlaps previous partition u-boot (offset 0x2000, size 0x102000)
->>> ERROR: hdimage(sdcard.img): bootloaders, etc. that overlap with the partition table must declare the overlapping area as a hole.
->>>
->>> To fix the second genimage error report, update the size of bootloader
->>> file. Do not reserve additional space for GPT partition table since
->>> new genimage is able to keep track of it.
->>
->> Here we need a:
->> Fixes:
->> url where you point the failure
-> 
-> You are right. But I don't have a CI report for this. I noticed the problem when
-> building images locally.
+../cube-shadertoy.c:37:10: fatal error: GLES3/gl3.h: No such file or directory
+   37 | #include <GLES3/gl3.h>
 
-Check here for this patch:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2021478371
+Complete log:
+http://autobuild.buildroot.net/results/7f559e89a96273fc019056eae13104e14161a484/build-end.log
 
-for the other you've found it locally.
+In OpenEmbedded the following patch is used:
+http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-graphics/kmscube/kmscube/0001-texturator-Use-correct-GL-extension-header.patch?h=master
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+What would be the appropriate fix for this issue?
+
+Thanks,
+
+Fabio Estevam
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
