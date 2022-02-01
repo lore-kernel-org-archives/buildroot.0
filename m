@@ -1,67 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A8EFC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61DC3C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 22:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5BC283366;
-	Tue,  1 Feb 2022 22:28:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BD24409F7;
+	Tue,  1 Feb 2022 22:29:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WhSHKfBUON-B; Tue,  1 Feb 2022 22:28:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Tx-H1Qr8p_fM; Tue,  1 Feb 2022 22:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E988E83336;
-	Tue,  1 Feb 2022 22:28:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33ECB40304;
+	Tue,  1 Feb 2022 22:29:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 57E521BF3BE
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:28:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 53D761BF3BE
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F0C0400CE
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:28:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EC9A400CE
+ for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 22:29:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NbrTaJyn5v1k for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 22:28:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C9D65400CC
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 22:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=c5Rl9G2sgE2yGP6RzfUjGMYu4YqJatXX+oZ446de9sc=; b=dC96GGJUDrrt0RA985R+2SgNc5
- dagjGMzchbNFUcwjt23t/YtceKVWybrt+TFGWqErIqH4/X1LYZC4nqvBO9AkIVuR6aUrbrvtz7HKJ
- OaGNw73bcIeN9Rd7nkK9SzE6CIjdXVDV/W5mBv2SHPXDQgXIqjzOW3DtK0cHD8QfIME7/qTOMr6vr
- wNccyfe3NTVTzSceUeJERxJWivdfAl1YJbPZeLmD17KWtoP+0lyxq9OH6Uo77FvBUKIOgu7c1t+9e
- ZrxLsIRwKEDnYSMZcT7U0kD+RpaFZm1TO3cdrP4R5vPbnNvm3cPYnfdnuGAqCeHFxfzmxMxTHjK9D
- 28z0a9XQ==;
-Received: from 91-152-140-238.elisa-laajakaista.fi ([91.152.140.238]
- helo=momiji) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1nF1d0-00064F-1w; Tue, 01 Feb 2022 23:27:58 +0100
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id a432736d;
- Tue, 1 Feb 2022 22:27:46 +0000 (UTC)
-Date: Wed, 2 Feb 2022 00:27:42 +0200
-Message-ID: <20220202002742.GB1241348@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Peter Seiderer <ps.report@gmx.net>
-In-Reply-To: <20220126193431.17777-1-ps.report@gmx.net>
-References: <20220126193431.17777-1-ps.report@gmx.net>
+ with ESMTP id pugt7SRd2H1c for <buildroot@lists.busybox.net>;
+ Tue,  1 Feb 2022 22:29:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 96C2C400CC
+ for <buildroot@buildroot.org>; Tue,  1 Feb 2022 22:29:47 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id k18so34803679wrg.11
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 14:29:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=BgV/mqK7uBtKsgEQACAkdFdgBK8DUV1EIEzVW9M7p4Q=;
+ b=pX8zktbSYFoSzdSlmcGDxHWr9Z3tksKCru37HKbyGYq6M/MhhoXXEYj0wZTrwEjDX/
+ xB48QOFj87scmEyomrUZOEiMd0qnC1+ard5aY7XyGNQVOUA2X6qOlGtAkrT59GjZvM3O
+ RGlPo8PSH88jk/SoAYOU3JXfa0TJRdbZWLGW4ifqXPHtvHU0XNQneh6uSoyglH4L41HD
+ 24z7IG8T/fC3oC7s614tMwvjp4p62R5DEK/qenZSSm42x7PPG1YRf8OAbjUByf5WYVZw
+ +sLGa0mBqCA4qn+inkohbRP2qBCsqah3ou2PO5N6qhtXkQYyKchaGVygJgYdy+cpndLv
+ A0mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=BgV/mqK7uBtKsgEQACAkdFdgBK8DUV1EIEzVW9M7p4Q=;
+ b=ZkKVAcyrSmNMSJZviD+iOPlOCjX5LUP1WAeVZGMdvy8SGDYg+9sKlBa6B/V7HvHFtC
+ VtS4P2hJw/emGY7xMMbr9+J0qJUvEX0rgjtKuzGjW+6Ukd2mPuw9hrFlsNK0xgfS2kFW
+ MXVg97lFIR7HCqm2uzLDaEIUnDtzWvH07KTl5AJ3h/q6UZpg+wKW6VguE9FElhKBf1d6
+ WjeBtqinZPJY6HP1B4qeUmlkIle4x4GVOKe3uxRyywVmzVOGpcULwykhltAou+KdHOKA
+ DzHb2+f5Qugryiibbd6sJspOPdu7iRhsDkIFcY5+IYyoBsJI6sJoUMGTGQ9kwSUAsc3l
+ 12Ig==
+X-Gm-Message-State: AOAM532qmeYuMPEvSSGzHW0W/DRxrRy37ssM8c+VqqFYqoQNLLUCsIsx
+ T1LLZh6zZjuGUIolukE507KlmYg4OFI=
+X-Google-Smtp-Source: ABdhPJzb5B2LpWkoOgrZXJ/yDmDcU1n0CpbLvWGqO/ooNpqSddmduVexmVMgHlzG2XxugFbdafXjfg==
+X-Received: by 2002:a5d:56cc:: with SMTP id m12mr23217069wrw.167.1643754585527; 
+ Tue, 01 Feb 2022 14:29:45 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id i3sm15337722wru.33.2022.02.01.14.29.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Feb 2022 14:29:45 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  1 Feb 2022 23:27:45 +0100
+Message-Id: <20220201222745.411463-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/binutils: add upstream patch for
- v2.37 fixing linking of thin archives
+Subject: [Buildroot] [PATCH 1/1] package/safeclib: bump to version 3.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,70 +85,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7095391334089003044=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop patch (already in version) and so autoreconf
 
---===============7095391334089003044==
-Content-Type: multipart/signed; boundary="0JNM1GNPsQpMx0i/"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+https://github.com/rurban/safeclib/blob/v3.7.1/ChangeLog
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...gure.ac-add-disable-hardening-option.patch | 63 -------------------
+ package/safeclib/safeclib.hash                |  4 +-
+ package/safeclib/safeclib.mk                  |  6 +-
+ 3 files changed, 4 insertions(+), 69 deletions(-)
+ delete mode 100644 package/safeclib/0001-configure.ac-add-disable-hardening-option.patch
 
---0JNM1GNPsQpMx0i/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-SGksCgpPbiBXZWQsIDI2IEphbiAyMDIyIDIwOjM0OjMxICswMTAwIFBldGVyIFNlaWRlcmVyIDxw
-cy5yZXBvcnRAZ214Lm5ldD4gd3JvdGU6Cj4gQWRkIHVwc3RyZWFtIHBhdGNoIChbMV0pIGZvciB2
-Mi4zNyBmaXhpbmcgbGlua2lnIG9mIHRoaW4gYXJjaGl2ZXMgKHNlZSBbMl0gZm9yCj4gZGV0YWls
-cykuCj4gCj4gRml4ZXM6Cj4gCj4gICAuLi4vaG9zdC9iaW4vYXJtLWJ1aWxkcm9vdC1saW51eC1n
-bnVlYWJpaGYtZysrIFsuLi5dIC1vIGxpYlF0NVdlYkVuZ2luZUNvcmUuc28uNS4xNS4yIFsuLi5d
-Cj4gICAuLi4vYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvYmluL2xkOiAuLi4vYnVpbGQv
-cXQ1d2ViZW5naW5lLTUuMTUuMi9zcmMvY29yZS9yZWxlYXNlL29iai90aGlyZF9wYXJ0eS9ib3Jp
-bmdzc2wvbGliYm9yaW5nc3NsLmE6IGVycm9yIGFkZGluZyBzeW1ib2xzOiBtYWxmb3JtZWQgYXJj
-aGl2ZQo+ICAgY29sbGVjdDI6IGVycm9yOiBsZCByZXR1cm5lZCAxIGV4aXQgc3RhdHVzCj4gICBt
-YWtlWzVdOiAqKiogW01ha2VmaWxlLmNvcmVfbW9kdWxlOjkwOiAuLi8uLi9saWIvbGliUXQ1V2Vi
-RW5naW5lQ29yZS5zby41LjE1LjJdIEVycm9yIDEKPiAgIG1ha2VbNF06ICoqKiBbTWFrZWZpbGU6
-MTI0OiBzdWItY29yZV9tb2R1bGUtcHJvLW1ha2VfZmlyc3RdIEVycm9yIDIKPiAgIG1ha2VbM106
-ICoqKiBbTWFrZWZpbGU6Nzk6IHN1Yi1jb3JlLW1ha2VfZmlyc3RdIEVycm9yIDIKPiAgIG1ha2Vb
-Ml06ICoqKiBbTWFrZWZpbGU6NDk6IHN1Yi1zcmMtbWFrZV9maXJzdF0gRXJyb3IgMgo+ICAgbWFr
-ZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1rOjI5NTogLi4uL2J1aWxkL3F0NXdlYmVu
-Z2luZS01LjE1LjIvLnN0YW1wX2J1aWx0XSBFcnJvciAyCj4gICBtYWtlOiAqKiogW01ha2VmaWxl
-OjIzOiBfYWxsXSBFcnJvciAyCj4gCj4gWzFdIGh0dHBzOi8vc291cmNld2FyZS5vcmcvZ2l0L2dp
-dHdlYi5jZ2k/cD1iaW51dGlscy1nZGIuZ2l0O2g9MWM2MTFiNDBlNmJmYzgwMjliZmY3Njk2ODE0
-MzMwYjViYzBlZTVjMAo+IFsyXSBodHRwczovL3NvdXJjZXdhcmUub3JnL2J1Z3ppbGxhL3Nob3df
-YnVnLmNnaT9pZD0yODEzOAoKQW11c2luZ2x5IEkgcmFuIGludG8gdGhpcyBhIGNvdXBsZSBvZiBk
-YXlzIGFnbyBhbmQgYWxtb3N0IHNpbXVsdGFuZW91c2x5IHNlbnQKYSBwYXRjaCB0byBpbmNsdWRl
-IHRoZSBmaXhlcyBpbiB0aGUgV2ViS2l0IFNESyB3ZSB1c2UgZm9yIGRldmVsb3BtZW50IFsxXSA9
-KQoKPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+CgpS
-ZXZpZXdlZC1ieTogQWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+CgoK
-Q2hlZXJzLArigJRBZHJpw6FuCgotLS0KWzFdIGh0dHBzOi8vYnVncy53ZWJraXQub3JnL3Nob3df
-YnVnLmNnaT9pZD0yMzU5NzUK
-
---0JNM1GNPsQpMx0i/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYfmz3gAKCRCRxVnb5MkS
-O0VUAJwNaEi2monpVkAvZsPNJpSlAnW+wQCeJbYC6dumkMlqmUTNJvSx11O6dfU=
-=+NFW
------END PGP SIGNATURE-----
-
---0JNM1GNPsQpMx0i/--
-
---===============7095391334089003044==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/safeclib/0001-configure.ac-add-disable-hardening-option.patch b/package/safeclib/0001-configure.ac-add-disable-hardening-option.patch
+deleted file mode 100644
+index e851fce993..0000000000
+--- a/package/safeclib/0001-configure.ac-add-disable-hardening-option.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 94c612016834d7bdc2b721ff5f4f5e158bda6fdd Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 8 Jan 2022 21:49:22 +0100
+-Subject: [PATCH] configure.ac: add --disable-hardening option
+-
+-Allow the user to disable hardening which is enabled by default since
+-version 02092020 and
+-https://github.com/rurban/safeclib/commit/caa4408eb4a5c767f0474258af3b6ccf444e10aa
+-to avoid the following build failure when the toolchain doesn't support
+-stack-protector:
+-
+-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real: ../src/.libs/libsafec-3.6.0.a(safe_mem_constraint.o): in function `handle_mem_bos_chk_warn':
+-safe_mem_constraint.c:(.text+0x40): undefined reference to `__stack_chk_guard'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a481ee2d26a094358b0298617cce691be3077f22
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/rurban/safeclib/pull/107]
+----
+- configure.ac | 27 +++++++++++++++++++--------
+- 1 file changed, 19 insertions(+), 8 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 55756b06..f852ed44 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -383,6 +383,21 @@ AC_ARG_ENABLE(debug-build,
+- 	esac], [enable_debug_build=false ])
+- AM_CONDITIONAL(ENABLE_DEBUG_BUILD, test "x$enable_debug_build" = "xtrue")
+- 
+-+AC_ARG_ENABLE(hardening,
+-+	AS_HELP_STRING([--disable-hardening],
+-+	               [disable hardening @<:@default=no@:>@]),
+-+	[case "${enableval}" in
+-+	yes) enable_hardening=true ;;
+-+	no)  enable_hardening=false ;;
+-+	*)   AC_MSG_ERROR([bad value ${enableval} for --enable-hardening]) ;;
+-+	esac], [enable_hardening=true])
+-+
+-+if test "x$enable_hardening" = "xtrue" ; then
+-+	AX_APPEND_COMPILE_FLAGS([-fstack-protector-strong -fstack-clash-protection -fcf-protection],
+-+                         [WARN_CFLAGS],[$ax_ccf_err])
+-+	AX_APPEND_LINK_FLAGS([-fstack-protector-strong -fstack-clash-protection -fcf-protection],
+-+                         [WARN_LDFLAGS],[$ax_ccf_err])
+-+fi
+- 
+- AC_MSG_NOTICE([Check programs])
+- # ===============================================
+-@@ -543,10 +562,6 @@ case $host_os in
+-        [],[$ax_ccf_err])
+-     ;;
+- esac
+--AX_APPEND_COMPILE_FLAGS([-fstack-protector-strong -fstack-clash-protection -fcf-protection],
+--                         [WARN_CFLAGS],[$ax_ccf_err])
+--AX_APPEND_LINK_FLAGS([-fstack-protector-strong -fstack-clash-protection -fcf-protection],
+--                         [WARN_LDFLAGS],[$ax_ccf_err])
+- 
+- if test x$ax_cv_check_cflags__Wrestrict = xyes; then
+-    AC_DEFINE([HAVE_WARNING_RESTRICT], 1, [Have -Wrestrict])
+--- 
+-2.34.1
+-
+diff --git a/package/safeclib/safeclib.hash b/package/safeclib/safeclib.hash
+index af732f93fd..bca5d86261 100644
+--- a/package/safeclib/safeclib.hash
++++ b/package/safeclib/safeclib.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/rurban/safeclib/releases/tag/v02092020
+-sha256  d374bdcbfcdc4c9a76abed3707667372ca212fd87a369e7bcaaa54e716d27c0a  libsafec-02092020.tar.xz
++# From https://github.com/rurban/safeclib/releases/tag/v3.7.1
++sha256  71d3ec970f930bd980f2a41127228eeedfc53749e4c6b203329adc4ff7df32a7  safeclib-3.7.1.tar.xz
+ 
+ # Hash for license file
+ sha256  c33e77efd5781e3d59a2bb648c82d2a615035ef0d24cf58880380e3af906510b  COPYING
+diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
+index 29ffea7f2e..91b3e26c68 100644
+--- a/package/safeclib/safeclib.mk
++++ b/package/safeclib/safeclib.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-SAFECLIB_VERSION = 02092020
++SAFECLIB_VERSION = 3.7.1
+ SAFECLIB_SITE = \
+ 	https://github.com/rurban/safeclib/releases/download/v$(SAFECLIB_VERSION)
+-SAFECLIB_SOURCE = libsafec-$(SAFECLIB_VERSION).tar.xz
++SAFECLIB_SOURCE = safeclib-$(SAFECLIB_VERSION).tar.xz
+ SAFECLIB_LICENSE = MIT
+ SAFECLIB_LICENSE_FILES = COPYING
+ SAFECLIB_INSTALL_STAGING = YES
+-# We're patching configure.ac
+-SAFECLIB_AUTORECONF = YES
+ # -fstack-protector-strong is used by default. Disable that so the
+ # BR2_SSP_* options in the toolchain wrapper are used instead
+ SAFECLIB_CONF_OPTS = --disable-hardening
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7095391334089003044==--
