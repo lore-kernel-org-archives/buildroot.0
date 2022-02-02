@@ -1,80 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2034C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 20:34:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D538C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 20:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D34281462;
-	Wed,  2 Feb 2022 20:34:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 669E2404F7;
+	Wed,  2 Feb 2022 20:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lgrEQRV0yKFv; Wed,  2 Feb 2022 20:34:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gATqjcNKal_9; Wed,  2 Feb 2022 20:37:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FA1D8136D;
-	Wed,  2 Feb 2022 20:34:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9BDBD1BF346
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 20:34:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85AAF40339;
+	Wed,  2 Feb 2022 20:37:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DF871BF346
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 20:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9825760A97
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 20:34:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8522240590
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 20:37:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TXbn7S25HcCg for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 20:34:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 94D8560745
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 20:34:17 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id c188so576146iof.6
- for <buildroot@buildroot.org>; Wed, 02 Feb 2022 12:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=AY8XAPQywL1qLkqoDEs6zMyGXQGQzHVfoU4g5iHIfvY=;
- b=fxrRIzeIEx6xVEFKo4b+sYuWbKaVL9tv4+pw8tp/Zt7UFc8vwoRmpj+hinOH3TyAFu
- swCTHjVBke0amcWvM7U5dvc51KZ5xyUoVMoq4zc6QANcMkRlDYnP+QE1Ozq2936n8f3J
- cFRmR08g68wXwxJVlVFD/wWaOjAXsoEn4uxQyIMPJY4NCbgwASzUF3ctnJ9F8+H3kTs0
- 9yJwgC89Gs49Pern1O7d0UcNLVpQ5RK5VyxD/YD9V1CqbKSYpSj0GLqP6/qhvLkQClzx
- KrSR1oE+xlwZAqxAzTrgCHNF5ZciUrmQ8WpDjKSULQaGjyjereRqUWOX3HFzZOkNPxlw
- lJsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=AY8XAPQywL1qLkqoDEs6zMyGXQGQzHVfoU4g5iHIfvY=;
- b=DjdqNrTEE/tqwteXY9AGjChW9uz+Za4+oCuq4f5nBvh1hlfQgwWuPeozWmKhwCtv0o
- qMPRhWDG0pBxbZEvX1ggAmllwUwM151oI5uI/y5eYj3wYVHVlMyDffUfn2SFxFHqsJnu
- 3taRz2IFGejyI3fdySrK2Ydj8VuP3jRXmZu3Nq6GcesgfxcHC+zgXKoxzYm9vzffY0z0
- RSDZfcLibSlNPFhGU0uUhzANvWVMoN1o6ZFtqL0UmEP5pJQB7XHUszgJCZh+v7t61P/z
- Nn4Iavmsr7PMc3Yqu9Lv+1FjtG2dIe9QuOy5DTjGyrlsW28tsPnCWeWN3zHkmMx1/ivd
- eGdg==
-X-Gm-Message-State: AOAM533UTvsbtkC2388wxncnsZpPOM3pp230Oz0CQE4n980mpiaj6TSB
- JmYvoe63ZuRrmyLoizRPCDmrkvCzMwo=
-X-Google-Smtp-Source: ABdhPJxS5okC+p70/Louke23aLP2DH/Dgjo+KTWsnWsXi5DLCzB9psz9y8JGwwww18yGYKDhL4nYrw==
-X-Received: by 2002:a5e:8406:: with SMTP id h6mr17235409ioj.144.1643834056327; 
- Wed, 02 Feb 2022 12:34:16 -0800 (PST)
-Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
- [71.218.245.50])
- by smtp.gmail.com with ESMTPSA id b9sm20946010ios.21.2022.02.02.12.34.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Feb 2022 12:34:16 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J88EjYj4yekg for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 20:37:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02FFD400D3
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 20:37:27 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id FMNZntAcD0FuyFMNZn4WZ6; Wed, 02 Feb 2022 21:37:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1643834246; bh=vU9/a8RoD7fYI0QXpp97S3r0RGhz11y0cekNowvhNsc=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=PfG12BVH6aHnuIMmITlQT4IW8ZlFxxtGEtkbIT0IlSx0PG0foiL2JaiZ8Wwqgrp1F
+ W7DhhEUlPEjD4ZY8U98+07cObgiQVY4x6hgke+TOYMwHjLL9q8X8hGCCZbzOtvP9+h
+ qp59J8rUVXHiMUGlZcyisFg8QfVJDV3pCJbLp+gQB7/Dck+KOfcVyFETvtSPut2fIM
+ P5A+jfsflFgngzbFhQcyNaLKhdEUgRZhT2Px+j8GtZwxAwBkmkUy2mYMmq1nk6l1xr
+ 9ZZV/YMxaLRbGihOS//ijs8ehaTkmWSsSm18C/ipqaIV7q4lSBEmbUaSgzvExm3tpN
+ wsexkFcFN86Ag==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Feb 2022 13:34:11 -0700
-Message-Id: <20220202203411.150459-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Feb 2022 21:37:25 +0100
+Message-Id: <20220202203725.2115889-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python3-setuptools: bump to version
- 60.7.0
+X-CMAE-Envelope: MS4wfDZALvRZJ8p6OB3r4m3oYMw74CRiHV0Li12H3mj57sZqQzEQy5kBECkdnEPcJz8QcwFjtLNiGNWAiORslVDTmNvhSjI3UByXsHCu57xPlafqbGfUumJ6
+ P+F4l3W2odjEgOgO6ImeVNSg3rIKlxPzxqBqjdRvxoao3z2M+lHrTpg9z2VFG77lNdWc5CxHWrEjT8AdL7kMxF2HkllgriyTs5ZP9d50ObweV2oOEU49Ussj
+ EhGJ764aJ7YT8xnfn+pl9WBYoygUk193KCr567rQG9M=
+Subject: [Buildroot] [PATCH] package/cryptsetup: fix build failure with
+ Microblaze
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,100 +67,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-setuptools/60.6.0/python-setuptools.hash       | 4 ----
- .../{60.6.0 => 60.7.0}/0001-add-executable.patch              | 0
- package/python-setuptools/60.7.0/python-setuptools.hash       | 4 ++++
- package/python-setuptools/python-setuptools.mk                | 4 ++--
- package/python3-setuptools/0001-add-executable.patch          | 2 +-
- package/python3-setuptools/python3-setuptools.hash            | 2 +-
- package/python3-setuptools/python3-setuptools.mk              | 4 ++--
- 7 files changed, 10 insertions(+), 10 deletions(-)
- delete mode 100644 package/python-setuptools/60.6.0/python-setuptools.hash
- rename package/python-setuptools/{60.6.0 => 60.7.0}/0001-add-executable.patch (100%)
- create mode 100644 package/python-setuptools/60.7.0/python-setuptools.hash
+Add local patch pending upstream[1] to fix the build failure after my
+suggestion[2] to imitate what I've done with libfuse[3].
 
-diff --git a/package/python-setuptools/60.6.0/python-setuptools.hash b/package/python-setuptools/60.6.0/python-setuptools.hash
-deleted file mode 100644
-index 734cb4d580..0000000000
---- a/package/python-setuptools/60.6.0/python-setuptools.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# From https://pypi.org/pypi/setuptools/json
--md5  392e91d7e244998c586c88da2cf881d3  setuptools-60.6.0.tar.gz
--sha256  eb83b1012ae6bf436901c2a2cee35d45b7260f31fd4b65fd1e50a9f99c11d7f8  setuptools-60.6.0.tar.gz
--sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/60.6.0/0001-add-executable.patch b/package/python-setuptools/60.7.0/0001-add-executable.patch
-similarity index 100%
-rename from package/python-setuptools/60.6.0/0001-add-executable.patch
-rename to package/python-setuptools/60.7.0/0001-add-executable.patch
-diff --git a/package/python-setuptools/60.7.0/python-setuptools.hash b/package/python-setuptools/60.7.0/python-setuptools.hash
+[1]: https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/275?commit_id=5f71b3d63181aa88a68f7f71eab8801f2d8d2cde
+[2]: https://gitlab.com/cryptsetup/cryptsetup/-/issues/709
+[3]: https://github.com/libfuse/libfuse/pull/620/commits/3aba09a5c56e017746c5c1652dbc845f4db7374a
+
+Fixes:
+http://autobuild.buildroot.net/results/bad/bad4d01fde3191e4d481a8e9dae18df3b1a94537/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...d-check-program-for-symver-attribute.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch
+
+diff --git a/package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch b/package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch
 new file mode 100644
-index 0000000000..8df7155d4c
+index 0000000000..04f59a2050
 --- /dev/null
-+++ b/package/python-setuptools/60.7.0/python-setuptools.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.org/pypi/setuptools/json
-+md5  082637e8fbc2e1fd9c637665d8fcccd8  setuptools-60.7.0.tar.gz
-+sha256  b83cf328a4f6a987c95610e76b29a30778db05174eef71f771776c48f8f25d1b  setuptools-60.7.0.tar.gz
-+sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 15912d96f5..8bca852fe2 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -9,9 +9,9 @@
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
--PYTHON_SETUPTOOLS_VERSION = 60.6.0
-+PYTHON_SETUPTOOLS_VERSION = 60.7.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/8f/89/9fec81ec84737c925a1ee992af2c6c7153aec4051c26afeadd6b822354d2
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/29/dd/48d662bb93e5e51e72265ef612f869947d4ae4126328d7156824cd50d440
- else # Python
- PYTHON_SETUPTOOLS_VERSION = 44.0.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-index 9d608239bc..46b5935d33 120000
---- a/package/python3-setuptools/0001-add-executable.patch
-+++ b/package/python3-setuptools/0001-add-executable.patch
-@@ -1 +1 @@
--../python-setuptools/60.6.0/0001-add-executable.patch
-\ No newline at end of file
-+../python-setuptools/60.7.0/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-index 9fb96015aa..2c9d3614d5 120000
---- a/package/python3-setuptools/python3-setuptools.hash
-+++ b/package/python3-setuptools/python3-setuptools.hash
-@@ -1 +1 @@
--../python-setuptools/60.6.0/python-setuptools.hash
-\ No newline at end of file
-+../python-setuptools/60.7.0/python-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index 55a01dba01..d5aaa01918 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 60.6.0
-+PYTHON3_SETUPTOOLS_VERSION = 60.7.0
- PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/8f/89/9fec81ec84737c925a1ee992af2c6c7153aec4051c26afeadd6b822354d2
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/29/dd/48d662bb93e5e51e72265ef612f869947d4ae4126328d7156824cd50d440
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_CPE_ID_VENDOR = python
++++ b/package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch
+@@ -0,0 +1,56 @@
++From 7c6ec620de3f99d4212f4a54aa576df1b97020ab Mon Sep 17 00:00:00 2001
++From: Ondrej Kozina <okozina@redhat.com>
++Date: Wed, 2 Feb 2022 11:34:57 +0100
++Subject: [PATCH] Add check program for symver attribute.
++
++Fixes: #709.
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ configure.ac               | 11 +++++++++++
++ lib/libcryptsetup_symver.h |  8 +++-----
++ 2 files changed, 14 insertions(+), 5 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index a0e5990d..b052f8cf 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -554,6 +554,17 @@ if test "x$enable_static_cryptsetup" = "xyes"; then
++ 	PKG_CONFIG=$saved_PKG_CONFIG
++ fi
++ 
+++dnl Check compiler support for symver function attribute
+++saved_CFLAGS=$CFLAGS
+++CFLAGS="-O0 -Werror"
+++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+++	void _test_sym(void);
+++	__attribute__((__symver__("sym@VERSION_4.2"))) void _test_sym(void) {}
+++]],
+++[[ _test_sym() ]]
+++)],[ AC_DEFINE([HAVE_ATTRIBUTE_SYMVER], 1, [Define to 1 to use __attribute__((symver))])])
+++CFLAGS=$saved_CFLAGS
+++
++ AC_MSG_CHECKING([for systemd tmpfiles config directory])
++ PKG_CHECK_VAR([systemd_tmpfilesdir], [systemd], [tmpfilesdir], [], [systemd_tmpfilesdir=no])
++ AC_MSG_RESULT([$systemd_tmpfilesdir])
++diff --git a/lib/libcryptsetup_symver.h b/lib/libcryptsetup_symver.h
++index 2a804b6a..3558310d 100644
++--- a/lib/libcryptsetup_symver.h
+++++ b/lib/libcryptsetup_symver.h
++@@ -67,11 +67,9 @@
++  *   under CRYPT_SYMBOL_EXPORT_OLD(int, crypt_func_X, ...) macro
++  */
++ 
++-#ifdef __has_attribute
++-#  if __has_attribute(symver)
++-#    define _CRYPT_SYMVER(_local_sym, _public_sym, _ver_str, _maj, _min)     \
++-       __attribute__((__symver__(#_public_sym _ver_str #_maj "." #_min)))
++-#  endif
+++#if HAVE_ATTRIBUTE_SYMVER
+++#  define _CRYPT_SYMVER(_local_sym, _public_sym, _ver_str, _maj, _min)     \
+++     __attribute__((__symver__(#_public_sym _ver_str #_maj "." #_min)))
++ #endif
++ 
++ #if !defined(_CRYPT_SYMVER) && defined(__GNUC__)
++-- 
++2.25.1
++
 -- 
 2.25.1
 
