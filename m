@@ -1,64 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB2FCC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 22:05:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 592DBC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 22:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 90562409A3;
-	Wed,  2 Feb 2022 22:05:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2F0A60AEB;
+	Wed,  2 Feb 2022 22:11:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LLXD6E2AZ-n7; Wed,  2 Feb 2022 22:05:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R75EmOvw-iHX; Wed,  2 Feb 2022 22:11:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E99D40253;
-	Wed,  2 Feb 2022 22:05:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9BDBC1BF5DE
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:05:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E18EC60ADA;
+	Wed,  2 Feb 2022 22:11:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C2F551BF5DE
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89F87404F7
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:05:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B126E83E80
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:11:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FpANEdJaNbwX for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 22:05:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iNPDGadIavC0 for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 22:11:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19C6440339
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 22:05:41 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.179.156])
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A91383E79
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 22:11:07 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id FNkxnvHOX0FuyFNkxn5Vjf; Wed, 02 Feb 2022 23:05:40 +0100
+ id FNq7nTfy0kz4hFNqEnvOOl; Wed, 02 Feb 2022 23:11:06 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643839540; bh=LUC3wU27hJFo0lmmDEuv71a3/NzAB9hvc+IHUNAMliY=;
- h=From:To:Subject:Date:MIME-Version;
- b=enHxM8noTnUi0j70jwwV+XSf5CREDYlYIaaGIx578HpucFbiCDXywWnsmZJlnwgGB
- 6cgv+vL5JdAg7Wd8h0kJb7fbrH062s6pYgXyHo95q/G6JI4KkVN5E8HRcCTVJtfg/7
- 0oRgMH9iggLgIuyjgj5Yeo7CV8A20gCfYKiJbrtyPoGIFl1ya9pdV0hMD3sSqC4KTc
- GHDHyt5//TIB2rvxUigoXw+tVjDPuv1FWU49x6ez9bwq+sfOfU7fSld0JzR+Xd1sTw
- uX+QwvlKyryALnVO4kxZ/5KRg2ZF8VvIAI1/2z3LzqgCiF40rxkWoMx7w+YlXDssbz
- 81CdmGQPbo1Jg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Wed,  2 Feb 2022 23:05:38 +0100
-Message-Id: <20220202220538.2858380-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <412baee3-b818-521a-99bf-ee868d3e1be2@benettiengineering.com>
-References: <412baee3-b818-521a-99bf-ee868d3e1be2@benettiengineering.com>
+ t=1643839866; bh=mZe5+CHo0a1Y3OqHbdHNCz4njRef4+aJ86W4SWEh5ps=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=V7TXQ3vFVAM8d08cssl9/MCGptQSVQ85buQnp8IaMb906K88U0OgXyOKsHF4SlDGp
+ q44A2YKmik7wjlKRtjV+CCGxwshDTXGv0zoQsHLN+kTPGn4LmYZdFL2dkU99Yg633r
+ iPkKE9nWYDCNTv2Y5ZUDEn9+Dv3//n49elPo/5o6ouU8osgeJ+Rb+SGuRDA5hsTNWR
+ A8+VfnKdgACNSoaivp0v4RGmsAqn4rDnwJGflJ2+At3X+fjYR/dEGeUesqTfqh8bdo
+ Y2dymI5O8G3RaE3wcQswhuppZn5p5Lp3w5bNkJbrl/NIZ6FmTQgFlk+lX/3UhPfaCS
+ oJDtsA3+fqaPw==
+Message-ID: <7f7bc01d-adb2-9ee9-e54c-0ef6736c83a0@benettiengineering.com>
+Date: Wed, 2 Feb 2022 23:10:59 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfB8jf7sZGl5WXw+ELigwfFKeA1qW2/ImJYvE0UIWbdoIW67gEzm/HCPB7MrkPvsiFfS7XEsPjHmFi6PhhoOSUmHdCsEp9cE+ydIl68ol3KX0FwX6EcWX
- 93QQoRMetuYZJycXgOefPpdSGykEYIlLUqNftu6fxt/dzhoPhCPuOSM968BBXt8wi9hHo0JscafdThMTSg0S3tXzUk9aZ2sc3QC7QXfvMmpOZ/lAY+qTJgU5
- +hJVKI0PF56wGMnj5Z2oX87epASHxiq1e8thcdEaRTQ+CPKRRL6M1v8APl04DwtXkjYx3Cg6syYUkO11/HIymTTpogblmN7Br4/i6DzCZDSv98N823NeWCJR
- qAvCDR6DKyao4TAkxrNnwsOObuVJSZW3e/9mz2BodiX9vIPcFmd47RYT3y/sHI+p3UTY3q2uYF9rDBrDIk2MzG5cKKaAMg==
-Subject: [Buildroot] [PATCH] package/util-linux: improve host build failure
- fix
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20220201232203.333403-1-giulio.benetti@benettiengineering.com>
+ <20220201232203.333403-2-giulio.benetti@benettiengineering.com>
+ <d6ff992c-a84c-d335-3ddb-2122f7c744dd@mind.be>
+ <20220202214210.0a2483e6@gmx.net>
+ <48ab9669-d467-a394-12a2-fd229f6229f0@benettiengineering.com>
+ <20220202224046.1ccef19a@gmx.net>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220202224046.1ccef19a@gmx.net>
+X-CMAE-Envelope: MS4wfAWcKzdtH+uVm9BjKaaOthmt34WJYw3KC39v5nBzgmX5FS/PLtkdqZmaPoEkImQrnvzBRm/hDr0FlVYyjljA4jbiUWk7crzA5brQmpBcDBOZTmHMcvDv
+ iPWBNN2C207bp0lrjMuLwYPAphaQNU6S566d2/f2ZZ6QwfuScV2VO0xYY1DNTH6RAINgMATua4/HlQElRlqtfy/Ve5wz4QRshnaOYmZFlWL/gDgALJ6vAtjH
+ p0aT8EO22zGX+LCkekAVLaPjVPHcgftxBF+YvBKLgByvhx0Mesu720TaeuPGdzjJEx2Z0StRye+vH+Xl5C/LaA==
+Subject: Re: [Buildroot] [URGENT 1/1] package/util-linux: fix host build
+ failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,54 +76,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As suggested by Peter Seiderer package util-linux doesn't need raw support
-when built for host, so let's remove:
-HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
-in favor of:
-HOST_UTIL_LINUX_CONF_OPTS += --disable-raw
-This is a better approach than my commit:
-https://git.buildroot.net/buildroot/commit/?id=d895bd973b35fde10d3dd7db530d9e4782926497
+Hi Peter,
 
-Suggested-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/util-linux/util-linux.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 02/02/22 22:40, Peter Seiderer wrote:
+> Hello Giulio,
+> 
+> On Wed, 2 Feb 2022 22:09:22 +0100, Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> Hi Peter,
+>>
+>> On 02/02/22 21:42, Peter Seiderer wrote:
+>>> Hello Arnout, Giulio,
+>>>
+>>> On Wed, 2 Feb 2022 08:41:34 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>
+>>>> On 02/02/2022 00:22, Giulio Benetti wrote:
+>>>>> The UTIL_LINUX_FIX_DISK_UTILS_COMPILE workaround is needed for host
+>>>>> building too. So let's add it to HOST_UTIL_LINUX_POST_PATCH_HOOKS.
+>>>>> host-util-linux is used a lot, so this patch fixes a lot of future
+>>>>> builds.
+>>>>
+>>>>     Darn, I tested that, both with and without BR2_PACKAGE_HOST_UTIL_LINUX set. I
+>>>> don't understand what went wrong in my test...
+>>>
+>>> The raw support depends on the available toolchain headers, see e.g.
+>>> package/util-linux/Config.in:
+>>>
+>>> 	config BR2_PACKAGE_UTIL_LINUX_RAW
+>>> 	        bool "raw"
+>>> 	        depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+>>> 	        help
+>>> 	          Build a linux raw character device
+>>>
+>>> Or according to [1] '--disable-raw' for the host build should do
+>>> the trick too...
+>>
+>> I was in hurry to produce the patch last night, so I went for the
+>> fastest way. Can you give a try with --disable-raw and eventually submit
+> 
+> Thanks for taking care!
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 5a4ff64d01..f3297257cf 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -41,7 +41,6 @@ define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
- 	touch $(@D)/disk-utils/raw.8
- endef
- UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
--HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
- 
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
-@@ -49,7 +48,8 @@ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- HOST_UTIL_LINUX_CONF_OPTS = \
- 	--without-systemd \
- 	--with-systemdsystemunitdir=no \
--	--without-python
-+	--without-python \
-+	--disable-raw
- 
- ifneq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES)$(BR2_PACKAGE_UTIL_LINUX_CRAMFS)$(BR2_PACKAGE_UTIL_LINUX_FSCK)$(BR2_PACKAGE_UTIL_LINUX_LOSETUP),)
- UTIL_LINUX_SELINUX_MODULES = fstools
+I've just sent a patch like you've suggested:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220202220538.2858380-1-giulio.benetti@benettiengineering.com/
+
+>> the patch? That would save some time while building. Also because
+>> host-util-linux is used a lot
+> 
+> Sorry, could not reproduce the host-build failure on my system, seems the
+> toolchain is too up-to-date (openSUSE Tumbleweed - gcc-11.2.1) ;-)
+
+For this situation you can use this docker:
+docker pull registry.gitlab.com/buildroot.org/buildroot/base:20220105.2314
+
+There gcc is version 10.2.1 and it's the official one used for 
+build-testing buildroot defconfigs. You can find it also in 
+buildroot/.gitlab-ci.yml
+
+Can you give a go with that docker by reproducing the failure and then 
+applying the latest patch?
+
+That way you can give a Reviewed-by: or also a Tested-by: you
+
+Thank you!
+Kind regards
 -- 
-2.25.1
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
