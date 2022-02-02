@@ -1,63 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16EB8C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 22:22:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A276BC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 22:28:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC48D83E85;
-	Wed,  2 Feb 2022 22:22:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4163760A92;
+	Wed,  2 Feb 2022 22:28:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SS4HumD30qUg; Wed,  2 Feb 2022 22:22:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FVJOgHIaxXKw; Wed,  2 Feb 2022 22:28:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8EBC83E60;
-	Wed,  2 Feb 2022 22:22:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3789B60AEB;
+	Wed,  2 Feb 2022 22:28:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9419F1BF5DE
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:22:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B74C61BF5DE
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82B4E409B1
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:22:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3497402D8
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 22:28:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RTcr_8yLYWzz for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 22:22:31 +0000 (UTC)
+ with ESMTP id v6hN1gnDRMGy for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 22:28:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D9E6409A6
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 22:22:31 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id FO1EnTrh6kz4hFO1FnvRFh; Wed, 02 Feb 2022 23:22:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643840550; bh=ziITKKKySWzbOGor2hKGGAMR23EIoSxGwL090vXtSIY=;
- h=Date:MIME-Version:To:From:Subject:Content-Type;
- b=SFYu/4bAnV+Ga0Jo5VIE5pbHhjft2zKpUQnroRqYPAasHF7Edoq1TwktnsHJ8J/b9
- pWGFUXhz5kjUYrhoYWYj34nmH+5J3hSMug+Rq7eyNHAtr52PIv+xbeD224sHD8E0Wl
- ffAUi1RXgp2WrAx/LJHrsE/21F997mPEd/DNetUppL6VyD66gtOagP/YSU+iKek2Iz
- 6Un3kTJlXWA79JcisLxLwDkwd67QdVcnBcEFsy/zhd7wT0ThkKPyBZ91e5nyasFSbs
- x3W6trNuiUG/eqrh3FG09AK4UmDP8ShFshBPLCuBBtSMQtQERmjWtfsX75eli+fRcB
- /ad41ae8SL+GQ==
-Message-ID: <d046141a-5913-b486-24fd-8f631df7c515@benettiengineering.com>
-Date: Wed, 2 Feb 2022 23:22:28 +0100
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8FE19402B8
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 22:28:45 +0000 (UTC)
+Received: from [77.244.183.192] (port=65038 helo=[192.168.178.41])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1nFO7H-0001Nw-8c; Wed, 02 Feb 2022 23:28:43 +0100
+Message-ID: <c36be0d9-f525-ff0b-5b05-d5f512f92105@lucaceresoli.net>
+Date: Wed, 2 Feb 2022 23:28:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
-To: Guo Ren <ren_guo@c-sky.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4wfMh4Kft6IVZpCPaK3Gvquh+VJjkC3nJ1WIbMFDfKHu5gfOiv4R+8GXnfHbomwv63eMtxQQW32fmwsPtTRNAp0Kz7RpbxD1LhmczWkvzhF9AeT5ALrPaF
- qKonTJzCuwpiunJt/OgqS/Q+VQ/CTdDLqKHHQbu9MhYLR9ftSCgEIaMfFJTq0goR4/fKvCWCUIzjLhecnWOBpgk2WWYL618jKJKzX/8pUsT8XMCaFNPHQZia
- 2UwsoTNdrxBYONFLCrjyTwhaD8nKE9hJJMndgkXnuoBh+im/4mfZgSstOr0hkEJibhxTDgdOnZxBZc4t8VlCrXMQf3zc2svDNjWow4F5oqSeT1vB8BpCbOLS
- 0TW68fYGZ7WKtRmgOr+Y5k3JmBCRWg==
-Subject: [Buildroot] csky_gx6605s build failure
+To: Neal Frager <neal.frager@xilinx.com>, buildroot@buildroot.org
+References: <20220202165555.3497977-1-nealf@xilinx.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <20220202165555.3497977-1-nealf@xilinx.com>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH 1/1] configs/zynqmp_zcu10x: Bump
+ ATF/U-Boot/Linux to Xilinx 2021.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,31 +72,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+Cc: Neal Frager <nealf@xilinx.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Guo,
+Hi Neal,
 
-I'm dealing with gitlab-ci failures, including csky_gx6605s_defconfig. 
-What is missing is basically the toolchain. Buildroot can't build a 
-tooclahin for C-Sky at the moment(we should wait until gcc 12 if it will 
-keep ck610 variant). So my idea would be to add an external toolchain 
-your company could provide with a stable URL to make this defconfig to 
-build successfully instead of dropping it. And once gcc 12 is released 
-and added to Buildroot we can drop the external toolchain and use the 
-Buildroot's one.
+thank you for your effort and for sending a patch in the format that is
+the most convenient for other people to review your code.
 
-What do you think?
+Your work seems generally in a good shape. I have several remarks, see
+below, but nothing really problematic.
 
-Best regards
+On 02/02/22 17:55, Neal Frager wrote:
+> Signed-off-by: Neal Frager <nealf@xilinx.com>
+
+Maybe you can add more details before the Signed-off-by line, suah as
+"Also add a defconfig for ZCU102", "remove U-Boot and ATF patches not
+upstream"...
+
+First issue: this defconfig does not build on my PC:
+
+$ git clean -xdf && make zynqmp_zcu106_defconfig && verynice make
+package/pkg-generic.mk:266: *** BR2_GLOBAL_PATCH_DIR contains
+nonexistent directory board/zynqmp/patches/.  Stop.
+$
+
+As you removed all patches (which is sooo gooood!) you now have to
+remove the BR2_GLOBAL_PATCH_DIR.
+
+> ---
+>  board/zynqmp/genimage.cfg                     |   1 +
+>  ...-fix-Remove-GGC-ignore-Warray-bounds.patch |  68 -------
+>  ...64-zynqmp-zcu106-fix-SPL-MMC-booting.patch |  52 ------
+>  ...2-arm64-zynqmp-Enable-booting-to-ATF.patch | 114 ------------
+>  ...ept-an-absolute-path-for-PMUFW_INIT_.patch |  68 -------
+>  ...ynqmp-pass-the-PS-init-file-as-a-kco.patch | 175 ------------------
+>  configs/zynqmp_zcu102_defconfig               |  35 ++++
+>  configs/zynqmp_zcu106_defconfig               |  15 +-
+>  8 files changed, 44 insertions(+), 484 deletions(-)
+>  delete mode 100644 board/zynqmp/patches/arm-trusted-firmware/0001-Coverity-fix-Remove-GGC-ignore-Warray-bounds.patch
+>  delete mode 100644 board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
+>  delete mode 100644 board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
+>  delete mode 100644 board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-for-PMUFW_INIT_.patch
+>  delete mode 100644 board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch
+>  create mode 100644 configs/zynqmp_zcu102_defconfig
+> 
+> diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
+> index ed202f4550..557364e124 100644
+> --- a/board/zynqmp/genimage.cfg
+> +++ b/board/zynqmp/genimage.cfg
+> @@ -3,6 +3,7 @@ image boot.vfat {
+>  		files = {
+>  			"boot.bin",
+>  			"u-boot.bin",
+> +			"u-boot.itb",
+
+Is u-boot.bin still needed, when we have the .itb?
+
+> diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+> index bee7c1daf7..3a6947e1e8 100644
+> --- a/configs/zynqmp_zcu106_defconfig
+> +++ b/configs/zynqmp_zcu106_defconfig
+> @@ -1,11 +1,11 @@
+>  BR2_aarch64=y
+>  BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.10_2021.2"
+>  BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+> @@ -14,21 +14,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.4_2021.2"
+
+As far as I remember (but I ask the core developers to confirm or deny),
+from the Buildroot perspective upstream versions are generally preferred
+even when they lack some non-fundamental features (e.g.: some drivers
+are missing) that are in vendor forks.
+
+Is there a reason for switching ATF to the Xilinx fork? In this case
+explain it in the commit message, otherwise stay on the upstream repo,
+upgrading to the latest [working] release.
+
+A similar question applies to kernel and U-Boot: is it possible to
+switch to upstream releases?
+
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="228801a215909365ae1dcdd799034195ad7264f7"
+> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_zcu106_revA"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2021.01_2021.2"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+
+The "_virt" suffix looks strange to the uninitiated. IIRC it is the
+main, unified defconfig for all Xilinx kernels. Please add a line in the
+commit message so it is clear for everybody's benefit.
+
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_TARGET_UBOOT_SPL=y
+>  BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+>  BR2_TARGET_UBOOT_ZYNQMP=y
+> -BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/53fdb7b6c92860ceb0ec5fd14deee302f4a84269/bin/pmufw-zcu106-default-v2017.4.bin"
+> +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2021.2.bin"
+
+Please point to a tag, not a branch, or the file could be modified in
+the future, resulting in a non-reproducible build. Use:
+https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2021.2/bin/pmufw-v2021.2.bin
+
+Ouch, now the build I had started ended with a new error:
+
+>>> arm-trusted-firmware xlnx_rebase_v2.4_2021.2 Building
+...
+  AR      .../build/zynqmp/release/lib/libc.a
+  LD      .../build/zynqmp/release/bl31/bl31.elf
+.../aarch64-buildroot-linux-uclibc-ld:
+.../build/zynqmp/release/bl31/bl31.elf section `coherent_ram' will not
+fit in region `RAM'
+.../aarch64-buildroot-linux-uclibc-ld: BL31 image has exceeded its limit.
+.../aarch64-buildroot-linux-uclibc-ld: region `RAM' overflowed by 1 byte
+
+I have run my build on Ubuntu 18.04 with your patch applied on current
+master.
+
+I assume you have built and run it successfully. Any idea on why it
+fails on a different host?
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
