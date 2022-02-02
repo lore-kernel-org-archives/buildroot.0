@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA7B6C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 03:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1871AC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 03:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 133FF404FE;
-	Wed,  2 Feb 2022 03:07:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D6C641645;
+	Wed,  2 Feb 2022 03:11:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y7qZ_Dv4bnK1; Wed,  2 Feb 2022 03:07:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kqnmjgx2RQ2s; Wed,  2 Feb 2022 03:11:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB0040153;
-	Wed,  2 Feb 2022 03:07:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05FD61BF373
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 03:07:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C074C41643;
+	Wed,  2 Feb 2022 03:11:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 08A5C1BF95D
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 03:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4CE560AE9
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 03:07:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7FB840153
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 03:11:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xXUGOfWhomIa for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 03:07:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lLQtR1WzRawr for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 03:11:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 22DAF60AD5
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 03:07:00 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id s18so23729395ioa.12
- for <buildroot@buildroot.org>; Tue, 01 Feb 2022 19:07:00 -0800 (PST)
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CE8BD4011C
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 03:11:33 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id w5so15964443ilo.2
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 19:11:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=rr0wrJ4Xv2GVg8EXSQo3i7Q/nw7FNYufuUeUy+8BTKE=;
- b=RBFhr9HsinTDp9sCUxTnlPlMDixISy5jNLjYpOWFDpajOWc5CXH5NhBiGXomv8HMGE
- iF4g++SWtHOicUZY2cLFRzTqR+7RoX9J/2z0j5Fyw/SdvtYcyAsdgnVLwfNF0jEYSXVt
- Q8DH9YkeDdFWTDCkpzg2N1ZQQ+QX1a+KfpOTvKrbmJhA5SmoJWgXsrK0nOayU7IoeKEK
- 6dWxnV5Qb+9R4tOt6Z033lkN7fWRlYtG8BJWBWfTMFsnuR5gTcGIVh+OZQfM8lwU0DUt
- gXXjZfw7Br5NOdgzy5fHbMFxUsTurSkP5sc6K9E69/GvqJeiTexEGWPhlkmn4FFGZ2qZ
- uaBg==
+ bh=tACJFTHnfFjj3rWOjR8b25rP+yJUdWMhtxNNazRb5ns=;
+ b=GY7CiFkSxc2kC5diZ1AGHMoW6Zb5eCN5zw17mDuQ5vWH8NitjAzpz7hJaCQ8XJ5tUd
+ auvD20crj7XqsnulRrP+8Ig0OCT83mLDHz4LutIKI4JtPJWVVWLgicxvQ94jUSrOGZGp
+ n5UnbAAst9iBEX95nb/Fq5OnzbK/2AKmdNqi1idEhL6GgGTZ0+yurFjVEvCJ3cYDkjuw
+ jpVWgBWW9eli6Pq3j2KHODaAGDTLlL4VS9OdoH5hqUqLPuRiqe6gHPNGkzVD/wLXw/Gw
+ yTzwAqsbZZCp6+VBRhsD5EeCG3xiW21kxhkH5o7cdDUOoJgyIrjQu7JiG6hEjbifK+lb
+ wuLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=rr0wrJ4Xv2GVg8EXSQo3i7Q/nw7FNYufuUeUy+8BTKE=;
- b=qVKLY2ZgsKS9J1TG8OtzAuS/2bxybMddJVS7uORICtPtBOrTxk7xqOGXtRMFqL16pK
- UHEOGEqdOZ7LWSX8ulJOvMIPSySZlj60pqKMEBlaZwGT7rqNzULk/2tlMajP01ycKOBI
- g61HwyKZfKjfJ09jnisWm2YB0UMLoxUEPI24Sp7SuvJ+3apxwEpb4IZ8pDgN7U6dLZbZ
- UYcanjr8shqVu9ex3XC3G38vsw7zn9AF/I61sxwdV1TXxFB1BZE7n+lYEXNBvzuDcRN+
- 9uD6+2JbhsqlSIa1HoGTGuWZm5LgXU6HyZ33JNeYYSpsHPGybSxEhfjF4BlBZU8O5o0u
- uYJA==
-X-Gm-Message-State: AOAM533bjXH31i4mxTH5w6Jaycv09lLXU+RNKUnDLg3C4/rRUnBoIWpk
- roIMWPKm6rdHvkTMwvt68T/LAkFAbDw=
-X-Google-Smtp-Source: ABdhPJw62v2jg5a3wg9eiZIkGHVg0DqC5MUtJ9v4GdnjwD24ETfhSMh86m9e3ZBbOQSlJAVbl3G9Qw==
-X-Received: by 2002:a05:6638:10ea:: with SMTP id
- g10mr14425141jae.79.1643771218784; 
- Tue, 01 Feb 2022 19:06:58 -0800 (PST)
+ bh=tACJFTHnfFjj3rWOjR8b25rP+yJUdWMhtxNNazRb5ns=;
+ b=QCnMNd5VdoanfuA8Zc2zjo1szRtWX6gH8uybNWdngf3QOh8Dp3sQ6Pl4Ncosibm4WA
+ YjMhV5zFkmwT3epF8Dq9RaNn8FxHFvwgYRGuRcJuZ+DBu8MCafG2zvkVhnmyvePjkMbL
+ T3tf4/EfYWkyq3BKCDT9FhDp4n1fsY56N01/jXLiWcyCEGXkL2S6LLrED+uMd9jD0YB+
+ Rzi/6JnGK+UR0MvWwnSKODmSDe4xmpXX1wwM2rZ02v95j9V57xh5m1PeuIPWh5uwnnf8
+ jWmIC+iqDAi8pf0UL58uLCBLS+Q/OHpEFEIGpXxLXhoVzid2yrWXLewytK0hWn0Xio4B
+ NUHA==
+X-Gm-Message-State: AOAM530UwPbRcN9AarptGqs1D2W3QkgVZrCKarxlbgqiHdabCl4fEXof
+ is1m9BYSe2CwdMDkt1shL2dOfYyrwk8=
+X-Google-Smtp-Source: ABdhPJxJO4qLqv1dMa44yzcmXaiellCg5sBm4O9iP3G0+CjvBbSOi53Uf9kez500iGf4Tv7MmtnIEA==
+X-Received: by 2002:a05:6e02:1986:: with SMTP id
+ g6mr17197383ilf.61.1643771492717; 
+ Tue, 01 Feb 2022 19:11:32 -0800 (PST)
 Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
  [71.218.245.50])
- by smtp.gmail.com with ESMTPSA id t6sm21824519iov.39.2022.02.01.19.06.58
+ by smtp.gmail.com with ESMTPSA id g1sm9922873iob.34.2022.02.01.19.11.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Feb 2022 19:06:58 -0800 (PST)
+ Tue, 01 Feb 2022 19:11:32 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  1 Feb 2022 20:06:56 -0700
-Message-Id: <20220202030656.2175796-1-james.hilliard1@gmail.com>
+Date: Tue,  1 Feb 2022 20:11:30 -0700
+Message-Id: <20220202031130.2178288-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to version
- 0.4.0
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
+ 22.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,7 +87,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Mauro Condarelli <mc5686@mclink.it>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -95,38 +96,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aioconsole/python-aioconsole.hash | 4 ++--
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 26a3778756..39ce16f8b2 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 0bbb9112d0..7b963df635 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  f8b67330e631cfc45a9b2560a6e0fa98  aioconsole-0.3.3.tar.gz
--sha256  47df42d9f8cc3995bbe032dd5f01d32cc5b06639e9078bb9b4e3c55b237f5e32  aioconsole-0.3.3.tar.gz
-+md5  56a1e6542ea3627bdbc67f24abcaa341  aioconsole-0.4.0.tar.gz
-+sha256  a30ad5276b85dd20a48d235111d0bd26c6bedf7b56d605ffc10ae27124b4b0b4  aioconsole-0.4.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  1ccd46d938d8b9fed435e9781e54e887  autobahn-21.11.1.tar.gz
+-sha256  bd6f46315419ca0a5be4109f737410208ad5f19718f67ca6a4a674cc66ca9b18  autobahn-21.11.1.tar.gz
++md5  9b0ae4ff164232c952ba01ab3516188e  autobahn-22.1.1.tar.gz
++sha256  17e1b58b6ae1a63ca7d926b1d71bb9e4fd6b9ac9a1a2277d8ee40e0b61f54746  autobahn-22.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index f06d91a550..44857054d4 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index db9e5083d1..df43e9cdf2 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.3.3
-+PYTHON_AIOCONSOLE_VERSION = 0.4.0
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/dd/f6/bbc451ba96c1e1da6aa253f254b181ceb03272b475b27b481b57865d7d7f
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/f2/7a/7628ec23f140ffca532c7f630e179503727b755849b5eab15576bbf7d3df
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
+-PYTHON_AUTOBAHN_VERSION = 21.11.1
++PYTHON_AUTOBAHN_VERSION = 22.1.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/f1/d3/23fdf1ab0104b1b65d2f7884e923f0526750a59f96334d752afc79cf44ed
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/0e/2a/0b627ad4adf70437b5753462958b3ba5c6802d7664eb4a680e46423659ba
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
 -- 
 2.25.1
 
