@@ -4,78 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A440C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 04:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24648C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 07:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A809060B79;
-	Wed,  2 Feb 2022 04:38:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AD0D60773;
+	Wed,  2 Feb 2022 07:02:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UBTPMJwVO8LQ; Wed,  2 Feb 2022 04:38:37 +0000 (UTC)
+	with ESMTP id 7g7K3oi--lsK; Wed,  2 Feb 2022 07:02:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B108D60AD5;
-	Wed,  2 Feb 2022 04:38:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21B261BF380
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 04:38:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93A1260A80;
+	Wed,  2 Feb 2022 07:02:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C62A51BF3DA
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 07:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F99C40899
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 04:38:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B33E540424
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 07:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v-m-siimBNuK for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 04:38:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C91324088C
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 04:38:33 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id n17so23967567iod.4
- for <buildroot@buildroot.org>; Tue, 01 Feb 2022 20:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=27LjD5RjKSphl0w/kw7sxEC+A6Kp78Q/40y1ba/jyCk=;
- b=RBYsTTGJ68l0nYoOJBB9b5ibWCLoYzQLAkmj7GHYzZRVLVonIfrdZWL88HXnv8iCtY
- INxSH6fMrv3XgPNV2gSFNT7rQXAhZVx+eS7dS2r81DlJ6F7FW02AC414B4b8xRHeetIz
- jwlMprwSZC8F8PHHTD2qJ7mpjGU8viGJdSGhkrZg+s95jdP9upg7rjeD5gTsJjytG7Tu
- qGCDdofQKXUtxO4gvlNou3loV0fDGKAoCOh7LAOklSSoudTnYxXKuTst6X7bpiRJHR+2
- s2v68eUVoXruz5rRQzVDqhH//L/Kem21ov8SQM3MXtjVuCWZF6IinFT8rMZQYg4pToDV
- 1aIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=27LjD5RjKSphl0w/kw7sxEC+A6Kp78Q/40y1ba/jyCk=;
- b=pJI64gkZCV8AHLH7TtZhPz0jFNv0ISMFxkku8/SKVq1cUc6JQIvoAotU6RuE+Uk/KI
- TKkoY5C5ldwjL0u8zpcugDHdFpaqov4gud6DNDtUx/+zfPxkJ1khSf6M0hY5KZnFpW8e
- XoIvjh6N+N1Dbm+feUbh+4w+2B79xiraJnF77T1epinXebvEXZhQxph32OXHIBfUX3lt
- PUO5LkiwLxg1nqWQjXj7t+jxm1zfZE+VdMmLkeFF+V8ma2oLZhLbEfm442t8npYc+RN5
- d+nuLCX+oJ0rVaO6ZG2U5b8lnW529MjVHmDZrR9MuLG4yq5s8GcETxdJmktPQHAqzY4c
- uSKA==
-X-Gm-Message-State: AOAM533PwC3c2FhHJQXK6iTeQhVN2SZGgCFbimHi3tpI9tQUT9KDxrc3
- YXst8qy9PSROwLhCEWglPG4JZ63ZUIE=
-X-Google-Smtp-Source: ABdhPJwCqCdvgolaFvCbau685wfRBs/WVQDZVvBDza/kOxBTlV/X4F7B0OycAskaVjq8C3kxFjYF1Q==
-X-Received: by 2002:a05:6602:1512:: with SMTP id
- g18mr8522362iow.121.1643776712780; 
- Tue, 01 Feb 2022 20:38:32 -0800 (PST)
-Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
- [71.218.245.50])
- by smtp.gmail.com with ESMTPSA id n9sm22148682ilk.27.2022.02.01.20.38.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Feb 2022 20:38:32 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  1 Feb 2022 21:38:30 -0700
-Message-Id: <20220202043830.2211307-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5gelQB-hvh5C for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 07:02:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DE8E3402C3
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 07:02:27 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C4F8B1BF203
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 07:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1643785344; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=tI7Fl7IVpPOgOb1SuPrSi4Ub+n+fuFf6ESaNCewWtvY=;
+ b=LwP3OUjgNh6cP6G1g2YlKhagHAPNwKF1O8qaeYrO4fx0+MukdLFG+9BIcIe3qtGymAJJ2D
+ cdMvfVVpdd2v23JM6erBz7cVIsrIM+etHDbEZNSezzlZqh2ecO4m9Z+EEcX5/dSnz9gQDm
+ Z1Apog+h5/JUBPJ29MAe16iUgnw3mPpTFWpBODUxJNmviYTGoSjVbE5bM/Z5rs7prSUVrS
+ qt4jYrFyAYf7hTN//pxb8Fkz8bKbRjQ34SPcurNVsjj0CyLmyf2F1MFLI05FhzvEJgwpGZ
+ s7lUnUGTOnfPN1cAJ76iU0vAFeDzWuxt5M0D+32hz/lSGJ/N5atlxDowErxBqg==
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python3-setuptools: bump to version
- 60.6.0
+To: buildroot@buildroot.org
+Date: Wed, 02 Feb 2022 07:02:24 -0000
+Message-Id: <20220202070229.B33E540424@smtp2.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-02-01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,103 +63,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-setuptools/59.8.0/python-setuptools.hash       | 4 ----
- .../{59.8.0 => 60.6.0}/0001-add-executable.patch              | 0
- package/python-setuptools/60.6.0/python-setuptools.hash       | 4 ++++
- package/python-setuptools/python-setuptools.mk                | 4 ++--
- package/python3-setuptools/0001-add-executable.patch          | 2 +-
- package/python3-setuptools/python3-setuptools.hash            | 2 +-
- package/python3-setuptools/python3-setuptools.mk              | 4 ++--
- 7 files changed, 10 insertions(+), 10 deletions(-)
- delete mode 100644 package/python-setuptools/59.8.0/python-setuptools.hash
- rename package/python-setuptools/{59.8.0 => 60.6.0}/0001-add-executable.patch (100%)
- create mode 100644 package/python-setuptools/60.6.0/python-setuptools.hash
+Hello,
 
-diff --git a/package/python-setuptools/59.8.0/python-setuptools.hash b/package/python-setuptools/59.8.0/python-setuptools.hash
-deleted file mode 100644
-index 285919639d..0000000000
---- a/package/python-setuptools/59.8.0/python-setuptools.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# From https://pypi.org/pypi/setuptools/json
--md5  675f2089d970bf0bbfc3f49c80e4c7c3  setuptools-59.8.0.tar.gz
--sha256  09980778aa734c3037a47997f28d6db5ab18bdf2af0e49f719bfc53967fd2e82  setuptools-59.8.0.tar.gz
--sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/59.8.0/0001-add-executable.patch b/package/python-setuptools/60.6.0/0001-add-executable.patch
-similarity index 100%
-rename from package/python-setuptools/59.8.0/0001-add-executable.patch
-rename to package/python-setuptools/60.6.0/0001-add-executable.patch
-diff --git a/package/python-setuptools/60.6.0/python-setuptools.hash b/package/python-setuptools/60.6.0/python-setuptools.hash
-new file mode 100644
-index 0000000000..734cb4d580
---- /dev/null
-+++ b/package/python-setuptools/60.6.0/python-setuptools.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.org/pypi/setuptools/json
-+md5  392e91d7e244998c586c88da2cf881d3  setuptools-60.6.0.tar.gz
-+sha256  eb83b1012ae6bf436901c2a2cee35d45b7260f31fd4b65fd1e50a9f99c11d7f8  setuptools-60.6.0.tar.gz
-+sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index d83336b909..15912d96f5 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -9,9 +9,9 @@
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
--PYTHON_SETUPTOOLS_VERSION = 59.8.0
-+PYTHON_SETUPTOOLS_VERSION = 60.6.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/75/2bc7bef4d668f9caa9c6ed3f3187989922765403198243040d08d2a52725
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/8f/89/9fec81ec84737c925a1ee992af2c6c7153aec4051c26afeadd6b822354d2
- else # Python
- PYTHON_SETUPTOOLS_VERSION = 44.0.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-index 6fc7595a8d..9d608239bc 120000
---- a/package/python3-setuptools/0001-add-executable.patch
-+++ b/package/python3-setuptools/0001-add-executable.patch
-@@ -1 +1 @@
--../python-setuptools/59.8.0/0001-add-executable.patch
-\ No newline at end of file
-+../python-setuptools/60.6.0/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-index 91d8bc0887..9fb96015aa 120000
---- a/package/python3-setuptools/python3-setuptools.hash
-+++ b/package/python3-setuptools/python3-setuptools.hash
-@@ -1 +1 @@
--../python-setuptools/59.8.0/python-setuptools.hash
-\ No newline at end of file
-+../python-setuptools/60.6.0/python-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index f4dae2d15d..55a01dba01 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 59.8.0
-+PYTHON3_SETUPTOOLS_VERSION = 60.6.0
- PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/75/2bc7bef4d668f9caa9c6ed3f3187989922765403198243040d08d2a52725
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/8f/89/9fec81ec84737c925a1ee992af2c6c7153aec4051c26afeadd6b822354d2
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_CPE_ID_VENDOR = python
+Autobuild statistics for 2022-02-01
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 66  |  9  |  0  | 75  |
+  2021.11.x  | 17  |  0  |  0  | 17  |
+    master   | 114 | 42  |  0  | 156 |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+                  rygel-0.40.2 | 6 
+               iproute2-5.16.0 | 4 
+                   guile-3.0.7 | 3 
+                    bat-0.18.3 | 2 
+                       frr-8.1 | 2 
+                mongodb-4.2.18 | 2 
+               mongrel2-1.13.0 | 2 
+               pulseview-0.4.2 | 2 
+           tesseract-ocr-5.0.1 | 2 
+             bluez5_utils-5.63 | 1 
+                  boinc-7.18.1 | 1 
+                    efl-1.26.1 | 1 
+google-breakpad-7515ab13768... | 1 
+        host-util-linux-2.37.3 | 1 
+              libblockdev-2.25 | 1 
+              libuhttpd-3.14.1 | 1 
+                nodejs-14.18.3 | 1 
+                 opencv4-4.5.5 | 1 
+                qt5base-5.15.2 | 1 
+            resiprocate-1.12.0 | 1 
+                rtorrent-0.9.8 | 1 
+                sg3_utils-1.47 | 1 
+                suricata-6.0.4 | 1 
+                       unknown | 1 
+                    vlc-3.0.16 | 1 
+          xml-security-c-2.0.4 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |           bat-0.18.3           | NOK | http://autobuild.buildroot.net/results/4e5d09720e1041b661abbab300d136c10c5a8d7d |     
+    i586     |           bat-0.18.3           | NOK | http://autobuild.buildroot.net/results/b28ea9e9bb361171c74ae2a0139d318a5127d987 |     
+    mips     |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/f28fe58f4a61e472eb9d927e1ac5c3ce91bcedf9 |     
+    arm      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/8e6e3563274622821105046328c66f3e10c76192 |     
+    arm      |           efl-1.26.1           | NOK | http://autobuild.buildroot.net/results/bd077e01708f1e389dc95ce3d95e75e3f89ecf1f |     
+    arc      |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/baeefc4afec26fc6fc1c0ea4e0664fd014519643 |     
+microblazeel |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/da6473439f4cbfa89b5b391fd704044e59ff970a |     
+   mipsel    | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/22ea26b16268cbc6e213a1a8e384e97bd20ab822 |     
+powerpc64le  |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/6b5721c2ac7b4bef05e2f1c0d09312c2c1a941ef | ORPH
+  riscv32    |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/a6a68c18fb895fabc86fe80b5f2826785de2c167 | ORPH
+powerpc64le  |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/a8d2d6ae17a05355c92df1081e4326f75efb41e9 | ORPH
+    arm      |     host-util-linux-2.37.3     | NOK | http://autobuild.buildroot.net/results/f397fc286a0d4b11b09dee3a850b64b1fe8f437f | ORPH
+  riscv64    |        iproute2-5.16.0         | NOK | http://autobuild.buildroot.net/results/57657fda6740cc804f4409f31089dc7c40f74a4e |     
+   x86_64    |        iproute2-5.16.0         | NOK | http://autobuild.buildroot.net/results/f99bb3722ea34b5bc6e2b813df87e4de472769f6 |     
+    arm      |        iproute2-5.16.0         | NOK | http://autobuild.buildroot.net/results/a7f294c6904cc081be8d015ed392260f77a0c188 |     
+  riscv64    |        iproute2-5.16.0         | NOK | http://autobuild.buildroot.net/results/9394abc10a7e836710ddae6562eafd72bfb8263e |     
+  aarch64    |        libblockdev-2.25        | NOK | http://autobuild.buildroot.net/results/8f9ca895cb07014804130a7ccbcb758b1d519470 | ORPH
+    m68k     |        libuhttpd-3.14.1        | NOK | http://autobuild.buildroot.net/results/491b279f6029aec7fa7b9d82304def42e883177b |     
+    arm      |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/d4b0a6f91954c307b7660612497ad90db72f4b69 |     
+    arm      |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/3461e9c2bfe6dfe2c041d4c551a51a653bd03c06 |     
+    arm      |        mongrel2-1.13.0         | NOK | http://autobuild.buildroot.net/results/04aa95fc8d4edcfbbbfc5bd5d5bf93a7119a9f0b |     
+    mips     |        mongrel2-1.13.0         | NOK | http://autobuild.buildroot.net/results/9627c426d98fdc582f35b13996b1892f098bcad2 |     
+   mipsel    |         nodejs-14.18.3         | NOK | http://autobuild.buildroot.net/results/8996cc747d90b5d7d15c93c09ba3ae3981f34af6 |     
+  powerpc    |         opencv4-4.5.5          | NOK | http://autobuild.buildroot.net/results/90787c5d8a492df662f8c7b2ee5df95184309cf6 |     
+   xtensa    |        pulseview-0.4.2         | NOK | http://autobuild.buildroot.net/results/18d39de9f2df7114eb992ea57efa58547d7247fe |     
+  aarch64    |        pulseview-0.4.2         | NOK | http://autobuild.buildroot.net/results/47fe7f2c5dee593b19461e830b4fd76517a7c0eb |     
+  riscv64    |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/a4aaf0971377a20f6f4893d482fbe14ad06d8e76 |     
+    arm      |       resiprocate-1.12.0       | NOK | http://autobuild.buildroot.net/results/ed249c8a59a12bbfff470370867d517c6bdc2933 | ORPH
+    i586     |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/158e32c11f8b06670973abc7b9603f2f4f77beb4 | ORPH
+  mips64el   |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/b1fa6aec6bad3d087239e29a8b864921718f5b6f |     
+    arm      |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/2261838c4bebad936329e90fc829f5b029cf1b39 |     
+  powerpc    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/650e064bd0f5661f5bf85ae147930c5f8ca60451 |     
+  riscv64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/2379f2da589b44edfac9816648e2a3d7916491af |     
+powerpc64le  |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/12f0cea0a844e8774a05e31c0ce8b3bb2efd9484 |     
+    arm      |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/d40e5f87411e208669dedb64d93bd96d4273fc6b |     
+    m68k     |         sg3_utils-1.47         | NOK | http://autobuild.buildroot.net/results/5038411b9e8907ee88048d6010ec75c8f53c4ae9 |     
+    arm      |         suricata-6.0.4         | NOK | http://autobuild.buildroot.net/results/f707c5e3119379e41913f207708fc61178d437b2 |     
+    arm      |      tesseract-ocr-5.0.1       | NOK | http://autobuild.buildroot.net/results/83218b7d248ca294be80fa6b7c0cfb542c9b326e |     
+    arm      |      tesseract-ocr-5.0.1       | NOK | http://autobuild.buildroot.net/results/bfae8b8897353147370535a46c8d7b43a469da35 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/c8478dc96499b276236cbf7de35d8f44239d6bda |     
+    sh4      |           vlc-3.0.16           | NOK | http://autobuild.buildroot.net/results/4eb47ace0d96063e94d58636e331f0a507fb6136 |     
+    arm      |      xml-security-c-2.0.4      | NOK | http://autobuild.buildroot.net/results/549cde069a1492dc87435a4af155e51d3c998b0d |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 3 
+        glib-networking-2.66.0 | 1 
+               host-go-1.16.13 | 1 
+monkey-f54856ce250c4e257354... | 1 
+                  ndisc6-1.0.4 | 1 
+               openldap-2.4.59 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    |     glib-networking-2.66.0     | NOK | http://autobuild.buildroot.net/results/3e2b499e602b0ad5e7d3ff0f8fb33b857863d562 | ORPH
+  mips64el   |        host-go-1.16.13         | NOK | http://autobuild.buildroot.net/results/8a5ab390afef75ee7c7c88f03161174928948adf |     
+    m68k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8fb5e47e890ae0a2b83a51662a50af73323ccb7f |     
+   x86_64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/52b828d3aa3ee5aa747f76a476457c81ce0ab526 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7308662ee2faf740de09342279ef66efec2f0960 |     
+microblazeel | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/0f78f13a13c8b77b6abc0735abb2a83557c8ef86 |     
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/ab457340d8cc12cced36300b770ce3c33d34d944 | ORPH
+  riscv32    |        openldap-2.4.59         | NOK | http://autobuild.buildroot.net/results/980c56bdc7678f10ea1ae1c0acf88fa9ed573e1d |     
+   nios2     |            unknown             | NOK | http://autobuild.buildroot.net/results/1b41a2394519e63f1fc6629a7771611426864247 |     
+
+
+
 -- 
-2.25.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
