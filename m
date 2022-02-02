@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF431C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 17:36:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814EEC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 17:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7EAB483E05;
-	Wed,  2 Feb 2022 17:36:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DED2E405AE;
+	Wed,  2 Feb 2022 17:50:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i14igs5XqJpm; Wed,  2 Feb 2022 17:36:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k44jU27l6nb8; Wed,  2 Feb 2022 17:50:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F9D0832D1;
-	Wed,  2 Feb 2022 17:36:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 997511BF573
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 17:35:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD0D940938;
+	Wed,  2 Feb 2022 17:50:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 407F51BF573
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 17:49:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87BA6832D1
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 17:35:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BF14405AF
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 17:49:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xRFNsFphA8Ns for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 17:35:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dzJbfb_uBznV for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 17:49:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B4D2826BF
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 17:35:57 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id h7so37523wrc.5
- for <buildroot@buildroot.org>; Wed, 02 Feb 2022 09:35:57 -0800 (PST)
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E91E405A7
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 17:49:58 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id x193so41234346oix.0
+ for <buildroot@buildroot.org>; Wed, 02 Feb 2022 09:49:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=a68U4X2etS2pUjM+Lsa76vU7b8AscDq20Hs3u1KNXco=;
- b=mBsztt9qKAZ11nnQqd+vcrItE7dIdpc7NIgAr5YqLiCSS1NiYsWr17rhK2vdDg4+ik
- buiMoE7lCPsRqh6wZI4g71bSjXl0FQZiH1XWZQkV7Ad0Mi+U9p9Kvl01wtqKgWcSmCKg
- mDEItfcCdiI6dcgmgkKC86BJae3fxzQAw1iGmC3jcTZJqALsZwPhLxs+bbX5STFab+YA
- YOxCQqpUxAbz0UrmnLqMy32g6Iafd1W7K5jhzHYfxgbvdjWu1kmQtB3VsVQF55FS1Rel
- ythNY65XJdwUJf6UblPw8Qti1PpxnWcDnAFi60QdrtjQ8VVjOyu1KD67oaxI6cZYtTfq
- 6FRw==
+ bh=+SYnQRupCR/wilupZ20yanHctJPH27JzNLHV2Ypy9Rc=;
+ b=CX4tn6N8Mre2lEz8Y1pb2BdLk5kvHEZW/fR3P+oAcZNAmEAAtkKUxPDf+wz1ednHNj
+ PxJAnk6QMD42ysWBjmPW2mW+HN0lvjsDFHHAKLFX0xi/UCg/K0T+HpvDMhxrKcAVL+0z
+ 3agllCNrbBpzaM4ymmoGJWty401/M+TmPW0WAfhUXCq3r/PZqjvjeKsdQH+7Pva6bCGA
+ xZ0zjqHqJeHk+8IhB2nuYdCnSu+ueCyDsxoG8c2jimgrEQAVRYwe77XNtE0oIvyN0hgU
+ ipj1svWp+Zlf652WfmShdpTHL2iopwysjhjem7Vm2JBhpGZnYepqFAVJ3mMMtAmqSy10
+ qzvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=a68U4X2etS2pUjM+Lsa76vU7b8AscDq20Hs3u1KNXco=;
- b=ojkRDEFpliSbz/wYgcOYNsNHa5SDUxcgexZuKcngPqnPZ0sQxEEacmpVAa7WeeAJQU
- Ly3MV9w5d2tptRpmE7DX5xksMhnkp967kDQC1wXGzleFk3GAlRIOh2aiBAHl/FXe119z
- cLegntYx59ouZxfW4riefByRb7mGjpGTjHf6R7ui1ak919rugd1b9DnU1AWFppLqhxgM
- R2H72z86ldE7sSMKENJb6LvMvsCCCwRLIDQkzIQuxrCEOsdz2PIveaJ8X94IDBODAEzv
- o0tVrnoqweYjjEeiFdgn+lxgKdP4i6EUAjI1+UkLNu9vcMg3Q019HNhs4FxTHF3hL0Qz
- QA4A==
-X-Gm-Message-State: AOAM532ks2S8hPQkPaBAw01aFKfP7p9mtGecJHi/OHHkJDHeKWkkhLRf
- D6hcZ3bWFNd304mxy4JUbJeCn21DF98=
-X-Google-Smtp-Source: ABdhPJz81lWWULNb+coAK1RnP26jY2JtRA+t/B5brpxewszVdd4KQ1l4pq+QgGR5W97lBBgv4jiZXA==
-X-Received: by 2002:a5d:484b:: with SMTP id n11mr1127712wrs.528.1643823355550; 
- Wed, 02 Feb 2022 09:35:55 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id g4sm20685443wrd.111.2022.02.02.09.35.54
+ bh=+SYnQRupCR/wilupZ20yanHctJPH27JzNLHV2Ypy9Rc=;
+ b=QRxrcB6P+T3eY2f/pRqQaMdaA7bFo7MfujhUvpKm5njslL7KwYiJdCRMCQjWV+88L5
+ HjaCajMkMyHnLMgUjOJHbG0H0PzAs6o2/ojWZTjutAKYoI0HEpm1BgcYGYGTNvSQj4w4
+ lu3nZZyWgu8i3M9z3A3wnaH2A8SqG6jNgNEP8LTIxoEJ1VN9VtatnOWVUc1WlqFEfuXW
+ rQpiGMFCmb82Yk/ZBEThKwocc1ifkSOidwkSigEPqON2daXprdXu7Tbx8WEUX+14NkID
+ BJoeos2etBOi2DThLhaDe++c5uMM9GQFg1r70/chxkiztD4xUKAsGZa5Itdp9p9Zr1AW
+ 4Z0g==
+X-Gm-Message-State: AOAM530B5GF/6Wx0RRbAL0IFqomoZ/isI9diLif8v+o165cTYsXsJevW
+ ER9n4su70ffXziENZtii3W7IcJrwAAI=
+X-Google-Smtp-Source: ABdhPJzLImB6OiT6RVo8KoQGG/6chhCi4wvjD+r1O7XhRsZ4EvBLphOEDW+mo1XpDU/gtcKlOvE2PA==
+X-Received: by 2002:a05:6808:ec4:: with SMTP id
+ q4mr5389761oiv.326.1643824197189; 
+ Wed, 02 Feb 2022 09:49:57 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:485:4b69:679c:5f8b:eef9:c6c7])
+ by smtp.gmail.com with ESMTPSA id
+ bk4sm5734088oib.24.2022.02.02.09.49.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Feb 2022 09:35:55 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Wed, 02 Feb 2022 09:49:56 -0800 (PST)
+From: Fabio Estevam <festevam@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Feb 2022 18:33:06 +0100
-Message-Id: <20220202173306.42559-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed,  2 Feb 2022 14:49:48 -0300
+Message-Id: <20220202174948.1919945-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/sconeserver: fix build with icu and
- libxml2
+Subject: [Buildroot] [PATCH] configs/warp7: bump Kernel and U-Boot version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,52 +84,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since addition of icu support in
-libxml2 through commit 49d7c85421e87d9d762be9352805cb47a2f0bbeb:
+Bump U-Boot to 2022.01 and kernel to version 5.16.5.
 
-In file included from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/ptypes.h:52:0,
-                 from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/umachine.h:46,
-                 from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/utypes.h:38,
-                 from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/ucnv_err.h:88,
-                 from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/ucnv.h:51,
-                 from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/bin/../../usr/include/libxml2/libxml/encoding.h:31,
-                 from /home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/bin/../../usr/include/libxml2/libxml/parser.h:812,
-                 from conftest.cpp:61:
-/home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/localpointer.h:224:41: error: 'noexcept' does not name a type
-     LocalPointer(LocalPointer<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
-                                         ^
-/home/peko/autobuild/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/usr/include/unicode/localpointer.h:224:41: note: C++11 'noexcept' only available with -std=c++11 or -std=gnu++11
-
-Fixes:
- - http://autobuild.buildroot.org/results/be043792e6e5501631517881b10096291a654364
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/sconeserver/sconeserver.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/warp7_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 17407c29f5..2b28f8015c 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -29,6 +29,8 @@ SCONESERVER_CONF_OPTS += \
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- SCONESERVER_CONF_OPTS += \
- 	--with-xml2-config="$(STAGING_DIR)/usr/bin/xml2-config"
-+# Needed to fix build failure when icu is enabled in libxml2
-+SCONESERVER_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- endif
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 5fca9f6cfc..04dfc94f7d 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 5.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ 
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
