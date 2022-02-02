@@ -1,66 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D69D0C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Feb 2022 23:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA7B6C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 03:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 836EA4162B;
-	Tue,  1 Feb 2022 23:25:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 133FF404FE;
+	Wed,  2 Feb 2022 03:07:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9PiSji8qesYU; Tue,  1 Feb 2022 23:25:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y7qZ_Dv4bnK1; Wed,  2 Feb 2022 03:07:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D06234162E;
-	Tue,  1 Feb 2022 23:25:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 493191BF2BD
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 23:25:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB0040153;
+	Wed,  2 Feb 2022 03:07:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 05FD61BF373
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 03:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4588083260
- for <buildroot@lists.busybox.net>; Tue,  1 Feb 2022 23:25:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4CE560AE9
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 03:07:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JM-ADV4OnlDC for <buildroot@lists.busybox.net>;
- Tue,  1 Feb 2022 23:25:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCD2083252
- for <buildroot@buildroot.org>; Tue,  1 Feb 2022 23:25:02 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id F2WDnnf9fks1JF2WDnXjKA; Wed, 02 Feb 2022 00:25:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643757901; bh=aMHPCPq2Gadoj1e39konBgkqmrhlw9trwi8c+9to+UA=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=b1iLjyOcb+id8Bg+B8t2OKuKQoIy1zgUphCskz3OU6x1YvAeRB/MQSZCkmWc2tEee
- FYoaLa0mBc3tlGYm5FOX18R1e9zlSl9zBspaqu2/UbUVUrjRgrdpL2V/EWVL0jhedH
- MUyMjfVsHWMcA6Tpe30YncuufzsQXffHzxysekhEeBd4Jg4FuUh2tXQa9PDI7PSs3Z
- ezMg0sWLnGOh3PrN1TTU0yZ6E4+rteUB/phFzvbNd9QIWhnCyisJlbpNJtE/uts7An
- jTxH4eMmMvjoUVaoVIyrr2JvaM1gJvxcpo4Fk7aQ5cjA1HzNZjPhJx8g5mDFVUuawS
- x49cQwIq2Ls/g==
-Message-ID: <bebd284f-c72e-c6bb-bde4-96d6838b2c10@benettiengineering.com>
-Date: Wed, 2 Feb 2022 00:25:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xXUGOfWhomIa for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 03:07:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 22DAF60AD5
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 03:07:00 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id s18so23729395ioa.12
+ for <buildroot@buildroot.org>; Tue, 01 Feb 2022 19:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rr0wrJ4Xv2GVg8EXSQo3i7Q/nw7FNYufuUeUy+8BTKE=;
+ b=RBFhr9HsinTDp9sCUxTnlPlMDixISy5jNLjYpOWFDpajOWc5CXH5NhBiGXomv8HMGE
+ iF4g++SWtHOicUZY2cLFRzTqR+7RoX9J/2z0j5Fyw/SdvtYcyAsdgnVLwfNF0jEYSXVt
+ Q8DH9YkeDdFWTDCkpzg2N1ZQQ+QX1a+KfpOTvKrbmJhA5SmoJWgXsrK0nOayU7IoeKEK
+ 6dWxnV5Qb+9R4tOt6Z033lkN7fWRlYtG8BJWBWfTMFsnuR5gTcGIVh+OZQfM8lwU0DUt
+ gXXjZfw7Br5NOdgzy5fHbMFxUsTurSkP5sc6K9E69/GvqJeiTexEGWPhlkmn4FFGZ2qZ
+ uaBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rr0wrJ4Xv2GVg8EXSQo3i7Q/nw7FNYufuUeUy+8BTKE=;
+ b=qVKLY2ZgsKS9J1TG8OtzAuS/2bxybMddJVS7uORICtPtBOrTxk7xqOGXtRMFqL16pK
+ UHEOGEqdOZ7LWSX8ulJOvMIPSySZlj60pqKMEBlaZwGT7rqNzULk/2tlMajP01ycKOBI
+ g61HwyKZfKjfJ09jnisWm2YB0UMLoxUEPI24Sp7SuvJ+3apxwEpb4IZ8pDgN7U6dLZbZ
+ UYcanjr8shqVu9ex3XC3G38vsw7zn9AF/I61sxwdV1TXxFB1BZE7n+lYEXNBvzuDcRN+
+ 9uD6+2JbhsqlSIa1HoGTGuWZm5LgXU6HyZ33JNeYYSpsHPGybSxEhfjF4BlBZU8O5o0u
+ uYJA==
+X-Gm-Message-State: AOAM533bjXH31i4mxTH5w6Jaycv09lLXU+RNKUnDLg3C4/rRUnBoIWpk
+ roIMWPKm6rdHvkTMwvt68T/LAkFAbDw=
+X-Google-Smtp-Source: ABdhPJw62v2jg5a3wg9eiZIkGHVg0DqC5MUtJ9v4GdnjwD24ETfhSMh86m9e3ZBbOQSlJAVbl3G9Qw==
+X-Received: by 2002:a05:6638:10ea:: with SMTP id
+ g10mr14425141jae.79.1643771218784; 
+ Tue, 01 Feb 2022 19:06:58 -0800 (PST)
+Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
+ [71.218.245.50])
+ by smtp.gmail.com with ESMTPSA id t6sm21824519iov.39.2022.02.01.19.06.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Feb 2022 19:06:58 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-References: <20220201232203.333403-1-giulio.benetti@benettiengineering.com>
- <20220201232203.333403-2-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220201232203.333403-2-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4wfNDWES/VuBuF7a/ltBkD1O2rOpazt3BHQ8e1OzkjtLkTs7ZFP3s7OxZurqOKQtmo7IvmwshK7zS0WL/ZhQIl++X9TQthZoTbMghvzHDd+018sijQr9QW
- Ks9GX54XD4MjtH0lDSXFwQL2BOlT3r/W6vFUwIlCQ3w7sMTmugNAKSUcPgjMCkm5ucXY8xjLuq2cHuiMoH3qtD1wUcr5dphJWHbIGaDpab40OEKHvI2ygy1n
- V6lwQ92AtTu/t7luD4k94OEq6H8Pq5vPPM9lm11fye5eQ8LGbn+Ax+WGTs+jx9ODkoWKxMwaQCdw6ERCHqKH2w==
-Subject: Re: [Buildroot] [URGENT 1/1] package/util-linux: fix host build
- failure
+Date: Tue,  1 Feb 2022 20:06:56 -0700
+Message-Id: <20220202030656.2175796-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to version
+ 0.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,49 +87,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/02/22 00:22, Giulio Benetti wrote:
-> The UTIL_LINUX_FIX_DISK_UTILS_COMPILE workaround is needed for host
-> building too. So let's add it to HOST_UTIL_LINUX_POST_PATCH_HOOKS.
-> host-util-linux is used a lot, so this patch fixes a lot of future
-> builds.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-aioconsole/python-aioconsole.hash | 4 ++--
+ package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I was too fast...
-
-Fixes:
-http://autobuild.buildroot.net/results/b8c/b8cb40efc036a01802c914544cd4fc29dfd67af6//
-
-and others that are coming out.
-
-Best regards!
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index 26a3778756..39ce16f8b2 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5  f8b67330e631cfc45a9b2560a6e0fa98  aioconsole-0.3.3.tar.gz
+-sha256  47df42d9f8cc3995bbe032dd5f01d32cc5b06639e9078bb9b4e3c55b237f5e32  aioconsole-0.3.3.tar.gz
++md5  56a1e6542ea3627bdbc67f24abcaa341  aioconsole-0.4.0.tar.gz
++sha256  a30ad5276b85dd20a48d235111d0bd26c6bedf7b56d605ffc10ae27124b4b0b4  aioconsole-0.4.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index f06d91a550..44857054d4 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOCONSOLE_VERSION = 0.3.3
++PYTHON_AIOCONSOLE_VERSION = 0.4.0
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/dd/f6/bbc451ba96c1e1da6aa253f254b181ceb03272b475b27b481b57865d7d7f
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/f2/7a/7628ec23f140ffca532c7f630e179503727b755849b5eab15576bbf7d3df
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+ PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/util-linux/util-linux.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index e59ef7dadc..5a4ff64d01 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -41,6 +41,7 @@ define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
->   	touch $(@D)/disk-utils/raw.8
->   endef
->   UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
-> +HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
->   
->   HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
->   
+2.25.1
 
 _______________________________________________
 buildroot mailing list
