@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 287B5C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 10:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A2B5C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  2 Feb 2022 10:18:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC06940502;
-	Wed,  2 Feb 2022 10:17:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCB07404AF;
+	Wed,  2 Feb 2022 10:18:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wipkDZfFO3af; Wed,  2 Feb 2022 10:17:50 +0000 (UTC)
+	with ESMTP id Wl8t9qc7Ji8m; Wed,  2 Feb 2022 10:18:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CFCF640447;
-	Wed,  2 Feb 2022 10:17:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E1AC1BF588
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 10:17:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9868403A2;
+	Wed,  2 Feb 2022 10:18:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7429F1BF588
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 10:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A80360AD8
- for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 10:17:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 62EA0812A0
+ for <buildroot@lists.busybox.net>; Wed,  2 Feb 2022 10:18:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sdo_POS-wK0p for <buildroot@lists.busybox.net>;
- Wed,  2 Feb 2022 10:17:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gAwQv1tfHMCq for <buildroot@lists.busybox.net>;
+ Wed,  2 Feb 2022 10:18:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9A67D60A83
- for <buildroot@buildroot.org>; Wed,  2 Feb 2022 10:17:45 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C082080C6A
+ for <buildroot@buildroot.org>; Wed,  2 Feb 2022 10:18:29 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0EDDAC0009;
- Wed,  2 Feb 2022 10:17:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0117EFF80A;
+ Wed,  2 Feb 2022 10:18:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nFChq-0005pR-ED; Wed, 02 Feb 2022 11:17:42 +0100
+ id 1nFCiX-0005rq-2O; Wed, 02 Feb 2022 11:18:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220202032025.2182903-1-james.hilliard1@gmail.com>
-Date: Wed, 02 Feb 2022 11:17:42 +0100
-In-Reply-To: <20220202032025.2182903-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Tue, 1 Feb 2022 20:20:25 -0700")
-Message-ID: <8735l11sjd.fsf@dell.be.48ers.dk>
+References: <20220202033144.2187501-1-james.hilliard1@gmail.com>
+Date: Wed, 02 Feb 2022 11:18:25 +0100
+In-Reply-To: <20220202033144.2187501-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Tue, 1 Feb 2022 20:31:44 -0700")
+Message-ID: <87y22tzi4u.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-charset-normalizer: bump
- to version 2.0.11
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-cssutils: bump to
+ version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,13 +60,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+
+ > Drop python2 support.
+ > Add new host-python-setuptools-scm dependency.
 
  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
