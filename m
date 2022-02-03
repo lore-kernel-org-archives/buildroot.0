@@ -1,89 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E69AC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CEAC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A988D4048B;
-	Thu,  3 Feb 2022 20:40:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33FFA84008;
+	Thu,  3 Feb 2022 20:41:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8CpirADRoecH; Thu,  3 Feb 2022 20:40:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iJuhYgS11OFS; Thu,  3 Feb 2022 20:41:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6B7040133;
-	Thu,  3 Feb 2022 20:39:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 41E351BF38D
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:39:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC5E683FFD;
+	Thu,  3 Feb 2022 20:41:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DD411BF38D
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 308DC60A72
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C6B5408D2
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:41:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zqOY8maAHu0g for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 20:39:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rzNYRhmYnirU for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 20:41:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B81060A6F
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:39:55 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id me13so12395674ejb.12
- for <buildroot@buildroot.org>; Thu, 03 Feb 2022 12:39:55 -0800 (PST)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F3BE4408BB
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:41:14 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id m4so12429635ejb.9
+ for <buildroot@buildroot.org>; Thu, 03 Feb 2022 12:41:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=0y5CYl9egGjPklCw0UgztG8rUvB2D58RJlA8+5Lr49w=;
- b=EF8XBvMDhhJczHJxjT6Sl4/V//BAKQmqCwper5/Tj+yuQuTKEO33R7t43BQKEVuZ7f
- ZIfVabbAqMyJJlUcBAkfsk4+0VVozWX5xTXKEttXpbwq5LpvxYC1awrYhXKrN5pk5+bm
- LHzTSGIUlHc4xN0YuZ9gjlIHcxLukzB7JiQdW9D0p4qmGl51H0F0SNePS6o8ssMlL6GH
- 6xyS27iqQLVKcCtdttxmFylroh/7fSh746gB6kdqerBeRWUQAJ8GYTGszBmsfIMZ9Wp8
- Rg6e13UofJ3yFKwJATpT488afMnesNC6qG19KTCu8Ct/PmK0xK4R2iwOQ57/PYyuYQ3a
- 3JTA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=Y4yOWtfDq0nnnGwO12Vrmql5uGFa7yVMsty+G3yC7gY=;
+ b=Owzg/ebRg2IPbvIM2UJsxMM8p5NggUKsXHALO7P6+h5KJLwNDA8+0VUxY9Zi/Qm8FP
+ GPBXdrtIh7rGJnv7055lVGB0nRVShhCasOGqdkwx+7N0tbrYv/Irz6XFB7cb6f2v5mMA
+ ONFacXOnmJRlNdFu8/b/CTyIFdDF4TRuukLM7dtYZ7TonP//aoWGI/7GocAHKPkGJuiS
+ 7K9dBkaldIBuXIf8nNp4LSF3wby83NcYQgnauHKIV96BtV+qkaAoWI4o05Q4DCZr6gvS
+ xg5F0Gx6uiVpMmxhCMk5L4PGCyh/6S5iNTWU8V9misBS2yrRHg14hsMzYmDPhGqTf1wi
+ qeAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=0y5CYl9egGjPklCw0UgztG8rUvB2D58RJlA8+5Lr49w=;
- b=LC1EIaEK9Bbs9TZFeO/6lh8xmcL93zSkQcNppHwVltcfLLRULbkQBTJFLT3iChVuR8
- abFt0BF3p7bdndD0ZfTpk0QgkAvvcao/5VegtbgI2ZClGu1KdQ1cOEUw6VfOoK0zB6kZ
- bp98zqt3Ga62N9NNW5gQuPDqh3NSxm/81V92JcUHbzUNe8PTvoChjjNyL0N3eZ9vGs50
- vZeB03HCxlwlUvtb3FrPd9aupwRiaNcynVFh+wU8LXGaFDQF7gw+UBjclYhwT2sfFObD
- JMcD+ApLt8+fHFfrFgaCPCIz+JIZZcMNmid9DTF3dpQL59BHclqLhHIUzL7wLwO6lj95
- oR6A==
-X-Gm-Message-State: AOAM532OKkhLSRAUr+AqlGlXboPRUWt82+mA4pWUxvhQr5vOi6mQRtCM
- gNbGxNq9BGJoRKGKxYxvl31DXg==
-X-Google-Smtp-Source: ABdhPJyUFJ2LyLF4RknIIc8OlfHCLlX74z4lbQDPItWpfy+ufYiC7bwJVKgUpjd/Y9rux7mDsRgcJQ==
-X-Received: by 2002:a17:907:d13:: with SMTP id
- gn19mr30245372ejc.252.1643920794267; 
- Thu, 03 Feb 2022 12:39:54 -0800 (PST)
+ bh=Y4yOWtfDq0nnnGwO12Vrmql5uGFa7yVMsty+G3yC7gY=;
+ b=MgfhZKbExpYi6EG92I4wRUoj9eRWRjWxm4xr7e7b8DLnawywMNONdMuiT9ERChNTU9
+ Anu52J+Ik4mhIsZRmFABVaH00eiuuDnQ1J3t+vHzWXo9Q1N9HXPJ3GEmgHfdqyoSn6rC
+ U8Ja5YhxD7HRwFwsqvW8qLYPn8J7aZ8MCFzZ1K+8EWshf/tMco/I3chBi/H9Ui3BNypU
+ g4ay3IReaw8MtyrsKx1Lc8yolBW7FcSht56IZ8BSDWB26wBJoY/Vm9lBJofpxmxkS7TK
+ fVT/SFLDOGAph6KLIN00E1Jfv3NC9DuTJyMrr/X8z6bR2+9cnt79R8ZjduU3sajaOk5p
+ PJqA==
+X-Gm-Message-State: AOAM533RUa4NFVJJPCBP4Gwm0gUGh6ZsXSSQGq+X2NB8+7SKO07jeuss
+ BlObevMlZV3+CUpxVar1DuSk/Q==
+X-Google-Smtp-Source: ABdhPJyDmNzf/N2YjZ+eZSWJZmB8+Df/wYzR++6lgsqPkJpf+QvzmvH9O76XywiP3yKrqrdofS7nvA==
+X-Received: by 2002:a17:907:d0f:: with SMTP id
+ gn15mr30623341ejc.43.1643920873130; 
+ Thu, 03 Feb 2022 12:41:13 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id w25sm22795824edv.68.2022.02.03.12.39.53
+ by smtp.gmail.com with ESMTPSA id co19sm22958590edb.7.2022.02.03.12.41.12
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 03 Feb 2022 12:39:53 -0800 (PST)
-Message-ID: <56d88177-6e09-dba3-6b27-2119cd55db52@mind.be>
-Date: Thu, 3 Feb 2022 21:39:53 +0100
+ Thu, 03 Feb 2022 12:41:12 -0800 (PST)
+Message-ID: <49ef11ab-7227-6a71-13d2-58da7d05aff2@mind.be>
+Date: Thu, 3 Feb 2022 21:41:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
-To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-References: <20220113233758.110264-1-aperez@igalia.com>
+To: Doug Brown <doug@schmorgal.com>, buildroot@buildroot.org,
+ Peter Korsgaard <peter@korsgaard.com>
+References: <20220114050734.497034-1-doug@schmorgal.com>
+ <20220114050734.497034-2-doug@schmorgal.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220113233758.110264-1-aperez@igalia.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/kf5/kf5-extra-cmake-modules: do
- not build documentation
+In-Reply-To: <20220114050734.497034-2-doug@schmorgal.com>
+Subject: Re: [Buildroot] [PATCH 2/2] package/rtl8723bu: fix firmware install
+ path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +96,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre Ducroquet <pinaraf@pinaraf.info>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,49 +103,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/01/2022 00:37, Adrian Perez de Castro wrote:
-> Pass needed CMake options to disable generating documentations. The
-> documentation is built using python-sphinx, which is not packaged in
-> Buildroot.
+On 14/01/2022 06:07, Doug Brown via buildroot wrote:
+> The rtl8723b_fw.bin file installed by this package is not actually used
+> by this driver at all. It is used by the btrtl Bluetooth driver in the
+> mainline kernel. The mainline btrtl driver looks for the file in
+> /lib/firmware/rtl_bt rather than /lib/firmware/rtlwifi. This driver's
+> Makefile has an install target that confirms the correct destination
+> firmware directory.
 > 
-> Prior to this change, if the build host would have a Python installation
-> with the sphinx module installed the automatic detection tried to build
-> documentation, which would fail in cases where the sphinxcontrib-qthelp
-> package is missing from the host Python installation. The error message
-> in this case was:
-> 
->    Extension error:
->    Could not import extension ecm (exception: cannot import name
->      'htmlescape' from 'sphinx.util.pycompat'
->      (/usr/lib/python3.10/site-packages/sphinx/util/pycompat.py))
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Doug Brown <doug@schmorgal.com>
 
   Applied to master, thanks.
 
-  (AFAICS the v2 was in fact identical)
+  I also double-checked that this was indeed wrong from the very first version 
+that was added to Buildroot.
+
+  @Peter this is for stable.
 
   Regards,
   Arnout
 
 > ---
->   .../kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk   | 5 +++++
->   1 file changed, 5 insertions(+)
+>   package/rtl8723bu/rtl8723bu.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
-> index 3c4281b960..ba2748456e 100644
-> --- a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
-> +++ b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
-> @@ -14,4 +14,9 @@ KF5_EXTRA_CMAKE_MODULES_DEPENDENCIES = host-pkgconf
->   KF5_EXTRA_CMAKE_MODULES_INSTALL_STAGING = YES
->   KF5_EXTRA_CMAKE_MODULES_INSTALL_TARGET = NO
+> diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
+> index e490bddf09..838bbedb74 100644
+> --- a/package/rtl8723bu/rtl8723bu.mk
+> +++ b/package/rtl8723bu/rtl8723bu.mk
+> @@ -13,7 +13,7 @@ RTL8723BU_MODULE_MAKE_OPTS = \
+>   	KSRC=$(LINUX_DIR)
 >   
-> +KF5_EXTRA_CMAKE_MODULES_CONF_OPTS += \
-> +	-DBUILD_HTML_DOCS=OFF \
-> +	-DBUILD_MAN_DOCS=OFF \
-> +	-DBUILD_QTHELP_DOCS=OFF
-> +
->   $(eval $(cmake-package))
+>   define RTL8723BU_INSTALL_TARGET_CMDS
+> -	$(INSTALL) -D -m 644 $(@D)/rtl8723b_fw.bin $(TARGET_DIR)/lib/firmware/rtlwifi/rtl8723b_fw.bin
+> +	$(INSTALL) -D -m 644 $(@D)/rtl8723b_fw.bin $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723b_fw.bin
+>   endef
+>   
+>   $(eval $(kernel-module))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
