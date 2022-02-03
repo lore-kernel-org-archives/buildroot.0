@@ -1,88 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC516C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 18:45:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE769C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 18:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10CBD40176;
-	Thu,  3 Feb 2022 18:45:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79B4184090;
+	Thu,  3 Feb 2022 18:47:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j4V_Ms6liCLv; Thu,  3 Feb 2022 18:45:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1iIlWuu9jNmu; Thu,  3 Feb 2022 18:47:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D723B40490;
-	Thu,  3 Feb 2022 18:45:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1ECFA1BF3AA
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 18:45:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACA178408C;
+	Thu,  3 Feb 2022 18:47:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EFED1BF3AA
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 18:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CF7D6009C
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 18:45:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F3738408C
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 18:47:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LF7h6Qwg38Mv for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 18:45:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gdIhub9jc5VJ for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 18:47:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9E44C60093
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 18:45:11 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id w14so7932420edd.10
- for <buildroot@buildroot.org>; Thu, 03 Feb 2022 10:45:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=DyIaNYJTzgOWOlgngxYKXSKrrfoFGN/KiQeLESyCrS0=;
- b=eYjYBUiyabS1bHU3DnTSdKhIxA1kP+UWXaACuQm81D641OgJnu4c3RP+72OkFpypuj
- R/iDry/V6XjulSFus52ce5gKH6R6BLT0rbnAiRrKe/uJlpiqV5c3lMZyGc4uMMPA8+ZX
- O7f7rzbhy95Dh11hrKskJ7YtTC6/EKSNyIL83cOvelUm77X+P75NI/1ffJFgbRoXhtQe
- kHtKjU+psxoAt/6qNw2eULbjid6a16w402YZWAqMVppbHdwRvrQlBGmE7MTc80tmR3q5
- jY8k6CHbuqwDY+iOi0W2fyATEEDFU1PIcBoVlTtChspU0SJhxojrHYJkSKzaO9jQnWgD
- cHVg==
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 31A9C83F4E
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 18:47:21 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id i1so2909884ils.5
+ for <buildroot@buildroot.org>; Thu, 03 Feb 2022 10:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=q6HqJayn2W0kM3R3P3ocVtXjW8fW4j4u+gVURBcLLMg=;
+ b=oaqPsxhWh/31OD1v6idZSITwzTHZi8y83ZsojFXpAZyKvhRd6Nv3/iKo/3AOsZQOIi
+ 3701HJebEyx0ZqS40Bpq1avaGSJdnC7Vm1WH9F9Sr21xFv5EH9ZgIEQUXLC50kiP9TOf
+ 2k+3KBSMajWp6LssEdKwnZ73on+Ck2Zv4Rvi/dv3rChynqmy4pAmGjBVXXctn4MagoKQ
+ 4rlu1YiXnzK7bHsoww86Tlkn2jmB/6ZWOfB8Vl/RUZZrwFidrJBAGhq7Rn92AfzrvnIL
+ +KK2T6ScPT7nuS/CFY4oOLw3kiUCUgjd3/z7gATFUcN+0Iz4fMGVEL78ZWKKc6JXN8vw
+ E5kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DyIaNYJTzgOWOlgngxYKXSKrrfoFGN/KiQeLESyCrS0=;
- b=V0uOd4N74nhBSsY0KwKKERumLDAtUh9+2TV157zWK6hQGK7xh+55KLJLiTcM9p/i9B
- SpXr2jcN788GyPTGRC03XRSb9cQISV3m9PqTu7DWXKJJ0xv6WGaxhlap5jHoJ2vpGJqj
- fTGluDQdQ1VXl85lMho3cbUt3/oTxGJXTs5UazBpx9kCSgW9/e7f/39PSbuF8gRTXb79
- priXMQZdAo/c8RHgqnuUm+HtL+VpMUsjsb2IXlzSIts91aZUn1jHBFECdobQIcKnO0Np
- /F/og2R4CzMTygvbfurxhdq3VJeY0RWUQxd5OJBpxoQL1MUISRm2ETkToOFClVupfJHx
- 4YNw==
-X-Gm-Message-State: AOAM530Joro9LdkCsdpefGhaFUgDqSY4kXdHiFwIC6WnIWSnQax/NnN3
- O+2r8DMDeRFm3zVyioBtWYkzdA==
-X-Google-Smtp-Source: ABdhPJwio7SRRYA6h5DeX9/fxGAi58G2tE3xRKurWGF2qYyFIqT+IJn6V7wdX95Q/VWOp/RdUgV7SA==
-X-Received: by 2002:a05:6402:1e92:: with SMTP id
- f18mr36753950edf.347.1643913909741; 
- Thu, 03 Feb 2022 10:45:09 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id m13sm17001074eja.160.2022.02.03.10.45.08
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 03 Feb 2022 10:45:08 -0800 (PST)
-Message-ID: <ff363cc2-4eab-1b91-1933-d0fbe65aaf48@mind.be>
-Date: Thu, 3 Feb 2022 19:45:08 +0100
+ bh=q6HqJayn2W0kM3R3P3ocVtXjW8fW4j4u+gVURBcLLMg=;
+ b=CwISZnK5qNxin10eBy+wZR0mXrZj+EfUOUJhGy86erYNT4J9GDncUe61/e8NZAHwx5
+ XsfQUAuR+A2r1jnYj/IYFX4A8UV8cX2KRMjPZn1+1tfX9SMsWcEDvoNVTFxhpJuI/xoh
+ 9mdFjcwtX8CUq5aEgBhLPC6tzkRubhIiHzi8Mr8E7IO4EgcKGbyOlMQ8bkOMttUpIiMq
+ pdhFbtNLrWxJBgtcWKebAS2wk6U5XTtgJellVqSmcECo/lREwqcCnXrinDPrZe/UZmAn
+ XAx8rJJ3EvK0WrsbmA+iLyHtcvSViD6ot9t2lGjFszFSWEGY3cuZe6CgTJ9gO0+yRUcV
+ JeOg==
+X-Gm-Message-State: AOAM5303P/2SBWl9p3MJCQSI+IZSiWxn40CqFOTekP2jhTNkacJ2Yqrp
+ srQlnD7doCK0PsB6dpdIKRaTGVRuVE8=
+X-Google-Smtp-Source: ABdhPJxA1QjBNCfqsKES09hsGcsCqreQoGnHetAoWDVKsZL+7s7kPZ1b4jtv3+zYpypAYA9RiizLDA==
+X-Received: by 2002:a05:6e02:184f:: with SMTP id
+ b15mr8282089ilv.288.1643914040508; 
+ Thu, 03 Feb 2022 10:47:20 -0800 (PST)
+Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
+ [71.218.245.50])
+ by smtp.gmail.com with ESMTPSA id r64sm20353280iod.25.2022.02.03.10.47.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Feb 2022 10:47:20 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  3 Feb 2022 11:47:18 -0700
+Message-Id: <20220203184718.3173767-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-GB
-To: ca0 <ca0@protonmail.ch>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-References: <5_xofMlQqIrdAjpopLNCIYCGiqsc2UoXvUQG4GIV5Bd0dY31bw-gZ_0eoD0ix_iW-BI3-5O_RbQESkV3ybUN1zFSLY2r3PAr3ZOfxYOFmrU=@protonmail.ch>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <5_xofMlQqIrdAjpopLNCIYCGiqsc2UoXvUQG4GIV5Bd0dY31bw-gZ_0eoD0ix_iW-BI3-5O_RbQESkV3ybUN1zFSLY2r3PAr3ZOfxYOFmrU=@protonmail.ch>
-Subject: Re: [Buildroot] package libldns
+Subject: [Buildroot] [PATCH 1/1] package/bat: bump to version 0.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,43 +84,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ David Pierret <david.pierret@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi ca0,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/bat/bat.hash | 2 +-
+ package/bat/bat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 03/02/2022 03:01, ca0 via buildroot wrote:
-> Building this package with orangepi_zero_defconfig results in an useless user system because both thee files are blown away
+diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+index aa6c8d743d..f4d3e32c34 100644
+--- a/package/bat/bat.hash
++++ b/package/bat/bat.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  9c345788eb916777a60e7ff32031f1c92edc5565031e0c057bce860982768744  bat-0.18.3.tar.gz
++sha256  7940641baaa61cd3bcd1c3db4804d179609d6ccd955868928a129bf3f853e0b2  bat-0.19.0.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+ sha256  64de710b6309a7db5e44ad0af382300c7fb6f6d116d8ae32f0164e05db033068  LICENSE-MIT
+diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+index 9b619af172..dc29a85429 100644
+--- a/package/bat/bat.mk
++++ b/package/bat/bat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BAT_VERSION = 0.18.3
++BAT_VERSION = 0.19.0
+ BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+ BAT_LICENSE = Apache-2.0 or MIT
+ BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-- 
+2.25.1
 
-  What is "this package"? The subject mentions libidns, but there's no libidns 
-package in buildroot.
-
-  What do you mean with "blown away"?
-
-> ./output/target/usr/lib/ld-musl-armhf.so.1
-
-  This file belongs to the musl standard C library, but orangepi_zero_defconfig 
-builds a uClibc standard C library, so it shouldn't even be there.
-
-  You can check which libraries are needed for an executable or shared library 
-with "readelf -d output/target/...". All the libraries mentioned there should 
-exist in output/target/lib or output/target/usr/lib. If not, it is indeed broken.
-
-
-  If you want more help, you will need to provide a whole lot more details.
-
-  Regards,
-  Arnout
-
-
-> ./output/host/arm-buildroot-linux-musleabihf/sysroot/usr/lib/ld-musl-armhf.so.1 >
-> Is the ldconfig hackery needed for embedded systems and is it supported when cross compiling?
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
