@@ -4,66 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1CABC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 08:14:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FF97C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 09:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1AFC840110;
-	Thu,  3 Feb 2022 08:14:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5C6040116;
+	Thu,  3 Feb 2022 09:08:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fnd7L49P4jT7; Thu,  3 Feb 2022 08:14:41 +0000 (UTC)
+	with ESMTP id 9eJQ-Fqh-28b; Thu,  3 Feb 2022 09:08:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADCEB4011C;
-	Thu,  3 Feb 2022 08:14:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A83F91BF403
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 08:14:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 783524011C;
+	Thu,  3 Feb 2022 09:08:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 684A91BF303
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 09:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9597C4011C
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 08:14:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 627E6410D0
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 09:08:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VrLGzhXJ7cNl for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 08:14:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB6A940110
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 08:14:36 +0000 (UTC)
-Received: from [77.244.183.192] (port=61970 helo=[192.168.178.41])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nFXGE-0001z0-Ci; Thu, 03 Feb 2022 09:14:34 +0100
-Message-ID: <57bd27fd-09c8-9441-8429-bb4983287c6c@lucaceresoli.net>
-Date: Thu, 3 Feb 2022 09:14:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: it-IT
-To: Neal Frager <nealf@xilinx.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <20220202165555.3497977-1-nealf@xilinx.com>
- <c36be0d9-f525-ff0b-5b05-d5f512f92105@lucaceresoli.net>
- <SJ0PR02MB7758DE2233B5C11EC28FCCB4D7289@SJ0PR02MB7758.namprd02.prod.outlook.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <SJ0PR02MB7758DE2233B5C11EC28FCCB4D7289@SJ0PR02MB7758.namprd02.prod.outlook.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH 1/1] configs/zynqmp_zcu10x: Bump
- ATF/U-Boot/Linux to Xilinx 2021.2
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Und2auNLq9im for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 09:08:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2BEB740A02
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 09:08:54 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id l5so4428320edv.3
+ for <buildroot@buildroot.org>; Thu, 03 Feb 2022 01:08:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=sQOpUihwq0CFESAxzCvS3RkyR3IEYxHquFRi32K3FGQ=;
+ b=Lxc6FYuS/BSUkrSgT7c1gkUO9H6F5LiDdTAvtPNbunlKBj+wPQP1q4jMTPGdeHGKLf
+ ThneaTvoiLZSVIHx3rcIqidUODrJ1zX2ic6GR/316Au8Lk7Ih8GMGZ1JX3J+MmT9xHuf
+ lsJl0lEq/EI5/ycDem71mMQCkCZrNEd8irI4fX7vPyq/UYgYURKOYG6WkOAUggLATvvS
+ jNvQ8M7f3W0g46FqJmyJ4bpL/adQFwOYWQc7AN///9z7vsXJ3BIOBk1r28+3aUoqaShD
+ fJK8UhAb35KoGORBJ7Vu3/3SAzSF/1fPX1G8R3aZ0y9xMZB4n7ji68x6bbiDO698TEjN
+ va3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=sQOpUihwq0CFESAxzCvS3RkyR3IEYxHquFRi32K3FGQ=;
+ b=6m2W11dO39Y0Fp0EpAxJS67Ydouf4ZV8gBtHXNhtW3GhCo5FOaETDWCAR7WChGERJh
+ iohCU9hDDZe18ViKKLASozkAo3WgkZqw4WYtYGHZZX2HmWqdfSipeX5JtKigfvjhqEt2
+ UE+eG3p0LDzksOO6kLb9YFZds4bxLVmmA0fwZrNEojEmfakHyO+M9wrVW7Ea3GWPhBxy
+ rThoX9t3RSlVNQ4v4vgkJXq7KKE6u1RufvpfZi2urnJkFLE0+f42s2ILwOiwkMQ+SU/x
+ 3zsOoEG7qaTVae7yB5w1RnIUPq6c2+pFbrF0stiUr191oeUBJlyu4HDrmFe3y+ba8g+t
+ vkdw==
+X-Gm-Message-State: AOAM532m7F9JgQvMO8N+YMNPVXnxHOjOgoFMDSzz0fH8E0pK+y9q82Js
+ 45JxcEiwRaFaQqEdqT084XNQhzEMARMJyg==
+X-Google-Smtp-Source: ABdhPJxxWyetKiiGYazfeXbl5zrtY+W/0D0OwW8qYFSUzqLolAdu5fp0Zz9VzXku/r+DisAW9+0o7Q==
+X-Received: by 2002:a05:6402:143:: with SMTP id
+ s3mr33982894edu.7.1643879331987; 
+ Thu, 03 Feb 2022 01:08:51 -0800 (PST)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202])
+ by smtp.gmail.com with ESMTPSA id gg14sm16545153ejb.63.2022.02.03.01.08.51
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Thu, 03 Feb 2022 01:08:51 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Thu,  3 Feb 2022 10:08:48 +0100
+Message-Id: <20220203090848.22869-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+Subject: [Buildroot] [PATCH] package/python-docutils: bump to version 0.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,178 +83,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On 03/02/22 07:20, Neal Frager wrote:
-> Hi Luca,
-> 
-> Thank you for your positive feedback.  Below you can find my thoughts.
-> 
-> Neal Frager
-> Embedded Processor Specialist
-> Xilinx
-> 
-> neal.frager@xilinx.com
-> Mobile: +33.6.48.11.37.36
-> www.linkedin.com/in/neal-frager-0397463
-> 
-> -----Original Message-----
-> From: Luca Ceresoli <luca@lucaceresoli.net> 
-> Sent: Wednesday 2 February 2022 23:29
-> To: Neal Frager <nealf@xilinx.com>; buildroot@buildroot.org
-> Cc: Neal Frager <nealf@xilinx.com>
-> Subject: Re: [PATCH 1/1] configs/zynqmp_zcu10x: Bump ATF/U-Boot/Linux to Xilinx 2021.2
-> 
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> 
-> 
-> Hi Neal,
-> 
-> thank you for your effort and for sending a patch in the format that is the most convenient for other people to review your code.
-> 
-> Your work seems generally in a good shape. I have several remarks, see below, but nothing really problematic.
-> 
-> On 02/02/22 17:55, Neal Frager wrote:
->> Signed-off-by: Neal Frager <nealf@xilinx.com>
-> 
-> Maybe you can add more details before the Signed-off-by line, suah as "Also add a defconfig for ZCU102", "remove U-Boot and ATF patches not upstream"...
-> 
-> [Neal] Could you share the proper git commands for adding comments to a patch?  I would be happy to add more comments, but I am a bit new to git, and I do not know what commands I need to use.
+Remove the obsolete patch as docutils is now a setuptools package.
 
-The command 'git commit' opens an editor where you can write a commit
-message with all the details you wish. And if you have already done your
-commit and want to modify the comment, use 'git commit --amend'.
+The package also includes code licensed under BSD-3-Clause licence.
+COPYING.txt has the following changes:
 
-A suggested reading is ProGit, the official git book:
-https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+* copyright year
+* more exceptions from the Public Domain added
+* BSD-3-Clause license added
 
-A few suggestions on how to write a good commit message:
-https://cbea.ms/git-commit/
+Fixes:
+http://autobuild.buildroot.net/results/02dd94c09dabdbdd8b47673393577a7fd3af3aeb
 
-> First issue: this defconfig does not build on my PC:
-> 
-> $ git clean -xdf && make zynqmp_zcu106_defconfig && verynice make
-> package/pkg-generic.mk:266: *** BR2_GLOBAL_PATCH_DIR contains nonexistent directory board/zynqmp/patches/.  Stop.
-> $
-> 
-> As you removed all patches (which is sooo gooood!) you now have to remove the BR2_GLOBAL_PATCH_DIR.
-> 
-> [Neal] I have not seen this error on my side, but to fix it, I will just remove the BR2_GLOBAL_PATCH_DIR from the defconfigs.
-> 
->> ---
->>  board/zynqmp/genimage.cfg                     |   1 +
->>  ...-fix-Remove-GGC-ignore-Warray-bounds.patch |  68 -------  
->> ...64-zynqmp-zcu106-fix-SPL-MMC-booting.patch |  52 ------  
->> ...2-arm64-zynqmp-Enable-booting-to-ATF.patch | 114 ------------  
->> ...ept-an-absolute-path-for-PMUFW_INIT_.patch |  68 -------  
->> ...ynqmp-pass-the-PS-init-file-as-a-kco.patch | 175 ------------------
->>  configs/zynqmp_zcu102_defconfig               |  35 ++++
->>  configs/zynqmp_zcu106_defconfig               |  15 +-
->>  8 files changed, 44 insertions(+), 484 deletions(-)  delete mode 
->> 100644 
->> board/zynqmp/patches/arm-trusted-firmware/0001-Coverity-fix-Remove-GGC
->> -ignore-Warray-bounds.patch  delete mode 100644 
->> board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-bootin
->> g.patch  delete mode 100644 
->> board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.pat
->> ch  delete mode 100644 
->> board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-f
->> or-PMUFW_INIT_.patch  delete mode 100644 
->> board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init
->> -file-as-a-kco.patch  create mode 100644 
->> configs/zynqmp_zcu102_defconfig
->>
->> diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg 
->> index ed202f4550..557364e124 100644
->> --- a/board/zynqmp/genimage.cfg
->> +++ b/board/zynqmp/genimage.cfg
->> @@ -3,6 +3,7 @@ image boot.vfat {
->>               files = {
->>                       "boot.bin",
->>                       "u-boot.bin",
->> +                     "u-boot.itb",
-> 
-> Is u-boot.bin still needed, when we have the .itb?
-> 
-> [Neal] u-boot.bin is no longer needed.  I can remove it.
-> 
->> diff --git a/configs/zynqmp_zcu106_defconfig 
->> b/configs/zynqmp_zcu106_defconfig index bee7c1daf7..3a6947e1e8 100644
->> --- a/configs/zynqmp_zcu106_defconfig
->> +++ b/configs/zynqmp_zcu106_defconfig
->> @@ -1,11 +1,11 @@
->>  BR2_aarch64=y
->>  BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
->> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
->>  BR2_LINUX_KERNEL=y
->>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
->> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.10_2021.2"
->>  BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
->>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
->> @@ -14,21 +14,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y  # 
->> BR2_TARGET_ROOTFS_TAR is not set  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y  
->> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
->> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
->> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.4_2021.2"
-> 
-> As far as I remember (but I ask the core developers to confirm or deny), from the Buildroot perspective upstream versions are generally preferred even when they lack some non-fundamental features (e.g.: some drivers are missing) that are in vendor forks.
-> 
-> Is there a reason for switching ATF to the Xilinx fork? In this case explain it in the commit message, otherwise stay on the upstream repo, upgrading to the latest [working] release.
-> 
-> A similar question applies to kernel and U-Boot: is it possible to switch to upstream releases?
-> 
-> [Neal] I was trying to match the Xilinx tested software release 2021.2 with these patches.  The mainline Linux kernel is still missing quite a bit of the Xilinx drivers, so if a developer uses all mainline locations, there will be things that do not work properly.  The ATF should probably be ok, as it is almost identical to the Xilinx fork, but since I was already using the Xilinx fork for the Linux kernel and U-Boot, I thought it would be better to use the Xilinx tested fork for everything to remain consistent.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ .../0001-Update-setup.py.patch                | 64 -------------------
+ package/python-docutils/python-docutils.hash  |  6 +-
+ package/python-docutils/python-docutils.mk    |  8 +--
+ 3 files changed, 7 insertions(+), 71 deletions(-)
+ delete mode 100644 package/python-docutils/0001-Update-setup.py.patch
 
-I can understand that mainline Linux has significantly fewer drivers
-than the Xilinx fork. However I have good hope that current mainline
-U-Boot is enough to boot properly, at least it's worth giving it a try
-and, should it fail, explain what's the problem that forces to stay on a
-fork.
-
-About ATF I would just stay on mainline. I would be surprised if an old
-mainline version worked and not a recent one.
-
-> Ouch, now the build I had started ended with a new error:
-> 
->>>> arm-trusted-firmware xlnx_rebase_v2.4_2021.2 Building
-> ...
->   AR      .../build/zynqmp/release/lib/libc.a
->   LD      .../build/zynqmp/release/bl31/bl31.elf
-> .../aarch64-buildroot-linux-uclibc-ld:
-> .../build/zynqmp/release/bl31/bl31.elf section `coherent_ram' will not fit in region `RAM'
-> .../aarch64-buildroot-linux-uclibc-ld: BL31 image has exceeded its limit.
-> .../aarch64-buildroot-linux-uclibc-ld: region `RAM' overflowed by 1 byte
-> 
-> I have run my build on Ubuntu 18.04 with your patch applied on current master.
-> 
-> I assume you have built and run it successfully. Any idea on why it fails on a different host?
-> 
-> [Neal] I have seen the ATF build error as well.  There seems to be an issue with the default buildroot aarch64-buildroot-linux-uclibc compiler when building the ATF.  I fixed the issue on my side by going into the output/build/arm-trusted-firmware-xlnx_rebase_v2.4_2021.2 and running the build with the aarch-none-elf compiler using the build command below.  Basically, changing nothing but the compiler.  Do you have any thoughts about how to fix this?
-> 
-> make CROSS_COMPILE=aarch64-none-elf- PLAT=zynqmp RESET_TO_BL31=1
-
-I'm afraid a defconfig that requires manual steps to build is a no-go,
-so we really need a solution.
-
-I don't know a proper solution, but first why don't you try mainline
-ATF? Should it build (and run) it'd be a double win! :) Otherwise you
-could try another toolchain, such as one prebuilt on
-https://toolchains.bootlin.com/ .
-
+diff --git a/package/python-docutils/0001-Update-setup.py.patch b/package/python-docutils/0001-Update-setup.py.patch
+deleted file mode 100644
+index 3fb34a9763..0000000000
+--- a/package/python-docutils/0001-Update-setup.py.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 583e59ccf72a02c2a6f0399f29f622c7f2f4a932 Mon Sep 17 00:00:00 2001
+-From: milde <milde@929543f6-e4f2-0310-98a6-ba3bd3dd1d04>
+-Date: Sun, 1 Sep 2019 19:39:36 +0000
+-Subject: [PATCH] Update setup.py
+-
+-Python 3.4 no longer supported,
+-more languages supported (and Lithuanian accepted by PyPi).
+-
+-git-svn-id: http://svn.code.sf.net/p/docutils/code/trunk@8383 929543f6-e4f2-0310-98a6-ba3bd3dd1d04
+-
+-[Asaf: adjust upstream patch to 0.15.2]
+-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+----
+- setup.py | 14 +++++++++++++-
+- 1 file changed, 13 insertions(+), 1 deletion(-)
+-
+-diff --git a/setup.py b/setup.py
+-index f801ea2..5c1ebfd 100755
+---- a/setup.py
+-+++ b/setup.py
+-@@ -7,6 +7,10 @@ import os
+- import glob
+- try:
+-     import setuptools
+-+except ImportError:
+-+    print('Warning: Could not load package `setuptools`.')
+-+    print('Actions requiring `setuptools` instead of `distutils` will fail')
+-+try:
+-     from distutils.core import setup, Command
+-     from distutils.command.build import build
+-     from distutils.command.build_py import build_py
+-@@ -123,7 +127,7 @@ what-you-see-is-what-you-get plaintext markup syntax.""", # wrap at col 60
+-     'maintainer_email': 'docutils-develop@lists.sourceforge.net',
+-     'license': 'public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)',
+-     'platforms': 'OS-independent',
+--    'python_requires': '>=2.6, !=3.0.*, !=3.1.*, !=3.2.*',
+-+    'python_requires': '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+-     'package_dir': {'docutils': 'docutils',
+-                     'docutils.tools': 'tools'},
+-     'packages': ['docutils',
+-@@ -213,14 +219,20 @@ classifiers = [
+-     'Natural Language :: Chinese (Simplified)',
+-     'Natural Language :: Chinese (Traditional)',
+-     'Natural Language :: Czech',
+-+    'Natural Language :: Danish',
+-     'Natural Language :: Dutch',
+-     'Natural Language :: Esperanto',
+-     'Natural Language :: Finnish',
+-     'Natural Language :: French',
+-     'Natural Language :: Galician',
+-     'Natural Language :: German',
+-+    'Natural Language :: Hebrew',
+-     'Natural Language :: Italian',
+-     'Natural Language :: Japanese',
+-+    'Natural Language :: Korean',
+-+    'Natural Language :: Latvian',
+-+    'Natural Language :: Lithuanian',
+-+    'Natural Language :: Persian',
+-     'Natural Language :: Polish',
+-     'Natural Language :: Portuguese (Brazilian)',
+-     'Natural Language :: Russian',
+--- 
+-2.20.1
+-k
+diff --git a/package/python-docutils/python-docutils.hash b/package/python-docutils/python-docutils.hash
+index ccccca1064..9f6bb53bdb 100644
+--- a/package/python-docutils/python-docutils.hash
++++ b/package/python-docutils/python-docutils.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/docutils/json, sha256 locally computed
+-md5	e26a308d8000b0bed7416a633217c676  docutils-0.15.2.tar.gz
+-sha256	a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99  docutils-0.15.2.tar.gz
+-sha256  efa0c85aa99ea5b4781240031b0d02af54d7b5554c87ad2b2bea9ba490f6663f  COPYING.txt
++md5	ca5827e2432fd58f4c8d74a6591135de  docutils-0.18.1.tar.gz
++sha256	679987caf361a7539d76e584cbeddc311e3aee937877c87346f31debc63e9d06  docutils-0.18.1.tar.gz
++sha256  f20172170ef9aeebbf53adf5d8f7d309f7dc6068e9a3a1b52ea772305686739d  COPYING.txt
+diff --git a/package/python-docutils/python-docutils.mk b/package/python-docutils/python-docutils.mk
+index 9a42d3e5dc..3872b54906 100644
+--- a/package/python-docutils/python-docutils.mk
++++ b/package/python-docutils/python-docutils.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DOCUTILS_VERSION = 0.15.2
++PYTHON_DOCUTILS_VERSION = 0.18.1
+ PYTHON_DOCUTILS_SOURCE = docutils-$(PYTHON_DOCUTILS_VERSION).tar.gz
+-PYTHON_DOCUTILS_SITE = https://files.pythonhosted.org/packages/93/22/953e071b589b0b1fee420ab06a0d15e5aa0c7470eb9966d60393ce58ad61
+-PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, GPL-3.0 (emacs mode), other
++PYTHON_DOCUTILS_SITE = https://files.pythonhosted.org/packages/57/b1/b880503681ea1b64df05106fc7e3c4e3801736cf63deffc6fa7fc5404cf5
++PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, BSD-3-Clause, GPL-3.0 (emacs mode), other
+ PYTHON_DOCUTILS_LICENSE_FILES = COPYING.txt
+-PYTHON_DOCUTILS_SETUP_TYPE = distutils
++PYTHON_DOCUTILS_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
-Luca
+2.17.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
