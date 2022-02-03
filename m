@@ -1,75 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C54EC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6486C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 204E8408BB;
-	Thu,  3 Feb 2022 20:47:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FEF4400F1;
+	Thu,  3 Feb 2022 20:57:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XI1yqqptN8bx; Thu,  3 Feb 2022 20:47:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wkgEN_B7hylB; Thu,  3 Feb 2022 20:57:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45E9D4088C;
-	Thu,  3 Feb 2022 20:47:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2BD951BF38D
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:47:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A5A640133;
+	Thu,  3 Feb 2022 20:57:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CFBF51BF38D
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18A6C408D2
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:47:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD8F140133
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:56:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9WJ0yIhTKxsH for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 20:47:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 40BF841735
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:47:09 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id m10so6029164oie.2
- for <buildroot@buildroot.org>; Thu, 03 Feb 2022 12:47:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=2F1W+MEGQkm0Th4qfVjqdgF5wORUdG1XMp78JjJ0VCI=;
- b=TEz3saj6w9+FDXl+2SNRBzXXUujdpfDPy3VsGaseGBhv+o6cmSnYGFK2LXypY9BoFd
- t2aA7ZyXcMd+mnmvpPiZHm6g8GffD1NtgjM8WGvu3ag8ngclIsSyNIS7MKfV7vXo6Iay
- 8C0NJTnbSoBaXaOWB2+aC4VH73jVhTcWRtkT0CwBuCmflHjg0mtFpekArDxJiQoe+ego
- RrmZlh6KFOKE8BUsD2M92R/Ludi4w5OHetEF4wyrDII1tb2AozH+d5fDjpX2KbzJgzy8
- i2iXzGPYJpeAifnrBlSoMXy+B7KAdrNXhmndpzAyn5hBnb+Vt4Ggta8oFuBGTZ3bBe/n
- 7jYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=2F1W+MEGQkm0Th4qfVjqdgF5wORUdG1XMp78JjJ0VCI=;
- b=zLI8cEk88xZ2r4+xDi8kuLeblWrPqviVhM62Y7mYWscTPrItmiGKKbh4rJWFhgXZA1
- xSXwi4lhQ6CuhunODqYEY5rUZ66CnyHE86W+vuQef0fWMXeaDpMIytE8xZXxxF6laEX8
- eS8O6QMHuF0Gs7gbo0e6qZUCAZCjuJ7oGfJOZPE+oywlw4mqdVM6+jp87mcPYv8z3aNI
- rLyVHREYNKDwT/zXl1zZrYBW9GIqddTjhAgf359SsjyZex9GJoeY+ubQf8/ih9H13AFf
- uCHzp0giDd7WmR90Of50hQDtkzUiouPwlUDk4q3VzCtrj5F0u5W8r8/SldXgvELNVhrE
- Y4BA==
-X-Gm-Message-State: AOAM532BFTKDDZ7rNmhre63k7jCw84nc+UpbNE+uxZVs0QEK4UGXO7qS
- ismcvYP0ewGpkJLayyXlR0uJO8njWNfJmoOvF67LGdx4
-X-Google-Smtp-Source: ABdhPJwdYFbFilShWBqLoq7p11nZqm57eL5+YOMh6XHteyIdS2NPFpZHmUrrL4slRbCHkP6cBVOFWsO3wgotABmMuB8=
-X-Received: by 2002:a05:6808:154:: with SMTP id
- h20mr9006493oie.103.1643921228180; 
- Thu, 03 Feb 2022 12:47:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20220131225622.90226-1-james.hilliard1@gmail.com>
- <fe89e71a-ad55-44ab-20ba-d2b46b15a271@mind.be>
-In-Reply-To: <fe89e71a-ad55-44ab-20ba-d2b46b15a271@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 3 Feb 2022 13:46:53 -0700
-Message-ID: <CADvTj4oBnkTotAUnOFssY8J0wN7_Q0cADYSA-wuvdBg_ciuOoA@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH v7 1/1] package/qt5: bump packages to latest
- kde submodule versions
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7QwyAd_vfGrt for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 20:56:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58255400F1
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:56:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id F13E7825B5; Thu,  3 Feb 2022 20:49:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 3 Feb 2022 21:56:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 995c093d6a3e8042110d6a8d96fdc7ad65a557c4
+X-Git-Newrev: 4353c716466fb8860dea265985829e9fae58e016
+X-Patchwork-Hint: ignore
+Message-Id: <20220203204945.F13E7825B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: backport fix for gdbserver
+ 11.1 on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,84 +53,361 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Joshua Henderson <joshua.henderson@microchip.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>, Peter Seiderer <ps.report@gmx.net>,
- =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>, Julien Corjon <corjon.j@ecagroup.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Feb 3, 2022 at 12:35 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 31/01/2022 23:56, James Hilliard wrote:
-> > This points all qt5 packages to the latest kde submodule versions
-> > available at https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
->
->   It took me some reading of the patch and of the upstream repositories to
-> understand that there are actually no release tarballs or tags, and the the
-> 5.15.8 is something we just pull out of our hat to be compatible with
-> qt5webengine. So I updated the commit message to (hopefully) better explain that.
+commit: https://git.buildroot.net/buildroot/commit/?id=4353c716466fb8860dea265985829e9fae58e016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yeah, upstream def makes this a bit annoying.
+Backported from upstream GDB geb79b23, with ChangeLogs stripped so the
+patch applies properly on Buildroot.
 
->
-> >
-> > We need to remove some patches applied upstream already.
-> >
-> > We need to rework qt5location to pull in the mapboxgl dependency from
-> > a separate package as that dependency is only included in release
-> > archives.
->
->   Instead of creating a separate package for it (which BTW you forgot to add to
-> DEVELOPERS), I changed this to use the git download method and _GIT_SUBMODULES =
-> YES. I checked that it extracts to exactly the same thing.
+    https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=eb79b23
 
-Yeah, I had done it this way mostly for consistency with the qt5webengine WIP
-update as for that we kinda need to patch multiple deps that have upstream
-patches that apply easier against the deps directly.
+Fixes the following issue:
 
->
-> >
-> > We need to pin qt5 packages not available in the new upstream to the
-> > previous 5.15.2 version.
-> >
-> > We need to set SYNC_QT_HEADERS for all qt5 packages in the new
-> > upstream as headers are only copied in release archives which are
-> > not provided in the kde upstream.
-> >
-> > Set the MODULE_VERSION to 5.15.8 to match latest qt5webengine which
-> > should be the closest release to the kde patches which don't have
-> > proper version tags.
-> >
-> > Create a .git file so to trigger headers sync during configure.
->
->   I don't really understand why this was needed rather than calling syncqt
-> explicitly, but OK.
+    # gdbserver /dev/hvc1 inadyn -n -l debug
+    Process inadyn created; pid = 675
+    Remote debugging using /dev/hvc1
+    ../../gdbserver/regcache.cc:257: A problem internal to GDBserver has been detected.
+    Unknown register tag_ctl requested
 
-Some packages like qt5base don't work with calling syncqt explicitly as they
-have different logic needed.
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+[yann.morin.1998@free.fr: add SoB in patch, provided live on IRC]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../gdb/11.1/0010-gdbserver-aarch64-support.patch  | 320 +++++++++++++++++++++
+ 1 file changed, 320 insertions(+)
 
->
->   Applied to master, thanks.
->
->   Regards,
->   Arnout
->
-> >
-> > Hold back updating qt5webengine for now since the latest version
-> > requires significant changes to build, just tweak existing version
-> > to be compatible with latest kde versions for now.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> [snip]
+diff --git a/package/gdb/11.1/0010-gdbserver-aarch64-support.patch b/package/gdb/11.1/0010-gdbserver-aarch64-support.patch
+new file mode 100644
+index 0000000000..3718b1b6fd
+--- /dev/null
++++ b/package/gdb/11.1/0010-gdbserver-aarch64-support.patch
+@@ -0,0 +1,320 @@
++From eb79b2318066cafb75ffdce310e3bbd44f7c79e3 Mon Sep 17 00:00:00 2001
++From: Luis Machado <luis.machado@linaro.org>
++Date: Fri, 29 Oct 2021 14:54:36 -0300
++Subject: [PATCH] [AArch64] Make gdbserver register set selection dynamic
++
++The current register set selection mechanism for AArch64 is static, based
++on a pre-populated array of register sets.
++
++This means that we might potentially probe register sets that are not
++available. This is OK if the kernel errors out during ptrace, but probing the
++tag_ctl register, for example, does not result in a ptrace error if the kernel
++supports the tagged address ABI but not MTE (PR 28355).
++
++Making the register set selection dynamic, based on feature checks, solves
++this and simplifies the code a bit. It allows us to list all of the register
++sets only once, and pick and choose based on HWCAP/HWCAP2 or other properties.
++
++gdb/ChangeLog:
++
++2021-11-03  Luis Machado  <luis.machado@linaro.org>
++
++	PR gdb/28355
++
++	* arch/aarch64.h (struct aarch64_features): New struct.
++
++gdbserver/ChangeLog:
++
++2021-11-03  Luis Machado  <luis.machado@linaro.org>
++
++	PR gdb/28355
++
++	* linux-aarch64-low.cc (is_sve_tdesc): Remove.
++	(aarch64_target::low_arch_setup): Rework to adjust the register sets.
++	(aarch64_regsets): Update to list all register sets.
++	(aarch64_regsets_info, regs_info_aarch64): Replace NULL with nullptr.
++	(aarch64_sve_regsets, aarch64_sve_regsets_info)
++	(regs_info_aarch64_sve): Remove.
++	(aarch64_adjust_register_sets): New.
++	(aarch64_target::get_regs_info): Remove references to removed structs.
++	(initialize_low_arch): Likewise.
++
++Backported from: eb79b2318066cafb75ffdce310e3bbd44f7c79e3
++Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
++---
++ gdb/arch/aarch64.h             |   9 ++
++ gdbserver/linux-aarch64-low.cc | 186 ++++++++++++++++++---------------
++ 4 files changed, 130 insertions(+), 85 deletions(-)
++
++diff --git a/gdb/arch/aarch64.h b/gdb/arch/aarch64.h
++index 0eb702c5b5e..95edb664b55 100644
++--- a/gdb/arch/aarch64.h
+++++ b/gdb/arch/aarch64.h
++@@ -22,6 +22,15 @@
++ 
++ #include "gdbsupport/tdesc.h"
++ 
+++/* Holds information on what architectural features are available.  This is
+++   used to select register sets.  */
+++struct aarch64_features
+++{
+++  bool sve = false;
+++  bool pauth = false;
+++  bool mte = false;
+++};
+++
++ /* Create the aarch64 target description.  A non zero VQ value indicates both
++    the presence of SVE and the Vector Quotient - the number of 128bit chunks in
++    an SVE Z register.  HAS_PAUTH_P indicates the presence of the PAUTH
++diff --git a/gdbserver/linux-aarch64-low.cc b/gdbserver/linux-aarch64-low.cc
++index daccfef746e..9a8cb4169a7 100644
++--- a/gdbserver/linux-aarch64-low.cc
+++++ b/gdbserver/linux-aarch64-low.cc
++@@ -196,16 +196,6 @@ is_64bit_tdesc (void)
++   return register_size (regcache->tdesc, 0) == 8;
++ }
++ 
++-/* Return true if the regcache contains the number of SVE registers.  */
++-
++-static bool
++-is_sve_tdesc (void)
++-{
++-  struct regcache *regcache = get_thread_regcache (current_thread, 0);
++-
++-  return tdesc_contains_feature (regcache->tdesc, "org.gnu.gdb.aarch64.sve");
++-}
++-
++ static void
++ aarch64_fill_gregset (struct regcache *regcache, void *buf)
++ {
++@@ -680,40 +670,6 @@ aarch64_target::low_new_fork (process_info *parent,
++   *child->priv->arch_private = *parent->priv->arch_private;
++ }
++ 
++-/* Matches HWCAP_PACA in kernel header arch/arm64/include/uapi/asm/hwcap.h.  */
++-#define AARCH64_HWCAP_PACA (1 << 30)
++-
++-/* Implementation of linux target ops method "low_arch_setup".  */
++-
++-void
++-aarch64_target::low_arch_setup ()
++-{
++-  unsigned int machine;
++-  int is_elf64;
++-  int tid;
++-
++-  tid = lwpid_of (current_thread);
++-
++-  is_elf64 = linux_pid_exe_is_elf_64_file (tid, &machine);
++-
++-  if (is_elf64)
++-    {
++-      uint64_t vq = aarch64_sve_get_vq (tid);
++-      unsigned long hwcap = linux_get_hwcap (8);
++-      unsigned long hwcap2 = linux_get_hwcap2 (8);
++-      bool pauth_p = hwcap & AARCH64_HWCAP_PACA;
++-      /* MTE is AArch64-only.  */
++-      bool mte_p = hwcap2 & HWCAP2_MTE;
++-
++-      current_process ()->tdesc
++-	= aarch64_linux_read_description (vq, pauth_p, mte_p);
++-    }
++-  else
++-    current_process ()->tdesc = aarch32_linux_read_description ();
++-
++-  aarch64_linux_get_debug_reg_capacity (lwpid_of (current_thread));
++-}
++-
++ /* Wrapper for aarch64_sve_regs_copy_to_reg_buf.  */
++ 
++ static void
++@@ -730,21 +686,36 @@ aarch64_sve_regs_copy_from_regcache (struct regcache *regcache, void *buf)
++   return aarch64_sve_regs_copy_from_reg_buf (regcache, buf);
++ }
++ 
+++/* Array containing all the possible register sets for AArch64/Linux.  During
+++   architecture setup, these will be checked against the HWCAP/HWCAP2 bits for
+++   validity and enabled/disabled accordingly.
+++
+++   Their sizes are set to 0 here, but they will be adjusted later depending
+++   on whether each register set is available or not.  */
++ static struct regset_info aarch64_regsets[] =
++ {
+++  /* GPR registers.  */
++   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_PRSTATUS,
++-    sizeof (struct user_pt_regs), GENERAL_REGS,
+++    0, GENERAL_REGS,
++     aarch64_fill_gregset, aarch64_store_gregset },
+++  /* Floating Point (FPU) registers.  */
++   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_FPREGSET,
++-    sizeof (struct user_fpsimd_state), FP_REGS,
+++    0, FP_REGS,
++     aarch64_fill_fpregset, aarch64_store_fpregset
++   },
+++  /* Scalable Vector Extension (SVE) registers.  */
+++  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_SVE,
+++    0, EXTENDED_REGS,
+++    aarch64_sve_regs_copy_from_regcache, aarch64_sve_regs_copy_to_regcache
+++  },
+++  /* PAC registers.  */
++   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_PAC_MASK,
++-    AARCH64_PAUTH_REGS_SIZE, OPTIONAL_REGS,
++-    NULL, aarch64_store_pauthregset },
+++    0, OPTIONAL_REGS,
+++    nullptr, aarch64_store_pauthregset },
+++  /* Tagged address control / MTE registers.  */
++   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_TAGGED_ADDR_CTRL,
++-    AARCH64_LINUX_SIZEOF_MTE, OPTIONAL_REGS, aarch64_fill_mteregset,
++-    aarch64_store_mteregset },
+++    0, OPTIONAL_REGS,
+++    aarch64_fill_mteregset, aarch64_store_mteregset },
++   NULL_REGSET
++ };
++ 
++@@ -752,47 +723,95 @@ static struct regsets_info aarch64_regsets_info =
++   {
++     aarch64_regsets, /* regsets */
++     0, /* num_regsets */
++-    NULL, /* disabled_regsets */
+++    nullptr, /* disabled_regsets */
++   };
++ 
++ static struct regs_info regs_info_aarch64 =
++   {
++-    NULL, /* regset_bitmap */
++-    NULL, /* usrregs */
+++    nullptr, /* regset_bitmap */
+++    nullptr, /* usrregs */
++     &aarch64_regsets_info,
++   };
++ 
++-static struct regset_info aarch64_sve_regsets[] =
+++/* Given FEATURES, adjust the available register sets by setting their
+++   sizes.  A size of 0 means the register set is disabled and won't be
+++   used.  */
+++
+++static void
+++aarch64_adjust_register_sets (const struct aarch64_features &features)
++ {
++-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_PRSTATUS,
++-    sizeof (struct user_pt_regs), GENERAL_REGS,
++-    aarch64_fill_gregset, aarch64_store_gregset },
++-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_SVE,
++-    SVE_PT_SIZE (AARCH64_MAX_SVE_VQ, SVE_PT_REGS_SVE), EXTENDED_REGS,
++-    aarch64_sve_regs_copy_from_regcache, aarch64_sve_regs_copy_to_regcache
++-  },
++-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_PAC_MASK,
++-    AARCH64_PAUTH_REGS_SIZE, OPTIONAL_REGS,
++-    NULL, aarch64_store_pauthregset },
++-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_TAGGED_ADDR_CTRL,
++-    AARCH64_LINUX_SIZEOF_MTE, OPTIONAL_REGS, aarch64_fill_mteregset,
++-    aarch64_store_mteregset },
++-  NULL_REGSET
++-};
+++  struct regset_info *regset;
++ 
++-static struct regsets_info aarch64_sve_regsets_info =
++-  {
++-    aarch64_sve_regsets, /* regsets.  */
++-    0, /* num_regsets.  */
++-    NULL, /* disabled_regsets.  */
++-  };
+++  for (regset = aarch64_regsets; regset->size >= 0; regset++)
+++    {
+++      switch (regset->nt_type)
+++	{
+++	case NT_PRSTATUS:
+++	  /* General purpose registers are always present.  */
+++	  regset->size = sizeof (struct user_pt_regs);
+++	  break;
+++	case NT_FPREGSET:
+++	  /* This is unavailable when SVE is present.  */
+++	  if (!features.sve)
+++	    regset->size = sizeof (struct user_fpsimd_state);
+++	  break;
+++	case NT_ARM_SVE:
+++	  if (features.sve)
+++	    regset->size = SVE_PT_SIZE (AARCH64_MAX_SVE_VQ, SVE_PT_REGS_SVE);
+++	  break;
+++	case NT_ARM_PAC_MASK:
+++	  if (features.pauth)
+++	    regset->size = AARCH64_PAUTH_REGS_SIZE;
+++	  break;
+++	case NT_ARM_TAGGED_ADDR_CTRL:
+++	  if (features.mte)
+++	    regset->size = AARCH64_LINUX_SIZEOF_MTE;
+++	  break;
+++	default:
+++	  gdb_assert_not_reached ("Unknown register set found.");
+++	}
+++    }
+++}
++ 
++-static struct regs_info regs_info_aarch64_sve =
++-  {
++-    NULL, /* regset_bitmap.  */
++-    NULL, /* usrregs.  */
++-    &aarch64_sve_regsets_info,
++-  };
+++/* Matches HWCAP_PACA in kernel header arch/arm64/include/uapi/asm/hwcap.h.  */
+++#define AARCH64_HWCAP_PACA (1 << 30)
+++
+++/* Implementation of linux target ops method "low_arch_setup".  */
+++
+++void
+++aarch64_target::low_arch_setup ()
+++{
+++  unsigned int machine;
+++  int is_elf64;
+++  int tid;
+++
+++  tid = lwpid_of (current_thread);
+++
+++  is_elf64 = linux_pid_exe_is_elf_64_file (tid, &machine);
+++
+++  if (is_elf64)
+++    {
+++      struct aarch64_features features;
+++
+++      uint64_t vq = aarch64_sve_get_vq (tid);
+++      features.sve = (vq > 0);
+++      /* A-profile PAC is 64-bit only.  */
+++      features.pauth = linux_get_hwcap (8) & AARCH64_HWCAP_PACA;
+++      /* A-profile MTE is 64-bit only.  */
+++      features.mte = linux_get_hwcap2 (8) & HWCAP2_MTE;
+++
+++      current_process ()->tdesc
+++	= aarch64_linux_read_description (vq, features.pauth, features.mte);
+++
+++      /* Adjust the register sets we should use for this particular set of
+++	 features.  */
+++      aarch64_adjust_register_sets (features);
+++    }
+++  else
+++    current_process ()->tdesc = aarch32_linux_read_description ();
+++
+++  aarch64_linux_get_debug_reg_capacity (lwpid_of (current_thread));
+++}
++ 
++ /* Implementation of linux target ops method "get_regs_info".  */
++ 
++@@ -802,9 +821,7 @@ aarch64_target::get_regs_info ()
++   if (!is_64bit_tdesc ())
++     return &regs_info_aarch32;
++ 
++-  if (is_sve_tdesc ())
++-    return &regs_info_aarch64_sve;
++-
+++  /* AArch64 64-bit registers.  */
++   return &regs_info_aarch64;
++ }
++ 
++@@ -3294,5 +3311,4 @@ initialize_low_arch (void)
++   initialize_low_arch_aarch32 ();
++ 
++   initialize_regsets_info (&aarch64_regsets_info);
++-  initialize_regsets_info (&aarch64_sve_regsets_info);
++ }
++-- 
++2.27.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
