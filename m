@@ -1,173 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7061CC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 15:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B13CC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 16:00:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE98F6100E;
-	Thu,  3 Feb 2022 15:45:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0E92416DE;
+	Thu,  3 Feb 2022 16:00:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3mQwBKCeKgwo; Thu,  3 Feb 2022 15:45:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oReDSezA3p23; Thu,  3 Feb 2022 16:00:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EB406100B;
-	Thu,  3 Feb 2022 15:45:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F0E211BF3D7
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 15:45:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 499E8416E3;
+	Thu,  3 Feb 2022 16:00:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58BD01BF3D7
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 16:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBC2240443
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 15:45:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 54BB9416E3
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 16:00:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=synopsys.com header.b="FG0BkctH";
- dkim=fail (1024-bit key) reason="fail (message has been altered)"
- header.d=synopsys.com header.b="U5cCYev6"
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eaNZdTljmdgR for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 15:45:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
- [149.117.87.133])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 62392403B9
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 15:45:50 +0000 (UTC)
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com
- [10.205.2.134])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
- by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 56DE7C015E;
- Thu,  3 Feb 2022 15:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
- t=1643903149; bh=rIECMPvaAHr5myw+rM2WWZqmeLM8NXa36oCEq3iaGlo=;
- h=From:To:CC:Subject:Date:References:In-Reply-To:From;
- b=FG0BkctHGW3mImRonHerAVfo/Q6RDWdKDEkyv9r0eEPxb6tTstJhsg7S4d29bnaBh
- +V1/WmHEGFqOsbf2v+D3q3fchQ5yCmJT0tuKiEb0bRwHcdR6lCFy9SJADBsQlG3YdK
- RYentH0VsP8CTuns0cH7uv2v8505Rh2sdg/lnIEXrPa3d9jGH0ONQrC+T87SrYYQGP
- NSfFhgYp7PaEfkkhNF/3HEATzUipGWCjGcIIxnlzWCyaozRDBaDGc5PPM1DgtxxRv8
- 7R4bh87COg+U0YVoQU5GdYPx4BfaoXJ2iTIB9MEytlvNTZvyaMQ8RLPwlm+x7DY5T/
- Ot6EZnG4bJrmA==
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com
- [10.4.161.137])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client CN "o365relay-in.synopsys.com",
- Issuer "Entrust Certification Authority - L1K" (verified OK))
- by mailhost.synopsys.com (Postfix) with ESMTPS id 5D277A0096;
- Thu,  3 Feb 2022 15:45:46 +0000 (UTC)
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (Client CN "mail.protection.outlook.com",
- Issuer "DigiCert Cloud Services CA-1" (verified OK))
- by o365relay-in.synopsys.com (Postfix) with ESMTPS id 47176801F1;
- Thu,  3 Feb 2022 15:45:45 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com;
- dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
- spf=pass smtp.mailfrom=abrodkin@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; dkim=pass (1024-bit key;
- unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="U5cCYev6";
- dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VBxcJUr9+9dc8nVqKHONQrJh+j5rTgezfuC53884YUSebWffXcTCfFvmavz1gOxinSVcPGsakIJ19JX1kZZpmquwHGMS5VmkvgKdGpT5vnSvP6NegpaWCKGq9Q5r2GVjg/8G+xNKMCkjCl7pOKxtofeTjHzImelpYkDgWyybJ0TVnSE8A2wlqxbllv83J4osE/nbVaptqKJ314kDK/OVIU34sXHfXFXlFMzoZbuTjarpSaO61Pws2C2fMRqXFu7AfycPyidVddhgRGAz3tq/JpG0rFqHG8KHulXUoHaeiHm2VKffIc1VF0WOEMsRYYe46y3bmsR8bjtnOVBTV0PtQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rIECMPvaAHr5myw+rM2WWZqmeLM8NXa36oCEq3iaGlo=;
- b=kPU5cgFpGK1tSnkFgRGoD5NNxxATgblX7cTofR4Y/PGit9mg/YToJrI3QXqMYVhGLH8n+h1YBTIKAm/K1wxWDAQSEpMXSj6x0nKkJU3p2GqFZcxIFDo/ytzRdSo9SZRuW30msnPgOGe6mmGfRBnBGVD/86e+CGBJeoycebHy9yMWi5/RfVkPZA9kIakrOlDJ5epvJrXLT5s/2R2hViABtLVuwnZQr28UcolAeSl2OnDkmNy63BdmFoCXTg8R6nFPrtKGlaJATIpFyFVol67UhPzbNXwHd1nPAOYDbXg+L7WmFxNARFfopwRrqg0VH5fB9gE1xZMGEAX5xJfC+7q41Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rIECMPvaAHr5myw+rM2WWZqmeLM8NXa36oCEq3iaGlo=;
- b=U5cCYev6fVnxi3xdQ8Rd5+0eAIPbaQVxb2w4S1wxAhp2+WI0mwLUSrnL1oGl3Hs8DfjgqOTxWg/eatdZUcdI1gl1NzxLkFFXtPJSYpnmnoqiytWiYMuB5Af8lQWgF1Tf624YxTuGyOg2FFllz+MjUbqPl3mwCgUZsRj/vd/+EN0=
-Received: from MWHPR1201MB0239.namprd12.prod.outlook.com
- (2603:10b6:301:50::15) by BN9PR12MB5340.namprd12.prod.outlook.com
- (2603:10b6:408:105::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
- 2022 15:45:42 +0000
-Received: from MWHPR1201MB0239.namprd12.prod.outlook.com
- ([fe80::b148:9990:8bc4:4647]) by MWHPR1201MB0239.namprd12.prod.outlook.com
- ([fe80::b148:9990:8bc4:4647%4]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
- 15:45:41 +0000
-X-SNPS-Relay: synopsys.com
-To: "yann.morin@orange.com" <yann.morin@orange.com>
-Thread-Topic: [PATCHv2] package/glibc: allow runing on kernels older than used
- for the headers
-Thread-Index: AQHYGDuZ5QO0C8Vs9EqwlFiJlujPqKyAeoTUgAEAVICAAH6y1A==
-Date: Thu, 3 Feb 2022 15:45:41 +0000
-Message-ID: <MWHPR1201MB023933DA53A56AB2AB3D5207A1289@MWHPR1201MB0239.namprd12.prod.outlook.com>
-References: <19291_1643809720_61FA8BB8_19291_487_24_41ca9ce22939ce2ed0c41973db7d612542850824.1643809712.git.yann.morin@orange.com>
- <MWHPR1201MB02399448DED9B92CC064520CA1279@MWHPR1201MB0239.namprd12.prod.outlook.com>
- <2371_1643875895_61FB8E37_2371_137_1_20220203081133.GA3479@tl-lnx-nyma7486>
-In-Reply-To: <2371_1643875895_61FB8E37_2371_137_1_20220203081133.GA3479@tl-lnx-nyma7486>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 14a1df2b-daea-4c48-9126-08d9e72c3bd5
-x-ms-traffictypediagnostic: BN9PR12MB5340:EE_
-x-microsoft-antispam-prvs: <BN9PR12MB5340D843844839A7AEEDF34EA1289@BN9PR12MB5340.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W5Kbqz9r69DwwkYuRWnAYtVbcA5GZ6bgahbHoS/ybZE8xBj5F+IsCcpzQBqUn2WRos6o9b5fHcub2pQGAVxuwyOuCV4rxnpDO0da627qTZFlY08W4aNxGoZTPLPIIs/NIuRm8+e1xLV0X1Pz5qoyx6POPYzWCjdvZN5M0a3duuAIh1Lq6pbmlw4uKPr+QzcTS+/szCnPlQn3IjPD/uYiEzwyMDXLCDf+daMZ2jID3gemwz6/dj1WZAxswQ0wUfpEk4uwzzJKKqgeYz0FLy70ljVvQXC1AxNn3j53TRWhccixpqcH2QKywLPO1B7kiDcgsVjlrAlunpHKx16pRVvUzl7GlZiVch4QlbFLdpp2p1LV65+e1p6rCXlDZsMuGR3TecH8ms1idEPGim9Q+2eQKtBMYaOHyp91bIhLVVuzisbe9DUTpqUvyhMWBpziiRBUkX/D4qIBBQ9AFvLhYH83lHkRIJ1wENYF8L0XgstquU4r50k52BFXcUh6aebeIBBi1sIBKWWu3mpL59a6zitK1SSSpCvjKMulp3Na1W7Qtr0JccHkRXAVlv1bn2t1UqKwCydyy9DirKI+JmfSdl+rXVm2Cm1uln7hqZX2xi4yTSfSI5LfObvpwPTP1ghu4ekjsO5wS34vF9w7Qvxpef3Nd9K+vLv+GOtCOJ2BRasPY4PDroTuV8duoXUjGItkjuIQfI4+sEnNya1UttcNnGUnlQ==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MWHPR1201MB0239.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(366004)(5660300002)(54906003)(186003)(2906002)(122000001)(26005)(52536014)(316002)(508600001)(6916009)(86362001)(76116006)(38100700002)(8676002)(4326008)(33656002)(91956017)(9686003)(55016003)(6506007)(38070700005)(66946007)(66556008)(66446008)(7696005)(64756008)(71200400001)(66476007)(8936002);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?C/UOXYKhlxggkcOThm0JblKJ2rRtrfTXWZbCg5FNW/dn0JHzBQo2/Ds04/?=
- =?iso-8859-1?Q?2sxa9Q4NOM5aoyL9/k3tQCOfyilWlDQg2Zga4RqHTHQqTktfvylInOKdlV?=
- =?iso-8859-1?Q?FLHG9EkjeWvRB5zWCgNHTrcwxl+1XZuv/lISWAtHXlT9nsxd33PDYRdxyW?=
- =?iso-8859-1?Q?dFD0xuQDfvOngfGpVleOpW6mg2/X0JLV9iY1Lj2GKM2KiXyP9Ed7RPS9E8?=
- =?iso-8859-1?Q?fScApM/EHOzzURVaigaHIZfh8Xhg1aahWxR2Wu2MZqdq78koOXRrjDaEZ1?=
- =?iso-8859-1?Q?RooLazmWlRpyIw4GNgg9aG91I3q8wJnryEAMu6pIIm/W0ps9sK78jwcTiR?=
- =?iso-8859-1?Q?bbizh8LJs0DINyzbeR0KIgY8eWA/wdUxqD6mymK9CLOPLwBEaKhzvGrmhq?=
- =?iso-8859-1?Q?BigWrmgfVXyyZCiU4MYxdNj7q4HtXeefbBrEmEs1E2ttrfqV7dU3q6fn8a?=
- =?iso-8859-1?Q?KiQdvADk4DY1M3haAiP0Bpt4DtxW7jAvbR4QiWBixDJBJ0kTBcIMDh5hFS?=
- =?iso-8859-1?Q?fQym3wEuhkNd3opEouO4c0fn6DOYUBAJVhqQLWlmM4/AtAIhNgyrxX63Jh?=
- =?iso-8859-1?Q?7k+BpIhzCucu0SbhYVfgrNelInuV6qZA6rx4ywmPeJLj8JG98RZ1x/PNs0?=
- =?iso-8859-1?Q?TNMPilzwLxC6SRdEzmYsykKiWQNT4hxBQL7ikFykgukfz5Som0cdtzEEUU?=
- =?iso-8859-1?Q?JpZ3ewUZC5grVvjOWqiobcDLky5ws/jv3+Tk5SKA8BwEjCSrk7rjClmLo4?=
- =?iso-8859-1?Q?aCJMVkIc+3r4L3uSMs93hxo7oQu3VddK01t6s/cSrVd606eTp9aUYI0E7V?=
- =?iso-8859-1?Q?EJzadxnG4dsS5OA47rqZ8NwnfRa4y+2WztX+JKfiGPitzjJKN3vWkZtlFP?=
- =?iso-8859-1?Q?N4B6s+iBhMqXNujvki/u/ZwbpUo9aKPBw4Sump817CFVyCOJhfJacWqN+U?=
- =?iso-8859-1?Q?Gb66Z/+Wq/5MoUIEgPfIQPrzu1jlyOv32k5SHvRp3ZM6AkJexI7RYCJJ5H?=
- =?iso-8859-1?Q?ubJiOTw1ZBUckjnQC5yW93QWlg63u1oVMpCq9AjAa2FL1tEQZ6m1lwIDjE?=
- =?iso-8859-1?Q?V7BFhlYTCUx35UYoT0xt8C60XZRwhjrFHQQAfgwZjvLwHTQO96WFF4qh0X?=
- =?iso-8859-1?Q?OAsMzhePDQh51ZLTPOZIqYeXLRnYaDbWAoX+KKeHFRWotDX7/UQXZ/5Coz?=
- =?iso-8859-1?Q?sKTdCiC4azm56WHv+/w4qX7Bx/nY1+0myj3HEbIabpxJcfkY6Hhh6HqBht?=
- =?iso-8859-1?Q?Xd3PMj0Chff/lNsJ9Dvlxm/kIw3LJZbxKLTpz7dlOsO8bPAqXU5SjYwtIc?=
- =?iso-8859-1?Q?1NkdJAQTwMwOW8i2HC2ov3iPqHnASZmaOkFqLvg+EISI7sSG27PK6s3SN0?=
- =?iso-8859-1?Q?Q2NfXKMoUZ7t2jpiOX3+zQrqrZdWeV1qc0x/HD5xj1uPTHRmfj8jR+GGLv?=
- =?iso-8859-1?Q?87BFZ7YZ3tgGXDv9rvu10NZzo2MnQIetsEEj6LkCyp/ZUfsFKllgZaOdAm?=
- =?iso-8859-1?Q?cyVuNK8A0x1nshGTyYm5+FTyBjxIFlGb04vSVkVFCSaEEKc2s4FFpz9AQi?=
- =?iso-8859-1?Q?3rr9no8op0NeGT+MYKdMzwdaWL+VARHMpWKQ4sOnYUcmn9E2wqdj02HTE9?=
- =?iso-8859-1?Q?3447DKFMe+QbU3AAfzFMQfcwoWrfXXn4woFYHQAdhyd7K5OxPwEdUvnupg?=
- =?iso-8859-1?Q?y38dk7DVAOB5yIxdErY=3D?=
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k3uVnlJmYAlW for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 16:00:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6BCCE416DE
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 16:00:26 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id s10so3359981wra.5
+ for <buildroot@buildroot.org>; Thu, 03 Feb 2022 08:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=spfo1QzP8mZzefJYhDb38CpOgCZOdEiOiciRJiA7tTA=;
+ b=Nuoew/QtLOJfWMkAsBhDKGEZhIMg4hSttLRSvd0dD9o6tCokbyotGLBJjo8ny1RsgX
+ 1xV5iCipkjYJc4xV1a607To9LOq8Ygz/T3CSJytDs3LT6/GjBbu7/8LeTSanyPLIy2Of
+ tWuhEQ3UtDepoZ3Mwvblf3uk5wFQ8rRocUFAp4/4SuwPyMAhUz2OftsEeJ5peAtcRRmB
+ UxCrUJAooehNWiYcIO3uQk3YzmwYY6wd21G2Odnuj9XVZ19MQCqAH1PlcYn3dAAf80Ut
+ VJorm+3yOrVE0hLjuEZTrFEjKlLu/iYIDkGBNVV2Hur2ehnEIv07qLA073eLI2TvouZY
+ NeDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=spfo1QzP8mZzefJYhDb38CpOgCZOdEiOiciRJiA7tTA=;
+ b=H9i2V892jC0BEeeajcjNAg/qVwY5eJKHY2qoL8uyCiKqlvQ8sMuZWFYY/+hi37nuEo
+ pG4Cc0IiFp2h2hlXGZg8OmOYNLzp6O3Suz4j2eX8CGrwJ0bBzFNofoPuNCqI/eCGOvvx
+ xxN5dvOh3aksKQz4dsBRAO7Drk1Ynvg1zIuWoK+mnnQocHD2y4orAh/WLa3G9TvwXt1W
+ 9z15rYft1fMUHL/G5CfAKskB1mQxTWPIOZB1QdJ8goj2jAS6+gUEirAmeCcufCaSzJwC
+ pfzvFKqrhmz5Ay1+u0BsVJPralbjzR+51I2lkWdmLP7teKT9fjOdCgHLBRTtp9lp0MCi
+ jxRQ==
+X-Gm-Message-State: AOAM531VleZT+GNYi5SF1/nozme/x1KwZJrPlbaINd2MzqDsdWmVWs8M
+ 5Y0dJe78pU/UehxaK+kflj/rdUbnmyI50A==
+X-Google-Smtp-Source: ABdhPJzZt21B8llwewdSnZFeO82VwbLTqNEqhEmNc5YbMFSrXp+EL2VGY8FIfJSO8FHIBCcWaIsSwA==
+X-Received: by 2002:adf:cd87:: with SMTP id q7mr7305984wrj.581.1643904024374; 
+ Thu, 03 Feb 2022 08:00:24 -0800 (PST)
+Received: from p-nan-sobek.nantes.intranet
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id t5sm21339994wrw.92.2022.02.03.08.00.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Feb 2022 08:00:23 -0800 (PST)
+From: David HENG <david.heng@smile.fr>
+To: buildroot@buildroot.org
+Date: Thu,  3 Feb 2022 16:59:51 +0100
+Message-Id: <20220203155951.1277343-1-david.heng@smile.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0239.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14a1df2b-daea-4c48-9126-08d9e72c3bd5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2022 15:45:41.7127 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i1VI80wreN/9ywcfDTkGKBgYKZFfjJyWHW/BJDeKQjzRj0X3IiLAIxJ72ITGnORiLLvQu/KcKP/azI/rLBByNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5340
-Subject: Re: [Buildroot] [PATCHv2] package/glibc: allow runing on kernels
- older than used for the headers
+Subject: [Buildroot] [PATCH 1/1] configs/qemu_*: bump kernel version to
+ 5.15.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -179,66 +85,585 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: David HENG <david.heng@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+See runtimes test here :
+https://gitlab.com/davidheng.pw/buildroot/-/pipelines/460019580
 
-> On 2022-02-02 17:00 +0000, Alexey Brodkin spake thusly:
-> > > We add an option to glibc to allow the user to enable compatibility
-> > > shims. To simplify the case, when that option is enabled, we just let
-> > > glibc enable as old compatibility shims as supported by the current
-> > > architecture.
-> > Looks reasonable to me. I mean to not have all the flexibility proposed
-> > initially, instead adding an option to fall back to something much
-> > older compared to used headers.
-> >
-> > If more options are needed later, we'll get to know it at some point ;)
-> >
-> > And thanks for doing that, as I meant to do something similar a while ago,
-> > but never posted my local changes.
-> 
-> Will that be followed up by a reviewed-by or maybe a tested-by tag? ;-)
+Signed-off-by: David HENG <david.heng@smile.fr>
+---
+It seems that qemu_s390x_defconfig made a timeout on Gitlab shared-runner at the end but work after a restarting.
+https://gitlab.com/davidheng.pw/buildroot/-/jobs/2044971657
+---
+ configs/qemu_aarch64_sbsa_defconfig        | 2 +-
+ configs/qemu_aarch64_virt_defconfig        | 2 +-
+ configs/qemu_arm_versatile_defconfig       | 2 +-
+ configs/qemu_arm_versatile_nommu_defconfig | 2 +-
+ configs/qemu_arm_vexpress_defconfig        | 2 +-
+ configs/qemu_arm_vexpress_tz_defconfig     | 2 +-
+ configs/qemu_m68k_mcf5208_defconfig        | 2 +-
+ configs/qemu_m68k_q800_defconfig           | 2 +-
+ configs/qemu_microblazebe_mmu_defconfig    | 2 +-
+ configs/qemu_microblazeel_mmu_defconfig    | 2 +-
+ configs/qemu_mips32r2_malta_defconfig      | 2 +-
+ configs/qemu_mips32r2el_malta_defconfig    | 2 +-
+ configs/qemu_mips32r6_malta_defconfig      | 2 +-
+ configs/qemu_mips32r6el_malta_defconfig    | 2 +-
+ configs/qemu_mips64_malta_defconfig        | 2 +-
+ configs/qemu_mips64el_malta_defconfig      | 2 +-
+ configs/qemu_mips64r6_malta_defconfig      | 2 +-
+ configs/qemu_mips64r6el_malta_defconfig    | 2 +-
+ configs/qemu_nios2_10m50_defconfig         | 2 +-
+ configs/qemu_or1k_defconfig                | 2 +-
+ configs/qemu_ppc64_e5500_defconfig         | 2 +-
+ configs/qemu_ppc64_pseries_defconfig       | 2 +-
+ configs/qemu_ppc64le_powernv8_defconfig    | 2 +-
+ configs/qemu_ppc64le_pseries_defconfig     | 2 +-
+ configs/qemu_ppc_bamboo_defconfig          | 2 +-
+ configs/qemu_ppc_e500mc_defconfig          | 2 +-
+ configs/qemu_ppc_g3beige_defconfig         | 2 +-
+ configs/qemu_ppc_mac99_defconfig           | 2 +-
+ configs/qemu_ppc_mpc8544ds_defconfig       | 2 +-
+ configs/qemu_riscv32_virt_defconfig        | 2 +-
+ configs/qemu_riscv64_virt_defconfig        | 2 +-
+ configs/qemu_s390x_defconfig               | 2 +-
+ configs/qemu_sh4_r2d_defconfig             | 2 +-
+ configs/qemu_sh4eb_r2d_defconfig           | 2 +-
+ configs/qemu_sparc64_sun4u_defconfig       | 2 +-
+ configs/qemu_sparc_ss10_defconfig          | 2 +-
+ configs/qemu_x86_64_defconfig              | 2 +-
+ configs/qemu_x86_defconfig                 | 2 +-
+ configs/qemu_xtensa_lx60_defconfig         | 2 +-
+ configs/qemu_xtensa_lx60_nommu_defconfig   | 2 +-
+ 40 files changed, 40 insertions(+), 40 deletions(-)
 
-Indeed the following config 
------------------------>8---------------------
-BR2_arcle=y
-BR2_archs38=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_KERNEL_HEADERS_5_15=y
-BR2_BINUTILS_VERSION_2_37_X=y
-BR2_GCC_VERSION_11_X=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.176"
-BR2_LINUX_KERNEL_DEFCONFIG="haps_hs"
-BR2_LINUX_KERNEL_VMLINUX=y
-BR2_TARGET_ROOTFS_INITRAMFS=y
------------------------>8---------------------
+diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+index e7d3bd03ca..2d6134e78c 100644
+--- a/configs/qemu_aarch64_sbsa_defconfig
++++ b/configs/qemu_aarch64_sbsa_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 9fbf293311..03df0ad9e2 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.16"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 5e399d17de..4f43273a82 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="versatile"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
+index 1357742703..0c49d1b67d 100644
+--- a/configs/qemu_arm_versatile_nommu_defconfig
++++ b/configs/qemu_arm_versatile_nommu_defconfig
+@@ -31,7 +31,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="versatile"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux-nommu.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index dafcc37bc0..2c813456f4 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index 327762277b..def11721ae 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragment"
+ 
+diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
+index 1dcd8272c3..0490b9e29e 100644
+--- a/configs/qemu_m68k_mcf5208_defconfig
++++ b/configs/qemu_m68k_mcf5208_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
+index 7bf8b4061f..30d8982db3 100644
+--- a/configs/qemu_m68k_q800_defconfig
++++ b/configs/qemu_m68k_q800_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 0508f92c36..7bd2ae53b8 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 10811e284e..cd8c5a3cb2 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
+index c08ca862c5..49d84c308b 100644
+--- a/configs/qemu_mips32r2_malta_defconfig
++++ b/configs/qemu_mips32r2_malta_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
+index 0bb16b9320..5363018c47 100644
+--- a/configs/qemu_mips32r2el_malta_defconfig
++++ b/configs/qemu_mips32r2el_malta_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
+index f7b218c62a..f77feb9b6d 100644
+--- a/configs/qemu_mips32r6_malta_defconfig
++++ b/configs/qemu_mips32r6_malta_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
+index d0f118ff90..575034441a 100644
+--- a/configs/qemu_mips32r6el_malta_defconfig
++++ b/configs/qemu_mips32r6el_malta_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index fe03b911c5..e9438fda1e 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index c6d428226c..4b1c8e22af 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
+index 9cf651a4ba..87ef7902af 100644
+--- a/configs/qemu_mips64r6_malta_defconfig
++++ b/configs/qemu_mips64r6_malta_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
+index 0d02a5b4df..5774207f65 100644
+--- a/configs/qemu_mips64r6el_malta_defconfig
++++ b/configs/qemu_mips64r6el_malta_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
+index 44afb928e3..4b9c53e8de 100644
+--- a/configs/qemu_nios2_10m50_defconfig
++++ b/configs/qemu_nios2_10m50_defconfig
+@@ -1,7 +1,7 @@
+ BR2_nios2=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="10m50"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux.fragment"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
+index 9d55cb3420..b3d9d79156 100644
+--- a/configs/qemu_or1k_defconfig
++++ b/configs/qemu_or1k_defconfig
+@@ -15,7 +15,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
+ 
+diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+index 09aac50252..072240c99c 100644
+--- a/configs/qemu_ppc64_e5500_defconfig
++++ b/configs/qemu_ppc64_e5500_defconfig
+@@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index 1a20e2ee0e..ad523ec2ef 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
+index d8ea6655fc..a784695ddf 100644
+--- a/configs/qemu_ppc64le_powernv8_defconfig
++++ b/configs/qemu_ppc64le_powernv8_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="powernv"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+index 46f62b8313..f10b0fdf40 100644
+--- a/configs/qemu_ppc64le_pseries_defconfig
++++ b/configs/qemu_ppc64le_pseries_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc_bamboo_defconfig b/configs/qemu_ppc_bamboo_defconfig
+index d6abbeb452..6129c4a663 100644
+--- a/configs/qemu_ppc_bamboo_defconfig
++++ b/configs/qemu_ppc_bamboo_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/bamboo"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-bamboo/linux.fragment"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
+index 232bc1f70c..1853e538bb 100644
+--- a/configs/qemu_ppc_e500mc_defconfig
++++ b/configs/qemu_ppc_e500mc_defconfig
+@@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index 824fe648ab..9bbebede1b 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
+index ddeb99465a..e9629ff233 100644
+--- a/configs/qemu_ppc_mac99_defconfig
++++ b/configs/qemu_ppc_mac99_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 1a72d81ed5..2b51573da9 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index e2753cfcfd..dff87ef342 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="rv32"
+ BR2_LINUX_KERNEL_IMAGE=y
+ 
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 07f20776f0..d67d070185 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_IMAGE=y
+ 
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index 86ac1fd024..346df04ada 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -17,7 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index c8177e6096..0f12b7dfe9 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+index f334569779..d5ee371e79 100644
+--- a/configs/qemu_sh4eb_r2d_defconfig
++++ b/configs/qemu_sh4eb_r2d_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
+index 941439d338..485b497e71 100644
+--- a/configs/qemu_sparc64_sun4u_defconfig
++++ b/configs/qemu_sparc64_sun4u_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
+ 
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 62d3acb16b..2ba04c0864 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
+ 
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 1bca76df44..cc505a8540 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -21,7 +21,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+ BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 54cf8e9794..34b7e2d292 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+ 
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index 1db3fd3ce4..cb78106091 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -21,7 +21,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index d4c07b574c..c4473fb32a 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -25,7 +25,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-- 
+2.25.1
 
-fails to boot with:
------------------------>8---------------------
-Run /init as init process
-FATAL: kernel too old
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x00007f00
----[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00007f00 ]---
------------------------>8---------------------
-
-But if we add newly introduced "BR2_PACKAGE_GLIBC_KERNEL_COMPAT=y" all boots
-well. With that...
-
-Tested-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-> Thanks for the feedback, by the way. 
-
-That's my pleasure!
-
--Alexey
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
