@@ -1,144 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F42FC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 13:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABC9DC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 14:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE4F4400CB;
-	Thu,  3 Feb 2022 13:57:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 477DC61001;
+	Thu,  3 Feb 2022 14:05:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id st1ixUdHAwsG; Thu,  3 Feb 2022 13:57:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XEu7_23q0nJI; Thu,  3 Feb 2022 14:05:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 485E8403C4;
-	Thu,  3 Feb 2022 13:57:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A83161002;
+	Thu,  3 Feb 2022 14:05:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 79DCE1BF476
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 13:57:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BBB321BF33B
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 14:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6BB1460FFE
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 13:57:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A96FB61002
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 14:05:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kpumS-yMTTy8 for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 13:57:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com
- (mail-dm3nam07on2060b.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e83::60b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4196D60FFD
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 13:57:10 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ShDySoss5EncF5N0XbGsmFO4rNehbb42/7uWRt3TKhQQhV1wjhbRK1zkJDT5CYqNy++dfHoe2PYhtO2jkdWQ0JNmNGSA88/D2t9Chus7n+r0ipaD7YoyT7os47XjPQaWsn0I0gTv9WaNLrovONSGpUS+seUb2xF4i6RLjoYZBARcjj+i95A9dLEa9EG9ebsvrSsWRTA+PytPInVxFlogOxr8qSx6/tr0f1Gv/xyJ/8OvwNWU/1q3kpgV1C8GbLPdg/Y4JrE5vV5wiB9L/d9LItcT4M4DzBXQT2Fha8Qw1jHsjLAM0mMRgx61G5DaCfoMIq8cZ2yp33w4SUlm05Z1KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t8ZXrMb+k7JmK03SR4dDGE0Cd4GjO95wAu8VFEv+eWg=;
- b=UO4OVVbkDryvyXdH1FSSkekzs4cygE7LclHLjUyxSvgRkvkvjtA3SGXD/VtR6RVuSh4TJ8oYHc+YGGMsf/anZjA1pUxJq6R5RgWrDyb/9skJPaVKnnuxmHu1iouJlBjSW51r588Or2I6nfNud3YRc0T1+dZwHDdRK6F6dsShHcWQLFz8Mw1TgmaS7/Ik5wNplhQoBDYby39XM+qi2lqUAg6Je1j5FTT5X38cqADt/n8K2f/ihw3tmwzGEoIb4A12NrLI0qSuy59xKU67fLMV3wvTWPRKzNQ6xMBlibNLz18wBFdLenK1+w98DFubjTo9XMyx+7/DBxwUpg2f3lZdhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t8ZXrMb+k7JmK03SR4dDGE0Cd4GjO95wAu8VFEv+eWg=;
- b=MMj0vG12rjsRQtVkP2FHp6zskvFOIRfdGUAhxAk+rm4W4bu5lg7YIG2753Mu6tM6Og9Aoln13icaNDLlwb+9ss1JN4gHrr8Juc26CvPdKRVWoTBCVsHR6rpJNtkSb3RZvd2Ff7vprG5GUNJ5BvL+wrHy1BHh8kyO6ub6bB+UsTs=
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by BL0PR02MB3795.namprd02.prod.outlook.com (2603:10b6:207:3e::21)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14; Thu, 3 Feb
- 2022 13:57:01 +0000
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::2116:5f79:fc19:9d93]) by SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::2116:5f79:fc19:9d93%7]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
- 13:57:01 +0000
-From: Neal Frager <nealf@xilinx.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH 1/1] configs/zynqmp_zcu10x: Bump
- ATF/U-Boot/Linux to Xilinx 2021.2
-Thread-Index: AQHYGFXQe6rW+OhmpECM57uHN+anmKyA2RsAgACC6rCAAF7gAIAAH0Rg
-Date: Thu, 3 Feb 2022 13:57:01 +0000
-Message-ID: <SJ0PR02MB77581316BAA24C0BB61FE03FD7289@SJ0PR02MB7758.namprd02.prod.outlook.com>
-References: <20220202165555.3497977-1-nealf@xilinx.com>
- <59b73223-73b3-1b9e-b8ec-0cedb0c605ef@benettiengineering.com>
- <SJ0PR02MB7758745E002B770107A10120D7289@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <b2065d36-7a25-a3e3-8311-95f3366a3c43@benettiengineering.com>
-In-Reply-To: <b2065d36-7a25-a3e3-8311-95f3366a3c43@benettiengineering.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a0353209-fd7f-4c7a-a05b-08d9e71d0d46
-x-ms-traffictypediagnostic: BL0PR02MB3795:EE_
-x-microsoft-antispam-prvs: <BL0PR02MB37954ECC69D9856E786EDB76D7289@BL0PR02MB3795.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 48ElN6WWEU+zmGoLH5B9mksL64DCHrRZTxDmAY3nuWWWIe25GTohNmDy2dGMhpky2z/pmWBkvheSyOJv9pRoCBecTEmbF1TeiqfHE6Wugx5W/fI9NW5rT8y6cyZ1e0QJZaBQ2RM47TDG32Fyy+yCewy8wt+zJ3zUdISnVhOyRw2/fF73rkxndmWEs9c00qR/IYheXVkgpD4Y93RdcOip31JzAJfw7r7j+n+eQKZWdgscoJD8oUkmQPox9dQPgVsNur7A+NxA0z1pup4AnrzBeAw24SfnhHFsu0k5gK3vfDczMykdTJJIm299PIpwPsNfgKkDIGqpZCQwCOtMckMMKjMDzN0mw+YwmROrkf134y4zZ6tXY+Ne+fzUfmZhuMSfYpFEdTE5L2RcQX9BqUc0C06OB5xS+XgfUllJM846tYpdakJ8WNnHgIeB4ZPkf2lGMK7huyL4H6EwJOYXnMutRCWWUWBHXYzumhunBcsPj3ZPDU+PiZIquAF1sAIkXB6SzM3GJq0A6IJW6OoXSe1mLqHxDbSc2lSx6gD5MY8BOI5rvU9B+vvjweaZDFIMm/v6b1ZVQpACEJuGX77Jr7n2LZ8UssIak9EAMkS6lu22isnLZj3ukcgS4kUjXDJYaGKQo9bR5Dvy7puK/ZJ0ZMIpwZ38IIn0zGEP07rwv0KNbXbSmuvNEbI4vgbSZ0pEjIf7TBuIREzkeZaetZ0o1JNgh67JKGR4ziwL4JeM/6vsXah/FfSQ39IrvmYm5zLS0CsEueaz9chsRKfeYazIFFlKcRG4rM8sO2xFMcFs2lOJqAElgZEwhxEGNmmGIPPh/u4V3K24HP7GZuq15FYAGzD78A==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(508600001)(83380400001)(53546011)(9686003)(38070700005)(7696005)(6506007)(71200400001)(186003)(26005)(8936002)(30864003)(4326008)(66946007)(66556008)(66446008)(64756008)(5660300002)(52536014)(8676002)(2906002)(122000001)(38100700002)(55016003)(86362001)(76116006)(19627235002)(110136005)(316002)(966005)(66476007)(33656002)(559001)(579004);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZG1kVFlNYVJOSDVtNVBLcnFNZE1BTGNuNW00bDFWWjRGTk9mekZRelh2MkVM?=
- =?utf-8?B?aVB0aFFuZjZnMlVGM2s3elVuVU1IN1lWTVpwODQ4YWYwTjZRZXluTDYxWitz?=
- =?utf-8?B?a3ZJeElpQ1NWWmNrdkNhTEppalIxcEZOenBaek1XZzRLMUhLRGpwc1dISFJn?=
- =?utf-8?B?amRGa3JHVlI5Qjc3TERWQ2ZrVnlMK1loSkhBUlhudkZvbE8rTXlIMHFKN1h0?=
- =?utf-8?B?czF5ZWNoTk1uTmZ1VDFVZ3I5MjJpalJBekhsSTRLZHk4a2ZIUktPbXY5ejFz?=
- =?utf-8?B?ZE9WUEptR1RZaXNrbjEzNHJ2S0lpQnJLT3JyeEVKRWp3MzRtQXNDd04rcXZ0?=
- =?utf-8?B?MVFaMExrbkZMSy9LQ2V1dTM0RktJa1psTGg3VTVMUFJuSGFvNkNIWjM5VGRx?=
- =?utf-8?B?blo4bEFvblpmd0lza3BhZFhYdHdMNXEvb1NEdzlPUUVWRnp2ajhick5ocGpw?=
- =?utf-8?B?dXFkWGUzRmhEeW9iaFpadVZHbklNVU12SmZHMlFwNlp2aitjRXAvMStvT0w0?=
- =?utf-8?B?c3NxRFB4K1h2YzBPZjlhcnpXVzFOR3VLTU9DSWdmakYyUUJKRXByaHpvUTNK?=
- =?utf-8?B?dGNtb3dwbVhMRWhiUXRZbkNUSVcvU045QlBhRkRvS2NzQ0tTeG9MSjg2QmhX?=
- =?utf-8?B?TXg5T1IxUUxHNUQwMnR6VU1oVnhrVjZQdnIrTWcyaXhDek0yOCt3UFc1Nmhr?=
- =?utf-8?B?cVg1aFlJOXhPT1N6Rnlrb3kxOWkxQk5kaFZWc0lMc3V2RllTUEp6WkFyZCto?=
- =?utf-8?B?L0YxTWFCcG9FaEJvUm5NdnhJWURoWCt0ejA4Y0xoT2dpOHVoUExkdG5nenVz?=
- =?utf-8?B?T29tejdKUEx1NklIT3dTTWlTZVRWZHJrQThFOHJ2cFRQTmVXUk1WT3V5WTNN?=
- =?utf-8?B?SnEvYnEvZTJCMURJa3ZsbmpyV0NReThwU01yRDM5NGEzSGMvVWxaYWdvYWlM?=
- =?utf-8?B?NmVIem5nNUUrWTBOVDk3SHFmWmE5UEpNTHpyMzJjVitCd0NJWXZ6RnRWbjdN?=
- =?utf-8?B?UytlcVhsaG9FRHhFV1BySC8rV0RDRlZodVd5Ni9Za1ozdFhsck5jdHFUaGt6?=
- =?utf-8?B?bU1MYlBTMWkvL2ZGQzBIbmtSTWlsUEpicy9rM2RPZFhUdlhCaSswNmxhRjZj?=
- =?utf-8?B?b1BDUnhQOU85bnI3Uy9UU29VQzFqdmF5eVlPcVdSTUtCWERPbnNTYnUvOW9V?=
- =?utf-8?B?cThuSDdHL25qckRNZGZ5OXRqVTR4Z296Wm8rejBFSzBrajByNEVrOXZXOXhj?=
- =?utf-8?B?eG0rQkhTTDZRTjFBdWxSc1lTbWdHMDB0V1d5a3dvNEFMWTJ0dml2Z2wvY3ZN?=
- =?utf-8?B?L0NualFhQkR3UjEySjltcUZxcThIbUh4T3hCcGpSOGpnaTluakUzUkFYK205?=
- =?utf-8?B?YWhvbEJTb2dYdU8vV1p2bGFJV1l1YUZkL2dRWFMxeVNwNzNmNXZZazRXRUNj?=
- =?utf-8?B?ZnQxckJxbkF3Z1NKVCtBVlFmSFh5ZExlS1pzbjJZenlyTkROVSswajEzK1lM?=
- =?utf-8?B?Q3E1L3VsNE1QcEdBcGhtcXdIOHBHWkFheSttRFJYcTRmMEMxSWU5Y1QwdG5W?=
- =?utf-8?B?Rk1zTzREc3ltUWdpY1hXOFg0SHRXck5XTkg0ZnlpWHA4NlNzL2I0MWkwRlFW?=
- =?utf-8?B?SkpGMUZyeTdSZk1NbjdxRlB4UzUyV1p0OG55cGN4RjZDT0ZINFhSTGdDQkpJ?=
- =?utf-8?B?R2RxSkNNR0ZGbXllV3ErRGNBM1lCcGM0ZTZuUjNtdXhkMlJRZDhUOFlSN0VE?=
- =?utf-8?B?NjZlelQyV20xR05KRHluUUdVVDFwZlB2YkVDdHdRd1dZSHIwZEV2YUVzWVVL?=
- =?utf-8?B?ajZyZW9aY3RzNUtBYzF6ZHBsNjlVQ0h5OTJtK1FWaWRXdlY3dXRhWC9Oa3pO?=
- =?utf-8?B?aDdYa2dsYmZTL3Z2YXNNSUQyeUovQUdoRm9wN1lOWWhYb01MKzI2T21lcmlz?=
- =?utf-8?B?Zm1UdU16M0k1VVpNY1RtYmlJTHptM0FyQWlLS0FWMHUxd2tKQXd5TWt3dklw?=
- =?utf-8?B?N3JJeGk5OUdraDE5bDlpZU9BeXJBUE1keVhHaitnSENsdWVJeFdTb2NqakdW?=
- =?utf-8?B?c0p1ZXJVejd2V05WLzhFcVZ2Sm9lb0liL0FMREFIeUw3alRVaXNZcGhQcC9T?=
- =?utf-8?B?MFI2VUxTUTdPV0xkNXVBSGVoOHVuZFhicGl4bEpWdStuYlFQT3c5b3J1K0dD?=
- =?utf-8?Q?7Thlmtekqq4YeijKLs4G7zE=3D?=
-MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0353209-fd7f-4c7a-a05b-08d9e71d0d46
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2022 13:57:01.1342 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wi693VtZjByn89Z7IZr5K4e2bc+Tsn4qNPQeH1iFqyOJkM/wv3WQOeRG611xTfboNUUVJ4bkda7ZU1DatUHWwQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3795
+ with ESMTP id 4nPz4eU83vyy for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 14:05:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 902C361001
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 14:05:39 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id FcjvnoisMDzPJFcjwnsgRu; Thu, 03 Feb 2022 15:05:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1643897136; bh=xh6siHQU/4WOD4YgsBgQzv56PJZtsVSsK9kBbUC+WJQ=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=QWZ3tB7jYMjzd5TNpnO6ZFwV0Og3wmZb038CpcpCkN02KmKW/A4OgMVHywHJbk7iM
+ 4DJ+Zn2zBZv/1Xej5yWK9Uosz8DPxLy6mtHcQwYpxyqccFmDthE2sbIy2W1s5Nc78z
+ L9l9Y56WCHmr6PhhyXPZXVs4eMvAKZRzBaGk6NNGyq79UVJWOOTJdPBuDCfYxwdhhu
+ c1EXNkNEAgm28vqWe/V8IR/4chE/3vwDy/dssbCYeSx2qM1RI18fdHEHEC0Mwrt462
+ cVaaAVq4DXlPRxgrEPWZAiFt3QsKiju5JrfA2qh05uyVRwTsgzhJhGP0NZqjqWVuFw
+ xUFvmfTrDGtkQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Thu, 3 Feb 2022 15:05:35 +0100
+Message-Id: <CDDC50C0-5680-4059-9D5F-0D2AA5F4D462@benettiengineering.com>
+References: <SJ0PR02MB77581316BAA24C0BB61FE03FD7289@SJ0PR02MB7758.namprd02.prod.outlook.com>
+In-Reply-To: <SJ0PR02MB77581316BAA24C0BB61FE03FD7289@SJ0PR02MB7758.namprd02.prod.outlook.com>
+To: Neal Frager <nealf@xilinx.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfNloGpMbqziE9/8tFLtRgIW0vAyckIH+Q9GJATIfBUuiGXVM0ySPu1wIhpOtrO3h/UVvAc8o7CN/eYW4zqAZP6tOytqP3tWzjYCofRnT+9cnu8dVWA/K
+ ejS9TPq4wBD3r0rWNg6a3h+mgJWJxsK0mHz5W9EB0MH5w55sfLis2k4+GEGNdCCP31nZjp14ofsglqx8RzJv4UR5Co49F+BRLeCs5MukNdii+ApCBvutusa+
+ Ut+ESH0hyQ9PHVGBX7EqG/arLPWUISLrfV1zNSgMVrU=
 Subject: Re: [Buildroot] [PATCH 1/1] configs/zynqmp_zcu10x: Bump
  ATF/U-Boot/Linux to Xilinx 2021.2
 X-BeenThere: buildroot@buildroot.org
@@ -152,820 +67,607 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: luca@lucaceresoli.net, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
-
-> Hi Neal,
-
-> On 03/02/22 07:24, Neal Frager wrote:
-> Hi Giulio,
->
-> Thank you very much for your feedback.
-
-> You're welcome.
-
-> Please don't top-post, answer inline as you see all around the Mailing List.
-
-> Also, I don't know if you've read my entire answer. Usually until you don't see "Best regards" and the name of the one who answer, the answer-mail is not finished yet, so simply scroll down until you finish the e-mail.
-
-> So please check also the rest of my previous e-mail.
-
-I hope this method of inline answer works.  I have submitted a new set of patches based on the feedback from you and Luca.  Could you please have a look and let me know what you think?
-
-> I would be happy to split the zynqmp_zcu102_defconfig off into a second patch.  No problem.
-
-> Fine
-
-> As for adding comments to the log, could you share the proper git commands for doing this?  I would be happy to do it, but I am a bit new to git and I did not know the proper command to use for adding log comments.
-
-> Luca already pointed you a lot of very useful links.
-
-> Another tool I like to create patches for me is "git gui" and also "gitk" to scroll the commits in a non-console way.
-
-> Most of all "git gui" is helpful to me to choose a single line to stage or revert.
-
-> Best regards
----
-> Giulio Benetti
-> Benetti Engineering sas
-
-> Best regards,
->
-> Neal Frager
-> Xilinx
->
-
-Best regards,
-Neal Frager
-Xilinx
-
-> -----Original Message-----
-> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Sent: Wednesday 2 February 2022 23:33
-> To: Neal Frager <nealf@xilinx.com>; buildroot@buildroot.org
-> Cc: luca@lucaceresoli.net; Neal Frager <nealf@xilinx.com>
-> Subject: Re: [Buildroot] [PATCH 1/1] configs/zynqmp_zcu10x: Bump 
-> ATF/U-Boot/Linux to Xilinx 2021.2
->
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
->
->
-> Hi Neal,
->
-> nice to see you've made it with git send-email :-),
->
-> Here I would improve commit log by stating that you're dropping all 
-> local patches because they are now upstreamed
->
-> On 02/02/22 17:55, Neal Frager wrote:
->> Signed-off-by: Neal Frager <nealf@xilinx.com>
->> ---
->>    board/zynqmp/genimage.cfg                     |   1 +
->>    ...-fix-Remove-GGC-ignore-Warray-bounds.patch |  68 -------
->>    ...64-zynqmp-zcu106-fix-SPL-MMC-booting.patch |  52 ------
->>    ...2-arm64-zynqmp-Enable-booting-to-ATF.patch | 114 ------------
->>    ...ept-an-absolute-path-for-PMUFW_INIT_.patch |  68 -------
->>    ...ynqmp-pass-the-PS-init-file-as-a-kco.patch | 175 ------------------
->>    configs/zynqmp_zcu102_defconfig               |  35 ++++
->
-> This ^^^ file is added, so it deserves a second patch after this one, 
-> basically this becomes a patchset of 2 patches
->
->>    configs/zynqmp_zcu106_defconfig               |  15 +-
->>    8 files changed, 44 insertions(+), 484 deletions(-)
->>    delete mode 100644 board/zynqmp/patches/arm-trusted-firmware/0001-Coverity-fix-Remove-GGC-ignore-Warray-bounds.patch
->>    delete mode 100644 board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
->>    delete mode 100644 board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
->>    delete mode 100644 board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-for-PMUFW_INIT_.patch
->>    delete mode 100644 board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch
->>    create mode 100644 configs/zynqmp_zcu102_defconfig
->>
->> diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg 
->> index ed202f4550..557364e124 100644
->> --- a/board/zynqmp/genimage.cfg
->> +++ b/board/zynqmp/genimage.cfg
->> @@ -3,6 +3,7 @@ image boot.vfat {
->>                files = {
->>                        "boot.bin",
->>                        "u-boot.bin",
->> +                     "u-boot.itb",
->
-> Can you please justify this adding ^^^ in commit log?
->
->>                        "atf-uboot.ub",
->>                        "system.dtb",
->>                        "Image"
->> diff --git
->> a/board/zynqmp/patches/arm-trusted-firmware/0001-Coverity-fix-Remove-
->> G
->> GC-ignore-Warray-bounds.patch
->> b/board/zynqmp/patches/arm-trusted-firmware/0001-Coverity-fix-Remove-
->> G
->> GC-ignore-Warray-bounds.patch
->> deleted file mode 100644
->> index 0c1a9ba2a4..0000000000
->> ---
->> a/board/zynqmp/patches/arm-trusted-firmware/0001-Coverity-fix-Remove-
->> G
->> GC-ignore-Warray-bounds.patch
->> +++ /dev/null
->> @@ -1,68 +0,0 @@
->> -From da003e6ada7d0217fe99dc7c649a731f8ebd3c34 Mon Sep 17 00:00:00
->> 2001
->> -From: Deepika Bhavnani <deepika.bhavnani@arm.com>
->> -Date: Thu, 15 Aug 2019 00:56:46 +0300
->> -Subject: [PATCH] Coverity fix: Remove GGC ignore -Warray-bounds
->> -
->> -GCC diagnostics were added to ignore array boundaries, instead -of 
->> ignoring GCC warning current code will check for array boundaries 
->> -and perform and array update only for valid elements.
->> -
->> -Resolves: `CID 246574` `CID 246710` `CID 246651`
->> -
->> -Signed-off-by: Deepika Bhavnani <deepika.bhavnani@arm.com>
->> -Change-Id: I7530ecf7a1707351c6ee87e90cc3d33574088f57
->> -
->> -Backported from: 41af05154abe136938bcfb5f26c969933784bbef
->> -[Adapted to apply on 1.5]
->> -
->> ----
->> - lib/psci/psci_common.c | 20 ++++++++++----------
->> - 1 file changed, 10 insertions(+), 10 deletions(-)
->> -
->> -diff --git a/lib/psci/psci_common.c b/lib/psci/psci_common.c -index
->> 2220a745cd6e..6282d992a2f0 100644
->> ---- a/lib/psci/psci_common.c
->> -+++ b/lib/psci/psci_common.c
->> -@@ -188,21 +188,17 @@ static unsigned int
->> get_power_on_target_pwrlvl(void)
->> -
->> /********************************************************************
->> *
->> *********
->> -  * Helper function to update the requested local power state array.
->> This array
->> -  * does not store the requested state for the CPU power level. 
->> Hence an
->> -- * assertion is added to prevent us from accessing the wrong index.
->> -+ * assertion is added to prevent us from accessing the CPU power level.
->> -
->> *********************************************************************
->> *
->> *******/
->> - static void psci_set_req_local_pwr_state(unsigned int pwrlvl,
->> -                                      unsigned int cpu_idx,
->> -                                      plat_local_state_t req_pwr_state)
->> - {
->> --    /*
->> --     * This should never happen, we have this here to avoid
->> --     * "array subscript is above array bounds" errors in GCC.
->> --     */
->> -     assert(pwrlvl > PSCI_CPU_PWR_LVL);
->> --#pragma GCC diagnostic push
->> --#pragma GCC diagnostic ignored "-Warray-bounds"
->> --    psci_req_local_pwr_states[pwrlvl - 1][cpu_idx] = req_pwr_state;
->> --#pragma GCC diagnostic pop
->> -+    if ((pwrlvl > PSCI_CPU_PWR_LVL) && (pwrlvl <= PLAT_MAX_PWR_LVL) &&
->> -+                    (cpu_idx < PLATFORM_CORE_COUNT)) {
->> -+            psci_req_local_pwr_states[pwrlvl - 1U][cpu_idx] = req_pwr_state;
->> -+    }
->> - }
->> -
->> -
->> /********************************************************************
->> *
->> ********* -@@ -228,7 +224,11 @@ static plat_local_state_t 
->> *psci_get_req_local_pwr_states(unsigned int pwrlvl,
->> - {
->> -     assert(pwrlvl > PSCI_CPU_PWR_LVL);
->> -
->> --    return &psci_req_local_pwr_states[pwrlvl - 1][cpu_idx];
->> -+    if ((pwrlvl > PSCI_CPU_PWR_LVL) && (pwrlvl <= PLAT_MAX_PWR_LVL) &&
->> -+                    (cpu_idx < PLATFORM_CORE_COUNT)) {
->> -+            return &psci_req_local_pwr_states[pwrlvl - 1U][cpu_idx];
->> -+    } else
->> -+            return NULL;
->> - }
->> -
->> - /*
->> ---
->> -2.34.0
->> -
->> diff --git
->> a/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-boo
->> t
->> ing.patch
->> b/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-boo
->> t
->> ing.patch
->> deleted file mode 100644
->> index 4d85e1bb12..0000000000
->> ---
->> a/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-boo
->> t
->> ing.patch
->> +++ /dev/null
->> @@ -1,52 +0,0 @@
->> -From e5d72ed8339eb05285448aad3c89d21e4d18fd29 Mon Sep 17 00:00:00
->> 2001
->> -From: Luca Ceresoli <luca@lucaceresoli.net>
->> -Date: Mon, 26 Feb 2018 09:40:34 +0100
->> -Subject: [PATCH] arm64: zynqmp: zcu106: fix SPL MMC booting
->> -
->> -The U-Boot SPL generated with the current zcu106 defconfig cannot 
->> boot -from MMC:
->> -
->> -  [...]
->> -  U-Boot SPL 2018.01 (Feb 21 2018 - 17:47:14)
->> -  EL Level:  EL3
->> -  Trying to boot from MMC1
->> -  sdhci_transfer_data: Error detected in status(0x408020)!
->> -  spl_load_image_fat_os: error reading image u-boot.bin, err - -2
->> -  spl_load_image_fat: error reading image u-boot.img, err - -6
->> -  SPL: failed to boot from all boot devices
->> -  ### ERROR ### Please RESET the board ###
->> -
->> -Fix by lowering the rpll value. The new value for the RPLL_CTRL 
->> -register comes from the current psu_init_gpl.c from the HDF file at
->> -https://github.com/xilinx/hdf-examples/tree/01ad8ea5fd1989abf4ea5a07
->> 2
->> d019a16cb2bc546/zcu106-zynqmp
->> -(generated by Vivado v2017.4).
->> -
->> -RPLL and sdio1_ref clocks before and after this change:
->> -
->> - - Old values: RPLL 1.36 GHz, sdio1_ref 272 MHz
->> - - New values: RPLL 1.16 GHz, sdio1_ref 233 MHz
->> -
->> -Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> -Cc: Michal Simek <michal.simek@xilinx.com>
->> -Upstream-status: accepted upstream in a different form
->> ----
->> -
->> - board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c | 2 +-
->> - 1 file changed, 1 insertion(+), 1 deletion(-)
->> -
->> -diff --git a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
->> b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
->> -index 4d18abe000ca..e6fa477e53e7 100644
->> ---- a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
->> -+++ b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
->> -@@ -10,7 +10,7 @@
->> - static unsigned long psu_pll_init_data(void)
->> - {
->> -     psu_mask_write(0xFF5E0034, 0xFE7FEDEFU, 0x7E4E2C62U);
->> --    psu_mask_write(0xFF5E0030, 0x00717F00U, 0x00013C00U);
->> -+    psu_mask_write(0xFF5E0030, 0x00717F00U, 0x00014600U);
->> -     psu_mask_write(0xFF5E0030, 0x00000008U, 0x00000008U);
->> -     psu_mask_write(0xFF5E0030, 0x00000001U, 0x00000001U);
->> -     psu_mask_write(0xFF5E0030, 0x00000001U, 0x00000000U);
->> ---
->> -2.7.4
->> -
->> diff --git
->> a/board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.
->> p
->> atch
->> b/board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.
->> p
->> atch
->> deleted file mode 100644
->> index 487fff6812..0000000000
->> ---
->> a/board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.
->> p
->> atch
->> +++ /dev/null
->> @@ -1,114 +0,0 @@
->> -From 5e3cac50cc981e01d9072241035a8d4162560c71 Mon Sep 17 00:00:00
->> 2001
->> -From: Luca Ceresoli <luca@lucaceresoli.net>
->> -Date: Mon, 12 Mar 2018 17:18:38 +0100
->> -Subject: [PATCH] arm64: zynqmp: Enable booting to ATF
->> -
->> -U-Boot is now able to boot to ARM Trusted Firmware (ATF). The boot 
->> -flow is SPL(EL3) loads ATF and full u-boot and jump to ATF(EL3) 
->> which -pass control to full u-boot(EL2). This has been tested on 
->> zcu106, so -enable it in this defconfig.
->> -
->> -To generate an image that triggers this booting flow, you need to 
->> pass -'-O arm-trusted-firmware' to mkimage.
->> -
->> -Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> -Signed-off-by: Michal Simek <michal.simek@xilinx.com> -Backported 
->> from upstream:
->> http://git.denx.de/?p=u-boot.git;a=commit;h=5e3cac50cc981e01d90722410
->> 3
->> 5a8d4162560c71
->> ----
->> -
->> - configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig | 1 +
->> - configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig | 1 +
->> - configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig | 1 +
->> - configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig | 1 +
->> - configs/xilinx_zynqmp_zcu102_rev1_0_defconfig    | 1 +
->> - configs/xilinx_zynqmp_zcu102_revA_defconfig      | 1 +
->> - configs/xilinx_zynqmp_zcu102_revB_defconfig      | 1 +
->> - 7 files changed, 7 insertions(+)
->> -
->> -diff --git a/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
->> b/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
->> -index c5bfa2b12638..488c72258b0e 100644
->> ---- a/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
->> -+++ b/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
->> -@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_FASTBOOT=y
->> - CONFIG_FASTBOOT_FLASH=y
->> -diff --git a/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
->> b/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
->> -index f86dce403a42..5d501eec0edd 100644
->> ---- a/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
->> -+++ b/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
->> -@@ -20,6 +20,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_FASTBOOT=y
->> - CONFIG_FASTBOOT_FLASH=y
->> -diff --git a/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
->> b/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
->> -index 6e947cf56827..6f7eaebd7676 100644
->> ---- a/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
->> -+++ b/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
->> -@@ -16,6 +16,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_CMD_MEMTEST=y
->> - CONFIG_SYS_ALT_MEMTEST=y
->> -diff --git a/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
->> b/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
->> -index 1c934858c61c..7a3806cba4b5 100644
->> ---- a/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
->> -+++ b/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
->> -@@ -17,6 +17,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_CMD_MEMTEST=y
->> - CONFIG_SYS_ALT_MEMTEST=y
->> -diff --git a/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
->> b/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
->> -index e13c7c56f310..e4408f182ca0 100644
->> ---- a/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
->> -+++ b/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
->> -@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_FASTBOOT=y
->> - CONFIG_FASTBOOT_FLASH=y
->> -diff --git a/configs/xilinx_zynqmp_zcu102_revA_defconfig
->> b/configs/xilinx_zynqmp_zcu102_revA_defconfig
->> -index 5b2cd495ee85..b52f6789fd4b 100644
->> ---- a/configs/xilinx_zynqmp_zcu102_revA_defconfig
->> -+++ b/configs/xilinx_zynqmp_zcu102_revA_defconfig
->> -@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_FASTBOOT=y
->> - CONFIG_FASTBOOT_FLASH=y
->> -diff --git a/configs/xilinx_zynqmp_zcu102_revB_defconfig
->> b/configs/xilinx_zynqmp_zcu102_revB_defconfig
->> -index e6530fbfe7ff..80592554f682 100644
->> ---- a/configs/xilinx_zynqmp_zcu102_revB_defconfig
->> -+++ b/configs/xilinx_zynqmp_zcu102_revB_defconfig
->> -@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
->> - CONFIG_SPL_OS_BOOT=y
->> - CONFIG_SPL_RAM_SUPPORT=y
->> - CONFIG_SPL_RAM_DEVICE=y
->> -+CONFIG_SPL_ATF=y
->> - CONFIG_SYS_PROMPT="ZynqMP> "
->> - CONFIG_FASTBOOT=y
->> - CONFIG_FASTBOOT_FLASH=y
->> ---
->> -2.7.4
->> -
->> diff --git
->> a/board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-pat
->> h
->> -for-PMUFW_INIT_.patch
->> b/board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-pat
->> h
->> -for-PMUFW_INIT_.patch
->> deleted file mode 100644
->> index 95ab7b3b75..0000000000
->> ---
->> a/board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-pat
->> h
->> -for-PMUFW_INIT_.patch
->> +++ /dev/null
->> @@ -1,68 +0,0 @@
->> -From c7df098a71e05dc81cee818747759e8060b59626 Mon Sep 17 00:00:00
->> 2001
->> -From: Luca Ceresoli <luca@lucaceresoli.net>
->> -Date: Mon, 4 Jun 2018 12:21:01 +0200
->> -Subject: [PATCH] arm64: zynqmp: accept an absolute path for 
->> PMUFW_INIT_FILE
->> -
->> -The value of PMUFW_INIT_FILE is prefixed with "$(srctree)/", thus 
->> -forcing it to be a relative path inside the U-Boot source tree. 
->> Since -the PMUFW is a binary file generated outside of U-Boot, the 
->> PMUFW -binary must be copied inside the U-Boot source tree before the 
->> -build.
->> -
->> -This generates a few problems:
->> -
->> - * if the source tree is shared among different out-of-tree builds,
->> -   they will pollute (and potentially corrupt) each other
->> - * the source tree cannot be read-only
->> - * any buildsystem must add a command to copy the PMUFW binary
->> - * putting an externally-generated binary in the source tree is ugly
->> -   as hell
->> -
->> -Avoid these problems by accepting an absolute path for 
->> -PMUFW_INIT_FILE. This would be as simple as removing the "$(srctree)/"
->> -prefix, but in order to keep backward compatibility we rather use 
->> the -shell and readlink to get the absolute path even when starting 
->> from a -relative path.
->> -
->> -Since 'readlink -f' produces an empty string if the file does not 
->> -exist, we also add a check to ensure the file configured in 
->> -PMUFW_INIT_FILE exists. Otherwise the build would exit successfully, 
->> -but produce a boot.bin without PMUFW as if PMUFW_INIT_FILE were empty.
->> -
->> -Tested in the 12 possible combinations of:
->> - - PMUFW_INIT_FILE empty, relative, absolute, non-existing
->> - - building in-tree, in subdir, in other directory
->> -
->> -Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> -Cc: Michal Simek <michal.simek@xilinx.com>
->> -Cc: Simon Glass <sjg@chromium.org>
->> -Cc: Emmanuel Vadot <manu@bidouilliste.com>
->> -Signed-off-by: Michal Simek <michal.simek@xilinx.com> -Backported 
->> from upstream:
->> https://git.denx.de/?p=u-boot.git;a=commit;h=c7df098a71e05dc81cee8187
->> 4
->> 7759e8060b59626
->> ----
->> - scripts/Makefile.spl | 8 +++++++-
->> - 1 file changed, 7 insertions(+), 1 deletion(-)
->> -
->> -diff --git a/scripts/Makefile.spl b/scripts/Makefile.spl -index 
->> ef018b5b4056..252f13826d4c 100644
->> ---- a/scripts/Makefile.spl
->> -+++ b/scripts/Makefile.spl
->> -@@ -167,8 +167,14 @@ ifdef CONFIG_ARCH_ZYNQ
->> - MKIMAGEFLAGS_boot.bin = -T zynqimage -R
->> $(srctree)/$(CONFIG_BOOT_INIT_FILE)
->> - endif
->> - ifdef CONFIG_ARCH_ZYNQMP
->> -+ifneq ($(CONFIG_PMUFW_INIT_FILE),"")
->> -+spl/boot.bin: zynqmp-check-pmufw
->> -+zynqmp-check-pmufw: FORCE
->> -+    ( cd $(srctree) && test -r $(CONFIG_PMUFW_INIT_FILE) ) \
->> -+            || ( echo "Cannot read $(CONFIG_PMUFW_INIT_FILE)" && 
->> -+false ) endif
->> - MKIMAGEFLAGS_boot.bin = -T zynqmpimage -R $(srctree)/$(CONFIG_BOOT_INIT_FILE) \
->> --    -n $(srctree)/$(CONFIG_PMUFW_INIT_FILE)
->> -+    -n "$(shell cd $(srctree); readlink -f $(CONFIG_PMUFW_INIT_FILE))"
->> - endif
->> -
->> - spl/boot.bin: $(obj)/u-boot-spl.bin FORCE
->> ---
->> -2.7.4
->> -
->> diff --git
->> a/board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-i
->> n
->> it-file-as-a-kco.patch
->> b/board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-i
->> n
->> it-file-as-a-kco.patch
->> deleted file mode 100644
->> index b32e162780..0000000000
->> ---
->> a/board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-i
->> n
->> it-file-as-a-kco.patch
->> +++ /dev/null
->> @@ -1,175 +0,0 @@
->> -From 4c9d54ab5a41d65000c8d249b6fb1b76056f1812 Mon Sep 17 00:00:00
->> 2001
->> -From: Luca Ceresoli <luca@lucaceresoli.net>
->> -Date: Wed, 20 Jun 2018 12:11:50 +0200
->> -Subject: [PATCH] arm/arm64: zynq/zynqmp: pass the PS init file as a 
->> kconfig
->> - variable
->> -
->> -U-Boot needs to link ps7_init_gpl.c on Zynq or psu_init_gpl.c on 
->> -ZynqMP (PS init for short). The current logic to locate this file 
->> for -both platforms is:
->> -
->> - 1. if a board-specific file exists in
->> -    board/xilinx/zynq[mp]/$(CONFIG_DEFAULT_DEVICE_TREE)/ps?_init_gpl.c
->> -    then use it
->> - 2. otherwise use board/xilinx/zynq/ps?_init_gpl.c
->> -
->> -In the latter case the file does not exist in the U-Boot sources and 
->> -must be copied in the source tree from the outside before starting 
->> the -build. This is typical when it is generated from Xilinx tools 
->> while -developing a custom hardware. However making sure that a 
->> -board-specific file is _not_ found (and used) requires some trickery 
->> -such as removing or overwriting all PS init files (e.g.: the current 
->> -meta-xilinx yocto layer [0]).
->> -
->> -This generates a few problems:
->> -
->> - * if the source tree is shared among different out-of-tree builds,
->> -   they will pollute (and potentially corrupt) each other
->> - * the source tree cannot be read-only
->> - * any buildsystem must add a command to copy the PS init file 
->> binary
->> - * overwriting or deleting files in the source tree is ugly as hell
->> -
->> -Simplify usage by allowing to pass the path to the desired PS init 
->> -file in kconfig variable XILINX_PS_INIT_FILE. It can be an absolute 
->> -path or relative to $(srctree). If the variable is set, the 
->> -user-specified file will always be used without being copied -around.
->> If the the variable is left empty, for backward compatibility -fall 
->> back to the old behaviour.
->> -
->> -Since the issue is the same for Zynq and ZynqMP, add one kconfig 
->> -variable in a common place and use it for both.
->> -
->> -Also use the new kconfig help text to document all the ways to give 
->> -U-Boot the PS init file.
->> -
->> -Build-tested with all combinations of:
->> - - platform: zynq or zynqmp
->> - - PS init file: from XILINX_PS_INIT_FILE (absolute, relative path,
->> -   non-existing), in-tree board-specific, in board/xilinx/zynq[mp]/
->> - - building in-tree, in subdir, in other directory
->> -
->> -[0]
->> https://github.com/Xilinx/meta-xilinx/blob/b2f74cc7fe5c4881589d5e440a
->> 1 
->> 7cb51fc66a7ab/meta-xilinx-bsp/recipes-bsp/u-boot/u-boot-spl-zynq-init.
->> inc#L9
->> -
->> -Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> -Cc: Albert Aribaud <albert.u.boot@aribaud.net>
->> -Cc: Michal Simek <michal.simek@xilinx.com>
->> -Cc: Nathan Rossi <nathan@nathanrossi.com> -Backported from upstream:
->> https://git.denx.de/?p=u-boot.git;a=commit;h=6da4f67ad09cd8b311d77b2b
->> 0
->> 4e557b7ef65b56c
->> ----
->> - arch/arm/Kconfig             |  1 +
->> - board/xilinx/Kconfig         | 41 +++++++++++++++++++++++++++++++++++++++++
->> - board/xilinx/zynq/Makefile   | 10 +++++++++-
->> - board/xilinx/zynqmp/Makefile | 10 +++++++++-
->> - 4 files changed, 60 insertions(+), 2 deletions(-)
->> - create mode 100644 board/xilinx/Kconfig
->> -
->> -diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig -index 
->> 22234cde2ab6..e04979d0ef7e 100644
->> ---- a/arch/arm/Kconfig
->> -+++ b/arch/arm/Kconfig
->> -@@ -1293,4 +1293,5 @@ source "board/technologic/ts4600/Kconfig"
->> - source "board/vscom/baltos/Kconfig"
->> - source "board/woodburn/Kconfig"
->> - source "board/work-microwave/work_92105/Kconfig"
->> -+source "board/xilinx/Kconfig"
->> - source "board/zipitz2/Kconfig"
->> -
->> - source "arch/arm/Kconfig.debug"
->> -diff --git a/board/xilinx/Kconfig b/board/xilinx/Kconfig -new file 
->> mode 100644 -index 000000000000..aa3fa061edef
->> ---- /dev/null
->> -+++ b/board/xilinx/Kconfig
->> -@@ -0,0 +1,41 @@
->> -+# Copyright (c) 2018, Luca Ceresoli <luca@lucaceresoli.net> # #
->> -+SPDX-License-Identifier: GPL-2.0
->> -+
->> -+if ARCH_ZYNQ || ARCH_ZYNQMP
->> -+
->> -+config XILINX_PS_INIT_FILE
->> -+    string "Zynq/ZynqMP PS init file(s) location"
->> -+    help
->> -+      On Zynq and ZynqMP U-Boot SPL (or U-Boot proper if
->> -+      ZYNQMP_PSU_INIT_ENABLED is set) is responsible for some
->> -+      basic initializations, such as enabling peripherals and
->> -+      configuring pinmuxes. The PS init file (called
->> -+      psu_init_gpl.c on ZynqMP, ps7_init_gpl.c for Zynq-7000)
->> -+      contains the code for such initializations.
->> -+
->> -+      U-Boot contains PS init files for some boards, but each of
->> -+      them describes only one specific configuration. Users of a
->> -+      different board, or needing a different configuration, can
->> -+      generate custom files using the Xilinx development tools.
->> -+
->> -+      There are three ways to give a PS init file to U-Boot:
->> -+
->> -+      1. Set this variable to the path, either relative to the
->> -+         source tree or absolute, where the psu_init_gpl.c or
->> -+         ps7_init_gpl.c file is located. U-Boot will build this
->> -+         file.
->> -+
->> -+      2. If you leave an empty string here, U-Boot will use
->> -+         board/xilinx/zynq/$(CONFIG_DEFAULT_DEVICE_TREE)/ps7_init_gpl.c
->> -+         for Zynq-7000, or
->> -+         board/xilinx/zynqmp/$(CONFIG_DEFAULT_DEVICE_TREE)/psu_init_gpl.c
->> -+         for ZynqMP.
->> -+
->> -+      3. If the above file does not exist, U-Boot will use
->> -+         board/xilinx/zynq/ps7_init_gpl.c for Zynq-7000, or
->> -+         board/xilinx/zynqmp/psu_init_gpl.c for ZynqMP. This file
->> -+         is not provided by U-Boot, you have to copy it there
->> -+         before the build.
->> -+
->> -+endif
->> -diff --git a/board/xilinx/zynq/Makefile b/board/xilinx/zynq/Makefile 
->> -index 5a76a26720cd..03ad5f0532ee 100644
->> ---- a/board/xilinx/zynq/Makefile
->> -+++ b/board/xilinx/zynq/Makefile
->> -@@ -5,10 +5,18 @@
->> -
->> - obj-y       := board.o
->> -
->> --hw-platform-y :=$(shell echo $(CONFIG_DEFAULT_DEVICE_TREE))
->> -+ifneq ($(CONFIG_XILINX_PS_INIT_FILE),"")
->> -+PS_INIT_FILE := $(shell cd $(srctree); readlink -f
->> -+$(CONFIG_XILINX_PS_INIT_FILE)) init-objs := ps_init_gpl.o 
->> -+spl/board/xilinx/zynq/ps_init_gpl.o board/xilinx/zynq/ps_init_gpl.o: $(PS_INIT_FILE)
->> -+    $(CC) $(c_flags) -I $(srctree)/$(src) -c -o $@ $^ endif
->> -
->> -+ifeq ($(init-objs),)
->> -+hw-platform-y :=$(shell echo $(CONFIG_DEFAULT_DEVICE_TREE))
->> - init-objs := $(if $(wildcard $(srctree)/$(src)/$(hw-platform-y)/ps7_init_gpl.c),\
->> -     $(hw-platform-y)/ps7_init_gpl.o)
->> -+endif
->> -
->> - ifeq ($(init-objs),)
->> - ifneq ($(wildcard $(srctree)/$(src)/ps7_init_gpl.c),)
->> -diff --git a/board/xilinx/zynqmp/Makefile 
->> b/board/xilinx/zynqmp/Makefile -index 05ccd25dcef3..960b81fc5853
->> 100644
->> ---- a/board/xilinx/zynqmp/Makefile
->> -+++ b/board/xilinx/zynqmp/Makefile
->> -@@ -5,10 +5,18 @@
->> -
->> - obj-y       := zynqmp.o
->> -
->> --hw-platform-y :=$(shell echo $(CONFIG_DEFAULT_DEVICE_TREE))
->> -+ifneq ($(CONFIG_XILINX_PS_INIT_FILE),"")
->> -+PS_INIT_FILE := $(shell cd $(srctree); readlink -f
->> -+$(CONFIG_XILINX_PS_INIT_FILE)) init-objs := ps_init_gpl.o 
->> -+spl/board/xilinx/zynqmp/ps_init_gpl.o board/xilinx/zynqmp/ps_init_gpl.o: $(PS_INIT_FILE)
->> -+    $(CC) $(c_flags) -I $(srctree)/$(src) -c -o $@ $^ endif
->> -
->> -+ifeq ($(init-objs),)
->> -+hw-platform-y :=$(shell echo $(CONFIG_DEFAULT_DEVICE_TREE))
->> - init-objs := $(if $(wildcard $(srctree)/$(src)/$(hw-platform-y)/psu_init_gpl.c),\
->> -     $(hw-platform-y)/psu_init_gpl.o)
->> -+endif
->> -
->> - ifeq ($(init-objs),)
->> - ifneq ($(wildcard $(srctree)/$(src)/psu_init_gpl.c),)
->> ---
->> -2.7.4
->> -
->> diff --git a/configs/zynqmp_zcu102_defconfig 
->> b/configs/zynqmp_zcu102_defconfig new file mode 100644 index 
->> 0000000000..336f5c2dbe
->> --- /dev/null
->> +++ b/configs/zynqmp_zcu102_defconfig
->> @@ -0,0 +1,35 @@
->> +BR2_aarch64=y
->> +BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.10_2021.2"
->> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
->> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +BR2_TARGET_ROOTFS_EXT2_4=y
->> +# BR2_TARGET_ROOTFS_TAR is not set
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.4_2021.2"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git"
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2021.01_2021.2"
->> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
->> +BR2_TARGET_UBOOT_NEEDS_DTC=y
->> +BR2_TARGET_UBOOT_SPL=y
->> +BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
->> +BR2_TARGET_UBOOT_ZYNQMP=y
->> +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2021.2.bin"
->> +BR2_TARGET_UBOOT_FORMAT_ITB=y
->> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
->> +BR2_PACKAGE_HOST_GENIMAGE=y
->> +BR2_PACKAGE_HOST_MTOOLS=y
->
-> As pointed above this ^^^ file must be in a separate patch and it 
-> deserves also a maintainer. So please you or maybe Luca could add an 
-> entry to DEVELOPERS for this board
->
->> diff --git a/configs/zynqmp_zcu106_defconfig 
->> b/configs/zynqmp_zcu106_defconfig index bee7c1daf7..3a6947e1e8 100644
->> --- a/configs/zynqmp_zcu106_defconfig
->> +++ b/configs/zynqmp_zcu106_defconfig
->> @@ -1,11 +1,11 @@
->>    BR2_aarch64=y
->>    BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
->
-> Since all patches are gone, this ^^^ is not needed anymore
->
->> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->>    BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
->>    BR2_LINUX_KERNEL=y
->>    BR2_LINUX_KERNEL_CUSTOM_GIT=y
->>    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
->> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.10_2021.2"
->>    BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
->>    BR2_LINUX_KERNEL_DTS_SUPPORT=y
->>    BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
->> @@ -14,21 +14,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->>    # BR2_TARGET_ROOTFS_TAR is not set
->>    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
->>    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
->> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
->> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
->> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.4_2021.2"
->
-> It's worth mention in commit log that you're switching from ARM to 
-> Xilinx ATF
->
->>    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
->>    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
->>    BR2_TARGET_UBOOT=y
->>    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->>    BR2_TARGET_UBOOT_CUSTOM_GIT=y
->>    BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git"
->> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="228801a215909365ae1dcdd799034195ad7264f7"
->> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_zcu106_revA"
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2021.01_2021.2"
->> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
->>    BR2_TARGET_UBOOT_NEEDS_DTC=y
->>    BR2_TARGET_UBOOT_SPL=y
->>    BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
->>    BR2_TARGET_UBOOT_ZYNQMP=y
->> -BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/53fdb7b6c92860ceb0ec5fd14deee302f4a84269/bin/pmufw-zcu106-default-v2017.4.bin"
->> +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2021.2.bin"
->> +BR2_TARGET_UBOOT_FORMAT_ITB=y
->
-> Here ^^^ I see that probably you're switching from .bin to .itb so 
-> better mention it in commit log
->
->>    BR2_PACKAGE_HOST_DOSFSTOOLS=y
->>    BR2_PACKAGE_HOST_GENIMAGE=y
->>    BR2_PACKAGE_HOST_MTOOLS=y
->
-> Thank you!
->
-> Best regards
-> --
-> Giulio Benetti
-> Benetti Engineering sas
-
---
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTmVhbCwKCj4gSWwgZ2lvcm5vIDMgZmViIDIwMjIsIGFsbGUgb3JlIDE0OjU3LCBOZWFsIEZy
+YWdlciA8bmVhbGZAeGlsaW54LmNvbT4gaGEgc2NyaXR0bzoKPiAKPiDvu79IaSBHaXVsaW8sCj4g
+Cj4+IEhpIE5lYWwsCj4gCj4+IE9uIDAzLzAyLzIyIDA3OjI0LCBOZWFsIEZyYWdlciB3cm90ZToK
+Pj4gSGkgR2l1bGlvLAo+PiAKPj4gVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91ciBmZWVkYmFj
+ay4KPiAKPj4gWW91J3JlIHdlbGNvbWUuCj4gCj4+IFBsZWFzZSBkb24ndCB0b3AtcG9zdCwgYW5z
+d2VyIGlubGluZSBhcyB5b3Ugc2VlIGFsbCBhcm91bmQgdGhlIE1haWxpbmcgTGlzdC4KPiAKPj4g
+QWxzbywgSSBkb24ndCBrbm93IGlmIHlvdSd2ZSByZWFkIG15IGVudGlyZSBhbnN3ZXIuIFVzdWFs
+bHkgdW50aWwgeW91IGRvbid0IHNlZSAiQmVzdCByZWdhcmRzIiBhbmQgdGhlIG5hbWUgb2YgdGhl
+IG9uZSB3aG8gYW5zd2VyLCB0aGUgYW5zd2VyLW1haWwgaXMgbm90IGZpbmlzaGVkIHlldCwgc28g
+c2ltcGx5IHNjcm9sbCBkb3duIHVudGlsIHlvdSBmaW5pc2ggdGhlIGUtbWFpbC4KPiAKPj4gU28g
+cGxlYXNlIGNoZWNrIGFsc28gdGhlIHJlc3Qgb2YgbXkgcHJldmlvdXMgZS1tYWlsLgo+IAo+IEkg
+aG9wZSB0aGlzIG1ldGhvZCBvZiBpbmxpbmUgYW5zd2VyIHdvcmtzLiAgCgpZZXMgaXQgZG9lcyB3
+b3JrLiBPbmx5IHJlbWVtYmVyIHRvIHNldCB5b3VyIGNsaWVudCB1c2luZyBwbGFpbi10ZXh0IG9u
+bHkuIEnigJltIG9uIG1vYmlsZSBub3cgc28gcHJvYmFibHkgbXkgYW5zd2VyIGFuZCB5b3VycyB3
+aWxsIGJlIGluIGh0bWwuCkJ1dCB3ZSBuZWVkIHBsYWluLXRleHQsIHBsZWFzZSBjaGVjayB5b3Vy
+IGVtYWlsIGNsaWVudCBhbmQgc2V0IHBsYWluLXRleHQgYnkgZGVmYXVsdC4KCj4gSSBoYXZlIHN1
+Ym1pdHRlZCBhIG5ldyBzZXQgb2YgcGF0Y2hlcyBiYXNlZCBvbiB0aGUgZmVlZGJhY2sgZnJvbSB5
+b3UgYW5kIEx1Y2EuICBDb3VsZCB5b3UgcGxlYXNlIGhhdmUgYSBsb29rIGFuZCBsZXQgbWUga25v
+dyB3aGF0IHlvdSB0aGluaz8KClN1cmUsIEnigJltIGdvaW5nIHRvIHRvbmlnaHQgOi0pCkFsc28g
+THVjYSBJIHRoaW5rIHdpbGwgc2luY2UgaGXigJlzIHRoZSBtYWludGFpbmVyIG9mIHp5bnEgc3R1
+ZmYuCgpBbHNvIHdl4oCZdmUgc2VudCB5b3UgdGhlIHJldmlldyBhbG1vc3QgYXQgdGhlIHNhbWUg
+dGltZSB5ZXN0ZXJkYXkgOi0pCgpCZXN0IHJlZ2FyZHMK4oCULQpHaXVsaW8gQmVuZXR0aQpCZW5l
+dHRpIEVuZ2luZWVyaW5nIHNhcwoKPiAKPj4gSSB3b3VsZCBiZSBoYXBweSB0byBzcGxpdCB0aGUg
+enlucW1wX3pjdTEwMl9kZWZjb25maWcgb2ZmIGludG8gYSBzZWNvbmQgcGF0Y2guICBObyBwcm9i
+bGVtLgo+IAo+PiBGaW5lCj4gCj4+IEFzIGZvciBhZGRpbmcgY29tbWVudHMgdG8gdGhlIGxvZywg
+Y291bGQgeW91IHNoYXJlIHRoZSBwcm9wZXIgZ2l0IGNvbW1hbmRzIGZvciBkb2luZyB0aGlzPyAg
+SSB3b3VsZCBiZSBoYXBweSB0byBkbyBpdCwgYnV0IEkgYW0gYSBiaXQgbmV3IHRvIGdpdCBhbmQg
+SSBkaWQgbm90IGtub3cgdGhlIHByb3BlciBjb21tYW5kIHRvIHVzZSBmb3IgYWRkaW5nIGxvZyBj
+b21tZW50cy4KPiAKPj4gTHVjYSBhbHJlYWR5IHBvaW50ZWQgeW91IGEgbG90IG9mIHZlcnkgdXNl
+ZnVsIGxpbmtzLgo+IAo+PiBBbm90aGVyIHRvb2wgSSBsaWtlIHRvIGNyZWF0ZSBwYXRjaGVzIGZv
+ciBtZSBpcyAiZ2l0IGd1aSIgYW5kIGFsc28gImdpdGsiIHRvIHNjcm9sbCB0aGUgY29tbWl0cyBp
+biBhIG5vbi1jb25zb2xlIHdheS4KPiAKPj4gTW9zdCBvZiBhbGwgImdpdCBndWkiIGlzIGhlbHBm
+dWwgdG8gbWUgdG8gY2hvb3NlIGEgc2luZ2xlIGxpbmUgdG8gc3RhZ2Ugb3IgcmV2ZXJ0Lgo+IAo+
+PiBCZXN0IHJlZ2FyZHMKPiAtLS0KPj4gR2l1bGlvIEJlbmV0dGkKPj4gQmVuZXR0aSBFbmdpbmVl
+cmluZyBzYXMKPiAKPj4gQmVzdCByZWdhcmRzLAo+PiAKPj4gTmVhbCBGcmFnZXIKPj4gWGlsaW54
+Cj4+IAo+IAo+IEJlc3QgcmVnYXJkcywKPiBOZWFsIEZyYWdlcgo+IFhpbGlueAo+IAo+PiAtLS0t
+LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQo+PiBGcm9tOiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJl
+bmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KPj4gU2VudDogV2VkbmVzZGF5IDIgRmVicnVh
+cnkgMjAyMiAyMzozMwo+PiBUbzogTmVhbCBGcmFnZXIgPG5lYWxmQHhpbGlueC5jb20+OyBidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwo+PiBDYzogbHVjYUBsdWNhY2VyZXNvbGkubmV0OyBOZWFsIEZy
+YWdlciA8bmVhbGZAeGlsaW54LmNvbT4KPj4gU3ViamVjdDogUmU6IFtCdWlsZHJvb3RdIFtQQVRD
+SCAxLzFdIGNvbmZpZ3MvenlucW1wX3pjdTEweDogQnVtcCAKPj4gQVRGL1UtQm9vdC9MaW51eCB0
+byBYaWxpbnggMjAyMS4yCj4+IAo+PiBDQVVUSU9OOiBUaGlzIG1lc3NhZ2UgaGFzIG9yaWdpbmF0
+ZWQgZnJvbSBhbiBFeHRlcm5hbCBTb3VyY2UuIFBsZWFzZSB1c2UgcHJvcGVyIGp1ZGdtZW50IGFu
+ZCBjYXV0aW9uIHdoZW4gb3BlbmluZyBhdHRhY2htZW50cywgY2xpY2tpbmcgbGlua3MsIG9yIHJl
+c3BvbmRpbmcgdG8gdGhpcyBlbWFpbC4KPj4gCj4+IAo+PiBIaSBOZWFsLAo+PiAKPj4gbmljZSB0
+byBzZWUgeW91J3ZlIG1hZGUgaXQgd2l0aCBnaXQgc2VuZC1lbWFpbCA6LSksCj4+IAo+PiBIZXJl
+IEkgd291bGQgaW1wcm92ZSBjb21taXQgbG9nIGJ5IHN0YXRpbmcgdGhhdCB5b3UncmUgZHJvcHBp
+bmcgYWxsIAo+PiBsb2NhbCBwYXRjaGVzIGJlY2F1c2UgdGhleSBhcmUgbm93IHVwc3RyZWFtZWQK
+Pj4gCj4+PiBPbiAwMi8wMi8yMiAxNzo1NSwgTmVhbCBGcmFnZXIgd3JvdGU6Cj4+PiBTaWduZWQt
+b2ZmLWJ5OiBOZWFsIEZyYWdlciA8bmVhbGZAeGlsaW54LmNvbT4KPj4+IC0tLQo+Pj4gICBib2Fy
+ZC96eW5xbXAvZ2VuaW1hZ2UuY2ZnICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKwo+Pj4gICAu
+Li4tZml4LVJlbW92ZS1HR0MtaWdub3JlLVdhcnJheS1ib3VuZHMucGF0Y2ggfCAgNjggLS0tLS0t
+LQo+Pj4gICAuLi42NC16eW5xbXAtemN1MTA2LWZpeC1TUEwtTU1DLWJvb3RpbmcucGF0Y2ggfCAg
+NTIgLS0tLS0tCj4+PiAgIC4uLjItYXJtNjQtenlucW1wLUVuYWJsZS1ib290aW5nLXRvLUFURi5w
+YXRjaCB8IDExNCAtLS0tLS0tLS0tLS0KPj4+ICAgLi4uZXB0LWFuLWFic29sdXRlLXBhdGgtZm9y
+LVBNVUZXX0lOSVRfLnBhdGNoIHwgIDY4IC0tLS0tLS0KPj4+ICAgLi4ueW5xbXAtcGFzcy10aGUt
+UFMtaW5pdC1maWxlLWFzLWEta2NvLnBhdGNoIHwgMTc1IC0tLS0tLS0tLS0tLS0tLS0tLQo+Pj4g
+ICBjb25maWdzL3p5bnFtcF96Y3UxMDJfZGVmY29uZmlnICAgICAgICAgICAgICAgfCAgMzUgKysr
+Kwo+PiAKPj4gVGhpcyBeXl4gZmlsZSBpcyBhZGRlZCwgc28gaXQgZGVzZXJ2ZXMgYSBzZWNvbmQg
+cGF0Y2ggYWZ0ZXIgdGhpcyBvbmUsIAo+PiBiYXNpY2FsbHkgdGhpcyBiZWNvbWVzIGEgcGF0Y2hz
+ZXQgb2YgMiBwYXRjaGVzCj4+IAo+Pj4gICBjb25maWdzL3p5bnFtcF96Y3UxMDZfZGVmY29uZmln
+ICAgICAgICAgICAgICAgfCAgMTUgKy0KPj4+ICAgOCBmaWxlcyBjaGFuZ2VkLCA0NCBpbnNlcnRp
+b25zKCspLCA0ODQgZGVsZXRpb25zKC0pCj4+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC96
+eW5xbXAvcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS8wMDAxLUNvdmVyaXR5LWZpeC1SZW1v
+dmUtR0dDLWlnbm9yZS1XYXJyYXktYm91bmRzLnBhdGNoCj4+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0
+NCBib2FyZC96eW5xbXAvcGF0Y2hlcy91Ym9vdC8wMDAxLWFybTY0LXp5bnFtcC16Y3UxMDYtZml4
+LVNQTC1NTUMtYm9vdGluZy5wYXRjaAo+Pj4gICBkZWxldGUgbW9kZSAxMDA2NDQgYm9hcmQvenlu
+cW1wL3BhdGNoZXMvdWJvb3QvMDAwMi1hcm02NC16eW5xbXAtRW5hYmxlLWJvb3RpbmctdG8tQVRG
+LnBhdGNoCj4+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC96eW5xbXAvcGF0Y2hlcy91Ym9v
+dC8wMDAzLWFybTY0LXp5bnFtcC1hY2NlcHQtYW4tYWJzb2x1dGUtcGF0aC1mb3ItUE1VRldfSU5J
+VF8ucGF0Y2gKPj4+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3p5bnFtcC9wYXRjaGVzL3Vi
+b290LzAwMDQtYXJtLWFybTY0LXp5bnEtenlucW1wLXBhc3MtdGhlLVBTLWluaXQtZmlsZS1hcy1h
+LWtjby5wYXRjaAo+Pj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy96eW5xbXBfemN1MTAy
+X2RlZmNvbmZpZwo+Pj4gCj4+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvenlucW1wL2dlbmltYWdlLmNm
+ZyBiL2JvYXJkL3p5bnFtcC9nZW5pbWFnZS5jZmcgCj4+PiBpbmRleCBlZDIwMmY0NTUwLi41NTcz
+NjRlMTI0IDEwMDY0NAo+Pj4gLS0tIGEvYm9hcmQvenlucW1wL2dlbmltYWdlLmNmZwo+Pj4gKysr
+IGIvYm9hcmQvenlucW1wL2dlbmltYWdlLmNmZwo+Pj4gQEAgLTMsNiArMyw3IEBAIGltYWdlIGJv
+b3QudmZhdCB7Cj4+PiAgICAgICAgICAgICAgIGZpbGVzID0gewo+Pj4gICAgICAgICAgICAgICAg
+ICAgICAgICJib290LmJpbiIsCj4+PiAgICAgICAgICAgICAgICAgICAgICAgInUtYm9vdC5iaW4i
+LAo+Pj4gKyAgICAgICAgICAgICAgICAgICAgICJ1LWJvb3QuaXRiIiwKPj4gCj4+IENhbiB5b3Ug
+cGxlYXNlIGp1c3RpZnkgdGhpcyBhZGRpbmcgXl5eIGluIGNvbW1pdCBsb2c/Cj4+IAo+Pj4gICAg
+ICAgICAgICAgICAgICAgICAgICJhdGYtdWJvb3QudWIiLAo+Pj4gICAgICAgICAgICAgICAgICAg
+ICAgICJzeXN0ZW0uZHRiIiwKPj4+ICAgICAgICAgICAgICAgICAgICAgICAiSW1hZ2UiCj4+PiBk
+aWZmIC0tZ2l0Cj4+PiBhL2JvYXJkL3p5bnFtcC9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJl
+LzAwMDEtQ292ZXJpdHktZml4LVJlbW92ZS0KPj4+IEcKPj4+IEdDLWlnbm9yZS1XYXJyYXktYm91
+bmRzLnBhdGNoCj4+PiBiL2JvYXJkL3p5bnFtcC9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJl
+LzAwMDEtQ292ZXJpdHktZml4LVJlbW92ZS0KPj4+IEcKPj4+IEdDLWlnbm9yZS1XYXJyYXktYm91
+bmRzLnBhdGNoCj4+PiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDBjMWE5YmEy
+YTQuLjAwMDAwMDAwMDAKPj4+IC0tLQo+Pj4gYS9ib2FyZC96eW5xbXAvcGF0Y2hlcy9hcm0tdHJ1
+c3RlZC1maXJtd2FyZS8wMDAxLUNvdmVyaXR5LWZpeC1SZW1vdmUtCj4+PiBHCj4+PiBHQy1pZ25v
+cmUtV2FycmF5LWJvdW5kcy5wYXRjaAo+Pj4gKysrIC9kZXYvbnVsbAo+Pj4gQEAgLTEsNjggKzAs
+MCBAQAo+Pj4gLUZyb20gZGEwMDNlNmFkYTdkMDIxN2ZlOTlkYzdjNjQ5YTczMWY4ZWJkM2MzNCBN
+b24gU2VwIDE3IDAwOjAwOjAwCj4+PiAyMDAxCj4+PiAtRnJvbTogRGVlcGlrYSBCaGF2bmFuaSA8
+ZGVlcGlrYS5iaGF2bmFuaUBhcm0uY29tPgo+Pj4gLURhdGU6IFRodSwgMTUgQXVnIDIwMTkgMDA6
+NTY6NDYgKzAzMDAKPj4+IC1TdWJqZWN0OiBbUEFUQ0hdIENvdmVyaXR5IGZpeDogUmVtb3ZlIEdH
+QyBpZ25vcmUgLVdhcnJheS1ib3VuZHMKPj4+IC0KPj4+IC1HQ0MgZGlhZ25vc3RpY3Mgd2VyZSBh
+ZGRlZCB0byBpZ25vcmUgYXJyYXkgYm91bmRhcmllcywgaW5zdGVhZCAtb2YgCj4+PiBpZ25vcmlu
+ZyBHQ0Mgd2FybmluZyBjdXJyZW50IGNvZGUgd2lsbCBjaGVjayBmb3IgYXJyYXkgYm91bmRhcmll
+cyAKPj4+IC1hbmQgcGVyZm9ybSBhbmQgYXJyYXkgdXBkYXRlIG9ubHkgZm9yIHZhbGlkIGVsZW1l
+bnRzLgo+Pj4gLQo+Pj4gLVJlc29sdmVzOiBgQ0lEIDI0NjU3NGAgYENJRCAyNDY3MTBgIGBDSUQg
+MjQ2NjUxYAo+Pj4gLQo+Pj4gLVNpZ25lZC1vZmYtYnk6IERlZXBpa2EgQmhhdm5hbmkgPGRlZXBp
+a2EuYmhhdm5hbmlAYXJtLmNvbT4KPj4+IC1DaGFuZ2UtSWQ6IEk3NTMwZWNmN2ExNzA3MzUxYzZl
+ZTg3ZTkwY2MzZDMzNTc0MDg4ZjU3Cj4+PiAtCj4+PiAtQmFja3BvcnRlZCBmcm9tOiA0MWFmMDUx
+NTRhYmUxMzY5MzhiY2ZiNWYyNmM5Njk5MzM3ODRiYmVmCj4+PiAtW0FkYXB0ZWQgdG8gYXBwbHkg
+b24gMS41XQo+Pj4gLQo+Pj4gLS0tLQo+Pj4gLSBsaWIvcHNjaS9wc2NpX2NvbW1vbi5jIHwgMjAg
+KysrKysrKysrKy0tLS0tLS0tLS0KPj4+IC0gMSBmaWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMo
+KyksIDEwIGRlbGV0aW9ucygtKQo+Pj4gLQo+Pj4gLWRpZmYgLS1naXQgYS9saWIvcHNjaS9wc2Np
+X2NvbW1vbi5jIGIvbGliL3BzY2kvcHNjaV9jb21tb24uYyAtaW5kZXgKPj4+IDIyMjBhNzQ1Y2Q2
+ZS4uNjI4MmQ5OTJhMmYwIDEwMDY0NAo+Pj4gLS0tLSBhL2xpYi9wc2NpL3BzY2lfY29tbW9uLmMK
+Pj4+IC0rKysgYi9saWIvcHNjaS9wc2NpX2NvbW1vbi5jCj4+PiAtQEAgLTE4OCwyMSArMTg4LDE3
+IEBAIHN0YXRpYyB1bnNpZ25lZCBpbnQKPj4+IGdldF9wb3dlcl9vbl90YXJnZXRfcHdybHZsKHZv
+aWQpCj4+PiAtCj4+PiAvKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioKPj4+ICoKPj4+ICoqKioqKioqKgo+Pj4gLSAgKiBI
+ZWxwZXIgZnVuY3Rpb24gdG8gdXBkYXRlIHRoZSByZXF1ZXN0ZWQgbG9jYWwgcG93ZXIgc3RhdGUg
+YXJyYXkuCj4+PiBUaGlzIGFycmF5Cj4+PiAtICAqIGRvZXMgbm90IHN0b3JlIHRoZSByZXF1ZXN0
+ZWQgc3RhdGUgZm9yIHRoZSBDUFUgcG93ZXIgbGV2ZWwuIAo+Pj4gSGVuY2UgYW4KPj4+IC0tICog
+YXNzZXJ0aW9uIGlzIGFkZGVkIHRvIHByZXZlbnQgdXMgZnJvbSBhY2Nlc3NpbmcgdGhlIHdyb25n
+IGluZGV4Lgo+Pj4gLSsgKiBhc3NlcnRpb24gaXMgYWRkZWQgdG8gcHJldmVudCB1cyBmcm9tIGFj
+Y2Vzc2luZyB0aGUgQ1BVIHBvd2VyIGxldmVsLgo+Pj4gLQo+Pj4gKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCj4+PiAq
+Cj4+PiAqKioqKioqLwo+Pj4gLSBzdGF0aWMgdm9pZCBwc2NpX3NldF9yZXFfbG9jYWxfcHdyX3N0
+YXRlKHVuc2lnbmVkIGludCBwd3JsdmwsCj4+PiAtICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICB1bnNpZ25lZCBpbnQgY3B1X2lkeCwKPj4+IC0gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHBsYXRfbG9jYWxfc3RhdGVfdCByZXFfcHdyX3N0YXRlKQo+Pj4g
+LSB7Cj4+PiAtLSAgICAvKgo+Pj4gLS0gICAgICogVGhpcyBzaG91bGQgbmV2ZXIgaGFwcGVuLCB3
+ZSBoYXZlIHRoaXMgaGVyZSB0byBhdm9pZAo+Pj4gLS0gICAgICogImFycmF5IHN1YnNjcmlwdCBp
+cyBhYm92ZSBhcnJheSBib3VuZHMiIGVycm9ycyBpbiBHQ0MuCj4+PiAtLSAgICAgKi8KPj4+IC0g
+ICAgIGFzc2VydChwd3JsdmwgPiBQU0NJX0NQVV9QV1JfTFZMKTsKPj4+IC0tI3ByYWdtYSBHQ0Mg
+ZGlhZ25vc3RpYyBwdXNoCj4+PiAtLSNwcmFnbWEgR0NDIGRpYWdub3N0aWMgaWdub3JlZCAiLVdh
+cnJheS1ib3VuZHMiCj4+PiAtLSAgICBwc2NpX3JlcV9sb2NhbF9wd3Jfc3RhdGVzW3B3cmx2bCAt
+IDFdW2NwdV9pZHhdID0gcmVxX3B3cl9zdGF0ZTsKPj4+IC0tI3ByYWdtYSBHQ0MgZGlhZ25vc3Rp
+YyBwb3AKPj4+IC0rICAgIGlmICgocHdybHZsID4gUFNDSV9DUFVfUFdSX0xWTCkgJiYgKHB3cmx2
+bCA8PSBQTEFUX01BWF9QV1JfTFZMKSAmJgo+Pj4gLSsgICAgICAgICAgICAgICAgICAgIChjcHVf
+aWR4IDwgUExBVEZPUk1fQ09SRV9DT1VOVCkpIHsKPj4+IC0rICAgICAgICAgICAgcHNjaV9yZXFf
+bG9jYWxfcHdyX3N0YXRlc1twd3JsdmwgLSAxVV1bY3B1X2lkeF0gPSByZXFfcHdyX3N0YXRlOwo+
+Pj4gLSsgICAgfQo+Pj4gLSB9Cj4+PiAtCj4+PiAtCj4+PiAvKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKPj4+ICoKPj4+
+ICoqKioqKioqKiAtQEAgLTIyOCw3ICsyMjQsMTEgQEAgc3RhdGljIHBsYXRfbG9jYWxfc3RhdGVf
+dCAKPj4+ICpwc2NpX2dldF9yZXFfbG9jYWxfcHdyX3N0YXRlcyh1bnNpZ25lZCBpbnQgcHdybHZs
+LAo+Pj4gLSB7Cj4+PiAtICAgICBhc3NlcnQocHdybHZsID4gUFNDSV9DUFVfUFdSX0xWTCk7Cj4+
+PiAtCj4+PiAtLSAgICByZXR1cm4gJnBzY2lfcmVxX2xvY2FsX3B3cl9zdGF0ZXNbcHdybHZsIC0g
+MV1bY3B1X2lkeF07Cj4+PiAtKyAgICBpZiAoKHB3cmx2bCA+IFBTQ0lfQ1BVX1BXUl9MVkwpICYm
+IChwd3JsdmwgPD0gUExBVF9NQVhfUFdSX0xWTCkgJiYKPj4+IC0rICAgICAgICAgICAgICAgICAg
+ICAoY3B1X2lkeCA8IFBMQVRGT1JNX0NPUkVfQ09VTlQpKSB7Cj4+PiAtKyAgICAgICAgICAgIHJl
+dHVybiAmcHNjaV9yZXFfbG9jYWxfcHdyX3N0YXRlc1twd3JsdmwgLSAxVV1bY3B1X2lkeF07Cj4+
+PiAtKyAgICB9IGVsc2UKPj4+IC0rICAgICAgICAgICAgcmV0dXJuIE5VTEw7Cj4+PiAtIH0KPj4+
+IC0KPj4+IC0gLyoKPj4+IC0tLQo+Pj4gLTIuMzQuMAo+Pj4gLQo+Pj4gZGlmZiAtLWdpdAo+Pj4g
+YS9ib2FyZC96eW5xbXAvcGF0Y2hlcy91Ym9vdC8wMDAxLWFybTY0LXp5bnFtcC16Y3UxMDYtZml4
+LVNQTC1NTUMtYm9vCj4+PiB0Cj4+PiBpbmcucGF0Y2gKPj4+IGIvYm9hcmQvenlucW1wL3BhdGNo
+ZXMvdWJvb3QvMDAwMS1hcm02NC16eW5xbXAtemN1MTA2LWZpeC1TUEwtTU1DLWJvbwo+Pj4gdAo+
+Pj4gaW5nLnBhdGNoCj4+PiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDRkODVl
+MWJiMTIuLjAwMDAwMDAwMDAKPj4+IC0tLQo+Pj4gYS9ib2FyZC96eW5xbXAvcGF0Y2hlcy91Ym9v
+dC8wMDAxLWFybTY0LXp5bnFtcC16Y3UxMDYtZml4LVNQTC1NTUMtYm9vCj4+PiB0Cj4+PiBpbmcu
+cGF0Y2gKPj4+ICsrKyAvZGV2L251bGwKPj4+IEBAIC0xLDUyICswLDAgQEAKPj4+IC1Gcm9tIGU1
+ZDcyZWQ4MzM5ZWIwNTI4NTQ0OGFhZDNjODlkMjFlNGQxOGZkMjkgTW9uIFNlcCAxNyAwMDowMDow
+MAo+Pj4gMjAwMQo+Pj4gLUZyb206IEx1Y2EgQ2VyZXNvbGkgPGx1Y2FAbHVjYWNlcmVzb2xpLm5l
+dD4KPj4+IC1EYXRlOiBNb24sIDI2IEZlYiAyMDE4IDA5OjQwOjM0ICswMTAwCj4+PiAtU3ViamVj
+dDogW1BBVENIXSBhcm02NDogenlucW1wOiB6Y3UxMDY6IGZpeCBTUEwgTU1DIGJvb3RpbmcKPj4+
+IC0KPj4+IC1UaGUgVS1Cb290IFNQTCBnZW5lcmF0ZWQgd2l0aCB0aGUgY3VycmVudCB6Y3UxMDYg
+ZGVmY29uZmlnIGNhbm5vdCAKPj4+IGJvb3QgLWZyb20gTU1DOgo+Pj4gLQo+Pj4gLSAgWy4uLl0K
+Pj4+IC0gIFUtQm9vdCBTUEwgMjAxOC4wMSAoRmViIDIxIDIwMTggLSAxNzo0NzoxNCkKPj4+IC0g
+IEVMIExldmVsOiAgRUwzCj4+PiAtICBUcnlpbmcgdG8gYm9vdCBmcm9tIE1NQzEKPj4+IC0gIHNk
+aGNpX3RyYW5zZmVyX2RhdGE6IEVycm9yIGRldGVjdGVkIGluIHN0YXR1cygweDQwODAyMCkhCj4+
+PiAtICBzcGxfbG9hZF9pbWFnZV9mYXRfb3M6IGVycm9yIHJlYWRpbmcgaW1hZ2UgdS1ib290LmJp
+biwgZXJyIC0gLTIKPj4+IC0gIHNwbF9sb2FkX2ltYWdlX2ZhdDogZXJyb3IgcmVhZGluZyBpbWFn
+ZSB1LWJvb3QuaW1nLCBlcnIgLSAtNgo+Pj4gLSAgU1BMOiBmYWlsZWQgdG8gYm9vdCBmcm9tIGFs
+bCBib290IGRldmljZXMKPj4+IC0gICMjIyBFUlJPUiAjIyMgUGxlYXNlIFJFU0VUIHRoZSBib2Fy
+ZCAjIyMKPj4+IC0KPj4+IC1GaXggYnkgbG93ZXJpbmcgdGhlIHJwbGwgdmFsdWUuIFRoZSBuZXcg
+dmFsdWUgZm9yIHRoZSBSUExMX0NUUkwgCj4+PiAtcmVnaXN0ZXIgY29tZXMgZnJvbSB0aGUgY3Vy
+cmVudCBwc3VfaW5pdF9ncGwuYyBmcm9tIHRoZSBIREYgZmlsZSBhdAo+Pj4gLWh0dHBzOi8vZ2l0
+aHViLmNvbS94aWxpbngvaGRmLWV4YW1wbGVzL3RyZWUvMDFhZDhlYTVmZDE5ODlhYmY0ZWE1YTA3
+Cj4+PiAyCj4+PiBkMDE5YTE2Y2IyYmM1NDYvemN1MTA2LXp5bnFtcAo+Pj4gLShnZW5lcmF0ZWQg
+YnkgVml2YWRvIHYyMDE3LjQpLgo+Pj4gLQo+Pj4gLVJQTEwgYW5kIHNkaW8xX3JlZiBjbG9ja3Mg
+YmVmb3JlIGFuZCBhZnRlciB0aGlzIGNoYW5nZToKPj4+IC0KPj4+IC0gLSBPbGQgdmFsdWVzOiBS
+UExMIDEuMzYgR0h6LCBzZGlvMV9yZWYgMjcyIE1Iego+Pj4gLSAtIE5ldyB2YWx1ZXM6IFJQTEwg
+MS4xNiBHSHosIHNkaW8xX3JlZiAyMzMgTUh6Cj4+PiAtCj4+PiAtU2lnbmVkLW9mZi1ieTogTHVj
+YSBDZXJlc29saSA8bHVjYUBsdWNhY2VyZXNvbGkubmV0Pgo+Pj4gLUNjOiBNaWNoYWwgU2ltZWsg
+PG1pY2hhbC5zaW1la0B4aWxpbnguY29tPgo+Pj4gLVVwc3RyZWFtLXN0YXR1czogYWNjZXB0ZWQg
+dXBzdHJlYW0gaW4gYSBkaWZmZXJlbnQgZm9ybQo+Pj4gLS0tLQo+Pj4gLQo+Pj4gLSBib2FyZC94
+aWxpbngvenlucW1wL3p5bnFtcC16Y3UxMDYtcmV2QS9wc3VfaW5pdF9ncGwuYyB8IDIgKy0KPj4+
+IC0gMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+PiAtCj4+
+PiAtZGlmZiAtLWdpdCBhL2JvYXJkL3hpbGlueC96eW5xbXAvenlucW1wLXpjdTEwNi1yZXZBL3Bz
+dV9pbml0X2dwbC5jCj4+PiBiL2JvYXJkL3hpbGlueC96eW5xbXAvenlucW1wLXpjdTEwNi1yZXZB
+L3BzdV9pbml0X2dwbC5jCj4+PiAtaW5kZXggNGQxOGFiZTAwMGNhLi5lNmZhNDc3ZTUzZTcgMTAw
+NjQ0Cj4+PiAtLS0tIGEvYm9hcmQveGlsaW54L3p5bnFtcC96eW5xbXAtemN1MTA2LXJldkEvcHN1
+X2luaXRfZ3BsLmMKPj4+IC0rKysgYi9ib2FyZC94aWxpbngvenlucW1wL3p5bnFtcC16Y3UxMDYt
+cmV2QS9wc3VfaW5pdF9ncGwuYwo+Pj4gLUBAIC0xMCw3ICsxMCw3IEBACj4+PiAtIHN0YXRpYyB1
+bnNpZ25lZCBsb25nIHBzdV9wbGxfaW5pdF9kYXRhKHZvaWQpCj4+PiAtIHsKPj4+IC0gICAgIHBz
+dV9tYXNrX3dyaXRlKDB4RkY1RTAwMzQsIDB4RkU3RkVERUZVLCAweDdFNEUyQzYyVSk7Cj4+PiAt
+LSAgICBwc3VfbWFza193cml0ZSgweEZGNUUwMDMwLCAweDAwNzE3RjAwVSwgMHgwMDAxM0MwMFUp
+Owo+Pj4gLSsgICAgcHN1X21hc2tfd3JpdGUoMHhGRjVFMDAzMCwgMHgwMDcxN0YwMFUsIDB4MDAw
+MTQ2MDBVKTsKPj4+IC0gICAgIHBzdV9tYXNrX3dyaXRlKDB4RkY1RTAwMzAsIDB4MDAwMDAwMDhV
+LCAweDAwMDAwMDA4VSk7Cj4+PiAtICAgICBwc3VfbWFza193cml0ZSgweEZGNUUwMDMwLCAweDAw
+MDAwMDAxVSwgMHgwMDAwMDAwMVUpOwo+Pj4gLSAgICAgcHN1X21hc2tfd3JpdGUoMHhGRjVFMDAz
+MCwgMHgwMDAwMDAwMVUsIDB4MDAwMDAwMDBVKTsKPj4+IC0tLQo+Pj4gLTIuNy40Cj4+PiAtCj4+
+PiBkaWZmIC0tZ2l0Cj4+PiBhL2JvYXJkL3p5bnFtcC9wYXRjaGVzL3Vib290LzAwMDItYXJtNjQt
+enlucW1wLUVuYWJsZS1ib290aW5nLXRvLUFURi4KPj4+IHAKPj4+IGF0Y2gKPj4+IGIvYm9hcmQv
+enlucW1wL3BhdGNoZXMvdWJvb3QvMDAwMi1hcm02NC16eW5xbXAtRW5hYmxlLWJvb3RpbmctdG8t
+QVRGLgo+Pj4gcAo+Pj4gYXRjaAo+Pj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4+PiBpbmRl
+eCA0ODdmZmY2ODEyLi4wMDAwMDAwMDAwCj4+PiAtLS0KPj4+IGEvYm9hcmQvenlucW1wL3BhdGNo
+ZXMvdWJvb3QvMDAwMi1hcm02NC16eW5xbXAtRW5hYmxlLWJvb3RpbmctdG8tQVRGLgo+Pj4gcAo+
+Pj4gYXRjaAo+Pj4gKysrIC9kZXYvbnVsbAo+Pj4gQEAgLTEsMTE0ICswLDAgQEAKPj4+IC1Gcm9t
+IDVlM2NhYzUwY2M5ODFlMDFkOTA3MjI0MTAzNWE4ZDQxNjI1NjBjNzEgTW9uIFNlcCAxNyAwMDow
+MDowMAo+Pj4gMjAwMQo+Pj4gLUZyb206IEx1Y2EgQ2VyZXNvbGkgPGx1Y2FAbHVjYWNlcmVzb2xp
+Lm5ldD4KPj4+IC1EYXRlOiBNb24sIDEyIE1hciAyMDE4IDE3OjE4OjM4ICswMTAwCj4+PiAtU3Vi
+amVjdDogW1BBVENIXSBhcm02NDogenlucW1wOiBFbmFibGUgYm9vdGluZyB0byBBVEYKPj4+IC0K
+Pj4+IC1VLUJvb3QgaXMgbm93IGFibGUgdG8gYm9vdCB0byBBUk0gVHJ1c3RlZCBGaXJtd2FyZSAo
+QVRGKS4gVGhlIGJvb3QgCj4+PiAtZmxvdyBpcyBTUEwoRUwzKSBsb2FkcyBBVEYgYW5kIGZ1bGwg
+dS1ib290IGFuZCBqdW1wIHRvIEFURihFTDMpIAo+Pj4gd2hpY2ggLXBhc3MgY29udHJvbCB0byBm
+dWxsIHUtYm9vdChFTDIpLiBUaGlzIGhhcyBiZWVuIHRlc3RlZCBvbiAKPj4+IHpjdTEwNiwgc28g
+LWVuYWJsZSBpdCBpbiB0aGlzIGRlZmNvbmZpZy4KPj4+IC0KPj4+IC1UbyBnZW5lcmF0ZSBhbiBp
+bWFnZSB0aGF0IHRyaWdnZXJzIHRoaXMgYm9vdGluZyBmbG93LCB5b3UgbmVlZCB0byAKPj4+IHBh
+c3MgLSctTyBhcm0tdHJ1c3RlZC1maXJtd2FyZScgdG8gbWtpbWFnZS4KPj4+IC0KPj4+IC1TaWdu
+ZWQtb2ZmLWJ5OiBMdWNhIENlcmVzb2xpIDxsdWNhQGx1Y2FjZXJlc29saS5uZXQ+Cj4+PiAtU2ln
+bmVkLW9mZi1ieTogTWljaGFsIFNpbWVrIDxtaWNoYWwuc2ltZWtAeGlsaW54LmNvbT4gLUJhY2tw
+b3J0ZWQgCj4+PiBmcm9tIHVwc3RyZWFtOgo+Pj4gaHR0cDovL2dpdC5kZW54LmRlLz9wPXUtYm9v
+dC5naXQ7YT1jb21taXQ7aD01ZTNjYWM1MGNjOTgxZTAxZDkwNzIyNDEwCj4+PiAzCj4+PiA1YThk
+NDE2MjU2MGM3MQo+Pj4gLS0tLQo+Pj4gLQo+Pj4gLSBjb25maWdzL3hpbGlueF96eW5xbXBfemMx
+NzUxX3htMDE1X2RjMV9kZWZjb25maWcgfCAxICsKPj4+IC0gY29uZmlncy94aWxpbnhfenlucW1w
+X3pjMTc1MV94bTAxNl9kYzJfZGVmY29uZmlnIHwgMSArCj4+PiAtIGNvbmZpZ3MveGlsaW54X3p5
+bnFtcF96YzE3NTFfeG0wMThfZGM0X2RlZmNvbmZpZyB8IDEgKwo+Pj4gLSBjb25maWdzL3hpbGlu
+eF96eW5xbXBfemMxNzUxX3htMDE5X2RjNV9kZWZjb25maWcgfCAxICsKPj4+IC0gY29uZmlncy94
+aWxpbnhfenlucW1wX3pjdTEwMl9yZXYxXzBfZGVmY29uZmlnICAgIHwgMSArCj4+PiAtIGNvbmZp
+Z3MveGlsaW54X3p5bnFtcF96Y3UxMDJfcmV2QV9kZWZjb25maWcgICAgICB8IDEgKwo+Pj4gLSBj
+b25maWdzL3hpbGlueF96eW5xbXBfemN1MTAyX3JldkJfZGVmY29uZmlnICAgICAgfCAxICsKPj4+
+IC0gNyBmaWxlcyBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykKPj4+IC0KPj4+IC1kaWZmIC0tZ2l0
+IGEvY29uZmlncy94aWxpbnhfenlucW1wX3pjMTc1MV94bTAxNV9kYzFfZGVmY29uZmlnCj4+PiBi
+L2NvbmZpZ3MveGlsaW54X3p5bnFtcF96YzE3NTFfeG0wMTVfZGMxX2RlZmNvbmZpZwo+Pj4gLWlu
+ZGV4IGM1YmZhMmIxMjYzOC4uNDg4YzcyMjU4YjBlIDEwMDY0NAo+Pj4gLS0tLSBhL2NvbmZpZ3Mv
+eGlsaW54X3p5bnFtcF96YzE3NTFfeG0wMTVfZGMxX2RlZmNvbmZpZwo+Pj4gLSsrKyBiL2NvbmZp
+Z3MveGlsaW54X3p5bnFtcF96YzE3NTFfeG0wMTVfZGMxX2RlZmNvbmZpZwo+Pj4gLUBAIC0xOSw2
+ICsxOSw3IEBAIENPTkZJR19CT0FSRF9FQVJMWV9JTklUX1I9eQo+Pj4gLSBDT05GSUdfU1BMX09T
+X0JPT1Q9eQo+Pj4gLSBDT05GSUdfU1BMX1JBTV9TVVBQT1JUPXkKPj4+IC0gQ09ORklHX1NQTF9S
+QU1fREVWSUNFPXkKPj4+IC0rQ09ORklHX1NQTF9BVEY9eQo+Pj4gLSBDT05GSUdfU1lTX1BST01Q
+VD0iWnlucU1QPiAiCj4+PiAtIENPTkZJR19GQVNUQk9PVD15Cj4+PiAtIENPTkZJR19GQVNUQk9P
+VF9GTEFTSD15Cj4+PiAtZGlmZiAtLWdpdCBhL2NvbmZpZ3MveGlsaW54X3p5bnFtcF96YzE3NTFf
+eG0wMTZfZGMyX2RlZmNvbmZpZwo+Pj4gYi9jb25maWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3ht
+MDE2X2RjMl9kZWZjb25maWcKPj4+IC1pbmRleCBmODZkY2U0MDNhNDIuLjVkNTAxZWVjMGVkZCAx
+MDA2NDQKPj4+IC0tLS0gYS9jb25maWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3htMDE2X2RjMl9k
+ZWZjb25maWcKPj4+IC0rKysgYi9jb25maWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3htMDE2X2Rj
+Ml9kZWZjb25maWcKPj4+IC1AQCAtMjAsNiArMjAsNyBAQCBDT05GSUdfQk9BUkRfRUFSTFlfSU5J
+VF9SPXkKPj4+IC0gQ09ORklHX1NQTF9PU19CT09UPXkKPj4+IC0gQ09ORklHX1NQTF9SQU1fU1VQ
+UE9SVD15Cj4+PiAtIENPTkZJR19TUExfUkFNX0RFVklDRT15Cj4+PiAtK0NPTkZJR19TUExfQVRG
+PXkKPj4+IC0gQ09ORklHX1NZU19QUk9NUFQ9Ilp5bnFNUD4gIgo+Pj4gLSBDT05GSUdfRkFTVEJP
+T1Q9eQo+Pj4gLSBDT05GSUdfRkFTVEJPT1RfRkxBU0g9eQo+Pj4gLWRpZmYgLS1naXQgYS9jb25m
+aWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3htMDE4X2RjNF9kZWZjb25maWcKPj4+IGIvY29uZmln
+cy94aWxpbnhfenlucW1wX3pjMTc1MV94bTAxOF9kYzRfZGVmY29uZmlnCj4+PiAtaW5kZXggNmU5
+NDdjZjU2ODI3Li42ZjdlYWViZDc2NzYgMTAwNjQ0Cj4+PiAtLS0tIGEvY29uZmlncy94aWxpbnhf
+enlucW1wX3pjMTc1MV94bTAxOF9kYzRfZGVmY29uZmlnCj4+PiAtKysrIGIvY29uZmlncy94aWxp
+bnhfenlucW1wX3pjMTc1MV94bTAxOF9kYzRfZGVmY29uZmlnCj4+PiAtQEAgLTE2LDYgKzE2LDcg
+QEAgQ09ORklHX0JPQVJEX0VBUkxZX0lOSVRfUj15Cj4+PiAtIENPTkZJR19TUExfT1NfQk9PVD15
+Cj4+PiAtIENPTkZJR19TUExfUkFNX1NVUFBPUlQ9eQo+Pj4gLSBDT05GSUdfU1BMX1JBTV9ERVZJ
+Q0U9eQo+Pj4gLStDT05GSUdfU1BMX0FURj15Cj4+PiAtIENPTkZJR19TWVNfUFJPTVBUPSJaeW5x
+TVA+ICIKPj4+IC0gQ09ORklHX0NNRF9NRU1URVNUPXkKPj4+IC0gQ09ORklHX1NZU19BTFRfTUVN
+VEVTVD15Cj4+PiAtZGlmZiAtLWdpdCBhL2NvbmZpZ3MveGlsaW54X3p5bnFtcF96YzE3NTFfeG0w
+MTlfZGM1X2RlZmNvbmZpZwo+Pj4gYi9jb25maWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3htMDE5
+X2RjNV9kZWZjb25maWcKPj4+IC1pbmRleCAxYzkzNDg1OGM2MWMuLjdhMzgwNmNiYTRiNSAxMDA2
+NDQKPj4+IC0tLS0gYS9jb25maWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3htMDE5X2RjNV9kZWZj
+b25maWcKPj4+IC0rKysgYi9jb25maWdzL3hpbGlueF96eW5xbXBfemMxNzUxX3htMDE5X2RjNV9k
+ZWZjb25maWcKPj4+IC1AQCAtMTcsNiArMTcsNyBAQCBDT05GSUdfQk9BUkRfRUFSTFlfSU5JVF9S
+PXkKPj4+IC0gQ09ORklHX1NQTF9PU19CT09UPXkKPj4+IC0gQ09ORklHX1NQTF9SQU1fU1VQUE9S
+VD15Cj4+PiAtIENPTkZJR19TUExfUkFNX0RFVklDRT15Cj4+PiAtK0NPTkZJR19TUExfQVRGPXkK
+Pj4+IC0gQ09ORklHX1NZU19QUk9NUFQ9Ilp5bnFNUD4gIgo+Pj4gLSBDT05GSUdfQ01EX01FTVRF
+U1Q9eQo+Pj4gLSBDT05GSUdfU1lTX0FMVF9NRU1URVNUPXkKPj4+IC1kaWZmIC0tZ2l0IGEvY29u
+Zmlncy94aWxpbnhfenlucW1wX3pjdTEwMl9yZXYxXzBfZGVmY29uZmlnCj4+PiBiL2NvbmZpZ3Mv
+eGlsaW54X3p5bnFtcF96Y3UxMDJfcmV2MV8wX2RlZmNvbmZpZwo+Pj4gLWluZGV4IGUxM2M3YzU2
+ZjMxMC4uZTQ0MDhmMTgyY2EwIDEwMDY0NAo+Pj4gLS0tLSBhL2NvbmZpZ3MveGlsaW54X3p5bnFt
+cF96Y3UxMDJfcmV2MV8wX2RlZmNvbmZpZwo+Pj4gLSsrKyBiL2NvbmZpZ3MveGlsaW54X3p5bnFt
+cF96Y3UxMDJfcmV2MV8wX2RlZmNvbmZpZwo+Pj4gLUBAIC0xOSw2ICsxOSw3IEBAIENPTkZJR19C
+T0FSRF9FQVJMWV9JTklUX1I9eQo+Pj4gLSBDT05GSUdfU1BMX09TX0JPT1Q9eQo+Pj4gLSBDT05G
+SUdfU1BMX1JBTV9TVVBQT1JUPXkKPj4+IC0gQ09ORklHX1NQTF9SQU1fREVWSUNFPXkKPj4+IC0r
+Q09ORklHX1NQTF9BVEY9eQo+Pj4gLSBDT05GSUdfU1lTX1BST01QVD0iWnlucU1QPiAiCj4+PiAt
+IENPTkZJR19GQVNUQk9PVD15Cj4+PiAtIENPTkZJR19GQVNUQk9PVF9GTEFTSD15Cj4+PiAtZGlm
+ZiAtLWdpdCBhL2NvbmZpZ3MveGlsaW54X3p5bnFtcF96Y3UxMDJfcmV2QV9kZWZjb25maWcKPj4+
+IGIvY29uZmlncy94aWxpbnhfenlucW1wX3pjdTEwMl9yZXZBX2RlZmNvbmZpZwo+Pj4gLWluZGV4
+IDViMmNkNDk1ZWU4NS4uYjUyZjY3ODlmZDRiIDEwMDY0NAo+Pj4gLS0tLSBhL2NvbmZpZ3MveGls
+aW54X3p5bnFtcF96Y3UxMDJfcmV2QV9kZWZjb25maWcKPj4+IC0rKysgYi9jb25maWdzL3hpbGlu
+eF96eW5xbXBfemN1MTAyX3JldkFfZGVmY29uZmlnCj4+PiAtQEAgLTE5LDYgKzE5LDcgQEAgQ09O
+RklHX0JPQVJEX0VBUkxZX0lOSVRfUj15Cj4+PiAtIENPTkZJR19TUExfT1NfQk9PVD15Cj4+PiAt
+IENPTkZJR19TUExfUkFNX1NVUFBPUlQ9eQo+Pj4gLSBDT05GSUdfU1BMX1JBTV9ERVZJQ0U9eQo+
+Pj4gLStDT05GSUdfU1BMX0FURj15Cj4+PiAtIENPTkZJR19TWVNfUFJPTVBUPSJaeW5xTVA+ICIK
+Pj4+IC0gQ09ORklHX0ZBU1RCT09UPXkKPj4+IC0gQ09ORklHX0ZBU1RCT09UX0ZMQVNIPXkKPj4+
+IC1kaWZmIC0tZ2l0IGEvY29uZmlncy94aWxpbnhfenlucW1wX3pjdTEwMl9yZXZCX2RlZmNvbmZp
+Zwo+Pj4gYi9jb25maWdzL3hpbGlueF96eW5xbXBfemN1MTAyX3JldkJfZGVmY29uZmlnCj4+PiAt
+aW5kZXggZTY1MzBmYmZlN2ZmLi44MDU5MjU1NGY2ODIgMTAwNjQ0Cj4+PiAtLS0tIGEvY29uZmln
+cy94aWxpbnhfenlucW1wX3pjdTEwMl9yZXZCX2RlZmNvbmZpZwo+Pj4gLSsrKyBiL2NvbmZpZ3Mv
+eGlsaW54X3p5bnFtcF96Y3UxMDJfcmV2Ql9kZWZjb25maWcKPj4+IC1AQCAtMTksNiArMTksNyBA
+QCBDT05GSUdfQk9BUkRfRUFSTFlfSU5JVF9SPXkKPj4+IC0gQ09ORklHX1NQTF9PU19CT09UPXkK
+Pj4+IC0gQ09ORklHX1NQTF9SQU1fU1VQUE9SVD15Cj4+PiAtIENPTkZJR19TUExfUkFNX0RFVklD
+RT15Cj4+PiAtK0NPTkZJR19TUExfQVRGPXkKPj4+IC0gQ09ORklHX1NZU19QUk9NUFQ9Ilp5bnFN
+UD4gIgo+Pj4gLSBDT05GSUdfRkFTVEJPT1Q9eQo+Pj4gLSBDT05GSUdfRkFTVEJPT1RfRkxBU0g9
+eQo+Pj4gLS0tCj4+PiAtMi43LjQKPj4+IC0KPj4+IGRpZmYgLS1naXQKPj4+IGEvYm9hcmQvenlu
+cW1wL3BhdGNoZXMvdWJvb3QvMDAwMy1hcm02NC16eW5xbXAtYWNjZXB0LWFuLWFic29sdXRlLXBh
+dAo+Pj4gaAo+Pj4gLWZvci1QTVVGV19JTklUXy5wYXRjaAo+Pj4gYi9ib2FyZC96eW5xbXAvcGF0
+Y2hlcy91Ym9vdC8wMDAzLWFybTY0LXp5bnFtcC1hY2NlcHQtYW4tYWJzb2x1dGUtcGF0Cj4+PiBo
+Cj4+PiAtZm9yLVBNVUZXX0lOSVRfLnBhdGNoCj4+PiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQK
+Pj4+IGluZGV4IDk1YWI3YjNiNzUuLjAwMDAwMDAwMDAKPj4+IC0tLQo+Pj4gYS9ib2FyZC96eW5x
+bXAvcGF0Y2hlcy91Ym9vdC8wMDAzLWFybTY0LXp5bnFtcC1hY2NlcHQtYW4tYWJzb2x1dGUtcGF0
+Cj4+PiBoCj4+PiAtZm9yLVBNVUZXX0lOSVRfLnBhdGNoCj4+PiArKysgL2Rldi9udWxsCj4+PiBA
+QCAtMSw2OCArMCwwIEBACj4+PiAtRnJvbSBjN2RmMDk4YTcxZTA1ZGM4MWNlZTgxODc0Nzc1OWU4
+MDYwYjU5NjI2IE1vbiBTZXAgMTcgMDA6MDA6MDAKPj4+IDIwMDEKPj4+IC1Gcm9tOiBMdWNhIENl
+cmVzb2xpIDxsdWNhQGx1Y2FjZXJlc29saS5uZXQ+Cj4+PiAtRGF0ZTogTW9uLCA0IEp1biAyMDE4
+IDEyOjIxOjAxICswMjAwCj4+PiAtU3ViamVjdDogW1BBVENIXSBhcm02NDogenlucW1wOiBhY2Nl
+cHQgYW4gYWJzb2x1dGUgcGF0aCBmb3IgCj4+PiBQTVVGV19JTklUX0ZJTEUKPj4+IC0KPj4+IC1U
+aGUgdmFsdWUgb2YgUE1VRldfSU5JVF9GSUxFIGlzIHByZWZpeGVkIHdpdGggIiQoc3JjdHJlZSkv
+IiwgdGh1cyAKPj4+IC1mb3JjaW5nIGl0IHRvIGJlIGEgcmVsYXRpdmUgcGF0aCBpbnNpZGUgdGhl
+IFUtQm9vdCBzb3VyY2UgdHJlZS4gCj4+PiBTaW5jZSAtdGhlIFBNVUZXIGlzIGEgYmluYXJ5IGZp
+bGUgZ2VuZXJhdGVkIG91dHNpZGUgb2YgVS1Cb290LCB0aGUgCj4+PiBQTVVGVyAtYmluYXJ5IG11
+c3QgYmUgY29waWVkIGluc2lkZSB0aGUgVS1Cb290IHNvdXJjZSB0cmVlIGJlZm9yZSB0aGUgCj4+
+PiAtYnVpbGQuCj4+PiAtCj4+PiAtVGhpcyBnZW5lcmF0ZXMgYSBmZXcgcHJvYmxlbXM6Cj4+PiAt
+Cj4+PiAtICogaWYgdGhlIHNvdXJjZSB0cmVlIGlzIHNoYXJlZCBhbW9uZyBkaWZmZXJlbnQgb3V0
+LW9mLXRyZWUgYnVpbGRzLAo+Pj4gLSAgIHRoZXkgd2lsbCBwb2xsdXRlIChhbmQgcG90ZW50aWFs
+bHkgY29ycnVwdCkgZWFjaCBvdGhlcgo+Pj4gLSAqIHRoZSBzb3VyY2UgdHJlZSBjYW5ub3QgYmUg
+cmVhZC1vbmx5Cj4+PiAtICogYW55IGJ1aWxkc3lzdGVtIG11c3QgYWRkIGEgY29tbWFuZCB0byBj
+b3B5IHRoZSBQTVVGVyBiaW5hcnkKPj4+IC0gKiBwdXR0aW5nIGFuIGV4dGVybmFsbHktZ2VuZXJh
+dGVkIGJpbmFyeSBpbiB0aGUgc291cmNlIHRyZWUgaXMgdWdseQo+Pj4gLSAgIGFzIGhlbGwKPj4+
+IC0KPj4+IC1Bdm9pZCB0aGVzZSBwcm9ibGVtcyBieSBhY2NlcHRpbmcgYW4gYWJzb2x1dGUgcGF0
+aCBmb3IgCj4+PiAtUE1VRldfSU5JVF9GSUxFLiBUaGlzIHdvdWxkIGJlIGFzIHNpbXBsZSBhcyBy
+ZW1vdmluZyB0aGUgIiQoc3JjdHJlZSkvIgo+Pj4gLXByZWZpeCwgYnV0IGluIG9yZGVyIHRvIGtl
+ZXAgYmFja3dhcmQgY29tcGF0aWJpbGl0eSB3ZSByYXRoZXIgdXNlIAo+Pj4gdGhlIC1zaGVsbCBh
+bmQgcmVhZGxpbmsgdG8gZ2V0IHRoZSBhYnNvbHV0ZSBwYXRoIGV2ZW4gd2hlbiBzdGFydGluZyAK
+Pj4+IGZyb20gYSAtcmVsYXRpdmUgcGF0aC4KPj4+IC0KPj4+IC1TaW5jZSAncmVhZGxpbmsgLWYn
+IHByb2R1Y2VzIGFuIGVtcHR5IHN0cmluZyBpZiB0aGUgZmlsZSBkb2VzIG5vdCAKPj4+IC1leGlz
+dCwgd2UgYWxzbyBhZGQgYSBjaGVjayB0byBlbnN1cmUgdGhlIGZpbGUgY29uZmlndXJlZCBpbiAK
+Pj4+IC1QTVVGV19JTklUX0ZJTEUgZXhpc3RzLiBPdGhlcndpc2UgdGhlIGJ1aWxkIHdvdWxkIGV4
+aXQgc3VjY2Vzc2Z1bGx5LCAKPj4+IC1idXQgcHJvZHVjZSBhIGJvb3QuYmluIHdpdGhvdXQgUE1V
+RlcgYXMgaWYgUE1VRldfSU5JVF9GSUxFIHdlcmUgZW1wdHkuCj4+PiAtCj4+PiAtVGVzdGVkIGlu
+IHRoZSAxMiBwb3NzaWJsZSBjb21iaW5hdGlvbnMgb2Y6Cj4+PiAtIC0gUE1VRldfSU5JVF9GSUxF
+IGVtcHR5LCByZWxhdGl2ZSwgYWJzb2x1dGUsIG5vbi1leGlzdGluZwo+Pj4gLSAtIGJ1aWxkaW5n
+IGluLXRyZWUsIGluIHN1YmRpciwgaW4gb3RoZXIgZGlyZWN0b3J5Cj4+PiAtCj4+PiAtU2lnbmVk
+LW9mZi1ieTogTHVjYSBDZXJlc29saSA8bHVjYUBsdWNhY2VyZXNvbGkubmV0Pgo+Pj4gLUNjOiBN
+aWNoYWwgU2ltZWsgPG1pY2hhbC5zaW1la0B4aWxpbnguY29tPgo+Pj4gLUNjOiBTaW1vbiBHbGFz
+cyA8c2pnQGNocm9taXVtLm9yZz4KPj4+IC1DYzogRW1tYW51ZWwgVmFkb3QgPG1hbnVAYmlkb3Vp
+bGxpc3RlLmNvbT4KPj4+IC1TaWduZWQtb2ZmLWJ5OiBNaWNoYWwgU2ltZWsgPG1pY2hhbC5zaW1l
+a0B4aWxpbnguY29tPiAtQmFja3BvcnRlZCAKPj4+IGZyb20gdXBzdHJlYW06Cj4+PiBodHRwczov
+L2dpdC5kZW54LmRlLz9wPXUtYm9vdC5naXQ7YT1jb21taXQ7aD1jN2RmMDk4YTcxZTA1ZGM4MWNl
+ZTgxODcKPj4+IDQKPj4+IDc3NTllODA2MGI1OTYyNgo+Pj4gLS0tLQo+Pj4gLSBzY3JpcHRzL01h
+a2VmaWxlLnNwbCB8IDggKysrKysrKy0KPj4+IC0gMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9u
+cygrKSwgMSBkZWxldGlvbigtKQo+Pj4gLQo+Pj4gLWRpZmYgLS1naXQgYS9zY3JpcHRzL01ha2Vm
+aWxlLnNwbCBiL3NjcmlwdHMvTWFrZWZpbGUuc3BsIC1pbmRleCAKPj4+IGVmMDE4YjViNDA1Ni4u
+MjUyZjEzODI2ZDRjIDEwMDY0NAo+Pj4gLS0tLSBhL3NjcmlwdHMvTWFrZWZpbGUuc3BsCj4+PiAt
+KysrIGIvc2NyaXB0cy9NYWtlZmlsZS5zcGwKPj4+IC1AQCAtMTY3LDggKzE2NywxNCBAQCBpZmRl
+ZiBDT05GSUdfQVJDSF9aWU5RCj4+PiAtIE1LSU1BR0VGTEFHU19ib290LmJpbiA9IC1UIHp5bnFp
+bWFnZSAtUgo+Pj4gJChzcmN0cmVlKS8kKENPTkZJR19CT09UX0lOSVRfRklMRSkKPj4+IC0gZW5k
+aWYKPj4+IC0gaWZkZWYgQ09ORklHX0FSQ0hfWllOUU1QCj4+PiAtK2lmbmVxICgkKENPTkZJR19Q
+TVVGV19JTklUX0ZJTEUpLCIiKQo+Pj4gLStzcGwvYm9vdC5iaW46IHp5bnFtcC1jaGVjay1wbXVm
+dwo+Pj4gLSt6eW5xbXAtY2hlY2stcG11Znc6IEZPUkNFCj4+PiAtKyAgICAoIGNkICQoc3JjdHJl
+ZSkgJiYgdGVzdCAtciAkKENPTkZJR19QTVVGV19JTklUX0ZJTEUpICkgXAo+Pj4gLSsgICAgICAg
+ICAgICB8fCAoIGVjaG8gIkNhbm5vdCByZWFkICQoQ09ORklHX1BNVUZXX0lOSVRfRklMRSkiICYm
+IAo+Pj4gLStmYWxzZSApIGVuZGlmCj4+PiAtIE1LSU1BR0VGTEFHU19ib290LmJpbiA9IC1UIHp5
+bnFtcGltYWdlIC1SICQoc3JjdHJlZSkvJChDT05GSUdfQk9PVF9JTklUX0ZJTEUpIFwKPj4+IC0t
+ICAgIC1uICQoc3JjdHJlZSkvJChDT05GSUdfUE1VRldfSU5JVF9GSUxFKQo+Pj4gLSsgICAgLW4g
+IiQoc2hlbGwgY2QgJChzcmN0cmVlKTsgcmVhZGxpbmsgLWYgJChDT05GSUdfUE1VRldfSU5JVF9G
+SUxFKSkiCj4+PiAtIGVuZGlmCj4+PiAtCj4+PiAtIHNwbC9ib290LmJpbjogJChvYmopL3UtYm9v
+dC1zcGwuYmluIEZPUkNFCj4+PiAtLS0KPj4+IC0yLjcuNAo+Pj4gLQo+Pj4gZGlmZiAtLWdpdAo+
+Pj4gYS9ib2FyZC96eW5xbXAvcGF0Y2hlcy91Ym9vdC8wMDA0LWFybS1hcm02NC16eW5xLXp5bnFt
+cC1wYXNzLXRoZS1QUy1pCj4+PiBuCj4+PiBpdC1maWxlLWFzLWEta2NvLnBhdGNoCj4+PiBiL2Jv
+YXJkL3p5bnFtcC9wYXRjaGVzL3Vib290LzAwMDQtYXJtLWFybTY0LXp5bnEtenlucW1wLXBhc3Mt
+dGhlLVBTLWkKPj4+IG4KPj4+IGl0LWZpbGUtYXMtYS1rY28ucGF0Y2gKPj4+IGRlbGV0ZWQgZmls
+ZSBtb2RlIDEwMDY0NAo+Pj4gaW5kZXggYjMyZTE2Mjc4MC4uMDAwMDAwMDAwMAo+Pj4gLS0tCj4+
+PiBhL2JvYXJkL3p5bnFtcC9wYXRjaGVzL3Vib290LzAwMDQtYXJtLWFybTY0LXp5bnEtenlucW1w
+LXBhc3MtdGhlLVBTLWkKPj4+IG4KPj4+IGl0LWZpbGUtYXMtYS1rY28ucGF0Y2gKPj4+ICsrKyAv
+ZGV2L251bGwKPj4+IEBAIC0xLDE3NSArMCwwIEBACj4+PiAtRnJvbSA0YzlkNTRhYjVhNDFkNjUw
+MDBjOGQyNDliNmZiMWI3NjA1NmYxODEyIE1vbiBTZXAgMTcgMDA6MDA6MDAKPj4+IDIwMDEKPj4+
+IC1Gcm9tOiBMdWNhIENlcmVzb2xpIDxsdWNhQGx1Y2FjZXJlc29saS5uZXQ+Cj4+PiAtRGF0ZTog
+V2VkLCAyMCBKdW4gMjAxOCAxMjoxMTo1MCArMDIwMAo+Pj4gLVN1YmplY3Q6IFtQQVRDSF0gYXJt
+L2FybTY0OiB6eW5xL3p5bnFtcDogcGFzcyB0aGUgUFMgaW5pdCBmaWxlIGFzIGEgCj4+PiBrY29u
+ZmlnCj4+PiAtIHZhcmlhYmxlCj4+PiAtCj4+PiAtVS1Cb290IG5lZWRzIHRvIGxpbmsgcHM3X2lu
+aXRfZ3BsLmMgb24gWnlucSBvciBwc3VfaW5pdF9ncGwuYyBvbiAKPj4+IC1aeW5xTVAgKFBTIGlu
+aXQgZm9yIHNob3J0KS4gVGhlIGN1cnJlbnQgbG9naWMgdG8gbG9jYXRlIHRoaXMgZmlsZSAKPj4+
+IGZvciAtYm90aCBwbGF0Zm9ybXMgaXM6Cj4+PiAtCj4+PiAtIDEuIGlmIGEgYm9hcmQtc3BlY2lm
+aWMgZmlsZSBleGlzdHMgaW4KPj4+IC0gICAgYm9hcmQveGlsaW54L3p5bnFbbXBdLyQoQ09ORklH
+X0RFRkFVTFRfREVWSUNFX1RSRUUpL3BzP19pbml0X2dwbC5jCj4+PiAtICAgIHRoZW4gdXNlIGl0
+Cj4+PiAtIDIuIG90aGVyd2lzZSB1c2UgYm9hcmQveGlsaW54L3p5bnEvcHM/X2luaXRfZ3BsLmMK
+Pj4+IC0KPj4+IC1JbiB0aGUgbGF0dGVyIGNhc2UgdGhlIGZpbGUgZG9lcyBub3QgZXhpc3QgaW4g
+dGhlIFUtQm9vdCBzb3VyY2VzIGFuZCAKPj4+IC1tdXN0IGJlIGNvcGllZCBpbiB0aGUgc291cmNl
+IHRyZWUgZnJvbSB0aGUgb3V0c2lkZSBiZWZvcmUgc3RhcnRpbmcgCj4+PiB0aGUgLWJ1aWxkLiBU
+aGlzIGlzIHR5cGljYWwgd2hlbiBpdCBpcyBnZW5lcmF0ZWQgZnJvbSBYaWxpbnggdG9vbHMgCj4+
+PiB3aGlsZSAtZGV2ZWxvcGluZyBhIGN1c3RvbSBoYXJkd2FyZS4gSG93ZXZlciBtYWtpbmcgc3Vy
+ZSB0aGF0IGEgCj4+PiAtYm9hcmQtc3BlY2lmaWMgZmlsZSBpcyBfbm90XyBmb3VuZCAoYW5kIHVz
+ZWQpIHJlcXVpcmVzIHNvbWUgdHJpY2tlcnkgCj4+PiAtc3VjaCBhcyByZW1vdmluZyBvciBvdmVy
+d3JpdGluZyBhbGwgUFMgaW5pdCBmaWxlcyAoZS5nLjogdGhlIGN1cnJlbnQgCj4+PiAtbWV0YS14
+aWxpbnggeW9jdG8gbGF5ZXIgWzBdKS4KPj4+IC0KPj4+IC1UaGlzIGdlbmVyYXRlcyBhIGZldyBw
+cm9ibGVtczoKPj4+IC0KPj4+IC0gKiBpZiB0aGUgc291cmNlIHRyZWUgaXMgc2hhcmVkIGFtb25n
+IGRpZmZlcmVudCBvdXQtb2YtdHJlZSBidWlsZHMsCj4+PiAtICAgdGhleSB3aWxsIHBvbGx1dGUg
+KGFuZCBwb3RlbnRpYWxseSBjb3JydXB0KSBlYWNoIG90aGVyCj4+PiAtICogdGhlIHNvdXJjZSB0
+cmVlIGNhbm5vdCBiZSByZWFkLW9ubHkKPj4+IC0gKiBhbnkgYnVpbGRzeXN0ZW0gbXVzdCBhZGQg
+YSBjb21tYW5kIHRvIGNvcHkgdGhlIFBTIGluaXQgZmlsZSAKPj4+IGJpbmFyeQo+Pj4gLSAqIG92
+ZXJ3cml0aW5nIG9yIGRlbGV0aW5nIGZpbGVzIGluIHRoZSBzb3VyY2UgdHJlZSBpcyB1Z2x5IGFz
+IGhlbGwKPj4+IC0KPj4+IC1TaW1wbGlmeSB1c2FnZSBieSBhbGxvd2luZyB0byBwYXNzIHRoZSBw
+YXRoIHRvIHRoZSBkZXNpcmVkIFBTIGluaXQgCj4+PiAtZmlsZSBpbiBrY29uZmlnIHZhcmlhYmxl
+IFhJTElOWF9QU19JTklUX0ZJTEUuIEl0IGNhbiBiZSBhbiBhYnNvbHV0ZSAKPj4+IC1wYXRoIG9y
+IHJlbGF0aXZlIHRvICQoc3JjdHJlZSkuIElmIHRoZSB2YXJpYWJsZSBpcyBzZXQsIHRoZSAKPj4+
+IC11c2VyLXNwZWNpZmllZCBmaWxlIHdpbGwgYWx3YXlzIGJlIHVzZWQgd2l0aG91dCBiZWluZyBj
+b3BpZWQgLWFyb3VuZC4KPj4+IElmIHRoZSB0aGUgdmFyaWFibGUgaXMgbGVmdCBlbXB0eSwgZm9y
+IGJhY2t3YXJkIGNvbXBhdGliaWxpdHkgLWZhbGwgCj4+PiBiYWNrIHRvIHRoZSBvbGQgYmVoYXZp
+b3VyLgo+Pj4gLQo+Pj4gLVNpbmNlIHRoZSBpc3N1ZSBpcyB0aGUgc2FtZSBmb3IgWnlucSBhbmQg
+WnlucU1QLCBhZGQgb25lIGtjb25maWcgCj4+PiAtdmFyaWFibGUgaW4gYSBjb21tb24gcGxhY2Ug
+YW5kIHVzZSBpdCBmb3IgYm90aC4KPj4+IC0KPj4+IC1BbHNvIHVzZSB0aGUgbmV3IGtjb25maWcg
+aGVscCB0ZXh0IHRvIGRvY3VtZW50IGFsbCB0aGUgd2F5cyB0byBnaXZlIAo+Pj4gLVUtQm9vdCB0
+aGUgUFMgaW5pdCBmaWxlLgo+Pj4gLQo+Pj4gLUJ1aWxkLXRlc3RlZCB3aXRoIGFsbCBjb21iaW5h
+dGlvbnMgb2Y6Cj4+PiAtIC0gcGxhdGZvcm06IHp5bnEgb3IgenlucW1wCj4+PiAtIC0gUFMgaW5p
+dCBmaWxlOiBmcm9tIFhJTElOWF9QU19JTklUX0ZJTEUgKGFic29sdXRlLCByZWxhdGl2ZSBwYXRo
+LAo+Pj4gLSAgIG5vbi1leGlzdGluZyksIGluLXRyZWUgYm9hcmQtc3BlY2lmaWMsIGluIGJvYXJk
+L3hpbGlueC96eW5xW21wXS8KPj4+IC0gLSBidWlsZGluZyBpbi10cmVlLCBpbiBzdWJkaXIsIGlu
+IG90aGVyIGRpcmVjdG9yeQo+Pj4gLQo+Pj4gLVswXQo+Pj4gaHR0cHM6Ly9naXRodWIuY29tL1hp
+bGlueC9tZXRhLXhpbGlueC9ibG9iL2IyZjc0Y2M3ZmU1YzQ4ODE1ODlkNWU0NDBhCj4+PiAxIAo+
+Pj4gN2NiNTFmYzY2YTdhYi9tZXRhLXhpbGlueC1ic3AvcmVjaXBlcy1ic3AvdS1ib290L3UtYm9v
+dC1zcGwtenlucS1pbml0Lgo+Pj4gaW5jI0w5Cj4+PiAtCj4+PiAtU2lnbmVkLW9mZi1ieTogTHVj
+YSBDZXJlc29saSA8bHVjYUBsdWNhY2VyZXNvbGkubmV0Pgo+Pj4gLUNjOiBBbGJlcnQgQXJpYmF1
+ZCA8YWxiZXJ0LnUuYm9vdEBhcmliYXVkLm5ldD4KPj4+IC1DYzogTWljaGFsIFNpbWVrIDxtaWNo
+YWwuc2ltZWtAeGlsaW54LmNvbT4KPj4+IC1DYzogTmF0aGFuIFJvc3NpIDxuYXRoYW5AbmF0aGFu
+cm9zc2kuY29tPiAtQmFja3BvcnRlZCBmcm9tIHVwc3RyZWFtOgo+Pj4gaHR0cHM6Ly9naXQuZGVu
+eC5kZS8/cD11LWJvb3QuZ2l0O2E9Y29tbWl0O2g9NmRhNGY2N2FkMDljZDhiMzExZDc3YjJiCj4+
+PiAwCj4+PiA0ZTU1N2I3ZWY2NWI1NmMKPj4+IC0tLS0KPj4+IC0gYXJjaC9hcm0vS2NvbmZpZyAg
+ICAgICAgICAgICB8ICAxICsKPj4+IC0gYm9hcmQveGlsaW54L0tjb25maWcgICAgICAgICB8IDQx
+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4+PiAtIGJvYXJkL3hp
+bGlueC96eW5xL01ha2VmaWxlICAgfCAxMCArKysrKysrKystCj4+PiAtIGJvYXJkL3hpbGlueC96
+eW5xbXAvTWFrZWZpbGUgfCAxMCArKysrKysrKystCj4+PiAtIDQgZmlsZXMgY2hhbmdlZCwgNjAg
+aW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPj4+IC0gY3JlYXRlIG1vZGUgMTAwNjQ0IGJv
+YXJkL3hpbGlueC9LY29uZmlnCj4+PiAtCj4+PiAtZGlmZiAtLWdpdCBhL2FyY2gvYXJtL0tjb25m
+aWcgYi9hcmNoL2FybS9LY29uZmlnIC1pbmRleCAKPj4+IDIyMjM0Y2RlMmFiNi4uZTA0OTc5ZDBl
+ZjdlIDEwMDY0NAo+Pj4gLS0tLSBhL2FyY2gvYXJtL0tjb25maWcKPj4+IC0rKysgYi9hcmNoL2Fy
+bS9LY29uZmlnCj4+PiAtQEAgLTEyOTMsNCArMTI5Myw1IEBAIHNvdXJjZSAiYm9hcmQvdGVjaG5v
+bG9naWMvdHM0NjAwL0tjb25maWciCj4+PiAtIHNvdXJjZSAiYm9hcmQvdnNjb20vYmFsdG9zL0tj
+b25maWciCj4+PiAtIHNvdXJjZSAiYm9hcmQvd29vZGJ1cm4vS2NvbmZpZyIKPj4+IC0gc291cmNl
+ICJib2FyZC93b3JrLW1pY3Jvd2F2ZS93b3JrXzkyMTA1L0tjb25maWciCj4+PiAtK3NvdXJjZSAi
+Ym9hcmQveGlsaW54L0tjb25maWciCj4+PiAtIHNvdXJjZSAiYm9hcmQvemlwaXR6Mi9LY29uZmln
+Igo+Pj4gLQo+Pj4gLSBzb3VyY2UgImFyY2gvYXJtL0tjb25maWcuZGVidWciCj4+PiAtZGlmZiAt
+LWdpdCBhL2JvYXJkL3hpbGlueC9LY29uZmlnIGIvYm9hcmQveGlsaW54L0tjb25maWcgLW5ldyBm
+aWxlIAo+Pj4gbW9kZSAxMDA2NDQgLWluZGV4IDAwMDAwMDAwMDAwMC4uYWEzZmEwNjFlZGVmCj4+
+PiAtLS0tIC9kZXYvbnVsbAo+Pj4gLSsrKyBiL2JvYXJkL3hpbGlueC9LY29uZmlnCj4+PiAtQEAg
+LTAsMCArMSw0MSBAQAo+Pj4gLSsjIENvcHlyaWdodCAoYykgMjAxOCwgTHVjYSBDZXJlc29saSA8
+bHVjYUBsdWNhY2VyZXNvbGkubmV0PiAjICMKPj4+IC0rU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6
+IEdQTC0yLjAKPj4+IC0rCj4+PiAtK2lmIEFSQ0hfWllOUSB8fCBBUkNIX1pZTlFNUAo+Pj4gLSsK
+Pj4+IC0rY29uZmlnIFhJTElOWF9QU19JTklUX0ZJTEUKPj4+IC0rICAgIHN0cmluZyAiWnlucS9a
+eW5xTVAgUFMgaW5pdCBmaWxlKHMpIGxvY2F0aW9uIgo+Pj4gLSsgICAgaGVscAo+Pj4gLSsgICAg
+ICBPbiBaeW5xIGFuZCBaeW5xTVAgVS1Cb290IFNQTCAob3IgVS1Cb290IHByb3BlciBpZgo+Pj4g
+LSsgICAgICBaWU5RTVBfUFNVX0lOSVRfRU5BQkxFRCBpcyBzZXQpIGlzIHJlc3BvbnNpYmxlIGZv
+ciBzb21lCj4+PiAtKyAgICAgIGJhc2ljIGluaXRpYWxpemF0aW9ucywgc3VjaCBhcyBlbmFibGlu
+ZyBwZXJpcGhlcmFscyBhbmQKPj4+IC0rICAgICAgY29uZmlndXJpbmcgcGlubXV4ZXMuIFRoZSBQ
+UyBpbml0IGZpbGUgKGNhbGxlZAo+Pj4gLSsgICAgICBwc3VfaW5pdF9ncGwuYyBvbiBaeW5xTVAs
+IHBzN19pbml0X2dwbC5jIGZvciBaeW5xLTcwMDApCj4+PiAtKyAgICAgIGNvbnRhaW5zIHRoZSBj
+b2RlIGZvciBzdWNoIGluaXRpYWxpemF0aW9ucy4KPj4+IC0rCj4+PiAtKyAgICAgIFUtQm9vdCBj
+b250YWlucyBQUyBpbml0IGZpbGVzIGZvciBzb21lIGJvYXJkcywgYnV0IGVhY2ggb2YKPj4+IC0r
+ICAgICAgdGhlbSBkZXNjcmliZXMgb25seSBvbmUgc3BlY2lmaWMgY29uZmlndXJhdGlvbi4gVXNl
+cnMgb2YgYQo+Pj4gLSsgICAgICBkaWZmZXJlbnQgYm9hcmQsIG9yIG5lZWRpbmcgYSBkaWZmZXJl
+bnQgY29uZmlndXJhdGlvbiwgY2FuCj4+PiAtKyAgICAgIGdlbmVyYXRlIGN1c3RvbSBmaWxlcyB1
+c2luZyB0aGUgWGlsaW54IGRldmVsb3BtZW50IHRvb2xzLgo+Pj4gLSsKPj4+IC0rICAgICAgVGhl
+cmUgYXJlIHRocmVlIHdheXMgdG8gZ2l2ZSBhIFBTIGluaXQgZmlsZSB0byBVLUJvb3Q6Cj4+PiAt
+Kwo+Pj4gLSsgICAgICAxLiBTZXQgdGhpcyB2YXJpYWJsZSB0byB0aGUgcGF0aCwgZWl0aGVyIHJl
+bGF0aXZlIHRvIHRoZQo+Pj4gLSsgICAgICAgICBzb3VyY2UgdHJlZSBvciBhYnNvbHV0ZSwgd2hl
+cmUgdGhlIHBzdV9pbml0X2dwbC5jIG9yCj4+PiAtKyAgICAgICAgIHBzN19pbml0X2dwbC5jIGZp
+bGUgaXMgbG9jYXRlZC4gVS1Cb290IHdpbGwgYnVpbGQgdGhpcwo+Pj4gLSsgICAgICAgICBmaWxl
+Lgo+Pj4gLSsKPj4+IC0rICAgICAgMi4gSWYgeW91IGxlYXZlIGFuIGVtcHR5IHN0cmluZyBoZXJl
+LCBVLUJvb3Qgd2lsbCB1c2UKPj4+IC0rICAgICAgICAgYm9hcmQveGlsaW54L3p5bnEvJChDT05G
+SUdfREVGQVVMVF9ERVZJQ0VfVFJFRSkvcHM3X2luaXRfZ3BsLmMKPj4+IC0rICAgICAgICAgZm9y
+IFp5bnEtNzAwMCwgb3IKPj4+IC0rICAgICAgICAgYm9hcmQveGlsaW54L3p5bnFtcC8kKENPTkZJ
+R19ERUZBVUxUX0RFVklDRV9UUkVFKS9wc3VfaW5pdF9ncGwuYwo+Pj4gLSsgICAgICAgICBmb3Ig
+WnlucU1QLgo+Pj4gLSsKPj4+IC0rICAgICAgMy4gSWYgdGhlIGFib3ZlIGZpbGUgZG9lcyBub3Qg
+ZXhpc3QsIFUtQm9vdCB3aWxsIHVzZQo+Pj4gLSsgICAgICAgICBib2FyZC94aWxpbngvenlucS9w
+czdfaW5pdF9ncGwuYyBmb3IgWnlucS03MDAwLCBvcgo+Pj4gLSsgICAgICAgICBib2FyZC94aWxp
+bngvenlucW1wL3BzdV9pbml0X2dwbC5jIGZvciBaeW5xTVAuIFRoaXMgZmlsZQo+Pj4gLSsgICAg
+ICAgICBpcyBub3QgcHJvdmlkZWQgYnkgVS1Cb290LCB5b3UgaGF2ZSB0byBjb3B5IGl0IHRoZXJl
+Cj4+PiAtKyAgICAgICAgIGJlZm9yZSB0aGUgYnVpbGQuCj4+PiAtKwo+Pj4gLStlbmRpZgo+Pj4g
+LWRpZmYgLS1naXQgYS9ib2FyZC94aWxpbngvenlucS9NYWtlZmlsZSBiL2JvYXJkL3hpbGlueC96
+eW5xL01ha2VmaWxlIAo+Pj4gLWluZGV4IDVhNzZhMjY3MjBjZC4uMDNhZDVmMDUzMmVlIDEwMDY0
+NAo+Pj4gLS0tLSBhL2JvYXJkL3hpbGlueC96eW5xL01ha2VmaWxlCj4+PiAtKysrIGIvYm9hcmQv
+eGlsaW54L3p5bnEvTWFrZWZpbGUKPj4+IC1AQCAtNSwxMCArNSwxOCBAQAo+Pj4gLQo+Pj4gLSBv
+YmoteSAgICAgICA6PSBib2FyZC5vCj4+PiAtCj4+PiAtLWh3LXBsYXRmb3JtLXkgOj0kKHNoZWxs
+IGVjaG8gJChDT05GSUdfREVGQVVMVF9ERVZJQ0VfVFJFRSkpCj4+PiAtK2lmbmVxICgkKENPTkZJ
+R19YSUxJTlhfUFNfSU5JVF9GSUxFKSwiIikKPj4+IC0rUFNfSU5JVF9GSUxFIDo9ICQoc2hlbGwg
+Y2QgJChzcmN0cmVlKTsgcmVhZGxpbmsgLWYKPj4+IC0rJChDT05GSUdfWElMSU5YX1BTX0lOSVRf
+RklMRSkpIGluaXQtb2JqcyA6PSBwc19pbml0X2dwbC5vIAo+Pj4gLStzcGwvYm9hcmQveGlsaW54
+L3p5bnEvcHNfaW5pdF9ncGwubyBib2FyZC94aWxpbngvenlucS9wc19pbml0X2dwbC5vOiAkKFBT
+X0lOSVRfRklMRSkKPj4+IC0rICAgICQoQ0MpICQoY19mbGFncykgLUkgJChzcmN0cmVlKS8kKHNy
+YykgLWMgLW8gJEAgJF4gZW5kaWYKPj4+IC0KPj4+IC0raWZlcSAoJChpbml0LW9ianMpLCkKPj4+
+IC0raHctcGxhdGZvcm0teSA6PSQoc2hlbGwgZWNobyAkKENPTkZJR19ERUZBVUxUX0RFVklDRV9U
+UkVFKSkKPj4+IC0gaW5pdC1vYmpzIDo9ICQoaWYgJCh3aWxkY2FyZCAkKHNyY3RyZWUpLyQoc3Jj
+KS8kKGh3LXBsYXRmb3JtLXkpL3BzN19pbml0X2dwbC5jKSxcCj4+PiAtICAgICAkKGh3LXBsYXRm
+b3JtLXkpL3BzN19pbml0X2dwbC5vKQo+Pj4gLStlbmRpZgo+Pj4gLQo+Pj4gLSBpZmVxICgkKGlu
+aXQtb2JqcyksKQo+Pj4gLSBpZm5lcSAoJCh3aWxkY2FyZCAkKHNyY3RyZWUpLyQoc3JjKS9wczdf
+aW5pdF9ncGwuYyksKQo+Pj4gLWRpZmYgLS1naXQgYS9ib2FyZC94aWxpbngvenlucW1wL01ha2Vm
+aWxlIAo+Pj4gYi9ib2FyZC94aWxpbngvenlucW1wL01ha2VmaWxlIC1pbmRleCAwNWNjZDI1ZGNl
+ZjMuLjk2MGI4MWZjNTg1Mwo+Pj4gMTAwNjQ0Cj4+PiAtLS0tIGEvYm9hcmQveGlsaW54L3p5bnFt
+cC9NYWtlZmlsZQo+Pj4gLSsrKyBiL2JvYXJkL3hpbGlueC96eW5xbXAvTWFrZWZpbGUKPj4+IC1A
+QCAtNSwxMCArNSwxOCBAQAo+Pj4gLQo+Pj4gLSBvYmoteSAgICAgICA6PSB6eW5xbXAubwo+Pj4g
+LQo+Pj4gLS1ody1wbGF0Zm9ybS15IDo9JChzaGVsbCBlY2hvICQoQ09ORklHX0RFRkFVTFRfREVW
+SUNFX1RSRUUpKQo+Pj4gLStpZm5lcSAoJChDT05GSUdfWElMSU5YX1BTX0lOSVRfRklMRSksIiIp
+Cj4+PiAtK1BTX0lOSVRfRklMRSA6PSAkKHNoZWxsIGNkICQoc3JjdHJlZSk7IHJlYWRsaW5rIC1m
+Cj4+PiAtKyQoQ09ORklHX1hJTElOWF9QU19JTklUX0ZJTEUpKSBpbml0LW9ianMgOj0gcHNfaW5p
+dF9ncGwubyAKPj4+IC0rc3BsL2JvYXJkL3hpbGlueC96eW5xbXAvcHNfaW5pdF9ncGwubyBib2Fy
+ZC94aWxpbngvenlucW1wL3BzX2luaXRfZ3BsLm86ICQoUFNfSU5JVF9GSUxFKQo+Pj4gLSsgICAg
+JChDQykgJChjX2ZsYWdzKSAtSSAkKHNyY3RyZWUpLyQoc3JjKSAtYyAtbyAkQCAkXiBlbmRpZgo+
+Pj4gLQo+Pj4gLStpZmVxICgkKGluaXQtb2JqcyksKQo+Pj4gLStody1wbGF0Zm9ybS15IDo9JChz
+aGVsbCBlY2hvICQoQ09ORklHX0RFRkFVTFRfREVWSUNFX1RSRUUpKQo+Pj4gLSBpbml0LW9ianMg
+Oj0gJChpZiAkKHdpbGRjYXJkICQoc3JjdHJlZSkvJChzcmMpLyQoaHctcGxhdGZvcm0teSkvcHN1
+X2luaXRfZ3BsLmMpLFwKPj4+IC0gICAgICQoaHctcGxhdGZvcm0teSkvcHN1X2luaXRfZ3BsLm8p
+Cj4+PiAtK2VuZGlmCj4+PiAtCj4+PiAtIGlmZXEgKCQoaW5pdC1vYmpzKSwpCj4+PiAtIGlmbmVx
+ICgkKHdpbGRjYXJkICQoc3JjdHJlZSkvJChzcmMpL3BzdV9pbml0X2dwbC5jKSwpCj4+PiAtLS0K
+Pj4+IC0yLjcuNAo+Pj4gLQo+Pj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvenlucW1wX3pjdTEwMl9k
+ZWZjb25maWcgCj4+PiBiL2NvbmZpZ3MvenlucW1wX3pjdTEwMl9kZWZjb25maWcgbmV3IGZpbGUg
+bW9kZSAxMDA2NDQgaW5kZXggCj4+PiAwMDAwMDAwMDAwLi4zMzZmNWMyZGJlCj4+PiAtLS0gL2Rl
+di9udWxsCj4+PiArKysgYi9jb25maWdzL3p5bnFtcF96Y3UxMDJfZGVmY29uZmlnCj4+PiBAQCAt
+MCwwICsxLDM1IEBACj4+PiArQlIyX2FhcmNoNjQ9eQo+Pj4gK0JSMl9HTE9CQUxfUEFUQ0hfRElS
+PSJib2FyZC96eW5xbXAvcGF0Y2hlcy8iCj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFE
+RVJTX0NVU1RPTV81XzEwPXkKPj4+ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2Fy
+ZC96eW5xbXAvcG9zdC1pbWFnZS5zaCIKPj4+ICtCUjJfTElOVVhfS0VSTkVMPXkKPj4+ICtCUjJf
+TElOVVhfS0VSTkVMX0NVU1RPTV9HSVQ9eQo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1JF
+UE9fVVJMPSJnaXQ6Ly9naXRodWIuY29tL1hpbGlueC9saW51eC14bG54LmdpdCIKPj4+ICtCUjJf
+TElOVVhfS0VSTkVMX0NVU1RPTV9SRVBPX1ZFUlNJT049InhsbnhfcmViYXNlX3Y1LjEwXzIwMjEu
+MiIKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0ieGlsaW54X3p5bnFtcCIKPj4+ICtC
+UjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0lOVFJF
+RV9EVFNfTkFNRT0ieGlsaW54L3p5bnFtcC16Y3UxMDItcmV2MS4wIgo+Pj4gK0JSMl9UQVJHRVRf
+Uk9PVEZTX0VYVDI9eQo+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4+PiArIyBCUjJf
+VEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNldAo+Pj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURf
+RklSTVdBUkU9eQo+Pj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX0dJ
+VD15Cj4+PiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fUkVQT19VUkw9
+Imh0dHBzOi8vZ2l0aHViLmNvbS9YaWxpbngvYXJtLXRydXN0ZWQtZmlybXdhcmUuZ2l0Igo+Pj4g
+K0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1JFUE9fVkVSU0lPTj0ieGxu
+eF9yZWJhc2VfdjIuNF8yMDIxLjIiCj4+PiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FS
+RV9QTEFURk9STT0ienlucW1wIgo+Pj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVf
+QkwzMV9VQk9PVD15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVD15Cj4+PiArQlIyX1RBUkdFVF9VQk9P
+VF9CVUlMRF9TWVNURU1fS0NPTkZJRz15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fR0lU
+PXkKPj4+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9SRVBPX1VSTD0iZ2l0Oi8vZ2l0aHViLmNv
+bS94aWxpbngvdS1ib290LXhsbnguZ2l0Igo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1JF
+UE9fVkVSU0lPTj0ieGxueF9yZWJhc2VfdjIwMjEuMDFfMjAyMS4yIgo+Pj4gK0JSMl9UQVJHRVRf
+VUJPT1RfQk9BUkRfREVGQ09ORklHPSJ4aWxpbnhfenlucW1wX3ZpcnQiCj4+PiArQlIyX1RBUkdF
+VF9VQk9PVF9ORUVEU19EVEM9eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfU1BMPXkKPj4+ICtCUjJf
+VEFSR0VUX1VCT09UX1NQTF9OQU1FPSJzcGwvYm9vdC5iaW4iCj4+PiArQlIyX1RBUkdFVF9VQk9P
+VF9aWU5RTVA9eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfWllOUU1QX1BNVUZXPSJodHRwczovL2dp
+dGh1Yi5jb20vbHVjYWNlcmVzb2xpL3p5bnFtcC1wbXVmdy1iaW5hcmllcy9yYXcvbWFzdGVyL2Jp
+bi9wbXVmdy12MjAyMS4yLmJpbiIKPj4+ICtCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9JVEI9eQo+
+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfRE9TRlNUT09MUz15Cj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9H
+RU5JTUFHRT15Cj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9NVE9PTFM9eQo+PiAKPj4gQXMgcG9pbnRl
+ZCBhYm92ZSB0aGlzIF5eXiBmaWxlIG11c3QgYmUgaW4gYSBzZXBhcmF0ZSBwYXRjaCBhbmQgaXQg
+Cj4+IGRlc2VydmVzIGFsc28gYSBtYWludGFpbmVyLiBTbyBwbGVhc2UgeW91IG9yIG1heWJlIEx1
+Y2EgY291bGQgYWRkIGFuIAo+PiBlbnRyeSB0byBERVZFTE9QRVJTIGZvciB0aGlzIGJvYXJkCj4+
+IAo+Pj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvenlucW1wX3pjdTEwNl9kZWZjb25maWcgCj4+PiBi
+L2NvbmZpZ3MvenlucW1wX3pjdTEwNl9kZWZjb25maWcgaW5kZXggYmVlN2MxZGFmNy4uM2E2OTQ3
+ZTFlOCAxMDA2NDQKPj4+IC0tLSBhL2NvbmZpZ3MvenlucW1wX3pjdTEwNl9kZWZjb25maWcKPj4+
+ICsrKyBiL2NvbmZpZ3MvenlucW1wX3pjdTEwNl9kZWZjb25maWcKPj4+IEBAIC0xLDExICsxLDEx
+IEBACj4+PiAgIEJSMl9hYXJjaDY0PXkKPj4+ICAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJk
+L3p5bnFtcC9wYXRjaGVzLyIKPj4gCj4+IFNpbmNlIGFsbCBwYXRjaGVzIGFyZSBnb25lLCB0aGlz
+IF5eXiBpcyBub3QgbmVlZGVkIGFueW1vcmUKPj4gCj4+PiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5V
+WF9IRUFERVJTX0NVU1RPTV80Xzk9eQo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVS
+U19DVVNUT01fNV8xMD15Cj4+PiAgIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJk
+L3p5bnFtcC9wb3N0LWltYWdlLnNoIgo+Pj4gICBCUjJfTElOVVhfS0VSTkVMPXkKPj4+ICAgQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fR0lUPXkKPj4+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01f
+UkVQT19VUkw9ImdpdDovL2dpdGh1Yi5jb20vWGlsaW54L2xpbnV4LXhsbnguZ2l0Igo+Pj4gLUJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1JFUE9fVkVSU0lPTj0ieGlsaW54LXYyMDE3LjQiCj4+PiAr
+QlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fUkVQT19WRVJTSU9OPSJ4bG54X3JlYmFzZV92NS4xMF8y
+MDIxLjIiCj4+PiAgIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJ4aWxpbnhfenlucW1wIgo+
+Pj4gICBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPj4+ICAgQlIyX0xJTlVYX0tFUk5F
+TF9JTlRSRUVfRFRTX05BTUU9InhpbGlueC96eW5xbXAtemN1MTA2LXJldkEiCj4+PiBAQCAtMTQs
+MjEgKzE0LDIyIEBAIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4+PiAgICMgQlIyX1RBUkdF
+VF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPj4+ICAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJN
+V0FSRT15Cj4+PiAgIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX0dJVD15
+Cj4+PiAtQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fUkVQT19VUkw9Imh0
+dHBzOi8vZ2l0aHViLmNvbS9BUk0tc29mdHdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuZ2l0Igo+
+Pj4gLUJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1JFUE9fVkVSU0lPTj0i
+djEuNSIKPj4+ICtCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9SRVBPX1VS
+TD0iaHR0cHM6Ly9naXRodWIuY29tL1hpbGlueC9hcm0tdHJ1c3RlZC1maXJtd2FyZS5naXQiCj4+
+PiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fUkVQT19WRVJTSU9OPSJ4
+bG54X3JlYmFzZV92Mi40XzIwMjEuMiIKPj4gCj4+IEl0J3Mgd29ydGggbWVudGlvbiBpbiBjb21t
+aXQgbG9nIHRoYXQgeW91J3JlIHN3aXRjaGluZyBmcm9tIEFSTSB0byAKPj4gWGlsaW54IEFURgo+
+PiAKPj4+ICAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0ienlucW1w
+Igo+Pj4gICBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0JMMzFfVUJPT1Q9eQo+Pj4g
+ICBCUjJfVEFSR0VUX1VCT09UPXkKPj4+ICAgQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1f
+S0NPTkZJRz15Cj4+PiAgIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX0dJVD15Cj4+PiAgIEJSMl9U
+QVJHRVRfVUJPT1RfQ1VTVE9NX1JFUE9fVVJMPSJnaXQ6Ly9naXRodWIuY29tL3hpbGlueC91LWJv
+b3QteGxueC5naXQiCj4+PiAtQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fUkVQT19WRVJTSU9OPSIy
+Mjg4MDFhMjE1OTA5MzY1YWUxZGNkZDc5OTAzNDE5NWFkNzI2NGY3Igo+Pj4gLUJSMl9UQVJHRVRf
+VUJPT1RfQk9BUkRfREVGQ09ORklHPSJ4aWxpbnhfenlucW1wX3pjdTEwNl9yZXZBIgo+Pj4gK0JS
+Ml9UQVJHRVRfVUJPT1RfQ1VTVE9NX1JFUE9fVkVSU0lPTj0ieGxueF9yZWJhc2VfdjIwMjEuMDFf
+MjAyMS4yIgo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVGQ09ORklHPSJ4aWxpbnhfenlu
+cW1wX3ZpcnQiCj4+PiAgIEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKPj4+ICAgQlIyX1RB
+UkdFVF9VQk9PVF9TUEw9eQo+Pj4gICBCUjJfVEFSR0VUX1VCT09UX1NQTF9OQU1FPSJzcGwvYm9v
+dC5iaW4iCj4+PiAgIEJSMl9UQVJHRVRfVUJPT1RfWllOUU1QPXkKPj4+IC1CUjJfVEFSR0VUX1VC
+T09UX1pZTlFNUF9QTVVGVz0iaHR0cHM6Ly9naXRodWIuY29tL2x1Y2FjZXJlc29saS96eW5xbXAt
+cG11ZnctYmluYXJpZXMvcmF3LzUzZmRiN2I2YzkyODYwY2ViMGVjNWZkMTRkZWVlMzAyZjRhODQy
+NjkvYmluL3BtdWZ3LXpjdTEwNi1kZWZhdWx0LXYyMDE3LjQuYmluIgo+Pj4gK0JSMl9UQVJHRVRf
+VUJPT1RfWllOUU1QX1BNVUZXPSJodHRwczovL2dpdGh1Yi5jb20vbHVjYWNlcmVzb2xpL3p5bnFt
+cC1wbXVmdy1iaW5hcmllcy9yYXcvbWFzdGVyL2Jpbi9wbXVmdy12MjAyMS4yLmJpbiIKPj4+ICtC
+UjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9JVEI9eQo+PiAKPj4gSGVyZSBeXl4gSSBzZWUgdGhhdCBw
+cm9iYWJseSB5b3UncmUgc3dpdGNoaW5nIGZyb20gLmJpbiB0byAuaXRiIHNvIAo+PiBiZXR0ZXIg
+bWVudGlvbiBpdCBpbiBjb21taXQgbG9nCj4+IAo+Pj4gICBCUjJfUEFDS0FHRV9IT1NUX0RPU0ZT
+VE9PTFM9eQo+Pj4gICBCUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKPj4+ICAgQlIyX1BBQ0tB
+R0VfSE9TVF9NVE9PTFM9eQo+PiAKPj4gVGhhbmsgeW91IQo+PiAKPj4gQmVzdCByZWdhcmRzCj4+
+IC0tCj4+IEdpdWxpbyBCZW5ldHRpCj4+IEJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCj4gCj4gLS0K
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+IAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
 
