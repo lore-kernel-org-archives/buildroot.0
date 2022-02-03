@@ -1,61 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A4FFC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 23:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53310C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 23:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2ABB60D4E;
-	Thu,  3 Feb 2022 23:00:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 001BE41730;
+	Thu,  3 Feb 2022 23:00:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q4pSlM0R7W7D; Thu,  3 Feb 2022 23:00:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15ED460AFD;
-	Thu,  3 Feb 2022 23:00:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3EFDB1BF34A
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 23:00:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B41141713
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 23:00:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FD6bwSkrndHr for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jpV6iqnMRrPW; Thu,  3 Feb 2022 23:00:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3186741713;
+	Thu,  3 Feb 2022 23:00:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C5A8B1BF34A
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 23:00:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0CB840A41
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 23:00:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2XjyCKJqz9oT for <buildroot@lists.busybox.net>;
  Thu,  3 Feb 2022 23:00:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3F394170F
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 23:00:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6363B400F6
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 23:00:01 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id Fl55nOQm70FuyFl55nQUJ2; Thu, 03 Feb 2022 23:59:59 +0100
+ id Fl55nOQm70FuyFl55nQUJO; Fri, 04 Feb 2022 00:00:00 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643929199; bh=6mGbm9XMQJ2XW3mq8HpJsjjazdr03o3R9r/VnLFb91U=;
+ t=1643929200; bh=qjnpF7xH5YZQhF5Gcilu8TlZ6N6Kph1taaKbreBu+74=;
  h=From:To:Subject:Date:MIME-Version;
- b=K2FGATKX3SYPeBQdXTCPpBkzj9uBbYI9dhNNOi2MPR+H682JPKgjPv5oYHFFdUGA5
- R4Cn5kzLNmVmsSoDp6AnBCzACxbqXuUXGrPvzLLduEn4/JK0zVa/vT3JkkeaGgbuIZ
- QuSkgxSWoMpQ3HPh/e8nF0GD80Val+xBo+vJkCUBEOkxON0OH+pZi2gbsMT2rgzxDL
- nsUA4EySbn5tpCtoTk9TSSVl9a5fWoOWZV2VDarLLT2WsGfMnIPVGDTMyhTmZOjlg+
- onqcJaU/8Ajkkgsnt2LwKTvihOGAn4aHW4ib00dBoGlZgGijiBEqYFAsu9jTpmjFdX
- 4/JvWM2E0v54Q==
+ b=XL6w0XXQP2GCi/ozxf3ZV6tr79sUS8bHASWyAyZsl4bKUR/yvuGzLsdeL4AHPTL6W
+ Lf+a9A/rvq9FHAt6iC1xJz0UGCBLR4r0OALszi93E/efPfBlhQ+HC66YzQIbQApAIb
+ EAIRC2RLoO514u7D9Govfw2pFW3z2XpV5A8fkUkSG1fZFaQhQzWWhW+S4h6osdAbti
+ /1ZXQYwyDWBU0FMRCrJx4g6ZDJW1T8y8xO6DASlCBUSUkV0raZ/QZMoHdPbGjZObJ+
+ uS2IIc5GkDR3XdXzdBHX8DAh+onMAV9TU6GtUKu1a/0LCFhASjNeYSwDIvsgyXb9ya
+ hHRef4ot8sGOQ==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Feb 2022 23:59:52 +0100
-Message-Id: <20220203225957.3039320-1-giulio.benetti@benettiengineering.com>
+Date: Thu,  3 Feb 2022 23:59:53 +0100
+Message-Id: <20220203225957.3039320-2-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220203225957.3039320-1-giulio.benetti@benettiengineering.com>
+References: <20220203225957.3039320-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfBcJCWvfiqgQd/amkcUjT3CI70M/E/AROfyc34rMO+dpr99Ks1z0aHY007DA+AOJvKlvGcVUXpMaWiA3KHbdfI0d41kzqKiLTnznhslVOfNMBz3JPNSc
- th8LZWkO6iANp2RUOQjGRLp0CxPuRv8dBt5gYzT36ZuCfbKxsljgKJNbEp5arzoJD1il/4oXaxTMB9n713xbXgvCMR0L2TbSgudL3TNpYpA4YFfHBVjERe9M
- WF6JHjbKcMVsu6lwXbwLWVQ/eGAnVMWkJNqcPTjlHtReCrcKjE2RKzSbaNY5DDpwh+IGFNCdWrS9kYxB7GW4v+drLLWYNQYFiuSb4ehVZHtQAP5C5oy+mNxS
- o1s175kcCGh0CHEtGciYhL1A4BsE1w==
-Subject: [Buildroot] [PATCH 0/5] Fix genimage build failure on Gitlab-CI
+X-CMAE-Envelope: MS4wfL7lne4VdHRlzDIG+zAasJ4nXAi91pTlHO7eJ6l+p6ShD/bHPqMXmp90Zw02Au7F6RLGxrVLOfcqfNd9SWqJkymG0Ted5ytPOC9hFyFq1L1T3WQtCF2Q
+ 0xLNe4wYPGcG5ezbi0ELrX/K74fB1AJZtDeHnLpiQmqm0OxbLsL3QzjswEGTA1XGTK9Agrv8lhpB3ZiuVwggXZzn7q+tt5sMA9G6iq6hLoxpmxAPgXwCTIPY
+ zZEzBg0kCJcdfpJRU+AIZrC2t5B+E2acSEg5dtM5/ObLGbnqWAcz8EV+/7wgHjdrJZSTTciOsoCNMWu4r7Bz1QIdb7xXxeJXCWWm34Lpz9KGDgpf3Wofh/PP
+ JWJRpUBlDp/yGVodV49Xo/L1nIMn8w==
+Subject: [Buildroot] [PATCH 1/5] board/friendlyarm/nanopc-t4:use
+ partition-type-uuid for genimage-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,20 +79,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio Benetti (5):
-  board/friendlyarm/nanopc-t4:use partition-type-uuid for genimage-15
-  board/friendlyarm/nanopi-m4:use partition-type-uuid for genimage-15
-  board/pine64/rockpro64:use partition-type-uuid for genimage-15
-  board/radxa/rockpi-4:use partition-type-uuid for genimage-15
-  board/radxa/rockpi-n10:use partition-type-uuid for genimage-15
+Genimage 15 restricted the partition-type option to mbr and hybrid
+partition-table-type and now prints a warning when it is used [1]:
 
+ERROR: hdimage(disk.img): part boot: 'partition-type' is only valid for mbr and hybrid partition-table-type
+
+[1] https://github.com/pengutronix/genimage/commit/1d72d8091f83790a0a35a1ea7dc25d46adba8876
+
+So let's use for EFI System partition:
+'partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b'
+and for Root partition (64-bit ARM/AArch64):
+'partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae'
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1929717055
+
+FTR, the magic UUID are from:
+    https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
  board/friendlyarm/nanopc-t4/genimage.cfg | 4 ++--
- board/friendlyarm/nanopi-m4/genimage.cfg | 4 ++--
- board/pine64/rockpro64/genimage.cfg      | 4 ++--
- board/radxa/rockpi-4/genimage.cfg        | 4 ++--
- board/radxa/rockpi-n10/genimage.cfg      | 4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
+index d63c293ab4..98dc2f3892 100644
+--- a/board/friendlyarm/nanopc-t4/genimage.cfg
++++ b/board/friendlyarm/nanopc-t4/genimage.cfg
+@@ -26,14 +26,14 @@ image sdcard.img {
+ 	}
+ 
+ 	partition boot {
+-		partition-type = 0xC
++		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+ 	}
+ 
+ 	partition rootfs {
+-		partition-type = 0x83
++		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
+ 		image = "rootfs.ext4"
+ 	}
+ }
 -- 
 2.25.1
 
