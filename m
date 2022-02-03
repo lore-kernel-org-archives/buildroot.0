@@ -1,78 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48CCDC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 22:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DAAAC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 22:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B232882591;
-	Thu,  3 Feb 2022 22:29:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8484404AA;
+	Thu,  3 Feb 2022 22:29:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IJcHfUQZ-wIe; Thu,  3 Feb 2022 22:29:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M3y174qICdpC; Thu,  3 Feb 2022 22:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEB0982612;
-	Thu,  3 Feb 2022 22:29:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 05B891BF33B
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 22:29:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 470304048D;
+	Thu,  3 Feb 2022 22:29:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 68AE01BF33B
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 22:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F035F81ABA
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 22:29:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 573EE60AFD
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 22:29:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vqk4mXIkLAg3 for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 22:29:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1B72582660
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 22:29:09 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id s10so5222213wra.5
- for <buildroot@buildroot.org>; Thu, 03 Feb 2022 14:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=XD0RgyDeXIl0zC7ys/1py90XZ+eV9K6Dv7E0ZTG7OhU=;
- b=AqetIcgTHtJnpwUEgKNhrzq6dZQKXgEeC6VouCBp6PS3nzUJ/bOebQOpYaagxR0ebY
- Z2cMfCpAuhI8t8tZEKiopYyR2iON5l0GwAkziH8gihpPaQb+EonhKs0Abc76TQSwmjQN
- nJnCl/ahOYDoZp9kybEBsrNKnwehksGkrXDKtZkzs2x1u/m19bm8LC+Gw9lxKWFaLnSp
- K08zFCc94kWC/KO4kB8XlS59liTT3LBoJ+nvQegPEFHaQ+/MOutDmITpVML51MwIq5/e
- WacoEEoW+omh9je0+kqaOHoIiqQnI6YnoQsCIQGG9stVkY6TeTI4+SVJeiJTe2niUPWN
- TFKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=XD0RgyDeXIl0zC7ys/1py90XZ+eV9K6Dv7E0ZTG7OhU=;
- b=5W8I/x+ppw0ngwlVA7ECyX/qs2hSTSirA5qyNIV+KJkM46hy50v4P7nnEBqBoj6hEt
- RqjNTQPYbauACpG6VO87cig3N911s/GaiVsrvJBGW2HXS4OEnEN2IeauvjZGL6T+rcnZ
- caBuT6mC9KhVy0ZV/O+EwbWjQ1CZs3SpYOTtIHX5oGVwXSOZqxT86Xf96AwUT1XdudFw
- +j+sKvdkgrFZ1pTwKdhnjv0Lab5ePgLU2D15+G0+G4GYRyAXehUH1U39xbJp6rY9NRep
- How++rgFXIHNyyUQBn0O3wjyKJDN8Ehyy0pgbUjIZSgXHTPfLLawc+kKSi/ZapR8z6VD
- Cmwg==
-X-Gm-Message-State: AOAM533eVGGikOlRqETT36r95UtembFaTDTOQjMxONJBSRJfoYVpy7Xh
- IsTRlbOuk0R7lzq0Q0/Xvv7KOswTEuo=
-X-Google-Smtp-Source: ABdhPJzFyx4/hcr2VSQ4ZO3V9yXME0bCe17bWmuaQ+13dc0Ag1DnNg6X82pSuGOGKsppXfLtUuxPmA==
-X-Received: by 2002:a05:6000:1001:: with SMTP id
- a1mr72149wrx.230.1643927348061; 
- Thu, 03 Feb 2022 14:29:08 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id w22sm80099wra.59.2022.02.03.14.29.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Feb 2022 14:29:07 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  3 Feb 2022 23:26:39 +0100
-Message-Id: <20220203222639.725822-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ahqRgwTUC2Ub for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 22:29:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A748860AEA
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 22:29:49 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Fkbrns3mvI46dFkbrnw5s1; Thu, 03 Feb 2022 23:29:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1643927388; bh=ALZEDmcZ37a/TmiUL9YIgiW53bKhntiiZ2DVwZgYPcA=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=mPYPEmU+CLRanOzrNFqsuVRGmjB8Yn4qBDa+dbEl+S4nmf3yaB3AH6j5QWgwzEZBj
+ XA/relL+SfjbyXp5Gn4Hm5hAPplvBMACX+RzttMeymXAR5HByfBKrnpLTltNgsRKT6
+ U9C4nVhuLquGLaUFCmD0B5DoWD0dUFFfOlBCfh2mdJqlkUaqK8Fkg+78LuLJq2yuPp
+ DC2e6LSDKLUJldEl6gpskp+ZXoswt5QtikOq5agZaNqqp22sCuVETnx62Rww6jIXLh
+ gS3T0q3HN43SHykT0SRWsm0V8kMTNag0sCnoVvCvvXHZz5bip7wQdWbRpgjIahOgBQ
+ fNNdgo8VtJSJA==
+Message-ID: <08bae7c4-b9cc-ebb9-c53e-5a3d0b5d044f@benettiengineering.com>
+Date: Thu, 3 Feb 2022 23:29:47 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/dt-utils: use snapshot tarball
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Peter Seiderer <ps.report@gmx.net>
+References: <412baee3-b818-521a-99bf-ee868d3e1be2@benettiengineering.com>
+ <20220202220538.2858380-1-giulio.benetti@benettiengineering.com>
+ <20220203212328.264bc948@gmx.net>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220203212328.264bc948@gmx.net>
+X-CMAE-Envelope: MS4wfBGNjrQPEdFtKK/SRBO4LTqjVYTxQSJhyETV9BYsOKj4SfEunm4Rky2cidu3sWIscdLefd4lg36By46zSy/VWeUZtvbxINuTUIf+UlBWiDPes4m2Ep7V
+ fT4S6Hvfi8oo8L/005SuFOc3ItRjUDOeFTfolSDqF0HXw3iwjzajEMWAgLBqh+Q2ZBfzUts2w29n+N+0eWf6NR8JCPHM6ve/WlBEOFUIb+JFldT5xsEE8mQz
+ IKWOFOylp/IGA6Ch1Fu7PaL7mPSiOHuvDA0NLJ4bwi8akSKoSLeHlKNm/ErIgaCcLbsGWzVgGLnLVf+BuC1oJA==
+Subject: Re: [Buildroot] [PATCH] package/util-linux: improve host build
+ failure fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,51 +73,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use snapshot tarball so DT_UTILS_VERSION will match what is returned by
-https://release-monitoring.org
+Hi Peter,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/dt-utils/dt-utils.hash | 2 +-
- package/dt-utils/dt-utils.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 03/02/22 21:23, Peter Seiderer wrote:
+> Hello Giulio,
+> 
+> On Wed,  2 Feb 2022 23:05:38 +0100, Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> As suggested by Peter Seiderer package util-linux doesn't need raw support
+>> when built for host, so let's remove:
+>> HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
+>> in favor of:
+>> HOST_UTIL_LINUX_CONF_OPTS += --disable-raw
+>> This is a better approach than my commit:
+>> https://git.buildroot.net/buildroot/commit/?id=d895bd973b35fde10d3dd7db530d9e4782926497
+>>
+>> Suggested-by: Peter Seiderer <ps.report@gmx.net>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> Tested with registry.gitlab.com/buildroot.org/buildroot/base:20220105.2314:
+> 
+> - reverted 'package/util-linux: fix host build failure' (d895bd973b35fde10d3dd7db530d9e4782926497)
+>    --> build fails with: No rule to make target 'disk-utils/raw.8'
+> 
+> - build with 'package/util-linux: fix host build failure' (d895bd973b35fde10d3dd7db530d9e4782926497)
+>    --> build o.k.
+> 
+> - build with this additional patch
+>    --> build o.k.
+> 
+> Tested-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> 
+>> ---
+>>   package/util-linux/util-linux.mk | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+>> index 5a4ff64d01..f3297257cf 100644
+>> --- a/package/util-linux/util-linux.mk
+>> +++ b/package/util-linux/util-linux.mk
+>> @@ -41,7 +41,6 @@ define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
+>>   	touch $(@D)/disk-utils/raw.8
+>>   endef
+>>   UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
+>> -HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
+>>
+>>   HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
+>>
+> 
+> The line above reads:
+> 
+> 	# We also don't want the host-python dependency
 
-diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
-index 74819158bb..9fca594db5 100644
---- a/package/dt-utils/dt-utils.hash
-+++ b/package/dt-utils/dt-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8b29d3a8799170afdb1b077e655528bf4e6afe0c789107b1eec8fff9d4482771  dt-utils-v2021.03.0-br1.tar.gz
-+sha256  63cf47c70911bb3605bafac38a5a7e19eb753ac1c90de2abceaf2fdefd71be6d  dt-utils-2021.03.0.tar.xz
- sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
-diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
-index bc7fd90631..d264e2cdc9 100644
---- a/package/dt-utils/dt-utils.mk
-+++ b/package/dt-utils/dt-utils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--DT_UTILS_VERSION = v2021.03.0
--DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
--DT_UTILS_SITE_METHOD = git
-+DT_UTILS_VERSION = 2021.03.0
-+DT_UTILS_SOURCE = dt-utils-$(DT_UTILS_VERSION).tar.xz
-+DT_UTILS_SITE = https://git.pengutronix.de/cgit/tools/dt-utils/snapshot
- DT_UTILS_LICENSE = GPL-2.0
- DT_UTILS_LICENSE_FILES = COPYING
- DT_UTILS_DEPENDENCIES = udev
+Oh, you're totally right
+
+>> @@ -49,7 +48,8 @@ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
+>>   HOST_UTIL_LINUX_CONF_OPTS = \
+>>   	--without-systemd \
+>>   	--with-systemdsystemunitdir=no \
+>> -	--without-python
+>> +	--without-python \
+>> +	--disable-raw
+> 
+> So I would move the 'disable-raw' down to line 196ff (or below to an
+> extra 'HOST_UTIL_LINUX_CONF_OPTS +=' section with comment why...
+
+Yes
+
+> With this change you can add my:
+> 
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> Regards,
+> Peter
+> 
+>>
+>>   ifneq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES)$(BR2_PACKAGE_UTIL_LINUX_CRAMFS)$(BR2_PACKAGE_UTIL_LINUX_FSCK)$(BR2_PACKAGE_UTIL_LINUX_LOSETUP),)
+>>   UTIL_LINUX_SELINUX_MODULES = fstools
+> 
+
+Thank you!
+
+Going to reply with V2.
+
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
