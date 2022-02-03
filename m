@@ -4,78 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A74EEC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA92C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23A348144A;
-	Thu,  3 Feb 2022 20:23:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07AB583F20;
+	Thu,  3 Feb 2022 20:37:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S_mZx_MHopH0; Thu,  3 Feb 2022 20:23:38 +0000 (UTC)
+	with ESMTP id FmL5bv1yIrSU; Thu,  3 Feb 2022 20:37:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6793F8142A;
-	Thu,  3 Feb 2022 20:23:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C64E51BF38D
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:23:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 552C583EB7;
+	Thu,  3 Feb 2022 20:37:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF89A1BF38D
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B03C56061B
- for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:23:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9828B401DD
+ for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:37:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 40qhUl7on5ls for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 20:23:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 126EA605EA
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1643919809;
- bh=zkoQk+XC2e7RgTWfmmA0o0C8x/i9eMcbDe2TTR5HA9U=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=ZXNOlLvt7JzIjPMEhm2E44KXznHFGf59Q6twBQ9/jrxMSSdPHQUBghjMNj/Eg5Syj
- OiwcbXqhq4OcwCbAFGPHEiUd6MoCDzks7woC61CHdEvhPOfssREFAC1N2QyrpGA20D
- S9snqnk3TITr8l0hWJDNNz1BzNwExAo5yuGETLgg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.201]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McH9Y-1mdM1F12hY-00cfQX; Thu, 03
- Feb 2022 21:23:29 +0100
-Date: Thu, 3 Feb 2022 21:23:27 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220203212328.264bc948@gmx.net>
-In-Reply-To: <20220202220538.2858380-1-giulio.benetti@benettiengineering.com>
-References: <412baee3-b818-521a-99bf-ee868d3e1be2@benettiengineering.com>
- <20220202220538.2858380-1-giulio.benetti@benettiengineering.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aOYfuZ1x-DC3 for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 20:37:52 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 73E2A405C8
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:37:52 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id w20so4622800edc.1
+ for <buildroot@buildroot.org>; Thu, 03 Feb 2022 12:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=EPzeJ84G/ayTIt+hNFp/fgWfD+HxO3dxoEMSVCbr1yQ=;
+ b=D6nhqfknu+2RsqgHGLWtL392gNPEGL71CB+AJtDfW3Wd2yKZ6m55nxHPfWYnZ2U+aa
+ uJL9c5mNjrTPtW4t40Zq7sAswn5zjwXwKIZTVWqc8qaoVu+cE6sG5uofDpYODiJZTJgI
+ A+YyhW59T5Van6knL8U6tqNz7EpeJJw4CwIym1ccWb3AatONVVe55UOziD4SkxKVEtgr
+ if4H64f0q3kHujEl4T/JUy73113OKmkSssYM8HU8IyeockW+hQm5bsyzxCrGB+nHIPXw
+ bnK2TU/J0nE+h4OSKJJa31XHF9NYncKrdh8JAHxnKus8jA+ykDAArIgHbb1j54lplfc1
+ tnnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=EPzeJ84G/ayTIt+hNFp/fgWfD+HxO3dxoEMSVCbr1yQ=;
+ b=zPcgdcnz+KMakuER1EsYPgx5RxCEz2VMIo6cnvlbvmoCW1nH6+WUy/RvIIEKDZNhHf
+ gk42XwBPWTf7LQ1eGWdC/Hat3PrqT2otWUbp5TOQh/YHnAx7KutdpsANVGMNc792HEWB
+ nB3Hf2VcXnjTjx51hFco8Mnh4ZN6NvKO/Qdd0XMYKIma6b2xDqDX5IteOglQU8pdgBsc
+ p6iyHqBZbZK6370dfpobBn72JRu3sZDKo3R47eDTF2LaeIf8Zd9H4tIK20H8iq1MnQCA
+ Oqz6gXJ4PZKhRzFLPSy4yVXkr0U9CqATFRLuvnTtnjjOKBHX3O1odwTXZwrEn2BcroqS
+ IZ4A==
+X-Gm-Message-State: AOAM531i5q6q8wwZ+mzZ1S+HPtfrrRW7Ei6U6/sksEY+9dFPbjyIjdZk
+ /1hXBmOefs5mNmda9WrbfQGZUg==
+X-Google-Smtp-Source: ABdhPJy1YtCiVsVNN9Gt30Ywuj6za+31+3sKQDy58HylCYaJ9/4A7vM/OrMB03Tziw55gIBL+/Pdvw==
+X-Received: by 2002:a05:6402:f0c:: with SMTP id
+ i12mr37492948eda.156.1643920670585; 
+ Thu, 03 Feb 2022 12:37:50 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id lt2sm17002858ejb.50.2022.02.03.12.37.49
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 03 Feb 2022 12:37:50 -0800 (PST)
+Message-ID: <14d0cf8a-c3bd-55d8-c18d-6488d266d69e@mind.be>
+Date: Thu, 3 Feb 2022 21:37:49 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:4WOQHUGP0baNbZ0a87c7lMSCh/JWO2HBhNzuKKdppQrPX99MQ5M
- jcU0l05p1lcgHSWgtc7MQIwapd1YoCwD1UlGJISzpAdp94Tf1cwepOXJjsvi1rnhaJhQEv0
- 3QAZAgNkbUmpV3u+AbUCsA6H9OwmOswgS36tV8P4mXSwx3Uc0hHwOvczFXDLQb6Y65sO5yc
- jUJbcZ/SIWSOvQt9+p+og==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CxDwtvkUfY0=:NPBaqq8VcGKYPFwHaUDhDx
- BqcqmGXQVr+lhKOuqFRj6l9vhEv3m1n9Cab7hQoA/sRdO7tIwjfIPeL227y3O1wXeep4kQCLa
- thkAfxrSojKhF5calgQBx8UT+S8HP8qLDIrQBtO4oibW9G/oQwTG5P3uQEeIMTOlXpYMttWUl
- TuXaSYXSaJI3HP5f2vY6DxMFWHS9bTFtDzBDWlqJOh2L2kHNrE9QsB7MuExg0TpG26eZUW5UH
- B3sevYV7dJHKSr1Z1KKADU00QMJFCobXMeMqxSkQniXZ/ZUTy8V/e/OyXYEKO1DHqn7SSuH1L
- IfjYYVOrlBp7pT3cO4jSkCucu5P38bIlURYXUFR+9F1Nvh0uFToS7aZhVpSrTx+XZYrQKrHoQ
- d1LQJ4fM4bYyLkSP0IX7sLQvxZsdwzqW3Z0zIb+WBtpH8xRNtrckLlyPYxn5cxU/5vnpO91wL
- txWaaClmCs42D3/KFuOe8vVdBwQSwGmgUP2IYWn5UuOY6dl0UC4tNmkjGJYS9YAFavZsnp+07
- styMqU7r1M6IFIrf7xgDsMw6pWbpPzP09n5vIC9wWJ1/xFyjuFCI5svuFjl0k4uZ8XbYgyqcT
- c8Qux4jxdsig8l3JST0Sodh2VicO2y98EXLunioqQb7FR6EkPj+PUL/Td+Y2hyfgJdahC3+ph
- 0oWsA7p2tZLh2uVCsDFP68PJ8Ymsna/uZZfMTTHSgIlu5Jadhuv/N0FcIpEYAC/nyP40cX0Es
- h2ayo+hws61SbvphnaxasxCbjkakeeOf9E/iP9sjUC42SoRtnAwHxNwNJoNxNArxuwGb9gQXj
- wduuwbswhiSSIVjJaxo2d9h3kaPTjK/R15/D21O0g/3Aau2H6w2JlKDBmsqb3otlBDwfinNSD
- oK8+7L0l6ZMgAjgLAyKJ+jkd51B8ADspkurCiqcmgGOusyFlCQDD2WuhtLXzUKQ2KvuaVOlZ0
- e1IvHdW2Wb8smUk6+NQwm2+h2g/0PGN2uMXlSd3CbJqXnEoEl4vFzE2qqsksYhWkP3l6u5KHK
- VnSHHoZt0/A0Yd0ZKW7sTnrI16t4kPNDHMAYBSRf1DFyxaXmjVxGkjpK6DJxKJDakGrH4uREH
- nzfFIS2atfD9AA=
-Subject: Re: [Buildroot] [PATCH] package/util-linux: improve host build
- failure fix
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+References: <20220113212605.13343-1-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220113212605.13343-1-ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH v1] package/mesa3d: fix glvnd option handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,85 +94,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Romain Naour <romain.naour@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
-
-On Wed,  2 Feb 2022 23:05:38 +0100, Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-
-> As suggested by Peter Seiderer package util-linux doesn't need raw support
-> when built for host, so let's remove:
-> HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
-> in favor of:
-> HOST_UTIL_LINUX_CONF_OPTS += --disable-raw
-> This is a better approach than my commit:
-> https://git.buildroot.net/buildroot/commit/?id=d895bd973b35fde10d3dd7db530d9e4782926497
->
-> Suggested-by: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Tested with registry.gitlab.com/buildroot.org/buildroot/base:20220105.2314:
-
-- reverted 'package/util-linux: fix host build failure' (d895bd973b35fde10d3dd7db530d9e4782926497)
-  --> build fails with: No rule to make target 'disk-utils/raw.8'
-
-- build with 'package/util-linux: fix host build failure' (d895bd973b35fde10d3dd7db530d9e4782926497)
-  --> build o.k.
-
-- build with this additional patch
-  --> build o.k.
-
-Tested-by: Peter Seiderer <ps.report@gmx.net>
 
 
+On 13/01/2022 22:26, Peter Seiderer wrote:
+> - enable glvnd option only in case OPENGL_GLX or OPENGL_EGL is enabled
+> 
+> Fixes:
+> 
+>    - http://autobuild.buildroot.net/results/e97ad48f20a325f5757754a8be2bdb613c86e4ea
+> 
+>    .../build/mesa3d-21.3.3/meson.build:542:4: ERROR: Problem encountered: glvnd requires DRI based GLX and/or EGL
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/util-linux/util-linux.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index 5a4ff64d01..f3297257cf 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -41,7 +41,6 @@ define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
->  	touch $(@D)/disk-utils/raw.8
->  endef
->  UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
-> -HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
->
->  HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
->
+>   package/mesa3d/mesa3d.mk | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index aa365838ab..fb178c10b3 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -271,10 +271,14 @@ MESA3D_CFLAGS += -mlong-jump-table-offsets
+>   endif
+>   
+>   ifeq ($(BR2_PACKAGE_LIBGLVND),y)
+> +ifneq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),)
 
-The line above reads:
+  Hard to read, but I don't know a better way to do it :-(
 
-	# We also don't want the host-python dependency
+  Applied to master, thanks.
 
-> @@ -49,7 +48,8 @@ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
->  HOST_UTIL_LINUX_CONF_OPTS = \
->  	--without-systemd \
->  	--with-systemdsystemunitdir=no \
-> -	--without-python
-> +	--without-python \
-> +	--disable-raw
+  Regards,
+  Arnout
 
-So I would move the 'disable-raw' down to line 196ff (or below to an
-extra 'HOST_UTIL_LINUX_CONF_OPTS +=' section with comment why...
 
-With this change you can add my:
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
->
->  ifneq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES)$(BR2_PACKAGE_UTIL_LINUX_CRAMFS)$(BR2_PACKAGE_UTIL_LINUX_FSCK)$(BR2_PACKAGE_UTIL_LINUX_LOSETUP),)
->  UTIL_LINUX_SELINUX_MODULES = fstools
-
+>   MESA3D_DEPENDENCIES += libglvnd
+>   MESA3D_CONF_OPTS += -Dglvnd=true
+>   else
+>   MESA3D_CONF_OPTS += -Dglvnd=false
+>   endif
+> +else
+> +MESA3D_CONF_OPTS += -Dglvnd=false
+> +endif
+>   
+>   $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
