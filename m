@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 981B6C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:46:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18DC2C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 491CA6101C;
-	Thu,  3 Feb 2022 20:46:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE2534087A;
+	Thu,  3 Feb 2022 20:46:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VF8e1AtZFuG2; Thu,  3 Feb 2022 20:46:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k2Zd6KKrDv4P; Thu,  3 Feb 2022 20:46:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B22761024;
-	Thu,  3 Feb 2022 20:46:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E2F11BF38D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6143D40919;
+	Thu,  3 Feb 2022 20:46:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E0CA1BF38D
  for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13CA260A6F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CA1A82768
  for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:45:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zke32S4VkhtA for <buildroot@lists.busybox.net>;
- Thu,  3 Feb 2022 20:45:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B38HIKycWx7f for <buildroot@lists.busybox.net>;
+ Thu,  3 Feb 2022 20:45:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A08B60A98
- for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:45:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDEBC83E01
+ for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:45:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A772E825B5; Thu,  3 Feb 2022 20:38:00 +0000 (UTC)
+ id 9EA61825B5; Thu,  3 Feb 2022 20:38:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 3 Feb 2022 21:44:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22
-X-Git-Newrev: 995c093d6a3e8042110d6a8d96fdc7ad65a557c4
+X-Git-Oldrev: 8ef413b59a870b6a593eb9f1a71caef30c1848c3
+X-Git-Newrev: 7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22
 X-Patchwork-Hint: ignore
-Message-Id: <20220203203800.A772E825B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpdecimal: bump to version 2.5.1
+Message-Id: <20220203203800.9EA61825B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ghostscript: bump to version 9.55.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,202 +58,548 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=995c093d6a3e8042110d6a8d96fdc7ad65a557c4
+commit: https://git.buildroot.net/buildroot/commit/?id=7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version) and so autoreconf
+- Drop patches (already in version)
+- Disable pdf which fails to build and was added by
+  https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=316c3a08269212f1005709da64efcb383f8f5ce0
+- Update hash of license file (references on ETS related patents removed
+  with
+  https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=431167121968b066d90b0506347b6eb779e08a3f)
 
-https://www.bytereef.org/mpdecimal/changelog.html
+https://www.ghostscript.com/doc/9.54.0/News.htm
+https://www.ghostscript.com/doc/9.55.0/News.htm
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-support-for-enable-disable-shared-static.patch | 147 ---------------------
- package/mpdecimal/mpdecimal.hash                   |   2 +-
- package/mpdecimal/mpdecimal.mk                     |   3 +-
- 3 files changed, 2 insertions(+), 150 deletions(-)
+ ...-704405-Fix-typo-in-non-forked-lcms2-code.patch |  28 +++
+ ...01-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch |  55 -----
+ ...Include-device-specifier-strings-in-acces.patch | 234 ---------------------
+ ...ck-stack-limits-after-function-evaluation.patch |  52 -----
+ ...stack-management-in-sampled_data_continue.patch |  68 ------
+ package/ghostscript/ghostscript.hash               |   6 +-
+ package/ghostscript/ghostscript.mk                 |  12 +-
+ 7 files changed, 33 insertions(+), 422 deletions(-)
 
-diff --git a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
+diff --git a/package/ghostscript/0001-Bug-704405-Fix-typo-in-non-forked-lcms2-code.patch b/package/ghostscript/0001-Bug-704405-Fix-typo-in-non-forked-lcms2-code.patch
+new file mode 100644
+index 0000000000..bb1227f687
+--- /dev/null
++++ b/package/ghostscript/0001-Bug-704405-Fix-typo-in-non-forked-lcms2-code.patch
+@@ -0,0 +1,28 @@
++From 830afae5454dea3bff903869d82022306890a96c Mon Sep 17 00:00:00 2001
++From: Robin Watts <Robin.Watts@artifex.com>
++Date: Fri, 1 Oct 2021 12:44:44 +0100
++Subject: [PATCH] Bug 704405: Fix typo in non-forked lcms2 code.
++
++[Retrieved from:
++https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=830afae5454dea3bff903869d82022306890a96c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ base/gsicc_lcms2.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/base/gsicc_lcms2.c b/base/gsicc_lcms2.c
++index ccf1d7051..9badb6dee 100644
++--- a/base/gsicc_lcms2.c
+++++ b/base/gsicc_lcms2.c
++@@ -462,7 +462,7 @@ int
++ gscms_transform_color(gx_device *dev, gsicc_link_t *icclink, void *inputcolor,
++                              void *outputcolor, int num_bytes)
++ {
++-    return gscms_transformm_color_const(dev, icclink, inputcolor, outputcolor, num_bytes);
+++    return gscms_transform_color_const(dev, icclink, inputcolor, outputcolor, num_bytes);
++ }
++ 
++ int
++-- 
++2.25.1
++
+diff --git a/package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch b/package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch
 deleted file mode 100644
-index 60d6b4bb02..0000000000
---- a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
+index 044dcc72f1..0000000000
+--- a/package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch
 +++ /dev/null
-@@ -1,147 +0,0 @@
--From c349964887901848fb4cd5db53a5bcb6dae27aaa Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 23 Nov 2014 10:16:33 +0100
--Subject: [PATCH] Add minimal support for --{enable,disable}-{shared,static}
+@@ -1,55 +0,0 @@
+-From 41ef9a0bc36b9db7115fbe9623f989bfb47bbade Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Tue, 20 Oct 2020 09:49:45 +0100
+-Subject: [PATCH] Bug 702985: drop use of FT_CALLBACK_DEF() def
 -
--mpdecimal uses autoconf, but not automake or libtool, so this commit
--adds some basic handling of --{enable,disable}-{shared,static}, so
--that building the shared library can be disabled in pure static
--library contexts.
+-From 2.10.3, Freetype disappeared the FT_CALLBACK_DEF() macro, which is what
+-we used when defining our callbacks from Freetype.
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Fabrice: update for 2.5.0 (add libmpdec++)]
+-No guidance forthcoming from the Freetype developer who made those changes,
+-so change to explicitly declaring the callbacks file static.
+-
+-Should fix the reported build failures.
+-
+-Downloaded from upstream commit:
+-https://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=41ef9a0bc36b
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- base/fapi_ft.c | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/base/fapi_ft.c b/base/fapi_ft.c
+-index 65fa6dcf4..21aef2f06 100644
+---- a/base/fapi_ft.c
+-+++ b/base/fapi_ft.c
+-@@ -125,7 +125,7 @@ static void
+- delete_inc_int_info(gs_fapi_server * a_server,
+-                     FT_IncrementalRec * a_inc_int_info);
+- 
+--FT_CALLBACK_DEF(void *)
+-+static void *
+- FF_alloc(FT_Memory memory, long size)
+- {
+-     gs_memory_t *mem = (gs_memory_t *) memory->user;
+-@@ -133,7 +133,7 @@ FF_alloc(FT_Memory memory, long size)
+-     return (gs_malloc(mem, size, 1, "FF_alloc"));
+- }
+- 
+--FT_CALLBACK_DEF(void *)
+-+static void *
+-     FF_realloc(FT_Memory memory, long cur_size, long new_size, void *block)
+- {
+-     gs_memory_t *mem = (gs_memory_t *) memory->user;
+-@@ -153,7 +153,7 @@ FT_CALLBACK_DEF(void *)
+-     return (tmp);
+- }
+- 
+--FT_CALLBACK_DEF(void)
+-+static void
+-     FF_free(FT_Memory memory, void *block)
+- {
+-     gs_memory_t *mem = (gs_memory_t *) memory->user;
+--- 
+-2.17.1
+-
+diff --git a/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
+deleted file mode 100644
+index 81436d8228..0000000000
+--- a/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
++++ /dev/null
+@@ -1,234 +0,0 @@
+-From a9bd3dec9fde03327a4a2c69dad1036bf9632e20 Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Tue, 7 Sep 2021 20:36:12 +0100
+-Subject: [PATCH] Bug 704342: Include device specifier strings in access
+- validation
+-
+-for the "%pipe%", %handle%" and %printer% io devices.
+-
+-We previously validated only the part after the "%pipe%" Postscript device
+-specifier, but this proved insufficient.
+-
+-This rebuilds the original file name string, and validates it complete. The
+-slight complication for "%pipe%" is it can be reached implicitly using
+-"|" so we have to check both prefixes.
+-
+-Addresses CVE-2021-3781
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- base/gdevpipe.c | 22 +++++++++++++++-
+- base/gp_mshdl.c | 11 +++++++-
+- base/gp_msprn.c | 10 ++++++-
+- base/gp_os2pr.c | 13 +++++++++-
+- base/gslibctx.c | 69 ++++++++++---------------------------------------
+- 5 files changed, 65 insertions(+), 60 deletions(-)
+-
+-diff --git a/base/gdevpipe.c b/base/gdevpipe.c
+-index 96d71f5d8..5bdc485be 100644
+---- a/base/gdevpipe.c
+-+++ b/base/gdevpipe.c
+-@@ -72,8 +72,28 @@ pipe_fopen(gx_io_device * iodev, const char *fname, const char *access,
+- #else
+-     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
+-     gs_fs_list_t *fs = ctx->core->fs;
+-+    /* The pipe device can be reached in two ways, explicltly with %pipe%
+-+       or implicitly with "|", so we have to check for both
+-+     */
+-+    char f[gp_file_name_sizeof];
+-+    const char *pipestr = "|";
+-+    const size_t pipestrlen = strlen(pipestr);
+-+    const size_t preflen = strlen(iodev->dname);
+-+    const size_t nlen = strlen(fname);
+-+    int code1;
+-+
+-+    if (preflen + nlen >= gp_file_name_sizeof)
+-+        return_error(gs_error_invalidaccess);
+-+
+-+    memcpy(f, iodev->dname, preflen);
+-+    memcpy(f + preflen, fname, nlen + 1);
+-+
+-+    code1 = gp_validate_path(mem, f, access);
+-+
+-+    memcpy(f, pipestr, pipestrlen);
+-+    memcpy(f + pipestrlen, fname, nlen + 1);
+- 
+--    if (gp_validate_path(mem, fname, access) != 0)
+-+    if (code1 != 0 && gp_validate_path(mem, f, access) != 0 )
+-         return gs_error_invalidfileaccess;
+- 
+-     /*
+-diff --git a/base/gp_mshdl.c b/base/gp_mshdl.c
+-index 2b964ed74..8d87ceadc 100644
+---- a/base/gp_mshdl.c
+-+++ b/base/gp_mshdl.c
+-@@ -95,8 +95,17 @@ mswin_handle_fopen(gx_io_device * iodev, const char *fname, const char *access,
+-     long hfile;	/* Correct for Win32, may be wrong for Win64 */
+-     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
+-     gs_fs_list_t *fs = ctx->core->fs;
+-+    char f[gp_file_name_sizeof];
+-+    const size_t preflen = strlen(iodev->dname);
+-+    const size_t nlen = strlen(fname);
+- 
+--    if (gp_validate_path(mem, fname, access) != 0)
+-+    if (preflen + nlen >= gp_file_name_sizeof)
+-+        return_error(gs_error_invalidaccess);
+-+
+-+    memcpy(f, iodev->dname, preflen);
+-+    memcpy(f + preflen, fname, nlen + 1);
+-+
+-+    if (gp_validate_path(mem, f, access) != 0)
+-         return gs_error_invalidfileaccess;
+- 
+-     /* First we try the open_handle method. */
+-diff --git a/base/gp_msprn.c b/base/gp_msprn.c
+-index ed4827968..746a974f7 100644
+---- a/base/gp_msprn.c
+-+++ b/base/gp_msprn.c
+-@@ -168,8 +168,16 @@ mswin_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
+-     uintptr_t *ptid = &((tid_t *)(iodev->state))->tid;
+-     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
+-     gs_fs_list_t *fs = ctx->core->fs;
+-+    const size_t preflen = strlen(iodev->dname);
+-+    const size_t nlen = strlen(fname);
+- 
+--    if (gp_validate_path(mem, fname, access) != 0)
+-+    if (preflen + nlen >= gp_file_name_sizeof)
+-+        return_error(gs_error_invalidaccess);
+-+
+-+    memcpy(pname, iodev->dname, preflen);
+-+    memcpy(pname + preflen, fname, nlen + 1);
+-+
+-+    if (gp_validate_path(mem, pname, access) != 0)
+-         return gs_error_invalidfileaccess;
+- 
+-     /* First we try the open_printer method. */
+-diff --git a/base/gp_os2pr.c b/base/gp_os2pr.c
+-index f852c71fc..ba54cde66 100644
+---- a/base/gp_os2pr.c
+-+++ b/base/gp_os2pr.c
+-@@ -107,9 +107,20 @@ os2_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
+-            FILE ** pfile, char *rfname, uint rnamelen)
+- {
+-     os2_printer_t *pr = (os2_printer_t *)iodev->state;
+--    char driver_name[256];
+-+    char driver_name[gp_file_name_sizeof];
+-     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
+-     gs_fs_list_t *fs = ctx->core->fs;
+-+    const size_t preflen = strlen(iodev->dname);
+-+    const int size_t = strlen(fname);
+-+
+-+    if (preflen + nlen >= gp_file_name_sizeof)
+-+        return_error(gs_error_invalidaccess);
+-+
+-+    memcpy(driver_name, iodev->dname, preflen);
+-+    memcpy(driver_name + preflen, fname, nlen + 1);
+-+
+-+    if (gp_validate_path(mem, driver_name, access) != 0)
+-+        return gs_error_invalidfileaccess;
+- 
+-     /* First we try the open_printer method. */
+-     /* Note that the loop condition here ensures we don't
+-diff --git a/base/gslibctx.c b/base/gslibctx.c
+-index 6dfed6cd5..318039fad 100644
+---- a/base/gslibctx.c
+-+++ b/base/gslibctx.c
+-@@ -655,82 +655,39 @@ rewrite_percent_specifiers(char *s)
+- int
+- gs_add_outputfile_control_path(gs_memory_t *mem, const char *fname)
+- {
+--    char *fp, f[gp_file_name_sizeof];
+--    const int pipe = 124; /* ASCII code for '|' */
+--    const int len = strlen(fname);
+--    int i, code;
+-+    char f[gp_file_name_sizeof];
+-+    int code;
+- 
+-     /* Be sure the string copy will fit */
+--    if (len >= gp_file_name_sizeof)
+-+    if (strlen(fname) >= gp_file_name_sizeof)
+-         return gs_error_rangecheck;
+-     strcpy(f, fname);
+--    fp = f;
+-     /* Try to rewrite any %d (or similar) in the string */
+-     rewrite_percent_specifiers(f);
+--    for (i = 0; i < len; i++) {
+--        if (f[i] == pipe) {
+--           fp = &f[i + 1];
+--           /* Because we potentially have to check file permissions at two levels
+--              for the output file (gx_device_open_output_file and the low level
+--              fopen API, if we're using a pipe, we have to add both the full string,
+--              (including the '|', and just the command to which we pipe - since at
+--              the pipe_fopen(), the leading '|' has been stripped.
+--            */
+--           code = gs_add_control_path(mem, gs_permit_file_writing, f);
+--           if (code < 0)
+--               return code;
+--           code = gs_add_control_path(mem, gs_permit_file_control, f);
+--           if (code < 0)
+--               return code;
+--           break;
+--        }
+--        if (!IS_WHITESPACE(f[i]))
+--            break;
+--    }
+--    code = gs_add_control_path(mem, gs_permit_file_control, fp);
+-+
+-+    code = gs_add_control_path(mem, gs_permit_file_control, f);
+-     if (code < 0)
+-         return code;
+--    return gs_add_control_path(mem, gs_permit_file_writing, fp);
+-+    return gs_add_control_path(mem, gs_permit_file_writing, f);
+- }
+- 
+- int
+- gs_remove_outputfile_control_path(gs_memory_t *mem, const char *fname)
+- {
+--    char *fp, f[gp_file_name_sizeof];
+--    const int pipe = 124; /* ASCII code for '|' */
+--    const int len = strlen(fname);
+--    int i, code;
+-+    char f[gp_file_name_sizeof];
+-+    int code;
+- 
+-     /* Be sure the string copy will fit */
+--    if (len >= gp_file_name_sizeof)
+-+    if (strlen(fname) >= gp_file_name_sizeof)
+-         return gs_error_rangecheck;
+-     strcpy(f, fname);
+--    fp = f;
+-     /* Try to rewrite any %d (or similar) in the string */
+--    for (i = 0; i < len; i++) {
+--        if (f[i] == pipe) {
+--           fp = &f[i + 1];
+--           /* Because we potentially have to check file permissions at two levels
+--              for the output file (gx_device_open_output_file and the low level
+--              fopen API, if we're using a pipe, we have to add both the full string,
+--              (including the '|', and just the command to which we pipe - since at
+--              the pipe_fopen(), the leading '|' has been stripped.
+--            */
+--           code = gs_remove_control_path(mem, gs_permit_file_writing, f);
+--           if (code < 0)
+--               return code;
+--           code = gs_remove_control_path(mem, gs_permit_file_control, f);
+--           if (code < 0)
+--               return code;
+--           break;
+--        }
+--        if (!IS_WHITESPACE(f[i]))
+--            break;
+--    }
+--    code = gs_remove_control_path(mem, gs_permit_file_control, fp);
+-+    rewrite_percent_specifiers(f);
+-+
+-+    code = gs_remove_control_path(mem, gs_permit_file_control, f);
+-     if (code < 0)
+-         return code;
+--    return gs_remove_control_path(mem, gs_permit_file_writing, fp);
+-+    return gs_remove_control_path(mem, gs_permit_file_writing, f);
+- }
+- 
+- int
+--- 
+-2.20.1
+-
+diff --git a/package/ghostscript/0003-oss-fuzz-30715-Check-stack-limits-after-function-evaluation.patch b/package/ghostscript/0003-oss-fuzz-30715-Check-stack-limits-after-function-evaluation.patch
+deleted file mode 100644
+index 352f1754f6..0000000000
+--- a/package/ghostscript/0003-oss-fuzz-30715-Check-stack-limits-after-function-evaluation.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 7861fcad13c497728189feafb41cd57b5b50ea25 Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Fri, 12 Feb 2021 10:34:23 +0000
+-Subject: [PATCH] oss-fuzz 30715: Check stack limits after function evaluation.
+-
+-During function result sampling, after the callout to the Postscript
+-interpreter, make sure there is enough stack space available before pushing
+-or popping entries.
+-
+-In thise case, the Postscript procedure for the "function" is totally invalid
+-(as a function), and leaves the op stack in an unrecoverable state (as far as
+-function evaluation is concerned). We end up popping more entries off the
+-stack than are available.
+-
+-To cope, add in stack limit checking to throw an appropriate error when this
+-happens.
+-
+-[Retrieved from:
+-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=7861fcad13c497728189feafb41cd57b5b50ea25]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- Makefile.in          |  6 ++++++
-- configure.ac         | 13 +++++++++++++
-- libmpdec/Makefile.in | 11 ++++++++++-
-- 3 files changed, 29 insertions(+), 1 deletion(-)
+- psi/zfsample.c | 14 +++++++++++---
+- 1 file changed, 11 insertions(+), 3 deletions(-)
 -
--diff --git a/Makefile.in b/Makefile.in
--index 2c91891..0c44f36 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -9,6 +9,8 @@ LIBSTATIC = @LIBSTATIC@
-- LIBSONAME = @LIBSONAME@
-- LIBSHARED = @LIBSHARED@
-- INSTALL = @INSTALL@
--+BUILD_SHARED = @BUILD_SHARED@
--+BUILD_STATIC = @BUILD_STATIC@
+-diff --git a/psi/zfsample.c b/psi/zfsample.c
+-index 290809405..652ae02c6 100644
+---- a/psi/zfsample.c
+-+++ b/psi/zfsample.c
+-@@ -551,9 +551,17 @@ sampled_data_continue(i_ctx_t *i_ctx_p)
+-     } else {
+-         if (stack_depth_adjust) {
+-             stack_depth_adjust -= num_out;
+--            push(O_STACK_PAD - stack_depth_adjust);
+--            for (i=0;i<O_STACK_PAD - stack_depth_adjust;i++)
+--                make_null(op - i);
+-+            if ((O_STACK_PAD - stack_depth_adjust) < 0) {
+-+                stack_depth_adjust = -(O_STACK_PAD - stack_depth_adjust);
+-+                check_op(stack_depth_adjust);
+-+                pop(stack_depth_adjust);
+-+            }
+-+            else {
+-+                check_ostack(O_STACK_PAD - stack_depth_adjust);
+-+                push(O_STACK_PAD - stack_depth_adjust);
+-+                for (i=0;i<O_STACK_PAD - stack_depth_adjust;i++)
+-+                    make_null(op - i);
+-+            }
+-         }
+-     }
 - 
-- prefix = @prefix@
-- exec_prefix = @exec_prefix@
--@@ -32,9 +34,13 @@ install: FORCE
-- 	$(INSTALL) -d -m 755 $(DESTDIR)$(includedir)
-- 	$(INSTALL) -m 644 libmpdec/mpdecimal.h $(DESTDIR)$(includedir)
-- 	$(INSTALL) -d -m 755 $(DESTDIR)$(libdir)
--+ifeq ($(BUILD_STATIC),yes)
-- 	$(INSTALL) -m 644 libmpdec/$(LIBSTATIC) $(DESTDIR)$(libdir)
--+endif
--+ifeq ($(BUILD_SHARED),yes)
-- 	$(INSTALL) -m 755 libmpdec/$(LIBSHARED) $(DESTDIR)$(libdir)
-- 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED) $(LIBSONAME) && ln -sf $(LIBSHARED) $(LIBNAME)
--+endif
-- 	$(INSTALL) -d -m 755 $(DESTDIR)$(docdir)
-- 	cp -R doc/* $(DESTDIR)$(docdir)
-- 
--@@ -74,9 +80,13 @@ install_libcxx: install_lib
-- 	$(INSTALL) -d -m 755 $(DESTDIR)$(includedir)
-- 	$(INSTALL) -m 644 libmpdec++/decimal.hh $(DESTDIR)$(includedir)
-- 	$(INSTALL) -d -m 755 $(DESTDIR)$(libdir)
--+ifeq ($(BUILD_STATIC),yes)
-- 	$(INSTALL) -m 644 libmpdec++/$(LIBSTATIC_CXX) $(DESTDIR)$(libdir)
--+endif
--+ifeq ($(BUILD_SHARED),yes)
-- 	$(INSTALL) -m 755 libmpdec++/$(LIBSHARED_CXX) $(DESTDIR)$(libdir)
-- 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED_CXX) $(LIBSONAME_CXX) && ln -sf $(LIBSHARED_CXX) $(LIBNAME_CXX)
--+endif
-- 	cp -R doc/libmpdec++ $(DESTDIR)$(docdir)
-- 
-- 
--diff --git a/configure.ac b/configure.ac
--index 7ee8f86..2b3e505 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -88,6 +88,19 @@ CFLAGS="$saved_cflags"
-- AC_PROG_INSTALL
-- AC_SUBST(INSTALL)
-- 
--+AC_ARG_ENABLE([shared],
--+	[AS_HELP_STRING([--enable-shared], [build shared library])],
--+	[BUILD_SHARED=$enableval],
--+	[BUILD_SHARED=yes])
--+
--+AC_ARG_ENABLE([static],
--+	[AS_HELP_STRING([--enable-static], [build static library])],
--+	[BUILD_STATIC=$enableval],
--+	[BUILD_STATIC=yes])
--+
--+AC_SUBST(BUILD_SHARED)
--+AC_SUBST(BUILD_STATIC)
--+
-- # _FORTIFY_SOURCE wrappers for memmove and bcopy are incorrect:
-- # http://sourceware.org/ml/libc-alpha/2010-12/msg00009.html
-- AC_MSG_CHECKING(for glibc _FORTIFY_SOURCE/memmove bug)
--diff --git a/libmpdec/Makefile.in b/libmpdec/Makefile.in
--index d9619a3..985c73c 100644
----- a/libmpdec/Makefile.in
--+++ b/libmpdec/Makefile.in
--@@ -7,6 +7,8 @@
-- LIBSTATIC = @LIBSTATIC@
-- LIBSONAME = @LIBSONAME@
-- LIBSHARED = @LIBSHARED@
--+BUILD_SHARED = @BUILD_SHARED@
--+BUILD_STATIC = @BUILD_STATIC@
-- 
-- CC = @CC@
-- LD = @LD@
--@@ -32,8 +34,15 @@ ifeq ($(MAKECMDGOALS), profile_use)
--   MPD_LDFLAGS += $(MPD_PUSE)
-- endif
-- 
--+ifeq ($(BUILD_SHARED),yes)
--+TARGETS += $(LIBSHARED)
--+endif
--+
--+ifeq ($(BUILD_STATIC),yes)
--+TARGETS += $(LIBSTATIC)
--+endif
-- 
---default: $(LIBSTATIC) $(LIBSHARED)
--+default: $(TARGETS)
-- 
-- 
-- OBJS := basearith.o context.o constants.o convolute.o crt.o mpdecimal.o \
--diff --git a/libmpdec/Makefile.in b/libmpdec/Makefile.in
--index d9619a3..985c73c 100644
----- a/libmpdec++/Makefile.in
--+++ b/libmpdec++/Makefile.in
--@@ -13,6 +13,8 @@ LIBSTATIC_CXX = @LIBSTATIC_CXX@
-- LIBNAME_CXX = @LIBNAME_CXX@
-- LIBSONAME_CXX = @LIBSONAME_CXX@
-- LIBSHARED_CXX = @LIBSHARED_CXX@
--+BUILD_SHARED = @BUILD_SHARED@
--+BUILD_STATIC = @BUILD_STATIC@
-- 
-- CXX = @CXX@
-- LDXX = @LDXX@
--@@ -39,8 +41,15 @@ ifeq ($(MAKECMDGOALS), profile_use)
--   MPD_LDXXFLAGS += $(MPD_PUSE)
-- endif
-- 
--+ifeq ($(BUILD_SHARED),yes)
--+TARGETS += $(LIBSHARED_CXX)
--+endif
--+
--+ifeq ($(BUILD_STATIC),yes)
--+TARGETS += $(LIBSTATIC_CXX)
--+endif
-- 
---default: $(LIBSTATIC_CXX) $(LIBSHARED_CXX)
--+default: $(TARGETS)
-- 
-- 
-- OBJS := decimal.o
 --- 
--2.1.0
+-2.25.1
 -
-diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
-index c931ee4a6d..81150c7575 100644
---- a/package/mpdecimal/mpdecimal.hash
-+++ b/package/mpdecimal/mpdecimal.hash
-@@ -1,4 +1,4 @@
- # From http://www.bytereef.org/mpdecimal/download.html
--sha256  15417edc8e12a57d1d9d75fa7e3f22b158a3b98f44db9d694cfd2acde8dfa0ca  mpdecimal-2.5.0.tar.gz
-+sha256  9f9cd4c041f99b5c49ffb7b59d9f12d95b683d88585608aa56a6307667b2b21f  mpdecimal-2.5.1.tar.gz
- # Locally computed
- sha256  b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  LICENSE.txt
-diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index fa310a2274..25c12c08b1 100644
---- a/package/mpdecimal/mpdecimal.mk
-+++ b/package/mpdecimal/mpdecimal.mk
-@@ -5,12 +5,11 @@
+diff --git a/package/ghostscript/0004-Bug-703902-Fix-op-stack-management-in-sampled_data_continue.patch b/package/ghostscript/0004-Bug-703902-Fix-op-stack-management-in-sampled_data_continue.patch
+deleted file mode 100644
+index 72e07df0ac..0000000000
+--- a/package/ghostscript/0004-Bug-703902-Fix-op-stack-management-in-sampled_data_continue.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From 2a3129365d3bc0d4a41f107ef175920d1505d1f7 Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Tue, 1 Jun 2021 19:57:16 +0100
+-Subject: [PATCH] Bug 703902: Fix op stack management in
+- sampled_data_continue()
+-
+-Replace pop() (which does no checking, and doesn't handle stack extension
+-blocks) with ref_stack_pop() which does do all that.
+-
+-We still use pop() in one case (it's faster), but we have to later use
+-ref_stack_pop() before calling sampled_data_sample() which also accesses the
+-op stack.
+-
+-Fixes:
+-https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=34675
+-
+-[Retrieved from:
+-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=2a3129365d3bc0d4a41f107ef175920d1505d1f7]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- psi/zfsample.c | 16 ++++++++++------
+- 1 file changed, 10 insertions(+), 6 deletions(-)
+-
+-diff --git a/psi/zfsample.c b/psi/zfsample.c
+-index 0e8e4bc8d..00cd0cfdd 100644
+---- a/psi/zfsample.c
+-+++ b/psi/zfsample.c
+-@@ -533,15 +533,19 @@ sampled_data_continue(i_ctx_t *i_ctx_p)
+-         for (j = 0; j < bps; j++)
+-             data_ptr[bps * i + j] = (byte)(cv >> ((bps - 1 - j) * 8));	/* MSB first */
+-     }
+--    pop(num_out);		    /* Move op to base of result values */
+- 
+--    /* Check if we are done collecting data. */
+-+    pop(num_out); /* Move op to base of result values */
+- 
+-+    /* From here on, we have to use ref_stack_pop() rather than pop()
+-+       so that it handles stack extension blocks properly, before calling
+-+       sampled_data_sample() which also uses the op stack.
+-+     */
+-+    /* Check if we are done collecting data. */
+-     if (increment_cube_indexes(params, penum->indexes)) {
+-         if (stack_depth_adjust == 0)
+--            pop(O_STACK_PAD);	    /* Remove spare stack space */
+-+            ref_stack_pop(&o_stack, O_STACK_PAD);	    /* Remove spare stack space */
+-         else
+--            pop(stack_depth_adjust - num_out);
+-+            ref_stack_pop(&o_stack, stack_depth_adjust - num_out);
+-         /* Execute the closing procedure, if given */
+-         code = 0;
+-         if (esp_finish_proc != 0)
+-@@ -554,11 +558,11 @@ sampled_data_continue(i_ctx_t *i_ctx_p)
+-             if ((O_STACK_PAD - stack_depth_adjust) < 0) {
+-                 stack_depth_adjust = -(O_STACK_PAD - stack_depth_adjust);
+-                 check_op(stack_depth_adjust);
+--                pop(stack_depth_adjust);
+-+                ref_stack_pop(&o_stack, stack_depth_adjust);
+-             }
+-             else {
+-                 check_ostack(O_STACK_PAD - stack_depth_adjust);
+--                push(O_STACK_PAD - stack_depth_adjust);
+-+                ref_stack_push(&o_stack, O_STACK_PAD - stack_depth_adjust);
+-                 for (i=0;i<O_STACK_PAD - stack_depth_adjust;i++)
+-                     make_null(op - i);
+-             }
+--- 
+-2.25.1
+-
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index f6cedc6198..95305a5e06 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/SHA512SUMS
+-sha512  c142ef9d83896aa8fd18c8e412220fe8f4950614be00d327d27ab051fe85e16524bf2ee00f46c2aca7a352ce47bc3acf2c4de0f7bbea7e4c55474b8af6cdc0a6  ghostscript-9.53.3.tar.gz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9550/SHA512SUMS
++sha512  3646b7981dced443559ba97c74c08463139e86a5479661e4dcd217c51e3f8e766da9cf4d7889a98ba3c079a17e9e5b452cc765b633e0720deab2337e77efdd09  ghostscript-9.55.0.tar.gz
+ 
+ # Hash for license file:
+-sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
++sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 9e13f29fe9..24a0c489a8 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
--MPDECIMAL_VERSION = 2.5.0
-+MPDECIMAL_VERSION = 2.5.1
- MPDECIMAL_INSTALL_STAGING = YES
- MPDECIMAL_LICENSE = BSD-2-Clause
- MPDECIMAL_LICENSE_FILES = LICENSE.txt
- MPDECIMAL_CONF_OPTS = LD="$(TARGET_CC)"
--MPDECIMAL_AUTORECONF = YES
+-GHOSTSCRIPT_VERSION = 9.53.3
++GHOSTSCRIPT_VERSION = 9.55.0
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+@@ -21,15 +21,6 @@ GHOSTSCRIPT_DEPENDENCIES = \
+ 	libpng \
+ 	tiff
  
- # On i386, by default, mpdecimal tries to uses <fenv.h> which is not
- # available in musl/uclibc. So in this case, we tell mpdecimal to use
+-# 0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
+-GHOSTSCRIPT_IGNORE_CVES += CVE-2021-3781
+-
+-# 0003-oss-fuzz-30715-Check-stack-limits-after-function-evaluation.patch
+-GHOSTSCRIPT_IGNORE_CVES += CVE-2021-45944
+-
+-# 0004-Bug-703902-Fix-op-stack-management-in-sampled_data_continue.patch
+-GHOSTSCRIPT_IGNORE_CVES += CVE-2021-45949
+-
+ # Ghostscript includes (old) copies of several libraries, delete them.
+ # Inspired by linuxfromscratch:
+ # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+@@ -52,6 +43,7 @@ GHOSTSCRIPT_CONF_OPTS = \
+ 	--enable-freetype \
+ 	--disable-gtk \
+ 	--without-libpaper \
++	--without-pdf \
+ 	--with-system-libtiff
+ 
+ ifeq ($(BR2_PACKAGE_JBIG2DEC),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
