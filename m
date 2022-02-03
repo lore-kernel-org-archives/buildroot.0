@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27DEEC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1B9C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  3 Feb 2022 20:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D246B60AB9;
-	Thu,  3 Feb 2022 20:45:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 062AD40423;
+	Thu,  3 Feb 2022 20:45:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oReCiRGmliMY; Thu,  3 Feb 2022 20:45:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w05uHaQfqrqL; Thu,  3 Feb 2022 20:45:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F35A60A6F;
-	Thu,  3 Feb 2022 20:45:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D2821C1135
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00245401CA;
+	Thu,  3 Feb 2022 20:45:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C5C31C113E
  for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6945D83EB7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A4A540133
  for <buildroot@lists.busybox.net>; Thu,  3 Feb 2022 20:45:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nL37VPGGeULA for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9kVNrtmeQWet for <buildroot@lists.busybox.net>;
  Thu,  3 Feb 2022 20:45:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBFD681D73
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAF11400F1
  for <buildroot@buildroot.org>; Thu,  3 Feb 2022 20:45:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6CB3E82AE4; Thu,  3 Feb 2022 20:38:00 +0000 (UTC)
+ id 58B1E7FFA5; Thu,  3 Feb 2022 20:38:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 3 Feb 2022 21:44:43 +0100
+Date: Thu, 3 Feb 2022 21:44:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b341f0c91f658484f90c5addd553c579b8d210c1
-X-Git-Newrev: 89211450c68df76f3b850c651733c86fb02b40d6
+X-Git-Oldrev: ac5ab240f1c5fd2c920f9d048c20827c9e56f303
+X-Git-Newrev: f0a1d47f6fe6bda3b18b3fcfca37757b37695dbb
 X-Patchwork-Hint: ignore
-Message-Id: <20220203203800.6CB3E82AE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8723bu: bump to version
- 19b4bdc05483a1e79a4f955a80f8f72cdd5dedc3
+Message-Id: <20220203203800.58B1E7FFA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gensio: add avahi optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89211450c68df76f3b850c651733c86fb02b40d6
+commit: https://git.buildroot.net/buildroot/commit/?id=f0a1d47f6fe6bda3b18b3fcfca37757b37695dbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version fixes a bug that prevents the user from switching from one
-access point to another.
+avahi-client is an optional dependency which is enabled by default since
+version 2.2.0 and
+https://github.com/cminyard/gensio/commit/5ab117c9743fd4719f610cf9f1ba45023cc25d7c
 
-Signed-off-by: Doug Brown <doug@schmorgal.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rtl8723bu/rtl8723bu.hash | 2 +-
- package/rtl8723bu/rtl8723bu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gensio/gensio.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
-index 04bc776a07..1dad7154b4 100644
---- a/package/rtl8723bu/rtl8723bu.hash
-+++ b/package/rtl8723bu/rtl8723bu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  4c7314dccebda1e55ec8dcf0d5ca8915c2490d17a9f56923f25e6e0e945c10cc  rtl8723bu-9ce1c38439f4f574bb7adaf33949835c25536a28.tar.gz
-+sha256  1cd658742ce10b21c92877e09cecc98880680d5f150de3845553005abc542977  rtl8723bu-19b4bdc05483a1e79a4f955a80f8f72cdd5dedc3.tar.gz
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index c35fad5832..e490bddf09 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8723BU_VERSION = 9ce1c38439f4f574bb7adaf33949835c25536a28
-+RTL8723BU_VERSION = 19b4bdc05483a1e79a4f955a80f8f72cdd5dedc3
- RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
- RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
- 
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 389de1e263..266ac137a2 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -9,6 +9,7 @@ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+ GENSIO_INSTALL_STAGING = YES
++GENSIO_DEPENDENCIES = $(if $(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),avahi)
+ GENSIO_CONF_OPTS = \
+ 	--without-openipmi \
+ 	--without-swig \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
