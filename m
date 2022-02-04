@@ -4,60 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F5D1C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  4 Feb 2022 10:41:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44FCBC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  4 Feb 2022 11:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27CEC840D8;
-	Fri,  4 Feb 2022 10:41:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B08D383112;
+	Fri,  4 Feb 2022 11:21:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EIU0M5eUOqKj; Fri,  4 Feb 2022 10:41:15 +0000 (UTC)
+	with ESMTP id IJfT7fZL2zP8; Fri,  4 Feb 2022 11:21:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5209984082;
-	Fri,  4 Feb 2022 10:41:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9119E1BF34D
- for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 10:41:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03562830C2;
+	Fri,  4 Feb 2022 11:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D2681BF339
+ for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 11:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8EDE784082
- for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 10:41:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A4A260B5E
+ for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 11:21:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cisinaGm7GVM for <buildroot@lists.busybox.net>;
- Fri,  4 Feb 2022 10:41:12 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jqmAtgPeplLQ for <buildroot@lists.busybox.net>;
+ Fri,  4 Feb 2022 11:21:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FA8784044
- for <buildroot@buildroot.org>; Fri,  4 Feb 2022 10:41:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B948A60B5C
+ for <buildroot@buildroot.org>; Fri,  4 Feb 2022 11:21:45 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id Fw1dnOP534NL9Fw1enVYwE; Fri, 04 Feb 2022 11:41:11 +0100
+ id FweqnQ46r4NL9FwernW9K0; Fri, 04 Feb 2022 12:21:42 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643971271; bh=q/2LCwMw7XLzz6BPsObgxlK3ikpZ3sf4RMCNbleU9eI=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=ISyyh0UxVus3tnEYzomllpH6CUYJB41NliJ0CGm7H+EI/vZDp1fYxaKhSi7kWSj7f
- JZ2jVcSu22lYV1fisd1s4vBHPJTh+FEAr5e9eNOBM9Sg41WJTOMFPSbu/h7FPlq29Q
- M0CKVPghnGxqhXbQJjGYl3l/aO74na2eN/7w8ROl4wUrOnRxVoFG/zgfm7r366+uv3
- Mqimz3mZSiVdX8K2slPeLKBLRhyj7LUE+/iEMcxfksw375S/VToAief1LD/zKYVGh+
- +C1AywdR5ROCsv/pni8nRknK69HYJZvHo4z/yT32Fg1M3figRXalmY0ziAMh4ot55k
- 8Ft5obIRAVobg==
-Message-ID: <4fc954ba-48d7-388f-39e4-56f83db14297@benettiengineering.com>
-Date: Fri, 4 Feb 2022 11:41:09 +0100
+ t=1643973703; bh=5FubwFOyz/yYBVWxJKY2byzCpExqZRgMAk3w+YX8nos=;
+ h=Date:MIME-Version:Subject:From:To:Content-Type;
+ b=W8NRzIkbLu0tjrXKCkINxvpItc1LN1oPbtx5mnOQgysPH4X/jvV4TNnN1NVvcxM5H
+ wU+Rjfh8q5LqoIgVNFjOY1xBT34BgOYqF8Gf1c/ZLHp+QOV9UfsjnIGuZx1uhRcgbf
+ hkpPEZutUnPhknm3dnvijI/aa+1PaW6GwdXRZnqwinKpDWuGBBNqur3dsW02IqVxx8
+ mQDvsRAQWhH/P5H0iIuDAJryaTiQP+LKcf0pz0okKQYXQWGaUdSRp9OILenlZ0NjT2
+ jvHbiwG6T8bs+4dSUflpXAkUE6vDe9Qop2g34AiWTV58indXMP+sgmQ4XWRs0TmvIM
+ irTjYCrAfcF2A==
+Message-ID: <67349e3c-373f-905a-840a-55c4b8143906@benettiengineering.com>
+Date: Fri, 4 Feb 2022 12:21:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1643665029.git.yann.morin.1998@free.fr>
- <c9dcef5830fdb5a83a625962702dccc093bb9a6c.1643665029.git.yann.morin.1998@free.fr>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <c9dcef5830fdb5a83a625962702dccc093bb9a6c.1643665029.git.yann.morin.1998@free.fr>
-X-CMAE-Envelope: MS4wfH3Oik2AvnQ1uaWycpWtQSc39noBoGCtyO0rirFV3u9ThKeg0smCSoAVq+81OZD5kUDM/VAy0PocUdGPqdXQVbxl/WVVS6PcszQsVdn/LCfF8l099aPl
- wQzYyvKNJkp+eGDJ541iAqws2w9oE74/uHz40ZR53kHdMW305/cxq6lkygCpm57kHcyUjwc5jxT7ypHzzAp1sv9086KX+KN/Z+K/T3B5lA+BkuKaWsVRd9hn
- y3n4AqI+r5GHLxpPqcZPI+Ia70OpOndVRbCBm9cs9FHGLk7lQdJKghWH5SDAzQ+f
-Subject: Re: [Buildroot] [PATCH 2/2 v2] linux: fix build with host-gcc 10+
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <1662cf67-b9ef-33be-c5c4-5d5e786f944a@benettiengineering.com>
+ <CADvTj4qg822gvS8ufFWFB8w5Uv+EQ7L4ULJRueQ+rp+MY_ugeA@mail.gmail.com>
+ <a07ea4e2-d37b-8596-8cfd-5c5dd29bc279@benettiengineering.com>
+In-Reply-To: <a07ea4e2-d37b-8596-8cfd-5c5dd29bc279@benettiengineering.com>
+X-CMAE-Envelope: MS4wfB6uXBZHl6jbTlgcj89lP/xP1YKFmtJUnOcqnIiPkFDS6ROELQg63Slz0ZQGXt3Nq28lGWh6mUz3rOwEt2pR8F8GmIek84vgV1jJ9C3DCDUn4rlVuJZh
+ tUW+VhklUkiY27XAq7ckyEi1n5g2aatjix9Gns13M1bi7zOTSOkEzTZxtZGEckbI2BocqIsyrA9FJ9bowoI5D7z5PYucS8CrE/GOUK8uTCU9FcpxJHpBnlQL
+ jdWC8HcqJOVa/1IyNmJ9Qs9SyNkidL67E8BSOC1Yb3Y=
+Subject: Re: [Buildroot] qt5webengine build failure on gitlab-CI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,78 +72,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+On 04/02/22 11:27, Giulio Benetti wrote:
+> Hi James,
+> 
+> On 04/02/22 09:52, James Hilliard wrote:
+>> On Thu, Feb 3, 2022 at 6:03 PM Giulio Benetti
+>> <giulio.benetti@benettiengineering.com> wrote:
+>>>
+>>> Hi Peter and James,
+>>>
+>>> I can fix this build failure[1] due to qt5webengine, you're the experts
+>>> here, can you take a look please?
+>>>
+>>> You have to build using official docker as I've described in this patch
+>>> for the manual:
+>>> https://patchwork.ozlabs.org/project/buildroot/patch/20220203235438.610277-1-giulio.benetti@benettiengineering.com/
+>>>
+>>> I've tried this patch:
+>>> https://patchwork.ozlabs.org/project/buildroot/patch/20220117114358.3814200-1-james.hilliard1@gmail.com/
+>>> but it didn't help :-/
+>>
+>> I've got a WIP branch that should hopefully fix this and a bunch of
+>> related issues,
+>> cleaning it up at the moment:
+>> https://github.com/buildroot/buildroot/compare/master...jameshilliard:qt5webengine-kde
+> 
+> This is a good improvement, but I need something to fix the actual
+> problem and that can be eventually backported, so this:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report@gmx.net/
+> fits more our needs for the moment.
 
-On 31/01/22 22:38, Yann E. MORIN wrote:
-> Some older versions of linux, or custom versions (like forks for some
-> boards), fail to build with host-gcc 10+, because of redefined symbols:
-> 
->        HOSTLD  scripts/dtc/dtc
->      /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition
->      of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
->      collect2: error: ld returned 1 exit status
-> 
-> Since this has been fixed in recent-ish versions, we can't use an
-> unconditionaly patch, so we must have a conditional patch. However, a
-> patch may not always apply to arbitrary U-Boot versions or forks.
-> 
-> Upstream just dropped that line altogether:
->      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33a814e772cdc36436c8c188d8c42d019fda639
-> 
-> So, we use a little sed-grep combo to do the exact same change.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+I was wrong, I haven't pulled the master branch so I was still building 
+5.15.2 and no 5.15.8
 
-I've extensively tested this patch while fixing Gitlab-CI build failures 
-and here there is the actual situation:
-https://paste.debian.net/1229530/
-I've built successfully circa 20-25 cases where the problem didn't arise 
-and also a couple where the problem arised.
-
-So:
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Look forward for having your patch to test then.
 
 Thank you!
 Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
-> Changes v1 -> v2:
->    - don't fail if no file to fix: use 'grep -Z |xargs -0 -r' (Arnout)
-> ---
->   linux/linux.mk | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index dd2eebd446..410b714360 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -268,6 +268,13 @@ endef
->   
->   LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
->   
-> +# Older versions break on gcc 10+ because of redefined symbols
-> +define LINUX_DROP_YYLLOC
-> +	$(Q)grep -Z -l -r -E '^YYLTYPE yylloc;$$' $(@D) \
-> +	|xargs -0 -r $(SED) '/^YYLTYPE yylloc;$$/d'
-> +endef
-> +LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
-> +
->   # Older linux kernels use deprecated perl constructs in timeconst.pl
->   # that were removed for perl 5.22+ so it breaks on newer distributions
->   # Try a dry-run patch to see if this applies, if it does go ahead
-
 -- 
 Giulio Benetti
 Benetti Engineering sas
