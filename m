@@ -1,64 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7896FC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  4 Feb 2022 10:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B303DC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  4 Feb 2022 10:27:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 249C540482;
-	Fri,  4 Feb 2022 10:24:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65B98840D8;
+	Fri,  4 Feb 2022 10:27:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MDhEZ04R9vKg; Fri,  4 Feb 2022 10:24:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 11aykfS_jsKC; Fri,  4 Feb 2022 10:27:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06D274020B;
-	Fri,  4 Feb 2022 10:24:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C2CCC1BF34D
- for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 10:24:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 767DD840D5;
+	Fri,  4 Feb 2022 10:27:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 329841BF34D
+ for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 10:27:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0DA541515
- for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 10:24:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1508C840D5
+ for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 10:27:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O5VjBzFTvPfn for <buildroot@lists.busybox.net>;
- Fri,  4 Feb 2022 10:24:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ubyjDO3JYSP5 for <buildroot@lists.busybox.net>;
+ Fri,  4 Feb 2022 10:27:35 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44CAE410E6
- for <buildroot@buildroot.org>; Fri,  4 Feb 2022 10:24:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECAA4840D4
+ for <buildroot@buildroot.org>; Fri,  4 Feb 2022 10:27:34 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id FvlbnNhem4NL9FvlcnVJtT; Fri, 04 Feb 2022 11:24:36 +0100
+ id FvoSnNppW4NL9FvoTnVMrU; Fri, 04 Feb 2022 11:27:33 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643970276; bh=BzDes3KtqRsmPoKvzg5ja3dGiMMGjB4rooWqsBMOseU=;
+ t=1643970453; bh=+wMyjdwotW5BnZW4/bTuMNPbcQAxRZPlubCZ7BZiiwI=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=I4tXxfaNcEuTb3VOMmsEhBYp20JZtvsrW77Ac4yW1C/7NAeA8RM0cgQKbNi0Yksa1
- PyZhvGhpWt8FxKbdn4/4AgPgT0AdKWJVkXhF1nJUol3ZTX2HLquGArLKgLb84f4Nvo
- k5u04eamjAUGC60rjOC14QeVxK5QfnM1DyrAbvZB0uudGhnm4eSIvylcsFHKUfINSZ
- LRa+ihb5ms+b0wPlmQQ41dX+uerEUTs1VJwfQ+NVmZCshvoPp6oO5DcVl+ij+g78Sm
- YwbLIzCn+Cp6UuSciuQcK6VZKW8mfmUPpzIvQZJbCRY4TV70PmLBCOMiTCeRWFcsxN
- Dt89Fg6h36yWQ==
-Message-ID: <92e2c20f-86dd-812b-e13f-5479146e640b@benettiengineering.com>
-Date: Fri, 4 Feb 2022 11:24:35 +0100
+ b=Fy/AM+sgYoFsBDknJSXQ/QRBJTklsDUp/WkVBxBcyouDZTh+F+KauV3TusyH4ffq/
+ RSrDudLMGb4c0ySWYL8qYaSDbYyxERIv47tn9PpiXLVa2ePt7aspR5KgoVgWsr0GSj
+ CzzWhUM/As4XnmjQFFvpu4z6coyaIB/O3WJkd8t1E+Gn4s7xe77qFs13N/Yj6Sr9ue
+ 9XlG6V3ueHrIWsWKFgqLIq4K6NvAxjS+MvI413RvDiKm7hSGP7zE8Iq4C7c2+0Ncb8
+ JMjLVb6GGyIJDBLbR+ZPU0AnzQZM2mZmTDB6Xc90IO97O5B+yI4NGQjK0Ne1vGBJXa
+ ULaXuOIWNLVdA==
+Message-ID: <a07ea4e2-d37b-8596-8cfd-5c5dd29bc279@benettiengineering.com>
+Date: Fri, 4 Feb 2022 11:27:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
-To: Peter Seiderer <ps.report@gmx.net>
+To: James Hilliard <james.hilliard1@gmail.com>
 References: <1662cf67-b9ef-33be-c5c4-5d5e786f944a@benettiengineering.com>
- <20220204085100.77deaeb8@gmx.net>
+ <CADvTj4qg822gvS8ufFWFB8w5Uv+EQ7L4ULJRueQ+rp+MY_ugeA@mail.gmail.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220204085100.77deaeb8@gmx.net>
-X-CMAE-Envelope: MS4wfA+He8NabweK7g9yU7Cyylv/do2cJd8uRBlafTBUlFC40j/SG+rQmKD4fiF+UXKNenV2v5JEOvaM+u6KBb9KL2iwbVNqXdZEPb/c7LLjbTN6+xj4iw8O
- 7ymV3EDTxjqzyzZ238C2UCp6g5XiMnjEMfHiDD9rV+GSchQjF9CSK63eK9QWlMB6M30eQWWbmsMX7Z443L1hm4uTn88Llw5sWjaLn/RlkztSt6WX9orECxgZ
- EtZVbTGo8FcPOTAYkpA4tpvEbca/Qa9ROscmICcdMgY=
+In-Reply-To: <CADvTj4qg822gvS8ufFWFB8w5Uv+EQ7L4ULJRueQ+rp+MY_ugeA@mail.gmail.com>
+X-CMAE-Envelope: MS4wfG06whymtVWuwllN46Bkb+EFESdepEz1keQF9+JdCmGRBTxdh2CVILoWzTbdqmNAKwX/JgMmqJAFlerdOeYuoXRDw8tzvVZ0aG2v4PtW87pYDgRnJfg4
+ +Q3QSDqs6AH0qkqiN1+Eu8u9nWVSsA69m6L40Om1kUxpXbrUs6uV0uXy78HK08kH59w94bacFE33T+LRnCKxbfB3tbOdOIN0RqjyHMZhe6ahM2WanoZntwCe
+ 4A8wSSUylgIHIsroP7vI9Lh5PSl5y/rZoMeZcKD/FIw=
 Subject: Re: [Buildroot] qt5webengine build failure on gitlab-CI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,20 +69,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- buildroot <buildroot@buildroot.org>
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+Hi James,
 
-On 04/02/22 08:51, Peter Seiderer wrote:
-> Hello Giulio,
-> 
-> On Fri, 4 Feb 2022 02:03:48 +0100, Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
+On 04/02/22 09:52, James Hilliard wrote:
+> On Thu, Feb 3, 2022 at 6:03 PM Giulio Benetti
+> <giulio.benetti@benettiengineering.com> wrote:
+>>
 >> Hi Peter and James,
 >>
 >> I can fix this build failure[1] due to qt5webengine, you're the experts
@@ -98,31 +94,35 @@ On 04/02/22 08:51, Peter Seiderer wrote:
 >> https://patchwork.ozlabs.org/project/buildroot/patch/20220117114358.3814200-1-james.hilliard1@gmail.com/
 >> but it didn't help :-/
 > 
-> See [2], [3] and [4]....
+> I've got a WIP branch that should hopefully fix this and a bunch of
+> related issues,
+> cleaning it up at the moment:
+> https://github.com/buildroot/buildroot/compare/master...jameshilliard:qt5webengine-kde
 
-Thank you for pointing, this patch:
+This is a good improvement, but I need something to fix the actual 
+problem and that can be eventually backported, so this:
 https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report@gmx.net/
-seems to be what we need at the moment IMHO. It can also be backported.
+fits more our needs for the moment.
 
+Thank you!
 Best regards
 -- 
 Giulio Benetti
 Benetti Engineering sas
 
-> Regards,
-> Peter
-> 
-> [2] http://lists.busybox.net/pipermail/buildroot/2020-December/601542.html
-> [3] http://lists.busybox.net/pipermail/buildroot/2021-January/301496.html
-> [4] http://lists.busybox.net/pipermail/buildroot/2022-January/633204.html
-> 
 >>
 >> Thanks in advance!
 >>
 >> [1]: https://gitlab.com/buildroot.org/buildroot/-/jobs/1929717230
 >>
 >> Best regards
-> 
+>> --
+>> Giulio Benetti
+>> Benetti Engineering sas
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
