@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987A6C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  4 Feb 2022 22:16:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A28C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  4 Feb 2022 22:24:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58AD160E79;
-	Fri,  4 Feb 2022 22:16:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB7D181449;
+	Fri,  4 Feb 2022 22:24:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3cyqUPIKfnsR; Fri,  4 Feb 2022 22:16:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tG48PcjXEXV7; Fri,  4 Feb 2022 22:24:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44B2D60E71;
-	Fri,  4 Feb 2022 22:16:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 214788135F;
+	Fri,  4 Feb 2022 22:24:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A66A41BF4E6
- for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 22:16:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24DA01BF4E6
+ for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 22:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 906C740986
- for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 22:16:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11B42408C5
+ for <buildroot@lists.busybox.net>; Fri,  4 Feb 2022 22:24:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0AE6lRfMlRF for <buildroot@lists.busybox.net>;
- Fri,  4 Feb 2022 22:16:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA6AC40991
- for <buildroot@buildroot.org>; Fri,  4 Feb 2022 22:16:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 21DAE81EB3; Fri,  4 Feb 2022 22:08:58 +0000 (UTC)
+ with ESMTP id RSgGzjoda8wF for <buildroot@lists.busybox.net>;
+ Fri,  4 Feb 2022 22:24:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1C21A408C0
+ for <buildroot@buildroot.org>; Fri,  4 Feb 2022 22:24:41 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id F2327200002;
+ Fri,  4 Feb 2022 22:24:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nG70R-0007Pn-BW; Fri, 04 Feb 2022 23:24:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 4 Feb 2022 23:15:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4ddaeb080ec00891ec415d373236582d28e9c17
-X-Git-Newrev: 6939ed917173c5b595f491478410a2ed1caf9342
-X-Patchwork-Hint: ignore
-Message-Id: <20220204220858.21DAE81EB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.15.4
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220128095249.2707373-1-bernd.kuhls@t-online.de>
+Date: Fri, 04 Feb 2022 23:24:39 +0100
+In-Reply-To: <20220128095249.2707373-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 28 Jan 2022 10:52:49 +0100")
+Message-ID: <87wniaw9qw.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,48 +59,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6939ed917173c5b595f491478410a2ed1caf9342
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Release notes: https://www.samba.org/samba/history/samba-4.15.4.html
+ > Release notes:
+ > https://lists.freedesktop.org/archives/mesa-announce/2022-January/000660.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 4749f6f597..130b628e32 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.15.3.tar.asc
--sha256  519399404391550345846768ea4dd0fe7fcb04e20c2b891b5eeb02e5554137db  samba-4.15.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.15.4.tar.asc
-+sha256  499065a589b7b9ffb8e3eb6efa8575985919a2999972afc469520a47322aec11  samba-4.15.4.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 14f9302e21..1d4b985437 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.15.3
-+SAMBA4_VERSION = 4.15.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
