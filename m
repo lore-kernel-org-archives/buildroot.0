@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11A8DC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D2A8C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2A8D408B0;
-	Sat,  5 Feb 2022 22:55:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00A56408B3;
+	Sat,  5 Feb 2022 22:55:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7zbfNsHrcHds; Sat,  5 Feb 2022 22:55:32 +0000 (UTC)
+	with ESMTP id 0PJgdydxDUnz; Sat,  5 Feb 2022 22:55:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E88D1408DB;
-	Sat,  5 Feb 2022 22:55:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 406791BF962
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28DF040901;
+	Sat,  5 Feb 2022 22:55:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EEBB1BF2A5
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DC944088D
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA46D8188B
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YWnjNuEwxljC for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OlHNKN_CwMOj for <buildroot@lists.busybox.net>;
  Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C46EE40889
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB87F817EB
  for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B5FAB82AA7; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
+ id 9CDB282AA7; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 23:34:41 +0100
+Date: Sat, 5 Feb 2022 23:34:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66192c66b9421b95f6cc45a46264c0193a873c58
-X-Git-Newrev: 5eff46a6c97203e7874edc931c4180f606f08275
+X-Git-Oldrev: bd7179d1394a002934f6c4d3ce3d1952cc3fe445
+X-Git-Newrev: b5654af1bae4c56af914d2d948cbe2dd1ae4de88
 X-Patchwork-Hint: ignore
-Message-Id: <20220205224746.B5FAB82AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sqliteschema: bump to
- version 1.2.1
+Message-Id: <20220205224746.9CDB282AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnpupnp: bump to version 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5eff46a6c97203e7874edc931c4180f606f08275
+commit: https://git.buildroot.net/buildroot/commit/?id=b5654af1bae4c56af914d2d948cbe2dd1ae4de88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-https://github.com/thombashi/sqliteschema/releases/tag/v1.2.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-sqliteschema/python-sqliteschema.hash | 4 ++--
- package/python-sqliteschema/python-sqliteschema.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnpupnp/libnpupnp.hash | 4 ++--
+ package/libnpupnp/libnpupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
-index 310e56ab32..e60bd64325 100644
---- a/package/python-sqliteschema/python-sqliteschema.hash
-+++ b/package/python-sqliteschema/python-sqliteschema.hash
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index 9ebfd13379..276bf93c99 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqliteschema/json
--md5  ca70006e289f1d506124de779ed73d64  sqliteschema-1.2.0.tar.gz
--sha256  4c18f141239c58b6dbdc69130be41ed9740d8209a7ab6d529ba982a8b79c071a  sqliteschema-1.2.0.tar.gz
-+md5  4fb0130e7cc60d92be468091fbfc3d51  sqliteschema-1.2.1.tar.gz
-+sha256  dde195bd7bc70d5841bc01dff20ec23bd43be87d760d2dfc7c7f2e5fd3808ef3  sqliteschema-1.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
-index e4fd0de2fb..5c52e35111 100644
---- a/package/python-sqliteschema/python-sqliteschema.mk
-+++ b/package/python-sqliteschema/python-sqliteschema.mk
-@@ -4,9 +4,9 @@
+-# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.1.5.tar.gz.sha256
+-sha256  566f5895376a14aa87997de7ce3454595646613d1d0af34d05c31f6d9fe884a9  libnpupnp-4.1.5.tar.gz
++# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.2.1.tar.gz.sha256
++sha256  e0e59eb2d3d024e827050428e0e7eb228355912a38c85eb30bfeb2f0926eca4c  libnpupnp-4.2.1.tar.gz
+ 
+ # Hash for license file:
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index 03ac01c915..09bfa34b87 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SQLITESCHEMA_VERSION = 1.2.0
-+PYTHON_SQLITESCHEMA_VERSION = 1.2.1
- PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
--PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/5c/d3/0c2e4c989a8d45f9443e431d7cbf89af4aba719fb0647b5f722716ef3990
-+PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/85/f8/be54d4bebf551cb533d1dea11c3bf165a1a408c2a1cceb1f9724aadd9967
- PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
- PYTHON_SQLITESCHEMA_LICENSE = MIT
- PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
+-LIBNPUPNP_VERSION = 4.1.5
++LIBNPUPNP_VERSION = 4.2.1
+ LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
