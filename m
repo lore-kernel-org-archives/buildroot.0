@@ -4,51 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8CBFC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 15:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 736F8C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 15:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 903E0408B8;
-	Sat,  5 Feb 2022 15:14:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BFC24088C;
+	Sat,  5 Feb 2022 15:18:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tzQr8zN0R7FD; Sat,  5 Feb 2022 15:14:45 +0000 (UTC)
+	with ESMTP id UQuCJaz3o7Ok; Sat,  5 Feb 2022 15:18:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF2804088E;
-	Sat,  5 Feb 2022 15:14:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AA33B1BF39A
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:14:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DB484028F;
+	Sat,  5 Feb 2022 15:18:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CE37B1BF39A
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98D694088E
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:14:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF20660B73
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:18:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dYkAKvY2Qk_H for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 15:14:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 78DC64030F
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 15:14:42 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3B741C0002;
- Sat,  5 Feb 2022 15:14:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nGMlr-0000XC-GA; Sat, 05 Feb 2022 16:14:39 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F-9y7VYnKAtO for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 15:18:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F53260597
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 15:18:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id AC55382981; Sat,  5 Feb 2022 15:11:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220128212005.2899314-1-fontaine.fabrice@gmail.com>
-Date: Sat, 05 Feb 2022 16:14:39 +0100
-In-Reply-To: <20220128212005.2899314-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 28 Jan 2022 22:20:05 +0100")
-Message-ID: <877da9tkf4.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/keepalived: bump to version
- 2.2.7
+To: buildroot@buildroot.org
+Date: Sat, 5 Feb 2022 16:13:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c2151a3f222854a711f40dc074be2bc9a63630a1
+X-Git-Newrev: df013c4de64815c283fefadcee05cf63bc339182
+X-Patchwork-Hint: ignore
+Message-Id: <20220205151113.AC55382981@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgeos: bump version to 3.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,28 +52,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ilias Apalodimas <apalos@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=df013c4de64815c283fefadcee05cf63bc339182
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patches (already in version)
- > https://www.keepalived.org/release-notes/Release-2.2.7.html
- > https://www.keepalived.org/release-notes/Release-2.2.4.html
- > https://www.keepalived.org/release-notes/Release-2.2.3.html
- > https://www.keepalived.org/release-notes/Release-2.2.2.html
- > https://www.keepalived.org/release-notes/Release-2.2.0.html
- > https://www.keepalived.org/release-notes/Release-2.1.5.html
+Changelog: https://github.com/libgeos/geos/blob/3.10.2/NEWS
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index d2c27955ac..f93badbaa3 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a8148eec9636814c8ab0f8f5266ce6f9b914ed65b0d083fc43bb0bbb01f83648  geos-3.10.1.tar.bz2
++sha256  50bbc599ac386b4c2b3962dcc411f0040a61f204aaef4eba7225ecdd0cf45715  geos-3.10.2.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 745eb32256..197def1212 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOS_VERSION = 3.10.1
++LIBGEOS_VERSION = 3.10.2
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
