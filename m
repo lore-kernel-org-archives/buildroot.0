@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D86CC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 09:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97497C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 09:26:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAFA40190;
-	Sat,  5 Feb 2022 09:20:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 232DD40190;
+	Sat,  5 Feb 2022 09:26:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bSdjxCYgiZn8; Sat,  5 Feb 2022 09:20:01 +0000 (UTC)
+	with ESMTP id UROcrvCqKsoc; Sat,  5 Feb 2022 09:26:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 76DE3400BA;
-	Sat,  5 Feb 2022 09:20:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4CD81BF3C5
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 09:19:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13490400BA;
+	Sat,  5 Feb 2022 09:26:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C98A11BF3C5
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 09:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE1E940340
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 09:19:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B606A400BA
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 09:26:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6tRyBgCsfdkn for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 09:19:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i_6KIT1qRUwE for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 09:26:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 08A1A4030D
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 09:19:57 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout10.t-online.de (Postfix) with SMTP id E723618947;
- Sat,  5 Feb 2022 10:19:14 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd75.t-online.de
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E00FF40018
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 09:26:29 +0000 (UTC)
+Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
+ by mailout07.t-online.de (Postfix) with SMTP id 856084C8E
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 10:26:26 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd79.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nGHDu-4Di9vV0; Sat, 5 Feb 2022 10:19:14 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44572)
+ esmtp id 1nGHKm-0mt86b0; Sat, 5 Feb 2022 10:26:20 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44574)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nGHDt-0005Ye-OH;
- Sat, 05 Feb 2022 10:19:13 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nGHKm-0006lS-1f
+ for buildroot@buildroot.org; Sat, 05 Feb 2022 10:26:20 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  5 Feb 2022 10:19:13 +0100
-Message-Id: <20220205091913.4135654-1-bernd.kuhls@t-online.de>
+Date: Sat,  5 Feb 2022 10:26:20 +0100
+Message-Id: <20220205092620.4162598-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1644052754-000184BD-C5F78A56/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3bde0cb5-113f-479f-b384-08089d2a4b30
-Subject: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to 22.0.2
+X-TOI-EXPURGATEID: 150726::1644053180-00010BFA-568BAA23/0/0 CLEAN NORMAL
+X-TOI-MSGID: 86594bda-7780-4fa0-a3e4-88397400b31e
+Subject: [Buildroot] [PATCH 1/1] package/libldns: remove
+ --disable-dane-verify configure option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,40 +62,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Not needed anymore after openssl was bumped to 1.1.x, snippet from
+libldns configure:
+
+checking for SSL_get0_dane... yes
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libldns/libldns.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index 8780eb9229..71a153e0a3 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  341eb3fa478e427e5a6f03d4cbc97bc2b02c52728dcf06c4794661d34b7c6e5c  intel-gmmlib-22.0.1.tar.gz
-+sha256  7cc044dc0979269abe825054ba6cc1b67169dc7a7f4192898e2dd04142a633fa  intel-gmmlib-22.0.2.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index c45a7669b1..235f71341c 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_GMMLIB_VERSION = 22.0.1
-+INTEL_GMMLIB_VERSION = 22.0.2
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 7deca978da..c934e19136 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -13,11 +13,9 @@ LIBLDNS_CPE_ID_VENDOR = nlnetlabs
+ LIBLDNS_CPE_ID_PRODUCT = ldns
+ LIBLDNS_INSTALL_STAGING = YES
+ LIBLDNS_DEPENDENCIES = openssl
+-# --disable-dane-verify can be removed after openssl bump to 1.1.x
+ LIBLDNS_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr \
+ 	--enable-dane \
+-	--disable-dane-verify \
+ 	--enable-ecdsa \
+ 	--enable-gost \
+ 	--enable-sha2 \
 -- 
 2.30.2
 
