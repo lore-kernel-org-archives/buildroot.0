@@ -4,86 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF9DBC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 14:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 734E0C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 14:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 845BA40018;
-	Sat,  5 Feb 2022 14:10:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F416840018;
+	Sat,  5 Feb 2022 14:13:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lKD3K9dlaJ0z; Sat,  5 Feb 2022 14:10:51 +0000 (UTC)
+	with ESMTP id ySzQycOyTvkB; Sat,  5 Feb 2022 14:13:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6712B40354;
-	Sat,  5 Feb 2022 14:10:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6C1411BF45A
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:10:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10F7440354;
+	Sat,  5 Feb 2022 14:13:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 41B221BF45A
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5ABBE408C5
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:10:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3060560776
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:13:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 61ymUhtixH6u for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 14:10:44 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P3ATVmbFJa29 for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 14:13:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7964F4089B
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 14:10:44 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id m4so28304239ejb.9
- for <buildroot@buildroot.org>; Sat, 05 Feb 2022 06:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=hYkXTGTB4PKp3pZRYxLBfTAlhWO+6RXRainUXxsvTqM=;
- b=VeE2453zhBujLC9kFvk1XhqT/al4SaRoFgEunw1r0849O346IiC75S+9TpjJkdbcDf
- biCxz8Ur9jW7jvlMuoCo11AQMEBO7NcmXKZTWQA1I7onYOsDfnHbPLYnqghHM9MP4Zs/
- u14C5iwP+T7Uyb8jojJrrnYkcss0kZQKiCBU9jykHy1mDQ5FH1RdY8PDdVurNUl8UOgT
- EsJZdX3lvf6Hks0A2IqHPv8+Uq528HZsaySTLV8fzUcVdtjlOVYmDpL6lnwAoU75mRjC
- pqd0JBFHUYmxA/AK3ywCq5RfMnsmAUANR2IQ8BbFinZg9lLxeO0ME8DV0FNJkZsMPZs9
- eP7A==
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A24D60608
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 14:13:40 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id s10so13972390wra.5
+ for <buildroot@buildroot.org>; Sat, 05 Feb 2022 06:13:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=gE8F0RD3zDyIsGPBDfILpN8wRCRFv5dX8p1oNJrdjQQ=;
+ b=ezwLBrYk9r6OpVPjf/uHWlZ9ALzRJmPRhPIi7jsGviVNSnsk8JApbo0yxkVHrvBHgM
+ Vm+p5sYkB6QeHWSXk9Tw+uFlsU+ERAECQ+dWetVS9z0Mzai6ssOERvVh4IXDu/2D7SB1
+ w9U8CdzpUlz9lim+ujeEP79sL2nuqrEwf3eZfTnYPzmZ/Q6OfG3bROzo7A9BXUYY8/KT
+ G+r1f/SkVoDknTxiD8cscvcxtouYYWL2oWfPCFF4+iMFSZA8NwmYomYX3xOgOirupZgI
+ 2PYAaAU/XzrXWtDTe4cLrY3vMejf22Z2xHTZrqr/c51ax5dLRCbGSnQ4lIDxaZGFhWL5
+ ilpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=hYkXTGTB4PKp3pZRYxLBfTAlhWO+6RXRainUXxsvTqM=;
- b=DluFP9igQHbJ3RAyns3/erx/T441r9l5PpQn66SwI1NcUoX45oJBkBJw+1OyIvDKVq
- TemVedmrfoCyES8D2fPAeJ0YbATeCQ8lLZkT52hVigo70mLqoHGMLWeaf46ZG/bqVAGl
- +HHYX8EkGtDBehdXDnmzpVH6cfrPA9WDl+35MHEQLbsdgxPLz5msl5P6nYOUnl3yYi8s
- LTq9Crjg8AITllYCtTZ+CvoEJOksEnqqsnP3DM+46QJpqKe1qjAb14wWCNw1R4OVER6A
- JtwUEWOyKljnRNxMNBlJmchi+FRo/cVxruJ28z7K1UIvZa3afJeXY50Fc+wimVYFKdSW
- PcjQ==
-X-Gm-Message-State: AOAM531xujnygly2pydvsJE0ra+GE8r7mmWcpArM/O8h9w2bmnNpOL7/
- FBzjWNR9akROBkotHLPdpzeb1Q==
-X-Google-Smtp-Source: ABdhPJw9BrDufp3cDcPYFtfKjjfLXRLsmXJu8a63hJ59jD8Xn7epFoPoIMuyoIUsq2Y6eM4m0lJr9w==
-X-Received: by 2002:a17:907:1b0b:: with SMTP id
- mp11mr3230435ejc.499.1644070242574; 
- Sat, 05 Feb 2022 06:10:42 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id g7sm2251481edr.71.2022.02.05.06.10.41
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 05 Feb 2022 06:10:41 -0800 (PST)
-Message-ID: <98670320-83fa-c6e9-9bc4-aa30d9deb6ff@mind.be>
-Date: Sat, 5 Feb 2022 15:10:41 +0100
+ bh=gE8F0RD3zDyIsGPBDfILpN8wRCRFv5dX8p1oNJrdjQQ=;
+ b=RMRBAMIL4wLmLa4hEaPCeBzgj+8+9w3G98wygK60hFKv6NXnn9X/AwsUoj1ooFrevB
+ R22ARfE6AXFHWOR2D+5hr9TgBE12K/Ej6kQBM0iVKFDb8Yr1qLOJmRFOkT7LhHoQ5c6W
+ dY4QadgAt12gacGjrsrgplJs4bDpxtIqPXxpEu/w/5iEbrbOP6UgsjPVnNbIEDLQAOUx
+ hOJYutRo9B4sks3kzuISR8bkub0mLgn9fJElH3VV90J7VxSf6+CQ4aBi4A5dU23O49DW
+ /1l4ooV5kgu68GB0gOZpcy0axAXa+Stj4oyEPF+dRUtKB6MSvWAAChXUIWsICQUBeBmB
+ okSQ==
+X-Gm-Message-State: AOAM531jGg0c3joK3a69ohyZDtU+oPUZnBQUp1RzdSgO1wgb6s2C2RzP
+ zZKBCFxi7ZIONOmHYyq4/3/bdo5MyOw=
+X-Google-Smtp-Source: ABdhPJxw+ZMDNFucu+X/cjfWdnLk532aw1ntMuxLZL1yXBwx/vNhaDbCd6gkfA5TvlcXctCBkx20DQ==
+X-Received: by 2002:a5d:6c67:: with SMTP id r7mr3131525wrz.391.1644070418174; 
+ Sat, 05 Feb 2022 06:13:38 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id 1sm5365412wry.52.2022.02.05.06.13.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Feb 2022 06:13:37 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  5 Feb 2022 15:11:32 +0100
+Message-Id: <20220205141132.419654-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20220204005610.897894-1-giulio.benetti@benettiengineering.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220204005610.897894-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] board/pc: fix build failure due to new
- genimage 15
+Subject: [Buildroot] [PATCH 1/1] package/libgeotiff: bump to version 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,49 +85,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Murat Demirten <mdemirten@yh.com.tr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Giulio,
+https://github.com/OSGeo/libgeotiff/releases/tag/1.7.0
 
-On 04/02/2022 01:56, Giulio Benetti wrote:
-> Actually genimage fails to create final image with:
-> ```
-> ERROR: hdimage(disk.img): partition [MBR] (offset 0x1b8, size 0x48) overlaps previous partition boot (offset 0x0, size 0x200)
-> ERROR: hdimage(disk.img): bootloaders, etc. that overlap with the partition table must declare the overlapping area as a hole.
-> ```
-> 
-> This is because genimage 15 is less permissive than before, so let's add
-> holes = {"(440; 512)"} to leave room to MBR.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/1865935249
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   board/pc/genimage-bios.cfg | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/board/pc/genimage-bios.cfg b/board/pc/genimage-bios.cfg
-> index 26d12d9ab3..54026f6527 100644
-> --- a/board/pc/genimage-bios.cfg
-> +++ b/board/pc/genimage-bios.cfg
-> @@ -7,6 +7,7 @@ image disk.img {
->   		image = "boot.img"
->   		offset = 0
->   		size = 512
-> +		holes = {"(440; 512)"}
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgeotiff/libgeotiff.hash | 2 +-
+ package/libgeotiff/libgeotiff.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-  Have you tested this change on an actual board (i.e. a PC :-)?
+diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
+index 51adcc2843..ec9fccb492 100644
+--- a/package/libgeotiff/libgeotiff.hash
++++ b/package/libgeotiff/libgeotiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9311017e5284cffb86f2c7b7a9df1fb5ebcdc61c30468fb2e6bca36e4272ebca  libgeotiff-1.6.0.tar.gz
++sha256  fc304d8839ca5947cfbeb63adb9d1aa47acef38fc6d6689e622926e672a99a7e  libgeotiff-1.7.0.tar.gz
+ sha256  6a22340b8293c50a34ce8e95589489bd3ec65bcb8b93e61cbda3daaafe498375  LICENSE
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
+index c6fb61b4a2..c49528565d 100644
+--- a/package/libgeotiff/libgeotiff.mk
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOTIFF_VERSION = 1.6.0
++LIBGEOTIFF_VERSION = 1.7.0
+ LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
+ LIBGEOTIFF_LICENSE = X11-style, public domain
+ LIBGEOTIFF_LICENSE_FILES = LICENSE
+-- 
+2.34.1
 
-  Regards,
-  Arnout
-
->   	}
->   
->   	partition grub {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
