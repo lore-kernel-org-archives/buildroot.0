@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91FD7C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 14:17:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DD7C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 14:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45740827D2;
-	Sat,  5 Feb 2022 14:17:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F74060C14;
+	Sat,  5 Feb 2022 14:33:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VhR9mKZEs2aQ; Sat,  5 Feb 2022 14:17:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nsU3HWDz3ROR; Sat,  5 Feb 2022 14:32:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E0B0827B5;
-	Sat,  5 Feb 2022 14:17:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B2B2D1BF45A
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:17:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CEFD60BE4;
+	Sat,  5 Feb 2022 14:32:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 329171BF33C
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D7EA404B6
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:17:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B65B40291
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:32:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MdoRuOfObQ1e for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 14:17:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m9k5MuYgfPaH for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 14:32:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A7A2040474
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 14:17:17 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id c19so1819768wrb.10
- for <buildroot@buildroot.org>; Sat, 05 Feb 2022 06:17:17 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E4AE240018
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 14:32:55 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id k1so95028wrd.8
+ for <buildroot@buildroot.org>; Sat, 05 Feb 2022 06:32:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=y7GbrrTiHmGnGX/jhXL9YOrgqHsQxw4JD/x35nkSJjI=;
- b=Q999ARH8ZFVdXuvboAxmFkCKAVWSyz1CuRGhiWz8tng7uOfDb5iLsG3lgA1Y0Ud3w2
- eg+4+92igsTTHm+gXoMlO5+MYewPYKZVqeesNdTP/EdjBgp+A0KixdRq9TqWWMQZpfQN
- SjieCeZZS9cmCcfl3/Um1Rk3zUEN0UV7CCPYVnvBxh/4uVaNa+sBmTzGLn4+xcQaxMoB
- XMpAl5z4f9diX10i/e7hAPxTyS2SVqxDmC8ipn1ksXKdHwCoD21FcMLOfTgyqCJBVEvn
- JPqEwiPecew1YImvQRWLqWlokn/NvxcPlJKhw0k8Rl6y3lTd2MS7/KOWeU1VMl/R0h1K
- WQhg==
+ bh=4kJCy+s9zDES3fSk/ugZMo1r5yHSjxj3T/Im/mtiyqo=;
+ b=CO4j5x0NP/7qEzY+r//AXpmOMInFvu04NJtYP/r1BiN+EKze+Y+0/iEgyAZPY9uLR8
+ tApy97SClA96v7h0Zc+0R6URgQOSpSJyNvH9KzJ6AshnvecbbfqtTM3Ac1pT1lqBG6kf
+ brvPS4ZwjENr6mRfy5GzNU5gbWUec0g0WtgCckBZ5jHg/GQDUzebEYt0SgymEl5tPh2Y
+ ejPmR9ogplexGfhb553yHk3xXiJWtzj/i2G3havNRMSqvQ7j1PCNMONas4EfSEAZEt0h
+ knsxf3BlHmRQoYGJlKLf9CKK3o8ppJM79ibj49VpfnepyJH2IR+n1wBfvwVMwAduKtl8
+ MaVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=y7GbrrTiHmGnGX/jhXL9YOrgqHsQxw4JD/x35nkSJjI=;
- b=zgkEtmWUh42rWQLSoa8+5pOnDRP923dn2PYJTAk23AHHpFeLSPiXsXqkQKpCR7cqW7
- 1RidXXh96Aw1YRpXLwQK8dwHtVpEqHZaNputnA7v7idP3//XgbDBIWkEpOr4keEBW96d
- BkPCwsckpi7Sj4UWXIRHg1oddphBUnDTE/35nvrwv6UjhHifKbUmnOlWqGVyVwAKlWdS
- FVkORO78jNV0SUVCenErbb/uxxhH5KQj9FhUTna3HUX1IXyAO7v3yGxPjDmsUuP6fE8z
- S7fW3HTr6BusBt1Jez87O/ntkIjOfFBwDd2P7sgr6xnDL2xvmqImh+rgqIYamZy6o42W
- nfcA==
-X-Gm-Message-State: AOAM531IBYpXhvSdjW53tedobaDm4/2pGoemdvrJzZy+VRk8T11E77e2
- 364ucUPjOmlwR+vHvXPoUxNInsPaElI=
-X-Google-Smtp-Source: ABdhPJwYl3xdwblJmPuqNCj1k72P9zwR+sB8HgMxDE+EW37ZjybRYEf3HoknoUQ5Dv6j1KZWJ7wM1w==
-X-Received: by 2002:a5d:6486:: with SMTP id o6mr3021302wri.454.1644070635770; 
- Sat, 05 Feb 2022 06:17:15 -0800 (PST)
+ bh=4kJCy+s9zDES3fSk/ugZMo1r5yHSjxj3T/Im/mtiyqo=;
+ b=hagUmb8WchzcpSKiFwCIzAl0PI8IwEtqm9YCfzs/1pc33V6GJQW4cbkcPhRnoFYQ2x
+ 28Tc6fv2GlarJBFNHhwNmjNP713LleYyd6+e4dGeM19YFmJQasz/20LNGSgkMyc/ktX+
+ +O+i2FwCKYEq39rT9Kp0d3cRnJQxOSVl9S4WFiE022Y8lQUegbBY9K7O0U3bHbU5f4C5
+ InmM0ICyHOBbUGGjg0hZN9Up+UP8qBjoXtFy+TdHaYuISRrPfmT5hshMtrQMZl2ztJfn
+ Dwzg/f9A0jHFxFRtkxi5QBJaxyzo0i6JCNxYMs5Zt9wKh4JoFLStMP0BHJytsrMtNsmA
+ BNmg==
+X-Gm-Message-State: AOAM533Vvm/YurmwbolZwSXQKlZHVWGRfQLsRSLpJJBx37dYHu9JWo+r
+ kx1Az5ZbW/T2VByTC5kdLH1fSiIHxPo=
+X-Google-Smtp-Source: ABdhPJyp/7BW8kg5ddP9M925vabPEfF21z4gg6yQxfuXXL/KNYyUobHlqaKmUwK1kMHF4SaZXl44ww==
+X-Received: by 2002:a5d:6489:: with SMTP id o9mr3088906wri.628.1644071573811; 
+ Sat, 05 Feb 2022 06:32:53 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id 11sm5567552wrb.30.2022.02.05.06.17.15
+ by smtp.gmail.com with ESMTPSA id n2sm5487609wrw.63.2022.02.05.06.32.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 05 Feb 2022 06:17:15 -0800 (PST)
+ Sat, 05 Feb 2022 06:32:53 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  5 Feb 2022 15:14:48 +0100
-Message-Id: <20220205141448.420553-1-fontaine.fabrice@gmail.com>
+Date: Sat,  5 Feb 2022 15:30:43 +0100
+Message-Id: <20220205143043.427517-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/tiff: fix CVE-2022-22844
+Subject: [Buildroot] [PATCH 1/1] package/cryptopp: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,87 +85,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julian Scheel <julian@jusst.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LibTIFF 4.3.0 has an out-of-bounds read in _TIFFmemcpy in tif_unix.c in
-certain situations involving a custom tag and 0x0200 as the second word
-of the DE field.
+Fix the following build failure raised since commit
+bf4cf9de833e2d571d98d1ca935ea08a3468e463:
+
+no -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1 -fPIC -DCRYPTOPP_DISABLE_ARM_NEON -c cryptlib.cpp
+make[1]: no: Command not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fa90b416a219a512a482e7dc63e2d72b184307c7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...lobal-buffer-overflow-for-ASCII-tags.patch | 43 +++++++++++++++++++
- package/tiff/tiff.mk                          |  4 ++
- 2 files changed, 47 insertions(+)
- create mode 100644 package/tiff/0001-tiffset-fix-global-buffer-overflow-for-ASCII-tags.patch
+ package/cryptopp/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/tiff/0001-tiffset-fix-global-buffer-overflow-for-ASCII-tags.patch b/package/tiff/0001-tiffset-fix-global-buffer-overflow-for-ASCII-tags.patch
-new file mode 100644
-index 0000000000..ba1487782e
---- /dev/null
-+++ b/package/tiff/0001-tiffset-fix-global-buffer-overflow-for-ASCII-tags.patch
-@@ -0,0 +1,43 @@
-+From 03047a26952a82daaa0792957ce211e0aa51bc64 Mon Sep 17 00:00:00 2001
-+From: 4ugustus <wangdw.augustus@qq.com>
-+Date: Tue, 25 Jan 2022 16:25:28 +0000
-+Subject: [PATCH] tiffset: fix global-buffer-overflow for ASCII tags where
-+ count is required (fixes #355)
-+
-+[Retrieved from:
-+https://gitlab.com/libtiff/libtiff/-/commit/03047a26952a82daaa0792957ce211e0aa51bc64]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/tiffset.c | 16 +++++++++++++---
-+ 1 file changed, 13 insertions(+), 3 deletions(-)
-+
-+diff --git a/tools/tiffset.c b/tools/tiffset.c
-+index 8c9e23c5..e7a88c09 100644
-+--- a/tools/tiffset.c
-++++ b/tools/tiffset.c
-+@@ -146,9 +146,19 @@ main(int argc, char* argv[])
-+ 
-+             arg_index++;
-+             if (TIFFFieldDataType(fip) == TIFF_ASCII) {
-+-                if (TIFFSetField(tiff, TIFFFieldTag(fip), argv[arg_index]) != 1)
-+-                    fprintf( stderr, "Failed to set %s=%s\n",
-+-                             TIFFFieldName(fip), argv[arg_index] );
-++                if(TIFFFieldPassCount( fip )) {
-++                    size_t len;
-++                    len = strlen(argv[arg_index]) + 1;
-++                    if (len > UINT16_MAX || TIFFSetField(tiff, TIFFFieldTag(fip),
-++                            (uint16_t)len, argv[arg_index]) != 1)
-++                        fprintf( stderr, "Failed to set %s=%s\n",
-++                            TIFFFieldName(fip), argv[arg_index] );
-++                } else {
-++                    if (TIFFSetField(tiff, TIFFFieldTag(fip),
-++                            argv[arg_index]) != 1)
-++                        fprintf( stderr, "Failed to set %s=%s\n",
-++                            TIFFFieldName(fip), argv[arg_index] );
-++                }
-+             } else if (TIFFFieldWriteCount(fip) > 0
-+ 		       || TIFFFieldWriteCount(fip) == TIFF_VARIABLE) {
-+                 int     ret = 1;
-+-- 
-+GitLab
-+
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index f6c6de12c5..f80ab7ac55 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -11,6 +11,10 @@ TIFF_LICENSE_FILES = COPYRIGHT
- TIFF_CPE_ID_VENDOR = libtiff
- TIFF_CPE_ID_PRODUCT = libtiff
- TIFF_INSTALL_STAGING = YES
-+
-+# 0001-tiffset-fix-global-buffer-overflow-for-ASCII-tags.patch
-+TIFF_IGNORE_CVES += CVE-2022-22844
-+
- TIFF_CONF_OPTS = \
- 	--disable-cxx \
- 	--without-x
+diff --git a/package/cryptopp/Config.in b/package/cryptopp/Config.in
+index feb945db2f..1648a73f9d 100644
+--- a/package/cryptopp/Config.in
++++ b/package/cryptopp/Config.in
+@@ -1,9 +1,11 @@
+ config BR2_PACKAGE_CRYPTOPP
+ 	bool "cryptopp"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  A free C++ class library of cryptographic schemes
+ 
+-comment "cryptopp needs a toolchain w/ dynamic library, wchar"
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
++comment "cryptopp needs a toolchain w/ C++, dynamic library, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_USE_WCHAR
 -- 
 2.34.1
 
