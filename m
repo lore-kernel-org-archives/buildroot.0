@@ -1,62 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBDCC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 15:36:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DACFC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 16:05:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D496E404E7;
-	Sat,  5 Feb 2022 15:36:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDDC881369;
+	Sat,  5 Feb 2022 16:05:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zn1oyqhlLWgh; Sat,  5 Feb 2022 15:36:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D447140132;
-	Sat,  5 Feb 2022 15:36:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F20931BF39A
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:36:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED54082656
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:36:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8uTT8o4St4un for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 15:36:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp1.osuosl.org (Postfix) with ESMTP id 556AE81D67
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 15:36:32 +0000 (UTC)
-Received: from smtpclient.apple ([151.82.206.129])
- by Aruba Outgoing Smtp  with ESMTPA
- id GN6znaVP8DzPJGN6znEQLR; Sat, 05 Feb 2022 16:36:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644075390; bh=mXlTuaXR8RX09jZ+XM6ZUB9ErwnCJN6oXJboLaFlIPM=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=C/7JFfc0MYwOHZYg47pg7xt76VMPJbp+3kiJCljLBoPgBjeLXhF4VQMCFKNFfgjLP
- Khlc5pV1LTscdO4NOUZUCfgv3LQm/V5hFXRLzAGLppnN32U5VBpYwrATO6CSU9QLwW
- 1w3Vf18+ZeLi4NAglQT1rvR2xR7TPOpfTzf3Rx6Iim7Wn1WBB+smOx3t0nveUl9jEE
- NmQOSYSA16ccbBgkDhMwFPGpjtXhvylzbHlPEy0NxfT/FTDV168y9Bs6HnjL4F/WHV
- ME2MdZFebmhVUjijA2q2FpmFTw2K9VtHEfJaT/wxok7GxkltPDw9ezW//AcfSTob3e
- Us+yb4uF/NQUA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Sat, 5 Feb 2022 16:36:29 +0100
-Message-Id: <34C01EB2-BB12-4DE4-BC53-0141B5DF491D@benettiengineering.com>
-References: <98670320-83fa-c6e9-9bc4-aa30d9deb6ff@mind.be>
-In-Reply-To: <98670320-83fa-c6e9-9bc4-aa30d9deb6ff@mind.be>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfOwBqFIl4Kh6DQlcr2GTrWkVaUCttN5dTKRw+ae4zE2Z2+xM3UYoSHJr9kGlC4TzRbrKZDXVQ3J4ur3HolRcOb1Ne7DZP2UzdCTMHzrYgbelhPGDo+rr
- Z688kDOsIwTddWNUPIJH7U64SPWCogoqY8t0Ahhqy/AQY23k1SChun4byypJeBwz9h+1/EO/ydyj1aXKvxKPKcfeJL9QcW0Pz4ld/jX6Apn5T6Jp9iTH4alL
-Subject: Re: [Buildroot] [PATCH] board/pc: fix build failure due to new
- genimage 15
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OKWEIt0G0QX4; Sat,  5 Feb 2022 16:05:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 254DC81300;
+	Sat,  5 Feb 2022 16:05:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 245BD1BF429
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 16:05:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 205746080A
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 16:05:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rbIQ4WBpyH9Z for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 16:05:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
+ [IPv6:2607:f8b0:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6D360607F9
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 16:05:17 +0000 (UTC)
+Received: by mail-pl1-x633.google.com with SMTP id c3so7746787pls.5
+ for <buildroot@buildroot.org>; Sat, 05 Feb 2022 08:05:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bVN2N6ho91N3IX/zpnPrIwheeUdAqZ1m8rcqGlR14Ic=;
+ b=WVaZB6vkCy340swvG9T251yRk1kRfN59SC9cGTW/Col4XbajFdvcK7aYh3q2KIKgmq
+ YY267yz5+w7ihlcha0anzK8fI4YfC3ZdHgnLmHv/VHYhq9D99G0L3DMkr0WbIDpcs56/
+ eRmKlmLt11++U4eQ/83+sG+gcVFWvRkukxjP9MBvbduZr5YjyOnNDVbXqPMKtpcZTRTK
+ 2Dy750wOG/eUXdprGTRGtdnB0P5e2zvNCSY1kOhtkf6QRg+FCxwacZ3wWJUpMI1rM6A5
+ qJHcaCBcovNITw4HMUA1jPfT9S8V0NElNSNayTzKK6J+Z7oss5zCapXeg+Hbq0Vv1aOM
+ GHXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bVN2N6ho91N3IX/zpnPrIwheeUdAqZ1m8rcqGlR14Ic=;
+ b=ogV0IXn1ZJUdFBrqrBR4R2nOW3f+94BOeMZwPDr47Ndogsv05AEfflb0PIDpLQ4bJv
+ hVWefWnEQShb1xJ8J+fh4ZPnvuMQuS8+hkS04xh5mmBucrK2VEyBTp+bOdC5qAB2on5w
+ E90BEOnQXWKR960OuTtuC74oSuuApWkKDxFxsKVqj1W4UB7nR6X7bzGnT5xIHm12TYOW
+ doq9HCKWJfIfqFwYIHCpEMgPwGQkELUQw6YlSTeoheTnN1uB9Qm2HH+AZEMUtvyGUX5J
+ o3ufkaWkZug6Npev7dw2LxGlGne4ICLoC0cSCyTRVwt3RKjnBvYYyPTbyWcWyRnILshf
+ W1XA==
+X-Gm-Message-State: AOAM533zuH+pAMdoWe4+6rebqivJI55cCtC/0FXDfrg8NhAyyoOdlucm
+ +OknUwbKc2tyoa0ClPCoQAOjjg/ferRVhA==
+X-Google-Smtp-Source: ABdhPJxnN23LpgwFBOOS7g6xHOf+j8/ltRnbXO3H9C6KxbfFnSt1stlGEKduiiNPRgBAyZj7qHUwrQ==
+X-Received: by 2002:a17:90b:4c43:: with SMTP id
+ np3mr9253180pjb.88.1644077116439; 
+ Sat, 05 Feb 2022 08:05:16 -0800 (PST)
+Received: from solsona.hitronhub.home (S0106f81d0f601923.cg.shawcable.net.
+ [174.0.44.90])
+ by smtp.gmail.com with ESMTPSA id j12sm2046256pfu.79.2022.02.05.08.05.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Feb 2022 08:05:16 -0800 (PST)
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  5 Feb 2022 09:05:11 -0700
+Message-Id: <20220205160511.4602-1-peter.macleod.thompson@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] bump version to 2.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,43 +86,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: PeterThompson <peter.macleod.thompson@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKPiBJbCBnaW9ybm8gNSBmZWIgMjAyMiwgYWxsZSBvcmUgMTU6MTEsIEFybm91
-dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4gaGEgc2NyaXR0bzoKPiAKPiDvu78gSGkg
-R2l1bGlvLAo+IAo+PiBPbiAwNC8wMi8yMDIyIDAxOjU2LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToK
-Pj4gQWN0dWFsbHkgZ2VuaW1hZ2UgZmFpbHMgdG8gY3JlYXRlIGZpbmFsIGltYWdlIHdpdGg6Cj4+
-IGBgYAo+PiBFUlJPUjogaGRpbWFnZShkaXNrLmltZyk6IHBhcnRpdGlvbiBbTUJSXSAob2Zmc2V0
-IDB4MWI4LCBzaXplIDB4NDgpIG92ZXJsYXBzIHByZXZpb3VzIHBhcnRpdGlvbiBib290IChvZmZz
-ZXQgMHgwLCBzaXplIDB4MjAwKQo+PiBFUlJPUjogaGRpbWFnZShkaXNrLmltZyk6IGJvb3Rsb2Fk
-ZXJzLCBldGMuIHRoYXQgb3ZlcmxhcCB3aXRoIHRoZSBwYXJ0aXRpb24gdGFibGUgbXVzdCBkZWNs
-YXJlIHRoZSBvdmVybGFwcGluZyBhcmVhIGFzIGEgaG9sZS4KPj4gYGBgCj4+IFRoaXMgaXMgYmVj
-YXVzZSBnZW5pbWFnZSAxNSBpcyBsZXNzIHBlcm1pc3NpdmUgdGhhbiBiZWZvcmUsIHNvIGxldCdz
-IGFkZAo+PiBob2xlcyA9IHsiKDQ0MDsgNTEyKSJ9IHRvIGxlYXZlIHJvb20gdG8gTUJSLgo+PiBG
-aXhlczoKPj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9i
-cy8xODY1OTM1MjQ5Cj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVu
-ZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+PiAtLS0KPj4gIGJvYXJkL3BjL2dlbmltYWdl
-LWJpb3MuY2ZnIHwgMSArCj4+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPj4gZGlm
-ZiAtLWdpdCBhL2JvYXJkL3BjL2dlbmltYWdlLWJpb3MuY2ZnIGIvYm9hcmQvcGMvZ2VuaW1hZ2Ut
-Ymlvcy5jZmcKPj4gaW5kZXggMjZkMTJkOWFiMy4uNTQwMjZmNjUyNyAxMDA2NDQKPj4gLS0tIGEv
-Ym9hcmQvcGMvZ2VuaW1hZ2UtYmlvcy5jZmcKPj4gKysrIGIvYm9hcmQvcGMvZ2VuaW1hZ2UtYmlv
-cy5jZmcKPj4gQEAgLTcsNiArNyw3IEBAIGltYWdlIGRpc2suaW1nIHsKPj4gICAgICAgICAgaW1h
-Z2UgPSAiYm9vdC5pbWciCj4+ICAgICAgICAgIG9mZnNldCA9IDAKPj4gICAgICAgICAgc2l6ZSA9
-IDUxMgo+PiArICAgICAgICBob2xlcyA9IHsiKDQ0MDsgNTEyKSJ9Cj4gCj4gSGF2ZSB5b3UgdGVz
-dGVkIHRoaXMgY2hhbmdlIG9uIGFuIGFjdHVhbCBib2FyZCAoaS5lLiBhIFBDIDotKT8KCknigJl2
-ZSB0ZXN0ZWQgaXQgd2l0aCBxZW11IGFuZCBpdCBib290cyB0aGUga2VybmVsIGNvcnJlY3RseSh0
-aGF0IGlzIGluIHJvb3RmcyksIG9ubHkgdGhpbmcgaXMgdGhhdCBpdCBjYW7igJl0IG1vdW50IHRo
-ZSByb290ZnMgYW5kIEkgZG9u4oCZdCB1bmRlcnN0YW5kIHdoeS4KSSB3YW50ZWQgdG8gYXNrIGFi
-b3V0IHRoaXMgYnV0IEnigJl2ZSBnb3QgbG9zdCBhbW9uZyBhbGwgdGhlIG90aGVyIHBhdGNoZXMg
-Oi0pCgpDb3VsZCBzb21lb25lIGRvdWJsZSBjaGVjayBpZiBpdCBtb3VudHM/CgpCZXN0IHJlZ2Fy
-ZHMKR2l1bGlvCgo+IAo+IFJlZ2FyZHMsCj4gQXJub3V0Cj4gCj4+ICAgICAgfQo+PiAgICAgICAg
-cGFydGl0aW9uIGdydWIgewo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+From: PeterThompson <peter.macleod.thompson@gmail.com>
+
+Signed-off-by: PeterThompson <peter.macleod.thompson@gmail.com>
+---
+ package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+ package/sdl2_ttf/sdl2_ttf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
+index 16459e4a59..a490b002b6 100644
+--- a/package/sdl2_ttf/sdl2_ttf.hash
++++ b/package/sdl2_ttf/sdl2_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a9eceb1ad88c1f1545cd7bd28e7cbc0b2c14191d40238f531a15b01b1b22cd33  SDL2_ttf-2.0.15.tar.gz
+-sha256  f6370809c9f644760920d9945c5be07aed17664975f2e4741013d4d9a2ec696f  COPYING.txt
++sha256  7234eb8883514e019e7747c703e4a774575b18d435c22a4a29d068cb768a2251  SDL2_ttf-2.0.18.tar.gz
++sha256  e211dfe7e2c36e64048be886fe3f2bbba8732ce4dd77b596a355d3abbec775a4  COPYING.txt
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 326cb99366..1fe7c0a075 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_TTF_VERSION = 2.0.15
++SDL2_TTF_VERSION = 2.0.18
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+ SDL2_TTF_LICENSE = Zlib
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
