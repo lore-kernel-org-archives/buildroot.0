@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0CB9C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ACD0C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E38A60C21;
-	Sat,  5 Feb 2022 22:56:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45D79408A0;
+	Sat,  5 Feb 2022 22:56:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W06bSHqZhAtU; Sat,  5 Feb 2022 22:56:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K9mZPzugKH-7; Sat,  5 Feb 2022 22:56:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 535BC60AC6;
-	Sat,  5 Feb 2022 22:56:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 644541BF2A5
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82C2B4088D;
+	Sat,  5 Feb 2022 22:56:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B7601BF2A5
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2DAB60806
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BAB0817EB
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ssUrysGkeD06 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xo6Kp72vNIKe for <buildroot@lists.busybox.net>;
  Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF91160AA5
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC8A581801
  for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CF6E282AA7; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
+ id BE1AC82AE5; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 23:45:19 +0100
+Date: Sat, 5 Feb 2022 23:41:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f9a5659023c66fc166de28fd39a6c97a9490667
-X-Git-Newrev: d32e062f1cc709893ed5893ebae736a54c36eef9
+X-Git-Oldrev: 5eff46a6c97203e7874edc931c4180f606f08275
+X-Git-Newrev: 1c667a11400e51618a4b38d288816cbb3ee7478f
 X-Patchwork-Hint: ignore
-Message-Id: <20220205224746.CF6E282AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua: use Lua 5.4 as default
+Message-Id: <20220205224746.BE1AC82AE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/boost: enable context/coroutine
+ for arm variants
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +59,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d32e062f1cc709893ed5893ebae736a54c36eef9
+commit: https://git.buildroot.net/buildroot/commit/?id=1c667a11400e51618a4b38d288816cbb3ee7478f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lua-sdl2 is not available on Lua 5.4, so update its test to use Lua 5.3
-instead.
+Add boost context support for aarch64/aarch64_be.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Context support for ARM is only available in the AAPCS ABI, so switch to
+AAPCS ABI for all ARM variants.
+
+While we're at it, update the URL about the context architecture support
+to the one corresponding to the current version of boost.
+
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+[Arnout: update URL, extend commit message]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lua/Config.in                          | 2 +-
- support/testing/tests/package/test_lua.py      | 4 ++--
- support/testing/tests/package/test_lua_sdl2.py | 1 +
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/boost/Config.in | 3 ++-
+ package/boost/boost.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 5d4cee5d5b..309dd6eec2 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 1c405a36c3..2c458bf88a 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -68,12 +68,13 @@ config BR2_PACKAGE_BOOST_CONTAINER
+ 	  Standard library containers and extensions.
  
- choice
- 	prompt "Lua Version"
--	default BR2_PACKAGE_LUA_5_3
-+	default BR2_PACKAGE_LUA_5_4
- 	help
- 	  Select the version of Lua API/ABI you wish to use.
+ # see
+-# http://www.boost.org/doc/libs/1_59_0/libs/context/doc/html/context/architectures.html
++# http://www.boost.org/doc/libs/1_78_0/libs/context/doc/html/context/architectures.html
+ # for the list of supported architectures. Sparc pretends to be
+ # supported, but it doesn't build.
+ config BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	bool
+ 	default y if ((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM)
++	default y if (BR2_aarch64 || BR2_aarch64_be)
+ 	default y if BR2_i386
+ 	default y if BR2_mips
+ 	default y if BR2_mipsel
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 2d2a8fb311..b6681b0ad3 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -85,7 +85,7 @@ HOST_BOOST_OPTS += --no-cmake-config toolset=gcc threading=multi \
  
-diff --git a/support/testing/tests/package/test_lua.py b/support/testing/tests/package/test_lua.py
-index 573ae01005..9703dffbd4 100644
---- a/support/testing/tests/package/test_lua.py
-+++ b/support/testing/tests/package/test_lua.py
-@@ -42,8 +42,8 @@ class TestLua(TestLuaBase):
- 
-     def test_run(self):
-         self.login()
--        self.version_test('Lua 5.3')
--        self.g_version_test('Lua 5.3')
-+        self.version_test('Lua 5.4')
-+        self.g_version_test('Lua 5.4')
- 
- 
- class TestLuajit(TestLuaBase):
-diff --git a/support/testing/tests/package/test_lua_sdl2.py b/support/testing/tests/package/test_lua_sdl2.py
-index 22c4087f5d..b9aad15f45 100644
---- a/support/testing/tests/package/test_lua_sdl2.py
-+++ b/support/testing/tests/package/test_lua_sdl2.py
-@@ -5,6 +5,7 @@ class TestLuaLuaSDL2(TestLuaBase):
-     config = TestLuaBase.config + \
-         """
-         BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_5_3=y
-         BR2_PACKAGE_LUA_SDL2=y
-         BR2_PACKAGE_SDL2_IMAGE=y
-         BR2_PACKAGE_SDL2_MIXER=y
+ ifeq ($(BR2_MIPS_OABI32),y)
+ BOOST_ABI = o32
+-else ifeq ($(BR2_arm),y)
++else ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be),y)
+ BOOST_ABI = aapcs
+ else
+ BOOST_ABI = sysv
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
