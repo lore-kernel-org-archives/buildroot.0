@@ -1,57 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D40BAC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 18:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29EEBC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 18:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5262D60B70;
-	Sat,  5 Feb 2022 18:08:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B58458134E;
+	Sat,  5 Feb 2022 18:08:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jn0EDchh3i9O; Sat,  5 Feb 2022 18:08:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E051812E6;
+	Sat,  5 Feb 2022 18:08:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2114E1BF95F
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:08:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E01060B66
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:08:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x4_Dyeni-IKk; Sat,  5 Feb 2022 18:08:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 622CF60758;
-	Sat,  5 Feb 2022 18:08:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B467A1BF41B
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:08:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B06C7401EF
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:08:22 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id It2XFzV9psSu for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 18:08:21 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rX-kd7Io8OXm for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 18:08:27 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 83206401EB
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 18:08:21 +0000 (UTC)
-Received: from fwd82.dcpf.telekom.de (fwd82.aul.t-online.de [10.223.144.108])
- by mailout01.t-online.de (Postfix) with SMTP id B99703CB5;
- Sat,  5 Feb 2022 19:08:18 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd82.t-online.de
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BCF8260758
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 18:08:27 +0000 (UTC)
+Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
+ by mailout06.t-online.de (Postfix) with SMTP id 85D955084;
+ Sat,  5 Feb 2022 19:08:25 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd88.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nGPTu-1mFVjt0; Sat, 5 Feb 2022 19:08:18 +0100
+ esmtp id 1nGPTt-2KTpCr0; Sat, 5 Feb 2022 19:08:18 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44586)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nGPTt-0002vI-L8;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nGPTt-0002vI-Ff;
  Sat, 05 Feb 2022 19:08:17 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  5 Feb 2022 19:08:16 +0100
-Message-Id: <20220205180817.2103343-2-bernd.kuhls@t-online.de>
+Date: Sat,  5 Feb 2022 19:08:15 +0100
+Message-Id: <20220205180817.2103343-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220205180817.2103343-1-bernd.kuhls@t-online.de>
-References: <20220205180817.2103343-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1644084498-0000B8A1-2174FD74/0/0 CLEAN NORMAL
-X-TOI-MSGID: a5ab090c-70c9-4ba8-97e7-43f609a9dcd8
-Subject: [Buildroot] [PATCH 2/3] package/dht: new package
+X-TOI-EXPURGATEID: 150726::1644084498-00013579-8D19FD75/0/0 CLEAN NORMAL
+X-TOI-MSGID: cc713386-6011-49c2-a7b3-56e202e82c06
+Subject: [Buildroot] [PATCH 1/3] package/libdeflate: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,13 +68,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Needed for upcoming version bump of transmission.
+Needed for upcoming version bump of transmission:
+https://github.com/transmission/transmission/commit/d8d765c59551b97ffb10bedb6f66133a54954a0e
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 Build test using this defconfig
 
-BR2_PACKAGE_DHT=y
+BR2_PACKAGE_LIBDEFLATE=y
 
 was successful:
 
@@ -127,155 +126,159 @@ was successful:
                           sourcery-nios2 [45/45]: OK
 45 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/dht/0001-cmake.patch | 67 ++++++++++++++++++++++++++++++++++++
- package/dht/Config.in        |  6 ++++
- package/dht/dht.hash         |  3 ++
- package/dht/dht.mk           | 13 +++++++
- 6 files changed, 91 insertions(+)
- create mode 100644 package/dht/0001-cmake.patch
- create mode 100644 package/dht/Config.in
- create mode 100644 package/dht/dht.hash
- create mode 100644 package/dht/dht.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-fix-crc32-build-on-arm.patch         | 49 +++++++++++++++++++
+ package/libdeflate/Config.in                  |  7 +++
+ package/libdeflate/libdeflate.hash            |  3 ++
+ package/libdeflate/libdeflate.mk              | 34 +++++++++++++
+ 6 files changed, 95 insertions(+)
+ create mode 100644 package/libdeflate/0001-fix-crc32-build-on-arm.patch
+ create mode 100644 package/libdeflate/Config.in
+ create mode 100644 package/libdeflate/libdeflate.hash
+ create mode 100644 package/libdeflate/libdeflate.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 70021ef823..c4084c5545 100644
+index a1ec9a091e..70021ef823 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -325,6 +325,7 @@ F:	package/bluez-tools/
- F:	package/boinc/
- F:	package/clamav/
- F:	package/dav1d/
-+F:	package/dht/
- F:	package/dovecot/
- F:	package/dovecot-pigeonhole/
- F:	package/dtv-scan-tables/
+@@ -364,6 +364,7 @@ F:	package/libcec/
+ F:	package/libcodec2/
+ F:	package/libcrossguid/
+ F:	package/libdcadec/
++F:	package/libdeflate/
+ F:	package/libdrm/
+ F:	package/libdvbcsa/
+ F:	package/libdvdcss/
 diff --git a/package/Config.in b/package/Config.in
-index 52a8ff8fe3..990ee19665 100644
+index 5e6fed6dec..52a8ff8fe3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1798,6 +1798,7 @@ menu "Networking"
- 	source "package/daq/Config.in"
- 	source "package/daq3/Config.in"
- 	source "package/davici/Config.in"
-+	source "package/dht/Config.in"
- 	source "package/enet/Config.in"
- 	source "package/filemq/Config.in"
- 	source "package/flickcurl/Config.in"
-diff --git a/package/dht/0001-cmake.patch b/package/dht/0001-cmake.patch
+@@ -1393,6 +1393,7 @@ endmenu
+ 
+ menu "Compression and decompression"
+ 	source "package/libarchive/Config.in"
++	source "package/libdeflate/Config.in"
+ 	source "package/libmspack/Config.in"
+ 	source "package/libsquish/Config.in"
+ 	source "package/libzip/Config.in"
+diff --git a/package/libdeflate/0001-fix-crc32-build-on-arm.patch b/package/libdeflate/0001-fix-crc32-build-on-arm.patch
 new file mode 100644
-index 0000000000..bbac639044
+index 0000000000..1ea3d6d564
 --- /dev/null
-+++ b/package/dht/0001-cmake.patch
-@@ -0,0 +1,67 @@
-+From 25e12bb39eea3d433602de6390796fec8a8f3620 Mon Sep 17 00:00:00 2001
-+From: Mike Gelfand <mikedld@mikedld.com>
-+Date: Sun, 1 Jan 2017 16:23:21 +0300
-+Subject: [PATCH] Remove Makefile, add Makefile.am and CMakeLists.txt
++++ b/package/libdeflate/0001-fix-crc32-build-on-arm.patch
+@@ -0,0 +1,49 @@
++From ce096af0f9f9c76ba98408daeee45c4f456be602 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 5 Feb 2022 14:32:18 +0100
++Subject: [PATCH] fix crc32 build on arm
 +
-+Downloaded from transmission repo:
-+https://github.com/transmission/dht/commit/25e12bb39eea3d433602de6390796fec8a8f3620
++Fixes build error
 +
-+Upstream status: rejected (https://github.com/jech/dht/pull/19)
++/tmp/ccAwbDTP.s: Assembler messages:
++/tmp/ccAwbDTP.s:140: Error: selected processor does not support `crc32b r0,r0,r3' in ARM mode
++/tmp/ccAwbDTP.s:146: Error: selected processor does not support `crc32w r3,r0,r3' in ARM mode
++/tmp/ccAwbDTP.s:148: Error: selected processor does not support `crc32w r3,r3,r4' in ARM mode
++/tmp/ccAwbDTP.s:150: Error: selected processor does not support `crc32w r3,r3,r4' in ARM mode
++/tmp/ccAwbDTP.s:152: Error: selected processor does not support `crc32w r3,r3,r0' in ARM mode
++/tmp/ccAwbDTP.s:154: Error: selected processor does not support `crc32w r3,r3,r4' in ARM mode
++/tmp/ccAwbDTP.s:156: Error: selected processor does not support `crc32w r3,r3,r0' in ARM mode
++/tmp/ccAwbDTP.s:158: Error: selected processor does not support `crc32w r3,r3,r4' in ARM mode
++/tmp/ccAwbDTP.s:159: Error: selected processor does not support `crc32w r0,r3,r0' in ARM mode
++/tmp/ccAwbDTP.s:165: Error: selected processor does not support `crc32w lr,r0,lr' in ARM mode
++/tmp/ccAwbDTP.s:166: Error: selected processor does not support `crc32w r0,lr,r4' in ARM mode
++/tmp/ccAwbDTP.s:170: Error: selected processor does not support `crc32b r0,r0,r3' in ARM mode
++/tmp/ccAwbDTP.s:177: Error: selected processor does not support `crc32b r0,r0,r3' in ARM mode
++
++Patch sent upstream as RFC:
++https://github.com/ebiggers/libdeflate/pull/163
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ CMakeLists.txt |  9 +++++++++
-+ Makefile       |  9 ---------
-+ Makefile.am    | 11 +++++++++++
-+ 3 files changed, 20 insertions(+), 9 deletions(-)
-+ create mode 100644 CMakeLists.txt
-+ delete mode 100644 Makefile
-+ create mode 100644 Makefile.am
++ common/compiler_gcc.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+new file mode 100644
-+index 0000000..6d4aa99
-+--- /dev/null
-++++ b/CMakeLists.txt
-+@@ -0,0 +1,9 @@
-++cmake_minimum_required(VERSION 2.8)
-++project(dht C)
-++
-++add_library(${PROJECT_NAME} STATIC
-++    dht.c
-++)
-++
-++install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-++install(FILES dht.h DESTINATION include/dht)
-+diff --git a/Makefile b/Makefile
-+deleted file mode 100644
-+index e012945..0000000
-+--- a/Makefile
-++++ /dev/null
-+@@ -1,9 +0,0 @@
-+-CFLAGS = -g -Wall
-+-LDLIBS = -lcrypt
-+-
-+-dht-example: dht-example.o dht.o
-+-
-+-all: dht-example
-+-
-+-clean:
-+-	-rm -f dht-example dht-example.o dht-example.id dht.o *~ core
-+diff --git a/Makefile.am b/Makefile.am
-+new file mode 100644
-+index 0000000..2dba648
-+--- /dev/null
-++++ b/Makefile.am
-+@@ -0,0 +1,11 @@
-++AM_CFLAGS = @PTHREAD_CFLAGS@
-++
-++noinst_LIBRARIES = libdht.a
-++libdht_a_SOURCES = dht.c
-++libdht_a_DEPENDENCIES = $(builddir)/include/dht
-++noinst_HEADERS = dht.h
-++EXTRA_DIST = CHANGES CMakeLists.txt dht-example.c LICENCE README
-++
-++$(builddir)/include/dht:
-++	$(MKDIR_P) $(builddir)/include
-++	(cd $(builddir)/include && $(LN_S) $(abs_srcdir) dht)
-diff --git a/package/dht/Config.in b/package/dht/Config.in
++diff --git a/common/compiler_gcc.h b/common/compiler_gcc.h
++index 2a45b05..ea16c2d 100644
++--- a/common/compiler_gcc.h
+++++ b/common/compiler_gcc.h
++@@ -128,9 +128,9 @@
++       * they work as expected.  (Well, not quite.  There's still a bug, but we
++       * have to work around it later when including arm_acle.h.)
++       */
++-#    if GCC_PREREQ(10, 1) || \
+++#    if ((GCC_PREREQ(10, 1) || \
++         (GCC_PREREQ(9, 3) && !GCC_PREREQ(10, 0)) || \
++-        (GCC_PREREQ(8, 4) && !GCC_PREREQ(9, 0)) || \
+++        (GCC_PREREQ(8, 4) && !GCC_PREREQ(9, 0))) && defined(__aarch64__)) || \
++         (defined(__clang__) && __has_builtin(__builtin_arm_crc32b))
++ #      define COMPILER_SUPPORTS_CRC32_TARGET_INTRINSICS 1
++ #    endif
++-- 
++2.30.2
++
+diff --git a/package/libdeflate/Config.in b/package/libdeflate/Config.in
 new file mode 100644
-index 0000000000..7660295c8d
+index 0000000000..d2fb0d6c55
 --- /dev/null
-+++ b/package/dht/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_DHT
-+	bool "dht"
++++ b/package/libdeflate/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBDEFLATE
++	bool "libdeflate"
 +	help
-+	  BitTorrent DHT library
++	  Libdeflate is a heavily optimized library for DEFLATE/zlib/
++	  gzip compression and decompression
 +
-+	  https://www.irif.fr/~jch/software/bittorrent
-diff --git a/package/dht/dht.hash b/package/dht/dht.hash
++	  https://github.com/ebiggers/libdeflate
+diff --git a/package/libdeflate/libdeflate.hash b/package/libdeflate/libdeflate.hash
 new file mode 100644
-index 0000000000..0f5d5c1758
+index 0000000000..ef480ab270
 --- /dev/null
-+++ b/package/dht/dht.hash
++++ b/package/libdeflate/libdeflate.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  3873d54b786cf74090672ed6f786b82510ae375d5a8d8f4d99314e358d898baa  dht-0.26.tar.gz
-+sha256  06ce07293caf8c8ddfaf47797ad1fb18d1c040a8375231d8f8a6105cef51a8e6  LICENCE
-diff --git a/package/dht/dht.mk b/package/dht/dht.mk
++sha256  a537ab6125c226b874c02b166488b326aece954930260dbf682d88fc339137e3  libdeflate-1.9.tar.gz
++sha256  5d246dd2537307b80fed9ba5fdddf5d0fe7a8f023393a071182b9daed56b40fe  COPYING
+diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
 new file mode 100644
-index 0000000000..0fa4ed9e6a
+index 0000000000..2453804989
 --- /dev/null
-+++ b/package/dht/dht.mk
-@@ -0,0 +1,13 @@
++++ b/package/libdeflate/libdeflate.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+# dht
++# libdeflate
 +#
 +################################################################################
 +
-+DHT_VERSION = 0.26
-+DHT_SITE = $(call github,jech,dht,dht-$(DHT_VERSION))
-+DHT_LICENSE = MIT
-+DHT_LICENSE_FILES = LICENCE
-+DHT_INSTALL_STAGING = YES
++LIBDEFLATE_VERSION = 1.9
++LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
++LIBDEFLATE_LICENSE = MIT
++LIBDEFLATE_LICENSE_FILES = COPYING
++LIBDEFLATE_INSTALL_STAGING = YES
 +
-+$(eval $(cmake-package))
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBDEFLATE_MAKE_OPTS += DISABLE_SHARED=yes
++endif
++
++define LIBDEFLATE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		$(LIBDEFLATE_MAKE_OPTS)
++endef
++
++define LIBDEFLATE_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		$(LIBDEFLATE_MAKE_OPTS) \
++		DESTDIR="$(STAGING_DIR)" PREFIX=/usr install
++endef
++
++define LIBDEFLATE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		$(LIBDEFLATE_MAKE_OPTS) \
++		DESTDIR="$(TARGET_DIR)" PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
 -- 
 2.30.2
 
