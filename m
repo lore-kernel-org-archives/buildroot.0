@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 597DEC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 14:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A39BC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 14:58:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17925405AE;
-	Sat,  5 Feb 2022 14:58:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23EDA60C21;
+	Sat,  5 Feb 2022 14:58:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gcvx-9crDtUw; Sat,  5 Feb 2022 14:58:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4PVHMlZUK3Ws; Sat,  5 Feb 2022 14:58:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EC79408B9;
-	Sat,  5 Feb 2022 14:58:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B53441BF33C
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:57:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CA1460B73;
+	Sat,  5 Feb 2022 14:58:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A2001BF33C
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7F63408B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id A764B60B73
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 14:57:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ORPrzuBZzJTH for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 14:57:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DqH-WGjXW1-T for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 14:57:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E48A9408B8
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 14:57:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00FAF60BE4
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 14:57:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9A0F68295E; Sat,  5 Feb 2022 14:49:55 +0000 (UTC)
+ id AA22482901; Sat,  5 Feb 2022 14:49:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 15:55:09 +0100
+Date: Sat, 5 Feb 2022 15:55:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8de78f3da0cdbc139b876bdeb34079302ce02934
-X-Git-Newrev: aef9027773543fede0cbfa3405f5919e38671dbf
+X-Git-Oldrev: 56c0d7b8867228bb44e76f4bf296e27202d10f13
+X-Git-Newrev: aa87c2e1689b920052ee4a802e24ca342d8f9651
 X-Patchwork-Hint: ignore
-Message-Id: <20220205144955.9A0F68295E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-vaapi: bump version to 1.18.6
+Message-Id: <20220205144955.AA22482901@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1-editing-services: bump
+ version to 1.18.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,39 +59,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aef9027773543fede0cbfa3405f5919e38671dbf
+commit: https://git.buildroot.net/buildroot/commit/?id=aa87c2e1689b920052ee4a802e24ca342d8f9651
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
+ .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
+ .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index b0c19fc600..7e22774c11 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.5.tar.xz.sha256sum
--sha256  4a460fb95559f41444eb24864ad2d9e37922b6eea941510310319fc3e0ba727b  gstreamer-vaapi-1.18.5.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.6.tar.xz.sha256sum
-+sha256  ab6270f1e5e4546fbe6f5ea246d86ca3d196282eb863d46e6cdcc96f867449e0  gstreamer-vaapi-1.18.6.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 9810b12cf7..6af851602f 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index daaf729c70..e29dc112ce 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.5.tar.xz.sha256sum
+-sha256  8af4a8394d051f3e18280686db49a6efaccc95c0c59a17f0f564e32000590df5  gst-editing-services-1.18.5.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.6.tar.xz.sha256sum
++sha256  fe10d14ef896aa21038317f6f81e1158ccc6caaed9b0d5a29ae5bdd63074582c  gst-editing-services-1.18.6.tar.xz
+ 
+ # Hashes for license files:
+ sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index d3de79c5f6..a3722cbbca 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VAAPI_VERSION = 1.18.5
-+GST1_VAAPI_VERSION = 1.18.6
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
+-GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.5
++GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.6
+ GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
+ GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
+ GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
