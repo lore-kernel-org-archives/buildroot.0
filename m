@@ -1,57 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06688C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 18:08:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6533DC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 18:13:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4971E812F8;
-	Sat,  5 Feb 2022 18:08:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D088C4055D;
+	Sat,  5 Feb 2022 18:13:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mzJlCLYL2up8; Sat,  5 Feb 2022 18:08:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Xz_XCci6vHwl; Sat,  5 Feb 2022 18:13:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C2FB813CC;
-	Sat,  5 Feb 2022 18:08:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8CE4E1BF41B
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:08:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DBEAA401F2;
+	Sat,  5 Feb 2022 18:13:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DA231BF41B
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C39D81260
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:08:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5470A401F2
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 18:13:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1A4v-c9SoQN3 for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 18:08:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6034B80F5C
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 18:08:32 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout04.t-online.de (Postfix) with SMTP id 3636B3808;
- Sat,  5 Feb 2022 19:08:30 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd72.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nGPTu-2YuLIn0; Sat, 5 Feb 2022 19:08:18 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44586)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nGPTt-0002vI-Pl;
- Sat, 05 Feb 2022 19:08:17 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZPFY3eelAI8k for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 18:13:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17B9340156
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 18:13:04 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id i186so8035275pfe.0
+ for <buildroot@buildroot.org>; Sat, 05 Feb 2022 10:13:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bVN2N6ho91N3IX/zpnPrIwheeUdAqZ1m8rcqGlR14Ic=;
+ b=VdMv+TtQUM7Et3Qu0Yh4P3MTA7Fz6HL7BSBgxXbCsH3R66UdfUt16ouVijSdRCsDMQ
+ UsEFiemsCdPEATq+fS0sr5lFaiCJoZcZ+4KD/2vMZd5HuAbkllhsz36h/i9l1MWsMRAy
+ JPRZ7FEJJXT6iBzEQcHmHiunPWE10MNE0w4JGJNrjdSBz8hx2lrX0DrpK13cTNuuoKD5
+ mPjb7sBTHu4kdPKcvqpuCNUWThpMdNRzkHigx1Bah3TQfxb7oO4Clkbf7JI60/VO3PEf
+ 6GMgo1N6M8KlrHWDpioJAV3gKptj2acFLXR1TRm1VXfpsCRlIxfepDIx2T4LDcJVY4P9
+ r0gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bVN2N6ho91N3IX/zpnPrIwheeUdAqZ1m8rcqGlR14Ic=;
+ b=7Htb25wyC2Wnd+DD/R2fdSEMscfzRMfzuxC1e10V4pluJ5gwYfxNq6TOnZkMGdgzeq
+ WqAxtcUqQ4+hnzZ88wbEspNqJ/AWVCMbGPnVXk2fbElsTXg+AlJoG6sAdZi2o3GkYqEo
+ fXSjOAdDxAUVAnfYpwMs+Ixs0lVSUoHG63njIFJftbnXbIIXvL/LIfy6Zx972C2dIS2t
+ 6Oab3cIvjsr4z7BMGFpYrFHKhX2SMdcehPUsCXj5WXg6WGP1lz0Mu5UvNw8o2ZRlsIFR
+ J5mE8gx7/7+xZQfoWY9fKh1pQ70hrRfhcQ0QD/Y+abEmNmjXK1t/zKKa7Xlfog4QIP7Q
+ nnwg==
+X-Gm-Message-State: AOAM531pUMLOl2KAijvy4k33+aAfE1tE4wWJFdEZEdM3b3bhAw2rC7OG
+ znjgblOz9LRERkotlsHYUVfViOJJLp1XcQ==
+X-Google-Smtp-Source: ABdhPJy4W/1LwqUuOGuGwiLP/AFB1QZgPIeDerwWxbVc42nb+5IKxLnx3OCcLyhrNxFsMblGalZxSw==
+X-Received: by 2002:a63:8b42:: with SMTP id j63mr3719662pge.551.1644084784284; 
+ Sat, 05 Feb 2022 10:13:04 -0800 (PST)
+Received: from solsona.hitronhub.home (S0106f81d0f601923.cg.shawcable.net.
+ [174.0.44.90])
+ by smtp.gmail.com with ESMTPSA id f9sm4370750pgf.94.2022.02.05.10.13.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Feb 2022 10:13:03 -0800 (PST)
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  5 Feb 2022 19:08:17 +0100
-Message-Id: <20220205180817.2103343-3-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220205180817.2103343-1-bernd.kuhls@t-online.de>
-References: <20220205180817.2103343-1-bernd.kuhls@t-online.de>
+Date: Sat,  5 Feb 2022 11:12:58 -0700
+Message-Id: <20220205181259.5831-1-peter.macleod.thompson@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1644084498-0000B7AB-DB880748/0/0 CLEAN NORMAL
-X-TOI-MSGID: d479779b-079b-4f1e-84c7-5589f7b57258
-Subject: [Buildroot] [PATCH 3/3] package/libutp: new package
+Subject: [Buildroot] [PATCH 1/1] bump version to 2.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,150 +83,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: PeterThompson <peter.macleod.thompson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Needed for upcoming version bump of transmission.
+From: PeterThompson <peter.macleod.thompson@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: PeterThompson <peter.macleod.thompson@gmail.com>
 ---
-Build test using this defconfig
+ package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+ package/sdl2_ttf/sdl2_ttf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-BR2_PACKAGE_LIBUTP=y
-
-was successful:
-
-                             andes-nds32 [ 1/45]: SKIPPED
-                             arm-aarch64 [ 2/45]: OK
-                   bootlin-aarch64-glibc [ 3/45]: OK
-               bootlin-arcle-hs38-uclibc [ 4/45]: OK
-                    bootlin-armv5-uclibc [ 5/45]: OK
-                     bootlin-armv7-glibc [ 6/45]: OK
-                   bootlin-armv7m-uclibc [ 7/45]: OK
-                      bootlin-armv7-musl [ 8/45]: OK
-                bootlin-m68k-5208-uclibc [ 9/45]: OK
-               bootlin-m68k-68040-uclibc [10/45]: OK
-             bootlin-microblazeel-uclibc [11/45]: OK
-                bootlin-mipsel32r6-glibc [12/45]: OK
-                   bootlin-mipsel-uclibc [13/45]: OK
-                     bootlin-nios2-glibc [14/45]: OK
-                 bootlin-openrisc-uclibc [15/45]: OK
-        bootlin-powerpc64le-power8-glibc [16/45]: OK
-           bootlin-powerpc-e500mc-uclibc [17/45]: OK
-                   bootlin-riscv32-glibc [18/45]: OK
-                   bootlin-riscv64-glibc [19/45]: OK
-                    bootlin-riscv64-musl [20/45]: OK
-                      bootlin-sh4-uclibc [21/45]: OK
-                   bootlin-sparc64-glibc [22/45]: OK
-                    bootlin-sparc-uclibc [23/45]: OK
-                    bootlin-x86-64-glibc [24/45]: OK
-                     bootlin-x86-64-musl [25/45]: OK
-                   bootlin-x86-64-uclibc [26/45]: OK
-                   bootlin-xtensa-uclibc [27/45]: OK
-                            br-arm-basic [28/45]: SKIPPED
-                    br-arm-full-nothread [29/45]: OK
-                      br-arm-full-static [30/45]: OK
-                   br-i386-pentium4-full [31/45]: OK
-                br-i386-pentium-mmx-musl [32/45]: OK
-                      br-mips64-n64-full [33/45]: OK
-                 br-mips64r6-el-hf-glibc [34/45]: OK
-               br-powerpc-603e-basic-cpp [35/45]: OK
-               br-powerpc64-power7-glibc [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                         sourcery-mips64 [43/45]: OK
-                           sourcery-mips [44/45]: OK
-                          sourcery-nios2 [45/45]: OK
-45 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libutp/Config.in   | 10 ++++++++++
- package/libutp/libutp.hash |  3 +++
- package/libutp/libutp.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/libutp/Config.in
- create mode 100644 package/libutp/libutp.hash
- create mode 100644 package/libutp/libutp.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c4084c5545..c1e486a175 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -398,6 +398,7 @@ F:	package/libsoundtouch/
- F:	package/libsquish/
- F:	package/libudfread/
- F:	package/liburiparser/
-+F:	package/libutp/
- F:	package/libva/
- F:	package/libva-intel-driver/
- F:	package/libva-utils/
-diff --git a/package/Config.in b/package/Config.in
-index 990ee19665..03fd6c04dd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1881,6 +1881,7 @@ menu "Networking"
- 	source "package/libupnp/Config.in"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
-+	source "package/libutp/Config.in"
- 	source "package/libuwsc/Config.in"
- 	source "package/libvncserver/Config.in"
- 	source "package/libwebsock/Config.in"
-diff --git a/package/libutp/Config.in b/package/libutp/Config.in
-new file mode 100644
-index 0000000000..6382913103
---- /dev/null
-+++ b/package/libutp/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBUTP
-+	bool "libutp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  uTorrent Transport Protocol library
-+
-+	  https://github.com/bittorrent/libutp
-+
-+comment "libutp support needs a toolchain with C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libutp/libutp.hash b/package/libutp/libutp.hash
-new file mode 100644
-index 0000000000..38d46b0ae5
---- /dev/null
-+++ b/package/libutp/libutp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  c515e6f9add47d3d202389e8a62feb765f0ae41d6398cc238e44028be520774e  libutp-fda9f4b3db97ccb243fcbed2ce280eb4135d705b.tar.gz
-+sha256  4441418beb8e352b6e2aa09083b4c51a86814a49878dbb1a81936b466cd5badd  LICENSE
-diff --git a/package/libutp/libutp.mk b/package/libutp/libutp.mk
-new file mode 100644
-index 0000000000..c926c290d2
---- /dev/null
-+++ b/package/libutp/libutp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libutp
-+#
-+################################################################################
-+
-+LIBUTP_VERSION = fda9f4b3db97ccb243fcbed2ce280eb4135d705b
-+LIBUTP_SITE = $(call github,transmission,libutp,$(LIBUTP_VERSION))
-+LIBUTP_LICENSE = MIT
-+LIBUTP_LICENSE_FILES = LICENSE
-+LIBUTP_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
+index 16459e4a59..a490b002b6 100644
+--- a/package/sdl2_ttf/sdl2_ttf.hash
++++ b/package/sdl2_ttf/sdl2_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a9eceb1ad88c1f1545cd7bd28e7cbc0b2c14191d40238f531a15b01b1b22cd33  SDL2_ttf-2.0.15.tar.gz
+-sha256  f6370809c9f644760920d9945c5be07aed17664975f2e4741013d4d9a2ec696f  COPYING.txt
++sha256  7234eb8883514e019e7747c703e4a774575b18d435c22a4a29d068cb768a2251  SDL2_ttf-2.0.18.tar.gz
++sha256  e211dfe7e2c36e64048be886fe3f2bbba8732ce4dd77b596a355d3abbec775a4  COPYING.txt
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 326cb99366..1fe7c0a075 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_TTF_VERSION = 2.0.15
++SDL2_TTF_VERSION = 2.0.18
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+ SDL2_TTF_LICENSE = Zlib
 -- 
-2.30.2
+2.20.1
 
 _______________________________________________
 buildroot mailing list
