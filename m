@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8237C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 15:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1D5EC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 15:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49A324057A;
-	Sat,  5 Feb 2022 15:32:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C38A60C14;
+	Sat,  5 Feb 2022 15:32:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6EWkalp4Wl1y; Sat,  5 Feb 2022 15:32:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xRuDv2vN2-2y; Sat,  5 Feb 2022 15:32:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 70AC840018;
-	Sat,  5 Feb 2022 15:32:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 47ACB1BF95F
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:32:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8288060BEA;
+	Sat,  5 Feb 2022 15:32:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D54C1BF39A
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4287B40385
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A26E81BCF
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 15:32:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JnJk1WxcVReU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9frZIAMFWbhg for <buildroot@lists.busybox.net>;
  Sat,  5 Feb 2022 15:32:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57D3940018
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67D3B81CD0
  for <buildroot@buildroot.org>; Sat,  5 Feb 2022 15:32:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EECE182967; Sat,  5 Feb 2022 15:25:06 +0000 (UTC)
+ id 0DCD48295E; Sat,  5 Feb 2022 15:25:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 16:30:02 +0100
+Date: Sat, 5 Feb 2022 16:31:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9c94d126f5579a68f85584a6ebe1dd20130b39f
-X-Git-Newrev: d0e519ad3d459e8e38c77216b3d30a4ec383a991
+X-Git-Oldrev: cc27267ae41bf44276c63b1e86042c4fae4adf50
+X-Git-Newrev: 1e48e5bf0c67295e219a2d7d58213d0a71a5863d
 X-Patchwork-Hint: ignore
-Message-Id: <20220205152506.EECE182967@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpg-error: add or1k support
+Message-Id: <20220205152507.0DCD48295E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lcms2: bump to version 2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +58,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0e519ad3d459e8e38c77216b3d30a4ec383a991
+commit: https://git.buildroot.net/buildroot/commit/?id=1e48e5bf0c67295e219a2d7d58213d0a71a5863d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-or1k is supported since version 1.18 and
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commit;h=c143fa81462584ad39ea780908266bce3fb9a49e
+https://littlecms.com/blog/2022/01/28/lcms2-2.13
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgpg-error/Config.in | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ package/lcms2/lcms2.hash | 6 +++---
+ package/lcms2/lcms2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-index 44e9d67aaf..03157dd9fe 100644
---- a/package/libgpg-error/Config.in
-+++ b/package/libgpg-error/Config.in
-@@ -2,14 +2,19 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	bool
- 	# see src/syscfg/
- 	default y if \
--		BR2_aarch64	|| BR2_aarch64_eb	|| BR2_arm	|| \
--		BR2_armeb	|| BR2_i386		|| BR2_mips	|| \
--		BR2_mipsel	|| BR2_mips64		|| BR2_mips64el	|| \
--		BR2_m68k	|| BR2_nios2		|| BR2_powerpc	|| \
--		BR2_powerpc64 	|| BR2_powerpc64le 	|| BR2_RISCV_64	|| \
--		BR2_RISCV_32	|| BR2_s390x		|| BR2_sh4	|| \
--		BR2_sh4eb	|| BR2_sh4a		|| BR2_sh4aeb	|| \
--		BR2_sparc	|| BR2_sparc64		|| BR2_x86_64
-+		BR2_aarch64	|| BR2_aarch64_eb	|| \
-+		BR2_arm		|| BR2_armeb		|| \
-+		BR2_i386	|| BR2_mips		|| \
-+		BR2_mipsel	|| BR2_mips64		|| \
-+		BR2_mips64el	|| BR2_m68k		|| \
-+		BR2_nios2	|| BR2_or1k		|| \
-+		BR2_powerpc	|| BR2_powerpc64 	|| \
-+		BR2_powerpc64le	|| BR2_RISCV_64		|| \
-+		BR2_RISCV_32	|| BR2_s390x		|| \
-+		BR2_sh4		|| BR2_sh4eb		|| \
-+		BR2_sh4a	|| BR2_sh4aeb		|| \
-+		BR2_sparc	|| BR2_sparc64		|| \
-+		BR2_x86_64
+diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
+index 8477610ff0..d3ae1d934f 100644
+--- a/package/lcms2/lcms2.hash
++++ b/package/lcms2/lcms2.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/lcms/files/lcms/2.12
+-sha1  3d0c0276fcd3930b80c424512ec0b1ed54ec1497  lcms2-2.12.tar.gz
++# From https://sourceforge.net/projects/lcms/files/lcms/2.13
++sha1  1676097fb18fce83c9c876d56828c83a6ad829dd  lcms2-2.13.tar.gz
+ # Locally computed:
+-sha256  18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5  lcms2-2.12.tar.gz
++sha256  0c67a5cc144029cfa34647a52809ec399aae488db4258a6a66fba318474a070f  lcms2-2.13.tar.gz
+ sha256  46d4e05af3bce75332a12d01f19bcce7e32b6bac544be28a64043d0231291e31  COPYING
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 49ddccd82b..5a253d044b 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBGPG_ERROR
- 	bool "libgpg-error"
-@@ -36,6 +41,8 @@ config BR2_PACKAGE_LIBGPG_ERROR_SYSCFG
- 		if BR2_m68k
- 	default "nios2-unknown-linux-gnu" \
- 		if BR2_nios2
-+	default "or1k-unknown-linux-gnu" \
-+		if BR2_or1k
- 	default "powerpc-unknown-linux-gnu" \
- 		if BR2_powerpc
- 	default "powerpc64-unknown-linux-gnu" \
+-LCMS2_VERSION = 2.12
++LCMS2_VERSION = 2.13
+ LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+ LCMS2_LICENSE = MIT
+ LCMS2_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
