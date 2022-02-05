@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5896BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 157C4C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 23:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCB14400C7;
-	Sat,  5 Feb 2022 22:59:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1B744016D;
+	Sat,  5 Feb 2022 23:00:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wkJMED0xMMCZ; Sat,  5 Feb 2022 22:59:16 +0000 (UTC)
+	with ESMTP id ZrtT6DJtauzy; Sat,  5 Feb 2022 23:00:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 320404016D;
-	Sat,  5 Feb 2022 22:59:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 389251BF20B
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:59:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C62E14010E;
+	Sat,  5 Feb 2022 23:00:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BBFF31BF2A5
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3503640400
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:59:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAEE860806
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:00:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4uZQmYDvAquS for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 22:59:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fNyHh627c5bu for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 23:00:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0C80403ED
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:59:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D3BE6079D
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 23:00:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DC88782A80; Sat,  5 Feb 2022 22:51:46 +0000 (UTC)
+ id F03B482A80; Sat,  5 Feb 2022 22:53:08 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 23:55:53 +0100
+Date: Sat, 5 Feb 2022 23:59:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b429dce6f8e2ee162b79fe2a3ebb1bd179f462e3
-X-Git-Newrev: 85af8e22c62dc9e378f27c59dc388c8d7394a91f
+X-Git-Oldrev: 85af8e22c62dc9e378f27c59dc388c8d7394a91f
+X-Git-Newrev: 3b0d174166dbc68a3c688da63eb9684390981895
 X-Patchwork-Hint: ignore
-Message-Id: <20220205225146.DC88782A80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ltp-testsuite: bump version to
- 20220121
+Message-Id: <20220205225308.F03B482A80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ltp-testsuite: update spacing in
+ hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,418 +59,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85af8e22c62dc9e378f27c59dc388c8d7394a91f
+commit: https://git.buildroot.net/buildroot/commit/?id=3b0d174166dbc68a3c688da63eb9684390981895
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LTP now builds metadata directory for the host. It supports
-cross-compilation, we just need to pass HOST_CFLAGS and HOST_LDFLAGS in
-addition to the target flags. They have to be passed to make, adding
-them to configure does not work. Without this, on some architectures the
--mlongcalls and -mauto-litpools get passed to the host compile, but
-they're not valid there.
+sha1 was using just 1 space.
 
-Drop patches from this release.
-
-Refresh 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-(still safe to carry it).
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch | 45 ++++++----------
- .../0002-lib-fix-MemAvailable-parsing.patch        | 36 -------------
- .../0003-lapi-rtnetlink.h-Fix-include-guards.patch | 37 -------------
- ...ate-if_addr.h-and-reuse-it-in-rtnetlink.h.patch | 58 ---------------------
- .../0005-lapi-if_addr.h-Define-IFA_FLAGS.patch     | 60 ----------------------
- package/ltp-testsuite/ltp-testsuite.hash           |  6 +--
- package/ltp-testsuite/ltp-testsuite.mk             |  6 ++-
- 7 files changed, 25 insertions(+), 223 deletions(-)
+ package/ltp-testsuite/ltp-testsuite.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-index a167d938e1..2ceba64ed5 100644
---- a/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-+++ b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-@@ -1,4 +1,4 @@
--From bee452dfa2a34ba7df7db677e5673cbdcd23f61e Mon Sep 17 00:00:00 2001
-+From f34c6ca3d543968e900d6327d8b5900db63f08ad Mon Sep 17 00:00:00 2001
- From: Petr Vorel <petr.vorel@gmail.com>
- Date: Thu, 1 Oct 2020 23:28:39 +0200
- Subject: [PATCH] lapi: Add sysinfo.h to fix build with MUSL libc
-@@ -56,7 +56,7 @@ Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
- 
- diff --git a/include/lapi/sysinfo.h b/include/lapi/sysinfo.h
- new file mode 100644
--index 000000000..d0e0e93d7
-+index 0000000000..d0e0e93d7f
- --- /dev/null
- +++ b/include/lapi/sysinfo.h
- @@ -0,0 +1,22 @@
-@@ -83,7 +83,7 @@ index 000000000..d0e0e93d7
- +
- +#endif /* SYSINFO_H__ */
- diff --git a/include/tst_safe_macros.h b/include/tst_safe_macros.h
--index d99441c86..0d26e9d45 100644
-+index d99441c86f..0d26e9d455 100644
- --- a/include/tst_safe_macros.h
- +++ b/include/tst_safe_macros.h
- @@ -12,7 +12,7 @@
-@@ -96,44 +96,33 @@ index d99441c86..0d26e9d45 100644
-  #include <libgen.h>
-  #include <signal.h>
- diff --git a/lib/safe_macros.c b/lib/safe_macros.c
--index a5b6bc504..20d01d304 100644
-+index a5b6bc5047..87d922a928 100644
- --- a/lib/safe_macros.c
- +++ b/lib/safe_macros.c
--@@ -11,7 +11,6 @@
-+@@ -11,7 +11,7 @@
-  #include <sys/wait.h>
-  #include <sys/mount.h>
-  #include <sys/xattr.h>
- -#include <sys/sysinfo.h>
-++#include "lapi/sysinfo.h"
-  #include <errno.h>
-  #include <fcntl.h>
-  #include <libgen.h>
--@@ -23,6 +22,7 @@
-- #include <malloc.h>
-- #include "test.h"
-- #include "safe_macros.h"
--+#include "lapi/sysinfo.h"
-- 
-- char *safe_basename(const char *file, const int lineno,
-- 		    void (*cleanup_fn) (void), char *path)
- diff --git a/lib/tst_memutils.c b/lib/tst_memutils.c
--index 69077861f..ae1cad29b 100644
-+index 4a49747613..000688f5a3 100644
- --- a/lib/tst_memutils.c
- +++ b/lib/tst_memutils.c
--@@ -5,11 +5,11 @@
-- 
-+@@ -6,7 +6,7 @@
-+ #include <stdio.h>
-  #include <unistd.h>
-  #include <limits.h>
- -#include <sys/sysinfo.h>
-++#include "lapi/sysinfo.h"
-  #include <stdlib.h>
-  
-  #define TST_NO_DEFAULT_MAIN
-- #include "tst_test.h"
--+#include "lapi/sysinfo.h"
-- 
-- #define BLOCKSIZE (16 * 1024 * 1024)
-- 
- diff --git a/testcases/kernel/mem/mtest01/mtest01.c b/testcases/kernel/mem/mtest01/mtest01.c
--index 9676ea4b5..33b2ac822 100644
-+index 20cb95191d..3462dc3f82 100644
- --- a/testcases/kernel/mem/mtest01/mtest01.c
- +++ b/testcases/kernel/mem/mtest01/mtest01.c
- @@ -20,7 +20,6 @@
-@@ -153,7 +142,7 @@ index 9676ea4b5..33b2ac822 100644
-  
-  #define FIVE_HUNDRED_MB         (500ULL*1024*1024)
- diff --git a/testcases/kernel/syscalls/madvise/madvise06.c b/testcases/kernel/syscalls/madvise/madvise06.c
--index 263b8e78b..4fa52e6ea 100644
-+index 263b8e78bf..4fa52e6eae 100644
- --- a/testcases/kernel/syscalls/madvise/madvise06.c
- +++ b/testcases/kernel/syscalls/madvise/madvise06.c
- @@ -46,7 +46,7 @@
-@@ -166,7 +155,7 @@ index 263b8e78b..4fa52e6ea 100644
-  #include "tst_cgroup.h"
-  
- diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo01.c b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
--index 2ea44a2be..a237345ef 100644
-+index 2ea44a2beb..a237345ef7 100644
- --- a/testcases/kernel/syscalls/sysinfo/sysinfo01.c
- +++ b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
- @@ -69,7 +69,7 @@
-@@ -179,7 +168,7 @@ index 2ea44a2be..a237345ef 100644
-  #include "test.h"
-  
- diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo02.c b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
--index 7ad0e8bdc..61fa1ab75 100644
-+index 7ad0e8bdcf..61fa1ab757 100644
- --- a/testcases/kernel/syscalls/sysinfo/sysinfo02.c
- +++ b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
- @@ -65,7 +65,7 @@
-@@ -192,7 +181,7 @@ index 7ad0e8bdc..61fa1ab75 100644
-  
-  #include "test.h"
- diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo03.c b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
--index af7cb6421..dc5ae65e3 100644
-+index af7cb6421e..dc5ae65e35 100644
- --- a/testcases/kernel/syscalls/sysinfo/sysinfo03.c
- +++ b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
- @@ -13,7 +13,7 @@
-@@ -205,7 +194,7 @@ index af7cb6421..dc5ae65e3 100644
-  #include "lapi/posix_clocks.h"
-  #include "tst_test.h"
- diff --git a/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c b/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
--index 22e7c3638..572701f9f 100644
-+index 22e7c36386..572701f9fd 100644
- --- a/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
- +++ b/testcases/open_posix_testsuite/conformance/interfaces/pthread_cond_broadcast/1-2.c
- @@ -43,7 +43,7 @@
-@@ -218,5 +207,5 @@ index 22e7c3638..572701f9f 100644
-  
-  #include "../testfrmw/testfrmw.h"
- -- 
--2.33.0
-+2.34.1
- 
-diff --git a/package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch b/package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch
-deleted file mode 100644
-index 4a9a5b2363..0000000000
---- a/package/ltp-testsuite/0002-lib-fix-MemAvailable-parsing.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 29a096fe2bd356f419bd8a8404d5b652c996b92f Mon Sep 17 00:00:00 2001
--From: Ralph Siemsen <ralph.siemsen@linaro.org>
--Date: Mon, 27 Sep 2021 22:18:50 -0400
--Subject: [PATCH] lib: fix MemAvailable parsing
--
--The amount of available memory was not being returned correctly, which
--resulted in tests being executed when they should have been skipped.
--
--Fixes: 8759f4 ("lib: adjust the tmpfs size according to .dev_min_size and MemAvailable")
--Signed-off-by: Ralph Siemsen <ralph.siemsen@linaro.org>
--Signed-off-by: Li Wang <liwang@redhat.com>
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: e42149e28 ("lib: fix MemAvailable parsing") ]
-----
-- lib/tst_memutils.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/lib/tst_memutils.c b/lib/tst_memutils.c
--index ae1cad29b..a46de78f5 100644
----- a/lib/tst_memutils.c
--+++ b/lib/tst_memutils.c
--@@ -65,9 +65,9 @@ void tst_pollute_memory(size_t maxsize, int fillchar)
-- 
-- long long tst_available_mem(void)
-- {
---	long long mem_available;
--+	unsigned long long mem_available = 0;
-- 
---	if (FILE_LINES_SCANF("/proc/meminfo", "MemAvailable: %ld",
--+	if (FILE_LINES_SCANF("/proc/meminfo", "MemAvailable: %llu",
-- 		&mem_available)) {
-- 		mem_available = SAFE_READ_MEMINFO("MemFree:")
-- 			+ SAFE_READ_MEMINFO("Cached:");
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch b/package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch
-deleted file mode 100644
-index 056c769feb..0000000000
---- a/package/ltp-testsuite/0003-lapi-rtnetlink.h-Fix-include-guards.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 881709d1e4d1bba5bf8ca365bc058f338bd72dc2 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Wed, 29 Sep 2021 19:38:42 +0200
--Subject: [PATCH] lapi/rtnetlink.h: Fix include guards
--
--Fixes: 5fea0638a ("lapi: Add missing IFA_FLAGS")
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: a2a212cf8 ("lapi/rtnetlink.h: Fix include guards") ]
-----
-- include/lapi/rtnetlink.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/include/lapi/rtnetlink.h b/include/lapi/rtnetlink.h
--index 8a1b5385b..04e9ad51a 100644
----- a/include/lapi/rtnetlink.h
--+++ b/include/lapi/rtnetlink.h
--@@ -1,8 +1,8 @@
-- // SPDX-License-Identifier: GPL-2.0-or-later
-- /* Copyright (c) 2021 Petr Vorel <petr.vorel@gmail.com> */
-- 
---#ifndef LAPI_IF_ADDR_H__
---# define LAPI_IF_ADDR_H__
--+#ifndef LAPI_RTNETLINK_H__
--+# define LAPI_RTNETLINK_H__
-- 
-- #include <linux/rtnetlink.h>
-- 
--@@ -10,4 +10,4 @@
-- # define IFA_FLAGS 8
-- #endif
-- 
---#endif	/* LAPI_IF_ADDR_H__ */
--+#endif	/* LAPI_RTNETLINK_H__ */
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch b/package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch
-deleted file mode 100644
-index 4044636e63..0000000000
---- a/package/ltp-testsuite/0004-lapi-Create-if_addr.h-and-reuse-it-in-rtnetlink.h.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From b13440627bd4a9f060a33d400a47a40daa2bc12e Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Wed, 29 Sep 2021 19:37:19 +0200
--Subject: [PATCH] lapi: Create if_addr.h and reuse it in rtnetlink.h
--
--There will be fix in next commit for missing IFA_F_NOPREFIXROUTE which
--requires creating lapi/if_addr.h. Thus move IFA_FLAGS to lapi/if_addr.h,
--as it belongs there and reuse lapi/if_addr.h in lapi/rtnetlink.h just
--like <linux/rtnetlink.h> includes <linux/if_addr.h>.
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: https://lore.kernel.org/ltp/20210930183058.5240-3-petr.vorel@gmail.com/T/#u ]
-----
-- include/lapi/if_addr.h   | 16 ++++++++++++++++
-- include/lapi/rtnetlink.h |  5 +----
-- 2 files changed, 17 insertions(+), 4 deletions(-)
-- create mode 100644 include/lapi/if_addr.h
--
--diff --git a/include/lapi/if_addr.h b/include/lapi/if_addr.h
--new file mode 100644
--index 000000000..4e50a0a4e
----- /dev/null
--+++ b/include/lapi/if_addr.h
--@@ -0,0 +1,16 @@
--+// SPDX-License-Identifier: GPL-2.0-or-later
--+/*
--+ * Copyright (c) 2021 Petr Vorel <petr.vorel@gmail.com>
--+ */
--+
--+#ifndef LAPI_IF_ADDR_H__
--+#define LAPI_IF_ADDR_H__
--+
--+#include <linux/if_addr.h>
--+
--+#ifndef IFA_FLAGS
--+# define IFA_FLAGS 8
--+#endif
--+
--+
--+#endif /* LAPI_IF_ADDR_H__ */
--diff --git a/include/lapi/rtnetlink.h b/include/lapi/rtnetlink.h
--index 04e9ad51a..089bf1a0d 100644
----- a/include/lapi/rtnetlink.h
--+++ b/include/lapi/rtnetlink.h
--@@ -5,9 +5,6 @@
-- # define LAPI_RTNETLINK_H__
-- 
-- #include <linux/rtnetlink.h>
---
---#ifndef IFA_FLAGS
---# define IFA_FLAGS 8
---#endif
--+#include "lapi/if_addr.h"
-- 
-- #endif	/* LAPI_RTNETLINK_H__ */
---- 
--2.33.0
--
-diff --git a/package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch b/package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch
-deleted file mode 100644
-index b54e052992..0000000000
---- a/package/ltp-testsuite/0005-lapi-if_addr.h-Define-IFA_FLAGS.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 9e357fb4fc00ab9c303e314b85b9ae3836141f81 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Wed, 29 Sep 2021 19:56:29 +0200
--Subject: [PATCH] lapi/if_addr.h: Define IFA_FLAGS
--
--and use it in icmp_rate_limit01.c.
--
--This fixes error on toolchains with very old kernel headers, e.g.
--Buildroot sourcery-arm:
--
--icmp_rate_limit01.c:82:3: error: 'IFA_F_NOPREFIXROUTE' undeclared (first use in this function)
--   IFA_F_NOPREFIXROUTE);
--
--Fixed because IFA_F_NOPREFIXROUTE was added in 3.14 and the oldest
--system we still support is Cent0S 7 with 3.10 kernel.
--
--NOTE: Cent0S 7 is obviously heavily patched thus it contains
--IFA_F_NOPREFIXROUTE and therefore CI build didn't catch this error.
--
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: https://lore.kernel.org/ltp/20210930183058.5240-4-petr.vorel@gmail.com/T/#u ]
-----
-- include/lapi/if_addr.h            | 3 +++
-- testcases/cve/icmp_rate_limit01.c | 3 ++-
-- 2 files changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/include/lapi/if_addr.h b/include/lapi/if_addr.h
--index 4e50a0a4e..0f7e44784 100644
----- a/include/lapi/if_addr.h
--+++ b/include/lapi/if_addr.h
--@@ -12,5 +12,8 @@
-- # define IFA_FLAGS 8
-- #endif
-- 
--+#ifndef IFA_F_NOPREFIXROUTE
--+# define IFA_F_NOPREFIXROUTE	0x200
--+#endif
-- 
-- #endif /* LAPI_IF_ADDR_H__ */
--diff --git a/testcases/cve/icmp_rate_limit01.c b/testcases/cve/icmp_rate_limit01.c
--index b3a237b30..3ada32675 100644
----- a/testcases/cve/icmp_rate_limit01.c
--+++ b/testcases/cve/icmp_rate_limit01.c
--@@ -27,11 +27,12 @@
-- #include <sys/socket.h>
-- #include <netinet/in.h>
-- #include <arpa/inet.h>
---#include <linux/if_addr.h>
-- #include <linux/errqueue.h>
-- 
-- #include <sched.h>
-- #include <limits.h>
--+
--+#include "lapi/if_addr.h"
-- #include "tst_test.h"
-- #include "tst_netdevice.h"
-- 
---- 
--2.33.0
--
 diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index a9f3cfdfe1..bd648cbfdd 100644
+index bd648cbfdd..53429fd59f 100644
 --- a/package/ltp-testsuite/ltp-testsuite.hash
 +++ b/package/ltp-testsuite/ltp-testsuite.hash
 @@ -1,5 +1,5 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20210927/ltp-full-20210927.tar.xz.sha1
--sha1 dad7737f609e358c4060cb446b9cae5c026fc137  ltp-full-20210927.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20220121/ltp-full-20220121.tar.xz.sha1
-+sha1 211935e901afea1010ec4f70369b782fbee93ed4  ltp-full-20220121.tar.xz
+ # From: https://github.com/linux-test-project/ltp/releases/download/20220121/ltp-full-20220121.tar.xz.sha1
+-sha1 211935e901afea1010ec4f70369b782fbee93ed4  ltp-full-20220121.tar.xz
++sha1  211935e901afea1010ec4f70369b782fbee93ed4  ltp-full-20220121.tar.xz
  # Locally computed
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  779e9e5cc9af4f2b3d4cb32f5439ebd635504d2c4591bf900f0942dac290ed15  ltp-full-20210927.tar.xz
-+sha256  ad002520616fac52362229ea0f1bb9d304fc03ff0096ccb5b1820cee9fc8413a  ltp-full-20220121.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index cc6d3c63b6..d9b7133b07 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20210927
-+LTP_TESTSUITE_VERSION = 20220121
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- 
-@@ -70,6 +70,10 @@ LTP_TESTSUITE_CONF_ENV += \
- 	LIBS="$(LTP_TESTSUITE_LIBS)" \
- 	SYSROOT="$(STAGING_DIR)"
- 
-+LTP_TESTSUITE_MAKE_ENV += \
-+	HOST_CFLAGS="$(HOST_CFLAGS)" \
-+	HOST_LDFLAGS="$(HOST_LDFLAGS)"
-+
- # uclibc: bessel support normally not enabled
- LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
- 	testcases/misc/math/float/bessel/ \
+ sha256  ad002520616fac52362229ea0f1bb9d304fc03ff0096ccb5b1820cee9fc8413a  ltp-full-20220121.tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
