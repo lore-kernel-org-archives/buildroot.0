@@ -1,46 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48A9C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 21:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D45DC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 21:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1610E40550;
-	Sat,  5 Feb 2022 21:18:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nou0cMC6thIf; Sat,  5 Feb 2022 21:18:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52C2040593;
-	Sat,  5 Feb 2022 21:18:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 15B251BF2CF
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 21:18:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02F054011A
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 21:18:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A20440591;
+	Sat,  5 Feb 2022 21:56:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y2mymDR45X_r for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 21:18:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D366C40119
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 21:18:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D792F82650; Sat,  5 Feb 2022 21:10:57 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nxum2XWpkyZM; Sat,  5 Feb 2022 21:56:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA8E64054A;
+	Sat,  5 Feb 2022 21:56:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 33D1C1BF2CF
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 21:56:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AFD560758
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 21:56:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6ZeCZatQhDRD for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 21:56:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
+ [IPv6:2a00:1450:4864:20::22c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AEFEA60640
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 21:56:05 +0000 (UTC)
+Received: by mail-lj1-x22c.google.com with SMTP id k18so1927990lji.12
+ for <buildroot@buildroot.org>; Sat, 05 Feb 2022 13:56:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Rnf1bbxOCVom2LBSIiY08TAm3z3XFXNOODI9XMbLo98=;
+ b=pcMhxpfNRMJMaArB7YCpNBlPCIKrS/Jyp2c24HWqC32hGcKbS31tULnWTIBqY/TCWY
+ y03VOA3TLsww6FBwmiCPgAJkwHJVVScAkV5a1rmjguMVswkRqqsR3JNoZxdKVElLbxOG
+ O6Rly+6pGIjKoYF6m0g6gCEpU/V22826TecgFEqYZhVT7DdJMFRMEsyBTQy0c7fCCoC+
+ FigTsJ1SlwcGQaE9xDPpSXBawT8vJYiPPYQnWPAbUeevIJbO3GWMW0dCuD1eeL23Ptio
+ ZmFlTjdVNlmvBysGHxOxier6ZI3hyF9Hngz8TesnWq4Bx+krteHqo8H+RO4zj6c5KUTX
+ q1/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Rnf1bbxOCVom2LBSIiY08TAm3z3XFXNOODI9XMbLo98=;
+ b=l+7ik7CfsXX+GR+a2I2VIOzvEIeKd2cVHQKbcMFpjQqzAFPIRWQvhECiTq5XjFcQWc
+ 7qQUtZZ6WQTLxCzgQBF6KPgqMBaMw8AyW3UnmvpmJ1+cjSO4xQgeBOdRDFpH7Ua3fayJ
+ oWar7lHC+lg+ZmGhkEfkM5mRNXtrDvtrtBTpGiByB0udR/DKzUlu4sX+/jXUMKhm8T5E
+ CD/aDofzRuWaU7yu8ZzDFU9zGMHggj9zFZUh2iku8zr9LO78Dgb90aTD8741Eq+/kEP4
+ m8P+wE+qwKdkj15iGMe8L+qrB3eTlHDOIlSRwCeAsp8ZXH+663cP3iTTkInJ6eFNeX1o
+ LmHw==
+X-Gm-Message-State: AOAM532cnvnL2HLvWqJuvcjAw/nvae3H+E829NtTy4Se+u7pZY46113t
+ XJVkL3RG0rkc1nlCJwYJvrBKsvtFHj8=
+X-Google-Smtp-Source: ABdhPJxva0oy5s20JYp3KORLvmWcD41VZz5LhsrSjpo4UV9tuJ6tO4FxMx4Zq+4Ct64vWxKU5DUW1A==
+X-Received: by 2002:a2e:7f03:: with SMTP id a3mr3942363ljd.525.1644098163278; 
+ Sat, 05 Feb 2022 13:56:03 -0800 (PST)
+Received: from hellfire.local ([178.155.5.31])
+ by smtp.gmail.com with ESMTPSA id y15sm856936lfk.195.2022.02.05.13.56.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Feb 2022 13:56:02 -0800 (PST)
+From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 22:16:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 18a19c985f3363510d8ae317e66d53680475db26
-X-Git-Newrev: f22bff4a79faee5e4501e0f7653c09e6dcf5387e
-X-Patchwork-Hint: ignore
-Message-Id: <20220205211057.D792F82650@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zynq-boot-bin: drop legacy package
+Date: Sun,  6 Feb 2022 00:55:58 +0300
+Message-Id: <20220205215558.30751-1-kuzminov.sergey81@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2] configs/orangepi_zero_defconfig: switch to
+ extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,144 +85,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f22bff4a79faee5e4501e0f7653c09e6dcf5387e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Changes:
+v1:
+- Exclude FAT partition, it is no longer needed for U-Boot.
+- Switch the rootfs partition from MBR to GPT for partition-uuid to work.
+- Switch to extlinux, this is convenient for debugging.
+- Create common scenarios for multiple boards to create an SD image: board/orangepi/common.
 
-Since commit 6dd5a33c485c (zynq_zed: bump U-Boot to xilinx-v2016.2), we
-have no in-tree users of zynq-boot-bin.py, as U-Boot has since v2016.01
-been able to natively generate Xilinx images.
+v2:
+- Fix typo in first line of changes (s/he/it).
+- Add BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y.
+- Exclude one boot option from extlinux.conf.
 
-zynq-boot-bin.py is python2-only and there is zero chance that upstream
-will move it to python3. We could carry a python3-compatible copy, but
-that tool is now virtually unused.
-
-6 years have passed now; let it rest in peace at last.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 ---
- Config.in.legacy                         | 13 +++++++++++++
- boot/uboot/Config.in                     | 12 ------------
- boot/uboot/uboot.mk                      | 11 -----------
- package/zynq-boot-bin/zynq-boot-bin.hash |  2 --
- package/zynq-boot-bin/zynq-boot-bin.mk   | 22 ----------------------
- 5 files changed, 13 insertions(+), 47 deletions(-)
+ board/orangepi/common/extlinux.conf       |  4 +++
+ board/orangepi/common/genimage.cfg        | 23 +++++++++++++++
+ board/orangepi/common/post-build.sh       | 34 +++++++++++++++++++++
+ board/orangepi/orangepi-zero/boot.cmd     |  9 ------
+ board/orangepi/orangepi-zero/genimage.cfg | 36 -----------------------
+ configs/orangepi_zero_defconfig           | 11 ++++---
+ 6 files changed, 66 insertions(+), 51 deletions(-)
+ create mode 100644 board/orangepi/common/extlinux.conf
+ create mode 100644 board/orangepi/common/genimage.cfg
+ create mode 100755 board/orangepi/common/post-build.sh
+ delete mode 100644 board/orangepi/orangepi-zero/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-zero/genimage.cfg
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 62717463df..34d8c71cc8 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,19 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_TARGET_UBOOT_ZYNQ_IMAGE
-+	bool "Generate image for Xilinx Zynq"
-+	select BR2_LEGACY
-+	help
-+	  Since 2016.1, U-Boot can natively generate the Zynq boot
-+	  image, and so the Xilinx-specific format and tools have been
-+	  removed. Should you still have an older U-Boot that needs
-+	  this, a python3 version of the zynq-boot-bin.py script can be
-+	  downloaded from the URL below and called from a post-build
-+	  script.
+diff --git a/board/orangepi/common/extlinux.conf b/board/orangepi/common/extlinux.conf
+new file mode 100644
+index 0000000000..12f496b1fa
+--- /dev/null
++++ b/board/orangepi/common/extlinux.conf
+@@ -0,0 +1,4 @@
++LABEL default
++  kernel /boot/%LINUXIMAGE%
++  devicetreedir /boot
++  append root=PARTUUID=%PARTUUID% rootwait console=${console} rootfstype=ext4 quiet panic=10
+diff --git a/board/orangepi/common/genimage.cfg b/board/orangepi/common/genimage.cfg
+new file mode 100644
+index 0000000000..fa0d988991
+--- /dev/null
++++ b/board/orangepi/common/genimage.cfg
+@@ -0,0 +1,23 @@
++image sdcard.img {
++	partition u-boot {
++		in-partition-table = false
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
++	}
 +
-+	  https://gist.githubusercontent.com/jameshilliard/e09235dfc6f96c11418a134e6ebf7890/raw/135b7480c405ae8a77a9db615e495f9a9f2d3242/zynq-boot-bin.py
++	hdimage {
++		partition-table-type = gpt
++		gpt-location = 1008K # 1MB - 16KB(GPT)
++		gpt-no-backup = true
++		# After writing the image to the SD card,
++		# backup GPT data structures at the end of the disk:
++		# gdisk /dev/mmcblk0 then press the buttons: x, e, w, y
++	}
 +
- config BR2_PACKAGE_RPI_BT_FIRMWARE
- 	bool "rpi-bt-firmware package was renamed"
- 	depends on BR2_arm || BR2_aarch64
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index c630fc6552..1fd4dede92 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -455,18 +455,6 @@ config BR2_TARGET_UBOOT_SPL_NAME
- 	  and TPL name is tpl/u-boot-tpl.bin but not always. SPL name is
- 	  MLO on OMAP and SPL on i.MX6 for example.
- 
--config BR2_TARGET_UBOOT_ZYNQ_IMAGE
--	bool "Generate image for Xilinx Zynq"
--	depends on BR2_arm
--	depends on BR2_TARGET_UBOOT_SPL
--	depends on BR2_TARGET_UBOOT_FORMAT_DTB_IMG
--	help
--	  Generate the BOOT.BIN file from U-Boot's SPL. The image
--	  boots the Xilinx Zynq chip without any FPGA bitstream.
--	  A bitstream can be loaded by the U-Boot. The SPL searchs
--	  for u-boot-dtb.img file so this U-Boot format is required
--	  to be set.
--
- config BR2_TARGET_UBOOT_ZYNQMP
- 	bool "Boot on the Xilinx ZynqMP SoCs"
- 	depends on BR2_aarch64
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 574fc7089a..a61d1c8135 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -432,17 +432,6 @@ UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
- UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
- endif
- 
--ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
--define UBOOT_GENERATE_ZYNQ_IMAGE
--	$(HOST_DIR)/bin/python2 \
--		$(HOST_DIR)/bin/zynq-boot-bin.py \
--		-u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))) \
--		-o $(BINARIES_DIR)/BOOT.BIN
--endef
--UBOOT_DEPENDENCIES += host-zynq-boot-bin
--UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
--endif
--
- ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
- ifeq ($(BR2_TARGET_UBOOT_SPL),y)
- UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.hash b/package/zynq-boot-bin/zynq-boot-bin.hash
++	partition rootfs {
++		offset = 1M
++		image = "rootfs.ext4"
++		partition-uuid = %PARTUUID%
++	}
++}
+diff --git a/board/orangepi/common/post-build.sh b/board/orangepi/common/post-build.sh
+new file mode 100755
+index 0000000000..296f94b174
+--- /dev/null
++++ b/board/orangepi/common/post-build.sh
+@@ -0,0 +1,34 @@
++#!/bin/sh
++
++linux_image()
++{
++	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
++		echo "uImage"
++	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
++		echo "Image"
++	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGEGZ=y$" ${BR2_CONFIG}; then
++		echo "Image.gz"
++	else
++		echo "zImage"
++	fi
++}
++
++generic_getty()
++{
++	if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG}; then
++		echo ""
++	else
++		echo "s/\s*console=\S*//"
++	fi
++}
++
++PARTUUID="$($HOST_DIR/bin/uuidgen)"
++
++install -d "$TARGET_DIR/boot/extlinux/"
++
++sed -e "$(generic_getty)" \
++	-e "s/%LINUXIMAGE%/$(linux_image)/g" \
++	-e "s/%PARTUUID%/$PARTUUID/g" \
++	"board/orangepi/common/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
++
++sed "s/%PARTUUID%/$PARTUUID/g" "board/orangepi/common/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
+diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
 deleted file mode 100644
-index 0bc23de197..0000000000
---- a/package/zynq-boot-bin/zynq-boot-bin.hash
+index d094a64fe5..0000000000
+--- a/board/orangepi/orangepi-zero/boot.cmd
 +++ /dev/null
-@@ -1,2 +0,0 @@
--# From https://raw.githubusercontent.com/Xilinx/u-boot-xlnx
--sha1	940331ee02b0007099effa61e382fe7ea4174054	zynq-boot-bin.py
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
+@@ -1,9 +0,0 @@
+-setenv fdt_high ffffffff
+-
+-part uuid mmc 0:2 uuid
+-setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
+-
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-zero/genimage.cfg b/board/orangepi/orangepi-zero/genimage.cfg
 deleted file mode 100644
-index deba5f4096..0000000000
---- a/package/zynq-boot-bin/zynq-boot-bin.mk
+index 32f5454ae6..0000000000
+--- a/board/orangepi/orangepi-zero/genimage.cfg
 +++ /dev/null
-@@ -1,22 +0,0 @@
--################################################################################
+@@ -1,36 +0,0 @@
+-# Minimal SD card image for the OrangePi Zero
 -#
--# zynq-boot-bin
--#
--################################################################################
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h2-plus-orangepi-zero.dtb",
+-			"boot.scr"
+-		}
+-	}
+-	size = 10M
+-}
 -
--ZYNQ_BOOT_BIN_VERSION = 2015.1
--ZYNQ_BOOT_BIN_SOURCE = zynq-boot-bin.py
--ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/xilinx-v$(ZYNQ_BOOT_BIN_VERSION)/tools
--ZYNQ_BOOT_BIN_LICENSE = GPL-3.0+
+-image sdcard.img {
+-	hdimage {
+-	}
 -
--HOST_ZYNQ_BOOT_BIN_DEPENDENCIES = host-python
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
 -
--define HOST_ZYNQ_BOOT_BIN_EXTRACT_CMDS
--	cp $(HOST_ZYNQ_BOOT_BIN_DL_DIR)/$(ZYNQ_BOOT_BIN_SOURCE) $(@D)
--endef
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
 -
--define HOST_ZYNQ_BOOT_BIN_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/$(ZYNQ_BOOT_BIN_SOURCE) $(HOST_DIR)/bin/$(ZYNQ_BOOT_BIN_SOURCE)
--endef
--
--$(eval $(host-generic-package))
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
+index 5aaa1566c5..96f0c3f600 100644
+--- a/configs/orangepi_zero_defconfig
++++ b/configs/orangepi_zero_defconfig
+@@ -20,10 +20,13 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="63M"
++BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # Bootloader
+@@ -39,16 +42,12 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
+ # Required tools to create the SD image
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ 
+ # Wireless driver and firmware
+ BR2_PACKAGE_XR819_XRADIO=y
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
