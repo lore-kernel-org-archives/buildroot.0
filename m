@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A729EC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 13:58:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1837C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 13:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 256C28139A;
-	Sat,  5 Feb 2022 13:58:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73E718139E;
+	Sat,  5 Feb 2022 13:59:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qKtgIkdzDRsl; Sat,  5 Feb 2022 13:58:46 +0000 (UTC)
+	with ESMTP id uy-zOkwI7TyF; Sat,  5 Feb 2022 13:59:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 790D580E7E;
-	Sat,  5 Feb 2022 13:58:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC2951BF39F
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 13:58:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 893EB813BE;
+	Sat,  5 Feb 2022 13:59:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 381A91BF20B
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 13:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A306B60BE3
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 13:58:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27178813BE
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 13:59:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ESfEAQYWvK_B for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 13:58:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nzsAtjXw778D for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 13:59:33 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 569EE6068B
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 13:58:42 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B6958139E
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 13:59:32 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 356A2C0003;
- Sat,  5 Feb 2022 13:58:41 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id BAAF4FF802;
+ Sat,  5 Feb 2022 13:59:29 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nGLaK-000182-Ie; Sat, 05 Feb 2022 14:58:40 +0100
+ id 1nGLb7-0001Au-4x; Sat, 05 Feb 2022 14:59:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20220203232410.26906-1-ps.report@gmx.net>
-Date: Sat, 05 Feb 2022 14:58:40 +0100
-In-Reply-To: <20220203232410.26906-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 4 Feb 2022 00:24:10 +0100")
-Message-ID: <87ee4hv2i7.fsf@dell.be.48ers.dk>
+To: Adam Duskett <aduskett@gmail.com>
+References: <20220204193215.167521-1-aduskett@gmail.com>
+Date: Sat, 05 Feb 2022 14:59:29 +0100
+In-Reply-To: <20220204193215.167521-1-aduskett@gmail.com> (Adam Duskett's
+ message of "Fri, 4 Feb 2022 11:32:15 -0800")
+Message-ID: <87a6f5v2gu.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/mtools: bump version to 4.0.37
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-django: bump to version
+ 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,18 +60,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
- > For details see [1].
- > [1] https://lists.gnu.org/archive/html/info-gnu/2022-01/msg00006.html
+ > Tested with:
+ > support/testing/run-tests tests.package.test_python_django.TestPythonPy3Django
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
 Committed, thanks.
 
