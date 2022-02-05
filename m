@@ -4,83 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3057DC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8D2FC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99853400C7;
-	Sat,  5 Feb 2022 22:13:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9497140160;
+	Sat,  5 Feb 2022 22:14:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hEmNHwwNB8Ty; Sat,  5 Feb 2022 22:13:15 +0000 (UTC)
+	with ESMTP id k5RgVYlIs4VZ; Sat,  5 Feb 2022 22:14:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39B074010E;
-	Sat,  5 Feb 2022 22:13:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74A874016D;
+	Sat,  5 Feb 2022 22:14:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2636E1BF2A5
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:13:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A64F41BF2A5
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:14:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12EAC4010E
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:13:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1DE44043B
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:14:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4FnxoWB4l6eM for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 22:13:08 +0000 (UTC)
+ with ESMTP id 086-m5nI_LNy for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 22:14:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6F674400C7
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:13:08 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id s13so30484149ejy.3
- for <buildroot@buildroot.org>; Sat, 05 Feb 2022 14:13:08 -0800 (PST)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 92CBB40160
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:14:18 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id s21so2307705ejx.12
+ for <buildroot@buildroot.org>; Sat, 05 Feb 2022 14:14:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=ZigY5czq5jKdiLXOHtPnf/Oeqhk3SSWsIfr108dHNxs=;
- b=Vlpafl7Jx0G7IHULweAZygd2744VWBaJ9xgoYFl89eVbUxEIxvHXSRHxFugyXjpTwp
- N1nWhudNJvk5yaTCbiUZZg5qlmBA7oT3XcVhS2mZrQ8TSy/WiA2BPlvSCYFGNJsd6Ylu
- TIFKx0NygJZ0vXQCBEVcnS/85/9asniKlim1rx1onoF9o6nrqXGep8tPOY2sGG+b/5YG
- lKPaAvz9OKGEXy6gKeoM9a7XZInrVHN7chS2eF9PHJ0vchqLIMwivuAjfzDWLjkK/QZ/
- Xg4xEFf4AcPJVCnRr8aoypPWWVXj72KrVcvy2+Su5rTLtFNzVRlGBkVZ+yNMO2S8rLOr
- arYw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=xmKCRjAKRilVOzqe9XDga1dXuzUKksC/TkRJJTp2X4M=;
+ b=WevPlkU28ULFFl6Gcym9RP+n6hxh5vt5MDh9XZVz3p4j6Q2LaTEQj/JoZ1Hrhe4KVi
+ NSaPwhXVQyt4URC+oiH2THYrVRLoiL0/LTvt2e7jzQVg2r/patgzxpLcqaX1iVcByIgt
+ IzAxHU41oGPuTWtwbJ7piGFHhXcMGln9sQ1Ei+cO6Vw6Tg7V591rowbWbVdOAPewAyUV
+ G470jEFjFnSJg8a8E7sv/SSRblySlO8CBUNWSmQ5TP8zRzW3MzhhOLtI7KmTzsHakwRt
+ YeDM/JBBRas9cOx1bqJgWu4SOOw5S6z1Rxf4zAyYm72NwVpDBOPPrOPuWGtTe+u0IAGA
+ kjAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ZigY5czq5jKdiLXOHtPnf/Oeqhk3SSWsIfr108dHNxs=;
- b=ICm/FvR1SQnrZv5V5VDDVmz78//Lvn/UH1wcpcNQ3cir4lIwAwRUJXrseCmYVuc+2l
- ucp+a3kAZyQEy2hCzMzMHJ6P/pNtxnz2alHbYAgUAw4fb8PNqdOMLOFleJ8v6dS73T7F
- RJ52aZeUHdHou7UQK2yJyl3RFZuYZDsI59RAHt8vRaCSI7+/RQlgJ0r6Z4TzB0OgKVsB
- 3XLTUQlvZHdRI/h7xYSWdWgLQayBMkUoSXx6k7H2kmiMcEF3TDbkJNN4FCAWTLZQ1w52
- 6GAV5D+pnbmaxNbDXthCAOkyaYTx89XFmF9/WrUUNhZnjuy3ic59p1Dnkls4Zyi0adgs
- bhnQ==
-X-Gm-Message-State: AOAM530+gSpIOKnaudHhDmwLKAM2IzDlJ76uiJMw2lAUkQhBVx4ZRQNx
- WKHpK1NHjsGwmnPQZf5pQu//RAkF2/N0sA==
-X-Google-Smtp-Source: ABdhPJzO+UG3GG5Mh+pXeaHCs0Aeriv87p31Ch4Kk8gqWsnHWkhr0jZ2zcVxr9cuIFO5UVPlpAOl8g==
-X-Received: by 2002:a17:907:7e92:: with SMTP id
- qb18mr4667651ejc.555.1644099186437; 
- Sat, 05 Feb 2022 14:13:06 -0800 (PST)
+ bh=xmKCRjAKRilVOzqe9XDga1dXuzUKksC/TkRJJTp2X4M=;
+ b=6OULP3kLhCOHCs1/1QK89aEDPDTlXh6MKPIKj/Gh3PeT6KVPf5WI8E7s2ur2aXBH/C
+ NUtHaCtK7LBE9aTIGYHY7kY2B0NZeOkvCww8yaOqawDrmGkmGxNkR6OVjTlOUsyyMFEc
+ tlZwIYj6FYOhq0REuC6vEG66eTyd+xXuM6SqtCeO9Sk+bYhpDghKQHGtjecasYl5AmTF
+ WcB6yfAELsG22we8yJlhrmhpRYf0AdkgrZP5yIPltTTZZvtnCO3qWKKDeZiVjeshajZh
+ MelmLYjUuV1JbqAMKsz0hgFOY5/sn7uboYkCWPF/mlAODp13+Ol8hQiXmxUKABTFw5T0
+ wAJg==
+X-Gm-Message-State: AOAM531CzQIBQT4VOsRIKtgF+iXjRO4lJroqgcV8fsXd83T7I3gwrMZb
+ JGgcFUsZi48czVqfKiR3nQtuXQ==
+X-Google-Smtp-Source: ABdhPJw59SCttOlFnA6domO7G/sKyNW0JhS9FdiFz08LWnq9wExAdjGAQUxUhDTZFlzREKTAFPXpDQ==
+X-Received: by 2002:a17:907:6e0b:: with SMTP id
+ sd11mr4480942ejc.278.1644099256840; 
+ Sat, 05 Feb 2022 14:14:16 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id w18sm2709185edr.59.2022.02.05.14.13.05
+ by smtp.gmail.com with ESMTPSA id h16sm2019625ejj.56.2022.02.05.14.14.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 05 Feb 2022 14:13:05 -0800 (PST)
-Message-ID: <9ff36776-8e54-e835-21de-5b7466efb7fb@mind.be>
-Date: Sat, 5 Feb 2022 23:13:05 +0100
+ Sat, 05 Feb 2022 14:14:16 -0800 (PST)
+Message-ID: <1cc78242-026c-6c70-04b6-4c76a15fe6d7@mind.be>
+Date: Sat, 5 Feb 2022 23:14:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
 To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
 References: <20220114101247.342256-1-nolange79@gmail.com>
+ <20220114101247.342256-2-nolange79@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220114101247.342256-1-nolange79@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] support/scripts/mkusers: allow option
- for system uid/gid
+In-Reply-To: <20220114101247.342256-2-nolange79@gmail.com>
+Subject: Re: [Buildroot] [PATCH 2/2] mkusers: change default from normal to
+ system user
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,6 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -100,197 +103,84 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 14/01/2022 11:12, Norbert Lange wrote:
-> Some software decides based on uid/gid whether a user is a
-> system or normal/human user, with differnt behaviour for those
-> flavors (example journald [2]).
+> for all packages, this is the fitting default,
+> but the fallout will be user provided tables.
 > 
-> So adding logic to create system-users is necessary, we take
-> the now common ranges from [1].
-> 
-> This extends the mkusers script to allow -2 for uid/gid,
-> this argument will take an identifier from the system range.
-> 
-> System/user ranges are added as variables, and the argument
-> for user/system uid was added as variable aswell.
-> Thus some magic constants could be removed, some further
-> occurences of -1 were replaced with equivalent logic.
-> 
-> [1] - https://systemd.io/UIDS-GIDS/
-> [2] - https://www.freedesktop.org/software/systemd/man/journald.conf.html
+> Also update the docs with the chagned behaviour.
 > 
 > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-
-  I applied both to master, after squashing and making the modifications I 
-mentioned in my previous review. In addition...
-
 > ---
->   support/scripts/mkusers | 57 +++++++++++++++++++++++++++++------------
->   1 file changed, 40 insertions(+), 17 deletions(-)
+>   docs/manual/makeusers-syntax.txt | 11 +++++++----
+>   support/scripts/mkusers          |  6 +++---
+>   2 files changed, 10 insertions(+), 7 deletions(-)
 > 
+> diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
+> index 467e596230..3d1013f447 100644
+> --- a/docs/manual/makeusers-syntax.txt
+> +++ b/docs/manual/makeusers-syntax.txt
+> @@ -20,13 +20,16 @@ Where:
+>     It can not be +root+, and must be unique. If set to +-+, then just a
+>     group will be created.
+>   - +uid+ is the desired UID for the user. It must be unique, and not
+> -  +0+. If set to +-1+, then a unique UID will be computed by Buildroot
+> -  in the range [1000...1999]
+> +  +0+. If set to +-1+ or +-2+, then a unique UID will be computed by
+> +  Buildroot, with +-1+ denoting a system UID from [100...999] and +-2+
+> +  denoting a user UID from [1000...1999].
+>   - +group+ is the desired name for the user's main group. It can not
+>     be +root+. If the group does not exist, it will be created.
+>   - +gid+ is the desired GID for the user's main group. It must be unique,
+> -  and not +0+. If set to +-1+, and the group does not already exist, then
+> -  a unique GID will be computed by Buildroot in the range [1000..1999]
+> +  and not +0+. If set to +-1+ or +-2+, and the group does not already
+> +  exist, then a unique GID will be computed by Buildroot, with +-1+
+> +  denoting a system GID from [100...999] and +-2+ denoting a user GID
+> +  from [1000...1999].
+>   - +password+ is the crypt(3)-encoded password. If prefixed with +!+,
+>     then login is disabled. If prefixed with +=+, then it is interpreted
+>     as clear-text, and will be crypt-encoded (using MD5). If prefixed with
 > diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> index d00ba33823..9d8295e8a3 100755
+> index 9d8295e8a3..f7a3180e30 100755
 > --- a/support/scripts/mkusers
 > +++ b/support/scripts/mkusers
-> @@ -8,6 +8,15 @@ MIN_UID=1000
->   MAX_UID=1999
+> @@ -14,8 +14,8 @@ LAST_SYSTEM_UID=999
+>   FIRST_SYSTEM_GID=100
+>   LAST_SYSTEM_GID=999
+>   # argument to automatically crease system/user id
+> -AUTO_SYSTEM_ID=-2
+> -AUTO_USER_ID=-1
+> +AUTO_SYSTEM_ID=-1
+> +AUTO_USER_ID=-2
+>   
+>   # No more is configurable below this point
+>   #----------------------------------------------------------------------------
+> @@ -433,7 +433,7 @@ main() {
+>           read username uid group gid passwd home shell groups comment <<<"${line}"
+>           if [ "${groups}" != "-" ]; then
+>               for g in ${groups//,/ }; do
+> -                add_one_group "${g}" ${AUTO_USER_ID}
+> +                add_one_group "${g}" ${AUTO_SYSTEM_ID}
 
-  For consistency wiht LAST_SYSTEM_UID, I renamed this one to LAST_USER_UID (and 
-same for the other 3 of course).
+  I changed this to decide on user or system ID based on the uid:
 
+             if [ ${uid} -le 0 ]; then
+                 auto_id=${uid}
+             elif [ ${uid} -le ${LAST_SYSTEM_UID} ]; then
+                 auto_id=${AUTO_SYSTEM_ID}
+             else
+                 auto_id=${AUTO_USER_ID}
+             fi
+             for g in ${groups//,/ }; do
+                 add_one_group "${g}" ${auto_id}
+             done
+
+  It seems to work well.
 
   Regards,
   Arnout
 
-
->   MIN_GID=1000
->   MAX_GID=1999
-> +# use names from /etc/adduser.conf
-> +FIRST_SYSTEM_UID=100
-> +LAST_SYSTEM_UID=999
-> +FIRST_SYSTEM_GID=100
-> +LAST_SYSTEM_GID=999
-> +# argument to automatically crease system/user id
-> +AUTO_SYSTEM_ID=-2
-> +AUTO_USER_ID=-1
-> +
->   # No more is configurable below this point
->   #----------------------------------------------------------------------------
->   
-> @@ -136,9 +145,9 @@ check_user_validity() {
->           fail "invalid username '%s\n'" "${username}"
->       fi
->   
-> -    if [ ${gid} -lt -1 -o ${gid} -eq 0 ]; then
-> +    if [ ${gid} -lt -2 -o ${gid} -eq 0 ]; then
->           fail "invalid gid '%d' for '%s'\n" ${gid} "${username}"
-> -    elif [ ${gid} -ne -1 ]; then
-> +    elif [ ${gid} -ge 0 ]; then
->           # check the gid is not already used for another group
->           if [ -n "${_group}" -a "${_group}" != "${group}" ]; then
->               fail "gid '%d' for '%s' is already used by group '%s'\n" \
-> @@ -162,9 +171,9 @@ check_user_validity() {
->           fi
->       fi
->   
-> -    if [ ${uid} -lt -1 -o ${uid} -eq 0 ]; then
-> +    if [ ${uid} -lt -2 -o ${uid} -eq 0 ]; then
->           fail "invalid uid '%d' for '%s'\n" ${uid} "${username}"
-> -    elif [ ${uid} -ne -1 ]; then
-> +    elif [ ${uid} -ge 0 ]; then
->           # check the uid is not already used for another user
->           if [ -n "${_username}" -a "${_username}" != "${username}" ]; then
->               fail "uid '%d' for '%s' already used by user '%s'\n" \
-> @@ -198,16 +207,18 @@ check_user_validity() {
->   #   - not already used by a group
->   generate_gid() {
->       local group="${1}"
-> +    local mingid="${2:-$MIN_UID}"
-> +    local maxgid="${3:-$MAX_UID}"
->       local gid
->   
->       gid="$( get_gid "${group}" )"
->       if [ -z "${gid}" ]; then
-> -        for(( gid=MIN_GID; gid<=MAX_GID; gid++ )); do
-> +        for(( gid=mingid; gid<=maxgid; gid++ )); do
->               if [ -z "$( get_group "${gid}" )" ]; then
->                   break
->               fi
->           done
-> -        if [ ${gid} -gt ${MAX_GID} ]; then
-> +        if [ ${gid} -gt ${maxgid} ]; then
->               fail "can not allocate a GID for group '%s'\n" "${group}"
->           fi
->       fi
-> @@ -222,8 +233,12 @@ add_one_group() {
->       local members
->   
->       # Generate a new GID if needed
-> -    if [ ${gid} -eq -1 ]; then
-> -        gid="$( generate_gid "${group}" )"
-> +    if [ ${gid} -lt 0 ]; then
-> +        if [ ${gid} -eq ${AUTO_USER_ID} ]; then
-> +            gid="$( generate_gid "${group}" )"
-> +        else
-> +            gid="$( generate_gid "${group}" $FIRST_SYSTEM_GID $LAST_SYSTEM_GID )"
-> +        fi
->       fi
->   
->       members=$(get_members "$group")
-> @@ -247,16 +262,19 @@ add_one_group() {
->   #   - not already used by a user
->   generate_uid() {
->       local username="${1}"
-> +    local minuid="${2:-$MIN_UID}"
-> +    local maxuid="${3:-$MAX_UID}"
-> +
->       local uid
->   
->       uid="$( get_uid "${username}" )"
->       if [ -z "${uid}" ]; then
-> -        for(( uid=MIN_UID; uid<=MAX_UID; uid++ )); do
-> +        for(( uid=minuid; uid<=maxuid; uid++ )); do
->               if [ -z "$( get_username "${uid}" )" ]; then
->                   break
->               fi
->           done
-> -        if [ ${uid} -gt ${MAX_UID} ]; then
-> +        if [ ${uid} -gt ${maxuid} ]; then
->               fail "can not allocate a UID for user '%s'\n" "${username}"
->           fi
->       fi
-> @@ -307,8 +325,13 @@ add_one_user() {
->       check_user_validity "${username}" "${uid}" "${group}" "${gid}"
->   
->       # Generate a new UID if needed
-> -    if [ ${uid} -eq -1 ]; then
-> -        uid="$( generate_uid "${username}" )"
-> +    if [ ${uid} -lt 0 ]; then
-> +        if [ ${uid} -eq ${AUTO_USER_ID} ]; then
-> +            uid="$( generate_uid "${username}" )"
-> +        else
-> +            uid="$( generate_uid "${username}" $FIRST_SYSTEM_UID $LAST_SYSTEM_UID )"
-> +
-> +        fi
->       fi
->   
->       # Remove any previous instance of this user
-> @@ -384,8 +407,8 @@ main() {
->           ENTRIES+=( "${line}" )
->       done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
->   
-> -    # We first create groups whose gid is not -1, and then we create groups
-> -    # whose gid is -1 (automatic), so that, if a group is defined both with
-> +    # We first create groups whose gid is positive, and then we create groups
-> +    # whose gid is automatic, so that, if a group is defined both with
->       # a specified gid and an automatic gid, we ensure the specified gid is
->       # used, rather than a different automatic gid is computed.
->   
-> @@ -399,7 +422,7 @@ main() {
->       # Then, create all the main groups which gid *is* automatic
->       for line in "${ENTRIES[@]}"; do
->           read username uid group gid passwd home shell groups comment <<<"${line}"
-> -        [ ${gid} -eq -1 ] || continue    # Non-automatic gid
-> +        [ ${gid} -lt 0 ] || continue    # Non-automatic gid
->           add_one_group "${group}" "${gid}"
->       done
->   
-> @@ -410,7 +433,7 @@ main() {
->           read username uid group gid passwd home shell groups comment <<<"${line}"
->           if [ "${groups}" != "-" ]; then
->               for g in ${groups//,/ }; do
-> -                add_one_group "${g}" -1
-> +                add_one_group "${g}" ${AUTO_USER_ID}
 >               done
 >           fi
->       done
-> @@ -433,7 +456,7 @@ main() {
->       for line in "${ENTRIES[@]}"; do
->           read username uid group gid passwd home shell groups comment <<<"${line}"
->           [ "${username}" != "-" ] || continue # Magic string to skip user creation
-> -        [ ${uid} -eq -1        ] || continue # Non-automatic uid
-> +        [ ${uid} -lt 0        ] || continue # Non-automatic uid
->           add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
->                        "${home}" "${shell}" "${groups}" "${comment}"
 >       done
 _______________________________________________
 buildroot mailing list
