@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA334C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11A8DC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 877B7403AC;
-	Sat,  5 Feb 2022 22:55:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2A8D408B0;
+	Sat,  5 Feb 2022 22:55:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lYZmVTz7bLXd; Sat,  5 Feb 2022 22:55:19 +0000 (UTC)
+	with ESMTP id 7zbfNsHrcHds; Sat,  5 Feb 2022 22:55:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCAEC408B3;
-	Sat,  5 Feb 2022 22:55:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3AA011BF95F
+	by smtp4.osuosl.org (Postfix) with ESMTP id E88D1408DB;
+	Sat,  5 Feb 2022 22:55:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 406791BF962
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28EA460BDA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DC944088D
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qhsgJezchStg for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YWnjNuEwxljC for <buildroot@lists.busybox.net>;
  Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93BCC60806
+ by smtp4.osuosl.org (Postfix) with ESMTP id C46EE40889
  for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 82A4282AA7; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
+ id B5FAB82AA7; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 23:30:23 +0100
+Date: Sat, 5 Feb 2022 23:34:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec7fd50d08690a383fec40748ac9b78c3f764316
-X-Git-Newrev: 25457ba3458b932507424a9a55298282128059c8
+X-Git-Oldrev: 66192c66b9421b95f6cc45a46264c0193a873c58
+X-Git-Newrev: 5eff46a6c97203e7874edc931c4180f606f08275
 X-Patchwork-Hint: ignore
-Message-Id: <20220205224746.82A4282AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/runc: bump to version 1.1.0
+Message-Id: <20220205224746.B5FAB82AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sqliteschema: bump to
+ version 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25457ba3458b932507424a9a55298282128059c8
+commit: https://git.buildroot.net/buildroot/commit/?id=5eff46a6c97203e7874edc931c4180f606f08275
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added LGPL-2.1 license specifier: libseccomp is statically-linked.
+https://github.com/thombashi/sqliteschema/releases/tag/v1.2.1
 
-https://github.com/opencontainers/runc/releases/tag/v1.1.0
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-sqliteschema/python-sqliteschema.hash | 4 ++--
+ package/python-sqliteschema/python-sqliteschema.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 4ef04132bf..38d9f52510 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0eaf2f6606d72f166a5e7138a8a8d4d8f85d84e43448c08c66a1c93ead17a574  runc-1.0.3.tar.gz
-+sha256  a8de57edbf0ff741ea798ccdd99ac0e1b79914f552871bd7cd92b0569f200964  runc-1.1.0.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index c4e45a00a9..a40075544e 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
+index 310e56ab32..e60bd64325 100644
+--- a/package/python-sqliteschema/python-sqliteschema.hash
++++ b/package/python-sqliteschema/python-sqliteschema.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sqliteschema/json
+-md5  ca70006e289f1d506124de779ed73d64  sqliteschema-1.2.0.tar.gz
+-sha256  4c18f141239c58b6dbdc69130be41ed9740d8209a7ab6d529ba982a8b79c071a  sqliteschema-1.2.0.tar.gz
++md5  4fb0130e7cc60d92be468091fbfc3d51  sqliteschema-1.2.1.tar.gz
++sha256  dde195bd7bc70d5841bc01dff20ec23bd43be87d760d2dfc7c7f2e5fd3808ef3  sqliteschema-1.2.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
+diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
+index e4fd0de2fb..5c52e35111 100644
+--- a/package/python-sqliteschema/python-sqliteschema.mk
++++ b/package/python-sqliteschema/python-sqliteschema.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.0.3
-+RUNC_VERSION = 1.1.0
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
--RUNC_LICENSE = Apache-2.0
-+RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
- RUNC_CPE_ID_VENDOR = linuxfoundation
- 
+-PYTHON_SQLITESCHEMA_VERSION = 1.2.0
++PYTHON_SQLITESCHEMA_VERSION = 1.2.1
+ PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
+-PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/5c/d3/0c2e4c989a8d45f9443e431d7cbf89af4aba719fb0647b5f722716ef3990
++PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/85/f8/be54d4bebf551cb533d1dea11c3bf165a1a408c2a1cceb1f9724aadd9967
+ PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
+ PYTHON_SQLITESCHEMA_LICENSE = MIT
+ PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
