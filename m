@@ -1,79 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D45DC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 21:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 791FBC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A20440591;
-	Sat,  5 Feb 2022 21:56:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BC2581435;
+	Sat,  5 Feb 2022 22:10:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iM7pkcrTBP2P; Sat,  5 Feb 2022 22:10:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2B5981432;
+	Sat,  5 Feb 2022 22:10:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 652F81BF2A5
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:10:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53BF240544
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:10:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nxum2XWpkyZM; Sat,  5 Feb 2022 21:56:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA8E64054A;
-	Sat,  5 Feb 2022 21:56:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 33D1C1BF2CF
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 21:56:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1AFD560758
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 21:56:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ZeCZatQhDRD for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 21:56:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
- [IPv6:2a00:1450:4864:20::22c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AEFEA60640
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 21:56:05 +0000 (UTC)
-Received: by mail-lj1-x22c.google.com with SMTP id k18so1927990lji.12
- for <buildroot@buildroot.org>; Sat, 05 Feb 2022 13:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Rnf1bbxOCVom2LBSIiY08TAm3z3XFXNOODI9XMbLo98=;
- b=pcMhxpfNRMJMaArB7YCpNBlPCIKrS/Jyp2c24HWqC32hGcKbS31tULnWTIBqY/TCWY
- y03VOA3TLsww6FBwmiCPgAJkwHJVVScAkV5a1rmjguMVswkRqqsR3JNoZxdKVElLbxOG
- O6Rly+6pGIjKoYF6m0g6gCEpU/V22826TecgFEqYZhVT7DdJMFRMEsyBTQy0c7fCCoC+
- FigTsJ1SlwcGQaE9xDPpSXBawT8vJYiPPYQnWPAbUeevIJbO3GWMW0dCuD1eeL23Ptio
- ZmFlTjdVNlmvBysGHxOxier6ZI3hyF9Hngz8TesnWq4Bx+krteHqo8H+RO4zj6c5KUTX
- q1/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Rnf1bbxOCVom2LBSIiY08TAm3z3XFXNOODI9XMbLo98=;
- b=l+7ik7CfsXX+GR+a2I2VIOzvEIeKd2cVHQKbcMFpjQqzAFPIRWQvhECiTq5XjFcQWc
- 7qQUtZZ6WQTLxCzgQBF6KPgqMBaMw8AyW3UnmvpmJ1+cjSO4xQgeBOdRDFpH7Ua3fayJ
- oWar7lHC+lg+ZmGhkEfkM5mRNXtrDvtrtBTpGiByB0udR/DKzUlu4sX+/jXUMKhm8T5E
- CD/aDofzRuWaU7yu8ZzDFU9zGMHggj9zFZUh2iku8zr9LO78Dgb90aTD8741Eq+/kEP4
- m8P+wE+qwKdkj15iGMe8L+qrB3eTlHDOIlSRwCeAsp8ZXH+663cP3iTTkInJ6eFNeX1o
- LmHw==
-X-Gm-Message-State: AOAM532cnvnL2HLvWqJuvcjAw/nvae3H+E829NtTy4Se+u7pZY46113t
- XJVkL3RG0rkc1nlCJwYJvrBKsvtFHj8=
-X-Google-Smtp-Source: ABdhPJxva0oy5s20JYp3KORLvmWcD41VZz5LhsrSjpo4UV9tuJ6tO4FxMx4Zq+4Ct64vWxKU5DUW1A==
-X-Received: by 2002:a2e:7f03:: with SMTP id a3mr3942363ljd.525.1644098163278; 
- Sat, 05 Feb 2022 13:56:03 -0800 (PST)
-Received: from hellfire.local ([178.155.5.31])
- by smtp.gmail.com with ESMTPSA id y15sm856936lfk.195.2022.02.05.13.56.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 05 Feb 2022 13:56:02 -0800 (PST)
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zhMRpOSN3E13 for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 22:10:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6EA64028C
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:10:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id E60E882952; Sat,  5 Feb 2022 22:03:01 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 00:55:58 +0300
-Message-Id: <20220205215558.30751-1-kuzminov.sergey81@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] configs/orangepi_zero_defconfig: switch to
- extlinux
+Date: Sat, 5 Feb 2022 23:09:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f22bff4a79faee5e4501e0f7653c09e6dcf5387e
+X-Git-Newrev: 41ea61d59c3e0261673be978bcfc779c8188e43f
+X-Patchwork-Hint: ignore
+Message-Id: <20220205220301.E60E882952@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/mkusers: allow option for
+ system uid/gid
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,215 +53,280 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
-v1:
-- Exclude FAT partition, it is no longer needed for U-Boot.
-- Switch the rootfs partition from MBR to GPT for partition-uuid to work.
-- Switch to extlinux, this is convenient for debugging.
-- Create common scenarios for multiple boards to create an SD image: board/orangepi/common.
+commit: https://git.buildroot.net/buildroot/commit/?id=41ea61d59c3e0261673be978bcfc779c8188e43f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-v2:
-- Fix typo in first line of changes (s/he/it).
-- Add BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y.
-- Exclude one boot option from extlinux.conf.
+Some software decides based on uid/gid whether a user is a system or
+normal (human) user, with different behaviour for those flavors (example
+journald [2]).
 
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+So adding logic to create system-users is necessary, we take the now
+common ranges from [1].
+
+This extends the mkusers script to allow -2 for uid/gid, this argument
+will take an identifier from the user range. All identifiers used up to
+now should have been from the system range, so -1 is now interpreted as
+a system user/group.
+
+Note that after this commit, all the UIDs and GIDs that are created
+automatically (with -1) will change. That means if there is peristent
+data on an existing system that was created by such an automatic user,
+it will suddenly belong to a different user. However, this could already
+happen before: if a USERS line is added to a package, then other UIDs
+may change as well.
+
+Add system/user ranges as variables, and the argument for user/system
+uid variable as well. Thus some magic constants could be removed, some
+further occurences of -1 were replaced with equivalent logic. For
+consistency, the existing MIN/MAX_UID/GID variables are renamed to
+FIRST/LAST_USER_UID/GID.
+
+Update the documentation with the new automatic ranges.
+
+[1] - https://systemd.io/UIDS-GIDS/
+[2] - https://www.freedesktop.org/software/systemd/man/journald.conf.html
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+[Arnout: use -1 for system users; refactor the changes a bit]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/orangepi/common/extlinux.conf       |  4 +++
- board/orangepi/common/genimage.cfg        | 23 +++++++++++++++
- board/orangepi/common/post-build.sh       | 34 +++++++++++++++++++++
- board/orangepi/orangepi-zero/boot.cmd     |  9 ------
- board/orangepi/orangepi-zero/genimage.cfg | 36 -----------------------
- configs/orangepi_zero_defconfig           | 11 ++++---
- 6 files changed, 66 insertions(+), 51 deletions(-)
- create mode 100644 board/orangepi/common/extlinux.conf
- create mode 100644 board/orangepi/common/genimage.cfg
- create mode 100755 board/orangepi/common/post-build.sh
- delete mode 100644 board/orangepi/orangepi-zero/boot.cmd
- delete mode 100644 board/orangepi/orangepi-zero/genimage.cfg
+ docs/manual/makeusers-syntax.txt | 11 ++++--
+ support/scripts/mkusers          | 84 ++++++++++++++++++++++++++--------------
+ 2 files changed, 63 insertions(+), 32 deletions(-)
 
-diff --git a/board/orangepi/common/extlinux.conf b/board/orangepi/common/extlinux.conf
-new file mode 100644
-index 0000000000..12f496b1fa
---- /dev/null
-+++ b/board/orangepi/common/extlinux.conf
-@@ -0,0 +1,4 @@
-+LABEL default
-+  kernel /boot/%LINUXIMAGE%
-+  devicetreedir /boot
-+  append root=PARTUUID=%PARTUUID% rootwait console=${console} rootfstype=ext4 quiet panic=10
-diff --git a/board/orangepi/common/genimage.cfg b/board/orangepi/common/genimage.cfg
-new file mode 100644
-index 0000000000..fa0d988991
---- /dev/null
-+++ b/board/orangepi/common/genimage.cfg
-@@ -0,0 +1,23 @@
-+image sdcard.img {
-+	partition u-boot {
-+		in-partition-table = false
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
-+	}
-+
-+	hdimage {
-+		partition-table-type = gpt
-+		gpt-location = 1008K # 1MB - 16KB(GPT)
-+		gpt-no-backup = true
-+		# After writing the image to the SD card,
-+		# backup GPT data structures at the end of the disk:
-+		# gdisk /dev/mmcblk0 then press the buttons: x, e, w, y
-+	}
-+
-+	partition rootfs {
-+		offset = 1M
-+		image = "rootfs.ext4"
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/orangepi/common/post-build.sh b/board/orangepi/common/post-build.sh
-new file mode 100755
-index 0000000000..296f94b174
---- /dev/null
-+++ b/board/orangepi/common/post-build.sh
-@@ -0,0 +1,34 @@
-+#!/bin/sh
-+
-+linux_image()
-+{
-+	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
-+		echo "uImage"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
-+		echo "Image"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGEGZ=y$" ${BR2_CONFIG}; then
-+		echo "Image.gz"
-+	else
-+		echo "zImage"
-+	fi
-+}
-+
-+generic_getty()
-+{
-+	if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG}; then
-+		echo ""
-+	else
-+		echo "s/\s*console=\S*//"
-+	fi
-+}
-+
-+PARTUUID="$($HOST_DIR/bin/uuidgen)"
-+
-+install -d "$TARGET_DIR/boot/extlinux/"
-+
-+sed -e "$(generic_getty)" \
-+	-e "s/%LINUXIMAGE%/$(linux_image)/g" \
-+	-e "s/%PARTUUID%/$PARTUUID/g" \
-+	"board/orangepi/common/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+
-+sed "s/%PARTUUID%/$PARTUUID/g" "board/orangepi/common/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
-deleted file mode 100644
-index d094a64fe5..0000000000
---- a/board/orangepi/orangepi-zero/boot.cmd
-+++ /dev/null
-@@ -1,9 +0,0 @@
--setenv fdt_high ffffffff
--
--part uuid mmc 0:2 uuid
--setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
--
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
--
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-zero/genimage.cfg b/board/orangepi/orangepi-zero/genimage.cfg
-deleted file mode 100644
-index 32f5454ae6..0000000000
---- a/board/orangepi/orangepi-zero/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Minimal SD card image for the OrangePi Zero
--#
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-h2-plus-orangepi-zero.dtb",
--			"boot.scr"
--		}
--	}
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 5aaa1566c5..96f0c3f600 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -20,10 +20,13 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
+index 467e596230..3d1013f447 100644
+--- a/docs/manual/makeusers-syntax.txt
++++ b/docs/manual/makeusers-syntax.txt
+@@ -20,13 +20,16 @@ Where:
+   It can not be +root+, and must be unique. If set to +-+, then just a
+   group will be created.
+ - +uid+ is the desired UID for the user. It must be unique, and not
+-  +0+. If set to +-1+, then a unique UID will be computed by Buildroot
+-  in the range [1000...1999]
++  +0+. If set to +-1+ or +-2+, then a unique UID will be computed by
++  Buildroot, with +-1+ denoting a system UID from [100...999] and +-2+
++  denoting a user UID from [1000...1999]. 
+ - +group+ is the desired name for the user's main group. It can not
+   be +root+. If the group does not exist, it will be created.
+ - +gid+ is the desired GID for the user's main group. It must be unique,
+-  and not +0+. If set to +-1+, and the group does not already exist, then
+-  a unique GID will be computed by Buildroot in the range [1000..1999]
++  and not +0+. If set to +-1+ or +-2+, and the group does not already
++  exist, then a unique GID will be computed by Buildroot, with +-1+
++  denoting a system GID from [100...999] and +-2+ denoting a user GID
++  from [1000...1999]. 
+ - +password+ is the crypt(3)-encoded password. If prefixed with +!+,
+   then login is disabled. If prefixed with +=+, then it is interpreted
+   as clear-text, and will be crypt-encoded (using MD5). If prefixed with
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index d00ba33823..4fc06f8fdf 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -4,10 +4,19 @@ myname="${0##*/}"
  
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="63M"
-+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
- # BR2_TARGET_ROOTFS_TAR is not set
+ #----------------------------------------------------------------------------
+ # Configurable items
+-MIN_UID=1000
+-MAX_UID=1999
+-MIN_GID=1000
+-MAX_GID=1999
++FIRST_USER_UID=1000
++LAST_USER_UID=1999
++FIRST_USER_GID=1000
++LAST_USER_GID=1999
++# use names from /etc/adduser.conf
++FIRST_SYSTEM_UID=100
++LAST_SYSTEM_UID=999
++FIRST_SYSTEM_GID=100
++LAST_SYSTEM_GID=999
++# argument to automatically crease system/user id
++AUTO_SYSTEM_ID=-1
++AUTO_USER_ID=-2
++
+ # No more is configurable below this point
+ #----------------------------------------------------------------------------
  
- # Bootloader
-@@ -39,16 +42,12 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+@@ -136,9 +145,9 @@ check_user_validity() {
+         fail "invalid username '%s\n'" "${username}"
+     fi
  
- # Required tools to create the SD image
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
+-    if [ ${gid} -lt -1 -o ${gid} -eq 0 ]; then
++    if [ ${gid} -lt -2 -o ${gid} -eq 0 ]; then
+         fail "invalid gid '%d' for '%s'\n" ${gid} "${username}"
+-    elif [ ${gid} -ne -1 ]; then
++    elif [ ${gid} -ge 0 ]; then
+         # check the gid is not already used for another group
+         if [ -n "${_group}" -a "${_group}" != "${group}" ]; then
+             fail "gid '%d' for '%s' is already used by group '%s'\n" \
+@@ -162,9 +171,9 @@ check_user_validity() {
+         fi
+     fi
  
- # Image
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+-    if [ ${uid} -lt -1 -o ${uid} -eq 0 ]; then
++    if [ ${uid} -lt -2 -o ${uid} -eq 0 ]; then
+         fail "invalid uid '%d' for '%s'\n" ${uid} "${username}"
+-    elif [ ${uid} -ne -1 ]; then
++    elif [ ${uid} -ge 0 ]; then
+         # check the uid is not already used for another user
+         if [ -n "${_username}" -a "${_username}" != "${username}" ]; then
+             fail "uid '%d' for '%s' already used by user '%s'\n" \
+@@ -194,20 +203,22 @@ check_user_validity() {
+ # then simply report its current GID. Otherwise, generate the lowest GID
+ # that is:
+ #   - not 0
+-#   - comprised in [MIN_GID..MAX_GID]
++#   - comprised in [$2..$3]
+ #   - not already used by a group
+ generate_gid() {
+     local group="${1}"
++    local mingid="${2}"
++    local maxgid="${3}"
+     local gid
  
- # Wireless driver and firmware
- BR2_PACKAGE_XR819_XRADIO=y
--- 
-2.34.1
-
+     gid="$( get_gid "${group}" )"
+     if [ -z "${gid}" ]; then
+-        for(( gid=MIN_GID; gid<=MAX_GID; gid++ )); do
++        for(( gid=mingid; gid<=maxgid; gid++ )); do
+             if [ -z "$( get_group "${gid}" )" ]; then
+                 break
+             fi
+         done
+-        if [ ${gid} -gt ${MAX_GID} ]; then
++        if [ ${gid} -gt ${maxgid} ]; then
+             fail "can not allocate a GID for group '%s'\n" "${group}"
+         fi
+     fi
+@@ -222,8 +233,10 @@ add_one_group() {
+     local members
+ 
+     # Generate a new GID if needed
+-    if [ ${gid} -eq -1 ]; then
+-        gid="$( generate_gid "${group}" )"
++    if [ ${gid} -eq ${AUTO_USER_ID} ]; then
++        gid="$( generate_gid "${group}" $FIRST_USER_GID $LAST_USER_GID )"
++    elif [ ${gid} -eq ${AUTO_SYSTEM_ID} ]; then
++        gid="$( generate_gid "${group}" $FIRST_SYSTEM_GID $LAST_SYSTEM_GID )"
+     fi
+ 
+     members=$(get_members "$group")
+@@ -243,20 +256,23 @@ add_one_group() {
+ # then simply report its current UID. Otherwise, generate the lowest UID
+ # that is:
+ #   - not 0
+-#   - comprised in [MIN_UID..MAX_UID]
++#   - comprised in [$2..$3]
+ #   - not already used by a user
+ generate_uid() {
+     local username="${1}"
++    local minuid="${2}"
++    local maxuid="${3}"
++
+     local uid
+ 
+     uid="$( get_uid "${username}" )"
+     if [ -z "${uid}" ]; then
+-        for(( uid=MIN_UID; uid<=MAX_UID; uid++ )); do
++        for(( uid=minuid; uid<=maxuid; uid++ )); do
+             if [ -z "$( get_username "${uid}" )" ]; then
+                 break
+             fi
+         done
+-        if [ ${uid} -gt ${MAX_UID} ]; then
++        if [ ${uid} -gt ${maxuid} ]; then
+             fail "can not allocate a UID for user '%s'\n" "${username}"
+         fi
+     fi
+@@ -307,8 +323,10 @@ add_one_user() {
+     check_user_validity "${username}" "${uid}" "${group}" "${gid}"
+ 
+     # Generate a new UID if needed
+-    if [ ${uid} -eq -1 ]; then
+-        uid="$( generate_uid "${username}" )"
++    if [ ${uid} -eq ${AUTO_USER_ID} ]; then
++        uid="$( generate_uid "${username}" $FIRST_USER_GID $LAST_USER_GID )"
++    elif [ ${uid} -eq ${AUTO_SYSTEM_ID} ]; then
++        uid="$( generate_uid "${username}" $FIRST_SYSTEM_GID $LAST_SYSTEM_GID )"
+     fi
+ 
+     # Remove any previous instance of this user
+@@ -369,14 +387,15 @@ add_one_user() {
+ main() {
+     local username uid group gid passwd home shell groups comment
+     local line
++    local auto_id
+     local -a ENTRIES
+ 
+     # Some sanity checks
+-    if [ ${MIN_UID} -le 0 ]; then
+-        fail "MIN_UID must be >0 (currently %d)\n" ${MIN_UID}
++    if [ ${FIRST_USER_UID} -le 0 ]; then
++        fail "FIRST_USER_UID must be >0 (currently %d)\n" ${FIRST_USER_UID}
+     fi
+-    if [ ${MIN_GID} -le 0 ]; then
+-        fail "MIN_GID must be >0 (currently %d)\n" ${MIN_GID}
++    if [ ${FIRST_USER_GID} -le 0 ]; then
++        fail "FIRST_USER_GID must be >0 (currently %d)\n" ${FIRST_USER_GID}
+     fi
+ 
+     # Read in all the file in memory, exclude empty lines and comments
+@@ -384,8 +403,8 @@ main() {
+         ENTRIES+=( "${line}" )
+     done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
+ 
+-    # We first create groups whose gid is not -1, and then we create groups
+-    # whose gid is -1 (automatic), so that, if a group is defined both with
++    # We first create groups whose gid is positive, and then we create groups
++    # whose gid is automatic, so that, if a group is defined both with
+     # a specified gid and an automatic gid, we ensure the specified gid is
+     # used, rather than a different automatic gid is computed.
+ 
+@@ -399,18 +418,27 @@ main() {
+     # Then, create all the main groups which gid *is* automatic
+     for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+-        [ ${gid} -eq -1 ] || continue    # Non-automatic gid
++        [ ${gid} -lt 0 ] || continue    # Non-automatic gid
+         add_one_group "${group}" "${gid}"
+     done
+ 
+     # Then, create all the additional groups
+     # If any additional group is already a main group, we should use
+-    # the gid of that main group; otherwise, we can use any gid
++    # the gid of that main group; otherwise, we can use any gid - a
++    # system gid if the uid is a system user (<= LAST_SYSTEM_UID),
++    # otherwise a user gid.
+     for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         if [ "${groups}" != "-" ]; then
++            if [ ${uid} -le 0 ]; then
++                auto_id=${uid}
++            elif [ ${uid} -le ${LAST_SYSTEM_UID} ]; then
++                auto_id=${AUTO_SYSTEM_ID}
++            else
++                auto_id=${AUTO_USER_ID}
++            fi
+             for g in ${groups//,/ }; do
+-                add_one_group "${g}" -1
++                add_one_group "${g}" ${auto_id}
+             done
+         fi
+     done
+@@ -433,7 +461,7 @@ main() {
+     for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ "${username}" != "-" ] || continue # Magic string to skip user creation
+-        [ ${uid} -eq -1        ] || continue # Non-automatic uid
++        [ ${uid} -lt 0        ] || continue # Non-automatic uid
+         add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
+                      "${home}" "${shell}" "${groups}" "${comment}"
+     done
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
