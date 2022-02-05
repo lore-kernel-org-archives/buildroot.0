@@ -1,79 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD445C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 23:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C48C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 23:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6101A60AC6;
-	Sat,  5 Feb 2022 23:29:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A30128144E;
+	Sat,  5 Feb 2022 23:34:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ik2Wp82YmdBP; Sat,  5 Feb 2022 23:29:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gFl2s9sn3nzr; Sat,  5 Feb 2022 23:34:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64A0760804;
-	Sat,  5 Feb 2022 23:29:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B3508142F;
+	Sat,  5 Feb 2022 23:34:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD2BC1BF863
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:29:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 282951BF863
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AE4281497
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:29:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16A058142F
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:34:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t0ZaUZww5S9r for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 23:29:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
- [IPv6:2a00:1450:4864:20::22f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B52481495
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 23:29:40 +0000 (UTC)
-Received: by mail-lj1-x22f.google.com with SMTP id t7so14094500ljc.10
- for <buildroot@buildroot.org>; Sat, 05 Feb 2022 15:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=w1G1wEzMHXLl77yqibUPAoOoFjfXlYOnkVIkC46Iez8=;
- b=bNhfsPcGZNExQY82vIWDeOQfRZYScBmvkTeS1xjrPaS1O8HjWqiFS3figwg2vehOht
- vjFzoZl0/bOPnvdqG8zSP84nKqLzXe6krLHR36LeT001M8Ui74I0MBM0I+oCwV/BqhkH
- 86hXMObeo/SnzsVAY7mpoBu62IhsBLoxU8QgRDdaE1WSysVHGPm4nkxyBx7vM0c75xSg
- 2gI4GIxmVLv9gfkfsjWivJ2iitHQmbqQ8JWOoqhrDgT5wFUGV4RgF2Ahl71cdJLackaf
- jySfKCn0FHfSLqFPHWFB6CyDHKOCgjipfwGrFqs0awpF+0xc6heIjfChAmi7kkvg+yUT
- 2UPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=w1G1wEzMHXLl77yqibUPAoOoFjfXlYOnkVIkC46Iez8=;
- b=gFBjV+zaBth5Tf95Q339x71fYcbxnt97QxZLGYAqEM4z5bZsNkr60OctZDIjYdMJyk
- Wm5EAhL3YzKB0ibEQVrrlouVDI8BK0gkQNrhkh9UUw+7rBDXwJVvG1BiejL71EKz98ck
- 4rbaU+GOzc/NQM8BgZVeCe4xssMS/709mvSzHZ/f2sYGju4ZwsE3BD88BMIVSl+X9I8G
- s2lveM01bw0HhKNQ/leny0+lV5jaog6daXKCqPrUsm3WgngGRQTPEj1voww6Iz9Xogee
- C0Ij6VhhuUPHFxnkJTOIdov77GZVYyyCoucPMldPJxAO35qy23OENh+x4vh7lPGtfnj0
- W3MQ==
-X-Gm-Message-State: AOAM531IYMaJmb1FbJMw28EvYbYaHINDlVVdXPi4GbXNkBaBZ7ShAbDv
- JHWddDh9w3ZNEiiiz/AomwoeC+ZG76I=
-X-Google-Smtp-Source: ABdhPJww3kFymu/PzMcHHFA3G2VSk5LXfoMx2honh532HZOmBPBLS3T4mCIFEEhkH6ogoRyKadO3iQ==
-X-Received: by 2002:a2e:2416:: with SMTP id k22mr3997756ljk.377.1644103778251; 
- Sat, 05 Feb 2022 15:29:38 -0800 (PST)
-Received: from hellfire.local ([178.155.5.31])
- by smtp.gmail.com with ESMTPSA id p16sm927678ljn.55.2022.02.05.15.29.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 05 Feb 2022 15:29:37 -0800 (PST)
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 02:29:18 +0300
-Message-Id: <20220205232918.27091-1-kuzminov.sergey81@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3] configs/orangepi_zero_defconfig: switch to
- extlinux
+ with ESMTP id rXJfdS_02GFp for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 23:34:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FFEA8142C
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 23:34:22 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id GUZQnhCuNDzPJGUZQnGYK4; Sun, 06 Feb 2022 00:34:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644104060; bh=i4kTSFN23adph6tDQUY/+3uPK3YAYAqpQEM5kN0tM9o=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=JHpX5G1DKupvh5cxm/ZQjuBu1G4cP5xAtcyQirrdrMRrBD+zoBeLlkaErdgITmOiP
+ 8bdawvGy9B6OjjlngFe41srZAHZ9EcP+HAqY0pyBY14ETgi3Dhe1LoAJqYAVBRHUOX
+ medIje0IBT9st/9qCU5bmv9xy892c5ul1v5ezZsdC/8VfbwsNCAxGFbDGNxZMM6b8Q
+ R/o5FLUyvNeraNyBydulUJxfoQTc4AdFezeBcnbZkALhVgqR3+D2e1/Ul2K8jzNALF
+ uuX6Pg+o6swz29l7CufhpTEtZl2zbDtQN/52D9Avo5rSsq+j4aDloHTZ+G7vcMv47w
+ CBhliBXRawRag==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sun, 6 Feb 2022 00:34:19 +0100
+Message-Id: <583B80CF-6F5A-4E96-BAF6-FC019E12868E@benettiengineering.com>
+References: <20220205232918.27091-1-kuzminov.sergey81@gmail.com>
+In-Reply-To: <20220205232918.27091-1-kuzminov.sergey81@gmail.com>
+To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfF2CKg+Hmcfa35LI5mHI6dC0Gd7bFFVkImDDM/HMmoDJ0t0J6uObIk33S7IIZeJ9qShaT0+7HFt08AL0ziOhDVBL0x3L5UXwL2mQn3qhP0wJh98u7+xD
+ M1eiMuXX+nViw/WhSnYrZY8Xp9mXI8hZj8V1muJjoN24AbmVZTSEgrNMDkQEQlYXB46BVcjfKrAC9vdP9rlyPK9fZenjxyg3F7yp3ThVjz3lgQd3fwPtjrV2
+ ixfgWaPpZnxfTf+2mONaZA==
+Subject: Re: [Buildroot] [PATCH v3] configs/orangepi_zero_defconfig: switch
+ to extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,217 +67,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
-* Exclude FAT partition, it is no longer needed for U-Boot.
-* Switch the rootfs partition from MBR to GPT for partition-uuid to work.
-* Switch to extlinux, this is convenient for debugging.
-* Create common scenarios for multiple boards to create an SD image: board/orangepi/common.
-* Add BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y, remount root filesystem read-write during boot.
----
-V1->V2:
-* improved commit log
-* removed commented line in extlinux.conf
-* removed one boot option from extlinux.conf
-
-V2->V3:
-* improved commit log
-* removed comment from board/orangepi/common/genimage.cfg
-
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
----
- board/orangepi/common/extlinux.conf       |  4 +++
- board/orangepi/common/genimage.cfg        | 20 +++++++++++++
- board/orangepi/common/post-build.sh       | 34 +++++++++++++++++++++
- board/orangepi/orangepi-zero/boot.cmd     |  9 ------
- board/orangepi/orangepi-zero/genimage.cfg | 36 -----------------------
- configs/orangepi_zero_defconfig           | 11 ++++---
- 6 files changed, 63 insertions(+), 51 deletions(-)
- create mode 100644 board/orangepi/common/extlinux.conf
- create mode 100644 board/orangepi/common/genimage.cfg
- create mode 100755 board/orangepi/common/post-build.sh
- delete mode 100644 board/orangepi/orangepi-zero/boot.cmd
- delete mode 100644 board/orangepi/orangepi-zero/genimage.cfg
-
-diff --git a/board/orangepi/common/extlinux.conf b/board/orangepi/common/extlinux.conf
-new file mode 100644
-index 0000000000..12f496b1fa
---- /dev/null
-+++ b/board/orangepi/common/extlinux.conf
-@@ -0,0 +1,4 @@
-+LABEL default
-+  kernel /boot/%LINUXIMAGE%
-+  devicetreedir /boot
-+  append root=PARTUUID=%PARTUUID% rootwait console=${console} rootfstype=ext4 quiet panic=10
-diff --git a/board/orangepi/common/genimage.cfg b/board/orangepi/common/genimage.cfg
-new file mode 100644
-index 0000000000..a61c4a039f
---- /dev/null
-+++ b/board/orangepi/common/genimage.cfg
-@@ -0,0 +1,20 @@
-+image sdcard.img {
-+	partition u-boot {
-+		in-partition-table = false
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
-+	}
-+
-+	hdimage {
-+		partition-table-type = gpt
-+		gpt-location = 1008K # 1MB - 16KB(GPT)
-+		gpt-no-backup = true
-+	}
-+
-+	partition rootfs {
-+		offset = 1M
-+		image = "rootfs.ext4"
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/orangepi/common/post-build.sh b/board/orangepi/common/post-build.sh
-new file mode 100755
-index 0000000000..296f94b174
---- /dev/null
-+++ b/board/orangepi/common/post-build.sh
-@@ -0,0 +1,34 @@
-+#!/bin/sh
-+
-+linux_image()
-+{
-+	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
-+		echo "uImage"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
-+		echo "Image"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGEGZ=y$" ${BR2_CONFIG}; then
-+		echo "Image.gz"
-+	else
-+		echo "zImage"
-+	fi
-+}
-+
-+generic_getty()
-+{
-+	if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG}; then
-+		echo ""
-+	else
-+		echo "s/\s*console=\S*//"
-+	fi
-+}
-+
-+PARTUUID="$($HOST_DIR/bin/uuidgen)"
-+
-+install -d "$TARGET_DIR/boot/extlinux/"
-+
-+sed -e "$(generic_getty)" \
-+	-e "s/%LINUXIMAGE%/$(linux_image)/g" \
-+	-e "s/%PARTUUID%/$PARTUUID/g" \
-+	"board/orangepi/common/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+
-+sed "s/%PARTUUID%/$PARTUUID/g" "board/orangepi/common/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
-deleted file mode 100644
-index d094a64fe5..0000000000
---- a/board/orangepi/orangepi-zero/boot.cmd
-+++ /dev/null
-@@ -1,9 +0,0 @@
--setenv fdt_high ffffffff
--
--part uuid mmc 0:2 uuid
--setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
--
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
--
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-zero/genimage.cfg b/board/orangepi/orangepi-zero/genimage.cfg
-deleted file mode 100644
-index 32f5454ae6..0000000000
---- a/board/orangepi/orangepi-zero/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Minimal SD card image for the OrangePi Zero
--#
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-h2-plus-orangepi-zero.dtb",
--			"boot.scr"
--		}
--	}
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 5aaa1566c5..96f0c3f600 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -20,10 +20,13 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="63M"
-+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
- # Bootloader
-@@ -39,16 +42,12 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- 
- # Required tools to create the SD image
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
- 
- # Image
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- 
- # Wireless driver and firmware
- BR2_PACKAGE_XR819_XRADIO=y
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Cj4gSWwgZ2lvcm5vIDYgZmViIDIwMjIsIGFsbGUgb3JlIDAwOjI5LCBTZXJnZXkgS3V6bWlub3Yg
+PGt1em1pbm92LnNlcmdleTgxQGdtYWlsLmNvbT4gaGEgc2NyaXR0bzoKPiAKPiDvu79DaGFuZ2Vz
+Ogo+ICogRXhjbHVkZSBGQVQgcGFydGl0aW9uLCBpdCBpcyBubyBsb25nZXIgbmVlZGVkIGZvciBV
+LUJvb3QuCj4gKiBTd2l0Y2ggdGhlIHJvb3RmcyBwYXJ0aXRpb24gZnJvbSBNQlIgdG8gR1BUIGZv
+ciBwYXJ0aXRpb24tdXVpZCB0byB3b3JrLgo+ICogU3dpdGNoIHRvIGV4dGxpbnV4LCB0aGlzIGlz
+IGNvbnZlbmllbnQgZm9yIGRlYnVnZ2luZy4KPiAqIENyZWF0ZSBjb21tb24gc2NlbmFyaW9zIGZv
+ciBtdWx0aXBsZSBib2FyZHMgdG8gY3JlYXRlIGFuIFNEIGltYWdlOiBib2FyZC9vcmFuZ2VwaS9j
+b21tb24uCj4gKiBBZGQgQlIyX1RBUkdFVF9HRU5FUklDX1JFTU9VTlRfUk9PVEZTX1JXPXksIHJl
+bW91bnQgcm9vdCBmaWxlc3lzdGVtIHJlYWQtd3JpdGUgZHVyaW5nIGJvb3QuCgpZb3VyIFNvQiBn
+b2VzIGhlcmUgYWxvbmcgbXkgUmV2aWV3ZWQtYnkgYW5kIFRlc3RlZC1ieShvbmUgcGVyIGxpbmUp
+IEnigJl2ZSBnaXZlbiB5b3Ugb24gVjEuCgo+IC0tLQo+IFYxLT5WMjoKPiAqIGltcHJvdmVkIGNv
+bW1pdCBsb2cKPiAqIHJlbW92ZWQgY29tbWVudGVkIGxpbmUgaW4gZXh0bGludXguY29uZgo+ICog
+cmVtb3ZlZCBvbmUgYm9vdCBvcHRpb24gZnJvbSBleHRsaW51eC5jb25mCj4gCj4gVjItPlYzOgo+
+ICogaW1wcm92ZWQgY29tbWl0IGxvZwo+ICogcmVtb3ZlZCBjb21tZW50IGZyb20gYm9hcmQvb3Jh
+bmdlcGkvY29tbW9uL2dlbmltYWdlLmNmZwo+IAo+IFNpZ25lZC1vZmYtYnk6IFNlcmdleSBLdXpt
+aW5vdiA8a3V6bWlub3Yuc2VyZ2V5ODFAZ21haWwuY29tPgpBbmQgaGVyZSB5b3UgcmVtb3ZlIHlv
+dXIgU29CIF5eXgoKUGxlYXNlIHNlbmQgYSBWNCBwb2ludGluZyB5b3XigJl2ZSBmaXhlZCB5b3Vy
+IFNpZ25lZC1vZmYtYnkgcG9zaXRpb24gYW5kIHdl4oCZcmUgZG9uZSA6LSkKCkdpdWxpbwo+IC0t
+LQo+IGJvYXJkL29yYW5nZXBpL2NvbW1vbi9leHRsaW51eC5jb25mICAgICAgIHwgIDQgKysrCj4g
+Ym9hcmQvb3JhbmdlcGkvY29tbW9uL2dlbmltYWdlLmNmZyAgICAgICAgfCAyMCArKysrKysrKysr
+KysrCj4gYm9hcmQvb3JhbmdlcGkvY29tbW9uL3Bvc3QtYnVpbGQuc2ggICAgICAgfCAzNCArKysr
+KysrKysrKysrKysrKysrKysKPiBib2FyZC9vcmFuZ2VwaS9vcmFuZ2VwaS16ZXJvL2Jvb3QuY21k
+ICAgICB8ICA5IC0tLS0tLQo+IGJvYXJkL29yYW5nZXBpL29yYW5nZXBpLXplcm8vZ2VuaW1hZ2Uu
+Y2ZnIHwgMzYgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiBjb25maWdzL29yYW5nZXBpX3plcm9f
+ZGVmY29uZmlnICAgICAgICAgICB8IDExICsrKystLS0KPiA2IGZpbGVzIGNoYW5nZWQsIDYzIGlu
+c2VydGlvbnMoKyksIDUxIGRlbGV0aW9ucygtKQo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9v
+cmFuZ2VwaS9jb21tb24vZXh0bGludXguY29uZgo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9v
+cmFuZ2VwaS9jb21tb24vZ2VuaW1hZ2UuY2ZnCj4gY3JlYXRlIG1vZGUgMTAwNzU1IGJvYXJkL29y
+YW5nZXBpL2NvbW1vbi9wb3N0LWJ1aWxkLnNoCj4gZGVsZXRlIG1vZGUgMTAwNjQ0IGJvYXJkL29y
+YW5nZXBpL29yYW5nZXBpLXplcm8vYm9vdC5jbWQKPiBkZWxldGUgbW9kZSAxMDA2NDQgYm9hcmQv
+b3JhbmdlcGkvb3JhbmdlcGktemVyby9nZW5pbWFnZS5jZmcKPiAKPiBkaWZmIC0tZ2l0IGEvYm9h
+cmQvb3JhbmdlcGkvY29tbW9uL2V4dGxpbnV4LmNvbmYgYi9ib2FyZC9vcmFuZ2VwaS9jb21tb24v
+ZXh0bGludXguY29uZgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4u
+MTJmNDk2YjFmYQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9vcmFuZ2VwaS9jb21tb24v
+ZXh0bGludXguY29uZgo+IEBAIC0wLDAgKzEsNCBAQAo+ICtMQUJFTCBkZWZhdWx0Cj4gKyAga2Vy
+bmVsIC9ib290LyVMSU5VWElNQUdFJQo+ICsgIGRldmljZXRyZWVkaXIgL2Jvb3QKPiArICBhcHBl
+bmQgcm9vdD1QQVJUVVVJRD0lUEFSVFVVSUQlIHJvb3R3YWl0IGNvbnNvbGU9JHtjb25zb2xlfSBy
+b290ZnN0eXBlPWV4dDQgcXVpZXQgcGFuaWM9MTAKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvb3Jhbmdl
+cGkvY29tbW9uL2dlbmltYWdlLmNmZyBiL2JvYXJkL29yYW5nZXBpL2NvbW1vbi9nZW5pbWFnZS5j
+ZmcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmE2MWM0YTAzOWYK
+PiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvb3JhbmdlcGkvY29tbW9uL2dlbmltYWdlLmNm
+Zwo+IEBAIC0wLDAgKzEsMjAgQEAKPiAraW1hZ2Ugc2RjYXJkLmltZyB7Cj4gKyAgICBwYXJ0aXRp
+b24gdS1ib290IHsKPiArICAgICAgICBpbi1wYXJ0aXRpb24tdGFibGUgPSBmYWxzZQo+ICsgICAg
+ICAgIGltYWdlID0gInUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCj4gKyAgICAgICAgb2Zmc2V0
+ID0gOEsKPiArICAgICAgICBzaXplID0gMTAwMEsgIyAxTUIgLSA4S0Iob2Zmc2V0KSAtIDE2S0Io
+R1BUKQo+ICsgICAgfQo+ICsKPiArICAgIGhkaW1hZ2Ugewo+ICsgICAgICAgIHBhcnRpdGlvbi10
+YWJsZS10eXBlID0gZ3B0Cj4gKyAgICAgICAgZ3B0LWxvY2F0aW9uID0gMTAwOEsgIyAxTUIgLSAx
+NktCKEdQVCkKPiArICAgICAgICBncHQtbm8tYmFja3VwID0gdHJ1ZQo+ICsgICAgfQo+ICsKPiAr
+ICAgIHBhcnRpdGlvbiByb290ZnMgewo+ICsgICAgICAgIG9mZnNldCA9IDFNCj4gKyAgICAgICAg
+aW1hZ2UgPSAicm9vdGZzLmV4dDQiCj4gKyAgICAgICAgcGFydGl0aW9uLXV1aWQgPSAlUEFSVFVV
+SUQlCj4gKyAgICB9Cj4gK30KPiBkaWZmIC0tZ2l0IGEvYm9hcmQvb3JhbmdlcGkvY29tbW9uL3Bv
+c3QtYnVpbGQuc2ggYi9ib2FyZC9vcmFuZ2VwaS9jb21tb24vcG9zdC1idWlsZC5zaAo+IG5ldyBm
+aWxlIG1vZGUgMTAwNzU1Cj4gaW5kZXggMDAwMDAwMDAwMC4uMjk2Zjk0YjE3NAo+IC0tLSAvZGV2
+L251bGwKPiArKysgYi9ib2FyZC9vcmFuZ2VwaS9jb21tb24vcG9zdC1idWlsZC5zaAo+IEBAIC0w
+LDAgKzEsMzQgQEAKPiArIyEvYmluL3NoCj4gKwo+ICtsaW51eF9pbWFnZSgpCj4gK3sKPiArICAg
+IGlmIGdyZXAgLUVxICJeQlIyX0xJTlVYX0tFUk5FTF9VSU1BR0U9eSQiICR7QlIyX0NPTkZJR307
+IHRoZW4KPiArICAgICAgICBlY2hvICJ1SW1hZ2UiCj4gKyAgICBlbGlmIGdyZXAgLUVxICJeQlIy
+X0xJTlVYX0tFUk5FTF9JTUFHRT15JCIgJHtCUjJfQ09ORklHfTsgdGhlbgo+ICsgICAgICAgIGVj
+aG8gIkltYWdlIgo+ICsgICAgZWxpZiBncmVwIC1FcSAiXkJSMl9MSU5VWF9LRVJORUxfSU1BR0VH
+Wj15JCIgJHtCUjJfQ09ORklHfTsgdGhlbgo+ICsgICAgICAgIGVjaG8gIkltYWdlLmd6Igo+ICsg
+ICAgZWxzZQo+ICsgICAgICAgIGVjaG8gInpJbWFnZSIKPiArICAgIGZpCj4gK30KPiArCj4gK2dl
+bmVyaWNfZ2V0dHkoKQo+ICt7Cj4gKyAgICBpZiBncmVwIC1FcSAiXkJSMl9UQVJHRVRfR0VORVJJ
+Q19HRVRUWT15JCIgJHtCUjJfQ09ORklHfTsgdGhlbgo+ICsgICAgICAgIGVjaG8gIiIKPiArICAg
+IGVsc2UKPiArICAgICAgICBlY2hvICJzL1xzKmNvbnNvbGU9XFMqLy8iCj4gKyAgICBmaQo+ICt9
+Cj4gKwo+ICtQQVJUVVVJRD0iJCgkSE9TVF9ESVIvYmluL3V1aWRnZW4pIgo+ICsKPiAraW5zdGFs
+bCAtZCAiJFRBUkdFVF9ESVIvYm9vdC9leHRsaW51eC8iCj4gKwo+ICtzZWQgLWUgIiQoZ2VuZXJp
+Y19nZXR0eSkiIFwKPiArICAgIC1lICJzLyVMSU5VWElNQUdFJS8kKGxpbnV4X2ltYWdlKS9nIiBc
+Cj4gKyAgICAtZSAicy8lUEFSVFVVSUQlLyRQQVJUVVVJRC9nIiBcCj4gKyAgICAiYm9hcmQvb3Jh
+bmdlcGkvY29tbW9uL2V4dGxpbnV4LmNvbmYiID4gIiRUQVJHRVRfRElSL2Jvb3QvZXh0bGludXgv
+ZXh0bGludXguY29uZiIKPiArCj4gK3NlZCAicy8lUEFSVFVVSUQlLyRQQVJUVVVJRC9nIiAiYm9h
+cmQvb3JhbmdlcGkvY29tbW9uL2dlbmltYWdlLmNmZyIgPiAiJEJJTkFSSUVTX0RJUi9nZW5pbWFn
+ZS5jZmciCj4gZGlmZiAtLWdpdCBhL2JvYXJkL29yYW5nZXBpL29yYW5nZXBpLXplcm8vYm9vdC5j
+bWQgYi9ib2FyZC9vcmFuZ2VwaS9vcmFuZ2VwaS16ZXJvL2Jvb3QuY21kCj4gZGVsZXRlZCBmaWxl
+IG1vZGUgMTAwNjQ0Cj4gaW5kZXggZDA5NGE2NGZlNS4uMDAwMDAwMDAwMAo+IC0tLSBhL2JvYXJk
+L29yYW5nZXBpL29yYW5nZXBpLXplcm8vYm9vdC5jbWQKPiArKysgL2Rldi9udWxsCj4gQEAgLTEs
+OSArMCwwIEBACj4gLXNldGVudiBmZHRfaGlnaCBmZmZmZmZmZgo+IC0KPiAtcGFydCB1dWlkIG1t
+YyAwOjIgdXVpZAo+IC1zZXRlbnYgYm9vdGFyZ3MgY29uc29sZT10dHlTMCwxMTUyMDAgcm9vdD1Q
+QVJUVVVJRD0ke3V1aWR9IHJvb3R3YWl0Cj4gLQo+IC1mYXRsb2FkIG1tYyAwICRrZXJuZWxfYWRk
+cl9yIHpJbWFnZQo+IC1mYXRsb2FkIG1tYyAwICRmZHRfYWRkcl9yIHN1bjhpLWgyLXBsdXMtb3Jh
+bmdlcGktemVyby5kdGIKPiAtCj4gLWJvb3R6ICRrZXJuZWxfYWRkcl9yIC0gJGZkdF9hZGRyX3IK
+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVyby9nZW5pbWFnZS5jZmcg
+Yi9ib2FyZC9vcmFuZ2VwaS9vcmFuZ2VwaS16ZXJvL2dlbmltYWdlLmNmZwo+IGRlbGV0ZWQgZmls
+ZSBtb2RlIDEwMDY0NAo+IGluZGV4IDMyZjU0NTRhZTYuLjAwMDAwMDAwMDAKPiAtLS0gYS9ib2Fy
+ZC9vcmFuZ2VwaS9vcmFuZ2VwaS16ZXJvL2dlbmltYWdlLmNmZwo+ICsrKyAvZGV2L251bGwKPiBA
+QCAtMSwzNiArMCwwIEBACj4gLSMgTWluaW1hbCBTRCBjYXJkIGltYWdlIGZvciB0aGUgT3Jhbmdl
+UGkgWmVybwo+IC0jCj4gLWltYWdlIGJvb3QudmZhdCB7Cj4gLSAgICB2ZmF0IHsKPiAtICAgICAg
+ICBmaWxlcyA9IHsKPiAtICAgICAgICAgICAgInpJbWFnZSIsCj4gLSAgICAgICAgICAgICJzdW44
+aS1oMi1wbHVzLW9yYW5nZXBpLXplcm8uZHRiIiwKPiAtICAgICAgICAgICAgImJvb3Quc2NyIgo+
+IC0gICAgICAgIH0KPiAtICAgIH0KPiAtICAgIHNpemUgPSAxME0KPiAtfQo+IC0KPiAtaW1hZ2Ug
+c2RjYXJkLmltZyB7Cj4gLSAgICBoZGltYWdlIHsKPiAtICAgIH0KPiAtCj4gLSAgICBwYXJ0aXRp
+b24gdS1ib290IHsKPiAtICAgICAgICBpbi1wYXJ0aXRpb24tdGFibGUgPSAibm8iCj4gLSAgICAg
+ICAgaW1hZ2UgPSAidS1ib290LXN1bnhpLXdpdGgtc3BsLmJpbiIKPiAtICAgICAgICBvZmZzZXQg
+PSA4Swo+IC0gICAgICAgIHNpemUgPSAxMDE2SyAjIDFNQiAtIDhLQgo+IC0gICAgfQo+IC0KPiAt
+ICAgIHBhcnRpdGlvbiBib290IHsKPiAtICAgICAgICBwYXJ0aXRpb24tdHlwZSA9IDB4Qwo+IC0g
+ICAgICAgIGJvb3RhYmxlID0gInRydWUiCj4gLSAgICAgICAgaW1hZ2UgPSAiYm9vdC52ZmF0Igo+
+IC0gICAgfQo+IC0KPiAtICAgIHBhcnRpdGlvbiByb290ZnMgewo+IC0gICAgICAgIHBhcnRpdGlv
+bi10eXBlID0gMHg4Mwo+IC0gICAgICAgIGltYWdlID0gInJvb3Rmcy5leHQ0Igo+IC0gICAgICAg
+IHNpemUgPSA1MTJNCj4gLSAgICB9Cj4gLX0KPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9vcmFuZ2Vw
+aV96ZXJvX2RlZmNvbmZpZyBiL2NvbmZpZ3Mvb3JhbmdlcGlfemVyb19kZWZjb25maWcKPiBpbmRl
+eCA1YWFhMTU2NmM1Li45NmYwYzNmNjAwIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3Mvb3JhbmdlcGlf
+emVyb19kZWZjb25maWcKPiArKysgYi9jb25maWdzL29yYW5nZXBpX3plcm9fZGVmY29uZmlnCj4g
+QEAgLTIwLDEwICsyMCwxMyBAQCBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiBCUjJf
+TElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0ic3VuOGktaDItcGx1cy1vcmFuZ2VwaS16ZXJv
+Igo+IEJSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9vcmFuZ2Vw
+aS9vcmFuZ2VwaS16ZXJvL2xpbnV4LWV4dHJhcy5mcmFnbWVudCIKPiBCUjJfTElOVVhfS0VSTkVM
+X05FRURTX0hPU1RfT1BFTlNTTD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfSU5TVEFMTF9UQVJHRVQ9
+eQo+IAo+ICMgRmlsZXN5c3RlbQo+IEJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+IEJSMl9UQVJH
+RVRfUk9PVEZTX0VYVDJfND15Cj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfU0laRT0iNjNNIgo+
+ICtCUjJfVEFSR0VUX0dFTkVSSUNfUkVNT1VOVF9ST09URlNfUlc9eQo+ICMgQlIyX1RBUkdFVF9S
+T09URlNfVEFSIGlzIG5vdCBzZXQKPiAKPiAjIEJvb3Rsb2FkZXIKPiBAQCAtMzksMTYgKzQyLDEy
+IEBAIEJSMl9UQVJHRVRfVUJPT1RfU1BMPXkKPiBCUjJfVEFSR0VUX1VCT09UX1NQTF9OQU1FPSJ1
+LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgo+IAo+ICMgUmVxdWlyZWQgdG9vbHMgdG8gY3JlYXRl
+IHRoZSBTRCBpbWFnZQo+IC1CUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTPXkKPiAtQlIyX1BB
+Q0tBR0VfSE9TVF9VQk9PVF9UT09MU19CT09UX1NDUklQVD15Cj4gLUJSMl9QQUNLQUdFX0hPU1Rf
+VUJPT1RfVE9PTFNfQk9PVF9TQ1JJUFRfU09VUkNFPSJib2FyZC9vcmFuZ2VwaS9vcmFuZ2VwaS16
+ZXJvL2Jvb3QuY21kIgo+IC1CUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQo+IEJSMl9QQUNL
+QUdFX0hPU1RfR0VOSU1BR0U9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX01UT09MUz15Cj4gCj4gIyBJ
+bWFnZQo+ICtCUjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9vcmFuZ2VwaS9jb21t
+b24vcG9zdC1idWlsZC5zaCIKPiBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0
+L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4gLUJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMg
+Ym9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVyby9nZW5pbWFnZS5jZmciCj4gK0JSMl9ST09URlNf
+UE9TVF9TQ1JJUFRfQVJHUz0iLWMgJChCSU5BUklFU19ESVIpL2dlbmltYWdlLmNmZyIKPiAKPiAj
+IFdpcmVsZXNzIGRyaXZlciBhbmQgZmlybXdhcmUKPiBCUjJfUEFDS0FHRV9YUjgxOV9YUkFESU89
+eQo+IC0tIAo+IDIuMzQuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
