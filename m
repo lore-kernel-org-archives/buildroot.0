@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4049C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E42DDC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 22:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90F7B81AEA;
-	Sat,  5 Feb 2022 22:56:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B291408C0;
+	Sat,  5 Feb 2022 22:57:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2jCOiSRD4M-b; Sat,  5 Feb 2022 22:56:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ny6fL9mSb8Pd; Sat,  5 Feb 2022 22:57:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE2E081AEF;
-	Sat,  5 Feb 2022 22:56:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 642F51BF2A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id D82E940895;
+	Sat,  5 Feb 2022 22:57:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 676591BF95F
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57AE860BC5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A93281801
  for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 22:55:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5JYgydYgvcP7 for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6ztlpX2Drfaq for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 22:55:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AF196079D
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED1608186B
  for <buildroot@buildroot.org>; Sat,  5 Feb 2022 22:55:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 78CFE82AA2; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
+ id DF05782AE5; Sat,  5 Feb 2022 22:47:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 5 Feb 2022 23:30:20 +0100
+Date: Sat, 5 Feb 2022 23:46:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 41ea61d59c3e0261673be978bcfc779c8188e43f
-X-Git-Newrev: ec7fd50d08690a383fec40748ac9b78c3f764316
+X-Git-Oldrev: a1acae45658989922d799f0b668444217ef01e7a
+X-Git-Newrev: b429dce6f8e2ee162b79fe2a3ebb1bd179f462e3
 X-Patchwork-Hint: ignore
-Message-Id: <20220205224746.78CFE82AA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmt: bump to version 8.1.1
+Message-Id: <20220205224746.DF05782AE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: add pgsql support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +58,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec7fd50d08690a383fec40748ac9b78c3f764316
+commit: https://git.buildroot.net/buildroot/commit/?id=b429dce6f8e2ee162b79fe2a3ebb1bd179f462e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lighttpd/Config.in   | 10 ++++++++++
+ package/lighttpd/lighttpd.mk |  8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index e735704023..79956c251b 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a627a56eab9554fc1e5dd9a623d0768583b3a383ff70a4312ba68f94c9d415bf  fmt-8.0.1.zip
-+sha256  23778bad8edba12d76e4075da06db591f3b0e3c6c04928ced4a7282ca3400e5d  fmt-8.1.1.zip
- sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 6ec86de7f3..be7ffb022b 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index f46e1a9a66..b9f64a3bc3 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -80,6 +80,16 @@ config BR2_PACKAGE_LIGHTTPD_PCRE
+ 	help
+ 	  Enable PCRE support. Needed to support mod_rewrite
  
--FMT_VERSION = 8.0.1
-+FMT_VERSION = 8.1.1
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
++config BR2_PACKAGE_LIGHTTPD_PGSQL
++	bool "pgsql support"
++	depends on BR2_USE_MMU # postgresql
++	select BR2_PACKAGE_POSTGRESQL
++	help
++	  Enable postgres support for lighttpd mod_vhostdb_pgsql.
++
++comment "pgsql support needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_LIGHTTPD_WEBDAV
+ 	bool "webdav support"
+ 	select BR2_PACKAGE_LIBXML2
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index f8ed7c6f7c..49ab8587f7 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -23,7 +23,6 @@ LIGHTTPD_CONF_OPTS = \
+ 	-Dwith_nettle=false \
+ 	-Dwith_nss=false \
+ 	-Dwith_pcre=false \
+-	-Dwith_pgsql=false \
+ 	-Dwith_sasl=false \
+ 	-Dwith_wolfssl=false \
+ 	-Dwith_xattr=false \
+@@ -95,6 +94,13 @@ else
+ LIGHTTPD_CONF_OPTS += -Dwith_pcre2=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIGHTTPD_PGSQL),y)
++LIGHTTPD_DEPENDENCIES += postgresql
++LIGHTTPD_CONF_OPTS += -Dwith_pgsql=true
++else
++LIGHTTPD_CONF_OPTS += -Dwith_pgsql=false
++endif
++
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
+ LIGHTTPD_DEPENDENCIES += libxml2 sqlite
+ LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
