@@ -1,86 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35508C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 23:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A67A5C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Feb 2022 23:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D74E260A79;
-	Sat,  5 Feb 2022 23:17:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 266EB81489;
+	Sat,  5 Feb 2022 23:28:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Ltzsz3MxoiW; Sat,  5 Feb 2022 23:17:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P6oqCIbhQ5FD; Sat,  5 Feb 2022 23:28:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED8EA60804;
-	Sat,  5 Feb 2022 23:17:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0BFA81491;
+	Sat,  5 Feb 2022 23:28:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B515D1BF863
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:17:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 647141BF863
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A372481422
- for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:17:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58F5381491
+ for <buildroot@lists.busybox.net>; Sat,  5 Feb 2022 23:28:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bCpvZP1FDNsi for <buildroot@lists.busybox.net>;
- Sat,  5 Feb 2022 23:17:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B9CDC8141E
- for <buildroot@buildroot.org>; Sat,  5 Feb 2022 23:17:09 +0000 (UTC)
-Received: by mail-lf1-x12b.google.com with SMTP id a28so19700257lfl.7
- for <buildroot@buildroot.org>; Sat, 05 Feb 2022 15:17:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=6juMNj6spFdh3QbomWTWUQ/aNgXw+RWBrTgpUlZIM4g=;
- b=W/wBxwQkCyQdaI8cDn30V0U0sGqpdTvRAx0E84DVONRZDpxI8n49ol8uyQPba3g6oW
- ++KxwbxSansrMvtj2hCCtWiY0K/vY34xzYCMWUiS2AxnHp9V9AaXddGbF2F4qGfK4qal
- bLHM/LoEkU4XCYubXC0hhdEOFhqhbNwc/CHwNXw4GynPT7KMNsvHCHuXH7Lt2IYc7MEj
- AOWVGQkPCOTujlE18tyrwB/RipATLsHcyTFrKT22Qt9HYdzaz855UiAVj3bjqLkUh3KK
- wippPNipoLpBYRKMWQaDHQ+qtH336yrKixxbbglYHBi68QZoTNcfE+4DqifF06m0lA/Z
- 5HKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=6juMNj6spFdh3QbomWTWUQ/aNgXw+RWBrTgpUlZIM4g=;
- b=4opfffPsj+j05BcmsGUPjVm1P1CktajrIxRcZcmCTlfSO62khHj0gziTlD62TMBc4Y
- 3DhVZgGt552UtZlZN7C2D4vgBJCchQDhezbFFYgOOKuuxyAC4xNmbjMm7MoGGxVtDVRv
- CFAgKuEbpSgE1Qqaome2nrjhOmvJl7HGrv7RNJ1iKsYJSlGKKZlc0JS9CExWH5o1Ep84
- 3EP8I0YZtzqCS8dk/0UqG9y6YgAsrC0bZVOkPaowKqO6Q3MQeX0k38BCS2/EeYBTj382
- Ob48SytU2MzFehxxFTne/CBmCQnoktaxw5+BdMK3P44duenPsI/w5RLgUziNJYfYO/3P
- xfIw==
-X-Gm-Message-State: AOAM533+IL/XL3u3/MpCESTneel4QRkTd8gutw+hrTWsmj1rlH91GJqa
- fRYt4RsZ8QWY4Fm6Y1QjUc5q4zbTNnQ=
-X-Google-Smtp-Source: ABdhPJxAVbvae4Q1ElSKdD3Y+bNNwunkPaGw920qVaUX2//JqrRXJhYAvPVXcTtefJAbEF5o43XMaw==
-X-Received: by 2002:a05:6512:e9c:: with SMTP id
- bi28mr2828441lfb.498.1644103027549; 
- Sat, 05 Feb 2022 15:17:07 -0800 (PST)
-Received: from [192.168.10.7] ([178.155.5.31])
- by smtp.gmail.com with ESMTPSA id o17sm883456lfl.16.2022.02.05.15.17.06
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 05 Feb 2022 15:17:07 -0800 (PST)
-Message-ID: <54d39db2-d11d-ffc6-1966-c721b26d1a5c@gmail.com>
-Date: Sun, 6 Feb 2022 02:17:06 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: ru-RU
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20220205215558.30751-1-kuzminov.sergey81@gmail.com>
- <033373DF-6707-4295-8A12-D4ABE072608F@benettiengineering.com>
- <4b114bca-d4ee-9ff9-931c-bd7501eb2e32@gmail.com>
- <ad2e127a-4662-b535-f32d-73aeee583280@benettiengineering.com>
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-In-Reply-To: <ad2e127a-4662-b535-f32d-73aeee583280@benettiengineering.com>
+ with ESMTP id eRlt_SCNuDSl for <buildroot@lists.busybox.net>;
+ Sat,  5 Feb 2022 23:28:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22A0681489
+ for <buildroot@buildroot.org>; Sat,  5 Feb 2022 23:28:03 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id GUTKnh6GuDzPJGUTKnGXOC; Sun, 06 Feb 2022 00:28:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644103682; bh=nyfqaGL8dqIrG1o0CM70Y3d7yMLdNkfFz5fnWW9SeUU=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=DqurcprmYP35LLoLH+tE1oMQly19qATVZBeL0yLhY/UwI3A7equFFkmybt/UyqNh+
+ +tU6t76TxRzfd93jhcfNWtRNMREjAXiAJjMMK9DjpMZOj+ROuviJlrj2aft/VRZWEa
+ 4hsNcUqgt77irMB12O3WUtANz+ZksYRYvQJuIsUTu+4VqBBJdIMhg+ubTnr5TyR7l7
+ +CYakkj4Wl0mK8PjEUQj4TSPbaYGpozbYFNZLyE22YUZVLmLzZEB6PsF+INtqyetty
+ A2icHmgqR6kXbt03EsE9Ze8Buvs3ekr2hrxvTx3KQw+RrtDrFpN0GCGybKXxM7WJeI
+ JyLlRdXT6uViw==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sun, 6 Feb 2022 00:28:01 +0100
+Message-Id: <D33D946E-418C-49C0-B1F1-31F60F175490@benettiengineering.com>
+References: <54d39db2-d11d-ffc6-1966-c721b26d1a5c@gmail.com>
+In-Reply-To: <54d39db2-d11d-ffc6-1966-c721b26d1a5c@gmail.com>
+To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfBlnRdyAHCZ4IuGXMKWcMWuja4YAMr9oaaizbL7wSAak/8Mj/5yiHbgcgij8PEcwwG/I3fvDmgUxJ757IKd8C9MejPudvfgyfoqlJ6qhz47LVcE28XV8
+ lSbJRFsqTkpnQJ4GBjMOZSL4+dn7l0HH8KNZVz+ozx8vOblWd9+a//qD7vZelytgL+vmMF+LBf1SMBw1Rr7t6ROvdf5n1SkujD3UTtsl+yC56Lhj9GqLJSjJ
+ OQd7O4PbBDBl8kC7AO68gw==
 Subject: Re: [Buildroot] [PATCH v2] configs/orangepi_zero_defconfig: switch
  to extlinux
 X-BeenThere: buildroot@buildroot.org
@@ -95,84 +68,413 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============0578567281946342245=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-MDYuMDIuMjAyMiAwMjoxMywgR2l1bGlvIEJlbmV0dGkg0L/QuNGI0LXRgjoKPiBIaSBTZXJnZXks
-Cj4gCj4gT24gMDYvMDIvMjIgMDA6MDQsIFNlcmdleSBLdXptaW5vdiB3cm90ZToKPj4gSGkgR2l1
-bGlvLAo+Pgo+PiAwNi4wMi4yMDIyIDAxOjE4LCBHaXVsaW8gQmVuZXR0aToKPj4+IEhpIFNlcmdl
-eSwKPj4+Cj4+PiBiZWxvdyBJIGdpdmUgeW91IGEgYmV0dGVyIGV4YW1wbGUgb2YgY29tbWl0IGxv
-ZywKPj4+IGFuZCB0aGUgZGVhbGluZyB3aXRoIFYxLT5WMiBzZXJpZXMuCj4+Pgo+Pj4+IElsIGdp
-b3JubyA1IGZlYiAyMDIyLCBhbGxlIG9yZSAyMjo1NiwgU2VyZ2V5IEt1em1pbm92IAo+Pj4+IDxr
-dXptaW5vdi5zZXJnZXk4MUBnbWFpbC5jb20+IGhhIHNjcml0dG86Cj4+Pj4KPj4+PiDvu79DaGFu
-Z2VzOgo+Pj4+IHYxOgo+Pj4KPj4+IFBsZWFzZSBSZW1vdmUgdGhpcyBsaW5lIF5eXgo+Pj4KPj4+
-PiAtIEV4Y2x1ZGUgRkFUIHBhcnRpdGlvbiwgaXQgaXMgbm8gbG9uZ2VyIG5lZWRlZCBmb3IgVS1C
-b290Lgo+Pj4+IC0gU3dpdGNoIHRoZSByb290ZnMgcGFydGl0aW9uIGZyb20gTUJSIHRvIEdQVCBm
-b3IgcGFydGl0aW9uLXV1aWQgdG8gCj4+Pj4gd29yay4KPj4+PiAtIFN3aXRjaCB0byBleHRsaW51
-eCwgdGhpcyBpcyBjb252ZW5pZW50IGZvciBkZWJ1Z2dpbmcuCj4+Pj4gLSBDcmVhdGUgY29tbW9u
-IHNjZW5hcmlvcyBmb3IgbXVsdGlwbGUgYm9hcmRzIHRvIGNyZWF0ZSBhbiBTRCBpbWFnZTogCj4+
-Pj4gYm9hcmQvb3JhbmdlcGkvY29tbW9uLgo+Pj4+Cj4+Pj4gdjI6Cj4+PiBSZW1vdmUgdGhpcyBe
-Xl4gbGluZQo+Pj4+IC0gRml4IHR5cG8gaW4gZmlyc3QgbGluZSBvZiBjaGFuZ2VzIChzL2hlL2l0
-KS4KPj4+IFRoaXMgdG9vIF5eXgo+Pj4+IC0gQWRkIEJSMl9UQVJHRVRfR0VORVJJQ19SRU1PVU5U
-X1JPT1RGU19SVz15Lgo+Pj4gSGVyZSB3ZSBuZWVkIGFuIGV4cGxhbmF0aW9uIG9mIHRoZSByZWFz
-b24gd2h5LCB3aGF0IHRoaXMgaW1wbGllcy4KPj4+PiAtIEV4Y2x1ZGUgb25lIGJvb3Qgb3B0aW9u
-IGZyb20gZXh0bGludXguY29uZi4KPj4+IFRoaXMgXl5eIHRvbwo+Pj4+Cj4+Pj4gU2lnbmVkLW9m
-Zi1ieTogU2VyZ2V5IEt1em1pbm92IDxrdXptaW5vdi5zZXJnZXk4MUBnbWFpbC5jb20+Cj4+PiDi
-gJQtCj4+PiBWMS0+VjI6Cj4+PiAqIGltcHJvdmVkIGNvbW1pdCBsb2cKPj4+ICogcmVtb3ZlZCBj
-b21tZW50ZWQgbGluZSBpbiBleHRsaW51eC5jb25mCj4+PiAqIHJlbW92ZWQgb25lIGJvb3Qgb3B0
-aW9uIGZyb20gZXh0bGludXguY29uZgo+Pj4+IC0tLQo+Pj4KPj4+IFNvIGFzIHlvdSBjYW4gc2Vl
-LCBjb21taXQgbG9nIGRvZXNu4oCZdCBtZW50aW9uIHRoZSBwYXRjaCB2ZXJzaW9uLCAKPj4+IHdo
-aWxlIGFmdGVyIHRoZSAzIGRhc2hlcyB5b3UKPj4+IGNhbiB3cml0ZSBpbiBnZW5lcmFsIHdoYXRl
-dmVyIHlvdSB3YW50IGJlY2F1c2UgaXQgd29u4oCZdCBiZSBwYXJ0IG9mIAo+Pj4gY29tbWl0IGxv
-ZyBhbmQgaXTigJlzIHVzdWFsbHkgdXNlZAo+Pj4gdG8gcmVwb3J0IFYxLT5WMiB2ZXJzaW9uIGV0
-Yy4KPj4KPj4gQ2hhbmdlczoKPj4gKiBFeGNsdWRlIEZBVCBwYXJ0aXRpb24sIGl0IGlzIG5vIGxv
-bmdlciBuZWVkZWQgZm9yIFUtQm9vdC4KPj4gKiBTd2l0Y2ggdGhlIHJvb3RmcyBwYXJ0aXRpb24g
-ZnJvbSBNQlIgdG8gR1BUIGZvciBwYXJ0aXRpb24tdXVpZCB0byB3b3JrLgo+PiAqIFN3aXRjaCB0
-byBleHRsaW51eCwgdGhpcyBpcyBjb252ZW5pZW50IGZvciBkZWJ1Z2dpbmcuCj4+ICogQ3JlYXRl
-IGNvbW1vbiBzY2VuYXJpb3MgZm9yIG11bHRpcGxlIGJvYXJkcyB0byBjcmVhdGUgYW4gU0QgaW1h
-Z2U6Cj4+IGJvYXJkL29yYW5nZXBpL2NvbW1vbi4KPj4gKiBBZGQgQlIyX1RBUkdFVF9HRU5FUklD
-X1JFTU9VTlRfUk9PVEZTX1JXPXksIHJlbW91bnQgcm9vdCBmaWxlc3lzdGVtCj4+IHJlYWQtd3Jp
-dGUgZHVyaW5nIGJvb3QuCj4+Cj4+IC0tLQo+PiBWMS0+VjI6Cj4+ICogaW1wcm92ZWQgY29tbWl0
-IGxvZwo+PiAqIHJlbW92ZWQgY29tbWVudGVkIGxpbmUgaW4gZXh0bGludXguY29uZgo+PiAqIHJl
-bW92ZWQgb25lIGJvb3Qgb3B0aW9uIGZyb20gZXh0bGludXguY29uZgo+Pgo+PiBWMi0+VjM6Cj4+
-ICogaW1wcm92ZWQgY29tbWl0IGxvZwo+Pgo+PiBUaGF0J3MgcmlnaHQ/Cj4gCj4gWWVzLCB0aGlz
-IHdvcmtzIGZvciBtZSBub3cKPiAKPj4KPj4+PiArKysgYi9ib2FyZC9vcmFuZ2VwaS9jb21tb24v
-Z2VuaW1hZ2UuY2ZnCj4+Pj4gQEAgLTAsMCArMSwyMyBAQAo+Pj4+ICtpbWFnZSBzZGNhcmQuaW1n
-IHsKPj4+PiArwqDCoMKgIHBhcnRpdGlvbiB1LWJvb3Qgewo+Pj4+ICvCoMKgwqDCoMKgwqDCoCBp
-bi1wYXJ0aXRpb24tdGFibGUgPSBmYWxzZQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCBpbWFnZSA9ICJ1
-LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgo+Pj4+ICvCoMKgwqDCoMKgwqDCoCBvZmZzZXQgPSA4
-Swo+Pj4+ICvCoMKgwqDCoMKgwqDCoCBzaXplID0gMTAwMEsgIyAxTUIgLSA4S0Iob2Zmc2V0KSAt
-IDE2S0IoR1BUKQo+Pj4+ICvCoMKgwqAgfQo+Pj4+ICsKPj4+PiArwqDCoMKgIGhkaW1hZ2Ugewo+
-Pj4+ICvCoMKgwqDCoMKgwqDCoCBwYXJ0aXRpb24tdGFibGUtdHlwZSA9IGdwdAo+Pj4+ICvCoMKg
-wqDCoMKgwqDCoCBncHQtbG9jYXRpb24gPSAxMDA4SyAjIDFNQiAtIDE2S0IoR1BUKQo+Pj4+ICvC
-oMKgwqDCoMKgwqDCoCBncHQtbm8tYmFja3VwID0gdHJ1ZQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCAj
-IEFmdGVyIHdyaXRpbmcgdGhlIGltYWdlIHRvIHRoZSBTRCBjYXJkLAo+Pj4+ICvCoMKgwqDCoMKg
-wqDCoCAjIGJhY2t1cCBHUFQgZGF0YSBzdHJ1Y3R1cmVzIGF0IHRoZSBlbmQgb2YgdGhlIGRpc2s6
-Cj4+Pj4gK8KgwqDCoMKgwqDCoMKgICMgZ2Rpc2sgL2Rldi9tbWNibGswIHRoZW4gcHJlc3MgdGhl
-IGJ1dHRvbnM6IHgsIGUsIHcsIHkKPj4+Cj4+PiBXaHkgZG9u4oCZdCB5b3UgbWFrZSB0aGlzIHBh
-cnQgXl5eIGF1dG9tYXRpYyB3aXRoIGEgc2NyaXB0IG9yIHlvdSAKPj4+IHNpbXBseSB1c2UgZ2Vu
-aW1hZ2UgaXRzZWxmPwo+Pj4KPj4+IFdoYXQgaXTigJlzIGV4cGVjdGVkIGFzIGJvYXJkIGRlZmNv
-bmZpZyBpcyBzb21ldGhpbmcgdGhhdCB5b3UgYnVybiBhIAo+Pj4gc2RjYXJkIHdpdGggdGhlIHNk
-Y2FyZC5pbWcgZmlsZSBhbmQgdGhhdOKAmXMgaXQuIFNvIGhlcmUgeW91IG5lZWQgdG8gCj4+PiBt
-YWtlIGl0IGF1dG9tYXRpYy4KPj4+Cj4+PiBTbyB3ZSB3YWl0IGZvciBWMyB3aXRoIHRoZSBjb21t
-aXQgbG9nIGZvcm0geW91IHJlYWQgYWJvdmUgYW5kIAo+Pj4gcmVxdWVzdGVkIGNoYW5nZXMuCj4+
-Cj4+IFRoZSBwcm9ibGVtIGlzIHRoYXQgaXQgaXMgbm90IHBvc3NpYmxlIHRvIGNyZWF0ZSBhbiBz
-ZGNhcmQuaW1nIGltYWdlCj4+IHdpdGggdGhlIGNvcnJlY3QgR1BUIHN0cnVjdHVyZS4gVGhlIHNl
-Y29uZCBjb3B5IG9mIHRoZSBHUFQgbXVzdCBiZSBhdAo+PiB0aGUgZW5kIG9mIHRoZSBkaXNrLCBh
-bmQgdGhlIHNpemUgb2Ygc2RjYXJkLmltZyB3aWxsIG5vdCBtYXRjaCB0aGUgU0QKPj4gY2FyZC4g
-V2lsbCB3b3JrIGFuZCBzbywgd2l0aCBvbmUgY29weSBvZiBHUFQuIEJ1dCB0aGUgZGlzayB1dGls
-aXRpZXMgbWF5Cj4+IGlzc3VlIGEgd2FybmluZyBhYm91dCB0aGUgYWJzZW5jZSBvZiBhIHNlY29u
-ZCBjb3B5IG9mIHRoZSBHUFQuIFlvdSBjYW4KPj4gY29ycmVjdCB0aGUgc2l0dWF0aW9uIG9ubHkg
-YWZ0ZXIgd3JpdGluZyBzZGNhcmQuaW1nIHRvIHRoZSBTRCBjYXJkLCBvcgo+PiBkdXJpbmcgdGhl
-IGZpcnN0IGxvYWRpbmcgb2YgdGhlIGJvYXJkIGluIGEgc2VwYXJhdGUgc2NyaXB0LiBUaGlzIGlz
-IG91dAo+PiBvZiBzY29wZSBmb3IgdGhpcyBwYXRjaC4KPiAKPiBPaywgc28gcGxlYXNlIHJlbW92
-ZSB0aG9zZSAzIGNvbW1lbnRlZCBsaW5lcyBzaW5jZSBJIHRoaW5rIHRoZSBib2FyZCAKPiBhY3R1
-YWxseSB3b3JrcyB3aXRob3V0IHRob3NlIGFkZGl0aW9uYWwgY29tbWFuZHMsIGNvcnJlY3Q/CgpZ
-ZXMuCgo+IAo+IE90aGVyd2lzZSwgaXQgdGhpcyBkb2Vzbid0IHdvcmsgb24gdGFyZ2V0IHdpdGhv
-dXQgZ2Rpc2sgY29tbWFuZHMsIHlvdSAKPiBuZWVkIHRvIGFkZCBhIHBvc3QtaW1hZ2Uuc2ggc2Ny
-aXB0IHRvIGxhdW5jaCB0aG9zZSBjb21tYW5kcy4KPiAKPiBUaGFuayB5b3UhCj4gQmVzdCByZWdh
-cmRzCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+--===============0578567281946342245==
+Content-Type: multipart/alternative; boundary=Apple-Mail-292BC296-AC25-4F57-AD2B-7798E99F4821
+Content-Transfer-Encoding: 7bit
+
+
+--Apple-Mail-292BC296-AC25-4F57-AD2B-7798E99F4821
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Sergey,
+
+> Il giorno 6 feb 2022, alle ore 00:17, Sergey Kuzminov <kuzminov.sergey81@g=
+mail.com> ha scritto:
+>=20
+> =EF=BB=BF06.02.2022 02:13, Giulio Benetti =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> Hi Sergey,
+>>> On 06/02/22 00:04, Sergey Kuzminov wrote:
+>>> Hi Giulio,
+>>>=20
+>>> 06.02.2022 01:18, Giulio Benetti:
+>>>> Hi Sergey,
+>>>>=20
+>>>> below I give you a better example of commit log,
+>>>> and the dealing with V1->V2 series.
+>>>>=20
+>>>>> Il giorno 5 feb 2022, alle ore 22:56, Sergey Kuzminov <kuzminov.sergey=
+81@gmail.com> ha scritto:
+>>>>>=20
+>>>>> =EF=BB=BFChanges:
+>>>>> v1:
+>>>>=20
+>>>> Please Remove this line ^^^
+>>>>=20
+>>>>> - Exclude FAT partition, it is no longer needed for U-Boot.
+>>>>> - Switch the rootfs partition from MBR to GPT for partition-uuid to wo=
+rk.
+>>>>> - Switch to extlinux, this is convenient for debugging.
+>>>>> - Create common scenarios for multiple boards to create an SD image: b=
+oard/orangepi/common.
+>>>>>=20
+>>>>> v2:
+>>>> Remove this ^^^ line
+>>>>> - Fix typo in first line of changes (s/he/it).
+>>>> This too ^^^
+>>>>> - Add BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=3Dy.
+>>>> Here we need an explanation of the reason why, what this implies.
+>>>>> - Exclude one boot option from extlinux.conf.
+>>>> This ^^^ too
+>>>>>=20
+>>>>> Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+>>>> =E2=80=94-
+>>>> V1->V2:
+>>>> * improved commit log
+>>>> * removed commented line in extlinux.conf
+>>>> * removed one boot option from extlinux.conf
+>>>>> ---
+>>>>=20
+>>>> So as you can see, commit log doesn=E2=80=99t mention the patch version=
+, while after the 3 dashes you
+>>>> can write in general whatever you want because it won=E2=80=99t be part=
+ of commit log and it=E2=80=99s usually used
+>>>> to report V1->V2 version etc.
+>>>=20
+>>> Changes:
+>>> * Exclude FAT partition, it is no longer needed for U-Boot.
+>>> * Switch the rootfs partition from MBR to GPT for partition-uuid to work=
+.
+>>> * Switch to extlinux, this is convenient for debugging.
+>>> * Create common scenarios for multiple boards to create an SD image:
+>>> board/orangepi/common.
+>>> * Add BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=3Dy, remount root filesystem
+>>> read-write during boot.
+>>>=20
+>>> ---
+>>> V1->V2:
+>>> * improved commit log
+>>> * removed commented line in extlinux.conf
+>>> * removed one boot option from extlinux.conf
+>>>=20
+>>> V2->V3:
+>>> * improved commit log
+>>>=20
+>>> That's right?
+>> Yes, this works for me now
+>>>=20
+>>>>> +++ b/board/orangepi/common/genimage.cfg
+>>>>> @@ -0,0 +1,23 @@
+>>>>> +image sdcard.img {
+>>>>> +    partition u-boot {
+>>>>> +        in-partition-table =3D false
+>>>>> +        image =3D "u-boot-sunxi-with-spl.bin"
+>>>>> +        offset =3D 8K
+>>>>> +        size =3D 1000K # 1MB - 8KB(offset) - 16KB(GPT)
+>>>>> +    }
+>>>>> +
+>>>>> +    hdimage {
+>>>>> +        partition-table-type =3D gpt
+>>>>> +        gpt-location =3D 1008K # 1MB - 16KB(GPT)
+>>>>> +        gpt-no-backup =3D true
+>>>>> +        # After writing the image to the SD card,
+>>>>> +        # backup GPT data structures at the end of the disk:
+>>>>> +        # gdisk /dev/mmcblk0 then press the buttons: x, e, w, y
+>>>>=20
+>>>> Why don=E2=80=99t you make this part ^^^ automatic with a script or you=
+ simply use genimage itself?
+>>>>=20
+>>>> What it=E2=80=99s expected as board defconfig is something that you bur=
+n a sdcard with the sdcard.img file and that=E2=80=99s it. So here you need t=
+o make it automatic.
+>>>>=20
+>>>> So we wait for V3 with the commit log form you read above and requested=
+ changes.
+>>>=20
+>>> The problem is that it is not possible to create an sdcard.img image
+>>> with the correct GPT structure. The second copy of the GPT must be at
+>>> the end of the disk, and the size of sdcard.img will not match the SD
+>>> card. Will work and so, with one copy of GPT. But the disk utilities may=
+
+>>> issue a warning about the absence of a second copy of the GPT. You can
+>>> correct the situation only after writing sdcard.img to the SD card, or
+>>> during the first loading of the board in a separate script. This is out
+>>> of scope for this patch.
+>> Ok, so please remove those 3 commented lines since I think the board actu=
+ally works without those additional commands, correct?
+>=20
+> Yes.
+
+Perfect, so you can send the V3 patch.
+Please remember to keep my Reviewed-by and Tested-by after your SoB that I=E2=
+=80=99ve given you on V1 patch.
+
+You can follow patchwork here:
+https://patchwork.ozlabs.org/project/buildroot/list/
+
+You should also subscribe to patchwork and mark your V1 and V2 patches as su=
+perseded.
+
+Thank you
+Giulio
+
+>=20
+>> Otherwise, it this doesn't work on target without gdisk commands, you nee=
+d to add a post-image.sh script to launch those commands.
+>> Thank you!
+>> Best regards
+>=20
+
+--Apple-Mail-292BC296-AC25-4F57-AD2B-7798E99F4821
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Sergey,<br><div dir=3D"ltr"><br><blockqu=
+ote type=3D"cite">Il giorno 6 feb 2022, alle ore 00:17, Sergey Kuzminov &lt;=
+kuzminov.sergey81@gmail.com&gt; ha scritto:<br><br></blockquote></div><block=
+quote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<span>06.02.2022 02:13, Giulio=
+ Benetti =D0=BF=D0=B8=D1=88=D0=B5=D1=82:</span><br><blockquote type=3D"cite"=
+><span>Hi Sergey,</span><br></blockquote><blockquote type=3D"cite"><span>On 0=
+6/02/22 00:04, Sergey Kuzminov wrote:</span><br></blockquote><blockquote typ=
+e=3D"cite"><blockquote type=3D"cite"><span>Hi Giulio,</span><br></blockquote=
+></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span></sp=
+an><br></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>06.02.2022 01:18, Giulio Benetti:</span><br></blockquote></bloc=
+kquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>Hi Sergey,</span><br></blockquote></blockquote></blockquote><bl=
+ockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><=
+span></span><br></blockquote></blockquote></blockquote><blockquote type=3D"c=
+ite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>below I give y=
+ou a better example of commit log,</span><br></blockquote></blockquote></blo=
+ckquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=
+=3D"cite"><span>and the dealing with V1-&gt;V2 series.</span><br></blockquot=
+e></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"ci=
+te"><blockquote type=3D"cite"><span></span><br></blockquote></blockquote></b=
+lockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote ty=
+pe=3D"cite"><blockquote type=3D"cite"><span>Il giorno 5 feb 2022, alle ore 2=
+2:56, Sergey Kuzminov &lt;kuzminov.sergey81@gmail.com&gt; ha scritto:</span>=
+<br></blockquote></blockquote></blockquote></blockquote><blockquote type=3D"=
+cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span></span><br></blockquote></blockquote></blockquote></blockquote>=
+<blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite=
+"><blockquote type=3D"cite"><span>=EF=BB=BFChanges:</span><br></blockquote><=
+/blockquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote t=
+ype=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>v1:</=
+span><br></blockquote></blockquote></blockquote></blockquote><blockquote typ=
+e=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span>=
+<br></blockquote></blockquote></blockquote><blockquote type=3D"cite"><blockq=
+uote type=3D"cite"><blockquote type=3D"cite"><span>Please Remove this line ^=
+^^</span><br></blockquote></blockquote></blockquote><blockquote type=3D"cite=
+"><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span><br></blo=
+ckquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=
+=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>- Exclud=
+e FAT partition, it is no longer needed for U-Boot.</span><br></blockquote><=
+/blockquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote t=
+ype=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>- Swi=
+tch the rootfs partition from MBR to GPT for partition-uuid to work.</span><=
+br></blockquote></blockquote></blockquote></blockquote><blockquote type=3D"c=
+ite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>- Switch to extlinux, this is convenient for debugging.</span><=
+br></blockquote></blockquote></blockquote></blockquote><blockquote type=3D"c=
+ite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>- Create common scenarios for multiple boards to create an SD i=
+mage: board/orangepi/common.</span><br></blockquote></blockquote></blockquot=
+e></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquo=
+te type=3D"cite"><blockquote type=3D"cite"><span></span><br></blockquote></b=
+lockquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote ty=
+pe=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>v2:</s=
+pan><br></blockquote></blockquote></blockquote></blockquote><blockquote type=
+=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>Remove t=
+his ^^^ line</span><br></blockquote></blockquote></blockquote><blockquote ty=
+pe=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote t=
+ype=3D"cite"><span>- Fix typo in first line of changes (s/he/it).</span><br>=
+</blockquote></blockquote></blockquote></blockquote><blockquote type=3D"cite=
+"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>This too ^^^</sp=
+an><br></blockquote></blockquote></blockquote><blockquote type=3D"cite"><blo=
+ckquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><s=
+pan>- Add BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=3Dy.</span><br></blockquote><=
+/blockquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote t=
+ype=3D"cite"><blockquote type=3D"cite"><span>Here we need an explanation of t=
+he reason why, what this implies.</span><br></blockquote></blockquote></bloc=
+kquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><blockquote type=3D"cite"><span>- Exclude one boot option from extlin=
+ux.conf.</span><br></blockquote></blockquote></blockquote></blockquote><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an>This ^^^ too</span><br></blockquote></blockquote></blockquote><blockquote=
+ type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquo=
+te type=3D"cite"><span></span><br></blockquote></blockquote></blockquote></b=
+lockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote ty=
+pe=3D"cite"><blockquote type=3D"cite"><span>Signed-off-by: Sergey Kuzminov &=
+lt;kuzminov.sergey81@gmail.com&gt;</span><br></blockquote></blockquote></blo=
+ckquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><bl=
+ockquote type=3D"cite"><span>=E2=80=94-</span><br></blockquote></blockquote>=
+</blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote=
+ type=3D"cite"><span>V1-&gt;V2:</span><br></blockquote></blockquote></blockq=
+uote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>* improved commit log</span><br></blockquote></blockquote></blo=
+ckquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=
+=3D"cite"><span>* removed commented line in extlinux.conf</span><br></blockq=
+uote></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><blockquote type=3D"cite"><span>* removed one boot option from extlin=
+ux.conf</span><br></blockquote></blockquote></blockquote><blockquote type=3D=
+"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>---</span><br></blockquote></blockquote></blockquote></blockquo=
+te><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"c=
+ite"><span></span><br></blockquote></blockquote></blockquote><blockquote typ=
+e=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>So as y=
+ou can see, commit log doesn=E2=80=99t mention the patch version, while afte=
+r the 3 dashes you</span><br></blockquote></blockquote></blockquote><blockqu=
+ote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>=
+can write in general whatever you want because it won=E2=80=99t be part of c=
+ommit log and it=E2=80=99s usually used</span><br></blockquote></blockquote>=
+</blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote=
+ type=3D"cite"><span>to report V1-&gt;V2 version etc.</span><br></blockquote=
+></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cit=
+e"><span></span><br></blockquote></blockquote><blockquote type=3D"cite"><blo=
+ckquote type=3D"cite"><span>Changes:</span><br></blockquote></blockquote><bl=
+ockquote type=3D"cite"><blockquote type=3D"cite"><span>* Exclude FAT partiti=
+on, it is no longer needed for U-Boot.</span><br></blockquote></blockquote><=
+blockquote type=3D"cite"><blockquote type=3D"cite"><span>* Switch the rootfs=
+ partition from MBR to GPT for partition-uuid to work.</span><br></blockquot=
+e></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* S=
+witch to extlinux, this is convenient for debugging.</span><br></blockquote>=
+</blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* Cre=
+ate common scenarios for multiple boards to create an SD image:</span><br></=
+blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite">=
+<span>board/orangepi/common.</span><br></blockquote></blockquote><blockquote=
+ type=3D"cite"><blockquote type=3D"cite"><span>* Add BR2_TARGET_GENERIC_REMO=
+UNT_ROOTFS_RW=3Dy, remount root filesystem</span><br></blockquote></blockquo=
+te><blockquote type=3D"cite"><blockquote type=3D"cite"><span>read-write duri=
+ng boot.</span><br></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><span></span><br></blockquote></blockquote><blockquote t=
+ype=3D"cite"><blockquote type=3D"cite"><span>---</span><br></blockquote></bl=
+ockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>V1-&gt;V2=
+:</span><br></blockquote></blockquote><blockquote type=3D"cite"><blockquote t=
+ype=3D"cite"><span>* improved commit log</span><br></blockquote></blockquote=
+><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* removed comment=
+ed line in extlinux.conf</span><br></blockquote></blockquote><blockquote typ=
+e=3D"cite"><blockquote type=3D"cite"><span>* removed one boot option from ex=
+tlinux.conf</span><br></blockquote></blockquote><blockquote type=3D"cite"><b=
+lockquote type=3D"cite"><span></span><br></blockquote></blockquote><blockquo=
+te type=3D"cite"><blockquote type=3D"cite"><span>V2-&gt;V3:</span><br></bloc=
+kquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><spa=
+n>* improved commit log</span><br></blockquote></blockquote><blockquote type=
+=3D"cite"><blockquote type=3D"cite"><span></span><br></blockquote></blockquo=
+te><blockquote type=3D"cite"><blockquote type=3D"cite"><span>That's right?</=
+span><br></blockquote></blockquote><blockquote type=3D"cite"><span>Yes, this=
+ works for me now</span><br></blockquote><blockquote type=3D"cite"><blockquo=
+te type=3D"cite"><span></span><br></blockquote></blockquote><blockquote type=
+=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote ty=
+pe=3D"cite"><span>+++ b/board/orangepi/common/genimage.cfg</span><br></block=
+quote></blockquote></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an>@@ -0,0 +1,23 @@</span><br></blockquote></blockquote></blockquote></block=
+quote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><blockquote type=3D"cite"><span>+image sdcard.img {</span><br></block=
+quote></blockquote></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an>+&nbsp;&nbsp;&nbsp; partition u-boot {</span><br></blockquote></blockquot=
+e></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"ci=
+te"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>+&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp; in-partition-table =3D false</span><br></block=
+quote></blockquote></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; image =3D "u-boot-sunxi-with-=
+spl.bin"</span><br></blockquote></blockquote></blockquote></blockquote><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><bl=
+ockquote type=3D"cite"><span>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; off=
+set =3D 8K</span><br></blockquote></blockquote></blockquote></blockquote><bl=
+ockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><=
+blockquote type=3D"cite"><span>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; s=
+ize =3D 1000K # 1MB - 8KB(offset) - 16KB(GPT)</span><br></blockquote></block=
+quote></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>+&nbsp;&nbs=
+p;&nbsp; }</span><br></blockquote></blockquote></blockquote></blockquote><bl=
+ockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><=
+blockquote type=3D"cite"><span>+</span><br></blockquote></blockquote></block=
+quote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><span>+&nbsp;&nbsp;&nbsp; hdi=
+mage {</span><br></blockquote></blockquote></blockquote></blockquote><blockq=
+uote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><span>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parti=
+tion-table-type =3D gpt</span><br></blockquote></blockquote></blockquote></b=
+lockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote ty=
+pe=3D"cite"><blockquote type=3D"cite"><span>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp; gpt-location =3D 1008K # 1MB - 16KB(GPT)</span><br></blockquote>=
+</blockquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote=
+ type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>+&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gpt-no-backup =3D true</span><br></=
+blockquote></blockquote></blockquote></blockquote><blockquote type=3D"cite">=
+<blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite=
+"><span>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # After writing the imag=
+e to the SD card,</span><br></blockquote></blockquote></blockquote></blockqu=
+ote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"=
+cite"><blockquote type=3D"cite"><span>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp; # backup GPT data structures at the end of the disk:</span><br></block=
+quote></blockquote></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # gdisk /dev/mmcblk0 then pre=
+ss the buttons: x, e, w, y</span><br></blockquote></blockquote></blockquote>=
+</blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote=
+ type=3D"cite"><span></span><br></blockquote></blockquote></blockquote><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an>Why don=E2=80=99t you make this part ^^^ automatic with a script or you s=
+imply use genimage itself?</span><br></blockquote></blockquote></blockquote>=
+<blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite=
+"><span></span><br></blockquote></blockquote></blockquote><blockquote type=3D=
+"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span>What it=E2=80=
+=99s expected as board defconfig is something that you burn a sdcard with th=
+e sdcard.img file and that=E2=80=99s it. So here you need to make it automat=
+ic.</span><br></blockquote></blockquote></blockquote><blockquote type=3D"cit=
+e"><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span><br></bl=
+ockquote></blockquote></blockquote><blockquote type=3D"cite"><blockquote typ=
+e=3D"cite"><blockquote type=3D"cite"><span>So we wait for V3 with the commit=
+ log form you read above and requested changes.</span><br></blockquote></blo=
+ckquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
+an></span><br></blockquote></blockquote><blockquote type=3D"cite"><blockquot=
+e type=3D"cite"><span>The problem is that it is not possible to create an sd=
+card.img image</span><br></blockquote></blockquote><blockquote type=3D"cite"=
+><blockquote type=3D"cite"><span>with the correct GPT structure. The second c=
+opy of the GPT must be at</span><br></blockquote></blockquote><blockquote ty=
+pe=3D"cite"><blockquote type=3D"cite"><span>the end of the disk, and the siz=
+e of sdcard.img will not match the SD</span><br></blockquote></blockquote><b=
+lockquote type=3D"cite"><blockquote type=3D"cite"><span>card. Will work and s=
+o, with one copy of GPT. But the disk utilities may</span><br></blockquote><=
+/blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>issue a=
+ warning about the absence of a second copy of the GPT. You can</span><br></=
+blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite">=
+<span>correct the situation only after writing sdcard.img to the SD card, or=
+</span><br></blockquote></blockquote><blockquote type=3D"cite"><blockquote t=
+ype=3D"cite"><span>during the first loading of the board in a separate scrip=
+t. This is out</span><br></blockquote></blockquote><blockquote type=3D"cite"=
+><blockquote type=3D"cite"><span>of scope for this patch.</span><br></blockq=
+uote></blockquote><blockquote type=3D"cite"><span>Ok, so please remove those=
+ 3 commented lines since I think the board actually works without those addi=
+tional commands, correct?</span><br></blockquote><span></span><br><span>Yes.=
+</span><br></div></blockquote><div><br></div><div>Perfect, so you can send t=
+he V3 patch.</div><div>Please remember to keep my Reviewed-by and Tested-by a=
+fter your SoB that I=E2=80=99ve given you on V1 patch.</div><div><br></div><=
+div>You can follow patchwork here:</div><div><a href=3D"https://patchwork.oz=
+labs.org/project/buildroot/list/">https://patchwork.ozlabs.org/project/build=
+root/list/</a></div><div><br></div><div>You should also subscribe to patchwo=
+rk and mark your V1 and V2 patches as superseded.</div><div><br></div><div>T=
+hank you</div><div>Giulio</div><br><blockquote type=3D"cite"><div dir=3D"ltr=
+"><span></span><br><blockquote type=3D"cite"><span>Otherwise, it this doesn'=
+t work on target without gdisk commands, you need to add a post-image.sh scr=
+ipt to launch those commands.</span><br></blockquote><blockquote type=3D"cit=
+e"><span>Thank you!</span><br></blockquote><blockquote type=3D"cite"><span>B=
+est regards</span><br></blockquote><span></span><br></div></blockquote></bod=
+y></html>=
+
+--Apple-Mail-292BC296-AC25-4F57-AD2B-7798E99F4821--
+
+--===============0578567281946342245==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0578567281946342245==--
