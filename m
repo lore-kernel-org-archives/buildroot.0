@@ -1,47 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36035C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67E6AC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2FF740303;
-	Sun,  6 Feb 2022 15:35:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4uIOPWKPM9pk; Sun,  6 Feb 2022 15:35:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 066A1402F6;
-	Sun,  6 Feb 2022 15:35:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2365E1BF325
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:35:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11A32400C1
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:35:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1219640270;
+	Sun,  6 Feb 2022 15:37:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gUYGExOIxMNq for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 15:35:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 923424031D
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:35:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E59BC82BD7; Sun,  6 Feb 2022 15:27:43 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 16:34:16 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 2a660956f3a14453d05831ad874e756bb39e3c86
-X-Git-Newrev: 9ff7b2165762d45479bfa2527c9ed10d2928e4cd
-X-Patchwork-Hint: ignore
-Message-Id: <20220206152743.E59BC82BD7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/log4cxx: bump
- version to 0.12.1
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v2EXWD_B_uPO; Sun,  6 Feb 2022 15:37:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65358400C1;
+	Sun,  6 Feb 2022 15:37:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D85C1BF325
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:37:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A43860B64
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:37:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HJOAe9I-PkEu for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 15:37:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8DFEA60B12
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:37:13 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id w20so20817789edc.1
+ for <buildroot@buildroot.org>; Sun, 06 Feb 2022 07:37:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Lh62O2d50e+YYvNqo3XLoVditUS/0jSWyCX4fOL1z+4=;
+ b=I/ojVY3+KfykpAAcsDXXAiUIwxaamN1vGPRlARODK5di9tLdiogcCWMCc6XVLOJU6D
+ urNTq3kkPX/vDzlWhLp1dMIaBBuTQPdqyjXCBod/tOtssgVYsJce8jmwOx9nigUJbMzn
+ HcfE6xa84EyHLKKQBI7xbZQCCyR5+0WnggHezQbfEeS8uLjwO9+0n2RfngrHFNantwkM
+ 2HVcBuJHJOL9aGMAyTWicxt8Zixiviah+SUPMnt2uRPlR1wU23upRYnUojI76mhlWPXI
+ zCsiaV+skP7YQQ6TAEx4nFaLM7VHqJbHGMwqrKhxlByTmVgs/gat14DMSjeOqoN8tUI+
+ KU7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Lh62O2d50e+YYvNqo3XLoVditUS/0jSWyCX4fOL1z+4=;
+ b=7TWolFQG+0Z21yaYugj6MuRJ4xHWFKie0qN2VaLYNHE2NQzHt+CIb8RDJvX6LUeRYM
+ WQKX9hzfcZvg68C4fokSEIVQnm1KDMXjDCPhelxvQOBpOTOGMdKSvmWMqUYeaax/S358
+ HOJb1u8f3u04xo5fGJfHm4/Tx+8h12E0E9EyxGMAQT8eKZR3z1LMaQ0C7UILi+54o/Bl
+ KblSFvE+wk01wrJRUQMfsNl5YOeitahTXoD0qFKrPITKDGN3Ph3QBJM3pdgiHIFx/EqR
+ ponKP7k903wyQjTzHpan9Uqp06X60At8S7CjYR6UG78Ad00gO1O5kCRs3uiDNUVokToQ
+ +lYQ==
+X-Gm-Message-State: AOAM533sFdTtK0KQy8Q2PiR+jSyQANuHqsuFtJkOSwMUHtLzNlfL/XQ6
+ /Qzf5DVPk7d5T4SEQxlQhkX9bg==
+X-Google-Smtp-Source: ABdhPJxwJuY5E57PAweZrVgp2m9FUxfeeyCikFbG4vEMPy1K1Aj+9TLJ0ZinyRssWyUyvQub2hHFNA==
+X-Received: by 2002:a50:d5cd:: with SMTP id g13mr9476388edj.268.1644161831646; 
+ Sun, 06 Feb 2022 07:37:11 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id ss14sm534187ejb.199.2022.02.06.07.37.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 06 Feb 2022 07:37:11 -0800 (PST)
+Message-ID: <c76bab40-01a1-e4d0-3f04-02745f8ce26a@mind.be>
+Date: Sun, 6 Feb 2022 16:37:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+References: <20211205102010.2834942-1-troglobit@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211205102010.2834942-1-troglobit@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: add section on start
+ script recommendations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,264 +94,147 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: thomas.petazzoni@bootlin.com,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ff7b2165762d45479bfa2527c9ed10d2928e4cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-- drop 0001-LOGCXX-528.patch (from upstream [1])
-- renumber remainnig patch
 
-Changelog (for deteils see [2]):
+On 05/12/2021 11:20, Joachim Wiberg wrote:
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> ---
+>   docs/manual/adding-packages-directory.txt | 96 +++++++++++++++++++++++
+>   docs/manual/configure.txt                 |  1 +
+>   2 files changed, 97 insertions(+)
+> 
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index 4ceb3fd772..72e8dac5ff 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -554,3 +554,99 @@ over time. Such patches should not be downloaded, and instead be added
+>   locally to the package folder.
+>   
+>   If the +.hash+ file is missing, then no check is done at all.
+> +
+> +[[adding-packages-start-script]]
+> +=== The +SNNfood+ start script
+> +
+> +Packages that provide a system daemon usually need to be started somehow
+> +at boot.  Buildroot comes with support for several init systems, some
+> +are considered tier one (see xref:init-system[]), while others are also
+> +available but do not have the same level of integration.  The
+> +recommended one in Buildroot is the BusyBox init.
 
-- This is a minor bugfix release to fix issues found with 0.12.0. Notably,
-  this version fixes a bug where a multithreaded application would crash
-  when using a rolling file.
+  I think the intention is that systemd is at the same level as busybox init. 
+And we generally don't distinguish between busybox init and SysV init.
 
-  [LOGCXX-534] - Crashed in log->forcedLog function when running with multi-thread
-  [LOGCXX-528] - log4cxx fails to build on Centos 7.6 / g++ 4.8.5 / Boost 1.53
+  I made a few other small changes to the text and applied to master, thanks.
 
-[1] https://github.com/apache/logging-log4cxx/commit/249dd85494a430d95fd69d89f42b02fd950cda51
-[2] https://logging.apache.org/log4cxx/latest_stable/changelog.html#0.12.1
+  Regards,
+  Arnout
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 38659ff0cb5b3d8a340adf5ff631200103f53e67)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/log4cxx/0001-LOGCXX-528.patch              | 189 ---------------------
- ...ck-only-check-for-boost-if-really-needed.patch} |   0
- package/log4cxx/log4cxx.hash                       |   4 +-
- package/log4cxx/log4cxx.mk                         |   2 +-
- 4 files changed, 3 insertions(+), 192 deletions(-)
-
-diff --git a/package/log4cxx/0001-LOGCXX-528.patch b/package/log4cxx/0001-LOGCXX-528.patch
-deleted file mode 100644
-index d1d3189024..0000000000
---- a/package/log4cxx/0001-LOGCXX-528.patch
-+++ /dev/null
-@@ -1,189 +0,0 @@
--From 249dd85494a430d95fd69d89f42b02fd950cda51 Mon Sep 17 00:00:00 2001
--From: Robert Middleton <rm5248@users.noreply.github.com>
--Date: Thu, 22 Jul 2021 15:27:50 -0700
--Subject: [PATCH] LOGCXX-528 (#66)
--
--Fixes for checking that C++11 is available.  Fix for older compilers.
--
--[Retrieved from:
--https://github.com/apache/logging-log4cxx/commit/249dd85494a430d95fd69d89f42b02fd950cda51]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt                                | 10 +++++++++
-- src/cmake/boost-fallback/boost-fallback.cmake | 21 ++++++++++---------
-- src/main/cpp/hierarchy.cpp                    |  4 ++--
-- src/main/include/CMakeLists.txt               |  2 +-
-- .../log4cxx/helpers/appenderattachableimpl.h  |  1 +
-- .../include/log4cxx/helpers/aprinitializer.h  |  1 +
-- src/main/include/log4cxx/helpers/loglog.h     |  1 +
-- .../include/log4cxx/helpers/serversocket.h    |  1 +
-- src/main/include/log4cxx/level.h              |  1 +
-- src/main/include/log4cxx/rolling/action.h     |  1 +
-- 10 files changed, 30 insertions(+), 13 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index e5b44ef1a..9c6e63902 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -41,6 +41,9 @@ if( NOT "${CMAKE_CXX_STANDARD}")
--     set(CMAKE_CXX_STANDARD 17)
-- endif()
-- 
--+# Don't allow for compiler-specific extensions
--+set(CMAKE_CXX_EXTENSIONS OFF)
--+
-- # Building
-- add_subdirectory(src)
-- 
--@@ -185,6 +188,13 @@ if(APACHE_MAINTAINER)
-- 	)
-- endif()
-- 
--+#
--+# Check for any fatal configuration errors
--+#
--+if( "${SHARED_MUTEX_IMPL}" STREQUAL "NONE" )
--+    message( FATAL_ERROR "No shared_mutex implementation found.  Requires Boost or C++17" )
--+endif()
--+
-- #
-- # Output configuration information
-- # Similar to APR CMake configuration
--diff --git a/src/cmake/boost-fallback/boost-fallback.cmake b/src/cmake/boost-fallback/boost-fallback.cmake
--index a8d7d441b..8285b0b99 100644
----- a/src/cmake/boost-fallback/boost-fallback.cmake
--+++ b/src/cmake/boost-fallback/boost-fallback.cmake
--@@ -56,16 +56,17 @@ try_compile(STD_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
--     "${CMAKE_CURRENT_LIST_DIR}/test-stdatomic.cpp")
-- 
-- find_package(Boost COMPONENTS thread)
---try_compile(Boost_SHARED_PTR_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
---    "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedptr.cpp")
---try_compile(Boost_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
---    "${CMAKE_CURRENT_LIST_DIR}/test-boostmutex.cpp")
---try_compile(Boost_SHARED_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
---    "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedmutex.cpp"
---    LINK_LIBRARIES Threads::Threads
---)
---try_compile(Boost_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
---    "${CMAKE_CURRENT_LIST_DIR}/test-boostatomic.cpp")
--+if( ${Boost_FOUND} )
--+    try_compile(Boost_SHARED_PTR_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
--+        "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedptr.cpp")
--+    try_compile(Boost_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
--+        "${CMAKE_CURRENT_LIST_DIR}/test-boostmutex.cpp")
--+    try_compile(Boost_SHARED_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
--+        "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedmutex.cpp"
--+        LINK_LIBRARIES Threads::Threads Boost::thread)
--+    try_compile(Boost_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
--+        "${CMAKE_CURRENT_LIST_DIR}/test-boostatomic.cpp")
--+endif( ${Boost_FOUND} )
-- 
-- # Link the target with the appropriate boost libraries(if required)
-- function(boostfallback_link target)
--diff --git a/src/main/cpp/hierarchy.cpp b/src/main/cpp/hierarchy.cpp
--index 4f5174448..c70d39dbb 100644
----- a/src/main/cpp/hierarchy.cpp
--+++ b/src/main/cpp/hierarchy.cpp
--@@ -223,7 +223,7 @@ LoggerPtr Hierarchy::getLogger(const LogString& name,
-- 	else
-- 	{
-- 		LoggerPtr logger(factory->makeNewLoggerInstance(pool, name));
---		logger->setHierarchy(weak_from_this());
--+		logger->setHierarchy(shared_from_this());
-- 		loggers->insert(LoggerMap::value_type(name, logger));
-- 
-- 		ProvisionNodeMap::iterator it2 = provisionNodes->find(name);
--@@ -423,6 +423,6 @@ void Hierarchy::configureRoot(){
-- 	// LOGCXX-322 we need to turn the repositroy into a weak_ptr, and we
-- 	// can't use weak_from_this() in the constructor.
-- 	if( !root->getLoggerRepository().lock() ){
---		root->setHierarchy(weak_from_this());
--+		root->setHierarchy(shared_from_this());
-- 	}
-- }
--diff --git a/src/main/include/CMakeLists.txt b/src/main/include/CMakeLists.txt
--index 8183660a5..584941c97 100644
----- a/src/main/include/CMakeLists.txt
--+++ b/src/main/include/CMakeLists.txt
--@@ -133,7 +133,7 @@ if( ${STD_SHARED_MUTEX_FOUND} )
-- elseif( ${Boost_SHARED_MUTEX_FOUND} )
--     set( SHARED_MUTEX_IMPL "boost::shared_mutex" )
-- else()
---    set( SMART_PTR_IMPL "NONE" )
--+    set( SHARED_MUTEX_IMPL "NONE" )
-- endif()
-- 
-- if( ${STD_ATOMIC_FOUND} )
--diff --git a/src/main/include/log4cxx/helpers/appenderattachableimpl.h b/src/main/include/log4cxx/helpers/appenderattachableimpl.h
--index 40e77d93c..b80b5aade 100644
----- a/src/main/include/log4cxx/helpers/appenderattachableimpl.h
--+++ b/src/main/include/log4cxx/helpers/appenderattachableimpl.h
--@@ -28,6 +28,7 @@
-- #include <log4cxx/helpers/object.h>
-- #include <log4cxx/helpers/pool.h>
-- #include <log4cxx/log4cxx.h>
--+#include <mutex>
-- 
-- namespace log4cxx
-- {
--diff --git a/src/main/include/log4cxx/helpers/aprinitializer.h b/src/main/include/log4cxx/helpers/aprinitializer.h
--index 6f3f55070..fccd18e0f 100644
----- a/src/main/include/log4cxx/helpers/aprinitializer.h
--+++ b/src/main/include/log4cxx/helpers/aprinitializer.h
--@@ -30,6 +30,7 @@ extern "C" {
-- }
-- 
-- #include <apr_time.h>
--+#include <mutex>
-- 
-- namespace log4cxx
-- {
--diff --git a/src/main/include/log4cxx/helpers/loglog.h b/src/main/include/log4cxx/helpers/loglog.h
--index d54785ddc..a4c92416a 100644
----- a/src/main/include/log4cxx/helpers/loglog.h
--+++ b/src/main/include/log4cxx/helpers/loglog.h
--@@ -20,6 +20,7 @@
-- 
-- #include <log4cxx/logstring.h>
-- #include <exception>
--+#include <mutex>
-- 
-- namespace log4cxx
-- {
--diff --git a/src/main/include/log4cxx/helpers/serversocket.h b/src/main/include/log4cxx/helpers/serversocket.h
--index e6e6d475e..7da75b969 100644
----- a/src/main/include/log4cxx/helpers/serversocket.h
--+++ b/src/main/include/log4cxx/helpers/serversocket.h
--@@ -19,6 +19,7 @@
-- #define _LOG4CXX_HELPERS_SERVER_SOCKET_H
-- 
-- #include <log4cxx/helpers/socket.h>
--+#include <mutex>
-- 
-- namespace log4cxx
-- {
--diff --git a/src/main/include/log4cxx/level.h b/src/main/include/log4cxx/level.h
--index 4ca4bf28c..7848c902a 100644
----- a/src/main/include/log4cxx/level.h
--+++ b/src/main/include/log4cxx/level.h
--@@ -22,6 +22,7 @@
-- #include <log4cxx/logstring.h>
-- #include <limits.h>
-- #include <log4cxx/helpers/object.h>
--+#include <mutex>
-- 
-- #if defined(_MSC_VER)
-- 	#pragma warning ( push )
--diff --git a/src/main/include/log4cxx/rolling/action.h b/src/main/include/log4cxx/rolling/action.h
--index 0e8d55f36..fc4497813 100644
----- a/src/main/include/log4cxx/rolling/action.h
--+++ b/src/main/include/log4cxx/rolling/action.h
--@@ -21,6 +21,7 @@
-- #include <log4cxx/portability.h>
-- #include <log4cxx/helpers/object.h>
-- #include <log4cxx/helpers/pool.h>
--+#include <mutex>
-- 
-- namespace log4cxx
-- {
-diff --git a/package/log4cxx/0002-boost-fallback-only-check-for-boost-if-really-needed.patch b/package/log4cxx/0001-boost-fallback-only-check-for-boost-if-really-needed.patch
-similarity index 100%
-rename from package/log4cxx/0002-boost-fallback-only-check-for-boost-if-really-needed.patch
-rename to package/log4cxx/0001-boost-fallback-only-check-for-boost-if-really-needed.patch
-diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
-index 6fc0d8836e..12633c8e57 100644
---- a/package/log4cxx/log4cxx.hash
-+++ b/package/log4cxx/log4cxx.hash
-@@ -1,4 +1,4 @@
--# From https://www.apache.org/dist/logging/log4cxx/0.12.0/apache-log4cxx-0.12.0.tar.gz.sha512
--sha512  00fe571f9c511bf93b17cac8269ce00f7e817e8d723acf62bddff1bbe0e7facd0ab2fd75c01a93870f7e5c66718b2b73fc22c5f193bfd204e34d052b1123e60d  apache-log4cxx-0.12.0.tar.gz
-+# From https://www.apache.org/dist/logging/log4cxx/0.12.1/apache-log4cxx-0.12.1.tar.gz.sha512
-+sha512  807058734cebf7c92e99484313becbc6be63e48bd930889c733318bb78dfec498b66aaa12255ed30879abb005b32e2b965f9dd87ec50d0421ca067f3f66280d9  apache-log4cxx-0.12.1.tar.gz
- # Locally computed
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index 7612774583..d20cc792a6 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LOG4CXX_VERSION = 0.12.0
-+LOG4CXX_VERSION = 0.12.1
- LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
- LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
- LOG4CXX_INSTALL_STAGING = YES
+> +
+> +All packages providing a system daemon must provide a start script for
+> +BusyBox init, and should provide a systemd unit file.  For consistency,
+> +the init script must follow the style and composition as defined in the
+> +reference: +package/busybox/S01syslogd+.  There is no recommendation for
+> +systemd unit files, but if a package comes with its own unit file, that
+> +is preferred over a local one.  Provided of course that the unit file
+> +is compatible with a Buildroot system.
+> +
+> +The name of the start script is composed of the +SNN+ and the daemon
+> +name.  The +NN+ is the start order number which needs to be carefully
+> +chosen.  For example, a program that requires networking to be up should
+> +not start before +S40network+.  The scripts are started in alphabetical
+> +order, so +S01syslogd+ starts before +S01watchdogd+, and +S02sysctl+
+> +start thereafter.
+> +
+> +------------------------------
+> +01: #!/bin/sh
+> +02:
+> +03: DAEMON="syslogd"
+> +04: PIDFILE="/var/run/$DAEMON.pid"
+> +05:
+> +06: SYSLOGD_ARGS=""
+> +07:
+> +08: # shellcheck source=/dev/null
+> +09: [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+> +10:
+> +11: # BusyBox' syslogd does not create a pidfile, so pass "-n" in the command line
+> +12: # and use "-m" to instruct start-stop-daemon to create one.
+> +13: start() {
+> +14: 	printf 'Starting %s: ' "$DAEMON"
+> +15: 	# shellcheck disable=SC2086 # we need the word splitting
+> +16: 	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
+> +17: 		-- -n $SYSLOGD_ARGS
+> +18: 	status=$?
+> +19: 	if [ "$status" -eq 0 ]; then
+> +20: 		echo "OK"
+> +21: 	else
+> +22: 		echo "FAIL"
+> +23: 	fi
+> +24: 	return "$status"
+> +25: }
+> +26:
+> +27: stop() {
+> +28: 	printf 'Stopping %s: ' "$DAEMON"
+> +29: 	start-stop-daemon -K -q -p "$PIDFILE"
+> +30: 	status=$?
+> +31: 	if [ "$status" -eq 0 ]; then
+> +32: 		rm -f "$PIDFILE"
+> +33: 		echo "OK"
+> +34: 	else
+> +35: 		echo "FAIL"
+> +36: 	fi
+> +37: 	return "$status"
+> +38: }
+> +39:
+> +40: restart() {
+> +41: 	stop
+> +42: 	sleep 1
+> +43: 	start
+> +44: }
+> +45:
+> +46: case "$1" in
+> +47: 	start|stop|restart)
+> +48: 		"$1";;
+> +49: 	reload)
+> +50: 		# Restart, since there is no true "reload" feature.
+> +51: 		restart;;
+> +52: 	*)
+> +53: 		echo "Usage: $0 {start|stop|restart|reload}"
+> +54: 		exit 1
+> +55: esac
+> +------------------------------
+> +
+> +*Note:* programs that support reloading their configuration in some
+> +fashion (+SIGHUP+) should provide a +reload()+ function similar to
+> ++stop()+.  The +start-stop-daemon+ supports +-K -s HUP+ for this.
+> +It is recommended to always append +-x "/sbin/$DAEMON"+ to all the
+> ++start-stop-daemon+ commands to ensure signals are set to a PID that
+> +matches +$DAEMON+.
+> +
+> +Both start scripts and unit files can source command line arguments from
+> ++/etc/default/foo+, in general, if such a file does not exist it should
+> +not block the start of the daemon, unless there is some site specirfic
+> +command line argument the daemon requires to start.  For start scripts a
+> ++FOO_ARGS="-s -o -m -e -args"+ can be defined to a default value in and
+> +the user can override this from +/etc/default/foo+.
+> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+> index c9eef567f4..60860d2c71 100644
+> --- a/docs/manual/configure.txt
+> +++ b/docs/manual/configure.txt
+> @@ -377,6 +377,7 @@ good solution.
+>   Note that if +systemd+ is chosen as init system, /dev management will
+>   be performed by the +udev+ program provided by +systemd+.
+>   
+> +[[init-system]]
+>   === init system
+>   
+>   The _init_ program is the first userspace program started by the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
