@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCE46C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 16:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 826F9C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 17:27:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B56A60C21;
-	Sun,  6 Feb 2022 16:25:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAA7240243;
+	Sun,  6 Feb 2022 17:27:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fWqHBQ6pM5AN; Sun,  6 Feb 2022 16:25:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VCL8hCILoEwl; Sun,  6 Feb 2022 17:27:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEF3460B00;
-	Sun,  6 Feb 2022 16:25:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EDE5A1BF38C
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 16:25:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36A624023D;
+	Sun,  6 Feb 2022 17:27:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 436681BF976
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9AEF60B00
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 16:25:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CADE401A0
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ShHMO6nOV2S for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 16:25:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jLrjfBh3R3lT for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 17:27:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4507A60597
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 16:25:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8BB7082BD9; Sun,  6 Feb 2022 16:17:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2AD914014E
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 17:27:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 5513882C83; Sun,  6 Feb 2022 17:20:23 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 16:45:33 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 9ff7b2165762d45479bfa2527c9ed10d2928e4cd
-X-Git-Newrev: b9794087bd971cfb49a22ca2ad01d754b1c47f53
+Date: Sun, 6 Feb 2022 18:27:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d020368eeae5f85eb125788d07a7b013e13b34c2
+X-Git-Newrev: 236e2343f39b0aeb6aa18be26c92a0dee7fd656e
 X-Patchwork-Hint: ignore
-Message-Id: <20220206161751.8BB7082BD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/connman: security
- bump to version 1.41
+Message-Id: <20220206172023.5513882C83@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/docker: add shellcheck
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9794087bd971cfb49a22ca2ad01d754b1c47f53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=236e2343f39b0aeb6aa18be26c92a0dee7fd656e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Allow developers to run check-package for init scripts, that call
+shellcheck, without having to install the tool.
 
-- CVE-2022-23096: An issue was discovered in the DNS proxy in Connman
-  through 1.40.  The TCP server reply implementation lacks a check for the
-  presence of sufficient Header Data, leading to an out-of-bounds read.
+Since the docker have a fixed version of the tool, there will be no
+difference between runs in different machines.
 
-- CVE-2022-23097: An issue was discovered in the DNS proxy in Connman
-  through 1.40.  forward_dns_reply mishandles a strnlen call, leading to an
-  out-of-bounds read.
+One can call:
+$ utils/docker-run utils/check-package package/package/S*
+$ utils/docker-run shellcheck package/package/S*
 
-- CVE-2022-23098: An issue was discovered in the DNS proxy in Connman
-  through 1.40.  The TCP server reply implementation has an infinite loop if
-  no data is received.
+This change also allows to eventually run check-package for init scripts
+in the GitLab CI.
 
-For details, see the advisory:
-https://www.openwall.com/lists/oss-security/2022/01/25/1
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 35a3c018246813597db52ef65b36a295ebdd9285)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Acked-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/docker/Dockerfile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 797448337c..6fc5edf29a 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256  1a57ae7ce234aa3a1744aac3be5c2121d98dce999440ef8ab9cc4edfd5edcb12  connman-1.40.tar.xz
-+sha256  79fb40f4fdd5530c45aa8e592fb16ba23d3674f3a98cf10b89a6576f198de589  connman-1.41.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 8c66a69882..61851bd2dc 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.40
-+CONNMAN_VERSION = 1.41
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 120e301b7c..f54c31b54a 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -45,6 +45,7 @@ RUN apt-get install -y --no-install-recommends \
+         qemu-system-arm \
+         qemu-system-x86 \
+         rsync \
++        shellcheck \
+         subversion \
+         unzip \
+         wget \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
