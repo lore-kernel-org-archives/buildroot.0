@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87EFFC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 14:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8507C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 14:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFD4040549;
-	Sun,  6 Feb 2022 14:54:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8043440303;
+	Sun,  6 Feb 2022 14:55:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P6fO6L_7gCGU; Sun,  6 Feb 2022 14:54:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wmzNNLxJQu5z; Sun,  6 Feb 2022 14:55:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA32B40289;
-	Sun,  6 Feb 2022 14:54:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E42F21BF5AA
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:54:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1C48402E9;
+	Sun,  6 Feb 2022 14:55:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A96701BF5AA
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2043400A6
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:54:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94804402E9
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:55:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fWGKCK4YAFb5 for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 14:54:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3DD5400C1
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 14:54:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 60FD382BBB; Sun,  6 Feb 2022 14:47:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6erpW5Ywno9t for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 14:55:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B602E402E2
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 14:55:05 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5413920002;
+ Sun,  6 Feb 2022 14:55:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nGiwQ-0001fk-NZ; Sun, 06 Feb 2022 15:55:02 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 15:52:29 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 6400186971ac3430e3827563b8bce73f15f18583
-X-Git-Newrev: 95f5dcef1ba2c05a5ef23f619dac24c067148624
-X-Patchwork-Hint: ignore
-Message-Id: <20220206144700.60FD382BBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/pkcs11-helper:
- drop autoreconf
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220128215013.2997212-1-fontaine.fabrice@gmail.com>
+Date: Sun, 06 Feb 2022 15:55:02 +0100
+In-Reply-To: <20220128215013.2997212-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 28 Jan 2022 22:50:12 +0100")
+Message-ID: <874k5cvyd5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/pkcs11-helper: drop autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,39 +59,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95f5dcef1ba2c05a5ef23f619dac24c067148624
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-autoreconf is not needed since commit
-dbf8047f64f081ffbc97b67dd891690632377692 as the official tarball already
-ships a configure file
+ > autoreconf is not needed since commit
+ > dbf8047f64f081ffbc97b67dd891690632377692 as the official tarball already
+ > ships a configure file
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 59f8a971ae6c8f88bf99dede56946e701a2c1b40)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkcs11-helper/pkcs11-helper.mk | 1 -
- 1 file changed, 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/pkcs11-helper/pkcs11-helper.mk b/package/pkcs11-helper/pkcs11-helper.mk
-index 805e000759..90929404be 100644
---- a/package/pkcs11-helper/pkcs11-helper.mk
-+++ b/package/pkcs11-helper/pkcs11-helper.mk
-@@ -10,7 +10,6 @@ PKCS11_HELPER_SITE = https://github.com/OpenSC/pkcs11-helper/releases/download/p
- PKCS11_HELPER_LICENSE = GPL-2.0 or BSD-3-Clause
- PKCS11_HELPER_LICENSE_FILES = COPYING COPYING.BSD COPYING.GPL
- PKCS11_HELPER_DEPENDENCIES = host-pkgconf
--PKCS11_HELPER_AUTORECONF = YES
- PKCS11_HELPER_INSTALL_STAGING = YES
- 
- PKCS11_HELPER_CONF_OPTS = \
+Committed to 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
