@@ -1,89 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B2CCC433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B451C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:17:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D62FA402B3;
-	Sun,  6 Feb 2022 19:17:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A88E940186;
+	Sun,  6 Feb 2022 19:17:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LKnwvSpi_B_J; Sun,  6 Feb 2022 19:17:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60E4440191;
+	Sun,  6 Feb 2022 19:17:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 653361BF384
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:17:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 544C1402AC
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:17:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n-QRfP3UaHv3; Sun,  6 Feb 2022 19:17:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E40C9402AC;
-	Sun,  6 Feb 2022 19:17:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB1E41BF384
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:17:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97FEC81777
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:17:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=inbox.ru header.b="SCXg1Bxa";
- dkim=pass (1024-bit key) header.d=inbox.ru header.b="nedzXdT5"
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id myLkWPtg4nZn for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 19:17:06 +0000 (UTC)
-X-Greylist: delayed 00:16:24 by SQLgrey-1.8.0
-Received: from fallback9.mail.ru (fallback9.mail.ru [94.100.178.49])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 864B681776
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru;
- s=mail3; 
- h=References:In-Reply-To:Content-Type:Message-ID:Reply-To:Date:MIME-Version:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=7tgQUdDveh/qg+F+T56T1NMLsGfpvPBWUQ80PABf/eU=; 
- t=1644175026;x=1644780426; 
- b=SCXg1BxaapuvMgdd55fiKU7JxZOUMYJVcJ0Brg/QS0dtME1us7KZYtrk1VyIYFMH/VHrYZVzQ1SajZurdtORPjHvsW6WHpzB1fdNGGxbpoPntUYz7b5GGpWSxcVfhVA6Q0X/yLybQvEJJNm1f80N7nPoRJzrryp7Lqs7Izrgbbk=;
-Received: from [10.14.54.173] (port=48768 helo=f387.i.mail.ru)
- by fallback9.m.smailru.net with esmtp (envelope-from <fido_max@inbox.ru>)
- id 1nGmm7-0004Tz-Km
- for buildroot@buildroot.org; Sun, 06 Feb 2022 22:00:39 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru;
- s=mail3; 
- h=References:In-Reply-To:Content-Type:Message-ID:Reply-To:Date:MIME-Version:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=7tgQUdDveh/qg+F+T56T1NMLsGfpvPBWUQ80PABf/eU=; 
- t=1644174039;x=1644779439; 
- b=nedzXdT5HC2RjOWUOFD7P5P42QcrqtSY8nZutC22kxS+wraXN6bjfnDm5XERXPS51GgXtOhjMlW5pR5XTlbmBo1wwAaFetj0Nnnil4nhAEpQRjmKRsITzYOB5KVY/brKa0y96+x00tA1flLZBE2+OPMhCtmnTgAelgO4sci9qdQ=;
-Received: by f387.i.mail.ru with local (envelope-from <fido_max@inbox.ru>)
- id 1nGmlx-0008T0-BP; Sun, 06 Feb 2022 22:00:29 +0300
-Received: by e.mail.ru with HTTP;
-	Sun, 06 Feb 2022 22:00:29 +0300
-To: =?UTF-8?B?RmFicmljZSBGb250YWluZQ==?= <fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-X-Mailer: Mail.Ru Mailer 1.0
-X-SenderField-ReMsg: 16441595901384076504
-Date: Sun, 06 Feb 2022 22:00:29 +0300
-X-Priority: 3 (Normal)
-Message-ID: <1644174029.436223773@f387.i.mail.ru>
-In-Reply-To: <20220206145740.1765660-1-fontaine.fabrice@gmail.com>
-References: <20220206145740.1765660-1-fontaine.fabrice@gmail.com>
-X-7564579A: 646B95376F6C166E
-X-77F55803: 119C1F4DF6A9251C27C7DFA0C7E3D7EC014C280C20FC7FC81CA0C35061514BDE8FD872164937FA4C76A7D2D318CFD6FA369EBFB787578DA3C1A2DA03B7E7DB80A5D7981818872E50
-X-7FA49CB5: 70AAF3C13DB7016878DA827A17800CE71383E581C033BCDDD82A6BABE6F325AC08BE7437D75B48FABCF491FFA38154B613377AFFFEAFD26923F8577A6DFFEA7CC579B1C3ABE6C709C2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE75263010198C72082EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BEBC5CAB6D411FFA65F1BFD6C072B64FB4444FBA5B8B676C920879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0DEC8C2C8BCD2534D8941B15DA834481FA18204E546F3947CEDCF5861DED71B2F389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC82FFDA4F57982C5F4F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8B3241B8C6B78F28F975ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-8FC586DF: 7088FE8F28191859
-X-C1DE0DAB: 0D63561A33F958A54F68643072190CF33FC0F54230A2391A49E064CA3E3C7FECBDC6A1CF3F042BAD6DF99611D93F60EF05A8BD9291DE3CBB699F904B3F4130E343918A1A30D5E7FCCB5012B2E24CD356
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34A08F09726D78E07B3E8A6DE3A03851F5B31B43F71CD2A055505F6A503F03981EC5726EC8D577BE4F1D7E09C32AA3244C5BEA8DE7BDEABDDAA0620DDB2E742A7E51E887DA02A9F7BF729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5+wYjsrrSY/u8Y3PrTqANeitKFiSd6Yd7yPpbiiZ/d5BsxIjK0jGQgCHUM3Ry2Lt2G3MDkMauH3h0dBdQGj+BB/iPzQYh7XS329fgu+/vnDhi4E+GzsRyLMGA7DvoNNDag==
-X-Mailru-Sender: C88E38A2D15C6BD1F5DE00CD28993412B846FB56033E7B637EEA7A9CAEF28A8AEE03E9CB690294D29B775E5490DE5A1263E6FEAB5E25C8532DCD4D777336F7390491AD08BA5FD0C09AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Spam: undefined
-X-4EC0790: 10
-X-7564579A: B8F34718100C35BD
-X-77F55803: 6242723A09DB00B4B83DF1D2C0E648B5D62FB021F3AB0081425A3902524D726068F3CF0E9FE49B69E15DDCCB26CC86FE95942B4EE3D546081874DC9287D6294BE8EA8589D97D71F2
-X-7FA49CB5: 0D63561A33F958A58F7DB22D8EEAEC0F3CD3B887501F653A70345F188C5CAADCCACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F7900637712AAB6D9D366D8A389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8457EE4B4996FC546F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA775ECD9A6C639B01B78DA827A17800CE702706FBA10211704731C566533BA786AA5CC5B56E945C8DA
-X-C1DE0DAB: 0D63561A33F958A58F7DB22D8EEAEC0F3CD3B887501F653AE550113AB1E8F8A08E8E86DC7131B365E7726E8460B7C23C
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5+wYjsrrSY/u8Y3PrTqANeitKFiSd6Yd7yPpbiiZ/d5BsxIjK0jGQgCHUM3Ry2Lt2G3MDkMauH3h0dBdQGj+BB/iPzQYh7XS329fgu+/vnDhi4E+GzsRyLPDuVBzbgTUqQ==
-X-Mailru-MI: 400800
-X-Mras: Ok
-Subject: Re: [Buildroot] 
- =?utf-8?q?=5BPATCH_1/1=5D_package/protozero=3A_bump_?=
- =?utf-8?q?to_version_1=2E7=2E1?=
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jU0THcIX3ZY5 for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 19:17:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9641A401EF
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:17:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 9865682BCC; Sun,  6 Feb 2022 19:10:14 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sun, 6 Feb 2022 20:16:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b42e87772a995b19913822b810f876a5890d2369
+X-Git-Newrev: 3621918d1bc1ddc9312dd1cc8dec6db61e712fe2
+X-Patchwork-Hint: ignore
+Message-Id: <20220206191014.9865682BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ace: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,191 +52,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?b?0JrQvtGH0LXRgtC60L7QsiDQnNCw0LrRgdC40LwgdmlhIGJ1aWxkcm9vdA==?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?0JrQvtGH0LXRgtC60L7QsiDQnNCw0LrRgdC40Lw=?=
- <fido_max@inbox.ru>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8178220291903872189=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=3621918d1bc1ddc9312dd1cc8dec6db61e712fe2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---===============8178220291903872189==
-Content-Type: multipart/alternative;
-	boundary="--ALT--5TApwBiYdLbQ9TXd3CQc8AOIEdDff6KW1644174029"
+ACE is an open-source framework that provides many components and
+patterns for developing high-performance, distributed real-time
+and embedded systems. It provides powerful, yet efficient abstractions
+for sockets, demultiplexing loops, threads, synchronization primitives.
 
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ DEVELOPERS                      |  1 +
+ package/Config.in               |  1 +
+ package/ace/Config.in           | 12 ++++++++
+ package/ace/ace.hash            |  3 ++
+ package/ace/ace.mk              | 61 +++++++++++++++++++++++++++++++++++++++++
+ package/ace/platform_macros.GNU | 14 ++++++++++
+ 6 files changed, 92 insertions(+)
 
-----ALT--5TApwBiYdLbQ9TXd3CQc8AOIEdDff6KW1644174029
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
-
-CkkganVzdCBzZW50IHRoZSBzYW1lIHBhdGNoIHRoaXMgd2Vlay4gCi0tCtCe0YLQv9GA0LDQstC7
-0LXQvdC+INC40LcgTWFpbC5ydSDQtNC70Y8gQW5kcm9pZCDQstC+0YHQutGA0LXRgdC10L3RjNC1
-LCAwNiDRhNC10LLRgNCw0LvRjyAyMDIy0LMuLCAxNzo1OSArMDM6MDAg0L7RgiBGYWJyaWNlIEZv
-bnRhaW5lICBmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbSA6Cgo+RHJvcCBwYXRjaCAoYWxyZWFk
-eSBpbiB2ZXJzaW9uKQo+Cj5odHRwczovL2dpdGh1Yi5jb20vbWFwYm94L3Byb3RvemVyby9yZWxl
-YXNlcy90YWcvdjEuNy4xCj4KPlNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPCBmb250
-YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPi0tLQo+wqAuLi5DTWFrZUxpc3RzLnR4dC1yZXNwZWN0
-LUJVSUxEX1RFU1RJTkcucGF0Y2ggfCA0NyAtLS0tLS0tLS0tLS0tLS0tLS0tCj7CoHBhY2thZ2Uv
-cHJvdG96ZXJvL3Byb3RvemVyby5oYXNoICAgICAgICAgICAgICB8ICAyICstCj7CoHBhY2thZ2Uv
-cHJvdG96ZXJvL3Byb3RvemVyby5tayAgICAgICAgICAgICAgICB8ICAyICstCj7CoDMgZmlsZXMg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA0OSBkZWxldGlvbnMoLSkKPsKgZGVsZXRlIG1vZGUg
-MTAwNjQ0IHBhY2thZ2UvcHJvdG96ZXJvLzAwMDEtQ01ha2VMaXN0cy50eHQtcmVzcGVjdC1CVUlM
-RF9URVNUSU5HLnBhdGNoCj4KPmRpZmYgLS1naXQgYS9wYWNrYWdlL3Byb3RvemVyby8wMDAxLUNN
-YWtlTGlzdHMudHh0LXJlc3BlY3QtQlVJTERfVEVTVElORy5wYXRjaCBiL3BhY2thZ2UvcHJvdG96
-ZXJvLzAwMDEtQ01ha2VMaXN0cy50eHQtcmVzcGVjdC1CVUlMRF9URVNUSU5HLnBhdGNoCj5kZWxl
-dGVkIGZpbGUgbW9kZSAxMDA2NDQKPmluZGV4IGQwMjY3ZTMyODMuLjAwMDAwMDAwMDAKPi0tLSBh
-L3BhY2thZ2UvcHJvdG96ZXJvLzAwMDEtQ01ha2VMaXN0cy50eHQtcmVzcGVjdC1CVUlMRF9URVNU
-SU5HLnBhdGNoCj4rKysgL2Rldi9udWxsCj5AQCAtMSw0NyArMCwwIEBACj4tRnJvbSAwM2RhYWU0
-OWM4ZmE5NDUxM2I1MDhiZDEyZjE1OTdlOGU1ZTA4NmYyIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAw
-MQo+LUZyb206IEZhYnJpY2UgRm9udGFpbmUgPCBmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4K
-Pi1EYXRlOiBTYXQsIDE3IEFwciAyMDIxIDEzOjA2OjQ0ICswMjAwCj4tU3ViamVjdDogW1BBVENI
-XSBDTWFrZUxpc3RzLnR4dDogcmVzcGVjdCBCVUlMRF9URVNUSU5HCj4tCj4tRG9uJ3QgYnVpbGQg
-dGVzdHMgaWYgdGhlIHN0YW5kYXJkIGNtYWtlIEJVSUxEX1RFU1RJTkcgdmFyaWFibGUgaXMgc2V0
-IHRvCj4tT0ZGLgo+LQo+LVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPCBmb250YWlu
-ZS5mYWJyaWNlQGdtYWlsLmNvbT4KPi1bVXBzdHJlYW0gc3RhdHVzOiAgaHR0cHM6Ly9naXRodWIu
-Y29tL21hcGJveC9wcm90b3plcm8vcHVsbC8xMDUgXQo+LS0tLQo+LSBDTWFrZUxpc3RzLnR4dCB8
-IDkgKysrKystLS0tCj4tIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
-b25zKC0pCj4tCj4tZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIvQ01ha2VMaXN0cy50eHQK
-Pi1pbmRleCBmOTcwMmQ2Li43YTQwMjEyIDEwMDY0NAo+LS0tLSBhL0NNYWtlTGlzdHMudHh0Cj4t
-KysrIGIvQ01ha2VMaXN0cy50eHQKPi1AQCAtMjMsNiArMjMsNyBAQCBzZXQoQ01BS0VfRVhQT1JU
-X0NPTVBJTEVfQ09NTUFORFMgT04pCj4tIAo+LSAjLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPi0gCj4t
-K29wdGlvbihCVUlMRF9URVNUSU5HICJCdWlsZCB0ZXN0cyIgT04pCj4tIG9wdGlvbihXRVJST1Ig
-IkFkZCAtV2Vycm9yIGZsYWcgdG8gYnVpbGQgKHR1cm5zIHdhcm5pbmdzIGludG8gZXJyb3JzKSIg
-T04pCj4tIAo+LSBpZihNU1ZDKQo+LUBAIC0xMzQsMTMgKzEzNSwxMyBAQCBpbnN0YWxsKERJUkVD
-VE9SWSBpbmNsdWRlL3Byb3RvemVybyBERVNUSU5BVElPTiBpbmNsdWRlKQo+LSAKPi0gIy0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tCj4tIAo+LS1lbmFibGVfdGVzdGluZygpCj4tLQo+LSBhZGRfc3ViZGly
-ZWN0b3J5KGRvYykKPi0gCj4tIGFkZF9zdWJkaXJlY3RvcnkodG9vbHMpCj4tIAo+LS1hZGRfc3Vi
-ZGlyZWN0b3J5KHRlc3QpCj4tLQo+LStpZihCVUlMRF9URVNUSU5HKQo+LSsgICAgZW5hYmxlX3Rl
-c3RpbmcoKQo+LSsgICAgYWRkX3N1YmRpcmVjdG9yeSh0ZXN0KQo+LStlbmRpZigpCj4tIAo+LSAj
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0KPi0tLSAKPi0yLjMwLjIKPi0KPmRpZmYgLS1naXQgYS9wYWNr
-YWdlL3Byb3RvemVyby9wcm90b3plcm8uaGFzaCBiL3BhY2thZ2UvcHJvdG96ZXJvL3Byb3RvemVy
-by5oYXNoCj5pbmRleCA1NDUzZTAxZWNmLi5mMGI4ZTM5MDA5IDEwMDY0NAo+LS0tIGEvcGFja2Fn
-ZS9wcm90b3plcm8vcHJvdG96ZXJvLmhhc2gKPisrKyBiL3BhY2thZ2UvcHJvdG96ZXJvL3Byb3Rv
-emVyby5oYXNoCj5AQCAtMSw0ICsxLDQgQEAKPsKgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPi1zaGEy
-NTYgIGJlZmZiZGZhYjA2MDg1NGZkNzcwMTc4YThkYjljMDI4YjViNmVlNGEwNTlhMmZlZDgyYzQ2
-MzkwYTg1ZjNmMzEgIHByb3RvemVyby0xLjcuMC50YXIuZ3oKPitzaGEyNTYgIDI3ZTAwMTdkNWIz
-YmEwNmQ2NDZhM2VjNjM5MWQ1Y2NjODUwMGRiODIxYmU0ODBhZWZkMmU0ZGRjM2RlNWZmOTkgIHBy
-b3RvemVyby0xLjcuMS50YXIuZ3oKPsKgc2hhMjU2ICAxZjRkNDc3ZTNjMmQ3NGQ4NzA2YzhmMDU0
-MzdiZDg2ODA0YWJlNDY4NTNiMWYyMzNjZTE1NDlhNGRlNzZmYTQ5ICBMSUNFTlNFLm1kCj7CoHNo
-YTI1NiAgMGQ1NDJlMGM4ODA0ZTM5YWE3ZjM3ZWIwMGRhNWE3NjIxNDlkYzY4MmQ3ODI5NDUxMjg3
-ZTExYjkzOGU5NDU5NCAgTElDRU5TRS5mcm9tX2ZvbGx5Cj5kaWZmIC0tZ2l0IGEvcGFja2FnZS9w
-cm90b3plcm8vcHJvdG96ZXJvLm1rIGIvcGFja2FnZS9wcm90b3plcm8vcHJvdG96ZXJvLm1rCj5p
-bmRleCA4MGQxNjE5MmUzLi5hNDZlMzdkNjliIDEwMDY0NAo+LS0tIGEvcGFja2FnZS9wcm90b3pl
-cm8vcHJvdG96ZXJvLm1rCj4rKysgYi9wYWNrYWdlL3Byb3RvemVyby9wcm90b3plcm8ubWsKPkBA
-IC00LDcgKzQsNyBAQAo+wqAjCj7CoCMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj7CoAo+LVBST1RP
-WkVST19WRVJTSU9OID0gMS43LjAKPitQUk9UT1pFUk9fVkVSU0lPTiA9IDEuNy4xCj7CoFBST1RP
-WkVST19TSVRFID0gJChjYWxsIGdpdGh1YixtYXBib3gscHJvdG96ZXJvLHYkKFBST1RPWkVST19W
-RVJTSU9OKSkKPsKgUFJPVE9aRVJPX0xJQ0VOU0UgPSBCU0QtMi1DbGF1c2UsIEFwYWNoZS0yLjAK
-PsKgUFJPVE9aRVJPX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLm1kIExJQ0VOU0UuZnJvbV9mb2xs
-eQo+LS0gCj4yLjM0LjEK
-
-----ALT--5TApwBiYdLbQ9TXd3CQc8AOIEdDff6KW1644174029
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: base64
-
-CjxIVE1MPjxCT0RZPjxwIHN0eWxlPSJtYXJnaW4tdG9wOiAwcHg7IiBkaXI9Imx0ciI+SSBqdXN0
-IHNlbnQgdGhlIHNhbWUgcGF0Y2ggdGhpcyB3ZWVrLiA8L3A+IAo8ZGl2IGlkPSJtYWlsLWFwcC1h
-dXRvLWRlZmF1bHQtc2lnbmF0dXJlIj4KIDxwIGRpcj0ibHRyIj4tLTxicj4g0J7RgtC/0YDQsNCy
-0LvQtdC90L4g0LjQtyBNYWlsLnJ1INC00LvRjyBBbmRyb2lkPC9wPgo8L2Rpdj7QstC+0YHQutGA
-0LXRgdC10L3RjNC1LCAwNiDRhNC10LLRgNCw0LvRjyAyMDIy0LMuLCAxNzo1OSArMDM6MDAg0L7R
-giBGYWJyaWNlIEZvbnRhaW5lIDxhIGhyZWY9Im1haWx0bzpmb250YWluZS5mYWJyaWNlQGdtYWls
-LmNvbSI+Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb208L2E+Ojxicj48YnI+PGJsb2NrcXVvdGUg
-aWQ9Im1haWwtYXBwLWF1dG8tcXVvdGUiIGNpdGU9IjE2NDQxNTk1OTAxMzg0MDc2NTA0IiBzdHls
-ZT0iYm9yZGVyLWxlZnQ6MXB4IHNvbGlkICMwMDVGRjk7IG1hcmdpbjowcHggMHB4IDBweCAxMHB4
-OyBwYWRkaW5nOjBweCAwcHggMHB4IDEwcHg7Ij4KCgoKCgoKPGRpdiBjbGFzcz0ianMtaGVscGVy
-IGpzLXJlYWRtc2ctbXNnIj4KCTxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT4KIAk8ZGl2
-ID4KCQk8YmFzZSB0YXJnZXQ9Il9zZWxmIiBocmVmPSJodHRwczovL2UubWFpbC5ydS8iIC8+CgkJ
-CiAgICAgICAgICAgIDxkaXYgaWQ9InN0eWxlXzE2NDQxNTk1OTAxMzg0MDc2NTA0X0JPRFkiPkRy
-b3AgcGF0Y2ggKGFscmVhZHkgaW4gdmVyc2lvbik8YnI+Cjxicj4KPGEgaHJlZj0iaHR0cHM6Ly9n
-aXRodWIuY29tL21hcGJveC9wcm90b3plcm8vcmVsZWFzZXMvdGFnL3YxLjcuMSIgdGFyZ2V0PSJf
-YmxhbmsiID5odHRwczovL2dpdGh1Yi5jb20vbWFwYm94L3Byb3RvemVyby9yZWxlYXNlcy90YWcv
-djEuNy4xPC9hPjxicj4KPGJyPgpTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDw8YSBo
-cmVmPSJtYWlsdG86Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20iPmZvbnRhaW5lLmZhYnJpY2VA
-Z21haWwuY29tPC9hPj48YnI+Ci0tLTxicj4KwqAuLi5DTWFrZUxpc3RzLnR4dC1yZXNwZWN0LUJV
-SUxEX1RFU1RJTkcucGF0Y2ggfCA0NyAtLS0tLS0tLS0tLS0tLS0tLS0tPGJyPgrCoHBhY2thZ2Uv
-cHJvdG96ZXJvL3Byb3RvemVyby5oYXNoICAgICAgICAgICAgICB8ICAyICstPGJyPgrCoHBhY2th
-Z2UvcHJvdG96ZXJvL3Byb3RvemVyby5tayAgICAgICAgICAgICAgICB8ICAyICstPGJyPgrCoDMg
-ZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA0OSBkZWxldGlvbnMoLSk8YnI+CsKgZGVs
-ZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcHJvdG96ZXJvLzAwMDEtQ01ha2VMaXN0cy50eHQtcmVz
-cGVjdC1CVUlMRF9URVNUSU5HLnBhdGNoPGJyPgo8YnI+CmRpZmYgLS1naXQgYS9wYWNrYWdlL3By
-b3RvemVyby8wMDAxLUNNYWtlTGlzdHMudHh0LXJlc3BlY3QtQlVJTERfVEVTVElORy5wYXRjaCBi
-L3BhY2thZ2UvcHJvdG96ZXJvLzAwMDEtQ01ha2VMaXN0cy50eHQtcmVzcGVjdC1CVUlMRF9URVNU
-SU5HLnBhdGNoPGJyPgpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQ8YnI+CmluZGV4IGQwMjY3ZTMy
-ODMuLjAwMDAwMDAwMDA8YnI+Ci0tLSBhL3BhY2thZ2UvcHJvdG96ZXJvLzAwMDEtQ01ha2VMaXN0
-cy50eHQtcmVzcGVjdC1CVUlMRF9URVNUSU5HLnBhdGNoPGJyPgorKysgL2Rldi9udWxsPGJyPgpA
-QCAtMSw0NyArMCwwIEBAPGJyPgotRnJvbSAwM2RhYWU0OWM4ZmE5NDUxM2I1MDhiZDEyZjE1OTdl
-OGU1ZTA4NmYyIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMTxicj4KLUZyb206IEZhYnJpY2UgRm9u
-dGFpbmUgPDxhIGhyZWY9Im1haWx0bzpmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbSI+Zm9udGFp
-bmUuZmFicmljZUBnbWFpbC5jb208L2E+Pjxicj4KLURhdGU6IFNhdCwgMTcgQXByIDIwMjEgMTM6
-MDY6NDQgKzAyMDA8YnI+Ci1TdWJqZWN0OiBbUEFUQ0hdIENNYWtlTGlzdHMudHh0OiByZXNwZWN0
-IEJVSUxEX1RFU1RJTkc8YnI+Ci08YnI+Ci1Eb24ndCBidWlsZCB0ZXN0cyBpZiB0aGUgc3RhbmRh
-cmQgY21ha2UgQlVJTERfVEVTVElORyB2YXJpYWJsZSBpcyBzZXQgdG88YnI+Ci1PRkYuPGJyPgot
-PGJyPgotU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8PGEgaHJlZj0ibWFpbHRvOmZv
-bnRhaW5lLmZhYnJpY2VAZ21haWwuY29tIj5mb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbTwvYT4+
-PGJyPgotW1Vwc3RyZWFtIHN0YXR1czogPGEgaHJlZj0iaHR0cHM6Ly9naXRodWIuY29tL21hcGJv
-eC9wcm90b3plcm8vcHVsbC8xMDUiIHRhcmdldD0iX2JsYW5rIiA+aHR0cHM6Ly9naXRodWIuY29t
-L21hcGJveC9wcm90b3plcm8vcHVsbC8xMDU8L2E+XTxicj4KLS0tLTxicj4KLSBDTWFrZUxpc3Rz
-LnR4dCB8IDkgKysrKystLS0tPGJyPgotIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyks
-IDQgZGVsZXRpb25zKC0pPGJyPgotPGJyPgotZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIv
-Q01ha2VMaXN0cy50eHQ8YnI+Ci1pbmRleCBmOTcwMmQ2Li43YTQwMjEyIDEwMDY0NDxicj4KLS0t
-LSBhL0NNYWtlTGlzdHMudHh0PGJyPgotKysrIGIvQ01ha2VMaXN0cy50eHQ8YnI+Ci1AQCAtMjMs
-NiArMjMsNyBAQCBzZXQoQ01BS0VfRVhQT1JUX0NPTVBJTEVfQ09NTUFORFMgT04pPGJyPgotIDxi
-cj4KLSAjLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08YnI+Ci0gPGJyPgotK29wdGlvbihCVUlMRF9URVNU
-SU5HICJCdWlsZCB0ZXN0cyIgT04pPGJyPgotIG9wdGlvbihXRVJST1IgIkFkZCAtV2Vycm9yIGZs
-YWcgdG8gYnVpbGQgKHR1cm5zIHdhcm5pbmdzIGludG8gZXJyb3JzKSIgT04pPGJyPgotIDxicj4K
-LSBpZihNU1ZDKTxicj4KLUBAIC0xMzQsMTMgKzEzNSwxMyBAQCBpbnN0YWxsKERJUkVDVE9SWSBp
-bmNsdWRlL3Byb3RvemVybyBERVNUSU5BVElPTiBpbmNsdWRlKTxicj4KLSA8YnI+Ci0gIy0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tPGJyPgotIDxicj4KLS1lbmFibGVfdGVzdGluZygpPGJyPgotLTxicj4K
-LSBhZGRfc3ViZGlyZWN0b3J5KGRvYyk8YnI+Ci0gPGJyPgotIGFkZF9zdWJkaXJlY3RvcnkodG9v
-bHMpPGJyPgotIDxicj4KLS1hZGRfc3ViZGlyZWN0b3J5KHRlc3QpPGJyPgotLTxicj4KLStpZihC
-VUlMRF9URVNUSU5HKTxicj4KLSsgICAgZW5hYmxlX3Rlc3RpbmcoKTxicj4KLSsgICAgYWRkX3N1
-YmRpcmVjdG9yeSh0ZXN0KTxicj4KLStlbmRpZigpPGJyPgotIDxicj4KLSAjLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS08YnI+Ci0tLSA8YnI+Ci0yLjMwLjI8YnI+Ci08YnI+CmRpZmYgLS1naXQgYS9wYWNr
-YWdlL3Byb3RvemVyby9wcm90b3plcm8uaGFzaCBiL3BhY2thZ2UvcHJvdG96ZXJvL3Byb3RvemVy
-by5oYXNoPGJyPgppbmRleCA1NDUzZTAxZWNmLi5mMGI4ZTM5MDA5IDEwMDY0NDxicj4KLS0tIGEv
-cGFja2FnZS9wcm90b3plcm8vcHJvdG96ZXJvLmhhc2g8YnI+CisrKyBiL3BhY2thZ2UvcHJvdG96
-ZXJvL3Byb3RvemVyby5oYXNoPGJyPgpAQCAtMSw0ICsxLDQgQEA8YnI+CsKgIyBMb2NhbGx5IGNh
-bGN1bGF0ZWQ8YnI+Ci1zaGEyNTYgIGJlZmZiZGZhYjA2MDg1NGZkNzcwMTc4YThkYjljMDI4YjVi
-NmVlNGEwNTlhMmZlZDgyYzQ2MzkwYTg1ZjNmMzEgIHByb3RvemVyby0xLjcuMC50YXIuZ3o8YnI+
-CitzaGEyNTYgIDI3ZTAwMTdkNWIzYmEwNmQ2NDZhM2VjNjM5MWQ1Y2NjODUwMGRiODIxYmU0ODBh
-ZWZkMmU0ZGRjM2RlNWZmOTkgIHByb3RvemVyby0xLjcuMS50YXIuZ3o8YnI+CsKgc2hhMjU2ICAx
-ZjRkNDc3ZTNjMmQ3NGQ4NzA2YzhmMDU0MzdiZDg2ODA0YWJlNDY4NTNiMWYyMzNjZTE1NDlhNGRl
-NzZmYTQ5ICBMSUNFTlNFLm1kPGJyPgrCoHNoYTI1NiAgMGQ1NDJlMGM4ODA0ZTM5YWE3ZjM3ZWIw
-MGRhNWE3NjIxNDlkYzY4MmQ3ODI5NDUxMjg3ZTExYjkzOGU5NDU5NCAgTElDRU5TRS5mcm9tX2Zv
-bGx5PGJyPgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wcm90b3plcm8vcHJvdG96ZXJvLm1rIGIvcGFj
-a2FnZS9wcm90b3plcm8vcHJvdG96ZXJvLm1rPGJyPgppbmRleCA4MGQxNjE5MmUzLi5hNDZlMzdk
-NjliIDEwMDY0NDxicj4KLS0tIGEvcGFja2FnZS9wcm90b3plcm8vcHJvdG96ZXJvLm1rPGJyPgor
-KysgYi9wYWNrYWdlL3Byb3RvemVyby9wcm90b3plcm8ubWs8YnI+CkBAIC00LDcgKzQsNyBAQDxi
-cj4KwqAjPGJyPgrCoCMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjPGJyPgrCoDxicj4KLVBST1RPWkVS
-T19WRVJTSU9OID0gMS43LjA8YnI+CitQUk9UT1pFUk9fVkVSU0lPTiA9IDEuNy4xPGJyPgrCoFBS
-T1RPWkVST19TSVRFID0gJChjYWxsIGdpdGh1YixtYXBib3gscHJvdG96ZXJvLHYkKFBST1RPWkVS
-T19WRVJTSU9OKSk8YnI+CsKgUFJPVE9aRVJPX0xJQ0VOU0UgPSBCU0QtMi1DbGF1c2UsIEFwYWNo
-ZS0yLjA8YnI+CsKgUFJPVE9aRVJPX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLm1kIExJQ0VOU0Uu
-ZnJvbV9mb2xseTxicj4KLS0gPGJyPgoyLjM0LjE8YnI+CjwvZGl2PgogICAgICAgICAgICAKICAg
-ICAgICAKCQk8YmFzZSB0YXJnZXQ9Il9zZWxmIiBocmVmPSJodHRwczovL2UubWFpbC5ydS8iIC8+
-Cgk8L2Rpdj4KCgkKPC9kaXY+CgoKPC9ibG9ja3F1b3RlPjwvQk9EWT48L0hUTUw+Cg==
-
-----ALT--5TApwBiYdLbQ9TXd3CQc8AOIEdDff6KW1644174029--
-
---===============8178220291903872189==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c52cb35b60..1d1cf99898 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1868,6 +1868,7 @@ F:	board/qemu/ppc64-e5500/
+ F:	configs/freescale_p*
+ F:	configs/freescale_t*
+ F:	configs/qemu_ppc64_e5500_defconfig
++F:	package/ace/
+ F:	package/argp-standalone/
+ F:	package/aufs/
+ F:	package/aufs-util/
+diff --git a/package/Config.in b/package/Config.in
+index e4ca195beb..43ce9013c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1924,6 +1924,7 @@ menu "Networking"
+ endmenu
+ 
+ menu "Other"
++	source "package/ace/Config.in"
+ 	source "package/apr/Config.in"
+ 	source "package/apr-util/Config.in"
+ 	source "package/argp-standalone/Config.in"
+diff --git a/package/ace/Config.in b/package/ace/Config.in
+new file mode 100644
+index 0000000000..226e34df32
+--- /dev/null
++++ b/package/ace/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_ACE
++	bool "ace"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_STATIC_LIBS
++	help
++	  The ADAPTIVE Communication Environment (ACE(TM))
++	  An OO Network Programming Toolkit in C++.
++
++	  http://www.dre.vanderbilt.edu/~schmidt/ACE.html
++
++comment "ACE needs a glibc toolchain, dynamic library"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
+diff --git a/package/ace/ace.hash b/package/ace/ace.hash
+new file mode 100644
+index 0000000000..92fd42e131
+--- /dev/null
++++ b/package/ace/ace.hash
+@@ -0,0 +1,3 @@
++# Locally Computed:
++sha256  a28339750620c70cd29a8a7088a4bc6ebaf1ff7ba667498a0279ac97f0e32e01  ACE-7.0.1.tar.gz
++sha256  687bf9d16119e0caf6fb5c18214928fd6ea0da10df91e906255b7613af8061d8  COPYING
+diff --git a/package/ace/ace.mk b/package/ace/ace.mk
+new file mode 100644
+index 0000000000..b6b4cfbc24
+--- /dev/null
++++ b/package/ace/ace.mk
+@@ -0,0 +1,61 @@
++################################################################################
++#
++# ace
++#
++################################################################################
++
++ACE_VERSION = 7.0.1
++ACE_SOURCE = ACE-$(ACE_VERSION).tar.gz
++ACE_SITE = http://download.dre.vanderbilt.edu/previous_versions
++ACE_LICENSE = DOC
++ACE_LICENSE_FILES = COPYING
++ACE_INSTALL_STAGING = YES
++ACE_CPE_ID_VENDOR = vanderbilt
++ACE_CPE_ID_PRODUCT = adaptive_communication_environment
++
++# Note: We are excluding examples, apps and tests
++# Only compiling ACE libraries (no TAO)
++ACE_LIBARIES = ace ACEXML Kokyu netsvcs protocols/ace
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ACE_LIBARIES += ace/SSL
++ACE_DEPENDENCIES += openssl
++define ACE_CONFIGURE_SSL
++	echo "ssl = 1" >> $(@D)/include/makeinclude/platform_macros.GNU
++endef
++endif
++
++# configure the target build
++# refer: http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/ACE/ACE-INSTALL.html#unix
++define ACE_CONFIGURE_CMDS
++	# create a config file
++	echo ' #include "ace/config-linux.h" ' >> $(@D)/ace/config.h
++
++	# Create platform/compiler-specific Makefile configurations
++	$(INSTALL) -m 0644 package/ace/platform_macros.GNU $(@D)/include/makeinclude/
++
++	$(ACE_CONFIGURE_SSL)
++endef
++
++define ACE_BUILD_CMDS
++	$(foreach lib,$(ACE_LIBARIES), \
++		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(lib) ACE_ROOT="$(@D)" all
++	)
++endef
++
++define  ACE_LIBARIES_INSTALL
++	mkdir -p $(1)/usr/share/ace
++	$(foreach lib,$(ACE_LIBARIES), \
++		$(MAKE) -C $(@D)/$(lib) ACE_ROOT="$(@D)" DESTDIR=$(1) install
++	)
++endef
++
++define  ACE_INSTALL_TARGET_CMDS
++	$(call ACE_LIBARIES_INSTALL,$(TARGET_DIR))
++endef
++
++define  ACE_INSTALL_STAGING_CMDS
++	$(call ACE_LIBARIES_INSTALL,$(STAGING_DIR))
++endef
++
++$(eval $(generic-package))
+diff --git a/package/ace/platform_macros.GNU b/package/ace/platform_macros.GNU
+new file mode 100644
+index 0000000000..ab5ec25a1b
+--- /dev/null
++++ b/package/ace/platform_macros.GNU
+@@ -0,0 +1,14 @@
++# help: http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/ACE/ACE-INSTALL.html#unix
++
++# create a platform macros file
++include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
++
++# disable RPATH
++install_rpath = 0
++
++# set the installation prefix
++INSTALL_PREFIX = /usr
++
++# fix link error with ARM EABI tools
++# http://list.isis.vanderbilt.edu/pipermail/ace-users/2008-January/002742.html
++no_hidden_visibility = 1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8178220291903872189==--
