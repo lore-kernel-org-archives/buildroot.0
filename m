@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9038C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 14:42:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C83C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 14:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99FBC8143D;
-	Sun,  6 Feb 2022 14:42:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAC074030A;
+	Sun,  6 Feb 2022 14:42:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4ZPPnlB7bxD7; Sun,  6 Feb 2022 14:41:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rSSilt-02FgQ; Sun,  6 Feb 2022 14:42:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD0CD81435;
-	Sun,  6 Feb 2022 14:41:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D261F1BF5AA
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:41:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02857402FE;
+	Sun,  6 Feb 2022 14:42:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7512B1BF5AA
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C089B81435
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:41:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 715F760B75
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 14:42:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id af0-AhLpD7zZ for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 14:41:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JygqF85YGu7h for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 14:42:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2084A813F1
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 14:41:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD3D960B64
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 14:42:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8B5A7818E5; Sun,  6 Feb 2022 14:34:39 +0000 (UTC)
+ id 3673B8152C; Sun,  6 Feb 2022 14:34:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 15:35:55 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: fad154253deb5b5399ea52a19ed6608dcd00ee4d
-X-Git-Newrev: 728ece090b894a9404d4944b453b78738774d721
+Date: Sun, 6 Feb 2022 15:35:50 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 873223cae13889d663ef8d07c2d71eb15182a4ee
+X-Git-Newrev: b8eb50e3dc924f06daf814b766116f6defac2924
 X-Patchwork-Hint: ignore
-Message-Id: <20220206143439.8B5A7818E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
+Message-Id: <20220206143445.3673B8152C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x]
  docs/manual/adding-packages-directory.txt: reorder select/depends
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=728ece090b894a9404d4944b453b78738774d721
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b8eb50e3dc924f06daf814b766116f6defac2924
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 From [1]:
 "Even though the ordering has absolutely no consequences in Kconfig, it
