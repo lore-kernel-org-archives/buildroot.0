@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86313C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 17:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C314FC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 17:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23FA081751;
-	Sun,  6 Feb 2022 17:27:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6357981499;
+	Sun,  6 Feb 2022 17:28:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XTc5_9ufYm6F; Sun,  6 Feb 2022 17:27:57 +0000 (UTC)
+	with ESMTP id D5_7Sgoob1A9; Sun,  6 Feb 2022 17:28:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4861881422;
-	Sun,  6 Feb 2022 17:27:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FB811BF59A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B93281754;
+	Sun,  6 Feb 2022 17:28:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 456251BF97D
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A59481443
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40CAA4023D
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x7bY7oN3aF9i for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZCz_6EZuIz8S for <buildroot@lists.busybox.net>;
  Sun,  6 Feb 2022 17:27:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15B5F8141D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 309B84023B
  for <buildroot@buildroot.org>; Sun,  6 Feb 2022 17:27:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 42B7482BDD; Sun,  6 Feb 2022 17:20:23 +0000 (UTC)
+ id 5E1EE82BA3; Sun,  6 Feb 2022 17:20:23 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 18:26:20 +0100
+Date: Sun, 6 Feb 2022 18:27:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1734127e5998f6874beee5430081f15cfcb33ce6
-X-Git-Newrev: 7947328de48cbea36cadf2d41b0b401da761ba37
+X-Git-Oldrev: 236e2343f39b0aeb6aa18be26c92a0dee7fd656e
+X-Git-Newrev: d409fe085663194cbe23fbbfef38f566c4910bb8
 X-Patchwork-Hint: ignore
-Message-Id: <20220206172023.42B7482BDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/checkpackagelib: warn about
- executable files
+Message-Id: <20220206172023.5E1EE82BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/checkpackagelib/lib_sysv: run
+ shellcheck
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,138 +59,162 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7947328de48cbea36cadf2d41b0b401da761ba37
+commit: https://git.buildroot.net/buildroot/commit/?id=d409fe085663194cbe23fbbfef38f566c4910bb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently there are no .mk, Config.in, .patch or .hash files with
-executable permissions in the tree.
-But we don't want to have that.
+For simplicity, when shellcheck returns one or more warnings, count it
+as a single check-package warning.
+The developer can get the full output either by running shellcheck
+directly or by calling check-package with -v.
 
-So warn when a file checked by check-package has executable permission.
+Examples:
 
-This check will be reused when testing SysV init scripts in the tree.
+|$ ./utils/docker-run utils/check-package --include Shellcheck package/polkit/S50polkit
+|package/polkit/S50polkit:0: run 'shellcheck' and fix the warnings
+|51 lines processed
+|1 warnings generated
+
+|$ ./utils/docker-run utils/check-package --include Shellcheck -v package/polkit/S50polkit
+|package/polkit/S50polkit:0: run 'shellcheck' and fix the warnings
+|In package/polkit/S50polkit line 43:
+|< tab  >start|stop|restart|reload)
+|                           ^----^ SC2221: This pattern always overrides a later one on line 45.
+|In package/polkit/S50polkit line 45:
+|< tab  >reload)
+|        ^----^ SC2222: This pattern never matches because of a previous pattern on line 43.
+|For more information:
+|  https://www.shellcheck.net/wiki/SC2221 -- This pattern always overrides a l...
+|  https://www.shellcheck.net/wiki/SC2222 -- This pattern never matches becaus...
+|51 lines processed
+|1 warnings generated
+
+NOTICE: shellcheck results depends on the version of the tool.
+This is why the examples above run inside the docker image.
+
+Also update .gitlab-ci.yml with the docker image after the change of
+the previous commit. We don't actually use shellcheck in CI, but the
+image from .gitlab-ci.yml is used by the docker-run script and we use
+that to run shellcheck.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[Arnout: use context manager for temp dir so it gets deleted]
+[Arnout: make sure a single -v is enough to get shellcheck output;
+ update docker image tag in .gitlab-ci.yml]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- utils/checkpackagelib/lib_config.py |  1 +
- utils/checkpackagelib/lib_hash.py   |  1 +
- utils/checkpackagelib/lib_mk.py     |  1 +
- utils/checkpackagelib/lib_patch.py  |  1 +
- utils/checkpackagelib/test_tool.py  | 41 +++++++++++++++++++++++++++++++++++++
- utils/checkpackagelib/tool.py       |  8 ++++++++
- 6 files changed, 53 insertions(+)
+ .gitlab-ci.yml                     |  2 +-
+ utils/checkpackagelib/lib_sysv.py  |  1 +
+ utils/checkpackagelib/test_tool.py | 46 ++++++++++++++++++++++++++++++++++++++
+ utils/checkpackagelib/tool.py      | 16 +++++++++++++
+ 4 files changed, 64 insertions(+), 1 deletion(-)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index c348eec399..b05831f2c3 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -10,6 +10,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
- from checkpackagelib.lib import EmptyLastLine          # noqa: F401
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index d54f46c409..cad35c96bc 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,7 +1,7 @@
+ # Configuration for Gitlab-CI.
+ # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+ 
+-image: $CI_REGISTRY/buildroot.org/buildroot/base:20220206.1324
++image: $CI_REGISTRY/buildroot.org/buildroot/base:20220206.1756
+ 
+ stages:
+   - generate-gitlab-ci
+diff --git a/utils/checkpackagelib/lib_sysv.py b/utils/checkpackagelib/lib_sysv.py
+index 2ee5f74af7..386d085afc 100644
+--- a/utils/checkpackagelib/lib_sysv.py
++++ b/utils/checkpackagelib/lib_sysv.py
+@@ -7,6 +7,7 @@ from checkpackagelib.lib import EmptyLastLine          # noqa: F401
  from checkpackagelib.lib import NewlineAtEof           # noqa: F401
  from checkpackagelib.lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.tool import NotExecutable         # noqa: F401
+ import checkpackagelib.tool
++from checkpackagelib.tool import Shellcheck            # noqa: F401
  
  
- def _empty_or_comment(text):
-diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-index 1c595e84b8..5968c809bf 100644
---- a/utils/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -10,6 +10,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
- from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.tool import NotExecutable         # noqa: F401
- 
- 
- def _empty_line_or_comment(text):
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 88e4b15c7c..153754b6f1 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -13,6 +13,7 @@ from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
- from checkpackagelib.lib import Utf8Characters         # noqa: F401
-+from checkpackagelib.tool import NotExecutable         # noqa: F401
- 
- # used in more than one check
- start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
-diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
-index e4e914b7f0..caee36158f 100644
---- a/utils/checkpackagelib/lib_patch.py
-+++ b/utils/checkpackagelib/lib_patch.py
-@@ -8,6 +8,7 @@ import re
- 
- from checkpackagelib.base import _CheckFunction
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
-+from checkpackagelib.tool import NotExecutable         # noqa: F401
- 
- 
- class ApplyOrder(_CheckFunction):
+ class Indent(_CheckFunction):
 diff --git a/utils/checkpackagelib/test_tool.py b/utils/checkpackagelib/test_tool.py
-new file mode 100644
-index 0000000000..51c8e0cb27
---- /dev/null
+index 9e1abbfc23..38029297a5 100644
+--- a/utils/checkpackagelib/test_tool.py
 +++ b/utils/checkpackagelib/test_tool.py
-@@ -0,0 +1,41 @@
-+import os
-+import pytest
-+import re
-+import tempfile
-+import checkpackagelib.tool as m
-+
-+workdir_regex = re.compile(r'/tmp/tmp[^/]*-checkpackagelib-test-tool')
+@@ -64,3 +64,49 @@ def test_NotExecutable_hint(testname, hint, filename, permissions, string, expec
+             return hint
+     warnings = check_file(NotExecutable, filename, string, permissions)
+     assert warnings == expected
 +
 +
-+def check_file(tool, filename, string, permissions=None):
-+    with tempfile.TemporaryDirectory(suffix='-checkpackagelib-test-tool') as workdir:
-+        script = os.path.join(workdir, filename)
-+        with open(script, 'wb') as f:
-+            f.write(string.encode())
-+        if permissions:
-+            os.chmod(script, permissions)
-+        obj = tool(script)
-+        result = obj.run()
-+        if result is None:
-+            return []
-+        return [workdir_regex.sub('dir', r) for r in result]
-+
-+
-+NotExecutable = [
-+    ('664',
-+     'package.mk',
-+     0o664,
++Shellcheck = [
++    ('missing shebang',
++     'empty.sh',
 +     '',
++     ["dir/empty.sh:0: run 'shellcheck' and fix the warnings",
++      "In dir/empty.sh line 1:",
++      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.",
++      "For more information:",
++      "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y..."]),
++    ('sh shebang',
++     'sh-shebang.sh',
++     '#!/bin/sh',
 +     []),
-+    ('775',
-+     'package.mk',
-+     0o775,
-+     '',
-+     ["dir/package.mk:0: This file does not need to be executable"]),
++    ('bash shebang',
++     'bash-shebang.sh',
++     '#!/bin/bash',
++     []),
++    ('2 warnings',
++     'unused.sh',
++     'unused=""',
++     ["dir/unused.sh:0: run 'shellcheck' and fix the warnings",
++      "In dir/unused.sh line 1:",
++      'unused=""',
++      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.",
++      "^----^ SC2034: unused appears unused. Verify use (or export if used externally).",
++      "For more information:",
++      "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y...",
++      "  https://www.shellcheck.net/wiki/SC2034 -- unused appears unused. Verify use..."]),
++    ('tab',
++     'tab.sh',
++     '\t#!/bin/sh',
++     ["dir/tab.sh:0: run 'shellcheck' and fix the warnings",
++      "In dir/tab.sh line 1:",
++      '\t#!/bin/sh',
++      "^-- SC1114: Remove leading spaces before the shebang.",
++      "For more information:",
++      "  https://www.shellcheck.net/wiki/SC1114 -- Remove leading spaces before the ..."]),
 +    ]
 +
 +
-+@pytest.mark.parametrize('testname,filename,permissions,string,expected', NotExecutable)
-+def test_NotExecutable(testname, filename, permissions, string, expected):
-+    warnings = check_file(m.NotExecutable, filename, string, permissions)
++@pytest.mark.parametrize('testname,filename,string,expected', Shellcheck)
++def test_Shellcheck(testname, filename, string, expected):
++    warnings = check_file(m.Shellcheck, filename, string)
 +    assert warnings == expected
 diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
-new file mode 100644
-index 0000000000..f2007be1ff
---- /dev/null
+index e931272554..e719fdd407 100644
+--- a/utils/checkpackagelib/tool.py
 +++ b/utils/checkpackagelib/tool.py
-@@ -0,0 +1,8 @@
-+import os
-+from checkpackagelib.base import _Tool
+@@ -1,4 +1,5 @@
+ import os
++import subprocess
+ from checkpackagelib.base import _Tool
+ 
+ 
+@@ -6,3 +7,18 @@ class NotExecutable(_Tool):
+     def run(self):
+         if os.access(self.filename, os.X_OK):
+             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
 +
 +
-+class NotExecutable(_Tool):
++class Shellcheck(_Tool):
 +    def run(self):
-+        if os.access(self.filename, os.X_OK):
-+            return ["{}:0: This file does not need to be executable".format(self.filename)]
++        cmd = ['shellcheck', self.filename]
++        try:
++            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++            stdout = p.communicate()[0]
++            processed_output = [str(line.decode().rstrip()) for line in stdout.splitlines() if line]
++            if p.returncode == 0:
++                return
++            return ["{}:0: run 'shellcheck' and fix the warnings".format(self.filename),
++                    '\n'.join(processed_output)]
++        except FileNotFoundError:
++            return ["{}:0: failed to call 'shellcheck'".format(self.filename)]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
