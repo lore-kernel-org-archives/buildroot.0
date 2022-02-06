@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97932C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:21:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25793C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E31040201;
-	Sun,  6 Feb 2022 15:21:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD28560B12;
+	Sun,  6 Feb 2022 15:21:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rTooJ3I3QXzU; Sun,  6 Feb 2022 15:21:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D69460B89;
+	Sun,  6 Feb 2022 15:21:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 262BC1BF325
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:21:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 213B7401AD
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y0vv_39ZpMWX; Sun,  6 Feb 2022 15:21:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C640400C1;
-	Sun,  6 Feb 2022 15:21:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 260111BF325
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:21:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BA45402D1
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:21:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8zE6sXxv6Aiq for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 15:21:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8080402C9
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:21:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AEA6620002;
- Sun,  6 Feb 2022 15:21:08 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nGjLf-0002MN-SI; Sun, 06 Feb 2022 16:21:07 +0100
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZYCM-0jjpB2L for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 15:21:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A53C400C1
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:21:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 9462782A9A; Sun,  6 Feb 2022 15:14:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20220129183426.152177-1-giulio.benetti@benettiengineering.com>
-Date: Sun, 06 Feb 2022 16:21:07 +0100
-In-Reply-To: <20220129183426.152177-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sat, 29 Jan 2022 19:34:26 +0100")
-Message-ID: <87v8xsuil8.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/apitrace: fix build failure on m68k
- architecture
+To: buildroot@buildroot.org
+Date: Sun, 6 Feb 2022 16:20:06 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 95f5dcef1ba2c05a5ef23f619dac24c067148624
+X-Git-Newrev: 08e8792c50685c1a8c2be7609943990f6083f714
+X-Patchwork-Hint: ignore
+Message-Id: <20220206151401.9462782A9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/apitrace: fix
+ build failure on m68k architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,32 +53,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=08e8792c50685c1a8c2be7609943990f6083f714
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
- > apitrace uses very big switch statements, which causes the build to fail
- > on m68k, because the offsets there are only 16-bit.
+apitrace uses very big switch statements, which causes the build to fail
+on m68k, because the offsets there are only 16-bit.
 
- > We fix that by using -mlong-jump-table-offsets on m68k, to use 32-bit
- > offsets for switch statements. That flag is available on gcc version >= 7
- > but apitrace package already depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7, so
- > we can use it with no problem.
+We fix that by using -mlong-jump-table-offsets on m68k, to use 32-bit
+offsets for switch statements. That flag is available on gcc version >= 7
+but apitrace package already depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7, so
+we can use it with no problem.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/7306bf05962fec30fbe98b1eb8ee09b3162b8080/
+Fixes:
+http://autobuild.buildroot.net/results/7306bf05962fec30fbe98b1eb8ee09b3162b8080/
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fdee6c9f3987189eb743f54be2e545ce84d4d3bb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apitrace/apitrace.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Committed to 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index 3656a5722b..c47562233b 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
+@@ -38,6 +38,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ APITRACE_CXXFLAGS += -O0
+ endif
+ 
++# m68k needs 32-bit offsets in switch tables to build
++ifeq ($(BR2_m68k),y)
++APITRACE_CXXFLAGS += -mlong-jump-table-offsets
++endif
++
+ APITRACE_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(APITRACE_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(APITRACE_CXXFLAGS)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
