@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECE28C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA9F8C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8918401D8;
-	Sun,  6 Feb 2022 19:17:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B12D40210;
+	Sun,  6 Feb 2022 19:23:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FjRBDOMW0wRg; Sun,  6 Feb 2022 19:17:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9DE5F40201;
-	Sun,  6 Feb 2022 19:17:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B2B81BF384
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:17:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A268402AC
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:17:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yp3OVfEyBE7N for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 19:17:41 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wMLtbEAAIVkl; Sun,  6 Feb 2022 19:23:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 958FE40204;
+	Sun,  6 Feb 2022 19:23:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F21A1BF384
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:23:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4830B8001C
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:23:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 86UZiT7v7K3w for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 19:23:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B97E4401EF
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:17:40 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id h7so36032231ejf.1
- for <buildroot@buildroot.org>; Sun, 06 Feb 2022 11:17:40 -0800 (PST)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2ADC0817A7
+ for <buildroot@busybox.net>; Sun,  6 Feb 2022 19:23:27 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id h7so36050683ejf.1
+ for <buildroot@busybox.net>; Sun, 06 Feb 2022 11:23:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=pBWuq2GIGSWxsTpmbqb2XL48EL4PMdsxv1xQf3ProL8=;
- b=Ecbi7lv0cfbMlPgUVsBKyd63SyRhDUq7Ybg5Xf8c/sBR3tmXGlC3dZo77owetmxKdt
- OkRnxS5JJvztDdQg9GTpya4URS0hJ+Krn8k0VjPxcD4soULN/LjXSK9w3cZLNLNouEUX
- d6+sXAjbWAyy+XPPr40okRo9kwNXETQbOOvBF+9s+FJvQXlV28Aq+oKF8Bl21gSp7egZ
- py+yI2mxzwdaNiXwgcKzFHi8Oqbro5uvRD9lavgSI5awf2FIKG/h04kIJauYArZHoHPh
- whh1XXuvHg5c/BIovWc6E3vbOt3OcBo0IDGFovGGS8En2TTE4M1WP/gddQnLWlWYMlOz
- aGnQ==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=9m7VE306UQ9BPwboXu2rGW7k9n04HuWJUFIybD4rK90=;
+ b=cKIEQ9VUEWBGw2VwILdf2m9jV8DZuB2pRAKr7oWVIXpuq/ZKwj9swFHyVm2FzOV/6w
+ PJYDIlzark9YC3t4X3uiGKHTB1Icahc2AwprlDi3JclvKjoOam2BIjUKjnYCz1b1Op1z
+ z9+PxAVH2xu6uELZe4EjBApMJQu68Ql52YsgEFVgfehmQjhxwoovwMhVcOioHsH+gJaR
+ CI52gNv6gOxTDfUDus3a6WNQ/uWFxCZmrehYCvVIfebb4vZ9u2CKQtEPFSas2lp2M4wu
+ X293yZ1ZXnxY8Fqrusfrkk+XPPbwiu6MlSg0DWmQD9SSAqOCC71kt1joskRpXNmE8892
+ 4Q7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=pBWuq2GIGSWxsTpmbqb2XL48EL4PMdsxv1xQf3ProL8=;
- b=xzwvNKLvhmge6Syb2KG4nxnGcSxYyQL3IYFtw0w5HxR62OQ6BuXwhPG18QSPp7WDhJ
- fF62Nbtj7V7PTHFZT9boNpy6JRQ77zx8nIsOBKYqmoJtUfwwCj5f/OzU6s+nLuWqAhSt
- NXyVUQ7GEem+IkrAT2YaFWQ0/DkpMtOpTkUv17GaYxK636sbsMsGG+MxIUfflxNY44KO
- jaW1ntxRFi1+WoTAhjKUJybfr2IHOKAE8mFCbDynZT9fYmoshXNeGsjMlJqpuzyrZ58U
- UiMU9J9cACV53SOeyWvN6JqSIrvSSme58l3GvMhKNmCNu8J/Di+mguCErT78TbAXsnK2
- O9ow==
-X-Gm-Message-State: AOAM533bj/SBfmKfOaMyz+B1O5lMj1fD2KA7Qm4w8Cm4LK9+pRPyoabW
- Az7ya/Blyk049L8bxxMfDSkewWSbpMUR1Q==
-X-Google-Smtp-Source: ABdhPJwsFDhOU5nyjQtK80eVfYPmd2F6d5zPQ9ZGl8irFnPGvYg/Ww6ykgfpQtsI+5uXpmGr/kqZEw==
-X-Received: by 2002:a17:907:8a01:: with SMTP id
- sc1mr7171594ejc.739.1644175058954; 
- Sun, 06 Feb 2022 11:17:38 -0800 (PST)
+ bh=9m7VE306UQ9BPwboXu2rGW7k9n04HuWJUFIybD4rK90=;
+ b=qM20VZ44UL07tzXcABYrQ3OTBaogj4+Uhv8FpQMrKEuyPT06l3YUpxfWdi/F+YCAH/
+ pGocd1z5Dync/F+FN/htHLm/W0uYllMu/r4AIHaJpXf8PWrlN0ua1ETLyBidRlXkrVBp
+ ZaXIBgwsfvLj7swHQaNz19wc9qo3BPIcArgnYaVE62MaDmZuk8bgfPv3epx9290Rb859
+ NiFA0fPNf0ZrX9HJlnKgZ7vHx6AgEncFh5r8a+3N+Nm5vfexvqW5nFAF6yoTkj4mNSFU
+ i4i8+URMDGLkTr0wJhM6SR51C0kt1F+LTC//K32tpdZdOvCJus8/9hiDqsg+TKUV+ww8
+ 7RDQ==
+X-Gm-Message-State: AOAM5305rYbFPlrq98ZRh6udkWzhUddvVPqBOAP/6ObYjI7tKoyxmfaV
+ SKZTqzsJWfNqLXiNzamjr7O8vg==
+X-Google-Smtp-Source: ABdhPJxWotC3Te/CaZeDe33P6em31PQ7QzRoNTLG5RhmfToyX4QOtdnquVXJ+xWtmwhSxmyWadOhuw==
+X-Received: by 2002:a17:907:91c1:: with SMTP id
+ h1mr6564145ejz.232.1644175405190; 
+ Sun, 06 Feb 2022 11:23:25 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id cb18sm993713edb.25.2022.02.06.11.17.38
+ by smtp.gmail.com with ESMTPSA id j12sm2108365edp.56.2022.02.06.11.23.24
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 06 Feb 2022 11:17:38 -0800 (PST)
-Message-ID: <fb183026-865f-a560-45a9-43ab987067fb@mind.be>
-Date: Sun, 6 Feb 2022 20:17:37 +0100
+ Sun, 06 Feb 2022 11:23:24 -0800 (PST)
+Message-ID: <0a0771a9-43f2-0f10-5706-5beddf124a06@mind.be>
+Date: Sun, 6 Feb 2022 20:23:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
-To: Matt Weber <matthew.weber@rockwellcollins.com>, buildroot@buildroot.org
-References: <20210413134139.13281-1-matthew.weber@rockwellcollins.com>
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20210321154903.1950636-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210413134139.13281-1-matthew.weber@rockwellcollins.com>
-Subject: Re: [Buildroot] [PATCH v2] package/ace: new package
+In-Reply-To: <20210321154903.1950636-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH] package/lua-cffi: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +93,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,183 +100,115 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/04/2021 15:41, Matt Weber wrote:
-> ACE is an open-source framework that provides many components and
-> patterns for developing high-performance, distributed real-time
-> and embedded systems. It provides powerful, yet efficient abstractions
-> for sockets, demultiplexing loops, threads, synchronization primitives.
+On 21/03/2021 16:49, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>   package/Config.in                              |  1 +
+>   package/lua-cffi/Config.in                     | 18 ++++++++++++++++++
+>   package/lua-cffi/lua-cffi.hash                 |  3 +++
+>   package/lua-cffi/lua-cffi.mk                   | 14 ++++++++++++++
+>   support/testing/tests/package/test_lua_cffi.py | 14 ++++++++++++++
+>   5 files changed, 50 insertions(+)
+>   create mode 100644 package/lua-cffi/Config.in
+>   create mode 100644 package/lua-cffi/lua-cffi.hash
+>   create mode 100644 package/lua-cffi/lua-cffi.mk
+>   create mode 100644 support/testing/tests/package/test_lua_cffi.py
 > 
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index 8fb173540..5b854f898 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -652,6 +652,7 @@ menu "Lua libraries/modules"
+>   	source "package/lua-basexx/Config.in"
+>   	source "package/lua-binaryheap/Config.in"
+>   	source "package/lua-bit32/Config.in"
+> +	source "package/lua-cffi/Config.in"
+>   	source "package/lua-cjson/Config.in"
+>   	source "package/lua-coat/Config.in"
+>   	source "package/lua-coatpersistent/Config.in"
+> diff --git a/package/lua-cffi/Config.in b/package/lua-cffi/Config.in
+> new file mode 100644
+> index 000000000..fcf3d25e2
+> --- /dev/null
+> +++ b/package/lua-cffi/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_LUA_CFFI
+> +	bool "lua-cffi"
+> +	depends on !BR2_PACKAGE_LUAJIT
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS  # libffi
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	select BR2_PACKAGE_LIBFFI
+> +	help
+> +	  This is a portable C FFI for Lua, based on libffi and aiming
+> +	  to be mostly compatible with LuaJIT FFI, but written from
+> +	  scratch.
+> +
+> +	  https://github.com/q66/cffi-lua
+> +
+> +comment "lua-cffi needs a toolchain w/ C++, gcc >= 4.8, threads"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || \
 
-  I made a few more small modification/simplifications, and applied ot master, 
-thanks.
+  You should have copied the dependency on !luajit here, otherwise the comment 
+appears when it can't be selected anyway.
+
+
+  Applied to master with that fixed, thanks.
 
   Regards,
   Arnout
 
-> ---
-> Changes
-> v1 -> v2:
-> [Thomas P
->   - Added platform specific Makefile config file
->   - Made Config.in dependency style updates
->   - Made OpenSSL optional
->   - Used foreach loop in makefile
->   - Used common install command for target and staging
-> ---
->   DEVELOPERS                      |  1 +
->   package/Config.in               |  1 +
->   package/ace/Config.in           | 12 +++++++
->   package/ace/ace.hash            |  3 ++
->   package/ace/ace.mk              | 63 +++++++++++++++++++++++++++++++++
->   package/ace/platform_macros.GNU | 14 ++++++++
->   6 files changed, 94 insertions(+)
->   create mode 100644 package/ace/Config.in
->   create mode 100644 package/ace/ace.hash
->   create mode 100644 package/ace/ace.mk
->   create mode 100644 package/ace/platform_macros.GNU
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 626bb393dd..6dac446c68 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1699,6 +1699,7 @@ F:	board/qemu/ppc64-e5500/
->   F:	configs/freescale_p*
->   F:	configs/freescale_t*
->   F:	configs/qemu_ppc64_e5500_defconfig
-> +F:	package/ace/
->   F:	package/argp-standalone/
->   F:	package/aufs/
->   F:	package/aufs-util/
-> diff --git a/package/Config.in b/package/Config.in
-> index 01e6bc0bfa..9f9b22d6d4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1844,6 +1844,7 @@ menu "Networking"
->   endmenu
->   
->   menu "Other"
-> +	source "package/ace/Config.in"
->   	source "package/appstream-glib/Config.in"
->   	source "package/apr/Config.in"
->   	source "package/apr-util/Config.in"
-> diff --git a/package/ace/Config.in b/package/ace/Config.in
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/lua-cffi/lua-cffi.hash b/package/lua-cffi/lua-cffi.hash
 > new file mode 100644
-> index 0000000000..226e34df32
+> index 000000000..a532c6c7b
 > --- /dev/null
-> +++ b/package/ace/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_ACE
-> +	bool "ace"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on !BR2_STATIC_LIBS
-> +	help
-> +	  The ADAPTIVE Communication Environment (ACE(TM))
-> +	  An OO Network Programming Toolkit in C++.
-> +
-> +	  http://www.dre.vanderbilt.edu/~schmidt/ACE.html
-> +
-> +comment "ACE needs a glibc toolchain, dynamic library"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
-> diff --git a/package/ace/ace.hash b/package/ace/ace.hash
-> new file mode 100644
-> index 0000000000..92fd42e131
-> --- /dev/null
-> +++ b/package/ace/ace.hash
+> +++ b/package/lua-cffi/lua-cffi.hash
 > @@ -0,0 +1,3 @@
-> +# Locally Computed:
-> +sha256  a28339750620c70cd29a8a7088a4bc6ebaf1ff7ba667498a0279ac97f0e32e01  ACE-7.0.1.tar.gz
-> +sha256  687bf9d16119e0caf6fb5c18214928fd6ea0da10df91e906255b7613af8061d8  COPYING
-> diff --git a/package/ace/ace.mk b/package/ace/ace.mk
+> +# Locally computed
+> +sha256  c30080d6309167f86d1a96d3ee33f33ef52e884052b7feac140b8c52db10ad7a  lua-cffi-0.2.1.tar.gz
+> +sha256  f5653a4d5864a3920ea1e07dacfd646067314be647598f0acaaf685beaa2e396  COPYING.md
+> diff --git a/package/lua-cffi/lua-cffi.mk b/package/lua-cffi/lua-cffi.mk
 > new file mode 100644
-> index 0000000000..539e0cc6c4
+> index 000000000..07d84ad5f
 > --- /dev/null
-> +++ b/package/ace/ace.mk
-> @@ -0,0 +1,63 @@
-> +################################################################################
-> +#
-> +# ace
-> +#
-> +################################################################################
-> +
-> +ACE_VERSION = 7.0.1
-> +ACE_SOURCE = ACE-$(ACE_VERSION).tar.gz
-> +ACE_SITE = http://download.dre.vanderbilt.edu/previous_versions
-> +ACE_LICENSE = DOC
-> +ACE_LICENSE_FILES = COPYING
-> +ACE_INSTALL_STAGING = YES
-> +ACE_CPE_ID_VENDOR = vanderbilt
-> +ACE_CPE_ID_PRODUCT = adaptive_communication_environment
-> +
-> +# Note: We are excluding examples, apps and tests
-> +# Only compiling ACE libraries (no TAO)
-> +ACE_LIBARIES = ace ACEXML Kokyu netsvcs protocols/ace
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +ACE_LIBARIES += ace/SSL
-> +ACE_DEPENDENCIES = openssl
-> +ACE_SSL = "ssl = 1"
-> +endif
-> +
-> +# configure the target build
-> +# refer: http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/ACE/ACE-INSTALL.html#unix
-> +define ACE_CONFIGURE_CMDS
-> +	# create a config file
-> +	echo ' #include "ace/config-linux.h" ' >> $(@D)/ace/config.h
-> +
-> +	# Create platform/compiler-specific Makefile configurations
-> +	$(INSTALL) -m 0644 package/ace/platform_macros.GNU $(@D)/include/makeinclude/
-> +	# Enable ssl if OpenSSL is configured
-> +	[ ! -z $(ACE_SSL) ] && \
-> +	echo $(ACE_SSL) >> $(@D)/include/makeinclude/platform_macros.GNU || \
-> +	echo 'ace/SSL skipped'
-> +endef
-> +
-> +# compile ace,ACEXML, Kokyu, netsvcs & protocols/ace
-> +define ACE_BUILD_CMDS
-> +	$(foreach lib,$(ACE_LIBARIES), \
-> +		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(lib) ACE_ROOT="$(@D)" all
-> +	)
-> +endef
-> +
-> +define  ACE_LIBARIES_INSTALL
-> +	# create below folder required by ACE makefiles during install
-> +	mkdir -p $(1)/usr/share/ace
-> +	$(foreach lib,$(ACE_LIBARIES), \
-> +		$(MAKE) -C $(@D)/$(lib) ACE_ROOT="$(@D)" DESTDIR=$(1) install
-> +	)
-> +endef
-> +
-> +define  ACE_INSTALL_TARGET_CMDS
-> +	$(call ACE_LIBARIES_INSTALL,$(TARGET_DIR))
-> +endef
-> +
-> +define  ACE_INSTALL_STAGING_CMDS
-> +	$(call ACE_LIBARIES_INSTALL,$(STAGING_DIR))
-> +endef
-> +
-> +$(eval $(generic-package))
-> diff --git a/package/ace/platform_macros.GNU b/package/ace/platform_macros.GNU
-> new file mode 100644
-> index 0000000000..ab5ec25a1b
-> --- /dev/null
-> +++ b/package/ace/platform_macros.GNU
+> +++ b/package/lua-cffi/lua-cffi.mk
 > @@ -0,0 +1,14 @@
-> +# help: http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/ACE/ACE-INSTALL.html#unix
+> +################################################################################
+> +#
+> +# lua-cffi
+> +#
+> +################################################################################
 > +
-> +# create a platform macros file
-> +include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
+> +LUA_CFFI_VERSION=0.2.1
+> +LUA_CFFI_SITE = $(call github,q66,cffi-lua,v$(LUA_CFFI_VERSION))
+> +LUA_CFFI_LICENSE = MIT
+> +LUA_CFFI_LICENSE_FILES = COPYING.md
 > +
-> +# disable RPATH
-> +install_rpath = 0
+> +LUA_CFFI_DEPENDENCIES = libffi lua
 > +
-> +# set the installation prefix
-> +INSTALL_PREFIX = /usr
+> +$(eval $(meson-package))
+> diff --git a/support/testing/tests/package/test_lua_cffi.py b/support/testing/tests/package/test_lua_cffi.py
+> new file mode 100644
+> index 000000000..7f56eef56
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_lua_cffi.py
+> @@ -0,0 +1,14 @@
+> +from tests.package.test_lua import TestLuaBase
 > +
-> +# fix link error with ARM EABI tools
-> +# http://list.isis.vanderbilt.edu/pipermail/ace-users/2008-January/002742.html
-> +no_hidden_visibility = 1
+> +
+> +class TestLuaLuaCffi(TestLuaBase):
+> +    config = TestLuaBase.config + \
+> +        """
+> +        BR2_PACKAGE_LUA=y
+> +        BR2_PACKAGE_LUA_CFFI=y
+> +        """
+> +
+> +    def test_run(self):
+> +        self.login()
+> +        self.module_test("cffi")
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
