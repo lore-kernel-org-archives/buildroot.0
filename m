@@ -1,63 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6409C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 09:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF3E1C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 09:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D079401ED;
-	Sun,  6 Feb 2022 09:33:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A6FE813CC;
+	Sun,  6 Feb 2022 09:45:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OFCYcVFbdFTo; Sun,  6 Feb 2022 09:33:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CE2340120;
-	Sun,  6 Feb 2022 09:33:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1DED51BF83C
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:32:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AC118191E
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:32:21 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u28RpYpKsYo1 for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 09:32:20 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b_8unYkLT-3m; Sun,  6 Feb 2022 09:45:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C4EF813CD;
+	Sun,  6 Feb 2022 09:45:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B1411BF83C
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:45:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3092240362
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:45:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I5a4oCWGHQCZ for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 09:45:14 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E6283818C2
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 09:32:19 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 968E140002;
- Sun,  6 Feb 2022 09:32:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1644139938;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=O4PCgILFP9UP4IiMno7XjSjT2OvXog/6FvbpA8HXOms=;
- b=lE9DsdfHE6DSmV44OTSpqQn1d/rTG0RJBF3gh2HzsZyYIxQloWeSGuDzKcuY7cUfeoNOcF
- 1r5Ynbs32Gcn8mkSP8pbAPhPgiI0+Lkd5GfjsYp42y6Wc3ait3B+EQxvHcCDzXFMFuqpPD
- EqqnI8hSd2ZLG+0GEp0YlzzkUCo3PuwV8S1cGF1m98oUN7/q7/g+9CmY50A9rQPGpHLASu
- 5/Mem+kUyydBWBP3X343BguxgnbIWcFuppbF9/f3lryQM7Dn81ZpcAFBITMD6JB5BKIh8Z
- +IVP7af2y8jb5qI79gLIghBBOIxD5+Wjk70aGAnQF7oX8S/3HceoCY4cfzJnbg==
-Date: Sun, 6 Feb 2022 10:32:16 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220206103216.6d89c19e@windsurf>
-In-Reply-To: <20220203225957.3039320-1-giulio.benetti@benettiengineering.com>
-References: <20220203225957.3039320-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23B0F40361
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 09:45:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 51ABF60007;
+ Sun,  6 Feb 2022 09:45:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1nGe6W-0002z7-Vh; Sun, 06 Feb 2022 10:45:08 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun,  6 Feb 2022 10:45:02 +0100
+Message-Id: <20220206094504.11415-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 0/5] Fix genimage build failure on Gitlab-CI
+Subject: [Buildroot] [PATCH 1/2] package/avahi: drop unneeded
+ am_cv_path_PYTHON
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,32 +57,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>,
- Jagan Teki <jagan@amarulasolutions.com>, "Yann
- E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  3 Feb 2022 23:59:52 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+It is not used by the configure script and refer to PYTHON_TARGET_BINARY
+which was dropped back in 2010 by commit e3418f69cf (python: convert to
+autotargets, bump to 2.7.1, many improvements), so drop it.
 
-> Giulio Benetti (5):
->   board/friendlyarm/nanopc-t4:use partition-type-uuid for genimage-15
->   board/friendlyarm/nanopi-m4:use partition-type-uuid for genimage-15
->   board/pine64/rockpro64:use partition-type-uuid for genimage-15
->   board/radxa/rockpi-4:use partition-type-uuid for genimage-15
->   board/radxa/rockpi-n10:use partition-type-uuid for genimage-15
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/avahi/avahi.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Series applied, thanks
-
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 13e2106014..04c4164af6 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -107,7 +107,6 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ AVAHI_CONF_ENV += \
+ 	am_cv_pathless_PYTHON=python \
+-	am_cv_path_PYTHON=$(PYTHON_TARGET_BINARY) \
+ 	am_cv_python_version=$(PYTHON_VERSION) \
+ 	am_cv_python_platform=linux2 \
+ 	am_cv_python_pythondir=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
