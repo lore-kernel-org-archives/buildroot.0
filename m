@@ -1,67 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62419C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 21:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49318C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 21:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1504860B41;
-	Sun,  6 Feb 2022 21:37:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2877818C4;
+	Sun,  6 Feb 2022 21:57:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mSF5tdqnljmT; Sun,  6 Feb 2022 21:37:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B68060B3C;
-	Sun,  6 Feb 2022 21:37:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F316C1BF44A
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:37:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1472818C9
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:37:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EC6I9S2KBR1P for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 21:37:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77B52818C4
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 21:37:10 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9d52:b578:c062:8b13])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4CB6E7802C2;
- Sun,  6 Feb 2022 22:36:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1644183428;
- bh=BNfTOR/nzB/7so7Z5NYOwWv9/9kYuGWSoeW/W4uiIiU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=bpPJan/fajlJrPw79UFZUZ/Uo+BjIUYOYoqnAlfW9Zkn7hS31sjNwNqciHrVccuzH
- Gpa/BSpO8vLO2/O8qHIrSDqM/l7Qdyj7odJVY23gG4avrPwq34tZgmdQMzNljRxXu7
- 55JGPvKEb1t5EKk974uqUBI7BllNAFcFqp7mcaVL9TA+bRykErUR8AxW6jOuk90yK5
- tS5u30TKkZ0dpQSyjTgaZEj4N0XzKdAY4FW0IVE+XwBk6dTGn8DkQ1ZHifgFCqaeM2
- TV/Xm/TbF+OXRWFzoUPug+CVeSCWDFqQUQ95Way09GIW4kUFikDnAASJ1w9PwG5lGs
- 7q23uYCkfdrBg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 06 Feb 2022 22:36:57 +0100
-Date: Sun, 6 Feb 2022 22:36:57 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220206213657.GA457876@scaer>
-References: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
- <20220206200532.2758493-2-giulio.benetti@benettiengineering.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5wifvd4NrmFW; Sun,  6 Feb 2022 21:57:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C7DE814BA;
+	Sun,  6 Feb 2022 21:57:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6ECCE1BF44A
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:57:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56C9660B3C
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:57:42 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NQ6DNk2z8wbo for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 21:57:41 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4156160AED
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 21:57:40 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id q204so14539108iod.8
+ for <buildroot@buildroot.org>; Sun, 06 Feb 2022 13:57:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3Ng4pMK/6Oe0LNUUtJF5NK+IJIO70vg82cWc2rOVIx8=;
+ b=ZumGfqKVk5p/sU77HaQkFqWobZKExwFDW7JhdPIvZran9HzJK3er83hi6N5VX+o4Nv
+ jsqiLyP2mlBk1VkKNPtqLo4m7JT/MsebOUgjNa5MsEgzKvFH+Dgu7y8AXZ+P9/KXa4el
+ WCb/GQNQ92YttIZKvNv1g1KlfdQh6NvqFvEAp2qRvIw5Ji7FnZ/PhaPyU6TMo/UPKiXo
+ 19w0feQIW3YqY4w2WDZlzRgFR7t0u2BTwtnVRfvoOQ3RT5cJps+ACPQVTkJ3Z2aaI4pw
+ Y1B+sAOJk7L4En3LYXgfnknUEP78XVvMcIhxxtB39Fn3+oDTU40IVuZKm83vOIVjlJ1r
+ hy+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3Ng4pMK/6Oe0LNUUtJF5NK+IJIO70vg82cWc2rOVIx8=;
+ b=3Bt9NAgqDIcDRIGL9iMNpznHhUjU61nhso0KblFXpldRLJiJ1rnccGzye4yu5pRtly
+ 167zwgrego4UlKVGIaIXBUW3vgUsGgOj8Ai556kplO9h40iAvULNL0WgLQ5C0h5JBXZC
+ FmiV7t2O1GoTR22DLzRoRrpSkn7WUasgyeZH2m6fO2HhSCKU4TuhwqNe4MpvdNfZX0Mj
+ JlPVsjrJ8rJnt7KTwdY70fBap4qCzdJ6Weqx76UICL5trZcX9QDtKKwKXDz6uMkCZY4h
+ dzZ4ChSQhCPhQvxZfegAq/Y+7/hLSGe4WurlvPz/iCdoo+7h2ZLDP+7a38/X8FdHfsPf
+ qwWw==
+X-Gm-Message-State: AOAM530/6Xgv2MI3taksa5QI/IvYaarqAU0ZBADsgtRFK63pMW3HbTgD
+ 1lgu9y9fAE6WIubiZ/Kh346CZ6BiaTwCaQ==
+X-Google-Smtp-Source: ABdhPJwkYo97E8d4bHUtBqH83GOgP0JfcUVSc5q0EN2iIEckDOSWvecyuuAdfCYEb0PNVVDXXTX5dA==
+X-Received: by 2002:a05:6602:330b:: with SMTP id
+ b11mr4258872ioz.156.1644184660083; 
+ Sun, 06 Feb 2022 13:57:40 -0800 (PST)
+Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
+ [71.218.245.50])
+ by smtp.gmail.com with ESMTPSA id b6sm957632ilq.26.2022.02.06.13.57.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 06 Feb 2022 13:57:39 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  6 Feb 2022 14:57:34 -0700
+Message-Id: <20220206215734.3853337-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220206200532.2758493-2-giulio.benetti@benettiengineering.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 01/16] board/aarch64-efi/genimage-efi:
- convert partition-type-uuid to single letter notation
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5location: remove unused
+ qt5location-mapboxgl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,83 +87,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>,
- Alistair Francis <alistair@alistair23.me>,
- Gerome Burlats <gerome.burlats@smile.fr>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Suniel Mahesh <sunil@amarulasolutions.com>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+This was only needed when the mapboxgl submodule was a separate
+package(was never included in buildroot only a patch series).
 
-FTR, a little recap of what we discussed on IRC, see below
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/qt5/qt5location/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-On 2022-02-06 21:05 +0100, Giulio Benetti spake thusly:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  board/aarch64-efi/genimage-efi.cfg | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-> index 87e85816bc..7fbe13d390 100644
-> --- a/board/aarch64-efi/genimage-efi.cfg
-> +++ b/board/aarch64-efi/genimage-efi.cfg
-> @@ -18,13 +18,13 @@ image disk.img {
->  
->  	partition boot {
->  		image = "efi-part.vfat"
-> -		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-> +		partition-type-uuid = U
->  		offset = 32K
->  		bootable = true
->  	}
->  
->  	partition root {
-> -		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
-> +		partition-type-uuid = L
-
-As we discussed on IRC, this is not the same thing. genimage will extend
-the 'L' shorthand to the full UUID 0fc63daf-8483-4772-8e79-3d69d8477de4,
-which is different.
-
-So I don't think uaing the shorthands are correct.
-
-The UUID assignments are available on Wikipedia:
-    https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
-
-But the systemd docuemntation has extra UUID definitions:
-    https://man.archlinux.org/man/systemd-gpt-auto-generator.8
-
-And finally, if neither resources has a UUID for a specific
-architecture, we can still use the 'generic' "Linux filesystem data"
-UUID 0FC63DAF-8483-4772-8E79-3D69D8477DE4.
-
-Regards,
-Yann E. MORIN.
-
->  		image = "rootfs.ext2"
->  	}
->  }
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/qt5/qt5location/Config.in b/package/qt5/qt5location/Config.in
+index b811f9a590..3d91adaf1f 100644
+--- a/package/qt5/qt5location/Config.in
++++ b/package/qt5/qt5location/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_QT5LOCATION
+ 	bool "qt5location"
+ 	select BR2_PACKAGE_QT5BASE_GUI
+-	select BR2_PACKAGE_QT5LOCATION_MAPBOXGL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
