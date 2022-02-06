@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 656DDC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C53C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E240440232;
-	Sun,  6 Feb 2022 19:23:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B912E817A7;
+	Sun,  6 Feb 2022 19:30:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9c8nS-XpZv30; Sun,  6 Feb 2022 19:23:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JmYlrUXU5MUx; Sun,  6 Feb 2022 19:30:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBDA3401C2;
-	Sun,  6 Feb 2022 19:23:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12CE81BF384
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:23:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92C10817BD;
+	Sun,  6 Feb 2022 19:30:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 46E991BF384
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:30:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0ED53605E0
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:23:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CEAE817BD
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:30:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qzO-xm0ILc_j for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 19:23:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PEterYVX9d_V for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 19:30:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 470DD605DB
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:23:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 082C8817A7
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:30:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 46D5682BD5; Sun,  6 Feb 2022 19:16:13 +0000 (UTC)
+ id 0410782BD9; Sun,  6 Feb 2022 19:23:21 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 20:22:12 +0100
+Date: Sun, 6 Feb 2022 20:29:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3621918d1bc1ddc9312dd1cc8dec6db61e712fe2
-X-Git-Newrev: 13114d0f9352531e5d7ebed45cd3f679407c61d9
+X-Git-Oldrev: 13114d0f9352531e5d7ebed45cd3f679407c61d9
+X-Git-Newrev: 8251d8c2559b25f11684776fc343059cf100657d
 X-Patchwork-Hint: ignore
-Message-Id: <20220206191613.46D5682BD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-cffi: new package
+Message-Id: <20220206192321.0410782BD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grpc: restrict host-grpc to the
+ absolute minimum
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,105 +59,363 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13114d0f9352531e5d7ebed45cd3f679407c61d9
+commit: https://git.buildroot.net/buildroot/commit/?id=8251d8c2559b25f11684776fc343059cf100657d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Currently, grpc depends on the full host-grpc, which in turn depends on host
+versions of many other libraries. One of these, host-libabseil-cpp, also
+requires a host gcc 4.9 or larger, a dependency which is not met on CentOS
+7.
+But in fact, the target grpc only needs the 'grpc_cpp_plugin' binary from
+host-grpc. And that binary does not depend on host-libabseil-cpp or other
+libraries, only on host-protobuf.
+
+Given the above, simplify the grpc/host-grpc situation.
+- Add a patch to the (host-)grpc CMakeLists.txt file to add an option to
+  only build grpc_cpp_plugin.
+- Update grpc.mk and Config.in to remove the unnecessary dependencies, and
+  change the host-grpc configure options to make cmake happy.
+
+The advantages of these changes are:
+- making grpc available to older hosts with gcc < 4.8, like CentOS 7
+- significantly reducing the build time of host-grpc and its dependencies
+
+The patch was proposed upstream but not accepted with below rationale.
+Perhaps input from others can help in persuading upstream in a future
+attempt.
+
+    'What you're doing sounds like quite a narrow use case. But we simply
+    cannot provide a cmake option for every possible scenario in the world.
+    Introducing a new cmake option isn't for free and requires careful
+    design and maintenance.'
+
+Nevertheless, given the benefits in terms of build time and dependency
+reduction, it makes sense to apply this patch in spite of the disadvantage
+of a local non-upstreamed patch.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[Arnout: propagate removed dependency to collectd]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                              |  1 +
- package/lua-cffi/Config.in                     | 19 +++++++++++++++++++
- package/lua-cffi/lua-cffi.hash                 |  3 +++
- package/lua-cffi/lua-cffi.mk                   | 14 ++++++++++++++
- support/testing/tests/package/test_lua_cffi.py | 14 ++++++++++++++
- 5 files changed, 51 insertions(+)
+ package/collectd/Config.in                        |   1 -
+ package/grpc/0004-host-grpc-only-cpp-plugin.patch | 223 ++++++++++++++++++++++
+ package/grpc/Config.in                            |   6 +-
+ package/grpc/grpc.mk                              |  27 ++-
+ 4 files changed, 244 insertions(+), 13 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 43ce9013c6..d631ed784a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -677,6 +677,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-basexx/Config.in"
- 	source "package/lua-binaryheap/Config.in"
- 	source "package/lua-bit32/Config.in"
-+	source "package/lua-cffi/Config.in"
- 	source "package/lua-cjson/Config.in"
- 	source "package/lua-coat/Config.in"
- 	source "package/lua-coatpersistent/Config.in"
-diff --git a/package/lua-cffi/Config.in b/package/lua-cffi/Config.in
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 697dc51f7e..67413ffde0 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -680,7 +680,6 @@ config BR2_PACKAGE_COLLECTD_GRPC
+ 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # grpc -> libabseil-cpp
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # grpc -> host-libabseil-cpp
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+ 	select BR2_PACKAGE_GRPC
+ 	help
+diff --git a/package/grpc/0004-host-grpc-only-cpp-plugin.patch b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
 new file mode 100644
-index 0000000000..64a36e1de4
+index 0000000000..43fad7e3d6
 --- /dev/null
-+++ b/package/lua-cffi/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LUA_CFFI
-+	bool "lua-cffi"
-+	depends on !BR2_PACKAGE_LUAJIT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS  # libffi
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBFFI
-+	help
-+	  This is a portable C FFI for Lua, based on libffi and aiming
-+	  to be mostly compatible with LuaJIT FFI, but written from
-+	  scratch.
++++ b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
+@@ -0,0 +1,223 @@
++From a1922eadfc87da3dd221ff631f94ddd4a8ee7049 Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Tue, 25 May 2021 14:55:23 +0200
++Subject: [PATCH] Add option to restrict building of (host-)grpc to
++ grpc_cpp_plugin only.
 +
-+	  https://github.com/q66/cffi-lua
++This avoids unnecessary dependencies on big packages like libabseil-cpp and
++others.
 +
-+comment "lua-cffi needs a toolchain w/ C++, gcc >= 4.8, threads"
-+	depends on !BR2_PACKAGE_LUAJIT
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lua-cffi/lua-cffi.hash b/package/lua-cffi/lua-cffi.hash
-new file mode 100644
-index 0000000000..a532c6c7b3
---- /dev/null
-+++ b/package/lua-cffi/lua-cffi.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  c30080d6309167f86d1a96d3ee33f33ef52e884052b7feac140b8c52db10ad7a  lua-cffi-0.2.1.tar.gz
-+sha256  f5653a4d5864a3920ea1e07dacfd646067314be647598f0acaaf685beaa2e396  COPYING.md
-diff --git a/package/lua-cffi/lua-cffi.mk b/package/lua-cffi/lua-cffi.mk
-new file mode 100644
-index 0000000000..07d84ad5fa
---- /dev/null
-+++ b/package/lua-cffi/lua-cffi.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lua-cffi
-+#
-+################################################################################
++Upstream-status: not accepted (see https://github.com/grpc/grpc/issues/25322)
 +
-+LUA_CFFI_VERSION=0.2.1
-+LUA_CFFI_SITE = $(call github,q66,cffi-lua,v$(LUA_CFFI_VERSION))
-+LUA_CFFI_LICENSE = MIT
-+LUA_CFFI_LICENSE_FILES = COPYING.md
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++---
++ CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
++ 1 file changed, 35 insertions(+), 8 deletions(-)
 +
-+LUA_CFFI_DEPENDENCIES = libffi lua
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e8934a3e03..c2df332cc6 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -48,12 +48,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
++ option(gRPC_BUILD_CODEGEN "Build codegen" ON)
++ option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
++ option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
+++option(gRPC_BUILD_PLUGIN_SUPPORT_ONLY "Build plugin support only" OFF)
++ 
++ set(gRPC_INSTALL_default ON)
++ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
++   # Disable gRPC_INSTALL by default if building as a submodule
++   set(gRPC_INSTALL_default OFF)
++ endif()
+++if(gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++  set(gRPC_INSTALL_default OFF)
+++endif()
++ set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
++     "Generate installation target")
++ 
++@@ -367,6 +371,8 @@ add_custom_target(plugins
++   DEPENDS ${_gRPC_PLUGIN_LIST}
++ )
++ 
+++if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++
++ add_custom_target(tools_c
++   DEPENDS
++   check_epollexclusive
++@@ -382,6 +388,8 @@ add_custom_target(tools_cxx
++ add_custom_target(tools
++   DEPENDS tools_c tools_cxx)
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+++
++ protobuf_generate_grpc_cpp(
++   src/proto/grpc/channelz/channelz.proto
++ )
++@@ -1000,6 +1008,7 @@ if(gRPC_BUILD_TESTS)
++     DEPENDS buildtests_c buildtests_cxx)
++ endif()
++ 
+++if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
++ 
++ add_library(address_sorting
++   third_party/address_sorting/address_sorting.c
++@@ -1051,6 +1060,8 @@ if(gRPC_INSTALL)
++   )
++ endif()
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+++
++ if(gRPC_BUILD_TESTS)
++ 
++ add_library(end2end_nosec_tests
++@@ -1313,6 +1324,8 @@ target_link_libraries(end2end_tests
++ 
++ endif()
++ 
+++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++
++ add_library(gpr
++   src/core/lib/gpr/alloc.cc
++   src/core/lib/gpr/atm.cc
++@@ -2106,6 +2119,8 @@ if(gRPC_INSTALL)
++   )
++ endif()
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+++
++ if(gRPC_BUILD_CSHARP_EXT)
++ 
++ add_library(grpc_csharp_ext SHARED
++@@ -2288,6 +2303,8 @@ endif()
++ 
++ endif()
++ 
+++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++
++ add_library(grpc_unsecure
++   src/core/ext/filters/census/grpc_context.cc
++   src/core/ext/filters/client_channel/backend_metric.cc
++@@ -2650,6 +2667,8 @@ if(gRPC_INSTALL)
++   )
++ endif()
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+++
++ if(gRPC_BUILD_TESTS)
++ 
++ if(gRPC_BUILD_CODEGEN)
++@@ -2717,6 +2736,8 @@ endif()
++ 
++ endif()
++ 
+++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++
++ add_library(grpc++
++   src/cpp/client/channel_cc.cc
++   src/cpp/client/client_callback.cc
++@@ -3134,6 +3155,7 @@ if(gRPC_INSTALL)
++   )
++ endif()
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
++ 
++ if(gRPC_BUILD_CODEGEN)
++ add_library(grpc++_reflection
++@@ -3374,6 +3396,8 @@ target_link_libraries(grpc++_test_util
++ 
++ endif()
++ 
+++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++
++ add_library(grpc++_unsecure
++   src/cpp/client/channel_cc.cc
++   src/cpp/client/client_callback.cc
++@@ -3656,6 +3680,7 @@ if(gRPC_INSTALL)
++   )
++ endif()
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
++ 
++ add_library(grpc_plugin_support
++   src/compiler/cpp_generator.cc
++@@ -3715,7 +3740,7 @@ foreach(_hdr
++ endforeach()
++ 
++ 
++-if(gRPC_INSTALL)
+++if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
++   install(TARGETS grpc_plugin_support EXPORT gRPCTargets
++     RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
++     LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
++@@ -3795,6 +3820,8 @@ endif()
++ 
++ endif()
++ 
+++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+++
++ add_library(upb
++   third_party/upb/upb/decode_fast.c
++   third_party/upb/upb/decode.c
++@@ -3852,8 +3879,6 @@ if(gRPC_INSTALL)
++   )
++ endif()
++ 
++-
++-
++ add_executable(check_epollexclusive
++   test/build/check_epollexclusive.c
++ )
++@@ -3906,8 +3931,6 @@ target_link_libraries(gen_hpack_tables
++   gpr
++ )
++ 
++-
++-
++ add_executable(gen_legal_metadata_characters
++   tools/codegen/core/gen_legal_metadata_characters.cc
++ )
++@@ -3958,6 +3981,8 @@ target_link_libraries(gen_percent_encoding_tables
++   ${_gRPC_ALLTARGETS_LIBRARIES}
++ )
++ 
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+++
++ 
++ if(gRPC_BUILD_TESTS)
++ 
++@@ -10722,7 +10747,7 @@ target_link_libraries(grpc_cli
++ 
++ 
++ endif()
++-if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
+++if(gRPC_BUILD_GRPC_CPP_PLUGIN)
++ 
++ add_executable(grpc_cpp_plugin
++   src/compiler/cpp_plugin.cc
++@@ -10752,7 +10777,7 @@ target_link_libraries(grpc_cpp_plugin
++ 
++ 
++ 
++-if(gRPC_INSTALL)
+++if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
++   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
++     RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
++     LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
++@@ -15420,7 +15445,7 @@ endif()
++ 
++ 
++ 
++-
+++if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
++ 
++ if(gRPC_INSTALL)
++   install(EXPORT gRPCTargets
++@@ -15517,3 +15542,5 @@ generate_pkgconfig(
++   "-lgrpc++_unsecure -labsl_statusor -labsl_status -labsl_raw_hash_set -labsl_hashtablez_sampler -labsl_synchronization -labsl_time -labsl_time_zone -labsl_civil_time -labsl_graphcycles_internal -labsl_symbolize -labsl_demangle_internal -labsl_malloc_internal -labsl_stacktrace -labsl_debugging_internal -labsl_exponential_biased -labsl_cord -labsl_str_format_internal -labsl_hash -labsl_bad_variant_access -labsl_bad_optional_access -labsl_strings -labsl_strings_internal -labsl_base -labsl_spinlock_wait -labsl_int128 -labsl_city -labsl_throw_delegate -labsl_raw_logging_internal -labsl_log_severity"
++   ""
++   "grpc++_unsecure.pc")
+++
+++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
++-- 
++2.26.3
 +
-+$(eval $(meson-package))
-diff --git a/support/testing/tests/package/test_lua_cffi.py b/support/testing/tests/package/test_lua_cffi.py
-new file mode 100644
-index 0000000000..7f56eef566
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_cffi.py
-@@ -0,0 +1,14 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLuaCffi(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_CFFI=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("cffi")
-+
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index d1bf0d078d..ad3ddbcf19 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_GRPC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libabseil-cpp
+ 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+@@ -20,10 +19,9 @@ config BR2_PACKAGE_GRPC
+ 
+ 	  http://github.com/grpc/grpc
+ 
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
++comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+-		|| !BR2_HOST_GCC_AT_LEAST_4_9
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 2e8bc5049f..5d8201f12f 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -14,8 +14,7 @@ GRPC_INSTALL_STAGING = YES
+ 
+ # Need to use host grpc_cpp_plugin during cross compilation.
+ GRPC_DEPENDENCIES = c-ares host-grpc libabseil-cpp openssl protobuf re2 zlib
+-HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protobuf \
+-	host-re2 host-zlib
++HOST_GRPC_DEPENDENCIES = host-protobuf
+ 
+ # gRPC_CARES_PROVIDER=package won't work because it requires c-ares to have
+ # installed a cmake config file, but buildroot uses c-ares' autotools build,
+@@ -70,14 +69,26 @@ GRPC_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
+ 
++# For host-grpc, we only need the 'grpc_cpp_plugin' binary, which is needed for
++# target grpc compilation. To avoid unnecessary build steps and host
++# dependencies, supply enough options to pass the configure checks without
++# requiring other host packages, unless those needed by grpc_cpp_plugin.
+ HOST_GRPC_CONF_OPTS = \
+-	-DgRPC_ABSL_PROVIDER=package \
+-	-D_gRPC_CARES_LIBRARIES=cares \
+-	-DgRPC_CARES_PROVIDER=none \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+-	-DgRPC_RE2_PROVIDER=package \
+-	-DgRPC_SSL_PROVIDER=package \
+-	-DgRPC_ZLIB_PROVIDER=package
++	-DgRPC_ABSL_PROVIDER=none \
++	-DgRPC_CARES_PROVIDER=none \
++	-DgRPC_RE2_PROVIDER=none \
++	-DgRPC_SSL_PROVIDER=none \
++	-DgRPC_ZLIB_PROVIDER=none \
++	-DgRPC_BUILD_CODEGEN=OFF \
++	-DgRPC_BUILD_CSHARP_EXT=OFF \
++	-DgRPC_BUILD_PLUGIN_SUPPORT_ONLY=ON \
++	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
