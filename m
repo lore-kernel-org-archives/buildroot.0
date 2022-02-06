@@ -1,64 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64491C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 10:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A31BC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 10:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0386D40448;
-	Sun,  6 Feb 2022 10:50:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D22FC60C21;
+	Sun,  6 Feb 2022 10:51:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vVvY97MKr3ug; Sun,  6 Feb 2022 10:50:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aIw3YHTPoQza; Sun,  6 Feb 2022 10:51:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01615401ED;
-	Sun,  6 Feb 2022 10:50:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F1DE71BF83B
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 10:50:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1596360BE4;
+	Sun,  6 Feb 2022 10:51:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6962B1BF83B
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 10:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB86C401ED
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 10:50:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 659124032E
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 10:51:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cfCzOEc5uMTt for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 10:50:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C1A7F400A8
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 10:50:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4DEB0E0005;
- Sun,  6 Feb 2022 10:50:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1644144642;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YeEtYeoiByvhhm0IiwGcmWaRuX1R7PQSsUSm56PNRM4=;
- b=XA5VosvpQ2M/Cde5GOqR8wXBqcsM2dUOqcGEqRMWQhtW5NRmkSUhAqNSPJ8PsGfTkdrFeE
- /gxf3dkyQ8vr+lYPSvwfQnKCjTotyS746qZqoqYWc7Er4zevjUrXC4trvpoAlfF0iCTO0L
- CkcLuqWhpsqJDQ9NdGJQCHiPR+kJlrdDcWo/8gT51tQny2YeZDB0OLitTJDtMxFwcfbVjS
- xCRLUc8M3snOnVwLQo9wPKDyCFsMOBOTJen6NdkgsyTrDEHeGZPaCvcoA0a+st5GRz4ujJ
- GCucKsoivuM9xsMFDTbDiCZYG5ZJlu+ci1aeNRqVa0x0A55CxXnlAClgr+hUTw==
-Date: Sun, 6 Feb 2022 11:50:41 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220206115041.58101a3a@windsurf>
-In-Reply-To: <20220201230414.4144930-7-giulio.benetti@benettiengineering.com>
-References: <20220201230414.4144930-1-giulio.benetti@benettiengineering.com>
- <20220201230414.4144930-7-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 6/6]
- configs/microchip_sama7g5ek_mmc_dev_defconfig: add missing
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15 and host openssl for linux
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eOW7wRiOBV2P for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 10:51:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB1D24032B
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 10:51:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 8A4D282BBB; Sun,  6 Feb 2022 10:44:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Feb 2022 11:51:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 490438f437b2a603204aa6ae9cbf3875c262f976
+X-Git-Newrev: a8c0a1c6a0a771eab65f27fc4ed3f76c43334ef8
+X-Patchwork-Hint: ignore
+Message-Id: <20220206104417.8A4D282BBB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglev: linux needs host openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,36 +53,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  2 Feb 2022 00:04:14 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a8c0a1c6a0a771eab65f27fc4ed3f76c43334ef8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> https://gitlab.com/ymorin/buildroot/-/jobs/2035821100
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * add host openssl linux
-> ---
->  configs/microchip_sama7g5ek_mmc_dev_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+Fixes:
+https://gitlab.com/ymorin/buildroot/-/jobs/2035820979
 
-Same problem as PATCH 5/6: the kernel version should be defined as a
-fixed version.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/beaglev_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+index 70459bf3e8..79af8c2ece 100644
+--- a/configs/beaglev_defconfig
++++ b/configs/beaglev_defconfig
+@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="starlight"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="starfive/jh7100-beaglev-starlight"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
