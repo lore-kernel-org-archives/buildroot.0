@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A8F5C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 09:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0C2C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 09:32:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00063818C9;
-	Sun,  6 Feb 2022 09:32:09 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AJ9V77smk5ka; Sun,  6 Feb 2022 09:32:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2701E818C4;
-	Sun,  6 Feb 2022 09:32:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 111161BF83C
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:32:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BEB760759
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:32:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F2C060C22;
+	Sun,  6 Feb 2022 09:32:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 64sRL8FV6IZY for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FP2yxQqKQAnT; Sun,  6 Feb 2022 09:32:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D90A60759;
+	Sun,  6 Feb 2022 09:32:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BBC81BF968
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:32:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08024818C9
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:32:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eQejCHRYDR7Z for <buildroot@lists.busybox.net>;
  Sun,  6 Feb 2022 09:32:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4136B605EA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 322AF818B5
  for <buildroot@buildroot.org>; Sun,  6 Feb 2022 09:32:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2FB6282B9A; Sun,  6 Feb 2022 09:24:48 +0000 (UTC)
+ id 1D002822F1; Sun,  6 Feb 2022 09:24:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 10:31:40 +0100
+Date: Sun, 6 Feb 2022 10:31:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd29ee0e8ef59361824ef4ae7957208915d80c65
-X-Git-Newrev: 2466a542813228099fdfce9488199dc6e39d78b9
+X-Git-Oldrev: 7d3845f10ccc0810243036439b955cd9f49d3da4
+X-Git-Newrev: 7a9a74fc823d14ec8b7bbfea9b1e4535e408c95c
 X-Patchwork-Hint: ignore
-Message-Id: <20220206092448.2FB6282B9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/pine64/rockpro64: use
+Message-Id: <20220206092448.1D002822F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/friendlyarm/nanopc-t4: use
  partition-type-uuid in genimage.cfg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,7 +60,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2466a542813228099fdfce9488199dc6e39d78b9
+commit: https://git.buildroot.net/buildroot/commit/?id=7a9a74fc823d14ec8b7bbfea9b1e4535e408c95c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Genimage 15 restricted the partition-type option to mbr and hybrid
@@ -76,7 +76,7 @@ and for Root partition (64-bit ARM/AArch64):
 'partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae'
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1929717243
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1929717055
 
 FTR, the magic UUID are from:
     https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
@@ -84,13 +84,13 @@ FTR, the magic UUID are from:
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/pine64/rockpro64/genimage.cfg | 4 ++--
+ board/friendlyarm/nanopc-t4/genimage.cfg | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/pine64/rockpro64/genimage.cfg b/board/pine64/rockpro64/genimage.cfg
-index 14dd0e1d18..d3926f2df6 100644
---- a/board/pine64/rockpro64/genimage.cfg
-+++ b/board/pine64/rockpro64/genimage.cfg
+diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
+index d63c293ab4..98dc2f3892 100644
+--- a/board/friendlyarm/nanopc-t4/genimage.cfg
++++ b/board/friendlyarm/nanopc-t4/genimage.cfg
 @@ -26,14 +26,14 @@ image sdcard.img {
  	}
  
