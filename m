@@ -1,61 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19092C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 09:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64312C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 09:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A868840160;
-	Sun,  6 Feb 2022 09:08:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF40D401ED;
+	Sun,  6 Feb 2022 09:21:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iq2caOnrRwnG; Sun,  6 Feb 2022 09:08:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M2p33_RBfXke; Sun,  6 Feb 2022 09:21:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF3C740134;
-	Sun,  6 Feb 2022 09:08:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CDBD41BF83C
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:08:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C630F40120;
+	Sun,  6 Feb 2022 09:21:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E6B961BF83C
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:21:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C93B281291
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:08:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEC0C60D4D
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 09:21:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SOEHtzrH6zzD for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 09:08:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zIXEVI4Cs71a for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 09:21:09 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02F5B8127D
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 09:08:11 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id GdWknIUKSX0z7GdWknKCKy; Sun, 06 Feb 2022 10:08:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644138490; bh=dFk7Be9Sixs0OTvODqkdsOsQhOlpytjMGbRyV4nNwbk=;
- h=From:To:Subject:Date:MIME-Version;
- b=HRU/iezRfx+ZSidsRHtpL7O5reuoU9SLYPkWxFTXg15Ny3XuPTLyM7XUlb/fCnC0W
- AMe8S2BwK6wYVaaLskYxsGqtVfjqPemJS3XRjrRsYDWsY0UbJJqRHFJJ52sL/jhew2
- aKzGv2cXhIqgdnlLiIH2WAyj10zpU+Neh+OrSuU956SWeo+LFIfrc63n6uQJsTLzPp
- dGZufElJ3OEH0iPL/5EkA+Nqvc/jWzNOLTR2J+v5OcxQwO/FTkuPyaHssSNKr6jdwe
- qPwv4tE0vvOyjjGQ0A0UQly5Yg4Bc6l07Wjb0geojCec3DUWYkA6B4JA6TI2URsW86
- HJnsbvSzYsviQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4A15660C21
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 09:21:08 +0000 (UTC)
+Received: from calakmul.fritz.box ([151.61.103.53]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.17.173]) with ESMTPA (Nemesis) id
+ 1M1ZQT-1nDcWg30LD-0034DW; Sun, 06 Feb 2022 10:21:06 +0100
+From: Pedro Aguilar <paguilar@paguilar.org>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 10:08:09 +0100
-Message-Id: <20220206090809.1532589-1-giulio.benetti@benettiengineering.com>
+Date: Sun,  6 Feb 2022 10:20:48 +0100
+Message-Id: <20220206092048.1901703-1-paguilar@paguilar.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfM9Q63azfiM2Xie4McgwHIAORP0MLB9ByewsnoNqhMuAHw0wXGVmV+c5rHAQReyxPfE+zRvPEXmFrZ5dh9KNFTRbE7vtUMOYFs+hDyzmLTvPI5yNNjoa
- /q3z/RkjziG6JHFe3QCixeEAVrZQ5EVeQXEULAJmGeAdU8gfXqtLXi2LDrrtK+u7LhuRc7fNwYYmhoRo8yHe9ZzOR83Sqjedu0buIW8wBGX4IqaTw5Ytcism
- CBmdCEeDv3WD2RYpNppppctgNPALB3bIX8XMgMEOLY9nFlDS9gJDd8U2JE/M907L5DvSlFunhsMbt8OYNknzPQ61bIu4+zPnZcwv+rcTlKk4P8YVELUBCtX0
- Zf0VTcS4WC2mAw7CaJy4TZFfe0Z0UYosXDRtDguXrV5EhF2ub5w=
-Subject: [Buildroot] [PATCH] toolchain: update gcc bug 99410
+X-Provags-ID: V03:K1:OP7L3JFVwjn/PM+FHFA0qR2Avx1Fu/tv0FE1/T8HhYSXHWvLwDC
+ aEUXRKB3ximzniTw4YbFWMMi1VKqo1iviZ0DIQAwOd4CH62/FiiMYRRnXuyVdC5FuvmeglO
+ Sh1syMLHC/yaH1PgohmkINmUMCf/UD1eMSBn1mosRLveZZvSPu3JIkEaALBUcT6h5g9ELLN
+ xRGgc/oQApGjwmJlGOR5Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rRpr0AtSPIU=:Wt0xKhnG7uQC0KXyHM3Kv0
+ W+35EUJMcBAYYS6A7HPdWtj4T7anYhMW5LY34NUssZLLQg6JtxWajC5jfrj1p8fyoHUaEg4a/
+ /YX/ZGwaIYxio9NRFxmsKt6ErhNZIevqOM0V1HAfpH4mrcol6DxDxKD8ueBqGewYrArRgBteA
+ LuH6B20LliREdp/FAe2vnlDV1ZvQ7jzQ3jeosk65HMQif3KugjiZ6/3xu1pvXZ2CKFQ76GTc1
+ SK1XKHgj33xAcgSLzWjSDm+I4Tsz6lLF+cmQxEorElk95aPt/+Rb1yuNFzZhVWQr2xeiitDXJ
+ 1lUIpbFao9pNp8hlkaJ4sSvvLrEGjX0ymAALoCpwFVdwnk/Mh146UVI7RBvBQzWc6VTgaudFB
+ F1s1JuXCztfRhCzA/S8HXiWGieyHiD5v73G5AOHcKw7UIIUalxVwsBTsKHZqXdSJyHbbgjBbC
+ jaXFHNeLXT3cVTytQG2JAlYrRxxOw49agdAti4en750YEJzgqmGqMBMgfEEKCXOe7IGgAgHl0
+ 6KxexFYwPQzUYGk68X4IG8UT4KwDXxKLlo4/jWnWs7YIFrvuvkubun3W+U2YJXTfKRhq2yHbf
+ SwDi9D//figrincrdxdxc6nNmYRD2tVsH0lc7oK2dQGUEaYG63slh539X7zPcfzqJG3EywrWM
+ VJf9D9rlhftsbYTcWr+zRJYwFBXA2Lrb3V1Xaak68XKvDXNM9EWAMo3J/TPkTLPqgHZ4qizr3
+ LabD3+EJ74t3efe7
+Subject: [Buildroot] [PATCH v1] DEVELOPERS: Add packages guile and bdwgc to
+ Pedro Aguilar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,44 +69,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Pedro Aguilar <paguilar@paguilar.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Gcc bug 99410 reappeared in gcc 10.x while building belle-sip, but it's
-fixed on gcc 11.x, so let's update bug conditions.
-
-Fixes:
-http://autobuild.buildroot.net/results/846597f3573d3b0d52e80627a9577d14b9348547/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 ---
- toolchain/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ccdf62503d..aed8f393a3 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -185,11 +185,11 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
- # Error: branch offset out of range on Nios II. This bug
- # no longer exists in gcc 8.x but reappeared on gcc 9.x and has been
--# fixed on gcc 10.x.
-+# fixed on gcc 11.x.
- config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
- 	bool
- 	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9 && !BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_10 && !BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_nios2
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a1ec9a091e..97d264afef 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2199,6 +2199,8 @@ F:	package/umtprd/
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
+ N:	Pedro Aguilar <paguilar@paguilar.org>
+ F:	package/libunistring/
++F:	package/guile/
++F:	package/bdwgc/
+ 
+ N:	Peter Korsgaard <peter@korsgaard.com>
+ F:	board/arrow/avenger96/
 -- 
 2.25.1
 
