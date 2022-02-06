@@ -1,77 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5593DC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38094C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 20:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0793E40283;
-	Sun,  6 Feb 2022 19:59:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BEBBB401C2;
+	Sun,  6 Feb 2022 20:05:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yS9GZSotxApX; Sun,  6 Feb 2022 19:59:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hki8LQHp43DQ; Sun,  6 Feb 2022 20:05:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FFC940276;
-	Sun,  6 Feb 2022 19:59:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0C6D401D6;
+	Sun,  6 Feb 2022 20:05:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 41C711BF325
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:59:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 566B11BF360
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 20:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E79F40276
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:59:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4442A402B3
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 20:05:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WxTHJ8wJ0W3i for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 19:59:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1056140275
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:59:00 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id u15so21388862wrt.3
- for <buildroot@buildroot.org>; Sun, 06 Feb 2022 11:59:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1eWCNQQSuAupmZW8JLXa0uewie7os/RjCf/Bzq3jJqw=;
- b=eh5ZAQcpha9dZ6Kx4cRN6AnKhU7TQKF8rHcRuZNFPm0n7FvkG/kgbA93zO9C1QIEbu
- ORHyn0coj4IRz8a4btMWGqodL3KtTNb0zf3M2CAtZxEPWt4GVsBDotkgNtf8+uPbnOts
- KT8C2xul0XXsm8T/w2IBgtlxbcSgjpwlSXZKKR2y/93xWQ6EMIseWK4ym+cmCzt+2SJ7
- iVFi2o8yAQUbntoY9cjFFLra7jiBvppsts5uJcoICHNNjSpe4+LlJaBZ6nUTaLBO8m+l
- zQLOVLYZowgWzHYHdoSGaos9DsxenzKWiVKmRBnSPOEeRa3GVaWvKE6qzBA57uzLhAf6
- Oz8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1eWCNQQSuAupmZW8JLXa0uewie7os/RjCf/Bzq3jJqw=;
- b=Li3GKq9xcSlvUNiAWsBzIxwjMgVZ4xXVhYS6d7X2knilFl1z/0N0EQLGXHI1K9Gjp+
- pMAfINla2lCYtQKzpmMCTcLpdp5xV6JgevkmoJ8PLl4TUTEEoJOT8WW6lLjS//3LdScQ
- Qqr9TFvyIdpwEqOqrL89M83G1Ddk+CvdaW9nar0e2phABBIcUz8tbD4hAxeea0KuwoCb
- A68imwgYnwXzjl3+/mKjkfuvR/oqjyS7cdyD20OYUpwldTunkNiiK1ZBD1yu9dbY4fv/
- 8mW7lNN1mUNCvBnqx46e6/qpNjG2dlQ4aP6aZHkHmoEn39XqDY97CWozNubO1vo2vrF2
- lsww==
-X-Gm-Message-State: AOAM531snF1TADSgOpyaK+uAjmM4XMC8mqmkPpxzz9CWtg+yPJFb8uaG
- EO2LFoSXtobhkgGErzPZFouGb3ja5G4=
-X-Google-Smtp-Source: ABdhPJxtzYWzz5DWAA3LRBfEX4BOy3RZa+ME2hQkZGJzwJV4eh9bgw6Fm6AjjTVH7D4qe5dCyQcXgA==
-X-Received: by 2002:a5d:644c:: with SMTP id d12mr7253497wrw.631.1644177538894; 
- Sun, 06 Feb 2022 11:58:58 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id y6sm7758267wrl.46.2022.02.06.11.58.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Feb 2022 11:58:58 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id BzI7oOClqWQP for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 20:05:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A8714027D
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 20:05:37 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id GnmvnnlBAkz4hGnmxnXO6s; Sun, 06 Feb 2022 21:05:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644177935; bh=Uyf4YP3urYPIWUKu0PQxb4rZtwhvFZ34ZEojQsm5Y+M=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=ABIHo+sbsYRXO9nTFAnHFIyhT1e5uCD+LzdrHN2L8rgZcDQY0v8xRIBKbUJkaIW47
+ QfFfuoh54iRuhgSiRl4V+XWti8mNTdO8Szo4OsH3FomPAtRDZLjYpVU6Ehptwt2F/F
+ EYqBLrtON2uwvKFlZZcwU4jmLm1iSArIpdmp0ZsqbKh2XUnWNJrrSVzNkBVJ5ewLfa
+ vXYPkQU+4enWWMKwu4/Vfa+Rxj+TPWH5hdUXpI73VQlziHRZ2TxJsB5+DQV6050xU4
+ AZfEDBZJ7WxEEUIk9+P4oC4dVwF5Ki/HugbRFdyz6xoyVhgy7i1lqLZKj2dW/axxPg
+ M/5xkOvU8EeEw==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 20:56:43 +0100
-Message-Id: <20220206195643.2522277-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun,  6 Feb 2022 21:05:17 +0100
+Message-Id: <20220206200532.2758493-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
+References: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/lua-cffi: fix spaces
+X-CMAE-Envelope: MS4wfNp+MXm4w6Kaqg7fRKrtNjU/C/vhndri20i347aj3/LOo6O7bOGKPCYzWMHdygI92/MILhmW7buwfCZ7hGrczobVkBeg0LfY8nPeitydCdIhZJOUDlAv
+ 9Xvd3s8Db8N2V8BHlvm0U93pq7Y437gTcl8Usv0FKMKYC3r8KIwdERm7MPVZzP6RlAOM+/Lv1wSFPwD15KDY2F05WAD/owC9jadgIF9cohyXWJHZzPOanQtV
+ B3bWj0T5HJH12vu8uglP6JAJ0E1HoVXeA8KDmriYepqBjZA2lNzhD07BBOwUPtRn32/vCWGpekbLKRSFwkThFxYY2R4rCC/+iivKJNM29GIFz+HVSbnz9cWR
+ fa6Kb5u3L35PtNTBOjWXTHX6tHCLS+9JLB23wTDdP1mlEIv+ndGNv+AdxK23tLGT67CbzCfWVBAfxoUFnNAhJEjyM5dpZJn1FBJiIup2gcVw+Bfw25hXXtzd
+ KUILvp0UBpk/JS0TMLH0vyL5OIfnhDh+pvi1AJ2bIjAmlxXY1Ba2WZYX42SYILEu2UEwF7wWVaL+YUN/BzF+8ssLM1HY5uGynMWO+iBPU1Hh4YILlpdbGfaN
+ iJQ7dkQzBEIhKE36WSEwVQSH
+Subject: [Buildroot] [PATCH 01/16] board/aarch64-efi/genimage-efi: convert
+ partition-type-uuid to single letter notation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,49 +72,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Alistair Francis <alistair@alistair23.me>,
+ Suniel Mahesh <sunil@amarulasolutions.com>,
+ Gerome Burlats <gerome.burlats@smile.fr>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 13114d0f9352531e5d7ebed45cd3f679407c61d9 forgot to add spaces
-before and after '=' and added a spurious space in Config.in
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/lua-cffi/Config.in   | 2 +-
- package/lua-cffi/lua-cffi.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/aarch64-efi/genimage-efi.cfg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-cffi/Config.in b/package/lua-cffi/Config.in
-index 64a36e1de4..f4a760ce0d 100644
---- a/package/lua-cffi/Config.in
-+++ b/package/lua-cffi/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LUA_CFFI
- 	bool "lua-cffi"
- 	depends on !BR2_PACKAGE_LUAJIT
--	depends on BR2_TOOLCHAIN_HAS_THREADS  # libffi
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBFFI
-diff --git a/package/lua-cffi/lua-cffi.mk b/package/lua-cffi/lua-cffi.mk
-index 07d84ad5fa..964f49f030 100644
---- a/package/lua-cffi/lua-cffi.mk
-+++ b/package/lua-cffi/lua-cffi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
+index 87e85816bc..7fbe13d390 100644
+--- a/board/aarch64-efi/genimage-efi.cfg
++++ b/board/aarch64-efi/genimage-efi.cfg
+@@ -18,13 +18,13 @@ image disk.img {
  
--LUA_CFFI_VERSION=0.2.1
-+LUA_CFFI_VERSION = 0.2.1
- LUA_CFFI_SITE = $(call github,q66,cffi-lua,v$(LUA_CFFI_VERSION))
- LUA_CFFI_LICENSE = MIT
- LUA_CFFI_LICENSE_FILES = COPYING.md
+ 	partition boot {
+ 		image = "efi-part.vfat"
+-		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++		partition-type-uuid = U
+ 		offset = 32K
+ 		bootable = true
+ 	}
+ 
+ 	partition root {
+-		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
++		partition-type-uuid = L
+ 		image = "rootfs.ext2"
+ 	}
+ }
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
