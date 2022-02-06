@@ -1,52 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D6AAC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 08:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2448EC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 08:54:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 163BE40353;
-	Sun,  6 Feb 2022 08:48:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 901FB4019D;
+	Sun,  6 Feb 2022 08:54:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XZYFEHqSbE6r; Sun,  6 Feb 2022 08:48:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jWvBS87UuIjV; Sun,  6 Feb 2022 08:54:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AEA54017D;
-	Sun,  6 Feb 2022 08:48:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 77B6E1BF3DD
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 08:48:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 841664015A;
+	Sun,  6 Feb 2022 08:54:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2763E1BF3DD
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 08:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6357F817F2
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 08:48:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 148C74015A
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 08:54:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y3kYK1QsqN9Z for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 08:48:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VyYjVehIPfDz for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 08:54:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63DCB817D3
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 08:48:19 +0000 (UTC)
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC2B8400A8
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 08:54:46 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id GdDVnII1xX0z7GdDVnK7cv; Sun, 06 Feb 2022 09:48:18 +0100
+ id GdJknIM6uX0z7GdJlnK9D3; Sun, 06 Feb 2022 09:54:45 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644137298; bh=VDTtBrYj36OjmsvGqMAYIczVU16p/RRsfJhgOXDSB0U=;
+ t=1644137685; bh=zphmUenbA1piFxniK5g1XClzVszNfQwuS4GRXJyXNBg=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=BjxXi6GFTpTXoX2D/DgIRBMov6oOwTaMf/+gkgOK6IM2V8gQDF7AUix56TaH/JHnZ
- pvvt/epYpULnIet8HThu4+4fyFYqyaNlaEvh87GSStiVDoT0M72aJRk52GI+UCowKQ
- 74eGDJZXTjKrdo/hlKNOAwq6mgKnYoNV3NOEmI1rxhM/S+zOcOr0IbuTWL3iq3q/8C
- 8dN/oqlyq3dWa6f9Oa12WOBtcmHrLC4MOuuJps2Lk6tEMPIaeWJzypALxjjjKZcVsc
- 02g4GlGLLqTJq7dnTaXAu66z54I7ubPE4lEDGv4CRLPBej20j90r1LlRF/8iNE4RpB
- JneWS9UMkc1oA==
-Message-ID: <15b995c3-8d86-55f5-2b0e-d17e3f1d6978@benettiengineering.com>
-Date: Sun, 6 Feb 2022 09:48:17 +0100
+ b=BJj/fUspTjuBtuffgyeOp8LYfrw38bfxfebrVH7SN60Bw903t0nJwAcSSDVPt4XaA
+ VT6F6IG2m0kS09hQAc5wdlq2I0my2m/4IqyxTWaBTVm/v5zetTnA6QknPvwCIoA/1O
+ 3j509l1F12YjYWuDkRzE8gvmG0PnWAy4e9Wv9hWD3XOYjo4ZgqS54QkWRJsTHPRLKk
+ aK6Btsu7dAB/kD/HRYT/lOgBo5qzi9yukoiZXtWGgVmyLaYv1NhzSZYUxoZW5BNwLV
+ GWWWZm+E+vziMIA1BFFAaWj/8kd+puGIgzOevQTot9npuEm5Jm+ie7l8VKTHlrGIPl
+ eULtztK9erXDA==
+Message-ID: <3942047e-e69e-d079-3ca5-55409fdda839@benettiengineering.com>
+Date: Sun, 6 Feb 2022 09:54:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -55,9 +53,9 @@ To: Pedro Aguilar <paguilar@paguilar.org>, buildroot@buildroot.org
 References: <20220206084334.1900252-1-paguilar@paguilar.org>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 In-Reply-To: <20220206084334.1900252-1-paguilar@paguilar.org>
-X-CMAE-Envelope: MS4wfOqRr0mZrSuBw9BbO7nVmea+3VeOrxWuNnWZ0Y+VRwjST2uWpwierf7c69iRgcSwgKp1X86nFGoUcyZ21Ixt7DSAdkGoSPDPcLdhLuK7hEZXTMe4K9EC
- jptDoIsfn4dS+m0ymwj0VywZt1+KBgchqKTLZHCs4DAvMlB91Ny8G8Eiz1A0e+IV+8rlIa57cxbdMEDOV2G3UX8ivNmAuhhHMW3PEmw52Kj2/TNj85R9GN2V
- A3Q/LskDNXD1M2/iaYeIJg==
+X-CMAE-Envelope: MS4wfOdROpXiu/dj+wMw/21gENIoo6Py1RSWYfcEAiVCbRmegkjjintsjl25gd5bdnDT+QcVhMdCtVgSf/6bV9rqjg7CjipmxGTaTH6ufkbkPN6392UlWFsL
+ WzkjL4bLC2aNhwZwkQhEKENOeTv7R1EaNCmWG9VTXFYIlhutuiupwZv/DLpRZPu9LyIhE4yM52AdRk2YDK19narrYIFuWSky/UagdJyZv7FAHe9osUs5OL10
+ ln1yyBXzthaIrOuXPeX+Xg==
 Subject: Re: [Buildroot] [PATCH v1 1/1] package/guile: Guile 3.0.7 requires
  libiconv.
 X-BeenThere: buildroot@buildroot.org
@@ -76,23 +74,11 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Pedro,
+Too fast...
 
 On 06/02/22 09:43, Pedro Aguilar wrote:
 > This fixes the error reported in the daily results.
-
-Please add to commit log:
-```
-Fixes:
-http://autobuild.buildroot.net/results/0ad/0add99a8cbb143d912d48ef4670e09a6710bb8b1/
-```
-
-Thank you
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
+> 
 > Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 > ---
 >   package/guile/Config.in | 1 +
@@ -121,6 +107,16 @@ Benetti Engineering sas
 >   
 > -GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc host-pkgconf
 > +GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc host-pkgconf libiconv
+
+Here ^^^ please keep alphabetical order, so libiconv goes before 
+libunistring and doing so can you please move host-pkgconf after host-guile?
+
+Thank you!
+
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
 >   HOST_GUILE_DEPENDENCIES = host-libunistring host-libffi host-gmp host-bdwgc host-flex host-pkgconf host-gettext
 >   
 >   # The HAVE_GC* CFLAGS specify that we will use internal callbacks
