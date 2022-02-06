@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57FA6C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EB45C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDCAA401C7;
-	Sun,  6 Feb 2022 15:31:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 481A640201;
+	Sun,  6 Feb 2022 15:31:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MvBJNsLbeFH1; Sun,  6 Feb 2022 15:31:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M9qU7BIA9x5J; Sun,  6 Feb 2022 15:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B33440160;
-	Sun,  6 Feb 2022 15:31:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 656991BF325
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:30:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50895400C1;
+	Sun,  6 Feb 2022 15:31:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C75FF1BF325
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:31:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5379D4013D
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:30:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4AE8400C1
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:31:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XJvR1ixSRifA for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 15:30:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8BDF40160
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:30:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0652C829FB; Sun,  6 Feb 2022 15:23:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X7pIHDo2gmez for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 15:31:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3AF72400A6
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:31:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 67CA3C0007;
+ Sun,  6 Feb 2022 15:31:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nGjVS-0002zd-Mh; Sun, 06 Feb 2022 16:31:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 16:30:47 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: afcbd7abc4354d9aa3e312a723fc4374bbce919b
-X-Git-Newrev: e46015c705e18097827e59cfc6fdee8e3dfccd92
-X-Patchwork-Hint: ignore
-Message-Id: <20220206152340.0652C829FB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/log4cxx: change
- download URL to https
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20220128124538.31789-1-ps.report@gmx.net>
+Date: Sun, 06 Feb 2022 16:31:14 +0100
+In-Reply-To: <20220128124538.31789-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 28 Jan 2022 13:45:36 +0100")
+Message-ID: <87mtj4ui4d.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v1 1/3] package/log4cxx: change download URL
+ to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,38 +60,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e46015c705e18097827e59cfc6fdee8e3dfccd92
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-- change download URL to https
+ > - change download URL to https
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0876da5ea1a9bd74737a4ccef2995f124368bb86)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/log4cxx/log4cxx.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2021.02.x and 2021.11.x, thanks.
 
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index 0ddea9466a..2bf70a99d2 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LOG4CXX_VERSION = 0.11.0
--LOG4CXX_SITE = http://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
-+LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
- LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
- LOG4CXX_INSTALL_STAGING = YES
- LOG4CXX_LICENSE = Apache-2.0
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
