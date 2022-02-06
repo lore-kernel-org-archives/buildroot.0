@@ -4,88 +4,175 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3C71C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABA31C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 19:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D5C64028E;
-	Sun,  6 Feb 2022 19:31:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C0EA402B3;
+	Sun,  6 Feb 2022 19:40:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BP-1jPGmszB8; Sun,  6 Feb 2022 19:31:37 +0000 (UTC)
+	with ESMTP id c0zyjfJboNxP; Sun,  6 Feb 2022 19:40:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3AB4402AC;
-	Sun,  6 Feb 2022 19:31:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 011E01BF384
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:31:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56B3F402AC;
+	Sun,  6 Feb 2022 19:40:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A40F21BF384
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4626817D3
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:31:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A076F402AC
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 19:40:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uIWsR6G5Bkkn for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 19:31:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D479817BD
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:31:33 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id s13so36043382ejy.3
- for <buildroot@buildroot.org>; Sun, 06 Feb 2022 11:31:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=tRJB8hfpPtteywE06kuFBRygr1irmX7nVXOGlidubl8=;
- b=aREEU3H0axunAL3PkeBMgtNinzOcofY1Jv2eLjOTJGOkdy7v9hm2OQKTZmAuJ/Fwmc
- zb0eTuILKzRAaD3UjKi+CbwNtudUNGXlOQ40UuBz+5gGXVx+twsG03MxyIvKVhQ165em
- KMtWaqAkfoLjjxnQ8/ZokxHXuQcTgsnaJbWPpGzLCt5GKCDgzp1bvcjUaa5kLr76bjpG
- 1aKrx6Zrx8O9qo0Mnjlhd3cYcH9Y5alrMYUw/+9qXAaojld2hVruBxcppRaPZUXhTIOm
- ybODnqcFZrTfmKbNfTDezAD8IYgQUec5I7Tma3XTd1sY2EOpd7LMYhEOt3TPBkJUR8fh
- pd5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=tRJB8hfpPtteywE06kuFBRygr1irmX7nVXOGlidubl8=;
- b=0Fwr0RZ8twFc+d7LIrnQRvWcGFQ5oxXAfFSAe093WtslbrOKAPJCXUQU+p4f9k+2d5
- vZOrjGfgzWRvd99I1ByocAhBI4cHJqc4QuUDIjsv6xjrZByA9KNXYGELwrMt0DJkkKOH
- +a2MxaUtGl7NY+qmwNiJGnwQznVL5r1zL6T7i2UDCQ/oKOCswM8IZL5YOe9Kmg2kDcgj
- cj/ILi+b/w6qheiiRUp2+WDXRIh/05FtC95fRqtil8OS9VtKB9gtMmAJuOplWMKUOvet
- GtDH46svRure8fBUzUqOtSyqbLOwBz7EuoaxiQPUHtbEqivm9DSKGI/TtnhROik5Igvq
- Fg8A==
-X-Gm-Message-State: AOAM530znC4QsZmFNPabjdL8vFWG0JaJtIibvKsH8o8oibU/8J+aKCN6
- OGcQysSxm8/cl/O8YCF4rtYLWQ==
-X-Google-Smtp-Source: ABdhPJzZ8OzDNrs6mz8uh7f0QeQ3+vQgJrzw+ABwbsNuIlw/CEn9wSBYvSCwngt0ZI07CFTEMAAoQg==
-X-Received: by 2002:a17:906:8055:: with SMTP id
- x21mr6276060ejw.402.1644175891286; 
- Sun, 06 Feb 2022 11:31:31 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id kw5sm2935290ejc.140.2022.02.06.11.31.30
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 06 Feb 2022 11:31:30 -0800 (PST)
-Message-ID: <db3a31d6-f4c4-666a-b026-c81a6037bc3f@mind.be>
-Date: Sun, 6 Feb 2022 20:31:29 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VcwGMfAOv8PI for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 19:40:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.153.233])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02A284028E
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 19:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1644176402; x=1675712402;
+ h=from:to:cc:subject:date:message-id:references:
+ in-reply-to:content-id:content-transfer-encoding: mime-version;
+ bh=kM4wf5vXDKvSO9inq0grhpbP/AWzek7fBZ1AmZ+SBFg=;
+ b=hNh4g40Rb8a8pVsJBMaLPW7yR01+Oc1B2IKtkD4is5Td2VwrJ9Ek9vGs
+ cJqliYFDwXO6o5bfDmVPmRoy/Yg9eabmXYPpiKWnHtcDjIdhSDTifqYLM
+ DIxMSkC4X+kZVPyfD2dmP8tAvZwSj1PxYiNxEbRSTbJz6dW1CtbgDChxT
+ j9wm4r2cxEQNmEzLD8UPN/1wxVWujzViEQruhevvnJ1gdQ9vWtzeS35PN
+ 6LsEV/5yh2Rw0hlQLdUY8c3RWfjIRVBw3gPPVXkomET1RwM7/aClZwbep
+ wp8qORAmk8QHu+cicmdvua8PPE+wZng+6bE3ZaIh2oV1RaATbHrvsT6y3 Q==;
+IronPort-SDR: BhlUH+knVf+COuMXP8GYFBqo7Fd1XljW9OMQy6lNNOICVatBKnVIDat3OuTeQsV+xahM8hBY+X
+ JI3JhQiaSw14hALIZLY1Ulx/O81hajVIP1kzQWKIsUDQMPY+D4UJb43TLfxDkrZEt51GrvTcIU
+ fUIo7+UgBV5RDxgziPToP8LmtrsD66yxCMp1FoutvMW45jj+ugdnsFYBrja4JwBAiqyymROPQv
+ 4Gh+oqJJim5rU8nkDLgFDbYpzmkVGcRhqf9sg7TWZ5gsXrDABcAsjafNEPWBTNJaAm8EDoQd+z
+ ZxbZ+XSsymlkPEHL4qtVmxZU
+X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; d="scan'208";a="152101187"
+Received: from smtpout.microchip.com (HELO email.microchip.com)
+ ([198.175.253.82])
+ by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 06 Feb 2022 12:40:01 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 6 Feb 2022 12:39:59 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, 
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Sun, 6 Feb 2022 12:39:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PZLHUrCAAZHCODk3fGbkeukv3gjKzmxuRZvfEhzedoO0quXcs54+86NEl9VITB9EFGNGjhetNrJCmlkAXmm0sR70ee5PhpTL3HWG/V/Jv4+zVFkJ/0QJ8s37NeoyhKkd4nftaN30ym6W4tTECYiSDtDv8X519vvBNcs33hsSTDJ5uYd5D0bmpKCom4Z/kXKVHm3b/7cMBU/azWZebHMiuBCB5y24DU8H/NOFI1iJLx7t2rLzJ8uqYf1su4Ds5BBRD9LIcgiuQ6rec7wuz5SdZ6pyF+RF+JNWCy3r4zMt0KhvIf23t0J7Ek3ZD5UZiTbrAo3vc2URQF6RGNokOxa+Vg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kM4wf5vXDKvSO9inq0grhpbP/AWzek7fBZ1AmZ+SBFg=;
+ b=KiAnCiUCewhZxXziQiBkucPTw4dAxUIhcugIc+gFOLXImHiFmxhoyye9+Jg+tsjgYVsSvvUAq2pP3CW7bXUPeE4hbpWgWHdhvH04f6PobTIPrJ7p6iTVCTHdgz3U6gZs1FTU3txOQAw6/M6GLF0xLlynyaKqo9/veiDsD0t7owNG1+NVzQ2db8Flvv/ZrsDfkKFi+yMsXve45sYW8dOZ6YslCHEpcFAsaWUZimYlaS5LA1fCWQSPccSnAQbewQmThE2IFqyLnimjXowiBNX5L6za1SnaEC9k77kq2ezolCsCeFsU4ElbhfUMl8Ucvqmy8z+kHLjvKp96Chx2VseZcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kM4wf5vXDKvSO9inq0grhpbP/AWzek7fBZ1AmZ+SBFg=;
+ b=XLV30yXoZMumlXG6nE46Uy5LpnFO0ix0adS3XDpsuqORaEkwzc3nqYHXHQa40ztN3+lkE2Al2QakcSLIitiwD/kb68+V3F9/5XI6NK1SXl10nvOLQadcICHADjNkgLGAtRtMDlY7MCdbNIe3d099Ck/Bqf0YnyjJArpGlDe5MkM=
+Received: from BL1PR11MB5384.namprd11.prod.outlook.com (2603:10b6:208:311::14)
+ by BL0PR11MB3282.namprd11.prod.outlook.com (2603:10b6:208:6a::32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Sun, 6 Feb
+ 2022 19:39:48 +0000
+Received: from BL1PR11MB5384.namprd11.prod.outlook.com
+ ([fe80::11a5:42e0:3f3d:fcdc]) by BL1PR11MB5384.namprd11.prod.outlook.com
+ ([fe80::11a5:42e0:3f3d:fcdc%6]) with mapi id 15.20.4951.018; Sun, 6 Feb 2022
+ 19:39:48 +0000
+To: <giulio.benetti@benettiengineering.com>, <thomas.petazzoni@bootlin.com>
+Thread-Topic: [PATCH v3 1/2] configs/microchip_sama7g5ek_mmc_defconfig: set
+ custom linux version to 5.15.21 and add host openssl for linux
+Thread-Index: AQHYG0xlPHryZVg9uEi3K64w4b9GS6yGcEQAgAAkAoCAAFe3gA==
+Date: Sun, 6 Feb 2022 19:39:48 +0000
+Message-ID: <0f8fcb54-806c-fb0b-27ea-38eb938a725f@microchip.com>
+References: <20220206115156.6042cc1b@windsurf>
+ <20220206112620.1637342-1-giulio.benetti@benettiengineering.com>
+ <20220206112620.1637342-2-giulio.benetti@benettiengineering.com>
+ <20220206131656.16e2c8a6@windsurf>
+ <febd6a86-7b73-7263-ce66-2056fa102342@benettiengineering.com>
+In-Reply-To: <febd6a86-7b73-7263-ce66-2056fa102342@benettiengineering.com>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 24077c67-e2be-4201-c910-08d9e9a86f6a
+x-ms-traffictypediagnostic: BL0PR11MB3282:EE_
+x-microsoft-antispam-prvs: <BL0PR11MB328221E7B411AD2A538F7AC5E82B9@BL0PR11MB3282.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6+HJjIPzilYRyNjSejjPcn01YLrlQE3wYbZwdFgxN0nvsYBYhEHXwRbu8YuhV/uZDF7l/uvvE/Vqt3CA9MbjIkbTIlwHmeclPlDE1xJ9Kaynz5/BwFCmDWsMM4qj1JKVErbEyHtrFMc/KKUaT/bsZ45Arm2NLBkddkzmuqDShFmbFftlXXe9vA8AmlpPc0d3lD6CPkcgveR8p2M4ww8Z+8NsLqSy/3uVGlk7cnKaCYKgwkXQg03bbozSJulrKdv10Lii92yp3fPi/qia+Vpqc8ETF0pXWMwvH+4ufFVaTHwHSwX4bQUjIp2LaqPiB9VOamPzV5BhVmvs3iJYoyhnaD4ULsCGbAXGmAb3Xt80uNe2tWu/gg8Lne2+URSFlf+cVS6TT/I6+kIQLLw56z040KJqRaGmyMUOAkPtKS1VO8Ts2O3mwA39BWISzn6ELnrkaz7MHTmzFGViCNMGDR3WQeNsnWRDwztDeggE/kHxHJ5mBpRIrU0hlk7AUma80kwQc5zZRDiltO1jINHezno+6oa1i4TPjVTyFn26CxXM87Xdhifi0Q/iB2hONNskzACdpbv9w3PBcEv/a5jBpOb2c+w2CkdBgmDL7ATJXNra+eOA0oRxHbm7so10R9m4yiFoDOIwSwhbQTDlkGWBwvLwo66IJ0ym70mc0zhj3znXjzqHdfYXxe+XTNPyu/4SAWy3AH9dMjfjYbJ3PgQ/hif6kAwOw0SvXIiRI6LOuODDPOTRnMI6/Nn8bNQDDoQCo+jWeBZrTx+HannlcVxqnDLteHv1XV7b1vGqkB8TgLe0mL2bTWU4Kes3l5WVfAWCZbfghGFCRxDnS6lucV/af5L0NMAUB9zxckERNAq6LgfclWE=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BL1PR11MB5384.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(366004)(110136005)(6512007)(966005)(122000001)(54906003)(2906002)(83380400001)(8936002)(316002)(36756003)(6486002)(508600001)(38100700002)(31686004)(91956017)(66556008)(4326008)(66946007)(71200400001)(107886003)(66446008)(6506007)(76116006)(64756008)(8676002)(66476007)(26005)(53546011)(5660300002)(86362001)(186003)(31696002)(38070700005)(2616005)(43740500002)(45980500001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WW1PbzZPL2VhTVgvcFZRUW1LMkNOamNkV1hEb1diL0h5emZiR2JPS2hWWGh3?=
+ =?utf-8?B?TzN3bmJ3MEVnWjF4REhCU2pQZmNocHpCdGtPcHh1SXI2NkRhamc5bDM5Q3JI?=
+ =?utf-8?B?NnlzV2pZaTN5aGltS0F1ZkVwQ1JNbFNYRnk2a1lCWlJtR3ZQZ3ZCSGZzNmlD?=
+ =?utf-8?B?bHpQbGdYUHFFMFJ4UEtMNUg5VEtsNzhDcWlqU2hwcUdaVEhXUlJFY2VOU0Nt?=
+ =?utf-8?B?QUFjaDF3ZjZlY3FGL2NMZGVNaXBjRTE4S3BVa1hrKytrS3FDZDRFY3N4U2ZU?=
+ =?utf-8?B?dkdmOTJLTk8xa25wc0RGamdMRm9NT0paR3g5Z0owSko0bHhJaFBTazVBRDJ0?=
+ =?utf-8?B?NTUwa0doMnFHNmdWWG92RmtSeUoyQlIwUHdqS09OWjJCMTF2SnROYURyZFMx?=
+ =?utf-8?B?NGNoMWpzdCtoM1BTOUlZTExtZThLNmRGUU1xRkVncjF2WTNqM1l6ZFBhWmFn?=
+ =?utf-8?B?eExTeDhRUzVEa1RyOFhLeEt1VEhpUkVRWUtDbjFSNjFyTitDWFY5cC9mZytC?=
+ =?utf-8?B?N1hrMU1VZFhRUlVNNytEN05TZTZvZDY2ZCtxYVB5OXozaFFDYUxrQ3hJbXVT?=
+ =?utf-8?B?enk4U3FyUGFVRTdYTW93bnpLSkpGZ0FkdjRsdnRPRVRFQldZM2dpcWdySW9y?=
+ =?utf-8?B?a2xZYVpxMjhMWXFlaWsvVTZ5VEo3bFBLRGdadlpRaERFZVQ3WUJPYkRBamsw?=
+ =?utf-8?B?dnVPV1ZIank2MCt4QTI0aVk3N0Z0UDhHZEd0TjA4WExMOTFreDhMclF5VHpa?=
+ =?utf-8?B?aEkrTElRNmtFalp1aGdva0dXWW1GTUN1Wld6ZEhKaStDU2dyeHo2NkFMbjBq?=
+ =?utf-8?B?TEJrZnRMbVcwNnRENXcza1MvcHJ2MmJORGZRVXRmU21BSjM5cTV2NExud01L?=
+ =?utf-8?B?akNIeVFRTnVlblgxMWswZmtzcEExL1RQMlFyVDBtS1ZvMEFyUUNoVHArdDV0?=
+ =?utf-8?B?T2NVcnNheERkcmJiSVJLZ2d4bW1TZjA4N2lHWDN3RmpCT1A4L3J3TVloY2pD?=
+ =?utf-8?B?T2NNK1BhTHNFN2lyNDZyb2pSeGRLYldwcjRxdU9OQkhoL3ZDMU1VK2F1T1hm?=
+ =?utf-8?B?cWE2NlFCWXpNMVpsTEgyWXlFbU1RRVRpYmRTeXo0T2dVdnVCbEJUVWRMYklC?=
+ =?utf-8?B?WFJOb2ZoK3IrMWRXOTZheE9hZEJzK0pSazN1NFFGSXJrbzR3bXc1SkhwRWVW?=
+ =?utf-8?B?cVdYeFpOTjJUK1NTaFJKaVprWUVubEJpOCtrdFBuR2I1NmtRZ25lQTlvcWl4?=
+ =?utf-8?B?eEQvRkk3MGhuM3ozMDlSWDBnL0JQSTdnL0ZJYll0THdXSzVUcFJOb0R6L21F?=
+ =?utf-8?B?SDErenIrRjhBcjF6eC80VWo4bEx0VmZOYm9ZbjFUYjRHWGpMU1pxN0JVeXFO?=
+ =?utf-8?B?ekZyWCtjd3BVZnBwblJiajBmbEF6QWR5dDBaYVFEdWo3cU80T3hobFFrWFph?=
+ =?utf-8?B?bG5ibDlYVkxpYjNLTmVLUHVVbVlvK1JYd1pPb0hzaGgzeE42Q3ppbmgwTXJT?=
+ =?utf-8?B?SzBUZ1lNRkRGTmhIV1FDaXo3Q0N4bzBoZTltV2hvbTdWVmxBakcwNmRsK0ZX?=
+ =?utf-8?B?QWpSWk9LREJkRXVtNHZTcEVnMlpQSGNwUzE5eERUWGJVZEZwdUJ5eHFzbGx2?=
+ =?utf-8?B?VERHY0JubnR6SjBhOFEvQTlFblNoMWlpTmpDM0dUSXg5ODVZUDhLb0JiSUFU?=
+ =?utf-8?B?MFhyT1hydGg1WUEyc3VWR1RSdDJRTFFhRFZIcTVOdG5naXBmMytOWXlCYkx0?=
+ =?utf-8?B?cUwwcy9KWUJ3c2dHOGFPVHdaR05GcG5LcFZwWHliK0RkRnRWRUV0aER6QnBw?=
+ =?utf-8?B?bEtiRERqTXNXMDFFZnlvdlduQkN1amEyTDB4UjlNZ1A4LzhYeEV4NEd4LzJW?=
+ =?utf-8?B?K1g2QXRvODlQTHdoM3VkU1pic0VveFdtZjJxRDU4L3BKSzMzZ1NtU0R6K3B5?=
+ =?utf-8?B?MlZ5UmxraHVUeE5aMWo2L3FTRFdLOFFWNXhuU21zdFZ6alEvY3RzSVV3VFVK?=
+ =?utf-8?B?eGVLQXBHdVJwbC92KzdyOXZ5ZmMzODR3cEdOYkc0dktDdDhCTWZoM1ZwR3Q1?=
+ =?utf-8?B?MGhNYlZIM1F1K1JJa1BiaHVMSktFSnpkeDdPV3hkVlJYUnJQeHJZUU1CWE9o?=
+ =?utf-8?B?em0xMVMwa1g3aGRzMHNQeC95VG5tOVpvanVpM0RXWWU1b1BWZXMyTCtIOERj?=
+ =?utf-8?B?UW1ZZlg0NHdqMWxkVGFKa2hkTjk0aXg0TkkybUF5UmRkRzRTMjZEcUFmc3pZ?=
+ =?utf-8?B?aWZtWjJzaFhkM1NnN0g4WC9WV0FBPT0=?=
+Content-ID: <2E60B9911080A04E82CE774503A0709B@namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <patrickdepinguin@gmail.com>
-References: <20210525182044.13785-1-patrickdepinguin@gmail.com>
- <20220112115100.4bab9b25@windsurf>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220112115100.4bab9b25@windsurf>
-Subject: Re: [Buildroot] [PATCHv2] package/grpc: restrict host-grpc to the
- absolute minimum
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5384.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24077c67-e2be-4201-c910-08d9e9a86f6a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2022 19:39:48.1745 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3a89cyoj7uwXcPPXmSTvgpJWxAgVfsMFMaZXhyUvQQEhpMu+oSIwNI9SC6JYBGHUdHThvo1q/N8K5VE3tUsCNyOhE3ClOgJHX7rNv77g25I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3282
+Subject: Re: [Buildroot] [PATCH v3 1/2]
+ configs/microchip_sama7g5ek_mmc_defconfig: set custom linux version to
+ 5.15.21 and add host openssl for linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,402 +184,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Robert Rose <robertroyrose@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: "Eugen.Hristev--- via buildroot" <buildroot@buildroot.org>
+Reply-To: Eugen.Hristev@microchip.com
+Cc: Ludovic.Desroches@microchip.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 12/01/2022 11:51, Thomas Petazzoni wrote:
-> Hello Thomas,
-> 
-> +Yann, Arnout, Peter, to raise their attention on this patch.
-> 
-> On Tue, 25 May 2021 20:20:44 +0200
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
-> 
->> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>
->> Currently, grpc depends on the full host-grpc, which in turn depends on host
->> versions of many other libraries. One of these, host-libabseil-cpp, also
->> requires a host gcc 4.9 or larger, a dependency which is not met on CentOS
->> 7.
->> But in fact, the target grpc only needs the 'grpc_cpp_plugin' binary from
->> host-grpc. And that binary does not depend on host-libabseil-cpp or other
->> libraries, only on host-protobuf.
->>
->> Given the above, simplify the grpc/host-grpc situation.
->> - Add a patch to the (host-)grpc CMakeLists.txt file to add an option to
->>    only build grpc_cpp_plugin.
->> - Update grpc.mk and Config.in to remove the unnecessary dependencies, and
->>    change the host-grpc configure options to make cmake happy.
->>
->> The advantages of these changes are:
->> - making grpc available to older hosts with gcc < 4.8, like CentOS 7
->> - significantly reducing the build time of host-grpc and its dependencies
->>
->> The patch was proposed upstream but not accepted with below rationale.
->> Perhaps input from others can help in persuading upstream in a future
->> attempt.
->>
->>      'What you're doing sounds like quite a narrow use case. But we simply
->>      cannot provide a cmake option for every possible scenario in the world.
->>      Introducing a new cmake option isn't for free and requires careful
->>      design and maintenance.'
->>
->> Nevertheless, given the benefits in terms of build time and dependency
->> reduction, it makes sense to apply this patch in spite of the disadvantage
->> of a local non-upstreamed patch.
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> So I had a look at this, and indeed, upstream has not been very
-> supportive. The patch on CMakeLists.txt that you have is not too crazy,
-> but it would certainly be a bit annoying to maintain forever (even
-> though for some packages, like python3, we do have many more patches
-> than that).
-> 
-> I have thought of enabling the download of the git submodules for just
-> the host variant, and use the make target that builds just the native
-> tool that is needed. However, using the git submodules just for the
-> host variant doesn't work: the tarball has to be the same between host
-> and target. An option would be to have a separate package, for just the
-> host variant. A bit meh.
-> 
-> Perhaps we should just take your patch in fact? :-)
-
-  As promised: applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> 
-> Yann, Peter, Arnout, any opinion on this?
-> 
-> Best regards,
-> 
-> Thomas
-> 
->> ---
->>
->> v2: fix typo in Config.in comment (Baruch Siach)
->>
->>
->>   .../grpc/0004-host-grpc-only-cpp-plugin.patch | 223 ++++++++++++++++++
->>   package/grpc/Config.in                        |   6 +-
->>   package/grpc/grpc.mk                          |  27 ++-
->>   3 files changed, 244 insertions(+), 12 deletions(-)
->>   create mode 100644 package/grpc/0004-host-grpc-only-cpp-plugin.patch
->>
->> diff --git a/package/grpc/0004-host-grpc-only-cpp-plugin.patch b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
->> new file mode 100644
->> index 0000000000..43fad7e3d6
->> --- /dev/null
->> +++ b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
->> @@ -0,0 +1,223 @@
->> +From a1922eadfc87da3dd221ff631f94ddd4a8ee7049 Mon Sep 17 00:00:00 2001
->> +From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->> +Date: Tue, 25 May 2021 14:55:23 +0200
->> +Subject: [PATCH] Add option to restrict building of (host-)grpc to
->> + grpc_cpp_plugin only.
->> +
->> +This avoids unnecessary dependencies on big packages like libabseil-cpp and
->> +others.
->> +
->> +Upstream-status: not accepted (see https://github.com/grpc/grpc/issues/25322)
->> +
->> +Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->> +---
->> + CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
->> + 1 file changed, 35 insertions(+), 8 deletions(-)
->> +
->> +diff --git a/CMakeLists.txt b/CMakeLists.txt
->> +index e8934a3e03..c2df332cc6 100644
->> +--- a/CMakeLists.txt
->> ++++ b/CMakeLists.txt
->> +@@ -48,12 +48,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
->> + option(gRPC_BUILD_CODEGEN "Build codegen" ON)
->> + option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
->> + option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
->> ++option(gRPC_BUILD_PLUGIN_SUPPORT_ONLY "Build plugin support only" OFF)
->> +
->> + set(gRPC_INSTALL_default ON)
->> + if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
->> +   # Disable gRPC_INSTALL by default if building as a submodule
->> +   set(gRPC_INSTALL_default OFF)
->> + endif()
->> ++if(gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++  set(gRPC_INSTALL_default OFF)
->> ++endif()
->> + set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
->> +     "Generate installation target")
->> +
->> +@@ -367,6 +371,8 @@ add_custom_target(plugins
->> +   DEPENDS ${_gRPC_PLUGIN_LIST}
->> + )
->> +
->> ++if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++
->> + add_custom_target(tools_c
->> +   DEPENDS
->> +   check_epollexclusive
->> +@@ -382,6 +388,8 @@ add_custom_target(tools_cxx
->> + add_custom_target(tools
->> +   DEPENDS tools_c tools_cxx)
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> ++
->> + protobuf_generate_grpc_cpp(
->> +   src/proto/grpc/channelz/channelz.proto
->> + )
->> +@@ -1000,6 +1008,7 @@ if(gRPC_BUILD_TESTS)
->> +     DEPENDS buildtests_c buildtests_cxx)
->> + endif()
->> +
->> ++if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> +
->> + add_library(address_sorting
->> +   third_party/address_sorting/address_sorting.c
->> +@@ -1051,6 +1060,8 @@ if(gRPC_INSTALL)
->> +   )
->> + endif()
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> ++
->> + if(gRPC_BUILD_TESTS)
->> +
->> + add_library(end2end_nosec_tests
->> +@@ -1313,6 +1324,8 @@ target_link_libraries(end2end_tests
->> +
->> + endif()
->> +
->> ++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++
->> + add_library(gpr
->> +   src/core/lib/gpr/alloc.cc
->> +   src/core/lib/gpr/atm.cc
->> +@@ -2106,6 +2119,8 @@ if(gRPC_INSTALL)
->> +   )
->> + endif()
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> ++
->> + if(gRPC_BUILD_CSHARP_EXT)
->> +
->> + add_library(grpc_csharp_ext SHARED
->> +@@ -2288,6 +2303,8 @@ endif()
->> +
->> + endif()
->> +
->> ++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++
->> + add_library(grpc_unsecure
->> +   src/core/ext/filters/census/grpc_context.cc
->> +   src/core/ext/filters/client_channel/backend_metric.cc
->> +@@ -2650,6 +2667,8 @@ if(gRPC_INSTALL)
->> +   )
->> + endif()
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> ++
->> + if(gRPC_BUILD_TESTS)
->> +
->> + if(gRPC_BUILD_CODEGEN)
->> +@@ -2717,6 +2736,8 @@ endif()
->> +
->> + endif()
->> +
->> ++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++
->> + add_library(grpc++
->> +   src/cpp/client/channel_cc.cc
->> +   src/cpp/client/client_callback.cc
->> +@@ -3134,6 +3155,7 @@ if(gRPC_INSTALL)
->> +   )
->> + endif()
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> +
->> + if(gRPC_BUILD_CODEGEN)
->> + add_library(grpc++_reflection
->> +@@ -3374,6 +3396,8 @@ target_link_libraries(grpc++_test_util
->> +
->> + endif()
->> +
->> ++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++
->> + add_library(grpc++_unsecure
->> +   src/cpp/client/channel_cc.cc
->> +   src/cpp/client/client_callback.cc
->> +@@ -3656,6 +3680,7 @@ if(gRPC_INSTALL)
->> +   )
->> + endif()
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> +
->> + add_library(grpc_plugin_support
->> +   src/compiler/cpp_generator.cc
->> +@@ -3715,7 +3740,7 @@ foreach(_hdr
->> + endforeach()
->> +
->> +
->> +-if(gRPC_INSTALL)
->> ++if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> +   install(TARGETS grpc_plugin_support EXPORT gRPCTargets
->> +     RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
->> +     LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
->> +@@ -3795,6 +3820,8 @@ endif()
->> +
->> + endif()
->> +
->> ++if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> ++
->> + add_library(upb
->> +   third_party/upb/upb/decode_fast.c
->> +   third_party/upb/upb/decode.c
->> +@@ -3852,8 +3879,6 @@ if(gRPC_INSTALL)
->> +   )
->> + endif()
->> +
->> +-
->> +-
->> + add_executable(check_epollexclusive
->> +   test/build/check_epollexclusive.c
->> + )
->> +@@ -3906,8 +3931,6 @@ target_link_libraries(gen_hpack_tables
->> +   gpr
->> + )
->> +
->> +-
->> +-
->> + add_executable(gen_legal_metadata_characters
->> +   tools/codegen/core/gen_legal_metadata_characters.cc
->> + )
->> +@@ -3958,6 +3981,8 @@ target_link_libraries(gen_percent_encoding_tables
->> +   ${_gRPC_ALLTARGETS_LIBRARIES}
->> + )
->> +
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> ++
->> +
->> + if(gRPC_BUILD_TESTS)
->> +
->> +@@ -10722,7 +10747,7 @@ target_link_libraries(grpc_cli
->> +
->> +
->> + endif()
->> +-if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
->> ++if(gRPC_BUILD_GRPC_CPP_PLUGIN)
->> +
->> + add_executable(grpc_cpp_plugin
->> +   src/compiler/cpp_plugin.cc
->> +@@ -10752,7 +10777,7 @@ target_link_libraries(grpc_cpp_plugin
->> +
->> +
->> +
->> +-if(gRPC_INSTALL)
->> ++if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> +   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
->> +     RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
->> +     LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
->> +@@ -15420,7 +15445,7 @@ endif()
->> +
->> +
->> +
->> +-
->> ++if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->> +
->> + if(gRPC_INSTALL)
->> +   install(EXPORT gRPCTargets
->> +@@ -15517,3 +15542,5 @@ generate_pkgconfig(
->> +   "-lgrpc++_unsecure -labsl_statusor -labsl_status -labsl_raw_hash_set -labsl_hashtablez_sampler -labsl_synchronization -labsl_time -labsl_time_zone -labsl_civil_time -labsl_graphcycles_internal -labsl_symbolize -labsl_demangle_internal -labsl_malloc_internal -labsl_stacktrace -labsl_debugging_internal -labsl_exponential_biased -labsl_cord -labsl_str_format_internal -labsl_hash -labsl_bad_variant_access -labsl_bad_optional_access -labsl_strings -labsl_strings_internal -labsl_base -labsl_spinlock_wait -labsl_int128 -labsl_city -labsl_throw_delegate -labsl_raw_logging_internal -labsl_log_severity"
->> +   ""
->> +   "grpc++_unsecure.pc")
->> ++
->> ++endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->> +--
->> +2.26.3
->> +
->> diff --git a/package/grpc/Config.in b/package/grpc/Config.in
->> index d1bf0d078d..ad3ddbcf19 100644
->> --- a/package/grpc/Config.in
->> +++ b/package/grpc/Config.in
->> @@ -4,7 +4,6 @@ config BR2_PACKAGE_GRPC
->>   	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
->>   	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
->>   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
->> -	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libabseil-cpp
->>   	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
->>   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
->>   	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
->> @@ -20,10 +19,9 @@ config BR2_PACKAGE_GRPC
->>   
->>   	  http://github.com/grpc/grpc
->>   
->> -comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
->> +comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
->>   	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
->>   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
->>   	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
->> -		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
->> -		|| !BR2_HOST_GCC_AT_LEAST_4_9
->> +		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->>   	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
->> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
->> index ee8dc38e70..8718b0e956 100644
->> --- a/package/grpc/grpc.mk
->> +++ b/package/grpc/grpc.mk
->> @@ -14,8 +14,7 @@ GRPC_INSTALL_STAGING = YES
->>   
->>   # Need to use host grpc_cpp_plugin during cross compilation.
->>   GRPC_DEPENDENCIES = c-ares host-grpc libabseil-cpp openssl protobuf re2 zlib
->> -HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protobuf \
->> -	host-re2 host-zlib
->> +HOST_GRPC_DEPENDENCIES = host-protobuf
->>   
->>   # gRPC_CARES_PROVIDER=package won't work because it requires c-ares to have
->>   # installed a cmake config file, but buildroot uses c-ares' autotools build,
->> @@ -70,14 +69,26 @@ GRPC_CONF_OPTS += \
->>   	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
->>   	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
->>   
->> +# For host-grpc, we only need the 'grpc_cpp_plugin' binary, which is needed for
->> +# target grpc compilation. To avoid unnecessary build steps and host
->> +# dependencies, supply enough options to pass the configure checks without
->> +# requiring other host packages, unless those needed by grpc_cpp_plugin.
->>   HOST_GRPC_CONF_OPTS = \
->> -	-DgRPC_ABSL_PROVIDER=package \
->> -	-D_gRPC_CARES_LIBRARIES=cares \
->> -	-DgRPC_CARES_PROVIDER=none \
->>   	-DgRPC_PROTOBUF_PROVIDER=package \
->> -	-DgRPC_RE2_PROVIDER=package \
->> -	-DgRPC_SSL_PROVIDER=package \
->> -	-DgRPC_ZLIB_PROVIDER=package
->> +	-DgRPC_ABSL_PROVIDER=none \
->> +	-DgRPC_CARES_PROVIDER=none \
->> +	-DgRPC_RE2_PROVIDER=none \
->> +	-DgRPC_SSL_PROVIDER=none \
->> +	-DgRPC_ZLIB_PROVIDER=none \
->> +	-DgRPC_BUILD_CODEGEN=OFF \
->> +	-DgRPC_BUILD_CSHARP_EXT=OFF \
->> +	-DgRPC_BUILD_PLUGIN_SUPPORT_ONLY=ON \
->> +	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
->> +	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
->> +	-DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF \
->> +	-DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
->> +	-DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
->> +	-DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
->>   
->>   $(eval $(cmake-package))
->>   $(eval $(host-cmake-package))
-> 
-> 
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMi82LzIyIDQ6MjUgUE0sIEdpdWxpbyBCZW5ldHRpIHdyb3RlOg0KPiBIaSBUaG9tYXMsDQo+
+IA0KPiBPbiAwNi8wMi8yMiAxMzoxNiwgVGhvbWFzIFBldGF6em9uaSB3cm90ZToNCj4+IE9uIFN1
+bizCoCA2IEZlYiAyMDIyIDEyOjI2OjE5ICswMTAwDQo+PiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlv
+LmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4gd3JvdGU6DQo+Pg0KPj4+IEZpeGVzOg0K
+Pj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS95bW9yaW4vYnVpbGRyb290Ly0vam9icy8yMDM1ODIxMDk4
+DQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlA
+YmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4NCj4+DQo+PiBEaWQgeW91IGFjdHVhbGx5IHRlc3Qgb24g
+SFcgdGhhdCA1LjE1LjIxIHdhcyB3b3JraW5nPw0KPiANCj4gVW5mb3J0dW5hdGVseSBJIGRvbid0
+IGhhdmUgYm9hcmQsIHNvIG5vLg0KPiANCj4+IFNob3VsZG4ndCB0aGlzIGJlDQo+PiBkb25lIGJ5
+IHRoZSBvcmlnaW5hbCBzdWJtaXR0ZXIgb2YgdGhlIGRlZmNvbmZpZy4NCj4+DQo+PiBFdWdlbiwg
+THVkb3ZpYz8NCg0KSSBjYW4gdGVzdCBpdC4gRG8geW91IGhhdmUgYSBidWlsdCBhbHJlYWR5IGRv
+bmUgd2l0aCBpdCBvbiB0b3AgdGhhdCBJIA0KY291bGQgZG93bmxvYWQgPyAod291bGQgY2VydGFp
+bmx5IHNwZWVkIHRoaW5ncyB1cCkNCg0KSSBkbyBub3QgcmVhbGx5IHVuZGVyc3RhbmQgd2h5IHdl
+IG5lZWQgdG8gaGF2ZSBhIGZpeGVkIGtlcm5lbCB2ZXJzaW9uLg0KVGhpcyBib2FyZCB3b3JrcyB3
+aXRoIGxhdGVzdCBMVFMgc3RhcnRpbmcgZnJvbSA1LjE1LiBDYW4ndCBidWlsZHJvb3QgDQpqdXN0
+IHNlbGVjdCB0aGF0ID8NCg0KQW5kIHdoeSBqdXN0IGFkZGluZyB0aGUgbWlzc2luZyBkZXBlbmRl
+bmN5IGRvZXMgbm90IGZpeCB0aGluZ3MuDQoNCihJIHJlbWVtYmVyIGJ1aWxkcm9vdCBoYWQgc29t
+ZXRoaW5nIGxpa2Uga2VybmVsIGxhdGVzdCB2ZXJzaW9uIHRvIHBpY2sgdXAgKS4NCg0KRXVnZW4N
+Cg0KPiANCj4gSXQgd291bGQgYmUgZ3JlYXQgdG8gaGF2ZSBpdCB0ZXN0ZWQuIEJvdGgsIHRoaXMg
+YW5kIHRoZQ0KPiBtaWNyb2NoaXBfc2FtYTdnNWVrX21tY19kZXZfZGVmY29uZmlnIHRvby4NCj4g
+DQo+IEJlc3QgcmVnYXJkcw0KPiAtLSANCj4gR2l1bGlvIEJlbmV0dGkNCj4gQmVuZXR0aSBFbmdp
+bmVlcmluZyBzYXMNCg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
