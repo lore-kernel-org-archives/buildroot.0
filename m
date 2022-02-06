@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38094C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 20:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1DBCC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 20:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BEBBB401C2;
-	Sun,  6 Feb 2022 20:05:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BFF960B1C;
+	Sun,  6 Feb 2022 20:05:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hki8LQHp43DQ; Sun,  6 Feb 2022 20:05:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4j6y4KHuGgi0; Sun,  6 Feb 2022 20:05:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0C6D401D6;
-	Sun,  6 Feb 2022 20:05:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 566B11BF360
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E3BB60B04;
+	Sun,  6 Feb 2022 20:05:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66D621BF976
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 20:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4442A402B3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 628EE401C2
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 20:05:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BzI7oOClqWQP for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3bYCklNQG6Pk for <buildroot@lists.busybox.net>;
  Sun,  6 Feb 2022 20:05:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A8714027D
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 20:05:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 260FF400C4
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 20:05:36 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id GnmvnnlBAkz4hGnmxnXO6s; Sun, 06 Feb 2022 21:05:35 +0100
+ id GnmvnnlBAkz4hGnmxnXO7D; Sun, 06 Feb 2022 21:05:36 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644177935; bh=Uyf4YP3urYPIWUKu0PQxb4rZtwhvFZ34ZEojQsm5Y+M=;
+ t=1644177936; bh=ZNvSJCaPgLzMtWDPS6u7k/bG100IUlP08fr9UBn3Nvc=;
  h=From:To:Subject:Date:MIME-Version;
- b=ABIHo+sbsYRXO9nTFAnHFIyhT1e5uCD+LzdrHN2L8rgZcDQY0v8xRIBKbUJkaIW47
- QfFfuoh54iRuhgSiRl4V+XWti8mNTdO8Szo4OsH3FomPAtRDZLjYpVU6Ehptwt2F/F
- EYqBLrtON2uwvKFlZZcwU4jmLm1iSArIpdmp0ZsqbKh2XUnWNJrrSVzNkBVJ5ewLfa
- vXYPkQU+4enWWMKwu4/Vfa+Rxj+TPWH5hdUXpI73VQlziHRZ2TxJsB5+DQV6050xU4
- AZfEDBZJ7WxEEUIk9+P4oC4dVwF5Ki/HugbRFdyz6xoyVhgy7i1lqLZKj2dW/axxPg
- M/5xkOvU8EeEw==
+ b=FV4DaoVJuoN54gystODjGqWQOQaJoDRQh1sXsdQVgLTHb70ZT9SaCARL0rBsrZVjL
+ NBPTj/ICDASw6Z3+zOWtCXMHHcdqIi6JQfSC0sZhgqOQy7G9WEmn8Qw18/M/P+KQtz
+ AhTDO/sHLb1JZOMxiLO/t0eJFzm452wSMEtbuF/vpEbofco7TAwxqyogTTiUrU/bXC
+ bJKxlNMH81XhsgMouW57Q2aiy0a1GLcsMpj8/Zh2eO5f3ZCR4SEdeoQ4B8W1oQ//G3
+ DQRwPJ4g8KQ+/OXgtFgcpJHc0Yrm6421IwGJdjruZWYZMGO/3kySmbg+Bci9OM/zc7
+ xqlLMQshoGWsg==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 21:05:17 +0100
-Message-Id: <20220206200532.2758493-2-giulio.benetti@benettiengineering.com>
+Date: Sun,  6 Feb 2022 21:05:18 +0100
+Message-Id: <20220206200532.2758493-3-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
 References: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfNp+MXm4w6Kaqg7fRKrtNjU/C/vhndri20i347aj3/LOo6O7bOGKPCYzWMHdygI92/MILhmW7buwfCZ7hGrczobVkBeg0LfY8nPeitydCdIhZJOUDlAv
- 9Xvd3s8Db8N2V8BHlvm0U93pq7Y437gTcl8Usv0FKMKYC3r8KIwdERm7MPVZzP6RlAOM+/Lv1wSFPwD15KDY2F05WAD/owC9jadgIF9cohyXWJHZzPOanQtV
- B3bWj0T5HJH12vu8uglP6JAJ0E1HoVXeA8KDmriYepqBjZA2lNzhD07BBOwUPtRn32/vCWGpekbLKRSFwkThFxYY2R4rCC/+iivKJNM29GIFz+HVSbnz9cWR
- fa6Kb5u3L35PtNTBOjWXTHX6tHCLS+9JLB23wTDdP1mlEIv+ndGNv+AdxK23tLGT67CbzCfWVBAfxoUFnNAhJEjyM5dpZJn1FBJiIup2gcVw+Bfw25hXXtzd
- KUILvp0UBpk/JS0TMLH0vyL5OIfnhDh+pvi1AJ2bIjAmlxXY1Ba2WZYX42SYILEu2UEwF7wWVaL+YUN/BzF+8ssLM1HY5uGynMWO+iBPU1Hh4YILlpdbGfaN
- iJQ7dkQzBEIhKE36WSEwVQSH
-Subject: [Buildroot] [PATCH 01/16] board/aarch64-efi/genimage-efi: convert
+X-CMAE-Envelope: MS4wfB3Upf2zi35+oH25euDDxMegtZZp+my+IMaOOqr4XpS8Vl+DIN02Zwz9rakzG0sK2pptMmdemsB9450XM7T8MOxRmxbWOq1nD5erkNrCvpGSWf2qcZya
+ ZuBJVrlfxud4rp7cM9DwYOvdK0UOjzS4JdNOHdb4lzA4zJU8NAtcHAbdAfGUbhxGGRbebF6shBtN+STBOBNK09iIiWSkKqK8L41RHL7DVHjRxGJPix1ZosJm
+ yHvCLJd67GJyI4o91r+0F38LHTMRWcbdWTN+ab1kFo/9SG4eUcTdVm9cYxrFsth/hot00UouSMu6g6fakUuBY/PIBIULIhsaDkqFsDm2hHXfgm1Atk1CFtky
+ rdjAzyNKKf9qA0vkRUnGnDg9x8IF26g0D6AY9MSK0I5Vdfr8oDK8VsTXtVNIV0FYtCZjcsDXzbSva8mKJ3pSpLOq8kUowMhcEK/Z2wI8Ymf8YaTDISCjrkFt
+ Az/DsFHz+CBSN1gsB8ibnEaIj8Cv0pQcUKyvHRPG094pyijB836FXc2lj6dnG+aWCounSb6A7ZvNdp0qrI69OsWrm9RapA8cslAgr68JDaa5B3v1IPzsguNs
+ AxxGKdlanysQCus/mUE5/k9q
+Subject: [Buildroot] [PATCH 02/16] board/beaglev/genimage-efi: convert
  partition-type-uuid to single letter notation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -87,29 +87,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/aarch64-efi/genimage-efi.cfg | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ board/beaglev/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-index 87e85816bc..7fbe13d390 100644
---- a/board/aarch64-efi/genimage-efi.cfg
-+++ b/board/aarch64-efi/genimage-efi.cfg
-@@ -18,13 +18,13 @@ image disk.img {
- 
- 	partition boot {
- 		image = "efi-part.vfat"
--		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		partition-type-uuid = U
- 		offset = 32K
- 		bootable = true
+diff --git a/board/beaglev/genimage.cfg b/board/beaglev/genimage.cfg
+index deefdbc110..54f9118ea9 100644
+--- a/board/beaglev/genimage.cfg
++++ b/board/beaglev/genimage.cfg
+@@ -4,7 +4,7 @@ image sdcard.img {
  	}
  
- 	partition root {
--		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
+ 	partition rootfs {
+-		partition-type-uuid = 72ec70a6-cf74-40e6-bd49-4bda08e8f224
 +		partition-type-uuid = L
- 		image = "rootfs.ext2"
- 	}
- }
+ 		partition-uuid = 0fef845a-c6e1-45bc-82f7-002fa720f958
+ 		bootable = "true"
+ 		image = "rootfs.ext4"
 -- 
 2.25.1
 
