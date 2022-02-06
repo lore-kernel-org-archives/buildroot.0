@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DA3C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF15C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 15:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9B6581763;
-	Sun,  6 Feb 2022 15:28:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 288DE4019E;
+	Sun,  6 Feb 2022 15:28:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jRuc9VQmXeFY; Sun,  6 Feb 2022 15:28:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UnYw0gaatyI0; Sun,  6 Feb 2022 15:28:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 377CB8175B;
-	Sun,  6 Feb 2022 15:28:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 415C91BF325
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:28:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FF3640303;
+	Sun,  6 Feb 2022 15:28:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E2CE11BF325
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2FDDF60B12
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:28:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFE65402D1
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 15:28:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A-B0_7tghiGR for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 15:28:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R2PCV8fHsbov for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 15:28:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71FBD608A6
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:28:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06895400DE
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 15:28:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C8C9A8267F; Sun,  6 Feb 2022 15:20:53 +0000 (UTC)
+ id 624FC8267F; Sun,  6 Feb 2022 15:21:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 16:27:36 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b7dadab3e1c602fc98ad112ea622a3152862aead
-X-Git-Newrev: afcbd7abc4354d9aa3e312a723fc4374bbce919b
+Date: Sun, 6 Feb 2022 16:27:15 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 08e8792c50685c1a8c2be7609943990f6083f714
+X-Git-Newrev: eb7af923b23a444d3e79c8e7131ed6a03a8b2d9c
 X-Patchwork-Hint: ignore
-Message-Id: <20220206152053.C8C9A8267F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/pistache: disable
+Message-Id: <20220206152105.624FC8267F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/pistache: disable
  package if BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afcbd7abc4354d9aa3e312a723fc4374bbce919b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=eb7af923b23a444d3e79c8e7131ed6a03a8b2d9c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Package pistache is affected by binutils bug 27597 (Nios II), so let's
 disable it when BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597=y. Let's also
