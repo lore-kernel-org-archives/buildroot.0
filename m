@@ -4,60 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3456C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 20:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE15BC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 20:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC49781A65;
-	Sun,  6 Feb 2022 20:13:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91E628190B;
+	Sun,  6 Feb 2022 20:13:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZKHAHyxQZqrd; Sun,  6 Feb 2022 20:13:07 +0000 (UTC)
+	with ESMTP id Z6QjzvRMIIUD; Sun,  6 Feb 2022 20:13:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBD4D81A29;
-	Sun,  6 Feb 2022 20:13:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0AEAE1BF360
+	by smtp1.osuosl.org (Postfix) with ESMTP id D67CA81A29;
+	Sun,  6 Feb 2022 20:13:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 23DE01BF976
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 20:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07CB0814B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12B9760B04
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 20:12:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cDQFY7_2_Naw for <buildroot@lists.busybox.net>;
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id znfqXL8bfkeL for <buildroot@lists.busybox.net>;
  Sun,  6 Feb 2022 20:12:41 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd04135.aruba.it (smtpcmd04135.aruba.it [62.149.158.135])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43930813F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43476607D1
  for <buildroot@buildroot.org>; Sun,  6 Feb 2022 20:12:41 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id GnmvnnlBAkz4hGnn2nXOAo; Sun, 06 Feb 2022 21:05:40 +0100
+ id GnmvnnlBAkz4hGnn1nXO9v; Sun, 06 Feb 2022 21:05:39 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644177940; bh=Ka2E7iceWWFj5ahwj0uyVS2eJoxyIaMG4fSO79JuL/A=;
+ t=1644177939; bh=wNWrF5qOmv4DbOaQSC5n+7HZp5WFcEIJfG5TWpIP++Q=;
  h=From:To:Subject:Date:MIME-Version;
- b=h+c7iESatJOobdWK9rHy2zetGXrtHMMDSiwVHWNX1SQmiz+3xuM1bHm6WBnXam+bM
- E7qppOQAmVSdw+6K8QyNTKCiZjC5tILC/WfJGgmlFYrtlkrGkb4PccVy6ypAtrwAr8
- J8e3oicTJfcxCv6SK3ngkzsdFWUQbr3pN7hymtfzmtRFh/D3QO6Gza5f/EiUXZN5nA
- bZj81QlVNVJ4mdDR0RTpb89rKqQWHiuGA8mS3VJfuQJ0h6OlLD0MZFmkUaDdwnTAT+
- wzXvkIFxlzBigF5gGamUkyg4jBNcBU/U4w6k6h7Jyyviku2Zr/Ewb89qg5KiF7oebJ
- PMQIAZ1KldWAA==
+ b=OdTc7strCKbP3m2Wij2bIxFMBSTBINcB/u6ecwvwgsBGMCYbvtPs2FZStYXO+mreq
+ 7pqOFtle5NnDzEq/xntWDj6+4vTSwMgbXAmDc702+HbNfthgnL6JcW79JJvp3ZZJY/
+ 0Jcjs+9Ebbf5K5azwt52a/i1oomtdUWmCGtMRuzj8KI8CVNYgoD+ceKos7VDy/jw5C
+ zdj96AMYD4ia0nsmdY2k62xsiGxGiAiDM1Y9te9vGZd/DeZIABBWwFriZgCPNgkXUp
+ ZnVGAqc4WCNnrVkPUVD9ElekFHaokzDD1H1eSItJhDBQemGyiFfC9mqmDdwvB8wo/t
+ E4en0OWnWwoNQ==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 21:05:29 +0100
-Message-Id: <20220206200532.2758493-14-giulio.benetti@benettiengineering.com>
+Date: Sun,  6 Feb 2022 21:05:26 +0100
+Message-Id: <20220206200532.2758493-11-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
 References: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfIeqW4tLXAqn9HKE4MjvjL31/djGkOuMuJM+dVr7eEKFgdDCHWx15Ouf0qsck2ZjPvGXnMUx3BIoOQFSpUDv4Q8CT2D7EvzZwZ4KHPO7J+AH0jwNs8Io
- w+Avs9PKQwtVL1Wsp73SWoPQ1JjUWkblksO0Fcwq8Uxvx435ay+VIuB28crj+CzIy20o2+Ir7w67EAzalufCboX7d51kLv+XArnQ9yO92oVe70SzzCXLfD75
- AMfNT+oETrpucIv0bfMtaPZGw3PBgEEs6/aJuG6W9aVMkmlcCVT77owbpxUtCFwIYqaN+sanGOqLZiOgVqagSMCzheB5+RXIzDaqKl7aqE4XUYyuOIvq29z1
- pT0us37gSyvtJoyEiP8hheHIjjqU9jyGgFto9LUCBaNG5XrPiyDm7D80JYpNmoskhOREbHzc0c6BMwrJkUzAlaV9RetGq1F+o02bPskaCQhd8Est1QCtbOxv
- ZGLHrxSak+5SXLhpIXno58QW9YZB6yIx5vm2gbI6JAKJ8gn8s+ZbmFLw5MgoayPT8cMDvBLd98L/3l7/3WM2XhKSFyelFl86gzXilzsm/n+HJWx6MKe9eZDO
- rKFv8BgrzH0oB2VIzQh2yXEC
-Subject: [Buildroot] [PATCH 13/16] board/radxa/rockpi-n8/genimage: convert
+X-CMAE-Envelope: MS4wfOMFAeP/6r4YMoph//JpOD0vr4YIHpIZPI2NPS1vTCDC3M2/tsbYOhSG3io+NUcfv332xDNtQZS4xYAsZzItgjuEUjDREZyowfCr3eoie/Q+zwSQK1tJ
+ 73zK8hLarKaSZaXx94xx1/nY1NSdgyZVVF+STOyCcFpnOlGjwjn/6H0keVmsEASi51tW5Ib3NyGsukrThwJ5c82WcNpNUulqrIraEfNQ71z4dLcvquYUIB0n
+ O8jph+EIi/eZfjRYFrQyaYqJ80wymzp4/zVwly1CmOKeJVzNhmAcKKowXcefUksIsPfJehdtJD8C2qTPrzA2ZbO8n89J3XcumCjctvC7yzuUjR3CjTGUqoKq
+ 20TKbZ/e24OUgqhiynj1aRiLv9ooQDajKZAVCSifuvT6rYp7CZCpPg/IA0csvammrEN+OW2GL1o2YktXlu+vHEqc/tj5mw6TzOx/D3R6jvyjKxZJS9GqnSnw
+ w5/+dzTYiVpPl9oGwlWlyayS2Sfd1ejtj8tnpJkYJA9eF52Uw4T5DvxfACFyIZlxNGIGc5I/BW5sd2CNouUNnM2/NAYZHZVPO/UCga5+LuqD3EH7cYHXIwEO
+ rNz3IkIje6E8sPCI8MRaZY7I
+Subject: [Buildroot] [PATCH 10/16] board/qemu/aarch64-sbsa/genimage: convert
  partition-type-uuid to single letter notation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -85,28 +87,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/radxa/rockpi-n8/genimage.cfg | 4 ++--
+ board/qemu/aarch64-sbsa/genimage.cfg | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
-index 909a646499..3fced4a5d8 100644
---- a/board/radxa/rockpi-n8/genimage.cfg
-+++ b/board/radxa/rockpi-n8/genimage.cfg
-@@ -26,14 +26,14 @@ image sdcard.img {
- 	}
+diff --git a/board/qemu/aarch64-sbsa/genimage.cfg b/board/qemu/aarch64-sbsa/genimage.cfg
+index bdf8a89d75..629f4e07b7 100644
+--- a/board/qemu/aarch64-sbsa/genimage.cfg
++++ b/board/qemu/aarch64-sbsa/genimage.cfg
+@@ -19,13 +19,13 @@ image disk.img {
  
  	partition boot {
+ 		image = "efi-part.vfat"
 -		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		partition-type-uuid = F
- 		bootable = "true"
- 		image = "boot.vfat"
- 		offset = 16M
++		partition-type-uuid = U
+ 		offset = 32K
+ 		bootable = true
  	}
  
- 	partition rootfs {
--		partition-type-uuid = 69dad710-2ce4-4e3c-b16c-21a1d49abed3
+ 	partition root {
+-		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
 +		partition-type-uuid = L
- 		image = "rootfs.ext4"
+ 		image = "rootfs.ext2"
  	}
  }
 -- 
