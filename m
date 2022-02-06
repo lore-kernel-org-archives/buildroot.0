@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C314FC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 17:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B71DC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 17:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6357981499;
-	Sun,  6 Feb 2022 17:28:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA5DC81774;
+	Sun,  6 Feb 2022 17:28:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D5_7Sgoob1A9; Sun,  6 Feb 2022 17:28:09 +0000 (UTC)
+	with ESMTP id PGtgqO8sqohp; Sun,  6 Feb 2022 17:28:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B93281754;
-	Sun,  6 Feb 2022 17:28:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 456251BF97D
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A391281776;
+	Sun,  6 Feb 2022 17:28:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6732A1BF59A
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40CAA4023D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 612A58141D
  for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 17:27:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZCz_6EZuIz8S for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tr6wzepKJ7IK for <buildroot@lists.busybox.net>;
  Sun,  6 Feb 2022 17:27:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 309B84023B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F20F81422
  for <buildroot@buildroot.org>; Sun,  6 Feb 2022 17:27:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5E1EE82BA3; Sun,  6 Feb 2022 17:20:23 +0000 (UTC)
+ id 4C66A82C6C; Sun,  6 Feb 2022 17:20:23 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 6 Feb 2022 18:27:03 +0100
+Date: Sun, 6 Feb 2022 18:27:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 236e2343f39b0aeb6aa18be26c92a0dee7fd656e
-X-Git-Newrev: d409fe085663194cbe23fbbfef38f566c4910bb8
+X-Git-Oldrev: 7947328de48cbea36cadf2d41b0b401da761ba37
+X-Git-Newrev: d020368eeae5f85eb125788d07a7b013e13b34c2
 X-Patchwork-Hint: ignore
-Message-Id: <20220206172023.5E1EE82BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/checkpackagelib/lib_sysv: run
- shellcheck
+Message-Id: <20220206172023.4C66A82C6C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/checkpackagelib/lib_sysv: check SysV
+ init scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,162 +59,339 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d409fe085663194cbe23fbbfef38f566c4910bb8
+commit: https://git.buildroot.net/buildroot/commit/?id=d020368eeae5f85eb125788d07a7b013e13b34c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For simplicity, when shellcheck returns one or more warnings, count it
-as a single check-package warning.
-The developer can get the full output either by running shellcheck
-directly or by calling check-package with -v.
+Enable the common checks:
+ - consecutive empty lines
+ - empty last line
+ - missing new line at end of file
+ - trailing space
+ - warn for executable files, with the hint to instead use
+   '$(INSTALL) -D -m 0755' in the .mk file
 
-Examples:
+Check indent with tabs:
+ - add a simple check function to warn only when the indent is done
+   using spaces or a mix of tabs and spaces. It does not check indenting
+   levels, but it already makes the review easier, since it
+   diferentiates spaces and tabs.
 
-|$ ./utils/docker-run utils/check-package --include Shellcheck package/polkit/S50polkit
-|package/polkit/S50polkit:0: run 'shellcheck' and fix the warnings
-|51 lines processed
-|1 warnings generated
+Check variables:
+ - check DAEMON is defined
+ - when DAEMON is defined, check the filename is in the form S01daemon
+ - when PIDFILE is defined, expect it to be in /var/run and defined
+   using $DAEMON.
 
-|$ ./utils/docker-run utils/check-package --include Shellcheck -v package/polkit/S50polkit
-|package/polkit/S50polkit:0: run 'shellcheck' and fix the warnings
-|In package/polkit/S50polkit line 43:
-|< tab  >start|stop|restart|reload)
-|                           ^----^ SC2221: This pattern always overrides a later one on line 45.
-|In package/polkit/S50polkit line 45:
-|< tab  >reload)
-|        ^----^ SC2222: This pattern never matches because of a previous pattern on line 43.
-|For more information:
-|  https://www.shellcheck.net/wiki/SC2221 -- This pattern always overrides a l...
-|  https://www.shellcheck.net/wiki/SC2222 -- This pattern never matches becaus...
-|51 lines processed
-|1 warnings generated
-
-NOTICE: shellcheck results depends on the version of the tool.
-This is why the examples above run inside the docker image.
-
-Also update .gitlab-ci.yml with the docker image after the change of
-the previous commit. We don't actually use shellcheck in CI, but the
-image from .gitlab-ci.yml is used by the docker-run script and we use
-that to run shellcheck.
+Also add unit test for this.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[Arnout: make sure a single -v is enough to get shellcheck output;
- update docker image tag in .gitlab-ci.yml]
+[Arnout: avoid 'del NotExecutable_base' by importing the module instead
+ of the class; refer to manual in warnings]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .gitlab-ci.yml                     |  2 +-
- utils/checkpackagelib/lib_sysv.py  |  1 +
- utils/checkpackagelib/test_tool.py | 46 ++++++++++++++++++++++++++++++++++++++
- utils/checkpackagelib/tool.py      | 16 +++++++++++++
- 4 files changed, 64 insertions(+), 1 deletion(-)
+ utils/check-package                    |   5 ++
+ utils/checkpackagelib/base.py          |   3 +
+ utils/checkpackagelib/lib_sysv.py      |  68 +++++++++++++++++
+ utils/checkpackagelib/test_lib_sysv.py | 131 +++++++++++++++++++++++++++++++++
+ utils/checkpackagelib/test_tool.py     |  25 +++++++
+ utils/checkpackagelib/tool.py          |   2 +-
+ 6 files changed, 233 insertions(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d54f46c409..cad35c96bc 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -1,7 +1,7 @@
- # Configuration for Gitlab-CI.
- # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+diff --git a/utils/check-package b/utils/check-package
+index 5fb430902d..f64daed84c 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -13,6 +13,7 @@ import checkpackagelib.lib_config
+ import checkpackagelib.lib_hash
+ import checkpackagelib.lib_mk
+ import checkpackagelib.lib_patch
++import checkpackagelib.lib_sysv
  
--image: $CI_REGISTRY/buildroot.org/buildroot/base:20220206.1324
-+image: $CI_REGISTRY/buildroot.org/buildroot/base:20220206.1756
+ VERBOSE_LEVEL_TO_SHOW_IGNORED_FILES = 3
+ flags = None  # Command line arguments.
+@@ -66,6 +67,8 @@ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
+     r"toolchain/toolchain-external/pkg-toolchain-external\.mk$",
+     ]))
  
- stages:
-   - generate-gitlab-ci
++SYSV_INIT_SCRIPT_FILENAME = re.compile(r"/S\d\d[^/]+$")
++
+ 
+ def get_lib_from_filename(fname):
+     if flags.intree_only:
+@@ -85,6 +88,8 @@ def get_lib_from_filename(fname):
+         return checkpackagelib.lib_mk
+     if fname.endswith(".patch"):
+         return checkpackagelib.lib_patch
++    if SYSV_INIT_SCRIPT_FILENAME.search(fname):
++        return checkpackagelib.lib_sysv
+     return None
+ 
+ 
+diff --git a/utils/checkpackagelib/base.py b/utils/checkpackagelib/base.py
+index 73da925a03..f666e4110b 100644
+--- a/utils/checkpackagelib/base.py
++++ b/utils/checkpackagelib/base.py
+@@ -24,3 +24,6 @@ class _Tool(object):
+ 
+     def run(self):
+         pass
++
++    def hint(self):
++        return ""
 diff --git a/utils/checkpackagelib/lib_sysv.py b/utils/checkpackagelib/lib_sysv.py
-index 2ee5f74af7..386d085afc 100644
---- a/utils/checkpackagelib/lib_sysv.py
+new file mode 100644
+index 0000000000..2ee5f74af7
+--- /dev/null
 +++ b/utils/checkpackagelib/lib_sysv.py
-@@ -7,6 +7,7 @@ from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
- import checkpackagelib.tool
-+from checkpackagelib.tool import Shellcheck            # noqa: F401
- 
- 
- class Indent(_CheckFunction):
-diff --git a/utils/checkpackagelib/test_tool.py b/utils/checkpackagelib/test_tool.py
-index 9e1abbfc23..38029297a5 100644
---- a/utils/checkpackagelib/test_tool.py
-+++ b/utils/checkpackagelib/test_tool.py
-@@ -64,3 +64,49 @@ def test_NotExecutable_hint(testname, hint, filename, permissions, string, expec
-             return hint
-     warnings = check_file(NotExecutable, filename, string, permissions)
-     assert warnings == expected
+@@ -0,0 +1,68 @@
++import os
++import re
++
++from checkpackagelib.base import _CheckFunction
++from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
++from checkpackagelib.lib import EmptyLastLine          # noqa: F401
++from checkpackagelib.lib import NewlineAtEof           # noqa: F401
++from checkpackagelib.lib import TrailingSpace          # noqa: F401
++import checkpackagelib.tool
 +
 +
-+Shellcheck = [
-+    ('missing shebang',
-+     'empty.sh',
++class Indent(_CheckFunction):
++    INDENTED_WITH_SPACES = re.compile(r"^[\t]* ")
++
++    def check_line(self, lineno, text):
++        if self.INDENTED_WITH_SPACES.search(text.rstrip()):
++            return ["{}:{}: should be indented with tabs ({}#adding-packages-start-script)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++
++
++class NotExecutable(checkpackagelib.tool.NotExecutable):
++    def hint(self):
++        return ", just make sure you use '$(INSTALL) -D -m 0755' in the .mk file"
++
++
++class Variables(_CheckFunction):
++    DAEMON_VAR = re.compile(r"^DAEMON=[\"']{0,1}([^\"']*)[\"']{0,1}")
++    PIDFILE_PATTERN = re.compile(r"/var/run/(\$DAEMON|\$\{DAEMON\}).pid")
++    PIDFILE_VAR = re.compile(r"^PIDFILE=[\"']{0,1}([^\"']*)[\"']{0,1}")
++
++    def before(self):
++        self.name = None
++
++    def check_line(self, lineno, text):
++        name_found = self.DAEMON_VAR.search(text.rstrip())
++        if name_found:
++            if self.name:
++                return ["{}:{}: DAEMON variable redefined ({}#adding-packages-start-script)"
++                        .format(self.filename, lineno, self.url_to_manual),
++                        text]
++            self.name = name_found.group(1)
++            if '/' in self.name:
++                self.name = os.path.basename(self.name)  # to be used in after() to check the expected filename
++                return ["{}:{}: Do not include path in DAEMON ({}#adding-packages-start-script)"
++                        .format(self.filename, lineno, self.url_to_manual),
++                        text,
++                        'DAEMON="{}"'.format(self.name)]
++            return
++
++        pidfile_found = self.PIDFILE_VAR.search(text.rstrip())
++        if pidfile_found:
++            pidfile = pidfile_found.group(1)
++            if not self.PIDFILE_PATTERN.match(pidfile):
++                return ["{}:{}: Incorrect PIDFILE value  ({}#adding-packages-start-script)"
++                        .format(self.filename, lineno, self.url_to_manual),
++                        text,
++                        'PIDFILE="/var/run/$DAEMON.pid"']
++
++    def after(self):
++        if self.name is None:
++            return ["{}:0: DAEMON variable not defined ({}#adding-packages-start-script)"
++                    .format(self.filename, self.url_to_manual)]
++        expected_filename = re.compile(r"S\d\d{}$".format(self.name))
++        if not expected_filename.match(os.path.basename(self.filename)):
++            return ["{}:0: filename should be S<number><number><daemon name> ({}#adding-packages-start-script)"
++                    .format(self.filename, self.url_to_manual),
++                    "expecting S<number><number>{}".format(self.name)]
+diff --git a/utils/checkpackagelib/test_lib_sysv.py b/utils/checkpackagelib/test_lib_sysv.py
+new file mode 100644
+index 0000000000..9ae840594f
+--- /dev/null
++++ b/utils/checkpackagelib/test_lib_sysv.py
+@@ -0,0 +1,131 @@
++import os
++import pytest
++import re
++import tempfile
++import checkpackagelib.test_util as util
++import checkpackagelib.lib_sysv as m
++from checkpackagelib.test_tool import check_file as tool_check_file
++
++workdir = os.path.join(tempfile.mkdtemp(suffix='-checkpackagelib-test-sysv'))
++workdir_regex = re.compile(r'/tmp/tmp[^/]*-checkpackagelib-test-sysv')
++
++
++Indent = [
++    ('empty file',
++     'any',
 +     '',
-+     ["dir/empty.sh:0: run 'shellcheck' and fix the warnings",
-+      "In dir/empty.sh line 1:",
-+      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.",
-+      "For more information:",
-+      "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y..."]),
-+    ('sh shebang',
-+     'sh-shebang.sh',
-+     '#!/bin/sh',
 +     []),
-+    ('bash shebang',
-+     'bash-shebang.sh',
-+     '#!/bin/bash',
++    ('empty line',
++     'any',
++     '\n',
 +     []),
-+    ('2 warnings',
-+     'unused.sh',
-+     'unused=""',
-+     ["dir/unused.sh:0: run 'shellcheck' and fix the warnings",
-+      "In dir/unused.sh line 1:",
-+      'unused=""',
-+      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.",
-+      "^----^ SC2034: unused appears unused. Verify use (or export if used externally).",
-+      "For more information:",
-+      "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y...",
-+      "  https://www.shellcheck.net/wiki/SC2034 -- unused appears unused. Verify use..."]),
++    ('ignore whitespace',
++     'any',
++     ' \n',
++     []),
++    ('spaces',
++     'any',
++     'case "$1" in\n'
++     '  start)',
++     [['any:2: should be indented with tabs (url#adding-packages-start-script)',
++       '  start)']]),
 +    ('tab',
-+     'tab.sh',
-+     '\t#!/bin/sh',
-+     ["dir/tab.sh:0: run 'shellcheck' and fix the warnings",
-+      "In dir/tab.sh line 1:",
-+      '\t#!/bin/sh',
-+      "^-- SC1114: Remove leading spaces before the shebang.",
-+      "For more information:",
-+      "  https://www.shellcheck.net/wiki/SC1114 -- Remove leading spaces before the ..."]),
++     'any',
++     'case "$1" in\n'
++     '\tstart)',
++     []),
++    ('tabs and spaces',
++     'any',
++     'case "$1" in\n'
++     '\t  start)',
++     [['any:2: should be indented with tabs (url#adding-packages-start-script)',
++       '\t  start)']]),
++    ('spaces and tabs',
++     'any',
++     'case "$1" in\n'
++     '  \tstart)',
++     [['any:2: should be indented with tabs (url#adding-packages-start-script)',
++       '  \tstart)']]),
 +    ]
 +
 +
-+@pytest.mark.parametrize('testname,filename,string,expected', Shellcheck)
-+def test_Shellcheck(testname, filename, string, expected):
-+    warnings = check_file(m.Shellcheck, filename, string)
++@pytest.mark.parametrize('testname,filename,string,expected', Indent)
++def test_Indent(testname, filename, string, expected):
++    warnings = util.check_file(m.Indent, filename, string)
++    assert warnings == expected
++
++
++NotExecutable = [
++    ('SysV',
++     'sh-shebang.sh',
++     0o775,
++     '#!/bin/sh',
++     ["dir/sh-shebang.sh:0: This file does not need to be executable,"
++      " just make sure you use '$(INSTALL) -D -m 0755' in the .mk file"]),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,permissions,string,expected', NotExecutable)
++def test_NotExecutable(testname, filename, permissions, string, expected):
++    warnings = tool_check_file(m.NotExecutable, filename, string, permissions)
++    assert warnings == expected
++
++
++Variables = [
++    ('empty file',
++     'any',
++     '',
++     [['any:0: DAEMON variable not defined (url#adding-packages-start-script)']]),
++    ('daemon and pidfile ok',
++     'package/busybox/S01syslogd',
++     'DAEMON="syslogd"\n'
++     'PIDFILE="/var/run/$DAEMON.pid"\n',
++     []),
++    ('wrong filename',
++     'package/busybox/S01syslog',
++     'DAEMON="syslogd"\n'
++     'PIDFILE="/var/run/${DAEMON}.pid"\n',
++     [['package/busybox/S01syslog:0: filename should be S<number><number><daemon name> (url#adding-packages-start-script)',
++       'expecting S<number><number>syslogd']]),
++    ('no pidfile ok',
++     'S99something',
++     'DAEMON="something"\n',
++     []),
++    ('hardcoded pidfile',
++     'S99something',
++     'DAEMON="something"\n'
++     'PIDFILE="/var/run/something.pid"\n',
++     [['S99something:2: Incorrect PIDFILE value  (url#adding-packages-start-script)',
++       'PIDFILE="/var/run/something.pid"\n',
++       'PIDFILE="/var/run/$DAEMON.pid"']]),
++    ('redefined daemon',
++     'S50any',
++     'DAEMON="any"\n'
++     'DAEMON="other"\n',
++     [['S50any:2: DAEMON variable redefined (url#adding-packages-start-script)',
++       'DAEMON="other"\n']]),
++    ('daemon name with dash',
++     'S82cups-browsed',
++     'DAEMON="cups-browsed"',
++     []),
++    ('daemon with path',
++     'S50avahi-daemon',
++     'DAEMON=/usr/sbin/avahi-daemon',
++     [['S50avahi-daemon:1: Do not include path in DAEMON (url#adding-packages-start-script)',
++       'DAEMON=/usr/sbin/avahi-daemon',
++       'DAEMON="avahi-daemon"']]),
++    ('daemon with path and wrong filename',
++     'S50avahi',
++     'DAEMON=/usr/sbin/avahi-daemon',
++     [['S50avahi:1: Do not include path in DAEMON (url#adding-packages-start-script)',
++       'DAEMON=/usr/sbin/avahi-daemon',
++       'DAEMON="avahi-daemon"'],
++      ['S50avahi:0: filename should be S<number><number><daemon name> (url#adding-packages-start-script)',
++       'expecting S<number><number>avahi-daemon']]),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,string,expected', Variables)
++def test_Variables(testname, filename, string, expected):
++    warnings = util.check_file(m.Variables, filename, string)
++    assert warnings == expected
+diff --git a/utils/checkpackagelib/test_tool.py b/utils/checkpackagelib/test_tool.py
+index 51c8e0cb27..9e1abbfc23 100644
+--- a/utils/checkpackagelib/test_tool.py
++++ b/utils/checkpackagelib/test_tool.py
+@@ -39,3 +39,28 @@ NotExecutable = [
+ def test_NotExecutable(testname, filename, permissions, string, expected):
+     warnings = check_file(m.NotExecutable, filename, string, permissions)
+     assert warnings == expected
++
++
++NotExecutable_hint = [
++    ('no hint',
++     "",
++     'sh-shebang.sh',
++     0o775,
++     '#!/bin/sh',
++     ["dir/sh-shebang.sh:0: This file does not need to be executable"]),
++    ('hint',
++     ", very special hint",
++     'sh-shebang.sh',
++     0o775,
++     '#!/bin/sh',
++     ["dir/sh-shebang.sh:0: This file does not need to be executable, very special hint"]),
++    ]
++
++
++@pytest.mark.parametrize('testname,hint,filename,permissions,string,expected', NotExecutable_hint)
++def test_NotExecutable_hint(testname, hint, filename, permissions, string, expected):
++    class NotExecutable(m.NotExecutable):
++        def hint(self):
++            return hint
++    warnings = check_file(NotExecutable, filename, string, permissions)
 +    assert warnings == expected
 diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
-index e931272554..e719fdd407 100644
+index f2007be1ff..e931272554 100644
 --- a/utils/checkpackagelib/tool.py
 +++ b/utils/checkpackagelib/tool.py
-@@ -1,4 +1,5 @@
- import os
-+import subprocess
- from checkpackagelib.base import _Tool
- 
- 
-@@ -6,3 +7,18 @@ class NotExecutable(_Tool):
+@@ -5,4 +5,4 @@ from checkpackagelib.base import _Tool
+ class NotExecutable(_Tool):
      def run(self):
          if os.access(self.filename, os.X_OK):
-             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
-+
-+
-+class Shellcheck(_Tool):
-+    def run(self):
-+        cmd = ['shellcheck', self.filename]
-+        try:
-+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+            stdout = p.communicate()[0]
-+            processed_output = [str(line.decode().rstrip()) for line in stdout.splitlines() if line]
-+            if p.returncode == 0:
-+                return
-+            return ["{}:0: run 'shellcheck' and fix the warnings".format(self.filename),
-+                    '\n'.join(processed_output)]
-+        except FileNotFoundError:
-+            return ["{}:0: failed to call 'shellcheck'".format(self.filename)]
+-            return ["{}:0: This file does not need to be executable".format(self.filename)]
++            return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
