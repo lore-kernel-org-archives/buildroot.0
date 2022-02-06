@@ -4,57 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7829C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 22:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7C59C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 22:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F0B460B75;
-	Sun,  6 Feb 2022 22:45:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44A7C60B71;
+	Sun,  6 Feb 2022 22:59:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yv2ugiv8sNAO; Sun,  6 Feb 2022 22:45:30 +0000 (UTC)
+	with ESMTP id 8oCIqKF_6fyI; Sun,  6 Feb 2022 22:59:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7423F60B41;
-	Sun,  6 Feb 2022 22:45:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F6E51BF341
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 22:45:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BCD860ABA;
+	Sun,  6 Feb 2022 22:59:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C5C21BF325
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 22:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47A49402A0
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 22:45:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5247B60B41
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 22:59:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YwnqF74WwJpc for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 22:45:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bDJ7b4orLeVx for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 22:59:06 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2BE84029F
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 22:45:25 +0000 (UTC)
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A4216059C
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 22:59:05 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id GqHbnfXpqks1JGqHbnX8pK; Sun, 06 Feb 2022 23:45:23 +0100
+ id GqUqnqZqzkz4hGqUqnY9sp; Sun, 06 Feb 2022 23:59:04 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644187523; bh=jmEpt9ewkBeesugsOf7YqK4wmGwSCz9VZxgx8c3ZlyA=;
+ t=1644188344; bh=BLUQ1sEf1m7oKd/hSQ40ihOvyZwzTJ+j51Ux72/GB8I=;
  h=From:To:Subject:Date:MIME-Version;
- b=EZmq7qEXnSiJmYx+lq/I/YC2AUgnkNpOlecKsuqi3+0v71hMndXiGJbSuO72IqTvL
- IgIjFbeuEUyLrH7jgZ2d4yvppKegBWnQYenFytPxwNrWG7+0nrnnP8ayj6rvjJn6iH
- /qPrAHs1/qa6bwEce2Y8EHGMxdllZlajl7evfHqIgNt4OlpdDCOtGjaWhGZVZW0V0n
- NEAckWnB8ezWwuo9V0hn+60ehdjp/gcfiyxCvoOOv6HOECK5UbEt6Jy3exjcjAnD2t
- VBYBuC3+39008LBq4VXfQsXo/Nfr+Aljy7N7cn35rsAtouROoHp7H7cP6JMk+lKtsX
- unP7C6dTXNmnQ==
+ b=UZCLynl5K0No+jV8YIAiprp5cUAOEksyJoBBRK/8yzzX6mML8wdmd8m98rXOsSiBN
+ MYF4mqUxUWuopxCOfUnD0fVEgLuMraiuC07LmI6ZjWcwaflpF+D0Wx1Zg8ti0iDyCX
+ uk82IkNbZoaoZ+p/0AdKuPb7rNZKjDLRQQ7MRJg+MthQvW4zTJqTAEkxXWxFgZsKrF
+ a0yd0KJ/sa3nuUSC41VJbItReKQBChYM8kKAGfF5IlYA7c8BfNL89urJHxFKPzzPap
+ xNKQDNN8p/gWu7RXhlRuiseRUq6utb+bkaTydOHJKiYI13urH07SerraXaA39GpB78
+ x18zraWHaDxAg==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 23:45:21 +0100
-Message-Id: <20220206224521.3204040-1-giulio.benetti@benettiengineering.com>
+Date: Sun,  6 Feb 2022 23:59:02 +0100
+Message-Id: <20220206225902.3349344-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfO6Rvl44COWei8ZmCMJbRT31yYr8a95/m9RVsh0TexFhSoUvSi4+nL7AJvY9X62eJnpBT/tzYB8dEJN0peFP0sPlik7TYFY3N4u7uYWvoucwMCVcz4fF
- wDOVH367nA+SU4pdwRfF7GymS97Zv2wH7nZjf979+0Szklc3DHihX+oDOyZLeCViyg7zNFZR+jDFAuItV8h4nOc47+fT+Fdz8VncL2ODYTTiC9i7Mmq9OmbI
- QKGYU4eoPbAfiPxCvNZj2ZagTRdsd4Bxsr2NKKd87Ah3Gu4+vpj3Kd3bkIoMDQnU/eb52kSK8NLkKKgK+mXx5w==
-Subject: [Buildroot] [PATCH] package/libnss: bump to version 3.75
+X-CMAE-Envelope: MS4wfM4y1g0JU+W6tv3Sz2p/OqArgxHJPSvCV/pmcktvFdpliZzBvKCUXVSjb9zDv6JcuNDDyJ0Y2xPjnfcJl/c18gZ2BRpevMuoDNpYvR9y65Zq3y18jJhy
+ jlAxOT7zHJ2a4C2OieXcOKaNCYFX93NDCafCqBqXIcxrAQyb4yM7btUyOgiSn+WEkx3rH8LwHV7rmiOew0C/TeFouqfm5r5gmq6mgPa1O09ybRvjXa1uae/b
+ 4FeJDOtSnXbFS5wsrL8FtY4vxIQ0vNThO8yivF1wkX4=
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 3.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,8 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -75,34 +72,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This patch superseeds this:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220131175341.4091688-1-giulio.benetti@benettiengineering.com/
+---
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 819c272a30..07fb340c33 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_74_RTM/src/SHA256SUMS
--sha256  88928811f9f40f87d42e2eaccdf6e454562e51486067f2ddbe90aa47ea6cd056  nss-3.74.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_75_RTM/src/SHA256SUMS
-+sha256  fd571507827284644f4dd522a032acda2286835f6683ed22a1c2d3878cc58582  nss-3.75.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 537f6dd9b6..a9549e48dd 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 1615933a6e..61f2865563 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0ada50a1c199bb6f70843ab893c55867743a443b84d087d54df08ad883ebc2cd  harfbuzz-3.2.0.tar.xz
++sha256  1c13bca136c4f66658059853e2c1253f34c88f4b5c5aba6050aba7b5e0ce2503  harfbuzz-3.3.2.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 67eab359c6..1f5dfa8822 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.74
-+LIBNSS_VERSION = 3.75
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-HARFBUZZ_VERSION = 3.2.0
++HARFBUZZ_VERSION = 3.3.2
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
 2.25.1
 
