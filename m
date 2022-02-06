@@ -1,81 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B6A8C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 21:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C594C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Feb 2022 21:24:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE39B60B71;
-	Sun,  6 Feb 2022 21:20:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB3AB4023B;
+	Sun,  6 Feb 2022 21:24:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mfqSSd3qwQLI; Sun,  6 Feb 2022 21:20:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OMbzhm6U3X6r; Sun,  6 Feb 2022 21:24:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14B3060B3C;
-	Sun,  6 Feb 2022 21:20:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 650DC1BF44A
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:20:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C543140201;
+	Sun,  6 Feb 2022 21:24:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2237E1BF44A
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BD994029B
- for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:20:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1167D813AA
+ for <buildroot@lists.busybox.net>; Sun,  6 Feb 2022 21:24:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5i9YRin3Sd1R for <buildroot@lists.busybox.net>;
- Sun,  6 Feb 2022 21:20:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LY81bBxgpHvZ for <buildroot@lists.busybox.net>;
+ Sun,  6 Feb 2022 21:24:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A144040296
- for <buildroot@buildroot.org>; Sun,  6 Feb 2022 21:20:34 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id h11so1428680ilq.9
- for <buildroot@buildroot.org>; Sun, 06 Feb 2022 13:20:34 -0800 (PST)
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 43A5281398
+ for <buildroot@buildroot.org>; Sun,  6 Feb 2022 21:24:11 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id q204so14486139iod.8
+ for <buildroot@buildroot.org>; Sun, 06 Feb 2022 13:24:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=oI1yQ7EMzo1DQuDYYFP+q1/EmMamsmp2Ml23n4oXVeE=;
- b=JL8wiabhWTAQzHDj791/dFqjtEsmcgbrdoXFgc4jfuzR/sZ7e2sBxyJ+7ObkDeXmyr
- Bxa03RI+lP1TCf8r7g9oKNEwgy4+zsCS2+OwtAYc4PuSJAFZVYPxMUZD2UBKfaqu9rfs
- HOvZZY7DCHZwogmQOz+Oggs00LPUV4BVwbYrVgJSSkYhRHj5uvP9pvlcrVDKnIg1v2Vz
- 7feONIK88SYkaX5zTb/1lRjMYlCVorvxYz2JtkaW9itfsdOsQsbJeyuKQyzFg+zgM3TP
- AXh0YRNKTeY6x73/N5KrBVAma4TmBP/VI0BPaYqSZ/Td+cSV7FSw37FaIMgWXqy0o4p8
- oOHQ==
+ bh=WCK6bvonakNSyStbJvnFCuXJeC9lwGeMB65XFCDSfBs=;
+ b=g2wo7CIYyzxL+jgzXV5t8bNDqAtA9e/0VKJCD/Jd7QIU2OuuiDQZtsUVcrLGsEvmQU
+ z2cfuQckTw8BM3BYfcqmzoLzokMw5/WV2RLIT9HAiCruplL6lzFtqcGmO590zeh5zKCf
+ So9Y87XuBcjUgzxbZ9FGa9KN19VvpcdlBLGiVD7sTzQhwGOdN1TSZCKCArJI4v7ZRAov
+ N0xnP28BBRF/EzI7sBREmmBrjw/1DfEfuqQjNcuhwmavcfy85gGaCASI0j60fARkfNMU
+ sAkpt5wHT1yWBHiawcGYyNrVSlzLryPievX44fP12IZ7B1aQ1+FiosYgu4eBGnDtA2jk
+ Vt+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=oI1yQ7EMzo1DQuDYYFP+q1/EmMamsmp2Ml23n4oXVeE=;
- b=jkt+3j8BENGbocDbgCZjV6D75hmoITD48gPdzxB3UGxL3f8D4zty2bGgYEu03BDSzt
- 68Nu59HJ1D0eWTlseymCTJ1YBL4Gd/Aqw1HDOHcyia3hzTsIO+xZgVIvgAwDoLcRNme6
- 8mMhqF7HMMGNtqdZiX6pziDqv0bjP7K9VM/RNDep8F6DIUkSCc647cr4edgTooXvWTBW
- e3+4r8VHzie75GD9YOY2EDQ87r5wpsfa8Wux+BgdDbKWutcYXhFXDJgCX62iZbS8qYG9
- 8U3KkJFR0qfuIi/NP3AkI8Ln/kgMv22xW4rwHB3l+YUapD/zKjXyb5mObU2g+c9MT/h7
- 6fhA==
-X-Gm-Message-State: AOAM531ssncA/NbuQjOtGlaBPlK4x2DAhqrrMXwTtwFxllrr+pZzhwcT
- uss2dxHu2bZGMFg/pNKKGPHLFbltfys=
-X-Google-Smtp-Source: ABdhPJyBvnobwpSU6mAcw1nS+QI1HfgqKCnkhecmhWfwkgNHGpk7OXluijdclH+ehziasHsZaOUGjw==
-X-Received: by 2002:a05:6e02:b41:: with SMTP id
- f1mr4704792ilu.193.1644182433637; 
- Sun, 06 Feb 2022 13:20:33 -0800 (PST)
+ bh=WCK6bvonakNSyStbJvnFCuXJeC9lwGeMB65XFCDSfBs=;
+ b=ig4GqD/SdE+WfyffGwCWChsJ72SJKNJ3GSobDXHMi/td+esZ49Cgm7rHucMJYdsuLk
+ C2aI0yxCP73LhUvr0YSKPd+GhMrmIVV9uwAmwq+8YXM2yfsXPy3P+bVI72BUpyzleu+9
+ /8JFhteHzZdXDL4/Za70InUOGeae3KMWVy+vnF3S8FfBFjxIH+Htkuu0gh/JZIgDX55Z
+ N7ZZvUM3xIOaewosPY8LyN2R8L1pgqfvmUJYfO/vGeOCsZTvBSVofMQBF6G0/BeL8Ns+
+ UGLX/H92a9IMgJRqPqQhsgCEgJukY2NVNiJUMxyA6czQ01IXnQNTt8Ez33pfAHhl7wMy
+ aU2Q==
+X-Gm-Message-State: AOAM532EfoyjejWDfyk5m+1JcPSnDIFY03fbl0Jq249dkZYTP2tWJU6N
+ NsQPMitNFT+7k/SyXFW9n/3/w5HALEo=
+X-Google-Smtp-Source: ABdhPJy0+KDnQ4LlA/rLT94XJ3MoW6V4kb3pkZSadweZpUC4fhUFRd54vOsLfGqPQbtrkmsh8yJXEQ==
+X-Received: by 2002:a5e:9916:: with SMTP id t22mr4075522ioj.146.1644182650198; 
+ Sun, 06 Feb 2022 13:24:10 -0800 (PST)
 Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
  [71.218.245.50])
- by smtp.gmail.com with ESMTPSA id k13sm4349052ili.22.2022.02.06.13.20.32
+ by smtp.gmail.com with ESMTPSA id h3sm4354651ild.11.2022.02.06.13.24.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Feb 2022 13:20:33 -0800 (PST)
+ Sun, 06 Feb 2022 13:24:09 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Feb 2022 14:20:28 -0700
-Message-Id: <20220206212028.1786742-1-james.hilliard1@gmail.com>
+Date: Sun,  6 Feb 2022 14:24:05 -0700
+Message-Id: <20220206212405.1787998-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: bump to version
- d16bf02a11953dcac01dca73e6f3778f293adefe
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5declarative: bump to version
+ 1d49a5b678957adde7e2db23a485a3f48157bc8f
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,34 +95,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/qt5/qt5base/qt5base.hash | 2 +-
- package/qt5/qt5base/qt5base.mk   | 2 +-
+ package/qt5/qt5declarative/qt5declarative.hash | 2 +-
+ package/qt5/qt5declarative/qt5declarative.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 396f5044ff..1b9ff43ab2 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
+diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
+index adda7e03ba..e5b016fc20 100644
+--- a/package/qt5/qt5declarative/qt5declarative.hash
++++ b/package/qt5/qt5declarative/qt5declarative.hash
 @@ -1,5 +1,5 @@
  # Locally calculated
--sha256  269ae20ed74cb949420ac3abac0bdef3b65501ea47c9312c01e8f9073baf24fe  qtbase-53a047c212af7fbded6505651f648172f9d7a34d.tar.bz2
-+sha256  96b1c96041ae7b5186c94f231979217bd50e3c0a4caeba32982faa8054a6d113  qtbase-d16bf02a11953dcac01dca73e6f3778f293adefe.tar.bz2
+-sha256  14a4b9640a2cd94771108dc3658a77c04c680f3d6444750d55e313b20774ce00  qtdeclarative-9349f3975d26632befc036fc9f2ea6e03aee2182.tar.bz2
++sha256  afea60cbfa48f88c1f0f54b8dbbf90370f6d2535179b4ccaf489db8133ff37ea  qtdeclarative-1d49a5b678957adde7e2db23a485a3f48157bc8f.tar.bz2
  
  # Hashes for license files:
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index d8a0bf1d16..37ad9c652c 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index e63a78021a..54aa3be1cb 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QT5BASE_VERSION = 53a047c212af7fbded6505651f648172f9d7a34d
-+QT5BASE_VERSION = d16bf02a11953dcac01dca73e6f3778f293adefe
- QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
- QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
- 
+-QT5DECLARATIVE_VERSION = 9349f3975d26632befc036fc9f2ea6e03aee2182
++QT5DECLARATIVE_VERSION = 1d49a5b678957adde7e2db23a485a3f48157bc8f
+ QT5DECLARATIVE_SITE = $(QT5_SITE)/qtdeclarative/-/archive/$(QT5DECLARATIVE_VERSION)
+ QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5DECLARATIVE_VERSION).tar.bz2
+ QT5DECLARATIVE_INSTALL_STAGING = YES
 -- 
 2.25.1
 
