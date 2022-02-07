@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05C6FC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 18:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43075C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 18:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5E3A403C8;
-	Mon,  7 Feb 2022 18:25:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01A40403C1;
+	Mon,  7 Feb 2022 18:25:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ghxJrEKqreT; Mon,  7 Feb 2022 18:25:34 +0000 (UTC)
+	with ESMTP id rc-LTVp7NZ93; Mon,  7 Feb 2022 18:25:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E176403C1;
-	Mon,  7 Feb 2022 18:25:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31DE81BF299
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DE9040457;
+	Mon,  7 Feb 2022 18:25:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A91821BF299
  for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 18:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB6494010F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C0B8403C7
  for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 18:24:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LzohL8EBV406 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GRVNYggL_1XY for <buildroot@lists.busybox.net>;
  Mon,  7 Feb 2022 18:24:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4AD640158
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACE55403C1
  for <buildroot@buildroot.org>; Mon,  7 Feb 2022 18:24:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9BB0882AB5; Mon,  7 Feb 2022 18:17:34 +0000 (UTC)
+ id 8228782AB5; Mon,  7 Feb 2022 18:17:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Feb 2022 19:21:33 +0100
+Date: Mon, 7 Feb 2022 19:18:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff44d53b647c20b5221fe960d7411ddf8094a3cc
-X-Git-Newrev: 71dc252bb96c5d8f667f11abf3e0b8ba59fd4131
+X-Git-Oldrev: 11f8b9fb45aee2d83fffd8d57f5c4ccfc1b1f613
+X-Git-Newrev: 7162d69194d606734e7148f009dd034b31d1302a
 X-Patchwork-Hint: ignore
-Message-Id: <20220207181734.9BB0882AB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/avahi: add pygobject support,
- move to python3
+Message-Id: <20220207181734.8228782AB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: simplify pyver logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,71 +58,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71dc252bb96c5d8f667f11abf3e0b8ba59fd4131
+commit: https://git.buildroot.net/buildroot/commit/?id=7162d69194d606734e7148f009dd034b31d1302a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The python support in avahi needs pygobjet to do anything:
-
-Building avahi-python:              no   (You need python, pygobject and python-dbus!)
-
-So add optional support for it.  Python-gobject is only available for
-python3, so change the python logic to use python 3.
+Gnuradio only works with python3 since commit 786c783f3796
+(package/python-numpy: bump to version 1.18.2), so the python2/3 logic for
+_PYVER can be dropped.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/avahi/avahi.mk | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ package/gnuradio/gnuradio.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 04c4164af6..1992669a92 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -40,7 +40,6 @@ AVAHI_CONF_OPTS = \
- 	--disable-gtk \
- 	--disable-gtk3 \
- 	--disable-gdbm \
--	--disable-pygobject \
- 	--disable-mono \
- 	--disable-monodoc \
- 	--disable-stack-protector \
-@@ -104,16 +103,16 @@ else
- AVAHI_CONF_OPTS += --disable-glib --disable-gobject
- endif
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 658357398d..417a51e067 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -11,13 +11,6 @@ GNURADIO_LICENSE_FILES = COPYING
  
+ GNURADIO_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+-# needed to determine site-packages path
 -ifeq ($(BR2_PACKAGE_PYTHON),y)
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
- AVAHI_CONF_ENV += \
--	am_cv_pathless_PYTHON=python \
--	am_cv_python_version=$(PYTHON_VERSION) \
--	am_cv_python_platform=linux2 \
--	am_cv_python_pythondir=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
--	am_cv_python_pyexecdir=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	am_cv_pathless_PYTHON=python3 \
-+	am_cv_python_version=$(PYTHON3_VERSION) \
-+	am_cv_python_platform=linux5 \
-+	am_cv_python_pythondir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	am_cv_python_pyexecdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	py_cv_mod_socket_=yes
- 
--AVAHI_DEPENDENCIES += python
-+AVAHI_DEPENDENCIES += python3
- AVAHI_CONF_OPTS += --enable-python
+-GNURADIO_PYVER = $(PYTHON_VERSION_MAJOR)
+-else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-GNURADIO_PYVER = $(PYTHON3_VERSION_MAJOR)
+-endif
+-
+ # host-python-mako and host-python-six are needed for volk to compile
+ GNURADIO_DEPENDENCIES = \
+ 	host-python3 \
+@@ -125,7 +118,7 @@ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+ # mandatory to install python modules in site-packages and to use
+ # correct path for python libraries
+ GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
+-	-DGR_PYTHON_DIR=lib/python$(GNURADIO_PYVER)/site-packages
++	-DGR_PYTHON_DIR=lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
  else
- AVAHI_CONF_OPTS += --disable-python
-@@ -127,6 +126,13 @@ else
- AVAHI_CONF_OPTS += --disable-python-dbus
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
  endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON_GOBJECT),y)
-+AVAHI_CONF_OPTS += --enable-pygobject
-+AVAHI_DEPENDENCIES += python-gobject
-+else
-+AVAHI_CONF_OPTS += --disable-pygobject
-+endif
-+
- AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
- 
- AVAHI_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
