@@ -4,73 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A32FC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 19:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EFABC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 06:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF7F6404CD;
-	Mon,  7 Feb 2022 19:44:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3D0040275;
+	Tue,  8 Feb 2022 06:34:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SNGIaW6KYRwg; Mon,  7 Feb 2022 19:44:51 +0000 (UTC)
+	with ESMTP id G7YGVyrmuv41; Tue,  8 Feb 2022 06:34:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3FA04049B;
-	Mon,  7 Feb 2022 19:44:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4112D1BF28B
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 19:44:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C001C40178;
+	Tue,  8 Feb 2022 06:34:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AAF71BF31B
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 06:34:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F1F260783
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 19:44:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 791EF813E4
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 06:34:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QYjaU68TqfsV for <buildroot@lists.busybox.net>;
- Mon,  7 Feb 2022 19:44:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wdz7iaU55QSa for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 06:34:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com
- [IPv6:2607:f8b0:4864:20::b31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E714F60669
- for <buildroot@buildroot.org>; Mon,  7 Feb 2022 19:44:46 +0000 (UTC)
-Received: by mail-yb1-xb31.google.com with SMTP id g14so43196003ybs.8
- for <buildroot@buildroot.org>; Mon, 07 Feb 2022 11:44:46 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8718181340
+ for <buildroot@busybox.net>; Tue,  8 Feb 2022 06:34:45 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id v12so100265wrv.2
+ for <buildroot@busybox.net>; Mon, 07 Feb 2022 22:34:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=zh4r0LSy4iM9Un9YAj2XWmClacXtP3FX49QNgp3vuoM=;
- b=Q5DBXCCbGoDjhwbCEu+RQw6Q3X8ZAu8X6FhOeeIVGvWt6Qd1OYQPtXI/GIIWHu7aqy
- 73+UVt3kYT66Ci56QPjsU+HwJvOCbkdrbC8lxmKBLe5H2fdYM4y38ZXd8yyLiwYyDt2x
- K9kPmBNYzjcd7kZ4HXRda1PCLSUO0TM9c7pDiMOLEtdheVfzvVu6Lz7FOfH0dA/Tg3mM
- KNXcfMGgjPj5ZOHQ1EyxvoMS0Tt4oRN+a95iPNfNFYFUv8sXStRYz8KC4iW8C1xZrKnC
- Jc8fEJQrunYwkd/ywnzZBDfzAse262VoF8/CQWMfam0ZeulZCcq/3NNOhruvIEsMKRWh
- qYGg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eA7QFkGSQQ1WjzOiguDRyWuxa13RcmF091qK1c+IXPw=;
+ b=hDIFInuGopP758LjgkOj4uU0Z8HoLuwXw+z5JoxJakv062rY1TkrbmjzWMqdtQkf0W
+ 4A1pEInMy2jjnk2km42N1NGZddaUeqkjnJ0uBTA6eumJI4tRZPSx+d3VKu6fTURs8Jwn
+ v6qHyasLZFJCB0f518fXDWUiAKPsuhf/3+jC91HlHlL8GmE+Z2nnDCqJS14yrtj9jkSl
+ tS3XdFL/w/bEEiy4qecNy9jOGBK/2tB8MQu4fDRF8W4Orw1jrpxqKY4jcq9LcH1CBY45
+ MStMCIIed2bcr0gnXM7RepZfMIyPOpIQG1PrxixIK9j515+qSavOeohQJeJKXA/AtYKZ
+ 5ndA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=zh4r0LSy4iM9Un9YAj2XWmClacXtP3FX49QNgp3vuoM=;
- b=5KFpwDtQ6N7tCfQ7U8Ni8mGVMw6ui18A2o2pABTblquDbKMsckhoD5XgJXN7nI6htq
- MvhhOM8WNMRu6EjQPe5ownPoim1s+Y+2MgDxh12Vbm/fD02MzzgVY2qeFVKAmJck2XoR
- 0CjAspWlW8wbmhLsK3bAgKTNY4kNk6WvpMWkt2p8Q8JPuEC63nZJTiZlhgw+3BiY/k+P
- /a2DSSbHNb7USqVE69OSVg66L/uHkJyPRcyjFecLjsPippKXMrVYk/uLsBE5PBSd+JlU
- TWit+zsF5ExEWVl/EeBmwXIF4Iu/CGqQoobRX3V4N9bz/Qhps45IWRx7a4m7v2610C39
- 9GCA==
-X-Gm-Message-State: AOAM530qdnI+QdOYG76kumbPRnXW/LPtQ6VArpCOnkJsdmZxr5UruErQ
- ooYEeHqa6vV7QXlfd3UQDRLW9DzGgKbp1r+g+NTb07U5Pr0=
-X-Google-Smtp-Source: ABdhPJyXnD4hdBDKX6WxlNZO9VgEgXIJp29+qxfrLA+qbhIOtqTVsiJRMb5HtIrVr7fp0rAXemj12tYNDG7LarvxFoM=
-X-Received: by 2002:a05:6902:10c3:: with SMTP id
- w3mr1399362ybu.280.1644263085546; 
- Mon, 07 Feb 2022 11:44:45 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eA7QFkGSQQ1WjzOiguDRyWuxa13RcmF091qK1c+IXPw=;
+ b=Pvl7NZijUDpYxWKpcrLs32ENq380r25g7n8U6E2ZCoiHhAhTcyvXOXRIcPr2RKklCK
+ 2QJjCBJLqFcH+rmQPRT64DvNo8v2ZgEmeQQQ9KK0xk8nh0yvlQoy1pVR+TW4jp8GqxZf
+ u+7QQIcyJa74U2TkBg2ZwaupKd6xza4ZoDGQc9bh/0vIdN0b5ibTFL4g4sgfQGx3LEmd
+ zk2pJ8fBaJANgALiO/GMROXRx03XPuHl6Wt4r/Gpj2+jQXIohg8+gv3/yF8Vaaj9bSz3
+ 8omYF8jUbIS1yaoB0VtY9NxSADHbkoeI59FbqYkFHBmQC5ci9WHcXggx6JR2R5EtXL9P
+ tRWA==
+X-Gm-Message-State: AOAM5308XWHk69YMZOvOFr293fQnDe+7ka8oDIRW9qRt6K8mX/FSDcf5
+ CbL6Rr6EGxKieZLgl/QmT2Si3HOQvOQ=
+X-Google-Smtp-Source: ABdhPJy+bysmArhpUld6lkSicKf6IviRcPbuER7Uuh9pIRlOXvv1VLzLQQSRl8VHWYj6LzGHDkNoEg==
+X-Received: by 2002:adf:f5d2:: with SMTP id k18mr2283807wrp.381.1644302083105; 
+ Mon, 07 Feb 2022 22:34:43 -0800 (PST)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id g4sm13530025wrd.111.2022.02.07.22.34.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Feb 2022 22:34:42 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  7 Feb 2022 13:24:23 +0100
+Message-Id: <20220207122423.1561946-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <CAOiXNkCq0M11qPm=nyJdLgFPRSf7Y+rWfhgGfPLuXsWk4ziCaw@mail.gmail.com>
- <87ee4esejl.fsf@dell.be.48ers.dk>
-In-Reply-To: <87ee4esejl.fsf@dell.be.48ers.dk>
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Mon, 7 Feb 2022 20:44:34 +0100
-Message-ID: <CAOiXNkBHd74CVZ2-rEKCskkSYbz44bPvXSVv3d3=KDpdSS2bwA@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] Build error with 2021.11.x
+Subject: [Buildroot] [PATCH] package/zstd: bump to version 1.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,39 +85,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/zstd/zstd.hash | 4 ++--
+ package/zstd/zstd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> >>>> icu 69-1 Configuring
->
-> [snip]
->
-> > INTLTOOL_PERL=/usr/bin/perl CFLAGS="-D_LARGEFILE_SOURCE
-> > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0
-> > -D_FORTIFY_SOURCE=1
-> > -I/home/and/p2/build/prodx/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/drm"
-> > LDFLAGS=" -ldrm" ac_cv_lbl_unaligned_fail=yes
->
-> Hmm, is this a pristine upstream Buildroot 2021.11 without any external
-> packages? You seem to be passing some extra CFLAGS / LDFLAGS to the
-> configure script.
->
-> Variables like TARGET_CONFIGURE_OPTS are global, so you cannot change it
-> in a custom package without causing problems, like this:
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index d7d8a448f..eca44b89f 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/facebook/zstd/releases/download/v1.5.1/zstd-1.5.1.tar.gz.sha256
+-sha256  e28b2f2ed5710ea0d3a1ecac3f6a947a016b972b9dd30242369010e5f53d7002  zstd-1.5.1.tar.gz
++# From https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz.sha256
++sha256  7c42d56fac126929a6a85dbc73ff1db2411d04f104fae9bdea51305663a83fd0  zstd-1.5.2.tar.gz
+ 
+ # License files (locally computed)
+ sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 476190e9a..a4bbada82 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZSTD_VERSION = 1.5.1
++ZSTD_VERSION = 1.5.2
+ ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+-- 
+2.32.0
 
-Indeed, I am using an external tree and one custom package did modify
-TARGET_CONFIGURE_OPTS. Somehow I did not realize that these variables are
-global.
-
-Thank you very much! Really appreciate the help.
-
-Best regards,
-Andrey.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
