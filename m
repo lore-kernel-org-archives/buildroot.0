@@ -4,170 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B73CDC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 10:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A291BC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 10:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EC648133C;
-	Mon,  7 Feb 2022 10:11:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 612C981382;
+	Mon,  7 Feb 2022 10:25:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q30QB5Evot7w; Mon,  7 Feb 2022 10:11:13 +0000 (UTC)
+	with ESMTP id sf7RAQOEWv-k; Mon,  7 Feb 2022 10:25:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ADD548131A;
-	Mon,  7 Feb 2022 10:11:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B99B812B4;
+	Mon,  7 Feb 2022 10:25:21 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24BE71BF41D
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 10:11:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 169B21BF41D
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 10:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12FD060B2C
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 10:11:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04806600B5
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 10:25:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=synopsys.com header.b="ayktbyte";
- dkim=fail (1024-bit key) reason="fail (message has been altered)"
- header.d=synopsys.com header.b="ccV3UYyI"
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f0eDKFB3RvKa for <buildroot@lists.busybox.net>;
- Mon,  7 Feb 2022 10:11:10 +0000 (UTC)
+ with ESMTP id uPyy4RvKwsJM for <buildroot@lists.busybox.net>;
+ Mon,  7 Feb 2022 10:25:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
- [149.117.73.133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 80A64605A7
- for <buildroot@buildroot.org>; Mon,  7 Feb 2022 10:11:10 +0000 (UTC)
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com
- [10.205.2.132])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
- by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id F256040AFD;
- Mon,  7 Feb 2022 10:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
- t=1644228670; bh=c/R71GGhF8zqYOlxDOBmyf9luI0ff/eW3wDhR7xNDPI=;
- h=From:To:CC:Subject:Date:References:In-Reply-To:From;
- b=ayktbyteY/LjzdtDZfz2AkVfHpGah1P/GlaW4oNZfqFdXM7rp0Miw+CBEfp2Dek7o
- bvSfoNGPeEm1gc82HYaYbhKyegAxHsUNI9D7CTw3q07s7WlHUiIm1j9Sv2cgiAb64a
- yf8IdSlEDEa940H/G3jYBfbW6pp8ARVe0kEdyFuGuVEtMROJJoEdbxYbFg9wGnPV4h
- TF1DdzRbBnCrKeeZj5rs97dWj2a4W7xqgUMnFM3S7Y8DF1/uv13z1lXbD0p/5H56Kv
- hjMfvHEFUDHsweCqTBjPGLU3irtZHvvS09CCzfUIULYc5dHS2u+2t0H4urAwkPLgAt
- zr+HxtcLDx74A==
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com
- [10.202.1.137])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client CN "o365relay-in.synopsys.com",
- Issuer "Entrust Certification Authority - L1K" (verified OK))
- by mailhost.synopsys.com (Postfix) with ESMTPS id E3EC2A0070;
- Mon,  7 Feb 2022 10:11:09 +0000 (UTC)
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11lp2173.outbound.protection.outlook.com [104.47.58.173])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (Client CN "mail.protection.outlook.com",
- Issuer "DigiCert Cloud Services CA-1" (verified OK))
- by o365relay-in.synopsys.com (Postfix) with ESMTPS id B9710400DA;
- Mon,  7 Feb 2022 10:11:09 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com;
- dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
- spf=pass smtp.mailfrom=abrodkin@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; dkim=pass (1024-bit key;
- unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="ccV3UYyI";
- dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nnHw3Te4i1lzaMgXg5Fx6dahnQCWFWUaUtKzYoSjr6pA1XGyfR4XSI5VInOn9getZh7i0VPXj/70s3QDvPOPuW7BoWOELEiKxY4ysB2JqdCXKHHIuhnK1QweUB0hHRM30mnj/GSAt4xMy2URWID9eMeiBNPjuSCi7ocA2I6HGdeX/XCT6gWyLH/HfNLh0JTfyfT9JEZftv2r4ED/9NB30GfiVqcLHJQ3JDAIRIdS3Vqs3IqfUugDjSe7wlxkkHqToqhB2kryKsLFaRRJ/GMr6/iiox8uupYzKcG3J0bAZa2vM+ZuT/tAJYvSg5VtGoZ8/sMfRpH/AnvKzFit7w66hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c/R71GGhF8zqYOlxDOBmyf9luI0ff/eW3wDhR7xNDPI=;
- b=jLI1OEpMf7ReDuGoVNxsH4z/RQJAgibdOzXQ9wqn+aVgx54uHhUb7LdcimzU2mykd4PxMHKCUbzMPIOg7pBfHk6k9D8g97T21n+x7xmknE3KHdrzQM6gsWhF5Yci5zGJH4d/IrEIK04ZKv822gqIb/9Pxy40ekWZcVgJgw3InzrpD+wdMo/hP8dd/zmGcJtF0qFJJdNYeTirPbECWqMcjyoJgSG3OLKEaRQCFpjXnnSFbHNLfdB7PcFkvIpPlqGqzaZwNgsMp8kWqioAgGvHt+lUT9UY16dzThtwNDv2RQvRcJwMefq6KCRMjvqn6iTrb8P1cbati4QbiayKfU5xxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c/R71GGhF8zqYOlxDOBmyf9luI0ff/eW3wDhR7xNDPI=;
- b=ccV3UYyI9yoXQauE0I9wvMdumJgnfc5nbgnpiuB4sCPecMSuDRwBWYzz0NrihrvyjXl0Nl8yp9hVAQMQ5b2rdGaug4P4xO+XkjXvzaGt0pZWiPrjPYRrbqJbkGVcaCD9htVlZ3dzAefPkb/n9ED2vNeatD1DKzs5jGm1zWrm+ZE=
-Received: from BN6PR1201MB0228.namprd12.prod.outlook.com (2603:10b6:405:57::7)
- by DM6PR12MB3145.namprd12.prod.outlook.com (2603:10b6:5:3a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Mon, 7 Feb
- 2022 10:11:07 +0000
-Received: from BN6PR1201MB0228.namprd12.prod.outlook.com
- ([fe80::d95b:ceff:cf14:c484]) by BN6PR1201MB0228.namprd12.prod.outlook.com
- ([fe80::d95b:ceff:cf14:c484%11]) with mapi id 15.20.4951.019; Mon, 7 Feb 2022
- 10:11:07 +0000
-X-SNPS-Relay: synopsys.com
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>, Sergey Matyukevich
- <geomatsi@gmail.com>
-Thread-Topic: [arc-buildroot] [Buildroot] [PATCH 5/5] board/synopsys: remove
- outdated vdk boards
-Thread-Index: AQHYFnpLKw6JyyXkwE+TiQTr3nJxqqyH6Owy
-Date: Mon, 7 Feb 2022 10:11:06 +0000
-Message-ID: <BN6PR1201MB02287F4E86EA7F89D8DA0ABFA12C9@BN6PR1201MB0228.namprd12.prod.outlook.com>
-References: <20220131081214.12773-1-geomatsi@gmail.com>
- <20220131081214.12773-6-geomatsi@gmail.com>
-In-Reply-To: <20220131081214.12773-6-geomatsi@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 284737db-a4ca-411d-3a70-08d9ea22282c
-x-ms-traffictypediagnostic: DM6PR12MB3145:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB31459865250DA3ECE684943CA12C9@DM6PR12MB3145.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:400;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lp2pqaF7OZVLmYTn8KL5leGaV3jRRLLyQJc3Xh9OnHOo81Mnv5h3YldN1dQfzYRey3OHIdTpMGEVIEgUaGEtLf7GhydQsWFkvU/abwzDGmW4BPuGrxOmSZd4XP0FaX+u8CSE5gYJlFOTymFaobNQNckpOXGBXVk2BOU4twAlGdcQR5Uj3wS7IWDB+HLNOccJnbYQzOmfsdt9FK2QjeL68VKpg81eAyGUhih34WFZKOQLvv+YmUWMLU4pJz+oH4J1zAHQLLQDDB2ff0d3Ap/GcNihty/1nOGnSn8c7MPxWfP5M2iaykFmLPFwqb6x5iMyqejKdJGbfrKmgZcDGcWaBpT52MUhPN1qd95waL9ZHFW8u+RKGthSER5ePlVhO2bxRHFBn/g8tTzYtcaYiuEadjvKgurMLwlhbaoeTL3wIaUwk6q3HUF6ixlhul6QDmT6VlNk6xS2R6DWF6yCHGTm3QGvPoQYwRn0buyZKyAi6fYOlVW94uFn580U7Sa+X5MN37WGHYRexTTCaBNh1pV6R50QbpRdMSjz+NWg17eLihdnISlAl+u89N50uGxevlTjdjO7tE0oua5I793p9YsXtmMjnXPfE61xFefNVHe/1deybPUYlRawixzaXBZNicGiGe9QbwcY1sMl2S2AG18ihviaJOKF1jUaxsCg/YUFDHNI78jrILrU75GFlgob4gotJvL7wUyXv6r5h14XC7SneZd6+JBbLm1/ESlaI/Lp0qhIcCNYrUFGdfhBrLKRBiPi
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BN6PR1201MB0228.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(366004)(55016003)(26005)(186003)(107886003)(91956017)(86362001)(7696005)(9686003)(2906002)(66556008)(5660300002)(33656002)(558084003)(52536014)(4326008)(66476007)(66946007)(8676002)(38100700002)(66446008)(71200400001)(64756008)(122000001)(8936002)(316002)(76116006)(110136005)(38070700005)(54906003)(508600001)(6506007);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?VvLoTm85g0fnxqIUMF+cnPt/je96jObmnkUVPi5veXVl84pH47gMNuBFg4?=
- =?iso-8859-1?Q?ixnaDCaCKAK42vDkfdIb1Y+r+I42LmKCpZSlbCIIWSl5iUzFq+xyhrvzi9?=
- =?iso-8859-1?Q?nGgbO3dy0dZ1ygpC9vqPlQ35Cbg7QeHux6JQeQQEQy1Ev7yccgYRUjseOp?=
- =?iso-8859-1?Q?d+Ec5TughxtaVfYE3Sip7bw24+Yq7KbxmbYKJuIGASDRJUSX2NaOXoFzFv?=
- =?iso-8859-1?Q?oMGGbpxFO5MKNhJCi35OwluIfk32Q+Z9nLLy9Dyh2dnSlflH09svvNSfyV?=
- =?iso-8859-1?Q?couVlkKMIoNHyyEMDBaYcScAKZn/OMaRVYSGpI1QNkLrW8gLpmUrqq/aof?=
- =?iso-8859-1?Q?ANVqbxqQDjeLf0cQ0RmDIhp/y5RX2H4mIpS0FSQIcCV4OtZTDy4dqXZR/d?=
- =?iso-8859-1?Q?dVk0uyen6qNQv2yptMDDqryNtu9se+ogW0Sxk1pCtF9NzEcE1421KUhENe?=
- =?iso-8859-1?Q?JSVw8YLDrYlvk9JCWbk51s20/S0NadNuXHUIF9Fzh2E3E0HM/Tev1Z5aia?=
- =?iso-8859-1?Q?aYbOXqb3y96Jc3DATFpnpwiW3aBshlIaPLE7TT+cZGwvliX4XXKwN8U7xx?=
- =?iso-8859-1?Q?Z1h0oE1ucLCn52bDXptThy5VAT8mouyUwH3SXOvXeltx01JJmHJiH+7yWR?=
- =?iso-8859-1?Q?PnzqhjFXHcsmluLAFuGIp8EzPU3T8LBbpYwCXdMTRBHe1FYKKr/Udld5j3?=
- =?iso-8859-1?Q?YCSz6Q6YIIf+A4nV0hmFVLAxet3tjSGYDzzd18BTZTA18NGKO3dttne8Qg?=
- =?iso-8859-1?Q?TCNai6q6FwxunmNQP26aSeunsk1jDZnBU9m7U878dzAQ1sYyetqo7fOr/X?=
- =?iso-8859-1?Q?U26dtDoevRLbbtjqroDJey/Ugcs7TzVOeS0rJENNIM7V7Pmcls89p/Jq8g?=
- =?iso-8859-1?Q?hXS7T1JeLCYJo+9/4KtMD/lGT1lpw9RKgXpgwYhU3VtFGhDnUlz15hI4Dz?=
- =?iso-8859-1?Q?Lym6gQqW7ovEMVv+sloqIhk/nBgSjlfie7+44Bnhkgab2kIU2Ay0F4r/1K?=
- =?iso-8859-1?Q?48w1b654PR3l3skhnhAW7HO2VgcrktqTYKNcGTh2Pr78DjHqteUs0IY81c?=
- =?iso-8859-1?Q?c4DDPc9z45rQL7NeKgdb4XUDwqmzshw197v31o+4MYQx0CeT28lZVbXwy1?=
- =?iso-8859-1?Q?7GNOT0YEHnnYMAPyDf7pbuKxJgVYjWrKH/BwmxRsTSBcXlUbYQnPOr/UxE?=
- =?iso-8859-1?Q?zYIg6ai3x+27UA7BvT7PFt8ZAVAOw8zYEAQ6szXlgWTuypVlqB/miwEvKk?=
- =?iso-8859-1?Q?zYNSwF438CYHFgCXiCta2zmCtkYimLUM5v7Qbz/4wAwC/aAE4lfpVrogIk?=
- =?iso-8859-1?Q?EpLpIDQuqrGdkn1VWoKAbbRGeldARwQNGMM6u9ds9bQn+dj98I4PPXmUYs?=
- =?iso-8859-1?Q?mVLz2hWKqOSCTh40C3Smn71JnpNER0DTq7qQOTbtEFVY4Ebl8UvW7VggYd?=
- =?iso-8859-1?Q?fRvJ1EpLn81fvdkt5Ig3kTY2HSfIDt9B/xZzBnquh6vn/i9tzubfD31gPU?=
- =?iso-8859-1?Q?vnWLhHCY5OzanpKhmvpa66hNX3Kw3pTmQFXtmZceyxZ5yi8la7xrJwWZ+5?=
- =?iso-8859-1?Q?6L5oo8CnrW3ub4/Ay7GU7qKItaGiFhx+MND+97mdjKC1zUWB8MJa3uQ65g?=
- =?iso-8859-1?Q?Yn+rYBKlE8iU5FLUJtYSRylmjf6/Y3luAs2rMK6XScawsyNVwgE9t6ag?=
- =?iso-8859-1?Q?=3D=3D?=
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A123F6009C
+ for <buildroot@buildroot.org>; Mon,  7 Feb 2022 10:25:18 +0000 (UTC)
+Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:54306
+ helo=[192.168.101.73])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1nH1Cu-0004fq-DX; Mon, 07 Feb 2022 11:25:16 +0100
+Message-ID: <032d657b-eb9a-2dc9-f60b-8536f1fc6c57@lucaceresoli.net>
+Date: Mon, 7 Feb 2022 11:25:15 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR1201MB0228.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 284737db-a4ca-411d-3a70-08d9ea22282c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 10:11:06.9348 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0msgmccWXSDSmtNoCu2KwsBBArbGdavEaGmXFyjfTXpPWRnxDv7/pgYSWS70+3fORuEQLgbePjevsTk+LgA9Vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3145
-Subject: Re: [Buildroot] [arc-buildroot] [PATCH 5/5] board/synopsys: remove
- outdated vdk boards
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Neal Frager <nealf@xilinx.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <SJ0PR02MB7758F655ACB4D148D78E403BD72B9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <0a82d8c7-a0c6-06a5-6a0b-788fd5c4a935@benettiengineering.com>
+ <8be136a0-1263-3b17-0b78-b7d34ef146c2@lucaceresoli.net>
+ <SJ0PR02MB775843B513EA2CAFD0FEBD82D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <SJ0PR02MB775843B513EA2CAFD0FEBD82D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] Xilinx zynqmp_zcu10x_defconfigs: two things left
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -179,23 +76,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Cc: Joao Pinto <Joao.Pinto@synopsys.com>,
- ARC Maintainers <arc-buildroot@synopsys.com>,
- Sergey Matyukevich <Sergey.Matyukevich@synopsys.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Sergey, all,
+Hi Neal,
 
-> Remove outdated and unused aarch64 and archs38 Synopsys VDK boards.
+On 07/02/22 10:34, Neal Frager wrote:
+> Adding buildroot ML on copy of discussion:
 > 
-> Signed-off-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
+> Hi Neal, Giulio,
+> 
+> Neal, it's better to send technical discussion e-mail on the Buildroot mailing list: you'll get more replies, less latency and other people can benefit from the discussion (now and in the future).
 
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+Thanks for adding the ML in the loop!
+
+> 
+> On 06/02/22 23:20, Giulio Benetti wrote:
+>> Hi Neal,
+>>
+>> On 06/02/22 20:27, Neal Frager wrote:
+>>> Hi Giulio, Luca,
+>>>
+>>> I now have a version of the defconfigs which will at least build 
+>>> cleanly with buildroot without requiring any manual steps.  However, 
+>>> in order to get Linux to boot and login to the rootfs, I am still 
+>>> doing two manual things to make this happen.  If our goal is to make 
+>>> defconfigs that just boot, then we need to find a solution to make 
+>>> these two manual things included with the buildroot build automation.
+>>>
+>>> 1. PMU firmware configuration object.  Without configuring the 
+>>> following U-Boot .config option, the PMU firmware does not appear to 
+>>> be working properly.  I have been fixing this manually by adding this 
+>>> configuration, rebuilding U-Boot, and then copying the results into 
+>>> the output/images directory.  While this works, it is not a clean out 
+>>> of box experience for new users.
+>>>
+>>> CONFIG_ZYNQMP_SPL_PM_CFG_OBJ_FILE
+>>>
+>>> Is there a buildroot config option like BR2_TARGET_UBOOT_ZYNQMP_PMUFW 
+>>> available that can be used for configuring this with the automated 
+>>> build process?
+>>
+>> There is a better option I think:
+>> BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
+> 
+> Even better, use BR2_TARGET_UBOOT_ZYNQMP_PM_CFG Buildroot option (Bootloaders -> U-Boot -> Boot on the Xilinx ZynqMP SoCs). It is specifically done for that purpose.
+
+In reply to your additional question (sent privately):
+
+> Thank you for sharing this option.  That should work well.  But where
+> will it get the pmu_obj.bin file from?  Do we need to put that file on
+> your git as well, so that it can get automatically downloaded at build
+> time?
+
+The zcu106 defconfig currently in Buildroot uses a pmufw that has a
+hard-coded pm_cfg_obj for zcu106 in its default Vivado configuration. It
+is an old and unflexible hack that required a different pmufw binary for
+each zynqmp hardware _and_ peripheral configuration (or other solutions
+like a "wildcard" configuration).
+
+Nowadays pmufw images do not contain a pm_cfg_obj anymore, as it gets
+passed from U-Boot SPL at runtime [0]. This allows to use the same pmufw
+binary for all zynqmp designs.
+
+This means you should provide a pm_cfg_obj.c file in boards/ and put the
+path to that file in BR2_TARGET_UBOOT_ZYNQMP_PM_CFG. It will be built in
+U-Boot SPL, which will pass it at runtime to the PMUFW.
+
+Note that you could handle similarly the psu_init_gpl.c: provide one in
+boards/ and put its path in BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE. But
+since U-Boot has a builtin psu_init_gpl for the ZCU106 (and 102 too)
+then you should not need do anything. It's for other boards not
+supported in U-Boot.
+
+[0] https://lucaceresoli.net/zynqmp-uboot-spl-pmufw-cfg-load/
+
+-- 
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
