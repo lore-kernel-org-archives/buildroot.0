@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4135C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 11:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40E2C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 12:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58C6860B31;
-	Mon,  7 Feb 2022 11:22:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F59B60DE5;
+	Mon,  7 Feb 2022 12:10:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L76AlXhB8J_Q; Mon,  7 Feb 2022 11:22:38 +0000 (UTC)
+	with ESMTP id So4HtjqSgnEu; Mon,  7 Feb 2022 12:10:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 784FC60AE5;
-	Mon,  7 Feb 2022 11:22:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7238360D77;
+	Mon,  7 Feb 2022 12:10:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 846611BF28C
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 11:22:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C4251BF321
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 12:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 727B381456
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 11:22:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 386B7813BB
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 12:10:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X33r7d-Xglgl for <buildroot@lists.busybox.net>;
- Mon,  7 Feb 2022 11:22:33 +0000 (UTC)
+ with ESMTP id wflzr-JQXAa2 for <buildroot@lists.busybox.net>;
+ Mon,  7 Feb 2022 12:09:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
- [IPv6:2a00:1450:4864:20::22b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C5C64813D7
- for <buildroot@buildroot.org>; Mon,  7 Feb 2022 11:22:32 +0000 (UTC)
-Received: by mail-lj1-x22b.google.com with SMTP id z7so19063105ljj.4
- for <buildroot@buildroot.org>; Mon, 07 Feb 2022 03:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20210112.gappssmtp.com; s=20210112;
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 619A1813BA
+ for <buildroot@busybox.net>; Mon,  7 Feb 2022 12:09:59 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ y6-20020a7bc186000000b0037bdc5a531eso350044wmi.0
+ for <buildroot@busybox.net>; Mon, 07 Feb 2022 04:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dRlHFTsA5+Q1SpauQ99RMl8cyogYd3dnnFhAIU6iDQE=;
- b=fcknAJRMU2/rA3T4VwQRFU09gAetMX1+SBq+yiRGZpJgKtx8/aYwkAtujBlhHDBgJG
- ikVobDPg5GZ4Ag4Z9oVaPPE7UwIZey/pCuGhOL5COJlY3NZiLeWqGmpjgi7VFoPa7vli
- AekcYt7A0ARJdikROK6rjbbTmAdqbsJrClld3caLXkjVIO+qcDP4kWLR/vc+MJH/q1qo
- G/zI3EVH1a1NDvW1mHjsBQXph+FNZVpoMADzdiuFT+/XJnTuen/VxK8dH3BjuJhcsqI1
- L86NgjkLNjT+EtnkltBQ9xed3BMMxnRNlV/oGWhC9K27OTic2YMhzIjcmYYDsH6dy0+P
- 7sbw==
+ bh=bsuXsyuamqk9etMCjd8V0jynu8bAQMDlhN4YO0sQc44=;
+ b=e8NBgm52xF15UMjvHibeJPXqPqB2+XxL0e8SFnZ+KOy++c1OTPc6eX63o0qfmKPtNY
+ Y5ph++WZsrF+s4nAFA/dC9GYr3SkyunuSiuHEXdCDbm9b/yjFwgmxfv+tpL+1qHvtQNW
+ 8MGJy0ItaYXmOt53fAi1q5SkMLDT7hyMGOmsuSUWCYbJvKl0gQW/m6TyqkmyaHKPMPFZ
+ F9lrsnbRFTsiDxRdubSUSo7kiY69o6ud5da1KKB6k0VCTXh2L+GGjg9iwl3oeejb15Bv
+ gtB3GZGwV1NM6IzjCnTUMnQEqTXe+J04OdIo/MmdUnI5uXpOgLKnd+PAAt8fCR0IvZ+Q
+ XIhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dRlHFTsA5+Q1SpauQ99RMl8cyogYd3dnnFhAIU6iDQE=;
- b=kwN3wdxfJr6kd+SjPEnH9p2Abi3qOCjeWCGFw6X2HKKp2ktsZgfQcSrHW9SMoRysJN
- 3aTRTkqJ7cuUcLyHADIC2PuEjc1ST+qx1fJQWa9NF4MtR4b20sd7zSXmunRgeafONt8c
- xLygM8uW9+L2HW9tz0aevdf/sl434xGZExSj5S5Jsnj7597tJq6E/vjSwYZUmLcyRHCU
- OPnR7V80E5IKPyX1Rhh8LYVn3s5SfMT81thTLlHHGJ1ZnM8NzXiZLdbzl/2tXEXLHgfW
- M5QjiqyP4JMkM0OTiMlxWGWUP7jNa9GMq+un0cd67HlwzDzPodUpAv1XgJHrgG5p3dKq
- 7Mww==
-X-Gm-Message-State: AOAM532t5ASz7DJ1MRVZcRuWdvX7gQrwR8qjmH1zi7LyLxi0uR1Hwjyx
- a1PlOL+kVYHYFgsmWZYZIf456rLMOINRIQzYl73Ifw==
-X-Google-Smtp-Source: ABdhPJznuRxwHMZqqK2F0v46KkjlglfKQHgxFUEOajiAQNAXKgYC/B+2evY0kFt7U4PUiMkugh0LrA==
-X-Received: by 2002:a2e:8715:: with SMTP id m21mr8461204lji.327.1644232950597; 
- Mon, 07 Feb 2022 03:22:30 -0800 (PST)
-Received: from Unikie-T14-Gen-2i.madriguera.foxhound.fi
- (88-113-104-240.elisa-laajakaista.fi. [88.113.104.240])
- by smtp.googlemail.com with ESMTPSA id h2sm1563319ljk.41.2022.02.07.03.22.29
+ bh=bsuXsyuamqk9etMCjd8V0jynu8bAQMDlhN4YO0sQc44=;
+ b=xNc7/LBV7RZ2JZDpg6fcqjperS5+nZUFVINWqbrW/ilXb2bgsRRkurhh+VGJ76ZNQb
+ r8wt4Slyc9hDXswkiltbPvZQmIJKqBt2oA9OUyhZsGWIoZVNipKNzL9rxwTRz5KnjYYZ
+ +bDNWoRC9a0UxXXLtXBs7nChpY9NluQz4K/42lNGxK7Kte7l8GxAkJM6CtPYnePWFQW8
+ aDDQviKp+XHRwmEoJ0cL3emJs9wCVGIju8lm6/hgLUhyYiqit+ljYTZy+yxAKDfZZOIa
+ IjoPc95b2usM9GI6HNhhdUDZf8I9aChglwK6asbpAChqxMOvKPPo9SWJTuj7JgrYquU0
+ CiFw==
+X-Gm-Message-State: AOAM5309+8EVbtjjESvoxwwshJE78IgSkRMDHOsbR0F2HFARALG8jvP6
+ ImynhyqLBTEl+fFbu+88Iyl6rCB052g=
+X-Google-Smtp-Source: ABdhPJwMRX/5Xc4/Cjm1OcpCbied8OUz3thep9yudRhACwlPn2bLVP+gUZYDyc92U2eG7AD+k6uPbw==
+X-Received: by 2002:a7b:cd15:: with SMTP id f21mr1641771wmj.157.1644235797406; 
+ Mon, 07 Feb 2022 04:09:57 -0800 (PST)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id r2sm17059077wmq.0.2022.02.07.04.09.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Feb 2022 03:22:30 -0800 (PST)
-From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-To: buildroot@buildroot.org
-Date: Mon,  7 Feb 2022 13:22:28 +0200
-Message-Id: <20220207112228.1753927-1-jose.pekkarinen@unikie.com>
-X-Mailer: git-send-email 2.25.1
+ Mon, 07 Feb 2022 04:09:56 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  7 Feb 2022 13:09:46 +0100
+Message-Id: <20220207120946.1553618-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/alfred: bump to version 2022.0
+Subject: [Buildroot] [PATCH] package/libbsd: bump to version 0.11.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,39 +86,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly93d3cub3Blbi1tZXNoLm9yZy9uZXdzLzEwNwoKU2lnbmVkLW9mZi1ieTogSm9zw6kg
-UGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Ci0tLQogcGFja2FnZS9hbGZy
-ZWQvYWxmcmVkLmhhc2ggfCA2ICsrKy0tLQogcGFja2FnZS9hbGZyZWQvYWxmcmVkLm1rICAgfCAy
-ICstCiAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2FsZnJlZC9hbGZyZWQuaGFzaCBiL3BhY2thZ2UvYWxmcmVkL2Fs
-ZnJlZC5oYXNoCmluZGV4IDA3OTkwNzEyMzEuLjJkYTdlYjMxYzggMTAwNjQ0Ci0tLSBhL3BhY2th
-Z2UvYWxmcmVkL2FsZnJlZC5oYXNoCisrKyBiL3BhY2thZ2UvYWxmcmVkL2FsZnJlZC5oYXNoCkBA
-IC0xLDUgKzEsNSBAQAotIyBGcm9tIGh0dHBzOi8vZG93bmxvYWRzLm9wZW4tbWVzaC5vcmcvYmF0
-bWFuL3N0YWJsZS9zb3VyY2VzL2FsZnJlZC9hbGZyZWQtMjAyMS40LnRhci5nei5zaGExCi1zaGEx
-ICBiZTFlOWMxMzE3ZDQwZTQ2Y2ZjODgxYTMxYzYzMmZlYzc4YzYyMGExIGFsZnJlZC0yMDIxLjQu
-dGFyLmd6CisjIEZyb20gaHR0cHM6Ly9kb3dubG9hZHMub3Blbi1tZXNoLm9yZy9iYXRtYW4vc3Rh
-YmxlL3NvdXJjZXMvYWxmcmVkL2FsZnJlZC0yMDIyLjAudGFyLmd6LnNoYTEKK3NoYTEgIDhlMDA3
-ODlkM2UxZTVjOTU5ZGQ5ODU4MDk4NjFmZjYyNGQzNzI2OTQgIGFsZnJlZC0yMDIyLjAudGFyLmd6
-CiAjIExvY2FsbHkgY29tcHV0ZWQKLXNoYTI1NiAgNGM3OWI2YzQ1ZGU0YmNjOGNiZmU2NGNiYTlh
-MGY4YjRlZjMwNGNhODRjMTk0NjIyZjJiZmE0MWUwMWUyY2I5NSAgYWxmcmVkLTIwMjEuNC50YXIu
-Z3oKK3NoYTI1NiAgYWJiYTFkYWM2MWVjY2ZjZDYzMjllNzMzMWQwNTU1ZmVjYzkzNzc2MGZiMzZj
-NmNmNTVjZTZjMWQ3NTFjZmQ5OCAgYWxmcmVkLTIwMjIuMC50YXIuZ3oKIHNoYTI1NiAgY2VjYmY1
-M2QxMTQ4ZTEzMjU2YWMyOWY4YjkwMDY1NWI3ZmM4ZGMxMmQ1OTkzOWE5NWJjMjMyM2VhMTc0NzAy
-NSAgTElDRU5TRVMvcHJlZmVycmVkL0dQTC0yLjAKZGlmZiAtLWdpdCBhL3BhY2thZ2UvYWxmcmVk
-L2FsZnJlZC5tayBiL3BhY2thZ2UvYWxmcmVkL2FsZnJlZC5tawppbmRleCBlZDU5MDY2MzkzLi4y
-NGI5OTU2YjExIDEwMDY0NAotLS0gYS9wYWNrYWdlL2FsZnJlZC9hbGZyZWQubWsKKysrIGIvcGFj
-a2FnZS9hbGZyZWQvYWxmcmVkLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMKIAotQUxGUkVEX1ZFUlNJT04gPSAyMDIxLjQKK0FMRlJFRF9WRVJTSU9OID0gMjAy
-Mi4wCiBBTEZSRURfU0lURSA9IGh0dHBzOi8vZG93bmxvYWRzLm9wZW4tbWVzaC5vcmcvYmF0bWFu
-L3N0YWJsZS9zb3VyY2VzL2FsZnJlZAogQUxGUkVEX0xJQ0VOU0UgPSBHUEwtMi4wCiBBTEZSRURf
-TElDRU5TRV9GSUxFUyA9IExJQ0VOU0VTL3ByZWZlcnJlZC9HUEwtMi4wCi0tIAoyLjI1LjEKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/libbsd/libbsd.hash | 8 +++++---
+ package/libbsd/libbsd.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
+index 17bb32e01..435ea5470 100644
+--- a/package/libbsd/libbsd.hash
++++ b/package/libbsd/libbsd.hash
+@@ -1,3 +1,5 @@
+-# From https://lists.freedesktop.org/archives/libbsd/2021-February/000305.html
+-sha512  a7015ea1ffa3766b1a4690526a25231898ad8275149b31fb6801082450172249997c36165626d101ffce53b59767a46676eebc0806426922fe4e773a0376c1f5  libbsd-0.11.3.tar.xz
+-sha256  ff2fdeeb0fe8bcb9045fe91d69e8312a5b477c54db48dffe34dd1c0d730c5864  COPYING
++# From https://lists.freedesktop.org/archives/libbsd/2022-January/000322.html
++sha512  c52c19eddd53630aca14f9f6221f7b84aa9cc798b4bb91e867822b161793313aab872ac1c0350d29312a72fee6e2061f3910ff918b724ec171d8c9de5837c841  libbsd-0.11.5.tar.xz
++
++# License files (locally computed)
++sha256  3761714adb9c45fa588b77b372d6e75dcc9e6822cc2d6baa712007241aec714e  COPYING
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 86df8a97a..0654bef82 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBSD_VERSION = 0.11.3
++LIBBSD_VERSION = 0.11.5
+ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+ LIBBSD_SITE = https://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, BSD-5-Clause, \
+-- 
+2.32.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
