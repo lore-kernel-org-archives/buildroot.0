@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43075C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 18:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74680C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 18:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01A40403C1;
-	Mon,  7 Feb 2022 18:25:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 269C360E3C;
+	Mon,  7 Feb 2022 18:25:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rc-LTVp7NZ93; Mon,  7 Feb 2022 18:25:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RBYRaH_EHNdR; Mon,  7 Feb 2022 18:25:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DE9040457;
-	Mon,  7 Feb 2022 18:25:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79DDA60E8D;
+	Mon,  7 Feb 2022 18:25:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A91821BF299
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 18:24:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BA5141BF299
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 18:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C0B8403C7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89ECE40129
  for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 18:24:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GRVNYggL_1XY for <buildroot@lists.busybox.net>;
+ with ESMTP id Vgr1_hjMaugy for <buildroot@lists.busybox.net>;
  Mon,  7 Feb 2022 18:24:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACE55403C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC9EE403CA
  for <buildroot@buildroot.org>; Mon,  7 Feb 2022 18:24:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8228782AB5; Mon,  7 Feb 2022 18:17:34 +0000 (UTC)
+ id A59A682DC2; Mon,  7 Feb 2022 18:17:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Feb 2022 19:18:58 +0100
+Date: Mon, 7 Feb 2022 19:22:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11f8b9fb45aee2d83fffd8d57f5c4ccfc1b1f613
-X-Git-Newrev: 7162d69194d606734e7148f009dd034b31d1302a
+X-Git-Oldrev: 71dc252bb96c5d8f667f11abf3e0b8ba59fd4131
+X-Git-Newrev: b8e7e90b839c5411674729326f3f603a5a2c69d9
 X-Patchwork-Hint: ignore
-Message-Id: <20220207181734.8228782AB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnuradio: simplify pyver logic
+Message-Id: <20220207181734.A59A682DC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: pgsql needs wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7162d69194d606734e7148f009dd034b31d1302a
+commit: https://git.buildroot.net/buildroot/commit/?id=b8e7e90b839c5411674729326f3f603a5a2c69d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gnuradio only works with python3 since commit 786c783f3796
-(package/python-numpy: bump to version 1.18.2), so the python2/3 logic for
-_PYVER can be dropped.
+Commit b429dce6f8e2ee162b79fe2a3ebb1bd179f462e3 forgot to add wchar
+dependency resulting in the following build failure of postgresql:
 
+configure: error: C compiler "/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-linux-gcc" does not support C99
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e4b59fecd2a5bcda8103ddf4eae3dbd78fe3b896
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuradio/gnuradio.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ package/lighttpd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 658357398d..417a51e067 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -11,13 +11,6 @@ GNURADIO_LICENSE_FILES = COPYING
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index b9f64a3bc3..4406a685ba 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -83,11 +83,13 @@ config BR2_PACKAGE_LIGHTTPD_PCRE
+ config BR2_PACKAGE_LIGHTTPD_PGSQL
+ 	bool "pgsql support"
+ 	depends on BR2_USE_MMU # postgresql
++	depends on BR2_USE_WCHAR # postgresql
+ 	select BR2_PACKAGE_POSTGRESQL
+ 	help
+ 	  Enable postgres support for lighttpd mod_vhostdb_pgsql.
  
- GNURADIO_SUPPORTS_IN_SOURCE_BUILD = NO
+ comment "pgsql support needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR
  
--# needed to determine site-packages path
--ifeq ($(BR2_PACKAGE_PYTHON),y)
--GNURADIO_PYVER = $(PYTHON_VERSION_MAJOR)
--else ifeq ($(BR2_PACKAGE_PYTHON3),y)
--GNURADIO_PYVER = $(PYTHON3_VERSION_MAJOR)
--endif
--
- # host-python-mako and host-python-six are needed for volk to compile
- GNURADIO_DEPENDENCIES = \
- 	host-python3 \
-@@ -125,7 +118,7 @@ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
- # mandatory to install python modules in site-packages and to use
- # correct path for python libraries
- GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
--	-DGR_PYTHON_DIR=lib/python$(GNURADIO_PYVER)/site-packages
-+	-DGR_PYTHON_DIR=lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
- else
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
- endif
+ config BR2_PACKAGE_LIGHTTPD_WEBDAV
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
