@@ -1,74 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52D40C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 17:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AEDEC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 17:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14053814B7;
-	Mon,  7 Feb 2022 17:36:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45B4D60E9A;
+	Mon,  7 Feb 2022 17:38:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DVyWT-8MDiwM; Mon,  7 Feb 2022 17:36:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NdnGP0o2kmq4; Mon,  7 Feb 2022 17:38:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B31D81499;
-	Mon,  7 Feb 2022 17:36:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E20160EC1;
+	Mon,  7 Feb 2022 17:38:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5AEE41BF29C
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:36:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3725B1BF29C
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 497764033D
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:36:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30F2640238
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:38:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TkB72Sj0SdPR for <buildroot@lists.busybox.net>;
- Mon,  7 Feb 2022 17:36:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6758540331
- for <buildroot@buildroot.org>; Mon,  7 Feb 2022 17:36:24 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id H7w6nEPtnvHpTH7w6nIoGf; Mon, 07 Feb 2022 18:36:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644255382; bh=coroOWktZfl3kpOGRMealNwXUjcaWPwmjyJftqFjZao=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=WX8xQkMMdLcY9eqDTOFhF6wkzHLgMLuEkC710sDzaCRoXHxZhIS+jYUP8fzQiagJf
- OfJT0TAAmjwKKEHeYcMUAK70LgWSVvEik6IDqzE6ZClT+hJz/NnbROgz1ILsbs4JeX
- BLgCZH41wAbbQ3eVupRh6ABqj3uGZAKAy50mBwqKZjOLRmSM8h5yoJiErc5vUrDAsB
- Hi+1Jk7PBuPEDBoIOrmsralLvWCEeH72Ccy9ckRiekRYFSl6ASDJQI5A9yCDPxGPqu
- LcrbYVXoASDxiUku3IOV88ujRCBRu7gIzvlN0oKYWr2YjYZkenY8yXfSHU1wOsYkF5
- qc54pGIIDd5AA==
-Message-ID: <d2319e17-8500-f9af-56a4-1b4efe75fe9a@benettiengineering.com>
-Date: Mon, 7 Feb 2022 18:36:22 +0100
+ with ESMTP id KAlivF2Xl_D5 for <buildroot@lists.busybox.net>;
+ Mon,  7 Feb 2022 17:38:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D63D5401B5
+ for <buildroot@buildroot.org>; Mon,  7 Feb 2022 17:38:04 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4514:5b91:b120:9d9f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1F71219F553;
+ Mon,  7 Feb 2022 18:37:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1644255481;
+ bh=K6QPzsWG899vTubmhbewAD31fHJlJCJUz9MWzDJhYKg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=GPnBMguQBUhpHTlYFjRA4MaCX8NEitgtqCCEAJphuhwpvo9hIZ6MXtJBVR16zTRRm
+ nDX+WddVl6MHTtkzmIlWiBnZSV/42WET49mdXEijmZGye7TlzIZbrrwxTTfytn20a+
+ V2A1zItt50HmXkfPlhSMxMUByNplzpA5z/9ubZ7Kk0Iz0Ki6w0NmKj0KVzFjd8zy8v
+ hS5kfX94Sc9HrRFCLTw2whOEje9dTTyB57tqclUOZtaS/XqtMCX1eC+na/OvFVVUFp
+ QfWZtap0HwlSB3QO0m6phjobeiJETNNFF20q1TuG52EPlbuK6Wl9S0QiXqWNkxwhHt
+ Ynfh1y8wNiinQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 07 Feb 2022 18:37:51 +0100
+Date: Mon, 7 Feb 2022 18:37:51 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220207173751.GA2249818@scaer>
+References: <20220206200532.2758493-1-giulio.benetti@benettiengineering.com>
+ <20220206200532.2758493-2-giulio.benetti@benettiengineering.com>
+ <20220206213657.GA457876@scaer> <20220207085517.5c13c097@windsurf>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Neal Frager <nealf@xilinx.com>, Luca Ceresoli <luca@lucaceresoli.net>
-References: <SJ0PR02MB7758F655ACB4D148D78E403BD72B9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <0a82d8c7-a0c6-06a5-6a0b-788fd5c4a935@benettiengineering.com>
- <8be136a0-1263-3b17-0b78-b7d34ef146c2@lucaceresoli.net>
- <SJ0PR02MB775843B513EA2CAFD0FEBD82D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <032d657b-eb9a-2dc9-f60b-8536f1fc6c57@lucaceresoli.net>
- <SJ0PR02MB7758A5DBC6DD4DA837E0F47FD72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <SJ0PR02MB7758129FFD78D128D3393198D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <16f4b7bf-546b-3bf4-c6a3-b711c8cfcadb@lucaceresoli.net>
- <SJ0PR02MB77586A616AEE69FE18916F15D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <fb6fd9dc-7619-5768-a1b4-00324516b4d4@benettiengineering.com>
- <SJ0PR02MB7758884FD57FC4A53E3585EFD72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <SJ0PR02MB7758884FD57FC4A53E3585EFD72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
-X-CMAE-Envelope: MS4wfPM2wp5xvdMy9Rr6otohIjMdUUV+rsEh0BMc4nkXGlFrI7ENR9M+zU1XeFixVGinEVy7vT/OLR0LXXV4/og3gZFSiUyaaxOM6cnZ/0wi9LqYrv/W3SPK
- SwWU4GG1rB4R02dnglaKMJDaiIrDwZDtyqu2qnBJBgLG4Hhz7tYhWdWgV/tit9AVshS3VAbNsTiIZB/MPBiTX6YEHTOWs5H3Y6BVzg8J1nieexcd6XXmu95Y
- v1O1Z0B0szAM4eKgOGwzPejRjksbf/Kv3JUWtXguPCE=
-Subject: Re: [Buildroot] Xilinx zynqmp_zcu10x_defconfigs: two things left
+Content-Disposition: inline
+In-Reply-To: <20220207085517.5c13c097@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 01/16] board/aarch64-efi/genimage-efi:
+ convert partition-type-uuid to single letter notation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,79 +74,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Alistair Francis <alistair@alistair23.me>,
+ Gerome Burlats <gerome.burlats@smile.fr>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+Thomas, All,
 
-On 07/02/22 18:26, Neal Frager wrote:
-> Hi Giulio,
-> 
->> In the boards I've pointed you before:
->> https://github.com/buildroot/buildroot/tree/master/board/orangepi/orangepi-lite2
-> 
->> there is everythyng you need, the post-build script:
->> https://github.com/buildroot/buildroot/blob/master/board/orangepi/orangepi-lite2/post-build.sh
->> that copies the extlinux.conf.
-> 
->> And as explained before you have to point to it like this:
->> https://github.com/buildroot/buildroot/blob/master/configs/orangepi_lite2_defconfig#L48
-> 
->> For creating the VFAT you can imitate this genimage.cfg file:
->> https://github.com/buildroot/buildroot/blob/master/board/orangepi/orangepi-lite2/genimage.cfg#L1-L11
-> 
->> that must be pointed by:
->> https://github.com/buildroot/buildroot/blob/master/configs/orangepi_lite2_defconfig#L46-L47
-> 
-> Yes, the problem is that these steps put the extlinux.conf in the root directory of the vfat image, which does not work.  U-Boot only looks for the extlinux.conf in the extlinux.conf directory.  So what I was missing was figuring out how to build a vfat image with my extlinux.conf in the extlinux directory.  I finally figured it out with the following genimage.cfg.
+On 2022-02-07 08:55 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 6 Feb 2022 22:36:57 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > >  	partition root {
+> > > -		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
+> > > +		partition-type-uuid = L  
+> > As we discussed on IRC, this is not the same thing. genimage will extend
+> > the 'L' shorthand to the full UUID 0fc63daf-8483-4772-8e79-3d69d8477de4,
+> > which is different.
+> And? Is that really important?
+> > So I don't think uaing the shorthands are correct.
+> Why?
 
-Aah ok.
-Usually /extlinux/extlinux.conf is found in ext4 /boot/ but it's ok even 
-in vfat.
+I think that it is important that we do adhere to the expected values;
+see below...
 
-> 
-> image boot.vfat {
-> 	vfat {
-> 		files = {
-> 			"boot.bin",
-> 			"u-boot.itb",
-> 			"system.dtb",
-> 			"Image"
-> 		}
-> 		file extlinux/extlinux.conf {
-> 			image = extlinux.conf
-> 		}
-> 	}
-> 
-> 	size = 32M
-> }
-> 
-> image sdcard.img {
-> 	hdimage {
-> 	}
-> 
-> 	partition boot {
-> 		partition-type = 0xC
-> 		bootable = "true"
-> 		image = "boot.vfat"
-> 	}
-> 
-> 	partition rootfs {
-> 		partition-type = 0x83
-> 		image = "rootfs.ext4"
-> 	}
-> }
-> 
-> Thanks for your help!
-You're welcome
+> > The UUID assignments are available on Wikipedia:
+> >     https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
+> > But the systemd docuemntation has extra UUID definitions:
+> >     https://man.archlinux.org/man/systemd-gpt-auto-generator.8
+> Yes, but how useful are they?
 
-Best regards
+Why would we diverge from the specs?
+
+> Unless these systemd-defined UUID are really relevant, I would prefer
+> that we use the shortcuts provided by genimage wherever possible, and
+> only rely on using the full UUID for special cases, such as the
+> board/sifive/hifive-unleashed/genimage_sdcard.cfg (PATCH 15/16).
+
+There are tools that expect those values, to autodetect partitions. This
+is the case, of course, of systemd-gpt-auto-generator, which will lookup
+the partition UUIDs, but other tools may expect these UUIDs too.
+
+I am not saying that we would cause trouble by changing our board
+descriptions, but if we want to allow people to just copy them as the
+base for their own development, then diverging from expected behaviour
+is not nice.
+
+> This way, it would be pretty clear that we have the "common cases" (boot
+> partition, rootfs partition) and the "odd/special cases".
+
+I think the "common case" would be "adhere to spec, use specified
+values", while the exceptions are "the spec says nothing, use something
+else and comment it".
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
