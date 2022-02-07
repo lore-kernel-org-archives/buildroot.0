@@ -1,79 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 946B3C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 17:27:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3E14C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 17:29:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31218402A7;
-	Mon,  7 Feb 2022 17:27:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79C9881374;
+	Mon,  7 Feb 2022 17:29:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RBi8BwHQAQW9; Mon,  7 Feb 2022 17:27:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4hMwVTKe_CrO; Mon,  7 Feb 2022 17:29:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47BDC40265;
-	Mon,  7 Feb 2022 17:27:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE4D6812EA;
+	Mon,  7 Feb 2022 17:29:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ECE4E1BF29C
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:27:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B50491BF29C
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9455401EE
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:27:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A316F401F7
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 17:29:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HFxRFxBNuevN for <buildroot@lists.busybox.net>;
- Mon,  7 Feb 2022 17:27:20 +0000 (UTC)
+ with ESMTP id OuQ9lDoQf6Ap for <buildroot@lists.busybox.net>;
+ Mon,  7 Feb 2022 17:29:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9D36F40265
- for <buildroot@buildroot.org>; Mon,  7 Feb 2022 17:27:20 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id c19so11383582wrb.10
- for <buildroot@buildroot.org>; Mon, 07 Feb 2022 09:27:20 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE0C3401EE
+ for <buildroot@buildroot.org>; Mon,  7 Feb 2022 17:29:16 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id m14so26077588wrg.12
+ for <buildroot@buildroot.org>; Mon, 07 Feb 2022 09:29:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=fxQVMlIIAyGJnMX/eNWNle7CMpMga1IylBYcc1gm4K4=;
- b=F5Ol4ABTRf5sbUmv182Sv4dt0lcKLFeXUgtE9rZqEYpQusru8v+tUVR95eWKVMKZaz
- VmE6pSnGk3JHtPKlxVZTd+W9BgcUyp5sSY84VyjEAmahv8Y6E3ly9QqGpIgnBdKnnelQ
- //pFtbWQlce172oq+HkuxE77RUz7Uwr6j03WN4PKzkxgwxmzWKvPjLDXMnTiN3HeDdA7
- jjDp6aTxI+yVVck4Xsya2iNUfulZyHHG/owo43CrOeNC2f24IAYQczTp7UbRbuOG/FKg
- jgU5LvTVo/Cu7nWYWZYXzTollKNVlF8+dMcjAzvW68y/L9ugjQYk2AsRZlSSQKIkdYhr
- 1X/A==
+ bh=u8YWyoeN2t4wK8H3ZSGNlzC61t7jWB5xU8rtq9K85Gk=;
+ b=aZWG0X4IlYKz/Z++KI23kqSxuFdHpzC6gc31eDup047NeEm8PL5gyf3JzI7IuLs6y0
+ 4Q1MOm9bgNN1fS5ncV5EhLZQoVJ2MJUQEzP5WAZWcMu1CMakIIoIquLVyoFh6pk/6BH/
+ JNGruIMyK/cEU9vZU4hvYKrMyNFVgzBkhsa/2gh6RGeXWSvmAsnrrkba8Kayde+hGlhz
+ lbi96sSRy0lJ7Zxc7Ix+PoEMaR0DVavys8KRB0YEn5fuD38X1uUe2pLvWjBFzfo3qFmF
+ soqT86jzUKT8+5NbTy7g/MNNdT7GAxb3KtaazBj60j+EyM4JIedrXt+AdIPnP1CvjPCz
+ 9t+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=fxQVMlIIAyGJnMX/eNWNle7CMpMga1IylBYcc1gm4K4=;
- b=WpgVC5eYHPFJz1mrgBvbo8BF3u9Q0WoaoqR4jDVEJ8U7ugVmuimOLXsDkbHnOsbi4q
- lpSV8bVf4LBLylAMHx5ngFGwbc2GAax1ThqvORApnjWXEQMmYOFYPUPWiglPIqw5SEV1
- h/XFfE2XCE7GQ8x6yQqq5K10iOLkselloc+Us1PFWxRYRjPdw7PFwFuHIHAYVwhoevAH
- cyyROFGLa2bDJyj9bihIsebQorRH78cjwGkJlEg54noENAOQMJU81nu9Fk6NSwjfQJ2i
- qXmIVH/4o4o/DRi6qriejY5JV8rV7HxcUmcfcKZBe2hUIKsXa6XWAB0tKxL38Y93esv7
- aIPw==
-X-Gm-Message-State: AOAM530weXb6iePxgJDFsEuke+cn96NmiOWzlGEGZaSh4DOqIigISyfq
- 3dv9DCf1H9ZiS/sr7CxzGuoeL8YTdww=
-X-Google-Smtp-Source: ABdhPJyE0ldx857gAOvt3wdaearxdnhZvR0y309RgDuXUFrOpLey345AC8JCY9MTvA2S3jRgbcKAyg==
-X-Received: by 2002:a05:6000:16c7:: with SMTP id
- h7mr382028wrf.93.1644254838547; 
- Mon, 07 Feb 2022 09:27:18 -0800 (PST)
+ bh=u8YWyoeN2t4wK8H3ZSGNlzC61t7jWB5xU8rtq9K85Gk=;
+ b=6qt2TCZt0IkHgeK30PbVvL2cQNDAbY7P8NwVv4MJTDajGuW233w9we40wgTolAc1VK
+ OVTTXZDLU9ujS149CEfSpqCtE6LWSItv6X1PtFwCc8HYIsIdQmbmOQ8mCFOUhJcn952n
+ NNArd8qR5IeCzy8JQ2G6QaDweQX0Ba5NPC8SsWKP2E9Ruyc3G/kC/zJalyQD8FVup9sO
+ tyRzpOMDgO6nNZzzXOrytmjtAnXBskxdYP7HpYUalpbCLXf/Z2j3Vtzl0MafBb9XYRvX
+ uj9uFHNr8QkjMflV+B3KF9Zn4iHMUTM0/Izdj2nxqOTyTq+0p0yCC98ETsBVp7j7UX9j
+ a2xA==
+X-Gm-Message-State: AOAM5301EZYbeMHWO0MrfPDzJVnf0p7aBIgyqMraAJKm1MXRPIY06swA
+ 0S9wNrUB0UNahKo8qIMtg+IaMR++6sM=
+X-Google-Smtp-Source: ABdhPJxw8P+XhoUqRjwtw+mmorpAUiBYYQAR8O6uY6dIZsfHVzXI2aWKED0YC/QIzRehWsd4jbWDug==
+X-Received: by 2002:a05:6000:16c8:: with SMTP id
+ h8mr364595wrf.693.1644254954609; 
+ Mon, 07 Feb 2022 09:29:14 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id p15sm4502835wma.27.2022.02.07.09.27.17
+ by smtp.gmail.com with ESMTPSA id y15sm14857845wry.36.2022.02.07.09.29.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Feb 2022 09:27:18 -0800 (PST)
+ Mon, 07 Feb 2022 09:29:14 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  7 Feb 2022 18:25:00 +0100
-Message-Id: <20220207172500.3041019-1-fontaine.fabrice@gmail.com>
+Date: Mon,  7 Feb 2022 18:26:49 +0100
+Message-Id: <20220207172649.3041300-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libusb: add -latomic to
- libusb-1.0.pc if needed
+Subject: [Buildroot] [PATCH 1/1] package/lighttpd: pgsql needs wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,92 +86,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+Cc: Matt Weber <matthew.weber@collins.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libusb unconditionally uses atomic since version 1.0.25 and
-https://github.com/libusb/libusb/commit/1a08aa84d96397a3840a75abe66051f5360c2c84
-resulting in the following build failure with pcsc-lite or openocd since
-commit aad609936fc83acfe1eac6ffc86d29ac35dcf54e:
+Commit b429dce6f8e2ee162b79fe2a3ebb1bd179f462e3 forgot to add wchar
+dependency resulting in the following build failure of postgresql:
 
-checking for libusb_init... configure: error: libusb not found, use ./configure LIBUSB_LIBS=...
-
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libusb-1.0.so: undefined reference to `__atomic_fetch_add_4'
-collect2: error: ld returned 1 exit status
+configure: error: C compiler "/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-linux-gcc" does not support C99
 
 Fixes:
- - http://autobuild.buildroot.org/results/4a27a769bb3cdf78643c3049b87d792178d6512c
- - http://autobuild.buildroot.org/results/b59b30cbe0e27399db5c7586f369104e68a1589a
+ - http://autobuild.buildroot.org/results/e4b59fecd2a5bcda8103ddf4eae3dbd78fe3b896
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...igure.ac-link-with-latomic-if-needed.patch | 39 +++++++++++++++++++
- package/libusb/libusb.mk                      |  2 +
- 2 files changed, 41 insertions(+)
- create mode 100644 package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
+ package/lighttpd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch b/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
-new file mode 100644
-index 0000000000..5f6c88e57d
---- /dev/null
-+++ b/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
-@@ -0,0 +1,39 @@
-+From 0b857081d687f7ee41483a3d7e9846af44a5ba7d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 7 Feb 2022 11:55:54 +0100
-+Subject: [PATCH] configure.ac: link with -latomic if needed
-+
-+libusb unconditionally uses atomic_fetch_add since version 1.0.25 and
-+https://github.com/libusb/libusb/commit/1a08aa84d96397a3840a75abe66051f5360c2c84
-+https://github.com/libusb/libusb/commit/eed8a371ea53939096ba94d44001e0637d042572
-+but some architectures (e.g. sparc) needs to link with -latomic to be
-+able to use it. So check if -latomic is needed and update libusb-1.0.pc
-+accordingly to avoid the following build failure with openocd:
-+
-+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libusb-1.0.so: undefined reference to `__atomic_fetch_add_4'
-+collect2: error: ld returned 1 exit status
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4a27a769bb3cdf78643c3049b87d792178d6512c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/libusb/libusb/pull/1064]
-+---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f6cf2f9..002bcf6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -152,6 +152,7 @@ if test "x$platform" = xposix; then
-+ 	AC_SEARCH_LIBS([pthread_create], [pthread],
-+ 		[test "x$ac_cv_search_pthread_create" != "xnone required" && AC_SUBST(THREAD_LIBS, [-lpthread])],
-+ 		[], [])
-++	AC_SEARCH_LIBS([__atomic_fetch_add_4], [atomic])
-+ elif test "x$platform" = xwindows; then
-+ 	AC_DEFINE([PLATFORM_WINDOWS], [1], [Define to 1 if compiling for a Windows platform.])
-+ else
-+-- 
-+2.34.1
-+
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index 1e82cb9a85..aa306e295d 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -13,6 +13,8 @@ LIBUSB_LICENSE_FILES = COPYING
- LIBUSB_CPE_ID_VENDOR = libusb
- LIBUSB_DEPENDENCIES = host-pkgconf
- LIBUSB_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+LIBUSB_AUTORECONF = YES
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index aa18c13171..6f0c927319 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -92,11 +92,13 @@ config BR2_PACKAGE_LIGHTTPD_PCRE
+ config BR2_PACKAGE_LIGHTTPD_PGSQL
+ 	bool "pgsql support"
+ 	depends on BR2_USE_MMU # postgresql
++	depends on BR2_USE_WCHAR # postgresql
+ 	select BR2_PACKAGE_POSTGRESQL
+ 	help
+ 	  Enable postgres support for lighttpd mod_vhostdb_pgsql.
  
- # Avoid the discovery of udev for the host variant
- HOST_LIBUSB_CONF_OPTS = --disable-udev
+ comment "pgsql support needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_LIGHTTPD_WEBDAV
 -- 
 2.34.1
 
