@@ -1,73 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69285C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 13:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AFF6C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Feb 2022 16:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D49AD60BBC;
-	Mon,  7 Feb 2022 13:38:22 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id otGYpqMbe8J4; Mon,  7 Feb 2022 13:38:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C1DA60B20;
-	Mon,  7 Feb 2022 13:38:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 409321BF29D
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 13:38:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CA0C4011A
- for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 13:38:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E899C40130;
+	Mon,  7 Feb 2022 16:03:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fxw2qE9hs8ew for <buildroot@lists.busybox.net>;
- Mon,  7 Feb 2022 13:38:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0126940102
- for <buildroot@buildroot.org>; Mon,  7 Feb 2022 13:38:17 +0000 (UTC)
-Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:55266
- helo=[192.168.101.73])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nH4Df-0003QP-Bk; Mon, 07 Feb 2022 14:38:15 +0100
-Message-ID: <16f4b7bf-546b-3bf4-c6a3-b711c8cfcadb@lucaceresoli.net>
-Date: Mon, 7 Feb 2022 14:38:15 +0100
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B6TmB708HUQA; Mon,  7 Feb 2022 16:03:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AAC74012D;
+	Mon,  7 Feb 2022 16:03:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 45BB41BF31E
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 16:03:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 312E860E48
+ for <buildroot@lists.busybox.net>; Mon,  7 Feb 2022 16:03:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BwcuMmscoJsu for <buildroot@lists.busybox.net>;
+ Mon,  7 Feb 2022 16:03:06 +0000 (UTC)
+X-Greylist: delayed 00:09:01 by SQLgrey-1.8.0
+Received: from mail.arcturusgroup.com (mx92.arcturusgroup.com [68.179.103.92])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 015D160E95
+ for <buildroot@buildroot.org>; Mon,  7 Feb 2022 16:03:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.arcturusgroup.com (Postfix) with ESMTP id B0A80CF304E;
+ Mon,  7 Feb 2022 10:53:59 -0500 (EST)
+X-Virus-Scanned: amavisd-new at arcturusgroup.com
+Received: from mail.arcturusgroup.com ([127.0.0.1])
+ by localhost (mail.arcturusgroup.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id proY31QY5MlV; Mon,  7 Feb 2022 10:53:57 -0500 (EST)
+Received: from [192.168.1.80] (gw.arcturusgroup.net [66.11.68.6])
+ by mail.arcturusgroup.com (Postfix) with ESMTPSA id 68267CF3044;
+ Mon,  7 Feb 2022 10:53:57 -0500 (EST)
+Message-ID: <4b667326-5aca-538b-9b36-7f0d5a400e9f@arcturusnetworks.com>
+Date: Mon, 7 Feb 2022 10:53:57 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ Thunderbird/91.5.1
 Content-Language: en-US
-To: Neal Frager <nealf@xilinx.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <SJ0PR02MB7758F655ACB4D148D78E403BD72B9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <0a82d8c7-a0c6-06a5-6a0b-788fd5c4a935@benettiengineering.com>
- <8be136a0-1263-3b17-0b78-b7d34ef146c2@lucaceresoli.net>
- <SJ0PR02MB775843B513EA2CAFD0FEBD82D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <032d657b-eb9a-2dc9-f60b-8536f1fc6c57@lucaceresoli.net>
- <SJ0PR02MB7758A5DBC6DD4DA837E0F47FD72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <SJ0PR02MB7758129FFD78D128D3393198D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <SJ0PR02MB7758129FFD78D128D3393198D72C9@SJ0PR02MB7758.namprd02.prod.outlook.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] Xilinx zynqmp_zcu10x_defconfigs: two things left
+To: buildroot <buildroot@buildroot.org>
+From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
+Subject: [Buildroot] [PATCH 1/1] board/arcturus/aarch64-ucls1012a: bump
+ u-boot and kernel version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,62 +62,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Michael Durrant <mdurrant@arcturusnetworks.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
-
-On 07/02/22 14:00, Neal Frager wrote:
-> Hi Luca,
-> 
->> The zcu106 defconfig currently in Buildroot uses a pmufw that has a hard-coded pm_cfg_obj for zcu106 in its default Vivado configuration. It is an old and unflexible hack that required a different pmufw binary for each zynqmp hardware _and_ peripheral configuration (or other solutions like a "wildcard" configuration).
-> 
->> Nowadays pmufw images do not contain a pm_cfg_obj anymore, as it gets passed from U-Boot SPL at runtime [0]. This allows to use the same pmufw binary for all zynqmp designs.
-> 
->> This means you should provide a pm_cfg_obj.c file in boards/ and put the path to that file in BR2_TARGET_UBOOT_ZYNQMP_PM_CFG. It will be built in U-Boot SPL, which will pass it at runtime to the PMUFW.
-> 
->> Note that you could handle similarly the psu_init_gpl.c: provide one in boards/ and put its path in BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE. But since U-Boot has a builtin psu_init_gpl for the ZCU106 (and 102 too) then you should not need do anything. It's for other boards not supported in U-Boot.
-> 
->> [0] https://lucaceresoli.net/zynqmp-uboot-spl-pmufw-cfg-load/
-> 
-> I tried this method, but I am getting the error below.  Do you have any ideas?  Attached you can find the pm_cfg_obj.c source file that comes with Xilinx 2021.2.
-> 
-> cp /buildroot/output/images/bl31.bin /buildroot/output/build/uboot-xlnx_rebase_v2021.01_2021.2/
-> /buildroot/output/build/uboot-xlnx_rebase_v2021.01_2021.2/tools/zynqmp_pm_cfg_obj_convert.py "board/zynqmp/pm_cfg_obj.c" "/buildroot/output/build/uboot-xlnx_rebase_v2021.01_2021.2/pm_cfg_obj.bin"
-> package/pkg-generic.mk:289: recipe for target '/buildroot/output/build/uboot-xlnx_rebase_v2021.01_2021.2/.stamp_built' failed Traceback (most recent call last):
->   File "/buildroot/output/build/uboot-xlnx_rebase_v2021.01_2021.2/tools/zynqmp_pm_cfg_obj_convert.py", line 293, in <module>
->     code, flags=re.DOTALL).group(1)
-> AttributeError: 'NoneType' object has no attribute 'group'
-
-Vitis 2020.1 changed the format of pm_cfg_obj.c. There's a fix commit
-[0] in U-Boot 2021.04 but as you are based on 2021.01 you don't have it.
-
-You have two options to use that fix:
- 1. use U-Boot >= 2021.04
- 2. provide that commit as a patch to the uboot package in Buildroot
-
-To go for option 2, you'll have to put the patch in the
-BR2_GLOBAL_PATCH_DIR, and of course _not_ remove BR2_GLOBAL_PATCH_DIR
-from the defconfig as you would otherwise.
-
-Hint to create the patch file:
-  cd <u-boot-clone>
-  git format-patch -1 d42ab39f58e828c99a0cba6890e29986e87d11f5
-  mv 0001-*.patch <path-to-buildroot>/board/zynqmp/patches/uboot/
-Then add a "Backported from:" line to the patch (see [1])
-
-[0]
-https://source.denx.de/u-boot/u-boot/-/commit/d42ab39f58e828c99a0cba6890e29986e87d11f5
-
-[1]
-https://buildroot.org/downloads/manual/manual.html#_integrating_patches_found_on_the_web
-
--- 
-Luca
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogT2xla3NhbmRyIEcgWmhhZGFuIDxvbGVrc0BBcmN0dXJ1c0dyb3VwLmNv
+bT4KU2lnbmVkLW9mZi1ieTogTWljaGFlbCBEdXJyYW50PG1kdXJyYW50QGFyY3R1cnVzbmV0d29y
+a3MuY29tPgotLS0KIMKgYm9hcmQvYXJjdHVydXMvYWFyY2g2NC11Y2xzMTAxMmEvcG9zdC1idWls
+ZC5zaMKgwqDCoCB8wqAgMiAtLQogwqBib2FyZC9hcmN0dXJ1cy9hYXJjaDY0LXVjbHMxMDEyYS9y
+ZWFkbWUudHh0wqDCoMKgwqDCoMKgIHzCoCA4ICsrKystLS0tCiDCoC4uLi9yb290ZnNfb3Zlcmxh
+eS9ldGMvaW5pdC5kL1MwOW1vZGxvYWTCoMKgwqDCoMKgwqDCoMKgwqAgfCAxNCAtLS0tLS0tLS0t
+LS0tLQogwqBjb25maWdzL2FyY3R1cnVzX3VjbHMxMDEyYV9kZWZjb25maWfCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCB8IDE1ICsrKysrKystLS0tLS0tLQogwqA0IGZpbGVzIGNoYW5nZWQsIDEx
+IGluc2VydGlvbnMoKyksIDI4IGRlbGV0aW9ucygtKQogwqBkZWxldGUgbW9kZSAxMDA3NTUgCmJv
+YXJkL2FyY3R1cnVzL2FhcmNoNjQtdWNsczEwMTJhL3Jvb3Rmc19vdmVybGF5L2V0Yy9pbml0LmQv
+UzA5bW9kbG9hZAoKZGlmZiAtLWdpdCBhL2JvYXJkL2FyY3R1cnVzL2FhcmNoNjQtdWNsczEwMTJh
+L3Bvc3QtYnVpbGQuc2ggCmIvYm9hcmQvYXJjdHVydXMvYWFyY2g2NC11Y2xzMTAxMmEvcG9zdC1i
+dWlsZC5zaAppbmRleCBmOGJhNzgwOTVmLi5jYTM4NjI5ODhkIDEwMDc1NQotLS0gYS9ib2FyZC9h
+cmN0dXJ1cy9hYXJjaDY0LXVjbHMxMDEyYS9wb3N0LWJ1aWxkLnNoCisrKyBiL2JvYXJkL2FyY3R1
+cnVzL2FhcmNoNjQtdWNsczEwMTJhL3Bvc3QtYnVpbGQuc2gKQEAgLTEsNSArMSwzIEBACiDCoCMh
+L2Jpbi9zaAoKLW1rZGlyIC1wICR7VEFSR0VUX0RJUn0vbGliL2Zpcm13YXJlCi1jcCAtZiAke0JV
+SUxEX0RJUn0vbGludXgtY3VzdG9tL2Zpcm13YXJlL3BwZmUvKiAke1RBUkdFVF9ESVJ9L2xpYi9m
+aXJtd2FyZS8KIMKgY3AgLWYgJHtCVUlMRF9ESVJ9L2xpbnV4LWN1c3RvbS9icjItdWNsczEwMTJh
+Lml0cyAke0JJTkFSSUVTX0RJUn0vCmRpZmYgLS1naXQgYS9ib2FyZC9hcmN0dXJ1cy9hYXJjaDY0
+LXVjbHMxMDEyYS9yZWFkbWUudHh0IApiL2JvYXJkL2FyY3R1cnVzL2FhcmNoNjQtdWNsczEwMTJh
+L3JlYWRtZS50eHQKaW5kZXggNDgzZDVlOWFlZi4uZjg5MmZjNGFiYyAxMDA2NDQKLS0tIGEvYm9h
+cmQvYXJjdHVydXMvYWFyY2g2NC11Y2xzMTAxMmEvcmVhZG1lLnR4dAorKysgYi9ib2FyZC9hcmN0
+dXJ1cy9hYXJjaDY0LXVjbHMxMDEyYS9yZWFkbWUudHh0CkBAIC0yMywxNCArMjMsMTQgQEAgUmVz
+dWx0IG9mIHRoZSBidWlsZAogwqBBZnRlciBidWlsZGluZywgeW91IHNob3VsZCBvYnRhaW4gdGhp
+cyB0cmVlOgoKIMKgwqDCoMKgIG91dHB1dC9pbWFnZXMvCi3CoMKgwqAgKy0tIGFyYy11Y2xzMTAx
+MmEuZHRiCi3CoMKgwqAgKy0tIEltYWdlCivCoMKgwqAgKy0tIGJyMi11Y2xzMTAxMmEuaXRzCivC
+oMKgwqAgKy0tIEltYWdlLmd6CiDCoMKgwqDCoCArLS0gcGFydDAtMDAwMDAwLml0YgogwqDCoMKg
+wqAgKy0tIHJvb3Rmcy5jcGlvCiDCoMKgwqDCoCArLS0gcm9vdGZzLmNwaW8uZ3oKIMKgwqDCoMKg
+ICstLSByb290ZnMudGFyCiDCoMKgwqDCoCArLS0gdS1ib290LmJpbgotwqDCoMKgICstLSB1Y2xz
+MTAxMmEuaXRzCivCoMKgwqAgKy0tIHVjbHMxMDEyYS1zb20uZHRiCgogwqBGbGFzaGluZwogwqAt
+LS0tLS0tLQpAQCAtNjAsNyArNjAsNyBAQCB1LWJvb3Qgc2hlbGwuCiDCoDQuIFByb2dyYW0gdGhl
+IElUQiBpbWFnZSAoaW5jbHVkZXMgS2VybmVsLCBEVEIgYW5kIFJhbWRpc2spCgogwqDCoMKgwqAg
+QiQgdGZ0cCBwYXJ0MC0wMDAwMDAuaXRiCi3CoMKgwqAgQiQgcnVuIGlwcm9ncmFtCivCoMKgwqAg
+QiQgcnVuIHByb2dyYW0wCgogwqA1LiBCb290aW5nIHlvdXIgbmV3IHN5c3RlbQoKZGlmZiAtLWdp
+dCAKYS9ib2FyZC9hcmN0dXJ1cy9hYXJjaDY0LXVjbHMxMDEyYS9yb290ZnNfb3ZlcmxheS9ldGMv
+aW5pdC5kL1MwOW1vZGxvYWQgCmIvYm9hcmQvYXJjdHVydXMvYWFyY2g2NC11Y2xzMTAxMmEvcm9v
+dGZzX292ZXJsYXkvZXRjL2luaXQuZC9TMDltb2Rsb2FkCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDc1
+NQppbmRleCBjODdmZmRhMTRmLi4wMDAwMDAwMDAwCi0tLSBhL2JvYXJkL2FyY3R1cnVzL2FhcmNo
+NjQtdWNsczEwMTJhL3Jvb3Rmc19vdmVybGF5L2V0Yy9pbml0LmQvUzA5bW9kbG9hZAorKysgL2Rl
+di9udWxsCkBAIC0xLDE0ICswLDAgQEAKLSMhL2Jpbi9zaAotIwotY2FzZSAiJDEiIGluCi3CoMKg
+wqDCoMKgwqAgc3RhcnQpCi3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbW9kcHJvYmUg
+cGZlCi3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgOzsKLcKgwqDCoMKgwqDCoMKgIHN0
+b3ApCi3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgOzsKLcKgwqDCoMKgwqDCoMKgIHJl
+c3RhcnR8cmVsb2FkKQotwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDs7Ci3CoMKgwqDC
+oMKgwqDCoCAqKQotwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVjaG8gIlVzYWdlOiAk
+MCB7c3RhcnR8c3RvcHxyZXN0YXJ0fSIKLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBl
+eGl0IDEKLWVzYWMKZGlmZiAtLWdpdCBhL2NvbmZpZ3MvYXJjdHVydXNfdWNsczEwMTJhX2RlZmNv
+bmZpZyAKYi9jb25maWdzL2FyY3R1cnVzX3VjbHMxMDEyYV9kZWZjb25maWcKaW5kZXggZmQzM2Vi
+ZjFmNi4uZjU0NGE1MjQwYSAxMDA2NDQKLS0tIGEvY29uZmlncy9hcmN0dXJ1c191Y2xzMTAxMmFf
+ZGVmY29uZmlnCisrKyBiL2NvbmZpZ3MvYXJjdHVydXNfdWNsczEwMTJhX2RlZmNvbmZpZwpAQCAt
+MSwyNCArMSwyMyBAQAogwqAjIEFyY2hpdGVjdHVyZQogwqBCUjJfYWFyY2g2ND15CgotIyBMaW51
+eCBoZWFkZXJzIHNhbWUgYXMga2VybmVsLCBhIDQuMTQgc2VyaWVzCi1CUjJfUEFDS0FHRV9IT1NU
+X0xJTlVYX0hFQURFUlNfQ1VTVE9NXzRfMTQ9eQorQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFE
+RVJTX0NVU1RPTV81XzQ9eQoKIMKgIyBTeXN0ZW0gc2V0dGluZ3MKIMKgQlIyX1RBUkdFVF9HRU5F
+UklDX0hPU1ROQU1FPSJ1Y2xzMTAxMmEiCiDCoEJSMl9UQVJHRVRfR0VORVJJQ19JU1NVRT0iV2Vs
+Y29tZSB0byB1Q0xTMTAxMkEtU09NIgogwqBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCi1CUjJfUk9P
+VEZTX09WRVJMQVk9ImJvYXJkL2FyY3R1cnVzL2FhcmNoNjQtdWNsczEwMTJhL3Jvb3Rmc19vdmVy
+bGF5IgogwqBCUjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9hcmN0dXJ1cy9hYXJj
+aDY0LXVjbHMxMDEyYS9wb3N0LWJ1aWxkLnNoIgogwqBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NS
+SVBUPSJib2FyZC9hcmN0dXJ1cy9hYXJjaDY0LXVjbHMxMDEyYS9wb3N0LWltYWdlLnNoIgoKIMKg
+IyBLZXJuZWwKIMKgQlIyX0xJTlVYX0tFUk5FTD15CiDCoEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X1RBUkJBTEw9eQotQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChj
+YWxsIApnaXRodWIsQXJjdHVydXNOZXR3b3Jrcyx1Q0xTMTAxMkEta2VybmVsLHYuMjAuMzEpL2xp
+bnV4LXYuMjAuMzEudGFyLmd6IgotQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InVjbHMxMDEy
+YSIKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2FsbCAKZ2l0
+aHViLEFyY3R1cnVzTmV0d29ya3MsdUNMUzEwMTJBLWtlcm5lbCx2LjIyLjA1KS9saW51eC12LjIy
+LjA1LnRhci5neiIKK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJ1Y2xzMTAxMmFfc29tIgor
+QlIyX0xJTlVYX0tFUk5FTF9JTUFHRUdaPXkKIMKgQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9S
+VD15Ci1CUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0iYXJjdHVydXMvYXJjLXVjbHMx
+MDEyYSIKK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJhcmN0dXJ1cy91Y2xzMTAx
+MmEtc29tIgoKIMKgIyBGaWxlc3lzdGVtCiDCoEJSMl9UQVJHRVRfUk9PVEZTX0NQSU89eQpAQCAt
+MjgsOCArMjcsOCBAQCBCUjJfVEFSR0VUX1JPT1RGU19DUElPX0daSVA9eQogwqBCUjJfVEFSR0VU
+X1VCT09UPXkKIMKgQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJRz15CiDCoEJS
+Ml9UQVJHRVRfVUJPT1RfQ1VTVE9NX1RBUkJBTEw9eQotQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01f
+VEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIApnaXRodWIsQXJjdHVydXNOZXR3b3Jrcyx1Q0xTMTAx
+MkEtdWJvb3Qsdi4yMC4zMSkvdWJvb3Qtdi4yMC4zMS50YXIuZ3oiCi1CUjJfVEFSR0VUX1VCT09U
+X0JPQVJEX0RFRkNPTkZJRz0iVUNMUzEwMTJBX1FTUEkxMjgiCitCUjJfVEFSR0VUX1VCT09UX0NV
+U1RPTV9UQVJCQUxMX0xPQ0FUSU9OPSIkKGNhbGwgCmdpdGh1YixBcmN0dXJ1c05ldHdvcmtzLHVD
+TFMxMDEyQS11Ym9vdCx2LjIyLjA1KS91Ym9vdC12LjIyLjA1LnRhci5neiIKK0JSMl9UQVJHRVRf
+VUJPT1RfQk9BUkRfREVGQ09ORklHPSJVQ0xTMTAxMkFfU09NIgoKIMKgIyBUb29scwogwqBCUjJf
+UEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTPXkKLS0gCjIuMjYuMgoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
