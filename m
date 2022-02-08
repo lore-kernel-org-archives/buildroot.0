@@ -1,146 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08ECBC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 11:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07F3BC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 12:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0C9681B53;
-	Tue,  8 Feb 2022 11:56:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A7B3404F5;
+	Tue,  8 Feb 2022 12:02:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kl8DjQsWQpV1; Tue,  8 Feb 2022 11:56:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xVLwmpXKjitT; Tue,  8 Feb 2022 12:02:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00F8180D69;
-	Tue,  8 Feb 2022 11:56:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 292AA40435;
+	Tue,  8 Feb 2022 12:02:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7C25A1BF31D
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 11:56:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2725A1BF31D
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 12:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 682644014D
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 11:56:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 137A740435
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 12:02:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j06bSmYsbicR for <buildroot@lists.busybox.net>;
- Tue,  8 Feb 2022 11:56:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11on2081.outbound.protection.outlook.com [40.107.236.81])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 71AA54010C
- for <buildroot@buildroot.org>; Tue,  8 Feb 2022 11:56:17 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HVVsLgFPJY+w3I45XCV7L8m4BKKcNINQ/C9YSelLg/NYXve8nB84WDcB5FbM1FVqoX0OBhgBbapZxXAOa074UKF6r4oXaC5JEGboXe8tWFkFvPXRqT2YjZF0/aGTvjOHDvp2CtiRuVKqT/kTqoYMf0qTtUeiUvRCRxgbSv6xuhEcrcYXPHA7Xv9MpQp1zmn5fUOhNE1QG8Gh0z9GVpgohWgBYKct8lwKSUtZd/tVhxcyRKhX9WgBTC1XPTpdM6JvcyiHVKKpusTMTzwJBbHWQN50pRJYOu97vKwyRUZZV4TL+Z2cTKc/tMDZYgYv3uSXLSOV2xTgzVAHct7+sLo08w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JY564HweMH0jXRR4+Er9pZbU6j7RPhu/0FkgHzO0JSQ=;
- b=N8z/PQhPDXSyMUtw0PgjjAVbBNfEvZScEhw/w5zh7Z/pz3wtRZbbjW1+jVglaLz1YONDvtKUBAsB/fiYl6/yuZJH8godyvvkmJmOCpJDpg5efVQ9eYby/u+BMbJM0OV4j6rifvzlOLGtbXbObVJZ38zjo3/0p+ihMPhLpNu7UV1IM4b2qShBqtr+Pqt4Y2gwqOs8jnOWmo7BHmnG3OUVZOh/AIY7HyF5UMTGer0fEvu32Yf8b9qEAbiZqPkBYAqMcNNHPBxhrHK+OrcMWsjRPSIj3Jj0BGysK/2OugZr+ooNP00SbXsnQVYwHQyK1uFzEtRzXZYonyZCrXrs5shXaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JY564HweMH0jXRR4+Er9pZbU6j7RPhu/0FkgHzO0JSQ=;
- b=Ec4WXnOvzS8YZoG+AujyMWKlqWsvWpcTJJm76sjZZFfurspwUCmLZFy2aI2ZDyFWusWnfaIMvTTw6LVOyE9nHZqRG0YEUx6CLsMCK0reyOGpzeN6Vs3zwLZ6t8TVqGdTym4vmlonO1P9FzLomXG7CTNgRXJoecaAC1i7HdDqB7c=
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by DM6PR02MB4266.namprd02.prod.outlook.com (2603:10b6:5:2b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 11:56:14 +0000
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::2116:5f79:fc19:9d93]) by SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::2116:5f79:fc19:9d93%7]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 11:56:13 +0000
-From: Neal Frager <nealf@xilinx.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH 1/2] configs/zynqmp_zcu106: Bump
- ATF/U-Boot/Linux to Xilinx 2022
-Thread-Index: AQHYHLvCRQMYU+xDi0iUN6JqHwI+MayJbQIQgAAD1QCAAAEWgIAAD1IAgAAKt9A=
-Date: Tue, 8 Feb 2022 11:56:13 +0000
-Message-ID: <SJ0PR02MB77585322044616B1600B5D83D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
-References: <20220208071559.2862411-1-neal.frager@xilinx.com>
- <SJ0PR02MB7758927E29E93F773AD4C9F8D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <69efa9da-ae55-6795-8724-ed7105083924@benettiengineering.com>
- <SJ0PR02MB7758317CF3A3B2D662099BC3D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <32cc1c12-1496-7db9-5e32-1b99404a4fe3@benettiengineering.com>
-In-Reply-To: <32cc1c12-1496-7db9-5e32-1b99404a4fe3@benettiengineering.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 61b94113-f8b6-49b7-56a7-08d9eafa018e
-x-ms-traffictypediagnostic: DM6PR02MB4266:EE_
-x-microsoft-antispam-prvs: <DM6PR02MB426637FEE198BF5D641AA260D72D9@DM6PR02MB4266.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ubroAxCk+RjkzwUziCEIPNNvn8NGYePFiinNcLRnQ9XWyHdIygaFx43QuX3JwzR2vWPq4Oxh25+FOy0NWOm+i6+PRQwr+KiCom0tnN+2/KB6JGrsVo4p9Xia/XCtQ/9UEnvLi2U+mf5NFH5s3a50dX0Oq7MtwjlyYoYr5VJd6Yes9GhEhNcm6ypRqjSwA6hhB+cPNrpStHJdNFQKLnBcyMVoPVYRZp/X9SaOhQ+PCmxq9l/iIT3MCozEkMh3VsVjbHt64cePcIF49JR0+7+YhMJMG0aamGY3gqLHGlbxeLG0MKbo31KF15qukqrP0/FxdssyD5uZUjySUFo+YZjP5P22YP2p9vPxTfzrLO/+IElkN+ejlDZWLy9gAezEXlFHPiyzfklMki3u3qiZ7XfHrQddVOWBwGVcyOTFy3nDGNNVWyvy0ds25z5Zl0dDqej9/6KrRFNAE7DuhOvuMZobkoQZAY/W359StM7LQ4eeEpos8bS0SbC5kuNfwn3PlUXfYjGKXybcSl7HY5Z6zlgJKD72lMRYYk5l8EGtiDNlJX+7d8YxxcsW5+z36F1ka9pgRoaGQeu1efBskjcUlGjquFt+1zMZJ9jYOzgaucHcX/bpsWt2M0rVr/EXpc4WqPkVBKEhgMBDwBecxzJdNao520/eeoGpHh2hhwd0xRJF5Sh8TSp4/VK1o/3IylGS4hq1Ni9cO94TmRSuqqken7zcvw==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(122000001)(64756008)(86362001)(38100700002)(54906003)(71200400001)(186003)(55016003)(107886003)(26005)(316002)(33656002)(9686003)(6506007)(7696005)(508600001)(8936002)(76116006)(66946007)(66556008)(4326008)(5660300002)(66446008)(52536014)(8676002)(2906002)(66476007)(38070700005)(4744005)(110136005);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R3g4eGV5Z1VxWWZhYUxXOURlcTZJQjU2MDJCMTJVL0xpeWwrdVFwQ0hWN211?=
- =?utf-8?B?Ty90U2ZEaG5NbERzV2ZiUnVweUs4RUFoY3JpeDNhcS9ibUc4NmVPR3ZLM2lJ?=
- =?utf-8?B?T2NIbTZhQlI3YjZnUDN5b0xoeElGb0Q4MXdCVE83MzZ3alNrQ0daVWVDTlRi?=
- =?utf-8?B?YjdLWnczZDlTa0FXdlBITXhVOEs0NnNSSXV4WThYZVZSZktjeDEyS2crMmpy?=
- =?utf-8?B?a1ZjSll4a1lkUUxhVm8yeFFXQ0MrYkFGMXoyc0FVT1oyVjk4RE5yb0hyaDc2?=
- =?utf-8?B?Qko5WjF5WkMvV3JuZThKZVF5RjBvTTV0YlJ6OC8wWUoyOU14c01mRUVleUFP?=
- =?utf-8?B?eXU2WFZaellucHhMSHZQRDF4RkpVNVNpUXdtaXM1VCs0VGgzVFdNbDRmLzZW?=
- =?utf-8?B?cDd1Um1saElTc3ZPOG1IVkZuTEY5b05MUkZQSTlRTnZRei80UDZ0Z2YxNEQv?=
- =?utf-8?B?NVlUYzV5dVZSNkFFakFmYXJQSHZWU0pGcytNZTFGaEp1Y1lmYWdTenZoRUVx?=
- =?utf-8?B?QldoOVlqN0w0S0hxMnVnV3Qxb25rRFYvWWRmSUdTRHljL1JLR1E1c01tbldW?=
- =?utf-8?B?RjAzdGVralRkNlplSXFNc2JBTGYyejFia2RVS1BZWEZjbVFYZU9pb2F1Zlhn?=
- =?utf-8?B?TkVvY1FsYXRCRjkyQnpDM3A3M0dkdXFMbGlNN01NTXFkRTdkNzhKR2dhR3Ft?=
- =?utf-8?B?WHNXWm13V0hvZjBlMWg1RnVvdlRsRzdBSFYwOHdScFpuZlJiUE1RRk5JTGZ1?=
- =?utf-8?B?NDZ3Y0t1UDdrUVc4bk1RLzRiamprRUMzS2xBTTQ1aXZnZUR2MTdSYThmczJz?=
- =?utf-8?B?bGFSWFUzSGZabnp1QmE0ZytxS0VNQ294ZnZDbFZvZDkzQUhZazBRdVJkbHV4?=
- =?utf-8?B?cFRmK2VjcXJmSHF6Z1h0L0ZySis0YTRORmF1M0QzdHhvV2dhSjZWQW5vZGVl?=
- =?utf-8?B?UDdjRWdXcnJmVnBrMUZvNEtJV2ZJUDVYM3N5YjR4eXdFYU1hek5mcWZOZmhq?=
- =?utf-8?B?Zm95aDJEd3J3d3hORUdIYzZzd2owS1pwcTVGZHdtbXc5RnVud2pkaHh0dkJ3?=
- =?utf-8?B?bUFpTm9aUHpNRHA3emZ1NmRWNEQxMFBpVVlzUmZFUGZGL3NZY1ZOc0FOYkFN?=
- =?utf-8?B?UmZWMWthRTNNZjZlRjhtWTIvL3NPd1hWaVZLR2R4c29CSHZjai9ma3Z6eE1J?=
- =?utf-8?B?cDBKclBROHpLVkVMMzZ1aFR5bk1XNkpCQUI1bHZ5SUJhVVA3U2cxeStoalNw?=
- =?utf-8?B?T2VZQmdkZEFPWmlOUjQxSmJGZ3puWUhrYnkvTnZ4NmQ5MDF4Kzh2Qk85Y3Vj?=
- =?utf-8?B?bi9wRFRGOXBGZklHY1VGaEVXYVN0UG9Fd1NTeWF2YVRjVG95T05pbmQ0aVpS?=
- =?utf-8?B?MDUxaTZiRVo3RnFrY2JJaE9CQXJPYmZYek4vT3lqaEFTWng0MExxOEl3SG85?=
- =?utf-8?B?YTFhZHZPL3pLYUtPeTE0QUJQNFlpbzBwQ2MvakxuTFU1anc5T21ZK05CZHVw?=
- =?utf-8?B?Mm5UUnB6VlRXSnp5d2c2Z0NQbEFIMjAxZ0FDL3ZIc2h3cVBiWHBjTXVtUFRn?=
- =?utf-8?B?eEVJTmhLeGlWc1Fsa3FmWUEwUmp2UDc2d0RjdFZlRnhJWFAxcEFCTjZySFZX?=
- =?utf-8?B?bE92bUh0cEpHT3BULzErNHhIWmczOU0rb2JVVnZQUDBjQmV2RCtZWk9pT0o5?=
- =?utf-8?B?amMzZ0dFMWVHVzdDZFptVmI0ZGFvWitJRmJnVUJFV1VhcmQvZ2ZJa1BmZDNB?=
- =?utf-8?B?ZDVET3pRZHdtd0h5NEVDYUN2MGt6UG8xdTV2cWNRSEJsbUZkS0kvSHFTWnRW?=
- =?utf-8?B?bk9aV2RmRlVjbUZveVd3UHkwVmV0SWdCemNkcXdSVlpCdWtqdTd6Y3FJMzJN?=
- =?utf-8?B?eGxzUDBoTlVScGI4RG43SjNvNWFuMHEvWFI1YnJ2aExHNVl6OW1BT0h6RW9P?=
- =?utf-8?B?WGZkUXhQVENiRzZtRmRjSDBuaU1VdzJKa3J6cTFTdStKV3NsTFpyOE5hSk1n?=
- =?utf-8?B?bCtlL0VBZlgzYi9lZlVZUXBKMGFUTldDS09PcFdqMTJESFQ5QWhsdkwxTUNJ?=
- =?utf-8?B?RUNzWkg1a1czODJ6cGtEWEowbUFLTnVnU2dmdGF5QUhFQis1MVJJVnNKQ3Bu?=
- =?utf-8?B?V1pmdHlJdnIyZDNSd1hTMTN4OTd0czlVa0MvTGd1aGxpdUgrOWRCd0ViWk1M?=
- =?utf-8?Q?Zu1hSbJY255b4bAJfZxT2oc=3D?=
-MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61b94113-f8b6-49b7-56a7-08d9eafa018e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 11:56:13.7356 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XXgHF6YQcNCdYoeD9ShA/Iy5VBAzRIw2DqNHDd+Bfc+Bfd+0gm3l3ZQW6QpXBte8HhVxE9/Y76Za9Qw9hm0xzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4266
-Subject: Re: [Buildroot] [PATCH 1/2] configs/zynqmp_zcu106: Bump
- ATF/U-Boot/Linux to Xilinx 2022
+ with ESMTP id 92WWmD4trWSh for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 12:02:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2142B4010C
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 12:02:42 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id HPCin0zoqX0z7HPCjnf34h; Tue, 08 Feb 2022 13:02:41 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644321761; bh=TXJTfsxk0TEkkOuf2E8XgtfZ9AcabxQqNO7mexv7Gus=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=icnS1LA4YqZdTzfvS5QCiJNGpk5GAEjygek+SDM9ZXrcRsplfU1SjhQzd1aVtykWM
+ cuB4y7R2afn3luttI7S5ObKjfi+VbPGt0dY8royLUGNThZSGQy2LDnF+s1L7fym6OX
+ Ihg8VJ3mmT35iv/XuN5907PYWk8gnRxi2UTg54aeJexppxViym2J5VM56t8gZahtGd
+ +sly5au21CQiqO8AJgaqOkAMXOQiR6zgQjt80MWimB/5UhZqUqQKEj3ERUMSWuPIvL
+ kluSlmUiz4u4kisoUWEasM5Zv5SXuGt4ojODuFsRipptDceZW0xYVDfyMl1upomIo1
+ P4VVNpW6y4fRQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Tue, 8 Feb 2022 13:02:40 +0100
+Message-Id: <0B93B49F-FD97-4CFE-9B13-DC866D12C7E1@benettiengineering.com>
+References: <ec93ac94-a7ae-3448-800b-88de7615e675@benettiengineering.com>
+In-Reply-To: <ec93ac94-a7ae-3448-800b-88de7615e675@benettiengineering.com>
+To: Pedro Aguilar <paguilar@paguilar.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfCSfM+VVdoWgRnuxZe4tpdGnFH9a6IDjcUxQtE6jTobaOwXlOMHgZplqhGunmEis5Uc+fqMi1rrtIOTCORfyJPnxpNMmyB9z/uXkkJheGM0m5bhHC8tZ
+ LwkJOVgiWsDAaavVcYH3QvwWWB2x1dSBK5o9v0EuX23o5HMtyDSVmydNm38ZQsp9tf72/MZTI+mPFLLgtefOF5Tu7H8ly8Ga8JYmIkLBFTK/dCh7HxiEwY8z
+ BszKCqPVU2f6kADlRttRMu0dHx033QKcEPmFBIZpZmsi7gI7h6N/xZ7XZbf1CnZN
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/guile: Guile 3.0.7 requires
+ libiconv.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -152,28 +68,194 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
- Michal Simek <michals@xilinx.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2540889028920958323=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
 
-> I think you should go with local patch honestly.
-> As the patch is now.
+--===============2540889028920958323==
+Content-Type: multipart/alternative; boundary=Apple-Mail-3AA294D6-D41F-47A1-B34F-5D68E4605214
+Content-Transfer-Encoding: 7bit
 
-> --
+
+--Apple-Mail-3AA294D6-D41F-47A1-B34F-5D68E4605214
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+> Il giorno 8 feb 2022, alle ore 12:47, Giulio Benetti <giulio.benetti@benet=
+tiengineering.com> ha scritto:
+>=20
+> =EF=BB=BFHi Pedro, Thomas,
+>=20
+> please don't top-post, answer in-line.
+>=20
+>> On 08/02/22 10:19, Pedro Aguilar wrote:
+>> Hi Thomas,
+>> I added libiconv based on the error I got while building. The attchmnt ha=
+s the output error and the config file I used.
+>=20
+> Please send your changes as patches, or otherwise paste here the last line=
+s of logs or in the case log is very long use pastebin and point the URL her=
+e. So please don't attach anything.
+>=20
+>> However, I was not aware of BR2_ENABLE_LOCALE, so I selected it and remov=
+ed libiconv and it also built correctly. The other config file shows this co=
+nfiguration.
+>> May be a correct solution could be to add the dependency on BR2_ENABLE_LO=
+CALE. But if it's not present, enable libiconv.
+>=20
+> I think this is a good example of what you're trying to do:
+> https://git.buildroot.net/buildroot/tree/package/libcdio/Config.in#n4
+
+And you also need this:
+https://git.buildroot.net/buildroot/tree/package/libcdio/libcdio.mk#n16
+
+Best regards
+Giulio
+
+>=20
+> Best regards
+> --=20
 > Giulio Benetti
 > Benetti Engineering sas
+>=20
+>> Thanks.
+>> Regards,
+>>>> On 06/02/2022 10:30 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wro=
+te:
+>>>=20
+>>>  On Sun,  6 Feb 2022 09:43:34 +0100
+>>> Pedro Aguilar <paguilar@paguilar.org> wrote:
+>>>=20
+>>>> This fixes the error reported in the daily results.
+>>>>=20
+>>>> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+>>>=20
+>>> libiconv is normally needed only on toolchains that don't have
+>>> BR2_ENABLE_LOCALE. But the build failure of guile happens with glibc
+>>> toolchains, so it doesn't make much sense.
+>>>=20
+>>> Are you sure that your analysis of the problem is correct? Could you
+>>> provide some more details?
+>>>=20
+>>> Thanks a lot!
+>>>=20
+>>> Thomas
+>>> --=20
+>>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>>> Embedded Linux and Kernel engineering and training
+>>> https://bootlin.com
+>> Pedro Aguilar
+>> https://paguilar.org
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+>=20
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Ok.  Please go ahead and start building with the patch as is.  I have tested it on my side.  It builds and runs without needing any manual steps.
+--Apple-Mail-3AA294D6-D41F-47A1-B34F-5D68E4605214
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Neal Frager
-Xilinx
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto"><br><div dir=3D"ltr"><blockquote type=3D"ci=
+te">Il giorno 8 feb 2022, alle ore 12:47, Giulio Benetti &lt;giulio.benetti@=
+benettiengineering.com&gt; ha scritto:<br><br></blockquote></div><blockquote=
+ type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<span>Hi Pedro, Thomas,</span><br><=
+span></span><br><span>please don't top-post, answer in-line.</span><br><span=
+></span><br><span>On 08/02/22 10:19, Pedro Aguilar wrote:</span><br><blockqu=
+ote type=3D"cite"><span>Hi Thomas,</span><br></blockquote><blockquote type=3D=
+"cite"><span>I added libiconv based on the error I got while building. The a=
+ttchmnt has the output error and the config file I used.</span><br></blockqu=
+ote><span></span><br><span>Please send your changes as patches, or otherwise=
+ paste here the last lines of logs or in the case log is very long use paste=
+bin and point the URL here. So please don't attach anything.</span><br><span=
+></span><br><blockquote type=3D"cite"><span>However, I was not aware of BR2_=
+ENABLE_LOCALE, so I selected it and removed libiconv and it also built corre=
+ctly. The other config file shows this configuration.</span><br></blockquote=
+><blockquote type=3D"cite"><span>May be a correct solution could be to add t=
+he dependency on BR2_ENABLE_LOCALE. But if it's not present, enable libiconv=
+.</span><br></blockquote><span></span><br><span>I think this is a good examp=
+le of what you're trying to do:</span><br><span>https://git.buildroot.net/bu=
+ildroot/tree/package/libcdio/Config.in#n4</span><br></div></blockquote><div>=
+<br></div><div>And you also need this:</div><div><a href=3D"https://git.buil=
+droot.net/buildroot/tree/package/libcdio/libcdio.mk#n16">https://git.buildro=
+ot.net/buildroot/tree/package/libcdio/libcdio.mk#n16</a></div><div><br></div=
+><div>Best regards</div><div>Giulio</div><br><blockquote type=3D"cite"><div d=
+ir=3D"ltr"><span></span><br><span>Best regards</span><br><span>-- </span><br=
+><span>Giulio Benetti</span><br><span>Benetti Engineering sas</span><br><spa=
+n></span><br><blockquote type=3D"cite"><span>Thanks.</span><br></blockquote>=
+<blockquote type=3D"cite"><span>Regards,</span><br></blockquote><blockquote t=
+ype=3D"cite"><blockquote type=3D"cite"><span>On 06/02/2022 10:30 Thomas Peta=
+zzoni &lt;thomas.petazzoni@bootlin.com&gt; wrote:</span><br></blockquote></b=
+lockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span><=
+br></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"c=
+ite"><span> &nbsp;On Sun, &nbsp;6 Feb 2022 09:43:34 +0100</span><br></blockq=
+uote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>=
+Pedro Aguilar &lt;paguilar@paguilar.org&gt; wrote:</span><br></blockquote></=
+blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span>=
+<br></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"=
+cite"><blockquote type=3D"cite"><span>This fixes the error reported in the d=
+aily results.</span><br></blockquote></blockquote></blockquote><blockquote t=
+ype=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><span></spa=
+n><br></blockquote></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><blockquote type=3D"cite"><span>Signed-off-by: Pedro Ag=
+uilar &lt;paguilar@paguilar.org&gt;</span><br></blockquote></blockquote></bl=
+ockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span><b=
+r></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"ci=
+te"><span>libiconv is normally needed only on toolchains that don't have</sp=
+an><br></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D=
+"cite"><span>BR2_ENABLE_LOCALE. But the build failure of guile happens with g=
+libc</span><br></blockquote></blockquote><blockquote type=3D"cite"><blockquo=
+te type=3D"cite"><span>toolchains, so it doesn't make much sense.</span><br>=
+</blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite=
+"><span></span><br></blockquote></blockquote><blockquote type=3D"cite"><bloc=
+kquote type=3D"cite"><span>Are you sure that your analysis of the problem is=
+ correct? Could you</span><br></blockquote></blockquote><blockquote type=3D"=
+cite"><blockquote type=3D"cite"><span>provide some more details?</span><br><=
+/blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"=
+><span></span><br></blockquote></blockquote><blockquote type=3D"cite"><block=
+quote type=3D"cite"><span>Thanks a lot!</span><br></blockquote></blockquote>=
+<blockquote type=3D"cite"><blockquote type=3D"cite"><span></span><br></block=
+quote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span=
+>Thomas</span><br></blockquote></blockquote><blockquote type=3D"cite"><block=
+quote type=3D"cite"><span>-- </span><br></blockquote></blockquote><blockquot=
+e type=3D"cite"><blockquote type=3D"cite"><span>Thomas Petazzoni, co-owner a=
+nd CEO, Bootlin</span><br></blockquote></blockquote><blockquote type=3D"cite=
+"><blockquote type=3D"cite"><span>Embedded Linux and Kernel engineering and t=
+raining</span><br></blockquote></blockquote><blockquote type=3D"cite"><block=
+quote type=3D"cite"><span>https://bootlin.com</span><br></blockquote></block=
+quote><blockquote type=3D"cite"><span>Pedro Aguilar</span><br></blockquote><=
+blockquote type=3D"cite"><span>https://paguilar.org</span><br></blockquote><=
+blockquote type=3D"cite"><span>_____________________________________________=
+__</span><br></blockquote><blockquote type=3D"cite"><span>buildroot mailing l=
+ist</span><br></blockquote><blockquote type=3D"cite"><span>buildroot@buildro=
+ot.org</span><br></blockquote><blockquote type=3D"cite"><span>https://lists.=
+buildroot.org/mailman/listinfo/buildroot</span><br></blockquote><span></span=
+><br><span>_______________________________________________</span><br><span>b=
+uildroot mailing list</span><br><span>buildroot@buildroot.org</span><br><spa=
+n>https://lists.buildroot.org/mailman/listinfo/buildroot</span><br></div></b=
+lockquote></body></html>=
+
+--Apple-Mail-3AA294D6-D41F-47A1-B34F-5D68E4605214--
+
+--===============2540889028920958323==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2540889028920958323==--
