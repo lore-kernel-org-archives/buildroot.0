@@ -1,75 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E57EC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 10:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DA05C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 11:13:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E6AD408F4;
-	Tue,  8 Feb 2022 10:25:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDA3580DAB;
+	Tue,  8 Feb 2022 11:13:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XBGc5z1W6X7W; Tue,  8 Feb 2022 10:25:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70226408D6;
-	Tue,  8 Feb 2022 10:25:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5504F1BF2FB
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 10:24:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50E0881366
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 10:24:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7kK7eQedI4kh for <buildroot@lists.busybox.net>;
- Tue,  8 Feb 2022 10:24:58 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XfXB-R4VZqmd; Tue,  8 Feb 2022 11:13:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A99A80C44;
+	Tue,  8 Feb 2022 11:13:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 39F381BF5F6
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 11:13:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 277A640897
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 11:13:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZfQi0smXh4_u for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 11:13:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on20602.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e88::602])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7EE1E8134F
- for <buildroot@buildroot.org>; Tue,  8 Feb 2022 10:24:58 +0000 (UTC)
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10on20615.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e8a::615])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 347D540882
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 11:13:52 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LE8AxgXLoGechmh/i3m7dXWPvqK9UOCq2L+DHPzb0gxpCiOlXLs8J7pyA62tht4iOQ0zs+I2Ac7kW/qHUgt8yay/ebkMSv0g8hgyBHqjmJ/lKutFHpu7GYmGjpsZ0s8TMbOIl4cCYOquXgDDSPSSzqEdzG+zuLdWWbB2IBKdBejRpjJmi/5V/AWViOGwTQY5GLgQAdG6Qq69jTR+lf1+sUspGACvQHH90uWj7kTrTx+tmvYK+gYiV65Bn/wlmJmn4M/TfI7lxxlhL/Wo3pJlHcNiRTGzgvcw37TUgWqpZvXe08ksMwNy5nnhHPAe5EpejixavQowtraSS2ffATitUQ==
+ b=kqBClBJ4FpoHF23XtrsLMWuFYA0mKPRgZTQzydsZoM9kXG5zI/uTXxJuirDjuk7Zdt62/42SzTfZrIYUe3g1mXSuUbHzKWM/datSADHxOjvCAcciIiDJxlgxLwW3p7UUnXjNcbA9cDihOuYSJYUo0cQRNV0PG7Yrttqvkgx/x0Nh6TK8g/a22EYp2BcbUVLqGFvyKO34J7fxvPZxbNRjhYjnfW7FI7ib+Gk64ex32aXqryABBwgipo45/EOWz+2HGxWypgwTkRXLwAgismL9M2HlkHsrVTuRXsM/mJ6WYNIr1zp5POwyrpIMJExLKlafBdySoFoAJUyllxHOUBmoSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=14kM076wZzacY1nNNzpRY6WT6FI3jl66OHFth5Rnvqs=;
- b=D/jrdumx/cs49VlZBfUuoYOuCaGFmfhtXeH7jD9D6DQ+izPs1xPkSySzsJtblRuaamOSDrlqyza87S+zB1NuNULHKd2SilWGr0Q3rkTISiRbvUJylxUXSqCqyycKlJnDfJHcBSrrhI1QIS1/0gL68oYMiZuezl1G/2RTIbDDfJFSX2SvzQI81wBWo4W05RD6hpo82devU/fTpDvQTxkLZwFfXf7ooiX/7u4af/dG0jy9tCofqPzjwKeYHNPm5DoNTffXo413wopD82lc8or2uOFT1QdKtXpMc8GNTWeMfJUBiDTNmVIgqegadOaS4NN7YzxwYIyjQzY4uTrvmnvI2w==
+ bh=a3tPfBXlOX4LRxMIgQmjNd7JeNX4G7zXb8E47Dhkjd8=;
+ b=fkiJX7VC/H0HlpGG5Rr8SWS/dSpKVyIkyKhVcPwM1F7ZV+UNP3qFbRZZlgxQhkwKUikUhPdBjD2WR9SIpSLGR4fKSjOCTQ6KTWScR7hRlWWQitIyLygI512vlQBhTOE2zxOWZgOGP9qCGp0MyV6DJGj1zkCR2Rh80C1A9VvKcDJZ7M8n+l8s2DOkov+j9WiYfa2IQx7L45v4oXRmyOW9VMXH7dpP6Wx+l4V8uqooILzF18poQT/zs10ErMiq4sPwf5vFWdKhC99n4x/3rhbYbbxwXfd4qAddW5JYVC1vui5EDEIqwmhJH+VbvI1sLrHvWAw5JR75tpheICmEK8UPxA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=14kM076wZzacY1nNNzpRY6WT6FI3jl66OHFth5Rnvqs=;
- b=jPO40jNDcGgfp95gCy37dAADMkXjsnwxgKgqZn+DXWS0ubOlXglNXF3OPVUZdFGBqjcG8c36U5r8U9vkffm6hwH64ws8B8b/eriblUHVQM0BpDEAa1+uzhT0AiFaPRc3wB6tR1+JrxBlvqESn7a938KQVfXiX1fXsXe4bEFwpRA=
+ bh=a3tPfBXlOX4LRxMIgQmjNd7JeNX4G7zXb8E47Dhkjd8=;
+ b=Oh/4E+nLRCq6OnMXidWS8uExVsS5StHUsoLUXFo5ixug5LyHsyS+5Ek1au1Ad4PD6bGaiFhXRsE0UGwvYVFylYrwkwkTeviCc0YLJjs6mqZJqci0dBNi1PVm09gNMWH1t3t+uQSZUWCIIctvww6J6JlMRIc0RqvIx7Vzh23WOK8=
 Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by SN4PR0201MB3533.namprd02.prod.outlook.com (2603:10b6:803:4a::26)
+ by CO6PR02MB7780.namprd02.prod.outlook.com (2603:10b6:303:ac::14)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Tue, 8 Feb
- 2022 10:24:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 8 Feb
+ 2022 11:13:41 +0000
 Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
  ([fe80::2116:5f79:fc19:9d93]) by SJ0PR02MB7758.namprd02.prod.outlook.com
  ([fe80::2116:5f79:fc19:9d93%7]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 10:24:56 +0000
+ 11:13:41 +0000
 From: Neal Frager <nealf@xilinx.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH 1/2] configs/zynqmp_zcu106: Bump
- ATF/U-Boot/Linux to Xilinx 2022
-Thread-Index: AQHYHLvCRQMYU+xDi0iUN6JqHwI+MayJbQIQgAAD1QCAAAEWgA==
-Date: Tue, 8 Feb 2022 10:24:56 +0000
-Message-ID: <SJ0PR02MB7758317CF3A3B2D662099BC3D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
-References: <20220208071559.2862411-1-neal.frager@xilinx.com>
- <SJ0PR02MB7758927E29E93F773AD4C9F8D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <69efa9da-ae55-6795-8724-ed7105083924@benettiengineering.com>
-In-Reply-To: <69efa9da-ae55-6795-8724-ed7105083924@benettiengineering.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Thread-Topic: Xilinx mainline ATF v2.6
+Thread-Index: Adgc3Oy3XAK4QW8zQv2B3w/LH9LbXw==
+Date: Tue, 8 Feb 2022 11:13:41 +0000
+Message-ID: <SJ0PR02MB77580A9E2B0D263EE239D46ED72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -77,69 +71,68 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=xilinx.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6e5bd80b-6156-4c05-ec0f-08d9eaed40be
-x-ms-traffictypediagnostic: SN4PR0201MB3533:EE_
-x-microsoft-antispam-prvs: <SN4PR0201MB3533C66AC15F2543D3F0E31FD72D9@SN4PR0201MB3533.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-office365-filtering-correlation-id: 62afa18b-65d9-4e82-0d5c-08d9eaf41021
+x-ms-traffictypediagnostic: CO6PR02MB7780:EE_
+x-microsoft-antispam-prvs: <CO6PR02MB7780D40C9655B822CCF8564CD72D9@CO6PR02MB7780.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2803;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CtlYdoVgLPVSBB1zeGHfHmOkirQNn2Rfwb9dk7k2bETA7xBezv3jxIJe1Ew8K8GltDyyyvb5FqyBsmObVbWrNQ0SN41qP8sJD3vqBF/bbPbU8vag524+i8Uzn9B8KHNsqQy8OE695FSJXzjlS+rBD4N9HVKCLtjpnElIqi1f1u3XbrXwdxHQvR4jtHaEAAK0JvK/IgFtRAqf/uEvxgYr2Ixi9NIP10X1vgpDW6K15siMfS6Fb0THbaZi2Xm3VwMCTF3iepcTLE/haUuD6lonUPpQo2fC4kqOni4rbctxm/KdOqRbBhG3NVMKMws4XLcwhxNmOq34/nNYI9d5+xjMHV1WAOBQZGDQ0AbUntE5kEdjyjElWL6FppXwhr4wdFV+sJOfYYBj48P1/JaUuprZlENKHclKKP5ewE74mExcITxNVZ2+z7rRbTMWV25XGwAviGNXWWscblbapGmz3dGHGjMD0PMNHuDNLw0oXPq8N2jX05pNAb9IckgAKrc+byqM3uHPgKYXWcsq0DWuKi7wC9a0jCbm7wBBdJJEQFJJl9zw58GnObgCZKPO8v6J5ZV7dDTVVwamHWV1Wl1RbOC1l5JT9ALyg2UF9hFX+p+dp5tCPtpEx1ThxtOnIZ3smhv3a3bktW9i1+oj90e+4f6V8I7HYuuKdt8C3SynjgvlfkFRmu2h8r30LKA+KtHenuc4EuuapLCcmEj9U0tObV5gWg==
+x-microsoft-antispam-message-info: GgWUPM/CpLvaDGfcOssht2Cbx9cJLG8+mz8JWfnSrWd9oCbIM/jpoGU+7eJmLGtAunsNTiZm+OhJ3kOvn1lz1KosJSfJVmMVYiWXtCHppDVO4yYh727ZGH9/A9GW5NgDkQphuB4Iy8HQKMnhSENHOlYf+n7j3WJTwe6sto4maBvDuQv051McVBfgw4ZNhTxY43Gk1md2oWT1GEkzz31t8nsPWNf1eXQEGmUJ1T7zlSNLAAHxOdjPOekMqkZUdI0Qv/9aU8KXa1PvRzplG7+Z/UrNxkicJKW+ZdZwxniOB5zbYlFA/Jypi5sESDvEp2C0j9j4gtGTuCe6N5pqvyQabBq1Q521wlGUfn5d/ouKeYOadIMQm+7GDXZymQRdTU6ZNPM4H132VS66JYa+GkFafvQ715a2UwKfgP5OOxrj2Pufu8RYeQIjn3+voFbW5tHmZH0Kp/XqtMxeX7qYiW14gicInNfiQ823aGLnakJsVCk6wktCpUbovRDBezuVs5tH9iufnYmcVbPJlKNqKujn5YLPne80jGPx0oJ8GMTOBc+04mUq9lkAB9kV2X3PN8MNF3XCDMkDfMszM5kDk2zENPe2ZCGPjCCGKeofVf2O2zVQcegD5Xqb3ByC3K6B/hQ+knVSEeihzfvcZB7VTEHF1yvQdG6ssUD6tpTH6D/DMMAWp9KNTRjVIY/gEh6SvtI+lx7xdPkexK8uXSHqadFv8J7i2qIjaC+GqPeK873laI+N+P7CaR1TGmBl+ikIR0mbida1ZpYCjkxj9btCsh5RKhFSYbbqYi6RWIolKK5bruA=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(55016003)(38070700005)(71200400001)(122000001)(110136005)(9686003)(2906002)(38100700002)(508600001)(33656002)(66556008)(66476007)(66446008)(64756008)(8676002)(54906003)(4326008)(52536014)(83380400001)(6506007)(186003)(7696005)(26005)(107886003)(86362001)(5660300002)(316002)(66946007)(8936002)(76116006);
+ SFS:(13230001)(4636009)(366004)(55016003)(38070700005)(86362001)(33656002)(38100700002)(122000001)(52536014)(71200400001)(8936002)(5660300002)(9686003)(6506007)(7696005)(53546011)(54906003)(316002)(966005)(6916009)(4326008)(64756008)(66446008)(66476007)(66556008)(8676002)(66946007)(76116006)(508600001)(83380400001)(186003)(26005)(2906002);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NnpPaTVnaW40UkViZDlFQkUvN0hNb1ZNUkl2c1pUZWVIQUc0TGNyZVl5SVV5?=
- =?utf-8?B?Q3M5cEtIUXVpMlVSWFBDb0d0bkRYL24xMDFQcEdpOWdaUXVVTXJWUVBsOVdl?=
- =?utf-8?B?MkFsMzJ2MmFRRnRWZkhGTU1FZHBob2tTU3F3cGdzTUJEOHgxUnhzV09lK2tl?=
- =?utf-8?B?ZEFLWlpFdzlWaXdsVDFvTzBGMmpIWUQzS1NueHZ4U3F3VGJUWnl0cjBTTTJz?=
- =?utf-8?B?ZWQyRWQxSUV6cVg3VkttckJ2NlJpbUx6T0RpOWFidTVnbFUzbHBTazMxTUdR?=
- =?utf-8?B?S0U0TVdyZ0FiOGxNY2hnYWdyOU05K1dEa3BqMkVSaEFvTUFDRGVsVUVwY0Vr?=
- =?utf-8?B?QVYzWkZkR0ljN2lZaHVEa2JMbUl2cWdSV1pEOXI5ZEJNMlh5T3lUZTd2b3pj?=
- =?utf-8?B?NlNvZDRYd0lqZnhVZVFRNi9ubDJyYVdvWnhSaGtTV2ZmZ1FTcGlKY2Ywd3Bs?=
- =?utf-8?B?Q0dDOURDam9IalFiUk9Oa1FBYXJvUC8vYTArNWdBSHBMdHFkaVVDaEliR1hs?=
- =?utf-8?B?Q0JrdjhUT2FtczRNemJRLzhGLyt1NGJQZmpKZFQwdlQvTzZDMTJJSVJrbWN1?=
- =?utf-8?B?SFUrR0NuU2NXTjQxcTVNZmh6N3VQT05hYi85dDFiN0ExS3pSc0c0Ykt2ODdO?=
- =?utf-8?B?bkVzTzBITHVsZXc5Q2syZmhScG42TzlQMU5JalMwSG93MHVEanZmVWpyUGFs?=
- =?utf-8?B?OEFvT0oxL0ZtSWEyV2NTeWQzZTVoamhrSWN5dkdyQTRLZGRSZmNJQ0JQc2xF?=
- =?utf-8?B?QTF4M0lkY0JudmFXcFozcnI2QTRyU1JWekt3UGRDRThXL0o1M1BGQ1BaUERE?=
- =?utf-8?B?U2pmdmJMTFNXdjFSMWNCTnpQSlNjaW9DaW1jOW1pV1N1aUFLbGpMUGN1VDVM?=
- =?utf-8?B?Q1FhaURLK043YXlZVk5GbTlRd01KVmhxN0pyd1hJaFgzVHB6T2FsMk16cHJV?=
- =?utf-8?B?cWhEc0JyUVNnUU9ITHdZc3FYM0xSelZ2WThpRFVmRTlFc1djMHpDQnFTQ3BY?=
- =?utf-8?B?N20rTSttd1pyR09mV3JQWjB5L0FtdWw5MWVlQUxwNVpWSHlNN0lnTzhYZUtz?=
- =?utf-8?B?am1TQ0VZZndyWThERkRNSGFObmhFVTd2aUN4dTBrWDZ6SXhzdGxQclB2R243?=
- =?utf-8?B?UUJhWkRqNGFjQ2VpMDZKUnRqZnBBeVVvM3ZVZUFGVGs4dTBnZHRZOGlHRldZ?=
- =?utf-8?B?R3ZXRGtMUmoxYnY4U2RkM2gzQkRiRkgzWEovWEVVOWFtLzdXK3FCWWM1Nk1l?=
- =?utf-8?B?OHM1WURpZm1GcDc5dDJFU1d3Q0ROVTVUaUdvdEF3eXZvUjFGY3liQ0hpaDFs?=
- =?utf-8?B?WXNmWkZ3YlJGTjl4L2IzNERobkdnaUJlMFZPQ1liMHFIYXBiYm9xbFg1V1Uy?=
- =?utf-8?B?S1U1ZTFTRDB4SVRySVduMlE2eGNEK1MxejlTclh4TGg2LzhMM3J4UmpHNEVt?=
- =?utf-8?B?MlR5OGs2RGc0MU9LSHgvTjNBTkFXK2k2SVVuZ0N2QWFLVzJqdFZZNjFYS3JG?=
- =?utf-8?B?bldMYk02djQ0SEI3RFZ3eEtwazRWQ09CMlN3TFJQbFcrMUNVTDVuaDhuQkF6?=
- =?utf-8?B?MEtFdzQzS2tDMEtGeisvckNRa1FNZEYvY2E3ZGp4bHhWcGxpdlJCTGRobWpk?=
- =?utf-8?B?WXpHSkJjcW5WbmFSSytscEoxZlh6cE1jZkt0MDFTRnJYbzUwdDFnV3lMZUlm?=
- =?utf-8?B?Z3R6SWVnbWFMWmtoNms4NGlDRGl5MTFrWmIxQmkrUkNZbVdnUFltaUdHL3RE?=
- =?utf-8?B?TzdGYVVTMUhtSTZuSXVNZUFBSzlKaXdMTDUvcEZTeGE0SWp5cjR6MWQrWUht?=
- =?utf-8?B?cjZmTkU3a3pXTHpZT0crbVNMNzNKMFJiU1ArOU9kVnhKWnFpc3lCcWpwZ3hi?=
- =?utf-8?B?SDRoSDJKOEdxWVBTQUt4UnNNRlFrOHNTRjFRbi9IVUFXSGVtbDFsbnZYVnZ0?=
- =?utf-8?B?VlVxZ2lkTnM2ZmQ5dHFDbUs4MTltRW9BMjB5bkl5dWU1dWNaSjlVNnczSGd1?=
- =?utf-8?B?UXVqVFNIMG5UeW5PeG9wL3BmWlVOUVV3YWNoU2pVY3BBeWE5SGtLWFptdFBU?=
- =?utf-8?B?UFFCV0xyTkEwUmFNUkc0MHVxbThRcXIyS0ZkMzFaTFNCMjZKUk9rcTgvMFFi?=
- =?utf-8?B?UjFRSjZFcldJbjlrYWlLeWRIMEd6REd4enJWWWVjYkRiczloUURma3hGcVRq?=
- =?utf-8?Q?oTe8ecSAuEk7NcWn0brYCdA=3D?=
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OVVMSWVDdUpSWGZmMXdHNzJ5Rng3eFB1T3ZBWUpZT3h4UnF5SUlBeUVrQnVZ?=
+ =?utf-8?B?QTVIbEZQSnhmZ0Uram4rcjNhR0Z3MEQ0c0FMME1OTC9iL3d4Y1l0NEFvK1I0?=
+ =?utf-8?B?dFVDc3dEbHp4cklmNkF6bnpzcm5xUHdLb0VRNk1LeElnWWNzK2VXbllGWEg5?=
+ =?utf-8?B?N3phRWU2YmIwZjFpc0k5WmpObEU2N0FXL2ZLNm5OT0JrVjRYemx4dmFwcFU3?=
+ =?utf-8?B?Rnd2OVQ2QUR5cVRlSE5FVko0Ri9mWjVlVVY3Y3QvWkVQSlAxM09PYkZZZThE?=
+ =?utf-8?B?WDAwNVp4RHUyay80YXFMd0hGUzhjTWVMRFFaZWo0NjY3YzAxcmdnV3d5b1Zi?=
+ =?utf-8?B?TWgrZElDZkRrMW1KUFJlYTVaeU5vZ3RqOHJkNXAvQTEzVXhJTXJQSUZkdXBZ?=
+ =?utf-8?B?aXJtODZzK0RvY0NUaWUrWExEOUVmOU8rUlBjMndBMTZYRW51WStwT3NMbDBM?=
+ =?utf-8?B?cC9oaHdzRGhxS2NZbHMwTWJQa0FiM0VtWENnVkVwVy9JeDFVd2Y0ZWZwK3lV?=
+ =?utf-8?B?Q3hyY2d0Q0YxSm9MUWRhQnE2bVlSSzVCK2laRHZqdDZ0bnNaTzFEcmcrb3Ft?=
+ =?utf-8?B?Ymh4Rm53K2RUQUJwZzR0Zzh5b1IxbHh6azVkWTZLWjRIMEEvaDJKNnNQVkF5?=
+ =?utf-8?B?Q2JvU2t1cytuYWt5OFBJeUpMeEpzbk11dmpSdVpLdXplSkk3dEtPMzYwR1lz?=
+ =?utf-8?B?UDh5N3hDbVZlVmoyQ2YxSWUwNnpQck8vMTJJcU16bCs4TFJreXkrd0g2eG5u?=
+ =?utf-8?B?TzZLbVpLZ0RYQmlEc3pTTUlOVFFXSWZiWXZHWS9NdmlFSE12VkRYcG5SWndm?=
+ =?utf-8?B?aG1GUjRKdVdiSFpTU29KNHlTeDMxdnRURWYrNkJpOHZUWEdTRUkwdllHOEZs?=
+ =?utf-8?B?RjdGZEZYcWp0UDMvblZodnFBZ2N3VUFwZ0pGNkRtemR1UG95b0lSUlVHb0c3?=
+ =?utf-8?B?b2xEMkxrK0hPU1AxNEZ0UCtWR0JxaWdzQURuaVByTXUrWG96RkZkMUVoL3hp?=
+ =?utf-8?B?L2l3ajk0L05rVzFNaWUzb2o3TVlidGVwN2oyNS9ILzlLVkRZMzRHMXQycURM?=
+ =?utf-8?B?TXpxN2dVNmtkM2JOSFdnY0JnVStlaHFaY29KVzlXT3cxM0poekZVZ1VYVTZP?=
+ =?utf-8?B?ZEQ3czVRY3U4TlNLQ2h5WnNPZU5xb3lMckJSNUF1TDlOam0rTTN2Ujl2VVMv?=
+ =?utf-8?B?cGtLMUcyMmlGTU5veHpnWDBSWWJGeTBJNHNhWmxvVW9hSWYyY3NqbkhjdGkz?=
+ =?utf-8?B?S3pMMkJha1phaGRzc29ZV0t2YUpTVGJCL3VFM3Q4aWJOeGlyejlyS3NGWHVQ?=
+ =?utf-8?B?T011MEZGQlpqQnByaHhuc29acUsyd293Vk5KbCtEeldEMWhoaSt0RVR3TVZr?=
+ =?utf-8?B?K3FiQk9GZ2ZTNE54Q21HZHQvd1JGclVEdldkOEVOK2NZRUNjS1hUeUNlYzhy?=
+ =?utf-8?B?QituekhoU3d5Z0I4Tmx4a2FTRGpsWDZTS2p3TW1yUStkcEFsQ1VCMjlnMDF3?=
+ =?utf-8?B?S2dpOWNkd3QwRThqWnlKbDc1LzEzOHYrTFNkRHNQVUw3VjhMTHVtbFlvMWNN?=
+ =?utf-8?B?NEUvTGxoTUFEeGtFK2lmVG04MVk2R2RYNzY5aHIycUVOaUFmdDk2QW04THhN?=
+ =?utf-8?B?aERacEtrbWY1eEIwU3VNUmY0TUhiTzdYd0ZibCtNZnRxUEpzaFAvd2diM3Uz?=
+ =?utf-8?B?YkRMKzExeGlEUlhvbGM3dGNBTmdlT2xEeWJReHFRWUF3cW00UXF5a29PZVBO?=
+ =?utf-8?B?VkRWYUFOcEZ3QkNkS3FLNFNFLzh5TzVuNm14OVF0YmZUdHFMQ3FaNzlCbTYz?=
+ =?utf-8?B?SmVQT3hBa0VFT2hWQTJyMVZ2SW5iakNTNGRETk1mUE9KanFYdy8vUHk0NGZ1?=
+ =?utf-8?B?SkwwdGx2T2lDZXk5VDdPWUJPTTFpZWRUMTNpcHcxd0p3NkxYVTJTcmM3N0lO?=
+ =?utf-8?B?OTNTNVFKYlJabEQ4dlJwR3plVVllVHorT3BkVjhvYWhoS0RQMVF1czcvaTFn?=
+ =?utf-8?B?MjZjV2hOaVoyaDNQL25MTG8za0M5MEdOdUNLNnJ6WlFBRkROSDNwMTVsSXlw?=
+ =?utf-8?B?d0RoVyszY2JzcW9wZk10NjF4Y2MrUzc5STlwZWNRTzBUR0FQU1JJN2dkQ3o0?=
+ =?utf-8?B?VU9JVmxXYTlFcmU2dUREYkNHZjBHVEVsZVRTMHVvM2tMVWNGTGNZU2orQkIy?=
+ =?utf-8?Q?fD4BtCIIVw2wtyzoAqNQCWo=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e5bd80b-6156-4c05-ec0f-08d9eaed40be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 10:24:56.2945 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62afa18b-65d9-4e82-0d5c-08d9eaf41021
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 11:13:41.2219 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wENgJ2xXMfqjAJmAH/3NTO7Ia0OosNDMRSMjhPlrthiKN/lvbxAa5oCdhu0vi/Pt8GYjAc3VM2IKoNzlLfcK9A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3533
-Subject: Re: [Buildroot] [PATCH 1/2] configs/zynqmp_zcu106: Bump
- ATF/U-Boot/Linux to Xilinx 2022
+X-MS-Exchange-CrossTenant-userprincipalname: dGfWvD7N2nbzzQ9GSdnZBHZO3CKwIuzfBeaERJhC47M+nOxWuW2V0tjmz5jAVlVKX6L0B6ma7yXlIDM5gc5UxQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB7780
+Subject: Re: [Buildroot] Xilinx mainline ATF v2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -152,7 +145,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
- Michal Simek <michals@xilinx.com>
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -160,27 +153,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Giulio,
 
-> Ok, I was about building your patches :-)
+> today morning I had couple of hours and I've managed to fix the build failure and sent the patch upstream:
+> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/13800
 
-> Please send as v2, so when creating patches add -v2:
-> # git format-patch -s -M -o outgoing -2 -v2 then add 3 dashes before the actual 3 dashes in the produced patches and described what is changed between V1 version to V2 like:
-> ---
-> V1->V2:
-> * moved BR2_TARGET_UBOOT_ZYNQMP_PM_CFG to an URL instead of local patch as suggested by Giulio
-> * other eventual modifies
-> ---
+> Can you please give a try to that patch?
 
-> And if you send then a v3, then keep previous V1->V2 and add:
-> ---
-> V1->V2:
-> * moved BR2_TARGET_UBOOT_ZYNQMP_PM_CFG to an URL instead of local patch as suggested by Giulio
-> V2->V3:
-> * modified ....
-> ---
+> Here is a fast link to download exactly that one:
+> https://review.trustedfirmware.org/changes/TF-A%2Ftrusted-firmware-a~13800/revisions/1/patch?download
 
-Thank you for your quick response.  How do you think we should handle this?  It appears that the BR2_TARGET_UBOOT_ZYNQMP_PM_CFG configuration does not yet support pre-downloading the file from a URL.  Is this something that can easily be updated?  If not, perhaps it makes sense to move forward with my patch set as is for now, and then I can include a new update once the BR2_TARGET_UBOOT_ZYNQMP_PM_CFG configuration accepts URL inputs.
+> But its name is awful. So please:
+> # git clone https://github.com/giuliobenetti/trusted-firmware-a.git
+> # git checkout bl31-zynqmp-linker-failure # git format-patch -s -M -o . -1
 
-What are your thoughts on this?
+I am trying to test your patch now, but when I follow your instructions, I get the following error upon checkout:
+
+error: pathsec 'bl31-zynqmp-linker-failure' did not match any file(s) known to git.
+
+Any ideas how I can obtain the proper patch for testing?
+
+On 04/02/22 14:32, Neal Frager wrote:
+> Hi Giulio,
+>
+> If you simply modify the defconfig from my patch to change BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.4" to BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.6" and rebuild, you will see the build error when trying to build the mainline ATF v2.6.  If you can fix it on your side, that would be great!
+>er
+> Best regards,
+>
+> Neal Frager
+> Xilinx
+>
+>
 
 Best regards,
 Neal Frager
