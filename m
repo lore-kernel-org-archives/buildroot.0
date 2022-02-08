@@ -4,117 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51AC5C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 07:16:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9D5C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 07:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDA0460C1E;
-	Tue,  8 Feb 2022 07:16:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6958560C1E;
+	Tue,  8 Feb 2022 07:26:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WTzGbGqpUaUL; Tue,  8 Feb 2022 07:16:39 +0000 (UTC)
+	with ESMTP id Obh9FZVAwd8m; Tue,  8 Feb 2022 07:26:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15C5F60ABB;
-	Tue,  8 Feb 2022 07:16:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53BEB60ABB;
+	Tue,  8 Feb 2022 07:26:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1B92B1BF318
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 07:16:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 51B931BF318
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 07:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09F7860ABB
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 07:16:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DB1C60888
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 07:26:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m3QK-lkc_MAK for <buildroot@lists.busybox.net>;
- Tue,  8 Feb 2022 07:16:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2CAA460888
- for <buildroot@buildroot.org>; Tue,  8 Feb 2022 07:16:14 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l60V+zb7JHwqZCxecdowIGQ8WB1fgHx3HzldWB7HaLL7Tt89YB2MXKiUCs8JXQh58W0huqTegV2KQTjDS/Mjdkzg8wCmoibShdy70TES0VNHu26Cdh29Ohbfh+Tq/tNBVUsMiLO1218jTc5jWfcac03M/6XIsllZ6rLMTv82nb3r2mGddhaK73VoW0OVskp1gZcPwNyWMQA8aNsjDevqMEwDXrRWh8N2F2ooDh25piPu9+e5uBjA/k9vkuGsTcL9FwHTEUXxf9d/qJt4IXLAELsagk8Vw0V4XQN5hE9ILYy5dn0+G5tWMZq1Qe+4+4wyQdYV5ge3uXIm6tnbOnWePQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aTGEJl//sTW1SZ/Wt4M6y9iK/NS2FZE34wqPWVh92W4=;
- b=YKZ6UuWCwAvpztHYNz0DC7/DneHTEAL+lH3OTp2YV20cvzuwle/k+SZMcVUMnwi+s/CPdT0yqH9m1WY7SQQC/V2Th8B+4EmEo3UiisTIqk1bdpRL/KLulTLW/sVMd7HS4Fk3GK9sESwN5BAEN3frPs2UVSeKA78ScN1J3RouV6KFaRBSk4I0w0xlfesUqgN6wllnefyd/w2mwFVrhG7DSqNE0b09Cf4ZPDnBgSqzDwyFlPhr7Ah3Ar8vZCXdm1cjpVosRpONB4naB6VnxpJP8WD/KDhxbitIXUW7W7ujvIAlyahsxIbV1oCPLvxWnmjzA5//GJfCd/JJ8GRIunRSew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aTGEJl//sTW1SZ/Wt4M6y9iK/NS2FZE34wqPWVh92W4=;
- b=RCEsBegyj2mIat1C8nXZQPmo3LUc2ehRVyrrEF2j/DYhKsrKNMmTBWYmI159RVRiPgi4ArUB356UMYpqWfRshC2Kotn32DXnPLSoxYqqNBpG527WjNNEGZ2FVgtBl3hZho3sm+4kGYpte4X2WiE2gweXWzPLpSTM5OxnuUxywYA=
-Received: from DM6PR12CA0006.namprd12.prod.outlook.com (2603:10b6:5:1c0::19)
- by CH2PR02MB6790.namprd02.prod.outlook.com (2603:10b6:610:7d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 07:16:10 +0000
-Received: from DM3NAM02FT004.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:1c0:cafe::57) by DM6PR12CA0006.outlook.office365.com
- (2603:10b6:5:1c0::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Tue, 8 Feb 2022 07:16:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT004.mail.protection.outlook.com (10.13.5.122) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Tue, 8 Feb 2022 07:16:09 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 7 Feb 2022 23:16:09 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 7 Feb 2022 23:16:09 -0800
-Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
- giulio.benetti@benettiengineering.com
-Received: from [172.25.185.186] (port=34918 helo=xcoapps69.xilinx.com)
- by smtp.xilinx.com with esmtp (Exim 4.90)
- (envelope-from <neal.frager@xilinx.com>)
- id 1nHKjR-0007zm-BS; Mon, 07 Feb 2022 23:16:09 -0800
-From: Neal Frager <neal.frager@xilinx.com>
-To: <buildroot@buildroot.org>
-Date: Tue, 8 Feb 2022 00:15:59 -0700
-Message-ID: <20220208071559.2862411-2-neal.frager@xilinx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220208071559.2862411-1-neal.frager@xilinx.com>
-References: <20220208071559.2862411-1-neal.frager@xilinx.com>
+ with ESMTP id Ygy1ChA-xoW0 for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 07:26:01 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 816AD6072A
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 07:26:01 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BDABC240002
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 07:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1644305158; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=1TOUQIz0aY/b6DuTlhuoCr5M+xeL4AcNvIcKAHck8GI=;
+ b=BO2vffOnvilTN88Xjx3ROpJrbKsZFcLIBvSQFFoBF+8CMldH/OpyC54Zn5OlyiAsfLCe/j
+ K4vq5OnJ3U5a3GBKfgZ76XYKA24HANPTn/djYtjf+5j65rRnxUTmSc7EaHgwnTG8pITdnl
+ zdo/hyvhAh0QnJjjXjSLTxHoLkRjRJiNFjUJUbvuBPDoGDcr47m9G8j4q33j57jK5acLlc
+ xg8fOZdfmeBF/FL+YrPMp91NGFduMr97ysccFIoBNFnlgFXThsuosqAYFoaeU/LHnIKbNW
+ p9y/RsjZNtWZmTj5zDtq8FZKAya35AYQ9ZAGHCFn8fo9WaoBt7Jknq3WwKJnnw==
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cd06542f-fbc9-408d-dd54-08d9ead2e1aa
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6790:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR02MB67906836F472163CD257575FD72D9@CH2PR02MB6790.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ItWMs9wMHPfxvx1W+ome8h8RoHGQFkhRiiyeoco7oSsk9iU5vXqGvwlY8z0f7ctuVi8HJuQ6fdFeq/9l7scqsFcvHXAVtBgTMCQYd1TSXeoDymdx6Rm51Ii15Y3cz9ptnrH3DeGeNn2dAM5FpckEUBt6CntzUwt2Qp/uCa2BcKXKAhy1IYAZZOLj5Ngw4/n2THsIeQZ3k1pznGBXj7y+OmzV44kMKGEpFaofJyAQbXuniyy/faP4t10HXEqidoccbRue39tSUpKEbjZqyfyrnU/BKOhry37tBfXC3YUiU8uE3+6ey14deum8aGfT6cNWn1RcjTTPu1/DuucegPVjTZBs1RkcBvfoZ3Zf4zOL3qwxfalLPvK2qQYPnOv7V4tClwbkpYWHbYII+aXBW3szmVHMOEHjUQF0PLWF91NY3f+V0tbO2OFDe+LYBAfpAsi/tMni5gAQ/1Aki+B8B2Pof9R8P5SFRw4tWQwmsY8FLNopE/8PV2Nqc7FMZbedjQIf0XJRH61pyWgAwN4Eejprb8cNTgLxOTUxPKHW6VQW8NFjCyN8PEgqTuwBPyD+qHmy8NfkRknx8XZW3V1EQ9ENHSDW35fQiq4VAXYJRWbge0CjrNpZemDEbAeim23cq6y96ImNavEbq2mjxIdJQ5UuMg4PC6WCj6MIeIrQXsDKAwfRVcnul+ZAt1BCo6rVf/FNxPvJdaS7akrJCxLa+l+WjXXgKYivEV3TeokVesMRMB3ZCz5ickIPhSYAHQzmW5+FFtWKB/O0pt6aGnHF83RSH/U/yWkmL698fC1KzdJTiz4EtklNcyb7LOgczFXhuEu1uWRBV5Dsqhfb7SxfezVvKg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch02.xlnx.xilinx.com;
- PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(2616005)(36756003)(6666004)(7696005)(36860700001)(107886003)(316002)(426003)(508600001)(44832011)(2906002)(1076003)(186003)(26005)(336012)(5660300002)(47076005)(966005)(82310400004)(40460700003)(8676002)(8936002)(70206006)(70586007)(4326008)(54906003)(7636003)(6916009)(9786002)(356005)(102446001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 07:16:09.8801 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd06542f-fbc9-408d-dd54-08d9ead2e1aa
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT004.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6790
-Subject: [Buildroot] [PATCH 2/2] Add configs/zynqmp_zcu102_defconfig
+To: buildroot@buildroot.org
+Date: Tue, 08 Feb 2022 07:25:58 -0000
+Message-Id: <20220208072603.4DB1C60888@smtp3.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-02-07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -126,70 +60,173 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: luca@lucaceresoli.net, Neal Frager <neal.frager@xilinx.com>,
- giulio.benetti@benettiengineering.com, michal.simek@xilinx.com
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch:
-- adds support for Xilinx ZCU102 evaluation board
-- ZCU102 features can be found here:
-- https://www.xilinx.com/products/boards-and-kits/zcu102.html
+Hello,
 
-Signed-off-by: Neal Frager <neal.frager@xilinx.com>
----
- configs/zynqmp_zcu102_defconfig | 37 +++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 configs/zynqmp_zcu102_defconfig
+Autobuild statistics for 2022-02-07
+===================================
 
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-new file mode 100644
-index 0000000000..65a32d11d0
---- /dev/null
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -0,0 +1,37 @@
-+BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.15"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.6"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2022.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-+BR2_TARGET_UBOOT_ZYNQMP=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2021.2/bin/pmufw-v2021.2.bin"
-+BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/pm_cfg_obj.c"
-+BR2_TARGET_UBOOT_FORMAT_ITB=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 45  |  7  |  0  | 52  |
+  2021.11.x  | 20  |  1  |  0  | 21  |
+    master   | 35  | 49  |  2  | 86  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+           host-libselinux-3.3 | 13
+             bluez5_utils-5.63 | 11
+   host-python-docutils-0.15.2 | 5 
+                 gerbera-1.9.2 | 4 
+                     ace-7.0.1 | 2 
+                    bird-2.0.8 | 2 
+                       libuwsc | 2 
+               belle-sip-4.4.8 | 1 
+              host-grpc-1.43.0 | 1 
+              libuhttpd-3.14.1 | 1 
+                    mpd-0.23.5 | 1 
+                openocd-0.11.0 | 1 
+               pcsc-lite-1.9.5 | 1 
+                   perl-5.34.0 | 1 
+               poppler-21.12.0 | 1 
+               postgresql-14.1 | 1 
+qt5base-53a047c212af7fbded6... | 1 
+                rtorrent-0.9.8 | 1 
+                       unknown | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    mips     |           ace-7.0.1            | NOK | http://autobuild.buildroot.net/results/a10dae2e6e5f07590bcc1526216a4d41ae420fc7 |     
+  mips64el   |           ace-7.0.1            | NOK | http://autobuild.buildroot.net/results/13376405e313da112f546076a10859e60631d5d5 |     
+   xtensa    |        belle-sip-4.4.8         | NOK | http://autobuild.buildroot.net/results/67ffdea04cd847685c097551c6bb397ddac1b2d7 |     
+  mips64el   |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/c633ec702afb8c4f63ab1807250e469904ece9b3 |     
+  nds32le    |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/220501962e48cd7ddb5d5e849c41e5700e085177 |     
+    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/fef25236f2fb1de7d2bab8c72cecfdbd760bf5e2 |     
+  sparc64    |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/8d6ee2e834e5925bccce9e4cf302a8d7f161ba65 |     
+    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/b2978749181775f71045e57746484e315834e2cc |     
+    or1k     |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/ea576f4bab0f321a412645afbb70457a5d7595c1 |     
+    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/8221e8684b6f4e7de254bc944df4e9194f53a138 |     
+    arc      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/4d2d72b006d42fb3ed5fd9dfce1631056cc11a3a |     
+    m68k     |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/ccfeabf9509d070d7641f824bdeadd9bd1cfa995 |     
+   nios2     |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/bf1ee71708644842b9b59b03f419b087358b8f22 |     
+  powerpc    |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/98cf0818c6b5a8d2d347437a979ab08441803b4d |     
+   xtensa    |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/d40e351c1f02bf6530aa9ffac170b6042e93f501 |     
+ powerpc64   |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/ccb141f8ff040ebd2515cc3d3137ed6db9a35bc1 |     
+powerpc64le  |         gerbera-1.9.2          | NOK | http://autobuild.buildroot.net/results/4a2fc2094ccb52cbaf4977140c78c3cc75b5d068 |     
+   xtensa    |         gerbera-1.9.2          | NOK | http://autobuild.buildroot.net/results/d9fae4b220b87be1c778e1228d7ed4adbbc1c278 |     
+   s390x     |         gerbera-1.9.2          | NOK | http://autobuild.buildroot.net/results/ac9eb751c853031a7c4eec525aa5f4a882320bd1 |     
+  riscv64    |         gerbera-1.9.2          | NOK | http://autobuild.buildroot.net/results/2bfff4fd24fe07051cc07622eb6daa8312164f66 |     
+  aarch64    |        host-grpc-1.43.0        | NOK | http://autobuild.buildroot.net/results/96de2e7560d8d985a4079e53f0a2c88545be745d |     
+microblazeel |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/c53c52d3d233dda1766a04c0ff3a4081da947b09 |     
+    sh4      |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/119efa9e934d1661b577e19d3dae3b28a494db3a |     
+   x86_64    |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/1e82a8b02a1ce56169cd8d6f48d2c7e161950752 |     
+ powerpc64   |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/73ff5f4b71caf6ee05d36a4e3b22ec3796393230 |     
+  powerpc    |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/662524038ce5ae447821afd7e6ca41552036da86 |     
+   xtensa    |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/6384c41865b35557f4559277bfb9b2b60654ab94 |     
+   s390x     |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/7bb924e1c14989d57ab65cf9d4035ba89cd37cb0 |     
+    arm      |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/a7bdf69b603af0778264b9fce909569ef6a0a1de |     
+  riscv64    |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/c63b3a1aa07f000518239dcb86755f3482e2eaf6 |     
+microblazeel |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/bae6af7f80c183ab282891e17c11ec6f834174b4 |     
+  mips64el   |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/95d1afed62cddd4d911436bfa1dde52e3164edc3 |     
+    i586     |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/5f7346d120ca9601c0cd521a8f7115898a218924 |     
+   xtensa    |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/c94fcb109cce9ca0bed9d5e0cc077253f9bb39a5 |     
+powerpc64le  |  host-python-docutils-0.15.2   | NOK | http://autobuild.buildroot.net/results/b82682d3f0be0cdd9802a373faab651876f28ac3 |     
+    arm      |  host-python-docutils-0.15.2   | NOK | http://autobuild.buildroot.net/results/bfec58eb8215d08c6fb2a681398ab6c0c121cc75 |     
+  powerpc    |  host-python-docutils-0.15.2   | NOK | http://autobuild.buildroot.net/results/9c65891a4041db1c57cf8966cc62e5fbfa5d81e5 |     
+    mips     |  host-python-docutils-0.15.2   | NOK | http://autobuild.buildroot.net/results/40b1274b1019eae80e1a6cffae4b46b3c9a0f814 |     
+    arm      |  host-python-docutils-0.15.2   | NOK | http://autobuild.buildroot.net/results/61b863777ca9a417e7b9b0d20065d69e81f368e7 |     
+    arm      |        libuhttpd-3.14.1        | NOK | http://autobuild.buildroot.net/results/a3a970a6398dcb0e4e03f4277f1a50c6b5eff7bd |     
+  aarch64    |            libuwsc             | TIM | http://autobuild.buildroot.net/results/14f2e3517d432ecfba7c0c30b0b2d039007a611e |     
+microblazeel |            libuwsc             | TIM | http://autobuild.buildroot.net/results/30cad6e8afb864fdf4e19f58ef83f22b5a77d15c |     
+   xtensa    |           mpd-0.23.5           | NOK | http://autobuild.buildroot.net/results/032aaff121fb114f388c67dbca3ad2b02f670e38 |     
+   sparc     |         openocd-0.11.0         | NOK | http://autobuild.buildroot.net/results/4a27a769bb3cdf78643c3049b87d792178d6512c | ORPH
+   sparc     |        pcsc-lite-1.9.5         | NOK | http://autobuild.buildroot.net/results/b59b30cbe0e27399db5c7586f369104e68a1589a | ORPH
+  powerpc    |          perl-5.34.0           | NOK | http://autobuild.buildroot.net/results/0e0291ed7c9db636c1e6b72e5e8f7d7f04bf1563 |     
+   xtensa    |        poppler-21.12.0         | NOK | http://autobuild.buildroot.net/results/0f2a841b03462dd34ccf4be489b76a2a12550e54 |     
+    arm      |        postgresql-14.1         | NOK | http://autobuild.buildroot.net/results/e4b59fecd2a5bcda8103ddf4eae3dbd78fe3b896 |     
+  riscv32    | qt5base-53a047c212af7fbded6... | NOK | http://autobuild.buildroot.net/results/3b1b1b2f97d5645cacbd1e021b18006bb765362f |     
+    sh4      |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/5d614713e047e57558ef785d6c3b497006deb5c5 | ORPH
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/b51b1c608b050cd2982abe58a3eff68c4756be0b |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+           python-pybind-2.6.1 | 2 
+                  zeromq-4.3.4 | 2 
+                   gvfs-1.44.1 | 1 
+        host-sentry-cli-1.57.0 | 1 
+                rocksdb-6.13.3 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |          gvfs-1.44.1           | NOK | http://autobuild.buildroot.net/results/b4dfbb94f8cbfe40b3a566b90d87cc132a309099 | ORPH
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/abec1ecbfa3a7c56c1dddf03c641b66463124840 |     
+ aarch64_be  |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/0c77ee2af362301fc17eb641931436c4cb87f71c |     
+  riscv64    |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/67ec201c11d4dfa2d491c0d8f23a5cab9d840956 |     
+    m68k     |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/e74b26aea0be9f3bd6be31d3d923da30ac408f39 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/fd9d319726f6ac85892f04ffc480bbcce00b3f9a |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/8d51430b95f864e53e5223b72b9761331f9b3f95 |     
+
+
+Classification of failures by reason for 2021.11.x
+--------------------------------------------------
+
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for 2021.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/47c0738e024ff2c2c4c65a0ea034c97454343b2f |     
+
+
+Gitlab CI results for 2022-02-07
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+           TestIPythonPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952123  | ORPH 
+   TestIso9660Grub2Hybrid | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952067  | ORPH 
+              TestLuaHttp | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952145  | ORPH 
+         TestLuaLuasyslog | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952178  | ORPH 
+                  TestLxc | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952181  | ORPH 
+                  TestOci | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952078  | ORPH 
+       TestPerllibwwwperl | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952198  | ORPH 
+      TestPythonPy2Pynacl | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952264  | ORPH 
+      TestPythonPy2Pyyaml | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952270  | ORPH 
+     TestPythonPy3Automat | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952222  | ORPH 
+    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952238  | ORPH 
+      TestPythonPy3Pyyaml | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952271  | ORPH 
+        TestPythonPy3Treq | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952277  | ORPH 
+     TestPythonPy3Twisted | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952278  | ORPH 
+    TestPythonPy3Txtorcon | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952280  | ORPH 
+                 TestRust | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952289  | ORPH 
+              TestRustBin | https://gitlab.com/buildroot.org/buildroot/-/jobs/2060952290  | ORPH 
+
+
+
 -- 
-2.17.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
