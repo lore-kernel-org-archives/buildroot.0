@@ -1,77 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DA83C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 22:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A68DC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB2ED60F3D;
-	Tue,  8 Feb 2022 22:20:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF64981275;
+	Tue,  8 Feb 2022 22:23:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9LJ1TvQIFypE; Tue,  8 Feb 2022 22:20:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7lgWCYl8n8yh; Tue,  8 Feb 2022 22:23:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D101260F29;
-	Tue,  8 Feb 2022 22:20:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 476DB1BF2EF
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 22:20:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F104180C34;
+	Tue,  8 Feb 2022 22:23:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 00AE01BF3D5
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 22:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 365B2410D8
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 22:20:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3D4E80C26
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 22:23:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KDaed3iMuL2m for <buildroot@lists.busybox.net>;
- Tue,  8 Feb 2022 22:20:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B777D410C8
- for <buildroot@buildroot.org>; Tue,  8 Feb 2022 22:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1644358825;
- bh=ra9/Z0cs6/ImnsvdN//giN6/sZ6GBf9naGxB2EpqcSo=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=Mf03D/FdcnctXcRl8Psl3oDTk0C47kpvpN61mm61CMPVNhpT1YGnwIeu5ELliIW5+
- A1FJL10wLqmyG5XdYvExTRMltSUiGyIaiC9/F54kZmam06OTXSnbsWsfhQgYwz4Jw1
- 57qLU1JyYM9lpgKVxLGAvKQAtIFKF2m4QsbbRnKU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.59]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M2wL0-1nKqdI3ZRE-003LHO; Tue, 08
- Feb 2022 23:20:24 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eQtBeFRfqXCV for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 22:23:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6CF380BE0
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 22:23:32 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id k18so786529wrg.11
+ for <buildroot@buildroot.org>; Tue, 08 Feb 2022 14:23:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=SeEyB+oQdPuN5THHBfCPAzD3wsJri/0Ervp3kB/xdZ4=;
+ b=lTOhjJXE0MBtm8zOgd/2+C2ImZ/YbP00hw+7n1xh/XOGdP+ewNgiEjW0EUBetlYeI6
+ DBQA+21T7G53171fRYsIPcuTMJOx28W5bw4xO0uoVh2ymy+82XZ+4tA+jzEDiudIQ6a9
+ CY7XBA5B5pYuovJhsNYvwlU3fo8ewpbNK6I5kCnhpEs9JICm9PT2RNnU1k/F2/2xiR4w
+ S2f0rnbBwYP+Mb4duzYha5+xqGNHObpsAF4C7i0lcSipMQzZVIlWcfietElTkwwA0Qfd
+ ilPl+OtGcI+Unkh/N70M5f9BmF7U2YC5zlFr183eva/O4hFRvfWNirv9OSM8S2cjqzK5
+ 9UjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=SeEyB+oQdPuN5THHBfCPAzD3wsJri/0Ervp3kB/xdZ4=;
+ b=i6bJpChCuGvgiqVrRkgpyo/vOf747jsSBw7hXL5rGonEjvZ7xK39LQ0fofLe6XcC5y
+ Is+cyseWOrHXRYi49m8Tftp3bOfM5x96wZM77oJLKb/hdOrNhZGQxbSDzIPhLJ67ywS9
+ n4aX0Laty9SKMmRL2VABHwkoF9NvjdzNYvt/lJKFf9EaSSontQqAjAHmeTVLCZEaiDn8
+ jaa5Jz9MOsaB6tWImPJ4TNDNhFfN/natnQd3+XwjEYFDuNhBsG7OFE9CAmica/QVfdnl
+ ObD60yAKtXliKbT3H1OyxyKCfxkRS4xGGtelOz7u5dL7XF2wPh73nYo2q8UtiPQQDhg9
+ TnTA==
+X-Gm-Message-State: AOAM532XVU8q751JP7ynrKrCXbsy22yBx/YYEmVLViHANNs4gwqeKiY5
+ FPJDors9GKAh+OtrkfHeRebaa1gfMck=
+X-Google-Smtp-Source: ABdhPJzeEaddto3ii6ln9PCtgUTmXSdENoBdw3LOiy9hRV+sW2mLu3Cvp0mAZjvGJ9BM4+0dSxQJcA==
+X-Received: by 2002:a05:6000:1885:: with SMTP id
+ a5mr4982447wri.705.1644359010896; 
+ Tue, 08 Feb 2022 14:23:30 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id x17sm5049129wrv.107.2022.02.08.14.23.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 08 Feb 2022 14:23:30 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  8 Feb 2022 23:20:24 +0100
-Message-Id: <20220208222024.24167-1-ps.report@gmx.net>
+Date: Tue,  8 Feb 2022 23:23:56 +0100
+Message-Id: <20220208222356.24675-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ajJImdgX6ghkAeFFOK9175iklnxVt2ZizfwOyYM27zHqZgHmwS0
- WdnvLkxVBWX2JhACBSv62B3G9n9nNxhon+Jb/QHL7ffrm58JWupr5dzB4mz/M/Ond2663nE
- SyDuFnfPFWHmGPXd7DX7AQ5ubXOz/VKE+CJw90NJ+ubdrF7q7OPjhFWjfo9V/WRc/34vt9Q
- rDECsMC88yMRUahCnPWCw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DrIwjwx8Eho=:9idE++o4QIu9fIwKGLBOZA
- hins/UlXtF/klR/HQHPSkDIsjMQ2QG20uL2WzQ1lb6QPZ+7lilJqNzfzqsZMeG4rolZXiPik7
- JwFx4NMPan5KzijV1tCtrG9RLOoWjTHTXQuYtAiq0CKJ7VjFNagYNYV6wog9gYmA5YyoFdyvi
- u7iaPWA0xvgE8EDggCjLSSzSxDCTAF+camQFGFArXiGe4Qc1I0YUlfMXVPVE7bLON2u2jGHxW
- outSBp5yb4rHkJQ+xgXw2ScuASgbLlLScFh3ZWSrXA7KMBUBSyBIloDLLH9MXtfhXBqMTrUKy
- cjvW2f9JY8TCtpGQ1tSno9A2c89ms63rXmB0tsGFKS/rlFJtIPkcJcNnr7Osr3+pWwLojvM8b
- blugSVI71aHuwrfiQvotbJG+W3adTa5wPitpnjW+FYf+Hx1fO5r2pwOLRuXsgID2cp+KsfbVZ
- gROJpOeB9Sz0cgDT3B5jTkSqoHhU2O8SByNg0LA+05HAnqES0I8Rp8y7ddiQOORt9+97Y6OGQ
- el4upbM/qLPDenZTBn46f/2uDGmegeLINqgQahrqVjttoOJ0laW2CrLmEKCU2JV/rnnL03xSm
- 27ZwgGhURwuX4LZB/+QEUKBwHTpksqDL9LfqHjD6OCETnS4EwH5+78bsETHExlHqAN9JkjleB
- F/GeecgPsmfWdR5FQJQgijezSwrpC0EqbSbIuxUFvbHu6C10zBrVOnmJ9JOkKdi6GBuf7I58j
- qAzCNkQVTivEPT/IJ0qrInNNbgMglL2LXFYKQjgwYDUT4dhspfsovandNO57rKAHsb6zEhk7E
- LkFet/WHHb9utqG4S6bQZHMaSle75z3St1MGwyv/xBqw1m7rU9aXFpceSaBq77woW3KBOqoJY
- lMTBZJ1VwAtDI1Htu+yc5oB9+dWv/4NxP47lU5OP107TwItY4fQfiE8bq0GHZRwv9Y5IuH12/
- aZhCrqeewWHr0PgMJMsavnA+WBVjoIo5bysiWQxlLTZwkbIneHz8wy1ZoX8zGdwADXHR+QHNs
- cvV5x+tftrMdh51Is2vxlnL7YVfTfBsYqJlVfnGdyb9XU7NzhEF0njt95gFpRJLeXF+pgsXyr
- vPCd7N+2mSOMjw=
-Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to 1.4.0
+Subject: [Buildroot] [PATCH 1/1] package/grpc: fix fourth patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,84 +84,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Robert Rose <robertroyrose@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- bump version to 1.4.0
+Fix the following build failure raised since the addition of fourth
+patch in commit 8251d8c2559b25f11684776fc343059cf100657d:
 
-- add new option to select some tools for the target (xkbcli,
-  xkbcli-compile-keymap, xkbcli-how-to-type, xkbcli-interactive-evdev,
-  xkbcli-interactive-x11, xkbcli-interactive-wayland
+1 out of 22 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
 
-For details see [1].
+Fixes:
+ - http://autobuild.buildroot.org/results/44f6d7c61316e90d22e75cb1fb77c3bc5b31ad66
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2022-February/042104.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libxkbcommon/Config.in         | 11 +++++++++++
- package/libxkbcommon/libxkbcommon.hash |  4 ++--
- package/libxkbcommon/libxkbcommon.mk   |  8 +++++++-
- 3 files changed, 20 insertions(+), 3 deletions(-)
+ package/grpc/0004-host-grpc-only-cpp-plugin.patch | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
-index 4e73a24abb..e9f61227a0 100644
---- a/package/libxkbcommon/Config.in
-+++ b/package/libxkbcommon/Config.in
-@@ -7,3 +7,14 @@ config BR2_PACKAGE_LIBXKBCOMMON
- 	  specification.
+diff --git a/package/grpc/0004-host-grpc-only-cpp-plugin.patch b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
+index 43fad7e3d6..c97d9a9385 100644
+--- a/package/grpc/0004-host-grpc-only-cpp-plugin.patch
++++ b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
+@@ -10,6 +10,7 @@ others.
+ Upstream-status: not accepted (see https://github.com/grpc/grpc/issues/25322)
  
- 	  https://xkbcommon.org
-+
-+if BR2_PACKAGE_LIBXKBCOMMON
-+
-+config BR2_PACKAGE_LIBXKBCOMMON_TOOLS
-+	bool "tools"
-+	help
-+	  Tools: xkbcli, xkbcli-compile-keymap, xkbcli-how-to-type,
-+	  xkbcli-interactive-evdev, xkbcli-interactive-x11,
-+	  xkbcli-interactive-wayland
-+
-+endif
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index c00fffe706..fff2b7a943 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-September/041976.html
--sha256  b3c710d27a2630054e1e1399c85b7f330ef03359b460f0c1b3b587fd01fe9234  libxkbcommon-1.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2022-February/042104.html
-+sha256  106cec5263f9100a7e79b5f7220f889bc78e7d7ffc55d2b6fdb1efefb8024031  libxkbcommon-1.4.0.tar.xz
- 
- # License file:
- sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index ee2bc1ee99..f2c49cc700 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXKBCOMMON_VERSION = 1.3.1
-+LIBXKBCOMMON_VERSION = 1.4.0
- LIBXKBCOMMON_SITE = https://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
-@@ -23,4 +23,10 @@ else
- LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_TOOLS),y)
-+LIBXKBCOMMON_CONF_OPTS += -Denable-tools=true
-+else
-+LIBXKBCOMMON_CONF_OPTS += -Denable-tools=false
-+endif
-+
- $(eval $(meson-package))
+ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
+  1 file changed, 35 insertions(+), 8 deletions(-)
+@@ -167,15 +168,6 @@ index e8934a3e03..c2df332cc6 100644
+  add_executable(check_epollexclusive
+    test/build/check_epollexclusive.c
+  )
+-@@ -3906,8 +3931,6 @@ target_link_libraries(gen_hpack_tables
+-   gpr
+- )
+- 
+--
+--
+- add_executable(gen_legal_metadata_characters
+-   tools/codegen/core/gen_legal_metadata_characters.cc
+- )
+ @@ -3958,6 +3981,8 @@ target_link_libraries(gen_percent_encoding_tables
+    ${_gRPC_ALLTARGETS_LIBRARIES}
+  )
 -- 
 2.34.1
 
