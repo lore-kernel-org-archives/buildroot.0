@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD67C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 21:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BC2C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 21:26:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65A868295A;
-	Tue,  8 Feb 2022 21:26:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C6B48269C;
+	Tue,  8 Feb 2022 21:26:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Coo61kT_QU3m; Tue,  8 Feb 2022 21:26:35 +0000 (UTC)
+	with ESMTP id ytd0LYq6Kq8z; Tue,  8 Feb 2022 21:26:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A20858291A;
-	Tue,  8 Feb 2022 21:26:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 741D51BF391
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 21:24:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B396E829DB;
+	Tue,  8 Feb 2022 21:26:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5224D1BF391
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 21:24:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24C59402AD
+ by smtp3.osuosl.org (Postfix) with ESMTP id F233960E2F
  for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 21:24:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RBMM_nbYd2z6 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vI7MB00GTJwT for <buildroot@lists.busybox.net>;
  Tue,  8 Feb 2022 21:24:19 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E30C640868
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EAE3C6077D
  for <buildroot@buildroot.org>; Tue,  8 Feb 2022 21:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1644355448;
- bh=l7Qqo/UI3Ee0cH8B8/TAY5aRhe4KB/i1Q9P9N38xuXY=;
+ s=badeba3b8450; t=1644355449;
+ bh=DTbJDkEKLnUeGt/Rg+lkkAXtkUC5O9jSI060j+Uw2Hs=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=I8lTXVEwi1zS/1Ey2SFVd9sHSzabEqaon+lcx1QC6rfnvb4f5MA78A+jnUJEo+NTS
- BLqfpdx47bYoUF+lbLchjTw4yiZLcj3JYvxeLq0eeWkeQWTjlrP3DSJ8OmB5g1RyNM
- NdS9PQbKA1uCh8zWUr7XvyCcp9qaVIIsgJg30vf0=
+ b=LGHqg+NXsmsBdpl8iVbwY5M1yXKCjh14TnlNnvj98Q5bYzW/LaQez/IsZVQ22PMNu
+ i2Fx8q8bMiC//Yl0i2mPAcH1OKjg3GSIWnw8v2m3hVglQVjn9muu7Ivomd8NcBptdZ
+ uxWtv5IrkNyCFRZZnihs2vMBtnhQHjq/BOxYqAgc=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.59]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBlxM-1nTfRU2MrE-00C8m9; Tue, 08
- Feb 2022 22:24:08 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZCfJ-1nmZCa1AQ5-00VCfE; Tue, 08
+ Feb 2022 22:24:09 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Tue,  8 Feb 2022 22:24:02 +0100
-Message-Id: <20220208212405.19243-11-ps.report@gmx.net>
+Date: Tue,  8 Feb 2022 22:24:05 +0100
+Message-Id: <20220208212405.19243-14-ps.report@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220208212405.19243-1-ps.report@gmx.net>
 References: <20220208212405.19243-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:jPa4inoZvDYDJ4myxzSfTGmK6MVSeTypmnBkIRGV7RU1WEF10oj
- boMfkls7HG7+qtqVIusKAY6Z594CqTrJcMD+vOrWsuR+m0884PjKHRU15BVi+QXVPx5HU1l
- X6FSoNRUzKUDN3JnGn7wSKg5b0nCWLhEgCC9TJP5op8JBv33QM6liE9bNHSKHbvCqFewAM7
- U89PHvZEGquDx2ckfM8Fg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vtZx22/BqxE=:BsI7gRJ+JfWkYlntfalrYZ
- 4VEVUSvu/zCs15goGGnOtRllyoAMxA4zP+wDYVe+vS7VQK9+RwwWWKbBXCWd9ZsaAx7BZ9bzs
- IX7Ag2s4wG3kWwUBgdyEwrc3xJsE6Xtr5UeZ1vB2OfTlcL++HhtllVpBLefhvCbevPUqjsie0
- uwnJ0k1Js9k8uU5WSDw1cVMh4eosyou2HOiPAaQ5GnxOwguY7sHbQH+mhO5c/uTfDgZ/umj7Q
- 6wWszhKElJ1Ani/xdnnAYZTYJXQZugdlZiq1UobSzArA0D4WdCRXTZ5DRLUOUSANJNLt+SKyr
- i/igR9I2/wo85WfL1hgkf5CfzECdIGl1V8imr/Ihbp2VgkrrVq4qWBsAyMLeRdnc+sUfatDTE
- ZSd2BMIRy9l3i2ukKILBcWAE0bRiNQovIdTlJhRx4k7FsMwvBx9BaNN+iN/czP7yz0zlNP8nf
- edF/BypmSwalPhZ4j3d9MBwPGLFDVfPW6mD4Y0qknto4LAX3mt6HI0KoehInM7RZo40WbxpEi
- mnviP4cj2zakA8EpXWbzu8nq7rKTMhWoUpw7quJCc46T2gvgU7SRf3REevxRorKFTmHONgrTw
- 70ly5OpuRmSzb1Vi/7+6Pm5INzUm2VchDysZ65FFLJCxwyf1MIzOCcKNqKcbLMewJvy3uKcR8
- h0KRgzexAyuoB7vJX+seMNm2iDO0OnNCwlumxV7mPZhg7shd0Yh1P9uh0F4MSk77M7q1HXAC1
- YWDYEkTq8Fk1nArbwW8PmAs3DaA7E3Bz2gNdpsXGRUzG2fzEbQiaNQJx+dN2Y3zN57wc2g7WM
- upJwhmmeID69533kak7dCkNaLi5DARrl12PFI5kkEHTmb9vhCQF+F3r7dQrf7Emsku0atmKQt
- TxGj6lw/bpkKHh0GFeMO/FmDPzG0muMax6phisk+tDRvQcTdlYxI05+TzKdZw61RvnEvcQDIe
- 3yGtHRiUcxod7mD5SRXC6MGCHELXWD9d+o36mfMcAja399ykQMaGr1Il57AyJgFlrIOI36e8O
- anEiSUC2zypjWiuZWDqsfhp/h/G4aqQxPdk+s3t70w5LSZZwlWLtO9aXx2kQBPF4PVEH2aO2i
- yjkdz+G2Cv30bQ=
-Subject: [Buildroot] [PATCH v1 10/13] package/gstreamer1-editing-services:
- bump version to 1.20.0
+X-Provags-ID: V03:K1:rGx368SUMZOAU/IKjFNYALdZwGw12Senze8LBCQDLX0SJ2CXOVi
+ EOga6nlaq+viaEhqnTpPS0VYXPe/jQAIOU9TPueoz5Ngm3O/ZnM4Q5KJSifsrm0qFl/1Jqi
+ 5A+ZtGgDBy5DH//Oh1znqIi3L279yfSIk+qCOu5y0T+L9G9JRUknFrW0tdW1dHVEJ6IS6Y5
+ Q4H77HyZ+Bpv6FUHwKWXA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RJPXxcM1DfU=:jdHs7KJtR6URrmc3/Be+Ka
+ 0QuF0CHOe1LGF897zO9GHwS2VuyqxyqAqYXVeu8v6GkziklCr//Rn2DJfOG8lZgTjOBjZ2Naj
+ NBFrqcEC6MUmOiL0Q4dO6kSSWl9TVlCLfOWgiWaq+1tMi2YjluoaPL2FF3poD9Npl7SZaddmV
+ NSes3J63bQCSU4Zx7RxLIajh2CQRQ2oayNwdRbpqqYwYYl43pPd8tUH9/RmP1ORCDiy0naZ20
+ 1O+3rsd4emVj6BFU5ZI79kLCfNSxrnocFdQM0NoC2VW/03HnfDb59cImjEkgJSj75yPHNXold
+ s8aUW4xCC3NQ8IX4zO/anqJhgZdz9yxWg48PuE3nNvFge+cjutgcsnM81dhsmsokOWxdf8jrK
+ QDmPxqxRCDGok8JqGL7AQoWyw6dtc0y/k1C9RJPG6FyjEBoMPGVvkYJkChcvmRQZ422C+ehMK
+ XZCq/j/xLp5yVGlkrDUio4o8nZ++DvtHDCFLgErN8nzoTuFs6XCwmU+P7g4HHwrlgvuXJQyzI
+ nWnw+CILFUBaxpJJof881k7N1t0hOdarvYw38TFVMtBwC6wjabmJ7oU6t2kx5sNb1YLntMQO/
+ RkqB+Vqf8hukp6Os6m2gEcKSXNuvcD9qCV6/dfn1IN05s4I29YE7cM1iPCLoCCgodKIUXxd8a
+ 0SGF/RR+ywlDVi2sEJGcbpizvqCaKGF6CV2+BgDIRC21Qd6Ogq7CY+mIi69BpZdrBbEZEUxRV
+ X91O95LWJv8i7gPNHr/AEk9p7VM+svhKQpkEQ+nmrXg6gn1+b5PkxW8gIuyiZxOXXViETgr0L
+ tBLvNFD/XaF17tsoxaVD68IjmhWAJahb6eiUI7F72oyScmtdsuHmByEYms0QGXejp0E3GW7su
+ +wHdaC//fMGNmWTEEtl3DxBqL9I5dRljWXCYTXKrMyLDXH6yKVUJqsXv5e1PCfQ/IKHPSJD3+
+ sMboZD12Zmaf5LsFNLbXxlfq4yYKn6UV0pgoZ9NvmyEcCyW+TRldyrU89QX6lRZj7oK1y/qGm
+ LmLgmif03yFWKWIXUKL9zwg4CvR8YS2JwJvf439+05orUmOyftxjNisnKZeWFJn5O4TNbOyEV
+ /8UZuAPTg/y5nU=
+Subject: [Buildroot] [PATCH v1 13/13] package/gst1-plugins-bayer2rgb-neon:
+ fix plugin install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,37 +92,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+- fix plugin install path, add '-with-plugindir=/usr/lib/gstreamer-1.0',
+  otherwise the plugins are installed with duplicated build path
+  (as detected by step_check_build_dir)
+
+- remove GST1_PLUGINS_BAYER2RGB_NEON_INSTALL_STAGING (no need to install
+  the plugin to staging)
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../gstreamer1-editing-services.hash                          | 4 ++--
- .../gstreamer1-editing-services.mk                            | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../gst1-plugins-bayer2rgb-neon.mk                            | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index e29dc112ce..9662e6b8fb 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.6.tar.xz.sha256sum
--sha256  fe10d14ef896aa21038317f6f81e1158ccc6caaed9b0d5a29ae5bdd63074582c  gst-editing-services-1.18.6.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.20.0.tar.xz.sha256sum
-+sha256  f837adcf4073d19a5908984e879cd039f4192ca368e71d39e8ccd8a56b9feedf  gst-editing-services-1.20.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
+index 815099e315..0d4aeac7f5 100644
+--- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
++++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
+@@ -10,8 +10,6 @@ GST1_PLUGINS_BAYER2RGB_NEON_SITE_METHOD = git
+ GST1_PLUGINS_BAYER2RGB_NEON_LICENSE = GPL-3.0
+ GST1_PLUGINS_BAYER2RGB_NEON_LICENSE_FILES = COPYING
  
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index a3722cbbca..5e03c08ae7 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-GST1_PLUGINS_BAYER2RGB_NEON_INSTALL_STAGING = YES
+-
+ GST1_PLUGINS_BAYER2RGB_NEON_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	gstreamer1 \
+@@ -20,4 +18,6 @@ GST1_PLUGINS_BAYER2RGB_NEON_DEPENDENCIES = \
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.6
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.20.0
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+ GST1_PLUGINS_BAYER2RGB_NEON_AUTORECONF = YES
+ 
++GST1_PLUGINS_BAYER2RGB_NEON_CONF_OPTS = --with-plugindir=/usr/lib/gstreamer-1.0
++
+ $(eval $(autotools-package))
 -- 
 2.34.1
 
