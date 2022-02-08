@@ -1,91 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0960FC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 19:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 051EDC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 20:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CC3340198;
-	Tue,  8 Feb 2022 19:51:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 681774024E;
+	Tue,  8 Feb 2022 20:00:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d4gfdWQm64Ym; Tue,  8 Feb 2022 19:51:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z4hzgDWTNfps; Tue,  8 Feb 2022 20:00:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A0A540432;
-	Tue,  8 Feb 2022 19:51:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B9471BF8C7
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 19:50:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77760402FA;
+	Tue,  8 Feb 2022 20:00:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 44B271BF8C7
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 20:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1828560E3A
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 19:50:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3203E4062A
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 20:00:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ba5ONmjGM0Zu for <buildroot@lists.busybox.net>;
- Tue,  8 Feb 2022 19:50:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3C37960E2A
- for <buildroot@buildroot.org>; Tue,  8 Feb 2022 19:50:56 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id ka4so709161ejc.11
- for <buildroot@buildroot.org>; Tue, 08 Feb 2022 11:50:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=+3IpSM2fW6dfsZNqW/RywatFhgqrce974mwQp1/HQZ8=;
- b=HS+P6qXQRjxFT0fVVzkTA4WIKC6k28YHDCCIBWdH1rHSq+mMr2dUHQDOCTjHuoZrIt
- 970g9ejWoo3KYK4wO1NbYkVk4wOglv12AQANRzz9+jKDJvykbZGTWatBnft2uTyHJlAb
- haJsFFNQ1EeppnV+WYLwTrwE9FBpeWRkqCw10Ione1ITuYGiilRLYjgGVSKMJwG7av8r
- zV0rr0bylgXyDFUCJ0eYwmzSuSNSq6taMeuq0foCYHKHd9e2qirH6oWgA8tiBGg5TtJP
- rAyBi2gLBsh+1foR8ns8URdSMhq3Bj7U4B9okYgr5cLLjOZXG5aDK6fq9zM3Lu3BjusZ
- kFSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=+3IpSM2fW6dfsZNqW/RywatFhgqrce974mwQp1/HQZ8=;
- b=C/BaTtAdtvydWHSxY/iIxoXjGa1p5F/q6McUoYbH2G9A4LOoHm0fg17s6T0f/YgkBi
- CY6t2JqV3+XyK7wAMR5rAkimxlOTQHpYKbX8ESJMUfcSc+N2ivsttL9B1rutyUVIkYCT
- 5qWhtKaiv3gsN9YSUQdzW3kR4TdCJAkgp9GerzpXmoXtFezKK3arTGpgHOu/lV8bdi8W
- ipatxOFLNY2j4QOG34aNmS0wb7Vz/WzeyI8NvBrKAIW2P0I6AqzKS2CF05K9M5Q+OzcC
- 1Rm5NEqTuMlimZTnk/EWkrpxgJVnOcAzUEtZa3YIduVjSczbN0wLXSHYT4KwftHIgcqe
- yVBQ==
-X-Gm-Message-State: AOAM5303ag1zfSEbTR/L42XCwAXGTCH/BH0J7oyX1UEZZYBB+hKY+crw
- ou++bAVib2LbYm8XVNYXBYZMFO4j2CT0AA==
-X-Google-Smtp-Source: ABdhPJzOVEdRh7OeY2cETOFlsnIb/6GKPhdkLCio/5VW1HV7V338KCsk+4T9rzp86txx/f0a5dLhdQ==
-X-Received: by 2002:a17:906:604d:: with SMTP id
- p13mr4864237ejj.639.1644349855340; 
- Tue, 08 Feb 2022 11:50:55 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id s6sm1570499ejc.206.2022.02.08.11.50.54
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 08 Feb 2022 11:50:54 -0800 (PST)
-Message-ID: <a5cfceca-d49b-c2a0-b1b6-f5acded31890@mind.be>
-Date: Tue, 8 Feb 2022 20:50:54 +0100
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S6ZduGV-G8Lh for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 20:00:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41B5740641
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 20:00:38 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id HWfEnbUtBkz4hHWfFny1xH; Tue, 08 Feb 2022 21:00:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644350437; bh=aWyrdxK4+4/z11YmyJbi4REBdrcTJ3mu1iF57rO50Mk=;
+ h=Date:MIME-Version:Subject:From:To:Content-Type;
+ b=FQCRAf12OG7WsEwxnAzk5ptx9nrzPX2vtJWWg7Dp1ELbYnHquCpYcDvhoOcdCRDER
+ 8d1DlvJCEQQxaeEU35gcqBLZLsW/vJY9jWdeR5pAe6dizsh43Zf/QC2/yKgbe+MdOT
+ mQH8LdPGsF4jVv8NxcjC6l9cLXtCl91PWzRHYC/hDtgT99W20MmLwTRL36+k1mHV0f
+ NXJ1HlZH+D4ZsiWfgeMOc+qyQu8egewXQgvhY8nqELb1bNwfxSnPf+swDq6Ro/KoZ3
+ iJ/fHN2iZY0FZNPLpvlrfqD+HPPuHZMR8icJzdzA71GiV5talWBt/Z9JhhS/GrTQ5l
+ tucHx6BlY3Mbg==
+Message-ID: <41eaa6a2-6053-7671-1ff7-b8dd191263ba@benettiengineering.com>
+Date: Tue, 8 Feb 2022 21:00:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-GB
-To: Dan Jackson <dan@thejacksons.uk>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <AM6PR02MB4884FDD984AFCD1A4DC6B30CDA299@AM6PR02MB4884.eurprd02.prod.outlook.com>
- <53fa9f43-8aa2-4820-70e9-365e22b3408c@mind.be>
- <AM6PR02MB48841BC55D50D047E0C48D73DA2B9@AM6PR02MB4884.eurprd02.prod.outlook.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <AM6PR02MB48841BC55D50D047E0C48D73DA2B9@AM6PR02MB4884.eurprd02.prod.outlook.com>
-Subject: Re: [Buildroot] Getting Buildroot-created binaries to work with the
- Intel (TI) Puma 5 ARM-based CPU?
+ Thunderbird/91.5.0
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <98670320-83fa-c6e9-9bc4-aa30d9deb6ff@mind.be>
+ <34C01EB2-BB12-4DE4-BC53-0141B5DF491D@benettiengineering.com>
+ <f1d2404e-a93d-c0e9-6c1d-a33a011fa1d4@benettiengineering.com>
+In-Reply-To: <f1d2404e-a93d-c0e9-6c1d-a33a011fa1d4@benettiengineering.com>
+X-CMAE-Envelope: MS4wfFZUR6mlYv4PLQ/8BTStvPx13k+ydNTU+d+UaLF1rSmCy3RsnPY2ss/GJrZQPWrDdtEPe7yLOT/vD8IIk8cr7cQ/uobAuJyeCBL9781F392mKzp9la1T
+ uChbQh3LDjbXvE9QwadIIiFkFVT8h/bF6IeRcGf4NKKcGoRUBtxDMibbuYTaWNsoMVxuaLRirlWijQsi3tjwHnkJoZa//Ecw+Br5UEAbNdMScR4vXNxQUye3
+Subject: Re: [Buildroot] [PATCH] board/pc: fix build failure due to new
+ genimage 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,87 +72,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 06/02/2022 14:55, Dan Jackson wrote:
-> 
-> 
->> -----Original Message-----
->> From: Arnout Vandecappelle <arnout@mind.be>
->> Sent: 06 February 2022 11:50
->> To: Dan Jackson <dan@thejacksons.uk>; buildroot@buildroot.org
->> Subject: Re: [Buildroot] Getting Buildroot-created binaries to work with the
->> Intel (TI) Puma 5 ARM-based CPU?
->>
-> 
-> [...snip...]
-> 
->>>
->>> Links to the two toolchains I mentioned:
->>> https://github.com/bmaia/cross-
->> utils/tree/master/armeb/puma5_toolchain (uses Buildroot 2009.02)
->>
->>    This one uses
->>
->> BR2_armeb=y
->> BR2_arm1176jz_s=y
->> BR2_ARM_EABI=y
->>
->> It's not clear if there's an FPU, so use soft float.
-> 
->  From /proc/cpuinfo on the target device I can see:
-> 
-> 	Features        : swp half thumb fastmult edsp java
-> 
-> It's my understanding this line would include "vfp" if there was an FPU, so I don't believe there is one.
-> 
->>
->>    That should be enough to build a toolchain and userspace with current
->> Buildroot.
-> 
-> I tried creating a fresh Buildroot using the current stable version 2021.11 and only the above options.
-> 
-> I then tried transferring the files from the generated rootfs.tar to a directory /var/tmp/test on the device (the reason for this is that / is a read-only file system, so /bin, /lib, /usr are not writable, but /var is a read-write file system).
-> 
-> I then attempted to execute it in the following manner (accounting for the fact that Buildroot builds dynamically linked executables by default):
-> 
-> 	/var/tmp/test/lib/ld-uClibc-1.0.39.so --library-path /var/tmp/test/lib /var/tmp/test/bin/busybox
-> 
-> (this method was suggested in the section LD_LIBRARY_PATH on this page: https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html)
-
-  I generally find it easier to chroot, but OK. (To do anything more than the 
-simplest thing, you'll have to bind-mount a bunch of directories of course: 
-/proc, /sys, and whatever directories you want to share with the rest of the 
-system).
-
-
-> However this did not work and in fact produced a "Segmentation fault" error.
-
-  Segmentation fault is not what you'd expect if some arch-related setting is 
-wrong - it would be SIGILL or SIGFPE or something like that.
-
-  You could try building with BR2_STATIC_LIBS=y, then you don't have to worry 
-about shared libraries.
-
-  Oh hang on, I forgot: you need to make sure that the kernel headers version is 
-set to the same version as the running kernel. With glibc there is some backward 
-compatibility for older kernels, but uClibc needs to be identical.
-
-  Regards,
-  Arnout
-
-
-> 
-> Have I made some kind of obvious error or mistake?
-> 
-> Thanks,
-> Dan Jackson.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LAoKT24gMDUvMDIvMjIgMTg6NDAsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhp
+IGFnYWluIEFybm91dCwKPiAKPiBPbiAwNS8wMi8yMiAxNjozNiwgR2l1bGlvIEJlbmV0dGkgd3Jv
+dGU6Cj4+IEhpIEFybm91dCwKPj4KPj4+IElsIGdpb3JubyA1IGZlYiAyMDIyLCBhbGxlIG9yZSAx
+NToxMSwgQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiBoYSBzY3JpdHRvOgo+
+Pj4KPj4+IO+7vyBIaSBHaXVsaW8sCj4+Pgo+Pj4+IE9uIDA0LzAyLzIwMjIgMDE6NTYsIEdpdWxp
+byBCZW5ldHRpIHdyb3RlOgo+Pj4+IEFjdHVhbGx5IGdlbmltYWdlIGZhaWxzIHRvIGNyZWF0ZSBm
+aW5hbCBpbWFnZSB3aXRoOgo+Pj4+IGBgYAo+Pj4+IEVSUk9SOiBoZGltYWdlKGRpc2suaW1nKTog
+cGFydGl0aW9uIFtNQlJdIChvZmZzZXQgMHgxYjgsIHNpemUgMHg0OCkgb3ZlcmxhcHMgcHJldmlv
+dXMgcGFydGl0aW9uIGJvb3QgKG9mZnNldCAweDAsIHNpemUgMHgyMDApCj4+Pj4gRVJST1I6IGhk
+aW1hZ2UoZGlzay5pbWcpOiBib290bG9hZGVycywgZXRjLiB0aGF0IG92ZXJsYXAgd2l0aCB0aGUg
+cGFydGl0aW9uIHRhYmxlIG11c3QgZGVjbGFyZSB0aGUgb3ZlcmxhcHBpbmcgYXJlYSBhcyBhIGhv
+bGUuCj4+Pj4gYGBgCj4+Pj4gVGhpcyBpcyBiZWNhdXNlIGdlbmltYWdlIDE1IGlzIGxlc3MgcGVy
+bWlzc2l2ZSB0aGFuIGJlZm9yZSwgc28gbGV0J3MgYWRkCj4+Pj4gaG9sZXMgPSB7Iig0NDA7IDUx
+MikifSB0byBsZWF2ZSByb29tIHRvIE1CUi4KPj4+PiBGaXhlczoKPj4+PiBodHRwczovL2dpdGxh
+Yi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzE4NjU5MzUyNDkKPj4+PiBTaWdu
+ZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVy
+aW5nLmNvbT4KPj4+PiAtLS0KPj4+PiAgICBib2FyZC9wYy9nZW5pbWFnZS1iaW9zLmNmZyB8IDEg
+Kwo+Pj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+Pj4+IGRpZmYgLS1naXQg
+YS9ib2FyZC9wYy9nZW5pbWFnZS1iaW9zLmNmZyBiL2JvYXJkL3BjL2dlbmltYWdlLWJpb3MuY2Zn
+Cj4+Pj4gaW5kZXggMjZkMTJkOWFiMy4uNTQwMjZmNjUyNyAxMDA2NDQKPj4+PiAtLS0gYS9ib2Fy
+ZC9wYy9nZW5pbWFnZS1iaW9zLmNmZwo+Pj4+ICsrKyBiL2JvYXJkL3BjL2dlbmltYWdlLWJpb3Mu
+Y2ZnCj4+Pj4gQEAgLTcsNiArNyw3IEBAIGltYWdlIGRpc2suaW1nIHsKPj4+PiAgICAgICAgICAg
+IGltYWdlID0gImJvb3QuaW1nIgo+Pj4+ICAgICAgICAgICAgb2Zmc2V0ID0gMAo+Pj4+ICAgICAg
+ICAgICAgc2l6ZSA9IDUxMgo+Pj4+ICsgICAgICAgIGhvbGVzID0geyIoNDQwOyA1MTIpIn0KPj4+
+Cj4+PiBIYXZlIHlvdSB0ZXN0ZWQgdGhpcyBjaGFuZ2Ugb24gYW4gYWN0dWFsIGJvYXJkIChpLmUu
+IGEgUEMgOi0pPwo+Pgo+PiBJ4oCZdmUgdGVzdGVkIGl0IHdpdGggcWVtdSBhbmQgaXQgYm9vdHMg
+dGhlIGtlcm5lbCBjb3JyZWN0bHkodGhhdCBpcyBpbiByb290ZnMpLCBvbmx5IHRoaW5nIGlzIHRo
+YXQgaXQgY2Fu4oCZdCBtb3VudCB0aGUgcm9vdGZzIGFuZCBJIGRvbuKAmXQgdW5kZXJzdGFuZCB3
+aHkuCj4+IEkgd2FudGVkIHRvIGFzayBhYm91dCB0aGlzIGJ1dCBJ4oCZdmUgZ290IGxvc3QgYW1v
+bmcgYWxsIHRoZSBvdGhlciBwYXRjaGVzIDotKQo+IAo+IEkndmUgY29tcGFyZWQgdGhlIDIgZGlz
+ay5pbWcgZmlsZXMsIG9uZSBnZW5lcmF0ZWQgd2l0aCBnZW5pbWFnZSAxNAo+IHdpdGhvdXQgImhv
+bGVzLi4uIiBhbmQgdGhlIG90aGVyIGdlbmVyYXRlZCB3aXRoIGdlbmltYWdlIDE1IGFuZCB0aGV5
+IGFyZQo+IHRoZSBzYW1lLgo+IAo+IFRoZSBwcm9ibGVtIGhlcmUgaXMgbm90IHRoYXQgaXQgY2Fu
+J3QgbW91bnQgdXNpbmcgcWVtdSwgYnV0IGl0IGRvZXNuJ3QKPiBzaG93IHRoZSBzaGVsbC4KPiAK
+PiBIZXJlIGlzIHRoZSBxZW11IGNvbW1hbmQ6Cj4gcWVtdS1zeXN0ZW0teDg2XzY0IC1NIHBjIC1k
+cml2ZQo+IGZpbGU9aW1hZ2VzL2Rpc2suaW1nLGlmPXZpcnRpbyxmb3JtYXQ9cmF3IC1uZXQgbmlj
+LG1vZGVsPXZpcnRpbyAtbmV0IHVzZXIKPiAKPiBhbmQgdGhpcyBpcyB0aGUgb3V0cHV0Ogo+IGh0
+dHBzOi8vaW1ndXIuY29tL2EvZmZaQmxKUgo+IAo+IFNvIGl0IHNlZW1zIGxpa2UgYSBidXN5Ym94
+L2luaXQgc3lzdGVtIGlzc3VlIHdpdGggdHR5MS4gSSdtIGRpZ2dpbmcuCgpJJ3ZlIGZvdW5kIHRo
+ZSBwcm9ibGVtLiBVc2luZyB0aGUgZ3J1Yi5jZmcgYXMgaXQgaXMocm9vdD0vZGV2L3NkYTEpIAp3
+b3JrcyBvbmx5IHdpdGggVmlydHVhbGJveCBidXQgbm90IHdpdGggUWVtdSB0aGF0IG5lZWRzIHMv
+c2RhMS92ZGExLgoKQnV0IGl0J3Mgbm90IHNvIHdlbGwgZXhwbGFpbmVkIGluIHJlYWRtZS50eHQs
+IHNvIEknbSBnb2luZyB0byBzZW5kIGEgCnBhdGNoIGZvciB0aGF0LgoKU28gSSBjYW4gZ2l2ZSBh
+OgpUZXN0ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5l
+ZXJpbmcuY29tPgpbR2l1bGlvOiB0ZXN0ZWQgc3VjY2Vzc2Z1bGx5IHdpdGggUWVtdSBhbmQgVmly
+dHVhbGJveF0KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVl
+cmluZyBzYXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
