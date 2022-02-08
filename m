@@ -1,67 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC941C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 20:01:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59BDAC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Feb 2022 20:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61B82813AC;
-	Tue,  8 Feb 2022 20:01:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2A0D40176;
+	Tue,  8 Feb 2022 20:25:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lt55YhV7whtF; Tue,  8 Feb 2022 20:01:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8fIq0g5om5F1; Tue,  8 Feb 2022 20:25:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AEFF81400;
-	Tue,  8 Feb 2022 20:01:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F4E24018A;
+	Tue,  8 Feb 2022 20:25:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3933A1BF8C7
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 20:01:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 91EC91BF390
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 20:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27C464086D
- for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 20:01:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F963409BA
+ for <buildroot@lists.busybox.net>; Tue,  8 Feb 2022 20:25:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ys2yZpW6QLrJ for <buildroot@lists.busybox.net>;
- Tue,  8 Feb 2022 20:01:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1EE764024E
- for <buildroot@buildroot.org>; Tue,  8 Feb 2022 20:01:36 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id HWgAnbVtfkz4hHWgAny2PX; Tue, 08 Feb 2022 21:01:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644350494; bh=yKXxld4N23mX1tNnaVWLHyHU4lOPWW7il2uBq3gyF5Y=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=n2Lra3/c4XDMlos/WMonI5sWm9aFTac8yr44BlSGLFmhgTPDRuselIawuN/2OBVVh
- Ex8Y1pxN2jFUUOW58mCHYrmKm0iYx2HKbc6h3awVWdGs705dLJ0u82dOEVA/S7PYWW
- 9DALWGbXp4PS4h7oZtfoa68TO4M2Y/sqi4dMZbDSRIhq6Yyx1a8rWSJDc7h0KXjDd4
- u05Rq9epA0WUm3z/9hTk57cc73qPnxTMeIOfN53H7pIJyHFSY1lktcYtE2kGUD5zp1
- HCTtLQFzgzNdOpnsMHdlOZAQ8ZZSq4PVU8qfazmWFll34dRcOVlgXkIUGfgi5UlSSN
- t8jsqaYOB3/cw==
-Message-ID: <0a4cafd3-cbe0-16b7-cc3e-668e14240f0e@benettiengineering.com>
-Date: Tue, 8 Feb 2022 21:01:34 +0100
+ with ESMTP id qoFpWDBwTA01 for <buildroot@lists.busybox.net>;
+ Tue,  8 Feb 2022 20:25:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 51B4E408F9
+ for <buildroot@buildroot.org>; Tue,  8 Feb 2022 20:25:28 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id yw18so174094ejb.3
+ for <buildroot@buildroot.org>; Tue, 08 Feb 2022 12:25:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=1F1AqquVnsr5YL6DRrlE4Lz1Ct5WrnDFNsGWSsL/B8M=;
+ b=AKbjwuUiuQh/xrlhGttMfsR0PY1C6h7cjqeeMxscY3VUyAgtP5/43v09mNZHb/nvpj
+ 41iYKBCdzuH6Rt5y8nwBgY8q/rOE/SvAMgldJEFpb1l6T0vX7A69RN4wzKqHE4b790zw
+ ousVnjKTSJbsiFWcEZiy5K7KEFEj1JUYeLi9JC04pNrswhzZm9BdLcGI9rl63qq+loLg
+ q1oX8WeTKAIpGgFLOfTueK9/HbCisLxegRVJTixc2RZON/tNcnivEyGxuLZlNRN76qh8
+ FbeYLToTyPBFsuoJQPy9dLof0Y0+7s+9uOGcl3ObWKgPONghN0zzT9ffRc6HopaiOOsm
+ iTng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=1F1AqquVnsr5YL6DRrlE4Lz1Ct5WrnDFNsGWSsL/B8M=;
+ b=8IJ+eHuehsptFzl8BIXF5XnaWNn0M6vdmy/hdi9ovwQR85+9PiqOa1IORiqWbfAjS7
+ +SI+kBtSXIYX0b8wZL+XiIzuWsjcQlWL+pOENpJoNuMySXHqFZt1frDyA7ppSHK/BpbX
+ bk9NSB4hFHNO1cJ8V4btedhYxYiURWc4DwA3Lg0x2nerNaYnWc9wp7/hYs4OBQjCbGli
+ DM6djgbjiud6FUGDArBqM8Nplc5hw748FReUrl3EFP2prS2Kx/c+kjrqcxvjSotZ/HCG
+ BrG853hLYxRweNrhIJC6UCdVARG9vl6UlN5E2WiXR7HN8YYilKiIU1h8+fWcYPfI+gSu
+ odGg==
+X-Gm-Message-State: AOAM530C3MxsjUTBeh4tmKxU0v5ps63tAot6zRgG8UFzzXz3KDGIPgjI
+ Iw+Zhm8xfg3Gfux6xStbI70tsQ==
+X-Google-Smtp-Source: ABdhPJyF1absp/8ismrKwN8EZ77o/BjUkOBPV1HJLrK4BxbGHSGsJnoVyASxilOClHnN7rbkMTSSng==
+X-Received: by 2002:a17:907:da6:: with SMTP id
+ go38mr5272052ejc.124.1644351926016; 
+ Tue, 08 Feb 2022 12:25:26 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id i12sm5181296ejj.198.2022.02.08.12.25.24
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 08 Feb 2022 12:25:25 -0800 (PST)
+Message-ID: <cdc45fa5-d794-e3f8-3a54-793778ab8cc0@mind.be>
+Date: Tue, 8 Feb 2022 21:25:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <98670320-83fa-c6e9-9bc4-aa30d9deb6ff@mind.be>
- <34C01EB2-BB12-4DE4-BC53-0141B5DF491D@benettiengineering.com>
- <f1d2404e-a93d-c0e9-6c1d-a33a011fa1d4@benettiengineering.com>
- <41eaa6a2-6053-7671-1ff7-b8dd191263ba@benettiengineering.com>
-In-Reply-To: <41eaa6a2-6053-7671-1ff7-b8dd191263ba@benettiengineering.com>
-X-CMAE-Envelope: MS4wfMCk/09QxIMZp5StVrXRT0WXSXqmyULvZm195vMQQZAuflWanH+Ey6LIfyTr6936IjGyEe6aY+qV3AV/AckF/lXSWXaVKIopxl9mGVHx83fPgspjUp1V
- 7aMGcKSxvWiNAKAFIsRFemgIPRI3JMKhrB55bxZyj5gKQ8v3TkB71t/arAnGKZl7ml2BKVQBkmQq7+XN8RlzPtFAlos1PuIk/f2jnttrS0++KUCPEO4QKHHX
-Subject: Re: [Buildroot] [PATCH] board/pc: fix build failure due to new
- genimage 15
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Thomas De Schampheleire <patrickdepinguin@gmail.com>,
+ buildroot@buildroot.org
+References: <20220115200306.14037-1-patrickdepinguin@gmail.com>
+ <20220115200306.14037-2-patrickdepinguin@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220115200306.14037-2-patrickdepinguin@gmail.com>
+Subject: Re: [Buildroot] [PATCHv2 1/7] arch: move definition of KERNEL_ARCH
+ to Config.in.<arch> files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,61 +97,330 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: ARC Maintainers <arc-buildroot@synopsys.com>, Guo Ren <ren_guo@c-sky.com>,
+ Mark Corbin <mark@dibsco.co.uk>, Alexander Egorenkov <egorenar@linux.ibm.com>,
+ Nylon Chen <nylon7@andestech.com>, Jonathan Ben Avraham <yba@tkos.co.il>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Spenser Gilliland <spenser@gillilanding.com>, romain.naour@gmail.com,
+ Cyril Bur <cyrilbur@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMDgvMDIvMjIgMjE6MDAsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIEFybm91dCwKPiAK
-PiBPbiAwNS8wMi8yMiAxODo0MCwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IEhpIGFnYWluIEFy
-bm91dCwKPj4KPj4gT24gMDUvMDIvMjIgMTY6MzYsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+Pj4g
-SGkgQXJub3V0LAo+Pj4KPj4+PiBJbCBnaW9ybm8gNSBmZWIgMjAyMiwgYWxsZSBvcmUgMTU6MTEs
-IEFybm91dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4gaGEgc2NyaXR0bzoKPj4+Pgo+
-Pj4+IO+7vyBIaSBHaXVsaW8sCj4+Pj4KPj4+Pj4gT24gMDQvMDIvMjAyMiAwMTo1NiwgR2l1bGlv
-IEJlbmV0dGkgd3JvdGU6Cj4+Pj4+IEFjdHVhbGx5IGdlbmltYWdlIGZhaWxzIHRvIGNyZWF0ZSBm
-aW5hbCBpbWFnZSB3aXRoOgo+Pj4+PiBgYGAKPj4+Pj4gRVJST1I6IGhkaW1hZ2UoZGlzay5pbWcp
-OiBwYXJ0aXRpb24gW01CUl0gKG9mZnNldCAweDFiOCwgc2l6ZSAweDQ4KSBvdmVybGFwcyBwcmV2
-aW91cyBwYXJ0aXRpb24gYm9vdCAob2Zmc2V0IDB4MCwgc2l6ZSAweDIwMCkKPj4+Pj4gRVJST1I6
-IGhkaW1hZ2UoZGlzay5pbWcpOiBib290bG9hZGVycywgZXRjLiB0aGF0IG92ZXJsYXAgd2l0aCB0
-aGUgcGFydGl0aW9uIHRhYmxlIG11c3QgZGVjbGFyZSB0aGUgb3ZlcmxhcHBpbmcgYXJlYSBhcyBh
-IGhvbGUuCj4+Pj4+IGBgYAo+Pj4+PiBUaGlzIGlzIGJlY2F1c2UgZ2VuaW1hZ2UgMTUgaXMgbGVz
-cyBwZXJtaXNzaXZlIHRoYW4gYmVmb3JlLCBzbyBsZXQncyBhZGQKPj4+Pj4gaG9sZXMgPSB7Iig0
-NDA7IDUxMikifSB0byBsZWF2ZSByb29tIHRvIE1CUi4KPj4+Pj4gRml4ZXM6Cj4+Pj4+IGh0dHBz
-Oi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTg2NTkzNTI0OQo+
-Pj4+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0
-aWVuZ2luZWVyaW5nLmNvbT4KPj4+Pj4gLS0tCj4+Pj4+ICAgICBib2FyZC9wYy9nZW5pbWFnZS1i
-aW9zLmNmZyB8IDEgKwo+Pj4+PiAgICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4+
-Pj4+IGRpZmYgLS1naXQgYS9ib2FyZC9wYy9nZW5pbWFnZS1iaW9zLmNmZyBiL2JvYXJkL3BjL2dl
-bmltYWdlLWJpb3MuY2ZnCj4+Pj4+IGluZGV4IDI2ZDEyZDlhYjMuLjU0MDI2ZjY1MjcgMTAwNjQ0
-Cj4+Pj4+IC0tLSBhL2JvYXJkL3BjL2dlbmltYWdlLWJpb3MuY2ZnCj4+Pj4+ICsrKyBiL2JvYXJk
-L3BjL2dlbmltYWdlLWJpb3MuY2ZnCj4+Pj4+IEBAIC03LDYgKzcsNyBAQCBpbWFnZSBkaXNrLmlt
-ZyB7Cj4+Pj4+ICAgICAgICAgICAgIGltYWdlID0gImJvb3QuaW1nIgo+Pj4+PiAgICAgICAgICAg
-ICBvZmZzZXQgPSAwCj4+Pj4+ICAgICAgICAgICAgIHNpemUgPSA1MTIKPj4+Pj4gKyAgICAgICAg
-aG9sZXMgPSB7Iig0NDA7IDUxMikifQo+Pj4+Cj4+Pj4gSGF2ZSB5b3UgdGVzdGVkIHRoaXMgY2hh
-bmdlIG9uIGFuIGFjdHVhbCBib2FyZCAoaS5lLiBhIFBDIDotKT8KPj4+Cj4+PiBJ4oCZdmUgdGVz
-dGVkIGl0IHdpdGggcWVtdSBhbmQgaXQgYm9vdHMgdGhlIGtlcm5lbCBjb3JyZWN0bHkodGhhdCBp
-cyBpbiByb290ZnMpLCBvbmx5IHRoaW5nIGlzIHRoYXQgaXQgY2Fu4oCZdCBtb3VudCB0aGUgcm9v
-dGZzIGFuZCBJIGRvbuKAmXQgdW5kZXJzdGFuZCB3aHkuCj4+PiBJIHdhbnRlZCB0byBhc2sgYWJv
-dXQgdGhpcyBidXQgSeKAmXZlIGdvdCBsb3N0IGFtb25nIGFsbCB0aGUgb3RoZXIgcGF0Y2hlcyA6
-LSkKPj4KPj4gSSd2ZSBjb21wYXJlZCB0aGUgMiBkaXNrLmltZyBmaWxlcywgb25lIGdlbmVyYXRl
-ZCB3aXRoIGdlbmltYWdlIDE0Cj4+IHdpdGhvdXQgImhvbGVzLi4uIiBhbmQgdGhlIG90aGVyIGdl
-bmVyYXRlZCB3aXRoIGdlbmltYWdlIDE1IGFuZCB0aGV5IGFyZQo+PiB0aGUgc2FtZS4KPj4KPj4g
-VGhlIHByb2JsZW0gaGVyZSBpcyBub3QgdGhhdCBpdCBjYW4ndCBtb3VudCB1c2luZyBxZW11LCBi
-dXQgaXQgZG9lc24ndAo+PiBzaG93IHRoZSBzaGVsbC4KPj4KPj4gSGVyZSBpcyB0aGUgcWVtdSBj
-b21tYW5kOgo+PiBxZW11LXN5c3RlbS14ODZfNjQgLU0gcGMgLWRyaXZlCj4+IGZpbGU9aW1hZ2Vz
-L2Rpc2suaW1nLGlmPXZpcnRpbyxmb3JtYXQ9cmF3IC1uZXQgbmljLG1vZGVsPXZpcnRpbyAtbmV0
-IHVzZXIKPj4KPj4gYW5kIHRoaXMgaXMgdGhlIG91dHB1dDoKPj4gaHR0cHM6Ly9pbWd1ci5jb20v
-YS9mZlpCbEpSCj4+Cj4+IFNvIGl0IHNlZW1zIGxpa2UgYSBidXN5Ym94L2luaXQgc3lzdGVtIGlz
-c3VlIHdpdGggdHR5MS4gSSdtIGRpZ2dpbmcuCj4gCj4gSSd2ZSBmb3VuZCB0aGUgcHJvYmxlbS4g
-VXNpbmcgdGhlIGdydWIuY2ZnIGFzIGl0IGlzKHJvb3Q9L2Rldi9zZGExKQo+IHdvcmtzIG9ubHkg
-d2l0aCBWaXJ0dWFsYm94IGJ1dCBub3Qgd2l0aCBRZW11IHRoYXQgbmVlZHMgcy9zZGExL3ZkYTEu
-Cj4gCj4gQnV0IGl0J3Mgbm90IHNvIHdlbGwgZXhwbGFpbmVkIGluIHJlYWRtZS50eHQsIHNvIEkn
-bSBnb2luZyB0byBzZW5kIGEKPiBwYXRjaCBmb3IgdGhhdC4KClBhcmRvbiwgSSd2ZSBvbmx5IG1p
-c3JlYWQuIHJlYWRtZS50eHQgaXMgY29ycmVjdC4KCj4gU28gSSBjYW4gZ2l2ZSBhOgo+IFRlc3Rl
-ZC1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5j
-b20+Cj4gW0dpdWxpbzogdGVzdGVkIHN1Y2Nlc3NmdWxseSB3aXRoIFFlbXUgYW5kIFZpcnR1YWxi
-b3hdCj4gCj4gQmVzdCByZWdhcmRzCgotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVl
-cmluZyBzYXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 15/01/2022 21:02, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Similar to other arch-specific strings, the 'KERNEL_ARCH' variable can be
+> determined from Config.in.<arch> files.
+> 
+> Besides aligning with similar strings, this also means simplification: the
+> big 'sed' covers several architectures not even supported by Buildroot.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> 
+> ---
+>   Makefile                  | 17 +----------------
+>   arch/Config.in            |  3 +++
+>   arch/Config.in.arc        |  3 +++
+>   arch/Config.in.arm        |  4 ++++
+>   arch/Config.in.csky       |  3 +++
+>   arch/Config.in.m68k       |  3 +++
+>   arch/Config.in.microblaze |  3 +++
+>   arch/Config.in.mips       |  3 +++
+>   arch/Config.in.nds32      |  3 +++
+>   arch/Config.in.nios2      |  3 +++
+>   arch/Config.in.or1k       |  3 +++
+>   arch/Config.in.powerpc    |  3 +++
+>   arch/Config.in.riscv      |  3 +++
+>   arch/Config.in.s390x      |  3 +++
+>   arch/Config.in.sh         |  3 +++
+>   arch/Config.in.sparc      |  4 ++++
+>   arch/Config.in.x86        |  4 ++++
+>   arch/Config.in.xtensa     |  3 +++
+>   18 files changed, 55 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 5fc7137e5a..e012d121b9 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -437,22 +437,7 @@ QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+>   
+>   # Strip off the annoying quoting
+>   ARCH := $(call qstrip,$(BR2_ARCH))
+> -
+> -KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+> -	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
+> -	-e s/arcle/arc/ \
+> -	-e s/arceb/arc/ \
+> -	-e s/arm.*/arm/ -e s/sa110/arm/ \
+> -	-e s/aarch64.*/arm64/ \
+> -	-e s/nds32.*/nds32/ \
+> -	-e s/or1k/openrisc/ \
+> -	-e s/parisc64/parisc/ \
+> -	-e s/powerpc64.*/powerpc/ \
+> -	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+> -	-e s/riscv.*/riscv/ \
+> -	-e s/sh.*/sh/ \
+> -	-e s/s390x/s390/ \
+> -	-e s/microblazeel/microblaze/)
+> +KERNEL_ARCH := $(call qstrip,$(BR2_KERNEL_ARCH))
+>   
+>   ZCAT := $(call qstrip,$(BR2_ZCAT))
+>   BZCAT := $(call qstrip,$(BR2_BZCAT))
+> diff --git a/arch/Config.in b/arch/Config.in
+> index c99af89efa..edf337f13e 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -328,6 +328,9 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_11
+>   config BR2_ARCH
+>   	string
+>   
+> +config BR2_KERNEL_ARCH
+> +	string
+> +
+>   config BR2_ENDIAN
+>   	string
+>   
+> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+> index f7a6d920b5..cc55c9e68f 100644
+> --- a/arch/Config.in.arc
+> +++ b/arch/Config.in.arc
+> @@ -62,6 +62,9 @@ config BR2_ARCH
+>   	default "arc"	if BR2_arcle
+>   	default "arceb"	if BR2_arceb
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "arc"
+> +
+>   config BR2_arc
+>   	bool
+>   	default y if BR2_arcle || BR2_arceb
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 4c0910e4f8..0f50512fad 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -822,6 +822,10 @@ config BR2_ARCH
+>   	default "aarch64"	if BR2_aarch64
+>   	default "aarch64_be"	if BR2_aarch64_be
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "arm"		if BR2_arm || BR2_armeb
+> +	default "arm64"		if BR2_aarch64 || BR2_aarch64_be
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE" if (BR2_arm || BR2_aarch64)
+>   	default "BIG"	 if (BR2_armeb || BR2_aarch64_be)
+> diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+> index 7e2029f759..df9e7ab75b 100644
+> --- a/arch/Config.in.csky
+> +++ b/arch/Config.in.csky
+> @@ -39,6 +39,9 @@ config BR2_GCC_TARGET_FLOAT_ABI
+>   config BR2_ARCH
+>   	default "csky"
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "csky"
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE"
+>   
+> diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+> index 275f47f1d3..7f3aec7232 100644
+> --- a/arch/Config.in.m68k
+> +++ b/arch/Config.in.m68k
+> @@ -1,6 +1,9 @@
+>   config BR2_ARCH
+>   	default "m68k"		if BR2_m68k
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "m68k"
+> +
+>   config BR2_ENDIAN
+>   	default "BIG"
+>   
+> diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
+> index 5fe2906d40..52aa252a2c 100644
+> --- a/arch/Config.in.microblaze
+> +++ b/arch/Config.in.microblaze
+> @@ -2,6 +2,9 @@ config BR2_ARCH
+>   	default "microblazeel"  if BR2_microblazeel
+>   	default "microblaze"    if BR2_microblazebe
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "microblaze"
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE" if BR2_microblazeel
+>   	default "BIG"	 if BR2_microblazebe
+> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+> index 619456c2d5..b4923f8484 100644
+> --- a/arch/Config.in.mips
+> +++ b/arch/Config.in.mips
+> @@ -235,6 +235,9 @@ config BR2_ARCH
+>   	default "mips64"	if BR2_mips64
+>   	default "mips64el"	if BR2_mips64el
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "mips"
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE"	if BR2_mipsel || BR2_mips64el
+>   	default "BIG"		if BR2_mips || BR2_mips64
+> diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+> index 322ff49f2e..61fc346260 100644
+> --- a/arch/Config.in.nds32
+> +++ b/arch/Config.in.nds32
+> @@ -1,6 +1,9 @@
+>   config BR2_ARCH
+>   	default "nds32le"
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "nds32"
+> +
+>   config BR2_GCC_TARGET_ARCH
+>   	default "v3"
+>   
+> diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+> index aae435fa17..c77b1a1c59 100644
+> --- a/arch/Config.in.nios2
+> +++ b/arch/Config.in.nios2
+> @@ -1,6 +1,9 @@
+>   config BR2_ARCH
+>   	default "nios2"
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "nios2"
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE"
+>   
+> diff --git a/arch/Config.in.or1k b/arch/Config.in.or1k
+> index abdf498fb8..ef1bded453 100644
+> --- a/arch/Config.in.or1k
+> +++ b/arch/Config.in.or1k
+> @@ -1,6 +1,9 @@
+>   config BR2_ARCH
+>   	default "or1k"
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "openrisc"
+> +
+>   config BR2_ENDIAN
+>   	default "BIG"
+>   
+> diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+> index ba56c9c721..33b2471cf9 100644
+> --- a/arch/Config.in.powerpc
+> +++ b/arch/Config.in.powerpc
+> @@ -157,6 +157,9 @@ config BR2_ARCH
+>   	default "powerpc64"	if BR2_powerpc64
+>   	default "powerpc64le"	if BR2_powerpc64le
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "powerpc"
+> +
+>   config BR2_ENDIAN
+>   	default "BIG"    if BR2_powerpc || BR2_powerpc64
+>   	default "LITTLE" if BR2_powerpc64le
+> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+> index e6436d7c39..1a008a935d 100644
+> --- a/arch/Config.in.riscv
+> +++ b/arch/Config.in.riscv
+> @@ -118,6 +118,9 @@ config BR2_ARCH
+>   	default "riscv32" if !BR2_ARCH_IS_64
+>   	default "riscv64" if BR2_ARCH_IS_64
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "riscv"
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE"
+>   
+> diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
+> index ad866b421e..bf4b70f957 100644
+> --- a/arch/Config.in.s390x
+> +++ b/arch/Config.in.s390x
+> @@ -17,6 +17,9 @@ endchoice
+>   config BR2_ARCH
+>   	default "s390x"	if BR2_s390x
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "s390"
+> +
+>   config BR2_ENDIAN
+>   	default "BIG"
+>   
+> diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+> index b5cce18e22..fde42dfce2 100644
+> --- a/arch/Config.in.sh
+> +++ b/arch/Config.in.sh
+> @@ -24,6 +24,9 @@ config BR2_ARCH
+>   	default "sh4a"		if BR2_sh4a
+>   	default "sh4aeb"	if BR2_sh4aeb
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "sh"
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE"	if BR2_sh4 || BR2_sh4a
+>   	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
+> diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+> index 4c4dc61745..b91df6892b 100644
+> --- a/arch/Config.in.sparc
+> +++ b/arch/Config.in.sparc
+> @@ -21,6 +21,10 @@ config BR2_ARCH
+>   	default "sparc"	if BR2_sparc
+>   	default "sparc64" if BR2_sparc64
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "sparc"	if BR2_sparc
+> +	default "sparc64" if BR2_sparc64
+> +
+>   config BR2_ENDIAN
+>   	default "BIG"
+>   
+> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+> index 0ba9ecbcea..b38d0f8106 100644
+> --- a/arch/Config.in.x86
+> +++ b/arch/Config.in.x86
+> @@ -337,6 +337,10 @@ config BR2_ARCH
+>   	default "i686"		if BR2_x86_athlon_4
+>   	default "x86_64"	if BR2_x86_64
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "i386"		if !BR2_x86_64
+> +	default "x86_64"	if BR2_x86_64
+> +
+>   config BR2_ENDIAN
+>   	default "LITTLE"
+>   
+> diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+> index a79d906985..acc340eca6 100644
+> --- a/arch/Config.in.xtensa
+> +++ b/arch/Config.in.xtensa
+> @@ -48,6 +48,9 @@ config BR2_ENDIAN
+>   config BR2_ARCH
+>   	default "xtensa"	if BR2_xtensa
+>   
+> +config BR2_KERNEL_ARCH
+> +	default "xtensa"
+> +
+>   config BR2_READELF_ARCH_NAME
+>   	default "Tensilica Xtensa Processor"
+>   
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
