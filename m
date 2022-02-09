@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37521C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 19:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3255DC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 19:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DF0760B98;
-	Wed,  9 Feb 2022 19:54:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E082A60BD5;
+	Wed,  9 Feb 2022 19:55:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VFcN01hoWzQv; Wed,  9 Feb 2022 19:54:16 +0000 (UTC)
+	with ESMTP id k0gS4YCLektM; Wed,  9 Feb 2022 19:55:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE1AA60B4E;
-	Wed,  9 Feb 2022 19:54:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 915C41BF422
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C19360B4E;
+	Wed,  9 Feb 2022 19:55:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B9A41BF422
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D43D4021F
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:54:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 291F560B4E
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:55:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7mBo-9kEAJ49 for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 19:54:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ej0exqjtq4LH for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 19:55:21 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 438C340138
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 19:54:13 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 35E53605E8
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 19:55:20 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 716E0240007;
- Wed,  9 Feb 2022 19:54:11 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 616321BF208;
+ Wed,  9 Feb 2022 19:55:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1644436451;
+ t=1644436519;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=zkqVzvdH2gqdgBzCm8iKXzzpm6XIXJ6EeEj8xY3W9H0=;
- b=cZ8wG1qgq0drfSJIRyZShWozhfhZ20WjmXt8mHt+vAvodUBmh8CJXCttvCRj2sWYI9z9+4
- zeFn22BrJ5QKLbKl3yG1R59toF7BET5TIz3HBC1XziFfcv/ITlIU0nlx+YgVM6NjuzxzcY
- pKBE8phSGkyWmBTUpigWfdRx5clpE/A9OJMwkZs2H7CtTT9e01DJ3NPdBCFsa8W3HFR5F1
- 0HG6gh70VfcLmzj5oanrIfv6k6pG4QLcbnwWUM2Mo3PqIITNtCgh1QsRW0h4kdKS+g0CLL
- WSgS0cDUYJGCSKzRC5TLg9XJT+P3UnPGnGAaaDfX1L1/zHDXrC/5sLVWkXs0NA==
-Date: Wed, 9 Feb 2022 20:54:10 +0100
+ bh=cVhDvekeoDPK1iTiFYGGHFthg6EWHXbzsYNQXIYlGFs=;
+ b=CPFoYw4QCmrHXPzTD3yX7CVI+VI8obl4ETtp0umMrsOHt5qHAh/2+Kjj5RQhUCydfz38uN
+ p3vav4HD8oOsvX9WxX8fgGuEwtnZX7QIjhlGBa4dUbXN1XDsejbsyOqsXZwo1T47wFWDKT
+ 7rI/oAKEKfbXGsElWdc1I6DSoTgn+9HnWmWy5ZDgDSky/xJGec3T+x6PLgV/77+fm05SEo
+ 9pH94VQA1eKfqzadisWAB93x8yQ+SOSTS/d1LOLiJcfbnt1QiZaXBCya1d9czmbO/XPwWo
+ eB+R9tR+LYZiBqXbtaDC5lNqe1aeopKbLuhdlGLcCxeBzsrj1pWvFXetKJiGpA==
+Date: Wed, 9 Feb 2022 20:55:18 +0100
 To: <yann.morin@orange.com>
-Message-ID: <20220209205410.071f193a@windsurf>
-In-Reply-To: <20175_1644422934_6203E716_20175_175_1_fea7d1545892211e01cb6660dc5fba16b0851c47.1644422916.git.yann.morin@orange.com>
+Message-ID: <20220209205518.18d720ef@windsurf>
+In-Reply-To: <9430_1644422939_6203E71B_9430_485_1_951512fc2010b31a4d2d50fe12c2ad86f3a0c1a1.1644422916.git.yann.morin@orange.com>
 References: <cover.1644422916.git.yann.morin@orange.com>
- <20175_1644422934_6203E716_20175_175_1_fea7d1545892211e01cb6660dc5fba16b0851c47.1644422916.git.yann.morin@orange.com>
+ <9430_1644422939_6203E71B_9430_485_1_951512fc2010b31a4d2d50fe12c2ad86f3a0c1a1.1644422916.git.yann.morin@orange.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/5 v2] package/pkg-cargo: allow building in
- a sub-directory
+Subject: Re: [Buildroot] [PATCH 3/5 v2] package/pkg-cargo: host-rustc is
+ also a build dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,23 +77,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 9 Feb 2022 17:08:44 +0100
+On Wed, 9 Feb 2022 17:08:45 +0100
 <yann.morin@orange.com> wrote:
 
-> +# If building in a sub directory, use that to find the Cargo.toml, unless
-> +# the package already provided its location.
-> +ifneq ($$($(2)_SUBDIR),)
-> +ifeq ($$(filter BR_CARGO_MANIFEST_PATH=%,$$($(2)_DL_ENV)),)
-> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_SUBDIR)/Cargo.toml
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> Currently, host-rustc is a download dependency, because we need cargo
+> for the vendoring during the downlaod step.
 
-I find that a bit "meh". Should we have an explicit package variable
-that tells the location of the Cargo.toml, instead of directly have
-packages pass this "magic" BR_CARGO_MANIFEST_PATH variable ?
+                                ^^^^^^^^ download
 
-Should $(2)_SUBDIR be documented for the cargo-package infra in the
-documentation ?
+> However, when using a package in override-srcdir, there is no download
+> step, so host-rustc is not pulled in as a dependency which breaks
+> running the build of a single pcakge from scratch:
 
-Thomas
+                                ^^^^^^  package
+
+>     $ make clean
+>     $ make my-rust-package
+>     [...]
+>     [...] cargo build --offline --release --manifest-path Cargo.toml --locked
+>     /bin/sh: cargo: command not found
+> 
+> We fix that by adding host-rustc as a standard dependency too.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
