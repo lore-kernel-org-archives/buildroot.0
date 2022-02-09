@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97CE4C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:09:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3A7C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5927A830C5;
-	Wed,  9 Feb 2022 17:09:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BA6240292;
+	Wed,  9 Feb 2022 17:09:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rdO2HwjHBO1l; Wed,  9 Feb 2022 17:09:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5TSjLO2C7C7P; Wed,  9 Feb 2022 17:09:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 536DB81DCA;
-	Wed,  9 Feb 2022 17:09:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A7081BF27C
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:59:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6560E4016E;
+	Wed,  9 Feb 2022 17:09:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 52CD81BF27C
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 65A7B812BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F675404F1
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:59:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3cqWMeUENdFW for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hvtCQl7D5p9W for <buildroot@lists.busybox.net>;
  Wed,  9 Feb 2022 16:59:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2BC39817E4
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD974404DA
  for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:59:24 +0000 (UTC)
-Received: from relay11.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::231])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 72B23D006F
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:52:31 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id F229CCD967
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:52:29 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 18B9A10000B;
- Wed,  9 Feb 2022 16:52:23 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0BDAD1C0003;
+ Wed,  9 Feb 2022 16:52:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1nHqCc-0001DI-PE; Wed, 09 Feb 2022 17:52:22 +0100
+ id 1nHqCc-0001DD-85; Wed, 09 Feb 2022 17:52:22 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 17:50:28 +0100
-Message-Id: <20220209165213.4498-3-peter@korsgaard.com>
+Date: Wed,  9 Feb 2022 17:50:27 +0100
+Message-Id: <20220209165213.4498-2-peter@korsgaard.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220209165213.4498-1-peter@korsgaard.com>
 References: <20220209165213.4498-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 002/107] package/python: drop target package
+Subject: [Buildroot] [PATCH 001/107] support/testing: drop python2 tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,202 +60,434 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Julien Olivain <ju.o@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Python 2.7 is EOL since April 2020, so drop support for the target package.
-
-https://www.python.org/dev/peps/pep-0373/
+Python2 for the target is about to get removed, so drop the tests using it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy         |   8 +++
- package/Config.in        |   3 +-
- package/python/Config.in | 139 ---------------------------------------
- 3 files changed, 9 insertions(+), 141 deletions(-)
- delete mode 100644 package/python/Config.in
+ .../tests/package/sample_python_subprocess32.py    |  6 ------
+ support/testing/tests/package/test_bmap_tools.py   |  8 --------
+ support/testing/tests/package/test_crudini.py      |  8 --------
+ support/testing/tests/package/test_libftdi1.py     | 12 ------------
+ support/testing/tests/package/test_python.py       | 14 --------------
+ support/testing/tests/package/test_python_argh.py  |  9 ---------
+ .../testing/tests/package/test_python_bitstring.py | 10 ----------
+ support/testing/tests/package/test_python_can.py   | 11 -----------
+ support/testing/tests/package/test_python_cbor.py  | 11 -----------
+ support/testing/tests/package/test_python_click.py |  9 ---------
+ .../tests/package/test_python_constantly.py        | 10 ----------
+ support/testing/tests/package/test_python_gnupg.py | 10 ----------
+ .../tests/package/test_python_incremental.py       | 11 -----------
+ .../testing/tests/package/test_python_passlib.py   | 11 -----------
+ .../testing/tests/package/test_python_pexpect.py   | 10 ----------
+ .../testing/tests/package/test_python_pynacl.py    | 11 -----------
+ .../testing/tests/package/test_python_pyyaml.py    | 11 -----------
+ .../tests/package/test_python_subprocess32.py      | 11 -----------
+ .../testing/tests/package/test_python_ubjson.py    | 11 -----------
+ 19 files changed, 194 deletions(-)
+ delete mode 100644 support/testing/tests/package/sample_python_subprocess32.py
+ delete mode 100644 support/testing/tests/package/test_python_subprocess32.py
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 34d8c71cc8..6bc3803a5c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_PYTHON
-+	bool "python2.7 package removed"
-+	select BR2_LEGACY
-+	help
-+	  Python 2.7 is EOL since April 2020 and has been removed.
-+
-+	  https://www.python.org/dev/peps/pep-0373/
-+
- config BR2_TARGET_UBOOT_ZYNQ_IMAGE
- 	bool "Generate image for Xilinx Zynq"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index d631ed784a..ca2fb363e3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -897,9 +897,8 @@ if BR2_STATIC_LIBS
- comment "External PHP extensions need a toolchain w/ dynamic library"
- endif
- endif
--	source "package/python/Config.in"
- 	source "package/python3/Config.in"
--if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+if BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-aenum/Config.in"
- 	source "package/python-aexpect/Config.in"
-diff --git a/package/python/Config.in b/package/python/Config.in
+diff --git a/support/testing/tests/package/sample_python_subprocess32.py b/support/testing/tests/package/sample_python_subprocess32.py
 deleted file mode 100644
-index ab6950cae8..0000000000
---- a/package/python/Config.in
+index 8579745cc8..0000000000
+--- a/support/testing/tests/package/sample_python_subprocess32.py
 +++ /dev/null
-@@ -1,139 +0,0 @@
--comment "python needs a toolchain w/ wchar, threads, dynamic library"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+@@ -1,6 +0,0 @@
+-import subprocess32
 -
--config BR2_PACKAGE_PYTHON
--	bool "python2.7 (deprecated)"
--	depends on BR2_USE_WCHAR
--	# uses fork()
--	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
--	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_LIBFFI
--	help
--	  The python language interpreter.
+-output = subprocess32.check_output(["ls", "-l", "/dev/null"])
+-print(output)
+-assert("/dev/null" in output)
+-assert("No such" not in output)
+diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmap_tools.py
+index baa23154f8..a179027633 100644
+--- a/support/testing/tests/package/test_bmap_tools.py
++++ b/support/testing/tests/package/test_bmap_tools.py
+@@ -45,14 +45,6 @@ class TestBmapTools(BRTest):
+         self.assertRunOk(cmd, timeout=20)
+ 
+ 
+-class TestPy2BmapTools(TestBmapTools):
+-    __test__ = True
+-    config = TestBmapTools.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        """
 -
--	  http://www.python.org/
 -
--if BR2_PACKAGE_PYTHON
+ class TestPy3BmapTools(TestBmapTools):
+     __test__ = True
+     config = TestBmapTools.config + \
+diff --git a/support/testing/tests/package/test_crudini.py b/support/testing/tests/package/test_crudini.py
+index e320d3207e..470a714eb6 100644
+--- a/support/testing/tests/package/test_crudini.py
++++ b/support/testing/tests/package/test_crudini.py
+@@ -33,14 +33,6 @@ class TestCrudiniBase(TestPythonPackageBase):
+         self.assertEqual(out, ['this-is-the-magic-value'])
+ 
+ 
+-class TestCrudiniPy2(TestCrudiniBase):
+-    __test__ = True
+-    config = TestCrudiniBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        """
 -
--choice
--	prompt "python module format to install"
--	default BR2_PACKAGE_PYTHON_PYC_ONLY
--	help
--	  Select Python module format to install on target (py, pyc or
--	  both)
 -
--config BR2_PACKAGE_PYTHON_PY_ONLY
--	bool ".py sources only"
+ class TestCrudiniPy3(TestCrudiniBase):
+     __test__ = True
+     config = TestCrudiniBase.config + \
+diff --git a/support/testing/tests/package/test_libftdi1.py b/support/testing/tests/package/test_libftdi1.py
+index 78c928484c..5c29dea04f 100644
+--- a/support/testing/tests/package/test_libftdi1.py
++++ b/support/testing/tests/package/test_libftdi1.py
+@@ -1,18 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Libftdi1(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_LIBFTDI1=y
+-        BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS=y
+-        """
+-    sample_scripts = ["tests/package/sample_libftdi1.py"]
+-    timeout = 40
 -
--config BR2_PACKAGE_PYTHON_PYC_ONLY
--	bool ".pyc compiled sources only"
 -
--config BR2_PACKAGE_PYTHON_PY_PYC
--	bool ".py sources and .pyc compiled"
+ class TestPythonPy3Libftdi1(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
+index 60da8765c4..f29aff6624 100644
+--- a/support/testing/tests/package/test_python.py
++++ b/support/testing/tests/package/test_python.py
+@@ -39,20 +39,6 @@ class TestPythonBase(infra.basetest.BRTest):
+         self.assertEqual(exit_code, 1)
+ 
+ 
+-class TestPython2(TestPythonBase):
+-    config = TestPythonBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        """
 -
--endchoice
+-    def test_run(self):
+-        self.login()
+-        self.version_test("Python 2")
+-        self.math_floor_test()
+-        self.libc_time_test()
+-        self.zlib_test()
 -
--menu "core python modules"
 -
--comment "The following modules are unusual or require extra libraries"
+ class TestPython3(TestPythonBase):
+     config = TestPythonBase.config + \
+         """
+diff --git a/support/testing/tests/package/test_python_argh.py b/support/testing/tests/package/test_python_argh.py
+index de4b4cbe74..887d9acd46 100644
+--- a/support/testing/tests/package/test_python_argh.py
++++ b/support/testing/tests/package/test_python_argh.py
+@@ -27,15 +27,6 @@ class TestPythonArgh(TestPythonPackageBase):
+         self.assertEqual(exit_code, 2)
+ 
+ 
+-class TestPythonPy2Argh(TestPythonArgh):
+-    __test__ = True
+-    config = TestPythonArgh.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_ARGH=y
+-        """
 -
--config BR2_PACKAGE_PYTHON_2TO3
--	bool "2to3 module"
--	help
--	  code translation from python 2 to 3
 -
--config BR2_PACKAGE_PYTHON_BZIP2
--	bool "bzip2 module"
--	select BR2_PACKAGE_BZIP2
--	help
--	  bzip2 module for Python
+ class TestPythonPy3Argh(TestPythonArgh):
+     __test__ = True
+     config = TestPythonArgh.config + \
+diff --git a/support/testing/tests/package/test_python_bitstring.py b/support/testing/tests/package/test_python_bitstring.py
+index 63b3fdb69c..bd358a2fc5 100644
+--- a/support/testing/tests/package/test_python_bitstring.py
++++ b/support/testing/tests/package/test_python_bitstring.py
+@@ -1,16 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Bitstring(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_BITSTRING=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_bitstring.py"]
 -
--config BR2_PACKAGE_PYTHON_BSDDB
--	bool "bsddb module"
--	select BR2_PACKAGE_BERKELEYDB
--	help
--	  bsddb module for Python.
 -
--config BR2_PACKAGE_PYTHON_CODECSCJK
--	bool "codecscjk module"
--	help
--	  Chinese/Japanese/Korean codecs module for Python (large).
+ class TestPythonPy3Bitstring(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_can.py b/support/testing/tests/package/test_python_can.py
+index d509d05dbb..dba5539c5d 100644
+--- a/support/testing/tests/package/test_python_can.py
++++ b/support/testing/tests/package/test_python_can.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Can(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_CAN=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_can.py"]
+-    timeout = 40
 -
--config BR2_PACKAGE_PYTHON_CURSES
--	bool "curses module"
--	select BR2_PACKAGE_NCURSES
--	help
--	  curses module for Python.
 -
--config BR2_PACKAGE_PYTHON_OSSAUDIODEV
--	bool "ossaudiodev module"
--	help
--	  ossaudiodev module for Python.
+ class TestPythonPy3Can(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_cbor.py b/support/testing/tests/package/test_python_cbor.py
+index 9da3503763..23a1e3e701 100644
+--- a/support/testing/tests/package/test_python_cbor.py
++++ b/support/testing/tests/package/test_python_cbor.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Cbor(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_CBOR=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
+-                      "tests/package/sample_python_cbor_dec.py"]
 -
--config BR2_PACKAGE_PYTHON_READLINE
--	bool "readline"
--	select BR2_PACKAGE_READLINE
--	help
--	  readline module for Python (required for command-line
--	  editing in the Python shell).
 -
--config BR2_PACKAGE_PYTHON_SSL
--	bool "ssl"
--	select BR2_PACKAGE_OPENSSL
--	help
--	  _ssl module for Python (required for https in urllib etc).
+ class TestPythonPy3Cbor(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_click.py b/support/testing/tests/package/test_python_click.py
+index db57d3aa9f..0ee9702cce 100644
+--- a/support/testing/tests/package/test_python_click.py
++++ b/support/testing/tests/package/test_python_click.py
+@@ -26,15 +26,6 @@ class TestPythonClick(TestPythonPackageBase):
+         self.assertEqual(exit_code, 2)
+ 
+ 
+-class TestPythonPy2Click(TestPythonClick):
+-    __test__ = True
+-    config = TestPythonClick.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_CLICK=y
+-        """
 -
--config BR2_PACKAGE_PYTHON_UNICODEDATA
--	bool "unicodedata module"
--	default y
--	help
--	  Unicode character database (used by stringprep module)
--	  (large).
 -
--if BR2_PACKAGE_PYTHON_UNICODEDATA
+ class TestPythonPy3Click(TestPythonClick):
+     __test__ = True
+     config = TestPythonClick.config + \
+diff --git a/support/testing/tests/package/test_python_constantly.py b/support/testing/tests/package/test_python_constantly.py
+index 5be01c4f8c..edcb9bfd69 100644
+--- a/support/testing/tests/package/test_python_constantly.py
++++ b/support/testing/tests/package/test_python_constantly.py
+@@ -1,16 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Constantly(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_CONSTANTLY=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_constantly.py"]
 -
--choice
--	prompt "Python unicode database format"
--	default BR2_PACKAGE_PYTHON_UCS2
--	help
--	  Select Python unicode database format for target
 -
--config BR2_PACKAGE_PYTHON_UCS2
--	bool "Universal Character Set 2-byte (UCS2)"
+ class TestPythonPy3Constantly(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_gnupg.py b/support/testing/tests/package/test_python_gnupg.py
+index 0c71f6b6d0..8861115130 100644
+--- a/support/testing/tests/package/test_python_gnupg.py
++++ b/support/testing/tests/package/test_python_gnupg.py
+@@ -1,16 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2GnuPG(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_GNUPG=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_gnupg.py"]
 -
--config BR2_PACKAGE_PYTHON_UCS4
--	bool "Universal Character Set 4-byte (UCS4)"
 -
--endchoice
+ class TestPythonPy3GnuPG(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_incremental.py b/support/testing/tests/package/test_python_incremental.py
+index 49800d8937..4c53d61321 100644
+--- a/support/testing/tests/package/test_python_incremental.py
++++ b/support/testing/tests/package/test_python_incremental.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Incremental(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_INCREMENTAL=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_incremental.py"]
+-    timeout = 30
 -
--endif
 -
--config BR2_PACKAGE_PYTHON_SQLITE
--	bool "sqlite module"
--	select BR2_PACKAGE_SQLITE
--	help
--	  SQLite database support
+ class TestPythonPy3Incremental(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_passlib.py b/support/testing/tests/package/test_python_passlib.py
+index 7c85882bf8..e12e86d91b 100644
+--- a/support/testing/tests/package/test_python_passlib.py
++++ b/support/testing/tests/package/test_python_passlib.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Passlib(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_PASSLIB=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_passlib.py"]
+-    timeout = 30
 -
--config BR2_PACKAGE_PYTHON_PYEXPAT
--	bool "xml module"
--	select BR2_PACKAGE_EXPAT
--	help
--	  pyexpat and xml libraries for Python
 -
--config BR2_PACKAGE_PYTHON_ZLIB
--	bool "zlib module"
--	select BR2_PACKAGE_ZLIB
--	help
--	  zlib support in Python
+ class TestPythonPy3Passlib(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_pexpect.py b/support/testing/tests/package/test_python_pexpect.py
+index ba31cdbdbe..70037a7d3c 100644
+--- a/support/testing/tests/package/test_python_pexpect.py
++++ b/support/testing/tests/package/test_python_pexpect.py
+@@ -1,16 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Pexpect(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_PEXPECT=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_pexpect.py"]
 -
--config BR2_PACKAGE_PYTHON_HASHLIB
--	bool "hashlib module"
--	select BR2_PACKAGE_OPENSSL
--	help
--	  hashlib support in Python
 -
--endmenu
+ class TestPythonPy3Pexpect(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_pynacl.py b/support/testing/tests/package/test_python_pynacl.py
+index f4dd54940a..cef8a7e780 100644
+--- a/support/testing/tests/package/test_python_pynacl.py
++++ b/support/testing/tests/package/test_python_pynacl.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Pynacl(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_PYNACL=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_pynacl.py"]
+-    timeout = 10
 -
--endif
+-
+ class TestPythonPy3Pynacl(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_pyyaml.py b/support/testing/tests/package/test_python_pyyaml.py
+index cd45a57b86..9d0a351f72 100644
+--- a/support/testing/tests/package/test_python_pyyaml.py
++++ b/support/testing/tests/package/test_python_pyyaml.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Pyyaml(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_PYYAML=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_pyyaml_enc.py",
+-                      "tests/package/sample_python_pyyaml_dec.py"]
+-
+-
+ class TestPythonPy3Pyyaml(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
+diff --git a/support/testing/tests/package/test_python_subprocess32.py b/support/testing/tests/package/test_python_subprocess32.py
+deleted file mode 100644
+index d2878046d1..0000000000
+--- a/support/testing/tests/package/test_python_subprocess32.py
++++ /dev/null
+@@ -1,11 +0,0 @@
+-from tests.package.test_python import TestPythonPackageBase
+-
+-
+-class TestPythonPy2Subprocess32(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_SUBPROCESS32=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_subprocess32.py"]
+diff --git a/support/testing/tests/package/test_python_ubjson.py b/support/testing/tests/package/test_python_ubjson.py
+index 85c707e292..a15dbd54b8 100644
+--- a/support/testing/tests/package/test_python_ubjson.py
++++ b/support/testing/tests/package/test_python_ubjson.py
+@@ -1,17 +1,6 @@
+ from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonPy2Ubjson(TestPythonPackageBase):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_UBJSON=y
+-        """
+-    sample_scripts = ["tests/package/sample_python_ubjson_enc.py",
+-                      "tests/package/sample_python_ubjson_dec.py"]
+-
+-
+ class TestPythonPy3Ubjson(TestPythonPackageBase):
+     __test__ = True
+     config = TestPythonPackageBase.config + \
 -- 
 2.20.1
 
