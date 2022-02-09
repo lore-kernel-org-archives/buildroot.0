@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2107EC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7968C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:07:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DABA883163;
-	Wed,  9 Feb 2022 17:07:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59F0C404F8;
+	Wed,  9 Feb 2022 17:07:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OwHb0Yrwo-R4; Wed,  9 Feb 2022 17:07:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CTH9f4GvokJO; Wed,  9 Feb 2022 17:07:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA9983211;
-	Wed,  9 Feb 2022 17:07:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7F6FB1BF9BA
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2BF4040150;
+	Wed,  9 Feb 2022 17:07:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 13E431BF47D
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6EEEA4010F
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9E8460AEC
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FomFPNPe7iRD for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 16:53:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ukZ9swbadr48 for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 16:53:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 51EE54007D
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:53:19 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 79DF060D5D
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:53:18 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9CD726000F;
- Wed,  9 Feb 2022 16:53:15 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id BEC10C0004;
+ Wed,  9 Feb 2022 16:53:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1nHqDT-0001RU-7R; Wed, 09 Feb 2022 17:53:15 +0100
+ id 1nHqDU-0001Ri-BO; Wed, 09 Feb 2022 17:53:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 17:52:09 +0100
-Message-Id: <20220209165213.4498-104-peter@korsgaard.com>
+Date: Wed,  9 Feb 2022 17:52:11 +0100
+Message-Id: <20220209165213.4498-106-peter@korsgaard.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220209165213.4498-1-peter@korsgaard.com>
 References: <20220209165213.4498-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 103/107] package/python-dialog: drop python2
+Subject: [Buildroot] [PATCH 105/107] package/python-enum34: drop python2
  specific package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -67,92 +67,109 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  Config.in.legacy                         |  6 ++++++
+ DEVELOPERS                               |  1 -
  package/Config.in                        |  1 -
- package/python-dialog/Config.in          | 10 ----------
- package/python-dialog/python-dialog.hash |  5 -----
- package/python-dialog/python-dialog.mk   | 15 ---------------
- 5 files changed, 6 insertions(+), 31 deletions(-)
- delete mode 100644 package/python-dialog/Config.in
- delete mode 100644 package/python-dialog/python-dialog.hash
- delete mode 100644 package/python-dialog/python-dialog.mk
+ package/python-enum34/Config.in          | 12 ------------
+ package/python-enum34/python-enum34.hash |  5 -----
+ package/python-enum34/python-enum34.mk   | 17 -----------------
+ 6 files changed, 6 insertions(+), 36 deletions(-)
+ delete mode 100644 package/python-enum34/Config.in
+ delete mode 100644 package/python-enum34/python-enum34.hash
+ delete mode 100644 package/python-enum34/python-enum34.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 6776048fc4..630194edba 100644
+index bc5df0e489..7df95691ca 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2022.02"
  
-+config BR2_PACKAGE_PYTHON_DIALOG
-+	bool "python-dialog removed"
++config BR2_PACKAGE_PYTHON_ENUM34
++	bool "python-enum34 removed"
 +	select BR2_LEGACY
 +	help
 +	  Package was removed together with python 2.7 support.
 +
- config BR2_PACKAGE_PYTHON_CONFIGOBJ
- 	bool "python-configobj removed"
+ config BR2_PACKAGE_PYTHON_ENUM
+ 	bool "python-enum removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0716729cee..92abe8a6dd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2243,7 +2243,6 @@ F:	package/python-cached-property/
+ F:	package/python-docker/
+ F:	package/python-dockerpty/
+ F:	package/python-docker-pycreds/
+-F:	package/python-enum34/
+ F:	package/python-functools32/
+ F:	package/python-psutil/
+ F:	package/python-request-id/
 diff --git a/package/Config.in b/package/Config.in
-index 478a4e6b90..b91e190c8e 100644
+index f134b626be..18388f82c3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -994,7 +994,6 @@ menu "External python modules"
- 	source "package/python-dbus-next/Config.in"
- 	source "package/python-decorator/Config.in"
- 	source "package/python-defusedxml/Config.in"
--	source "package/python-dialog/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-distro/Config.in"
-diff --git a/package/python-dialog/Config.in b/package/python-dialog/Config.in
+@@ -1010,7 +1010,6 @@ menu "External python modules"
+ 	source "package/python-ecdsa/Config.in"
+ 	source "package/python-engineio/Config.in"
+ 	source "package/python-entrypoints/Config.in"
+-	source "package/python-enum34/Config.in"
+ 	source "package/python-esptool/Config.in"
+ 	source "package/python-falcon/Config.in"
+ 	source "package/python-filelock/Config.in"
+diff --git a/package/python-enum34/Config.in b/package/python-enum34/Config.in
 deleted file mode 100644
-index c1fdb23723..0000000000
---- a/package/python-dialog/Config.in
+index 2511a350e0..0000000000
+--- a/package/python-enum34/Config.in
 +++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_PYTHON_DIALOG
--	bool "python-dialog"
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_PYTHON_ENUM34
+-	bool "python-enum34"
 -	depends on BR2_PACKAGE_PYTHON
--	depends on BR2_USE_MMU # dialog
--	select BR2_PACKAGE_DIALOG
 -	help
--	  A Python interface to the UNIX dialog utility and
--	  mostly-compatible programs.
+-	  Python 3.4 Enum backported to 2.x.
 -
--	  http://pythondialog.sourceforge.net/
-diff --git a/package/python-dialog/python-dialog.hash b/package/python-dialog/python-dialog.hash
+-	  An enumeration is a set of symbolic names (members) bound to
+-	  unique, constant values. Within an enumeration, the members
+-	  can be compared by identity, and the enumeration itself can
+-	  be iterated over.
+-
+-	  https://pypi.python.org/pypi/enum34
+diff --git a/package/python-enum34/python-enum34.hash b/package/python-enum34/python-enum34.hash
 deleted file mode 100644
-index 8f84e198b2..0000000000
---- a/package/python-dialog/python-dialog.hash
+index e43e00a5fe..0000000000
+--- a/package/python-enum34/python-enum34.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# Locally computed after verifying
--# https://sourceforge.net/projects/pythondialog/files/pythondialog/3.4.0/python3-pythondialog-3.4.0.tar.bz2.asc
--# with key 9B6F19FB52965E6C21FE76142A205688F8489BDD
--sha256	8978d355c8db6728eeb9e23b39449b14597f1c76cb06dc72462642ca7cde46a0  python2-pythondialog-3.4.0.tar.bz2
--sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/python-dialog/python-dialog.mk b/package/python-dialog/python-dialog.mk
+-# md5 from https://pypi.python.org/pypi/enum34/json
+-md5  b5ac0bb5ea9e830029599e410d09d3b5  enum34-1.1.10.tar.gz
+-# Locally computed
+-sha256  cce6a7477ed816bd2542d03d53db9f0db935dd013b70f336a95c73979289f248  enum34-1.1.10.tar.gz
+-sha256  88ec6a6c8eafa3b9757e745783938bef3f5e4d5e3c76b1db576aa3ab520e5e1d  enum/LICENSE
+diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
 deleted file mode 100644
-index d5d4a4ceb5..0000000000
---- a/package/python-dialog/python-dialog.mk
+index 0bd00508aa..0000000000
+--- a/package/python-enum34/python-enum34.mk
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,17 +0,0 @@
 -################################################################################
 -#
--# python-dialog
+-# python-enum34
 -#
 -################################################################################
 -
--PYTHON_DIALOG_VERSION = 3.4.0
--PYTHON_DIALOG_SOURCE = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.bz2
--PYTHON_DIALOG_SITE = http://downloads.sourceforge.net/project/pythondialog/pythondialog/$(PYTHON_DIALOG_VERSION)
--PYTHON_DIALOG_LICENSE = LGPL-2.1+
--PYTHON_DIALOG_LICENSE_FILES = COPYING
--PYTHON_DIALOG_SETUP_TYPE = distutils
--PYTHON_DIALOG_DEPENDENCIES = dialog
+-PYTHON_ENUM34_VERSION = 1.1.10
+-PYTHON_ENUM34_SOURCE = enum34-$(PYTHON_ENUM34_VERSION).tar.gz
+-PYTHON_ENUM34_SITE = https://files.pythonhosted.org/packages/11/c4/2da1f4952ba476677a42f25cd32ab8aaf0e1c0d0e00b89822b835c7e654c
+-PYTHON_ENUM34_SETUP_TYPE = setuptools
+-PYTHON_ENUM34_LICENSE = BSD-3-Clause
+-PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
+-PYTHON_ENUM34_CPE_ID_VENDOR = python
+-PYTHON_ENUM34_CPE_ID_PRODUCT = enum34
 -
 -$(eval $(python-package))
+-$(eval $(host-python-package))
 -- 
 2.20.1
 
