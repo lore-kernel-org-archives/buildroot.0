@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4546C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1FC1C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:37:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97BCC60E40;
-	Wed,  9 Feb 2022 21:36:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qg_Yj3VQz88E; Wed,  9 Feb 2022 21:36:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEB5F60BF2;
-	Wed,  9 Feb 2022 21:36:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 16BBE1BF9C1
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4DF3983163
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B77F831B0;
+	Wed,  9 Feb 2022 21:37:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qnxjJqpMCvgu for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:33:24 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5yRlIrqy8avj; Wed,  9 Feb 2022 21:37:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D52648134F;
+	Wed,  9 Feb 2022 21:37:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 148441BF9BA
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 39BB74148D
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KDNAOOZ-31mS for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96EE283168
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DFB7414C3
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9879B8323E; Wed,  9 Feb 2022 21:25:59 +0000 (UTC)
+ id A001A8323C; Wed,  9 Feb 2022 21:26:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:07:56 +0100
+Date: Wed, 9 Feb 2022 22:09:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 459dd7a9850c7b3be519ae6bf7cc6a689c22cd32
-X-Git-Newrev: 1682e9b23b6aa8cd4f93a56c0efc8d7ec3566b42
+X-Git-Oldrev: 25fe06d41df4fd240eceb361e54828eafe8b22ea
+X-Git-Newrev: a0544dab33b8ca5b5f8d2f46ded5106ceb636e5f
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212559.9879B8323E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dstat: drop python2 support
+Message-Id: <20220209212600.A001A8323C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dpkt: drop python2 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,35 +58,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1682e9b23b6aa8cd4f93a56c0efc8d7ec3566b42
+commit: https://git.buildroot.net/buildroot/commit/?id=a0544dab33b8ca5b5f8d2f46ded5106ceb636e5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dstat/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/python-dpkt/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/dstat/Config.in b/package/dstat/Config.in
-index 647a7033c6..09d1970f73 100644
---- a/package/dstat/Config.in
-+++ b/package/dstat/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_DSTAT
- 	bool "dstat"
--	depends on BR2_USE_WCHAR # python
--	depends on BR2_USE_MMU # python
--	depends on BR2_TOOLCHAIN_HAS_THREADS # python
--	depends on !BR2_STATIC_LIBS # python
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-+	depends on BR2_USE_WCHAR # python3
-+	depends on BR2_USE_MMU # python3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
-+	depends on !BR2_STATIC_LIBS # python3
-+	select BR2_PACKAGE_PYTHON3 # runtime
+diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+index 9bd7a98d26..819d0fb613 100644
+--- a/package/python-dpkt/Config.in
++++ b/package/python-dpkt/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_DPKT
+ 	bool "python-dpkt"
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
  	help
- 	  Dstat, written in Python, is a versatile replacement for
- 	  vmstat, iostat, netstat and ifstat. Dstat overcomes some of
+ 	  Fast, simple packet creation / parsing, with definitions
+ 	  for the basic TCP/IP protocols.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
