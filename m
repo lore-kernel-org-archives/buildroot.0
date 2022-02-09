@@ -1,80 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6797CC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87968C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2526483422;
-	Wed,  9 Feb 2022 21:56:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CE5A40567;
+	Wed,  9 Feb 2022 21:56:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pf7jEdUEqlJn; Wed,  9 Feb 2022 21:56:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C4We-EDxgNRm; Wed,  9 Feb 2022 21:56:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C8AD833B7;
-	Wed,  9 Feb 2022 21:56:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A5FDD1BF302
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:43:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F7A84056E;
+	Wed,  9 Feb 2022 21:56:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C1B711BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94B9540504
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:43:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF05A4013B
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hwhuR57BEBl5 for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:43:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B36D34067F
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:43:42 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id j14so10818380ejy.6
- for <buildroot@buildroot.org>; Wed, 09 Feb 2022 13:43:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1UNN6FVWy9lCGAY7EU1dZjMbmx/CW4fft2j7LM7yr9Y=;
- b=NnDadOUxFLZj37gzrjAeW/lkb0muFRqY8YjeWOlr2eIsX4firQxz4Z0w3gjTEAbUd4
- f7gA7seIMzlU77anl7M4BUBDCn5USjvPt1XLs+x4ZmTurqbWJKTt1+uQOzha80fsDNRa
- 7UwnX/1q9th3HfFKmU6l3Ek9bZ5h89UklpGS3yqCUTkk45QDy35MDD9C/6YIAwXPOagJ
- wrSNiZgwyDDpv4B/dxl1jrIQ2Hh3jjLYWZhG66YT2+JH06OL6/RRcrBF5wGDV6RbnRcM
- McCrQiWzzODDO3wdxQJvPXE9o+QrqD6ou4qBLLu+3T2ov2eSW8wMDQaqYqVJzxoAzy23
- ka9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1UNN6FVWy9lCGAY7EU1dZjMbmx/CW4fft2j7LM7yr9Y=;
- b=GBvvoh5WbA/rkJ3ZzRt+Vwj9nqYOE9KwWl7eG1MSQUI2f52e6UmVnJaMRinuESDSfn
- pc2rv8M2xD0r5G6N7dgRGStOy/wyAiQtgW0R6OFMh1EL68WbOnBoR5fRUKs53nne+4ez
- mZkgc2V/UCbQ2x3zVqZNle0DcsGaI/OLjBh3WeMt1N8FDzUXeQcmacZXOTc7E8W9HNrp
- B87f7+BHxrO4QvK3tvgST9+U2ZXks0KX84p+HQT/1aH/0PTgfn2Whd4IDbVbgSjSfRP9
- NTdf1xJZ+/0cyfN1oF4SjLLNscYMs4f5fx5Pz7Vl5LKCtDgYwRqtia3YEYoTQXHdKVmI
- Ad0Q==
-X-Gm-Message-State: AOAM533JrJBCM0HHZbYAE7yRg4wV0KQEh0qxZmGXFhN8wJWpvGGTqXGd
- 4dZGQUwB7QjwRuIIRXt73usnv8kqnQE=
-X-Google-Smtp-Source: ABdhPJwvIk0XvZR7FUgOtI1dZiweJfCz67HD5sQzJKQ9LkdWeAMxKOXvzATg1hTS+y8jLUsS2H4SAw==
-X-Received: by 2002:a17:906:644f:: with SMTP id
- l15mr3819893ejn.135.1644443020547; 
- Wed, 09 Feb 2022 13:43:40 -0800 (PST)
-Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
- [77.21.162.21])
- by smtp.gmail.com with ESMTPSA id j11sm4603157ejb.110.2022.02.09.13.43.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Feb 2022 13:43:39 -0800 (PST)
-From: Heiko Thiery <heiko.thiery@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 22:43:27 +0100
-Message-Id: <20220209214326.21671-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.20.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jNY65qrl8wgg for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:48:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A97A94063F
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:48:04 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A3AB71C0007;
+ Wed,  9 Feb 2022 21:48:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1644443281;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WuMafsPE2TmodJsihyqtbWHTS79XY8jKOhOch0FPd6Q=;
+ b=KUO05bbi90bwFLAfE7zOZHAIX+K0LXcxYJ69cVIEoHYNtt3gKY+HxQXUxQfgmT8tgyu58Z
+ IyeEIWl9r+q/nslPvF09I5H3+k7pd8ajXDx1kIc7KQiGuNapaslQXPaMKuYg8EshFARH5a
+ FdyztCNbIVGsG0dFifdELq6IUt9aeLgbjowIBOBdVPUtSSRxY3iZ0bDkq/fm6GRIxsEUSf
+ MY0VOX1LEczbtDcDOeUwVZ0us/BBh79jhGg4b/qoQcZOL8IMvw8JDq8f49Ax4DupdBLGra
+ +0nVQ9F3TYkT4CLhFeNE/K/ez//58MGtA5cItgdf5jUZngIjKTaJ0kEb6xJclw==
+Date: Wed, 9 Feb 2022 22:48:00 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220209224800.7717a488@windsurf>
+In-Reply-To: <20220209205527.GD2249818@scaer>
+References: <cover.1644422916.git.yann.morin@orange.com>
+ <9354_1644422930_6203E712_9354_383_11_2d5b77c2a90cf722e007a5bf3ed4227d2bd1fda6.1644422916.git.yann.morin@orange.com>
+ <20220209205259.725e17c2@windsurf> <20220209205527.GD2249818@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/rauc: bump to version 1.6
+Subject: Re: [Buildroot] [PATCH 1/5 v2] package/pkg-cargo: allow packages to
+ define download environment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,58 +70,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>, Andrey Yurovsky <yurovsky@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: yann.morin@orange.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release notes see: https://github.com/rauc/rauc/releases/tag/v1.6
+On Wed, 9 Feb 2022 21:55:27 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
+> > But, but, then, how is:
+> > 
+> > PYTHON_CRYPTOGRAPHY_DL_ENV = \
+> >         BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
+> > 
+> > currently working?  
+> 
+> Because, its the name implies, it is a python-package, not a
+> cargo-package.
+> 
+> Yeah, I got puzzled too. ;-)
 
-# utils/test-pkg -p rauc
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Aah, yes. Indeed. A python-package that builds Rust stuff. I wonder how
+it's possible for me to forget this, after having spent so many hours
+on this particular package! :-)
 
-
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index a025257845..f6c1446de4 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.5.1/rauc-1.5.1.tar.xz.asc
--sha256  d4ea009ce702bcb083d942398ccfedec959c6bbb7adc0fd77ae9314ce11d9d91  rauc-1.5.1.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v1.6/rauc-1.6.tar.xz.asc
-+sha256  86013788dd02321b7c3f913ad3a1f8802afbc784ec076fa278524a9e1ef9e7b0  rauc-1.6.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 99efc16c2f..39f5255812 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 1.5.1
-+RAUC_VERSION = 1.6
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+Thomas
 -- 
-2.20.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
