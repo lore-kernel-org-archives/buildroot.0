@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83C0BC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37685C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48C2383466;
-	Wed,  9 Feb 2022 21:46:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7DE460E52;
+	Wed,  9 Feb 2022 21:46:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ow_r8BtgmZ6f; Wed,  9 Feb 2022 21:46:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4Is-UxePiQ8P; Wed,  9 Feb 2022 21:46:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9786383B07;
-	Wed,  9 Feb 2022 21:46:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B2F81BF2F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BF5160E56;
+	Wed,  9 Feb 2022 21:46:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 617A61BF9BA
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3E5D83300
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA71460BE7
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JfyV3KbRlJxc for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z-UOVknjzuoi for <buildroot@lists.busybox.net>;
  Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD6DB8333E
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B45E60E67
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id E23BA81335; Wed,  9 Feb 2022 21:26:01 +0000 (UTC)
+ id 8EE9481335; Wed,  9 Feb 2022 21:26:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:10:21 +0100
+Date: Wed, 9 Feb 2022 22:08:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15c47b462e0065a96c7b0436ec70f9be08d623c4
-X-Git-Newrev: f26bd4e9196a1d242a0a98207e2911c50c4f878f
+X-Git-Oldrev: 07ac57eab1409b9255300126280ed43c89a88fdd
+X-Git-Newrev: a10ad866364b4474f25233bac13676bc53d6cf0f
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212601.E23BA81335@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ranger: drop python2 support
+Message-Id: <20220209212600.8EE9481335@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-couchdb: drop python2
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,31 +59,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f26bd4e9196a1d242a0a98207e2911c50c4f878f
+commit: https://git.buildroot.net/buildroot/commit/?id=a10ad866364b4474f25233bac13676bc53d6cf0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ranger/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/python-couchdb/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/ranger/Config.in b/package/ranger/Config.in
-index ee0ffecd13..a379002f95 100644
---- a/package/ranger/Config.in
-+++ b/package/ranger/Config.in
-@@ -4,9 +4,8 @@ config BR2_PACKAGE_RANGER
- 	depends on BR2_USE_WCHAR # python3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
- 	depends on !BR2_STATIC_LIBS # python3
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_CURSES if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_CURSES if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_CURSES
+diff --git a/package/python-couchdb/Config.in b/package/python-couchdb/Config.in
+index 9156883b38..5bff75750b 100644
+--- a/package/python-couchdb/Config.in
++++ b/package/python-couchdb/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_COUCHDB
+ 	bool "python-couchdb"
+-	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON3_SSL # runtime
  	help
- 	  ranger is a console file manager with VI key bindings. It
- 	  provides a minimalistic and nice curses interface with a
+ 	  Python client library for working with CouchDB.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
