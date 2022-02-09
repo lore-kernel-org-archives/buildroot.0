@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00573C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FDAFC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A79B8405BC;
-	Wed,  9 Feb 2022 21:42:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C14FE405D1;
+	Wed,  9 Feb 2022 21:42:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ED7D5VuNDVyM; Wed,  9 Feb 2022 21:42:39 +0000 (UTC)
+	with ESMTP id qV2mGQWtTXGq; Wed,  9 Feb 2022 21:42:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AC2A405D1;
-	Wed,  9 Feb 2022 21:42:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A37B1BF9C1
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97F29408D8;
+	Wed,  9 Feb 2022 21:42:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 26D291BF9BA
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2518360E4F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FC1A83312
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XKnfRQZE_fjU for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NsBnNEwa3Mky for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C92BA60E46
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 025EE832A9
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id CB3038323C; Wed,  9 Feb 2022 21:25:59 +0000 (UTC)
+ id 174DD8323E; Wed,  9 Feb 2022 21:26:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:08:10 +0100
+Date: Wed, 9 Feb 2022 22:09:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4bbd6da50488944debba29e195557e5b345f2b1
-X-Git-Newrev: f8c3859b6f351aab631e1b3abdb87ce8fa930d3d
+X-Git-Oldrev: 7affa6a59b0b7834cebff4079983603ff134f4c3
+X-Git-Newrev: 6cf1e50c952486e175abdbb8ce909fa8087eabb3
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212559.CB3038323C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/i2c-tools: drop python2 support
+Message-Id: <20220209212601.174DD8323E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pymodbus: drop python2
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,48 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8c3859b6f351aab631e1b3abdb87ce8fa930d3d
+commit: https://git.buildroot.net/buildroot/commit/?id=6cf1e50c952486e175abdbb8ce909fa8087eabb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/i2c-tools/i2c-tools.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ package/python-pymodbus/python-pymodbus.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 7565349f5e..5c9ce26628 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -13,10 +13,6 @@ I2C_TOOLS_CPE_ID_VENDOR = i2c-tools_project
- I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
- I2C_TOOLS_INSTALL_STAGING = YES
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index 9135a4d0c4..d96e21a55c 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -11,13 +11,4 @@ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
  
 -ifeq ($(BR2_PACKAGE_PYTHON),y)
--I2C_TOOLS_DEPENDENCIES += python
+-# only needed/valid for python 3.x
+-define PYTHON_PYMODBUS_RM_PY3_FILES
+-	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pymodbus/client/asynchronous/asyncio
+-endef
+-
+-PYTHON_PYMODBUS_POST_INSTALL_TARGET_HOOKS += PYTHON_PYMODBUS_RM_PY3_FILES
 -endif
 -
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- I2C_TOOLS_DEPENDENCIES += python3
- endif
-@@ -31,7 +27,7 @@ endif
- 
- # Build/install steps mirror the distutil python package type in the python package
- # infrastructure
--ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
- # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
- I2C_TOOLS_PYTHON_BASE_ENV = \
- 	$(PKG_PYTHON_DISTUTILS_ENV) \
-@@ -51,7 +47,7 @@ define I2C_TOOLS_INSTALL_PYSMBUS
- 		$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS))
- endef
- 
--endif # BR2_PACKAGE_PYTHON
-+endif # BR2_PACKAGE_PYTHON3
- 
- define I2C_TOOLS_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(I2C_TOOLS_MAKE_OPTS) -C $(@D)
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
