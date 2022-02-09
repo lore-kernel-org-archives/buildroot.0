@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24646C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38C39C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4C9960BD5;
-	Wed,  9 Feb 2022 17:01:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E390860D79;
+	Wed,  9 Feb 2022 17:01:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XHy3UULLyIje; Wed,  9 Feb 2022 17:01:24 +0000 (UTC)
+	with ESMTP id eu4LSjKqD_xF; Wed,  9 Feb 2022 17:01:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 261FD60AEC;
-	Wed,  9 Feb 2022 17:01:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 90B261BF9BA
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:52:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FE2360E3B;
+	Wed,  9 Feb 2022 17:01:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10F7A1BF47D
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D6CF60B05
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F7A0403F8
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:52:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NL8WqoCkhzFQ for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 16:52:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xfij4y7UjMvf for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 16:52:51 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4C7960AEC
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8707B40146
  for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:52:51 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EC982C0006;
- Wed,  9 Feb 2022 16:52:49 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id EC344C0005;
+ Wed,  9 Feb 2022 16:52:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1nHqD3-0001Kf-HN; Wed, 09 Feb 2022 17:52:49 +0100
+ id 1nHqD0-0001Jd-Gq; Wed, 09 Feb 2022 17:52:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 17:51:20 +0100
-Message-Id: <20220209165213.4498-55-peter@korsgaard.com>
+Date: Wed,  9 Feb 2022 17:51:14 +0100
+Message-Id: <20220209165213.4498-49-peter@korsgaard.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220209165213.4498-1-peter@korsgaard.com>
 References: <20220209165213.4498-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 054/107] package/python-pyroute2: drop python2
+Subject: [Buildroot] [PATCH 048/107] package/python-m2crypto: drop python2
  support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,7 +59,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Gustavo Heinz <gustavo@gsthnz.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -67,22 +67,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyroute2/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/python-m2crypto/Config.in | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
-index 5df0a63d4b..9e685f9d1e 100644
---- a/package/python-pyroute2/Config.in
-+++ b/package/python-pyroute2/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYROUTE2
- 	bool "python-pyroute2"
--	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_SQLITE
+diff --git a/package/python-m2crypto/Config.in b/package/python-m2crypto/Config.in
+index 7481d49e5c..af710d5351 100644
+--- a/package/python-m2crypto/Config.in
++++ b/package/python-m2crypto/Config.in
+@@ -1,11 +1,8 @@
+ config BR2_PACKAGE_PYTHON_M2CRYPTO
+ 	bool "python-m2crypto"
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
++	select BR2_PACKAGE_PYTHON3_SSL # runtime
  	help
- 	  Python netlink library - Linux network / netns / wireless /
- 	  ipset configuration.
+ 	  M2Crypto: A Python crypto and SSL toolkit.
+ 
 -- 
 2.20.1
 
