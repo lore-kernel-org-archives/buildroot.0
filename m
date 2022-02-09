@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45EA2C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15462C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F154A405D9;
-	Wed,  9 Feb 2022 21:55:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C16EE60E67;
+	Wed,  9 Feb 2022 21:55:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ye5d-FelIyBY; Wed,  9 Feb 2022 21:55:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Xbae2jolzkdN; Wed,  9 Feb 2022 21:55:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA8E3405D1;
-	Wed,  9 Feb 2022 21:55:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF09460E38;
+	Wed,  9 Feb 2022 21:55:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 58A8B1BF9BA
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26E1B1BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96BAD607BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 982D460E5A
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KsbTbSVQTlTE for <buildroot@lists.busybox.net>;
+ with ESMTP id bLE8mBboHgtZ for <buildroot@lists.busybox.net>;
  Wed,  9 Feb 2022 21:33:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2067860FE4
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBB3960FF9
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 359348323C; Wed,  9 Feb 2022 21:26:03 +0000 (UTC)
+ id 0A91D8323C; Wed,  9 Feb 2022 21:26:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:16:19 +0100
+Date: Wed, 9 Feb 2022 22:13:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d264a96172cfa1c1f515d1160b921c013fa3bd7
-X-Git-Newrev: 1e44c7bcd928148ed31ade22512635e562bda7b2
+X-Git-Oldrev: 5fce56ae9b98e061706e6a57005a7b411b6db77f
+X-Git-Newrev: c2d0a365decdaf56f62ee39420c63c3d0953b721
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212603.359348323C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dialog: drop python2
+Message-Id: <20220209212603.0A91D8323C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-subprocess32: drop python2
  specific package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,94 +59,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e44c7bcd928148ed31ade22512635e562bda7b2
+commit: https://git.buildroot.net/buildroot/commit/?id=c2d0a365decdaf56f62ee39420c63c3d0953b721
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                         |  6 ++++++
- package/Config.in                        |  1 -
- package/python-dialog/Config.in          | 10 ----------
- package/python-dialog/python-dialog.hash |  5 -----
- package/python-dialog/python-dialog.mk   | 15 ---------------
- 5 files changed, 6 insertions(+), 31 deletions(-)
+ Config.in.legacy                                   |  6 +++++
+ package/Config.in                                  |  1 -
+ package/python-subprocess32/Config.in              | 13 ---------
+ .../python-subprocess32/python-subprocess32.hash   |  5 ----
+ package/python-subprocess32/python-subprocess32.mk | 31 ----------------------
+ 5 files changed, 6 insertions(+), 50 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 6776048fc4..630194edba 100644
+index 3cd78ccf1c..8db9558ed4 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2022.02"
  
-+config BR2_PACKAGE_PYTHON_DIALOG
-+	bool "python-dialog removed"
++config BR2_PACKAGE_PYTHON_SUBPROCESS32
++	bool "python-subprocess32 removed"
 +	select BR2_LEGACY
 +	help
 +	  Package was removed together with python 2.7 support.
 +
- config BR2_PACKAGE_PYTHON_CONFIGOBJ
- 	bool "python-configobj removed"
+ config BR2_PACKAGE_PYTHON_SINGLEDISPATCH
+ 	bool "python-singledispatch removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 478a4e6b90..b91e190c8e 100644
+index 0261463f45..18de2a32a5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -994,7 +994,6 @@ menu "External python modules"
- 	source "package/python-dbus-next/Config.in"
- 	source "package/python-decorator/Config.in"
- 	source "package/python-defusedxml/Config.in"
--	source "package/python-dialog/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-distro/Config.in"
-diff --git a/package/python-dialog/Config.in b/package/python-dialog/Config.in
+@@ -1243,7 +1243,6 @@ menu "External python modules"
+ 	source "package/python-sqlalchemy/Config.in"
+ 	source "package/python-sqliteschema/Config.in"
+ 	source "package/python-sqlparse/Config.in"
+-	source "package/python-subprocess32/Config.in"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
+diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
 deleted file mode 100644
-index c1fdb23723..0000000000
---- a/package/python-dialog/Config.in
+index d7fe84f1e6..0000000000
+--- a/package/python-subprocess32/Config.in
 +++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_PYTHON_DIALOG
--	bool "python-dialog"
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_PYTHON_SUBPROCESS32
+-	bool "python-subprocess32"
 -	depends on BR2_PACKAGE_PYTHON
--	depends on BR2_USE_MMU # dialog
--	select BR2_PACKAGE_DIALOG
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_MIPS_NABI64
 -	help
--	  A Python interface to the UNIX dialog utility and
--	  mostly-compatible programs.
+-	  A backport of the Python 3 subprocess module for use
+-	  on Python 2.
 -
--	  http://pythondialog.sourceforge.net/
-diff --git a/package/python-dialog/python-dialog.hash b/package/python-dialog/python-dialog.hash
+-	  https://github.com/google/python-subprocess32
+-
+-comment "python-subprocess32 needs a toolchain w/ headers >= 3.10 on MIPS N64"
+-	depends on BR2_MIPS_NABI64
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
 deleted file mode 100644
-index 8f84e198b2..0000000000
---- a/package/python-dialog/python-dialog.hash
+index 65d18763d1..0000000000
+--- a/package/python-subprocess32/python-subprocess32.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# Locally computed after verifying
--# https://sourceforge.net/projects/pythondialog/files/pythondialog/3.4.0/python3-pythondialog-3.4.0.tar.bz2.asc
--# with key 9B6F19FB52965E6C21FE76142A205688F8489BDD
--sha256	8978d355c8db6728eeb9e23b39449b14597f1c76cb06dc72462642ca7cde46a0  python2-pythondialog-3.4.0.tar.bz2
--sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/python-dialog/python-dialog.mk b/package/python-dialog/python-dialog.mk
+-# md5, sha256 from https://pypi.org/pypi/subprocess32/json
+-md5	748844d560be5f0c707931cba1cdb48b  subprocess32-3.5.4.tar.gz
+-sha256	eb2937c80497978d181efa1b839ec2d9622cf9600a039a79d0e108d1f9aec79d  subprocess32-3.5.4.tar.gz
+-# Locally computed sha256 checksums
+-sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
+diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
 deleted file mode 100644
-index d5d4a4ceb5..0000000000
---- a/package/python-dialog/python-dialog.mk
+index fb8a47f974..0000000000
+--- a/package/python-subprocess32/python-subprocess32.mk
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,31 +0,0 @@
 -################################################################################
 -#
--# python-dialog
+-# python-subprocess32
 -#
 -################################################################################
 -
--PYTHON_DIALOG_VERSION = 3.4.0
--PYTHON_DIALOG_SOURCE = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.bz2
--PYTHON_DIALOG_SITE = http://downloads.sourceforge.net/project/pythondialog/pythondialog/$(PYTHON_DIALOG_VERSION)
--PYTHON_DIALOG_LICENSE = LGPL-2.1+
--PYTHON_DIALOG_LICENSE_FILES = COPYING
--PYTHON_DIALOG_SETUP_TYPE = distutils
--PYTHON_DIALOG_DEPENDENCIES = dialog
+-PYTHON_SUBPROCESS32_VERSION = 3.5.4
+-PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
+-PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/32/c8/564be4d12629b912ea431f1a50eb8b3b9d00f1a0b1ceff17f266be190007
+-PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
+-PYTHON_SUBPROCESS32_LICENSE = Python-2.0
+-PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
+-
+-# The configure step needs to be run outside of the setup.py since it isn't
+-# run correctly for cross-compiling
+-define PYTHON_SUBPROCESS32_CONFIGURE_CMDS
+-	(cd $(@D) && \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	$(TARGET_CONFIGURE_ARGS) \
+-	./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--sysconfdir=/etc \
+-		--program-prefix="" \
+-	)
+-endef
 -
 -$(eval $(python-package))
 _______________________________________________
