@@ -1,48 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A6FEC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:53:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17328C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3BCB41601;
-	Wed,  9 Feb 2022 21:53:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C15D48297F;
+	Wed,  9 Feb 2022 21:54:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JbOx339YuYLN; Wed,  9 Feb 2022 21:53:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sFDGjI0G3HAo; Wed,  9 Feb 2022 21:54:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB1F9415F9;
-	Wed,  9 Feb 2022 21:53:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6EBE8294A;
+	Wed,  9 Feb 2022 21:54:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 741661BF2F0
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 57AB21BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5082560E6C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DC2260E5F
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y8LvMgXrMFIF for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:33:27 +0000 (UTC)
+ with ESMTP id 3o5yhMOxUr-o for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:33:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51F9960E6E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BADB60FF7
  for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 631B881335; Wed,  9 Feb 2022 21:26:02 +0000 (UTC)
+ id 9AEF18323C; Wed,  9 Feb 2022 21:26:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:13:21 +0100
+Date: Wed, 9 Feb 2022 22:13:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 532dd66e0477968cbed59f380924e9849bfbd04b
-X-Git-Newrev: 1727e80dfface4dbddbc84604ed781c12b0174d2
+X-Git-Oldrev: da9233cee3c93a7e903794008f35e87839aed746
+X-Git-Newrev: e990a926797edadb6b0e8b94c85b9d52a79f47ae
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212602.631B881335@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/python-backports-shutil-get-terminal-size: drop python2 specific
- package
+Message-Id: <20220209212602.9AEF18323C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ipaddress: drop python2
+ specific package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,104 +59,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1727e80dfface4dbddbc84604ed781c12b0174d2
+commit: https://git.buildroot.net/buildroot/commit/?id=e990a926797edadb6b0e8b94c85b9d52a79f47ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                                           |  6 ++++++
- DEVELOPERS                                                 |  1 -
- package/Config.in                                          |  1 -
- .../python-backports-shutil-get-terminal-size/Config.in    |  8 --------
- .../python-backports-shutil-get-terminal-size.hash         |  5 -----
- .../python-backports-shutil-get-terminal-size.mk           | 14 --------------
- 6 files changed, 6 insertions(+), 29 deletions(-)
+ Config.in.legacy                               |  6 ++++++
+ package/Config.in                              |  1 -
+ package/python-ipaddress/Config.in             |  7 -------
+ package/python-ipaddress/python-ipaddress.hash |  5 -----
+ package/python-ipaddress/python-ipaddress.mk   | 14 --------------
+ 5 files changed, 6 insertions(+), 27 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index cc1ed8f9d5..89c095a388 100644
+index c78fb20756..14b26408fe 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2022.02"
  
-+config BR2_PACKAGE_PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE
-+	bool "python-backports-shutil-get-terminal-size removed"
++config BR2_PACKAGE_PYTHON_IPADDRESS
++	bool "python-ipaddress removed"
 +	select BR2_LEGACY
 +	help
 +	  Package was removed together with python 2.7 support.
 +
- config BR2_PACKAGE_PYTHON_BACKPORTS_ABC
- 	bool "python-backports-abc removed"
+ config BR2_PACKAGE_PYTHON_IPADDR
+ 	bool "python-ipaddr removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f92bd32a9f..7fe7e4287a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -143,7 +143,6 @@ N:	Andreas Ziegler <br015@umbiko.net>
- F:	package/mpd/
- 
- N:	Andrey Smirnov <andrew.smirnov@gmail.com>
--F:	package/python-backports-shutil-get-terminal-size/
- F:	package/python-decorator/
- F:	package/python-ipython-genutils/
- F:	package/python-pathlib2/
 diff --git a/package/Config.in b/package/Config.in
-index 46e6b30cdf..fbfc876d89 100644
+index 611a8f6aa8..50c0e13510 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -941,7 +941,6 @@ menu "External python modules"
- 	source "package/python-avro/Config.in"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backcall/Config.in"
--	source "package/python-backports-shutil-get-terminal-size/Config.in"
- 	source "package/python-backports-ssl-match-hostname/Config.in"
- 	source "package/python-bcrypt/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-diff --git a/package/python-backports-shutil-get-terminal-size/Config.in b/package/python-backports-shutil-get-terminal-size/Config.in
+@@ -1058,7 +1058,6 @@ menu "External python modules"
+ 	source "package/python-iniparse/Config.in"
+ 	source "package/python-intelhex/Config.in"
+ 	source "package/python-iowait/Config.in"
+-	source "package/python-ipaddress/Config.in"
+ 	source "package/python-ipdb/Config.in"
+ 	source "package/python-iptables/Config.in"
+ 	source "package/python-ipy/Config.in"
+diff --git a/package/python-ipaddress/Config.in b/package/python-ipaddress/Config.in
 deleted file mode 100644
-index 392e05a282..0000000000
---- a/package/python-backports-shutil-get-terminal-size/Config.in
+index b2b9f0b1c3..0000000000
+--- a/package/python-ipaddress/Config.in
 +++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE
--	bool "python-backports-shutil-get-terminal-size"
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_PYTHON_IPADDRESS
+-	bool "python-ipaddress"
 -	depends on BR2_PACKAGE_PYTHON
 -	help
--	  A backport of the get_terminal_size function from Python
--	  3.3's shutil.
+-	  Python 3.3's ipaddress for older Python versions.
 -
--	  https://pypi.python.org/pypi/backports.shutil_get_terminal_size
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
+-	  https://github.com/phihag/ipaddress
+diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
 deleted file mode 100644
-index 40883a4e3b..0000000000
---- a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
+index e61835e192..0000000000
+--- a/package/python-ipaddress/python-ipaddress.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# md5 from https://pypi.python.org/pypi/backports.shutil_get_terminal_size/json
--md5 03267762480bd86b50580dc19dff3c66 backports.shutil_get_terminal_size-1.0.0.tar.gz
--# Locally computed
--sha256  713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80  backports.shutil_get_terminal_size-1.0.0.tar.gz
--sha256  9edd99f8c339cddbfe36a9707e671fccf245b3e50b80eec0877dccec87a2dfe4  LICENSE
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+-# md5, sha256 from https://pypi.org/pypi/ipaddress/json
+-md5	aaee67a8026782af1831148beb0d9060  ipaddress-1.0.23.tar.gz
+-sha256	b7f8e0369580bb4a24d5ba1d7cc29660a4a6987763faf1d8a8046830e020e7e2  ipaddress-1.0.23.tar.gz
+-# Locally computed sha256 checksums
+-sha256	38675419eb4a79ec616396d70f1254b3a433fb7088fb3f4cc9b6c0bcdcec6162  LICENSE
+diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
 deleted file mode 100644
-index 7c24b196f2..0000000000
---- a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+index 8f1ad5ffc7..0000000000
+--- a/package/python-ipaddress/python-ipaddress.mk
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -################################################################################
 -#
--# python-backports-shutil-get-terminal-size
+-# python-ipaddress
 -#
 -################################################################################
 -
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_VERSION = 1.0.0
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SOURCE = backports.shutil_get_terminal_size-$(PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_VERSION).tar.gz
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SITE = https://pypi.python.org/packages/ec/9c/368086faa9c016efce5da3e0e13ba392c9db79e3ab740b763fe28620b18b
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SETUP_TYPE = setuptools
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE = MIT
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE_FILES = LICENSE
+-PYTHON_IPADDRESS_VERSION = 1.0.23
+-PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
+-PYTHON_IPADDRESS_SITE = https://files.pythonhosted.org/packages/b9/9a/3e9da40ea28b8210dd6504d3fe9fe7e013b62bf45902b458d1cdc3c34ed9
+-PYTHON_IPADDRESS_LICENSE = Python-2.0
+-PYTHON_IPADDRESS_LICENSE_FILES = LICENSE
+-PYTHON_IPADDRESS_SETUP_TYPE = setuptools
 -
 -$(eval $(python-package))
 _______________________________________________
