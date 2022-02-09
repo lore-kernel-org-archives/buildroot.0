@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 750C7C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:04:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF2B7C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 17:04:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2AC5D4052C;
-	Wed,  9 Feb 2022 17:04:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 750AB400EA;
+	Wed,  9 Feb 2022 17:04:20 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XedlCzzzPjgb; Wed,  9 Feb 2022 17:04:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93CA9401CD;
+	Wed,  9 Feb 2022 17:04:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CC3E1BF47D
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 783BB400D0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QZFjQpiWZNmG; Wed,  9 Feb 2022 17:04:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D940404F8;
-	Wed,  9 Feb 2022 17:04:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F2C71BF47D
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E0BC82E14
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 16:53:09 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u7lMxQQgKdxM for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 16:53:08 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tOVP41Xo4o1s for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 16:53:09 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1B93582D40
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:53:07 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 070DC40146
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 16:53:08 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 56D27240003;
- Wed,  9 Feb 2022 16:53:06 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6612A1BF205;
+ Wed,  9 Feb 2022 16:53:07 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1nHqDJ-0001PS-Ur; Wed, 09 Feb 2022 17:53:05 +0100
+ id 1nHqDL-0001Pg-0g; Wed, 09 Feb 2022 17:53:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 17:51:52 +0100
-Message-Id: <20220209165213.4498-87-peter@korsgaard.com>
+Date: Wed,  9 Feb 2022 17:51:54 +0100
+Message-Id: <20220209165213.4498-89-peter@korsgaard.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220209165213.4498-1-peter@korsgaard.com>
 References: <20220209165213.4498-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 086/107]
- package/python-backports-shutil-get-terminal-size: drop python2 specific
- package
+Subject: [Buildroot] [PATCH 088/107] package/python-futures: drop python2
+ specific package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,101 +66,100 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                   |  6 ++++++
- DEVELOPERS                                         |  1 -
- package/Config.in                                  |  1 -
- .../Config.in                                      |  8 --------
- .../python-backports-shutil-get-terminal-size.hash |  5 -----
- .../python-backports-shutil-get-terminal-size.mk   | 14 --------------
- 6 files changed, 6 insertions(+), 29 deletions(-)
- delete mode 100644 package/python-backports-shutil-get-terminal-size/Config.in
- delete mode 100644 package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
- delete mode 100644 package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+ Config.in.legacy                           |  6 ++++++
+ DEVELOPERS                                 |  1 -
+ package/Config.in                          |  1 -
+ package/python-futures/Config.in           |  7 -------
+ package/python-futures/python-futures.hash |  5 -----
+ package/python-futures/python-futures.mk   | 14 --------------
+ 6 files changed, 6 insertions(+), 28 deletions(-)
+ delete mode 100644 package/python-futures/Config.in
+ delete mode 100644 package/python-futures/python-futures.hash
+ delete mode 100644 package/python-futures/python-futures.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index cc1ed8f9d5..89c095a388 100644
+index 10476a2adf..7e85e4cf63 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2022.02"
  
-+config BR2_PACKAGE_PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE
-+	bool "python-backports-shutil-get-terminal-size removed"
++config BR2_PACKAGE_PYTHON_FUTURES
++	bool "python-futures removed"
 +	select BR2_LEGACY
 +	help
 +	  Package was removed together with python 2.7 support.
 +
- config BR2_PACKAGE_PYTHON_BACKPORTS_ABC
- 	bool "python-backports-abc removed"
+ config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
+ 	bool "python-backports-ssl-match-hostname removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1d1cf99898..2fd8d4d010 100644
+index c94a7831fc..d2ed22dac0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -143,7 +143,6 @@ N:	Andreas Ziegler <br015@umbiko.net>
- F:	package/mpd/
- 
- N:	Andrey Smirnov <andrew.smirnov@gmail.com>
--F:	package/python-backports-shutil-get-terminal-size/
- F:	package/python-decorator/
- F:	package/python-ipython-genutils/
- F:	package/python-pathlib2/
+@@ -436,7 +436,6 @@ F:	package/pulseaudio/
+ F:	package/pure-ftpd/
+ F:	package/python-couchdb/
+ F:	package/python-cssutils/
+-F:	package/python-futures/
+ F:	package/python-mwclient/
+ F:	package/python-mwscrape/
+ F:	package/python-mwscrape2slob/
 diff --git a/package/Config.in b/package/Config.in
-index 46e6b30cdf..fbfc876d89 100644
+index 73f266504a..b18d298a1b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -941,7 +941,6 @@ menu "External python modules"
- 	source "package/python-avro/Config.in"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backcall/Config.in"
--	source "package/python-backports-shutil-get-terminal-size/Config.in"
- 	source "package/python-backports-ssl-match-hostname/Config.in"
- 	source "package/python-bcrypt/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-diff --git a/package/python-backports-shutil-get-terminal-size/Config.in b/package/python-backports-shutil-get-terminal-size/Config.in
+@@ -1032,7 +1032,6 @@ menu "External python modules"
+ 	source "package/python-frozenlist/Config.in"
+ 	source "package/python-functools32/Config.in"
+ 	source "package/python-future/Config.in"
+-	source "package/python-futures/Config.in"
+ 	source "package/python-git/Config.in"
+ 	source "package/python-gitdb2/Config.in"
+ 	source "package/python-gnupg/Config.in"
+diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
 deleted file mode 100644
-index 392e05a282..0000000000
---- a/package/python-backports-shutil-get-terminal-size/Config.in
+index 2eb40e93bd..0000000000
+--- a/package/python-futures/Config.in
 +++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE
--	bool "python-backports-shutil-get-terminal-size"
--	depends on BR2_PACKAGE_PYTHON
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_PYTHON_FUTURES
+-	bool "python-futures"
+-	depends on BR2_PACKAGE_PYTHON # not needed for python3
 -	help
--	  A backport of the get_terminal_size function from Python
--	  3.3's shutil.
+-	  Backport of the concurrent.futures package from Python 3.2.
 -
--	  https://pypi.python.org/pypi/backports.shutil_get_terminal_size
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
+-	  https://github.com/agronholm/pythonfutures
+diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
 deleted file mode 100644
-index 40883a4e3b..0000000000
---- a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
+index a4fbdf4fe9..0000000000
+--- a/package/python-futures/python-futures.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# md5 from https://pypi.python.org/pypi/backports.shutil_get_terminal_size/json
--md5 03267762480bd86b50580dc19dff3c66 backports.shutil_get_terminal_size-1.0.0.tar.gz
--# Locally computed
--sha256  713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80  backports.shutil_get_terminal_size-1.0.0.tar.gz
--sha256  9edd99f8c339cddbfe36a9707e671fccf245b3e50b80eec0877dccec87a2dfe4  LICENSE
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+-# md5, sha256 from https://pypi.org/pypi/futures/json
+-md5	b43a39ae1475e3fd6940f2b4f7214675  futures-3.3.0.tar.gz
+-sha256	7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794  futures-3.3.0.tar.gz
+-# Locally computed sha256 checksums
+-sha256	a698bd5d441e4a16af6c992b8e80cbfa12755d72d910854fa1fb11d4deb0059a  LICENSE
+diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
 deleted file mode 100644
-index 7c24b196f2..0000000000
---- a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+index 0666948115..0000000000
+--- a/package/python-futures/python-futures.mk
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -################################################################################
 -#
--# python-backports-shutil-get-terminal-size
+-# python-futures
 -#
 -################################################################################
 -
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_VERSION = 1.0.0
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SOURCE = backports.shutil_get_terminal_size-$(PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_VERSION).tar.gz
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SITE = https://pypi.python.org/packages/ec/9c/368086faa9c016efce5da3e0e13ba392c9db79e3ab740b763fe28620b18b
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SETUP_TYPE = setuptools
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE = MIT
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE_FILES = LICENSE
+-PYTHON_FUTURES_VERSION = 3.3.0
+-PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
+-PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/47/04/5fc6c74ad114032cd2c544c575bffc17582295e9cd6a851d6026ab4b2c00
+-PYTHON_FUTURES_SETUP_TYPE = setuptools
+-PYTHON_FUTURES_LICENSE = BSD-2-Clause
+-PYTHON_FUTURES_LICENSE_FILES = LICENSE
 -
 -$(eval $(python-package))
 -- 
