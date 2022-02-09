@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6BB0C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F962C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FE3160E3F;
-	Wed,  9 Feb 2022 21:33:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA5F960E46;
+	Wed,  9 Feb 2022 21:33:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1D-AKVeLp0Dd; Wed,  9 Feb 2022 21:33:45 +0000 (UTC)
+	with ESMTP id glYhWdIbKH1p; Wed,  9 Feb 2022 21:33:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD63760E46;
-	Wed,  9 Feb 2022 21:33:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 20E191BF9BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBE2560E43;
+	Wed,  9 Feb 2022 21:33:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 96C971BF2F0
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 02F7460E58
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82E5940523
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fjnheO_pF8jw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zZuNdeYjm8g3 for <buildroot@lists.busybox.net>;
  Wed,  9 Feb 2022 21:33:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F6C0607BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE8A84027F
  for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 5C9AB81335; Wed,  9 Feb 2022 21:25:59 +0000 (UTC)
+ id C3BAD81335; Wed,  9 Feb 2022 21:25:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:07:40 +0100
+Date: Wed, 9 Feb 2022 22:08:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5dd2cdd10f579059d01167d9a427b5cfea0bea2d
-X-Git-Newrev: 611e04609bea5fbe9f3616504d04f747653a789e
+X-Git-Oldrev: e643be1bfc3dccd82e0940d61c5f6954f4033a21
+X-Git-Newrev: c4bbd6da50488944debba29e195557e5b345f2b1
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212559.5C9AB81335@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bmap-tools: drop python2 support
+Message-Id: <20220209212559.C3BAD81335@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-devtools: drop python2 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,30 +58,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=611e04609bea5fbe9f3616504d04f747653a789e
+commit: https://git.buildroot.net/buildroot/commit/?id=c4bbd6da50488944debba29e195557e5b345f2b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bmap-tools/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-devtools/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
-index 83b4d92786..91081069c7 100644
---- a/package/bmap-tools/Config.in
-+++ b/package/bmap-tools/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_BMAP_TOOLS
- 	bool "bmap-tools"
--	depends on BR2_PACKAGE_PYTHON3 || BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
--	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+diff --git a/package/gstreamer1/gst1-devtools/Config.in b/package/gstreamer1/gst1-devtools/Config.in
+index 55cf25d53e..3f39beff53 100644
+--- a/package/gstreamer1/gst1-devtools/Config.in
++++ b/package/gstreamer1/gst1-devtools/Config.in
+@@ -1,11 +1,10 @@
+ config BR2_PACKAGE_GST1_DEVTOOLS
+ 	bool "gst1-devtools"
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime, pkg_resources
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_GSTREAMER1_CHECK
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_JSON_GLIB
+-	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_PYEXPAT
+ 	# cairo is autodetected but needs PNG support
+ 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
  	help
+@@ -14,5 +13,4 @@ config BR2_PACKAGE_GST1_DEVTOOLS
+ 	  https://gstreamer.freedesktop.org
+ 
+ comment "gst1-devtools depends on python"
+-	depends on !BR2_PACKAGE_PYTHON
+ 	depends on !BR2_PACKAGE_PYTHON3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
