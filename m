@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0286EC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 20:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2925C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 20:30:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1FC282560;
-	Wed,  9 Feb 2022 20:28:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E32560D5D;
+	Wed,  9 Feb 2022 20:30:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dm3Ma5UTTSsU; Wed,  9 Feb 2022 20:28:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0iRe74SnFWfV; Wed,  9 Feb 2022 20:30:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED9908247F;
-	Wed,  9 Feb 2022 20:28:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 96ECC1BF42C
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 20:28:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 940EA60D70;
+	Wed,  9 Feb 2022 20:30:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A4BFE1BF42C
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 20:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E8D98247F
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 20:28:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8449960D70
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 20:30:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SzjwCqbnzIgB for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 20:27:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RLUEtR3R6Mrt for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 20:30:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 40AB781980
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 20:27:59 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id d27so2222895wrb.5
- for <buildroot@buildroot.org>; Wed, 09 Feb 2022 12:27:59 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 81DE560D5D
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 20:30:34 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id v129so2193762wme.2
+ for <buildroot@buildroot.org>; Wed, 09 Feb 2022 12:30:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+ h=sender:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=oIrr7nOIURc7WU4bvIHydFVMAAxMeFemWg7FKlTTWPc=;
- b=q5P/KUCRMwcQ8kCUsvkIfaNBPHPEAjSKhXZZLNx8/pIwJOmdl2cha+1mwff/9xPdx1
- xX2B+VQs+JGjSNuJUHnJMqUH0uJ9U7wlNvSH4SpUNU//wiVIpNT1HGaBkI/QrtFAwmI8
- AAAx+r+D9GO3DwhmhSJrK8tl4jx+xZFhgHnNzQ4aj6pp8lzMOrz90RVDZbpURcBvzSPA
- +2wUXz9HxwKcEMrlE6P6HxyCYOSIpBYgtuqS158BKE1S3uisNgB6BfN2J8siwbOVqotw
- wiylRI7MQqsX6AEZitLLIjSfswssk8So7wQjXOBW2GCfTn3UzaQSNY+JbWQbLl7RNHMN
- iLMQ==
+ bh=mLray/aWuurbIGe6fCOOdeFpg4ChR0GT6gV1hZwFrWM=;
+ b=BzHl/4K6QUF89M660AnTO/PGuy2Fqyqa5g1lVhAM5Kf+PDUQ7lsmXMmUQV60IXG00B
+ lf0XCtF7g7uIf3phhYKE6sEYDxX0sfTnWdW7CV2jMKl6zqiarNJ30ZEl6ZFIGz38ZgXv
+ tYwtDPOpFp712tH+U9ntR/1XE3H5Yk0CnRg7pp61zjZ1da/K+cKkKMTlAPZVMPuTyK3/
+ U0ZaxQpeyt1YkgLqdu33H3R1xUWVWpQhYGnsdd64dhefHoN7ITJhdHxCrM7/Ih1f1X+s
+ 5fspiI2YxRNGd5H+whf1v1B8q5seGPgXclRVxBiDoP/K9wr3h+WTiu5vZHIu3tHfprK9
+ WttA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=oIrr7nOIURc7WU4bvIHydFVMAAxMeFemWg7FKlTTWPc=;
- b=2daI9FkGL+g6wZb1X9xBxMLVUgtxZSuZ2+mN0+/YTrGVipVgdDPjhQtJ2/+VOp4CNY
- 8C++ASbDB2LncCaxiAkMUJvGfw6QLwdQw/fCYLFFjiB1fBnUSPmhg3yFi1O7yDdK2rHT
- Gfb0Zqt6YHSPEWViKJHUtQcIM6A4k0YVOi1rXWHQ/UvXcq+ZnAxwKuYFCzqXuB6r6M+B
- CWNLCKXlnwf1h00qNMVa0Nv/31XE8Id63AMnWogePnvisy5RgqYbGPwl1iMREv2C4bvm
- CYIPRL90s5tejZX2E6NJMUSeyGvgYAk7vtZOZWVR314BB915YiMzmvHYkxS6F9LYFlmk
- xdRA==
-X-Gm-Message-State: AOAM530SKHRbY8QxQjGrtYCdKnkTPX8SdJqw7pKPM1XM4YSmcthTROr0
- ePbfALkKIityG1oE5SWFS/Klh1ll9do=
-X-Google-Smtp-Source: ABdhPJwHly60C5RxQ2IhxSky5leB+z6Qy1OAS0BdVBcG3hCdk9Ub5w35/VkkNpY/wGuQFSsKs3yz3g==
-X-Received: by 2002:a05:6000:3c3:: with SMTP id
- b3mr3517738wrg.102.1644438477335; 
- Wed, 09 Feb 2022 12:27:57 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id p27sm25484wms.1.2022.02.09.12.27.56
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=mLray/aWuurbIGe6fCOOdeFpg4ChR0GT6gV1hZwFrWM=;
+ b=wMVtKK8cUzigbPry8jXCfw6+BJ3UbaUk+Ymn0Wdu5jo6DSzPx3ZW7zcvh1Zi+kvg4+
+ gQC5g6MbeH4e4fRO8QXx8RCvGjppxbSvFDvFE3+YiqD9WDV4vY2mv4GlkS4LJF+rjmzq
+ vhsV2JQQAbfW9+0IIpRgKBlgKlunFaIng1W56kWkjGdjK5xyGce7IOOGExV/WsP4mRlP
+ 77ZsevcozJQOXOsUwgR1bfuzuJKf82RjY2aBYwDUqWTz9hwOZbgH78H9k6y1jILcSHf2
+ aQtC6ZWSzOxWyIwC9ZLzIv4NFJWr3sEiafYbIaN85bEK2CQ/BXCZdpwfUdoLw1/w4zDv
+ lF0g==
+X-Gm-Message-State: AOAM533qg5J2m2o69Uyni95Wnag6t+qCuuQ4WDMkn+fKF6ACJt4rnPta
+ HCZcybSpHQgqExRANiZWRgGzpg/4/mo=
+X-Google-Smtp-Source: ABdhPJxQspHuS2kdiVnHT7AGHBgH2HItHSu7l5lrJIzgCvs/gPasnom2tdqUG3R51i3o2p0m/Fdqzg==
+X-Received: by 2002:a05:600c:19d0:: with SMTP id
+ u16mr4176098wmq.35.1644438632516; 
+ Wed, 09 Feb 2022 12:30:32 -0800 (PST)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:d4bd:3395:fce0:5749])
+ by smtp.gmail.com with ESMTPSA id v5sm19601737wrx.114.2022.02.09.12.30.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Feb 2022 12:27:57 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Wed, 09 Feb 2022 12:30:32 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 21:28:25 +0100
-Message-Id: <20220209202825.359811-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed,  9 Feb 2022 21:30:26 +0100
+Message-Id: <20220209203026.3724993-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libmodbus: bump to version 3.1.7
+Subject: [Buildroot] [PATCH] support/scripts/graph-build-time: add support
+ for timeline graphing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,45 +84,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Julien Boibessot <julien.boibessot@armadeus.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/stephane/libmodbus/releases/tag/v3.1.7
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This commit adds support for a new type of graph, showing the timeline
+of a build. It shows, with one line per package, when each of this
+package steps started/ended, and therefore allows to see the
+sequencing of the package builds.
+
+For a fully serialized build like we have today, this is not super
+useful (except to show that everything is serialized), but it becomes
+much more useful in the context of top-level parallel build.
+
+We chose to order the graph by the time-of-configure, as it is the
+closest to the actual cascade-style of a true dependency graph, which is
+tiny bit more complex to achieve properly. The actual result still looks
+pretty good.
+
+The graph-build make target is extended to also generate this new
+timeline graph.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr:
+  - sort by start-of-configure time
+  - re-use existing colorsets (default or alternate)
+  - fix python2isms
+  - fix check-package
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmodbus/libmodbus.hash | 2 +-
- package/libmodbus/libmodbus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile                         |  3 ++
+ support/scripts/graph-build-time | 63 +++++++++++++++++++++++++++++++-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
 
-diff --git a/package/libmodbus/libmodbus.hash b/package/libmodbus/libmodbus.hash
-index 2931f3f3d7..b676d261de 100644
---- a/package/libmodbus/libmodbus.hash
-+++ b/package/libmodbus/libmodbus.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d7d9fa94a16edb094e5fdf5d87ae17a0dc3f3e3d687fead81835d9572cf87c16  libmodbus-3.1.6.tar.gz
-+sha256  7dfe958431d0570b271e1a5b329b76a658e89c614cf119eb5aadb725c87f8fbd  libmodbus-3.1.7.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index 52eb318a99..46eb860392 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 8a4ec4ef85..da2dd8cfba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -872,6 +872,9 @@ graph-build: $(O)/build/build-time.log
+ 				   --type=pie-$(t) --input=$(<) \
+ 				   --output=$(GRAPHS_DIR)/build.pie-$(t).$(BR_GRAPH_OUT) \
+ 				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
++	./support/scripts/graph-build-time --type=timeline --input=$(<) \
++		--output=$(GRAPHS_DIR)/build.timeline.$(BR_GRAPH_OUT) \
++		$(if $(BR2_GRAPH_ALT),--alternate-colors)
  
--LIBMODBUS_VERSION = 3.1.6
-+LIBMODBUS_VERSION = 3.1.7
- LIBMODBUS_SITE = http://libmodbus.org/releases
- LIBMODBUS_LICENSE = LGPL-2.1+
- LIBMODBUS_LICENSE_FILES = COPYING.LESSER
+ .PHONY: graph-depends-requirements
+ graph-depends-requirements:
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index 742c9a7a50..1edc3b3c00 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -241,6 +241,65 @@ def pkg_pie_time_per_step(data, output):
+     plt.savefig(output)
+ 
+ 
++def pkg_timeline(data, output):
++    start = 0
++    end = 0
++
++    # Find the first timestamp and the last timestamp
++    for p in data:
++        for k, v in p.steps_start.items():
++            if start == 0 or v < start:
++                start = v
++            if end < v:
++                end = v
++
++    # Readjust all timestamps so that 0 is the start of the build
++    # instead of being Epoch
++    for p in data:
++        for k, v in p.steps_start.items():
++            p.steps_start[k] = v - start
++        for k, v in p.steps_end.items():
++            p.steps_end[k] = v - start
++
++    plt.figure()
++
++    i = 0
++    labels_names = []
++    labels_coords = []
++    # put last packages that started to configure last; this does not
++    # give the proper dependency chain, but still provides a good-enough
++    # cascade graph.
++    for p in sorted(data, reverse=True, key=lambda x: x.steps_start['configure']):
++        durations = []
++        facecolors = []
++        for step in steps:
++            if step not in p.steps_start or step not in p.steps_end:
++                continue
++            durations.append((p.steps_start[step],
++                              p.steps_end[step] - p.steps_start[step]))
++            facecolors.append(colors[steps.index(step)])
++        plt.broken_barh(durations, (i, 6), facecolors=facecolors)
++        labels_coords.append(i + 3)
++        labels_names.append(p.name)
++        i += 10
++
++    axes = plt.gcf().gca()
++
++    axes.set_ylim(0, i + 10)
++    axes.set_xlim(0, end - start)
++    axes.set_xlabel('seconds since start')
++    axes.set_yticks(labels_coords)
++    axes.set_yticklabels(labels_names)
++    axes.set_axisbelow(True)
++    axes.grid(True, linewidth=0.2, zorder=-1)
++
++    plt.gcf().subplots_adjust(left=0.2)
++
++    plt.tick_params(axis='y', which='both', labelsize=6)
++    plt.title('Timeline')
++    plt.savefig(output, dpi=300)
++
++
+ # Parses the csv file passed on standard input and returns a list of
+ # Package objects, filed with the duration of each step and the total
+ # duration of the package.
+@@ -277,7 +336,7 @@ def read_data(input_file):
+ 
+ parser = argparse.ArgumentParser(description='Draw build time graphs')
+ parser.add_argument("--type", '-t', metavar="GRAPH_TYPE",
+-                    help="Type of graph (histogram, pie-packages, pie-steps)")
++                    help="Type of graph (histogram, pie-packages, pie-steps, timeline)")
+ parser.add_argument("--order", '-O', metavar="GRAPH_ORDER",
+                     help="Ordering of packages: build or duration (for histogram only)")
+ parser.add_argument("--alternate-colors", '-c', action="store_true",
+@@ -307,6 +366,8 @@ elif args.type == "pie-packages":
+     pkg_pie_time_per_package(d, args.output)
+ elif args.type == "pie-steps":
+     pkg_pie_time_per_step(d, args.output)
++elif args.type == "timeline":
++    pkg_timeline(d, args.output)
+ else:
+     sys.stderr.write("Unknown type: %s\n" % args.type)
+     exit(1)
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
