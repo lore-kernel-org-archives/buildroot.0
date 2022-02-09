@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D536AC433FE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 18:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 242B0C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 18:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CEFE60B5C;
-	Wed,  9 Feb 2022 18:40:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDEE0403F8;
+	Wed,  9 Feb 2022 18:40:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pEbYAEjalpbO; Wed,  9 Feb 2022 18:40:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tKtnTecHv1cc; Wed,  9 Feb 2022 18:40:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0DF360B37;
-	Wed,  9 Feb 2022 18:40:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA4CE1BF330
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 18:37:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2D7240239;
+	Wed,  9 Feb 2022 18:40:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 178491BF9BA
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 18:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6DE9408A1
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 18:37:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1432E82628
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 18:37:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0E_CGn64mNWW for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FqJZhUYAqqHU for <buildroot@lists.busybox.net>;
  Wed,  9 Feb 2022 18:37:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4383B40897
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 18:37:45 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E0D48247F
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 18:37:44 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 276AE20005;
- Wed,  9 Feb 2022 18:37:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8D7B360003;
+ Wed,  9 Feb 2022 18:37:41 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1nHqD5-0001L7-2j; Wed, 09 Feb 2022 17:52:51 +0100
+ id 1nHqDA-0001Mo-4d; Wed, 09 Feb 2022 17:52:56 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 17:51:23 +0100
-Message-Id: <20220209165213.4498-58-peter@korsgaard.com>
+Date: Wed,  9 Feb 2022 17:51:33 +0100
+Message-Id: <20220209165213.4498-68-peter@korsgaard.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220209165213.4498-1-peter@korsgaard.com>
 References: <20220209165213.4498-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 057/107] package/python-reentry: drop python2
+Subject: [Buildroot] [PATCH 067/107] package/python-webob: drop python2
  support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -67,20 +67,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-reentry/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-webob/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/python-reentry/Config.in b/package/python-reentry/Config.in
-index 8ebbe395c8..07d8988a18 100644
---- a/package/python-reentry/Config.in
-+++ b/package/python-reentry/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_PYTHON_REENTRY
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_CLICK # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_PATHLIB2 if BR2_PACKAGE_PYTHON # runtime
+diff --git a/package/python-webob/Config.in b/package/python-webob/Config.in
+index fe77723f95..d3397587a1 100644
+--- a/package/python-webob/Config.in
++++ b/package/python-webob/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_PYTHON_WEBOB
+ 	bool "python-webob"
+-	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
  	help
- 	  A plugin manager based on setuptools entry points mechanism.
+ 	  WSGI request and response object.
  
 -- 
 2.20.1
