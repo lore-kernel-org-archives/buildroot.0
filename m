@@ -1,82 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B06AC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 19:36:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D2DAC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 19:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E529D408A7;
-	Wed,  9 Feb 2022 19:36:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F46B82FF9;
+	Wed,  9 Feb 2022 19:38:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fx32sB2p9iGC; Wed,  9 Feb 2022 19:36:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6RU7-Jf-I_NB; Wed,  9 Feb 2022 19:38:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 194E8408B0;
-	Wed,  9 Feb 2022 19:36:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5528182FBE;
+	Wed,  9 Feb 2022 19:38:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 94B411BF422
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:36:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E5FA1BF422
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8021C82BE5
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:36:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A5F782FBE
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 19:38:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S08zQzhGT5iS for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 19:36:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 753EA82BBC
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 19:36:11 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- l67-20020a1c2546000000b00353951c3f62so2379076wml.5
- for <buildroot@buildroot.org>; Wed, 09 Feb 2022 11:36:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=8fqRBnBuf4ggAP1jnmIvBkWiJhrIZr+Fx7eN2BaGrfg=;
- b=U3Mmudt0jnV2CRD2WAqITaQ57tG8tPbBbtIWpNvjIjKtY2fLY/jxDEKw5190pI472b
- CUMIE0Fl544MLfRC8fY/NoPKyKAVUEevabCzfLcePtmQZ7vtdSSFswWsgvYNhtwQqB27
- 9OSD7sLSZFcHb0LvAf7wxFQHb42p8MGfjORFCE0Is13sbchSoefyzS/4l1JxA+ysafct
- hAV4MMxKoQt1c+JQrjIeIJvwkfGrKOMGgeoDru8AAVPqHs7//YGzAPSHkLeZ4JvERmHu
- mn96UB27uYZsHeycMZdxntp6jdlhJ9dIcuPDDNiUXVwPRvMHLyFjzgd8YC/tdeJfqLmP
- 3J3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=8fqRBnBuf4ggAP1jnmIvBkWiJhrIZr+Fx7eN2BaGrfg=;
- b=fjtqlPadWxq9mj2cFZDNEVASyf7QGgylFX4Zj2ED5r9xmYPwN5ijKoFJhZB48ZVVXr
- ByR1Atak9N+u0VL77ufeayVNdgS+Pxnx2yUXHQpz9UP4lEx91WUeWc/IvfN5YscFSZyJ
- Uf3jt1ErTB3J61f1SpsAT4aJ7F5OcMaHDohdfZ8pdoys0UHrswhF5OxIxah8CrRrO3AL
- fS9xdfqZSk9VwzyK5pHeE5LcKeBXttOU7n8QWPMMCbUmlKXCfiGpQno/Hp3Hzd6RiR7p
- ke92VFlHD6WsRuUA/tPv1lDg+RmCei1sEha08P4Vmx06JGfdn3OJn+ck54YExeX8+JeI
- +b0Q==
-X-Gm-Message-State: AOAM5310J+CfpuS6Da0tittnXI0dDm+SvKZdocQAKGcY4oijDIb0GyNr
- w4pWRFDlXTMesy1bZOeBXpzNvgt2qFQ=
-X-Google-Smtp-Source: ABdhPJyrnw7jJC4MzM51IjftK/HidSVe4n7EuoAKaQGO8MyZQ0fAdsp/EK9CEfZI5ZibtyB0BKAI0Q==
-X-Received: by 2002:a05:600c:2c49:: with SMTP id
- r9mr3581415wmg.51.1644435369549; 
- Wed, 09 Feb 2022 11:36:09 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id 3sm10373231wrz.86.2022.02.09.11.36.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Feb 2022 11:36:09 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  9 Feb 2022 20:36:14 +0100
-Message-Id: <20220209193614.330861-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id 4YcALFKk3XlY for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 19:38:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69AA682F84
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 19:38:09 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Hsn0nQrubks1JHsn1nIUQc; Wed, 09 Feb 2022 20:38:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644435487; bh=QUqLjkcCq6+wTPFON+yfZfvsp94r7nnfUA+4Fm8l1oE=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=X6MXQOhL58upwt3Zo/c7mXUTilXd4lAdwaXFzQ9SbHlaahvkS2Fbte+6AbAkufh9N
+ TeJ07jSkd5rX5LihAwUQ8Nz5BaiQuoQ13TyWLZmb48gu4DMDY7YwehQAC3LEDqtzdT
+ zbFLpp9nKOqgVTItkLdT9S0TWymcwJYlwaTCri17Il76gLyQ3TjwDJLRyWRn2UoIIt
+ BUF16IEG/lmMrhPg5mtqCh9y7liA+qR2LVlpxYyBAS7lEWNA2NGw+i5TqCnVxqs6sX
+ r4d/unkO1uUPjMwmt36roVrHBUMUq7cC5tSoozR5JZwaHBQpC1UKX11r6q56VvInpM
+ XUJjAqMtZtpSA==
+Message-ID: <6de61d14-67ba-2c21-ad51-b23690420009@benettiengineering.com>
+Date: Wed, 9 Feb 2022 20:38:06 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libarchive: security bump to
- version 3.5.3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Neal Frager <neal.frager@xilinx.com>, buildroot@buildroot.org
+References: <20220209180306.2629180-1-neal.frager@xilinx.com>
+ <20220209180306.2629180-2-neal.frager@xilinx.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220209180306.2629180-2-neal.frager@xilinx.com>
+X-CMAE-Envelope: MS4wfFC78XI/raywMZJ5X9hoK8PkjpjZ9gnBssSu+Wo8YSJKDBxjlyUh2gL6kk2vbGoOi3bVmNlHdUGlqJ3XnBLdXVr2jA/SkF0Nr16cL7ApZ5OWXmY3eJce
+ VStj3M9lTx5wqE1w0BkSDhUMo4P/SPVwdmkEnz1K+jC8vMRM0vmSmE+gcu19wviWbdb26uUrI2mmam4zZRqeQKtSu+zOFdYpDyIE9DG7/n4puAc7+wFqkoC7
+ uCGMM5IY/TBpVVx3776Ja8HRU+t8mkadmdKT+oYallDVBGTreDr1IazG+AzKCYP1KNlHtWcWgTyAvUJN2DTKkQ==
+Subject: Re: [Buildroot] [PATCH v3 2/2] add configs/zynqmp_zcu102_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,55 +69,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: luca@lucaceresoli.net, michal.simek@xilinx.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Libarchive 3.5.3 is a security release
+Hi Neal,
 
-Security Fixes:
- - extended fix for following symlinks when processing the fixup list
-   (CVE-2021-31566)
- - fix invalid memory access and out of bounds read in RAR5 reader
-   (CVE-2021-36976)
+On 09/02/22 19:03, Neal Frager wrote:
+> This patch:
+> - adds support for Xilinx ZCU102 evaluation board
+> - ZCU102 features can be found here:
+> - https://www.xilinx.com/products/boards-and-kits/zcu102.html
 
-https://github.com/libarchive/libarchive/releases/tag/v3.5.3
+^^^ please remove the dash
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> Signed-off-by: Neal Frager <neal.frager@xilinx.com>
+
+Here like on previous patch add:
 ---
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+V1->V2:
+*
+etc.
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index d31e9f55f4..5dd8e5c167 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  f0b19ff39c3c9a5898a219497ababbadab99d8178acc980155c7e1271089b5a0  libarchive-3.5.2.tar.xz
-+sha256  5cac725dd4be31c4a10b65d30f29dc957ea29ef3d758df6e46e8ae90a996a19a  libarchive-3.5.3.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index eec256ba75..cf16c27e67 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.5.2
-+LIBARCHIVE_VERSION = 3.5.3
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
+> ---
+>   board/zynqmp/readme.txt         | 23 +++++++++++++------
+>   configs/zynqmp_zcu102_defconfig | 39 +++++++++++++++++++++++++++++++++
+>   2 files changed, 55 insertions(+), 7 deletions(-)
+>   create mode 100644 configs/zynqmp_zcu102_defconfig
+> 
+> diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
+> index da37f4ccc9..0dc1793e03 100644
+> --- a/board/zynqmp/readme.txt
+> +++ b/board/zynqmp/readme.txt
+> @@ -1,10 +1,19 @@
+> -********************************
+> -Xilinx ZCU106 board - ZynqMP SoC
+> -********************************
+> +******************************************
+> +Xilinx ZCU102 / ZCU106 boards - ZynqMP SoC
+> +******************************************
+> +
+> +This document describes the Buildroot support for the ZCU102 and ZCU106
+> +boards by Xilinx, based on the Zynq UltraScale+ MPSoC (aka ZynqMP).
+> +It has been tested with the ZCU102 and ZCU106 production boards.
+> +
+> +Evaluation board features can be found here with the links below.
+> +
+> +ZCU102:
+> +https://www.xilinx.com/products/boards-and-kits/zcu102.html
+> +
+> +ZCU106:
+> +https://www.xilinx.com/products/boards-and-kits/zcu106.html
+>   
+> -This document describes the Buildroot support for the ZCU106 board by
+> -Xilinx, based on the Zynq UltraScale+ MPSoC (aka ZynqMP). It has been
+> -tested with the EK-U1-ZCU106-ES2 pre-production board.
+>   
+>   How to build it
+>   ===============
+> @@ -32,7 +41,7 @@ After building, you should get a tree like this:
+>       +-- rootfs.ext4 -> rootfs.ext2
+>       +-- sdcard.img
+>       +-- system.dtb -> zynqmp-zcu106-revA.dtb
+> -    +-- u-boot.bin
+> +    +-- u-boot.itb
+>       `-- zynqmp-zcu106-revA.dtb
+>   
+>   How to write the SD card
+> diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+> new file mode 100644
+> index 0000000000..acffda64bf
+> --- /dev/null
+> +++ b/configs/zynqmp_zcu102_defconfig
+> @@ -0,0 +1,39 @@
+> +BR2_aarch64=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.15"
+> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.6"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2022.01"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+> +BR2_TARGET_UBOOT_ZYNQMP=y
+> +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2021.2/bin/pmufw-v2021.2.bin"
+> +BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/pm_cfg_obj.c"
+> +BR2_TARGET_UBOOT_FORMAT_ITB=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+
+Please send a V4 with the few requested changes and add in commit log 
+like this:
+```
+Signed-off-by: Neal Frager <neal.frager@xilinx.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Giulio: only build tested]
+```
+
+Thank you!
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
