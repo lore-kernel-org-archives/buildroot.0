@@ -1,77 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 482BAC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 11:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF30C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 15:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B897D400A4;
-	Wed,  9 Feb 2022 11:55:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81A0F82A87;
+	Wed,  9 Feb 2022 15:26:22 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bIDwsgslG8PC; Wed,  9 Feb 2022 15:26:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE6F182C33;
+	Wed,  9 Feb 2022 15:26:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B8081BF57F
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 15:26:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E15AF4025D
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 15:26:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z1dfrkQvK9U7; Wed,  9 Feb 2022 11:55:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 777CF400E0;
-	Wed,  9 Feb 2022 11:55:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86CF31BF589
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 11:55:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7548C82D45
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 11:55:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Q1rQGAVmGmF for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 11:55:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3006782CE5
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 11:55:13 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id y84so2831859iof.0
- for <buildroot@buildroot.org>; Wed, 09 Feb 2022 03:55:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=rcoBj7aLgWA2amfuY73FlyfuMEDv809h7kAVSHtVJr8=;
- b=GmjLr0GKWW5JZeNECrEkTMxSiB3jtqXUQ44KIbb56uqCqftV7pT6vvn57KO5ocU/7r
- 1leK4H6GDc6wvGVr97+/D6WyglioeTu1Bp3Tp+KBon0XMyG9rRkQEBOysCMDn/FJUlwz
- qrRGdvObkOL3hSqMxsAhJxHTTOL0cmP89M7qyF6EiVx4X8s7nQTyFZwplr+llVzMMfcN
- QlT0zwSvdm9XntV8NO9m9JmK4b9yrg+JoRLFvOv643dWzlrH5ochr6smedzUHrvpKJsH
- TmSM4qlD6M4Wc8N0xF8mkXQdO9CL+wdwEeJHWr5KP2HOEmcg0mtNOnJgpZtxPuBpo16A
- Zogg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=rcoBj7aLgWA2amfuY73FlyfuMEDv809h7kAVSHtVJr8=;
- b=Q8RtMcr8A6rf4ta1VNgIB/9FaAdFtylJeygJWnj3zO1p8d6wLhJURj1CrJU1eVFazD
- mH20ySvzAnHFYM6PQlTgrg176HY2gvfXHDuha81kyHMh2lMW2tmeM4acIe9IrjQy/wfj
- HjcxtXlRnHuZUJPgIRun0rZAfT2pKvK7wbSkF7PyL9cKdekmRxyLGVkmDwJxmUnUIoeS
- L32dsA4I2wnmzb6goedPHoEpBAwP1F90LLzaAoTbQknckuc8cmqNIAoLjx93vuprgyQ/
- OhNDfg9UUP6Kpni3lndtEnqraebO1gQUTaNXbgrkFrU9rhjdISMtjYokOl9ypcrPxGVS
- QCGw==
-X-Gm-Message-State: AOAM533f1oRlkdz5qOzLiuB7NVq8guwc2DHBb3hvzsaKiESvXb93XIop
- XXvoVgSfNpZnY4q9ytIvxqOp3Nw0EHLVnfxYqT0A33C+La0=
-X-Google-Smtp-Source: ABdhPJzxYvamSpUYuNdiqn3vpXR2Y0JEocI2xWdpA0xYnKteUhosmXCNKdI69ZBhew/ZG5aQbXvBZbaxudC/Qie12/Q=
-X-Received: by 2002:a02:7b2d:: with SMTP id q45mr822338jac.121.1644407711971; 
- Wed, 09 Feb 2022 03:55:11 -0800 (PST)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zPSBOyXEnm4R for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 15:26:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D2BF400D0
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 15:26:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DAB31240008;
+ Wed,  9 Feb 2022 15:26:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1nHorA-0005Pg-R5; Wed, 09 Feb 2022 16:26:08 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed,  9 Feb 2022 16:26:06 +0100
+Message-Id: <20220209152606.20762-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220115200306.14037-1-patrickdepinguin@gmail.com>
- <ccf8bfcd-a4f9-9937-8b36-3ffd9b87a572@mind.be>
-In-Reply-To: <ccf8bfcd-a4f9-9937-8b36-3ffd9b87a572@mind.be>
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 9 Feb 2022 12:55:00 +0100
-Message-ID: <CAAXf6LX1w6K5ELFmdod_qMXqYO9zRDiiyjekiQONu_71dp2h=A@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCHv2 0/7] Basic support for 64-bit kernel and
- 32-bit userland
+Subject: [Buildroot] [PATCH] package/python-pyzmq: drop python2 dependency
+ for comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,109 +57,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: romain.naour@gmail.com,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Michael Rommel <rommel@layer-7.net>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKRWwgbWFyLCA4IGZlYiAyMDIyIGEgbGFzIDIxOjQ5LCBBcm5vdXQgVmFuZGVj
-YXBwZWxsZQooPGFybm91dEBtaW5kLmJlPikgZXNjcmliacOzOgo+Cj4KPgo+IE9uIDE1LzAxLzIw
-MjIgMjE6MDIsIFRob21hcyBEZSBTY2hhbXBoZWxlaXJlIHdyb3RlOgo+ID4gRnJvbTogVGhvbWFz
-IERlIFNjaGFtcGhlbGVpcmUgPHRob21hcy5kZV9zY2hhbXBoZWxlaXJlQG5va2lhLmNvbT4KPiA+
-Cj4gPiBIZWxsbywKPiA+Cj4gPiBFdmVuIHRob3VnaCB0aGVyZSBhcmUgYWxyZWFkeSBjYXNlcyB3
-aGVyZSBhIDY0LWJpdCBrZXJuZWwgaXMgY29tYmluZWQgd2l0aAo+ID4gMzItYml0IHVzZXJsYW5k
-LCBsaWtlIE1JUFM2NG4zMiwgdGhhdCBCdWlsZHJvb3QgY2FuIHN1cHBvcnQgb3V0LW9mLXRoZS1i
-b3gsCj4gPiB0aGVyZSBhcmUgb3RoZXIgY29tYmluYXRpb25zIHRoYXQgZG9uJ3QgY3VycmVudGx5
-IHdvcmsuCj4gPgo+ID4gQXQgd29yaywgd2UgaGF2ZSB0d28gc3VjaCBjYXNlczoKPiA+IC0gNjQt
-Yml0IHg4Nl82NCBrZXJuZWwgd2l0aCAzMi1iaXQgaTM4NiB1c2Vyc3BhY2UKPiA+IC0gNjQtYml0
-IGFhcmNoNjQga2VybmVsIHdpdGggMzItYml0IGFybSB1c2Vyc3BhY2UKPiA+Cj4gPiBUaGlzIHNl
-cmllcyBhZGRzIGJhc2ljIHN1cHBvcnQgZm9yIHRoZXNlIGNhc2VzLCB3aXRoIHRoZSBsaW1pdGF0
-aW9uIHRoYXQgdGhlCj4gPiB1c2VyIHN0aWxsIG5lZWRzIHRvIGtub3cgd2hhdCB0aGV5IGFyZSBk
-b2luZy4KPiA+Cj4gPiBQYXRjaCAxIGlzIGEgZ2VuZXJhbCBpbXByb3ZlbWVudCBhbmQgY2FuIGxh
-bmQgZXZlbiBpZiB5b3UgZG9uJ3QgYWdyZWUKPiA+IHdpdGggdGhlIHJlc3QuCj4gPgo+ID4gUGF0
-Y2ggMiBoYW5kbGVzIHRoZSByZWFsaXphdGlvbiB0aGF0ICdLRVJORUxfQVJDSCcgY2FuIG1lYW4g
-dHdvIGRpZmZlcmVudAo+ID4gdGhpbmdzLCBhbmQgdGhhdCB3ZSBuZWVkIHR3byBzZXBhcmF0ZSB2
-YXJpYWJsZXMuCj4gPgo+ID4gUGF0Y2ggMyBtYWtlcyBpdCBwb3NzaWJsZSBmb3IgdXNlcnMgdG8g
-c3BlY2lmeSB0aGUga2VybmVsIGFyY2hpdGVjdHVyZSB0aGF0Cj4gPiBkaWZmZXJzIGZyb20gdGhl
-IEJ1aWxkcm9vdCBub3Rpb24gb2YgdXNlcnNwYWNlIGFyY2hpdGVjdHVyZS4KPiA+Cj4gPiBQYXRj
-aCA0IGZpeGVzIHRoZSBidWlsZCBvZiBwZXJmIGluIHRoaXMgbWl4ZWQgNjQtYml0LWtlcm5lbCsz
-Mi1iaXQtdXNlcnNwYWNlCj4gPiBjYXNlLgo+ID4KPiA+IFBhdGNoIDUgcHJlcGFyZXMgaG9zdC1x
-ZW11IGZvciB0aGUgY2FzZSBvZiB4ODZfNjQuIEknbSBub3QgdmVyeSBmb25kIG9mIHRoZSBmYWN0
-Cj4gPiB0aGF0IHRoaXMgZG9lcyBub3QgcHJvdmlkZSBhIGdlbmVyaWMgc29sdXRpb24uCj4gPgo+
-ID4gUGF0Y2ggNiBhZGRzIGEgbmV3IHFlbXUgZGVmY29uZmlnIGZvciB4ODZfNjQga2VybmVsIGFu
-ZCB4ODYgdXNlcnNwYWNlLCB0aGF0Cj4gPiBlbXBsb3lzIHRoZSBuZXcgbG9naWMuCj4gPgo+ID4g
-RmluYWxseSBwYXRjaCA3IGNvcnJlY3RzIExJTlVYX0FSQ0hfUEFUSCBmb3Igc3BhcmM2NCwgbm90
-IGRpcmVjdGx5IHJlbGF0ZWQgdG8KPiA+IHRoaXMgc2VyaWVzIGJ1dCByZXBvcnRlZCBieSBSb21h
-aW4gTmFvdXIgZHVyaW5nIGhpcyByZXZpZXcuCj4gPgo+ID4KPiA+IEFzIGhpbnRlZCBhYm92ZSwg
-dXNlcnMgdGhhdCB3b3VsZCBsaWtlIHRvIGVtcGxveSBzdWNoIHNjZW5hcmlvcyBzdGlsbCBuZWVk
-IHRvCj4gPiBrbm93IHdoYXQgdGhleSBhcmUgZG9pbmc6Cj4gPgo+ID4gLSB0aGUgY29ycmVjdCB2
-YWx1ZSBvZiBCUjJfS0VSTkVMX0FSQ0hfT1ZFUlJJREUgaXMgdG8gYmUga25vd24gYnkgdGhlIHVz
-ZXIKPiA+Cj4gPiAtIHRoZSB0b29sY2hhaW4gc2hvdWxkIGJlIGNhcGFibGUgb2YgZ2VuZXJhdGlu
-ZyBib3RoIDY0LWJpdCAoa2VybmVsKSBvdXRwdXQgYXMKPiA+ICAgIHdlbGwgYXMgMzItYml0IHVz
-ZXJzcGFjZSBvdXRwdXQuIFRoaXMgaXMgdHlwaWNhbGx5IGRvbmUgd2l0aCBhIG11bHRpbGliCj4g
-PiAgICB0b29sY2hhaW4sIHdoZXJlIHRoZSBkZWZhdWx0IG91dHB1dCBpcyA2NC1iaXQgc28gdGhh
-dCB0aGUga2VybmVsIGJ1aWxkIGRvZXMKPiA+ICAgIG5vdCByZXF1aXJlIGFkZGl0aW9uYWwgY2hh
-bmdlcywgd2hpbGUgcGFzc2luZyB0aGUgY29ycmVjdCAnLW1YWFgnIGZsYWcgYXMKPiA+ICAgIEJS
-Ml9UQVJHRVRfT1BUSU1JWkFUSU9OIGZvciB0aGUgdXNlcnNwYWNlIGNvbXBpbGF0aW9ucy4KPiA+
-Cj4gPiAtIGl0IGlzIG5vdCBwb3NzaWJsZSB0byBjcmVhdGUgb25lIG11bHRpbGliIHRvb2xjaGFp
-biB0aGF0IHN1cHBvcnRzIEFhcmNoNjQgYW5kCj4gPiAgICAoMzItYml0KSBBUk0gb3V0cHV0LiBX
-ZSBoYXZlIHNvbHZlZCBpdCBieSBwYWNrYWdpbmcgdHdvIGluZGl2aWR1YWwgdG9vbGNoYWlucwo+
-ID4gICAgaW4gb25lIGFyY2hpdmUsIHdpdGggc3ltbGlua3MgYXQgdG9wLWxldmVsIHRvIHRoZSAz
-Mi1iaXQgdG9vbGNoYWluLCBhbmQKPiA+ICAgIHNvbWUgYWRkaXRpb25hbCBjaGFuZ2VzIGluIEJ1
-aWxkcm9vdCB0byBtYWtlIHN1cmUgdGhlIDY0LWJpdCB0b29sY2hhaW4gaXMKPiA+ICAgIHVzZWQg
-d2hlcmUgbmVlZGVkIChrZXJuZWwsIGJvb3Rsb2FkZXIpCj4gPgo+ID4gLSBCUjJfS0VSTkVMXzY0
-X1VTRVJMQU5EXzMyIGlzIG5vdCBhdXRvbWF0aWNhbGx5IHBhc3NlZC4KPiA+Cj4gPgo+ID4gQW4g
-YWx0ZXJuYXRpdmUgaW1wbGVtZW50YXRpb24gd291bGQgYmUgdG8gZXhwbGljaXRseSBzdXBwb3J0
-IGNlcnRhaW4KPiA+IGNvbWJpbmF0aW9ucywgYnV0IHRoaXMgaXMgbGVzcyBmbGV4aWJsZS4KPgo+
-ICAgU28sIEknbSBub3QgZW50aXJlbHkgY29udmluY2VkIGFib3V0IHRoaXMgYXBwcm9hY2guIEhl
-cmUgYXJlIG15IG9iamVjdGlvbnMuCj4KPiAtIEF0IGxlYXN0IGZvciBhcm0sIHlvdSBuZWVkIGFu
-IGVudGlyZWx5IGRpZmZlcmVudCB0b29sY2hhaW4gZm9yIHRoZSAzMiBhbmQgdGhlCj4gNjQtYml0
-IHZhcmlhbnRzLiBCdXQgZXZlbiBmb3IgeDg2LCB0aGUgQnVpbGRyb290IGludGVybmFsIHRvb2xj
-aGFpbiBmb3IgeDg2XzY0Cj4gZG9lc24ndCBzdXBwb3J0IC1tMzIuIFNvIGZvciBtb3N0IHVzZXJz
-IHRoaXMgaXMgbm90IGV2ZW4gZ29pbmcgdG8gd29yay4KCldpdGggY3Jvc3N0b29sLW5nIGl0IGlz
-IHBvc3NpYmxlIHRvIGJ1aWxkIGEgbXVsdGlsaWIgdG9vbGNoYWluIGZvciB4ODYKd2l0aG91dCBp
-c3N1ZS4gSXQncyB0cnVlIHRoYXQgdGhlIGludGVybmFsIEJ1aWxkcm9vdCBsb2dpYyBkb2VzIG5v
-dAphbGxvdyB0aGlzIGN1cnJlbnRseSwgYnV0IHRoYXQgYnkgaXRzZWxmIGlzIG5vdCBuZWNlc3Nh
-cmlseSBhbgpvYmplY3Rpb24gdG8gbWUuCkZvciBBUk0gd2UgaGF2ZSBwYWNrYWdlZCB0d28gdG9v
-bGNoYWlucyBpbiBvbmUsIHdpdGggdGhlIGJpbi8sIGxpYi8KZXRjLiBwYXRocyBhdCB0b3AtbGV2
-ZWwgcG9pbnRpbmcgdG8gdGhlICdkZWZhdWx0JyB0b29sY2hhaW4sIGkuZS4KMzItYml0IGluIG91
-ciBjYXNlLCBhbmQgY2hhbmdlcyBpbiBsaW51eC91Ym9vdCB0byB1c2UgdGhlIDY0LWJpdAp0b29s
-Y2hhaW4gc3BlY2lmaWNhbGx5LiBXZSdkIG5lZWQgdG8gZGlzY3VzcyBpZiBhbmQgaG93IHdlIHdv
-dWxkCmludGVncmF0ZSB0aGF0IGluIG1haW5saW5lIEJ1aWxkcm9vdC4KCj4KPiAtIFRoZXJlIGlz
-IGFuIGFsdGVybmF0aXZlOiB0d28gc2VwYXJhdGUgQnVpbGRyb290IGNvbmZpZ3MsIG9uZSBmb3Ig
-dGhlIGtlcm5lbCArCj4gbW9kdWxlcywgb25lIGZvciB1c2Vyc3BhY2UuCgpPaywgYnV0IGl0IGlz
-IG5vdCBzbyBjb252ZW5pZW50IGF0IGxlYXN0IGluIG91ciBjYXNlLCB3aGVyZSBhbGwKc3Vycm91
-bmRpbmcgYnVpbGQgbG9naWMgYW5kIHZhbGlkYXRpb24gYXNzdW1lcyB0aGF0IHlvdSBqdXN0IHNl
-dCBhCnNpbmdsZSBkZWZjb25maWcsIGJ1aWxkIGl0LCB0aGVuIG9idGFpbiB0aGUgcmVzdWx0cyBm
-cm9tCm91dHB1dC9pbWFnZXMuIFdlJ2QgbmVlZCBzdXJyb3VuZGluZyBzY3JpcHRpbmcgdG8gaGFu
-ZGxlIHRoZSBzZXBhcmF0ZQprZXJuZWwgYnVpbGQuCkFkZGl0aW9uYWxseSwgd2hhdCBhYm91dCBh
-IGJ1aWxkIHdpdGggaW5pdHJhbWZzIGJ1aWx0LWluIHRoZSB2bWxpbnV4CmltYWdlPyBUaGlzIHdv
-dWxkIG5lZWQgdGhlIHJvb3RmcyBmaWxlIGZyb20gdGhlIDMyLWJpdCBidWlsZHJvb3QKY29waWVk
-IG92ZXIgdG8gdGhlIGtlcm5lbCBidWlsZHJvb3QgY29udGV4dCwgYW5kIHRoZW4gYXR0YWNoZWQg
-dGhlcmUuClRoaXMgaXMgYWRkaXRpb25hbCBjb21wbGV4aXR5LgoKPgo+IC0gSSBkb24ndCB0aGlu
-ayB0aGUgZmxleGliaWxpdHkgaXMgdXNlZnVsLiBJIHRoaW5rIGl0IHdvdWxkIGJlIGJldHRlciB0
-byByZXVzZQo+IHRoZSBCUjJfS0VSTkVMXzY0X1VTRVJMQU5EXzMyIG9wdGlvbi4gKEUuZy4gYWRk
-IGFuIG9wdGlvbiB0byBDb25maWcuaW4ueDg2IHdoZW4KPiB0aGUgYXJjaCBpcyB4ODZfNjQgdG8g
-YnVpbGQgYSAzMi1iaXQgdXNlcnNwYWNlLikgVGhhdCB3YXkgd2UgY2FuIHVzZSBpdCB0byBwYXNz
-Cj4gLW0zMiB3aGVyZSBuZWVkZWQsIHRvIGJ1aWxkIGFuIGludGVybmFsIHRvb2xjaGFpbiB0aGF0
-IHN1cHBvcnRzIGl0LCBhbmQgdG8gY2hlY2sKPiBmb3IgdGhlIGV4dGVybmFsIHRvb2xjaGFpbiBp
-ZiBpdCBzdXBwb3J0cyBpdC4gRG9lc24ndCBzb2x2ZSB0aGUgaXNzdWUgZm9yIEFSTSwKPiBidXQg
-aXQncyBhIHN0YXJ0Lgo+Cj4KPiAgIEFsc28sIEkgdGhpbmsgd2UgYWJzb2x1dGVseSBuZWVkIHRv
-IHRlc3QgdGhpcyBmZWF0dXJlLiBBdCB0aGUgdmVyeSBsZWFzdCwgd2UnZAo+IG5lZWQgdG8gY29u
-ZmlnIGluIHRoZSBhdXRvYnVpbGRlcnMgdGhhdCBlbmFibGVzIGl0LCBvciBlbmFibGUgaXQgcmFu
-ZG9tbHkgaW4KPiBnZW5yYW5kY29uZmlnLiBBbHRob3VnaCBJJ20gbm90IHN1cmUgaWYgaXQgdGVz
-dHMgYW55dGhpbmcgaWYgbm8ga2VybmVsIGlzIGJ1aWx0Cj4gKGxldCBhbG9uZSB0aGF0IGl0J3Mg
-bm90IGV2ZW4gYm9vdGVkKS4KClllcyBJIGhhZCBjcmVhdGVkIGEgcWVtdSBkZWZjb25maWcgYW5k
-IG11bHRpbGliIHRvb2xjaGFpbiB0aGF0IGNhbiBiZQp1c2VkIGZvciB0ZXN0cy4gQnV0IFJvbWFp
-biBmb3VuZCB0aGF0IHRoZSBiaW5hcmllcyBkbyBub3QgcnVuIG9uIHRoZQpidWlsZCBmYXJtLgpX
-b3VsZCBpdCBiZSBwb3NzaWJsZSB0byBnZXQgdGVtcG9yYXJ5IHNoZWxsIGFjY2VzcyB0byB0aGF0
-IGVudmlyb25tZW50CnNvIEkgY2FuIGZpbmQgb3V0IHdoYXQgb3B0aW9ucyBJIHJlYWxseSBuZWVk
-PwoKPgo+Cj4gICBGb3Igbm93LCBJJ3ZlIGxlZnQgdGhlIHJlc3Qgb2YgdGhlIHNlcmllcyBhcyBO
-ZXcgaW4gcGF0Y2h3b3JrLCBsZXQncyBzZWUgd2hhdAo+IHRoZSBvdGhlcnMgdGhpbmsuCgoKVGhh
-bmtzIGZvciB5b3VyIGZlZWRiYWNrLApUaG9tYXMKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+The package was updated to support python3 in commit 4a8bedc51d9
+(python-pyzmq: enable PyZMQ for Python 3), but the comment dependency was
+missed.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-pyzmq/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
+index 8f33a635c8..f8ce52f844 100644
+--- a/package/python-pyzmq/Config.in
++++ b/package/python-pyzmq/Config.in
+@@ -9,5 +9,4 @@ config BR2_PACKAGE_PYTHON_PYZMQ
+ 	  http://zeromq.org/bindings:python
+ 
+ comment "python-pyzmq needs a toolchain w/ C++, threads"
+-	depends on BR2_PACKAGE_PYTHON
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
