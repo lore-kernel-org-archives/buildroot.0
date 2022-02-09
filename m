@@ -1,47 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E14EC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5227CC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F321460FDA;
-	Wed,  9 Feb 2022 21:55:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EA0A83396;
+	Wed,  9 Feb 2022 21:55:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KkFk3bgIskIG; Wed,  9 Feb 2022 21:55:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rG_x73czFotu; Wed,  9 Feb 2022 21:55:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4238E60E6E;
-	Wed,  9 Feb 2022 21:55:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61759832C7;
+	Wed,  9 Feb 2022 21:55:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 02D141BF2F0
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDF341BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5177C60E40
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E91A760E38
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7wNpw71-WDN4 for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:33:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2494E60FFC
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 2B44081335; Wed,  9 Feb 2022 21:26:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:15:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ecee967c03d8215ff3a40eed7c4faa42a14fd137
-X-Git-Newrev: 8d264a96172cfa1c1f515d1160b921c013fa3bd7
-X-Patchwork-Hint: ignore
-Message-Id: <20220209212603.2B44081335@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-configobj: drop python2
- specific package
+ with ESMTP id h6YNKAb3S4ep for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:34:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E45D860BF2
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:34:42 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:d4bd:3395:fce0:5749])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 23A9D7802C2;
+ Wed,  9 Feb 2022 22:34:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1644442480;
+ bh=utp5O4tRMA5J/QYyA0ih3FkbW6fbX453JJLJfxY+x+w=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=nmKCpzE3l28IyWrQFU00jGzofGEmmjbVVOd8uSlsh8ZPA/LEY8HOQbh0F+QxTZAxm
+ xnwYG7rGm2HZ91kf/kiZqNpgirNqkC/fgWmK/6LHfNliVfJeJIZspEwYsvNALYYPGM
+ vQj0oLM/jQ8cDtgkMT+ktcgI180D4ZRR+6tpzd1uIEyJaxQ/OXQHvYSFdVJPEew3bm
+ Ffx8xpGlYYouxzNjXz9vJ5XshcrtuFGrUBAfBI5cmXAzov6LI3T8eY32/kQBgyvkXx
+ rhAjRjcs8uvMbfpyd+7IcbKFyuVgw+fOC9zuGnEHCKxxAxanMERnWC5vIOVw19zK5f
+ o5OELaB3njbmw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 09 Feb 2022 22:34:37 +0100
+Date: Wed, 9 Feb 2022 22:34:37 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20220209213437.GF2249818@scaer>
+References: <20220209165213.4498-1-peter@korsgaard.com>
+ <20220209165213.4498-85-peter@korsgaard.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220209165213.4498-85-peter@korsgaard.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 084/107] package/python: drop host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,125 +72,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d264a96172cfa1c1f515d1160b921c013fa3bd7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy                               |  6 ++++++
- DEVELOPERS                                     |  1 -
- package/Config.in                              |  1 -
- package/Config.in.host                         |  1 -
- package/python-configobj/Config.in             | 10 ----------
- package/python-configobj/python-configobj.hash |  3 ---
- package/python-configobj/python-configobj.mk   | 14 --------------
- 7 files changed, 6 insertions(+), 30 deletions(-)
+On 2022-02-09 17:51 +0100, Peter Korsgaard spake thusly:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+...
+>  package/python/Config.in.host                 |  16 -
+>  package/python/python.hash                    |   5 -
+>  package/python/python.mk                      | 302 ------------------
+>  37 files changed, 2301 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 47e8d696e0..6776048fc4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_PYTHON_CONFIGOBJ
-+	bool "python-configobj removed"
-+	select BR2_LEGACY
-+	help
-+	  Package was removed together with python 2.7 support.
-+
- config BR2_PACKAGE_PYTHON_YIELDFROM
- 	bool "python-yieldfrom removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 90988478f9..8112873f14 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3033,7 +3033,6 @@ F:	package/grantlee/
- F:	package/libusb/
- F:	package/libusb-compat/
- F:	package/proj/
--F:	package/python-configobj/
- F:	package/python-iniparse/
- F:	package/qjson/
- F:	package/quazip/
-diff --git a/package/Config.in b/package/Config.in
-index 6fb62caa4c..478a4e6b90 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -973,7 +973,6 @@ menu "External python modules"
- 	source "package/python-colorama/Config.in"
- 	source "package/python-colorlog/Config.in"
- 	source "package/python-colorzero/Config.in"
--	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-constantly/Config.in"
- 	source "package/python-couchdb/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 341e24926b..e5fbb07fc2 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -69,7 +69,6 @@ menu "Host utilities"
- 	source "package/pkgconf/Config.in.host"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
--	source "package/python/Config.in.host"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-greenlet/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-diff --git a/package/python-configobj/Config.in b/package/python-configobj/Config.in
-deleted file mode 100644
-index fc57e26f1c..0000000000
---- a/package/python-configobj/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_PYTHON_CONFIGOBJ
--	bool "python-configobj"
--	depends on BR2_PACKAGE_PYTHON
--	help
--	  ConfigObj is a simple but powerful config file reader and
--	  writer: an ini file round tripper. Its main feature is that
--	  it is very easy to use, with a straightforward programmer's
--	  interface and a simple syntax for config files.
--
--	  http://www.voidspace.org.uk/python/configobj.html
-diff --git a/package/python-configobj/python-configobj.hash b/package/python-configobj/python-configobj.hash
-deleted file mode 100644
-index d43c453796..0000000000
---- a/package/python-configobj/python-configobj.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# md5 from https://pypi.python.org/pypi/configobj/json, sha256 locally computed
--md5	e472a3a1c2a67bb0ec9b5d54c13a47d6  configobj-5.0.6.tar.gz
--sha256	a2f5650770e1c87fb335af19a9b7eb73fc05ccf22144eb68db7d00cd2bcb0902  configobj-5.0.6.tar.gz
-diff --git a/package/python-configobj/python-configobj.mk b/package/python-configobj/python-configobj.mk
-deleted file mode 100644
-index 9e281d28e7..0000000000
---- a/package/python-configobj/python-configobj.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-configobj
--#
--################################################################################
--
--PYTHON_CONFIGOBJ_VERSION = 5.0.6
--PYTHON_CONFIGOBJ_SOURCE = configobj-$(PYTHON_CONFIGOBJ_VERSION).tar.gz
--PYTHON_CONFIGOBJ_SITE = https://pypi.python.org/packages/64/61/079eb60459c44929e684fa7d9e2fdca403f67d64dd9dbac27296be2e0fab
--PYTHON_CONFIGOBJ_LICENSE = BSD-3-Clause
--# License only mentioned in the source
--PYTHON_CONFIGOBJ_SETUP_TYPE = distutils
--
--$(eval $(python-package))
+You forgot to update DEVELOPPERS, so I cherry-picked the hunk from patch
+102 and applied it here.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
