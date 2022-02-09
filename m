@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15462C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39EF0C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C16EE60E67;
-	Wed,  9 Feb 2022 21:55:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F400983342;
+	Wed,  9 Feb 2022 21:55:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xbae2jolzkdN; Wed,  9 Feb 2022 21:55:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O8Eq7YewM8BR; Wed,  9 Feb 2022 21:55:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF09460E38;
-	Wed,  9 Feb 2022 21:55:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23AD4832C7;
+	Wed,  9 Feb 2022 21:55:30 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 26E1B1BF2F0
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 25E6D1BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 982D460E5A
+ by smtp3.osuosl.org (Postfix) with ESMTP id B30A560FE4
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bLE8mBboHgtZ for <buildroot@lists.busybox.net>;
+ with ESMTP id zajuTs0HRuqD for <buildroot@lists.busybox.net>;
  Wed,  9 Feb 2022 21:33:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBB3960FF9
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD48F60E46
  for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 0A91D8323C; Wed,  9 Feb 2022 21:26:03 +0000 (UTC)
+ id D19E181335; Wed,  9 Feb 2022 21:26:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:13:53 +0100
+Date: Wed, 9 Feb 2022 22:13:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fce56ae9b98e061706e6a57005a7b411b6db77f
-X-Git-Newrev: c2d0a365decdaf56f62ee39420c63c3d0953b721
+X-Git-Oldrev: c8ab303417e95a804719d1e1d76df8849e86d2b0
+X-Git-Newrev: cc3eda104a340f0a5a0ad96a74ffb31574a6df47
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212603.0A91D8323C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-subprocess32: drop python2
+Message-Id: <20220209212602.D19E181335@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pathlib2: drop python2
  specific package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,113 +59,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2d0a365decdaf56f62ee39420c63c3d0953b721
+commit: https://git.buildroot.net/buildroot/commit/?id=cc3eda104a340f0a5a0ad96a74ffb31574a6df47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                                   |  6 +++++
- package/Config.in                                  |  1 -
- package/python-subprocess32/Config.in              | 13 ---------
- .../python-subprocess32/python-subprocess32.hash   |  5 ----
- package/python-subprocess32/python-subprocess32.mk | 31 ----------------------
- 5 files changed, 6 insertions(+), 50 deletions(-)
+ Config.in.legacy                             |  6 ++++++
+ DEVELOPERS                                   |  1 -
+ package/Config.in                            |  1 -
+ package/python-pathlib2/Config.in            | 13 -------------
+ package/python-pathlib2/python-pathlib2.hash |  5 -----
+ package/python-pathlib2/python-pathlib2.mk   | 14 --------------
+ 6 files changed, 6 insertions(+), 34 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 3cd78ccf1c..8db9558ed4 100644
+index 386f94e72b..74317a2d7c 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2022.02"
  
-+config BR2_PACKAGE_PYTHON_SUBPROCESS32
-+	bool "python-subprocess32 removed"
++config BR2_PACKAGE_PYTHON_PATHLIB2
++	bool "python-pathlib2 removed"
 +	select BR2_LEGACY
 +	help
 +	  Package was removed together with python 2.7 support.
 +
- config BR2_PACKAGE_PYTHON_SINGLEDISPATCH
- 	bool "python-singledispatch removed"
+ config BR2_PACKAGE_PYTHON_PAM
+ 	bool "python-pam removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0ca1ee9f38..4bb8821563 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -145,7 +145,6 @@ F:	package/mpd/
+ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+ F:	package/python-decorator/
+ F:	package/python-ipython-genutils/
+-F:	package/python-pathlib2/
+ F:	package/python-pickleshare/
+ F:	package/python-scandir/
+ F:	package/python-simplegeneric/
 diff --git a/package/Config.in b/package/Config.in
-index 0261463f45..18de2a32a5 100644
+index 73e8901a1d..3c55dec6c5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1243,7 +1243,6 @@ menu "External python modules"
- 	source "package/python-sqlalchemy/Config.in"
- 	source "package/python-sqliteschema/Config.in"
- 	source "package/python-sqlparse/Config.in"
--	source "package/python-subprocess32/Config.in"
- 	source "package/python-systemd/Config.in"
- 	source "package/python-tabledata/Config.in"
- 	source "package/python-tempora/Config.in"
-diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
+@@ -1118,7 +1118,6 @@ menu "External python modules"
+ 	source "package/python-paramiko/Config.in"
+ 	source "package/python-parso/Config.in"
+ 	source "package/python-passlib/Config.in"
+-	source "package/python-pathlib2/Config.in"
+ 	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
+diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
 deleted file mode 100644
-index d7fe84f1e6..0000000000
---- a/package/python-subprocess32/Config.in
+index e28de4c12e..0000000000
+--- a/package/python-pathlib2/Config.in
 +++ /dev/null
 @@ -1,13 +0,0 @@
--config BR2_PACKAGE_PYTHON_SUBPROCESS32
--	bool "python-subprocess32"
+-config BR2_PACKAGE_PYTHON_PATHLIB2
+-	bool "python-pathlib2"
 -	depends on BR2_PACKAGE_PYTHON
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_MIPS_NABI64
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
 -	help
--	  A backport of the Python 3 subprocess module for use
--	  on Python 2.
+-	  Object-oriented filesystem paths.
 -
--	  https://github.com/google/python-subprocess32
+-	  The goal of pathlib2 is to provide a backport of standard
+-	  pathlib module which tracks the standard library module, so
+-	  all the newest features of the standard pathlib can be used
+-	  also on older Python versions.
 -
--comment "python-subprocess32 needs a toolchain w/ headers >= 3.10 on MIPS N64"
--	depends on BR2_MIPS_NABI64
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
+-	  https://pypi.python.org/pypi/pathlib2
+diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
 deleted file mode 100644
-index 65d18763d1..0000000000
---- a/package/python-subprocess32/python-subprocess32.hash
+index ebd197b62e..0000000000
+--- a/package/python-pathlib2/python-pathlib2.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/subprocess32/json
--md5	748844d560be5f0c707931cba1cdb48b  subprocess32-3.5.4.tar.gz
--sha256	eb2937c80497978d181efa1b839ec2d9622cf9600a039a79d0e108d1f9aec79d  subprocess32-3.5.4.tar.gz
+-# md5, sha256 from https://pypi.org/pypi/pathlib2/json
+-md5  e50a0cf94e406c5110b3aed535626e9e  pathlib2-2.3.6.tar.gz
+-sha256  7d8bcb5555003cdf4a8d2872c538faa3a0f5d20630cb360e518ca3b981795e5f  pathlib2-2.3.6.tar.gz
 -# Locally computed sha256 checksums
--sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
-diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
+-sha256  861f813004a151ac77024ad445794653809ddf8a7572aee7bab18d11df2ba1c6  LICENSE.rst
+diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
 deleted file mode 100644
-index fb8a47f974..0000000000
---- a/package/python-subprocess32/python-subprocess32.mk
+index 4bcfea78fb..0000000000
+--- a/package/python-pathlib2/python-pathlib2.mk
 +++ /dev/null
-@@ -1,31 +0,0 @@
+@@ -1,14 +0,0 @@
 -################################################################################
 -#
--# python-subprocess32
+-# python-pathlib2
 -#
 -################################################################################
 -
--PYTHON_SUBPROCESS32_VERSION = 3.5.4
--PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
--PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/32/c8/564be4d12629b912ea431f1a50eb8b3b9d00f1a0b1ceff17f266be190007
--PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
--PYTHON_SUBPROCESS32_LICENSE = Python-2.0
--PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
--
--# The configure step needs to be run outside of the setup.py since it isn't
--# run correctly for cross-compiling
--define PYTHON_SUBPROCESS32_CONFIGURE_CMDS
--	(cd $(@D) && \
--	$(TARGET_CONFIGURE_OPTS) \
--	$(TARGET_CONFIGURE_ARGS) \
--	./configure \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--sysconfdir=/etc \
--		--program-prefix="" \
--	)
--endef
+-PYTHON_PATHLIB2_VERSION = 2.3.6
+-PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
+-PYTHON_PATHLIB2_SITE = https://files.pythonhosted.org/packages/df/16/e9d6bcf1aed52a55bc1696324ab22586716053b3e97b85266e0f3ad36bae
+-PYTHON_PATHLIB2_LICENSE = MIT
+-PYTHON_PATHLIB2_LICENSE_FILES = LICENSE.rst
+-PYTHON_PATHLIB2_SETUP_TYPE = setuptools
 -
 -$(eval $(python-package))
 _______________________________________________
