@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45FA3C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:37:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 673BCC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:38:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 079A560E40;
-	Wed,  9 Feb 2022 21:37:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04B9C832EA;
+	Wed,  9 Feb 2022 21:38:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AVpmcPzsh1By; Wed,  9 Feb 2022 21:37:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0Bwo8f0SySJE; Wed,  9 Feb 2022 21:38:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5173660BE7;
-	Wed,  9 Feb 2022 21:37:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2FFDD1BF9C1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A7F783227;
+	Wed,  9 Feb 2022 21:38:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CC0261BF2F0
  for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6F62414C3
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E15D60E68
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oBroF1bvpmBD for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id roebdhP3l7M5 for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:33:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EC8A4148A
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7DDF460E40
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:33:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 35B988323E; Wed,  9 Feb 2022 21:26:01 +0000 (UTC)
+ id 905788323C; Wed,  9 Feb 2022 21:25:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Feb 2022 22:09:35 +0100
+Date: Wed, 9 Feb 2022 22:07:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e346f494c1507648f60c0e0174f06bd35ca84e3
-X-Git-Newrev: c449ceaae2044c7ecf30fc769a51d2b02c3ab2f1
+X-Git-Oldrev: cf47c53f80a6ab82971b70b5475ecc26beffeef7
+X-Git-Newrev: 459dd7a9850c7b3be519ae6bf7cc6a689c22cd32
 X-Patchwork-Hint: ignore
-Message-Id: <20220209212601.35B988323E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyroute2: drop python2
- support
+Message-Id: <20220209212559.905788323C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-compose: drop reference to
+ BR2_PACKAGE_PYTHON
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,28 +59,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c449ceaae2044c7ecf30fc769a51d2b02c3ab2f1
+commit: https://git.buildroot.net/buildroot/commit/?id=459dd7a9850c7b3be519ae6bf7cc6a689c22cd32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And adjust the comments to clarify that the toolchain dependencies are from
+python3.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyroute2/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/docker-compose/Config.in | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
-index 5df0a63d4b..9e685f9d1e 100644
---- a/package/python-pyroute2/Config.in
-+++ b/package/python-pyroute2/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYROUTE2
- 	bool "python-pyroute2"
--	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_SQLITE
- 	help
- 	  Python netlink library - Linux network / netns / wireless /
- 	  ipset configuration.
+diff --git a/package/docker-compose/Config.in b/package/docker-compose/Config.in
+index 761befea4d..f82a0c4bc2 100644
+--- a/package/docker-compose/Config.in
++++ b/package/docker-compose/Config.in
+@@ -1,10 +1,9 @@
+ config BR2_PACKAGE_DOCKER_COMPOSE
+ 	bool "docker-compose"
+-	depends on !BR2_PACKAGE_PYTHON # python-paramiko -> python-bcrypt
+-	depends on BR2_USE_MMU # python
+-	depends on BR2_USE_WCHAR # python
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # python
+-	depends on !BR2_STATIC_LIBS # python
++	depends on BR2_USE_MMU # python3
++	depends on BR2_USE_WCHAR # python3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
++	depends on !BR2_STATIC_LIBS # python3
+ 	# python-paramiko -> python-cryptography
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_PYTHON3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
