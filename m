@@ -1,66 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5227CC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E531FC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Feb 2022 21:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EA0A83396;
-	Wed,  9 Feb 2022 21:55:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A307B40567;
+	Wed,  9 Feb 2022 21:56:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CwvGxgGg3JjG; Wed,  9 Feb 2022 21:56:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE31F405DC;
+	Wed,  9 Feb 2022 21:56:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D3F11BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:36:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A55F8318C
+ for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:36:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rG_x73czFotu; Wed,  9 Feb 2022 21:55:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61759832C7;
-	Wed,  9 Feb 2022 21:55:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EDF341BF2F0
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E91A760E38
- for <buildroot@lists.busybox.net>; Wed,  9 Feb 2022 21:34:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h6YNKAb3S4ep for <buildroot@lists.busybox.net>;
- Wed,  9 Feb 2022 21:34:43 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mA_jz3Y2vWvY for <buildroot@lists.busybox.net>;
+ Wed,  9 Feb 2022 21:36:03 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E45D860BF2
- for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:34:42 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:d4bd:3395:fce0:5749])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 23A9D7802C2;
- Wed,  9 Feb 2022 22:34:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1644442480;
- bh=utp5O4tRMA5J/QYyA0ih3FkbW6fbX453JJLJfxY+x+w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nmKCpzE3l28IyWrQFU00jGzofGEmmjbVVOd8uSlsh8ZPA/LEY8HOQbh0F+QxTZAxm
- xnwYG7rGm2HZ91kf/kiZqNpgirNqkC/fgWmK/6LHfNliVfJeJIZspEwYsvNALYYPGM
- vQj0oLM/jQ8cDtgkMT+ktcgI180D4ZRR+6tpzd1uIEyJaxQ/OXQHvYSFdVJPEew3bm
- Ffx8xpGlYYouxzNjXz9vJ5XshcrtuFGrUBAfBI5cmXAzov6LI3T8eY32/kQBgyvkXx
- rhAjRjcs8uvMbfpyd+7IcbKFyuVgw+fOC9zuGnEHCKxxAxanMERnWC5vIOVw19zK5f
- o5OELaB3njbmw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 09 Feb 2022 22:34:37 +0100
-Date: Wed, 9 Feb 2022 22:34:37 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20220209213437.GF2249818@scaer>
-References: <20220209165213.4498-1-peter@korsgaard.com>
- <20220209165213.4498-85-peter@korsgaard.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 342FB83192
+ for <buildroot@buildroot.org>; Wed,  9 Feb 2022 21:36:02 +0000 (UTC)
+Received: from [192.168.178.58] ([151.61.64.67]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.17.173]) with ESMTPSA (Nemesis) id
+ 1MWiUg-1now6B3wm8-00X0Cz; Wed, 09 Feb 2022 22:36:00 +0100
+Message-ID: <890b73ae-305c-2674-ed03-c06562983328@paguilar.org>
+Date: Wed, 9 Feb 2022 22:35:58 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220209165213.4498-85-peter@korsgaard.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 084/107] package/python: drop host package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20220208213722.836257-1-paguilar@paguilar.org>
+ <5f710ea1-3f98-9435-c033-e73e70e86342@benettiengineering.com>
+ <f8202766-058e-25d3-2761-4568ba6c89a1@benettiengineering.com>
+From: Pedro Aguilar <paguilar@paguilar.org>
+In-Reply-To: <f8202766-058e-25d3-2761-4568ba6c89a1@benettiengineering.com>
+X-Provags-ID: V03:K1:4NtcYORs8gqIiyKJSvSZdAeiUN2+AJSqaldTd0jveS/v3Vaqd4X
+ cFwfDmO348FnZGxC+ya3+3C/7eWwLuhaL2kw13tikkDRR5kFf4s3NFBNQ/q6AeDGjg0iVcZ
+ KTRdrx5Y9ZSwlHnKp10dMUA2ucaMKx6X3bQ7fsiPP1A0YBv96UNrrTlBRaKgsp+iqllM4/c
+ 70LxwXEnl38sDMY4Svt6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I4xvYuK2UiU=:Jf+k3Bj4TjQWjQtoTA6LWF
+ BaF6YRMD+nNa+xx5YbdwAnfrFOscIYgg9hrVu0nMtacyZXcCh1MIomLuMQ2Iu52zR8y9PWEtJ
+ JQ6q6G7MnDUc30XcGSdAk6zR7L93RNkHCzsfGsn3huroJhYwVM95qDDBii0K80+fnqGsDjx7o
+ N+w1pSWA+//BiFzFVvOfJHUBaxrPKf/FJ0Jb798W1Ko0cZ3ZssIlYj2FE7X1t2i8d1ObDlJX6
+ OpzV6vQYhsqHLsIedNVLnAEDMCWfgv2rrJfYykglQqnuLE9PUNYir2aOJnlA/65OJo+ADXnd3
+ 6bx0EOIHd4U8S9M67RdGfuYcfUg3J2Xk2i1iPzy58Ycje62RVJPiz4wc4DWdrfg9H1N/MCAQq
+ txkXfQLJDSKc6UbTR7Ths7DqaOWCupUEpy+NG4VrEc8dgxoHPUH6Kf+RZe4VxNImmyk0eZaI9
+ 81NiPHad64Z1Mp5lr1rzASpR1l0AcUZa54d09qnQtYELBpPqKJ2hhSQ7/5nEG51F1aZ0md5uC
+ dvkFriPg8fEnA/I2P9wqsC03kpnPvy4hRqr+UYxkWGRRhiCkNrLcpI+PXS4cpw1eXIWSJ2/Yy
+ hXfWTCYhJjRNbGaVExuVJ306nMI+7oaurA6r5EKFlvzQwZX3MB5rGh21/Ne/ScbRQJH+GVzOp
+ kuCvt5pqZZl/TUq2YR4q4nUYQSBeUEEG1OPnt/FBZSu6+kpkFXxlrKEHhSMpbx9mfHQRzzdFA
+ 6PietG43QUHzX9Mm
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/guile: Add BR2_ENABLE_LOCALE
+ as dependency.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,38 +76,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: thomas.petazzoni@bootlin.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Hi Giulio,
 
-On 2022-02-09 17:51 +0100, Peter Korsgaard spake thusly:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
-...
->  package/python/Config.in.host                 |  16 -
->  package/python/python.hash                    |   5 -
->  package/python/python.mk                      | 302 ------------------
->  37 files changed, 2301 deletions(-)
+On 2/8/22 23:54, Giulio Benetti wrote:
+> Hi again Pedro,
+> 
+> I've reproduced the build failure with your previous attached .config 
+> file and this patch fixes it. So below...
+> 
+> On 08/02/22 23:06, Giulio Benetti wrote:
+>> Hi Pedro,
+>>
+>> On 08/02/22 22:37, Pedro Aguilar wrote:
+>>> If it's not present, enable libiconv.
+>> Here it's missing:
+>> Fixes:
+>> URL to autobuilder failure
+> 
+> ...please provide the autobuilder failure URL and if it doesn't exist 
+> than we don't need it.
 
-You forgot to update DEVELOPPERS, so I cherry-picked the hunk from patch
-102 and applied it here.
+AFAIK, the build failure fixed by this patch was not reported by the 
+autobuilder, so I'm afraid there isn't any URL to share.
 
-Applied to master, thanks.
+In a previous email I wrongly mentioned that it fixed an autobuilder 
+failure, but all those failures are linked to another issue that seems 
+to be fixed by a patch sent by Fabrice, although I haven't tested it:
+
+https://lists.buildroot.org/pipermail/buildroot/2022-February/636041.html
+
+May be the commit message of the current v2 patch can remain as is.
+
+Thanks!
+
+> So once done this I can give you my Review.
+> 
+> Waiting for V2 with improved commit log then.
+> 
+> Thank you!
+> Best regards
 
 Regards,
-Yann E. MORIN.
-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Pedro Aguilar
+https://paguilar.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
