@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1B08C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 20:45:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59DA4C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 20:45:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A4514091D;
-	Thu, 10 Feb 2022 20:45:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C30F1402EB;
+	Thu, 10 Feb 2022 20:45:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mVi1ZbHKDGTc; Thu, 10 Feb 2022 20:45:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id C16E44012B;
+	Thu, 10 Feb 2022 20:45:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BAF41BF398
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 20:45:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98675408F9
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 20:45:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bCJix4W1USrR; Thu, 10 Feb 2022 20:45:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99AD0408EE;
-	Thu, 10 Feb 2022 20:45:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A47B41C1135
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 20:45:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 989488244D
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 20:45:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cBw_BM3-wAMg for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CpTe6TZaP7Vr for <buildroot@lists.busybox.net>;
  Thu, 10 Feb 2022 20:45:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DBF38242D
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0458408E9
  for <buildroot@buildroot.org>; Thu, 10 Feb 2022 20:45:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 6253F82984; Thu, 10 Feb 2022 20:37:48 +0000 (UTC)
+ id 75FE982DF5; Thu, 10 Feb 2022 20:37:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 21:44:30 +0100
+Date: Thu, 10 Feb 2022 21:44:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f32a2b04c89b6fbcd2cccf22b34fcfebfbcc1f2d
-X-Git-Newrev: aa01b17862ab3af9d95a05018bf8ccf5e875057b
+X-Git-Oldrev: 39b025258539b8686eb5615a6df10e2c06b5c228
+X-Git-Newrev: 4c8ae13e7ce84d76e7ed06d05322a49b26bd3c7f
 X-Patchwork-Hint: ignore
-Message-Id: <20220210203748.6253F82984@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gtest: drop python2 host support
+Message-Id: <20220210203748.75FE982DF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rust: drop host-python2 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,48 +58,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa01b17862ab3af9d95a05018bf8ccf5e875057b
+commit: https://git.buildroot.net/buildroot/commit/?id=4c8ae13e7ce84d76e7ed06d05322a49b26bd3c7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And simplify the package a bit while we're at it.
+host-python2 is gone, so always use host-python3.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gtest/gtest.mk | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+ package/rust/rust.mk | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 673e626c45..e7ce89a3f4 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -19,16 +19,7 @@ endif
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 5fad7d404c..46487fe4b7 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -14,18 +14,11 @@ HOST_RUST_PROVIDES = host-rustc
  
- HOST_GTEST_LICENSE = Apache-2.0
- HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
+ HOST_RUST_DEPENDENCIES = \
+ 	toolchain \
++	host-python3 \
+ 	host-rust-bin \
+ 	host-openssl \
+ 	$(BR2_CMAKE_HOST_DEPENDENCY)
+ 
 -ifeq ($(BR2_PACKAGE_PYTHON3),y)
--HOST_GTEST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
--HOST_GTEST_DEPENDENCIES += host-python3
+-HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+-HOST_RUST_DEPENDENCIES += host-python3
 -else
--HOST_GTEST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
--HOST_GTEST_DEPENDENCIES += host-python
+-HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+-HOST_RUST_DEPENDENCIES += host-python
 -endif
 -
--HOST_GTEST_GMOCK_PYTHONPATH = \
--	$(HOST_DIR)/lib/python$(HOST_GTEST_PYTHON_VERSION)/site-packages
-+HOST_GTEST_DEPENDENCIES = host-python3
+ HOST_RUST_VERBOSITY = $(if $(VERBOSE),2,0)
  
- # While it is possible to build gtest as shared library, using this gtest shared
- # library requires to set some special configure option in the project using
-@@ -56,7 +47,7 @@ define HOST_GTEST_POST_INSTALL_PYTHON
- 	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
- 		$(HOST_DIR)/bin/gmock_gen
- 	cp -rp $(@D)/googlemock/scripts/generator/cpp \
--		$(HOST_GTEST_GMOCK_PYTHONPATH)
-+		$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+ # Some vendor crates contain Cargo.toml.orig files. The associated
+@@ -50,7 +43,7 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
+ 		echo 'cargo = "$(HOST_RUST_BIN_DIR)/cargo/bin/cargo"'; \
+ 		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
+-		echo 'python = "$(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION)"'; \
++		echo 'python = "$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)"'; \
+ 		echo 'submodules = false'; \
+ 		echo 'vendor = true'; \
+ 		echo 'extended = true'; \
+@@ -71,12 +64,12 @@ define HOST_RUST_CONFIGURE_CMDS
  endef
  
- HOST_GTEST_POST_INSTALL_HOOKS += HOST_GTEST_POST_INSTALL_PYTHON
+ define HOST_RUST_BUILD_CMDS
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py build
++	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py build
+ endef
+ 
+ define HOST_RUST_INSTALL_CMDS
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py dist
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py install
++	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py dist
++	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py install
+ endef
+ 
+ $(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
