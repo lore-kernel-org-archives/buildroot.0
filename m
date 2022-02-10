@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C923C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 19:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D72B3C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 19:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E116A4091D;
-	Thu, 10 Feb 2022 19:31:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F87A40546;
+	Thu, 10 Feb 2022 19:31:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PXJL1_aXPq5h; Thu, 10 Feb 2022 19:31:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6kGnNfMx614O; Thu, 10 Feb 2022 19:31:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26A2F40873;
-	Thu, 10 Feb 2022 19:31:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A71E11BF3BB
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5343D4038E;
+	Thu, 10 Feb 2022 19:31:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 715161BF3BB
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B194960A74
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C53F81678
  for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FBFe2lGPld8V for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 19:29:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8cVEKK0BeDQj for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 19:29:16 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 787E1607F9
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 19:29:17 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6032881985
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 19:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
  s=badeba3b8450; t=1644521347;
- bh=Tm4RXh6uF0mapwYEkwJ2hMs5l9NewavtfSDMUy0P42Y=;
+ bh=CXFdhnLnb49DTjpnfrFErN6g/mVvP3luoFeGiY0sgIM=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=hRXtPigy2/Q9lkjAhgaBUocdkoodASM0/Cgyo+TlJqZYtQvQMe8aASWuN4dfPqKAS
- Ye36iv8xu6kHQEy9RQOMgkqfse1e5fGXJI4vCD0OJ3LAWtCK1lrH+437AOb4dIqz8D
- iT2vaATYRaZc8ctHxhn0Ve3AbtOVzM6ih6lMWR/Q=
+ b=hMo0qTLwFscSJJ8JtOGHmYAds92LnO4s56UvyhkLZkvkzupyJ1nhLQpvwgEWc57RL
+ CXFzIY7wYrffvdf6nUhH2Y8XaTglnORh912XQBwRArmxPlYUZg2TmPuJekxCoQTa+i
+ vYU7ScDYSnVGePvEmrIycabfLVm2vY6SMgZ2ZZwU=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.34]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtOGa-1oAlBt103S-00upWR; Thu, 10
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MhD2O-1nwXh308EE-00ePdb; Thu, 10
  Feb 2022 20:29:07 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 20:28:58 +0100
-Message-Id: <20220210192905.4500-7-ps.report@gmx.net>
+Date: Thu, 10 Feb 2022 20:28:57 +0100
+Message-Id: <20220210192905.4500-6-ps.report@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220210192905.4500-1-ps.report@gmx.net>
 References: <20220210192905.4500-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:46NOLMBy55t8dgpMMOIpHHX5n1mZcXMY3iFWZc8s+lz4/5PXyPE
- ofl4WY/0KvaGT1iw6B4vxnRwS4ebJHn/MdFbhDPuyHGYjWct51ZT6aEHJSvCFlRx8KLhSuM
- 7cprAQt73E0dcrll5J/Dgf/VKT7Cqeh3CphhBJ1TP4rErlHGQqzDps4pcgLaC2Vuct7F3EZ
- F8gFRCytLRtTgMASR4i5g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O7Loq672no4=:jomjyJppd1zQM2xzv0OtB8
- QPdPtQEqTLbVVYHIASMCFCVlW6pYMWBRm84Fy4KL9ETaQTOaDjfg78mkGqh2vSAzlVI6zXt3/
- wxKy4toTa3hYd5TW8oJnyXpSX8zpPCpECB+b8X0/iNL0PKNLDy/eyx99VAo76gXrcWd5aQLoU
- GV2X0vvzAKfxXwgSSoeLzjbBE+V+DSNaf8xXhC68Nl70JtA7aZ6imKjcBt6vU7ChqDRJADnrN
- pw2S361j1mqWWCSZMsTLMY5spvOopclDvNn6vt/AQRk4QBsf4WgK1poAxy0C+uvacIh/hHBCe
- IiHTKQ6terUcCGJU/wDcyoCkNi9qmvMY12fg6Ef0XliF1rMKqipIyqwTnTqQBHeMl2bCyX1AM
- fqz9jdPdXjpkgh8KtO4othegdNam1+8r2yuO1SGId9GivAg0wGI251uiVfVxuH3QqUiZ8tugT
- ErDGdgdA+MMAP/XYkTp2b8me00zmRgHo89sU1G/ksIQ4mZcDeTGz1s9fyORGXEHVaqsXu3v2L
- x8v80MdCFfeF2QcrXxIewPn/1arIUr4fPgoNnJalzQWqzzdXFzs3b7knBSPPwMKuwLtt4aBPP
- 9dZ+HJiR+OiBkUqIu+WyJFVWH7hQWfOckYgUzmnp4MIXxSAiy9G93m1Y342HifhWJo7VMGtfB
- Hp5mq10x5J7uuhlJXmplo/3JreQOuglddnEGf1fe5SSGQ2vAyDjs9VcBCdN0Ed920RQfV9d13
- 2Ym7ifwHh0CVR/KD6U03xOqLFb2/JyThW85z7USqMAaYM7xwRunBybmYRgwRehkvFNqEhxqfG
- y0FU2EpNwvX4PCRCNRM/0/7d9QlfDUYv3wpWRRTHNfaP9t3ink++sZrIkh+rVbPbzCDfrnrPl
- Dkm/6/DAD5C6dB1ZdMfVVm0t0pP4oo7/DW3P54ZCqOAvI/8dBoiF7eSoNx+WWN0g+9OUspfCE
- EgdcQ/oXfzzhkFCRzUxJesvqFkadQC3CYaPT4NHs5q0HbqQjo07KfhcNh0VacKlUN3Z1ca1sc
- vUJhOfyF72gg5paj8qwWwzm6I6hfx/j6SNcSPKIaRIfmIWNMzbcXwvHTZbViMvlwjko7F0vUi
- gev7SmTVWJEYgI=
-Subject: [Buildroot] [PATCH v2 06/13] package/gst1-devtools: bump version to
- 1.20.0
+X-Provags-ID: V03:K1:a94fYHZ8BrR7A8n52Z/p3cMhVxKG/R6gzWn3D2yXsCWm0jGjnhF
+ UxRcH6IyRBETVs8vZnGsSWy7mlR5S5gFjJBoF2Zpm1jEbmE9PRFuLy426elgJLZ+OBQhYBO
+ lCz8d26CSfWZs4MBam+VLBSr0DI8hiBOlWPDThjjFMhDbD2rgeV5F0JUGuIZKMOGVfKqT5e
+ khFDOX316JZM3q8ccPlKw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g6e2iyGgkqM=:UowpG3MqkvOEBoq/+6AhLX
+ hAlsYYjZ2Wxf+LEOBUZqeitYjbDXPp5hspJRrV2fVr+3MgDWspcC2r/zdIKAzWt5aZOtKSnlg
+ n5P+rGd2sHQ4yQOvCkU0s0Qk+P0bpUNIFcUMV/AB1DrKdmwco3xUssCvLv5B74o0f0myvVXIg
+ tbskFeDBX61tQVVslDPp97BBj9PX6gZOU+EcksXdXa151MgDfKh4CxroXEU1VmqSzay3S1cmY
+ tlYwXpS/zQL/HV9pyywTOFfQcmp8ChRw0AjWw+6cdrH1yY9tPrxoikRIpMBG9jEnfdH9vQPAZ
+ /EioeZUUa9C116gayOFeBTqcXPZ3otL80DROHvVn4snurf7nG1npbzjvaooVEiCBkZ5aJI6o5
+ wKIYyksjtvVwvN9/7H1BmaN3DbWmor6+c4g9adijCXIyF6m1K4UgyRzoEXJ/Bssq+n1KLfdtc
+ 8VYGxXr0ZEOOB+sHK/q/aOGeSLIiM1r0MHcEDsms4YXBxLrqYSO0RtIEJno/DPUv6z6pk6sY+
+ 9kwCmDIrX0OJObalWsul0X49qX0M7AUMYSbskv9U/0kyEe/RCkRddwkmhI5jn0RRs+PNqOGp5
+ chC+iXGo06ujll/0xpeKWwtjmAKwC/GsPOLKTe+QctbaxPDZvvX8/bB5VfJWAzBv/pDi5rkac
+ jMDYcTrHDcxX92XDVBMVXPKcDxSxC4QfB6d6xQ2X2AVn+V5VWwQGMquaFBWWSI9VI/a59/cJZ
+ boiKAzVBW7PsCg45ncGcLOLHxq9oUYyZD6IGfrJ9iqROkbppJ8lEuf2Ib4uNryfq8TsURQft6
+ 5wlvIFTWbsLpN8DDIcr8P9SLeE15QaG5X95b+GiJ47Nq0BkV555RqloYv7WnosnfSmArhUbt6
+ T9PfwFPg84vjkTWyihpbNaf8/kBrhP/BilG56Q7CoJ5ZuH5fqBIXBG3nFGar+0znNARKA7BEa
+ +Z2CQEv4ekqXRhu+9cM/ks+cei/NF9rqEEAkgvhgxZUtvCXifofNahWQ/X2uMAUCDrNKUn8sq
+ vMcpXI1QyHL18a5UzY7pIzPWyorT+UAI27eV6cZXpzKGCkfSbv7/RiWKN3zYQmcf7PZEIp0g9
+ PXr+Dn+p6KY5sU=
+Subject: [Buildroot] [PATCH v2 05/13] package/gst1-plugins-ugly: bump
+ version to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,61 +92,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- use new option cairo ('Build GstValidateVideo') instead pure optional
-  dependency on packet cairo
+- enable new gpl option ('Allow build plugins that have GPL-licensed
+  dependencies') in case gpl plugin enabled
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-devtools/gst1-devtools.hash |  4 ++--
- package/gstreamer1/gst1-devtools/gst1-devtools.mk   | 13 ++++++++++---
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.hash b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
-index 011385e757..dd09280a9c 100644
---- a/package/gstreamer1/gst1-devtools/gst1-devtools.hash
-+++ b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 26fd0fd9ac..d16134f24b 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.18.6.tar.xz.sha256sum
--sha256  3725622c740a635452e54b79d065f963ab7706ca2403de6c43072ae7610a0de4  gst-devtools-1.18.6.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.20.0.tar.xz.sha256sum
-+sha256  69fc8756ec9d93e5c5258c99088434f203e91fdbc5af28d1f2c583fd819b7a1d  gst-devtools-1.20.0.tar.xz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  validate/COPYING
-diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-index 9089b12188..f72df9cf71 100644
---- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-+++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.18.6.tar.xz.sha256sum
+-sha256  4969c409cb6a88317d2108b8577108e18623b2333d7b587ae3f39459c70e3a7f  gst-plugins-ugly-1.18.6.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.20.0.tar.xz.sha256sum
++sha256  4e8dcb5d26552f0a4937f6bc6279bd9070f55ca6ae0eaa32d72d264c44001c2e  gst-plugins-ugly-1.20.0.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 7f483deb81..05b1fab304 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_DEVTOOLS_VERSION = 1.18.6
-+GST1_DEVTOOLS_VERSION = 1.20.0
- GST1_DEVTOOLS_SOURCE = gst-devtools-$(GST1_DEVTOOLS_VERSION).tar.xz
- GST1_DEVTOOLS_SITE = https://gstreamer.freedesktop.org/src/gst-devtools
- GST1_DEVTOOLS_LICENSE = LGPL-2.1+
-@@ -16,8 +16,7 @@ GST1_DEVTOOLS_DEPENDENCIES = \
- 	python3 \
- 	gstreamer1 \
- 	gst1-plugins-base \
--	json-glib \
--	$(if $(BR2_PACKAGE_CAIRO),cairo)
-+	json-glib
+-GST1_PLUGINS_UGLY_VERSION = 1.18.6
++GST1_PLUGINS_UGLY_VERSION = 1.20.0
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+@@ -89,6 +89,7 @@ endif
  
- ifeq ($(BR2_PACKAGE_GST1_RTSP_SERVER),y)
- GST1_DEVTOOLS_DEPENDENCIES += gst1-rtsp-server
-@@ -30,4 +29,12 @@ GST1_DEVTOOLS_CONF_OPTS = \
- 	-Dtests=disabled \
- 	-Ddoc=disabled
+ # Add GPL license if GPL plugins enabled.
+ ifeq ($(GST1_PLUGINS_UGLY_HAS_GPL_LICENSE),y)
++GST1_PLUGINS_UGLY_CONF_OPTS += -Dgpl=enabled
+ GST1_PLUGINS_UGLY_LICENSE += , GPL-2.0
+ endif
  
-+# build GstValidateVideo
-+ifeq ($(BR2_PACKAGE_CAIRO),y)
-+GST1_DEVTOOLS_CONF_OPTS += -Dcairo=enabled
-+GST1_DEVTOOLS_DEPENDENCIES += cairo
-+else
-+GST1_DEVTOOLS_CONF_OPTS += -Dcairo=disabled
-+endif
-+
- $(eval $(meson-package))
 -- 
 2.34.1
 
