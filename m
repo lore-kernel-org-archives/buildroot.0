@@ -1,75 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF73C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 16:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F455C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 17:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4B9881B9D;
-	Thu, 10 Feb 2022 16:54:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3170408BC;
+	Thu, 10 Feb 2022 17:15:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yE0eHufw-I71; Thu, 10 Feb 2022 16:54:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mi8K1Kb0oBNA; Thu, 10 Feb 2022 17:15:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2570E81A73;
-	Thu, 10 Feb 2022 16:54:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 137701BF20B
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 16:54:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8F21408BE;
+	Thu, 10 Feb 2022 17:15:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A2AF31BF228
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 17:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01C2A40184
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 16:54:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9EE028247F
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 17:15:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YajZJpvkTCRx for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 16:54:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2CBD40132
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 16:54:26 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPSA
- id ICi9nWQQyNVvLICi9nMEri; Thu, 10 Feb 2022 17:54:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644512065; bh=4cIoLqobpkkhC+VKCmmfbW4V2dhivXYMbvQz6oFbLns=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=YOtxH1KAom6EMG/AG/HZH9DlNUJkYvrTmVslKhtlCoKtd4JR/ll/A4zaMxC8CinYA
- xzVj6m1Hx0xzgKpbMD3meZI/XN1cJ3rxHj3N3yOLSyyJLwDNqI+8hMTRNQIRibx5zA
- Biw4uqC8/H/jaOwhib07M0du6KdnVSzCw9lc1nieztdFsPsXuwYX2+R1Hvfn6mgCry
- DDVl4qFuobAiUHonb1a4b6OWaassHSqEei6YzmmZRxgegZ3NFN5ZdVJs1yktXJPcI6
- O73Ayb8XxPMsq2t8VwF0zv3R6OGxaa6x34zzskxBast+w21VuyuErBkulp2mEhq/19
- mz5BfKPq+VPPg==
-Message-ID: <099dd7ff-c841-f7b5-88b7-f036ebc02a66@benettiengineering.com>
-Date: Thu, 10 Feb 2022 17:54:25 +0100
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jfIlHz73RAlh for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 17:15:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63BCD8242D
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 17:15:17 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id fy20so16828504ejc.0
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 09:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=YPVLfd7L2gXXvjUBjWHCY3f9Y2TK6CPSN4SpYheu4+Y=;
+ b=gTBbhkeq/aNC8QiDUfQxRhr/qt8GI9aO3Cmj/Yj3brMATmAfQ6rVqsyAScrtaKvk+U
+ qxrn+l6mdUq18zbaw9hjEAXpfOSZi0nncWfWP8ZEET4AATlddaiZ/hcgwRfIWxsncgmX
+ BDEdUGQjc7JhEIBL1oAq3fsugo/QEIBAO4c+AjGexhX3jUwkcLdfyQ89pBXuMkX+VA1h
+ MPgYc1tMldyPVdxuo5dIalDl/jlV5W6Oh/UMhH/h/XgR7avK82f1E0dIWapPcATir7Qo
+ N5sWpi2+qPRKPoCQiwNlJ5SorVshXW4vBfsoAholpqbRmE3Rklg5mLzHoIcCugkU59r1
+ /Eww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=YPVLfd7L2gXXvjUBjWHCY3f9Y2TK6CPSN4SpYheu4+Y=;
+ b=zVI1gGxrzLkatWPhxMZIAkp8jU9JQUF0fGzOnFyX8VPXlil77R2a47bPWjK1pjIX4l
+ I3pJl061uSrYYsraMDOKgkMaYMQDhc+LHW2+u8IbrwhQ07WH+qVuUf+jHepjjqnzct+I
+ MmDX0KBVh8B3yz9Snze4ekRlk+MTNKOazrSluEGUT9iFURkhS6i5w6I39vlQihpm7wm+
+ HrZkK8piMGKxlEwpiw0PhzrjzP9d70qzvxy0uuDcqt1kMfj2ER37VIrwDFVcOP+Ode67
+ RtuOvlrqfp1pPRAbxIuVvOQ5a/8dTPV2r2squQX32xJtRLiMU8SJd9j464FtvpLF4Vgo
+ aOzw==
+X-Gm-Message-State: AOAM532wXlNPmVSL4cVsY5maNbb/VSLf+DT8AugW9u4+YzlOLAFEepxp
+ HGoE0QPDIz8k05iGzB9Tumhj+1wgvZnaOg==
+X-Google-Smtp-Source: ABdhPJzgn/lx7FnZpA0LRCgKTVthxufGZMk2bCIWBOevIvPchJ63PFlEo3pWD4eMd1B7y9YtBUj3jA==
+X-Received: by 2002:a17:907:720b:: with SMTP id
+ dr11mr7185982ejc.70.1644513313607; 
+ Thu, 10 Feb 2022 09:15:13 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id gu2sm7156113ejb.221.2022.02.10.09.15.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 10 Feb 2022 09:15:12 -0800 (PST)
+Message-ID: <2cba2cd6-ca70-6336-f2fe-60649a0f1a0d@mind.be>
+Date: Thu, 10 Feb 2022 18:15:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Neal Frager <nealf@xilinx.com>
-References: <20220208071559.2862411-1-neal.frager@xilinx.com>
- <SJ0PR02MB7758927E29E93F773AD4C9F8D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <69efa9da-ae55-6795-8724-ed7105083924@benettiengineering.com>
- <SJ0PR02MB7758317CF3A3B2D662099BC3D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <32cc1c12-1496-7db9-5e32-1b99404a4fe3@benettiengineering.com>
- <690d8e1b-fb6d-7c36-b07f-4ed9ca61b768@lucaceresoli.net>
- <PH0PR02MB77502EC0E2E1A577AEF5201DD72D9@PH0PR02MB7750.namprd02.prod.outlook.com>
- <489a02df-4f2b-a46c-aa49-15c3c545f8f2@lucaceresoli.net>
- <SJ0PR02MB77583C51A75C70EDA6E1AC29D72F9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <acd2a42d-dff6-45f1-607c-1fb74294d1f1@benettiengineering.com>
- <1EC54279-220E-4043-AFBA-953D2CF5E54A@xilinx.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <1EC54279-220E-4043-AFBA-953D2CF5E54A@xilinx.com>
-X-CMAE-Envelope: MS4wfGZ9duBSPIf0NywMxN7UAUFhrZYh8mIgFUGybZfvWNihJp8gN17eYZq1EVwe5qKlIG3vl2E3sZXAtWeV/RddYodINT595UOOEo88t5BMmc/ypGQOq6H3
- GbcaACo5V7foeSCyB4B7FEaOW33I1bm9v5eshSql1H3W1gw8HnRzCISwCVRKEE6Uf/bZuIE5kP1cCj3xbTv4nYlQmwJSZ9LJZeor5n0zJyuvRmhOK4mP31wB
- Qb7s03TW4czhwVhiQN0+iJnodfrKK8yNa1j8eB4jzuQlin5c3dc1Z1pwCp6Db+fy
-Subject: Re: [Buildroot] [PATCH 1/2] configs/zynqmp_zcu106: Bump
- ATF/U-Boot/Linux to Xilinx 2022
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Peter Korsgaard <peter@korsgaard.com>
+References: <20220209165213.4498-1-peter@korsgaard.com>
+ <20220209213312.GE2249818@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220209213312.GE2249818@scaer>
+Subject: Re: [Buildroot] [PATCH 000/107] Drop python 2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,42 +96,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>, Michal Simek <michals@xilinx.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
 
-On 10/02/22 17:44, Neal Frager wrote:
-> Hi Giulio, Luca,
+
+On 09/02/2022 22:33, Yann E. MORIN wrote:
+> Peter ,All,
 > 
+> On 2022-02-09 17:50 +0100, Peter Korsgaard spake thusly:
+>> Python 2.7 is EOL since April 2020 and almost all packages support
+>> python 3, so drop it before the 2022.02 release.
 >>
->> Neal, can you reply about this ^^^. At least, are USB1, ETH0/1/2, both
->> SPIs, NAND, CAN0, VCU present on those 2 boards?
+>> It is a big series, but the changes are mainly mechanical in nature.
+>>
+>> There is still some cleanup to do, E.G. the python2 support in
+>> pkg-python and the host python-setuptools package - But this is IMHO
+>> the minimum changes before -rc1.
+>>
+>> Peter Korsgaard (107):
+> ...
+>>    package/python: drop target package
+> ...
+>>    package/python: drop host package
+> ...
+>>    docs/manual: drop python2 references
 > 
-> I confirm that the pm_cfg_obj.c file provided is correct for the ZCU102 and ZCU106 boards.  These boards use USB0 and ETH3 for these respective peripherals.  The peripherals disabled are not connected on either board.
+> All 107 patches applied, thanks!
+> 
+> I'll reply further to two of them, with ultra-minor nits.
+> 
+> Pfew, 21st century, here we come at last! ;-)
 
-So I would keep the pm_cfg_obj.c as is, but so why .dts file disable 
-peripherals that are not present?
+  Thank you Peter and Yann for handling this!
 
-> To clarify things, I may send another patch with two separate pm_cfg_obj.c files including the board names in the file names.  One thing that is different is that the ZCU106 comes with silicon that supports the VCU whereas the ZCU102 does not.  So I could create a ZCU106 version of this file which enables the VCU.
+  I did a bit of grepping for leftovers and found these:
 
-I would definitely do that, so 2 pm_cfg_obj.c for 2 FPGAs
+package/pkg-python.mk:# BR2_PACKAGE_PYTHON=y, or a host-package with neither
+package/pkg-python.mk:# BR2_PACKAGE_PYTHON3=y or BR2_PACKAGE_PYTHON=y.
+docs/manual/adding-packages-python.txt: * It is not necessary to add +python+ or 
++host-python+ in the
+package/gstreamer1/gst1-devtools/gst1-devtools.mk:GST1_DEVTOOLS_DEPENDENCIES += 
+host-python python
+package/omniorb/omniorb.mk:# omniorb is not python3 friendly, so force the 
+python interpreter
+package/omniorb/omniorb.mk:OMNIORB_CONF_OPTS = 
+ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
+package/omniorb/omniorb.mk:HOST_OMNIORB_CONF_OPTS = 
+ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
+package/pkg-python.mk:$(2)_DEPENDENCIES += $$(if 
+$$(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
+package/pkg-python.mk:ifeq ($$($(2)_NEEDS_HOST_PYTHON),python2)
+package/pkg-python.mk:# setuptools for python2.
+package/pkg-python.mk:# In all other cases, we install setuptools for python2. 
+Those other
+package/pkg-python.mk:else ifeq ($(4):$$($(2)_NEEDS_HOST_PYTHON),host:python2)
+package/pkg-python.mk:# We may want to specify the python interpreter to be used 
+for building a
+package/pkg-python.mk:# - for target packages, we always use the default python 
+interpreter (which
+package/python-pyrex/python-pyrex.mk:HOST_PYTHON_PYREX_NEEDS_HOST_PYTHON = python2
+package/python-setuptools/python-setuptools.mk:HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON 
+= python2
+package/python-web2py/python-web2py.mk:PYTHON_WEB2PY_DEPENDENCIES = $(if 
+$(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python) \
+package/python3/python3.mk:# python version chosen for the target.
+package/python3/python3.mk:# Only install the python symlink in the host tree if 
+python3 is enabled
+package/python3/python3.mk:     ln -fs python3 $(HOST_DIR)/bin/python
+package/qt5/qt5webengine/qt5webengine.mk:# QtWebengine's build system uses 
+python, but only supports python2. We work
+package/qt5/qt5webengine/qt5webengine.mk:# around this by forcing python2 early 
+in the PATH, via a python->python2
+package/qt5/qt5webengine/qt5webengine.mk:       ln -sf $(HOST_DIR)/bin/python2 
+$(@D)/host-bin/python
+package/rust/rust.mk:           echo 'python = 
+"$(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION)"'; \
 
-> I think this would be a good example by having two different boards with different pm_cfg_obj.c files, so developers know they will need to modify this file for their custom hardware.
 
-Exactly!
+The ones in gst1-devtools.mk and omniorb.mk look important, the rest is just 
+cleanup. qt5webengine is also a bit worrisome...
 
-PS: please wrap lines at 72 characters! :-)
+Also, some cleanups that I think are needed:
+- get rid of HOST_PYTHON_FOO_NEEDS_HOST_PYTHON
+- symlink $(HOST_DIR)/bin/python to python3, and get rid of the workarounds in 
+e.g. nodejs
 
-Thank you!
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
