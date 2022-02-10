@@ -4,49 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76143C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 11:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06C27C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 13:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE8C28291D;
-	Thu, 10 Feb 2022 11:06:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7863F8291D;
+	Thu, 10 Feb 2022 13:47:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uOMmJZEhVkmI; Thu, 10 Feb 2022 11:06:13 +0000 (UTC)
+	with ESMTP id o5Wbsppw_Nju; Thu, 10 Feb 2022 13:47:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 311EA82907;
-	Thu, 10 Feb 2022 11:06:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2282C1BF25F
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 11:06:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C67B782907;
+	Thu, 10 Feb 2022 13:47:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 023BF1BF356
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 13:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 084F940606
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 11:06:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E445260B68
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 13:47:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=heine.tech
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YuBaE5TIxbXu for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 11:06:07 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kjk6bkZIeWIj for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 13:47:48 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76092400BA
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 11:06:07 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 22C6D1814B9; Thu, 10 Feb 2022 12:06:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
- t=1644491162; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=1cxWR6VqP4VgyBLCIem5sYtejnVRCSGpuBRT4pDtTlQ=;
- b=kFOv7/+kckVSmIcNs6B8HQvx9ZPd1D682IYQDd7yYOGclWXevYGCK9fa3bbr6GGPt9N6/x
- jD8dHvzr3skzaFGrq7pMXpJMvyY9IrS8ozWrguPLLKXseU7E3vZmD+Zz3Q+0db4aXe0Z1o
- 2T+9cvAm1elNSh1O1ewmZfCSusHyBJM=
-To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 12:05:38 +0100
-Message-Id: <20220210110546.345600-1-buildroot@heine.tech>
+Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B81860AA4
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 13:47:48 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id I9nWnT5uYNVvLI9nWnK64A; Thu, 10 Feb 2022 14:47:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644500866; bh=IyuImVNrd7hkE12yY2WgcqeMbbhLXsBn0feh0tZvDSU=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=BcYgdBMLEW7v+EZTvlHJAj8ND5m59gnrjpSZ52xgfMp47dORiFFjk18N+BScjNWSh
+ il/d/+WAoK1uDGf3KnhGgm7OinXZbZGcXAgNcHttGy0lla3RpTOTnSdOJUnNg88gXE
+ iZPAix7CuhQ0wIIaM/kxX+141UVQXfNTb2GS0zqkOTylq7ZvbiofYQ/hAlRDe37E//
+ dD1r5fCjSjhHY3mNJGRsI06gKIt3dI/xyAoToytXl4Dciaq+sQUzIabps0ZFAqxuyj
+ 0CtDpyR04LXFmIu2U7B2C64CdFBq5t/3JyxVfiT+LR1P5lxjt5JdPBEBtRN22AHi3a
+ A/fiG8Lc7QuSQ==
+Message-ID: <eec4fc17-e588-64a7-f700-ebcc3eae5f0c@benettiengineering.com>
+Date: Thu, 10 Feb 2022 14:47:46 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/re2: bump version to 2022-02-01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Neal Frager <nealf@xilinx.com>
+References: <20220209180306.2629180-1-neal.frager@xilinx.com>
+ <C2A6170C-3951-42C0-A6B0-FEFD74238480@benettiengineering.com>
+ <SJ0PR02MB7758493F336639F00D599770D72F9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <SJ0PR02MB7758493F336639F00D599770D72F9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+X-CMAE-Envelope: MS4wfADm9Bo8uDg+QhKbddGxPpn7i1XZ+Qk5SGU+Ztm5AuALIDDlarNfabs1mOu7xsIS7wiI8pxtQ0RURIIip2LJmxbzmLzei5q9d5Hfe4dH+ol2eCuAw+dk
+ aUj0XmGuMtDe2hXiyHAEBkFsCy4HZgUyFwwbC4aN/q8BTOPlGA0UiWYn8Zs7tRJ8j/9P1bmC70ZmZwwx1AKmnsDLq1GvnQhrdxdRh0pDxvHt5kTS6yLLFFJj
+ 6mHubh/EwSSCF5nog1KNWkXGbimB5WuDaKtfIQjD+t4taikiPOJrt9jzgnQcXP2i
+Subject: Re: [Buildroot] [PATCH v3 1/2] configs/zynqmp_zcu106: bump
+ ATF/U-Boot/Linux to Xilinx 2022
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +73,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
+ Michal Simek <michals@xilinx.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/re2/re2.hash | 2 +-
- package/re2/re2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Neal,
 
-diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-index a0a7d15938..7cfece5d5e 100644
---- a/package/re2/re2.hash
-+++ b/package/re2/re2.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  8c45f7fba029ab41f2a7e6545058d9eec94eef97ce70df58e92d85cfc08b4669  re2-2021-11-01.tar.gz
-+sha256  9c1e6acfd0fed71f40b025a7a1dabaf3ee2ebb74d64ced1f9ee1b0b01d22fd27  re2-2022-02-01.tar.gz
- sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index b562d5d7ef..31252ee82f 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RE2_VERSION = 2021-11-01
-+RE2_VERSION = 2022-02-01
- RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
- RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
+On 10/02/22 09:24, Neal Frager wrote:
+> Hi Giulio,
+> 
+>> As other patch please send V4 and add my
+>> Reviewed-by and Tested-by
+> 
+> I have submitted v4 of the patch set including your feedback.  Please let me know if you find anything else.
+
+I've rebuilt both of them and now they have my tags so they are ready to 
+be committed!
+
+Best regards
 -- 
-2.25.1
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
