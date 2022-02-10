@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDC86C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 06:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50FE1C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 06:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F54F40921;
-	Thu, 10 Feb 2022 06:40:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8CD58299E;
+	Thu, 10 Feb 2022 06:43:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vf0pIZ3i5bnw; Thu, 10 Feb 2022 06:40:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BlaCbVObV-6r; Thu, 10 Feb 2022 06:43:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D081408DD;
-	Thu, 10 Feb 2022 06:40:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 346631BF409
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 06:40:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E617B82983;
+	Thu, 10 Feb 2022 06:43:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 314A01BF409
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 06:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2327B408DD
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 06:40:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17AEC60E6B
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 06:43:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k4Xq9jctJrPI for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 06:40:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5qYH6gW-MhsR for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 06:43:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.post.pl (mx.post.pl [89.161.252.111])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 95F17408DA
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 06:40:37 +0000 (UTC)
-Received: from leo (unknown [89.171.33.130])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mail02.home.net.pl (Postfix) with ESMTPSA id 33E414788D
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 07:23:40 +0100 (CET)
-Date: Thu, 10 Feb 2022 07:23:39 +0100
-From: Arek Marud <a.marud@post.pl>
-To: buildroot@buildroot.org
-Message-ID: <YgSva/uDdORQm9pE@leo>
-References: <YfcMrhsNq6LnkKzP@leo> <20220130234800.14da56ca@windsurf>
- <Yfz+U7rrMCkgrjah@leo>
- <d33c9f1c-2a1c-285e-0acc-cd52db921a34@mind.be>
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BFEAB60E6A
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 06:43:00 +0000 (UTC)
+Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 1E5F728375E;
+ Thu, 10 Feb 2022 07:42:57 +0100 (CET)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <d33c9f1c-2a1c-285e-0acc-cd52db921a34@mind.be>
-X-CLIENT-IP: 89.171.33.130
-X-CLIENT-HOSTNAME: 89.171.33.130
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddriedtgdelfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucenucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehrvghkucforghruhguuceorgdrmhgrrhhuugesphhoshhtrdhplheqnecuggftrfgrthhtvghrnhepieeuffehgfetuddvueeutdfhteevffeuheelffffledufefgkeffhfdtudejveetnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpmhgrkhgvfhhilhgvrdgrmhenucfkphepkeelrddujedurdeffedrudeftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrudejuddrfeefrddufedtpdhhvghloheplhgvohdpmhgrihhlfhhrohhmpeetrhgvkhcuofgrrhhuugcuoegrrdhmrghruhgusehpohhsthdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-DCC--Metrics: mail02.home.net.pl 1024; Body=1 Fuz1=1 Fuz2=1
-Subject: Re: [Buildroot] I have a problem adding new package
+Date: Thu, 10 Feb 2022 06:42:57 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: Peter Korsgaard <peter@korsgaard.com>, "Yann E. MORIN"
+ <yann.morin.1998@free.fr>
+In-Reply-To: <mailman.6747.1644442447.66748.buildroot@buildroot.org>
+References: <mailman.6747.1644442447.66748.buildroot@buildroot.org>
+Message-ID: <2378b58c9e724d2bb27ec019e165798e@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: Re: [Buildroot] [PATCH 000/107] Drop python 2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,87 +57,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Yann,
+Hi Peter,
 
-Hi Arnout, 
+On 2022-02-09 21:34, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Peter ,All,
+> 
+> On 2022-02-09 17:50 +0100, Peter Korsgaard spake thusly:
+>> Python 2.7 is EOL since April 2020 and almost all packages support
+>> python 3, so drop it before the 2022.02 release.
+>> 
+>> It is a big series, but the changes are mainly mechanical in nature.
+>> 
+>> There is still some cleanup to do, E.G. the python2 support in
+>> pkg-python and the host python-setuptools package - But this is IMHO
+>> the minimum changes before -rc1.
 
->  Hi Arek,
-> 
->  Please don't top-post, but reply inline like I do below.
-> 
-> On 04/02/2022 11:22, Arek Marud wrote:
-> > Helo Thomas,
-> > 
-> > Thank you for your answer.
-> > I had a problem with libonvif compilation. Compiler complaing about
-> > unsafe include path (details pasted below).
-> > 
-> > I was able to compile project ONLY when --includedir parameter was set,
-> > without it - compiler complains about include path.
-> > 
-> > https://gist.github.com/arekmd/11e9621ae3fc476cf37e80150d15b177
-> > 
-> > I pasted build log without LIBONVIF_CONF_OPTS line.
-> > 
-> > 
-> > myname buildroot$> make libonvif-build
-> > WARNING: no hash file for v1.1.1.tar.gz
-> > > > > libonvif 1.1.1 Extracting
-> [snip]
-> > make[3]: Entering directory '/home/myname/workbench/resources/development/myproj/bu
-> > ildroot/buildroot/output/build/libonvif-1.1.1/build'
-> > /bin/sh ../libtool  --tag=CC   --mode=compile /home/myname/workbench/resources/dev
-> > elopment/myproj/buildroot/buildroot/output/host/bin/aarch64-myproj-linux-gnu-gcc -
-> > DHAVE_CONFIG_H -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFS
-> > ET_BITS=64 -I/usr/include -I/usr/include/libxml2 -I../source -D_LARGEFILE_SOURCE
->                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 
->  This is what is wrong.
-> 
->  It is caused by the following lines in build/Makefile.am [1]
-> 
-> AM_CFLAGS = -I$(INCLUDE) -I$(INCLUDE)/libxml2 -I../source
+There seem to be some more references to python(2) in packages; this 
+build failure is from package/crda:
+
+# make clean && make
+   ...
+make[1]: *** No rule to make target 'host-python', needed by 
+'/home/data/buildroot.x86_64/build/host-python-pycryptodomex-3.13.0/.stamp_configured'. 
+  Stop.
+make: *** [Makefile:23: _all] Error 2
+
+$ grep python-pycryptodomex */*.mk
+crda/crda.mk:CRDA_DEPENDENCIES = host-pkgconf host-python-pycryptodomex 
+libnl libgcrypt
+python3-pycryptodomex/python3-pycryptodomex.mk:# Please keep in sync 
+with package/python-pycryptodomex/python-pycryptodomex.mk
+python3-pycryptodomex/python3-pycryptodomex.mk:HOST_PYTHON3_PYCRYPTODOMEX_DL_SUBDIR 
+= python-pycryptodomex
+python-pycryptodomex/python-pycryptodomex.mk:# python-pycryptodomex
+
+Kind regards,
+Andreas
+
+>> Peter Korsgaard (107):
 > ...
-> INCLUDE = @includedir@
-> LIB = @libdir@
+>>   package/python: drop target package
+> ...
+>>   package/python: drop host package
+> ...
+>>   docs/manual: drop python2 references
 > 
-> That is just simply wrong.
+> All 107 patches applied, thanks!
 > 
->  The proper fix is to patch the project and
+> I'll reply further to two of them, with ultra-minor nits.
 > 
-> - Remove the -I stuff from AM_CFLAGS, instead just set AM_CFLAGS = -I../source
-> - Remove the INCLUDE and LIB assignments
-> - Do proper discovery of libxml2 in configure.ac
-> - Add the libxml2 include and lib directories to CFLAGS and LIBS either in
-> configure.ac or in build/Makefile.am
+> Pfew, 21st century, here we come at last! ;-)
 > 
-> 
->  But it seems that this project is pretty dead, so the easier approach is to
-> just add
-> 
-> LIBONVIF_MAKE_OPTS = \
-> 	INCLUDE=$(STAGING_DIR)/usr/include \
-> 	LIBS=$(STAGING_DIR)/usr/lib
-
-That worked. Library successfully compile and install.
-
-> 
->  Regards,
->  Arnout
-> 
-> [1] https://github.com/sr99622/libonvif/blob/76961fb9f3ece462724a4a6c09b4bd7cc051b759/build/Makefile.am#L7
-> 
-
-Thank your for your help.
-
--- 
-Best regards,
-Arek 
-
+> Regards,
+> Yann E. MORIN.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
