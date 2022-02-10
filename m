@@ -1,78 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF69C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 19:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7479C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 19:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7CF040546;
-	Thu, 10 Feb 2022 19:30:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AA0060BD7;
+	Thu, 10 Feb 2022 19:30:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0FeQ1srivb5r; Thu, 10 Feb 2022 19:30:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nsGrFio63Z_V; Thu, 10 Feb 2022 19:30:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C08D8402BC;
-	Thu, 10 Feb 2022 19:30:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E9F41BF3BB
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8F4C60BCD;
+	Thu, 10 Feb 2022 19:30:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E7ED1C1135
  for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C92E40156
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E12F81B25
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 36DlPoMYUqGy for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 19:29:18 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UgDkr4QgO6CQ for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 19:29:16 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 747D7401F2
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 19:29:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 52681818C0
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 19:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1644521348;
- bh=1bdUtbAxXnLIotVtpz2S9s1EY0LPjshvK2CdfiNHzWw=;
+ s=badeba3b8450; t=1644521346;
+ bh=3uB2T78QfaPfFe//JaRu/FREy5CUjG8HrkDjh4d0mKQ=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Dw2Hs8v+QD4xNoN0dK5pQsSDjx4hWg/6XcQ3hhq22HJmQfMqCyblyTkcyEkV2HfrH
- XNDfAuC1MDpDQklUT4g80Zj9xg2IrrxzXr8MWY7fnbgxv5t2PlM6vxAYawQRZCl6bx
- WDsCSI5HQq2QIXckv4/Tu8ozXlF4T3mYDJXJDLbk=
+ b=Nn9zbL5duths3JALDULs/zIPWrs5lukqCXjh6FYp7CnjS7UaMpc1vpzj8ZKDzopzi
+ EmSmh8v5E6z/EFDLB6CGxchajrduSFDNLeSoK+FBaI+MFwRXf5ok/7oHJYLjOPTgnd
+ 4rJeWeQyyDDT3ZQyKINGSBo3nd1XcSokQ0iRutFY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.34]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiacH-1nvA7I3fbL-00fmYA; Thu, 10
- Feb 2022 20:29:07 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfHEP-1nyTVJ2UoN-00gtXe; Thu, 10
+ Feb 2022 20:29:06 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 20:29:01 +0100
-Message-Id: <20220210192905.4500-10-ps.report@gmx.net>
+Date: Thu, 10 Feb 2022 20:28:55 +0100
+Message-Id: <20220210192905.4500-4-ps.report@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220210192905.4500-1-ps.report@gmx.net>
 References: <20220210192905.4500-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:AynQ01UFMP06YfcNAGb9zzUR4DNvY7w2Ile09XeUQ38hMtFqMXI
- 5ZHkCzVjLZi1Ewco1VTm/ud5bwc0DQ6Z6Jh4c2j13f3M2DJimjZe3CKYjVU6zw7Ot6tUbPo
- 8K/Y08xDQy6QsgfefttGR2dOxLdTn/YleaIevoRkF25ksV+1vp+zLZWiNGuLGyvn9sC4zFt
- uMvATKY1U1ii7i6KY1kow==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AmUjmNnZP74=:vJBWR5uYtoMQAobB9KHhIA
- 09fPuLTWolX23XdbP03DgJHSF/Hmdf+bYDf5OuZkvqV8ylJIc+ntOhFrJaTb/E9Zm+ir68FYA
- VqsDYLeC9HlCG0A9xsrd6nSB29RQcvvsu3D45soDrLtinUB2DjBNFAqHm3ICgd3C+IjMNu+kQ
- aOoZ1YT/s+AdCAihcDM6ZGISz5kYM4UZpCY96a+k9cH18aN9R1xpMXkK0wp+1bgGkLxoCxiGh
- QstfMpQc2qMJmWuuXjtPmla1SeDZvYYG2RKsLhzh/dLVU8hxiIQfmtKDsYRMnEIMEhsNMrAEl
- vHtl7DYUB0Bu+LrGH2KAUtkwixAbpZK2yr3wuPNvJmHCDtBcsqU7TDVmyPRMs5YnUlAw7lUec
- hXf+fWZancphvdpV/j70Uzs6yGwf9qooc/d6lNdyGQql4SBA0CAueFLPQ8YfBn0qkpRunc2BA
- ATpltc5oeP9BJC+yKSqRUqZr6erbCvGROO+wMTxvBZincH/v36dFOqhYx1Iht3z8FtL0RhGwu
- bPxcNcABwruPsYn6Vg0sNlC/qrZl00EfwP/kREgf54x3KJWV2b1DE9xdBQODPMbktB1tA0eZb
- zuSpbsH2H4trHdgRckiVej6J+KYg6Jo7Yo3my5bGRfIb0UUBvnIHX4UlrIDwOtSWUaFafv1zo
- 3+1EcP3wQ+va9YbSYmCMA7i25sQOefzDH0c0MvqIr6FvycELN5dgLxh0IlcvrSW0WzHsAQEDP
- iQ1NNXu23iobo6HsR0DwjVzl7iJinUPcqh/zH/q4+gb2u63bulyGpTQEctT6uoEP43zvTrgmS
- rC2Jz7rpffZKVPsInwGM0VD1YiLu4YOlFuhefjiDWSXvDx4g9GsHtq5qwLHgF8U9/fOvSXOkD
- fpJuPKTnS7C49mhikI+nUwKYBGQzAMoxCGC53lBd9vojbKdrMFDu+EV4G+rN96XpGNuIITVId
- QWfAc7drg4s4Wmf04C8U0AvVSFNtzh9oLv3GbD8u/5PGiD7tuexHCbMbwiF8ctO01F9EMMDar
- xw47s28GTCjBPthH0OY8MmPMb0uyD5nyyW54bug43UGhP5oXOPAWbgAqkq/RYHpc4koGOORii
- DiYkxSUQso//JA=
-Subject: [Buildroot] [PATCH v2 09/13] package/gst1-rtsp-server: bump version
- to 1.20.0
+X-Provags-ID: V03:K1:vswkOkn0BB45bH0u/z21qEBKtV1dht7Rm7/wIHYB4nVbmoZEAkG
+ S4PcsTpO0uzMP8WIzBJOg2vUg/0/0onxU5DVceFQyKhj1LegT6aRHoAOCH5JYhLu9tF0NHI
+ gxsjXcuikskzmBK0bKqgGRzyhiBtdam9he8qY7EjFQWJ/3tw9w8284nZTlPxBwrGO6w4TpF
+ Ks0caD3oL1zCr9skE47fg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6K+AnoXGVGo=:iWk/Nf3M0EA5U8oDFRB1sk
+ Cdp++O4zhSkr3aqL4c0ncWYzU3M9m4Sh3Ht0SRvKIAe/W/j49KXDLeO57He8b6t/HSKLjk533
+ i+O+oFTsrsDmfgEgTw53TJBpRQVRpaGV6BmOgP/yV5anA5cZcuJaSVDhOCR2512p1vlWettVd
+ y4mbGuJi1jv+yX6prZ7h/Dt96RLb5NM25f66Wx5J1iWlD+LdUb4Zp53AwaAfQsDLAaf2CPseO
+ Kez9pzTNhTXfd77BsNj/367N2CvUwxCB7Z21wUkUgABcvTFvJ/c8T/pF8ZcdbclvgYxTB6U8j
+ DCoiKKYKLUT7A0cPR2uHQ601aXvOeE2lc/wj65ceWp73/rXn8cJieTR7dJhoxoafKPGQAWxfE
+ KwLUxmQFyKOnGakJRIuXOlVGRmtxn1VUWgpKSg9WjwEvQMxmTiR2YFeuj0oY77t+v/GOf1xei
+ X9zR/zDizNrIVLYjsJEnu6mhhp67LoGHuwKYbyXMIwcUbjHU3LB4/OjCvNTrJaylCtbdxl/bh
+ lIdz3hIEFPBz8bvhHJA1qnzfMFnxH5sdJZLkxPvJ+yObPEFzkGP5rcEWj9PjZmy257Lk8AduN
+ fo4mCx04h2h4840ZazuLOetNhtplYgrlsNKOJM2zNk9xd4xveT/d7slNUPv0lLieOrZlykKzY
+ jaDJpuDGRHfKv3q8aQ1UONHCQLloLK8hHcsaI95lpHds+jBt7leeS0Q58DbqTQyhwOYQ7JQMI
+ o5bPsJL4RUIStSebzI2UZvkoqzo8ObcX12x0NDRXuNkkOfEhSi/O7VjgLLyeah4in8uj2gDSl
+ 7QWcwmHZvIaFpaUv1Xdgz8BJnNIriDDahgyvUWm0KOpjCvbsj51/3KC8SuJAQXO7D0jaqYdwA
+ mVkUXvO18FA6Gh/MjgCxNsxOdqVcU6PNo+zg1nQRhFS7hcsiIzCBEJQfHsQpFmrzfWF2fXUBb
+ zTH6LioHyrf3z4AHeC/eI4Q4+BAGADecY1iVmSsRJ0yvI+yZxrqfWpetPU1GBQPrWPYsxpR4D
+ b+QuWPPZq6McD3q1f/a2Jm1TNZW6ywUZ8CQbezn+f7sBebkmEy6OVBDRA7ic33rnaqoRwSxs/
+ LktENntb7S/JBA=
+Subject: [Buildroot] [PATCH v2 03/13] package/gst1-plugins-good: bump
+ version to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,100 +92,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- removed 0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-  (upstream accepted [1])
-
-- update COPYING/COPYING.LIB hash (license text update from LGPL-2.0+ to
-  LGPL-2.1+, see [2]) and adjust GST1_RTSP_SERVER_LICENSE accordingly
-
-[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/e637aae629f5b95b748a6f23abecc2b502272822.patch
-[2] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/cc5cdab0165e3bdf5f4f748b3ba2a3493d304e70.patch
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-rtsp-server-meson.build-add-gst_dep.patch | 41 -------------------
- .../gst1-rtsp-server/gst1-rtsp-server.hash    |  8 ++--
- .../gst1-rtsp-server/gst1-rtsp-server.mk      |  4 +-
- 3 files changed, 6 insertions(+), 47 deletions(-)
- delete mode 100644 package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-deleted file mode 100644
-index b63f634598..0000000000
---- a/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From b6bc8fbb72d6d3914c616dc64d15b961493cb9c2 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 20 Dec 2021 10:09:36 +0100
--Subject: [PATCH] gst/rtsp-server/meson.build: add gst_dep
--
--Add gst_dep to gst_rtsp_server_deps, in the context of buildroot, this
--will avoid the following build failure, because the correct girdir
--location will be retrieved from gstreamer-1.0.pc:
--
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
--Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
--error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
--If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
--Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
--
--Fixes:
-- - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/merge_requests/217]
-----
-- gst/rtsp-server/meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gst/rtsp-server/meson.build b/gst/rtsp-server/meson.build
--index 24d7c39..874da14 100644
----- a/gst/rtsp-server/meson.build
--+++ b/gst/rtsp-server/meson.build
--@@ -55,7 +55,7 @@ rtsp_server_headers = [
-- 
-- install_headers(rtsp_server_headers, subdir : 'gstreamer-1.0/gst/rtsp-server')
-- 
---gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep]
--+gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep, gst_dep]
-- gst_rtsp_server = library('gstrtspserver-@0@'.format(api_version),
--   rtsp_server_sources,
--   include_directories : rtspserver_incs,
---- 
--2.33.0
--
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index fadef41351..00ff974c6e 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.18.6.tar.xz.sha256sum
--sha256  826f32afbcf94b823541efcac4a0dacdb62f6145ef58f363095749f440262be9  gst-rtsp-server-1.18.6.tar.xz
--sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
--sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING.LIB
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.20.0.tar.xz.sha256sum
-+sha256  c209f5ed906da713fdd44a8844e909aa6c8af3dfb630259b092cfb77a7755843  gst-rtsp-server-1.20.0.tar.xz
-+sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-+sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 55403754f3..d22dd5e7cc 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index e342bd133e..9ad1d7bf46 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.18.6.tar.xz.sha256sum
+-sha256  26723ac01fcb360ade1f41d168c7c322d8af4ceb7e55c8c12ed2690d06a76eed  gst-plugins-good-1.18.6.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.20.0.tar.xz.sha256sum
++sha256  2d119c15ab8c9e79f8cd3c6bf582ff7a050b28ccae52ab4865e1a1464991659c  gst-plugins-good-1.20.0.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index e0ca29c5fd..6298d578ed 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_RTSP_SERVER_VERSION = 1.18.6
-+GST1_RTSP_SERVER_VERSION = 1.20.0
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
--GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
-+GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
- GST1_RTSP_SERVER_LICENSE_FILES = COPYING COPYING.LIB
- GST1_RTSP_SERVER_CPE_ID_VENDOR = gstreamer_project
- GST1_RTSP_SERVER_CPE_ID_PRODUCT = gst-rtsp-server
+-GST1_PLUGINS_GOOD_VERSION = 1.18.6
++GST1_PLUGINS_GOOD_VERSION = 1.20.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
