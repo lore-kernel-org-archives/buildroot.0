@@ -1,67 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B421DC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 16:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF73C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 16:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4181B402B1;
-	Thu, 10 Feb 2022 16:44:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4B9881B9D;
+	Thu, 10 Feb 2022 16:54:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QkXJMjp23V50; Thu, 10 Feb 2022 16:44:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yE0eHufw-I71; Thu, 10 Feb 2022 16:54:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1513540184;
-	Thu, 10 Feb 2022 16:44:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2570E81A73;
+	Thu, 10 Feb 2022 16:54:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4CEA11BF20B
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 16:44:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 137701BF20B
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 16:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3934040184
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 16:44:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01C2A40184
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 16:54:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Du58Iw-1qk3 for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 16:44:54 +0000 (UTC)
+ with ESMTP id YajZJpvkTCRx for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 16:54:27 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66F1340132
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 16:44:54 +0000 (UTC)
+Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2CBD40132
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 16:54:26 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id ICYunWGVLNVvLICYunM7cK; Thu, 10 Feb 2022 17:44:52 +0100
+ id ICi9nWQQyNVvLICi9nMEri; Thu, 10 Feb 2022 17:54:25 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644511492; bh=M5Ak16jMDhgKgNhvrGKSpFy5poudZ+p74eayAM1dVjc=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=cyzpv1XCv/QU/clIyqB/GV9alaA4c+kjCG8pZDGlan9MioctDGo8yCQxGI+PFzgJq
- iobwRBhGFfoMUTtlaz0D6sB7NQPKVlJHeYkIyQQbZ3Lv6mI2ccvvtc+W5XiHYSuqBN
- OmY5v6aDOLpIJNJBXJ65Sgp8eG/mqG6m7YLSElHQR/bTWDO+XAoKzlNShHjJLY77wF
- LTibjRcVYCQ6Zrs8EqbD0wUWBoGEIDIjtIvatBcklq8PnGIW9VKifL1CT8+zxk31Fd
- XrXQkXahUUA9jTQiMeTSv4dQsT//1/sPR/RDden2YyM/m+JCJ63CAleZemr6lWxzEs
- EuuZK7f+Chctw==
-Message-ID: <05091af5-9095-1b40-29c5-b2480b859ae2@benettiengineering.com>
-Date: Thu, 10 Feb 2022 17:44:52 +0100
+ t=1644512065; bh=4cIoLqobpkkhC+VKCmmfbW4V2dhivXYMbvQz6oFbLns=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=YOtxH1KAom6EMG/AG/HZH9DlNUJkYvrTmVslKhtlCoKtd4JR/ll/A4zaMxC8CinYA
+ xzVj6m1Hx0xzgKpbMD3meZI/XN1cJ3rxHj3N3yOLSyyJLwDNqI+8hMTRNQIRibx5zA
+ Biw4uqC8/H/jaOwhib07M0du6KdnVSzCw9lc1nieztdFsPsXuwYX2+R1Hvfn6mgCry
+ DDVl4qFuobAiUHonb1a4b6OWaassHSqEei6YzmmZRxgegZ3NFN5ZdVJs1yktXJPcI6
+ O73Ayb8XxPMsq2t8VwF0zv3R6OGxaa6x34zzskxBast+w21VuyuErBkulp2mEhq/19
+ mz5BfKPq+VPPg==
+Message-ID: <099dd7ff-c841-f7b5-88b7-f036ebc02a66@benettiengineering.com>
+Date: Thu, 10 Feb 2022 17:54:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
+To: Neal Frager <nealf@xilinx.com>
+References: <20220208071559.2862411-1-neal.frager@xilinx.com>
+ <SJ0PR02MB7758927E29E93F773AD4C9F8D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <69efa9da-ae55-6795-8724-ed7105083924@benettiengineering.com>
+ <SJ0PR02MB7758317CF3A3B2D662099BC3D72D9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <32cc1c12-1496-7db9-5e32-1b99404a4fe3@benettiengineering.com>
+ <690d8e1b-fb6d-7c36-b07f-4ed9ca61b768@lucaceresoli.net>
+ <PH0PR02MB77502EC0E2E1A577AEF5201DD72D9@PH0PR02MB7750.namprd02.prod.outlook.com>
+ <489a02df-4f2b-a46c-aa49-15c3c545f8f2@lucaceresoli.net>
+ <SJ0PR02MB77583C51A75C70EDA6E1AC29D72F9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <acd2a42d-dff6-45f1-607c-1fb74294d1f1@benettiengineering.com>
+ <1EC54279-220E-4043-AFBA-953D2CF5E54A@xilinx.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Oleksandr G Zhadan <oleks@arcturusnetworks.com>,
- buildroot <buildroot@buildroot.org>
-References: <4b667326-5aca-538b-9b36-7f0d5a400e9f@arcturusnetworks.com>
- <f7c3a3ba-721b-c02b-a0e0-d07538117fba@benettiengineering.com>
- <fb40e506-9418-3389-8bb7-dbcd0ca1a3dd@arcturusnetworks.com>
- <2920974c-149f-ea4c-9b79-9a1b862fce95@benettiengineering.com>
-In-Reply-To: <2920974c-149f-ea4c-9b79-9a1b862fce95@benettiengineering.com>
-X-CMAE-Envelope: MS4wfM2skQ37jJv+OWx/1sRHyH9go9GBSGCEo7Es6duT8UqwFAFaD7sfDM8JDzNbAoHUrUMqQEgXfXmVg2aT6lxXG32I6Y+IJvP2aKr1XUWYTdv38Jp5BAPZ
- d3mirA2Ojmyk2dhbyOGr67dcVjcDMY3EICK4DT4ubZQbLau95g2xQ2iXFFBINREvBYNpyc4GXxDopz6KL6+Qf/F+OAm3uKW5LxU//DrFTQLL2YUzqYf1FbqA
- G0V18wPDjtMRReDGsNYuPh6Z+Y+Ue65AW5a45hogpxEIwgQR9Tx33gM9prA3LRe7
-Subject: Re: [Buildroot] [PATCH 1/1] board/arcturus/aarch64-ucls1012a: bump
- u-boot and kernel version
+In-Reply-To: <1EC54279-220E-4043-AFBA-953D2CF5E54A@xilinx.com>
+X-CMAE-Envelope: MS4wfGZ9duBSPIf0NywMxN7UAUFhrZYh8mIgFUGybZfvWNihJp8gN17eYZq1EVwe5qKlIG3vl2E3sZXAtWeV/RddYodINT595UOOEo88t5BMmc/ypGQOq6H3
+ GbcaACo5V7foeSCyB4B7FEaOW33I1bm9v5eshSql1H3W1gw8HnRzCISwCVRKEE6Uf/bZuIE5kP1cCj3xbTv4nYlQmwJSZ9LJZeor5n0zJyuvRmhOK4mP31wB
+ Qb7s03TW4czhwVhiQN0+iJnodfrKK8yNa1j8eB4jzuQlin5c3dc1Z1pwCp6Db+fy
+Subject: Re: [Buildroot] [PATCH 1/2] configs/zynqmp_zcu106: Bump
+ ATF/U-Boot/Linux to Xilinx 2022
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,63 +81,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Durrant <mdurrant@arcturusnetworks.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>, Michal Simek <michals@xilinx.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Oleksandr,
+Hi Neal,
 
-On 08/02/22 19:25, Giulio Benetti wrote:
-> Hi Oleksandr,
+On 10/02/22 17:44, Neal Frager wrote:
+> Hi Giulio, Luca,
 > 
-> On 08/02/22 18:31, Oleksandr G Zhadan wrote:
->> Hi Giulio,
 >>
->> Thanks for the quick response and your notes.
->>
->> New V2 patch file attached. The patches are based on today's `git clone
->> https://git.buildroot.net/buildroot`.
+>> Neal, can you reply about this ^^^. At least, are USB1, ETH0/1/2, both
+>> SPIs, NAND, CAN0, VCU present on those 2 boards?
 > 
-> good
-> 
->> Patches created with the options you suggested: `git format-patch -M -s
->> -o . -1`
-> 
-> Ok, but you also need the flag -v2, so this is the command:
-> # git format-patch -M -s -o . -1 -v2
-> 
-> And then you need to add what's changed after the 3 dashes. Check this
-> patch as an example:
-> https://lists.buildroot.org/pipermail/buildroot/2022-February/635926.html
-> 
-> Take care of adding 3 dashes and listing:
-> ---
-> V1->V2:
-> * changed this
-> * changed that
-> ---
-> 
->> Unfortunately I can't send it now with 'git send-email --to "buildroot
->> <buildroot@buildroot.org>" 0001-xxxx.patch`. If it doesn't work for you,
->> we'll send it later.
-> 
-> Yes, we need it sent like that for reviewing.
-> Anyway I've checked that the attached patch now applies correctly, so
-> you're on the right path!
-> 
-> Best regards
+> I confirm that the pm_cfg_obj.c file provided is correct for the ZCU102 and ZCU106 boards.  These boards use USB0 and ETH3 for these respective peripherals.  The peripherals disabled are not connected on either board.
 
-also, please register to patchwork:
-https://patchwork.ozlabs.org/project/buildroot/list/
-and tag your previous patch as superseded:
-https://patchwork.ozlabs.org/project/buildroot/patch/4b667326-5aca-538b-9b36-7f0d5a400e9f@arcturusnetworks.com/
-and also the V2 since you've been requested for Changes, so you can tag 
-as Change Request now and once sent V3 as superseded.
+So I would keep the pm_cfg_obj.c as is, but so why .dts file disable 
+peripherals that are not present?
+
+> To clarify things, I may send another patch with two separate pm_cfg_obj.c files including the board names in the file names.  One thing that is different is that the ZCU106 comes with silicon that supports the VCU whereas the ZCU102 does not.  So I could create a ZCU106 version of this file which enables the VCU.
+
+I would definitely do that, so 2 pm_cfg_obj.c for 2 FPGAs
+
+> I think this would be a good example by having two different boards with different pm_cfg_obj.c files, so developers know they will need to modify this file for their custom hardware.
+
+Exactly!
+
+PS: please wrap lines at 72 characters! :-)
 
 Thank you!
-
 Best regards
 -- 
 Giulio Benetti
