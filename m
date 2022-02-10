@@ -4,43 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30108C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 555CDC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEF5C40647;
-	Thu, 10 Feb 2022 21:39:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D220A40588;
+	Thu, 10 Feb 2022 21:48:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bj6WZN_v56MZ; Thu, 10 Feb 2022 21:39:35 +0000 (UTC)
+	with ESMTP id n5tTjMVYalCv; Thu, 10 Feb 2022 21:48:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3B5740571;
-	Thu, 10 Feb 2022 21:39:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07E091BF2EC
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:38:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB8BD4056A;
+	Thu, 10 Feb 2022 21:48:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ACFBF1BF2EC
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 51794408BF
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:38:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B94B402C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:48:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bcsFXYq5VEKS for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 21:38:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1900C40354
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:38:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E068482DE9; Thu, 10 Feb 2022 21:30:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 66B2r1pHfEw7 for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 21:48:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E1DAA402BC
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:48:44 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 705F9240002;
+ Thu, 10 Feb 2022 21:48:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nIHIv-00013D-Lo; Thu, 10 Feb 2022 22:48:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 22:35:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cde834f4777be4a855755703a291452ed6a5b052
-X-Git-Newrev: 5f703276e0713b746f2c937c4c4fc02ef6ad1d77
-X-Patchwork-Hint: ignore
-Message-Id: <20220210213036.E068482DE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gauche: drop autoreconf
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20220210192905.4500-1-ps.report@gmx.net>
+ <20220210192905.4500-8-ps.report@gmx.net>
+Date: Thu, 10 Feb 2022 22:48:41 +0100
+In-Reply-To: <20220210192905.4500-8-ps.report@gmx.net> (Peter Seiderer's
+ message of "Thu, 10 Feb 2022 20:28:59 +0100")
+Message-ID: <87y22itmti.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 07/13] package/gst1-libav: bump version
+ to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,37 +61,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f703276e0713b746f2c937c4c4fc02ef6ad1d77
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Commit 11cb72be570409be77d4bb49c17b4a2feef31be7 forgot to drop
-autoreconf
+ > - update COPYING hash (license text update from LGPL-2.0+ to LGPL-2.1+,
+ >   see [1]) and adjust GST1_LIBAV_LICENSE accordingly
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gauche/gauche.mk | 2 --
- 1 file changed, 2 deletions(-)
+ > [1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/d157b23fb0ce175b167611a4cb019599d9017042.patch
 
-diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-index 2520379369..fe0a613a9d 100644
---- a/package/gauche/gauche.mk
-+++ b/package/gauche/gauche.mk
-@@ -10,8 +10,6 @@ GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
- GAUCHE_LICENSE = BSD-3-Clause, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
- GAUCHE_LICENSE_FILES = COPYING
- GAUCHE_DEPENDENCIES = host-gauche
--# We're patching configure.ac
--GAUCHE_AUTORECONF = YES
- 
- HOST_GAUCHE_CONF_OPTS = --without-zlib
- GAUCHE_CONF_OPTS = --without-libatomic-ops
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
