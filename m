@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 488ACC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4494BC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F370580B79;
-	Thu, 10 Feb 2022 21:52:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 002E160E9C;
+	Thu, 10 Feb 2022 21:53:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H6bH5-6Cdvps; Thu, 10 Feb 2022 21:52:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iyQeY3dFG1pf; Thu, 10 Feb 2022 21:53:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AF2C82F80;
-	Thu, 10 Feb 2022 21:52:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5163F1C1162
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:51:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B6F160EAA;
+	Thu, 10 Feb 2022 21:53:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 139741BF2EC
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F61940354
+ by smtp4.osuosl.org (Postfix) with ESMTP id 39158404F7
  for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:51:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4_RAtti2b15E for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4E5gvKxPYTbS for <buildroot@lists.busybox.net>;
  Thu, 10 Feb 2022 21:51:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55AD040122
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8501940890
  for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:51:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 148C3828EF; Thu, 10 Feb 2022 21:44:20 +0000 (UTC)
+ id 4545C826C1; Thu, 10 Feb 2022 21:44:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 22:46:44 +0100
+Date: Thu, 10 Feb 2022 22:47:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b286cd169c57eb456ff8c540cafe8b314768aa72
-X-Git-Newrev: 1509fbe0689f37d002ec91a02068a942085b978b
+X-Git-Oldrev: 19278dc72f887377980d3f704fecf1858766fbb5
+X-Git-Newrev: 68f93d3a8a6400190e6dc6bba691317062bf18b7
 X-Patchwork-Hint: ignore
-Message-Id: <20220210214420.148C3828EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-libav: bump version to 1.20.0
+Message-Id: <20220210214420.4545C826C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-python: bump version to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +58,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1509fbe0689f37d002ec91a02068a942085b978b
+commit: https://git.buildroot.net/buildroot/commit/?id=68f93d3a8a6400190e6dc6bba691317062bf18b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- update COPYING hash (license text update from LGPL-2.0+ to LGPL-2.1+,
-  see [1]) and adjust GST1_LIBAV_LICENSE accordingly
-
-[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/d157b23fb0ce175b167611a4cb019599d9017042.patch
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 6 +++---
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 5fb39a0b3e..3204de3c14 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index a760e53e7d..a2f17583fd 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.18.6.tar.xz.sha256sum
--sha256  e4e50dcd5a29441ae34de60d2221057e8064ed824bb6ca4dc0fd9ee88fbe9b81  gst-libav-1.18.6.tar.xz
--sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.20.0.tar.xz.sha256sum
-+sha256  5eee5ed8d5082a31b500448e41535c722ee30cd5f8224f32982bbaba2eedef17  gst-libav-1.20.0.tar.xz
-+sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 55c6e06e0e..f07e5061b4 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,10 +4,10 @@
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.18.6.tar.xz.sha256sum
+-sha256  bdc0ea22fbd7335ad9decc151561aacc53c51206a9735b81eac700ce5b0bbd4a  gst-python-1.18.6.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.20.0.tar.xz.sha256sum
++sha256  8f67bdc5606ba33606c6bc896e89de7dcd8cf4fca459f71389b1b6fe075b5e54  gst-python-1.20.0.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index 7faab752cd..a9cc32d1d7 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.18.6
-+GST1_LIBAV_VERSION = 1.20.0
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
--GST1_LIBAV_LICENSE = LGPL-2.0+
-+GST1_LIBAV_LICENSE = LGPL-2.1+
- GST1_LIBAV_LICENSE_FILES = COPYING
- GST1_LIBAV_DEPENDENCIES =  host-pkgconf ffmpeg gstreamer1 gst1-plugins-base
- GST1_LIBAV_CONF_OPTS = -Ddoc=disabled
+-GST1_PYTHON_VERSION = 1.18.6
++GST1_PYTHON_VERSION = 1.20.0
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
