@@ -4,58 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B910C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 05:44:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 077BBC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 06:11:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF09D40917;
-	Thu, 10 Feb 2022 05:44:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AB6040921;
+	Thu, 10 Feb 2022 06:11:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id szh51AR0pqNw; Thu, 10 Feb 2022 05:44:24 +0000 (UTC)
+	with ESMTP id d1bCxcGzE8Xt; Thu, 10 Feb 2022 06:11:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2E0440911;
-	Thu, 10 Feb 2022 05:44:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F10E61BF40F
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 05:44:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D908408C8;
+	Thu, 10 Feb 2022 06:11:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 812731BF409
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 06:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB9184053B
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 05:44:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CE9160B1E
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 06:11:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L0wOcbaqkkeZ for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 05:44:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9AAAD4012D
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 05:44:19 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.4])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx.tkos.co.il (Postfix) with ESMTPS id 0738C440636;
- Thu, 10 Feb 2022 07:43:50 +0200 (IST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1644471830;
- bh=im6fdzX8EBRuVcqCE/eZHoPbt1fg3MCcJWX+peVUgJI=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=VVeKLq6TqmDLga+o/+2tXhg3Kx1MtDCgJApOayfT0+Y/JHMA+8eqHYp3LoWbJIaZA
- 7EbDEdXPOLbHT1oIlB1XWgZkVf8O9svrxlUhNwSKgU1oTWNsLMYOMgWs6cwBRpRBqd
- IeQyfoPnYp9m+tjUcprefk0FmLPcwSRrEhERMSsyGu8c+GNdcWu/7I8jlUqs0NSuE+
- OT48R6iJQJOPI332fQ6gh/8PY7UK0S4LsBD08uYhvrMXM72224LAql3gfbMAdxoL4o
- MpThPl9gNbfsc87UYr7DD/G6qlFNnBbl4TdkhBdmNKDZXOh727dYu9H0CVbsJzq9go
- SfMCU4b4ii+DQ==
-References: <20220209223551.772606-1-james.hilliard1@gmail.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 10 Feb 2022 07:42:19 +0200
-In-reply-to: <20220209223551.772606-1-james.hilliard1@gmail.com>
-Message-ID: <87wni3b7iq.fsf@tarshish>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e_bhcxsbQ67a for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 06:11:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4577860B02
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 06:11:03 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id m185so6036095iof.10
+ for <buildroot@buildroot.org>; Wed, 09 Feb 2022 22:11:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=2uEO3vVpEhinCIGlEF0c0CCk29c66S45agaXucDBgyo=;
+ b=lA88QfBl+ty13kfceihsiz57sWiwJIW7X4Nz17Mr6p/hnlKrN1Q6JyvZptyp/pk0OD
+ v65D6cNnmoQ23uuKPhfoLV0ZOv6mlhtyfugXZyT1bvtYtIdJh70BdfFQ37ZeEP+wcQGK
+ qegHqPr2FkY7yZixF6RB+OESHTxT0N6h1P2xEvbbln9cfdmkM91ivk8veHVf3vz26MT2
+ N7Tz3J2Rz+bddPSfE8Thj9jq3bZNNDpuEAazdjDpxZt95fyzBsozzWzqepUG+HqCAegt
+ 9wgOcIz0HgpCAkE/cFnGdafGYjL7u2UAzcTX86oZq7FNNsasAi+Z5zfIFm4gFgyddH8d
+ R0VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=2uEO3vVpEhinCIGlEF0c0CCk29c66S45agaXucDBgyo=;
+ b=r8Yb8SQqFxuvY3TWSInJgAM1hO/iE3cFxwgCQGZxBsKRAKX17A/cBjQrMsnoQNPmNU
+ Z+wdiT+pwDrSjSjumY/Nl7uXYip6YlvVe/NnQHMlKRWp2mQtK/IHRpxIJLjtlcMyKe6x
+ pg4Pyn9ggIBpaPs07n+KvUNaxJFJof4xw9dhlL+gRLdXZv3pgLSnwzrXYVqmU08I5nOq
+ uZb5kBW8f8BK39UE/01SUL/hn7Q9Fr+ya1Mvb7MTbQTqUCsLaQQHZI25E96lHjd+lYXw
+ er+tAYedfohnG83wBYKeUxUhYB3nPD5yrCjX/Dq28BYP6hnT4MgQOtJnqOMDIO/CHIs5
+ Zewg==
+X-Gm-Message-State: AOAM530s3CLAeneHur7/eOQhu602B9zI9XJvejNSGYMykv7CA1t6ESbI
+ HPqVd+oQflyQFAFYqLZgHOoSPtZakcU=
+X-Google-Smtp-Source: ABdhPJwZgYqMRTfvlQFjdu1KTpuGDWuhNzeB9qfAAM1IHTGvxlPS/7++q7AhGWp+gWjxxXvx5Nnr2g==
+X-Received: by 2002:a05:6602:3155:: with SMTP id
+ m21mr3024076ioy.60.1644473462116; 
+ Wed, 09 Feb 2022 22:11:02 -0800 (PST)
+Received: from james-x399.localdomain (71-218-245-50.hlrn.qwest.net.
+ [71.218.245.50])
+ by smtp.gmail.com with ESMTPSA id l12sm10959389iow.48.2022.02.09.22.11.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 09 Feb 2022 22:11:01 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  9 Feb 2022 23:11:00 -0700
+Message-Id: <20220210061100.810772-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gst1-devtools: drop python2
+Subject: [Buildroot] [PATCH v2 1/1] package/gst1-devtools: drop python2
  build dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -68,51 +87,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
+Looks like this was missed in c4bbd6da50488944debba29e195557e5b345f2b1
 
-On Wed, Feb 09 2022, James Hilliard wrote:
-> Looks like this was missed in c4bbd6da50488944debba29e195557e5b345f2b1
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/gstreamer1/gst1-devtools/gst1-devtools.mk | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-> index 66b509ae2c..390b20de16 100644
-> --- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-> +++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-> @@ -17,11 +17,7 @@ GST1_DEVTOOLS_DEPENDENCIES = \
->  	json-glib \
->  	$(if $(BR2_PACKAGE_CAIRO),cairo)
->  
-> -ifeq ($(BR2_PACKAGE_PYTHON3),y)
->  GST1_DEVTOOLS_DEPENDENCIES += host-python3 python3
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - move python3 deps to unconditional deps list
+---
+ package/gstreamer1/gst1-devtools/gst1-devtools.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Maybe better add this to the list of unconditional dependencies above?
-
-baruch
-
-> -else
-> -GST1_DEVTOOLS_DEPENDENCIES += host-python python
-> -endif
->  
->  ifeq ($(BR2_PACKAGE_GST1_RTSP_SERVER),y)
->  GST1_DEVTOOLS_DEPENDENCIES += gst1-rtsp-server
-
-
+diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+index 66b509ae2c..9089b12188 100644
+--- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
++++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+@@ -12,17 +12,13 @@ GST1_DEVTOOLS_LICENSE_FILES = validate/COPYING
+ GST1_DEVTOOLS_INSTALL_STAGING = YES
+ 
+ GST1_DEVTOOLS_DEPENDENCIES = \
++	host-python3 \
++	python3 \
+ 	gstreamer1 \
+ 	gst1-plugins-base \
+ 	json-glib \
+ 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-GST1_DEVTOOLS_DEPENDENCIES += host-python3 python3
+-else
+-GST1_DEVTOOLS_DEPENDENCIES += host-python python
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_RTSP_SERVER),y)
+ GST1_DEVTOOLS_DEPENDENCIES += gst1-rtsp-server
+ endif
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
