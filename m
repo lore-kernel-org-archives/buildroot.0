@@ -4,53 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A714EC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B3A2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B20881388;
-	Thu, 10 Feb 2022 21:18:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C73D82CE4;
+	Thu, 10 Feb 2022 21:21:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R6jxMB_AYIW7; Thu, 10 Feb 2022 21:18:55 +0000 (UTC)
+	with ESMTP id XGRLfEwE7bGY; Thu, 10 Feb 2022 21:21:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7ADDC812FE;
-	Thu, 10 Feb 2022 21:18:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7422482C84;
+	Thu, 10 Feb 2022 21:21:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 308DC1BF2EC
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:18:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6907D1BF2EC
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BD82408E0
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:18:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 581A34093D
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:21:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bADvbgr9c4co for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 21:18:50 +0000 (UTC)
+ with ESMTP id CHcPFF5xIw7O for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 21:21:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0EEEF408DA
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:18:49 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 37E204091E
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:21:19 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D7781C0006;
- Thu, 10 Feb 2022 21:18:45 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id F41F560004;
+ Thu, 10 Feb 2022 21:21:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nIGpw-0007pU-Kp; Thu, 10 Feb 2022 22:18:44 +0100
+ id 1nIGsN-00085n-PY; Thu, 10 Feb 2022 22:21:15 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220209165213.4498-1-peter@korsgaard.com>
- <20220209213312.GE2249818@scaer>
- <2cba2cd6-ca70-6336-f2fe-60649a0f1a0d@mind.be>
- <20220210203719.GA3752867@scaer>
-Date: Thu, 10 Feb 2022 22:18:44 +0100
-In-Reply-To: <20220210203719.GA3752867@scaer> (Yann E. MORIN's message of
- "Thu, 10 Feb 2022 21:37:19 +0100")
-Message-ID: <87czjuwhcb.fsf@dell.be.48ers.dk>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+References: <20220209214326.21671-1-heiko.thiery@gmail.com>
+Date: Thu, 10 Feb 2022 22:21:15 +0100
+In-Reply-To: <20220209214326.21671-1-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Wed, 9 Feb 2022 22:43:27 +0100")
+Message-ID: <878ruiwh84.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 000/107] Drop python 2.7
+Subject: Re: [Buildroot] [PATCH] package/rauc: bump to version 1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +59,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Andrey Yurovsky <yurovsky@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
-Hi,
+ > For release notes see: https://github.com/rauc/rauc/releases/tag/v1.6
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > ---
 
- > Arnout, All,
- > On 2022-02-10 18:15 +0100, Arnout Vandecappelle spake thusly:
- >> On 09/02/2022 22:33, Yann E. MORIN wrote:
- >> >On 2022-02-09 17:50 +0100, Peter Korsgaard spake thusly:
- >> >>Python 2.7 is EOL since April 2020 and almost all packages support
- >> >>python 3, so drop it before the 2022.02 release.
- > [--SNIP--]
- >> I did a bit of grepping for leftovers and found these:
- > [--SNIP--]
+ > # utils/test-pkg -p rauc
+ >                     bootlin-armv5-uclibc [1/6]: OK
+ >                      bootlin-armv7-glibc [2/6]: OK
+ >                    bootlin-armv7m-uclibc [3/6]: SKIPPED
+ >                      bootlin-x86-64-musl [4/6]: OK
+ >                       br-arm-full-static [5/6]: OK
+ >                             sourcery-arm [6/6]: OK
+ > 6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
- > Yeah, I knew we had missed a few things, and Peter had already noticed a
- > few in the cover-letter, but we needed to move forward quick, at the
- > risk of breaking things.
 
- > After all, the post-rc1 period is actually to fix things we broke! ;-)
-
-Indeed ;)
-
- >> The ones in gst1-devtools.mk and omniorb.mk look important, the rest is just
- >> cleanup. qt5webengine is also a bit worrisome...
-
- > For qt5webengine, IIRC James and Adam were working on it, and may have a
- > pending change ready?
-
- > I was thinking maybe about this:
- >     https://patchwork.ozlabs.org/project/buildroot/list/?series=284619
-
-Yes, I guess we'll need something like that. I did a quick test to see
-if the current qt5webengine version works with python3 - But it doesn't
-:/
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
