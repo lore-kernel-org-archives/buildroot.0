@@ -1,52 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF4AAC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 07:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0D11C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 07:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 426F560E8B;
-	Thu, 10 Feb 2022 07:56:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D6B440182;
+	Thu, 10 Feb 2022 07:58:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Kz74a7nW7kl; Thu, 10 Feb 2022 07:56:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aKgRkvidGWAs; Thu, 10 Feb 2022 07:58:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69BA460E86;
-	Thu, 10 Feb 2022 07:56:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BEA401BF340
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 07:56:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC7DB402A6;
+	Thu, 10 Feb 2022 07:58:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C7D9E1BF340
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 07:57:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACF8E60E86
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 07:56:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B54C44047C
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 07:57:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h-Jp05fCk6TJ for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 07:56:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F12660E82
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 07:56:39 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 9A8C62836C8;
- Thu, 10 Feb 2022 08:56:36 +0100 (CET)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ik32hz8yObvp for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 07:57:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 994A540465
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 07:57:57 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id k41so1772116wms.0
+ for <buildroot@buildroot.org>; Wed, 09 Feb 2022 23:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CpDcOuNpQo/CpqUu69JzzUgAoSPwCRpYJWGRSUHFESQ=;
+ b=BHOrYLwnjnxF4F/YTSk/Ws5DukRsUY57wmlQ3QtznO1p+griV0scuKg/LwARwODB5e
+ fH7lQwD8xPPNlvMkMm/Rryu/3NGuuuL36YIptVXpRwBnsK4gRjzktzcgmv6DC1sN5ib6
+ xUnExit+6vZcM7G5QxykEUdlloTs5slmpiWxUNM306+zGlE81mUAhnre0fQ+gL6rH7sG
+ 5SgrsLt0gGuDYGT0WL7HLWmpE0lcEV62kdxXMiZJ1ndqcEkBjyCugFJtNd4JHpPBVNru
+ n7PLMbKuyffQRZeSk9ukJvy6xND6Jjg2B3goTz9m/Ah1Qw08kgRfRYyfJblLhJMkw3Fb
+ Xu0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CpDcOuNpQo/CpqUu69JzzUgAoSPwCRpYJWGRSUHFESQ=;
+ b=g7en/NSHOhszhLGaeyIg3UCqPwQ7uXcjz2L1XSdaTL29Fk5urQ/JUqpvo9cVmnqC3S
+ el4b3dlsgluAxe1YqNxWcML4g3dEiBMRSc22LW7Pq2EHUYGKyPP42FX5Xa/9dL1CZxii
+ QwtojL9V7rXvWqtwnPXjj2SeMvzfmlGdBCluWlmZhVprDbagb0DYFlvzl4XFv4C1YmrC
+ irZd/9S5mAJTCnPCIQVZm7EUKx6maaMzdbdhKWeG6+HuIoJOZ9g98AWKACf9F/Rqdx5U
+ 73pX+BBK+icEc/ixnLvJjM2c18h9xFaH1b1IUOiGch8/NghUN6RJnUFq8NXeOZzX6qic
+ 1doA==
+X-Gm-Message-State: AOAM530cm9LpLHBqVZWcAz3vgD91vBEDYNtdO1vy2KTRTk1SwUFvezVY
+ PYmnXd91WkuMCZ+lKFK3KaQTpafYZ8s=
+X-Google-Smtp-Source: ABdhPJzKSirOnidOTJluahSIvdxSW/oLX5hJlR7EZWRrWgi6wiVChvjtGCnJcFqcin9ttwAE6i6Q5g==
+X-Received: by 2002:a05:600c:348e:: with SMTP id
+ a14mr1076881wmq.80.1644479875430; 
+ Wed, 09 Feb 2022 23:57:55 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id i2sm978503wmq.45.2022.02.09.23.57.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 09 Feb 2022 23:57:55 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 10 Feb 2022 08:58:21 +0100
+Message-Id: <20220210075821.493485-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date: Thu, 10 Feb 2022 07:56:36 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <87zgmzw5ei.fsf@dell.be.48ers.dk>
-References: <mailman.6747.1644442447.66748.buildroot@buildroot.org>
- <2378b58c9e724d2bb27ec019e165798e@umbiko.net>
- <87zgmzw5ei.fsf@dell.be.48ers.dk>
-Message-ID: <0ae21fe17b6d8e56be3d19feb0480e3c@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH 000/107] Drop python 2.7
+Subject: [Buildroot] [PATCH 1/1] package/omniorb: switch to host-python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,85 +86,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+Switch to host-python3 which is supported since version 4.2.1 and
+https://sourceforge.net/p/omniorb/svn/HEAD/tree/tags/4_2_1/omniORBpy/update.log
+to avoid the following build failure since removal of host-python in
+commit 2743ce00ca61fde1537b64a165a69d497052be58:
 
-On 2022-02-10 07:24, Peter Korsgaard wrote:
->>>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
-> 
->  > Hi Yann,
->  > Hi Peter,
-> 
->  > On 2022-02-09 21:34, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->  >> Peter ,All,
->  >>
->  >> On 2022-02-09 17:50 +0100, Peter Korsgaard spake thusly:
->  >>> Python 2.7 is EOL since April 2020 and almost all packages support
->  >>> python 3, so drop it before the 2022.02 release.
->  >>>
->  >>> It is a big series, but the changes are mainly mechanical in 
-> nature.
->  >>>
->  >>> There is still some cleanup to do, E.G. the python2 support in
->  >>> pkg-python and the host python-setuptools package - But this is 
-> IMHO
->  >>> the minimum changes before -rc1.
-> 
->  > There seem to be some more references to python(2) in packages; this
->  > build failure is from package/crda:
-> 
->  > # make clean && make
->  >   ...
->  > make[1]: *** No rule to make target 'host-python', needed by
->  >
-> '/home/data/buildroot.x86_64/build/host-python-pycryptodomex-3.13.0/.stamp_configured'.
-> Stop.
->  > make: *** [Makefile:23: _all] Error 2
-> 
-> Ahh yes, that is because we end up in package/pkg-python.mk with:
-> 
-> ifeq ($$($(2)_NEEDS_HOST_PYTHON),)
-> $(2)_DEPENDENCIES += $$(if 
-> $$(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+make: *** No rule to make target 'host-python', needed by '/home/buildroot/autobuild/instance-1/output-1/build/host-omniorb-4.3.0/.stamp_configured'.  Stop.
 
-Ah, this may be the reason I have two sets of host-python packages in my 
-build tree :-D
+Fixes:
+ - http://autobuild.buildroot.org/results/d415c2501b27cacf2356f0f6924ee7706d7a4070
 
-> 
-> And you (presumably) don't have python3 enabled. I'll send a fix.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/omniorb/omniorb.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Correct, I do not use Python on the target, but (at lest) one package 
-insists on having host-python.
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index a1943968f1..b44ec53fd5 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -11,11 +11,7 @@ OMNIORB_INSTALL_STAGING = YES
+ OMNIORB_LICENSE = GPL2+, LGPL-2.1+
+ OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
+ OMNIORB_DEPENDENCIES = host-omniorb
+-HOST_OMNIORB_DEPENDENCIES = host-python
+-
+-# omniorb is not python3 friendly, so force the python interpreter
+-OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
+-HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
++HOST_OMNIORB_DEPENDENCIES = host-python3
+ 
+ # Defaulting long double support to a safe option for the
+ # mix of embedded targets, this could later be automated
+-- 
+2.34.1
 
-I'm currently testing by changing host-python to host-python3 in 
-package/crda, and found another issue; this probably also needs a 
-change:
-
-[python3.mk]
-# Some packages may have build scripts requiring python3, whatever is 
-the
-# python version chosen for the target.
-# Only install the python symlink in the host tree if python3 is enabled
-# for the target.
-ifeq ($(BR2_PACKAGE_PYTHON3),y)
-define HOST_PYTHON3_INSTALL_SYMLINK
-	ln -fs python3 $(HOST_DIR)/bin/python
-	ln -fs python3-config $(HOST_DIR)/bin/python-config
-endef
-
-Is there any need of keeping separate python3 packages, now that python 
-== python3?
-
-Kind regards,
-Andreas
-
-> --
-> Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
