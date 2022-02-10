@@ -1,79 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50CCAC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:59:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED66C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 22:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CBD440863;
-	Thu, 10 Feb 2022 21:59:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B68282F80;
+	Thu, 10 Feb 2022 22:18:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zaxWCEZ3_iyq; Thu, 10 Feb 2022 21:59:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WHLq3E197fTY; Thu, 10 Feb 2022 22:18:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D80F404A6;
-	Thu, 10 Feb 2022 21:59:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 380B81BF20B
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:59:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7BC682CE4;
+	Thu, 10 Feb 2022 22:18:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C3B3F1BF2CA
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 22:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25DB84013D
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:59:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABB6E60761
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 22:18:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M-V0du8vEeGt for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 21:59:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com
- [IPv6:2607:f8b0:4864:20::c34])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0F8AB40122
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:59:21 +0000 (UTC)
-Received: by mail-oo1-xc34.google.com with SMTP id
- u25-20020a4ad0d9000000b002e8d4370689so8061127oor.12
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 13:59:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=q2406/03PUdiGOJrAZYXJclSdXmv657o1KtkF5x8tLc=;
- b=Rzwbhd8Vbec7gVk1FFNrVb/k2k4gsriXdN+nJUNEOWMBFlD3mTAOhcKae6jcVw/jGT
- 13AQE+il0mgm6q9yS74VRcRFUNbMzGGF55hOoMgiTOtoQoiMNG/KftZFPXtAmoQkpZcL
- fyXY+SRQKZLTQVqu5xMLFvJD8AppbHsZyUCfwPRX7iTiphDv5Sz332m/ASOTdXje1lvs
- ywhMh6NztuX/hNym3LMvXSG8Rp+YJ8bj0RL22GEdmOmRSqloVqZgwBqs2rCAfvmXzkaN
- Dgj+0PG2CCHl9Lq3wI8pL2UEpFa5+FnH5kQSx37yJs32DTvN9IXeqnhlVXBXJL3RSenc
- oLBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=q2406/03PUdiGOJrAZYXJclSdXmv657o1KtkF5x8tLc=;
- b=GeN6vpV2KdFjlBoS3qE9UrE90n2mpUECMBZBjE6j8gUFwAxxYf6MSYIQURtPKa54fm
- ice9ZXkLfED/+l7bdUjJfpRStg7e2/+Cfmm1mZoMP/cYF9qocSUex+JlZQt1N2EZltKw
- pCxB4gGACBKjCGF84mQg1GTlb3wQ80EpHeUnvth2NQ73Pura1AboqkYPWWX82kakWF15
- 8UR9nyAfsaN0jx5ixpjR8KOZDorwfKorMX1ROFRCmVoUuqb6e5gZQPoQEhpB6VmPMU+S
- 7ELJj0pVcojJEiP0Mr4W7H1UCDuzvPbF/wYVKoCoZa6EUTvDyKUQqEr/+N9e2iFCxbDK
- CcYA==
-X-Gm-Message-State: AOAM533UI2+vLmrA337jUO3249rS5trhJUbuufILO91h9+LzUlAwD61w
- 5k/FUs9T2HrsStuY64TezZDCJxxAMzmMZnC0ku0=
-X-Google-Smtp-Source: ABdhPJwSmC2W9T5eOubRXS1DKh6VGoHL1zGXHwkh1f0HGtBILryRdxKoqhsws+73z+2asvoxO1jp3RHdZ7qQiPjyCWs=
-X-Received: by 2002:a05:6870:9483:: with SMTP id
- w3mr1493849oal.124.1644530360843; 
- Thu, 10 Feb 2022 13:59:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20220209165213.4498-1-peter@korsgaard.com>
- <20220209213312.GE2249818@scaer>
- <2cba2cd6-ca70-6336-f2fe-60649a0f1a0d@mind.be>
- <20220210203719.GA3752867@scaer> <87czjuwhcb.fsf@dell.be.48ers.dk>
-In-Reply-To: <87czjuwhcb.fsf@dell.be.48ers.dk>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 10 Feb 2022 14:59:09 -0700
-Message-ID: <CADvTj4rDQEMeYFjKZnucs3q22x-2+P7oBsrsPvhbU_WZWAhArQ@mail.gmail.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bwJmEK1ppwXt for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 22:18:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 813F760750
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 22:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1644531494;
+ bh=ACYAJnSUPRleX+UUxQFWVpjhtl2zGe3Rz03t7KorFig=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=FU3ke1ZHqIp4pRU9D9p8rv34VdhRfgaH+TlvU7L6DZATxgYpuRGYyvgpEnpYDbtAu
+ UZoqXooyp6FsPdj+Ku10nYk3ZEGnCNlJd/CR+MYnDq/IJKOVlWBM2eyqUvhn8AauXW
+ JiR7yKlaQQM9FPvR/fjLJiZfJHd8aotv8E4OIxlc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.34]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MuDc7-1o9pE31Ilh-00uWne; Thu, 10
+ Feb 2022 23:18:14 +0100
+Date: Thu, 10 Feb 2022 23:18:13 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH 000/107] Drop python 2.7
+Message-ID: <20220210231813.236e2aae@gmx.net>
+In-Reply-To: <874k56tmqu.fsf@dell.be.48ers.dk>
+References: <20220210192905.4500-1-ps.report@gmx.net>
+ <20220210192905.4500-14-ps.report@gmx.net>
+ <874k56tmqu.fsf@dell.be.48ers.dk>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:uvrqZ4rNl2rYyORx5eqHdOp2XV11qilRz3Ll7e5B603FXBH02Y5
+ e79HBps4OPatKKIxON7Nkkk03tWCSjnygfD8M/wHylpAlHRcU7fuHRxO94Swk1o4oz4TmCK
+ Y4GVkIeUBoZo5doNnidJEdelgoO3ZSyY9avh17+xAlwmGbKPAm6vC34gZed06XXgnR1CwLJ
+ 2+xL7ys1Xc+Ysb+j1zoOA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Pq0Ub5YIqco=:A+Lgo/sB3Q8/aLZgZ1KeuE
+ 9aCZxcadTHNGyFMTacDhUo3C6j/z/LQZJPIt4TPpq4JwNI/4r9koEiu/foGcmM3ZZsOoSE5mk
+ 9i9cFgTGM5y50hNAoUVRH7BXNPbn/gCm2Mm4bds6IKYJVDuMnVJRUPuTn4XIfOUPPDXXVSwtV
+ fPrEJHANBwXYYQ3+t6NRhS92190UTyYVWKI59joiGpfMB+FF7REaHzhk9ZYQ5eJGHBv5cgTzH
+ 6+dOT4rNyGmKqBZWTyy51vYUhRFzo5gVxWr15n8xkV86FibxGtNPdx6szR+WcdCUSlYcoFbx5
+ iTG+54iAlZJP715Sve7F1M4IvckkPv4+dUxAaoP2Afsmcv0bgeydkWu7iuDOHynByd9Ma94WW
+ /ZSHNdY1yU85LUfl9dGohpdzhbT02VcyqM/V/9CjV0x950xvnSmgm3s58WC+t4KzVyoNMi8F/
+ shaARJ3U/HRabqiflw4B1C4uiZr2LmDra0EbHonIRUCz7AdTQ2sCzjPlW72QhrKGIO1NM7Z+t
+ QgJXz1Y20rD58HlSwCJvxInw7TBRWkpkOO3q59osGRhuTfTgv+b0O9JzUgpAKc45yPh7Kj9Yj
+ 1OVgoXBuAQhZ+oivhUswF7Brqxl7oWSCe8pQxzOcLtDPd/8YPIJQqBOQTHRGp33MJ+Cu/f+60
+ 3ganuMns3uDsXkqacBCg3NJpIGgPfS1IELVJD+fBqE9tx9cGDSWThIK5+L7I+Ac7VSwezF4XF
+ PrpO7YmRq8bi80pMTx3FDmETCwxXyCt03LGvuZ1j/Y1tR8b8mTxwoZCiHnapvbWWsCsXnc/lH
+ U22wUdB3mc5l39hQb7a5IwTPtn8OETiKTNbDi/VmTQPcVHD/Qwk2RseEq6z6rIdLksalWRTmP
+ TjYpVBVxTMEpwfmiuGHabvfRHqbaEhi3ZExQETMpP8ayBM8PULw21Y+bsFzcjT7W90aJyrfrS
+ JeCsSn7Idvhb645AE6V8RqkIIFYeJJ5ffkyT+b9zD9P3NNh55KSbzwep0GvI2/uUzp2lK7nNp
+ 64to7S3A/mltXM/9qsw6Fzf8DGMlpSS0NVrsGQgrywNY4J5n8GTwg+zLmswNQuuxIZC73GtyR
+ R5+SZOsjLJkSH8=
+Subject: Re: [Buildroot] [PATCH v2 13/13]
+ package/gst1-plugins-bayer2rgb-neon: fix plugin install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,61 +88,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
+Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Feb 10, 2022 at 2:19 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
-> Hi,
->
->  > Arnout, All,
->  > On 2022-02-10 18:15 +0100, Arnout Vandecappelle spake thusly:
->  >> On 09/02/2022 22:33, Yann E. MORIN wrote:
->  >> >On 2022-02-09 17:50 +0100, Peter Korsgaard spake thusly:
->  >> >>Python 2.7 is EOL since April 2020 and almost all packages support
->  >> >>python 3, so drop it before the 2022.02 release.
->  > [--SNIP--]
->  >> I did a bit of grepping for leftovers and found these:
->  > [--SNIP--]
->
->  > Yeah, I knew we had missed a few things, and Peter had already noticed a
->  > few in the cover-letter, but we needed to move forward quick, at the
->  > risk of breaking things.
->
->  > After all, the post-rc1 period is actually to fix things we broke! ;-)
->
-> Indeed ;)
->
->  >> The ones in gst1-devtools.mk and omniorb.mk look important, the rest is just
->  >> cleanup. qt5webengine is also a bit worrisome...
->
->  > For qt5webengine, IIRC James and Adam were working on it, and may have a
->  > pending change ready?
->
->  > I was thinking maybe about this:
->  >     https://patchwork.ozlabs.org/project/buildroot/list/?series=284619
->
-> Yes, I guess we'll need something like that. I did a quick test to see
-> if the current qt5webengine version works with python3 - But it doesn't
+Hello Peter,
 
-Yeah, that should get qt5webengine working on python3, there's a bunch of other
-issues it should fix as well relating to handling the host/target
-pkg-config split.
+On Thu, 10 Feb 2022 22:50:17 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> :/
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 >
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+>  > - fix plugin install path, add '-with-plugindir=/usr/lib/gstreamer-1.0',
+>  >   otherwise the plugins are installed with duplicated build path
+>  >   (as detected by step_check_build_dir)
+>
+>  > - remove GST1_PLUGINS_BAYER2RGB_NEON_INSTALL_STAGING (no need to install
+>  >   the plugin to staging)
+>
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> Committed, thanks.
+>
+> You have this as the last patch of the series, but is it related to the
+> 1.20 bump or is this a fix that should also be backported to the LTS
+> branch?
+>
+
+Observed the failure only after the 1.20.0 version bump..., but did not find
+any explanation why the failure should depend (or not depend) on the version
+bump...., but I think the patch should do no harm for the 1.18.x version...,
+so should be save for the LTS branch (specially the drop of install staging)...
+
+Regards,
+Peter
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
