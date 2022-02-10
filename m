@@ -1,70 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56780C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 23:30:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 054F8C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 23:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACD744056A;
-	Thu, 10 Feb 2022 23:30:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AA65408EE;
+	Thu, 10 Feb 2022 23:59:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 34eyJl0OZ2P8; Thu, 10 Feb 2022 23:30:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0qnrfPiq8Arx; Thu, 10 Feb 2022 23:59:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7F1F4052D;
-	Thu, 10 Feb 2022 23:30:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FB5540868;
+	Thu, 10 Feb 2022 23:59:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EED9D1BF487
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 23:30:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5FFA21BF20B
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 23:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFDDF82FE7
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 23:30:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CE7481A3E
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 23:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=rockwellcollins.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CPUQnGP6rQdv for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 23:30:38 +0000 (UTC)
-X-Greylist: delayed 00:07:08 by SQLgrey-1.8.0
-Received: from da1vs04.rockwellcollins.com (da1vs04.rockwellcollins.com
- [205.175.227.52])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1320982FE4
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 23:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rockwellcollins.com; s=hrcrc2020;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=4iAaOvXaAbq29YDZK/2aJC3y0avjnsOW4nl0zQLlq4g=;
- b=G3zd2Y7pY5instkDBrzR+x+bSerhFRnKZQNkGyUyeqnD2izytBk4w5jm
- AxIY6LX6GHFMZDLjLc15kXb1z9reyZKdUrpZyfgMPmnhiugm/GDacKQlW
- IvmnI3iyj9LAu8FsneOQhc/mQjHDhJpsEAzj+UzETaZ9sNZPkVyLCa9ZO
- efwX/0gsJYrgagSoPg2PbejeBcJxkZoNgiHsSiGOyv+hwEqhulUSAEBUf
- H/ITs9hlamoddCBk5wH+qyq5uVqW6WR4M+8ole6y3T26nJLrU89J7e71s
- LUhcdpFOLHdsQQIIIYjZNu88mYLTz6XbCcuG3RX2L3DhQuc3/+jqSVWVi A==;
-IronPort-SDR: GYq/IWMTV3EM/vAe1bImJgu2PrBQCXjZT0l9ngyMQDlb47mGCRjjqYaeD6/ZvqM9RnDd6XjB7b
- NozYs7fC2ExfLzSGGHzM12RYbO0xeU7qJ+cd2us6zXFxRmjzzsv8LQX0HbMpdz41IpWN+tw5Ua
- 68XkXqGyCM9X4NMpxS8L9XfqtzGfuNjaOlhegKTKj7s8b+qkLx31Y1h6HEFd+83UJpRxprwLVd
- EaDLTioVCOuc0yB5x6AEzcj+DZmXtGA7E2DCzzC34QZzlBUfkYpG2Nv4D/RN4BX2X2915a0TH+
- ljs=
-Received: from ofwda1n02.rockwellcollins.com (HELO
- crulimr01.rockwellcollins.com) ([205.175.227.14])
- by da1vs04.rockwellcollins.com with ESMTP; 10 Feb 2022 17:23:29 -0600
-X-Received: from righttwix.rockwellcollins.com (righttwix.rockwellcollins.com
- [192.168.141.218])
- by crulimr01.rockwellcollins.com (Postfix) with ESMTP id B57A5605AF;
- Thu, 10 Feb 2022 17:23:28 -0600 (CST)
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ with ESMTP id 8DrkYVxUihKo for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 23:59:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com
+ [209.85.210.178])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C76B815AC
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 23:59:09 +0000 (UTC)
+Received: by mail-pf1-f178.google.com with SMTP id d187so13131570pfa.10
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 15:59:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Cihcu56BX2wFlBGpPPQklZri+3GrQX4S+xDMgPRY1HA=;
+ b=5/pObcHc3tfSmXQPEU7iUsv95tTse+AAC/b3TETyy8+kyzwvCGLsBXs2/f05JO6bN+
+ ea+7IOzcHf3bBGpfrDtUMj7L81jLc9L5FtQCbx26a6limwdsnH6tFNJNMAgxkm7d47ds
+ TCToqa4QidDn5UHoFobZLeZjn/k4vQAWvpksMnCemuijmlOu1Ef9q+ZsGRIlKqml7E58
+ pYX0aVk9UmsFXZMbqtlkdzjyP+wpTsQuBALy0WP2qw0wQUL56Y157QoNn1bMHJKH2LhX
+ ZZ6jiDHvrp7uFcs3Efeh2b8oBZ6uP29IaFBVLuNPu75YNt8zH6OAcDMxEZGbjp1LKpsD
+ VNEQ==
+X-Gm-Message-State: AOAM531KlN/RXQSfOYPyfhQWgRv/ZHXab2EsgakdPKJW5iCG3uAn6dWH
+ 0P0fEFSGQcS6CnwIFIAtZWpBvCfksflMPA==
+X-Google-Smtp-Source: ABdhPJypm6mo2NR2rWFwlOwTLLnlXOlDHh0BslFVuz9jM/aeTd4494Yvrkf+jPixhq8KmIDZPAGlQQ==
+X-Received: by 2002:a65:52cc:: with SMTP id z12mr4533453pgp.532.1644537548459; 
+ Thu, 10 Feb 2022 15:59:08 -0800 (PST)
+Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
+ by smtp.gmail.com with ESMTPSA id
+ mv17sm3293496pjb.14.2022.02.10.15.59.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 10 Feb 2022 15:59:08 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 17:23:27 -0600
-Message-Id: <20220210232327.119488-1-clayton.shotwell@rockwellcollins.com>
-X-Mailer: git-send-email 2.29.0
+Date: Thu, 10 Feb 2022 15:59:06 -0800
+Message-Id: <20220210235906.23355-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] support/download/post-process-helpers: adjust
- for older coreutils versions
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump to 1.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,44 +72,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Clayton Shotwell <clayton.shotwell@collins.com>,
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Matt Weber <matthew.weber@collins.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Clayton Shotwell <clayton.shotwell@collins.com>
+go1.17.7 includes security fixes to the crypto/elliptic, math/big packages and
+to the go command, as well as bug fixes to the compiler, linker, runtime, the go
+command, and the debug/macho, debug/pe, and net/http/httptest packages.
 
-Ran into an issue with the post_process_unpack function using "head -z"
-on a RHEL box which is using an older version or coreutils. The "-z"
-flag was added in coreutils v8.25 but my IT managed RHEL box is only
-using v8.22. The fix I have implemented relies on the null terminated
-list and sed to remove the first null character and everthing
-afterwards.
+https://github.com/golang/go/issues?q=milestone%3AGo1.17.7+label%3ACherryPickApproved
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@collins.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- support/download/helpers | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/helpers b/support/download/helpers
-index ab31e27..90a7d6c 100755
---- a/support/download/helpers
-+++ b/support/download/helpers
-@@ -79,7 +79,7 @@ post_process_unpack() {
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9111c8c9aa..fdf342e602 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  4dc1bbf3ff61f0c1ff2b19355e6d88151a70126268a47c761477686ef94748c8  go1.17.6.src.tar.gz
++sha256  c108cd33b73b1911a02b697741df3dea43e01a5c4e08e409e8b3a0e3745d2b4d  go1.17.7.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 062bec378c..56a21dfe55 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     mkdir "${dest}"
-     tar -C "${dest}" --strip-components=1 -xzf "${tarball}"
--    one_file="$(find "${dest}" -type f -print0 |LC_ALL=C sort -z |head -z -n1 |tr -d "\0")"
-+    one_file="$(find "${dest}" -type f -print0 |LC_ALL=C sort -z |sed 's/\x0.*//')"
-     touch -r "${one_file}" "${dest}.timestamp"
- }
+-GO_VERSION = 1.17.6
++GO_VERSION = 1.17.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
 -- 
-1.8.3.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
