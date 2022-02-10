@@ -1,80 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC84C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 19:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07816C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 20:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8187360B36;
-	Thu, 10 Feb 2022 19:32:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EEC8408D8;
+	Thu, 10 Feb 2022 20:01:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lG9Yu1VEghQo; Thu, 10 Feb 2022 19:32:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kVRsPb8AwN0b; Thu, 10 Feb 2022 20:01:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98EA360EAE;
-	Thu, 10 Feb 2022 19:32:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 961D11BF3BB
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 791F7404E7;
+	Thu, 10 Feb 2022 20:01:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E19D71BF3BB
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 20:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E681818C0
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 19:29:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC80860E9C
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 20:01:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iE7ONPVrJLs2 for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 19:29:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7EFBB81990
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 19:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1644521348;
- bh=l7Qqo/UI3Ee0cH8B8/TAY5aRhe4KB/i1Q9P9N38xuXY=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=GdtEjO45hc1X2zlL47hy9hDOj1gUDsl+UebQSOA3XiLjzAQIe7egpR2UWR3JsNC69
- FUrWzWd9iewhQNltBwFMc+TBqYfhkbUGr86OEQgGHqatX54SPK0XyLuDqyXYREKXBq
- Z7sxR8T4sKkjzs5VnTxMozSheHe3tdBsLCBp/e/E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.34]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwfWa-1oGHVO0PMY-00y9Rb; Thu, 10
- Feb 2022 20:29:08 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Thu, 10 Feb 2022 20:29:02 +0100
-Message-Id: <20220210192905.4500-11-ps.report@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220210192905.4500-1-ps.report@gmx.net>
-References: <20220210192905.4500-1-ps.report@gmx.net>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A5i8vil2QJdr for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 20:01:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39EF760A84
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 20:01:04 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.179.156])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id IFclnZ4ZINVvLIFclnNmlB; Thu, 10 Feb 2022 21:01:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1644523263; bh=wl3jwH2FHcwaXQai0c7GB8MJmQZRbVHbKgC+QPGr/1g=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=OxP/biFx5jYPFPu5T+bmRVLBIa6uYCKvWoWkt0QIRbLSj8ksekrmq7JzVX7YP/SFN
+ W6itvrgx8fvsI3axynnnm/NECmOhLn8vIODntMSDgj7P3SoATG8FC6dAZeVJsWMjPn
+ 6ZOw5U2pImw2IhnzM24Spa57MRD7oBbbryb8ZMc6szNlazmW4Fy67heDynRgnH0FtK
+ 22q5/YA1iVyZedruzupSnWUtl/L0AuU+DyD4CxKyGtMTsbP/BrF7bNNgt9sfs3jt4/
+ 9ppIMtlHodVvF/hq6sOOfcBx8RBCl3SzPkHI0J57s5Iy+7PSIJpy3cmhN5iCIWTA+p
+ OugVg7/8FxHXA==
+Message-ID: <d82d35f5-426f-e0ce-7765-b7995f7abd1c@benettiengineering.com>
+Date: Thu, 10 Feb 2022 21:01:02 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:J7TcJC5UtanAAZOQFOjmeOir7To2ldGLmPwm9KFWVfgjXTtYZuf
- AoPsgZiKe2AuayC2xwVsghQha6dbWkNpgSl1EWnWTurNo3MLJ7dIW4cVyQ/GVr9BFlDyhJE
- NnBlvtmCI175oAGmlyEFg9G/IXQ8KdYi5KqsQGF0YqdZKwuqxmO5gNBVN3cJXAWZWZmSU5q
- 3U9ZTevCsTBIYZDIyfvsg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zrj9lWRBlug=:OPKzOY2ixuzlP9ePASpg6w
- hz55otxllea/pBmRUeEXxkMuaNQpI9bG3Ae1z5MKb74RqUTH9Iipq4Xsasg6954+HCmG8kRel
- dfaZh7f8q+CBi7bNoh/iMAOid85wZHgNBtp1NnMVI/UGxJigDFwHglGcLll2u10eLEKDxO+X9
- DblPF/OEZbHu2tR3NsnU97BRechcbAbDmzY/PxxnmozxkjlpCbwJ273M2TDbUgYJhnjD84CjB
- SCYQqQKvAOst/+B6oD7rCflISWKqvHE8qWJIV1aHqK5MiU/FAVI5aKCJZhRG1/DnKZrqW9lKU
- EhzOqLpQoYwSsdmEkTvIbWTz+eFC0Kjln+/WdZwRhxulmBCBZ7FTm6GjsFb698flXJZdArU2W
- mh2TbWAIfiEmZMsXYrUJ1590jicWqQnrSWiE6jboJuYmsjN4Be17AlRtaRM7rmuFvWtHrpuA5
- jE5bcruYPU2vJnF1hhVXwlgK1BnxKiRy6aR5hEcwMy1xq99WMmQUurB7NumSuTMBwwyu/W9WF
- 8/ZUtsMXfQyQxeHvjPiUM59Me/gqeCYzizMzrWcfly9CNTBAsmhXm+N6EF0TL9gK/z8K95MBh
- dL1CSLQBsj7OZMubVWuXHi4dhTqIIHdWAVOVjvXOJSOrE/jTlV/9Z5/sVFsrf+uQ5QAgRfmfq
- SSebtGu/Ofe5GEYRMYSiNf8jrko6e1erDUTUCKf9TN3VUMVihzLfRoBOC5kH2jEhqjoYDK1eQ
- T1Z31sDWkTfnCXONY3HIQc4gJu3Idd/V6XdF/MRc8XcGWNRclbwrHAzUT25LMUdLw2DA778D6
- XSySxXYA2frKOGh9QYVv0UVcApMRYbRyJT981jsmUrNxr/GgTNnno3S0rU/JOXT/O2wwlIyce
- f/yLakSXcKbnStq5VrPPNZpnJ3OEyTTtvOldzHW/QxD77wonn6pVFHfvFovHH98dK17iFMgmS
- xYwJf0E20du6fuyOuKg+dkMFETeJ3Uwhg/UhImfNoebQsRjqembidGDNNUPe2a+p5MQ926idR
- ZT2xKlneb8vVdfYwedu7wOr7h1+fiY8ZXV9mGALV5kaDuS3Q94oRztOUN6CSobS+I4SmX9rRi
- liuVghTnqsTB88=
-Subject: [Buildroot] [PATCH v2 10/13] package/gstreamer1-editing-services:
- bump version to 1.20.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Michal Simek <michal.simek@xilinx.com>,
+ Neal Frager <neal.frager@xilinx.com>, buildroot@buildroot.org
+References: <20220210081932.3114763-1-neal.frager@xilinx.com>
+ <7ed72b26-0729-93c7-e1c7-c429e2a5fb87@benettiengineering.com>
+ <20cfc8a7-9e51-8e16-3db6-775658503a75@xilinx.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20cfc8a7-9e51-8e16-3db6-775658503a75@xilinx.com>
+X-CMAE-Envelope: MS4wfMcn0go16JFeFgz+YI+AKkiI+jwIOYzZffRW88DCWwj1qZGg1YEPhXACNiSj4lgKFa9udH631bUYwQkuFMVO65+AY7oOyy3D7zaMjhILEiI05XHtsRmj
+ 7X6flFA+60ly8xnZxB89tZEjZKuULyZ317ZquKqfHb3aBbicAipb0fRL/AEHvr/hH28bA473WVHnza7Y7avU1tzRZ5tDhyY05GvVEIxvC6q3EcgfEoTUCWA6
+ BodJV9hW9Rufa+FVbFr6XgBGRyY7208pPwuMczRB79orNSht/AedHxmBpuKCBIquJm6ZpJTqxN3qfqgzcd8WJQ==
+Subject: Re: [Buildroot] [PATCH v4 1/2] configs/zynqmp_zcu106: bump
+ ATF/U-Boot/Linux to Xilinx 2022
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,47 +74,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: luca@lucaceresoli.net
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- .../gstreamer1-editing-services.hash                          | 4 ++--
- .../gstreamer1-editing-services.mk                            | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index e29dc112ce..9662e6b8fb 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.6.tar.xz.sha256sum
--sha256  fe10d14ef896aa21038317f6f81e1158ccc6caaed9b0d5a29ae5bdd63074582c  gst-editing-services-1.18.6.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.20.0.tar.xz.sha256sum
-+sha256  f837adcf4073d19a5908984e879cd039f4192ca368e71d39e8ccd8a56b9feedf  gst-editing-services-1.20.0.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index a3722cbbca..5e03c08ae7 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.6
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.20.0
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTWljaGFsLAoKT24gMTAvMDIvMjIgMTk6NDEsIE1pY2hhbCBTaW1layB3cm90ZToKPiAKPiAK
+PiBPbiAyLzEwLzIyIDE3OjM5LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPj4gSGkgTmVhbCwKPj4K
+Pj4gT24gMTAvMDIvMjIgMDk6MTksIE5lYWwgRnJhZ2VyIHdyb3RlOgo+Pj4gVGhpcyBwYXRjaDoK
+Pj4+IC0gYnVtcHMgQVRGIHRvIFhpbGlueCB2Mi42OiBtYWlubGluZSB2Mi42IHJlcXVpcmVzIHBh
+dGNoIHRvIGJ1aWxkCj4+PiAtIGJ1bXBzIFUtQm9vdCB0byBYaWxpbnggMjAyMi4wMTogaW1wb3J0
+YW50IGRyaXZlcnMgbm90IGluIG1haW5saW5lCj4+PiAtIGJ1bXBzIExpbnV4IHRvIFhpbGlueCA1
+LjE1OiBpbXBvcnRhbnQgZHJpdmVycyBub3QgaW4gbWFpbmxpbmUKPj4+IC0gZGVsZXRlcyBib2Fy
+ZC96eW5xbXAvcGF0Y2hlcyBkaXJlY3Rvcnk6IHBhdGNoZXMgYWxyZWFkeSBpbiBtYWlubGluZQo+
+Pj4gLSBtb2RpZmllcyBib2FyZC96eW5xbXAvZ2VuaW1hZ2UuY2ZnOiBVLUJvb3QgMjAyMi4wMSB1
+c2VzIHUtYm9vdC5pdGIgZm9ybWF0Cj4+PiAtIGFkZHMgZXh0bGludXguY29uZiB0byB2ZmF0IGJv
+b3Rmcwo+Pj4gLSBtb2RpZmllcyBVLUJvb3QgdG8gdW5pZmllZCB4aWxpbnhfenlucW1wX3ZpcnRf
+ZGVmY29uZmlnIChzdXBwb3J0cyBhbGwgYm9hcmRzKQo+Pj4gLSBhZGRzIHN1cHBvcnQgZm9yIFNQ
+TCBwbV9jZmdfb2JqLmMgbG9hZGluZyB0byBQTVUgZmlybXdhcmUKPj4+IC0gZW5hYmxlcyBzdXBw
+b3J0IGZvciBob3N0IG1hY2hpbmVzIHdpdGhvdXQgT3BlblNTTCByZXF1aXJlZCBieSBVLUJvb3Qg
+YW5kIExpbnV4Cj4+Pgo+Pgo+PiBJZiB5b3UgcHV0IHRoZSAzIGRhc2hlcyBiZWxvdywgZXZlcnl0
+aGluZyBhZnRlciB0aGVtIHdpbGwgYmUgaWdub3JlZCwgc28geW91Cj4+IG5lZWQgdG8gcHV0IGhl
+cmUuLi4KPj4KPj4+IC0tLQo+Pj4gVjEtPlYyOgo+Pj4gKiBmaXhlZCBnZW5lcmFsIGJ1aWxkIGlz
+c3Vlcwo+Pj4gKiBhZGRlZCBleHRsaW51eC5jb25mIGZvciBydW4tdGltZSBib290IGlzc3VlCj4+
+PiBWMi0+VjM6Cj4+PiAqIGVuYWJsZWQgc3VwcG9ydCBmb3IgaG9zdCBtYWNoaW5lcyB3aXRob3V0
+IE9wZW5TU0wgcmVxdWlyZWQgYnkgVS1Cb290IGFuZCBMaW51eAo+Pj4gKiBtb3ZlZCByZWFkbWUu
+dHh0IHVwZGF0ZSB0byB6eW5xbXBfemN1MTAyX2RlZmNvbmZpZyBwYXRjaCAyLzIKPj4+IFYzLT5W
+NDoKPj4+ICogY2xlYW5lZCB1cCBjb21taXQgbG9nIG1lc3NhZ2VzCj4+PiAqIGFkZGVkIHZlcnNp
+b24gaGlzdG9yeQo+Pj4gLS0tCj4+Pgo+Pj4gU2lnbmVkLW9mZi1ieTogTmVhbCBGcmFnZXIgPG5l
+YWwuZnJhZ2VyQHhpbGlueC5jb20+Cj4+PiBSZXZpZXdlZC1ieTogR2l1bGlvIEJlbmV0dGkgPGdp
+dWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4+PiBUZXN0ZWQtYnk6IEdpdWxp
+byBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+Pj4gW0dp
+dWxpbzogb25seSBidWlsZCB0ZXN0ZWRdCj4+Cj4+IFRoZXNlIF5eXgo+Pgo+Pj4gU2lnbmVkLW9m
+Zi1ieTogTmVhbCBGcmFnZXIgPG5lYWwuZnJhZ2VyQHhpbGlueC5jb20+Cj4+Cj4+IEFuZCBkcm9w
+IHRoaXMgXl5eIHRoYXQgaXMgYWxyZWFkeSBwYXJ0IG9mIHRoZSBwYXRjaC4KPj4KPj4gU2FtZSBn
+b2VzIGZvciBwYXRjaCAyLzIKPj4KPj4gQW5kIEkgd291bGQgc2hyaW5rIHBtX2NmZ19vYmouYyBk
+b3duIHRvIHdoYXQgYm9hcmRzIHJlYWxseSBzcG9ydCB3aXRob3V0Cj4+IHRoaW5raW5nIHRvbyBt
+dWNoIGFib3V0IGV2ZW50dWFsIGN1c3RvbSBib2FyZHMgYXMgZGlzY3Vzc2VkIGhlcmU6Cj4+IGh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVpbGRyb290LzIwMjItRmVicnVh
+cnkvNjM2NTEzLmh0bWwKPj4KPj4+IC0tLQo+Pj4gIMKgIGJvYXJkL3p5bnFtcC9leHRsaW51eC5j
+b25mwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgNSArCj4+PiAg
+wqAgYm9hcmQvenlucW1wL2dlbmltYWdlLmNmZ8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgfMKgwqAgNiArLQo+Pj4gIMKgIC4uLi1maXgtUmVtb3ZlLUdHQy1pZ25vcmUt
+V2FycmF5LWJvdW5kcy5wYXRjaCB8wqAgNjggLS0KPj4+ICDCoCAuLi42NC16eW5xbXAtemN1MTA2
+LWZpeC1TUEwtTU1DLWJvb3RpbmcucGF0Y2ggfMKgIDUyIC0tCj4+PiAgwqAgLi4uMi1hcm02NC16
+eW5xbXAtRW5hYmxlLWJvb3RpbmctdG8tQVRGLnBhdGNoIHwgMTE0IC0tLS0KPj4+ICDCoCAuLi5l
+cHQtYW4tYWJzb2x1dGUtcGF0aC1mb3ItUE1VRldfSU5JVF8ucGF0Y2ggfMKgIDY4IC0tCj4+PiAg
+wqAgLi4ueW5xbXAtcGFzcy10aGUtUFMtaW5pdC1maWxlLWFzLWEta2NvLnBhdGNoIHwgMTc1IC0t
+LS0tCj4+PiAgwqAgYm9hcmQvenlucW1wL3BtX2NmZ19vYmouY8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgfCA2MTQgKysrKysrKysrKysrKysrKysrCj4+Cj4+IEJ1dCBo
+ZXJlIEkgc2VlIHlvdSBvbmx5IGhhdmUgb25lIHBtX2NmZ19vYmouYyBmb3IgYm90aCB6MTAyIGFu
+ZCB6MTA2LCBpcyB0aGF0Cj4+IHN1ZmZpY2llbnQ/IEkgbWVhbiwgaGF2ZSB0aGV5IHNvIGNvbW1v
+biBwZXJpcGhlcmFscz8KPj4KPj4gSSBzZWUgd2UgaGF2ZSB0byBkZWFsIHdpdGg6Cj4+IFp5bnEg
+VWx0cmFTY2FsZSsgWENaVTdFVi0yRkZWQzExNTYgTVBTb0MgZm9yIHoxMDYKPj4gYW5kCj4+IFp5
+bnEgVWx0cmFTY2FsZSsgWENaVTlFRy0yRkZWQjExNTYgTVBTb0MgZm9yIHoxMDIKPj4KPj4gc28g
+SSBkb24ndCBrbm93IGlmIGhhdmluZyBhIGNvbW1vbiBwbV9jZmdfb2JqLmMgc2hvdWxkIGJlIGEg
+Z29vZCBpZGVhLgo+Pgo+PiBJIGtub3cgZmV3IGFib3V0IEZQR0FzLCBidXQgSSBkb24ndCBrbm93
+IGlmIHRoZXkgYXJlIHJlYWxseSBjb21wYXRpYmxlLgo+IAo+IFRoZXNlIGJvYXJkcyBjYW4gdXNl
+IHRoZSBzYW1lIGNvbmZpZyBvYmplY3QuIEJ1dCBpdCBhbGwgdGhlIHRpbWUgZGVwZW5kcyBvbgo+
+IGNvbmZpZ3VyYXRpb25zIHlvdSB3YW50LiBCdXQgZGVmYXVsdCBldmVyeSBib2FyZC9jb25maWcv
+Yml0c3RyZWFtIGNhbiByZXF1aXJlCj4gZGlmZmVyZW50IGNvbmZpZyBvYmplY3QuCgpZZXMsIHNv
+IGl0J3MgYmV0dGVyIHVzaW5nIGRpZmZlcmVudCBwbV9jZmdfb2JqLmMgaW4gZGlmZmVyZW50IApk
+aXJlY3Rvcmllcy4gVGhpcyB3YXkgaWYgeW91IHdpbGwgYWRkIGFub3RoZXIgRlBHQSBpdCB3aWxs
+IGhhdmUgaXRzIG93bgpiaXN0cmVhbShwbV9jZmdfb2JqLmMgQUZBSUNVKS4KClRoYW5rIHlvdSEK
+QmVzdCByZWdhcmRzCi0tIApHaXVsaW8gQmVuZXR0aQpCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
