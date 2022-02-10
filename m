@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2F62C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 257E6C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Feb 2022 21:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80F67408F9;
-	Thu, 10 Feb 2022 21:50:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFFDD40890;
+	Thu, 10 Feb 2022 21:51:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3GK7kfgd7isT; Thu, 10 Feb 2022 21:50:58 +0000 (UTC)
+	with ESMTP id qPzJspW9zwQZ; Thu, 10 Feb 2022 21:51:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D20C6408E5;
-	Thu, 10 Feb 2022 21:50:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 387061BF2EC
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:50:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E4464148A;
+	Thu, 10 Feb 2022 21:51:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F1621BF2EC
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2778982F57
- for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:50:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E79C40863
+ for <buildroot@lists.busybox.net>; Thu, 10 Feb 2022 21:50:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cWdEC9HcwwDs for <buildroot@lists.busybox.net>;
- Thu, 10 Feb 2022 21:50:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dAvXwOhNPZGM for <buildroot@lists.busybox.net>;
+ Thu, 10 Feb 2022 21:50:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 740A282F32
- for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:50:33 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3DF4A4030F
+ for <buildroot@buildroot.org>; Thu, 10 Feb 2022 21:50:37 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 76F0E60005;
- Thu, 10 Feb 2022 21:50:31 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 25D69C0002;
+ Thu, 10 Feb 2022 21:50:34 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nIHKg-00015n-RD; Thu, 10 Feb 2022 22:50:30 +0100
+ id 1nIHKk-00015x-Fv; Thu, 10 Feb 2022 22:50:34 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Peter Seiderer <ps.report@gmx.net>
 References: <20220210192905.4500-1-ps.report@gmx.net>
- <20220210192905.4500-13-ps.report@gmx.net>
-Date: Thu, 10 Feb 2022 22:50:30 +0100
-In-Reply-To: <20220210192905.4500-13-ps.report@gmx.net> (Peter Seiderer's
- message of "Thu, 10 Feb 2022 20:29:04 +0100")
-Message-ID: <87r18as861.fsf@dell.be.48ers.dk>
+ <20220210192905.4500-9-ps.report@gmx.net>
+Date: Thu, 10 Feb 2022 22:50:34 +0100
+In-Reply-To: <20220210192905.4500-9-ps.report@gmx.net> (Peter Seiderer's
+ message of "Thu, 10 Feb 2022 20:29:00 +0100")
+Message-ID: <87mtiys85x.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 12/13] package/gst1-python: bump version
+Subject: Re: [Buildroot] [PATCH v2 08/13] package/gst1-vaapi: bump version
  to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
