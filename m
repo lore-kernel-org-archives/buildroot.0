@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 936EBC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 19:12:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14ADBC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 19:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F3B261C2C;
-	Fri, 11 Feb 2022 19:12:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4800400F8;
+	Fri, 11 Feb 2022 19:12:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Xa9GCFbi0-Z; Fri, 11 Feb 2022 19:12:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nd4l5BBXgvA6; Fri, 11 Feb 2022 19:12:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F7B360BEA;
-	Fri, 11 Feb 2022 19:12:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1314C1BF3F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B7CB40A12;
+	Fri, 11 Feb 2022 19:12:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 205F51C116E
  for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 19:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DC9160B12
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5652241720
  for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 19:10:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M1iSziSyCheq for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GL1-Ya01MCpS for <buildroot@lists.busybox.net>;
  Fri, 11 Feb 2022 19:10:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7674A61C2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80E1B41675
  for <buildroot@buildroot.org>; Fri, 11 Feb 2022 19:10:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3452E82DDC; Fri, 11 Feb 2022 19:02:59 +0000 (UTC)
+ id 3EF11832DA; Fri, 11 Feb 2022 19:02:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Feb 2022 20:07:51 +0100
+Date: Fri, 11 Feb 2022 20:07:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1fc1b258d39b215194b868eb002200871e535595
-X-Git-Newrev: ea6a0a60e28f3047e762806a0cef3b4d55d7b576
+X-Git-Oldrev: ea6a0a60e28f3047e762806a0cef3b4d55d7b576
+X-Git-Newrev: d3730ae991107d338b4acab5e617c9ff0cd754a4
 X-Patchwork-Hint: ignore
-Message-Id: <20220211190259.3452E82DDC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: drop host-python2 support
+Message-Id: <20220211190259.3EF11832DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3-pyelftools: drop host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,116 +59,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea6a0a60e28f3047e762806a0cef3b4d55d7b576
+commit: https://git.buildroot.net/buildroot/commit/?id=d3730ae991107d338b4acab5e617c9ff0cd754a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-python2 is gone, so drop the _NEEDS_PYTHON2 logic.
+Now that host-python2 is gone, the custom python3 variant can be dropped.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy     |  6 ++++++
- boot/uboot/Config.in | 28 +++-------------------------
- boot/uboot/uboot.mk  |  8 +-------
- 3 files changed, 10 insertions(+), 32 deletions(-)
+ boot/optee-os/optee-os.mk                          |  2 +-
+ boot/uboot/uboot.mk                                |  2 +-
+ package/python-pyelftools/python-pyelftools.mk     |  1 -
+ package/python3-pyelftools/python3-pyelftools.hash |  1 -
+ package/python3-pyelftools/python3-pyelftools.mk   | 17 -----------------
+ 5 files changed, 2 insertions(+), 21 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2b1fd48de5..0794813a97 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 2884b48513..166b5e693c 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -21,7 +21,7 @@ else
+ OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
+ endif
  
- comment "Legacy options removed in 2022.02"
+-OPTEE_OS_DEPENDENCIES = host-openssl host-python3 host-python-pycryptodomex host-python3-pyelftools
++OPTEE_OS_DEPENDENCIES = host-openssl host-python3 host-python-pycryptodomex host-python-pyelftools
  
-+config BR2_TARGET_UBOOT_NEEDS_PYTHON2
-+	bool "host-python 2.7 support for U-Boot was removed"
-+	select BR2_LEGACY
-+	help
-+	  Option was removed together with python 2.7 support.
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS
- 	bool "gst1-plugins-bad plugin libmms was removed"
- 	depends on BR2_USE_WCHAR
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 1fd4dede92..953c36135e 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -143,45 +143,23 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
- 	  Select this option if your U-Boot board configuration
- 	  requires the Device Tree compiler to be available.
- 
--config BR2_TARGET_UBOOT_NEEDS_PYTHON
--	bool
--
--choice
--	bool "U-Boot needs host Python"
--
--config BR2_TARGET_UBOOT_NEEDS_PYTHON_NONE
--	bool "no"
--	depends on !BR2_TARGET_UBOOT_NEEDS_PYTHON
--	help
--	  Select this option if U-Boot does not need any
--	  host python to build.
--
--config BR2_TARGET_UBOOT_NEEDS_PYTHON2
--	bool "python 2.x"
--	help
--	  Select this option if U-Boot needs a host Python 2.x
--	  interpreter. This is the case for some U-Boot
--	  configurations, prior to U-Boot 2020.01.
--
- config BR2_TARGET_UBOOT_NEEDS_PYTHON3
--	bool "python 3.x"
-+	bool "U-Boot needs host python 3.x"
- 	help
- 	  Select this option if U-Boot needs a host Python 3.x
- 	  interpreter. This is the case for some U-Boot
- 	  configurations, after U-Boot 2020.01.
- 
--endchoice
--
- config BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
- 	bool "U-Boot needs pylibfdt"
--	select BR2_TARGET_UBOOT_NEEDS_PYTHON
-+	select BR2_TARGET_UBOOT_NEEDS_PYTHON3
- 	help
- 	  Select this option if your U-Boot board configuration
- 	  requires the Python libfdt library to be available.
- 
- config BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS
- 	bool "U-Boot needs pyelftools"
--	select BR2_TARGET_UBOOT_NEEDS_PYTHON
-+	select BR2_TARGET_UBOOT_NEEDS_PYTHON3
- 	help
- 	  Select this option if your U-Boot board configuration
- 	  requires the Python pyelftools library to be available.
+ # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
+ # can be built in 64bit mode and support 32bit and 64bit
 diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d05b9bb479..9e227fed91 100644
+index 9e227fed91..9e569906ce 100644
 --- a/boot/uboot/uboot.mk
 +++ b/boot/uboot/uboot.mk
-@@ -207,9 +207,7 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
- 
--ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
--UBOOT_DEPENDENCIES += host-python host-python-setuptools
--else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
- UBOOT_DEPENDENCIES += host-python3 host-python3-setuptools
- endif
- 
-@@ -218,12 +216,8 @@ UBOOT_DEPENDENCIES += host-swig
+@@ -216,7 +216,7 @@ UBOOT_DEPENDENCIES += host-swig
  endif
  
  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS),y)
--ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
--UBOOT_DEPENDENCIES += host-python-pyelftools
--else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
- UBOOT_DEPENDENCIES += host-python3-pyelftools
+-UBOOT_DEPENDENCIES += host-python3-pyelftools
++UBOOT_DEPENDENCIES += host-python-pyelftools
  endif
--endif
  
  ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
- UBOOT_DEPENDENCIES += host-openssl
+diff --git a/package/python-pyelftools/python-pyelftools.mk b/package/python-pyelftools/python-pyelftools.mk
+index 3ae0a4ffc2..5bfdcd33ae 100644
+--- a/package/python-pyelftools/python-pyelftools.mk
++++ b/package/python-pyelftools/python-pyelftools.mk
+@@ -4,7 +4,6 @@
+ #
+ ################################################################################
+ 
+-# Please keep in sync with package/python3-pyelftools/python3-pyelftools.mk
+ PYTHON_PYELFTOOLS_VERSION = 0.27
+ PYTHON_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
+ PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/6b/b5/f7022f2d950327ba970ec85fb8f85c79244031092c129b6f34ab17514ae0
+diff --git a/package/python3-pyelftools/python3-pyelftools.hash b/package/python3-pyelftools/python3-pyelftools.hash
+deleted file mode 120000
+index e8eebeda9f..0000000000
+--- a/package/python3-pyelftools/python3-pyelftools.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../python-pyelftools/python-pyelftools.hash
+\ No newline at end of file
+diff --git a/package/python3-pyelftools/python3-pyelftools.mk b/package/python3-pyelftools/python3-pyelftools.mk
+deleted file mode 100644
+index 3d21d3040e..0000000000
+--- a/package/python3-pyelftools/python3-pyelftools.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# python3-pyelftools
+-#
+-################################################################################
+-
+-# Please keep in sync with package/python-pyelftools/python-pyelftools.mk
+-PYTHON3_PYELFTOOLS_VERSION = 0.27
+-PYTHON3_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON3_PYELFTOOLS_VERSION).tar.gz
+-PYTHON3_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/6b/b5/f7022f2d950327ba970ec85fb8f85c79244031092c129b6f34ab17514ae0
+-PYTHON3_PYELFTOOLS_LICENSE = Public domain
+-PYTHON3_PYELFTOOLS_LICENSE_FILES = LICENSE
+-PYTHON3_PYELFTOOLS_SETUP_TYPE = setuptools
+-HOST_PYTHON3_PYELFTOOLS_DL_SUBDIR = python-pyelftools
+-HOST_PYTHON3_PYELFTOOLS_NEEDS_HOST_PYTHON = python3
+-
+-$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
