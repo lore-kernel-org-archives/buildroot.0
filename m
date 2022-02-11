@@ -4,53 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC978C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 22:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD3DC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 22:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57EFC4171A;
-	Fri, 11 Feb 2022 22:26:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53BD64172F;
+	Fri, 11 Feb 2022 22:27:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sDpf4zRpF87r; Fri, 11 Feb 2022 22:26:21 +0000 (UTC)
+	with ESMTP id d3vpSa043i5b; Fri, 11 Feb 2022 22:27:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 852EA41610;
-	Fri, 11 Feb 2022 22:26:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44F2C1BF34E
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 22:26:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97C9D4162F;
+	Fri, 11 Feb 2022 22:27:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 240441BF34E
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 22:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32AA541610
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 22:26:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1231660FB8
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 22:27:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w-c-LPG0v5Rn for <buildroot@lists.busybox.net>;
- Fri, 11 Feb 2022 22:26:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aEdeFct8gSjf for <buildroot@lists.busybox.net>;
+ Fri, 11 Feb 2022 22:27:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87DED41574
- for <buildroot@buildroot.org>; Fri, 11 Feb 2022 22:26:17 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E55A760F2D
+ for <buildroot@buildroot.org>; Fri, 11 Feb 2022 22:27:23 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8175100002;
- Fri, 11 Feb 2022 22:26:13 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1209DFF805;
+ Fri, 11 Feb 2022 22:27:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nIeMn-0008CY-0Q; Fri, 11 Feb 2022 23:26:13 +0100
+ id 1nIeNt-0008Dp-EZ; Fri, 11 Feb 2022 23:27:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Nuno =?utf-8?Q?Gon=C3=A7alves?= <nunojpg@gmail.com>
-References: <CAEXMXLSmFXY7jEVTuxtkq034drmG7nS_3c5D=B44M0Wt6U7rPA@mail.gmail.com>
- <CAEXMXLTDvKwJk0twwv_fqXkZFBncW3V4EGoDOZi9jadKVzG-Zg@mail.gmail.com>
-Date: Fri, 11 Feb 2022 23:26:12 +0100
-In-Reply-To: <CAEXMXLTDvKwJk0twwv_fqXkZFBncW3V4EGoDOZi9jadKVzG-Zg@mail.gmail.com>
- ("Nuno =?utf-8?Q?Gon=C3=A7alves=22's?= message of "Fri, 11 Feb 2022
- 18:22:03 +0000")
-Message-ID: <877da1oxa3.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220211203143.603357-1-fontaine.fabrice@gmail.com>
+Date: Fri, 11 Feb 2022 23:27:21 +0100
+In-Reply-To: <20220211203143.603357-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 11 Feb 2022 21:31:43 +0100")
+Message-ID: <8735kpox86.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/casync: fix zstd dependency to
- correct package name
+Subject: Re: [Buildroot] [PATCH 1/1] package/lzip: switch to tar.gz tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,14 +60,30 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIk51bm8iID09IE51bm8gR29uw6dhbHZlcyA8bnVub2pwZ0BnbWFpbC5jb20+IHdyaXRl
-czoKCiA+IFNpZ25lZC1vZmYtYnk6IE51bm8gR29uY2FsdmVzIDxudW5vanBnQGdtYWlsLmNvbT4K
-CkNvbW1pdHRlZCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+
+ > One of the autobuilder seems to have an issue with tar.lz tarball so
+ > switch to tar.gz to avoid the following build failure since bump to
+ > version 1.23 in commit 4648090a89a2478a4b0fa8cc43a49bc94668622c:
+
+ > tar: This does not look like a tar archive
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/76d8afa81e478cb4f408292484f67898236ca5a0
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+This is already fixed by
+https://git.buildroot.net/buildroot/commit/?id=618c5f7671643516432c1ec6b9f7b203313763a7
+so I have marked it as superseeded.
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
