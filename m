@@ -1,77 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43897C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 20:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F59DC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 20:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F07F40480;
-	Fri, 11 Feb 2022 20:31:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5D264171A;
+	Fri, 11 Feb 2022 20:35:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ygu4tJiXnn9H; Fri, 11 Feb 2022 20:31:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9b7EXUWi1YUl; Fri, 11 Feb 2022 20:35:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 90A4F40270;
-	Fri, 11 Feb 2022 20:31:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 031A41BF215
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 20:31:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45D1741718;
+	Fri, 11 Feb 2022 20:35:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CE1071BF215
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 20:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E31014046B
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 20:31:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCAE3819D2
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 20:35:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fBZgIZ_yyM2q for <buildroot@lists.busybox.net>;
- Fri, 11 Feb 2022 20:31:51 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NtAzr_oW8_hH for <buildroot@lists.busybox.net>;
+ Fri, 11 Feb 2022 20:35:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F0E9940270
- for <buildroot@buildroot.org>; Fri, 11 Feb 2022 20:31:50 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id d27so13318934wrb.5
- for <buildroot@buildroot.org>; Fri, 11 Feb 2022 12:31:50 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A11FA8198A
+ for <buildroot@buildroot.org>; Fri, 11 Feb 2022 20:35:19 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ az26-20020a05600c601a00b0037c078db59cso2572991wmb.4
+ for <buildroot@buildroot.org>; Fri, 11 Feb 2022 12:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ToDmxbOftSYKgVpgDiBT/cMGtbmvpvwcAjF5lhIsreM=;
- b=I0cYC8+cB2HxG7O5PTkaf2yvoyQ9cGXXoGDaNCmFA4bkp8JxYsaZ78y664PfFPkDSM
- HfvJYY1rfQuK8iBwO6W6LhOV5R+/t9ymUnaVARWbXlDf0prsW9ppTI1KJ26oavemjl9S
- itVPMKkBTmLbjczxEeX505UP38Jb6fFEHhIFUo7mm5V3yWKwALtfroeb2A6m6TbZkFt2
- 0Xmr7xwILPfmAa1EKYwr0HQUeyci3f5w6EUzndSKG6J4NvwcxAYQXfTZPp+podoJfkqs
- vXDHt7wwMpUBQrXyKH/MmX3qzxbktIPWUs3XJDR7lXkMWNAkyzzy8DSQvuH0AgMWljpG
- FqvA==
+ bh=C3ZBc3Y+uNtb/TGaGFTd3coniACVeKKF3xqHJz8kt8I=;
+ b=JAsg/XkRxDI2E7kIaFmAKQHqrezXRHhdL7vl6ke+Gbew/2LXPn2rLljY9W1giOWNUH
+ 6somNDyaWl5sWYN8WIFQ1J3YoxKtEJWKkf2nVcqepSHWvP1my7Wtsh/3WFMHGoy2Oylp
+ GfgELymj8mmnlNZh6xTjMJ2ydu/z7GMxQq0W8oGERZYlWVuzoHv0t/uQVo4NzascgRT5
+ xq1CD+mKl+viAVYhi6JP4+17u+OcLwNFMSI2rpeqJA8PajZjb2Vd5opuoMfSpCJ5nE6o
+ 2Ms82NyhyKITfjQONq9VWXcHdFeBWLFeriRwTmEaKzlhoE50AO1rJMG+MnaUVruDm/R2
+ HUyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ToDmxbOftSYKgVpgDiBT/cMGtbmvpvwcAjF5lhIsreM=;
- b=f0sYYqPMw+JEptKZ86xUOjXcDVtxDpgsX97wXTxPwApRBg9DWBCdt1dX41GqpYhv6B
- HL5tupeC0yfS9eXdze9PxxVjfMTWNXLWY0Db3LQgeO6ftar1NdVi0E4FbRqGCcPUhty2
- WtoA/XJsjhaiXx1G+dT2ZV0CBFr+PorUunxXyStQMsrh2ZRDXjMUT7bTLD2+UK0ckm8u
- rPOSOsrd/xSX4cVQ4vMqt3qGYDdO+29IkiWH7nhPsw2N29YqdKZy2hr8jQDu/q728u3G
- 7l1yqXXrV8VrT8NFYkhzdgDEdckJSFAoj3IPF6nc7W5Dxl9BPPd9o/HWTwDoy+ZiKi4p
- hrCA==
-X-Gm-Message-State: AOAM5322LCIhjlVvOJGG+QqoWXTKWYge0B3NC2rBDKXW6Ek4Jt+yb6Pg
- c6hu88b72djDUfaAuUgEDvsmWzPF9/4=
-X-Google-Smtp-Source: ABdhPJx2ZQuj9UjFZQRBIienzC/MS2ZSwHFArp2be0XRmLmeU8LU0dzteek1X/7eyKp1qlVZV3Ij8Q==
-X-Received: by 2002:a5d:50cb:: with SMTP id f11mr2611961wrt.178.1644611508629; 
- Fri, 11 Feb 2022 12:31:48 -0800 (PST)
+ bh=C3ZBc3Y+uNtb/TGaGFTd3coniACVeKKF3xqHJz8kt8I=;
+ b=y/3N7RS6nKYnohEZ30vQOzvyn+Vxjalm6QeE4I9VSECXAPbTtg+I+Z14EL+sVKns+s
+ hQdPs0EjAjHBSS+qPYaAdVS8kYd5WmLEKDfo/wgR+HbJepcAliNpRTPRbPx20/L9TENq
+ 7R9NTyNF3j+vkBqu0tJ/PHpIyd2IBTvOwkJM0Yas1JVayTTCyvPPDvLsIci1tQK3Dssb
+ AEBSzJ8qp/vwczCv9snRL1fUh3u0n45IyZJ2ivV/quiDONnYDluCcASdc6pr3cPZEQ9q
+ /+duw2SNLjBKsdms4/UDDIOEWA8FfblUYX/SmY2Gwh55b5JJExyQsz0lvESKNX7ERs8F
+ hGJA==
+X-Gm-Message-State: AOAM533pJDDSrwObVG05dZP0T4BUWNtizfbWy0fg/lcuLhRGuPKKcoAa
+ OlkUAZ9mp3yNFA++cnmM2ze1OUJ1lXU=
+X-Google-Smtp-Source: ABdhPJxzMrvrZCMQC1gcDpdAMmPJ5Zc32qTsb9XuRrxxfQuUoZICFY7QLQNB2c9/81bxMs21wJ7vwA==
+X-Received: by 2002:a05:600c:502c:: with SMTP id
+ n44mr1753372wmr.152.1644611717623; 
+ Fri, 11 Feb 2022 12:35:17 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id e8sm7465848wru.37.2022.02.11.12.31.47
+ by smtp.gmail.com with ESMTPSA id d14sm6521905wri.93.2022.02.11.12.35.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Feb 2022 12:31:48 -0800 (PST)
+ Fri, 11 Feb 2022 12:35:17 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Feb 2022 21:31:43 +0100
-Message-Id: <20220211203143.603357-1-fontaine.fabrice@gmail.com>
+Date: Fri, 11 Feb 2022 21:35:44 +0100
+Message-Id: <20220211203544.603682-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/lzip: switch to tar.gz tarball
+Subject: [Buildroot] [PATCH 1/1] package/python-pyrex: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,43 +93,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-One of the autobuilder seems to have an issue with tar.lz tarball so
-switch to tar.gz to avoid the following build failure since bump to
-version 1.23 in commit 4648090a89a2478a4b0fa8cc43a49bc94668622c:
-
-tar: This does not look like a tar archive
+Drop package which is not used by anyone and can't be built since drop
+of host-python in commit 2743ce00ca61fde1537b64a165a69d497052be58
 
 Fixes:
- - http://autobuild.buildroot.org/results/76d8afa81e478cb4f408292484f67898236ca5a0
+ - No autobuilder failures (yet)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lzip/lzip.hash | 2 +-
- package/lzip/lzip.mk   | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ DEVELOPERS                             |  1 -
+ package/python-pyrex/python-pyrex.hash |  3 ---
+ package/python-pyrex/python-pyrex.mk   | 15 ---------------
+ 3 files changed, 19 deletions(-)
+ delete mode 100644 package/python-pyrex/python-pyrex.hash
+ delete mode 100644 package/python-pyrex/python-pyrex.mk
 
-diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
-index 5e285a5ad8..48ee8175ca 100644
---- a/package/lzip/lzip.hash
-+++ b/package/lzip/lzip.hash
-@@ -1,4 +1,4 @@
- # From https://lists.nongnu.org/archive/html/lzip-bug/2022-02/msg00000.html
--sha256  ea02b9e6fb25d0e1a1d3ef4fdeb6ab26b931f1ece66fa1cee2983c95215e930a  lzip-1.23.tar.lz
-+sha256  4792c047ddf15ef29d55ba8e68a1a21e0cb7692d87ecdf7204419864582f280d  lzip-1.23.tar.gz
- # Locally calculated
- sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index e3cc86b956..31b5750767 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
-@@ -5,7 +5,6 @@
- ################################################################################
- 
- LZIP_VERSION = 1.23
--LZIP_SOURCE = lzip-$(LZIP_VERSION).tar.lz
- LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
- LZIP_LICENSE = GPL-2.0+
- LZIP_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0e759bc168..eb073c41f1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1934,7 +1934,6 @@ F:	package/python-ipy/
+ F:	package/python-iwlib/
+ F:	package/python-posix-ipc/
+ F:	package/python-pycairo/
+-F:	package/python-pyrex/
+ F:	package/python-pysftp/
+ F:	package/python-tinyrpc/
+ F:	package/python-txdbus/
+diff --git a/package/python-pyrex/python-pyrex.hash b/package/python-pyrex/python-pyrex.hash
+deleted file mode 100644
+index e8963558fc..0000000000
+--- a/package/python-pyrex/python-pyrex.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  5f87df06831d0b3412eb4bc9d3fc2ee7bfae1b913d7da8c23ab2bf5699fb6b50  Pyrex-0.9.9.tar.gz
+-sha256  5c1aec55fc8c399ec23968ddb2117eec8f7a53f002c15472a8b0aa7426790700  LICENSE.txt
+diff --git a/package/python-pyrex/python-pyrex.mk b/package/python-pyrex/python-pyrex.mk
+deleted file mode 100644
+index 6284a5f228..0000000000
+--- a/package/python-pyrex/python-pyrex.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# python-pyrex
+-#
+-################################################################################
+-
+-PYTHON_PYREX_VERSION = 0.9.9
+-PYTHON_PYREX_SOURCE = Pyrex-$(PYTHON_PYREX_VERSION).tar.gz
+-PYTHON_PYREX_SITE = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex
+-PYTHON_PYREX_LICENSE = Apache-2.0
+-PYTHON_PYREX_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYREX_SETUP_TYPE = distutils
+-HOST_PYTHON_PYREX_NEEDS_HOST_PYTHON = python2
+-
+-$(eval $(host-python-package))
 -- 
 2.34.1
 
