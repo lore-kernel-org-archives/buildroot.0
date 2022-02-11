@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E3B9C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 19:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF5F5C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 19:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DFAC40A12;
-	Fri, 11 Feb 2022 19:13:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C58D83E0F;
+	Fri, 11 Feb 2022 19:13:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id voyYSyRnHhFD; Fri, 11 Feb 2022 19:13:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c4g1stRxI2RY; Fri, 11 Feb 2022 19:13:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D974040A41;
-	Fri, 11 Feb 2022 19:13:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A265B83E01;
+	Fri, 11 Feb 2022 19:13:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 415581C116E
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 19:10:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4458D1BF3F7
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 19:10:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66BF260BEA
+ by smtp3.osuosl.org (Postfix) with ESMTP id D272860E3F
  for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 19:10:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rrFtCy7N_WBl for <buildroot@lists.busybox.net>;
- Fri, 11 Feb 2022 19:10:28 +0000 (UTC)
+ with ESMTP id 7E3WpiP4Onmy for <buildroot@lists.busybox.net>;
+ Fri, 11 Feb 2022 19:10:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4FADE60E3F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E1C161C3B
  for <buildroot@buildroot.org>; Fri, 11 Feb 2022 19:10:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0AEBA825B5; Fri, 11 Feb 2022 19:02:59 +0000 (UTC)
+ id 52FC9825B5; Fri, 11 Feb 2022 19:02:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Feb 2022 20:07:01 +0100
+Date: Fri, 11 Feb 2022 20:08:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 866b42ce4985affd0ab578e15b77eac1dc6533a5
-X-Git-Newrev: f2b862405abbafd68520f167ccb8b03975dc3aea
+X-Git-Oldrev: 2a8cea2ebcadb53d0b7545e9dd489344064d90d5
+X-Git-Newrev: f4f0e2a63726efe84032c69b4f2b41a883c5e822
 X-Patchwork-Hint: ignore
-Message-Id: <20220211190259.0AEBA825B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3-ply: drop host package
+Message-Id: <20220211190259.52FC9825B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3-six: drop host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,72 +58,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2b862405abbafd68520f167ccb8b03975dc3aea
+commit: https://git.buildroot.net/buildroot/commit/?id=f4f0e2a63726efe84032c69b4f2b41a883c5e822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Now that host-python2 is gone, the custom python3 variant can be dropped.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcamera/libcamera.mk       |  2 +-
- package/python-ply/python-ply.mk     |  1 -
- package/python3-ply/python3-ply.hash |  1 -
- package/python3-ply/python3-ply.mk   | 16 ----------------
- 4 files changed, 1 insertion(+), 19 deletions(-)
+ package/gnuradio/gnuradio.mk         |  2 +-
+ package/python-six/python-six.mk     |  1 -
+ package/python3-six/python3-six.hash |  1 -
+ package/python3-six/python3-six.mk   | 17 -----------------
+ 4 files changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 534d8d2637..7cd4bfa758 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -11,7 +11,7 @@ LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
- 	host-pkgconf \
- 	host-python-jinja2 \
--	host-python3-ply \
-+	host-python-ply \
- 	host-python-pyyaml \
- 	gnutls
- LIBCAMERA_CONF_OPTS = \
-diff --git a/package/python-ply/python-ply.mk b/package/python-ply/python-ply.mk
-index 50a3e32bc2..5dc7964d5f 100644
---- a/package/python-ply/python-ply.mk
-+++ b/package/python-ply/python-ply.mk
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 417a51e067..49e3b95191 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -15,7 +15,7 @@ GNURADIO_SUPPORTS_IN_SOURCE_BUILD = NO
+ GNURADIO_DEPENDENCIES = \
+ 	host-python3 \
+ 	host-python-mako \
+-	host-python3-six \
++	host-python-six \
+ 	host-swig \
+ 	boost \
+ 	log4cpp \
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+index 41ef41d0ba..9e3e5fcf50 100644
+--- a/package/python-six/python-six.mk
++++ b/package/python-six/python-six.mk
 @@ -4,7 +4,6 @@
  #
  ################################################################################
  
--# Please keep in sync with package/python3-ply/python3-ply.mk
- PYTHON_PLY_VERSION = 3.11
- PYTHON_PLY_SOURCE = ply-$(PYTHON_PLY_VERSION).tar.gz
- PYTHON_PLY_SITE = https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da
-diff --git a/package/python3-ply/python3-ply.hash b/package/python3-ply/python3-ply.hash
+-# Please keep in sync with package/python3-six/python3-six.mk
+ PYTHON_SIX_VERSION = 1.16.0
+ PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
+ PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e
+diff --git a/package/python3-six/python3-six.hash b/package/python3-six/python3-six.hash
 deleted file mode 120000
-index 5e07165c93..0000000000
---- a/package/python3-ply/python3-ply.hash
+index ed8cb89a6b..0000000000
+--- a/package/python3-six/python3-six.hash
 +++ /dev/null
 @@ -1 +0,0 @@
--../python-ply/python-ply.hash
+-../python-six/python-six.hash
 \ No newline at end of file
-diff --git a/package/python3-ply/python3-ply.mk b/package/python3-ply/python3-ply.mk
+diff --git a/package/python3-six/python3-six.mk b/package/python3-six/python3-six.mk
 deleted file mode 100644
-index 15f66a49db..0000000000
---- a/package/python3-ply/python3-ply.mk
+index ee9dc818ee..0000000000
+--- a/package/python3-six/python3-six.mk
 +++ /dev/null
-@@ -1,16 +0,0 @@
+@@ -1,17 +0,0 @@
 -################################################################################
 -#
--# python3-ply
+-# python3-six
 -#
 -################################################################################
 -
--PYTHON3_PLY_VERSION = 3.11
--PYTHON3_PLY_SOURCE = ply-$(PYTHON3_PLY_VERSION).tar.gz
--PYTHON3_PLY_SITE = https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da
--PYTHON3_PLY_SETUP_TYPE = setuptools
--PYTHON3_PLY_LICENSE = BSD-3-Clause
--PYTHON3_PLY_LICENSE_FILES = README.md
--
--HOST_PYTHON3_PLY_NEEDS_HOST_PYTHON = python3
+-# Please keep in sync with package/python-six/python-six.mk
+-PYTHON3_SIX_VERSION = 1.16.0
+-PYTHON3_SIX_SOURCE = six-$(PYTHON3_SIX_VERSION).tar.gz
+-PYTHON3_SIX_SITE = https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e
+-PYTHON3_SIX_SETUP_TYPE = setuptools
+-PYTHON3_SIX_LICENSE = MIT
+-PYTHON3_SIX_LICENSE_FILES = LICENSE
+-HOST_PYTHON3_SIX_DL_SUBDIR = python-six
+-HOST_PYTHON3_SIX_NEEDS_HOST_PYTHON = python3
 -
 -$(eval $(host-python-package))
 _______________________________________________
