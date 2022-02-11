@@ -1,133 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADA41C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 13:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6B37C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Feb 2022 13:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62B1A60C2E;
-	Fri, 11 Feb 2022 13:20:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 915034166D;
+	Fri, 11 Feb 2022 13:37:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tXaK7PiYZqPF; Fri, 11 Feb 2022 13:20:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kr8AVRaC2Kke; Fri, 11 Feb 2022 13:37:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D4A960C0F;
-	Fri, 11 Feb 2022 13:20:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C67B64166B;
+	Fri, 11 Feb 2022 13:37:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EFE61BF2CC
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 13:20:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 94FC51BF2CC
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 13:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CF1260675
- for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 13:20:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B92460E1B
+ for <buildroot@lists.busybox.net>; Fri, 11 Feb 2022 13:37:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W6Nmk7rV_YJc for <buildroot@lists.busybox.net>;
- Fri, 11 Feb 2022 13:20:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam08on2062c.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8d::62c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C061660C0F
- for <buildroot@buildroot.org>; Fri, 11 Feb 2022 13:20:34 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d9so98SLndfbpPmmHfD6sYVaVy+FsUVBsezDVyRg1ApfBQux2C9jNcqlJdI/B7nAovhdoz5tL5s1k5WrtmT6ZbPd08ZSeqOrCpptVigrOYxIEXqTowuQrHqvHOZsMnMZ47RKw85jC7bXjEues1JJQjmWmbBTqajKfMYVvOHvGC1xHjTc6ldrLnRvbV+vsCPrTJRgpEDw7vNs2u/q6D3pa0Ts4e5v3dTMasvihNPVUcC0yUBhe5Wz5dLZb11StQpAkf4//0orfJjoVjyh89utmoZOoukfu+HYFIyMBsW3dFK484NEYteybM2VyHajAVYPse9JATe0AM6TC1AeDqP21Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EyC79V/73vSrepPHbHIj3b0/n3xWgsj5LHYxMJfzMy4=;
- b=PeAd5wP3PMDj0Uw3ac8NtvJ4ohU3Fq+u6+knoBmMmcyXrnMQk1minXgidjPRBr/SBPlVGWGILjvPTRNaiQEernKkdrrk8x4lfujG5r2+cemCZJFbIubaEcHh/JitppLHdVfSE5XzegBZa+BfNQ6SS+kRg9CVcNWyi1Upq5lK9zle+Y0ib3A8jOe8C5sPec0BWae0u3rtCQRarN/x7Zhbs0b9r6nERSr+UlWsW7t8LdeYYRV+YqDtSkUgsUCBickY1qwtNPl6+lR3Rwq9l4MZC6ugBXpx1btif3A7vgc/T/zibiBQumANoNaOYFf4rmL1W3+f0sCnyJRgCLOkAHmFsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EyC79V/73vSrepPHbHIj3b0/n3xWgsj5LHYxMJfzMy4=;
- b=lZjiJRA387zoZgBw8cG6Y+LKggypXe8gfzSRCAnXK1fuAdzqX/J6fidSJzM41yKhnJ61IB7qgkCYQPuViid4sNd5OlseJ4NIC05iGnWTpchPbnQiuzf5Ot8B2GGSmG/aIWnSwpPo1gk138/XDlEpmJnyUgZmwhPZSf8XDGR8kY4=
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by CY4PR02MB2325.namprd02.prod.outlook.com (2603:10b6:903:c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Fri, 11 Feb
- 2022 13:20:31 +0000
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::3d75:3dc2:7976:32e3]) by SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::3d75:3dc2:7976:32e3%6]) with mapi id 15.20.4975.011; Fri, 11 Feb 2022
- 13:20:30 +0000
-From: Neal Frager <nealf@xilinx.com>
-To: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
- "giulio.benetti@benettiengineering.com"
- <giulio.benetti@benettiengineering.com>
-Thread-Topic: [PATCH v5 2/2] add configs/zynqmp_zcu102_defconfig
-Thread-Index: AQHYH0GFBqHvjb+TsUOnsm61PnAReayOUpywgAACe4A=
-Date: Fri, 11 Feb 2022 13:20:30 +0000
-Message-ID: <SJ0PR02MB775869979604C048051535B0D7309@SJ0PR02MB7758.namprd02.prod.outlook.com>
-References: <20220211121740.1257919-1-neal.frager@xilinx.com>
- <20220211121740.1257919-2-neal.frager@xilinx.com>
- <SJ0PR02MB77587E2B08F7E6F164D63093D7309@SJ0PR02MB7758.namprd02.prod.outlook.com>
-In-Reply-To: <SJ0PR02MB77587E2B08F7E6F164D63093D7309@SJ0PR02MB7758.namprd02.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 82424c02-6c01-4f69-a23e-08d9ed614717
-x-ms-traffictypediagnostic: CY4PR02MB2325:EE_
-x-microsoft-antispam-prvs: <CY4PR02MB2325B470A18891B2E8BEB15DD7309@CY4PR02MB2325.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pMUDSHksOnbdDC92AfmFkJgebPg/3r/97GHLiX7fU2ZUT348+53gpq6H9WJBfeiM1kAmYpfkYxw9lZmqRZX5NFlGqulxfb96Q7/H9Yr4lPhqbqd0JqmC04tl8bE4d1x00gXR0QQJtut61mbns3fgzIt74qbS8ss+GE+ll1LisoMQru7zmq31gTqphoscRSetRFXNYA+WYJnaQLwPTc7M3qO0N9e2DscUH5eLBCOg4L6QON63OYajqDzx9N/ri9RzHtlHsi/aRvwjBFpymZdTAATHob81lyZabs37IkbCWw7gQKPfncqZbc+GxOkdRJb8mbf/Ga/whbzgGjbq3LzuPMwpjdcAoikxyVnmTrbZupikBAlnHA69meg27AzfSiK7KMSBPv6XO3b2K3Yla/IVZ3Ddd2Yce6ddq0xeNZxgmd+ga8eEvt8SVfHcuaMWiG6w7hnAAJxyjFoI1HFnD0gPtQjF8TShOep0ZnIQPRI+g7vt0G4YWjRnC8JjpiaooxhIzDDsfu5eOmOeSHr55AxzxCYWYt8wNflCPOidpr1EVr7xPUfWMBgE+k/xvL6SVovr0H7aAefvLVQfbbfF7kWkFpQgYvflq35R6sNmKUC8mq+t7bpT+nUmy3IolDMy3nWj5R8sIcLIA6V0t7omWrOheeldSF04bNPA+7xSgg0kXnL0VTjOk4vYRe8GlFPxiOUeB3bgCbTC67igEXLDP9GT7Q==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(8936002)(54906003)(52536014)(9686003)(26005)(66556008)(4326008)(8676002)(110136005)(66946007)(86362001)(38100700002)(7696005)(6506007)(64756008)(76116006)(2940100002)(122000001)(186003)(38070700005)(66476007)(316002)(66446008)(71200400001)(508600001)(83380400001)(5660300002)(33656002)(2906002)(55016003)(4744005);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KNf9ctjRLWvpLp12UPOHENUqoUitnYVFdlz1mtv0BdiE5ZlyZZIT5f5ImRcM?=
- =?us-ascii?Q?XHCtMdrTahNhrBtQRIhEdzLgCjX1TYIkvTusTWAVzY+d2uCt3MjFShzlJxky?=
- =?us-ascii?Q?TzOgU/npkH4Hfg4mNsoaElmhOMLshFn3zDT6Wwt++WS+yE1xlwADSdB0R+lG?=
- =?us-ascii?Q?SUZLv3d/h7fNfhVJ6wayZhVocaZ6Qre8xReXG831fwJHfGl2ZFoUkpj0noVQ?=
- =?us-ascii?Q?5q2qOVZG4YklNMtR0HdbbZZzXGxM9oTS7WYy+BBEFsP5gedigJz8a83lEHlO?=
- =?us-ascii?Q?TzVyLQUW1O2slDfCj2CU9gnd3+c6ktirrXilFIRVf/oxZIEvrC0kqmvj6Pdg?=
- =?us-ascii?Q?MHKIPa0Shw6VV4ZDRcGasgJk9dMHxRyk33GuB9cYhWeBoY95SN7V/NH60sMu?=
- =?us-ascii?Q?TUfTbNy7razeRQqT6B6TYOM38F3KZ11e1iX/SrSgFhNrUKhYkJiItvnJxcpJ?=
- =?us-ascii?Q?juk9qalLuhkU6Fudt5vlFiw1zF1cIENNAQ9NOfhbleiwRMW+2aIuu1Sg+to8?=
- =?us-ascii?Q?HiAL7Nr37JGQlvVAgWdiWbDACNjPLxajM9rbAA48bmXeWboNdnKDwpWuLA/r?=
- =?us-ascii?Q?8JviZLWvwsGetsDxB+YXgNNkd76x1+LVnZAA3qM5kEp8ii1cXANfFAnDUgNX?=
- =?us-ascii?Q?ByoAXgL/Aet+2AwSiIFthhGEc18tJgGogd3BUFz5KTOt530YQ5gbTRotFuD8?=
- =?us-ascii?Q?bnLz/P/lF1I+qbF5bi7wFUUOoVMS5Y919dyjNhxyf2VdmF3rLuUEbwWdSylu?=
- =?us-ascii?Q?Xkp5C4BKKjPDT2CNPXw4JnXgmCZEb333URys4FiPk7RxHFsiFJ3LfacKffdj?=
- =?us-ascii?Q?5AMzsI9NTGxEh3wWDiCmEv4y2mGwkvB8BYshbwwFj9E4mTzmM3MQ6nkET40W?=
- =?us-ascii?Q?HgLpImsde1ebglNmOCOeRn1Bm5yLK6uVFKz6gckzfJCHdgcGnRX83+8v88Wi?=
- =?us-ascii?Q?ubAsiLxPmC4flu7pff6DgICQJk/4Z1eDfMJAfhVp7WqOk6jbFd1qlftdIJ7a?=
- =?us-ascii?Q?CciGHFXmzOviwQFy06qKcneTFABxgvkD82kMTfgbJT0qHT/c5xBWXRbovJlG?=
- =?us-ascii?Q?+ieoMu3NC//07khkbiHXpH8vVb8I23iR6Pjd+ykVGHC3JcKCOBjac4SZbZL4?=
- =?us-ascii?Q?fLZi9hz1gPLKqyjikeJeTcTCaJ35dKOz9YmfAG4IxKdXvSDlcveFzV/fjdeo?=
- =?us-ascii?Q?TUZa+JecV5WZs/axaMB0Q5En934tTdNQCEXCltRrlR+bOMz0kcNflscqnv6Q?=
- =?us-ascii?Q?LS3gmHL4d2ep/Y1WCEg7LH8g3t3zvdjS2TXUADCPoK3F+1WRopA+lldb63Lw?=
- =?us-ascii?Q?1xCZeflavcmnxeWE7QJ1uJRUkxLcgueGcBgyA8Os77xFTEAsLJEHAKARiLyP?=
- =?us-ascii?Q?HJ8NQGoI18g8LSicL9xd7dyS+4ObdAIQKzt0c1Cgv9oTWEjypZ2zQVBCAZF4?=
- =?us-ascii?Q?O2h+ia3gYguA5GjA7qPqtImn5S/g2TCEwSP+x7FcTfplGd3/Aoo3rai9IPwA?=
- =?us-ascii?Q?jhc/OgW/xI6m6Jy9EjwDg6iv4pvUNhOLOEBFvwPv/8BqXNMVfs9LbrzwSFHU?=
- =?us-ascii?Q?2f8Oy5tS4AB6HmQG/tGX+gw2ktKqCfM4dwGEWkCetG3AddLAY8xd9CPqAh7M?=
- =?us-ascii?Q?Zg=3D=3D?=
+ with ESMTP id 1phNpG_ugF9Y for <buildroot@lists.busybox.net>;
+ Fri, 11 Feb 2022 13:37:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1266760C0F
+ for <buildroot@buildroot.org>; Fri, 11 Feb 2022 13:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1644586663;
+ bh=DDTcNsXiAynxpGkmVB67b4/UV/IcYX33bPhlHOGxTWg=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=I2XHZBwwxR4UT7s35pC232WpW3HFeZmJJvRAt4T5to64kjFUE3AD927mDxzrgZhsD
+ vAPvoiwRCA3a7mBsRr3L+OLvRhb6CnU3atJHIqVINe9Ice/4zgpsr0OXT1tWcCHq9n
+ 0j5IsExRG9HovMi/vQlK/k/A3hIdHXv0n9lxC1jg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.232]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUowV-1nj5Xi2ryL-00QjXj; Fri, 11
+ Feb 2022 14:37:43 +0100
+Date: Fri, 11 Feb 2022 14:37:42 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Message-ID: <20220211143742.1fdec542@gmx.net>
+In-Reply-To: <20220211112245.1357817-1-kieran.bingham@ideasonboard.com>
+References: <20220211112245.1357817-1-kieran.bingham@ideasonboard.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82424c02-6c01-4f69-a23e-08d9ed614717
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2022 13:20:30.8571 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WgIVBW5ZgSGYphCEy0XQmJpSkbGEyG8CIXXQKIVLGMLJV36/n9MKE1raLiVxxyQdzyXGmljdFr2/Ud4rqCgABw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2325
-Subject: Re: [Buildroot] [PATCH v5 2/2] add configs/zynqmp_zcu102_defconfig
+X-Provags-ID: V03:K1:ohynS+eN508gi9oEJNH8FqImVku/AQO96SVOh2zCr4rfoTDQvTu
+ Bgm97dAzoblzu80Yx5ayaW90K1XOZNTBAAYSy3kAm+XTEfNJUqgF58VDv1l6nDQsybBg0kQ
+ SDfH61gvEVA6LVD+VGXSL8Vtr4UebuB3uwYUBaRd4FFiNJNPuF5r2JTGZ246QgzO8Rq95Zn
+ /cuyEE2bfkJD9v/ohZ++w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q7BrQR0Dltc=:dQN+4VFE9s8ZAUeb2/lp2L
+ gXRzLJsnQ9tdD21agVoMBQ3FHw1bp4mHvu8ugzlOs0xqnTm0IWn5HBmZ6kcIB5PohhlIbx/YN
+ but7vBhJsZQFYKL0MqmaBjpxos3DcQCmEH2Vbn5q36B7YQvY57080WYNSvH0tB4fR42g5/ir4
+ KPG8fKElBWUiUCVq7UDEmir8WSvxwc2YlZ7VYiwb3HMgcbRdYGQd4O2xmbuDLmjnazk6Jaqkx
+ JDnIq5seodGPSDS7nzwfzvSV1u2mGXGJbemYGgOhP/y8pVLXbr0dhj6uhRVZPFtZl5/JG4loH
+ IkFA2kZDPcUL71H4ghLxaDnlWjUZBZfffyxq2bx5ipGHu07I97eUwyHpHM5KsjRcBAk/sha3K
+ L/zxCuzwfZqRy+D9uQjtLiw5A9LIdlT3gqyXdq0WiENzaekr8Lu+TumJr3y4CBy3r/88qmUft
+ R1OU6W/wZVeQoKzZU9gtr9BVSdICzHkdnTt+KmGq0RMQJcAH/RD22LFBvgKTSU26FFEhuLA7b
+ qZm5GXYm4QVYLCa9JAWgdRcVOWsNhh3XoPhFvP7L2Cq31tnel/gXlf6U7n3MJl4rZrwALgedj
+ hqqxm4xg9ssEKDvhi1DQg3yffyiklTG/jGCXm7IdxVwOp/P9j0WdVCZl9iJ2lu3bwgiNqOMdS
+ hzHm6Yg/D/ZdGAZzyK9D78AUXbKlOpOTVe41bEEUtr3Acq1fsMpSd2W5otr3I4AYH9lGJkROR
+ zfpKvzZsnZtmdCESZNaI7mKYTXSz2a/c4XGbzwi/1b2LU/6QHh6DNCxsiouJ+qGYH767xImCL
+ GySjUOjG642bQCXVrLbOY6PU96b4pOWBNpQoHIDr3l/20D02/T9mpFOfYMAaTnMIIWN/oUhEG
+ JsScBxc1dOMf9JI/dktzUjq5+ngj0ZA5OEqSFU5boj2r/gGuWAs4oWtsg4Rf/I92rMOhTRFjM
+ 788+wdr8jeq2trAyU+KZoI/cbhMirXC4C8ZJGSaN1uxw0wRvxMRWXA2Uby/Hk3fXmmcYDrJQB
+ Hq+EuH99TOPc25dfTYlPS6naLcMpu++HuvbusBHsXRVWyCQoc7f1EnbqdourOgZXdVvABTl3G
+ nGKbe9Yh0r5fC4=
+Subject: Re: [Buildroot] [PATCH] package/libcamera bump to
+ 1966b9a58436fab51f8270aad6a228b935e4fac4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -139,24 +86,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michal Simek <michals@xilinx.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio, Luca,
+Hello Kieran,
 
-As PM_CONFIG_OBJECT_TYPE_BASE is used only a single time in the pm_cfg_obj.c,
-I am going to solve this by removing the define and replacing it with the value 0x1U.
+one nitpick: the patch subject should be 'package/libcamera: bump to ...'
+(instead of 'package/libcamera bump to ...')....
 
-In the meantime, it would be great if Luca could update the script in mainline to
-handle new Vitis generated pm_cfg_obj.c files.
+On Fri, 11 Feb 2022 11:22:45 +0000, Kieran Bingham <kieran.bingham@ideasonboard.com> wrote:
 
-Best regards,
-Neal Frager
-Xilinx
+> Update to the latest libcamera commit.
+>
+> This incorporates fixes and improvements for Raspberry Pi which will be
+> needed to go along side the new libcamera-apps package.
+>
+> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+> ---
+>  package/libcamera/libcamera.hash | 2 +-
+>  package/libcamera/libcamera.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+> index a7ca27a96b7f..8d5abf0e621c 100644
+> --- a/package/libcamera/libcamera.hash
+> +++ b/package/libcamera/libcamera.hash
+> @@ -1,4 +1,4 @@
+> -sha256  305e6f458d2bf3d4b697ffe33e104b696db6b1492bb5422e2cce1937e58516f1  libcamera-40f5fddca7f774944a53f58eeaebc4db79c373d8-br1.tar.gz
+> +sha256  3624c71ba492c602c5335aab3dc87798193f7596c6cc75f7cfb847165f180930  libcamera-1966b9a58436fab51f8270aad6a228b935e4fac4-br1.tar.gz
+>
+>  # license files
+>  sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+> index 534d8d26371f..cf1af5aaf065 100644
+> --- a/package/libcamera/libcamera.mk
+> +++ b/package/libcamera/libcamera.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>
+>  LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+> -LIBCAMERA_VERSION = 40f5fddca7f774944a53f58eeaebc4db79c373d8
+> +LIBCAMERA_VERSION = 1966b9a58436fab51f8270aad6a228b935e4fac4
+>  LIBCAMERA_SITE_METHOD = git
+>  LIBCAMERA_DEPENDENCIES = \
+>  	host-openssl \
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
