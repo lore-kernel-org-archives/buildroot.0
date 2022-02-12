@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DCCDC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 13:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD5BCC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 13:14:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3EAB4039D;
-	Sat, 12 Feb 2022 13:13:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FC6460F2D;
+	Sat, 12 Feb 2022 13:14:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S0jvrS1kQspM; Sat, 12 Feb 2022 13:13:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gi_K0ZlVuwty; Sat, 12 Feb 2022 13:13:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CF0740574;
-	Sat, 12 Feb 2022 13:13:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF531BF283
+	by smtp3.osuosl.org (Postfix) with ESMTP id D34F960746;
+	Sat, 12 Feb 2022 13:13:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 93BAF1BF954
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69B4680D9D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 830B561B89
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:13:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yokXor0EAs4Y for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lm9ylRoYMIny for <buildroot@lists.busybox.net>;
  Sat, 12 Feb 2022 13:13:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB04380C1E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D884E60592
  for <buildroot@buildroot.org>; Sat, 12 Feb 2022 13:13:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B9FDD82ACC; Sat, 12 Feb 2022 13:06:02 +0000 (UTC)
+ id DF42482210; Sat, 12 Feb 2022 13:06:02 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 13:55:52 +0100
+Date: Sat, 12 Feb 2022 14:05:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59d3a1a9994c337207cd0bfdfbd79f01ff8739e6
-X-Git-Newrev: ebde11d29f5ceb7f7398d24cbf71909c1e08a073
+X-Git-Oldrev: 3e031008ce489dea29073c5750f5773c2e4b13cd
+X-Git-Newrev: 1ddced072abefa001a10df56b9820e96db1b2b6f
 X-Patchwork-Hint: ignore
-Message-Id: <20220212130602.B9FDD82ACC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add test for python-distro
+Message-Id: <20220212130602.DF42482210@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/thermald: update URL in the docs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,62 +58,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebde11d29f5ceb7f7398d24cbf71909c1e08a073
+commit: https://git.buildroot.net/buildroot/commit/?id=1ddced072abefa001a10df56b9820e96db1b2b6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit add a simple test checking the reported distro name and
-id are Buildroot (as reported by /etc/os-release).
+Old project homepage was removed, so switch to github, already in use to
+download the sources.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-[Arnout: drop python2 variant]
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                                            |  2 ++
- support/testing/tests/package/sample_python_distro.py |  4 ++++
- support/testing/tests/package/test_python_distro.py   | 11 +++++++++++
- 3 files changed, 17 insertions(+)
+ package/thermald/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 689673fce7..e89149cea0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1604,7 +1604,9 @@ F:	package/python-gnupg/
- F:	package/python-pyalsa/
- F:	package/riscv-isa-sim/
- F:	package/zynaddsubfx/
-+F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
-+F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
+diff --git a/package/thermald/Config.in b/package/thermald/Config.in
+index 6d74a164b6..e5e15b9b8d 100644
+--- a/package/thermald/Config.in
++++ b/package/thermald/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_THERMALD
+ 	  reaches a certain threshold, the Linux daemon activates
+ 	  various cooling methods to try to cool the system.
  
- N:	Julien Viard de Galbert <julien@vdg.name>
-diff --git a/support/testing/tests/package/sample_python_distro.py b/support/testing/tests/package/sample_python_distro.py
-new file mode 100644
-index 0000000000..b31f129718
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_distro.py
-@@ -0,0 +1,4 @@
-+import distro
-+
-+assert(distro.name() == 'Buildroot')
-+assert(distro.id() == 'buildroot')
-diff --git a/support/testing/tests/package/test_python_distro.py b/support/testing/tests/package/test_python_distro.py
-new file mode 100644
-index 0000000000..c26f9c499e
---- /dev/null
-+++ b/support/testing/tests/package/test_python_distro.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Distro(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DISTRO=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_distro.py"]
+-	  https://01.org/linux-thermal-daemon
++	  https://github.com/intel/thermal_daemon
+ 
+ comment "thermald needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_i386 || BR2_x86_64
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
