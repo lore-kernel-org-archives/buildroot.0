@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34456C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 13:14:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3E3CC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 13:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E624B81D5C;
-	Sat, 12 Feb 2022 13:14:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 765914031F;
+	Sat, 12 Feb 2022 13:14:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xS0VcKwK8m3N; Sat, 12 Feb 2022 13:14:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RZdnq38BJaxf; Sat, 12 Feb 2022 13:14:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22BC281B14;
-	Sat, 12 Feb 2022 13:14:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 20B431BF954
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51F3F40272;
+	Sat, 12 Feb 2022 13:14:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 285CB1BF956
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9498060592
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D82980D9D
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:13:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uziVLb2edR3B for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q-78DETA60ED for <buildroot@lists.busybox.net>;
  Sat, 12 Feb 2022 13:13:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE458605DB
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFE1780C62
  for <buildroot@buildroot.org>; Sat, 12 Feb 2022 13:13:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0077782210; Sat, 12 Feb 2022 13:06:02 +0000 (UTC)
+ id D341E82AD4; Sat, 12 Feb 2022 13:06:02 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 14:10:12 +0100
+Date: Sat, 12 Feb 2022 14:04:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c8406392466ecd1591265e24e619202c79f08a39
-X-Git-Newrev: cdbe856675dafc43838f628ce4838ee8dc8d3080
+X-Git-Oldrev: 9c78c8c0d7120b6de7103879961c778d32c57d52
+X-Git-Newrev: 3e031008ce489dea29073c5750f5773c2e4b13cd
 X-Patchwork-Hint: ignore
-Message-Id: <20220212130603.0077782210@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xml-security-c: needs threads
+Message-Id: <20220212130602.D341E82AD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbpf: bump to version 0.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdbe856675dafc43838f628ce4838ee8dc8d3080
+commit: https://git.buildroot.net/buildroot/commit/?id=3e031008ce489dea29073c5750f5773c2e4b13cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add threads dependency to avoid the following build failure raised since
-bump to version 2.0.4 in commit
-27d08083ed4db5bd055219574cc602aaf8053a49:
-
-configure: error: unable to find pthreads, currently this is required
-
-Fixes:
- - http://autobuild.buildroot.org/results/b6065efaa722f2da911c7cf150d446da621e8c71
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/xml-security-c/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libbpf/libbpf.hash | 2 +-
+ package/libbpf/libbpf.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
-index 02544d5a01..c7963be69a 100644
---- a/package/xml-security-c/Config.in
-+++ b/package/xml-security-c/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_XML_SECURITY_C
- 	depends on !BR2_STATIC_LIBS # xerces
- 	depends on BR2_USE_WCHAR # xerces
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends	on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_XERCES
-@@ -13,6 +14,7 @@ config BR2_PACKAGE_XML_SECURITY_C
+diff --git a/package/libbpf/libbpf.hash b/package/libbpf/libbpf.hash
+index afc7aec1bf..27e22be9e9 100644
+--- a/package/libbpf/libbpf.hash
++++ b/package/libbpf/libbpf.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  21cbee4df093e7fd29e76ed429650d3f3abe3a893f35e346ab9bc3484f6e68c0  libbpf-0.4.0.tar.gz
++sha256  ce3a8eb32d85ac48490256597736d8b27e0a5e947a0731613b7aba6b4ae43ac0  libbpf-0.6.1.tar.gz
+ sha256  847f4addbd56e2d5be20c4ea0845e972672fc07b755fadaae5f7abd35d71e349  LICENSE
+ sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
+ sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSE.LGPL-2.1
+diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
+index 3f09cc38dc..6750b063c0 100644
+--- a/package/libbpf/libbpf.mk
++++ b/package/libbpf/libbpf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://santuario.apache.org/cindex.html
- 
--comment "xml-security-c needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
-+comment "xml-security-c needs a toolchain w/ C++, wchar, dynamic library, threads, gcc >= 4.7"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
+-LIBBPF_VERSION = 0.4.0
++LIBBPF_VERSION = 0.6.1
+ LIBBPF_SITE = $(call github,libbpf,libbpf,v$(LIBBPF_VERSION))
+ LIBBPF_LICENSE = GPL-2.0, LGPL-2.1, BSD-2-Clause
+ LIBBPF_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
