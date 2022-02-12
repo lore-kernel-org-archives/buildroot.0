@@ -1,47 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5523C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 22:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC054C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 22:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 795DC60AD1;
-	Sat, 12 Feb 2022 22:12:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B07A40384;
+	Sat, 12 Feb 2022 22:17:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DipF-Hhb4YNl; Sat, 12 Feb 2022 22:12:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZeOZS2i-2NZY; Sat, 12 Feb 2022 22:17:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92A996079E;
-	Sat, 12 Feb 2022 22:12:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A8DC91BF3AF
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 22:11:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D40AB402C9;
+	Sat, 12 Feb 2022 22:17:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 23BC21BF3AF
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 22:17:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A47806079E
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 22:11:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00A90400AB
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 22:17:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nPIxHKaVzfqG for <buildroot@lists.busybox.net>;
- Sat, 12 Feb 2022 22:11:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA8F0606F9
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 22:11:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1E558825C1; Sat, 12 Feb 2022 22:04:21 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 23:09:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92dc22dd6823b93b5989a704a2440e724d954bd3
-X-Git-Newrev: c0312f71cc89434e2f29e37b4586186240aa4d14
-X-Patchwork-Hint: ignore
-Message-Id: <20220212220421.1E558825C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/orangepi_zero_defconfig: switch to
- extlinux
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fGKdKHXLRaIL for <buildroot@lists.busybox.net>;
+ Sat, 12 Feb 2022 22:17:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1AB6640022
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 22:17:23 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id fy20so29669160ejc.0
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 14:17:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=UKlhH3L9+DxYrH+LP9+j1SnWtG39xSqi7j+6q52l7qo=;
+ b=UhMP+J7CTEqVHs9SFRdlfIjPIi/Gmfl+EPIyd3xuPkJWelVc1YbSSqujtzd6urd8zE
+ rm5GTSgCqV9zpQ4bBx4ZejP5K97J8d+c35TrYpcOy8go9cudx8t1DEa80NV3h0U27o4a
+ xFLjCa9P+HslAdmbcBvGK6/wG49FxDvaq6lNDWjdBeQIJqfDDsdQaIddXBKF4KgChDCA
+ /a5z3AY86+CAObc+b6Kxxt7j390WTdDhCsbiFtqqW6xQnxrbppTLdl5DE9C/p/uhmeTr
+ HssnnRkHfNbTppzEnfNdZZQxecJ2m317eLbgJTb71dVpsrQzsfNQo1UWXNFGdKaBFPTb
+ 778w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=UKlhH3L9+DxYrH+LP9+j1SnWtG39xSqi7j+6q52l7qo=;
+ b=0YVh1QE193qLDAPfUbhNCp9QzYyLWhnjPZcuALdczkAScNBBvn0IprvpOfYHhIM8hZ
+ ZmDwxasw6GwwLDqZ6vLqVo+KHA6a44PTzhrYNCy8n1gh9CHmGUkXgDJO3nmmGe5eLyWh
+ SQXRqEPTAqQrkv2yYo5PCpfVijrMTBLbilMO6x1/EnmKiTBGNyNk35v/9Ra3spwmKru+
+ /lUocV+bMJ6k0gTCnibqkE6faMwt3ByE9qqNe8cuVCjLbJ5nu87Z9imHLLgNAumZQ3KG
+ QdzgYgLI/9bo1wgmKERLWO27a3rOvUyORlXPfiUcgM5kEW3oZrIHUGQmr2RyIREIQTge
+ rHpQ==
+X-Gm-Message-State: AOAM5324Jrj7trS3yLK4y1vdGOwFIDBQiIn+ZBW/87L7LTkQZOeFJ1i9
+ KjqgSbMQ4SfguoyycwuIo2RuhQ==
+X-Google-Smtp-Source: ABdhPJywSH1fCDzKKD6lsqK7FJzp044QJampBAlMx2BcwvnLsSDqefDF2L/hYime7wPVwQZ+XYG8qA==
+X-Received: by 2002:a17:906:608c:: with SMTP id
+ t12mr5976726ejj.131.1644704241333; 
+ Sat, 12 Feb 2022 14:17:21 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id y11sm1224143edc.1.2022.02.12.14.17.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 12 Feb 2022 14:17:20 -0800 (PST)
+Message-ID: <e705b71d-9a21-89ea-d094-0f2678716dc5@mind.be>
+Date: Sat, 12 Feb 2022 23:17:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20220206115156.6042cc1b@windsurf>
+ <20220206112620.1637342-1-giulio.benetti@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220206112620.1637342-1-giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH v3 0/2] Fix gitlab CI build failure due to
+ missing HOST_ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,201 +97,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Eugen Hristev <eugen.hristev@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0312f71cc89434e2f29e37b4586186240aa4d14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-* Exclude FAT partition, it is no longer needed for U-Boot.
-* Switch the rootfs partition from MBR to GPT for partition-uuid to work.
-* Switch to extlinux, this is convenient for debugging.
-* Create common scenarios for multiple boards to create an SD image:
-  board/orangepi/common. Currently only orangepi_zero makes use of the
-  common infrastructure.
 
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Arnout: remove rootfs size = 63M and remount rw]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- board/orangepi/common/extlinux.conf       |  4 ++++
- board/orangepi/common/genimage.cfg        | 20 +++++++++++++++++
- board/orangepi/common/post-build.sh       | 34 +++++++++++++++++++++++++++++
- board/orangepi/orangepi-zero/boot.cmd     |  9 --------
- board/orangepi/orangepi-zero/genimage.cfg | 36 -------------------------------
- configs/orangepi_zero_defconfig           |  9 +++-----
- 6 files changed, 61 insertions(+), 51 deletions(-)
+On 06/02/2022 12:26, Giulio Benetti wrote:
+> This patchset fixes the gitlab build failure due to HOST_ dependencies(uboot/linux).
+> 
+> V1->V2:
+> * add missing host openssl for linux on microchip_sama7g5ek_mmc_defconfig/_dev_defconfig
+> V2->V3:
+> * add specific custom linux version as suggested by Thomas
+> 
+> Giulio Benetti (2):
+>    configs/microchip_sama7g5ek_mmc_defconfig: set custom linux version to
+>      5.15.21 and add host openssl for linux
+>    configs/microchip_sama7g5ek_mmc_dev_defconfig: set custom linux
+>      version to 5.15.21 and add host openssl for linux
 
-diff --git a/board/orangepi/common/extlinux.conf b/board/orangepi/common/extlinux.conf
-new file mode 100644
-index 0000000000..12f496b1fa
---- /dev/null
-+++ b/board/orangepi/common/extlinux.conf
-@@ -0,0 +1,4 @@
-+LABEL default
-+  kernel /boot/%LINUXIMAGE%
-+  devicetreedir /boot
-+  append root=PARTUUID=%PARTUUID% rootwait console=${console} rootfstype=ext4 quiet panic=10
-diff --git a/board/orangepi/common/genimage.cfg b/board/orangepi/common/genimage.cfg
-new file mode 100644
-index 0000000000..a61c4a039f
---- /dev/null
-+++ b/board/orangepi/common/genimage.cfg
-@@ -0,0 +1,20 @@
-+image sdcard.img {
-+	partition u-boot {
-+		in-partition-table = false
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
-+	}
-+
-+	hdimage {
-+		partition-table-type = gpt
-+		gpt-location = 1008K # 1MB - 16KB(GPT)
-+		gpt-no-backup = true
-+	}
-+
-+	partition rootfs {
-+		offset = 1M
-+		image = "rootfs.ext4"
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/orangepi/common/post-build.sh b/board/orangepi/common/post-build.sh
-new file mode 100755
-index 0000000000..296f94b174
---- /dev/null
-+++ b/board/orangepi/common/post-build.sh
-@@ -0,0 +1,34 @@
-+#!/bin/sh
-+
-+linux_image()
-+{
-+	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
-+		echo "uImage"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
-+		echo "Image"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGEGZ=y$" ${BR2_CONFIG}; then
-+		echo "Image.gz"
-+	else
-+		echo "zImage"
-+	fi
-+}
-+
-+generic_getty()
-+{
-+	if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG}; then
-+		echo ""
-+	else
-+		echo "s/\s*console=\S*//"
-+	fi
-+}
-+
-+PARTUUID="$($HOST_DIR/bin/uuidgen)"
-+
-+install -d "$TARGET_DIR/boot/extlinux/"
-+
-+sed -e "$(generic_getty)" \
-+	-e "s/%LINUXIMAGE%/$(linux_image)/g" \
-+	-e "s/%PARTUUID%/$PARTUUID/g" \
-+	"board/orangepi/common/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+
-+sed "s/%PARTUUID%/$PARTUUID/g" "board/orangepi/common/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
-deleted file mode 100644
-index d094a64fe5..0000000000
---- a/board/orangepi/orangepi-zero/boot.cmd
-+++ /dev/null
-@@ -1,9 +0,0 @@
--setenv fdt_high ffffffff
--
--part uuid mmc 0:2 uuid
--setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
--
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
--
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-zero/genimage.cfg b/board/orangepi/orangepi-zero/genimage.cfg
-deleted file mode 100644
-index 32f5454ae6..0000000000
---- a/board/orangepi/orangepi-zero/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Minimal SD card image for the OrangePi Zero
--#
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-h2-plus-orangepi-zero.dtb",
--			"boot.scr"
--		}
--	}
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 5aaa1566c5..464e075e5c 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -20,6 +20,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
-@@ -39,16 +40,12 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- 
- # Required tools to create the SD image
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
- 
- # Image
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- 
- # Wireless driver and firmware
- BR2_PACKAGE_XR819_XRADIO=y
+  Both applied to master, thanks.
+
+  The entropy issue can be resolved later.
+
+  Regards,
+  Arnout
+
+> 
+>   configs/microchip_sama7g5ek_mmc_defconfig     | 4 ++++
+>   configs/microchip_sama7g5ek_mmc_dev_defconfig | 4 ++++
+>   2 files changed, 8 insertions(+)
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
