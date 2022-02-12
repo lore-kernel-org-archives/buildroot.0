@@ -4,78 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 473DFC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 11:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52861C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 11:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF01F60B32;
-	Sat, 12 Feb 2022 11:17:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6624607D1;
+	Sat, 12 Feb 2022 11:18:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c3SXQGUvy26k; Sat, 12 Feb 2022 11:17:22 +0000 (UTC)
+	with ESMTP id UGy550C9oIEU; Sat, 12 Feb 2022 11:18:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E21DC60AFC;
-	Sat, 12 Feb 2022 11:17:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A13CB1BF3A4
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:17:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3149D605A3;
+	Sat, 12 Feb 2022 11:18:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C56601BF3A4
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:18:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85B8A83E63
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:17:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3A69605A3
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:18:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ntoX1hjnzhpj for <buildroot@lists.busybox.net>;
- Sat, 12 Feb 2022 11:17:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AiHxnSIRdS_x for <buildroot@lists.busybox.net>;
+ Sat, 12 Feb 2022 11:18:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69DA183E50
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 11:17:19 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id c192so6884679wma.4
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 03:17:19 -0800 (PST)
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
+ [IPv6:2607:f8b0:4864:20::133])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C3BB060590
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 11:18:46 +0000 (UTC)
+Received: by mail-il1-x133.google.com with SMTP id f13so8792303ilq.5
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 03:18:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=p/UlkcdCffDQfjQ7du7CVOjkNbzC8h6NqmVeOoGzlIE=;
- b=etMuyfzpBzcYjqaEyahRD9epj74+m2/5DeQi3kQWvX8+EpCkVlR3qrN/kxrFlqGG53
- Zl5CBzDygFvWpzBhS2DeR3vWNp8V2J519fTqXzWQUrPRo7PpmeQUe49ZeKRc2qOXANiM
- Y3Ym3OtqEVO/OnhjHbDdn8Sg6+ZXukXzTRlZ7ZNqzDD1jBbXywTJ2A3iWBkZoy7/5UGA
- TXkRd/fljFuRYpnq+Eukj3Jp2C8Aj4i2dbetbvsBj5tr0wWS/aYDAeb9MMwVEKRWupR/
- C52EHH74PZtIOnQUIHPM3bNxI3X3XWDLce+deCbzvlwaQRlJcB9NQroo/bk4gzBSl3V1
- EhRA==
+ bh=hKlTZ4Oq5NrESzirRq3rMv1M6izdAzEf5vmkqVVezBc=;
+ b=LzTVe0Y4nVVxIcoKet2ybrNs4K51OLHu18n0KfB3k49oA2ZL18g+9r1RlMw4ozeEQd
+ 2OuDqwxphAEVqcfqnkShQP2Gil8uqyV4tw7z4J+577kNythccflhEsUWm2WNsUggNodu
+ 30/RqayQvCy/M8goKUS9+EfsQ+vZASWFfI2K/E2FNbP2/UKGoOx9+v9vdX5BkLofejF4
+ CLyVPbfvD3cw1EEF7Uw5pHVOaDdjkfz6iPBfmyDK1ncq3kd8ZDp+Lxbi4vd7rtEAyl1m
+ Gbe+3llu7FA4O8i9oZC+H5InaFQj3tCYmU468UDaKMC5CCuzn3kn/i3SdLsse3QzXmDQ
+ uSmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=p/UlkcdCffDQfjQ7du7CVOjkNbzC8h6NqmVeOoGzlIE=;
- b=lND2LGxnfRvghj1t5arE/4er43TPBznVrep5J3mTZ5cf0wysB6qcvzGnW3CpWjbMiy
- rr6eFR9E9pKNbkvqP9auA9+2Vq9CdsH+mO4ot2GWP5jT3i7XnU/hL/E/1mUExFFYnH0R
- Sg0gwllmiJ8tD0kP1TXlvY974UJ0GLI91gyQN5OHZuZegXBZx8R+L3jazmBELgEQX1D6
- 4eT8f+f/oUMvafUa2+dsltZ3sLym5NWXxDJHBJXjl99tLhQLm4cXDrDD4fSTLGK460fh
- dBh73kgvdBbWfsbyf8BPveHBpYuMARf9bLtm5PtvrlNA6/ZZcTABAmsWgY5YQEkKzjgx
- vDRA==
-X-Gm-Message-State: AOAM530wdtirNc48Ogus71OU+LkIjitGpZiNlKj188BUs99+DN4uG1+L
- P6BTei2KSvd5drU/RTZgc8h4ufCdgvM=
-X-Google-Smtp-Source: ABdhPJzs6wnxOiZ3DxF9zJgAqxaUfoScKZr5Mue7065vTBcsGB3pAgXWelHtU/wDifFpsERpNSIJ/A==
-X-Received: by 2002:a1c:a141:: with SMTP id k62mr3830806wme.0.1644664637086;
- Sat, 12 Feb 2022 03:17:17 -0800 (PST)
-Received: from Clement-Blade14.home
- (2a01cb0003ba9b005ce88ca2b701695e.ipv6.abo.wanadoo.fr.
- [2a01:cb00:3ba:9b00:5ce8:8ca2:b701:695e])
- by smtp.gmail.com with ESMTPSA id l26sm6005401wmp.31.2022.02.12.03.17.16
+ bh=hKlTZ4Oq5NrESzirRq3rMv1M6izdAzEf5vmkqVVezBc=;
+ b=HuM4JYkhex0uIIsg1mQV9FIp64Gnf8SvP8Q2KFeki6D5QYJWsXj0nbFL5DwmoOnnsG
+ 0HgL0/+a4Y7c6euAAli5GbA2Dw0cVZQGBjr/gTXdtWS4inPE5Id2Mzrwxn7Cv743V+zK
+ Hd5IoJixnJDPpfZQTKhPJqiVoFpvpCWO0XlU5VpOamp8193MlTsB8qQX2Slhh+IR2pBt
+ SG2fzz5PIataaB2B0HEUxRXoxZZ2neHEEmwkj5UUNEOH4HK3zJCbrX5tB4Ln4paFFDzd
+ 1vrYBeXZWJXmmpj6Ihpno2iDrdwCu/Z+YJVTJVAg3Gtd8yf9Lw0vhcpiGXzpL8/g2nXo
+ 5Utg==
+X-Gm-Message-State: AOAM530q7LegGRfNU7UfYsJqaDvpjnCJLdIUz+1bLBP3seOory6AAhEt
+ S4MkNy2102NGe8VXD1JgaGEWuABMq+U=
+X-Google-Smtp-Source: ABdhPJy1ZS+dNrxhIY47qmr6VRCC7C1R8WkTZXLwF7PqavGwX0yokqAy68VGItD7s29UFnSiLx9Umw==
+X-Received: by 2002:a92:c5b1:: with SMTP id r17mr3087545ilt.320.1644664725451; 
+ Sat, 12 Feb 2022 03:18:45 -0800 (PST)
+Received: from james-x399.localdomain (97-118-156-98.hlrn.qwest.net.
+ [97.118.156.98])
+ by smtp.gmail.com with ESMTPSA id q9sm15230277iop.30.2022.02.12.03.18.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 12 Feb 2022 03:17:16 -0800 (PST)
-From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+ Sat, 12 Feb 2022 03:18:45 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 12:17:10 +0100
-Message-Id: <20220212111710.22559-1-peron.clem@gmail.com>
-X-Mailer: git-send-email 2.32.0
+Date: Sat, 12 Feb 2022 04:18:43 -0700
+Message-Id: <20220212111843.1210441-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/beelink_gs1: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to version
+ 60.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,29 +84,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2VsZWN0IEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BFTlNTTCB0byBmaXggdGhlIGZvbGxvd2lu
-ZyBidWlsZAplcnJvcjoKCmluY2x1ZGUvaW1hZ2UuaDoxMTc4OjEyOiBmYXRhbCBlcnJvcjogb3Bl
-bnNzbC9ldnAuaDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQogMTE3OCB8ICMgIGluY2x1ZGUg
-PG9wZW5zc2wvZXZwLmg+CiAgICAgIHwgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn4KCkZpeGVz
-OgotIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMjA3
-NjQ3NTAzMwoKU2lnbmVkLW9mZi1ieTogQ2zDqW1lbnQgUMOpcm9uIDxwZXJvbi5jbGVtQGdtYWls
-LmNvbT4KLS0tCiBjb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZyB8IDEgKwogMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvY29uZmlncy9iZWVsaW5rX2dzMV9k
-ZWZjb25maWcgYi9jb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZwppbmRleCBjYTk1M2RmM2Vh
-Li5iN2I3ZWI4NGQwIDEwMDY0NAotLS0gYS9jb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZwor
-KysgYi9jb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZwpAQCAtMzksNiArMzksNyBAQCBCUjJf
-VEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OPXkKIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZF
-UlNJT05fVkFMVUU9IjIwMjEuMTAiCiBCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0i
-YmVlbGlua19nczEiCiBCUjJfVEFSR0VUX1VCT09UX05FRURTX0RUQz15CitCUjJfVEFSR0VUX1VC
-T09UX05FRURTX09QRU5TU0w9eQogQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19QWVRIT04zPXkKIEJS
-Ml9UQVJHRVRfVUJPT1RfTkVFRFNfUFlMSUJGRFQ9eQogQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19B
-VEZfQkwzMT15Ci0tIAoyLjMyLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 8df7155d4c..e04235e041 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,4 +1,4 @@
+ # From https://pypi.org/pypi/setuptools/json
+-md5  082637e8fbc2e1fd9c637665d8fcccd8  setuptools-60.7.0.tar.gz
+-sha256  b83cf328a4f6a987c95610e76b29a30778db05174eef71f771776c48f8f25d1b  setuptools-60.7.0.tar.gz
++md5  f47a5750f6084cce3418f213a9d97785  setuptools-60.8.2.tar.gz
++sha256  66b8598da112b8dc8cd941d54cf63ef91d3b50657b374457eda5851f3ff6a899  setuptools-60.8.2.tar.gz
+ sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 584f83f7a0..8653c42259 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_VERSION = 60.7.0
++PYTHON_SETUPTOOLS_VERSION = 60.8.2
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/29/dd/48d662bb93e5e51e72265ef612f869947d4ae4126328d7156824cd50d440
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ae/0b/e458b0d07dced3d7fa2d21d828e708f374ef82040f2012c05d35f47f9af3
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
