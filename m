@@ -1,86 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C5F2C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 11:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC29FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 11:54:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C296440104;
-	Sat, 12 Feb 2022 11:53:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C9CC60B3A;
+	Sat, 12 Feb 2022 11:54:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0MA7bFiDLi7X; Sat, 12 Feb 2022 11:53:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Uq_DyOeXr0IL; Sat, 12 Feb 2022 11:54:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A86F040278;
-	Sat, 12 Feb 2022 11:53:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 952B61BF3A4
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:53:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA1AA60ACB;
+	Sat, 12 Feb 2022 11:54:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 553741BF3A4
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7279F40278
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:53:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44082817AF
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 11:54:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7PYS6LbS5Gd2 for <buildroot@lists.busybox.net>;
- Sat, 12 Feb 2022 11:53:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DB2A840104
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 11:53:52 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id p15so27855215ejc.7
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 03:53:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=2AkYLNVyrFmwkNjD/O7hv9fvzTHFNNwJmEKfkwSwk3k=;
- b=RyjjiuB6hfzZLI8OCvDc6Qwy9tQub7sWJjOfqDHWp7fVE/VtvxNkHjHsduwBaAuIDa
- k+A2Y+gzN49WbFq3WkvxHZ0ndmJCG8rNo8pJ0MGYw3yEqCmpBwm9Im1kProf/a7j52rZ
- gEfglwd0vlimb3u3dlLS2pEcl+OU6iftgPtsp4lC4P4TQffVVVD2COaA/WaEkQDMR4cc
- si9b48s8gUciAqS7GOlUW6Vfavtrovlru+l4iQevw1aEgzMqrgmnq7PQYj9QxapA4smu
- 3/+S/SpdBJJC67sDlbSEIwq6Oyw+RehmstM+jhhfF+ZAZEROAjY47RswAGwANaz+AprH
- 10oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=2AkYLNVyrFmwkNjD/O7hv9fvzTHFNNwJmEKfkwSwk3k=;
- b=3Ujznl4JB/9/Fj+EiT1fYew/Wxr/GryMzCKsn+Ldk4iooSOHOww21QEcaPXLJng5v6
- a32SC91y42wBDdTW8tsP6BEHYfGnMwTApXSr7ZcSgCPmiH5ABME8I/lL/LCKYYMVUJhA
- AG5ncT+iv/TOSap0Dd2hObFGCCB4D/lM/kk8K8MhFTwp+XOTmZ5fK/XavWMg0R3dk9AX
- HoOm68/io/jHvJ0ob4LXZFIV6FB9atwQg3jj7ZZqxJnwXWB4oplPG9mu5U/JzdLn7GSe
- ZK89CFh098lGEckeMj0JHRYw9XXWTIZWwEF+GY6w6rkQ1lPASZa4l1pFFFi55CgGBipu
- VD6A==
-X-Gm-Message-State: AOAM532yzV3271bEhAkoxdjB49e9PqRjCx5cNWJ2Yd0rRwLcAYUrw4tQ
- tcjF6jIOOTzHw51Te/veOy2PlQ==
-X-Google-Smtp-Source: ABdhPJyd8yNO+BG247XRm5c0dQlDj8KqG4p46g5H0xzY2IIIjuGkrqcFpopjcC5/5dGqDe3YlUET9w==
-X-Received: by 2002:a17:907:7292:: with SMTP id
- dt18mr4465895ejc.667.1644666831100; 
- Sat, 12 Feb 2022 03:53:51 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id cr8sm12315347edb.47.2022.02.12.03.53.49
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Feb 2022 03:53:49 -0800 (PST)
-Message-ID: <57cb38e0-b657-a6be-9722-4444ec9c0558@mind.be>
-Date: Sat, 12 Feb 2022 12:53:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-GB
-To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
-References: <20220131081214.12773-1-geomatsi@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220131081214.12773-1-geomatsi@gmail.com>
-Subject: Re: [Buildroot] [PATCH 0/5] synopsys: boards maintenance
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UeZgyBM9JlkS for <buildroot@lists.busybox.net>;
+ Sat, 12 Feb 2022 11:54:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 836F581516
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 11:54:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 9BFDC8284B; Sat, 12 Feb 2022 11:46:31 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 12 Feb 2022 12:50:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 697acda00d9f6fc601e6724da36f0e0b96aeee09
+X-Git-Newrev: 758a3dffd2769ee2fe27bd50f2a0ec7175c69f75
+X-Patchwork-Hint: ignore
+Message-Id: <20220212114631.9BFDC8284B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/snps_arc700_axs101: bump kernel
+ and u-boot versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,55 +53,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joao Pinto <jpinto@synopsys.com>,
- ARC Maintainers <arc-buildroot@synopsys.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=758a3dffd2769ee2fe27bd50f2a0ec7175c69f75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Bump versions:
+- use U-Boot 2022.01
+- use Linux kernel v5.16
 
-On 31/01/2022 09:12, Sergey Matyukevich wrote:
-> Hi all,
-> 
-> This is a maintenance patch series for Synopsys boards. Outdated
-> and unused VDK configurations are removed. All the other boards
-> receive Linux kernel and U-Boot updates.
-> 
-> Regards,
-> Sergey
-> 
-> 
-> Sergey Matyukevich (5):
->    configs/snps_arc700_axs101: bump kernel and u-boot versions
->    configs/snps_archs32_axs103: bump kernel and u-boot versions
->    configs/snps_archs38_hsdk: bump kernel and u-boot versions
->    configs/snps_archs38_haps: bump kernel and u-boot versions
->    board/synopsys: remove outdated vdk boards
+Add U-Boot configuration fragment increasing early malloc pool size.
 
-  Series applied to master, thanks!
+Signed-off-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
+Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ board/synopsys/axs10x/uboot-fragment.config |  1 +
+ configs/snps_arc700_axs101_defconfig        | 10 ++++++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-  Regards,
-  Arnout
-
-> 
->   board/synopsys/axs10x/uboot-fragment.config   |   1 +
->   .../synopsys/vdk/linux-vdk-aarch64-defconfig  | 143 ------------------
->   board/synopsys/vdk/readme.txt                 |  65 --------
->   configs/snps_aarch64_vdk_defconfig            |  12 --
->   configs/snps_arc700_axs101_defconfig          |  10 +-
->   configs/snps_archs38_axs103_defconfig         |  10 +-
->   configs/snps_archs38_haps_defconfig           |   6 +-
->   configs/snps_archs38_hsdk_defconfig           |   7 +-
->   configs/snps_archs38_vdk_defconfig            |  20 ---
->   9 files changed, 20 insertions(+), 254 deletions(-)
->   create mode 100644 board/synopsys/axs10x/uboot-fragment.config
->   delete mode 100644 board/synopsys/vdk/linux-vdk-aarch64-defconfig
->   delete mode 100644 board/synopsys/vdk/readme.txt
->   delete mode 100644 configs/snps_aarch64_vdk_defconfig
->   delete mode 100644 configs/snps_archs38_vdk_defconfig
-> 
+diff --git a/board/synopsys/axs10x/uboot-fragment.config b/board/synopsys/axs10x/uboot-fragment.config
+new file mode 100644
+index 0000000000..92fe20f463
+--- /dev/null
++++ b/board/synopsys/axs10x/uboot-fragment.config
+@@ -0,0 +1 @@
++CONFIG_SYS_MALLOC_F_LEN=0x0500
+diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
+index 080250e92b..3a6bd5c0d3 100644
+--- a/configs/snps_arc700_axs101_defconfig
++++ b/configs/snps_arc700_axs101_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
+ 
+-# Linux headers same as kernel, a 5.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++# Linux headers same as kernel, a 5.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+@@ -22,6 +22,8 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/synopsys/axs10x/uboot-fragment.config"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
