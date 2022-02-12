@@ -1,46 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4E4C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 17:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550A9C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 17:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72C0981361;
-	Sat, 12 Feb 2022 17:13:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF75360A8B;
+	Sat, 12 Feb 2022 17:25:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x7lerbau8tch; Sat, 12 Feb 2022 17:13:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WKm4-3M4ILiA; Sat, 12 Feb 2022 17:25:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 840C881332;
-	Sat, 12 Feb 2022 17:13:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 315F61BF580
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 17:13:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03E5B608A6;
+	Sat, 12 Feb 2022 17:25:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C7A9F1BF580
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 17:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DCD1402E9
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 17:13:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC4AD82B8C
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 17:25:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wxOKchlup6Qm for <buildroot@lists.busybox.net>;
- Sat, 12 Feb 2022 17:13:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40C0C40259
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 17:13:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id DCB5F8215C; Sat, 12 Feb 2022 17:06:19 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 18:11:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 695b21d6a16ab2033e8bdc86a5df38880e5aecda
-X-Git-Newrev: 7227d005d2435ec7b38995a6247d233ddb5ba365
-X-Patchwork-Hint: ignore
-Message-Id: <20220212170619.DCB5F8215C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera-apps: new package
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pwd-TW7u7YXZ for <buildroot@lists.busybox.net>;
+ Sat, 12 Feb 2022 17:25:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9CC2F82A53
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 17:25:02 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9140:15a5:f29a:157f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 54AC619F576;
+ Sat, 12 Feb 2022 18:24:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1644686699;
+ bh=6fElOhzHGn0QoWDP4FlFkET+cXdysWbf3/ApXEB+GfE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=NMFJ0HvUZEB6jnlz3uJI4jUPvJfrOdf0brfMq5AayVThUFm7l0dbPb31VgFrVw1tI
+ bfYfz4VNdGmD0XFdY3M4Dh4dU+nL3jGciy/WmhQraeQ9bS/XDPJUFz8Ex/WWuGnH6O
+ TrLDGsaYYn2xlBtxpD9avpxm2e2P38pp4vfk50mWohAfiZIPgF/k2tUgBY6/I9rLRH
+ z9a+dBuMUMn2elay1h7mpb4nNBteYYkLi5M2L9t7VXa6M/5qRcbzLQ4xCYnPYn6qUX
+ 76LvHpLq6Ag8AfrZRRei0g4YgVa7gJEkHpkZaiwu6idiUT9O/gOLQFWFbIIKOM3KO9
+ DozwU02pxWmWg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 12 Feb 2022 18:24:57 +0100
+Date: Sat, 12 Feb 2022 18:24:57 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20220212172457.GG3752867@scaer>
+References: <20220211150604.23489-1-ps.report@gmx.net>
+ <20220211150604.23489-2-ps.report@gmx.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220211150604.23489-2-ps.report@gmx.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v6 1/1] package/libcamera-apps: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,208 +72,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8459107994358004551=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8459107994358004551==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=7227d005d2435ec7b38995a6247d233ddb5ba365
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998@free.fr:
-  - only depend on libx11-xlib or libexpoxy if actually enabled
-  - simplify qt5 dependency
-  - fix check-package
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...e-Werror-and-Wfatal-errors-compiler-comma.patch | 37 +++++++++++++++++
- package/libcamera-apps/Config.in                   | 29 +++++++++++++
- package/libcamera-apps/libcamera-apps.hash         |  3 ++
- package/libcamera-apps/libcamera-apps.mk           | 48 ++++++++++++++++++++++
- 6 files changed, 119 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b36f42e274..9e3142d8a4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2283,6 +2283,7 @@ F:	package/gstreamer1/gst1-devtools/
- F:	package/gstreamer1/gst1-interpipe/
- F:	package/gstreamer1/gstreamer1-editing-services/
- F:	package/iwd/
-+F:	package/libcamera-apps/
- F:	package/libevdev/
- F:	package/libuev/
- F:	package/log4cplus/
-diff --git a/package/Config.in b/package/Config.in
-index 314a17a6db..10209d84d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1738,6 +1738,7 @@ menu "Multimedia"
- 	source "package/libbdplus/Config.in"
- 	source "package/libbluray/Config.in"
- 	source "package/libcamera/Config.in"
-+	source "package/libcamera-apps/Config.in"
- 	source "package/libdcadec/Config.in"
- 	source "package/libdvbcsa/Config.in"
- 	source "package/libdvbpsi/Config.in"
-diff --git a/package/libcamera-apps/0001-cmake-remove-Werror-and-Wfatal-errors-compiler-comma.patch b/package/libcamera-apps/0001-cmake-remove-Werror-and-Wfatal-errors-compiler-comma.patch
-new file mode 100644
-index 0000000000..988d89cca3
---- /dev/null
-+++ b/package/libcamera-apps/0001-cmake-remove-Werror-and-Wfatal-errors-compiler-comma.patch
-@@ -0,0 +1,37 @@
-+From 6bd733b52f0b4039407c676cd3126a9e2f79456b Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 5 Feb 2021 18:24:08 +0100
-+Subject: [PATCH] cmake: remove -Werror and -Wfatal-errors compiler command
-+ line option
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes (with bootlin-riscv64-musl toolchain):
-+
-+  .../build/libcamera-apps-2d1009e3badcc8047361ff81149ad6cba3b911b5/core/libcamera_app.cpp:30:22: error: overflow in conversion from ‘long unsigned int’ to ‘int’ changes value from ‘2154321408’ to ‘-2140645888’ [-Werror=overflow]
-+     30 |  int ret = ioctl(fd, VIDIOC_QUERYCAP, &caps);
-+        |                      ^~~~~~~~~~~~~~~
-+  cc1plus: all warnings being treated as errors
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 748c6dd..1ca1e39 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -11,7 +11,7 @@ endif()
-+ 
-+ set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
-+ set (CMAKE_CXX_STANDARD 17)
-+-add_compile_options(-Wall -Wextra -pedantic -Wno-unused-parameter -faligned-new -Werror -Wfatal-errors)
-++add_compile_options(-Wall -Wextra -pedantic -Wno-unused-parameter -faligned-new)
-+ add_definitions(-D_FILE_OFFSET_BITS=64)
-+ 
-+ if (CMAKE_COMPILER_IS_GNUCXX)
-+-- 
-+2.34.1
-+
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-new file mode 100644
-index 0000000000..a1affc2d23
---- /dev/null
-+++ b/package/libcamera-apps/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_LIBCAMERA_APPS
-+	bool "libcamera-apps"
-+	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
-+	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17/libcamera
-+	depends on !BR2_STATIC_LIBS # gnutls/libcamera
-+	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBCAMERA
-+	select BR2_PACKAGE_LIBEXIF
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_TIFF
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
-+	select BR2_PACKAGE_LIBEPOXY if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
-+	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5
-+	help
-+	  This is a small suite of libcamera-based apps that aim to copy
-+	  the functionality of the existing "raspicam" apps.
-+
-+	  https://github.com/raspberrypi/libcamera-apps
-+
-+comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-new file mode 100644
-index 0000000000..2dbb74d463
---- /dev/null
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  611aec06dd24de6586580164d9b7c55da0698ac4cf129944b2fc41fe67210597  libcamera-apps-2d1009e3badcc8047361ff81149ad6cba3b911b5.tar.gz
-+sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-new file mode 100644
-index 0000000000..210d4e1e52
---- /dev/null
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# libcamera-apps
-+#
-+################################################################################
-+
-+LIBCAMERA_APPS_VERSION = 2d1009e3badcc8047361ff81149ad6cba3b911b5
-+LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,$(LIBCAMERA_APPS_VERSION))
-+LIBCAMERA_APPS_LICENSE = BSD-2-Clause
-+LIBCAMERA_APPS_LICENSE_FILES = license.txt
-+LIBCAMERA_APPS_DEPENDENCIES = \
-+	host-pkgconf \
-+	boost \
-+	jpeg \
-+	libcamera \
-+	libexif \
-+	libpng \
-+	tiff
-+
-+LIBCAMERA_APPS_CONF_OPTS = \
-+	-DENABLE_COMPILE_FLAGS_FOR_TARGET=disabled \
-+	-DENABLE_OPENCV=0 \
-+	-DENABLE_TFLITE=0
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+LIBCAMERA_APPS_DEPENDENCIES += libdrm
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=1
-+else
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+LIBCAMERA_APPS_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
-+	$(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_X11=1
-+else
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_X11=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5),y)
-+LIBCAMERA_APPS_DEPENDENCIES += qt5base
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=1
-+else
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=0
-+endif
-+
-+$(eval $(cmake-package))
-
---===============8459107994358004551==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8459107994358004551==--
+UGV0ZXIsIEFsbCwKCitLaWVyYW4KCk9uIDIwMjItMDItMTEgMTY6MDYgKzAxMDAsIFBldGVyIFNl
+aWRlcmVyIHNwYWtlIHRodXNseToKPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMu
+cmVwb3J0QGdteC5uZXQ+CgpGaW5hbGx5IGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpIb3dl
+dmVyLCBzZWUgYmVsb3cgZm9yIHNvbW1lIGltcG9ydGFudCBjb21tZW50cy4uLgoKPiAtLS0KWy0t
+U05JUC0tXQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmNhbWVyYS1hcHBzLzAwMDEtY21ha2Ut
+cmVtb3ZlLVdlcnJvci1hbmQtV2ZhdGFsLWVycm9ycy1jb21waWxlci1jb21tYS5wYXRjaCBiL3Bh
+Y2thZ2UvbGliY2FtZXJhLWFwcHMvMDAwMS1jbWFrZS1yZW1vdmUtV2Vycm9yLWFuZC1XZmF0YWwt
+ZXJyb3JzLWNvbXBpbGVyLWNvbW1hLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRl
+eCAwMDAwMDAwMDAwLi45ODhkODljY2EzCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uv
+bGliY2FtZXJhLWFwcHMvMDAwMS1jbWFrZS1yZW1vdmUtV2Vycm9yLWFuZC1XZmF0YWwtZXJyb3Jz
+LWNvbXBpbGVyLWNvbW1hLnBhdGNoCj4gQEAgLTAsMCArMSwzNyBAQAo+ICtGcm9tIDZiZDczM2I1
+MmYwYjQwMzk0MDdjNjc2Y2QzMTI2YTllMmY3OTQ1NmIgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAx
+Cj4gK0Zyb206IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KPiArRGF0ZTogRnJp
+LCA1IEZlYiAyMDIxIDE4OjI0OjA4ICswMTAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gY21ha2U6IHJl
+bW92ZSAtV2Vycm9yIGFuZCAtV2ZhdGFsLWVycm9ycyBjb21waWxlciBjb21tYW5kCj4gKyBsaW5l
+IG9wdGlvbgo+ICtNSU1FLVZlcnNpb246IDEuMAo+ICtDb250ZW50LVR5cGU6IHRleHQvcGxhaW47
+IGNoYXJzZXQ9VVRGLTgKPiArQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAo+ICsKPiAr
+Rml4ZXMgKHdpdGggYm9vdGxpbi1yaXNjdjY0LW11c2wgdG9vbGNoYWluKToKPiArCj4gKyAgLi4u
+L2J1aWxkL2xpYmNhbWVyYS1hcHBzLTJkMTAwOWUzYmFkY2M4MDQ3MzYxZmY4MTE0OWFkNmNiYTNi
+OTExYjUvY29yZS9saWJjYW1lcmFfYXBwLmNwcDozMDoyMjogZXJyb3I6IG92ZXJmbG93IGluIGNv
+bnZlcnNpb24gZnJvbSDigJhsb25nIHVuc2lnbmVkIGludOKAmSB0byDigJhpbnTigJkgY2hhbmdl
+cyB2YWx1ZSBmcm9tIOKAmDIxNTQzMjE0MDjigJkgdG8g4oCYLTIxNDA2NDU4ODjigJkgWy1XZXJy
+b3I9b3ZlcmZsb3ddCj4gKyAgICAgMzAgfCAgaW50IHJldCA9IGlvY3RsKGZkLCBWSURJT0NfUVVF
+UllDQVAsICZjYXBzKTsKPiArICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+
+fn5+fn5+fgo+ICsgIGNjMXBsdXM6IGFsbCB3YXJuaW5ncyBiZWluZyB0cmVhdGVkIGFzIGVycm9y
+cwoKS2llcmFuLCBJIGJlbGlldmUgdGhpcyByZWFsbHkgbmVlZHMgc29tZSBpbnZlc3RpZ2F0aW9u
+IG9uIHlvdXIgc2lkZS4KUGV0ZXIsIGNhbiB5b3UgcHJvdmlkZSBhIGRlZmNvbmZpZyB0aGF0IGV4
+aGliaXRzIHRoZSBpc3N1ZSwgcGxlYXNlPwoKWy0tU05JUC0tXQo+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL2xpYmNhbWVyYS1hcHBzL0NvbmZpZy5pbiBiL3BhY2thZ2UvbGliY2FtZXJhLWFwcHMvQ29u
+ZmlnLmluCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi43NTgwN2I5
+YzAxCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvbGliY2FtZXJhLWFwcHMvQ29uZmln
+LmluCj4gQEAgLTAsMCArMSwzMCBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0VfTElCQ0FNRVJBX0FQ
+UFMKPiArCWJvb2wgImxpYmNhbWVyYS1hcHBzIgo+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9M
+SUJDQU1FUkFfQVJDSF9TVVBQT1JUUyAjIGxpYmNhbWVyYQo+ICsJZGVwZW5kcyBvbiBCUjJfSU5T
+VEFMTF9MSUJTVERDUFAgIyBsaWJjYW1lcmEvYm9vc3QKPiArCWRlcGVuZHMgb24gQlIyX1RPT0xD
+SEFJTl9IQVNfVEhSRUFEUyAjIGxpYmNhbWVyYS9ib29zdAo+ICsJZGVwZW5kcyBvbiBCUjJfVE9P
+TENIQUlOX0dDQ19BVF9MRUFTVF83ICMgQysrMTcvbGliY2FtZXJhCj4gKwlkZXBlbmRzIG9uICFC
+UjJfU1RBVElDX0xJQlMgIyBnbnV0bHMvbGliY2FtZXJhCj4gKwlkZXBlbmRzIG9uIEJSMl9VU0Vf
+V0NIQVIgIyBnbnV0bHMvbGliY2FtZXJhL2Jvb3N0Cj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfQk9P
+U1QKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9CT09TVF9QUk9HUkFNX09QVElPTlMKPiArCXNlbGVj
+dCBCUjJfUEFDS0FHRV9KUEVHCj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCQ0FNRVJBCj4gKwlz
+ZWxlY3QgQlIyX1BBQ0tBR0VfTElCRVhJRgo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlBORwo+
+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1RJRkYKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9YTElCX0xJ
+QlgxMSBpZiBCUjJfUEFDS0FHRV9YT1JHNyAmJiAoQlIyX1BBQ0tBR0VfSEFTX0xJQkVHTCB8fCBC
+UjJfUEFDS0FHRV9IQVNfTElCR0wpCj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRVBPWFkgaWYg
+QlIyX1BBQ0tBR0VfWE9SRzcgJiYgKEJSMl9QQUNLQUdFX0hBU19MSUJFR0wgfHwgQlIyX1BBQ0tB
+R0VfSEFTX0xJQkdMKQoKTG9vayBjbG9zZWx5IHRob3NlIHR3byBzZWxlY3Q6IGlmIG5laXRoZXIg
+RUdMIG5vciBHTCBhcmUgbmVhYmxlZCwgdGhlbgpuZWl0aGVyIGxpYmVvcHh5IG5vciB4bGliLWxp
+YngxMSBhcmUgZW5hYmxlZCwgZXZlbiB3aGVuIFhvcmcgaXMuIFNvLCBzZWUKbGF0ZXIgWzBdLi4u
+Cgo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1FUNUJBU0VfR1VJIGlmIEJSMl9QQUNLQUdFX1FUNQo+
+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1FUNUJBU0VfV0lER0VUUyBpZiBCUjJfUEFDS0FHRV9RVDUK
+CldoZW4gUXQ1IGlzIGVuYWJsZWQsIHRoZW4gUXQ1R1VJIGFuZCBRdDVXaWRnZXRzIGFyZSBlbmFi
+bGVkLCBzbyBbMV0uLi4KCj4gKwoKU3B1cmlvdXMgZW1wdHkgbGluZSwgSSBkcm9wZWVkIGl0LgoK
+Wy0tU05JUC0tXQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmNhbWVyYS1hcHBzL2xpYmNhbWVy
+YS1hcHBzLm1rIGIvcGFja2FnZS9saWJjYW1lcmEtYXBwcy9saWJjYW1lcmEtYXBwcy5tawo+IG5l
+dyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMjNjYzAyNzkzZAo+IC0tLSAv
+ZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2xpYmNhbWVyYS1hcHBzL2xpYmNhbWVyYS1hcHBzLm1r
+Cj4gQEAgLTAsMCArMSw0NiBAQAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMg
+bGliY2FtZXJhLWFwcHMKPiArIwo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArTElC
+Q0FNRVJBX0FQUFNfVkVSU0lPTiA9IDJkMTAwOWUzYmFkY2M4MDQ3MzYxZmY4MTE0OWFkNmNiYTNi
+OTExYjUKPiArTElCQ0FNRVJBX0FQUFNfU0lURSA9ICQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGks
+bGliY2FtZXJhLWFwcHMsJChMSUJDQU1FUkFfQVBQU19WRVJTSU9OKSkKPiArTElCQ0FNRVJBX0FQ
+UFNfTElDRU5TRSA9IEJTRC0yLUNsYXVzZQo+ICtMSUJDQU1FUkFfQVBQU19MSUNFTlNFX0ZJTEVT
+ID0gbGljZW5zZS50eHQKPiArTElCQ0FNRVJBX0FQUFNfREVQRU5ERU5DSUVTID0gXAo+ICsJaG9z
+dC1wa2djb25mIFwKPiArCWJvb3N0IFwKPiArCWpwZWcgXAo+ICsJbGliY2FtZXJhIFwKPiArCWxp
+YmV4aWYgXAo+ICsJbGlicG5nIFwKPiArCXRpZmYKPiArCj4gK0xJQkNBTUVSQV9BUFBTX0NPTkZf
+T1BUUyA9IFwKPiArCS1ERU5BQkxFX0NPTVBJTEVfRkxBR1NfRk9SX1RBUkdFVD1kaXNhYmxlZCBc
+Cj4gKwktREVOQUJMRV9PUEVOQ1Y9MCBcCj4gKwktREVOQUJMRV9URkxJVEU9MAo+ICsKPiAraWZl
+cSAoJChCUjJfUEFDS0FHRV9MSUJEUk0pLHkpCj4gK0xJQkNBTUVSQV9BUFBTX0NPTkZfT1BUUyAr
+PSAtREVOQUJMRV9EUk09MQo+ICtMSUJDQU1FUkFfQVBQU19ERVBFTkRFTkNJRVMgKz0gbGliZHJt
+Cj4gK2Vsc2UKPiArTElCQ0FNRVJBX0FQUFNfQ09ORl9PUFRTICs9IC1ERU5BQkxFX0RSTT0wCj4g
+K2VuZGlmCj4gKwo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX1hPUkc3KSQoQlIyX1BBQ0tBR0VfTElC
+RVBPWFkpLHl5KQo+ICtMSUJDQU1FUkFfQVBQU19DT05GX09QVFMgKz0gLURFTkFCTEVfWDExPTEK
+PiArTElCQ0FNRVJBX0FQUFNfREVQRU5ERU5DSUVTICs9IGxpYmVwb3h5IHhsaWJfbGliWDExCgpb
+MF0gc28gaGVyZSwgdGhlIGNvbmRpdGlvbiBpcyBvbmx5IG9uIFhvcmcgJiYgbGluZXBveHksIGFu
+ZCBub3RoaW5nCmFib3V0IHhsaWItbGlieDExLCBidXQgc3RpbGwgYSBkZXBlbmRlbmN5IGlzIGFk
+ZGVkIGFnYWluc3QgaXQsIGFsdGhvdWdoCml0IG1heSB3ZWxsIGJlIG5vdCBlbmFibGVkLgoKU28s
+IEkgY2hhbmdlZCB0aGUgY29uZGl0aW9uIHRvOgoKICAgIGlmZXEgKCQoQlIyX1BBQ0tBR0VfWE9S
+RzcpLHkpCiAgICBMSUJDQU1FUkFfQVBQU19ERVBFTkRFTkNJRVMgKz0gXAogICAgICAgICQoaWYg
+JChCUjJfUEFDS0FHRV9MSUJFUE9YWSksbGliZXBveHkpIFwKICAgICAgICAkKGlmICQoQlIyX1BB
+Q0tBR0VfWExJQl9MSUJYMTEpLHhsaWJfbGliWDExKQogICAgTElCQ0FNRVJBX0FQUFNfQ09ORl9P
+UFRTICs9IC1ERU5BQkxFX1gxMT0xCiAgICBlbHNlCiAgICBMSUJDQU1FUkFfQVBQU19DT05GX09Q
+VFMgKz0gLURFTkFCTEVfWDExPTAKICAgIGVuZGlmCgpBcmdoLCBhbmQgbm93IEkgc2VlIEkgbWlz
+c2VkIHNvbWV0aGluZzogaW5kZWVkLCBsaWJlcG94eSBhbmQgeGxpYi1saWJ4MTEKYXJlIHNlbGVj
+dGVkIHVkbmVyIHRoZSBzYW1lIGNvbmRpdGlvbnMsIHNvIGlmIGVpdGhlciBpcyBlbmFibGVkLCB0
+aGUKb3RoZXIgaXMuLi4uIE9oLCB3YWl0LCBubywgdGhleSBjYW4gZWl0aGVyIGJlIGVuYWJsZWQg
+bWFudWFsbHkgYnkgdGhlCnVzZXIsIGFuZCBub3QgJ3NlbGVjdGVkJyBieSBsaWJjYW5lcmEtYXBw
+cywgc28gd2Ugc3RpbGwgY2FuIGhhdmUgdGhlCnNpdHVhdGlvbiB3aGVyZSB0aGV5IGFyZSBub3Qg
+Ym90aCBlbmFibGVkLi4uCgpTbywgaWYgYm90aCB4bGliLWxpYngxMSBhcmUgcmVxdWlyZWQsIHRo
+ZW4gcGxlYXNlIHNlbmQgYSBwYXRjaCB0byBmaXgKdGhlIGNvbW5kaXRpb24uIEluIGFueSBjYXNl
+LCBwZWxhc2UgcmV2aWV3IHRoZSBjdXJyZW50IGNvZGUsIGF0IGxlYXN0IHRvCmNoZWNrIGlmIEkg
+ZGlkIG5vdCBtZXNzIHRvbyBtdWNoLi4uCgo+ICtlbHNlCj4gK0xJQkNBTUVSQV9BUFBTX0NPTkZf
+T1BUUyArPSAtREVOQUJMRV9YMTE9MAo+ICtlbmRpZgo+ICsKPiAraWZlcSAoJChCUjJfUEFDS0FH
+RV9RVDUpJChCUjJfUEFDS0FHRV9RVDVCQVNFX0dVSSkkKEJSMl9QQUNLQUdFX1FUNUJBU0VfV0lE
+R0VUUykseXl5KSAKClsxXSBzbyBoZXJlLCBHVUkgYW5kIHdpZGdldHMgd2lsbCBiZSBlbmFibGVk
+IHdoZW4gUXQ1IGlzLCBzbyBjaGVja2luZwpmb3IgdGhlbSBpcyByZWR1bmRhbnQuCgpBbHNvOgoK
+ICAgICMgbWFrZSBjaGVjay1wYWNrYWdlCiAgICBwYWNrYWdlL2xpYmNhbWVyYS1hcHBzL2xpYmNh
+bWVyYS1hcHBzLm1rOjM5OiBsaW5lIGNvbnRhaW5zIHRyYWlsaW5nIHdoaXRlc3BhY2UKCkFwcGxp
+ZWQgdG8gbWFzdGVyIHdpdGggYSBidW5jaGEgZml4ZXMgZm9yIGFsbCB0aGUgYWJvdmUsIHRoYW5r
+cy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+ICtMSUJDQU1FUkFfQVBQU19DT05GX09QVFMg
+Kz0gLURFTkFCTEVfUVQ9MQo+ICtMSUJDQU1FUkFfQVBQU19ERVBFTkRFTkNJRVMgKz0gcXQ1YmFz
+ZQo+ICtlbHNlCj4gK0xJQkNBTUVSQV9BUFBTX0NPTkZfT1BUUyArPSAtREVOQUJMRV9RVD0wCj4g
+K2VuZGlmCj4gKwo+ICskKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkKPiAtLSAKPiAyLjM0LjEKPiAK
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0t
+LS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwg
+LyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2
+IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAg
+ICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlO
+U1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsu
+b3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8Cict
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1e
+LS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
