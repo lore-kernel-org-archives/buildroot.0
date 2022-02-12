@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32034C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 14:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41DD2C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 14:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B341B4015F;
-	Sat, 12 Feb 2022 14:32:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6D2A4043D;
+	Sat, 12 Feb 2022 14:33:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id twY3kROmSd4v; Sat, 12 Feb 2022 14:32:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yFSvGbjdzDqM; Sat, 12 Feb 2022 14:33:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33BF540329;
-	Sat, 12 Feb 2022 14:32:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 738991BF954
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB2A2408E0;
+	Sat, 12 Feb 2022 14:33:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 78ABD1BF956
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 14:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F1EA40391
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DFC783E87
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 14:32:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bv9vQbGREnsi for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9vgWW1ulE9cf for <buildroot@lists.busybox.net>;
  Sat, 12 Feb 2022 14:32:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 600DA40329
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77DC883E32
  for <buildroot@buildroot.org>; Sat, 12 Feb 2022 14:32:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 464E682B3B; Sat, 12 Feb 2022 14:25:06 +0000 (UTC)
+ id 603B482B35; Sat, 12 Feb 2022 14:25:06 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 15:27:34 +0100
+Date: Sat, 12 Feb 2022 15:28:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b501e1a43d9f08e461937984a939f7afbc726336
-X-Git-Newrev: e55f57b3d367213ef4b667988e42f7d26c6b23c9
+X-Git-Oldrev: 0d4c8ce8a2f26989e0e2d95b977d60e450c090a9
+X-Git-Newrev: b066f1756f9af4a8577321ec09c17796bfb153d7
 X-Patchwork-Hint: ignore
-Message-Id: <20220212142506.464E682B3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/serd: new package
+Message-Id: <20220212142506.603B482B35@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lv2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,91 +58,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e55f57b3d367213ef4b667988e42f7d26c6b23c9
+commit: https://git.buildroot.net/buildroot/commit/?id=b066f1756f9af4a8577321ec09c17796bfb153d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/serd/Config.in |  8 ++++++++
- package/serd/serd.hash |  4 ++++
- package/serd/serd.mk   | 20 ++++++++++++++++++++
- 5 files changed, 34 insertions(+)
+ DEVELOPERS            |  1 +
+ package/Config.in     |  1 +
+ package/lv2/Config.in |  8 ++++++++
+ package/lv2/lv2.hash  |  4 ++++
+ package/lv2/lv2.mk    | 36 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a91dccd1e0..ece07026bc 100644
+index bdea8142e0..5573c62f0b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1336,6 +1336,7 @@ F:	package/python-tomli/
- F:	package/python-weasyprint/
- F:	package/python-yarl/
- F:	package/python-zopfli/
-+F:	package/serd/
- F:	package/zchunk/
- 
- N:	James Knight <james.knight@collins.com>
+@@ -1286,6 +1286,7 @@ F:	package/exfatprogs/
+ F:	package/gensio/
+ F:	package/lua-std-debug/
+ F:	package/lua-std-normalize/
++F:	package/lv2/
+ F:	package/pipewire/
+ F:	package/python-aioconsole/
+ F:	package/python-aiodns/
 diff --git a/package/Config.in b/package/Config.in
-index 7aff9e7cb7..a8f408844d 100644
+index 0b533ce999..d95257e7aa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1699,6 +1699,7 @@ menu "JSON/XML"
- 	source "package/rapidjson/Config.in"
- 	source "package/rapidxml/Config.in"
- 	source "package/raptor/Config.in"
-+	source "package/serd/Config.in"
- 	source "package/tinyxml/Config.in"
- 	source "package/tinyxml2/Config.in"
- 	source "package/valijson/Config.in"
-diff --git a/package/serd/Config.in b/package/serd/Config.in
+@@ -1351,6 +1351,7 @@ menu "Audio/Sound"
+ 	source "package/libsoundtouch/Config.in"
+ 	source "package/libsoxr/Config.in"
+ 	source "package/libvorbis/Config.in"
++	source "package/lv2/Config.in"
+ 	source "package/mp4v2/Config.in"
+ 	source "package/openal/Config.in"
+ 	source "package/opencore-amr/Config.in"
+diff --git a/package/lv2/Config.in b/package/lv2/Config.in
 new file mode 100644
-index 0000000000..7633a979e2
+index 0000000000..aeeb6d0451
 --- /dev/null
-+++ b/package/serd/Config.in
++++ b/package/lv2/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SERD
-+	bool "serd"
++config BR2_PACKAGE_LV2
++	bool "lv2"
 +	help
-+	  Serd is a lightweight C library for RDF syntax which
-+	  supports reading and writing Turtle, TriG, NTriples, and
-+	  NQuads.
++	  LV2 is a plugin standard for audio systems. It defines
++	  a minimal yet extensible C API for plugin code and a
++	  format for plugin "bundles".
 +
-+	  https://drobilla.net/software/serd.html
-diff --git a/package/serd/serd.hash b/package/serd/serd.hash
++	  https://lv2plug.in/
+diff --git a/package/lv2/lv2.hash b/package/lv2/lv2.hash
 new file mode 100644
-index 0000000000..d64a2aa271
+index 0000000000..ed21620bee
 --- /dev/null
-+++ b/package/serd/serd.hash
++++ b/package/lv2/lv2.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated after checking signature
-+# http://download.drobilla.net/serd-0.30.10.tar.bz2.sig
-+sha256  affa80deec78921f86335e6fc3f18b80aefecf424f6a5755e9f2fa0eb0710edf  serd-0.30.10.tar.bz2
-+sha256  e06562d6bcf0341b2ac2ad0f0ca36801d2ebf388d5ef297011625e4c36e963f0  COPYING
-diff --git a/package/serd/serd.mk b/package/serd/serd.mk
++# https://lv2plug.in/spec/lv2-1.18.2.tar.bz2.asc
++sha256  4e891fbc744c05855beb5dfa82e822b14917dd66e98f82b8230dbd1c7ab2e05e  lv2-1.18.2.tar.bz2
++sha256  0b0b07d852e3ce7fa04986e141f73001bd7f260683968f0a19e02dbcc4131aa6  COPYING
+diff --git a/package/lv2/lv2.mk b/package/lv2/lv2.mk
 new file mode 100644
-index 0000000000..85b16f6866
+index 0000000000..13ffaa34b0
 --- /dev/null
-+++ b/package/serd/serd.mk
-@@ -0,0 +1,20 @@
++++ b/package/lv2/lv2.mk
+@@ -0,0 +1,36 @@
 +################################################################################
 +#
-+# serd
++# lv2
 +#
 +################################################################################
 +
-+SERD_VERSION = 0.30.10
-+SERD_SITE = https://download.drobilla.net
-+SERD_SOURCE = serd-$(SERD_VERSION).tar.bz2
-+SERD_LICENSE = ISC
-+SERD_LICENSE_FILES = COPYING
-+SERD_INSTALL_STAGING = YES
++LV2_VERSION = 1.18.2
++LV2_SITE = https://lv2plug.in/spec
++LV2_SOURCE = lv2-$(LV2_VERSION).tar.bz2
++LV2_LICENSE = ISC
++LV2_LICENSE_FILES = COPYING
++LV2_DEPENDENCIES = host-pkgconf
++LV2_INSTALL_STAGING = YES
 +
-+SERD_CONF_OPTS += --largefile --no-coverage
++LV2_CONF_OPTS += \
++	--no-coverage \
++	--no-check-links \
++	--copy-headers
++
++ifeq ($(BR2_PACKAGE_CAIRO),y)
++LV2_DEPENDENCIES += cairo
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++LV2_DEPENDENCIES += libsndfile
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++LV2_DEPENDENCIES += libgtk2
++endif
 +
 +ifeq ($(BR2_STATIC_LIBS),y)
-+SERD_CONF_OPTS += --static --no-shared --static-progs
++LV2_CONF_OPTS += --no-plugins
 +endif
 +
 +$(eval $(waf-package))
