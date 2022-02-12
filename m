@@ -1,46 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD71C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 13:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3CDBC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 13:27:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F76061B7F;
-	Sat, 12 Feb 2022 13:26:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 621C841484;
+	Sat, 12 Feb 2022 13:27:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tY54jMtqeWxV; Sat, 12 Feb 2022 13:26:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8FvK2fkyEObS; Sat, 12 Feb 2022 13:27:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14DBC607B4;
-	Sat, 12 Feb 2022 13:26:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A0B1C1BF283
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:26:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5369B414C6;
+	Sat, 12 Feb 2022 13:27:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2850A1BF283
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D55683E38
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:26:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 166DF60D91
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 13:27:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2xkf9XAxIDGM for <buildroot@lists.busybox.net>;
- Sat, 12 Feb 2022 13:26:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 995DD83E36
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 13:26:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 98B4D82AD1; Sat, 12 Feb 2022 13:18:41 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 14:19:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c7de551c5bbe2fb4f392c4303a4d3475270fca7
-X-Git-Newrev: 3675131e6c654d7536a184db0184fde7a97040e0
-X-Patchwork-Hint: ignore
-Message-Id: <20220212131841.98B4D82AD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftool: new package
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2IC124fJYpie for <buildroot@lists.busybox.net>;
+ Sat, 12 Feb 2022 13:27:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C390760746
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 13:27:15 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id d3so8937944ilr.10
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 05:27:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=eeJizlbCGKA27Qtgkd0q9xI+/A49/1BXGodC0IsZ5Fc=;
+ b=pn52yCbtwSLKRwun5nuld0MhLH4kjdrYuVK1NLOZAeje038iIbGDY6ttJvB3ugmww1
+ rbfwg9TLfHBdnsxh6NyHwh4WprRezFVSMjQFPSxfonFkmwDQIjUQZNdG6aQoB17uB60I
+ K81e46vCKvpKkLC2KD+/aqz7OmswqCqBq/ZUri5r3PL6bzNBKY8/VnfytOezgwZrJHzC
+ ApYiQKYpCOn3PJThBnu+WRcVk5JsdBhC1+oK59V5FNiQS7PYoeZhPKqJWGgSEuUuw6gG
+ viDs6OIZm9tvWR52kXBapn10lgM1bmf/3e8jsbKehc+o+EiLHq59jljp9PahI6n0lBd7
+ cQvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=eeJizlbCGKA27Qtgkd0q9xI+/A49/1BXGodC0IsZ5Fc=;
+ b=ZVwJOLp1rFEOM0j6NkSyjX8qhWfk9CfEkwy7biz3xWCuppFXqskRgE6nImX9rCtVKA
+ rscHGtvnhjp/ZjN1rfqOlrCnTIlMziodAR5UF2Wu7ttXtVhbOn3+twCmRQNAgrnQENLk
+ DH6Qjw9EpMR4xlfhB+YHsAMJVAJHt9C45hq1sSmEABumYYvqlXZejUvU8Rn4Z3w4R1Rb
+ e6x3GNiy5N/p+58vVsRPELeTZll/BHmjQDTCkAnJdS8xv/LBRaIKouiRaHHMpT5qPA5d
+ w0eN+5lt9YyOan6dE6+Zezetcerk6WOAE+DYbOwSSYOjWo95dpHt4N00SUjWEw+8MwcW
+ xdwQ==
+X-Gm-Message-State: AOAM530WVdboZ2VNinYjASY3SbCROoN3zqEW8435Gm38EfmKuEmWqrQp
+ UCx9T3pdMdEOGNeWpM3v061um7M3S+wJEImsenmr7hGyJlA=
+X-Google-Smtp-Source: ABdhPJzvRbDO8myoZLIyJg9AFv6z3ge59oMejpeCFB2HcrLxJFVtsdPUhncGiarosbBYBfgM1Tyri6IMZZlH9C88QgU=
+X-Received: by 2002:a05:6e02:1849:: with SMTP id
+ b9mr3211060ilv.288.1644672434846; 
+ Sat, 12 Feb 2022 05:27:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20220131145555.2819020-1-michael@amarulasolutions.com>
+ <e7701dd2-5636-2891-0e47-7a518c1dc961@mind.be>
+In-Reply-To: <e7701dd2-5636-2891-0e47-7a518c1dc961@mind.be>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 12 Feb 2022 14:27:03 +0100
+Message-ID: <CAEyMn7ZEoPgtyTM=X73JH0wVkrAsW_7X18B9m9SxQS4GzFZcsA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH V3] board: Add support for iMX8MN BSH SMM S2
+ PRO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,245 +84,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+ Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3675131e6c654d7536a184db0184fde7a97040e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Move the target bpftool build out of linux-tools so that it is
-up to date.
-
-This also fixes build issues due to differences between kernel
-versions. The latest version should be fully backwards compatible.
-
-The host bpftool is needed for enabling features such as the systemd
-bpf-framework (to be added in a future patch).
-
-Use the git download method to get the libbpf submodule.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy                             |  8 +++++
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/bpftool/Config.in                    | 18 +++++++++++
- package/bpftool/bpftool.hash                 |  5 ++++
- package/bpftool/bpftool.mk                   | 45 ++++++++++++++++++++++++++++
- package/linux-tools/Config.in                | 22 --------------
- package/linux-tools/linux-tool-bpftool.mk.in | 37 -----------------------
- 8 files changed, 78 insertions(+), 59 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0794813a97..aefb0ba6ea 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_LINUX_TOOLS_BPFTOOL
-+	bool "bpftool was moved"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_BPFTOOL
-+	help
-+	  The linux-tools bpftool build has been moved out
-+	  of the linux-tools package.
-+
- config BR2_TARGET_UBOOT_NEEDS_PYTHON2
- 	bool "host-python 2.7 support for U-Boot was removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 55fd9344ef..bcfcacb91d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1279,6 +1279,7 @@ F:	configs/pine64_sopine_defconfig
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/apcupsd/
-+F:	package/bpftool/
- F:	package/exfatprogs/
- F:	package/gensio/
- F:	package/lua-std-debug/
-diff --git a/package/Config.in b/package/Config.in
-index 1a9f3e29d8..7aff9e7cb7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -86,6 +86,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/babeltrace2/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
-+	source "package/bpftool/Config.in"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/clinfo/Config.in"
- 	source "package/coremark/Config.in"
-diff --git a/package/bpftool/Config.in b/package/bpftool/Config.in
-new file mode 100644
-index 0000000000..39475aa962
---- /dev/null
-+++ b/package/bpftool/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_BPFTOOL
-+	bool "bpftool"
-+	depends on !BR2_nios2 # binutils
-+	depends on BR2_USE_WCHAR # binutils, elfutils
-+	depends on !BR2_STATIC_LIBS # elfutils
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-+	select BR2_PACKAGE_BINUTILS
-+	select BR2_PACKAGE_ELFUTILS
-+	help
-+	  bpftool is a tool for for inspection and simple manipulation
-+	  of eBPF programs and maps.
-+
-+comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+	depends on !BR2_nios2
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
-new file mode 100644
-index 0000000000..c7d4ae250e
---- /dev/null
-+++ b/package/bpftool/bpftool.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256  c868cb85bf44195ec6cd20649c3db4f7aff64a38d950a1c2911d981fb2d7042c  bpftool-a7f0e7f057283ae8af3de4578bcb8b7ee80b7144-br1.tar.gz
-+sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
-+sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
-diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
-new file mode 100644
-index 0000000000..4276f91958
---- /dev/null
-+++ b/package/bpftool/bpftool.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# bpftool
-+#
-+################################################################################
-+
-+BPFTOOL_VERSION = a7f0e7f057283ae8af3de4578bcb8b7ee80b7144
-+BPFTOOL_SITE = https://github.com/libbpf/bpftool
-+BPFTOOL_SITE_METHOD = git
-+BPFTOOL_GIT_SUBMODULES = YES
-+BPFTOOL_LICENSE = GPL-2.0, BSD-2-Clause
-+BPFTOOL_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.GPL-2.0
-+BPFTOOL_DEPENDENCIES = binutils elfutils
-+HOST_BPFTOOL_DEPENDENCIES = host-elfutils host-pkgconf host-zlib
-+
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+BPFTOOL_DEPENDENCIES += libcap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+BPFTOOL_DEPENDENCIES += zlib
-+endif
-+
-+define BPFTOOL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(@D)/src
-+endef
-+
-+define HOST_BPFTOOL_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(@D)/src
-+endef
-+
-+define BPFTOOL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(@D)/src install DESTDIR="$(TARGET_DIR)" prefix=/usr
-+endef
-+
-+define HOST_BPFTOOL_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(@D)/src install DESTDIR="$(HOST_DIR)" prefix=/usr
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 28641dccdd..f459b41762 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -5,28 +5,6 @@ menu "Linux Kernel Tools"
- config BR2_PACKAGE_LINUX_TOOLS
- 	bool
- 
--config BR2_PACKAGE_LINUX_TOOLS_BPFTOOL
--	bool "bpftool"
--	depends on !BR2_nios2 # binutils
--	depends on BR2_USE_WCHAR # binutils, elfutils
--	depends on !BR2_STATIC_LIBS # elfutils
--	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
--	select BR2_PACKAGE_LINUX_TOOLS
--	select BR2_PACKAGE_BINUTILS
--	select BR2_PACKAGE_ELFUTILS
--	help
--	  bpftool is a tool for for inspection and simple manipulation
--	  of eBPF programs and maps.
--
--	  These tools are available only from kernel version 4.15.
--
--comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
--	depends on !BR2_nios2
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
--
- config BR2_PACKAGE_LINUX_TOOLS_CPUPOWER
- 	bool "cpupower"
- 	select BR2_PACKAGE_LINUX_TOOLS
-diff --git a/package/linux-tools/linux-tool-bpftool.mk.in b/package/linux-tools/linux-tool-bpftool.mk.in
-deleted file mode 100644
-index 0c4d3693a3..0000000000
---- a/package/linux-tools/linux-tool-bpftool.mk.in
-+++ /dev/null
-@@ -1,37 +0,0 @@
--################################################################################
--#
--# bpftool
--#
--################################################################################
--
--LINUX_TOOLS += bpftool
--
--BPFTOOL_DEPENDENCIES = binutils elfutils
--
--ifeq ($(BR2_PACKAGE_LIBCAP),y)
--BPFTOOL_DEPENDENCIES += libcap
--endif
--
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--BPFTOOL_DEPENDENCIES += zlib
--endif
--
--BPFTOOL_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
--
--define BPFTOOL_BUILD_CMDS
--	$(Q)if ! grep install $(LINUX_DIR)/tools/bpf/bpftool/Makefile >/dev/null 2>&1 ; then \
--		echo "Your kernel version is too old and does not have install section in the bpf tools." ; \
--		echo "At least kernel 4.15 must be used." ; \
--		exit 1 ; \
--	fi
--
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/bpf/bpftool \
--		$(BPFTOOL_MAKE_OPTS)
--endef
--
--define BPFTOOL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/bpf/bpftool \
--		$(BPFTOOL_MAKE_OPTS) \
--		DESTDIR=$(TARGET_DIR) \
--		install
--endef
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpBbSBTYS4sIDEyLiBGZWIuIDIwMjIgdW0gMTM6MTAgVWhyIHNjaHJpZWIgQXJub3V0IFZh
+bmRlY2FwcGVsbGUKPGFybm91dEBtaW5kLmJlPjoKPgo+Cj4KPiBPbiAzMS8wMS8yMDIyIDE1OjU1
+LCBNaWNoYWVsIFRyaW1hcmNoaSB3cm90ZToKPiA+IEFkZCBpbml0aWFsIHN1cHBvcnQgZm9yIGlN
+WDhNTiBCU0ggU01NIFMyIFBSTyBib2FyZDoKPiA+Cj4gPiAtIExpbnV4OiB2NS4xNy1yYzEKPgo+
+ICAgSSdtIGEgYml0IHVuY29tZm9ydGFibGUgdG8gYWRkIGFuIC1yYyB2ZXJzaW9uLiBCdXQgSSBn
+dWVzcyBpdCBjYW4gYmUgdXBkYXRlZAo+IGFzIHNvb24gYXMgNS4xNyBpcyByZWxlYXNlZC4KPgo+
+ID4gLSBVYm9vdCAyMDIyLTAxLXJjMSAocmVmZXJlbmNlIHRyZWUpCj4gPiAtIERlZmF1bHQgcGFj
+a2FnZXMgZnJvbSBidWlsZHJvb3QKPiA+Cj4gPiBodHRwczovL3d3dy5hcGVydGlzLm9yZy9yZWZl
+cmVuY2VfaGFyZHdhcmUvaW14OG1uX2JzaF9zbW1fczJwcm9fc2V0dXAvCj4gPgo+ID4gQWRkIEFy
+aWVsIEQnQWxlc3NhbmRybyBhcyBjby1tYWludGFpbmVyLCB3ZSB3b3JrIHRvZ2V0aGVyIG9uCj4g
+PiBwbGF0Zm9ybSBtYWlubGluZQo+ID4KPiA+IEJ1aWxkIGFuZCB0ZXN0ZWQgdXNpbmc6Cj4gPiBk
+b2NrZXIgcHVsbCByZWdpc3RyeS5naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290L2Jh
+c2U6MjAyMjAxMDUuMjMxNAo+ID4KPiA+IENjOiBBcmllbCBEJ0FsZXNzYW5kcm8gPGFyaWVsLmRh
+bGVzc2FuZHJvQGNvbGxhYm9yYS5jb20+Cj4gPiBDYzogSmFnYW4gVGVraSA8amFnYW5AYW1hcnVs
+YXNvbHV0aW9ucy5jb20+Cj4gPiBDYzogSGVpa28gVGhpZXJ5IDxoZWlrby50aGllcnlAZ21haWwu
+Y29tPgo+ID4gQ2M6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5l
+ZXJpbmcuY29tPgo+ID4gUmV2aWV3ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0
+aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+ID4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUcmlt
+YXJjaGkgPG1pY2hhZWxAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gW3NuaXBdCj4gPiBkaWZmIC0t
+Z2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiA+IGluZGV4IGZlOGRlMTkxNmUuLmZjNjZm
+YjZiODMgMTAwNjQ0Cj4gPiAtLS0gYS9ERVZFTE9QRVJTCj4gPiArKysgYi9ERVZFTE9QRVJTCj4g
+PiBAQCAtMjIwLDYgKzIyMCw3IEBAIEY6ICAgICAgICBjb25maWdzL3NucHNfYXJjaHMzOF9oc2Rr
+X2RlZmNvbmZpZwo+ID4gICBGOiAgY29uZmlncy9zbnBzX2FyY2hzMzhfdmRrX2RlZmNvbmZpZwo+
+ID4KPiA+ICAgTjogIEFyaWVsIEQnQWxlc3NhbmRybyA8YXJpZWxAdmFuZ3VhcmRpYXN1ci5jb20u
+YXI+Cj4gPiArRjogICBib2FyZC9ic2gvCj4KPiAgIFlvdSBzaG91bGQgYWxzbyBhZGQgY29uZmln
+cy9ic2hfc21tczJwcm9fZGVmY29uZmlnIGhlcmUuCj4KPiA+ICAgRjogIHBhY2thZ2UvYXhmc3V0
+aWxzLwo+ID4gICBGOiAgcGFja2FnZS9tYWxpLXQ3NngvCj4gPgo+ID4gQEAgLTIwMTgsNiArMjAx
+OSw3IEBAIEY6ICAgICAgcGFja2FnZS9weXRob24tY3JjMTYvCj4gPiAgIEY6ICBwYWNrYWdlL3B5
+dGhvbi1weXptcS8KPiA+Cj4gPiAgIE46ICBNaWNoYWVsIFRyaW1hcmNoaSA8bWljaGFlbEBhbWFy
+dWxhc29sdXRpb25zLmNvbT4KPiA+ICtGOiAgIGJvYXJkL2JzaC8KPiA+ICAgRjogIHBhY2thZ2Uv
+cHl0aG9uLXNwaWRldi8KPiA+Cj4gPiAgIE46ICBNaWNoYWVsIFZldHRlciA8anViYWxoQGlvZG9y
+dS5vcmc+Cj4gPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYnNoL2JzaC1pbXg4bW4vZXh0bGludXguY29u
+ZiBiL2JvYXJkL2JzaC9ic2gtaW14OG1uL2V4dGxpbnV4LmNvbmYKPiA+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi45MTExMzU0NzQyCj4gPiAtLS0gL2Rldi9udWxs
+Cj4gPiArKysgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9leHRsaW51eC5jb25mCj4gPiBAQCAtMCww
+ICsxLDQgQEAKPiA+ICtsYWJlbCBidWlsZHJvb3QKPiA+ICsgIGtlcm5lbCAvYm9vdC9JbWFnZQo+
+ID4gKyAgZGV2aWNldHJlZSAvYm9vdC9mcmVlc2NhbGUvaW14OG1uLWJzaC1zbW0tczJwcm8uZHRi
+Cj4gPiArICBhcHBlbmQgcm9vdD1QQVJUVVVJRD0lUEFSVFVVSUQlIHJvb3R3YWl0IHJ3Cj4gPiBk
+aWZmIC0tZ2l0IGEvYm9hcmQvYnNoL2JzaC1pbXg4bW4vZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvYnNo
+L2JzaC1pbXg4bW4vZ2VuaW1hZ2UuY2ZnCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5k
+ZXggMDAwMDAwMDAwMC4uYmMxMDBiMTcxZAo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvYm9h
+cmQvYnNoL2JzaC1pbXg4bW4vZ2VuaW1hZ2UuY2ZnCj4gPiBAQCAtMCwwICsxLDE3IEBACj4gPiAr
+aW1hZ2Ugc2RjYXJkLmltZyB7Cj4gPiArICAgICBoZGltYWdlIHsKPiA+ICsgICAgICAgICAgICAg
+cGFydGl0aW9uLXRhYmxlLXR5cGUgPSAiZ3B0Igo+ID4gKyAgICAgfQo+ID4gKwo+ID4gKyAgICAg
+cGFydGl0aW9uIGlteC1ib290IHsKPiA+ICsgICAgICAgICAgICAgaW4tcGFydGl0aW9uLXRhYmxl
+ID0gIm5vIgo+ID4gKyAgICAgICAgICAgICBpbWFnZSA9ICJmbGFzaC5iaW4iCj4gPiArICAgICAg
+ICAgICAgIG9mZnNldCA9IDMzSwo+ID4gKyAgICAgfQo+ID4gKwo+ID4gKyAgICAgcGFydGl0aW9u
+IHJvb3RmcyB7Cj4gPiArICAgICAgICAgICAgIG9mZnNldCA9IDhNCj4gPiArICAgICAgICAgICAg
+IGltYWdlID0gInJvb3Rmcy5leHQ0Igo+ID4gKyAgICAgICAgICAgICBwYXJ0aXRpb24tdXVpZCA9
+ICVQQVJUVVVJRCUKPiA+ICsgICAgIH0KPiA+ICt9Cj4gPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYnNo
+L2JzaC1pbXg4bW4vcG9zdC1idWlsZC5zaCBiL2JvYXJkL2JzaC9ic2gtaW14OG1uL3Bvc3QtYnVp
+bGQuc2gKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNzU1Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi5iZjg4
+NjFmNmE5Cj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9w
+b3N0LWJ1aWxkLnNoCj4gPiBAQCAtMCwwICsxLDcgQEAKPiA+ICsjIS9iaW4vc2gKPiA+ICtCT0FS
+RF9ESVI9IiQoZGlybmFtZSAkMCkiCj4gPiArUEFSVFVVSUQ9IiQoJEhPU1RfRElSL2Jpbi91dWlk
+Z2VuKSIKPiA+ICsKPiA+ICtpbnN0YWxsIC1kICIkVEFSR0VUX0RJUi9ib290L2V4dGxpbnV4LyIK
+PiA+ICtzZWQgInMvJVBBUlRVVUlEJS8kUEFSVFVVSUQvZyIgIiRCT0FSRF9ESVIvZXh0bGludXgu
+Y29uZiIgPiAiJFRBUkdFVF9ESVIvYm9vdC9leHRsaW51eC9leHRsaW51eC5jb25mIgo+ID4gK3Nl
+ZCAicy8lUEFSVFVVSUQlLyRQQVJUVVVJRC9nIiAiJEJPQVJEX0RJUi9nZW5pbWFnZS5jZmciID4g
+IiRCSU5BUklFU19ESVIvZ2VuaW1hZ2UuY2ZnIgo+Cj4gICBUaGlzIGlzIHJlYWxseSBhIGdyZWF0
+IHdheSBvZiBkb2luZyBpdCEKClRoZXJlIHdhcyBhbHJlYWR5IGEgY29tbWVudCBhYm91dCB0aGF0
+IHRvcGljIGZyb20gVGhvbWFzOgpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlwZXJtYWls
+L2J1aWxkcm9vdC8yMDIyLUphbnVhcnkvNjM0MzA4Lmh0bWwKCj4KPiA+IGRpZmYgLS1naXQgYS9i
+b2FyZC9ic2gvYnNoLWlteDhtbi9wb3N0LWltYWdlLnNoIGIvYm9hcmQvYnNoL2JzaC1pbXg4bW4v
+cG9zdC1pbWFnZS5zaAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA3NTUKPiA+IGluZGV4IDAwMDAwMDAw
+MDAuLjM0NTJmZDQ1MDEKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL2JvYXJkL2JzaC9ic2gt
+aW14OG1uL3Bvc3QtaW1hZ2Uuc2gKPiA+IEBAIC0wLDAgKzEsMyBAQAo+ID4gKyMhL2Jpbi9zaAo+
+ID4gKwo+ID4gK3N1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCAtYyAke0JJTkFSSUVTX0RJUn0v
+Z2VuaW1hZ2UuY2ZnCj4gPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYnNoL2JzaC1pbXg4bW4vcmVhZG1l
+LnR4dCBiL2JvYXJkL2JzaC9ic2gtaW14OG1uL3JlYWRtZS50eHQKPiA+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi5hZTMwNjY2Y2QwCj4gPiAtLS0gL2Rldi9udWxs
+Cj4gPiArKysgYi9ib2FyZC9ic2gvYnNoLWlteDhtbi9yZWFkbWUudHh0Cj4gPiBAQCAtMCwwICsx
+LDU1IEBACj4gPiArSG93IHRvIGJ1aWxkIGl0Cj4gPiArPT09PT09PT09PT09PT09Cj4gPiArCj4g
+PiArQ29uZmlndXJlIGJ1aWxkcm9vdDoKPiA+ICsKPiA+ICsgICQgbWFrZSBic2hfc21tczJwcm9f
+ZGVmY29uZmlnCj4gPiArCj4gPiArQ2hhbmdlIHNldHRpbmdzIHRvIGZpdCB5b3VyIG5lZWRzIChv
+cHRpb25hbCk6Cj4gPiArCj4gPiArICAkIG1ha2UgbWVudWNvbmZpZwo+ID4gKwo+ID4gK0NvbXBp
+bGUgZXZlcnl0aGluZyBhbmQgYnVpbGRyIHRoZSByb290ZnMgaW1hZ2U6Cj4gPiArCj4gPiArICAk
+IG1ha2UKPiA+ICsKPiA+ICsKPiA+ICtSZXN1bHQgb2YgdGhlIGJ1aWxkCj4gPiArPT09PT09PT09
+PT09PT09PT09PQo+ID4gKwo+ID4gK0FmdGVyIGJ1aWxkaW5nLCB0aGUgb3V0cHV0L2ltYWdlcyBk
+aXJlY3RvcnkgY29udGFpbnM6Cj4gPiArCj4gPiArICBvdXRwdXQvaW1hZ2VzLwo+ID4gKyAgICDi
+lJzilIDilIAgYmwzMS5iaW4KPiA+ICsgICAg4pSc4pSA4pSAIEltYWdlCj4gPiArICAgIOKUnOKU
+gOKUgCBmbGFzaC5iaW4KPiA+ICsgICAg4pSc4pSA4pSAIGRkcjMqCj4gPiArICAgIOKUnOKUgOKU
+gCByb290ZnMuZXh0Mgo+ID4gKyAgICDilJzilIDilIAgcm9vdGZzLmV4dDQgLT4gcm9vdGZzLmV4
+dDIKPiA+ICsgICAg4pSc4pSA4pSAIHJvb3Rmcy50YXIKPiA+ICsgICAg4pSc4pSA4pSAIHNkY2Fy
+ZC5pbWcKPiA+ICsgICAg4pSc4pSA4pSAIHUtYm9vdC5iaW4KPiA+ICsgICAg4pSc4pSA4pSAIHUt
+Ym9vdC1ub2R0Yi5iaW4KPiA+ICsgICAg4pSU4pSA4pSAIHUtYm9vdC1zcGwuYmluCj4gPiArCj4g
+PiArCj4gPiArRmxhc2hpbmcgdGhlIGVtbWMgY2FyZCBpbWFnZQo+ID4gKz09PT09PT09PT09PT09
+PT09PT09PT09PT09Cj4gPiArCj4gPiArVG8gaW5zdGFsbCB0aGUgaW1hZ2Ugb24gb24gZU1NQwo+
+ID4gKwo+ID4gKyAgJCBzdWRvIHV1dSAtYiBlbW1jX2FsbCBvdXRwdXQvaW1hZ2VzL2ZsYXNoLmJp
+biBvdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcKPgo+ICAgUGxlYXNlIGFsc28gZXhwbGFpbiB3aGVy
+ZSB5b3UgZ2V0IHV1dS4gQ2FuIHdlIGJ1aWxkIGl0IGFzIHBhcnQgb2YgYnVpbGRyb290Pwo+IFRo
+ZW4gcmVmZXIgdG8gaXQgYXMgb3V0cHV0L2hvc3QvYmluL3V1dS4KPgo+ID4gKwo+ID4gKwo+ID4g
+K1ByZXBhcmluZyB0aGUgYm9hcmQKPiA+ICs9PT09PT09PT09PT09PT09PT09Cj4gPiArCj4gPiAr
+ICogQ29ubmVjdCBhIHNlcmlhbCBsaW5lIHRvIHRoZSBib2FyZAo+ID4gKyAqIFBvd2VyLXVwIHRo
+ZSBib2FyZAo+ID4gKwo+ID4gKwo+ID4gK0Jvb3RpbmcgdGhlIGJvYXJkCj4gPiArPT09PT09PT09
+PT09PT09PT0KPiA+ICsKPiA+ICtCeSBkZWZhdWx0IHRoZSBib290bG9hZGVyIHdpbGwgc2VhcmNo
+IGZvciB0aGUgZmlyc3QgdmFsaWQgaW1hZ2UsIHN0YXJ0aW5nCj4gPiArd2l0aCB0aGUgaW50ZXJu
+YWwgZU1NQy4KPiA+IGRpZmYgLS1naXQgYS9jb25maWdzL2JzaF9zbW1zMnByb19kZWZjb25maWcg
+Yi9jb25maWdzL2JzaF9zbW1zMnByb19kZWZjb25maWcKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
+Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi45ZmQ3ZmI4ZTdjCj4gPiAtLS0gL2Rldi9udWxsCj4gPiAr
+KysgYi9jb25maWdzL2JzaF9zbW1zMnByb19kZWZjb25maWcKPiA+IEBAIC0wLDAgKzEsNDMgQEAK
+PiA+ICtCUjJfYWFyY2g2ND15Cj4KPiAgIEV2ZW4gaWYgdGhlIGRlZmF1bHQgaGFwcGVucyB0byBi
+ZSBjb3JyZWN0LCBJIHByZWZlciB0aGUgc3ViYXJjaCB0byBiZQo+IHNwZWNpZmllZCBleHBsaWNp
+dGx5LiBUaGF0IHdheSB3ZSBjYW4gY2hhbmdlIHRoZSBkZWZhdWx0IGxhdGVyIHdpdGhvdXQgYWZm
+ZWN0aW5nCj4gdGhpcyBkZWZjb25maWcuCj4KPiA+ICtCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlf
+UE9SVD0idHR5bXhjMyIKPiA+ICtCUjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9i
+c2gvYnNoLWlteDhtbi9wb3N0LWJ1aWxkLnNoIgo+ID4gK0JSMl9ST09URlNfUE9TVF9JTUFHRV9T
+Q1JJUFQ9ImJvYXJkL2JzaC9ic2gtaW14OG1uL3Bvc3QtaW1hZ2Uuc2giCj4gPiArQlIyX1JPT1RG
+U19QT1NUX1NDUklQVF9BUkdTPSIke1VCT09UX0RJUn0vYXJjaC9hcm0vZHRzL2lteDhtbi1ic2gt
+c21tLXMycHJvLmR0YiIKPgo+ICAgSSBtYXkgYmUgbWlzc2luZyBzb21ldGhpbmcsIGJ1dCB0aGlz
+IGRvZXNuJ3Qgc2VlbSB0byBiZSB1c2VkIGJ5IGFueSBvZiB0aGUKPiBwb3N0LSBzY3JpcHRzPwoK
+VGhpcyBzZWVtcyB0byBiZSBhIGxlZnRvdmVyIGZyb20gdGhlIHN0YXRlIHdoZXJlCiJib2FyZC9m
+cmVlc2NhbGUvY29tbW9uL2lteC9pbXg4LWJvb3Rsb2FkZXItcHJlcGFyZS5zaCIgd2FzIHVzZWQg
+dG8KZ2VuZXJhdGUgdGhlIGlteCBmbGFzaCBpbWFnZS4gTm93IHRoaXMgaXMgZG9uZSBieSB1LWJv
+b3QgdXNpbmcgYmlubWFuClRoZXJlZm9yZSB0aGlzIGFyZ3VtZW50IGlzIG5vIGxvbmdlciBuZWVk
+ZWQuCgo+Cj4gPiArQlIyX0xJTlVYX0tFUk5FTD15Cj4gPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fR0lUPXkKPiA+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9SRVBPX1VSTD0iaHR0cHM6Ly9n
+aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0
+Igo+ID4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1JFUE9fVkVSU0lPTj0idjUuMTctcmMxIgo+
+Cj4gICBQbGVhc2UgdXNlIHRoZSB0YXJiYWxsIGluc3RlYWQuIFNpbXBseSBzZXR0aW5nIENVU1RP
+TV9WRVJTSU9OIHNob3VsZCBiZQo+IHN1ZmZpY2llbnQgLSBpZiBub3QsIGxpbnV4Lm1rIGhhcyB0
+b2JlIGZpeGVkLgo+Cj4gPiArQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJ
+Rz15Cj4gPiArQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Cj4gPiArQlIyX0xJTlVYX0tF
+Uk5FTF9JTlRSRUVfRFRTX05BTUU9ImZyZWVzY2FsZS9pbXg4bW4tYnNoLXNtbS1zMnBybyIKPiA+
+ICtCUjJfTElOVVhfS0VSTkVMX0RUQl9LRUVQX0RJUk5BTUU9eQo+ID4gK0JSMl9MSU5VWF9LRVJO
+RUxfSU5TVEFMTF9UQVJHRVQ9eQo+ID4gK0JSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVO
+U1NMPXkKPiA+ICtCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YPXkKPiA+ICtCUjJfUEFDS0FHRV9G
+UkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDhNTj15Cj4gPiArQlIyX1BBQ0tBR0VfRklSTVdBUkVf
+SU1YPXkKPiA+ICtCUjJfUEFDS0FHRV9GSVJNV0FSRV9JTVhfRERSMz15Cj4gPiArQlIyX1RBUkdF
+VF9ST09URlNfRVhUMj15Cj4gPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKPiA+ICtCUjJf
+VEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyME0iCj4gPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RF
+RF9GSVJNV0FSRT15Cj4gPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01f
+VkVSU0lPTj15Cj4gPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVS
+U0lPTl9WQUxVRT0idjIuNSIKPiA+ICtCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX1BM
+QVRGT1JNPSJpbXg4bW4iCj4gPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9BRERJ
+VElPTkFMX1ZBUklBQkxFUz0iSU1YX0JPT1RfVUFSVF9CQVNFPTB4MzBhNjAwMDAiCj4gPiArQlIy
+X1RBUkdFVF9VQk9PVD15Cj4gPiArQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJ
+Rz15Cj4gPiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fR0lUPXkKPiA+ICtCUjJfVEFSR0VUX1VC
+T09UX0NVU1RPTV9SRVBPX1VSTD0iaHR0cHM6Ly9naXRsYWIuYXBlcnRpcy5vcmcvYWRhbGVzc2Fu
+ZHJvL3UtYm9vdC5naXQiCj4KPiAgIEdpdGxhYiBpcyBhYmxlIHRvIGdlbmVyYXRlIHRhcmJhbGxz
+IGFzIHdlbGwuIFRoZXJlIGFyZSBwbGVudHkgb2YgZXhhbXBsZXMgaW4KPiB0aGUgdHJlZS4KPgo+
+Cj4gICBJIHdvdWxkIG5vcm1hbGx5IGZpeCB0aGVzZSB0aGluZ3MgdXAgd2hpbGUgYXBwbHlpbmcs
+IGJ1dCBzaW5jZSBJJ20gbm90Cj4gZW50aXJlbHkgc3VyZSBhYm91dCBtZXJnaW5nIGEgLXJjIGtl
+cm5lbCBhbnl3YXksIEknbGwgd2FpdCBmb3IgYSB2NCBpbnN0ZWFkLgo+Cj4gICBPaCwgb25lIG1v
+cmUgdGhpbmc6IHRoZSBzdWJqZWN0IGZvciBhIG5ldyBkZWZjb25maWcgaXMgdHlwaWNhbGx5Cj4g
+ImNvbmZpZ3MvYnNoX3NtbXMycHJvX2RlZmNvbmZpZzogbmV3IGRlZmNvbmZpZyIKPgo+ICAgUmVn
+YXJkcywKPiAgIEFybm91dAo+Cj4gPiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fUkVQT19WRVJT
+SU9OPSJ2MjAyMi4wMS1ic2gtc21tMiIKPiA+ICtCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNP
+TkZJRz0iaW14OG1uX2JzaF9zbW1fczJwcm8iCj4gPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19E
+VEM9eQo+ID4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfUFlUSE9OMz15Cj4gPiArQlIyX1RBUkdF
+VF9VQk9PVF9ORUVEU19QWUxJQkZEVD15Cj4gPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVO
+U1NMPXkKPiA+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX0FURl9CTDMxPXkKPiA+ICtCUjJfVEFS
+R0VUX1VCT09UX05FRURTX0lNWF9GSVJNV0FSRT15Cj4gPiArQlIyX1RBUkdFVF9VQk9PVF9GT1JN
+QVRfQ1VTVE9NPXkKPiA+ICtCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9DVVNUT01fTkFNRT0iZmxh
+c2guYmluIgo+ID4gK0JSMl9UQVJHRVRfVUJPT1RfU1BMPXkKPiA+ICtCUjJfUEFDS0FHRV9IT1NU
+X0dFTklNQUdFPXkKCi0tIApIZWlrbwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
