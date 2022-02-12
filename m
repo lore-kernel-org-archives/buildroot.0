@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BB6C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 14:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32034C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 14:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50B5A403BE;
-	Sat, 12 Feb 2022 14:32:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B341B4015F;
+	Sat, 12 Feb 2022 14:32:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a23TxxWYvRBy; Sat, 12 Feb 2022 14:32:40 +0000 (UTC)
+	with ESMTP id twY3kROmSd4v; Sat, 12 Feb 2022 14:32:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 341EA40391;
-	Sat, 12 Feb 2022 14:32:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C8381BF5A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33BF540329;
+	Sat, 12 Feb 2022 14:32:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 738991BF954
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 14:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B5E660B8F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F1EA40391
  for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 14:32:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AypZD7NvzgTj for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bv9vQbGREnsi for <buildroot@lists.busybox.net>;
  Sat, 12 Feb 2022 14:32:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E45760BBF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 600DA40329
  for <buildroot@buildroot.org>; Sat, 12 Feb 2022 14:32:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 53C6382B40; Sat, 12 Feb 2022 14:25:06 +0000 (UTC)
+ id 464E682B3B; Sat, 12 Feb 2022 14:25:06 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 15:27:39 +0100
+Date: Sat, 12 Feb 2022 15:27:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e55f57b3d367213ef4b667988e42f7d26c6b23c9
-X-Git-Newrev: 0d4c8ce8a2f26989e0e2d95b977d60e450c090a9
+X-Git-Oldrev: b501e1a43d9f08e461937984a939f7afbc726336
+X-Git-Newrev: e55f57b3d367213ef4b667988e42f7d26c6b23c9
 X-Patchwork-Hint: ignore
-Message-Id: <20220212142506.53C6382B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sord: new package
+Message-Id: <20220212142506.464E682B3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/serd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,7 +58,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d4c8ce8a2f26989e0e2d95b977d60e450c090a9
+commit: https://git.buildroot.net/buildroot/commit/?id=e55f57b3d367213ef4b667988e42f7d26c6b23c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
@@ -67,87 +67,82 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
  DEVELOPERS             |  1 +
  package/Config.in      |  1 +
- package/sord/Config.in |  8 ++++++++
- package/sord/sord.hash |  4 ++++
- package/sord/sord.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
+ package/serd/Config.in |  8 ++++++++
+ package/serd/serd.hash |  4 ++++
+ package/serd/serd.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ece07026bc..bdea8142e0 100644
+index a91dccd1e0..ece07026bc 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1337,6 +1337,7 @@ F:	package/python-weasyprint/
+@@ -1336,6 +1336,7 @@ F:	package/python-tomli/
+ F:	package/python-weasyprint/
  F:	package/python-yarl/
  F:	package/python-zopfli/
- F:	package/serd/
-+F:	package/sord/
++F:	package/serd/
  F:	package/zchunk/
  
  N:	James Knight <james.knight@collins.com>
 diff --git a/package/Config.in b/package/Config.in
-index a8f408844d..0b533ce999 100644
+index 7aff9e7cb7..a8f408844d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1700,6 +1700,7 @@ menu "JSON/XML"
+@@ -1699,6 +1699,7 @@ menu "JSON/XML"
+ 	source "package/rapidjson/Config.in"
  	source "package/rapidxml/Config.in"
  	source "package/raptor/Config.in"
- 	source "package/serd/Config.in"
-+	source "package/sord/Config.in"
++	source "package/serd/Config.in"
  	source "package/tinyxml/Config.in"
  	source "package/tinyxml2/Config.in"
  	source "package/valijson/Config.in"
-diff --git a/package/sord/Config.in b/package/sord/Config.in
+diff --git a/package/serd/Config.in b/package/serd/Config.in
 new file mode 100644
-index 0000000000..91dfb41d0b
+index 0000000000..7633a979e2
 --- /dev/null
-+++ b/package/sord/Config.in
++++ b/package/serd/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SORD
-+	bool "sord"
-+	select BR2_PACKAGE_SERD
++config BR2_PACKAGE_SERD
++	bool "serd"
 +	help
-+	  Sord is a lightweight C library for storing RDF data in
-+	  memory.
++	  Serd is a lightweight C library for RDF syntax which
++	  supports reading and writing Turtle, TriG, NTriples, and
++	  NQuads.
 +
-+	  https://drobilla.net/software/sord.html
-diff --git a/package/sord/sord.hash b/package/sord/sord.hash
++	  https://drobilla.net/software/serd.html
+diff --git a/package/serd/serd.hash b/package/serd/serd.hash
 new file mode 100644
-index 0000000000..af175f91f0
+index 0000000000..d64a2aa271
 --- /dev/null
-+++ b/package/sord/sord.hash
++++ b/package/serd/serd.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated after checking signature
-+# https://download.drobilla.net/sord-0.16.8.tar.bz2.asc
-+sha256  7c289d2eaabf82fa6ac219107ce632d704672dcfb966e1a7ff0bbc4ce93f5e14  sord-0.16.8.tar.bz2
++# http://download.drobilla.net/serd-0.30.10.tar.bz2.sig
++sha256  affa80deec78921f86335e6fc3f18b80aefecf424f6a5755e9f2fa0eb0710edf  serd-0.30.10.tar.bz2
 +sha256  e06562d6bcf0341b2ac2ad0f0ca36801d2ebf388d5ef297011625e4c36e963f0  COPYING
-diff --git a/package/sord/sord.mk b/package/sord/sord.mk
+diff --git a/package/serd/serd.mk b/package/serd/serd.mk
 new file mode 100644
-index 0000000000..f805805e9d
+index 0000000000..85b16f6866
 --- /dev/null
-+++ b/package/sord/sord.mk
-@@ -0,0 +1,25 @@
++++ b/package/serd/serd.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# sord
++# serd
 +#
 +################################################################################
 +
-+SORD_VERSION = 0.16.8
-+SORD_SITE = https://download.drobilla.net
-+SORD_SOURCE = sord-$(SORD_VERSION).tar.bz2
-+SORD_LICENSE = ISC
-+SORD_LICENSE_FILES = COPYING
-+SORD_DEPENDENCIES = host-pkgconf serd
-+SORD_INSTALL_STAGING = YES
++SERD_VERSION = 0.30.10
++SERD_SITE = https://download.drobilla.net
++SERD_SOURCE = serd-$(SERD_VERSION).tar.bz2
++SERD_LICENSE = ISC
++SERD_LICENSE_FILES = COPYING
++SERD_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+SORD_DEPENDENCIES += pcre
-+endif
-+
-+SORD_CONF_OPTS += --no-coverage
++SERD_CONF_OPTS += --largefile --no-coverage
 +
 +ifeq ($(BR2_STATIC_LIBS),y)
-+SORD_CONF_OPTS += --static --no-shared --static-progs
++SERD_CONF_OPTS += --static --no-shared --static-progs
 +endif
 +
 +$(eval $(waf-package))
