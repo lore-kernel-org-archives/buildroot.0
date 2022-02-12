@@ -1,80 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68170C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 18:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0F62C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 12 Feb 2022 20:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4CBB403F9;
-	Sat, 12 Feb 2022 18:42:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58C0C606BF;
+	Sat, 12 Feb 2022 20:35:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CVhD-O_t7KNX; Sat, 12 Feb 2022 18:42:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7mYp698GG1Dy; Sat, 12 Feb 2022 20:35:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3491403C8;
-	Sat, 12 Feb 2022 18:42:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7174B1BF2B4
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 18:42:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 864D7606ED;
+	Sat, 12 Feb 2022 20:35:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BFCCD1BF577
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 20:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FA7140335
- for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 18:42:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE8CC606ED
+ for <buildroot@lists.busybox.net>; Sat, 12 Feb 2022 20:35:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8NS4mJDTutSm for <buildroot@lists.busybox.net>;
- Sat, 12 Feb 2022 18:42:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hcP_ybvkSaiC for <buildroot@lists.busybox.net>;
+ Sat, 12 Feb 2022 20:35:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B227F40327
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 18:42:01 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- bg21-20020a05600c3c9500b0035283e7a012so8350941wmb.0
- for <buildroot@buildroot.org>; Sat, 12 Feb 2022 10:42:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9468B606BF
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 20:35:19 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id s7so21400618edd.3
+ for <buildroot@buildroot.org>; Sat, 12 Feb 2022 12:35:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=nJrVJlbovOi9oLSl2ZraPrO8cBz7aIF6BZoanrVEh7E=;
- b=BKMbxvViE/A8lWZ+F/ilIoMLsidOi8pWN7+EOxZDtQG9vF4cvdGsDwNohX4zOCVM7S
- nEfMehBUIpw2AygbCHZpLyw5CG4PtuAfvw+eCnSPiiRUisAZdJoZmdfKC1KcvE1EACIf
- //uWTeqVs2sL4TuRlJoJ0k1+rfXZoZlbejLNhmAM6H47FkNTuZ2lj+bodwzNB2FGSyEj
- j8j7+gbzwjhwLhsKyujsTMIzwx4Ab+9lHmwRhqTf3NigwrKwexqWLvsiGVdSHO2DlBon
- 7p1mB1Wx2Ksbnr7Wj4977p7S7mkPOazDFTrv64NsiWuuAitYOB5JXN7PpylMQnO6kZfd
- H7Ng==
+ bh=Ql8oybcq/D509mADQ388yt03omBDKeFulEe8AoeBypA=;
+ b=Kw64y6lprS4uYn+MxDqbcSe7MmUAQl4RYKRr+bTH6V/r4NQT/LyFErJsBIujZfAQVJ
+ 8pYCuG6TZu07n0Lvli49rgF2rmTvh9wdvrPXxUuz3OfWAXrmM42PXuQQRAo+NvvYq2rg
+ 5WldunvPLLdvimb/hM/4VxsMfrwcSJjVSDfydFQxki7tvIxiNtiJ3SqAg/03trK5pZkb
+ /sSwACYlSlVBGziSUypNd5vc27ZAZJUSF0aASTvrmxSx6dAqxwP5HmS3hP0rAbzhymsS
+ pXPbf0IZrEteaRV9xet57GtqBUlnJ7OUP6q5uxwFC0eJuEGZ6pCq1PJtCXTmwmlajWre
+ wEuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=nJrVJlbovOi9oLSl2ZraPrO8cBz7aIF6BZoanrVEh7E=;
- b=K0bT0R1g6Gj8BZhjdryOVI8jj9jJoESZ6WVPXJg7fmHg8tXJ+/B38wwU7jwHFrPPhp
- tdzGaez3FxamNqfYeG9n+8/LsfgGJFpeH4JR/5AE+4wbjWG29WfCeBoKWKtY5c4NolXv
- Z5XpHhVUBThTpIhTd775oVoK3SBjl/3oAG+9UGMKv0vIOdF+8trDjMxI0e/vVE3zt37H
- nsmP0lteqQPmuAx8W8s4w8BOaI6gB42l7dPIaY5GsRkTwvIR+c2DXgSDI7hYAAi3Pwks
- MlaJ4x2MkaXdDgAR0M5egI5UtEOi5T5H2nllCCAJypvrnJIRWfjBnmHaTtzj4jKnYSKz
- QEmg==
-X-Gm-Message-State: AOAM531RW7RVn1qEk1Ltli/S6pKiNJxFHuSd7fH4Zl68P9ds1OlmVQkD
- 03Zc6FMIFWxJKwlyfQxqBSpyjsAIQVY=
-X-Google-Smtp-Source: ABdhPJx+oFX1OatEPFcG+JOg703fGvyAr0eAS9zEeuRBPkOrLVPHPn3gHlr9qsL3hABhDQg4dtYyIg==
-X-Received: by 2002:a7b:cb54:: with SMTP id v20mr4979438wmj.2.1644691319935;
- Sat, 12 Feb 2022 10:41:59 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:9140:15a5:f29a:157f])
- by smtp.gmail.com with ESMTPSA id i6sm27323858wry.33.2022.02.12.10.41.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 12 Feb 2022 10:41:59 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 12 Feb 2022 19:41:55 +0100
-Message-Id: <20220212184155.4188927-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Ql8oybcq/D509mADQ388yt03omBDKeFulEe8AoeBypA=;
+ b=hV+CysZokNYdyH6OKbEyziCkqV5UIosY8yiNW7TI7FkVQxAhvDhq5ojTig7cNpGi6z
+ JFWHIYA4VbFZ2zwIDtCdoLLyABQmgTMRk2jGgWAKgAXS3RBgNa7ZpoWmrqjkPsSayT15
+ fupOCmmjl230Shx8BTlN0S42VRHhRHqAwCVoEpW8guwSjm1DbRpUaq4J1TwArHxb/erS
+ Qck5SNoMeEsDIBozaPhnUCZ1Pxpxt16G/N8N060xbJdSElgZdv9AQX5eQOFAfcpMPqYg
+ Ub2N/bPZa516o3vjXCWQX8BKACgOAWYB8w4xmA5ARQEPGreVY06J483vL0ypeZEaIgkw
+ iceA==
+X-Gm-Message-State: AOAM530PofhYn2HqQ4FjDdlDFN+9oDYVY05jjZ9sCX2tulh2xkBHuqsa
+ /EmNIMB66rFQfvgoGxU5s9FsLQ==
+X-Google-Smtp-Source: ABdhPJwgW0p8h2aTLFXfJQEeNrYGFouJnOTrhADEm31kQG6cYZRn5g48Z0wLZbWX1pHbrpIBXB//3Q==
+X-Received: by 2002:a05:6402:43cd:: with SMTP id
+ p13mr190256edc.28.1644698117518; 
+ Sat, 12 Feb 2022 12:35:17 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id q7sm6528963edv.93.2022.02.12.12.35.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 12 Feb 2022 12:35:17 -0800 (PST)
+Message-ID: <d8123960-c3ec-398b-9d27-15c01b73858c@mind.be>
+Date: Sat, 12 Feb 2022 21:35:16 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] support/pkg-stats: fix regression after cleanup
- in show-info
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Michael Trimarchi <michael@amarulasolutions.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <20220201091342.143010-1-michael@amarulasolutions.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220201091342.143010-1-michael@amarulasolutions.com>
+Subject: Re: [Buildroot] [PATCH] boot/uboot: add support for bundling TEE in
+ BIN format into U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,43 +94,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+ Jagan Teki <jagan@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 471ecea5eeb0 (core/show-info: 'name' only applies to packages)
-removed the 'name' field for rootfs (really, for non-package) entries,
-thus breaking the pkg-stats processing.
 
-We fix that by excluding any entry that has no 'name', on the assumption
-that if it has no name, it is not a package.
 
-Reported-by: Xogium on IRC
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 01/02/2022 10:13, Michael Trimarchi wrote:
+> Some U-Boot platforms (e.g. nxp) can bundle OPTEE's tee.bin
+> into the U-Boot image using binman. This patch brings the necessary changes to
+> enable this feature.
+> 
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+>   boot/uboot/Config.in | 12 ++++++++++++
+>   boot/uboot/uboot.mk  | 12 ++++++++++++
+>   2 files changed, 24 insertions(+)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index c630fc6552..117bbd3faf 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -237,6 +237,18 @@ config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE
+>   	  U-Boot. This option makes sure optee-os gets built prior to
+>   	  U-Boot, and that the TEE variable pointing to OPTEE's
+>   	  tee.elf, is passed during the Buildroot build.
+           ^^^^^^^ This is inconsistent with the choice below. Perhaps 
+reformulate like this:
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index abd36a3dd5..c235d99407 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -371,7 +371,7 @@ def get_pkglist(npackages, package_list):
- def get_config_packages():
-     cmd = ["make", "--no-print-directory", "show-info"]
-     js = json.loads(subprocess.check_output(cmd))
--    return set([v["name"] for v in js.values()])
-+    return set([v["name"] for v in js.values() if 'name' in v])
- 
- 
- def package_init_make_info():
--- 
-2.25.1
+	  U-Boot, and that the TEE variable pointing to OPTEE's binary
+	  is passed during the Buildroot build.
 
+
+> +choice
+> +	prompt "U-Boot OPTEE BL32 format"
+> +	default BR2_TARGET_UBOOT_NEEDS_OPTEE_BIN
+> +	depends on BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE
+
+  (nitpick) IMHO it's nicer to write this with if...endif around the choice.
+
+  More importantly: there should be a help text.
+
+> +
+> +config BR2_TARGET_UBOOT_NEEDS_OPTEE_BIN
+> +	bool "tee.bin"
+> +
+> +config BR2_TARGET_UBOOT_NEEDS_OPTEE_ELF
+> +	bool "tee.elf"
+> +
+> +endchoice
+>   
+>   config BR2_TARGET_UBOOT_NEEDS_OPENSBI
+>   	bool "U-Boot needs OpenSBI"
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 574fc7089a..210fa219ed 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -177,7 +177,19 @@ endif
+>   
+>   ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
+>   UBOOT_DEPENDENCIES += optee-os
+> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_ELF),y)
+>   UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
+> +define UBOOT_COPY_TEE_FIRMWARE
+> +	cp $(BINARIES_DIR)/tee.elf $(@D)/
+
+  As Yann explained but it didn't appear to get through: before, it supposedly 
+wasn't necessary to make this copy, so why is it necessary now?
+
+  Perhaps it is necessary to copy it in more recent versions of U-Boot (i.e. 
+when using binman). In that case, I think it would be good to also update the 
+make option to TEE=tee.elf, to make it more consistent.
+
+
+> +endef
+> +UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_TEE_FIRMWARE
+> +else
+> +UBOOT_MAKE_OPTS += BL32=$(BINARIES_DIR)/tee.bin
+> +define UBOOT_COPY_TEE_FIRMWARE
+> +	cp $(BINARIES_DIR)/tee-raw.bin $(@D)/tee.bin
+
+  Again, it's very weird that you pass in a BL32= that refers to a different 
+file (really different this time, because it's not the tee-raw.bin but the full 
+tee.bin).
+
+  There may be good reasons to do it this way, but that should be explained in 
+detail in the commit message, and also briefly in a comment because it's simply 
+too weird to understand like this.
+
+
+  I've marked the patch as Changes Requested.
+
+  Regards,
+  Arnout
+
+
+> +endef
+> +UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_TEE_FIRMWARE
+> +endif
+>   endif
+>   
+>   ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
