@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D66C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 11:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCA32C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 11:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1180C402E2;
-	Sun, 13 Feb 2022 11:47:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9467740305;
+	Sun, 13 Feb 2022 11:47:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 84_56qcbQDkS; Sun, 13 Feb 2022 11:47:25 +0000 (UTC)
+	with ESMTP id ZJHGfClta3mL; Sun, 13 Feb 2022 11:47:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E69DD40305;
-	Sun, 13 Feb 2022 11:47:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 063631BF842
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:47:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4054740309;
+	Sun, 13 Feb 2022 11:47:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB7E91BF842
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E527D40181
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:47:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B61AD81762
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:47:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mskUhRdj1YqH for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 11:47:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hVvzZBXc_sjD for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 11:47:27 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00309400D1
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:47:19 +0000 (UTC)
-Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
- by mailout10.t-online.de (Postfix) with SMTP id 8B55F910B
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 12:47:16 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd74.t-online.de
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C284814BA
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:47:27 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout06.t-online.de (Postfix) with SMTP id 2174C1B8EE
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 12:47:25 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd86.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nJDLU-20PFqr0; Sun, 13 Feb 2022 12:47:13 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37678)
+ esmtp id 1nJDLe-2JRTlJ0; Sun, 13 Feb 2022 12:47:22 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37680)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nJDLU-00028C-Dm
- for buildroot@buildroot.org; Sun, 13 Feb 2022 12:47:12 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nJDLd-00029g-M0
+ for buildroot@buildroot.org; Sun, 13 Feb 2022 12:47:21 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 12:47:12 +0100
-Message-Id: <20220213114712.2738619-1-bernd.kuhls@t-online.de>
+Date: Sun, 13 Feb 2022 12:47:21 +0100
+Message-Id: <20220213114721.2738803-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1644752833-00012DCC-CF4E5027/0/0 CLEAN NORMAL
-X-TOI-MSGID: fe3b3847-5bd3-4ccf-b11c-82d024b4d3fb
-Subject: [Buildroot] [PATCH 1/1] package/kodi: fix build with python-3.10
+X-TOI-EXPURGATEID: 150726::1644752842-000116DC-41FA404F/0/0 CLEAN NORMAL
+X-TOI-MSGID: 83a7da83-215b-40fd-a60c-f0d027e7ab05
+Subject: [Buildroot] [PATCH v2 1/1] package/kodi: fix build with python-3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
