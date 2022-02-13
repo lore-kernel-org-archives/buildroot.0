@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7277AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E04AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:30:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 230BA403CF;
-	Sun, 13 Feb 2022 15:29:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7B7D60B64;
+	Sun, 13 Feb 2022 15:30:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BiC4mKpsfjoK; Sun, 13 Feb 2022 15:29:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OVhO3zWba20y; Sun, 13 Feb 2022 15:30:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DDBD140360;
-	Sun, 13 Feb 2022 15:29:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 67D0D1BF3F2
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:25:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E857860AC0;
+	Sun, 13 Feb 2022 15:30:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 39CFA1BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5773481420
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:25:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 281A54040D
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:25:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8x96RPey-MKx for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 15:25:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j0UH4IBdoy9U for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 15:25:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5979F8140F
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:25:27 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id p9so9726428ejd.6
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:25:27 -0800 (PST)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D17AB403CF
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:25:44 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id h8so6100957ejy.4
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:25:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=v8REkH/TKQ+gH/WatHxZPHurLylNokmrj02T4SiOpoA=;
- b=aA5MArlmjR8mARhqjYIG3kmX0c3C78j9GRwtsiVUG7Ak/T8zvZXLV/LmNy8ZfuYRyt
- Hr+C3bZYWg6dLNoZ7S/GdzEwYOgKdqkGmQBTxPOiHK4TSl2tWrkdfvGX7hIWjn+qXJnp
- z7k+kXbHXyqCfYVJuLG1KzWDpfP5c+lvI7duIDEfk9fnC+fmimkUgvd703Ez/S48V8rs
- rw4zsTSRG5NCRm+bmehD3RtgZI1Q3kmmlu8JsOh0pQVPX+zGe+SQlOsV6EuoySsefYnT
- nVJUT4uK12qH74utaxVozb4dC96IctnRwmJe/5O5Vw7Z+Igb9PpKH3kWc4H3Vq2/u4sl
- w9Aw==
+ bh=dFx2L7O1cpcckrc15zpCKhRoHSXMQBhgqZGJNlYXnr8=;
+ b=UM/Lk7rbWSJ5NLWFR8VSuSL8pNgpCZUV9TKAhvzH7jOoHufpXpOuFTUtbp28+jZ6OC
+ UXFsGqtdjsCukCKE/9S8fU4fMH7noSHpWLMLHXgQGCYwPR4Z8nvugrhugeYr94fVOJjs
+ WgEQC9g9XQQJVp9p97SX9p91SnhPyCRxv8XL79BA13CKEzveM0bFnWwZD6ICa5I6pPCg
+ LUfPcv1gwkJkQ2HFJVb5trV/W7GeVvC0moJZCcS+39A9S9n4i6e9HjWB3c7eOIgFWRg5
+ zVxQEsrMlPJaEC94w7BHdK/W4yyJiRAgAgJEPypxKdoMOlECkhZXaRAfBy064XUSh5m6
+ Ia4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=v8REkH/TKQ+gH/WatHxZPHurLylNokmrj02T4SiOpoA=;
- b=TT4eqr6H24DSLjIcBofqSrMUoY/rYIom5zctb8nr7c6yit8sfagz3CDPltE5GTBKAA
- 0sdC09rl4E/qWM3hHrAojyvo8/3dPErnxJ+FUuU019jgk1Rk7lLUTKX8RBibcJ+R2T+2
- WGDHGBMle3HJEcbv7UWSvA5rgmEJKw5KK2WnqyOp6l/mP4XzA9rTLBqOVNpEDVghSgkc
- hWf5eq9mXAyKiHR8QfYlUjP8+eYN/Tq9n+WIOEzmQPWhdHJ3Vb3yBzqjasRQRShScXqT
- XRTLQsB5iw5E3d5Xay2Hn5vxBAqVReYZgVYX7qXsq9No9Bz5rXW650RICbgzMqAqM7fb
- lrYQ==
-X-Gm-Message-State: AOAM533VZbf9SlQHRCHE4/4A0WGPdbuGmDYJ01ngMlqkrPbQbgDSNjcs
- vU+UP0h/c/tQS0KkmOSgCpppVeOW/y0h2Q==
-X-Google-Smtp-Source: ABdhPJxgan9Tzlp79Lk9cSiNHsIsfQl6QlWNZZIV5Vf5R5R+0XsYKL7U5CfNLb0y+vZaaVmJg8hfhA==
-X-Received: by 2002:a17:907:6d07:: with SMTP id
- sa7mr1307826ejc.582.1644765925600; 
- Sun, 13 Feb 2022 07:25:25 -0800 (PST)
+ bh=dFx2L7O1cpcckrc15zpCKhRoHSXMQBhgqZGJNlYXnr8=;
+ b=VxlgNiQcJDz6E8eMLxfDPI/+mSCLrJnb1kY+T40WxeAbB5pIS8BfqSVAf4dhCGGZEr
+ 5TboYpX8jzAU9IG2Y+8dzLtFoNwbrq/cio62K58+1sMAfZzTVYMNhZS5JGNYVBZzhm0w
+ 4x64oO4+9gKqnuvEab6WHPMPwjZael5N1QZKC88nDdtuanIgPShsws0w2sIhn64yZAbe
+ EK1tPGYKylsZmE9xkJWp6TwI+DOLaGnTQ6XdGNfXFI5SBTzYhbBUIMxO4dPDJ4QjSzBv
+ jEiav5EKtybzeVY7gn+otltv/Ff734tZasSPgfVll51+UcBy3E03XEAGW+Nd99Rfld5+
+ np1Q==
+X-Gm-Message-State: AOAM533DhUiPE2BszT/kdyGE/VbfCeWi7/FkD7i7rxJbO++ElLZD7Q6N
+ G/BbG+RLkFCMXl/OrVor56ARxQ==
+X-Google-Smtp-Source: ABdhPJxrnRMtJz+0D2ZPVuInRGBfApesddJOVGYz065Ld1LMSrvyKGFG7IsjQGscyWlvSZM0dNq9mg==
+X-Received: by 2002:a17:906:748a:: with SMTP id
+ e10mr5050517ejl.107.1644765943036; 
+ Sun, 13 Feb 2022 07:25:43 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id n25sm10368529eds.89.2022.02.13.07.25.24
+ by smtp.gmail.com with ESMTPSA id b3sm2088174ejl.67.2022.02.13.07.25.42
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 13 Feb 2022 07:25:25 -0800 (PST)
-Message-ID: <e4a93e86-5a89-9eb6-f144-14ca099a7cac@mind.be>
-Date: Sun, 13 Feb 2022 16:25:24 +0100
+ Sun, 13 Feb 2022 07:25:42 -0800 (PST)
+Message-ID: <86d76831-de88-4d8a-3f1a-16bde429fa61@mind.be>
+Date: Sun, 13 Feb 2022 16:25:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220206140459.1622884-1-fontaine.fabrice@gmail.com>
+References: <20220206142638.1751906-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220206140459.1622884-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/gerbera: fix build with fmt >
- 8.0
+In-Reply-To: <20220206142638.1751906-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mp4v2: needs gcc >= 5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,16 +100,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 06/02/2022 15:04, Fabrice Fontaine wrote:
-> Fix the following build failure raised since bump of fmt to version
-> 8.1.1 in commit ec7fd50d08690a383fec40748ac9b78c3f764316:
+On 06/02/2022 15:26, Fabrice Fontaine wrote:
+> TechSmith fork of mp4v2 needs gcc >= 5:
+> https://github.com/TechSmith/mp4v2/issues/47
 > 
-> /home/peko/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/fmt/core.h:1728:7: error: static assertion failed: Cannot format an argument. To make type T formattable provide a formatter<T> specialization: https://fmt.dev/latest/api.html#udt
->         formattable,
->         ^~~~~~~~~~~
+> As a result, the following build failure is raised since bump to version
+> 5.0.1 in commit df22a9d6b77d9e245dceb7c8fd3f9d80c8917ca0:
+> 
+> In file included from ./include/mp4v2/mp4v2.h:58:0,
+>                   from ./libplatform/platform_posix.h:37,
+>                   from ./libplatform/platform.h:24,
+>                   from libplatform/impl.h:6:
+> ./include/mp4v2/file.h:336:5: warning: identifier 'nullptr' is a keyword in C++11 [-Wc++0x-compat]
+>       ShouldParseAtomCallback cb = nullptr );
+>       ^
+> 
+> While a it, drop first patch which is not needed now that mp4v2 depends
+> on gcc >= 5
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/009db44f83c3b02025c910ce4f190bd709c5ab49
+>   - http://autobuild.buildroot.org/results/178f1266396d44c6659a67d8e68cb99e36d544ea
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -120,60 +129,94 @@ On 06/02/2022 15:04, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/gerbera/0001-Fix-for-fmt-8-0.patch | 44 ++++++++++++++++++++++
->   1 file changed, 44 insertions(+)
->   create mode 100644 package/gerbera/0001-Fix-for-fmt-8-0.patch
+>   ...atic-cast-to-unsigned-int-for-cases.patch} |  0
+>   ...mp4track.cpp-replace-nullptr-by-NULL.patch | 50 -------------------
+>   package/mp4v2/Config.in                       |  6 ++-
+>   3 files changed, 4 insertions(+), 52 deletions(-)
+>   rename package/mp4v2/{0002-Static-cast-to-unsigned-int-for-cases.patch => 0001-Static-cast-to-unsigned-int-for-cases.patch} (100%)
+>   delete mode 100644 package/mp4v2/0001-src-mp4track.cpp-replace-nullptr-by-NULL.patch
 > 
-> diff --git a/package/gerbera/0001-Fix-for-fmt-8-0.patch b/package/gerbera/0001-Fix-for-fmt-8-0.patch
-> new file mode 100644
-> index 0000000000..c4419209a5
-> --- /dev/null
-> +++ b/package/gerbera/0001-Fix-for-fmt-8-0.patch
-> @@ -0,0 +1,44 @@
-> +From 82d84ac5e62c23e717198fc7b2ef190ff95e70d1 Mon Sep 17 00:00:00 2001
-> +From: kyak <bas@bmail.ru>
-> +Date: Wed, 12 Jan 2022 19:41:37 +0300
-> +Subject: [PATCH] Fix for fmt > 8.0
-> +
-> +[Retrieved from:
-> +https://github.com/gerbera/gerbera/commit/82d84ac5e62c23e717198fc7b2ef190ff95e70d1]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/util/logger.h | 15 +++++++++++++++
-> + 1 file changed, 15 insertions(+)
-> +
-> +diff --git a/src/util/logger.h b/src/util/logger.h
-> +index 58696e52f..ba64afa79 100644
-> +--- a/src/util/logger.h
-> ++++ b/src/util/logger.h
-> +@@ -32,7 +32,9 @@
-> + #ifndef __LOGGER_H__
-> + #define __LOGGER_H__
-> +
-> ++#include <fmt/format.h>
-> + #include <spdlog/spdlog.h>
-> ++#include <type_traits>
-> +
-> + #define log_debug SPDLOG_DEBUG
-> + #define log_info SPDLOG_INFO
-> +@@ -40,4 +42,17 @@
-> + #define log_error SPDLOG_ERROR
-> + #define log_js SPDLOG_INFO
-> +
-> ++#if FMT_VERSION >= 80100
-> ++template <typename T>
-> ++struct fmt::formatter<T, std::enable_if_t<std::is_enum_v<T>, char>>
-> ++    : formatter<std::underlying_type_t<T>> {
-> ++    template <typename FormatContext>
-> ++    auto format(const T& value, FormatContext& ctx) -> decltype(ctx.out())
-> ++    {
-> ++        return fmt::formatter<std::underlying_type_t<T>>::format(
-> ++            static_cast<std::underlying_type_t<T>>(value), ctx);
-> ++    }
-> ++};
-> ++#endif
-> ++
-> + #endif // __LOGGER_H__
+> diff --git a/package/mp4v2/0002-Static-cast-to-unsigned-int-for-cases.patch b/package/mp4v2/0001-Static-cast-to-unsigned-int-for-cases.patch
+> similarity index 100%
+> rename from package/mp4v2/0002-Static-cast-to-unsigned-int-for-cases.patch
+> rename to package/mp4v2/0001-Static-cast-to-unsigned-int-for-cases.patch
+> diff --git a/package/mp4v2/0001-src-mp4track.cpp-replace-nullptr-by-NULL.patch b/package/mp4v2/0001-src-mp4track.cpp-replace-nullptr-by-NULL.patch
+> deleted file mode 100644
+> index c279b9c56a..0000000000
+> --- a/package/mp4v2/0001-src-mp4track.cpp-replace-nullptr-by-NULL.patch
+> +++ /dev/null
+> @@ -1,50 +0,0 @@
+> -From 78cf76b5d661e37e958163c37c0ad95940c09591 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Sat, 30 May 2020 11:42:19 +0200
+> -Subject: [PATCH] src/mp4track.cpp: replace nullptr by NULL
+> -
+> -Commit 15ec11166ba9ee7b77631d0d9234522f656cfd66 added code that uses
+> -nullptr. nullptr is C++11, it will break the build with gcc < 5.
+> -
+> -Semantically, NULL and nullptr are different, so should not be mixed.
+> -In this situaiton, m_File.FindAtom() indeed does not return nullptr,
+> -but NULL (on error, that is).
+> -
+> -Switch back to comparing against NULL.
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/14937c96a82fb3d10e5d83bd7b2905b846fb09f9
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Upstream status: https://github.com/TechSmith/mp4v2/pull/62]
+> ----
+> - src/mp4track.cpp | 6 +++---
+> - 1 file changed, 3 insertions(+), 3 deletions(-)
+> -
+> -diff --git a/src/mp4track.cpp b/src/mp4track.cpp
+> -index 4b8fc9d..42489eb 100644
+> ---- a/src/mp4track.cpp
+> -+++ b/src/mp4track.cpp
+> -@@ -908,16 +908,16 @@ File* MP4Track::GetSampleFile( MP4SampleId sampleId )
+> -        MP4FtypAtom *pFtypAtom = reinterpret_cast<MP4FtypAtom *>( m_File.FindAtom( "ftyp" ) );
+> -
+> -        // MOV spec does not require "ftyp" atom...
+> --       if ( pFtypAtom == nullptr )
+> -+       if ( pFtypAtom == NULL )
+> -        {
+> --          return nullptr;
+> -+          return NULL;
+> -        }
+> -        else
+> -        {
+> -           // ... but most often it is present with a "qt  " value
+> -           const char *majorBrand = pFtypAtom->majorBrand.GetValue();
+> -           if ( ::strcmp( pFtypAtom->majorBrand.GetValue(), "qt  " ) == 0 )
+> --             return nullptr;
+> -+             return NULL;
+> -        }
+> -        throw new Exception( "invalid stsd entry", __FILE__, __LINE__, __FUNCTION__ );
+> -     }
+> ---
+> -2.26.2
+> -
+> diff --git a/package/mp4v2/Config.in b/package/mp4v2/Config.in
+> index 172d1baabe..00e80cd358 100644
+> --- a/package/mp4v2/Config.in
+> +++ b/package/mp4v2/Config.in
+> @@ -1,6 +1,7 @@
+>   config BR2_PACKAGE_MP4V2
+>   	bool "mp4v2"
+>   	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11
+>   	help
+>   	  The MP4v2 library provides functions to read, create, and
+>   	  modify mp4 files.
+> @@ -18,5 +19,6 @@ config BR2_PACKAGE_MP4V2_UTIL
+>   
+>   endif
+>   
+> -comment "mp4v2 needs a toolchain w/ C++"
+> -	depends on !BR2_INSTALL_LIBSTDCPP
+> +comment "mp4v2 needs a toolchain w/ C++, gcc >= 5"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
