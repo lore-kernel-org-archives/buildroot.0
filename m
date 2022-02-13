@@ -4,75 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B54C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 13:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 627B5C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 14:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8416D608A6;
-	Sun, 13 Feb 2022 13:55:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFE36608A6;
+	Sun, 13 Feb 2022 14:42:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FhWsJH4_s5v0; Sun, 13 Feb 2022 13:55:52 +0000 (UTC)
+	with ESMTP id b9rITqUkI-GM; Sun, 13 Feb 2022 14:42:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2233607CE;
-	Sun, 13 Feb 2022 13:55:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4C9B51BF2F2
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 13:55:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11FBB60758;
+	Sun, 13 Feb 2022 14:42:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DBB01BF841
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 14:42:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39E6D40360
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 13:55:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BB3481779
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 14:42:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=balena.io
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kvS-2f_tsUGH for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 13:55:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
- [IPv6:2607:f8b0:4864:20::f29])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C992640159
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 13:55:48 +0000 (UTC)
-Received: by mail-qv1-xf29.google.com with SMTP id o5so12808510qvm.3
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 05:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=balena.io; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NiUryMrlR/wUXcYHKbUhb8AdzADVmIKO/qnRl8HMBHA=;
- b=Bd8cTytJCJFeglEiREXwZQHKCLPNHg3XE8lNOebEMvu2mEpc2AuFkT5Mg0CiEjS7dy
- EFMaZip/wOPQ8a3rxRKkkyoQCv7qiIZ/aVhUSiJop3rIfJaFkcciqF/Wk3L76Fyw9deZ
- HmtYyHEaK2YSvzhz9nw79/gX0lm+LrJq3HJ8/QG0bqX94CyXCM1Zfuc8pyvj36mPzHeA
- /315A0x399a279ZfjaMhtkK/O/s+/gEjCwTfYQgMAUqfRmXYfLjrmxiiqmetoISxRFEz
- Mb0x8+so8XNhz2nbYJnDuCJ+vSJ7cCwS0xDLiF4iWJX1bL3UOolcKgg52dsbpqTW1Gew
- VGdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NiUryMrlR/wUXcYHKbUhb8AdzADVmIKO/qnRl8HMBHA=;
- b=N8hfaDLBZHZott7UmzyWHmAtbsJKt92Fik0nQADZOuAXfGJqMiYDMccnxXcq5YDk+z
- OjEprk8TBvJJzmWoYKmRUHoJY4er3i0t/J7+5eCRUnQtNEkdx9i0rcSOqFLUXnUmw31n
- bGSIvig36sy5tszbgubSSlNFDhg8mXeMRlX1PRLPi/DDMDYI8v/luWrB+9SGk83GG1y6
- VIz8mJkOp5I3MEgW5z+ZdePfWow+eG67+dT3gOWHiK6Cji2ik6jFD7C1TZZ2jZ9JyIvN
- /juv6T+58ex8KCLtgzNoDOZpDy5ChYEx4SbPZrxEiJ/GkBnjZpgSQ7ZKEDljl4mU79Vd
- hnLw==
-X-Gm-Message-State: AOAM531vt5viDEtIrcd2CgT8JFcyJO9vv8cYgIzGALCJu6u5haedWq3M
- H4/wZw90H7XHbt2wT81VMig8b/QC1Vo2mh8Z
-X-Google-Smtp-Source: ABdhPJzrFcUBoWnpFxif2UxqPCyGVgsdLNkmhi0qXPnYR2e6JUubh1MUP7Y/pqE1fDqK/BliGKNiAQ==
-X-Received: by 2002:ad4:5941:: with SMTP id eo1mr6653966qvb.50.1644760547538; 
- Sun, 13 Feb 2022 05:55:47 -0800 (PST)
-Received: from xps-13-9369.lan (198-48-234-199.cpe.pppoe.ca. [198.48.234.199])
- by smtp.gmail.com with ESMTPSA id
- v5sm14755480qkp.70.2022.02.13.05.55.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Feb 2022 05:55:47 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 08:55:40 -0500
-Message-Id: <20220213135540.49983-1-kyle@balena.io>
-X-Mailer: git-send-email 2.30.2
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jUr5n9R_BK6I for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 14:42:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F88B81775
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 14:42:31 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:8910:5bc5:ca35:1c76])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 406B313F88D;
+ Sun, 13 Feb 2022 15:42:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1644763348;
+ bh=yaOugCNrhtRO0RXmtdAtjBAMprzaIKQGrZoESqs9lnk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=RNsQNsckl9NHuXzgcmCAC/3Gbbfp0eFcYNmnz3TOm1UHQeNyKx9sNRM3M6El7uuxa
+ BjexGI42dhFdpNYqS2wX2Z46knGWQrK6bwJurKye576YYBZGyhhQXyXaAK5/zYg3ur
+ hWAyI1rg6aPalKPKj8mUr6xSCKHlcC6ZIEMo0qP4jE5MTw1iRp/9tmiGmT2Yr9Vk2o
+ STTt9Qrsg5yKtsfc9pADTQBCwZVtRGT7PFIemonbXYNO5/bbmaeRh4nsDR1y6pYLXq
+ ZI22xf11Q8UwBhrRA1LLrtWm5FiFAhpT5ESfKt2tfFEBz3ujxVsutAn2tpBKI46Txg
+ NpE++b3jWGtpQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 13 Feb 2022 15:42:18 +0100
+Date: Sun, 13 Feb 2022 15:42:18 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220213144218.GA4462@scaer>
+References: <20220205201837.3324085-1-james.hilliard1@gmail.com>
+ <20220205201837.3324085-2-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/unbound: bump version to 1.15.0
+Content-Disposition: inline
+In-Reply-To: <20220205201837.3324085-2-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v6 2/8] package/re2: switch to
+ generic-package make build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,48 +73,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kyle Harding via buildroot <buildroot@buildroot.org>
-Reply-To: Kyle Harding <kyle@balena.io>
-Cc: Kyle Harding <kyle@balena.io>, Stefan Ott <stefan@ott.net>
+Cc: Daniel Price <daniel.price@gmail.com>,
+ Gilles Talis <gilles.talis@gmail.com>, Peter Seiderer <ps.report@gmx.net>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Martin Bark <martin@barkynet.com>,
+ =?utf-8?B?R2HDq2w=?= Portay <gael.portay@collabora.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Kyle Harding <kyle@balena.io>
----
- package/unbound/unbound.hash | 4 ++--
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Jmes, All,
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index ca6fe174e0..99caf7dd3d 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,5 +1,5 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.14.0.tar.gz.sha256
--sha256  6ef91cbf02d5299eab39328c0857393de7b4885a2fe7233ddfe3c124ff5a89c8  unbound-1.14.0.tar.gz
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.15.0.tar.gz.sha256
-+sha256  a480dc6c8937447b98d161fe911ffc76cfaffa2da18788781314e81339f1126f  unbound-1.15.0.tar.gz
- 
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index 61fdc5389b..1e6e0d99d7 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNBOUND_VERSION = 1.14.0
-+UNBOUND_VERSION = 1.15.0
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
- UNBOUND_LICENSE = BSD-3-Clause
+On 2022-02-05 13:18 -0700, James Hilliard spake thusly:
+> The cmake build appears to be missing features such as pkg-config
+> generation support, switch to the regular makefile based build
+> which appears to work better.
+
+I was wondering why we could not just fix the CMake buildsystem, and
+submit the fix upstream...
+
+And then I remembered already talking about this earlier, but this
+commit did not carry any explanations why we could not do it... So I
+had to dig the archives to recover the previous discussion.
+
+So, bottom line is, the commit log would be better off with more
+explanations, like:
+
+    The cmake build appears to be missing features, such as pkg-config
+    generation support which is needed for some packages to find re2,
+    like qt5webengine.
+
+    Upstream is not keen on fixing the CMake-absed buildsystem [0]
+
+    Instead of patching it on our side, and then have to carry the patch
+    forever, we switch to the Makefile-based generic buildsystem.
+
+    Note that previously some packages like grpc failed when the generic
+    Makefile was used, because they would not find the cmake-equivalent
+    of pkg-config, but this is now fixed [1].
+
+    Signed-off-by: you.
+
+    [0] https://github.com/google/re2/issues/349
+    [1] https://github.com/grpc/grpc/commit/45e413d2520795e7281e9a592af81620349bc186
+
+> This will be needed by qt5webengine.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - don't built shared libraries if BR2_STATIC_LIBS is set
+> ---
+>  package/re2/re2.mk | 32 ++++++++++++++++++++++++++++----
+>  1 file changed, 28 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+> index b562d5d7ef..2863fcb662 100644
+> --- a/package/re2/re2.mk
+> +++ b/package/re2/re2.mk
+> @@ -10,8 +10,32 @@ RE2_LICENSE = BSD-3-Clause
+>  RE2_LICENSE_FILES = LICENSE
+>  RE2_INSTALL_STAGING = YES
+>  
+> -RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
+> -HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
+> +define RE2_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> +		-C $(@D) $(if $(BR2_STATIC_LIBS),static)
+> +endef
+>  
+> -$(eval $(cmake-package))
+> -$(eval $(host-cmake-package))
+> +define RE2_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> +		DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) \
+
+We usually do not double-quote STAGING_DIR, TARGET_DIR, or HOST_DIR,
+because we do not even support building in a directory with spaces in
+its name.
+
+    $ git grep -E '=\$\(STAGING_DIR\)' |wc -l
+    693
+    $ git grep -E '="\$\(STAGING_DIR\)"' |wc -l
+    23
+
+So I'd prefer we stick to the not-double-quoted situation.
+
+No need to respin, this can be fixed when applying...
+
+Regards,
+Yann E. MORIN.
+
+> +		$(if $(BR2_STATIC_LIBS),static-install,install)
+> +endef
+> +
+> +define RE2_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> +		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) \
+> +		$(if $(BR2_STATIC_LIBS),static-install,install)
+> +endef
+> +
+> +define HOST_RE2_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> +		-C $(@D)
+> +endef
+> +
+> +define HOST_RE2_INSTALL_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> +		-C $(@D) DESTDIR="$(HOST_DIR)" prefix=/usr install
+> +endef
+> +
+> +$(eval $(generic-package))
+> +$(eval $(host-generic-package))
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.30.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
