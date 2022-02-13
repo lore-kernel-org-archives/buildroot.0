@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D6C8C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 11:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A4DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 11:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E01B440360;
-	Sun, 13 Feb 2022 11:21:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FDA140360;
+	Sun, 13 Feb 2022 11:22:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id znqoNbU_3Lma; Sun, 13 Feb 2022 11:21:39 +0000 (UTC)
+	with ESMTP id kFiNw8HzCz5x; Sun, 13 Feb 2022 11:22:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 284074033A;
-	Sun, 13 Feb 2022 11:21:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 72CCB1BF842
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:21:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49C7B4033A;
+	Sun, 13 Feb 2022 11:22:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B55201BF842
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F8EA401F8
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:21:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A34D181A23
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:21:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LNt5uAdxEDNf for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 11:21:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ySSIAHoou6lU for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 11:21:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CF5940181
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:21:22 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id p14so7620524ejf.11
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 03:21:22 -0800 (PST)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4952981A1C
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:21:57 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id p15so31827445ejc.7
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 03:21:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=4+HyAMGpeUTyCfLt9xxxPCuRwemrZ7485AD1pXFQptY=;
- b=e+PeIUkwaox4klhJMnnVUkcjfIjJ2y/bNXyQSPHpZTGAjd0mO3AJipqSKQ6T0wFjZU
- bR3WR9mZTXpTifJRCf3hV0X27Ft7uG1LByFNm4Zc8g0YFUcXHteLTT45KBTNP/EQODht
- A4f5KmHQjJck9Q/fjaKvy3OSe+ABm1Me8cUheShCZRiSMvOzJ0ZrG9tzSnujrEhkCJi3
- Ft7P95m+QjGs8GaMkPWgAhi//kc9vIStrOJ3xaeFIFejLkATMRAtZhD2fhMYrnn9CWm2
- YVf9Jtt5X7IKHPzoriTLNCtHKD8xMGY0cX8EmifLhm4eWHRs2QttjQ5k6yjRdGECkh/e
- iOfA==
+ bh=bRtgV0Vt3bk/7aqmC8lnb/QPefj+yv2IT8DWLf94NSo=;
+ b=YxayLMNj32GisyjIviAozYpI3pcsDOdf5q1WAeAz7q1PhXhY1cSxypfC0jb8laim5m
+ RCbMxouP+KsmDzUoMR3NSSBgD3hu6J6PezRlT1JOz6ZO70bYZLVsxCQTD4OAb96O/xDE
+ eFMm3T2fGVpWk7FNPYQZGPfHnm+ODBTywjYi8Pz/L+w1qkA8t2oSxCqFt0LHxpEQplyi
+ UvtyUJdb/QIv+GrPrxuXTOccgA3VcYMf8z0HDB8IJxoaC0emNHdZS0bSJsloSJEliFsR
+ FrWqesgQBCzSt4yLXoj+9RxiM1wV2hjadkuW5KnsCPjMpEofes6lCXqTUQR74LqPUVFx
+ ymdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=4+HyAMGpeUTyCfLt9xxxPCuRwemrZ7485AD1pXFQptY=;
- b=OdUP2VUSSxDEG4kL6MrDJelzAG3NgPBy+t+8oUABSWzmVrEE27DrZzddjzmn1HhW0h
- LRNqFcmT4+3jGWl4m3ARnngXxyTHJKBwr78Tl7kcK71aMDsnBOuAlKtRiAt4nX7cvK9c
- HNRNYGdjS4T3lEVGNwDgh572vP8vhQVNlyeOy6YNlh7ElRxFcPFd98fTQPuqu7qc4MDy
- PEjx3820rLWCEeF++/3xCpK+DoOy7DbEn0B1f26vb109zHZIw6RMGL6Pml0+vw+kylQJ
- EfUix7aYYIxALh+kRhkty8Al7biQwzrdsHFqMgFGCbbCx04f+93RGklBAdic0X/06t66
- ZyAw==
-X-Gm-Message-State: AOAM530Vxqx1FzChybtXMFmJIxIVmjWze4ySNnS+kgDpvAPrhbyykap8
- kJSUdIT4r42aCugT0gIDJ/+nOQ==
-X-Google-Smtp-Source: ABdhPJyv+yaqvfGzxpFFiCbeZ3B9PeMcYbwKkO3+wrlT6DDCUmpTOTjyY3mKwBM++UWsNOMlXo7Svw==
-X-Received: by 2002:a17:906:4b44:: with SMTP id
- j4mr2480941ejv.223.1644751280450; 
- Sun, 13 Feb 2022 03:21:20 -0800 (PST)
+ bh=bRtgV0Vt3bk/7aqmC8lnb/QPefj+yv2IT8DWLf94NSo=;
+ b=s7udSjMmD8tGvVyn+DFqNlyJ2xviy6LeDuvLqZlCuyMVrlrCzqmEt2WySOhwtw8qo8
+ pNK9XFZybmOCTGEXngzic3bLUu2H0VrT4iq6ed3IBvcd7SkKprvF/nsFwyWRbXwFxmVJ
+ RMmzU6QYm2bArH/sF6XjlvVl+kxW/6Wc9a7egVX0Bp5R10RFIYswhiK6zk/5DYotjH+N
+ Y4EB0C2omtndpUSFbWMsLJuVzkzChnqkoyfKk3i3wguYdqZwtqAMjqKMVnOlN7yIDpA+
+ rjVkk05S8LrFBzitJDwsjci8jyX7bY5wizUtXHF0KAZjAvPAkJDf7TVZtMnJqMf3XJPU
+ tvzQ==
+X-Gm-Message-State: AOAM532NCLSCK8ac166uLlytF2c6+qijK7iVmplQrAq5oR4qYAUL1iTP
+ k0aX8Fuutv4J5gpeyo3piSpwaGZpEaFqCA==
+X-Google-Smtp-Source: ABdhPJyyyzK2sWQP0xgO+JgxHCbRhPcxf7uMatKdNGtSuVPgsp5v6FtAXc6muN4iCl1m5SbFn/4AAA==
+X-Received: by 2002:a17:906:72d6:: with SMTP id
+ m22mr3626992ejl.662.1644751315407; 
+ Sun, 13 Feb 2022 03:21:55 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id n25sm8733ejl.82.2022.02.13.03.21.19
+ by smtp.gmail.com with ESMTPSA id h26sm9591968eje.146.2022.02.13.03.21.54
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 13 Feb 2022 03:21:20 -0800 (PST)
-Message-ID: <a24263ab-0a69-f6cd-56aa-ef92696e184a@mind.be>
-Date: Sun, 13 Feb 2022 12:21:19 +0100
+ Sun, 13 Feb 2022 03:21:54 -0800 (PST)
+Message-ID: <2ff02c8e-f9bc-8acb-28d4-c4e8297b90fc@mind.be>
+Date: Sun, 13 Feb 2022 12:21:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  buildroot@buildroot.org
-References: <20220201173352.160244-1-giulio.benetti@benettiengineering.com>
+References: <20220201174202.286878-1-giulio.benetti@benettiengineering.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220201173352.160244-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/cryptsetup: bump version to
- 2.4.3
+In-Reply-To: <20220201174202.286878-1-giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: remove Martin Hicks from file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,42 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/02/2022 18:33, Giulio Benetti wrote:
+On 01/02/2022 18:42, Giulio Benetti wrote:
+> Martin Hicks asked to not maintain cryptsetup anymore:
+> https://lists.buildroot.org/pipermail/buildroot/2022-February/635413.html
+> 
+> Also he doesn't mantain any other package, so let's remove him from this
+> file.
+> 
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-  Both applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/cryptsetup/cryptsetup.hash | 2 +-
->   package/cryptsetup/cryptsetup.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   DEVELOPERS | 3 ---
+>   1 file changed, 3 deletions(-)
 > 
-> diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-> index b3bb859bdc..dce2686d31 100644
-> --- a/package/cryptsetup/cryptsetup.hash
-> +++ b/package/cryptsetup/cryptsetup.hash
-> @@ -1,4 +1,4 @@
->   # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.4/sha256sums.asc
-> -sha256  170cc2326a9daeeeb578579176bd10d4a60ee5c4fc5bc69018ce67dafc540b9c  cryptsetup-2.4.2.tar.xz
-> +sha256  fc0df945188172264ec5bf1d0bda08264fadc8a3f856d47eba91f31fe354b507  cryptsetup-2.4.3.tar.xz
->   sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
->   sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 9cfd647ac6..2e06047c56 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -5,7 +5,7 @@
->   ################################################################################
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 5255b096b0..555723867e 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1847,9 +1847,6 @@ F:	package/rpi-firmware/
+>   F:	package/tzdata/
+>   F:	package/zic/
 >   
->   CRYPTSETUP_VERSION_MAJOR = 2.4
-> -CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
-> +CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
->   CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
->   CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
->   CRYPTSETUP_DEPENDENCIES = \
+> -N:	Martin Hicks <mort@bork.org>
+> -F:	package/cryptsetup/
+> -
+>   N:	Martin Kepplinger <martink@posteo.de>
+>   F:	package/tslib/
+>   F:	package/x11r7/xdriver_xf86-input-tslib/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
