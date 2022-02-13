@@ -4,61 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A8DC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 12:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31149C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 13:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A6D2C40119;
-	Sun, 13 Feb 2022 12:56:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8ED9A40119;
+	Sun, 13 Feb 2022 13:03:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O0wmuZQLkSGC; Sun, 13 Feb 2022 12:56:13 +0000 (UTC)
+	with ESMTP id GNF-foo68V0k; Sun, 13 Feb 2022 13:03:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 714614022C;
-	Sun, 13 Feb 2022 12:56:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 85A5C1BF398
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 12:56:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 351A0401F8;
+	Sun, 13 Feb 2022 13:03:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A271D1BF398
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 13:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CFF14030C
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 12:56:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D751401F8
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 13:03:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nHkHC_8YxOks for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 12:56:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp4.osuosl.org (Postfix) with ESMTP id B252440302
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 12:56:09 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPA
- id JEQ9naTN1XmFAJEQAnsIJl; Sun, 13 Feb 2022 13:56:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644756966; bh=4wgZ+aikty+PiqaK8l3vGqegv/Z8tGg5ZdodgzV6MCU=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=lBgpeYEX6EHpnGVn8yhgW1N0hFkjHUE/90cAHLw5odroQabEoLmBziekU0aNxMxxy
- QHu+O5PNQHlF/0cilbQmTua8+50FZdkR1MD79457cA5UlaAaINgWes0NuwvkLIZ/Ux
- sr6//3+r1ytAT/uN+dCaLTFOVWOc6KonhWYoQ+6D/75ymhLGmk3Usv58G2aQxuUZRU
- QeDn9son3Kb7Am5tYqHAg4kPAWx/8D/xMmStXX11kacUXISNeUkYcj/iNz1lnQLLuD
- QpyjFIuDC8dwEBCkTeae4fGvP08H1wTDAyvBMJokDp6GibYwhwJSdpSDab5VeYTY8S
- ht4AOpeAuHf5w==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Sun, 13 Feb 2022 13:56:05 +0100
-Message-Id: <42058D10-AAA9-41FE-91E3-1D5153134FCA@benettiengineering.com>
-References: <c60cb2e3-c822-3f9f-0f16-f206f9f407b3@mind.be>
-In-Reply-To: <c60cb2e3-c822-3f9f-0f16-f206f9f407b3@mind.be>
-To: Arnout Vandecappelle <arnout@mind.be>,
- Nicholas Sielicki <sielicki@yandex.com>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfNHBsWFuxS58wOIkp92oOl1oMI8CXNHPNQHQ99n0PwIXDeRN2d/JzfmXayMe5nQR03FsEkUKJLxD1Yy6a6ln5meN1jHZ9+psE4dQ/sv8OZnntG39FfEk
- UNwjqxf70yXqO9VnFbo+5pwGwdlml4MNwlIUG68VJNqSsxz3mCfGI2cLNonzc5jdrS+6vyhoUYBhzMILhtEe9boDu7KpTuHlQODAlC9t4YjI/YXPbjV+W//J
- BxpZRtuR6rRjg7c3UFI7jVwgI5JaQqYbcFxaR4hT8zs=
-Subject: Re: [Buildroot] [PATCH] board/intel/galileo: fix build failure with
- host gcc 10
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id af_KU5b2qrIj for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 13:03:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C0B9C40119
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 13:03:14 +0000 (UTC)
+Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
+ by mailout11.t-online.de (Postfix) with SMTP id 369E4E08E;
+ Sun, 13 Feb 2022 14:03:11 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd78.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nJEWx-1s5O6L0; Sun, 13 Feb 2022 14:03:07 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37682)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nJEWw-0006gU-Gt;
+ Sun, 13 Feb 2022 14:03:06 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun, 13 Feb 2022 14:03:06 +0100
+Message-Id: <20220213130306.3002130-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1644757387-0000AD4E-DBB8D035/0/0 CLEAN NORMAL
+X-TOI-MSGID: b9968295-0102-49ed-8efe-a0f450710ea7
+Subject: [Buildroot] [PATCH 1/1] package/e3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,84 +61,323 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTmljb2xhcywKCnNvcnJ5IGZvciBodG1sIGJ1dCBJ4oCZbSBtb2JpbGUuCgpNeSBwYXRjaCBm
-b3IgZml4aW5nIHRoZSBidWlsZCBmYWlsdXJlIGZvciBHYWxpbGVvIGhhcyBiZWVuIHVwc3RyZWFt
-LCBidXQgTGludXggdmVyc2lvbiBpcyB2ZXJ5IG9sZCwKSeKAmXZlIGFkZGVkIGEgbG9jYWwgcGF0
-Y2ggZnJvbSAyMDE0IGFzIHBvaW50ZWQgQXJub3V0IGJlbG93LgpJIGRvbuKAmXQgaGF2ZSBhIEdh
-bGlsZW8gYm9hcmQgYW5kIHlvdSBhcmUgdGhlIG1haW50YWluZXIsIGNhbiB5b3UgcGxlYXNlIHVw
-ZGF0ZSB1Ym9vdCBhbmQgTGludXggdmVyc2lvbnMgYW5kIHNlbmQgYSBwYXRjaCBmb3IgdGhhdCBh
-ZnRlciB0ZXN0aW5nIHBsZWFzZT8KClRoYW5rIHlvdSEK4oCULQpHaXVsaW8gQmVuZXR0aQpCZW5l
-dHRpIEVuZ2luZWVyaW5nIHNhcwoKPiBJbCBnaW9ybm8gMTMgZmViIDIwMjIsIGFsbGUgb3JlIDEy
-OjQ2LCBBcm5vdXQgVmFuZGVjYXBwZWxsZSA8YXJub3V0QG1pbmQuYmU+IGhhIHNjcml0dG86Cj4g
-Cj4g77u/Cj4gCj4+IE9uIDAyLzAyLzIwMjIgMjI6NDMsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+
-PiBCdWlsZGluZyBnYWxpbGVvX2RlZmNvbmZpZyB0aHJvd3MgZXJyb3I6Cj4+IGBgYAo+PiAvdXNy
-L2Jpbi9sZDogYXJjaC94ODYvdG9vbHMvcmVsb2NzXzY0Lm86KC5ic3MrMHgwKTogbXVsdGlwbGUg
-ZGVmaW5pdGlvbiBvZiBgcGVyX2NwdV9sb2FkX2FkZHInOyBhcmNoL3g4Ni90b29scy9yZWxvY3Nf
-MzIubzooLmJzcysweDApOiBmaXJzdCBkZWZpbmVkIGhlcmUKPj4gYGBgCj4+IFRvIGZpeCB0aGlz
-IGxldCdzIGFkZCBhbiB1cHN0cmVhbWVkIHBhdGNoWzFdIGFuZCBhZGQgQlIyX0dMT0JBTF9QQVRD
-SF9ESVIKPj4gdG8gZ2FsaWxlb19kZWZjb25maWcgdG8gcG9pbnQgdG8gd2hlcmUgcGF0Y2ggaXMu
-Cj4+IFsxXTogaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQv
-dG9ydmFsZHMvbGludXguZ2l0L2NvbW1pdC8/aWQ9ZWVlZGE0Y2QwNmU4MjhiMzMxYjE1NzQxYTIw
-NGZmOWY1ODc0ZDI4ZC5wYXRjaAo+PiBGaXhlczoKPj4gaHR0cHM6Ly9naXRsYWIuY29tL3ltb3Jp
-bi9idWlsZHJvb3QvLS9qb2JzLzIwMzU4MjEwMzkKPj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJl
-bmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4gCj4gWW91IGNh
-bid0IGltYWdpbmUgaG93IG11Y2ggam95IGl0IGdpdmVzIG1lIHRvIHNlZSBhIHBhdGNoIGZyb20g
-MjAxNCBhcHBsaWVkIGhlcmUuLi4KPiAKPiAKPiBBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgo+
-IAo+IFJlZ2FyZHMsCj4gQXJub3V0Cj4gCj4+IC0tLQo+PiAgLi4ucmVsb2NzLU1ha2UtcGVyX2Nw
-dV9sb2FkX2FkZHItc3RhdGljLnBhdGNoIHwgMzkgKysrKysrKysrKysrKysrKysrKwo+PiAgY29u
-Zmlncy9nYWxpbGVvX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+PiAgMiBm
-aWxlcyBjaGFuZ2VkLCA0MCBpbnNlcnRpb25zKCspCj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9h
-cmQvaW50ZWwvZ2FsaWxlby9wYXRjaGVzL2xpbnV4LzAwMDEteDg2LXJlbG9jcy1NYWtlLXBlcl9j
-cHVfbG9hZF9hZGRyLXN0YXRpYy5wYXRjaAo+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvaW50ZWwvZ2Fs
-aWxlby9wYXRjaGVzL2xpbnV4LzAwMDEteDg2LXJlbG9jcy1NYWtlLXBlcl9jcHVfbG9hZF9hZGRy
-LXN0YXRpYy5wYXRjaCBiL2JvYXJkL2ludGVsL2dhbGlsZW8vcGF0Y2hlcy9saW51eC8wMDAxLXg4
-Ni1yZWxvY3MtTWFrZS1wZXJfY3B1X2xvYWRfYWRkci1zdGF0aWMucGF0Y2gKPj4gbmV3IGZpbGUg
-bW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMC4uMWQyMDZjYzZkMQo+PiAtLS0gL2Rldi9u
-dWxsCj4+ICsrKyBiL2JvYXJkL2ludGVsL2dhbGlsZW8vcGF0Y2hlcy9saW51eC8wMDAxLXg4Ni1y
-ZWxvY3MtTWFrZS1wZXJfY3B1X2xvYWRfYWRkci1zdGF0aWMucGF0Y2gKPj4gQEAgLTAsMCArMSwz
-OSBAQAo+PiArRnJvbSBlZWVkYTRjZDA2ZTgyOGIzMzFiMTU3NDFhMjA0ZmY5ZjU4NzRkMjhkIE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+PiArRnJvbTogQmVuIEh1dGNoaW5ncyA8YmVuQGRlY2Fk
-ZW50Lm9yZy51az4KPj4gK0RhdGU6IFdlZCwgMjQgU2VwIDIwMTQgMTM6MzA6MTIgKzAxMDAKPj4g
-K1N1YmplY3Q6IFtQQVRDSF0geDg2L3JlbG9jczogTWFrZSBwZXJfY3B1X2xvYWRfYWRkciBzdGF0
-aWMKPj4gKwo+PiArcGVyX2NwdV9sb2FkX2FkZHIgaXMgb25seSB1c2VkIGZvciA2NC1iaXQgcmVs
-b2NhdGlvbnMsIGJ1dCBpcwo+PiArZGVjbGFyZWQgaW4gYm90aCBjb25maWd1cmF0aW9ucyBvZiBy
-ZWxvY3MuYyAtIHdpdGggZGlmZmVyZW50Cj4+ICt0eXBlcy4gIFRoaXMgaGFzIHVuZGVmaW5lZCBi
-ZWhhdmlvdXIgaW4gZ2VuZXJhbC4gIEdOVSBsZCBpcwo+PiArZG9jdW1lbnRlZCB0byB1c2UgdGhl
-IGxhcmdlciBzaXplIGluIHRoaXMgY2FzZSwgYnV0IG90aGVyIHRvb2xzCj4+ICttYXkgZGlmZmVy
-IGFuZCBzb21lIHdhcm4gYWJvdXQgdGhpcy4KPj4gKwo+PiArUmVmZXJlbmNlczogaHR0cHM6Ly9i
-dWdzLmRlYmlhbi5vcmcvNzQ4NTc3Cj4+ICtSZXBvcnRlZC1ieTogTWljaGFlbCBUYXV0c2Nobmln
-IDxtdEBkZWJpYW4ub3JnPgo+PiArU2lnbmVkLW9mZi1ieTogQmVuIEh1dGNoaW5ncyA8YmVuQGRl
-Y2FkZW50Lm9yZy51az4KPj4gK0NjOiA3NDg1NzdAYnVncy5kZWJpYW4ub3JnCj4+ICtDYzogTGlu
-dXMgVG9ydmFsZHMgPHRvcnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPgo+PiArTGluazogaHR0
-cDovL2xrbWwua2VybmVsLm9yZy9yLzE0MTE1NjE4MTIuMzY1OS4yMy5jYW1lbEBkZWNhZGVudC5v
-cmcudWsKPj4gK1NpZ25lZC1vZmYtYnk6IEluZ28gTW9sbmFyIDxtaW5nb0BrZXJuZWwub3JnPgo+
-PiArU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGll
-bmdpbmVlcmluZy5jb20+Cj4+ICstLS0KPj4gKyBhcmNoL3g4Ni90b29scy9yZWxvY3MuYyB8IDIg
-Ky0KPj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPj4g
-Kwo+PiArZGlmZiAtLWdpdCBhL2FyY2gveDg2L3Rvb2xzL3JlbG9jcy5jIGIvYXJjaC94ODYvdG9v
-bHMvcmVsb2NzLmMKPj4gK2luZGV4IGJiYjFkMjI1OWVjZi4uYTVlZmIyMWQ1MjI4IDEwMDY0NAo+
-PiArLS0tIGEvYXJjaC94ODYvdG9vbHMvcmVsb2NzLmMKPj4gKysrKyBiL2FyY2gveDg2L3Rvb2xz
-L3JlbG9jcy5jCj4+ICtAQCAtNjk1LDcgKzY5NSw3IEBAIHN0YXRpYyB2b2lkIHdhbGtfcmVsb2Nz
-KGludCAoKnByb2Nlc3MpKHN0cnVjdCBzZWN0aW9uICpzZWMsIEVsZl9SZWwgKnJlbCwKPj4gKyAg
-Kgo+PiArICAqLwo+PiArIHN0YXRpYyBpbnQgcGVyX2NwdV9zaG5keCAgICA9IC0xOwo+PiArLUVs
-Zl9BZGRyIHBlcl9jcHVfbG9hZF9hZGRyOwo+PiArK3N0YXRpYyBFbGZfQWRkciBwZXJfY3B1X2xv
-YWRfYWRkcjsKPj4gKwo+PiArIHN0YXRpYyB2b2lkIHBlcmNwdV9pbml0KHZvaWQpCj4+ICsgewo+
-PiArLS0KPj4gKzIuMjUuMQo+PiArCj4+IGRpZmYgLS1naXQgYS9jb25maWdzL2dhbGlsZW9fZGVm
-Y29uZmlnIGIvY29uZmlncy9nYWxpbGVvX2RlZmNvbmZpZwo+PiBpbmRleCAwM2NhMjNmNDE0Li5h
-OGZkMGE2ZGNjIDEwMDY0NAo+PiAtLS0gYS9jb25maWdzL2dhbGlsZW9fZGVmY29uZmlnCj4+ICsr
-KyBiL2NvbmZpZ3MvZ2FsaWxlb19kZWZjb25maWcKPj4gQEAgLTEsNCArMSw1IEBACj4+ICBCUjJf
-eDg2X3gxMDAwPXkKPj4gK0JSMl9HTE9CQUxfUEFUQ0hfRElSPWJvYXJkL2ludGVsL2dhbGlsZW8v
-cGF0Y2hlcwo+PiAgIyBOZWVkZWQgZm9yIFRBUkdFVF9HUlVCMgo+PiAgQlIyX1RPT0xDSEFJTl9C
-VUlMRFJPT1RfV0NIQVI9eQo+PiAgIyBMaW51eCBoZWFkZXJzIHNhbWUgYXMga2VybmVsLCBhIDMu
-MTQgc2VyaWVzCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+Build was successful:
+
+[...]
+                    bootlin-x86-64-glibc [24/45]: OK
+                     bootlin-x86-64-musl [25/45]: OK
+                   bootlin-x86-64-uclibc [26/45]: OK
+[...]
+                   br-i386-pentium4-full [31/45]: OK
+                br-i386-pentium-mmx-musl [32/45]: OK
+[...]
+
+45 builds, 40 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/e3/0001-makefile.patch                | 42 +++++++++++++++
+ .../e3/0002-Align-header-to-avoid-crash.patch | 26 +++++++++
+ package/e3/0003-format-1.0.patch              | 54 +++++++++++++++++++
+ package/e3/0004-e3-gnu-stack.patch            | 50 +++++++++++++++++
+ package/e3/Config.in                          |  9 ++++
+ package/e3/e3.hash                            |  3 ++
+ package/e3/e3.mk                              | 24 +++++++++
+ 9 files changed, 210 insertions(+)
+ create mode 100644 package/e3/0001-makefile.patch
+ create mode 100644 package/e3/0002-Align-header-to-avoid-crash.patch
+ create mode 100644 package/e3/0003-format-1.0.patch
+ create mode 100644 package/e3/0004-e3-gnu-stack.patch
+ create mode 100644 package/e3/Config.in
+ create mode 100644 package/e3/e3.hash
+ create mode 100644 package/e3/e3.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7b5f4d992c..f8aab505ed 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -326,6 +326,7 @@ F:	package/dht/
+ F:	package/dovecot/
+ F:	package/dovecot-pigeonhole/
+ F:	package/dtv-scan-tables/
++F:	package/e3/
+ F:	package/eudev/
+ F:	package/exim/
+ F:	package/fetchmail/
+diff --git a/package/Config.in b/package/Config.in
+index c004228759..f47f003a00 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2612,6 +2612,7 @@ endmenu
+ 
+ menu "Text editors and viewers"
+ 	source "package/bat/Config.in"
++	source "package/e3/Config.in"
+ 	source "package/ed/Config.in"
+ 	source "package/joe/Config.in"
+ 	source "package/less/Config.in"
+diff --git a/package/e3/0001-makefile.patch b/package/e3/0001-makefile.patch
+new file mode 100644
+index 0000000000..62b2b3a94b
+--- /dev/null
++++ b/package/e3/0001-makefile.patch
+@@ -0,0 +1,42 @@
++Add build fixes from Gentoo
++
++Downloaded from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/app-editors/e3/files/e3-2.8.2-makefile.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++--- e3-2.82-orig/Makefile
+++++ e3-2.82/Makefile
++@@ -17,6 +17,8 @@
++ NASM_OR_YASM=nasm
++ #NASM_OR_YASM=yasm
++ 
+++LD=ld
+++
++ EXMODE=SED
++ 
++ #----------------------do not edit below line-------------------------------
++@@ -41,12 +43,12 @@
++ 
++ 32:	$(ASOURCES) Makefile
++ ifeq	($(OS),LINUX)
++-	nasm -O2 -f bin -l e3.lst -o e3 e3.asm -DCRIPLED_ELF=1 -D$(OS) -D$(EXMODE) 
+++	nasm -O2 -f bin -l e3.lst -o e3 e3.asm -DCRIPLED_ELF=1 -D$(OS)
++ 	chmod +x e3
++ else
++ 	echo $(ASVER)
++-	nasm -O2 $(AFLAGS) -o e3.o e3.asm -l e3.lst -D$(OS) -D$(EXMODE)
++-	ld -s -o e3 e3.o
+++	nasm -O2 $(AFLAGS) -o e3.o e3.asm -l e3.lst -D$(OS)
+++	$(LD) -s -o e3 e3.o
++ 	strip --remove-section .comment e3
++ endif
++ 	ln -sf e3 e3ws
++@@ -60,7 +62,7 @@
++ 64:	$(ASOURCES) Makefile
++ 	cat e3.asm | sed -f e3_32to64.sed  >e3.tmp
++ 	$(ASSEMBLER64)
++-	ld -b elf64-x86-64 --oformat elf64-x86-64 -o e3 e3.o
+++	$(LD) -o e3 e3.o
++ ifneq	($(DEBUG),true)
++ 	strip e3
++ endif
+diff --git a/package/e3/0002-Align-header-to-avoid-crash.patch b/package/e3/0002-Align-header-to-avoid-crash.patch
+new file mode 100644
+index 0000000000..f24f180b0c
+--- /dev/null
++++ b/package/e3/0002-Align-header-to-avoid-crash.patch
+@@ -0,0 +1,26 @@
++From: =?utf-8?q?Bernhard_=C3=9Cbelacker?= <bernhardu@mailbox.org>
++Date: Tue, 6 Nov 2018 18:52:41 +0100
++Subject: [PATCH] Align header to avoid crash.
++
++https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=913014
++
++Downloaded from
++https://sources.debian.org/src/e3/1%3A2.82%2Bdfsg-2/debian/patches/0001-Align-header-to-avoid-crash.patch/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ e3.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/e3.h b/e3.h
++index 96f8dc7..6508e9b 100644
++--- a/e3.h
+++++ b/e3.h
++@@ -861,6 +861,7 @@ phdr2:					;another Elf32_Phdr starts here
++ %else
++ 	org 0x8048000
++ 	ELFheader
+++	times 0xBF2 db 0
++ %endif
++ %else
++ 	;nothing
+diff --git a/package/e3/0003-format-1.0.patch b/package/e3/0003-format-1.0.patch
+new file mode 100644
+index 0000000000..c7ace235c4
+--- /dev/null
++++ b/package/e3/0003-format-1.0.patch
+@@ -0,0 +1,54 @@
++From: Debian QA Group <packages@qa.debian.org>
++Date: Sun, 12 May 2019 04:36:49 +0000
++Subject: format-1.0
++
++Downloaded from
++https://sources.debian.org/src/e3/1%3A2.82%2Bdfsg-2/debian/patches/format-1.0.patch/
++
++and removed Makefile patch.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++ e3.asm   | 26 ++++++++++++++++++++++++++
++ 2 files changed, 40 insertions(+), 12 deletions(-)
++---
++ e3.asm   | 26 ++++++++++++++++++++++++++
++ 2 files changed, 33 insertions(+), 11 deletions(-)
++
++diff --git a/e3.asm b/e3.asm
++index b0a17ca..7d99f17 100644
++--- a/e3.asm
+++++ b/e3.asm
++@@ -3653,6 +3653,32 @@ NoPi:	cmp ecx,'e3vi'
++ 	mov byte [eax],VI
++ 	ret
++ NoVi:	cmp ecx,'e3ws'
+++	jnz NoWs
+++	mov byte [eax],WS
+++	ret
+++NoWs:	cmp ecx,'edit'
+++	jnz NoNe2
+++	mov byte [eax],NE
+++	ret
+++NoNe2:	cmp ecx,'macs'
+++	jnz NoEm2
+++	mov byte [eax],EM
+++	ret
+++NoEm2:	cmp ecx,'pico'
+++	jnz NoPi2
+++	mov byte [eax],PI
+++	ret
+++NoPi2:  push cx
+++	mov cx,'__'
+++	cmp ecx,'__vi'
+++	pop cx
+++	jnz NoVi2
+++	mov byte [eax],VI
+++	ret
+++NoVi2:	push cx
+++	mov cx,'__'
+++	cmp ecx,'__ws'
+++	pop cx
++ 	jnz modeOK
++ 	mov byte [eax],WS
++ modeOK:	ret
+diff --git a/package/e3/0004-e3-gnu-stack.patch b/package/e3/0004-e3-gnu-stack.patch
+new file mode 100644
+index 0000000000..81eb6b14bb
+--- /dev/null
++++ b/package/e3/0004-e3-gnu-stack.patch
+@@ -0,0 +1,50 @@
++Fix GNU stack
++
++Quoted from https://src.fedoraproject.org/rpms/e3/blob/f30/f/e3.spec
++
++# mark the stack as non-executable and disable tiny/crippled elf on 32
++# bit linux so that stack can be marked as non-executable on it too
++
++Downloaded from
++https://src.fedoraproject.org/rpms/e3/blob/f30/f/e3-gnu-stack.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Common subdirectories: e3-2.8.orig/bin and e3-2.8/bin
++diff -u e3-2.8.orig/e3.asm e3-2.8/e3.asm
++--- e3-2.8.orig/e3.asm	2010-05-09 12:16:47.000000000 -0400
+++++ e3-2.8/e3.asm	2013-02-22 14:24:46.884384131 -0500
++@@ -6553,3 +6553,13 @@
++ %ifdef CRIPLED_ELF
++  bsssize equ $-bssstart
++ %endif
+++
+++%ifidn __OUTPUT_FORMAT__,elf
+++section .note.GNU-stack noalloc noexec nowrite progbits
+++%endif
+++%ifidn __OUTPUT_FORMAT__,elf32
+++section .note.GNU-stack noalloc noexec nowrite progbits
+++%endif
+++%ifidn __OUTPUT_FORMAT__,elf64
+++section .note.GNU-stack noalloc noexec nowrite progbits
+++%endif
++Only in e3-2.8: e3.asm~
++diff -u e3-2.8.orig/Makefile e3-2.8/Makefile
++--- e3-2.8.orig/Makefile	2010-05-27 14:58:59.000000000 -0400
+++++ e3-2.8/Makefile	2013-02-22 15:38:57.729605772 -0500
++@@ -42,15 +42,10 @@
++ #---------------- 32 bit LINUX (and perhaps BSD) --
++ 
++ 32:	$(ASOURCES) Makefile
++-ifeq	($(OS),LINUX)
++-	nasm -O2 -f bin -l e3.lst -o e3 e3.asm -DCRIPLED_ELF=1 -D$(OS)
++-	chmod +x e3
++-else
++ 	echo $(ASVER)
++ 	nasm -O2 $(AFLAGS) -o e3.o e3.asm -l e3.lst -D$(OS)
++ 	$(LD) -s -o e3 e3.o
++ 	strip --remove-section .comment e3
++-endif
++ 	ln -sf e3 e3ws
++ 	ln -sf e3 e3em
++ 	ln -sf e3 e3pi
+diff --git a/package/e3/Config.in b/package/e3/Config.in
+new file mode 100644
+index 0000000000..2854ea8ed7
+--- /dev/null
++++ b/package/e3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_E3
++	bool "e3"
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  e3 is a full-screen, user-friendly text editor with an
++	  interface similar to that of either WordStar, Emacs, Pico,
++	  Nedit, or vi written in NASM assembler.
++
++	  https://sites.google.com/site/e3editor
+diff --git a/package/e3/e3.hash b/package/e3/e3.hash
+new file mode 100644
+index 0000000000..5fc794f206
+--- /dev/null
++++ b/package/e3/e3.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  53c51d656801fd3ae0179a5b27f028e07eaba328e80c8c55050268359b9a2924  e3-2.82.tgz
++sha256  cc2a6651c315b233ebc110b49ea3c6452eff9a28f8bc051ffd2bb92a8dcfa3d2  COPYING.GPL
+diff --git a/package/e3/e3.mk b/package/e3/e3.mk
+new file mode 100644
+index 0000000000..63c97078ff
+--- /dev/null
++++ b/package/e3/e3.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# e3
++#
++################################################################################
++
++E3_VERSION = 2.82
++E3_SITE = https://gentoo.osuosl.org/distfiles
++E3_SOURCE = e3-$(E3_VERSION).tgz
++E3_LICENSE = GPL-2.0+
++E3_LICENSE_FILES = COPYING.GPL
++E3_DEPENDENCIES = host-nasm
++
++define E3_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		$(if $(BR2_ARCH_IS_64),64,32)
++endef
++
++define E3_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		PREFIX="$(TARGET_DIR)/usr" install
++endef
++
++$(eval $(generic-package))
+-- 
+2.30.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
