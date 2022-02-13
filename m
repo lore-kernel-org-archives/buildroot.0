@@ -1,89 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0699C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93EECC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62ACB60B56;
-	Sun, 13 Feb 2022 15:25:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B4D4814BA;
+	Sun, 13 Feb 2022 15:25:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rzQwpFfAyFPX; Sun, 13 Feb 2022 15:25:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5_nqA8fJkXg1; Sun, 13 Feb 2022 15:25:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 967CC60AC0;
-	Sun, 13 Feb 2022 15:25:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95B6881494;
+	Sun, 13 Feb 2022 15:25:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A36A31BF3F2
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:23:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 35C9F1BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9262981250
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:23:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32FF081420
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:24:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KpDYicAQknhf for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 15:23:39 +0000 (UTC)
+ with ESMTP id Ys7rkqNtR78q for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 15:24:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA11180F16
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:23:39 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id w10so4994906edd.11
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:23:39 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7443F8140F
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:24:39 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id s7so23612282edd.3
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:24:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=FQKJJZoXEX8N8dlbsQXebeSLvCAHYcSzmaMA2EB/jb0=;
- b=eOgvlfYodlXjr24pP2Ftyq07DD8DOJYKjXdazzmVZAsPU5yrMAh6VL70tqc5ppH18w
- YE75yxnyEfxTLSUY//tMnwxloVkTl3Yha5Ub32fd1VsRR6Gp/Dm87vGHNgck3+bfKi1t
- D7YtwrnEj2kwQ/agnK3UwvESTGynkOFHC5IQlVzyL7vuaGCD3YkpUbgeOHHIoudZlLns
- IhffdxfzBJpekRsNeENCi4jNMf1zUxioh1YRgAQLAAyerUgzvdmK2KEQijDGtTD+WJTA
- kEYLby/D735Ha1yjqUKa8FwXyVvhNkIPttHpXhJ4ld7YkJLhckdg1B/6Qc9E/nwNreGf
- AaXg==
+ bh=Huquuomnp5M7JdkgCn2AxJYb43NxPyymUAvXtL8g6zA=;
+ b=cYpXX58YsVXpbMEOYgFdefsahYHnYHuIwUtI7BQBx+9iYRPJqk225UWKk4QpQFj5OC
+ aLDXkMONDW+tLpro/XphBqLflghvJ3KqhHYCfEFYLhoBCVMRpTKxgTU4soscbuuiKwV3
+ 3rOGMGDMQiugeyNjViSocoeSzP0/pGw1pzFmf+UPMHICjrrK5D2woPwv8/yf4+8tHea+
+ uYO8n5O7/GSAL82B5yhGhwtAdAtIRD1fAM0xSi5QO6DspbxuUFEeChWJBD97768fvy75
+ De9AKl1X1rFE6qHr8ynneXPLTPcJWfLcJPrAZgP18QJ3aWjifK/XQqhM2C0Os/N/dtM9
+ ubdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=FQKJJZoXEX8N8dlbsQXebeSLvCAHYcSzmaMA2EB/jb0=;
- b=Rty2gF310cY838gYgvt8BAC/nCp+9+EYLYp+2pusBFg9+70crSGAosIeourMEgUHQZ
- 5OpcMLr9jvGdvPQAi8KbKk818XjsVCfWFlKaj4KICJBRuAjlzttwvoJtoz76LVM3Y6aP
- vjA7BffFrP0teDYwuBtSDNBj161fGDAANUZUgbMaV/EJgtVIHMD0o4JDwcgE8gg+kqQA
- ilMJdN0KZ7firdluBqQVF1OzH98fB5DM/zunJKccxDehnQ83C9ofdBu/9EzgKBEVHODU
- 9zuO8sS5RzHNsU4d5plmO3Za2Db5eeccLMHKKEg9cX5jJmV4mwseYr114XsFpkx3fTpY
- 02QA==
-X-Gm-Message-State: AOAM530R0EP6Qc2he5u4JpA3Gdi/ktLk3n4DGC68TzGtTwGnPP9OX1x5
- kOIc6kOeWFdF9LlGhAv+5LirMg==
-X-Google-Smtp-Source: ABdhPJzA5JJeYB8PpPErymNTpgeMxDsKP0BOZT3LWDiqhLPdp8Ax+Ycs+Q9f25xP+xhoeZZEEQ+dIw==
-X-Received: by 2002:a05:6402:2989:: with SMTP id
- eq9mr11269942edb.51.1644765817938; 
- Sun, 13 Feb 2022 07:23:37 -0800 (PST)
+ bh=Huquuomnp5M7JdkgCn2AxJYb43NxPyymUAvXtL8g6zA=;
+ b=ZNvSmoc9kvVIw4h9ThPCY0Zzyc/qk/vZ0XuT8OYvNUi4QgFX/HLIMKTFkmz07MfFxh
+ LtdYA2TVzH+lpExRzK11eX5MmXqHtkIJ2Jl17EpWQr16GCdWdXPOjHTu4/wYWDbznzGL
+ Klnjfa65Mp46wm/xZXA9fXYFw2fmFwHitwJR8453m7Ycuhwg9rAkLSxsV2DCZHOSF1mH
+ 45/F/RMgG6pLJS5f0MVhzsZhmj+TMWtb14L1jy7/rGdMbJQwYj7TpEAeVrPsohnXjdv9
+ SRzNcYC4oTaQyKbd3F56ETBsB+iuyD6xqfY2xIZ+opFz31wceWxJV8RtjaC8AlCRc7Jd
+ zHZQ==
+X-Gm-Message-State: AOAM5303o0pz2wxkrUzmuchbM7AERSwhC8qEnlxjAvwhPr+IXVYmlmyM
+ FrvgeyUH1I1SGu9Gw1wxiS6iIYEGv+JQ1w==
+X-Google-Smtp-Source: ABdhPJyRj33i+uGp/4OTTo5ajCObYJnaHTCHAEZs/Ym34/uB0ANber2wjsE9PF5FrN2eFztVHJdtmA==
+X-Received: by 2002:a05:6402:3509:: with SMTP id
+ b9mr11192888edd.192.1644765877716; 
+ Sun, 13 Feb 2022 07:24:37 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id c11sm14547969edx.42.2022.02.13.07.23.37
+ by smtp.gmail.com with ESMTPSA id r11sm5955602ejc.212.2022.02.13.07.24.36
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 13 Feb 2022 07:23:37 -0800 (PST)
-Message-ID: <734ec41c-a138-e7b4-eeba-7db667e226f1@mind.be>
-Date: Sun, 13 Feb 2022 16:23:36 +0100
+ Sun, 13 Feb 2022 07:24:37 -0800 (PST)
+Message-ID: <a063d54d-fced-7baf-1ba2-2ea6442d3d50@mind.be>
+Date: Sun, 13 Feb 2022 16:24:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220205135806.312865-1-fontaine.fabrice@gmail.com>
+References: <20220206073805.832602-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220205135806.312865-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptopp: disable altivec if
- needed
+In-Reply-To: <20220206073805.832602-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/lighttpd: add mysql support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +92,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julian Scheel <julian@jusst.de>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,17 +100,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/02/2022 14:58, Fabrice Fontaine wrote:
-> Fix the following build failure raised since commit
-> bf4cf9de833e2d571d98d1ca935ea08a3468e463:
-> 
-> blake2s_simd.cpp:715:8: error: 'uint32x4_p' does not name a type; did you mean 'uint32_t'?
->    715 | inline uint32x4_p VecLoad32(const T* p)
->        |        ^~~~~~~~~~
->        |        uint32_t
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/9e9f8559b12b8e2cf99cfab435fa7dd5796bbcd5
+On 06/02/2022 08:38, Fabrice Fontaine wrote:
+> lighttpd only supports mariadb
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -123,24 +111,56 @@ On 05/02/2022 14:58, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/cryptopp/cryptopp.mk | 4 ++++
->   1 file changed, 4 insertions(+)
+>   package/lighttpd/Config.in   | 9 +++++++++
+>   package/lighttpd/lighttpd.mk | 8 +++++++-
+>   2 files changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-> index 4353e35e0a..87d6fba237 100644
-> --- a/package/cryptopp/cryptopp.mk
-> +++ b/package/cryptopp/cryptopp.mk
-> @@ -47,6 +47,10 @@ ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),y)
->   CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
+> diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+> index b9f64a3bc3..aa18c13171 100644
+> --- a/package/lighttpd/Config.in
+> +++ b/package/lighttpd/Config.in
+> @@ -61,6 +61,15 @@ config BR2_PACKAGE_LIGHTTPD_MAXMINDDB
+>   	help
+>   	  Enable MaxMind GeoIP2 support. Needed to support mod_maxminddb
+>   
+> +config BR2_PACKAGE_LIGHTTPD_MYSQL
+> +	bool "mysql support"
+> +	depends on BR2_PACKAGE_MARIADB
+> +	help
+> +	  Enable mysql support for lighttpd mod_vhostdb_mysql.
+> +
+> +comment "mysql support needs mariadb"
+> +	depends on !BR2_PACKAGE_MARIADB
+> +
+>   config BR2_PACKAGE_LIGHTTPD_OPENSSL
+>   	bool "openssl support"
+>   	select BR2_PACKAGE_OPENSSL
+> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+> index 49ab8587f7..595c59cb37 100644
+> --- a/package/lighttpd/lighttpd.mk
+> +++ b/package/lighttpd/lighttpd.mk
+> @@ -19,7 +19,6 @@ LIGHTTPD_CONF_OPTS = \
+>   	-Dwith_libev=false \
+>   	-Dwith_libunwind=false \
+>   	-Dwith_mbedtls=false \
+> -	-Dwith_mysql=false \
+>   	-Dwith_nettle=false \
+>   	-Dwith_nss=false \
+>   	-Dwith_pcre=false \
+> @@ -73,6 +72,13 @@ else
+>   LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=false
 >   endif
 >   
-> +ifneq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-> +CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_ALTIVEC
+> +ifeq ($(BR2_PACKAGE_LIGHTTPD_MYSQL),y)
+> +LIGHTTPD_DEPENDENCIES += mysql
+> +LIGHTTPD_CONF_OPTS += -Dwith_mysql=true
+> +else
+> +LIGHTTPD_CONF_OPTS += -Dwith_mysql=false
 > +endif
 > +
->   ifneq ($(BR2_ARM_CPU_HAS_NEON),y)
->   CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_ARM_NEON
->   endif
+>   ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
+>   LIGHTTPD_DEPENDENCIES += openssl
+>   LIGHTTPD_CONF_OPTS += -Dwith_openssl=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
