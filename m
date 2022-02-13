@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6D6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 22:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51A78C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 22:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F4BD402D1;
-	Sun, 13 Feb 2022 22:54:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EB3B60A9C;
+	Sun, 13 Feb 2022 22:54:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id APEMvZoIEfhD; Sun, 13 Feb 2022 22:54:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50B5A40332;
-	Sun, 13 Feb 2022 22:54:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 18A461BF834
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:53:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14011606F9
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:53:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mwgsCodACq4e for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2ViWxoXHs3H9; Sun, 13 Feb 2022 22:54:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58788606F9;
+	Sun, 13 Feb 2022 22:54:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 367801BF95F
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:53:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23ABE400F3
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:53:56 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QMdMs36wWYO7 for <buildroot@lists.busybox.net>;
  Sun, 13 Feb 2022 22:53:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46086606EC
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 22:53:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24BED403FD
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 22:53:54 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id JNkdniVFUXmFAJNkfnv7yS; Sun, 13 Feb 2022 23:53:54 +0100
+ id JNkdniVFUXmFAJNkgnv7yl; Sun, 13 Feb 2022 23:53:54 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644792834; bh=cLjlKFsvm6VqmsJ4fHY775Mc4tP0IH0MD33tcB0oDlc=;
+ t=1644792834; bh=Z9awWW0Cik1fnwaiAEH1j70XqSp11kdDwELfFDwmYCw=;
  h=From:To:Subject:Date:MIME-Version;
- b=M1Bn8VFxTDayKO8hIZUs8SJNb3KRQ4ST/SvdvMZiJMrnmbRGQTpCRexkQ6hZS5pb6
- 4IwmysI+Md1YL6gy89rQJhbt1TWBZu9hLfB0kYfeQ8hC9YAA98P9i57szTgKlUhtIY
- wFRF8nkrnziSxTLcZjDLfuaegYLs/wIkS+sxF4MCUOIhs4TEADt3/kHQ/6Q1VvXaXI
- pzNrYqUEjBS+RKplCFcNDpiVq3zalJtcbMXmY5impiEgDuliEfeXute+iU4UTKhf7t
- BnE0n8cuHwrWb1+nIo9lPQetY+cbyl5kPcXF/OOMSBMmMAN0KbJ8w7RHXFcDW+zuKq
- zDJ+kMLYeuSiw==
+ b=TBlz39UGzqsjJcEQnKMzsp6NjOp+/2xJ1LqVX6mL3YjBDw5AXx152HlQLQffjv9NP
+ FwsoUe3Oryzfm4lgLXkPug+kzE8BA2+GsLPIbuO2WcE8vSZrjgj6RsRZ72vHGgkOmT
+ Tx5R7UsgL4H6+6g0LXnNIeAw1gkO3cKj6UhYL58IcawWpdWiAXKpVC5AHlVJlTpKo/
+ NmrUGM7qvcH4yBd++rpn7fGKF5opwvJ2yZODjAl+ZpjiprOoEj10YsHWmS6JJJ9g2O
+ 2gFZGsrxM9jDRd9M1Xts7JNN83X8ZeiKVZLwg0UcKe/siprOzhlD4zo1gmxCU4c+m3
+ 3uRg86IukAUYw==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 23:53:37 +0100
-Message-Id: <20220213225350.3466696-4-giulio.benetti@benettiengineering.com>
+Date: Sun, 13 Feb 2022 23:53:38 +0100
+Message-Id: <20220213225350.3466696-5-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220213225350.3466696-1-giulio.benetti@benettiengineering.com>
 References: <49133c66-0a53-7607-1c52-5e1ad9e8fc7b@benettiengineering.com>
@@ -60,7 +60,7 @@ X-CMAE-Envelope: MS4wfKPsj5rOrRG6QrlTBrkCBFe/9mVCOwF48NZmkWqzKVYpDsUn4/bFw+2v8c+
  uPM8YXB5qxknYB12ef5q3KhWdjgrOWgukzuHdZJLy7666Ugqa5l+yVqW0lYmcKaIWw/CEQw7Ba7wOq8hX/+KHQ8RaxMv9gaI6ZXgI/9AzL0TeXsbU+kWlZiO
  XmzuqlkMTlu4iCHznn7UneL7HixFCI4Y7IyzEO10bDUJTELMcjO0bBWAVKfCaCVWj64Z+pI+z8+5Uc8Dgctr/zlljzSB8EZdRZJnGKY2NDXL3mzdirFvTKsJ
  IaPVhVl/eDS/Xd6iYh52jOpEVNgXLAEDlR1AHgV7XUegIYg7iBBhV4jpecNArp+d16sOqcSjcVgL/zvULlGFRK5Z
-Subject: [Buildroot] [PATCH v2 03/16] board/friendlyarm/nanopc-t4/genimage:
+Subject: [Buildroot] [PATCH v2 04/16] board/friendlyarm/nanopi-m4/genimage:
  convert partition-type-uuid to single letter notation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -92,13 +92,13 @@ the default value. So let's remove it.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/friendlyarm/nanopc-t4/genimage.cfg | 3 +--
+ board/friendlyarm/nanopi-m4/genimage.cfg | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
-index 98dc2f3892..f966d48f3f 100644
---- a/board/friendlyarm/nanopc-t4/genimage.cfg
-+++ b/board/friendlyarm/nanopc-t4/genimage.cfg
+diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
+index 8d0e6ad13b..db1205bfbf 100644
+--- a/board/friendlyarm/nanopi-m4/genimage.cfg
++++ b/board/friendlyarm/nanopi-m4/genimage.cfg
 @@ -26,14 +26,13 @@ image sdcard.img {
  	}
  
