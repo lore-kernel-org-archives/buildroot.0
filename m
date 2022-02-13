@@ -1,47 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2B86C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 08:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F99C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 09:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 670FF8195C;
-	Sun, 13 Feb 2022 08:40:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4376040360;
+	Sun, 13 Feb 2022 09:15:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RTQ-WYUDuX2Y; Sun, 13 Feb 2022 08:40:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I8DwdoBKga3j; Sun, 13 Feb 2022 09:15:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7BD918194C;
-	Sun, 13 Feb 2022 08:40:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DDBF402DC;
+	Sun, 13 Feb 2022 09:15:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EB1B1BF3C0
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 08:40:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BCDA41BF32A
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 09:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B42A402A6
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 08:40:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B5C63402DC
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 09:15:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qMUe6Fswu2F0 for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 08:40:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5CA9540283
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 08:40:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8A11781DB5; Sun, 13 Feb 2022 08:33:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id 5xWZ_64sUZog for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 09:15:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8A834402B9
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 09:15:36 +0000 (UTC)
+Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
+ by mailout06.t-online.de (Postfix) with SMTP id B572E105E7
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 10:15:33 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd89.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nJAyi-0MQJH70; Sun, 13 Feb 2022 10:15:32 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37670)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nJAyi-0001bA-8j
+ for buildroot@buildroot.org; Sun, 13 Feb 2022 10:15:32 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 09:17:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5050f07fdfbd6b7cb4447745b4eb18606692dbf7
-X-Git-Newrev: 93d751217ee4cc18ebe48138ee4e712b5224fcf7
-X-Patchwork-Hint: ignore
-Message-Id: <20220213083309.8A11781DB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beelink_gs1: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+Date: Sun, 13 Feb 2022 10:15:32 +0100
+Message-Id: <20220213091532.1260695-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1644743732-0000F5B3-54BD7136/0/0 CLEAN NORMAL
+X-TOI-MSGID: 48e1872b-6b95-48b2-b9f7-0161841c3c2b
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,55 +62,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8540241138592080662=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8540241138592080662==
-Content-Type: text/plain
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2022-February/000663.html
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93d751217ee4cc18ebe48138ee4e712b5224fcf7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following build
-error:
-
-include/image.h:1178:12: fatal error: openssl/evp.h: No such file or directory
- 1178 | #  include <openssl/evp.h>
-      |            ^~~~~~~~~~~~~~~
-
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/2076475033
-
-Signed-off-by: Clément Péron <peron.clem@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/beelink_gs1_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
-index aa8a2cfb6b..d4682d6b7c 100644
---- a/configs/beelink_gs1_defconfig
-+++ b/configs/beelink_gs1_defconfig
-@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beelink_gs1"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-
---===============8540241138592080662==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 871cf2f495..c8573fafad 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.3.5
++MESA3D_HEADERS_VERSION = 21.3.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e36d798e21..d64b833100 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-January/000660.html
+-sha256  d93b2a9d2464ee856d7637a07dff6b7cd950f295ad58518bb959f76882cf4a4c  mesa-21.3.5.tar.xz
+-sha512  417d1787f8177567f0c547dde3e24212f7497f2fe7cdaa945fe998cd61ec0e9eb9388feb444e377c4fd8794b056af02aac28d1bbfb9527844391ba49e6893933  mesa-21.3.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-February/000663.html
++sha256  96bb761fd546e9aa41d025fcc025225c5668443839dae21e3731959beb096736  mesa-21.3.6.tar.xz
++sha512  8c930e04eade29f689384ee7d6e2f178acbbf30fa6c9fdf132281279658c3c221ec7f9b1318e3c0a654c6136f925a5c0a35eaf849b65db7674641127c71e8a4f  mesa-21.3.6.tar.xz
+ 
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 5f080ff5fc..95618b2072 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.3.5
++MESA3D_VERSION = 21.3.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.30.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8540241138592080662==--
