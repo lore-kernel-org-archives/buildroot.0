@@ -4,44 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69AF2C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 19:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FD8C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 20:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18D60400AF;
-	Sun, 13 Feb 2022 19:59:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8406040193;
+	Sun, 13 Feb 2022 20:00:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QZhySSGUhoqt; Sun, 13 Feb 2022 19:59:45 +0000 (UTC)
+	with ESMTP id 2JQd4ppYf20m; Sun, 13 Feb 2022 19:59:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A75C6400F5;
-	Sun, 13 Feb 2022 19:59:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9FAE4040D;
+	Sun, 13 Feb 2022 19:59:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E5C731BF20B
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 19:59:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C57141BF20B
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 19:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C616460B94
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 19:59:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C146760B94
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 19:59:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CP3Vtp9o-38B for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 19:59:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3C0060812
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 19:59:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CFFDE82297; Sun, 13 Feb 2022 19:52:07 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 20:59:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ee6be2bdc8882eb04b5480b61d3c369c06972b8
-X-Git-Newrev: 115ad9c54874dd14fd53ece9ae4ce6858ad743ad
-X-Patchwork-Hint: ignore
-Message-Id: <20220213195207.CFFDE82297@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rygel: gobject-introspection is
- mandatory
+ with ESMTP id 76fViE-ok1Ox for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 19:59:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2F57160812
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 19:59:50 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id g7so8178610edb.5
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=QrRNkBxkoeLmftGxkswIIzDhAj0Bw3kFJ1dKfLgYHjg=;
+ b=ZopuCYDibk8Vz+BjBOZtZPwlwkOy4fQeK06zxakLqm820hzuK5P6rzrJ1gmNWQ7YwF
+ WNGhzgG89ddXNWXmKlatvjtYSK+WpJi6itTdlgT9oI64CXyVlpqDmmccDvHKsmYKtlWj
+ /U1cKAkbmpEttgEp765lrQ15cNdPZ7CEK75uQwL6+Dlg2AevaV9SKDQC/wGCntb8lW3h
+ 95ntD0fFspkivpG7yGFnW0P7T7hTzbORSbpwMPg3R0CAN2/kpidAa5U/BrdywB3kr4oE
+ yKhLqFFeub20j73+NLIg+TyPFJqCkMoBbAwHGrb6xwIpyytmWho2eCflZFQ+AoDWousb
+ ZoIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=QrRNkBxkoeLmftGxkswIIzDhAj0Bw3kFJ1dKfLgYHjg=;
+ b=TS3+l8EZraPXZBhCsczNOVqkyUnvTNBoQnAE3+ijRTIkMEfE1Hxnnez0x+l2WLpd2S
+ iaYHTgtXX/xQ6T/wfVCv+tktfWj002oEq9lBVUQXkHkL7cBlZtdlANimARe3d0V0KLp7
+ OmXSZjANUpgzTc4OZG6Lsz3cMHtUCVdmpNiwxMvNM1vc7pfcQZN2rMtJLjg/4XajC0WF
+ rSerkZPdTmlPpNrBdb6rLETgO9SlPtfQ7L36TiASsM3wX4nxk/bhfAU+MGjKIItYWdZn
+ fX+705f2Stg6+s12Sg0OQGKqlzS1DKHAgtPr8z0HV9bqSubbe0xcvjFv43tnWi7XqG2N
+ LpWw==
+X-Gm-Message-State: AOAM533BM6ayVYbkXwmAKr2wUlIbkNaQ6+NkWcymPrLPAQrr8SKeKGZ/
+ Yy/bOOZbG7BioH5Aa/yoDC8vxg==
+X-Google-Smtp-Source: ABdhPJwXK7pUvMleLXM6CDW9VCs9zDN6WP+CyWCvhDvpy7vZGG1vx15BZJfZ+gHVDs/FjQZhOpiVaA==
+X-Received: by 2002:aa7:d459:: with SMTP id q25mr8926605edr.356.1644782389212; 
+ Sun, 13 Feb 2022 11:59:49 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id ec52sm70657edb.92.2022.02.13.11.59.48
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 13 Feb 2022 11:59:48 -0800 (PST)
+Message-ID: <f83db847-4919-e12d-16e3-00bc50c9e56c@mind.be>
+Date: Sun, 13 Feb 2022 20:59:47 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220206095359.854435-1-fontaine.fabrice@gmail.com>
+ <9e24e8c1-2b12-59c1-82a9-6ef49557132f@mind.be>
+ <CAPi7W82uuABgHYUVvU5K9q=nJkQaRJMLJNUwcCiJ+Hxg31E9DA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CAPi7W82uuABgHYUVvU5K9q=nJkQaRJMLJNUwcCiJ+Hxg31E9DA@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/rygel: gobject-introspection is mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,125 +96,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=115ad9c54874dd14fd53ece9ae4ce6858ad743ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-vapi (and gobject-introspection) is mandatory since bump to version
-0.40.2 in commit 6acdbb81c8d6cdd3ecb476ae24e72fd4547011c3:
-
-valac -C --pkg posix --pkg libxml-2.0 --pkg gmodule-2.0 --pkg gio-2.0 --pkg gssdp-1.2 --pkg gee-0.8 --pkg gupnp-1.2 --target-glib ' 2.56' --pkg glib-2.0 --color=always --directory src/librygel-core/librygel-core-2.6.so.2.0.4.p --basedir ../src/librygel-core --library rygel-core-2.6 --header src/librygel-core/rygel-core.h --vapi ../rygel-core-2.6.vapi --gir ../Rygel-2.6.gir ../src/librygel-core/rygel-build-config.vapi ../src/librygel-core/rygel-connection-manager.vala ../src/librygel-core/rygel-basic-management.vala ../src/librygel-core/rygel-basic-management-test.vala ../src/librygel-core/rygel-basic-management-test-ping.vala ../src/librygel-core/rygel-basic-management-test-nslookup.vala ../src/librygel-core/rygel-basic-management-test-traceroute.vala ../src/librygel-core/rygel-description-file.vala ../src/librygel-core/rygel-dlna-profile.vala ../src/librygel-core/rygel-energy-management.vala ../src/librygel-core/rygel-root-device.vala ../src/librygel-core/rygel-root-device-factory.v
- ala ../src/librygel-core/rygel-dbus-interface.vala ../src/librygel-core/rygel-log-handler.vala ../src/librygel-core/rygel-meta-config.vala ../src/librygel-core/rygel-plugin-loader.vala ../src/librygel-core/rygel-recursive-module-loader.vala ../src/librygel-core/rygel-plugin.vala ../src/librygel-core/rygel-resource-info.vala ../src/librygel-core/rygel-media-device.vala ../src/librygel-core/rygel-configuration.vala ../src/librygel-core/rygel-base-configuration.vala ../src/librygel-core/rygel-cmdline-config.vala ../src/librygel-core/rygel-environment-config.vala ../src/librygel-core/rygel-user-config.vala ../src/librygel-core/rygel-state-machine.vala ../src/librygel-core/rygel-v1-hacks.vala ../src/librygel-core/rygel-icon-info.vala ../src/librygel-core/rygel-xml-utils.vala ../src/librygel-core/rygel-plugin-information.vala
-error: Package `gssdp-1.2' not found in specified Vala API directories or GObject-Introspection GIR directories
-error: Package `gupnp-1.2' not found in specified Vala API directories or GObject-Introspection GIR directories
-
-Depends on BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES instead of selecting
-it to avoid the following recursive dependency:
-
-package/gstreamer1/gstreamer1/Config.in:5:error: recursive dependency detected!
-package/gstreamer1/gstreamer1/Config.in:5:	symbol BR2_PACKAGE_GSTREAMER1 is selected by BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
-package/rygel/Config.in:46:	symbol BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1 is part of choice <choice>
-package/rygel/Config.in:39:	choice <choice> contains symbol <choice>
-package/rygel/Config.in:39:	choice <choice> contains symbol BR2_PACKAGE_RYGEL
-package/rygel/Config.in:1:	symbol BR2_PACKAGE_RYGEL depends on BR2_PACKAGE_PYTHON3
-package/python3/Config.in:5:	symbol BR2_PACKAGE_PYTHON3 is selected by BR2_PACKAGE_JACK2_DBUS
-package/jack2/Config.in:35:	symbol BR2_PACKAGE_JACK2_DBUS depends on BR2_PACKAGE_JACK2
-package/jack2/Config.in:1:	symbol BR2_PACKAGE_JACK2 is selected by BR2_PACKAGE_FLUIDSYNTH_JACK2
-package/fluidsynth/Config.in:37:	symbol BR2_PACKAGE_FLUIDSYNTH_JACK2 depends on BR2_PACKAGE_FLUIDSYNTH
-package/fluidsynth/Config.in:1:	symbol BR2_PACKAGE_FLUIDSYNTH is selected by BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH
-package/gstreamer1/gst1-plugins-bad/Config.in:425:	symbol BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH depends on BR2_PACKAGE_GSTREAMER1
-
-Fixes:
- - http://autobuild.buildroot.org/results/027ce84895fab6fb251dd37cd5cfb7169287a2de
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/rygel/Config.in | 23 +++++++++++++++++------
- package/rygel/rygel.mk  |  9 ++-------
- 2 files changed, 19 insertions(+), 13 deletions(-)
-
-diff --git a/package/rygel/Config.in b/package/rygel/Config.in
-index df48918833..30e8430537 100644
---- a/package/rygel/Config.in
-+++ b/package/rygel/Config.in
-@@ -2,8 +2,14 @@ config BR2_PACKAGE_RYGEL
- 	bool "rygel"
- 	depends on BR2_USE_WCHAR # gupnp-av
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
--	depends on BR2_USE_MMU # gupnp-av
-+	depends on BR2_USE_MMU # gupnp-av, gobject-introspection
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # gobject-introspection
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
-+	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
- 	select BR2_PACKAGE_GDK_PIXBUF
-+	select BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	select BR2_PACKAGE_GUPNP_AV
- 	select BR2_PACKAGE_GUPNP_DLNA
- 	select BR2_PACKAGE_LIBGEE
-@@ -39,14 +45,19 @@ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
- 
- config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
- 	bool "gstreamer1"
--	select BR2_PACKAGE_GSTREAMER1
--	select BR2_PACKAGE_GST1_PLUGINS_BASE
--	select BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
-+	depends on BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
-+
-+comment "gstreamer1 needs gst1-editing-services"
-+	depends on !BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
- 
- endchoice
- 
--comment "rygel needs a toolchain w/ wchar, threads"
-+comment "rygel needs a glibc toolchain w/ wchar, threads, gcc >= 4.9, host gcc >= 8"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_HOST_GCC_AT_LEAST_8
- 
- endif # BR2_PACKAGE_RYGEL
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index c541cdc0ed..bfcd5df3c6 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -12,6 +12,7 @@ RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
- RYGEL_LICENSE_FILES = COPYING COPYING.logo
- RYGEL_DEPENDENCIES = \
- 	gdk-pixbuf \
-+	gobject-introspection \
- 	gupnp-av \
- 	gupnp-dlna \
- 	libgee \
-@@ -24,16 +25,10 @@ RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- RYGEL_CONF_OPTS += \
- 	-Dapi-docs=false \
- 	-Dexamples=false \
-+	-Dintrospection=enabled \
- 	-Dtests=false
- RYGEL_PLUGINS = external,lms,mpris,ruih
- 
--ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--RYGEL_CONF_OPTS += -Dintrospection=enabled
--RYGEL_DEPENDENCIES += gobject-introspection
--else
--RYGEL_CONF_OPTS += -Dintrospection=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
- RYGEL_CONF_OPTS += \
- 	-Dengines=gstreamer \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+DQoNCk9uIDEzLzAyLzIwMjIgMTc6NTksIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6DQo+IERlYXIg
+QXJub3V0LA0KPiANCj4gTGUgZGltLiAxMyBmw6l2ci4gMjAyMiDDoCAxNjoxOCwgQXJub3V0IFZh
+bmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiBhIMOpY3JpdCA6DQo+Pg0KPj4NCj4+DQo+PiBP
+biAwNi8wMi8yMDIyIDEwOjUzLCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOg0KPj4+IHZhcGkgKGFu
+ZCBnb2JqZWN0LWludHJvc3BlY3Rpb24pIGlzIG1hbmRhdG9yeSBzaW5jZSBidW1wIHRvIHZlcnNp
+b24NCj4+PiAwLjQwLjIgaW4gY29tbWl0IDZhY2RiYjgxYzhkNmNkZDNlY2I0NzZhZTI0ZTcyZmQ0
+NTQ3MDExYzM6DQo+Pj4NCj4+PiB2YWxhYyAtQyAtLXBrZyBwb3NpeCAtLXBrZyBsaWJ4bWwtMi4w
+IC0tcGtnIGdtb2R1bGUtMi4wIC0tcGtnIGdpby0yLjAgLS1wa2cgZ3NzZHAtMS4yIC0tcGtnIGdl
+ZS0wLjggLS1wa2cgZ3VwbnAtMS4yIC0tdGFyZ2V0LWdsaWIgJyAyLjU2JyAtLXBrZyBnbGliLTIu
+MCAtLWNvbG9yPWFsd2F5cyAtLWRpcmVjdG9yeSBzcmMvbGlicnlnZWwtY29yZS9saWJyeWdlbC1j
+b3JlLTIuNi5zby4yLjAuNC5wIC0tYmFzZWRpciAuLi9zcmMvbGlicnlnZWwtY29yZSAtLWxpYnJh
+cnkgcnlnZWwtY29yZS0yLjYgLS1oZWFkZXIgc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtY29yZS5o
+IC0tdmFwaSAuLi9yeWdlbC1jb3JlLTIuNi52YXBpIC0tZ2lyIC4uL1J5Z2VsLTIuNi5naXIgLi4v
+c3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtYnVpbGQtY29uZmlnLnZhcGkgLi4vc3JjL2xpYnJ5Z2Vs
+LWNvcmUvcnlnZWwtY29ubmVjdGlvbi1tYW5hZ2VyLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUv
+cnlnZWwtYmFzaWMtbWFuYWdlbWVudC52YWxhIC4uL3NyYy9saWJyeWdlbC1jb3JlL3J5Z2VsLWJh
+c2ljLW1hbmFnZW1lbnQtdGVzdC52YWxhIC4uL3NyYy9saWJyeWdlbC1jb3JlL3J5Z2VsLWJhc2lj
+LW1hbmFnZW1lbnQtdGVzdC1waW5nLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtYmFz
+aWMtbWFuYWdlbWVudC10ZXN0LW5zbG9va3VwLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnln
+ZWwtYmFzaWMtbWFuYWdlbWVudC10ZXN0LXRyYWNlcm91dGUudmFsYSAuLi9zcmMvbGlicnlnZWwt
+Y29yZS9yeWdlbC1kZXNjcmlwdGlvbi1maWxlLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnln
+ZWwtZGxuYS1wcm9maWxlLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtZW5lcmd5LW1h
+bmFnZW1lbnQudmFsYSAuLi9zcmMvbGlicnlnZWwtY29yZS9yeWdlbC1yb290LWRldmljZS52YWxh
+IC4uL3NyYy9saWJyeWdlbC1jb3JlL3J5Z2VsLXJvb3QtZGV2aWNlLWZhY3Rvcnkudg0KPj4+ICAg
+IGFsYSAuLi9zcmMvbGlicnlnZWwtY29yZS9yeWdlbC1kYnVzLWludGVyZmFjZS52YWxhIC4uL3Ny
+Yy9saWJyeWdlbC1jb3JlL3J5Z2VsLWxvZy1oYW5kbGVyLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNv
+cmUvcnlnZWwtbWV0YS1jb25maWcudmFsYSAuLi9zcmMvbGlicnlnZWwtY29yZS9yeWdlbC1wbHVn
+aW4tbG9hZGVyLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtcmVjdXJzaXZlLW1vZHVs
+ZS1sb2FkZXIudmFsYSAuLi9zcmMvbGlicnlnZWwtY29yZS9yeWdlbC1wbHVnaW4udmFsYSAuLi9z
+cmMvbGlicnlnZWwtY29yZS9yeWdlbC1yZXNvdXJjZS1pbmZvLnZhbGEgLi4vc3JjL2xpYnJ5Z2Vs
+LWNvcmUvcnlnZWwtbWVkaWEtZGV2aWNlLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwt
+Y29uZmlndXJhdGlvbi52YWxhIC4uL3NyYy9saWJyeWdlbC1jb3JlL3J5Z2VsLWJhc2UtY29uZmln
+dXJhdGlvbi52YWxhIC4uL3NyYy9saWJyeWdlbC1jb3JlL3J5Z2VsLWNtZGxpbmUtY29uZmlnLnZh
+bGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtZW52aXJvbm1lbnQtY29uZmlnLnZhbGEgLi4v
+c3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwtdXNlci1jb25maWcudmFsYSAuLi9zcmMvbGlicnlnZWwt
+Y29yZS9yeWdlbC1zdGF0ZS1tYWNoaW5lLnZhbGEgLi4vc3JjL2xpYnJ5Z2VsLWNvcmUvcnlnZWwt
+djEtaGFja3MudmFsYSAuLi9zcmMvbGlicnlnZWwtY29yZS9yeWdlbC1pY29uLWluZm8udmFsYSAu
+Li9zcmMvbGlicnlnZWwtY29yZS9yeWdlbC14bWwtdXRpbHMudmFsYSAuLi9zcmMvbGlicnlnZWwt
+Y29yZS9yeWdlbC1wbHVnaW4taW5mb3JtYXRpb24udmFsYQ0KPj4+IGVycm9yOiBQYWNrYWdlIGBn
+c3NkcC0xLjInIG5vdCBmb3VuZCBpbiBzcGVjaWZpZWQgVmFsYSBBUEkgZGlyZWN0b3JpZXMgb3Ig
+R09iamVjdC1JbnRyb3NwZWN0aW9uIEdJUiBkaXJlY3Rvcmllcw0KPj4+IGVycm9yOiBQYWNrYWdl
+IGBndXBucC0xLjInIG5vdCBmb3VuZCBpbiBzcGVjaWZpZWQgVmFsYSBBUEkgZGlyZWN0b3JpZXMg
+b3IgR09iamVjdC1JbnRyb3NwZWN0aW9uIEdJUiBkaXJlY3Rvcmllcw0KPj4+DQo+Pj4gRGVwZW5k
+cyBvbiBCUjJfUEFDS0FHRV9HU1RSRUFNRVIxX0VESVRJTkdfU0VSVklDRVMgaW5zdGVhZCBvZiBz
+ZWxlY3RpbmcNCj4+PiBpdCB0byBhdm9pZCB0aGUgZm9sbG93aW5nIHJlY3Vyc2l2ZSBkZXBlbmRl
+bmN5Og0KPj4+DQo+Pj4gcGFja2FnZS9nc3RyZWFtZXIxL2dzdHJlYW1lcjEvQ29uZmlnLmluOjU6
+ZXJyb3I6IHJlY3Vyc2l2ZSBkZXBlbmRlbmN5IGRldGVjdGVkIQ0KPj4+IHBhY2thZ2UvZ3N0cmVh
+bWVyMS9nc3RyZWFtZXIxL0NvbmZpZy5pbjo1OiAgICBzeW1ib2wgQlIyX1BBQ0tBR0VfR1NUUkVB
+TUVSMSBpcyBzZWxlY3RlZCBieSBCUjJfUEFDS0FHRV9SWUdFTF9NRURJQV9FTkdJTkVfR1NUUkVB
+TUVSMQ0KPj4+IHBhY2thZ2UvcnlnZWwvQ29uZmlnLmluOjQ2OiAgIHN5bWJvbCBCUjJfUEFDS0FH
+RV9SWUdFTF9NRURJQV9FTkdJTkVfR1NUUkVBTUVSMSBpcyBwYXJ0IG9mIGNob2ljZSA8Y2hvaWNl
+Pg0KPj4+IHBhY2thZ2UvcnlnZWwvQ29uZmlnLmluOjM5OiAgIGNob2ljZSA8Y2hvaWNlPiBjb250
+YWlucyBzeW1ib2wgPGNob2ljZT4NCj4+PiBwYWNrYWdlL3J5Z2VsL0NvbmZpZy5pbjozOTogICBj
+aG9pY2UgPGNob2ljZT4gY29udGFpbnMgc3ltYm9sIEJSMl9QQUNLQUdFX1JZR0VMDQo+Pj4gcGFj
+a2FnZS9yeWdlbC9Db25maWcuaW46MTogICAgc3ltYm9sIEJSMl9QQUNLQUdFX1JZR0VMIGRlcGVu
+ZHMgb24gQlIyX1BBQ0tBR0VfUFlUSE9OMw0KPj4+IHBhY2thZ2UvcHl0aG9uMy9Db25maWcuaW46
+NTogIHN5bWJvbCBCUjJfUEFDS0FHRV9QWVRIT04zIGlzIHNlbGVjdGVkIGJ5IEJSMl9QQUNLQUdF
+X0pBQ0syX0RCVVMNCj4+PiBwYWNrYWdlL2phY2syL0NvbmZpZy5pbjozNTogICBzeW1ib2wgQlIy
+X1BBQ0tBR0VfSkFDSzJfREJVUyBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0pBQ0syDQo+Pj4gcGFj
+a2FnZS9qYWNrMi9Db25maWcuaW46MTogICAgc3ltYm9sIEJSMl9QQUNLQUdFX0pBQ0syIGlzIHNl
+bGVjdGVkIGJ5IEJSMl9QQUNLQUdFX0ZMVUlEU1lOVEhfSkFDSzINCj4+PiBwYWNrYWdlL2ZsdWlk
+c3ludGgvQ29uZmlnLmluOjM3OiAgICAgIHN5bWJvbCBCUjJfUEFDS0FHRV9GTFVJRFNZTlRIX0pB
+Q0syIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfRkxVSURTWU5USA0KPj4+IHBhY2thZ2UvZmx1aWRz
+eW50aC9Db25maWcuaW46MTogICAgICAgc3ltYm9sIEJSMl9QQUNLQUdFX0ZMVUlEU1lOVEggaXMg
+c2VsZWN0ZWQgYnkgQlIyX1BBQ0tBR0VfR1NUMV9QTFVHSU5TX0JBRF9QTFVHSU5fRkxVSURTWU5U
+SA0KPj4+IHBhY2thZ2UvZ3N0cmVhbWVyMS9nc3QxLXBsdWdpbnMtYmFkL0NvbmZpZy5pbjo0MjU6
+ICAgIHN5bWJvbCBCUjJfUEFDS0FHRV9HU1QxX1BMVUdJTlNfQkFEX1BMVUdJTl9GTFVJRFNZTlRI
+IGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfR1NUUkVBTUVSMQ0KPj4NCj4+ICAgIEkgdGhpbmsgdGhh
+dCBub3cgcHl0aG9uMiBoYXMgYmVlbiByZW1vdmVkLCB3ZSBjYW4gc2VsZWN0IHB5dGhvbjMgZm9y
+DQo+PiBnb2JqZWN0LWludHJvc3BlY3Rpb24gaW5zdGVhZCBvZiBkZXBlbmRpbmcgb24gaXQsIGFu
+ZCB0aGF0IHRoYXQgd291bGQgYnJlYWsgdGhpcw0KPj4gY2lyY3VsYXIgZGVwZW5kZW5jeS4NCj4g
+DQo+IEkgdHJpZWQgdG8gd29yayBhcm91bmQgeW91ciBzdWdnZXN0aW9uIGJ1dCBpdCBzZWVtcyB0
+aGlzIGFkZHMgYW5vdGhlcg0KPiBjaXJjdWxhciBkZXBlbmRlbmN5IDotKA0KPiANCj4gcGFja2Fn
+ZS9weXRob24zL0NvbmZpZy5pbjo1OmVycm9yOiByZWN1cnNpdmUgZGVwZW5kZW5jeSBkZXRlY3Rl
+ZCENCj4gcGFja2FnZS9weXRob24zL0NvbmZpZy5pbjo1OiAgICBzeW1ib2wgQlIyX1BBQ0tBR0Vf
+UFlUSE9OMyBpcyBzZWxlY3RlZA0KPiBieSBCUjJfUEFDS0FHRV9HT0JKRUNUX0lOVFJPU1BFQ1RJ
+T04NCj4gcGFja2FnZS9nb2JqZWN0LWludHJvc3BlY3Rpb24vQ29uZmlnLmluOjY6ICAgIHN5bWJv
+bA0KPiBCUjJfUEFDS0FHRV9HT0JKRUNUX0lOVFJPU1BFQ1RJT04gaXMgc2VsZWN0ZWQgYnkNCj4g
+QlIyX1BBQ0tBR0VfUFlUSE9OX0dPQkpFQ1QNCj4gcGFja2FnZS9weXRob24tZ29iamVjdC9Db25m
+aWcuaW46MTogICAgc3ltYm9sDQo+IEJSMl9QQUNLQUdFX1BZVEhPTl9HT0JKRUNUIGlzIHNlbGVj
+dGVkIGJ5IEJSMl9QQUNLQUdFX1BZVEhPTl9CTFVFWkVSTw0KPiBwYWNrYWdlL3B5dGhvbi1ibHVl
+emVyby9Db25maWcuaW46MTogICAgc3ltYm9sDQo+IEJSMl9QQUNLQUdFX1BZVEhPTl9CTFVFWkVS
+TyBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1BZVEhPTjMNCg0KICBIZWguIEluIHRoYXQgY2FzZSBs
+ZXQncyBrZWVwIGl0IGFzIGlzLg0KDQogIFBhdGNoIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3Mu
+DQoNCiAgUmVnYXJkcywNCiAgQXJub3V0DQoNCg0KPiANCj4+DQo+PiAgICBzZWxlY3QgcHl0aG9u
+MyB3b3VsZCBhbHNvIGFsbG93IHVzIHRvIHJlbW92ZSB0aGUgcHl0aG9uMyBkZXBlbmRlbmN5IGZy
+b20gYWxsDQo+PiB0cmFuc2l0aXZlIGRlcGVuZGVuY2llcyBvZiBnb2JqZWN0LWludHJvc3BlY3Rp
+b24uDQo+Pg0KPj4gICAgUmVnYXJkcywNCj4+ICAgIEFybm91dA0KPj4NCj4+Pg0KPj4+IEZpeGVz
+Og0KPj4+ICAgIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMDI3Y2U4
+NDg5NWZhYjZmYjI1MWRkMzdjZDVjZmI3MTY5Mjg3YTJkZQ0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1i
+eTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+DQo+Pj4gLS0t
+DQo+Pj4gQ2hhbmdlcyB2MSAtPiB2MjoNCj4+PiAgICAtIERlcGVuZHMgb24gQlIyX1BBQ0tBR0Vf
+e1BZVEhPTjMsR1NUUkVBTUVSMV9FRElUSU5HX1NFUlZJQ0VTfQ0KPj4+DQo+Pj4gICAgcGFja2Fn
+ZS9yeWdlbC9Db25maWcuaW4gfCAyMyArKysrKysrKysrKysrKysrKy0tLS0tLQ0KPj4+ICAgIHBh
+Y2thZ2UvcnlnZWwvcnlnZWwubWsgIHwgIDkgKystLS0tLS0tDQo+Pj4gICAgMiBmaWxlcyBjaGFu
+Z2VkLCAxOSBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL3J5Z2VsL0NvbmZpZy5pbiBiL3BhY2thZ2UvcnlnZWwvQ29uZmlnLmluDQo+
+Pj4gaW5kZXggZGY0ODkxODgzMy4uMzBlODQzMDUzNyAxMDA2NDQNCj4+PiAtLS0gYS9wYWNrYWdl
+L3J5Z2VsL0NvbmZpZy5pbg0KPj4+ICsrKyBiL3BhY2thZ2UvcnlnZWwvQ29uZmlnLmluDQo+Pj4g
+QEAgLTIsOCArMiwxNCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUllHRUwNCj4+PiAgICAgICAgYm9v
+bCAicnlnZWwiDQo+Pj4gICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGd1cG5wLWF2
+DQo+Pj4gICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGd1cG5w
+LWF2DQo+Pj4gLSAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGd1cG5wLWF2DQo+Pj4gKyAg
+ICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGd1cG5wLWF2LCBnb2JqZWN0LWludHJvc3BlY3Rp
+b24NCj4+PiArICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0dPQkpFQ1RfSU5UUk9TUEVDVElP
+Tl9BUkNIX1NVUFBPUlRTICMgZ29iamVjdC1pbnRyb3NwZWN0aW9uDQo+Pj4gKyAgICAgZGVwZW5k
+cyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgIyBnb2JqZWN0LWludHJvc3BlY3Rp
+b24NCj4+PiArICAgICBkZXBlbmRzIG9uIEJSMl9IT1NUX0dDQ19BVF9MRUFTVF84ICMgZ29iamVj
+dC1pbnRyb3NwZWN0aW9uIC0+IGhvc3QtcWVtdQ0KPj4+ICsgICAgIGRlcGVuZHMgb24gQlIyX1RP
+T0xDSEFJTl9VU0VTX0dMSUJDICMgZ29iamVjdC1pbnRyb3NwZWN0aW9uDQo+Pj4gKyAgICAgZGVw
+ZW5kcyBvbiBCUjJfUEFDS0FHRV9QWVRIT04zICMgZ29iamVjdC1pbnRyb3NwZWN0aW9uDQo+Pj4g
+ICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9HREtfUElYQlVGDQo+Pj4gKyAgICAgc2VsZWN0IEJS
+Ml9QQUNLQUdFX0dPQkpFQ1RfSU5UUk9TUEVDVElPTg0KPj4+ICAgICAgICBzZWxlY3QgQlIyX1BB
+Q0tBR0VfR1VQTlBfQVYNCj4+PiAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0dVUE5QX0RMTkEN
+Cj4+PiAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkdFRQ0KPj4+IEBAIC0zOSwxNCArNDUs
+MTkgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1JZR0VMX01FRElBX0VOR0lORV9TSU1QTEUNCj4+Pg0K
+Pj4+ICAgIGNvbmZpZyBCUjJfUEFDS0FHRV9SWUdFTF9NRURJQV9FTkdJTkVfR1NUUkVBTUVSMQ0K
+Pj4+ICAgICAgICBib29sICJnc3RyZWFtZXIxIg0KPj4+IC0gICAgIHNlbGVjdCBCUjJfUEFDS0FH
+RV9HU1RSRUFNRVIxDQo+Pj4gLSAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0dTVDFfUExVR0lOU19C
+QVNFDQo+Pj4gLSAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0dTVFJFQU1FUjFfRURJVElOR19TRVJW
+SUNFUw0KPj4+ICsgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfR1NUUkVBTUVSMV9FRElUSU5H
+X1NFUlZJQ0VTDQo+Pj4gKw0KPj4+ICtjb21tZW50ICJnc3RyZWFtZXIxIG5lZWRzIGdzdDEtZWRp
+dGluZy1zZXJ2aWNlcyINCj4+PiArICAgICBkZXBlbmRzIG9uICFCUjJfUEFDS0FHRV9HU1RSRUFN
+RVIxX0VESVRJTkdfU0VSVklDRVMNCj4+Pg0KPj4+ICAgIGVuZGNob2ljZQ0KPj4+DQo+Pj4gLWNv
+bW1lbnQgInJ5Z2VsIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzIg0KPj4+ICtj
+b21tZW50ICJyeWdlbCBuZWVkcyBhIGdsaWJjIHRvb2xjaGFpbiB3LyB3Y2hhciwgdGhyZWFkcywg
+Z2NjID49IDQuOSwgaG9zdCBnY2MgPj0gOCINCj4+PiAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNF
+X01NVQ0KPj4+IC0gICAgIGRlcGVuZHMgb24gIUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hB
+SU5fSEFTX1RIUkVBRFMNCj4+PiArICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0dPQkpFQ1Rf
+SU5UUk9TUEVDVElPTl9BUkNIX1NVUFBPUlRTDQo+Pj4gKyAgICAgZGVwZW5kcyBvbiAhQlIyX1VT
+RV9XQ0hBUiB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyB8fCBcDQo+Pj4gKyAgICAgICAg
+ICAgICAhQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDIHx8IFwNCj4+PiArICAgICAgICAgICAgICFC
+UjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgfHwgXA0KPj4+ICsgICAgICAgICAgICAgIUJS
+Ml9IT1NUX0dDQ19BVF9MRUFTVF84DQo+Pj4NCj4+PiAgICBlbmRpZiAjIEJSMl9QQUNLQUdFX1JZ
+R0VMDQo+Pj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnlnZWwvcnlnZWwubWsgYi9wYWNrYWdlL3J5
+Z2VsL3J5Z2VsLm1rDQo+Pj4gaW5kZXggYzU0MWNkYzBlZC4uYmZjZDVkZjNjNiAxMDA2NDQNCj4+
+PiAtLS0gYS9wYWNrYWdlL3J5Z2VsL3J5Z2VsLm1rDQo+Pj4gKysrIGIvcGFja2FnZS9yeWdlbC9y
+eWdlbC5taw0KPj4+IEBAIC0xMiw2ICsxMiw3IEBAIFJZR0VMX0xJQ0VOU0UgPSBMR1BMLTIuMSss
+IENDLUJZLVNBLTMuMCAobG9nbykNCj4+PiAgICBSWUdFTF9MSUNFTlNFX0ZJTEVTID0gQ09QWUlO
+RyBDT1BZSU5HLmxvZ28NCj4+PiAgICBSWUdFTF9ERVBFTkRFTkNJRVMgPSBcDQo+Pj4gICAgICAg
+IGdkay1waXhidWYgXA0KPj4+ICsgICAgIGdvYmplY3QtaW50cm9zcGVjdGlvbiBcDQo+Pj4gICAg
+ICAgIGd1cG5wLWF2IFwNCj4+PiAgICAgICAgZ3VwbnAtZGxuYSBcDQo+Pj4gICAgICAgIGxpYmdl
+ZSBcDQo+Pj4gQEAgLTI0LDE2ICsyNSwxMCBAQCBSWUdFTF9DT05GX0VOViA9IExJQlM9JChUQVJH
+RVRfTkxTX0xJQlMpDQo+Pj4gICAgUllHRUxfQ09ORl9PUFRTICs9IFwNCj4+PiAgICAgICAgLURh
+cGktZG9jcz1mYWxzZSBcDQo+Pj4gICAgICAgIC1EZXhhbXBsZXM9ZmFsc2UgXA0KPj4+ICsgICAg
+IC1EaW50cm9zcGVjdGlvbj1lbmFibGVkIFwNCj4+PiAgICAgICAgLUR0ZXN0cz1mYWxzZQ0KPj4+
+ICAgIFJZR0VMX1BMVUdJTlMgPSBleHRlcm5hbCxsbXMsbXByaXMscnVpaA0KPj4+DQo+Pj4gLWlm
+ZXEgKCQoQlIyX1BBQ0tBR0VfR09CSkVDVF9JTlRST1NQRUNUSU9OKSx5KQ0KPj4+IC1SWUdFTF9D
+T05GX09QVFMgKz0gLURpbnRyb3NwZWN0aW9uPWVuYWJsZWQNCj4+PiAtUllHRUxfREVQRU5ERU5D
+SUVTICs9IGdvYmplY3QtaW50cm9zcGVjdGlvbg0KPj4+IC1lbHNlDQo+Pj4gLVJZR0VMX0NPTkZf
+T1BUUyArPSAtRGludHJvc3BlY3Rpb249ZGlzYWJsZWQNCj4+PiAtZW5kaWYNCj4+PiAtDQo+Pj4g
+ICAgaWZlcSAoJChCUjJfUEFDS0FHRV9SWUdFTF9NRURJQV9FTkdJTkVfR1NUUkVBTUVSMSkseSkN
+Cj4+PiAgICBSWUdFTF9DT05GX09QVFMgKz0gXA0KPj4+ICAgICAgICAtRGVuZ2luZXM9Z3N0cmVh
+bWVyIFwNCj4gQmVzdCBSZWdhcmRzLA0KPiANCj4gRmFicmljZQ0KX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
