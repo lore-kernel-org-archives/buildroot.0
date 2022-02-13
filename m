@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31FCEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:52:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D288C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:52:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1F9D60A9C;
-	Sun, 13 Feb 2022 15:52:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCB1040353;
+	Sun, 13 Feb 2022 15:52:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MSxTLC4BhAKr; Sun, 13 Feb 2022 15:52:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2459160A7D;
-	Sun, 13 Feb 2022 15:52:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DDFC71BF3F2
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:52:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7AB540343
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:52:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Wa3xpDA5c8S for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HrnW4VUp5rFc; Sun, 13 Feb 2022 15:52:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 066B64034D;
+	Sun, 13 Feb 2022 15:52:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DDC9D1BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:52:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBED940360
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:52:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f17Lzf5uUDNy for <buildroot@lists.busybox.net>;
  Sun, 13 Feb 2022 15:52:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 128344034D
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:52:12 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id j14so19052700lja.3
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:52:12 -0800 (PST)
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9E28400AF
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:52:13 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id k10so16052637ljq.2
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:52:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=j2SPLPuo/DitgA1JQRFPNNlM1q1M2CqyqAiNPQvhUqw=;
- b=lvNY2UPxaPaVkqb77CqPTf3RhuEniXx+G8pUENBU8PmN/1FLmtWuQkm9BCQknuEk5Z
- u/AlhHK++NQtaR/w1NpnDJqtwm3sP1lKxcQTDrmDsSan3cN5J62bAj7b3Aytovm+01eV
- V/kAAe/58n06axeX5p/5MrM/JWp+1XCe1YDz1mJXpxBnhumIuCuuIaB8g6GgNPIYDbNu
- lTqxDc5gkM88swPl3K3QB/fRcthT2btZIjUPpQshJZGQfuvaE3tzEiu8qjMJI6FxtgB0
- HALfDt4R4NRNwCvNbpZoKgWifIgdRUiJ+U4vx7EMihtzqijA61+4AC8NrNIM9e5utl4G
- h+uA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=cdyFDgZEv8o9Xozk+3gKRJrqLLuAVp3WhWSwDJJOqBI=;
+ b=M9CRA18BrfvvgOauAb+r/zSZkI5vIAicBvRN5fhX0eBcbOcyhEh67pZIXGMEnICC5F
+ mARZCqSuyxnD7PNEDzH+6dpE9RGtY7O4UTiEiA+D1x6DOV+YYMizxDLaKKpRFcQ/FUOO
+ fw3na1I/EQ2QIKbL2ZGz+7QI7CV1f0UcB2Qq64pm8ZHOtRRNPsBLnrc70VkgXlXiIZa2
+ veR2tBheKb3yXDvU6VnZbhISvPgSdv6e+uYJ20Nq3dWA0jnvuQmvyf+olaNnta3Jkaxs
+ XKPYcLPIjMyRTWylCdlaVZamCSQHBjwJZ8LE7+8AQk7WGMjMACayy+lvG4o4mge3+ZId
+ cDww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=j2SPLPuo/DitgA1JQRFPNNlM1q1M2CqyqAiNPQvhUqw=;
- b=QtJDVpTbD4Sba2iVpt4Emcnb/0U4dhwDftah5Ns9Pr9iPLOQ/Y/zfdMolgqDSED8+C
- xi3lLZ4Ox9uu9OUMQ5o7g0Vr+wYJlhPz1PR1D4aqmKPK8X+3zm+eJU75Jx1R+LC9A4N0
- pU1KkBq2P1uqFglU7AzqnAWbRoa3m1jciRkw62BXwn5ObGvHhGYGWb6uXqUqffI1nCMy
- 5gBoVId40tE42PL3aMtJK92eQwvYoK+MH2rx/yiNm0kwQVdTzwQtBCLvoO4kkrj5SYB3
- oF2+tS8lok3g9o3bM7UimNkGmCaXmanpRN940AhMzy56P2k1h5PIWCB5wpjwVF7iSYKm
- hefA==
-X-Gm-Message-State: AOAM5339o2DygGhIc23TzX5tg8NlLViuBsMxYcOmcGSo9sBia5WVM6Zc
- /PwX6ABOOnirc4YdNx0vLcHSzX0yup4=
-X-Google-Smtp-Source: ABdhPJxdk32hKNuFlHyOpwzKyi9Hv8ZF0AKfEeP6O6os+w0WK6rJKzCQnfVXvMoJbcw7vIzHjmSctA==
-X-Received: by 2002:a2e:9c04:: with SMTP id s4mr6711959lji.431.1644767530835; 
- Sun, 13 Feb 2022 07:52:10 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=cdyFDgZEv8o9Xozk+3gKRJrqLLuAVp3WhWSwDJJOqBI=;
+ b=PFTk55F5xJ80sl0jcI384K4WOM63OWWX+S04126xdHl+sRbItyr65UnAIOWG7HE/Uc
+ pZ1ucICZQ6URCHW3MaDq284fpBahZG5hOHvdI0ote+OylGk4gPvOFcQW67AKL8FNfFPU
+ VAxeH8ADkTh/GbPlsUEpfMK66VF/59aiiWuoLNK/Lhxsto/Pfy9pL8xOZ3mlspAmt/+X
+ +KL/p7ujXVNxPtKlMHnbAVYTqUiQQzSlGlYsTHAUoswgaxHQty/xhjyz4zVWhE2FnQdT
+ Y2LCaGEFN0GoDyTQSYK8dHWmgS2Lslb/AuveRlhXNR9vy8Ih5oiTjE7taFVVSZ5Kmjve
+ rrrQ==
+X-Gm-Message-State: AOAM530HXF8501NctXLmDCtiiN6HXiMeswaVzwo4D7bXwFTmRs6GXhQm
+ WwQNJDQhPh8DRPSGElLWarD3RpQTqFI=
+X-Google-Smtp-Source: ABdhPJwtBNpwpiz/OnBoHKZaEGJ1xjAhPBP8+xKNZ4m7oEHxC5jL2q4KVVXfsm3/95tILsHPRun/Mg==
+X-Received: by 2002:a05:651c:d2:: with SMTP id
+ 18mr6342661ljr.399.1644767531453; 
+ Sun, 13 Feb 2022 07:52:11 -0800 (PST)
 Received: from localhost.localdomain ([5.188.167.245])
- by smtp.googlemail.com with ESMTPSA id k18sm1935723lfg.217.2022.02.13.07.52.10
+ by smtp.googlemail.com with ESMTPSA id k18sm1935723lfg.217.2022.02.13.07.52.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Feb 2022 07:52:10 -0800 (PST)
+ Sun, 13 Feb 2022 07:52:11 -0800 (PST)
 From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 18:52:06 +0300
-Message-Id: <20220213155208.560001-1-geomatsi@gmail.com>
+Date: Sun, 13 Feb 2022 18:52:07 +0300
+Message-Id: <20220213155208.560001-2-geomatsi@gmail.com>
 X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20220213155208.560001-1-geomatsi@gmail.com>
+References: <20220213155208.560001-1-geomatsi@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 0/2] hostapd/wpa_s: fixes after version update
+Subject: [Buildroot] [PATCH 1/2] package/hostapd: update DPP option handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,34 +94,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Makefile hostapd.mk defines different macros for different defconfig
+options. Options that are not listed in defconfig, can be set using
+HOSTAPD_CONFIG_SET. Options that are listed in defconfig, can be
+enabled/disabled using HOSTAPD_CONFIG_ENABLE/HOSTAPD_CONFIG_DISABLE.
 
-This patch series provides two fixes for hostapd/wpa_s build issues.
+Starting from hostapd v2.10, option CONFIG_DPP is explicitly listed
+in defconfig. So it is time to switch to enable/disable macros for
+this option.
 
-The first patch fixes hostapd build regression caused by its version
-update. New hostapd version requires updated handling of CONFIG_DPP
-option. I guess I failed to catch this problem because all my random
-hostapd test configs enabled openssl. So I overlooked basic minimal
-configuration that did not require openssl.
+Fixes:
+- http://autobuild.buildroot.net/results/3f8058ee6f3913fda795578f206db895731ba1e6/
 
-The second patch fixes specific configuration of wpa_supplicant reported
-by Yegor Yefremov. For now a patch is added. Yegor already posted patch
-to hostapd mailing list. So some time in the future this problem will
-be fixed upstream.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ package/hostapd/hostapd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Regards,
-Sergey
-
-
-Sergey Matyukevich (2):
-  package/hostapd: update DPP option handling
-  package/wpa_supplicant: fix build for mesh configuration
-
- package/hostapd/hostapd.mk                    |  3 +-
- .../0001-mesh-enable-HMAC_SHA384_KDF.patch    | 30 +++++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
- create mode 100644 package/wpa_supplicant/0001-mesh-enable-HMAC_SHA384_KDF.patch
-
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 075cb2a8d0..2ea6e0312f 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -84,12 +84,13 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOSTAPD_WPA3),y)
+ HOSTAPD_CONFIG_SET += \
+-	CONFIG_DPP \
+ 	CONFIG_SAE
+ HOSTAPD_CONFIG_ENABLE += \
++	CONFIG_DPP \
+ 	CONFIG_OWE
+ else
+ HOSTAPD_CONFIG_DISABLE += \
++	CONFIG_DPP \
+ 	CONFIG_OWE
+ endif
+ 
 -- 
 2.35.0
 
