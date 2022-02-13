@@ -1,65 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2B7AC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 22:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C10EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 22:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2070D4040D;
-	Sun, 13 Feb 2022 22:44:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9DE94029F;
+	Sun, 13 Feb 2022 22:53:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QCqHxaZJnGEQ; Sun, 13 Feb 2022 22:44:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BoqT3qRKutd3; Sun, 13 Feb 2022 22:53:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15824403FD;
-	Sun, 13 Feb 2022 22:44:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5E50A1BF834
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A2104028F;
+	Sun, 13 Feb 2022 22:53:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 80DCD1BF834
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A29C606CB
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:44:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 747B640424
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 22:53:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q6FvqJL4dYvU for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 22:44:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FTdzUozqkJxz for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 22:53:54 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DFBD60598
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 22:44:49 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.179.156])
+Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51B8E400F3
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 22:53:54 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.179.156])
  by Aruba Outgoing Smtp  with ESMTPSA
- id JNbsniMdiXmFAJNbsnv5VT; Sun, 13 Feb 2022 23:44:48 +0100
+ id JNkdniVFUXmFAJNkenv7xr; Sun, 13 Feb 2022 23:53:53 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644792288; bh=LK5v9jsMjGnwCGhpsXOEhnWImKMMNxH4N1gOK+uBXZA=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=aXZFn5XOSgsXf7PZAfWchaAh5rQedseTXlsvMGYdMzYn9J6RYJ6lfoZMhGonuEyXi
- 8CZ/rLPQ5ByiLY6fQlm6SJIO/yVSNehGbSrNwVmIMO2+57UNlEdCTThM91DIBk15yO
- bSzySmNJ2TDgncymEEB7luchmvOVpZmX1bAm02awJadmUvSZcRd86ygpumnoG1sJDY
- ox6YZLLBEvN/ca/BxWHmSmUGD3SEZC0N6Yck0I8W6fHSBZEl3OkpkwOecwBI+9sK0V
- fkTn6NPHHp1+3150p61Kybjd5AZRs3tW7M/3ISN0mDUvR3fRWdS9bsk/8N6svG6FXQ
- azATF2GyQduOg==
-Message-ID: <4145b9b9-a71a-f763-2211-529cf916b91d@benettiengineering.com>
-Date: Sun, 13 Feb 2022 23:44:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220213212909.1504992-1-fontaine.fabrice@gmail.com>
+ t=1644792833; bh=rUgsUZ/1n41Bkm+HlER9BrqVygC6qVdRlRzlhIdK634=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=TWM8KZpr/YC+xumtz1j4omh4nxBzzZffSum1UDpG61OY4E9C5kBR6DxzGoWf9AZaA
+ 5yHjNzPfeVxaJhIfxnOYCcnqAgfq6pc+042oTefohazWXoG1GjMeuzXp55Sn8yMxgA
+ E/v3sv9Xh0af8C6ucCHsVF3U0UqUeCDnOw2g8QdlrwBpTdccRlMiNKVOXzM7Lt/ylR
+ d3i64VJHVmGTbzHhIIjSbRNSsVHfLSAgrA8Ap5BM2ExkyB2bnwXqiupLRIkf75RXIs
+ jaff9TuET4Mr1BnSXSTBuAjktnRv+Z/28Zu37NGaEDP3HhYOZmjsziGPS8LZi7b4nS
+ ixtha17BdgRhQ==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220213212909.1504992-1-fontaine.fabrice@gmail.com>
-X-CMAE-Envelope: MS4wfLn627ZiOHwMCnN7VYi/bub79WJyZ7uBqgMwkksObH+mrurpekOYDuMU9Xv7a6pURE2rmnH8gge5oqiD6udpQgkS+4KpssCW3PDDu/aF6h3/b0Gh6f6B
- 1MEuQBPvRA6/IAiD1TytDDZBkz/GdTnRi7rxDn2n/VWw5LMIZLeYS2KtQXQ6T/UMG7+yhBjtCKrLtdzfbb6ANdjIYDx6QYwceTeDVuYk2yex+JqxnITa5Umo
- C1yfGw4neTjzmx/kdvT1gQ==
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptsetup: openssl is the
- default crypto backend
+To: buildroot@buildroot.org
+Date: Sun, 13 Feb 2022 23:53:35 +0100
+Message-Id: <20220213225350.3466696-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220213225350.3466696-1-giulio.benetti@benettiengineering.com>
+References: <49133c66-0a53-7607-1c52-5e1ad9e8fc7b@benettiengineering.com>
+ <20220213225350.3466696-1-giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4wfCWcr4GTOIYDdpkm1zM6wgg7Y6CZo01YK6pUoOQupJ98ZdM/RSNfe4bL46wVkzvIfEDFQogeiceI1ZCNp9zqyFeYoRXfpLRcWNbC2OouqzBN5lyPT5Mb
+ ndG8bR2Iantac99amsn3OdmAfih9iUe4fMDgmlX5R/WI82NqSb4ayV1snjHpxUvr9T2PrAUvyfazbkJOKXtv0WEALGkXSKfPRsaRNlFibH975Tj6EcBLmEOA
+ FRsjKPQ5pi0kY5c3Bi1h+iV720Bm5Knwdjc0gVPq8UKWsESWb+Sm3TWQqcFVpSf02mFWhSk49yRbUiUQHoNKwsFHdBFCA30SfErLFUnmm4HuGrwxGt1Gz74b
+ qrtAz9SZQdP+H5a/SEGEsg94faQUMKhG2PlElgfgQhT1psWHvyuWGX61VLfp9NK+QKv4wdT+/apS3cO9vDLm6q1YzTnVk6ODyfQUQT2QdTJcmrBvT9gJaMoZ
+ 8DceuwkheCNDUmGk0pjl1fVya6ANF8HKbw1igxaWVarqgL6CUYehjwj9FRp1RA5Qr1RAo9yPysEu0fVgL83xoy/Unqod8Vq7aegI/uNqKPxBrTffWNXZcI1n
+ G4noG0m+7Al/6+l56BGdS7VWg7Lnwfw8tPie6MSJTXL8ZB0nt6jaGk785rcByHCqQiEUAPXlQwIGzKu0aLQCdkJu
+Subject: [Buildroot] [PATCH v2 01/16] board/aarch64-efi/genimage-efi:
+ convert partition-type-uuid to single letter notation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,58 +73,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Alistair Francis <alistair@alistair23.me>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>,
+ Gerome Burlats <gerome.burlats@smile.fr>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
+Note that rootfs doesn't need partition-type-uuid = L since L(rootfs) is
+the default value. So let's remove it.
 
-thanks a lot!
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ board/aarch64-efi/genimage-efi.cfg | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On 13/02/22 22:29, Fabrice Fontaine wrote:
-> openssl is the default crypto backend since version 2.1.0 and
-> https://github.com/mbroz/cryptsetup/commit/bc3d0feb5cd33f9181102b418cc7bf44fe112e82
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Best regards
+diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
+index 87e85816bc..3708727c18 100644
+--- a/board/aarch64-efi/genimage-efi.cfg
++++ b/board/aarch64-efi/genimage-efi.cfg
+@@ -18,13 +18,12 @@ image disk.img {
+ 
+ 	partition boot {
+ 		image = "efi-part.vfat"
+-		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++		partition-type-uuid = U
+ 		offset = 32K
+ 		bootable = true
+ 	}
+ 
+ 	partition root {
+-		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
+ 		image = "rootfs.ext2"
+ 	}
+ }
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
->   package/cryptsetup/cryptsetup.mk | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 55cc70576c..b50ac698bb 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -22,15 +22,15 @@ CRYPTSETUP_AUTORECONF = YES
->   CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
->   CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
->   
-> -# cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
-> +# cryptsetup uses OpenSSL by default, but can be configured to use libgcrypt
->   # or kernel crypto modules instead
-> -ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +CRYPTSETUP_DEPENDENCIES += openssl
-> +CRYPTSETUP_CONF_OPTS += --with-crypto_backend=openssl
-> +else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->   CRYPTSETUP_DEPENDENCIES += libgcrypt
->   CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
->   CRYPTSETUP_CONF_OPTS += --with-crypto_backend=gcrypt
-> -else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -CRYPTSETUP_DEPENDENCIES += openssl
-> -CRYPTSETUP_CONF_OPTS += --with-crypto_backend=openssl
->   else
->   CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
->   endif
+2.25.1
 
 _______________________________________________
 buildroot mailing list
