@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43755C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31006C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB37040258;
-	Sun, 13 Feb 2022 15:33:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBA6A60BF1;
+	Sun, 13 Feb 2022 15:33:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LKi5J2Dv1b3Q; Sun, 13 Feb 2022 15:33:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id upJyy_WfzMte; Sun, 13 Feb 2022 15:33:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FE4B4024A;
-	Sun, 13 Feb 2022 15:33:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E9CF71BF3F2
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:32:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C7D660B94;
+	Sun, 13 Feb 2022 15:33:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E4A3E1BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:32:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7E8B402FD
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:32:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D293640493
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:32:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e_syXs3VD8aZ for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 15:32:20 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LYSeslU6BCLr for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 15:32:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F01EE4035A
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:32:19 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id hw13so4157958ejc.9
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:32:19 -0800 (PST)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A11C340484
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:32:39 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id y17so21655552edd.10
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:32:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=/kHKHOxFVH+/tTCBhWxRr2FKq47w5M7+cnHaw7m6tEM=;
- b=YP17pYSx7m9nhVi9o6l7XRTAFmKwq/TG1H7oBOjBFeoQhixLXWrf9WyXHOmEpjR9/M
- yP5bSGNm2/V9JTmQR1m2Jv51bQD5RcwdamTTZ80cJ5kTZhmCyPtVGzzhS/p20iJSjM5y
- Jit+XLzw8yXdf+9zK8UfG9DRc+D/0BQl+OiQwhqt/INUSOxYlAWjL2tAUyLVYqj7NdJ6
- TFUhWmCkotbvy/TmBUHN2wOuP6O5Co1NtIN37MyjVJkkDROq4oYXj/HjnexATcWNhHEi
- pqON19kwKsrzEOS64qbSgUaxXgld/Kyirml9Rz+Bm02seqaAcCQWPNG2SMEne28c3LP7
- uCwg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=dT8W/WZUvuoac9GLRT5bzs0Rm7OjC42qQVb/O+aubKQ=;
+ b=MvvWe/fpKB1QJmT/pRuExZPGRRH1H2GMLh6MUmkLEUHluy0QJkobt6BfIOGnGfY9eo
+ icL0QcDRfr+8VVAxpZ1tf4j/TxL8tLuvIOL/MHQToX0wlH4cTl8PL/+A/3PmsDmj4g3j
+ SJbskfJ8D0NdEF+ClYoR+bD+GyzvZ8oKEjqoncWsCxzdU0bpl4fYJCVNQUVCX1hejpWp
+ 5GX8B1rB2HTXZUohnNurD+eiTGhAx06zBABHoRLKMqyue54DWTr6LE4Z+5+AKitn7UDz
+ qkavgX7L9UQrpAjCfHEMAEPo/i3qXJdMvnDhmoHR8F3I3NShS28p2YtWz+SuUWybqimY
+ BZ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/kHKHOxFVH+/tTCBhWxRr2FKq47w5M7+cnHaw7m6tEM=;
- b=uzZBDqljgx8r/NDWk/20jaAylKwrlbFhI7yvgA2/xbxVa4uuc5MRVDDspvFeYbm+HU
- nklnlrAWXF7DUzkSuIjMrv8Gp1r2RD8jMK23k8HxklKZqy9xS5FVMKUA5p9rZsLSSuWb
- 3eDdgQU67MLq4m7sJj61mEjzgN7e6IjxtxtoaThaeM2FBlS5mIWdwl7IJelAF3C42tjv
- tD630KCOG3GqX/uDdUYx4ri7Vo1FU4/+eVNDUCagufrooTQeNNXggR/fI9/xM2cc2VaH
- fMX/WKHIHF6cUBLgL+OnpBG4OoAiOqqLM/yygvPHxOgBwOnHBsWlmYhyS/mLqcyA3M+D
- cjNQ==
-X-Gm-Message-State: AOAM531L51s9u80db4QjAZWlZSS/NCvF0sNvJ3RmWweMo/HgC7gp8Lcl
- LwK4ss2iJA56a4jZizVqySYSDLwD7VjEbg==
-X-Google-Smtp-Source: ABdhPJxT7/bPfiTXSMDVgcWl50ilQZngVTH4JHBC8rE7zNt34aPQZxNvieUevlTVoYg7XkD6hy0KpA==
-X-Received: by 2002:a17:906:77d7:: with SMTP id
- m23mr8176844ejn.384.1644766338226; 
- Sun, 13 Feb 2022 07:32:18 -0800 (PST)
+ bh=dT8W/WZUvuoac9GLRT5bzs0Rm7OjC42qQVb/O+aubKQ=;
+ b=V7Rk982TFuR/dl+ivd7jwyhYnClqNOGw96WqoK3gi/LDHT2ullQ8SKkSz/TWj7/Dpv
+ R1P0AC1t8QXPhrqWBS9ferEY5LXFYOTnZKH8riCAuf2qmMCH+PsNAT9LLAARJ0Qv149S
+ c3FUDv1+yVpEqIbuY+UCX8v4LVEXqc1nMsDpmqbHCJ2umyN7nH5u2jJ1nyL3L3rYuROQ
+ blT428Rl2xfYC4m5esdZJo73ivSTTsjOrdlMGzuM6N3JvFzrwTpaSS09xFaoWpbMgf5z
+ XDhrksjKOdHrwHB69BjSifAtKKUCIvg0J+yJw3t1tzdTTMXwCJZHH5hewm+V0gj45Ptp
+ esiQ==
+X-Gm-Message-State: AOAM531qW4LKGIJprzabarfJpdZ49rzAK51WPkptnb70YwgwHyIswSdG
+ H+PzEzYPNVu+xG1FtO1BmuNhcQ==
+X-Google-Smtp-Source: ABdhPJxUsLjo45uTmwVem80btEHMnjAIwJCh0BLdPfDYhnQUrJs0kPfnauvy8aTvaAFn2QSdKxUs4A==
+X-Received: by 2002:aa7:ca4d:: with SMTP id j13mr11694937edt.400.1644766357866; 
+ Sun, 13 Feb 2022 07:32:37 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id c10sm9525676edr.6.2022.02.13.07.32.17
+ by smtp.gmail.com with ESMTPSA id 24sm2092457ejm.163.2022.02.13.07.32.37
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 13 Feb 2022 07:32:17 -0800 (PST)
-Message-ID: <a6b88abf-16bf-3d23-62a9-58ffa41a89d7@mind.be>
-Date: Sun, 13 Feb 2022 16:32:17 +0100
+ Sun, 13 Feb 2022 07:32:37 -0800 (PST)
+Message-ID: <6b41c65a-8655-229b-2832-23c2fa7c1c1e@mind.be>
+Date: Sun, 13 Feb 2022 16:32:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 Content-Language: en-GB
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  buildroot@buildroot.org
-References: <20220206225902.3349344-1-giulio.benetti@benettiengineering.com>
+References: <20220206224521.3204040-1-giulio.benetti@benettiengineering.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220206225902.3349344-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 3.3.2
+In-Reply-To: <20220206224521.3204040-1-giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH] package/libnss: bump to version 3.75
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,6 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -99,48 +102,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 06/02/2022 23:59, Giulio Benetti wrote:
+On 06/02/2022 23:45, Giulio Benetti wrote:
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
   Applied to master, thanks.
-
-> ---
-> This patch superseeds this:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220131175341.4091688-1-giulio.benetti@benettiengineering.com/
-
-  If you mark it as superseded yourself, there's no real need to say it here. 
-But you should probably have given it a v2.
 
   Regards,
   Arnout
 
 > ---
->   package/harfbuzz/harfbuzz.hash | 2 +-
->   package/harfbuzz/harfbuzz.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/libnss/libnss.hash | 4 ++--
+>   package/libnss/libnss.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-> index 1615933a6e..61f2865563 100644
-> --- a/package/harfbuzz/harfbuzz.hash
-> +++ b/package/harfbuzz/harfbuzz.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  0ada50a1c199bb6f70843ab893c55867743a443b84d087d54df08ad883ebc2cd  harfbuzz-3.2.0.tar.xz
-> +sha256  1c13bca136c4f66658059853e2c1253f34c88f4b5c5aba6050aba7b5e0ce2503  harfbuzz-3.3.2.tar.xz
->   sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-> index 67eab359c6..1f5dfa8822 100644
-> --- a/package/harfbuzz/harfbuzz.mk
-> +++ b/package/harfbuzz/harfbuzz.mk
+> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+> index 819c272a30..07fb340c33 100644
+> --- a/package/libnss/libnss.hash
+> +++ b/package/libnss/libnss.hash
+> @@ -1,4 +1,4 @@
+> -# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_74_RTM/src/SHA256SUMS
+> -sha256  88928811f9f40f87d42e2eaccdf6e454562e51486067f2ddbe90aa47ea6cd056  nss-3.74.tar.gz
+> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_75_RTM/src/SHA256SUMS
+> +sha256  fd571507827284644f4dd522a032acda2286835f6683ed22a1c2d3878cc58582  nss-3.75.tar.gz
+>   # Locally calculated
+>   sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+> index 537f6dd9b6..a9549e48dd 100644
+> --- a/package/libnss/libnss.mk
+> +++ b/package/libnss/libnss.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -HARFBUZZ_VERSION = 3.2.0
-> +HARFBUZZ_VERSION = 3.3.2
->   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
->   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
->   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+> -LIBNSS_VERSION = 3.74
+> +LIBNSS_VERSION = 3.75
+>   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+>   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+>   LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
