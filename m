@@ -1,47 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D599DC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 11:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D75C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 11:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83C9A81460;
-	Sun, 13 Feb 2022 11:14:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ajL7V7lq5IET; Sun, 13 Feb 2022 11:14:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7E8B8144E;
-	Sun, 13 Feb 2022 11:14:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9342B1BF842
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:13:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8069C4033F
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:13:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B55EB40360;
+	Sun, 13 Feb 2022 11:20:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yucd_d8c-caW for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 11:13:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75B28401F8
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:13:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 68FFF82821; Sun, 13 Feb 2022 11:06:15 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ans4SFv_NA_z; Sun, 13 Feb 2022 11:20:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93FF2401F8;
+	Sun, 13 Feb 2022 11:20:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A4B21BF842
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:20:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 713384033A
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 11:20:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xZZbnEf86YZF for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 11:20:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C3204030D
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 11:20:07 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ bg21-20020a05600c3c9500b0035283e7a012so9126298wmb.0
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 03:20:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FYMbM9ZGUPqoWIQTSqxLsmYQaQsK7fnCKbsp3jRQoiA=;
+ b=Y32lmW/G3v61+RZdjMrUx6dAvoYlZjGY0Q1DPJZ/cigg1anasioBervx6tcnEXoBhx
+ jXoOx4GoWE0jAWtjXwW+k7xbvx4zzFkM1J6HHVuEd+aEZtbgz+2krIBV3HojTRaZQiqf
+ OYIpC55vd7WNfPaOrO0j46n+9V8pP3w+H31qgad4WRw1stIcPm3G8vgFeoAIkdJxpIOF
+ e6adfUUYMV1J2p87XAfMH+JGsho2SoOUjtjm+f8sSFIKM9+nGlTQiKC1s43CBnf/8g/7
+ cNzv8thqY2vqQ1U/SCXOQHT+5SfgoRrlSyq2GjAoCXM5sARpUiu38SoyYj3U60q8YFfD
+ xm2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FYMbM9ZGUPqoWIQTSqxLsmYQaQsK7fnCKbsp3jRQoiA=;
+ b=nnu4w8w6wz2wSqltNUdcICOLMNFu2n5OU96tQ4qCCV2y9jQ2zoGfiTEoJK4XiIUqx4
+ iAF35oiVwn3IkT3GHKuw5VqwqRQxggKpJLUg1AfeLaUJHn+o+o4D2uZPF14yzKSvy8Dp
+ 6WsVYbdZQ59vcNQKobvfWyAzgH6fr62yOoq6Hrn+wHMI7a6w2IXXjph7D4t6teq7mNA8
+ VuqZ18374/x+yjM5MH0Emo1Ii5lzMFFHkisMrtsUaS9noTuMF0SbRbDsHEvXIg34CQ1v
+ bws7LDwTCSHoPhP7TNTEYRhh457NFOnazlggP748fQNOqYWoHruQy4pBINQR273IGKDW
+ +K/A==
+X-Gm-Message-State: AOAM5324VEiChw3YqVmXqkFirQYMbKFTu7PYtUzXA/r22HamOZrGABUe
+ WwqHCaehbb4hjeMIEzX3CaNRJ5HOdXI=
+X-Google-Smtp-Source: ABdhPJwUthYLYHy0n/EBv415S+nwvzBybu+tVbSxwXe11H4ItqSyO+2OlofKkGi7WPLKDljgA0nD1g==
+X-Received: by 2002:a1c:2584:: with SMTP id l126mr6972915wml.143.1644751205324; 
+ Sun, 13 Feb 2022 03:20:05 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id a1sm26782924wrf.42.2022.02.13.03.20.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 13 Feb 2022 03:20:04 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 12:11:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 594b2e9d3c427abac3efcbdf98359d2abe3d6888
-X-Git-Newrev: 26157321240adb9f5cc2802183d3955a877b9487
-X-Patchwork-Hint: ignore
-Message-Id: <20220213110615.68FFF82821@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual/adding-packages-python.txt:
- drop <pkg>_NEEDS_HOST_PYTHON
+Date: Sun, 13 Feb 2022 12:20:25 +0100
+Message-Id: <20220213112025.979418-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/safeclib: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,40 +86,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26157321240adb9f5cc2802183d3955a877b9487
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add -std=c99 to fix the following build failure with gcc 4.8 raised
+since bump to version 3.7.1 in commit
+cc27267ae41bf44276c63b1e86042c4fae4adf50:
 
-Now that host-python2 is gone and the corresponding logic in pkg-python.
+In file included from abort_handler_s.c:35:0:
+safeclib_private.h:167:18: error: anonymous variadic macros were introduced in C99 [-Werror=variadic-macros]
+ #define slprintf(...) fprintf(stderr, __VA_ARGS__)
+                  ^
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/5c3468585942879b47331e05058d25d324c8cc23
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/adding-packages-python.txt | 7 -------
- 1 file changed, 7 deletions(-)
+ package/safeclib/safeclib.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-index cfd2f88920..0141fea85b 100644
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -141,13 +141,6 @@ therefore only use a few of them, or none.
-   packages) and +HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS+ (for host
-   setuptools packages).
- 
--* +HOST_PYTHON_FOO_NEEDS_HOST_PYTHON+, to define the host python
--  interpreter. The usage of this variable is limited to host
--  packages. The two supported value are +python2+ and +python3+. It
--  will ensure the right host python package is available and will
--  invoke it for the build. If some build steps are overloaded, the
--  right python interpreter must be explicitly called in the commands.
--
- With the Python infrastructure, all the steps required to build and
- install the packages are already defined, and they generally work well
- for most Python-based packages. However, when required, it is still
+diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
+index 91b3e26c68..bc58c1a38c 100644
+--- a/package/safeclib/safeclib.mk
++++ b/package/safeclib/safeclib.mk
+@@ -11,6 +11,7 @@ SAFECLIB_SOURCE = safeclib-$(SAFECLIB_VERSION).tar.xz
+ SAFECLIB_LICENSE = MIT
+ SAFECLIB_LICENSE_FILES = COPYING
+ SAFECLIB_INSTALL_STAGING = YES
++SAFECLIB_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ # -fstack-protector-strong is used by default. Disable that so the
+ # BR2_SSP_* options in the toolchain wrapper are used instead
+ SAFECLIB_CONF_OPTS = --disable-hardening
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
