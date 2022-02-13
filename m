@@ -4,43 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC4EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 14:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ECDCC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 14:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBA3160A9C;
-	Sun, 13 Feb 2022 14:44:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFC4E60A9C;
+	Sun, 13 Feb 2022 14:52:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jJqfBV2_6hPx; Sun, 13 Feb 2022 14:44:16 +0000 (UTC)
+	with ESMTP id SS_WfKfxY3uM; Sun, 13 Feb 2022 14:52:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B46360758;
-	Sun, 13 Feb 2022 14:44:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31CF51BF841
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 14:44:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4176160758;
+	Sun, 13 Feb 2022 14:52:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C253F1BF841
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 14:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 209A860758
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 14:44:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE3884030A
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 14:52:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oZwuYhnYoj9M for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 14:44:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53C4960608
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 14:44:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EA37082901; Sun, 13 Feb 2022 14:36:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qcIf1oo9VyjL for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 14:52:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5B52640304
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 14:52:32 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B2CC8C000C;
+ Sun, 13 Feb 2022 14:52:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nJGEh-0002RL-Pm; Sun, 13 Feb 2022 15:52:23 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 15:44:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9324d53bc5114cf862602cafcf214adfc7375d32
-X-Git-Newrev: 9f22134430f00edcfb9093f6095b1b5f72c27069
-X-Patchwork-Hint: ignore
-Message-Id: <20220213143638.EA37082901@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/grpc: fix fourth patch
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220205201837.3324085-1-james.hilliard1@gmail.com>
+ <20220205201837.3324085-2-james.hilliard1@gmail.com>
+ <20220213144218.GA4462@scaer>
+Date: Sun, 13 Feb 2022 15:52:23 +0100
+In-Reply-To: <20220213144218.GA4462@scaer> (Yann E. MORIN's message of "Sun,
+ 13 Feb 2022 15:42:18 +0100")
+Message-ID: <87o83alsyg.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v6 2/8] package/re2: switch to
+ generic-package make build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,57 +62,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Daniel Price <daniel.price@gmail.com>,
+ Gilles Talis <gilles.talis@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Peter Seiderer <ps.report@gmx.net>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Martin Bark <martin@barkynet.com>,
+ =?utf-8?Q?Ga=C3=ABl?= Portay <gael.portay@collabora.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f22134430f00edcfb9093f6095b1b5f72c27069
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fix the following build failure raised since the addition of fourth
-patch in commit 8251d8c2559b25f11684776fc343059cf100657d:
+ > Jmes, All,
+ > On 2022-02-05 13:18 -0700, James Hilliard spake thusly:
+ >> The cmake build appears to be missing features such as pkg-config
+ >> generation support, switch to the regular makefile based build
+ >> which appears to work better.
 
-1 out of 22 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
+ > I was wondering why we could not just fix the CMake buildsystem, and
+ > submit the fix upstream...
 
-Fixes:
- - http://autobuild.buildroot.org/results/44f6d7c61316e90d22e75cb1fb77c3bc5b31ad66
+ > And then I remembered already talking about this earlier, but this
+ > commit did not carry any explanations why we could not do it... So I
+ > had to dig the archives to recover the previous discussion.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/grpc/0004-host-grpc-only-cpp-plugin.patch | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ > So, bottom line is, the commit log would be better off with more
+ > explanations, like:
 
-diff --git a/package/grpc/0004-host-grpc-only-cpp-plugin.patch b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
-index 43fad7e3d6..c97d9a9385 100644
---- a/package/grpc/0004-host-grpc-only-cpp-plugin.patch
-+++ b/package/grpc/0004-host-grpc-only-cpp-plugin.patch
-@@ -10,6 +10,7 @@ others.
- Upstream-status: not accepted (see https://github.com/grpc/grpc/issues/25322)
- 
- Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
-  1 file changed, 35 insertions(+), 8 deletions(-)
-@@ -167,15 +168,6 @@ index e8934a3e03..c2df332cc6 100644
-  add_executable(check_epollexclusive
-    test/build/check_epollexclusive.c
-  )
--@@ -3906,8 +3931,6 @@ target_link_libraries(gen_hpack_tables
--   gpr
-- )
-- 
---
---
-- add_executable(gen_legal_metadata_characters
--   tools/codegen/core/gen_legal_metadata_characters.cc
-- )
- @@ -3958,6 +3981,8 @@ target_link_libraries(gen_percent_encoding_tables
-    ${_gRPC_ALLTARGETS_LIBRARIES}
-  )
+ >     The cmake build appears to be missing features, such as pkg-config
+ >     generation support which is needed for some packages to find re2,
+ >     like qt5webengine.
+
+ >     Upstream is not keen on fixing the CMake-absed buildsystem [0]
+
+ >     Instead of patching it on our side, and then have to carry the patch
+ >     forever, we switch to the Makefile-based generic buildsystem.
+
+ >     Note that previously some packages like grpc failed when the generic
+ >     Makefile was used, because they would not find the cmake-equivalent
+ >     of pkg-config, but this is now fixed [1].
+
+ >     Signed-off-by: you.
+
+ >     [0] https://github.com/google/re2/issues/349
+ >     [1] https://github.com/grpc/grpc/commit/45e413d2520795e7281e9a592af81620349bc186
+
+Yes, a lot nicer! Committed with the commit message changed to the
+above, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
