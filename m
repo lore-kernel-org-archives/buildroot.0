@@ -1,55 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1F2C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 09:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF83EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 10:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F9BC60BC1;
-	Sun, 13 Feb 2022 09:17:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45F938145A;
+	Sun, 13 Feb 2022 10:40:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9LUPcmoyWQ1a; Sun, 13 Feb 2022 09:16:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8-KnXzaTQ5jq; Sun, 13 Feb 2022 10:40:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EDEF60BDE;
-	Sun, 13 Feb 2022 09:16:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 83A521BF32A
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 09:16:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FD1981464;
+	Sun, 13 Feb 2022 10:40:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 93BCD1BF2C9
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 10:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A72C40181
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 09:16:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81CC960ABB
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 10:40:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZDDHfm6_sOlo for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 09:16:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 098224018D
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 09:16:54 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout06.t-online.de (Postfix) with SMTP id 065283340
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 10:16:53 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.189.21]) by fwd89.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nJAzy-0hAP0z0; Sun, 13 Feb 2022 10:16:50 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37672)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nJAzy-0001oo-BU
- for buildroot@buildroot.org; Sun, 13 Feb 2022 10:16:50 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 10:16:50 +0100
-Message-Id: <20220213091650.1260849-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dM-HgGz3D7fX for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 10:40:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B80A060A8A
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 10:40:00 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id fy20so31566854ejc.0
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 02:40:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=uHsPUKaEEgwq9J0so+CfnaxRl8+VjHLvMDP7bSie1xM=;
+ b=fRZa8FeLSYf9NwEsoNZu5Wnf6pkZN0kmZA9/ar1Z3PhaPaG44+Hy1R40b/W6++Rpig
+ CK2ZbdHnLBpN0HW/jJA9NwgIJazj4C4Z4P0ucwhHdgVGnTgcmjtsofCeewaxNwzNEihj
+ MxSk0enAKFwBsbqxwh3S/dXD8/5yHeetytIJ8Ps+QNS5ax5cFFaOSQH1CZcifG0Wu6ZJ
+ SEgbFyEFQNWysXKX1He5rCOMkE+Mry/vsN86C5qYYSeEQr3dZCCDh+71J1+gpkez7XSZ
+ ngKFnCMFqP57VYk1vHqsqZgjezCMrfK4fgGsERbwbXFUyvTlkcDZh5y/oj98z9EywiRq
+ KDRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=uHsPUKaEEgwq9J0so+CfnaxRl8+VjHLvMDP7bSie1xM=;
+ b=6eqKdhVE8mGIeJuCOWLEUxQ6evy/LjFFswJhAp7cUmQAxnQfE3w+MWgvxzjFLeE0oP
+ BXisD3p5U7IFM5bxEiMDLDf02zAggElUjpJsoSuv6FpfXPgVrcFJt2ABKsum+NmZ4CeA
+ PvllpFWOG3uyEXeSWfcEv1j4ulrH74lWkf96sfwB6WYY0g8cqfqf/1+B3xDG2DT8eEqa
+ SifnscLTajB1+PlTzeUvtR1mKUqgFzzSZCiDsKhNF99mlgf4/y5UHkWjxDJEylYT/MW5
+ pQ2lFqKLgvsMQ5DslmXlXXbHeyopHKrJyUtCArANuESx6gTYIyRCb5XgaA5MEtrKf7sn
+ K8nw==
+X-Gm-Message-State: AOAM533LOZIqdeSYYqoav/txnRt2vP15MIE8NO7ekjhrAeyivyWlRGGD
+ +iMTCr+/Kz7ru+vAxsrAotmvWw==
+X-Google-Smtp-Source: ABdhPJw48EDE0TiYo9SZxqTNQOUd788b/1wfIYbOQsON7r0yXCeggJk+KAYoLFWXh1gP0+jFhS4vyw==
+X-Received: by 2002:a17:906:d552:: with SMTP id
+ cr18mr7291114ejc.99.1644748798535; 
+ Sun, 13 Feb 2022 02:39:58 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id q19sm7976500ejm.74.2022.02.13.02.39.57
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 13 Feb 2022 02:39:57 -0800 (PST)
+Message-ID: <f942379b-566a-dc23-b593-968b8613ef83@mind.be>
+Date: Sun, 13 Feb 2022 11:39:57 +0100
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1644743810-0000F5B3-46F6C99C/0/0 CLEAN NORMAL
-X-TOI-MSGID: 601a9573-2f29-4e6a-98c8-0b79ce443cca
-Subject: [Buildroot] [PATCH 1/1] package/kodi: fix buld with python-3.10
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: Luca Ceresoli <luca@lucaceresoli.net>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20220203235438.610277-1-giulio.benetti@benettiengineering.com>
+ <eff4604f-7630-d8d3-6ebb-dfbef57b8663@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <eff4604f-7630-d8d3-6ebb-dfbef57b8663@lucaceresoli.net>
+Subject: Re: [Buildroot] [PATCH] manual: board support: add instructions to
+ test defconfig in the official docker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,285 +97,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes build error:
 
-CMake Error at /usr/share/cmake-3.18/Modules/FindPackageHandleStandardArgs.cmake:165 (message):
-  Could NOT find PythonLibs (missing: PYTHON_LIBRARIES) (found suitable
-  version "3.10.2", minimum required is "3.5")
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi/0002-cmake-findpython.patch      | 135 ++++++++++++++++++
- ...-cmake-search-for-python-interpreter.patch |  48 +++++++
- ...-allow-to-override-PYTHON_EXECUTABLE.patch |  39 +++++
- package/kodi/kodi.mk                          |   4 +
- 4 files changed, 226 insertions(+)
- create mode 100644 package/kodi/0002-cmake-findpython.patch
- create mode 100644 package/kodi/0003-cmake-search-for-python-interpreter.patch
- create mode 100644 package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch
+On 12/02/2022 23:56, Luca Ceresoli wrote:
+> Hi Giulio,
+> 
+> On 04/02/22 00:54, Giulio Benetti wrote:
+>> Often new boards have not been tested with official docker so let's add
+>> instructions to do it.
+> 
+> Thank you, I think this is a very useful addition to the documentation!
+> However I would suggest some changes for it to look more "professional".
+> 
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   docs/manual/adding-board-support.txt | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+>> index 33ed709535..f5fb3af371 100644
+>> --- a/docs/manual/adding-board-support.txt
+>> +++ b/docs/manual/adding-board-support.txt
+>> @@ -46,3 +46,25 @@ create a directory +board/<manufacturer>+ and a subdirectory
+>>   +board/<manufacturer>/<boardname>+. You can then store your patches
+>>   and configurations in these directories, and reference them from the main
+>>   Buildroot configuration. Refer to xref:customize[] for more details.
+>> +
+>> +Before submitting patches for new boards it would be better to test it
+> 
+> "it would be better" -> "it is recommended".
+> 
+>> +by building it using .gitlab-ci.yml specified docker. For example at the
+> 
+> I think this should be reworded in a simpler way: "by building it using
+> the docker specified in .gitlab-ci.yml".
+> 
+> BTW as I am a docker newbie: is it common to say "the docker"? Or would
+> "the docker container" be more correct? -- By comparison, I would never
+> say "using the virtualbox" but rather "using the virtualbox machine".
 
-diff --git a/package/kodi/0002-cmake-findpython.patch b/package/kodi/0002-cmake-findpython.patch
-new file mode 100644
-index 0000000000..60728aa465
---- /dev/null
-+++ b/package/kodi/0002-cmake-findpython.patch
-@@ -0,0 +1,135 @@
-+From 52f44ec5c7b728a6afaca867e8d815fced2012ec Mon Sep 17 00:00:00 2001
-+From: fuzzard <fuzzard@kodi.tv>
-+Date: Sat, 31 Jul 2021 19:22:08 +1000
-+Subject: [PATCH] [cmake] findpython
-+
-+use cmakes (3.12+) FindPython3 module.
-+Provide cmake vars for user to overide specific version, and search path
-+
-+Backport of https://github.com/xbmc/xbmc/pull/20045
-+
-+Patch sent upstream: https://github.com/xbmc/xbmc/pull/20989
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt                 |  4 +-
-+ cmake/modules/FindPython.cmake | 71 ++++++++++++++++++++++++++--------
-+ 2 files changed, 56 insertions(+), 19 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 2d5369798d..9bed54ef40 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.4)
-++cmake_minimum_required(VERSION 3.12)
-+ if(WIN32)
-+   # Version 3.15 is required to use "PREPEND" for dependencies
-+   cmake_minimum_required(VERSION 3.15)
-+@@ -187,8 +187,6 @@ core_require_dep(${required_deps})
-+ find_package(TexturePacker REQUIRED)
-+ find_package(JsonSchemaBuilder REQUIRED)
-+ 
-+-SET(PYTHON_VERSION 3.8)
-+-
-+ if(ENABLE_MARIADBCLIENT AND NOT ENABLE_MARIADBCLIENT STREQUAL AUTO AND ENABLE_MYSQLCLIENT AND NOT ENABLE_MYSQLCLIENT STREQUAL AUTO)
-+   MESSAGE(FATAL_ERROR "You can not use MySql and MariaDB at the same time. Disable one by adding -DENABLE_MYSQLCLIENT=OFF or -DENABLE_MARIADBCLIENT=OFF.")
-+ elseif(ENABLE_MYSQLCLIENT AND NOT ENABLE_MYSQLCLIENT STREQUAL AUTO)
-+diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
-+index c40e12d551..35220b5426 100644
-+--- a/cmake/modules/FindPython.cmake
-++++ b/cmake/modules/FindPython.cmake
-+@@ -1,17 +1,56 @@
-+-# - Try to find python
-+-# Once done this will define
-++# FindPython
-++# --------
-++# Finds Python3 libraries
-++#
-++# This module will search for the required python libraries on the system
-++# If multiple versions are found, the highest version will be used.
-++#
-++# --------
-++#
-++# the following variables influence behaviour:
-++#
-++# PYTHON_PATH - use external python not found in system paths
-++#               usage: -DPYTHON_PATH=/path/to/python/lib
-++# PYTHON_VER - use exact python version, fail if not found
-++#               usage: -DPYTHON_VER=3.8
-++#
-++# --------
-++#
-++# This module will define the following variables:
-+ #
-+ # PYTHON_FOUND - system has PYTHON
-++# PYTHON_VERSION - Python version number (Major.Minor)
-+ # PYTHON_INCLUDE_DIRS - the python include directory
-+ # PYTHON_LIBRARIES - The python libraries
-++# PYTHON_LDFLAGS - Python provided link options
-++#
-++# --------
-++#
-++
-++# for Depends builds, set search root dir to depends path
-++if(KODI_DEPENDSBUILD)
-++  set(Python3_USE_STATIC_LIBS TRUE)
-++  set(Python3_ROOT_DIR ${DEPENDS_PATH}/lib)
-++endif()
-++
-++# Provide root dir to search for Python if provided
-++if(PYTHON_PATH)
-++  set(Python3_ROOT_DIR ${PYTHON_PATH})
-++
-++  # unset cache var so we can generate again with a different dir (or none) if desired
-++  unset(PYTHON_PATH CACHE)
-++endif()
-++
-++# Set specific version of Python to find if provided
-++if(PYTHON_VER)
-++  set(VERSION ${PYTHON_VER})
-++  set(EXACT_VER "EXACT")
-+ 
-+-if(PKG_CONFIG_FOUND)
-+-  pkg_check_modules(PC_PYTHON python3>=3.5 QUIET)
-++  # unset cache var so we can generate again with a different ver (or none) if desired
-++  unset(PYTHON_VER CACHE)
-+ endif()
-+ 
-+-find_program(PYTHON_EXECUTABLE python3 ONLY_CMAKE_FIND_ROOT_PATH)
-+-find_library(PYTHON_LIBRARY NAMES python3.9 python3.8 python3.7 python3.6 python3.5 PATHS ${PC_PYTHON_LIBDIR})
-+-find_path(PYTHON_INCLUDE_DIR NAMES Python.h PATHS ${PC_PYTHON_INCLUDE_DIRS} PATH_SUFFIXES python3.9 python3.8 python3.7 python3.6 python3.5)
-++find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Development)
-+ 
-+ if(KODI_DEPENDSBUILD)
-+   find_library(FFI_LIBRARY ffi REQUIRED)
-+@@ -27,17 +66,17 @@ if(KODI_DEPENDSBUILD)
-+     endif()
-+   endif()
-+ 
-+-  set(PYTHON_LIBRARIES ${PYTHON_LIBRARY} ${FFI_LIBRARY} ${EXPAT_LIBRARY} ${INTL_LIBRARY} ${GMP_LIBRARY} ${PYTHON_DEP_LIBRARIES})
-+-else()
-+-  find_package(PythonLibs 3.5 REQUIRED)
-+-  list(APPEND PYTHON_LIBRARIES ${PC_PYTHON_STATIC_LIBRARIES})
-++  list(APPEND Python3_LIBRARIES ${FFI_LIBRARY} ${EXPAT_LIBRARY} ${INTL_LIBRARY} ${GMP_LIBRARY} ${PYTHON_DEP_LIBRARIES})
-+ endif()
-+ 
-+-include(FindPackageHandleStandardArgs)
-+-find_package_handle_standard_args(Python REQUIRED_VARS PYTHON_INCLUDE_DIR PYTHON_LIBRARY PYTHON_LIBRARIES)
-+-if(PYTHON_FOUND)
-+-  set(PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_DIR})
-++if(Python3_FOUND)
-+   list(APPEND PYTHON_DEFINITIONS -DHAS_PYTHON=1)
-++  # These are all set for easy integration with the rest of our build system
-++  set(PYTHON_FOUND ${Python3_FOUND})
-++  set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
-++  set(PYTHON_LIBRARIES ${Python3_LIBRARIES})
-++  set(PYTHON_VERSION "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" CACHE INTERNAL "" FORCE)
-++  set(PYTHON_LDFLAGS ${Python3_LINK_OPTIONS})
-+ endif()
-+ 
-+-mark_as_advanced(PYTHON_EXECUTABLE PYTHON_INCLUDE_DIRS PYTHON_INCLUDE_DIR PYTHON_LIBRARY PYTHON_LIBRARIES PYTHON_LDFLAGS FFI_LIBRARY EXPAT_LIBRARY INTL_LIBRARY GMP_LIBRARY)
-++mark_as_advanced(PYTHON_EXECUTABLE PYTHON_VERSION PYTHON_INCLUDE_DIRS PYTHON_LDFLAGS FFI_LIBRARY EXPAT_LIBRARY INTL_LIBRARY GMP_LIBRARY)
-+-- 
-+2.30.2
-+
-diff --git a/package/kodi/0003-cmake-search-for-python-interpreter.patch b/package/kodi/0003-cmake-search-for-python-interpreter.patch
-new file mode 100644
-index 0000000000..158345a212
---- /dev/null
-+++ b/package/kodi/0003-cmake-search-for-python-interpreter.patch
-@@ -0,0 +1,48 @@
-+From 6bb112e585f2ffd10e5af70ca28159dd235d063b Mon Sep 17 00:00:00 2001
-+From: wsnipex <wsnipex@a1.net>
-+Date: Thu, 19 Aug 2021 08:50:05 +0200
-+Subject: [PATCH] [cmake] search for python interpreter fixes installing
-+ eventclients on linux
-+
-+Backport of https://github.com/xbmc/xbmc/pull/20058
-+
-+Patch sent upstream: https://github.com/xbmc/xbmc/pull/20989
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ cmake/modules/FindPython.cmake | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
-+index 35220b5426..c469ed9fb6 100644
-+--- a/cmake/modules/FindPython.cmake
-++++ b/cmake/modules/FindPython.cmake
-+@@ -20,6 +20,7 @@
-+ #
-+ # PYTHON_FOUND - system has PYTHON
-+ # PYTHON_VERSION - Python version number (Major.Minor)
-++# PYTHON_EXECUTABLE - Python interpreter binary
-+ # PYTHON_INCLUDE_DIRS - the python include directory
-+ # PYTHON_LIBRARIES - The python libraries
-+ # PYTHON_LDFLAGS - Python provided link options
-+@@ -51,6 +52,9 @@ if(PYTHON_VER)
-+ endif()
-+ 
-+ find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Development)
-++if(CORE_SYSTEM_NAME STREQUAL linux)
-++  find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Interpreter)
-++endif()
-+ 
-+ if(KODI_DEPENDSBUILD)
-+   find_library(FFI_LIBRARY ffi REQUIRED)
-+@@ -73,6 +77,7 @@ if(Python3_FOUND)
-+   list(APPEND PYTHON_DEFINITIONS -DHAS_PYTHON=1)
-+   # These are all set for easy integration with the rest of our build system
-+   set(PYTHON_FOUND ${Python3_FOUND})
-++  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE} CACHE FILEPATH "Python interpreter" FORCE)
-+   set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
-+   set(PYTHON_LIBRARIES ${Python3_LIBRARIES})
-+   set(PYTHON_VERSION "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" CACHE INTERNAL "" FORCE)
-+-- 
-+2.30.2
-+
-diff --git a/package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch b/package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch
-new file mode 100644
-index 0000000000..d1e9b3f25f
---- /dev/null
-+++ b/package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch
-@@ -0,0 +1,39 @@
-+From 25681d8adde4a90d5da02051e30f6a3a27322136 Mon Sep 17 00:00:00 2001
-+From: Jernej Skrabec <jernej.skrabec@gmail.com>
-+Date: Sat, 25 Sep 2021 07:41:10 +0200
-+Subject: [PATCH] [cmake] allow to override PYTHON_EXECUTABLE
-+
-+If Kodi is being build for distro which has different python version
-+than host, PYTHON_EXECUTABLE must be overriden and point to distro
-+version. Otherwise, eventclients will be installed in wrong location and
-+be thus unusable.
-+
-+Use case: Cross compiling Kodi for LibreELEC
-+
-+Backport of https://github.com/xbmc/xbmc/pull/20171
-+
-+Patch sent upstream: https://github.com/xbmc/xbmc/pull/20989
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ cmake/modules/FindPython.cmake | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
-+index c469ed9fb6..87b8368705 100644
-+--- a/cmake/modules/FindPython.cmake
-++++ b/cmake/modules/FindPython.cmake
-+@@ -77,7 +77,9 @@ if(Python3_FOUND)
-+   list(APPEND PYTHON_DEFINITIONS -DHAS_PYTHON=1)
-+   # These are all set for easy integration with the rest of our build system
-+   set(PYTHON_FOUND ${Python3_FOUND})
-+-  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE} CACHE FILEPATH "Python interpreter" FORCE)
-++  if(NOT PYTHON_EXECUTABLE)
-++    set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE} CACHE FILEPATH "Python interpreter" FORCE)
-++  endif()
-+   set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
-+   set(PYTHON_LIBRARIES ${Python3_LIBRARIES})
-+   set(PYTHON_VERSION "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" CACHE INTERNAL "" FORCE)
-+-- 
-+2.30.2
-+
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index a2c42b64c9..67459f4ccb 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -76,6 +76,10 @@ KODI_CONF_OPTS += \
- 	-DNATIVEPREFIX=$(HOST_DIR) \
- 	-DDEPENDS_PATH=$(STAGING_DIR)/usr \
- 	-DENABLE_TESTING=OFF \
-+	-DPYTHON_EXECUTABLE=$(HOST_DIR)/usr/bin/python3 \
-+	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-+	-DPYTHON_PATH=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
-+	-DPYTHON_VER=$(PYTHON3_VERSION_MAJOR) \
- 	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/JsonSchemaBuilder \
- 	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/TexturePacker \
- 	-DLIBDVDCSS_URL=$(KODI_DL_DIR)/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
--- 
-2.30.2
+  I would say "the container" since you can use it with any container manager 
+that follows the OCI spec.
+
+> 
+>> +time of this writing the docker is:
+> 
+> Remove the ':' from this line, or you'll have multiple ':' per line,
+> which looks awkward.
+> 
+>> +$CI_REGISTRY/buildroot.org/buildroot/base:20220105.2314
+> 
+> Hm, this string is already old.
+
+  Actually, this part of the documentation is already superseded since we now 
+have utils/docker-run that does everything.
+
+> There's no sane way to keep docs and
+> .yml in sync. I wonder whether we should have in the manual a command
+> line that always use the current string, such as:
+> 
+> DOCKER_IMAGE=$(cat .gitlab-ci.yml | \
+>                 sed -n '/^image/s/^.*CI_REGISTRY/registry.gitlab.com/p')
+> docker pull $DOCKER_IMAGE
+> sudo docker run -it  $DOCKER_IMAGE
+> 
+> However I must admit this is not very readable in the docs... :( What
+> about adding a simple script (utils/run-docker?) that does the trick and
+> just mention that in the docs?
+> 
+>> +so:
+> 
+> Add an empty line here, so that the output separates from the next line.
+> 
+>> +Pull the docker:
+>> +--------------------
+>> + $ docker pull registry.gitlab.com/buildroot.org/buildroot/base:20220105.2314
+> 
+> Missing 'sudo'?
+
+  Docker access is usually managed through the "docker" group rather than sudo.
+
+  And if you use podman as docker replacement, it can even be done in an 
+unprivileged container. Not that I tried it, but I think so.
+
+  Oh BTW, the pull is in fact not needed, both podman and docker pull 
+automatically when you start a container. That's the reason the container name 
+is so convoluted.
+
+> 
+>> +--------------------
+> 
+> Add an empty line here. This has no effect on the output but makes
+> source code more readable.
+> 
+>> +Run the docker:
+>> +--------------------
+>> + $ sudo docker run -it registry.gitlab.com/buildroot.org/buildroot/base:20220105.2314 /bin/bash
+>> +--------------------
+> 
+> As above, add an empty line here.
+> 
+>> +Inside the docker hint:
+>> +--------------------
+>> + $ git clone git://git.busybox.net/buildroot
+>> + $ cd buildroot
+>> + $ make +<boardname>_defconfig+
+>> + $ make
+>> +--------------------
+> 
+> As above, add an empty line here.
+> 
+>> +Wait until build finishes and eventually add host dependencies.
+> 
+> If I understand what you mean here, it should be "and add host
+> dependencies if needed" ("eventually" is not the english translation of
+> italian "eventualmente"). If my understanding is correct, I don't find
+> this sentence very useful: a docker newbie perhaps doesn't know how to
+> add a host dependency (and maybe not even how to understand that they
+> are missing one).
+> 
+> I would just remove this line, but if you think it is very important I'd
+> clarify it, maybe with some examples.
+
+  Yes, I think this is what triggered the addition of this documentation. If you 
+have e.g. libopenssl-dev installed on your build host, then you usually won't 
+notice in your test builds that a dependency on host-openssl is needed. So test 
+builds should be done in a minimal container.
+
+  Unfortunately, the buildroot/base container is not exactly minimal. It's 
+really what is meant to be used for running CI tests, not exactly what is needed 
+for build tests. Ideally, we'd have
+
+- an absolutely minimal container that can be used for build tests - ideally in 
+a couple of variants for different distros;
+- a container for CI;
+- a more complete container you could use for development, though I can't 
+immediately think of extra stuff you'd want in there (but then, I wouldn't use a 
+container for development).
+
+
+  Regards,
+  Arnout
 
 _______________________________________________
 buildroot mailing list
