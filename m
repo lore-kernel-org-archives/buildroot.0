@@ -4,51 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FC9FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 08:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2B86C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 08:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 004E281882;
-	Sun, 13 Feb 2022 08:18:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 670FF8195C;
+	Sun, 13 Feb 2022 08:40:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FajBsaatbqit; Sun, 13 Feb 2022 08:18:21 +0000 (UTC)
+	with ESMTP id RTQ-WYUDuX2Y; Sun, 13 Feb 2022 08:40:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F045817D3;
-	Sun, 13 Feb 2022 08:18:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E082B1BF3C0
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 08:18:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BD918194C;
+	Sun, 13 Feb 2022 08:40:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EB1B1BF3C0
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 08:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DAF0760AFC
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 08:18:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B42A402A6
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 08:40:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AbxQUdYq93VY for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 08:18:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AEF7C60AFA
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 08:18:16 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 61FD520002;
- Sun, 13 Feb 2022 08:18:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nJA5E-0005UG-Fq; Sun, 13 Feb 2022 09:18:12 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qMUe6Fswu2F0 for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 08:40:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5CA9540283
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 08:40:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 8A11781DB5; Sun, 13 Feb 2022 08:33:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Cl=C3=A9ment_P=C3=A9ron?= <peron.clem@gmail.com>
-References: <20220212111710.22559-1-peron.clem@gmail.com>
-Date: Sun, 13 Feb 2022 09:18:12 +0100
-In-Reply-To: <20220212111710.22559-1-peron.clem@gmail.com> (=?utf-8?Q?=22C?=
- =?utf-8?Q?l=C3=A9ment_P=C3=A9ron=22's?=
- message of "Sat, 12 Feb 2022 12:17:10 +0100")
-Message-ID: <87leyfmb7f.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] configs/beelink_gs1: select
+To: buildroot@buildroot.org
+Date: Sun, 13 Feb 2022 09:17:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5050f07fdfbd6b7cb4447745b4eb18606692dbf7
+X-Git-Newrev: 93d751217ee4cc18ebe48138ee4e712b5224fcf7
+X-Patchwork-Hint: ignore
+Message-Id: <20220213083309.8A11781DB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beelink_gs1: select
  BR2_TARGET_UBOOT_NEEDS_OPENSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -61,21 +53,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8540241138592080662=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkNsw6ltZW50IiA9PSBDbMOpbWVudCBQw6lyb24gPHBlcm9uLmNsZW1AZ21haWwuY29t
-PiB3cml0ZXM6CgogPiBTZWxlY3QgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMIHRvIGZp
-eCB0aGUgZm9sbG93aW5nIGJ1aWxkCiA+IGVycm9yOgoKID4gaW5jbHVkZS9pbWFnZS5oOjExNzg6
-MTI6IGZhdGFsIGVycm9yOiBvcGVuc3NsL2V2cC5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5
-CiA+ICAxMTc4IHwgIyAgaW5jbHVkZSA8b3BlbnNzbC9ldnAuaD4KID4gICAgICAgfCAgICAgICAg
-ICAgIF5+fn5+fn5+fn5+fn5+fgoKID4gRml4ZXM6CiA+IC0gaHR0cHM6Ly9naXRsYWIuY29tL2J1
-aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8yMDc2NDc1MDMzCgogPiBTaWduZWQtb2ZmLWJ5
-OiBDbMOpbWVudCBQw6lyb24gPHBlcm9uLmNsZW1AZ21haWwuY29tPgoKQ29tbWl0dGVkLCB0aGFu
-a3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+--===============8540241138592080662==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=93d751217ee4cc18ebe48138ee4e712b5224fcf7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following build
+error:
+
+include/image.h:1178:12: fatal error: openssl/evp.h: No such file or directory
+ 1178 | #  include <openssl/evp.h>
+      |            ^~~~~~~~~~~~~~~
+
+Fixes:
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/2076475033
+
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/beelink_gs1_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+index aa8a2cfb6b..d4682d6b7c 100644
+--- a/configs/beelink_gs1_defconfig
++++ b/configs/beelink_gs1_defconfig
+@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beelink_gs1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+
+--===============8540241138592080662==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8540241138592080662==--
