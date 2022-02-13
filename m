@@ -1,80 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 024A5C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 15:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A788C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Feb 2022 16:11:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A16F381771;
-	Sun, 13 Feb 2022 15:52:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C59FE400AF;
+	Sun, 13 Feb 2022 16:11:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gRbSzszfUnCO; Sun, 13 Feb 2022 15:52:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id paTwBKuUbzgp; Sun, 13 Feb 2022 16:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E049181768;
-	Sun, 13 Feb 2022 15:52:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D52D340116;
+	Sun, 13 Feb 2022 16:11:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 04D3D1BF95F
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:52:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26FD81BF421
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 16:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8A0581768
- for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 15:52:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07C4C81774
+ for <buildroot@lists.busybox.net>; Sun, 13 Feb 2022 16:11:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0FvXv6s6Nx85 for <buildroot@lists.busybox.net>;
- Sun, 13 Feb 2022 15:52:14 +0000 (UTC)
+ with ESMTP id 8WIIMeFsqzk7 for <buildroot@lists.busybox.net>;
+ Sun, 13 Feb 2022 16:11:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 303468175B
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 15:52:14 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id j15so3054163lfe.11
- for <buildroot@buildroot.org>; Sun, 13 Feb 2022 07:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=YHGvimSx3xAocwjl1ALclvRh0quEDSfUzeANRhOXNqQ=;
- b=Pjyv1r/j93liCPNBry715CnP2OMVEbbeOCUG9p1U/tGEy8eVJjIJjl60Kwqr9w9XJ8
- exg9KJyqs6s07aNjL6JY3jCJHfR1xGlYBYqSrMPwtkdqlX7BIFgnrY7YxyI8UEFs0APF
- gXK4lEKeE7P1TYAsIqXgWH1W7wxhUybt6BKitQvvP5E8TKyWp/paFlQX2sKegibLe4Gy
- FUhB3MJm0riL+yqksm9164hfAQcrrEs67dwkkAHNUEgFC5P6yE5+CYat9NwrgBiciAzN
- KA6J+yh+w+dYnLBaYtoI73VSlMuLWOmBeMkOl/rJq/7azpLORt24waz6Vs1TImY3pL7l
- AoUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=YHGvimSx3xAocwjl1ALclvRh0quEDSfUzeANRhOXNqQ=;
- b=Wuthu+j1YI8swgVr9ZcWrfphediMU/s10aUi5tWq+fqTTj6d97zaLFlfb8sHqALe/h
- ZEttUKfd+tbG3agdy8//f2dNusbsD/CHv6ux48Mr1xAOXCimXcBd6kVIHYGS7xp7tGV8
- 7/YrYLhOBaJWj/BRN9NtiXVj/CIi+UvrLFh4LUIWqlDCelqK6VqfbCnFo+R0wk8igAB7
- 57L3Reju4LSpJX0e5pkw6RDmmFm0FPE6k9OsCPUs0DhTj16xH2AmMEQhXeExSyo9NvKu
- bVPd7yA+uBIuYHuJWYE8RLq2VvaFuBeMzrYXr3hQaQxwuTjPwwJMTCXxJFodGs5DOA1Q
- oRZw==
-X-Gm-Message-State: AOAM530Ltz5UuicHVRGSR/Xq0AKqv7xTFu0N+ZwiwTQXxDJmCNzHAmwO
- fOE2HUo5KbWWQT8ZAfiB5APiscsLa5Y=
-X-Google-Smtp-Source: ABdhPJzqoBjFLtIfmJqphQ8Ny4Z2dRfFL2eDZ2IzG3yx0pQKzsNM/0UWN7A4MPmoUiuidzvRrePnkg==
-X-Received: by 2002:a05:6512:3b0c:: with SMTP id
- f12mr2268078lfv.233.1644767532022; 
- Sun, 13 Feb 2022 07:52:12 -0800 (PST)
-Received: from localhost.localdomain ([5.188.167.245])
- by smtp.googlemail.com with ESMTPSA id k18sm1935723lfg.217.2022.02.13.07.52.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Feb 2022 07:52:11 -0800 (PST)
-From: Sergey Matyukevich <geomatsi@gmail.com>
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0F28C81772
+ for <buildroot@buildroot.org>; Sun, 13 Feb 2022 16:11:21 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.173.48.54])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 6EC23200381;
+ Sun, 13 Feb 2022 17:11:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1644768679;
+ bh=mGW2APtjOKs+QfG/TvVqkjhskAy4OF9n+qyx+J4Pcds=;
+ h=From:To:Cc:Subject:Date:From;
+ b=TOz63Z9ifEjY7gwnwF+iY+pKeX9QL1jh2w7m4wS6zFTdZxrzXqG2FK2gT+z9fIrDd
+ aerDh/prV1Zfh9eb8qTJUw1yCpJmGSUKZlum14svnCdaBm1aEx1yvzHJWdxXsIEzE0
+ 1MFPc9M5ky+BPIiMgkNBiBNNfQ69yzrrlZTt8B1R+dVZ2hCqH5yAqJxeMTB4RTUEOz
+ PaBiMoeO/1IxHOdxIdkyr1REKS1/+VjTeJVtJeUyoJz42/s6HAwdHnGG3sRLzPw+AZ
+ 8Eove0AK/Cb2FukfvxKmikBatUUhqSyS0QcGtr62R9HtOcfoRkwL98ASUHUJb+ovr+
+ BP4D3kEtxE9wA==
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Feb 2022 18:52:08 +0300
-Message-Id: <20220213155208.560001-3-geomatsi@gmail.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220213155208.560001-1-geomatsi@gmail.com>
-References: <20220213155208.560001-1-geomatsi@gmail.com>
+Date: Sun, 13 Feb 2022 17:11:07 +0100
+Message-Id: <20220213161107.3138320-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/wpa_supplicant: fix mesh
- configuration build
+Subject: [Buildroot] [PATCH 1/1] package/ola: reintroduce package at version
+ 0.10.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,81 +66,517 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Consider the following wpa_supplicant configuration:
+The ola package (Open Lighting Architecture) version 0.10.2 was
+removed in commit e692e1f2b2285c18057e2c70cc1d9d0cfdb15d5e due to an
+incompatibility with the protobuf version 3.2.0 present in Buildroot
+at that time.
 
-BR2_PACKAGE_WPA_SUPPLICANT=y
-BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
-BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING=y
-BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
+ola was fixed to support newer protobuf version in:
+https://github.com/OpenLightingProject/ola/pull/1630
 
-This configuration fails to build with the following error:
+This commit reintroduce this package at version 0.10.8.
+For changelogs since its removal at 0.10.2, see:
+- https://github.com/OpenLightingProject/ola/releases/tag/0.10.3
+- https://github.com/OpenLightingProject/ola/releases/tag/0.10.4
+- https://github.com/OpenLightingProject/ola/releases/tag/0.10.5
+- https://github.com/OpenLightingProject/ola/releases/tag/0.10.6
+- https://github.com/OpenLightingProject/ola/releases/tag/0.10.7
+- https://github.com/OpenLightingProject/ola/releases/tag/0.10.8
 
-/path/to/output/build/wpa_supplicant-2.10/build/wpa_supplicant/src/common/sae.o: in function `hkdf_expand':
-sae.c:(.text+0x3c8): undefined reference to `hmac_sha384_kdf'
-collect2: error: ld returned 1 exit status
-make[1]: *** [Makefile:1894: wpa_supplicant] Error 1
+This commit is based on the previously removed ola package, with the
+following rework:
+- Remove the dependency on BR2_HOST_GCC_AT_LEAST_4_5 as host gcc is
+  now guaranteed to be at least 4.8.
+- Update target gcc dependency to >= 4.8 to reflect protobuf
+  requirement.
+- Remove the BR2_PACKAGE_OLA_SLP option, which was removed in
+  ola 0.9.4.
+- Change the "DMX4Linux" plugin option name to "Open DMX" to better
+  reflect the ola option (DMX4Linux is a legacy plugin for 2.6
+  Kernels).
+- Update Python support to version 3.x only
+- Remove patches, as they are no longer needed
+- Add options for ola plugins: ftdidmx, gpio, karate,
+  openpixelcontrol, renard, spi, uartdmx, usbdmx
+- Reorder options alphabetically
+- Update project URL
+- Add license hashes
 
-Looking into wpa_supplicant Makefile:
-- CONFIG_MESH for some reason needs SAE, so it enables CONFIG_SAE
-- CONFIG_SAE enables only HMAC_SHA256_KDF
-
-This is apparently not enough. At least HMAC_SHA384_KDF is required
-for successful build. This commit adds a minimal patch for
-wpa_supplicant that fixes specified build configuration.
-
-Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-mesh-enable-HMAC_SHA384_KDF.patch    | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/wpa_supplicant/0001-mesh-enable-HMAC_SHA384_KDF.patch
+Package tested with:
 
-diff --git a/package/wpa_supplicant/0001-mesh-enable-HMAC_SHA384_KDF.patch b/package/wpa_supplicant/0001-mesh-enable-HMAC_SHA384_KDF.patch
+make check-package
+[...]
+0 warnings generated
+
+./utils/test-pkg -a --package ola
+[...]
+45 builds, 6 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ DEVELOPERS            |   1 +
+ package/Config.in     |   1 +
+ package/ola/Config.in | 171 ++++++++++++++++++++++++++++++++
+ package/ola/ola.hash  |   8 ++
+ package/ola/ola.mk    | 223 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 404 insertions(+)
+ create mode 100644 package/ola/Config.in
+ create mode 100644 package/ola/ola.hash
+ create mode 100644 package/ola/ola.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ac702d8d0f..91e9060ac5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1610,6 +1610,7 @@ F:	configs/zynq_qmtech_defconfig
+ F:	package/fluid-soundfont/
+ F:	package/fluidsynth/
+ F:	package/glslsandbox-player/
++F:	package/ola/
+ F:	package/ptm2human/
+ F:	package/python-distro/
+ F:	package/python-gnupg/
+diff --git a/package/Config.in b/package/Config.in
+index 10209d84d7..9a8196efe2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -535,6 +535,7 @@ endmenu
+ 	source "package/nvidia-modprobe/Config.in"
+ 	source "package/nvme/Config.in"
+ 	source "package/ofono/Config.in"
++	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+ 	source "package/open2300/Config.in"
+ 	source "package/openfpgaloader/Config.in"
+diff --git a/package/ola/Config.in b/package/ola/Config.in
 new file mode 100644
-index 0000000000..d765c1dbbc
+index 0000000000..36b175138f
 --- /dev/null
-+++ b/package/wpa_supplicant/0001-mesh-enable-HMAC_SHA384_KDF.patch
-@@ -0,0 +1,30 @@
-+From 08986b7da7e580f5deb570aaa654df38fb23397a Mon Sep 17 00:00:00 2001
-+From: Sergey Matyukevich <geomatsi@gmail.com>
-+Date: Sun, 13 Feb 2022 18:26:23 +0300
-+Subject: [PATCH] mesh: enable HMAC_SHA384_KDF
++++ b/package/ola/Config.in
+@@ -0,0 +1,171 @@
++comment "ola needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
 +
-+Mesh support CONFIG_MESH needs SAE, so it enables CONFIG_SAE.
-+In its turn, CONFIG_SAE enables only HMAC_SHA256_KDF option.
-+This is apparently not enough for successful build. At least
-+HMAC_SHA384_KDF is required for successful build.
++menuconfig BR2_PACKAGE_OLA
++	bool "ola (open lighting architecture)"
++	depends on BR2_INSTALL_LIBSTDCPP # protobuf
++	depends on !BR2_STATIC_LIBS # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Open Lighting Architecture provides applications
++	  with a mechanism to send and receive DMX512 & RDM
++	  commands using hardware devices and DMX over IP protocols.
 +
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+---
-+ wpa_supplicant/Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
++	  https://www.openlighting.org/ola/
 +
-+diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
-+index cb66defac..c8e53a3c9 100644
-+--- a/wpa_supplicant/Makefile
-++++ b/wpa_supplicant/Makefile
-+@@ -246,6 +246,7 @@ endif
-+ ifdef CONFIG_MESH
-+ NEED_80211_COMMON=y
-+ NEED_AES_SIV=y
-++NEED_HMAC_SHA384_KDF=y
-+ CONFIG_SAE=y
-+ CONFIG_AP=y
-+ CFLAGS += -DCONFIG_MESH
-+-- 
-+2.35.0
++if BR2_PACKAGE_OLA
 +
++comment "bindings and interface"
++
++config BR2_PACKAGE_OLA_WEB
++	bool "http interface"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, libmicrohttpd
++	select BR2_PACKAGE_LIBMICROHTTPD
++	help
++	  Build OLA with browser interface.
++
++config BR2_PACKAGE_OLA_PYTHON_BINDINGS
++	bool "python bindings"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_PROTOBUF
++	help
++	  Build OLA with support for the Python language.
++
++comment "tests and examples"
++
++config BR2_PACKAGE_OLA_EXAMPLES
++	bool "examples"
++	select BR2_PACKAGE_NCURSES
++	help
++	  Build OLA examples.
++
++config BR2_PACKAGE_OLA_RDM_TESTS
++	bool "rdm tests"
++	depends on BR2_PACKAGE_OLA_PYTHON_BINDINGS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	select BR2_PACKAGE_PYTHON_NUMPY
++	help
++	  Build OLA RDM tests.
++
++comment "plugin selections"
++
++config BR2_PACKAGE_OLA_PLUGIN_ARTNET
++	bool "artnet"
++	help
++	  Build Artnet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_DUMMY
++	bool "dummy"
++	help
++	  Build Dummy plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_E131
++	bool "acn E131"
++	help
++	  Build ACN E131 plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_ESPNET
++	bool "espnet"
++	help
++	  Build EspNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_FTDIDMX
++	bool "ftdidmx"
++	select BR2_PACKAGE_LIBFTDI1
++	help
++	  Build FTDI USB DMX plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_GPIO
++	bool "GPIO"
++	help
++	  Build GPIO plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_KARATE
++	bool "karate"
++	help
++	  Build Karate plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_KINET
++	bool "kinet"
++	help
++	  Build KiNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_MILINT
++	bool "Milford Instruments"
++	help
++	  Build Milford Instruments 1-463 plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_OPENDMX
++	bool "Enttec Open DMX"
++	help
++	  Build Enttec Open DMX plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_OPENPIXELCONTROL
++	bool "Open Pixel Control"
++	help
++	  Build Open Pixel Control (OPC) plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_OSC
++	bool "osc"
++	select BR2_PACKAGE_LIBLO
++	help
++	  Build Open Sound Control (OSC) plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_PATHPORT
++	bool "pathport"
++	help
++	  Build Pathport plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_RENARD
++	bool "renard"
++	help
++	  Build Renard plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_SANDNET
++	bool "sandnet"
++	help
++	  Build SandNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_SHOWNET
++	bool "shownet"
++	help
++	  Build ShowNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_SPI
++	bool "spi"
++	help
++	  Build SPI plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI
++	bool "stageprofi"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Build StageProfi plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_UARTDMX
++	bool "uartdmx"
++	help
++	  Build UART Native DMX plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_USBDMX
++	bool "usbdmx"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Build USB DMX plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_USBPRO
++	bool "usbpro"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Build UsbPro plugin for OLA.
++
++endif
+diff --git a/package/ola/ola.hash b/package/ola/ola.hash
+new file mode 100644
+index 0000000000..7565adabde
+--- /dev/null
++++ b/package/ola/ola.hash
+@@ -0,0 +1,8 @@
++# Locally calculated
++sha256  102aa3114562a2a71dbf7f77d2a0fb9fc47acc35d6248a70b6e831365ca71b13  ola-0.10.8.tar.gz
++
++# License files (locally computed)
++sha256  e6b95dd336a57abb343e2988ac22b7e21b35c5b86003e6eb9e066ffbeeff9da7  COPYING
++sha256  1480a883c87789075ccdead38b8ad9e2d740d6f7eefaaf183f894b50bebd8a25  GPL
++sha256  e6b95dd336a57abb343e2988ac22b7e21b35c5b86003e6eb9e066ffbeeff9da7  LGPL
++sha256  685ceaf368d37250f69f2861e91a4cbbab069e81af8bf50adce8a498936e02fc  LICENCE
+diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+new file mode 100644
+index 0000000000..5090076175
+--- /dev/null
++++ b/package/ola/ola.mk
+@@ -0,0 +1,223 @@
++################################################################################
++#
++# ola
++#
++################################################################################
++
++OLA_VERSION = 0.10.8
++OLA_SITE = https://github.com/OpenLightingProject/ola/releases/download/$(OLA_VERSION)
++OLA_LICENSE = LGPL-2.1+ (libola, libolacommon, Python bindings), GPL-2.0+ (libolaserver, olad, Python examples and tests)
++OLA_LICENSE_FILES = COPYING GPL LGPL LICENCE
++OLA_INSTALL_STAGING = YES
++OLA_AUTORECONF = YES
++
++# util-linux provides uuid lib
++OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex host-ola
++
++OLA_CONF_OPTS = \
++	ac_cv_have_pymod_google_protobuf=yes \
++	--disable-fatal-warnings \
++	--disable-gcov \
++	--disable-ja-rule \
++	--disable-java-libs \
++	--disable-root-check \
++	--disable-tcmalloc \
++	--disable-unittests \
++	--with-ola-protoc-plugin=$(HOST_DIR)/usr/bin/ola_protoc_plugin
++
++HOST_OLA_DEPENDENCIES = host-util-linux host-protobuf
++
++# When building the host part, disable as much as possible to speed up
++# the configure step and avoid missing host dependencies.
++HOST_OLA_CONF_OPTS = \
++	--disable-all-plugins \
++	--disable-osc \
++	--disable-uart \
++	--disable-libusb \
++	--disable-libftdi \
++	--disable-http \
++	--disable-examples \
++	--disable-unittests \
++	--disable-doxygen-html \
++	--disable-doxygen-doc \
++	--disable-fatal-warnings
++
++# On the host side, we only need ola_protoc_plugin, so build and install this
++# only.
++HOST_OLA_MAKE_OPTS = protoc/ola_protoc_plugin
++define HOST_OLA_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/protoc/ola_protoc_plugin $(HOST_DIR)/usr/bin/ola_protoc_plugin
++endef
++
++# sets where to find python libs built for target and required by ola
++OLA_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++OLA_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++
++## OLA Bindings and Interface selections
++
++ifeq ($(BR2_PACKAGE_OLA_WEB),y)
++OLA_CONF_OPTS += --enable-http
++OLA_DEPENDENCIES += libmicrohttpd
++else
++OLA_CONF_OPTS += --disable-http
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PYTHON_BINDINGS),y)
++OLA_CONF_OPTS += --enable-python-libs
++OLA_DEPENDENCIES += python3 python-protobuf
++else
++OLA_CONF_OPTS += --disable-python-libs
++endif
++
++## OLA Examples and Tests
++
++ifeq ($(BR2_PACKAGE_OLA_EXAMPLES),y)
++OLA_CONF_OPTS += --enable-examples
++OLA_DEPENDENCIES += ncurses
++else
++OLA_CONF_OPTS += --disable-examples
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_RDM_TESTS),y)
++OLA_CONF_OPTS += --enable-rdm-tests
++OLA_DEPENDENCIES += python-numpy
++# needed as numpy builds some shared libraries and ola checks for
++# numpy using a host python test program which fails with 'wrong ELF
++# class'.
++OLA_CONF_ENV += ac_cv_have_pymod_numpy=yes
++else
++OLA_CONF_OPTS += --disable-rdm-tests
++endif
++
++## OLA Plugin selections
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ARTNET),y)
++OLA_CONF_OPTS += --enable-artnet
++else
++OLA_CONF_OPTS += --disable-artnet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_DUMMY),y)
++OLA_CONF_OPTS += --enable-dummy
++else
++OLA_CONF_OPTS += --disable-dummy
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_E131),y)
++OLA_CONF_OPTS += --enable-e131
++else
++OLA_CONF_OPTS += --disable-e131
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ESPNET),y)
++OLA_CONF_OPTS += --enable-espnet
++else
++OLA_CONF_OPTS += --disable-espnet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_FTDIDMX),y)
++OLA_CONF_OPTS += --enable-ftdidmx
++OLA_DEPENDENCIES += libftdi1
++else
++OLA_CONF_OPTS += --disable-ftdidmx
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_GPIO),y)
++OLA_CONF_OPTS += --enable-gpio
++else
++OLA_CONF_OPTS += --disable-gpio
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KARATE),y)
++OLA_CONF_OPTS += --enable-karate
++else
++OLA_CONF_OPTS += --disable-karate
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KINET),y)
++OLA_CONF_OPTS += --enable-kinet
++else
++OLA_CONF_OPTS += --disable-kinet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_MILINT),y)
++OLA_CONF_OPTS += --enable-milinst
++else
++OLA_CONF_OPTS += --disable-milinst
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OPENDMX),y)
++OLA_CONF_OPTS += --enable-opendmx
++else
++OLA_CONF_OPTS += --disable-opendmx
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OPENPIXELCONTROL),y)
++OLA_CONF_OPTS += --enable-openpixelcontrol
++else
++OLA_CONF_OPTS += --disable-openpixelcontrol
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OSC),y)
++OLA_CONF_OPTS += --enable-osc
++OLA_DEPENDENCIES += liblo
++else
++OLA_CONF_OPTS += --disable-osc
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_PATHPORT),y)
++OLA_CONF_OPTS += --enable-pathport
++else
++OLA_CONF_OPTS += --disable-pathport
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_RENARD),y)
++OLA_CONF_OPTS += --enable-renard
++else
++OLA_CONF_OPTS += --disable-renard
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SANDNET),y)
++OLA_CONF_OPTS += --enable-sandnet
++else
++OLA_CONF_OPTS += --disable-sandnet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SHOWNET),y)
++OLA_CONF_OPTS += --enable-shownet
++else
++OLA_CONF_OPTS += --disable-shownet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SPI),y)
++OLA_CONF_OPTS += --enable-spi
++else
++OLA_CONF_OPTS += --disable-spi
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI),y)
++OLA_CONF_OPTS += --enable-stageprofi --enable-libusb
++else
++OLA_CONF_OPTS += --disable-stageprofi
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_UARTDMX),y)
++OLA_CONF_OPTS += --enable-uartdmx
++else
++OLA_CONF_OPTS += --disable-uartdmx
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBDMX),y)
++OLA_CONF_OPTS += --enable-usbdmx --enable-libusb
++else
++OLA_CONF_OPTS += --disable-usbdmx
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBPRO),y)
++OLA_CONF_OPTS += --enable-usbpro --enable-libusb
++else
++OLA_CONF_OPTS += --disable-usbpro
++endif
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.35.0
+2.35.1
 
 _______________________________________________
 buildroot mailing list
