@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABEF7C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 21:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20CFAC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 21:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EBC260BA0;
-	Mon, 14 Feb 2022 21:22:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFC5540903;
+	Mon, 14 Feb 2022 21:32:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vr5TjXvJKSsU; Mon, 14 Feb 2022 21:22:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DF2360B78;
-	Mon, 14 Feb 2022 21:22:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B75211BF275
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:22:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2E1641499
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:22:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MazFliXGGYct for <buildroot@lists.busybox.net>;
- Mon, 14 Feb 2022 21:22:51 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KPTHBWhmB8Sw; Mon, 14 Feb 2022 21:32:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECD94408FB;
+	Mon, 14 Feb 2022 21:32:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C0CAE1BF97D
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:32:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAD78401B2
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:32:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WyocfaQIOY1d for <buildroot@lists.busybox.net>;
+ Mon, 14 Feb 2022 21:32:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8BE254148B
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 21:22:51 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id p9so8384129wra.12
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 13:22:51 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B32CD401D2
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 21:32:08 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ l12-20020a7bc34c000000b003467c58cbdfso249584wmj.2
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 13:32:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=P7IcVeO4CmFI6i6oRkH17gq5IOp9wYbRnkXP/VYN3ZY=;
- b=FnkF3V1Iq1Nv7Kd7vVfUSUp8znY5UGEiM9XkXOoAB8at6T2t+KE8IHI8fFxqaCULZe
- BvbB0Y+yendaDO4mRbP6VJ6gcFHC4NF1zObZIdQAuCNAUv9lgrRePMZUsqO7iDaIQTKl
- KtD08k86JDzy+Yn//R5pm+tCi7OXdIWBhchMCrYk7YSC1n30gcYcG29JEj8tqzLBRzj2
- IiEQnZW329b7+zK9Jy0uYlCZNZetJVYr4AgeM5B8dKzEUUcZ2vVQrvSMaRsTMAr7Vpsw
- mWkiLQFjVbfEVpZZ9tW9fQ0X8Yv3N0ItDwMhRFTjQqMN4ddegvO5h3xQMjHEBtJZfKbQ
- gjfw==
+ bh=Cinh9BB31s+3wgWwLSFoONBPBddo7JFAHvfv/r3dBVs=;
+ b=nz/WSWZ2VfNNep2cCVVIPgjKoPtR74PFREuXuzRuX7zhsy4dul/5ZwVtg8kMnn2FrA
+ gpi7tq6kJxg1vGURHh8DR5kF1/BXElziJGbvQPm+dU2S59sZB0T+EQ0OqpOq3N/ykzss
+ Gh9PK0LrhoVMpl9nBJ2GebrIp7RQJj30nqSk4qoELvY+RNWKCRsUrXeG/CSGAfOiEg5s
+ aNFMxo7vTWWeoVxmeUpC2n+J6Ir++VgSDT2GyZuoPqeqwzjkc9lfust7smngw073II1c
+ FptZWvIyJsbrZWhvV5C7x4hKWzlUhLs5W9my1X+QleWIp0xc4CPFabk1i2U8ZHZ/LU1b
+ Pd4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=P7IcVeO4CmFI6i6oRkH17gq5IOp9wYbRnkXP/VYN3ZY=;
- b=CeCrT0NZv1nUf0UZVjy2Wfcoyv9xsejNw5mu+KjGBYVmMQ/OprRaPJkYnTA1kFj5Ul
- JSP6fF58xIknRp2mKmC6e+mt1dk+wN9eNxUitQzZmJc/vsYQRO4I/XGMF5oCwkyD/e1u
- cTSK6uRvNctFLA33hgLDvT3PD+F82/Jyuxgzsnt2ZjJBewoIEmeI9iHQr3K5y5vqVhCk
- 8Pz1O1dQHPMOi7D8oxxJQlqbQoCDKJ5U8i78P04MEVCAA3oHGTl1is0NAjpW+4LKjQdL
- D+wUDP4ICJPuJu1kL/aSun3I+BequutO/knAI8IcDIUHChaq5SUT0sjzNYNsbFPntF9Z
- NNIA==
-X-Gm-Message-State: AOAM532/1YRknIWlFCM1y+2mId4Ik1He1hgZvM9xwZrOK0W7Uk2vQVFa
- gWkhtvjD1eAUYjMd+USguokS8xRH0cE=
-X-Google-Smtp-Source: ABdhPJzCT7D4XSrXu8CAALyvzg4tjgiAWfC9lFlWvmcQM4eIDFJtTzeUV7bBzXIZE0Q9kTovduYCqg==
-X-Received: by 2002:a05:6000:2a5:: with SMTP id
- l5mr691096wry.279.1644873769658; 
- Mon, 14 Feb 2022 13:22:49 -0800 (PST)
+ bh=Cinh9BB31s+3wgWwLSFoONBPBddo7JFAHvfv/r3dBVs=;
+ b=qd15KvX40JUn/YAMPqORIZT0VlwlthERQBs9WdvOBOhf83O7nQ0msnIjnWwVhBZQp0
+ OWurc4kdyIZMoM34FXXJ8LeMapsqV8GoQwHbx0p90L2oIDyDll3Xl3nn4lZdpUb7LV80
+ S8qgUJIEwJuMJ1rw0vYT7TpIwYOH2yuFyuF6vME1ege4DKMoKwxg8ReA5jyxgVD2ukWY
+ E5fqnFqG+AjOho54X/VzeDXSYraHmlb5oHSuf2UL+xv6lkLGWFwCA2lYbabHIulM+KPW
+ Cs3eqr71zyorcCL3Ta7DKAF/eAczELg9NTvkvemp0aqOIEEzGICfBm9TBPxCnZ8KW7IP
+ RxSw==
+X-Gm-Message-State: AOAM531vp/ntmAXgcFQyLWrnGzg1HaJftY+xgKB+9XldJSkdkvn9Np/r
+ +29zP3BNcglgHfh/M12JMhFTeiaii+Y=
+X-Google-Smtp-Source: ABdhPJzi/P9+WN9Wu8aRoR3q2aBgPB5bymP9p37+qQ07m4Bh0ZotPpMrLkFGKIe+7rDvoFcf6SDS8w==
+X-Received: by 2002:a05:600c:4fcf:: with SMTP id
+ o15mr550180wmq.145.1644874326602; 
+ Mon, 14 Feb 2022 13:32:06 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id t16sm3772596wmq.43.2022.02.14.13.22.48
+ by smtp.gmail.com with ESMTPSA id n16sm1153966wrm.19.2022.02.14.13.32.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Feb 2022 13:22:49 -0800 (PST)
+ Mon, 14 Feb 2022 13:32:06 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Feb 2022 22:23:01 +0100
-Message-Id: <20220214212301.4142823-1-fontaine.fabrice@gmail.com>
+Date: Mon, 14 Feb 2022 22:32:26 +0100
+Message-Id: <20220214213226.4143188-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,1/1] package/ghostscript: disable tesseract
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5webkit: needs execinfo.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,51 +87,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ =?UTF-8?q?Ga=C3=ABl=20Portay?= <gael.portay@collabora.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ghostscript embeds a local copy of tesseract-ocr which is enabled by
-default since version 9.53.0 and
-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=7322ef87546c55b29056c1d96d8bdbb7f3ba53ef
+qt5webkit needs execinfo.h since bump to version 5.212.0-alpha4 in
+commit df0b0fe6919c0d0f3750f439a3cfa765232bd569:
 
-Since version 9.55.0 and
-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=5459f7aca1ded3b7cf96c339a2419f418aa406c7,
-ghostscript expects that tesseract is disabled if threads are not
-available resulting in the following build failure since commit
-7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22:
-
-configure: error: Threading disabled or not available. Tesseract OCR relies on threading. Rerun configure with "--without-tesseract" to exclude OCR from the build
-
-So disable tesseract as there is no way to tell ghostscript to use a
-system provided tesseract-ocr package
+/tmp/instance-1/output-1/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/inspector/JSGlobalObjectInspectorController.cpp:54:10: fatal error: execinfo.h: No such file or directory
+   54 | #include <execinfo.h>
+      |          ^~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/fd35a47b2a77cf57c243ec1c88802b53ddca8f52
+ - http://autobuild.buildroot.org/results/351529f7d928e28fa2db22c6297dc70d21db562b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Unconditionally disable tesseract
+ package/qt5/qt5webkit/Config.in    | 1 +
+ package/qt5/qt5webkit/qt5webkit.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
- package/ghostscript/ghostscript.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 24a0c489a8..b2e5fe16bb 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -44,6 +44,7 @@ GHOSTSCRIPT_CONF_OPTS = \
- 	--disable-gtk \
- 	--without-libpaper \
- 	--without-pdf \
-+	--without-tesseract \
- 	--with-system-libtiff
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 68b679dfcd..ed87efca95 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -21,6 +21,7 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	select BR2_PACKAGE_QT5LOCATION
+ 	select BR2_PACKAGE_QT5SENSORS
+ 	select BR2_PACKAGE_QT5WEBCHANNEL
++	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 565c57e813..2084f3af52 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -10,7 +10,8 @@ QT5WEBKIT_SOURCE = qtwebkit-$(QT5WEBKIT_VERSION).tar.xz
+ QT5WEBKIT_DEPENDENCIES = \
+ 	host-bison host-flex host-gperf host-python3 host-ruby gstreamer1 \
+ 	gst1-plugins-base icu leveldb jpeg libpng libxml2 libxslt qt5location \
+-	qt5sensors qt5webchannel sqlite webp woff2
++	qt5sensors qt5webchannel sqlite webp woff2 \
++	$(if $(BR2_PACKAGE_LIBEXECINFO),libexecinfo)
+ QT5WEBKIT_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_JBIG2DEC),y)
+ QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
 -- 
 2.34.1
 
