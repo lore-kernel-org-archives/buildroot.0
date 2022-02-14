@@ -4,74 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54607C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 20:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9827BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 20:41:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06F3A41504;
-	Mon, 14 Feb 2022 20:39:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46E3E41505;
+	Mon, 14 Feb 2022 20:41:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mfeUHNlrqGRP; Mon, 14 Feb 2022 20:39:21 +0000 (UTC)
+	with ESMTP id I_JZ6GVcIeSY; Mon, 14 Feb 2022 20:41:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46C30414E6;
-	Mon, 14 Feb 2022 20:39:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C400D1BF348
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 20:39:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85DB241503;
+	Mon, 14 Feb 2022 20:41:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E89141BF348
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 20:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1DFF414E6
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 20:39:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D721360A98
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 20:41:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k3nsBpFftpuJ for <buildroot@lists.busybox.net>;
- Mon, 14 Feb 2022 20:39:17 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2MCZf8coWcAk for <buildroot@lists.busybox.net>;
+ Mon, 14 Feb 2022 20:41:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B73574032C
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 20:39:17 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id i19so8862031wmq.5
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 12:39:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DAEDC60634
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 20:41:06 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id i14so28732987wrc.10
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 12:41:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=CuV2YsnThLSnb7TJtQMP5WgBwt119ZmrnCdNUYbdOIs=;
- b=aWfY/7rLhu8eytXilzsihut3/taU30QC0863hdRnwLi7J0LafVndG8yS19Cyp/jvpa
- GG3qkHXpUfdneUc2DGiIgmwiaEnsWAEwkwilSP0zF3pwRISxJ2u6hOxikLk50WKFirAT
- hh6BXLb8xPE5jYVIYXpee52kkRQgLzXzm0EgLAB75qjj4rMfr5EbtHnnjjAmucykVWc+
- dtbwYsNX7rpBeDDnEASeSIiaWICttJ+MdHBq7R0u/7S2QXlT27FIGTI3i5WFqW3aB6Gb
- g0ju0K/fINVdf7uLrk2RVRKNHwrfBoMj8B9FotnzIluceNvN5IVcNlAQXuLhUE0fM3Y8
- /qZQ==
+ bh=I9IPPaax/hADm8oFowPZJerT9IxaVHXx1LBBvsOcjIU=;
+ b=Mp6vEUVzqAtGqE6TykHjUOF27RMil2oYz7LkXKpkpkROVynLvODgt0bgAdCoqM83HX
+ iPQD8UO7pUq6ucLPKXfZeN7DYUzRDpYQYmNe45I6JJXzc+KelYV6nUWdeP2ov/auGG5N
+ 5bQusB2pATIF6cIvP7EHLfsmO56lvcJUM32kp7sVU+7d2Vzx+W/ecf3D+ZDV9jmR2OwD
+ SHg6gtxUjhuLMmOegWeeo2DKNfo2WmhF73qGEMOFQNhxsE5IwAN0DntXYPzWjzZVt/hg
+ TNDRPEkBpScI0O5Ja4xwx3yIyEBUovDlNKrj/rGXiJFwz0Rogpfuk2tioyOA74gBapey
+ b95g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=CuV2YsnThLSnb7TJtQMP5WgBwt119ZmrnCdNUYbdOIs=;
- b=sLLt5+EYex6F9cRpr2n23oKPmzpV5VHRDm5V/ZR1xIbw0IBXJbiqHoZQf0rD/9M1a3
- 7Gas16W8Jtb2kdoeVhhQ9li8LlOV98dSAKJ9JaDaQzok+/c0cWYB0w/Xci2wV6DC3gUU
- Ea2DtIh0oiLpJNi+NT4zDmuB4fbvnWkaki0BONCX8gEs5jiZmsUHGYJhCT7QO0FpiXnN
- 4rU9mSAKxAlfXPUK2gY/WxbCWfDnaftR1egEPCFuaw78fhuamT8bboPYVd3aLHEvzl67
- ByxZLt/xZ8mpct0QhBdU+sg7323uRnn3XF/PKKqqUmAf9FAo9wZ/CLAz/la7vYp5QoAH
- eloQ==
-X-Gm-Message-State: AOAM533dBgJLA8cx1Kas3LyVoxJhKzD25UNNq1xBNEtXGMlp70Je1QSz
- ondfoT6HREfoHIF9C8OfrUD530LSpRU=
-X-Google-Smtp-Source: ABdhPJwTRC+SI0Aw2K9mVmUFfssPX2gpvtTXoB5h4aGjxPQmu5JrVUecam0eLpH1UmMFfQjzEct7gA==
-X-Received: by 2002:a05:600c:1d22:: with SMTP id
- l34mr422189wms.174.1644871155827; 
- Mon, 14 Feb 2022 12:39:15 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:892f:28b2:cec5:360f])
- by smtp.gmail.com with ESMTPSA id u3sm15997677wmm.0.2022.02.14.12.39.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Feb 2022 12:39:15 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 14 Feb 2022 21:39:09 +0100
-Message-Id: <20220214203909.251924-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=I9IPPaax/hADm8oFowPZJerT9IxaVHXx1LBBvsOcjIU=;
+ b=mr2tHVnfyXFNqhaSP9NqB1C/WGHTyer6J4n76p3+m3SY5eKeq1Wyl5ghm+TuCOSD2i
+ Dk56KfYpbZZew48fQGfbUNKsj0zFqaZJhJFnXHtq0aLnzWf6uuIAlSQbpbB3cz7JfpA+
+ F7SkQicCZCTxZL/YN9R4Bgz6+kF/AFaEnI1z3ONFpfpa1RuZnBcJkMc62AfzUsgn8iGA
+ buVBlVEuenTRCH2KOly5JPdTV3dQitmaUekrfV3OAyRbfAoIH3M23me6kZ6sFY2tErLM
+ JwX/j/s/i/F81e/eO0n6JDj45szYK2f3Begy78ZJ3fEmukYKg9vHko1k4EenNzUspMhY
+ mSYw==
+X-Gm-Message-State: AOAM530dyM9uVMys0HNnmTFM/77s/+IgBGzjO/yK1nCptMlo55K4OQMK
+ fDTF4Cil1yqPizFtTFpl/X6D3Q==
+X-Google-Smtp-Source: ABdhPJyBbaeLpN1e5mxhVE6A99iCXiiwmAhW+sToGj4zbCSfJoZBDiKlCHOPr6KTC9TzNWqle/nioQ==
+X-Received: by 2002:adf:9ccc:: with SMTP id h12mr543958wre.689.1644871264953; 
+ Mon, 14 Feb 2022 12:41:04 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id az21sm12770847wmb.11.2022.02.14.12.41.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 14 Feb 2022 12:41:04 -0800 (PST)
+Message-ID: <31b52468-98ef-bfa7-c59e-12130d4ecdf9@mind.be>
+Date: Mon, 14 Feb 2022 21:41:03 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] utils/docker-run: improve user experience
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220208210644.16926-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220208210644.16926-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libuhttpd: depends on gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,77 +93,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Jianhui Zhao <zhaojh329@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, the docker-run script starts a container based on the
-reference image, in which the user has UID:GID set to 1000:1000,
-which may or may not be the same as local user uses, which may
-prevent the commands in the container from creating files, which
-foils the plan of using the container to run a build...
 
-Additionally, the paths in the container differ from the paths
-the user expects, as the current Buildroot tree is mounted over
-the in-container user home directory. This is a bit confusing...
 
-Finally, the container is left hanging around after the command
-finishes, and thus there are as many lingering containers as the
-user runs docker-run. This is not very nice...
+On 08/02/2022 22:06, Fabrice Fontaine wrote:
+> Add a dependency on gcc >= 4.9 to avoid the following build failure
+> with gcc 4.8.3 raised since bump to version 3.14.1 in commit
+> 61797c52f5deef2cb67e60cf075ca243078c8855 and
+> https://github.com/zhaojh329/libuhttpd/commit/ffdf7de3a4a1f5a62aa3814ac96e889958a30840:
+> 
+> /home/peko/autobuild/instance-1/output-1/build/libuhttpd-3.14.1/src/cgi.c:41:5: error: initializer element is not a constant expression [-Werror]
+>       {"accept", strlen("accept"), "HTTP_ACCEPT"},
+>       ^
+> 
+> It should be noted that upstream rejected a patch to remove -Werror:
+> https://github.com/zhaojh329/libuhttpd/pull/12
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/a3a970a6398dcb0e4e03f4277f1a50c6b5eff7bd
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-We fix all of that (yeah, should be different patches, but meh):
+  Applied to master, thanks.
 
-  - we use --mount instead of -v, which allows us to bind-mount
-    the Buildroot tree at the same place in the container, as
-    Docker will create the destination if it does not exist, while
-    -v seems to expect it to exist [0].
+  Regards,
+  Arnout
 
-  - as a consequence, we can also set the working directory as the
-    Buildroot top-directory;
-
-  - use --user to force the same UID:GID in the container as the
-    local user, so that files created in the container belong to
-    the local user, and so that files from the local user are
-    accessible from the container;
-
-  - use --rm do remove the container once it terminates; starting
-    a new container is very quick anyway, so it is as good as
-    re-using a previous container.
-
-[0] the documentation is not clear about that. It clearly states
-that the host directory (i.e. the origin, the source) is created
-if missing, but it says nothing of the destination:
-    https://docs.docker.com/engine/reference/commandline/run/#mount-volume--v---read-only
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- utils/docker-run | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/utils/docker-run b/utils/docker-run
-index 2bca8d8e3a..bdbc979264 100755
---- a/utils/docker-run
-+++ b/utils/docker-run
-@@ -7,4 +7,8 @@ IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
-         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
- 
- set -x
--exec docker run -v "${MAIN_DIR}:/home/br-user" -it "${IMAGE}" "$@"
-+exec docker run -it --rm \
-+    --user $(id -u):$(id -g) \
-+    --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}" \
-+    --workdir "${MAIN_DIR}" \
-+    "${IMAGE}" "${@}"
--- 
-2.25.1
-
+> ---
+>   package/libuhttpd/Config.in | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
+> index 52bbd313bc..97fc984ea0 100644
+> --- a/package/libuhttpd/Config.in
+> +++ b/package/libuhttpd/Config.in
+> @@ -1,6 +1,7 @@
+>   config BR2_PACKAGE_LIBUHTTPD
+>   	bool "libuhttpd"
+>   	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>   	select BR2_PACKAGE_LIBEV
+>   	select BR2_PACKAGE_WOLFSSL_ALL if BR2_PACKAGE_WOLFSSL
+>   	help
+> @@ -8,3 +9,7 @@ config BR2_PACKAGE_LIBUHTTPD
+>   	  library based on libev
+>   
+>   	  https://github.com/zhaojh329/libuhttpd
+> +
+> +comment "libuhttpd needs a toolchain w/ gcc >= 4.9"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
