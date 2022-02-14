@@ -1,65 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CAA0C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F3ECC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F965415AE;
-	Wed,  9 Mar 2022 13:28:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 112A560B5B;
+	Wed,  9 Mar 2022 13:30:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uSEFUYh18Mgn; Wed,  9 Mar 2022 13:28:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 86_fxZ_mstbi; Wed,  9 Mar 2022 13:30:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5879E411C6;
-	Wed,  9 Mar 2022 13:28:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C05581BF869
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:28:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2164260F97;
+	Wed,  9 Mar 2022 13:30:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E0E31BF869
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF9C2411C6
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:28:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8862A84145
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tznPuBwDJCrI for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 13:28:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
- [149.117.87.133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27E7940323
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:28:50 +0000 (UTC)
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com
- [10.225.0.210])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
- by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 765B3C193D;
- Wed,  9 Mar 2022 13:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
- t=1646832529; bh=fBkhnNTdJJI1EiNd9fjKjPq9GdWCB0xBgkXxJXIb5p0=;
- h=From:To:Cc:Subject:Date:From;
- b=Nevmx4+UXIB7kEO4sB3nXKuZOItXvHyLzfRjwO5kV6AtDtzmMQKy/COfCpQh6EwI4
- w8sRL8ph8PyyaSWEGHlAWiC5HcMEgT/9KdlZOxGzILLAOe0M2roDHfaBJR6faHvFVa
- sg9x8Xg38xYACScAAMbVmRIRkZmAAH2kupjiCbntz6/sjGk+2COscNetms8MhD6Syg
- p6AhM3NdjcN6Q85VwACsAiyu/YcunnYpm6ahooBAYAoavncJUWtp8K14cbk30S5hjQ
- R1UpSYxbrwM1HdcLRYleWsibBhCWZ0kWSWhVF9XFrVM+ZptV/y+i0znSMfZd3nsfAH
- zdM2KqaxMrkPg==
-Received: from abrodkin-5550.internal.synopsys.com
- (abrodkin-e7480.internal.synopsys.com [10.121.15.41])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client did not present a certificate)
- by mailhost.synopsys.com (Postfix) with ESMTPSA id CF5FDA005E;
- Wed,  9 Mar 2022 13:28:45 +0000 (UTC)
-X-SNPS-Relay: synopsys.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kVB0ykfDdKSA for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 13:30:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 96DA383FF1
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:30:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 0ADB883916; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed,  9 Mar 2022 16:28:35 +0300
-Message-Id: <20220309132835.7251-1-abrodkin@synopsys.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] qt5: enable JS and WebKit for ARC
+Date: Mon, 14 Feb 2022 22:01:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f7f8f381394207bfb029ec395f5ced5695a0a2e
+X-Git-Newrev: 948050c0f9096953555ed7f84835c5297a415a6d
+X-Patchwork-Hint: ignore
+Message-Id: <20220309132156.0ADB883916@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxkbcommon: bump version to 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,180 +52,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds support of ARC architecture in Qt's JS core and Webkit.
-The change itself is quite straight-forward:
+commit: https://git.buildroot.net/buildroot/commit/?id=948050c0f9096953555ed7f84835c5297a415a6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- 1. Enable JS core for ARC
- 2. Make sure so-called "large memory model" is used,
-    i.e. relocations with long jumps are being generated for global
-    symbols, as otherwise insanely huge libqt5webkit.so fails to link
-    because some symbols might be more than 32 MiB away from each other.
- 3. Make the original WebKit build system aware of yet another CPU
-    architecture with explicitly disabled JIT in JS core for ARC.
+- bump version to 1.4.0
 
-Obviously, this one depends on [1].
+- add new option to select some tools for the target (xkbcli,
+  xkbcli-compile-keymap, xkbcli-how-to-type, xkbcli-interactive-evdev,
+  xkbcli-interactive-x11, xkbcli-interactive-wayland
 
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20220221140628.2295-1-abrodkin@synopsys.com/
+For details see [1].
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2022-February/042104.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qt5/Config.in                         |  2 +-
- package/qt5/qt5base/qt5base.mk                | 13 +++
- .../0005-Add-support-for-ARC-processors.patch | 93 +++++++++++++++++++
- 3 files changed, 107 insertions(+), 1 deletion(-)
- create mode 100644 package/qt5/qt5webkit/0005-Add-support-for-ARC-processors.patch
+ package/libxkbcommon/Config.in         | 11 +++++++++++
+ package/libxkbcommon/libxkbcommon.hash |  4 ++--
+ package/libxkbcommon/libxkbcommon.mk   |  8 +++++++-
+ 3 files changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index f2b1ff4a19..cbb2e06a21 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	bool
- 	default y
- 	# Javascript engine is only available on certain architectures
--	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_mipsel
-+	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_mipsel || BR2_arc
- 	# ARM needs BLX, so v5t+
- 	depends on !BR2_ARM_CPU_ARMV4
+diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+index 4e73a24abb..e9f61227a0 100644
+--- a/package/libxkbcommon/Config.in
++++ b/package/libxkbcommon/Config.in
+@@ -7,3 +7,14 @@ config BR2_PACKAGE_LIBXKBCOMMON
+ 	  specification.
  
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ef38d03253..b25e0f44b6 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -201,6 +201,19 @@ endif
- QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
- QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
+ 	  https://xkbcommon.org
++
++if BR2_PACKAGE_LIBXKBCOMMON
++
++config BR2_PACKAGE_LIBXKBCOMMON_TOOLS
++	bool "tools"
++	help
++	  Tools: xkbcli, xkbcli-compile-keymap, xkbcli-how-to-type,
++	  xkbcli-interactive-evdev, xkbcli-interactive-x11,
++	  xkbcli-interactive-wayland
++
++endif
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index c00fffe706..fff2b7a943 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-September/041976.html
+-sha256  b3c710d27a2630054e1e1399c85b7f330ef03359b460f0c1b3b587fd01fe9234  libxkbcommon-1.3.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2022-February/042104.html
++sha256  106cec5263f9100a7e79b5f7220f889bc78e7d7ffc55d2b6fdb1efefb8024031  libxkbcommon-1.4.0.tar.xz
  
-+ifeq ($(BR2_arc),y)
-+# In case of -Os (which is default in BR) gcc will use millicode implementation
-+# from libgcc. That along with performance degradation may lead to issues during
-+# linkage stage. In case of QtWebkit exactly that happens - millicode functions
-+# get put way too far from caller functions and so linker fails.
-+# To solve that problem we explicitly disable millicode call generation for Qt.
-+# Also due to some Qt5 libs being really huge (the best example is QtWebKit)
-+# it's good to firce compiler to not assume short or even medium-length calls
-+# could be used. I.e. always use long jump instaructions.
-+# Otherwise there's a high risk of hitting link-time failures.
-+QT5BASE_CFLAGS += -mno-millicode -mlong-calls
+ # License file:
+ sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index ee2bc1ee99..f2c49cc700 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 1.3.1
++LIBXKBCOMMON_VERSION = 1.4.0
+ LIBXKBCOMMON_SITE = https://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
+@@ -23,4 +23,10 @@ else
+ LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_TOOLS),y)
++LIBXKBCOMMON_CONF_OPTS += -Denable-tools=true
++else
++LIBXKBCOMMON_CONF_OPTS += -Denable-tools=false
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
- QT5BASE_CONFIGURE_OPTS += -eglfs
- QT5BASE_DEPENDENCIES   += libegl
-diff --git a/package/qt5/qt5webkit/0005-Add-support-for-ARC-processors.patch b/package/qt5/qt5webkit/0005-Add-support-for-ARC-processors.patch
-new file mode 100644
-index 0000000000..92f023eab6
---- /dev/null
-+++ b/package/qt5/qt5webkit/0005-Add-support-for-ARC-processors.patch
-@@ -0,0 +1,93 @@
-+From 8da574cf8f30f69e47f76705aa2eb07000540aeb Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Mon, 21 Feb 2022 18:28:00 +0300
-+Subject: [PATCH] Add support for ARC processors
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ CMakeLists.txt                       | 4 +++-
-+ Source/JavaScriptCore/CMakeLists.txt | 3 ++-
-+ Source/WTF/wtf/Platform.h            | 8 ++++++++
-+ Source/WTF/wtf/dtoa/utils.h          | 2 +-
-+ Source/cmake/OptionsQt.cmake         | 4 ++++
-+ 5 files changed, 18 insertions(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 31a2ea1fd..f0dfbda5b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -57,7 +57,9 @@ if (MSVC_CXX_ARCHITECTURE_ID)
-+ else ()
-+     string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} LOWERCASE_CMAKE_SYSTEM_PROCESSOR)
-+ endif ()
-+-if (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
-++if (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^arc")
-++    set(WTF_CPU_ARC 1)
-++elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
-+     set(WTF_CPU_ARM 1)
-+ elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^aarch64")
-+     set(WTF_CPU_ARM64 1)
-+diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
-+index 937b3ed00..205dde288 100644
-+--- a/Source/JavaScriptCore/CMakeLists.txt
-++++ b/Source/JavaScriptCore/CMakeLists.txt
-+@@ -1275,7 +1275,8 @@ if (ENABLE_WEB_REPLAY)
-+     list(APPEND JavaScriptCore_HEADERS ${DERIVED_SOURCES_JAVASCRIPTCORE_DIR}/JSReplayInputs.h)
-+ endif ()
-+ 
-+-if (WTF_CPU_ARM)
-++if (WTF_CPU_ARC)
-++elseif (WTF_CPU_ARM)
-+ elseif (WTF_CPU_ARM64)
-+ elseif (WTF_CPU_ALPHA)
-+ elseif (WTF_CPU_HPPA)
-+diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
-+index 5717f3ea1..b327ed693 100644
-+--- a/Source/WTF/wtf/Platform.h
-++++ b/Source/WTF/wtf/Platform.h
-+@@ -349,6 +349,14 @@
-+ 
-+ #endif /* ARM */
-+ 
-++/* CPU(ARC) - ARC */
-++#if defined(__arc__)
-++#define WTF_CPU_ARC 1
-++#if defined(__BIG_ENDIAN__)
-++#define WTF_CPU_BIG_ENDIAN 1
-++#endif
-++#endif
-++
-+ #if CPU(ARM) || CPU(MIPS) || CPU(SH4) || CPU(ALPHA) || CPU(HPPA)
-+ #define WTF_CPU_NEEDS_ALIGNED_ACCESS 1
-+ #endif
-+diff --git a/Source/WTF/wtf/dtoa/utils.h b/Source/WTF/wtf/dtoa/utils.h
-+index 889642cee..8f1e9933e 100644
-+--- a/Source/WTF/wtf/dtoa/utils.h
-++++ b/Source/WTF/wtf/dtoa/utils.h
-+@@ -49,7 +49,7 @@
-+ defined(__ARMEL__) || \
-+ defined(_MIPS_ARCH_MIPS32R2)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+-#elif CPU(MIPS) || CPU(MIPS64) || CPU(PPC) || CPU(PPC64) || CPU(PPC64LE) || CPU(SH4) || CPU(S390) || CPU(S390X) || CPU(IA64) || CPU(ALPHA) || CPU(ARM64) || CPU(HPPA)
-++#elif CPU(MIPS) || CPU(MIPS64) || CPU(PPC) || CPU(PPC64) || CPU(PPC64LE) || CPU(SH4) || CPU(S390) || CPU(S390X) || CPU(IA64) || CPU(ALPHA) || CPU(ARM64) || CPU(HPPA) || CPU(ARC)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+ #elif defined(_M_IX86) || defined(__i386__)
-+ #if defined(_WIN32)
-+diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
-+index ec6081de0..e1a5efc1e 100644
-+--- a/Source/cmake/OptionsQt.cmake
-++++ b/Source/cmake/OptionsQt.cmake
-+@@ -365,6 +365,10 @@ if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-+     WEBKIT_OPTION_DEFAULT_PORT_VALUE(ENABLE_JIT PRIVATE OFF)
-+ endif ()
-+ 
-++if (WTF_CPU_ARC)
-++    WEBKIT_OPTION_DEFAULT_PORT_VALUE(ENABLE_JIT PRIVATE OFF)
-++endif ()
-++
-+ WEBKIT_OPTION_CONFLICT(USE_GSTREAMER USE_QT_MULTIMEDIA)
-+ WEBKIT_OPTION_CONFLICT(USE_GSTREAMER USE_MEDIA_FOUNDATION)
-+ WEBKIT_OPTION_CONFLICT(USE_QT_MULTIMEDIA USE_MEDIA_FOUNDATION)
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
