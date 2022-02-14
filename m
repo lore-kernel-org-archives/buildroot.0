@@ -4,80 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 742AEC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 19:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F5BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 20:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CC9E40573;
-	Mon, 14 Feb 2022 19:39:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F38640239;
+	Mon, 14 Feb 2022 20:01:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9UkDU5K35Yx3; Mon, 14 Feb 2022 19:39:44 +0000 (UTC)
+	with ESMTP id pWAapBdXWvhN; Mon, 14 Feb 2022 20:01:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEE7F404FA;
-	Mon, 14 Feb 2022 19:39:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC8801BF316
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 19:39:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9A554031E;
+	Mon, 14 Feb 2022 20:01:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 123C21BF316
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 20:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B90B360D51
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 19:39:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00CA681D18
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 20:01:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id een0-szyHyu4 for <buildroot@lists.busybox.net>;
- Mon, 14 Feb 2022 19:39:29 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yRt3n6U73LjJ for <buildroot@lists.busybox.net>;
+ Mon, 14 Feb 2022 20:01:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 68CF160B30
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 19:39:29 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- y6-20020a7bc186000000b0037bdc5a531eso447546wmi.0
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 11:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=pTNsM2p37SRi22oqlXNyt38aI9rUia0dxUzc8eyLXuo=;
- b=Sa8f+cuEjfQr6TFCTbgRB1fTUU9iBy6pnDTTgM0kPJxtxAZeLADVyFVj+eRdtvP9EI
- eZgyzUwHm+ppQ9civJcy3hd+ZeD6qzE1sQWv5/JqpnAa8vVRebQ9fFvSIyu7Oso6r7uK
- 9NG1SUrtrnnfqxcb3mTRt9+MRCZFmVVkQQ/blatjwdF/fGYU/nVwDhgAbU8ZoZ/iiYso
- h9JVv6uf25M/vBo6pnXQDZ1KNCsAPKceaLVKhHgI4QELM1THAXZKuhqWsmC1ggzbIiT4
- eTRV6GMVpy3Zh4eM9tf3+h3xCE/XQnnnKdtUR2Pna3WtSaTTPgDUDBTpzPIgPlc0BGj6
- YNsA==
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D348C81C56
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 20:01:05 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ bg19-20020a05600c3c9300b0034565e837b6so208966wmb.1
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 12:01:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=xJugc220ezZiIsLtEuO4mIX5sOCBzKSQ4d6CRZMUToI=;
+ b=Zu5STH8fumrMGlZrOr2WAPZJsP1N5S+VLbgF3jlGtjUSJg5GHz0DJQWUklNQT31PV+
+ 8zkxj0lXTh0nNlXKBJcQr3jMs+5L/de6KxFUo2svVFRB0vD/KdUNXM7TU82gMapCZa9H
+ Ph00bBC6+G5ZjENzdpJoOAz2YryyRQcsOEUR7v1mf+yDtiDYcuSNKMkmcnsOc6+K7qih
+ Cw2KmOHFokGNM4baGkQt5bU3NO7pWFMnkkKaRwK1dLBokX99+hz70U6yThKo+erdzMBq
+ ZNw2mHioUkpE77YMoYjzBW6Co8V8PfUd9QceLh5LDbiRz8S2afTtoIqRtzrdEZhV4hSC
+ 86uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=pTNsM2p37SRi22oqlXNyt38aI9rUia0dxUzc8eyLXuo=;
- b=PQ/MgxNvWQs/Yb4jUlkZOi3/6P7U+3g1Wt8pztBYNMQYpqqU7pHzvQm/G/bJeINrWw
- dATh9KlI03kghp7j18bKNXAYwH8nrysxsCcv1m3KMQEUHpSimuyTRzTemBRA5J88g5Xt
- LbhSqqUcjlMgdpgWLselrho+qLOQjv4nkItp38cfIn07H0js0Gd3jDPu1Y252es0sTl+
- Ti8CwphpB5llbXzQxL82HY6KAQPoul4Cbtv3Uaj2/wjPF1qaKZBfONHjCNqKx8BebA/D
- gLe97Gj5mShzWNXCHpKvtWsdZlTE0AY2Qu5+vUApYoYEmldm3F8unQfy1R1qfDd3NVP7
- +Nog==
-X-Gm-Message-State: AOAM531eUNUp1K1tqU55AehSCKrsqL/IkHQaNlcdnyfT/kXPOJVrJioU
- T7gQWsjdXbqrZBCqBraEqSrMxBXSJQs=
-X-Google-Smtp-Source: ABdhPJzj8DcWxqAw8IwWaKHjeNtCPaoWAhVE/oxwzUf3WRCUCMQUUiBl/5AIxUP4bbwhxl8fcTjpkQ==
-X-Received: by 2002:a05:600c:220b:b0:37b:ec02:32c4 with SMTP id
- z11-20020a05600c220b00b0037bec0232c4mr226500wml.11.1644867567237; 
- Mon, 14 Feb 2022 11:39:27 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id p15sm15407352wma.27.2022.02.14.11.39.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Feb 2022 11:39:26 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 14 Feb 2022 20:39:40 +0100
-Message-Id: <20220214193940.3615904-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214193940.3615904-1-fontaine.fabrice@gmail.com>
-References: <20220214193940.3615904-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=xJugc220ezZiIsLtEuO4mIX5sOCBzKSQ4d6CRZMUToI=;
+ b=XZvnJMJWzMVkH3quEthPM+CndWsoBHrMnzsyGNt3Dwqt4Y702MitNrf1Opn95mPe8U
+ GLCSwZ2kvY66F7ktlf1DStb5IHxoJdEK1xBVneKcA/sJfZEy/6lak6VIIexAOPmYvlC9
+ C5sKteYY2E6gkYqcA39LdN2l8fmh0fnrC5XYLhX0xZZPFj5s0d4u9ZbvspDuN2Aytg82
+ z6BLX5WWCpdJO+S2HzI3zaPim58GB55KS+MgLWsLFmtEjbpLAIXU8zwAWkoMkgJ5en1G
+ N8bg8yWDDpPo7OVI6aPoLQqRaXXZV18PzPIA/WLYVInvtzRC1hmJb8FsAUIaq+WqSbEC
+ RQfA==
+X-Gm-Message-State: AOAM530TWt1KQBKc1+4Ywe3NLueDZQS3Ce9CCYyNjkOP0Ws60ol/tPW3
+ 7FI42RNaVyiFCKReLZVx2lKo7Q==
+X-Google-Smtp-Source: ABdhPJyybbaY8wCGxoNm+Qc+G0G5dsm/Drz4T61VRzJXVVIPTOzU3wMHWnmD10O2zT2CMTKZ9wtPsQ==
+X-Received: by 2002:a7b:cc8f:0:b0:37b:dcdf:cf40 with SMTP id
+ p15-20020a7bcc8f000000b0037bdcdfcf40mr228628wma.99.1644868863922; 
+ Mon, 14 Feb 2022 12:01:03 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id o14sm12739560wms.4.2022.02.14.12.01.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 14 Feb 2022 12:01:03 -0800 (PST)
+Message-ID: <e3fedbe7-4727-77cf-3c1a-f35e84ab2551@mind.be>
+Date: Mon, 14 Feb 2022 21:01:02 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/weston: drop fbdev
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220206195106.2520033-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220206195106.2520033-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/guile: fix build with glibc 2.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,110 +95,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Pedro Aguilar <paguilar@paguilar.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-fbdev raises the following build failure since bump to version 10.0.0 in
-commit f67a6e9b7a7be9adbc405b3126000056120a01af and
-https://gitlab.freedesktop.org/wayland/weston/-/commit/6338dbd5816689b2f08f48b359a972e16ff038d8:
 
-../output-1/build/weston-10.0.0/meson.build:133:7: ERROR: Tried to access unknown option 'backend-fbdev'.
 
-Drop fbdev to avoid this build failure as upstream is reluctant to
-properly fix this issue by renaming the fbdev option in stable release:
-https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/791
+On 06/02/2022 20:51, Fabrice Fontaine wrote:
+> Fix the following build failure with glibc 2.34 raised since bump to
+> version 3.0.7 in commit d8bee3950aa851620d6a954aebad1f984caa105a:
+> 
+> In file included from regexec.c:1368,
+>                   from regex.c:74:
+> ./malloc/dynarray-skeleton.c:195:24: error: expected declaration specifiers or '...' before '(' token
+>    195 | __attribute_nonnull__ ((1))
+>        |                        ^
+> 
+> https://lists.gnu.org/archive/html/bug-guile/2021-08/msg00003.html
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/27a2a69e1177f15daec65eca035b99ea5355c34b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/e669a6237c19783c627169c819d7372e20daaf54
+  Applied to master, thanks. Pity about the huge patch, but it is what it is.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy         | 12 ++++++++++++
- package/weston/Config.in |  8 --------
- package/weston/weston.mk |  6 ------
- 3 files changed, 12 insertions(+), 14 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index aefb0ba6ea..b90b9dbcbc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,18 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_WESTON_DEFAULT_FBDEV
-+	bool "weston fbdev removed"
-+	select BR2_LEGACY
-+	help
-+	  fbdev was deprecated in weston 10.0.0.
-+
-+config BR2_PACKAGE_WESTON_FBDEV
-+	bool "weston fbdev compositor removed"
-+	select BR2_LEGACY
-+	help
-+	  fbdev compositor was deprecated in weston 10.0.0.
-+
- config BR2_PACKAGE_LINUX_TOOLS_BPFTOOL
- 	bool "bpftool was moved"
- 	select BR2_LEGACY
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 073a3ae567..6ad8241caa 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -34,10 +34,6 @@ if BR2_PACKAGE_WESTON
- choice
- 	prompt "default compositor"
- 
--config BR2_PACKAGE_WESTON_DEFAULT_FBDEV
--	bool "fbdev (deprecated)"
--	select BR2_PACKAGE_WESTON_FBDEV
--
- config BR2_PACKAGE_WESTON_DEFAULT_DRM
- 	bool "drm"
- 	select BR2_PACKAGE_WESTON_DRM
-@@ -62,7 +58,6 @@ endchoice
- 
- config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
- 	string
--	default "fbdev"    if BR2_PACKAGE_WESTON_DEFAULT_FBDEV
- 	default "drm"      if BR2_PACKAGE_WESTON_DEFAULT_DRM
- 	default "headless" if BR2_PACKAGE_WESTON_DEFAULT_HEADLESS
- 	default "wayland"  if BR2_PACKAGE_WESTON_DEFAULT_WAYLAND
-@@ -71,9 +66,6 @@ config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
- config BR2_PACKAGE_WESTON_DRM
- 	bool "DRM compositor"
- 
--config BR2_PACKAGE_WESTON_FBDEV
--	bool "fbdev compositor (deprecated)"
--
- # FreeRDP needs threads and !static, already the case for weston
- config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index a0a18d9358..90cf160688 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -85,12 +85,6 @@ else
- WESTON_CONF_OPTS += -Dbackend-rdp=false
- endif
- 
--ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
--WESTON_CONF_OPTS += -Ddeprecated-backend-fbdev=true
--else
--WESTON_CONF_OPTS += -Ddeprecated-backend-fbdev=false
--endif
--
- ifeq ($(BR2_PACKAGE_WESTON_DRM),y)
- WESTON_CONF_OPTS += -Dbackend-drm=true
- else
--- 
-2.34.1
-
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
