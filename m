@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE999C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 21:18:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83874C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 21:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92B2E401B2;
-	Mon, 14 Feb 2022 21:18:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 322BA400D9;
+	Mon, 14 Feb 2022 21:18:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CnzRX6v17Dr2; Mon, 14 Feb 2022 21:18:28 +0000 (UTC)
+	with ESMTP id Eu1fLqa40ZrL; Mon, 14 Feb 2022 21:18:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FBAF400D9;
-	Mon, 14 Feb 2022 21:18:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9A63E1BF275
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:17:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72A6E40529;
+	Mon, 14 Feb 2022 21:18:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 408A01BF275
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:17:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88593400D9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2DE3D81496
  for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:17:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2JUII4QGZ0CF for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZNBT05bAQNnu for <buildroot@lists.busybox.net>;
  Mon, 14 Feb 2022 21:17:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66E14400B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D7D181992
  for <buildroot@buildroot.org>; Mon, 14 Feb 2022 21:17:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2A18A82A50; Mon, 14 Feb 2022 21:10:17 +0000 (UTC)
+ id 204BA82BDC; Mon, 14 Feb 2022 21:10:17 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 14 Feb 2022 22:02:03 +0100
+Date: Mon, 14 Feb 2022 22:02:00 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0fc614345f1b8389df46b8f2d64cb3ae5a209b6d
-X-Git-Newrev: 91cc129d72cf972c906829b1085c96797e41efd0
+X-Git-Oldrev: 948050c0f9096953555ed7f84835c5297a415a6d
+X-Git-Newrev: 0fc614345f1b8389df46b8f2d64cb3ae5a209b6d
 X-Patchwork-Hint: ignore
-Message-Id: <20220214211017.2A18A82A50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rng-tools: bump to
- version 6.15
+Message-Id: <20220214211017.204BA82BDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/poke: bump to version
+ 2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,148 +59,149 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91cc129d72cf972c906829b1085c96797e41efd0
+commit: https://git.buildroot.net/buildroot/commit/?id=0fc614345f1b8389df46b8f2d64cb3ae5a209b6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patches (already in version)
+Tested locally with poke testsuite on aarch64 with Qemu:
 
-https://github.com/nhorman/rng-tools/releases/tag/v6.15
+         === poke Summary ===
+ # of expected passes		6320
+ # of unsupported tests		7
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Build tested with test-pkg:
+https://gitlab.com/kubu93/buildroot/-/pipelines/466516470
+
+See:
+http://www.jemarch.net/poke-2.0-relnotes.html
+http://www.jemarch.net/poke-2.1-relnotes.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-detect-non-posix-extensions-for-pthreads.patch | 43 -------------------
- ...se-of-either-pthread-affinity-set-methods.patch | 49 ----------------------
- package/rng-tools/rng-tools.hash                   |  2 +-
- package/rng-tools/rng-tools.mk                     |  2 +-
- 4 files changed, 2 insertions(+), 94 deletions(-)
+ ...c-HELP2MAN-replace-by-true-when-cross-com.patch |  6 ++---
+ ...-getrandom.c-fix-build-with-uclibc-1.0.35.patch | 28 +++++++++++-----------
+ package/poke/poke.hash                             |  2 +-
+ package/poke/poke.mk                               |  2 +-
+ 4 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch b/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
-deleted file mode 100644
-index ba6cf63d7c..0000000000
---- a/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From d1840e54a15fc454936cada10cce7fd91d06232b Mon Sep 17 00:00:00 2001
--From: Neil Horman <nhorman@gmail.com>
--Date: Thu, 15 Jul 2021 08:43:01 -0400
--Subject: [PATCH] Adding ability to detect non-posix extensions for pthreads
--
--Theres a desire to build rngd with musl, which doesn't have all the gnu
--extensions (but it has some).  So test for those.  Note, this requires
--the addition of the USE_EXTENSIONS macro to enable -d_GNU_SOURCE
--
--Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
--
--[Retrieved from:
--https://github.com/nhorman/rng-tools/commit/d1840e54a15fc454936cada10cce7fd91d06232b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 7 +++++++
-- 1 file changed, 7 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index 0fe06fc..de7dca3 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -25,6 +25,7 @@ AC_CANONICAL_TARGET dnl required for broken AX_PTHREAD
-- AM_INIT_AUTOMAKE([foreign])
-- AC_CONFIG_HEADERS([rng-tools-config.h])
-- AC_CONFIG_MACRO_DIRS([m4])
--+AC_USE_SYSTEM_EXTENSIONS
-- 
-- dnl Parse options
-- 
--@@ -100,6 +101,12 @@ AS_IF(
-- 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
-- )
-- 
--+AC_CHECK_DECL(pthread_attr_setaffinity_np,
--+		[AC_DEFINE([HAVE_PTHREAD_ATTR_SETAFFINITY], 1,[Set ATTR_SETAFFINITY])],
--+		[ AC_CHECK_DECL(pthread_setaffinity_np,
--+		   [AC_DEFINE([HAVE_PTHREAD_SETAFFINITY],1, [Set PTHREAD_SETAFFINITY])], [ AC_MSG_ERROR([Neither pthread_setaffinity_np nor pthread_attr_setaffinity_np found])],[[#include <pthread.h>]])
--+		], [[#include <pthread.h>]])
--+
-- AS_IF(
-- 	[ test "x$with_nistbeacon" != "xno"],
-- 	[
-diff --git a/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch b/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
-deleted file mode 100644
-index 17285baa6a..0000000000
---- a/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 5caa086dc14cecf68d1a5c31e87ba1efb2c00893 Mon Sep 17 00:00:00 2001
--From: Neil Horman <nhorman@gmail.com>
--Date: Thu, 15 Jul 2021 08:48:10 -0400
--Subject: [PATCH] Allow for use of either pthread affinity set methods
--
--musl has support for pthread_setaffinity_np, but not
--pthread_attr_setaffinity_np.  so check for hte existence of either
--function in configure, and use the appropriate one.
--
--Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
--
--[Retrieved from:
--https://github.com/nhorman/rng-tools/commit/5caa086dc14cecf68d1a5c31e87ba1efb2c00893]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- rngd_jitter.c | 15 ++++++++++++++-
-- 1 file changed, 14 insertions(+), 1 deletion(-)
--
--diff --git a/rngd_jitter.c b/rngd_jitter.c
--index ea29436..5c7e09e 100644
----- a/rngd_jitter.c
--+++ b/rngd_jitter.c
--@@ -67,12 +67,25 @@ static int rngd_notime_start(void *ctx,
-- 	for(i=i-1;i>=0;i--) {
-- 		CPU_SET(i,cpus);
-- 	}
---	pthread_attr_setaffinity_np(&thread_ctx->notime_pthread_attr, cpusize, cpus);
-- 
--+        /*
--+	 * Note that only one of:
--+	 * HAVE_PTHREAD_ATTR_SETAFFINITY
--+	 * and
--+	 * HAVE_PTHREAD_SETAFFINITY
--+	 * Will ever be set, as per the configure.ac logic
--+	 */
--+#ifdef HAVE_PTHREAD_ATTR_SETAFFINITY
--+	pthread_attr_setaffinity_np(&thread_ctx->notime_pthread_attr, cpusize, cpus);
--+#endif
-- 	ret = -pthread_create(&thread_ctx->notime_thread_id,
-- 				&thread_ctx->notime_pthread_attr,
-- 				start_routine, arg);
-- 
--+#ifdef HAVE_PTHREAD_SETAFFINITY
--+	pthread_setaffinity_np(&thread_ctx->notime_thread_id, cpusize, cpus);
--+#endif
--+
-- 	CPU_FREE(cpus);
-- 	return ret;
-- }
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index 6806a99fc6..be2ee13969 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4dd86f6ae37d917a8489f44070d39d7feddcc622429b95efd7aa85a1f3cfdf81  rng-tools-6.14.tar.gz
-+sha256  bff0c58dff90ec10bd61f672e48618e045155eabd60b32d63a9c4ffbdad05f3a  rng-tools-6.15.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 8db97569d4..8b195ea875 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
+diff --git a/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch b/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
+index c169516153..85a76e068e 100644
+--- a/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
++++ b/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
+@@ -1,4 +1,4 @@
+-From b35dadae6371c3727cac46ae5bd348b66aa411fc Mon Sep 17 00:00:00 2001
++From 51fb81264323f01a86dd0bdeaf1c7a044a9cb6dc Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Fri, 30 Apr 2021 15:43:59 +0200
+ Subject: [PATCH] configure.ac: HELP2MAN replace ':' by 'true' when
+@@ -17,10 +17,10 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 2c6f1aef..9c4c9be2 100644
++index a1943b57..c633f719 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -74,7 +74,7 @@ gl_LIBTEXTSTYLE_OPTIONAL([0.20.5])
++@@ -90,7 +90,7 @@ gl_LIBTEXTSTYLE_OPTIONAL([0.20.5])
+  if test $cross_compiling = no; then
+    AM_MISSING_PROG(HELP2MAN, help2man)
+  else
+diff --git a/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch b/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+index 757dc3f760..bd20b5d2c6 100644
+--- a/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
++++ b/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+@@ -1,4 +1,4 @@
+-From a0594387565e1e6b4a8a8ba04ad13b135cc1f0b5 Mon Sep 17 00:00:00 2001
++From 236b019b83228d2e37fa07635fb6864ed7dc5fad Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Thu, 1 Apr 2021 07:49:46 +0200
+ Subject: [PATCH] lib/getrandom.c: fix build with uclibc < 1.0.35
+@@ -15,7 +15,7 @@ In file included from ./sys/random.h:40,
+ /tmp/instance-0/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
+     7 | #include <features.h>
+   +++ |+#include <stddef.h>
+-    8 | 
++    8 |
+ 
+ This patch is not upstreamable as it is only a workaround for
+ uclibc < 1.0.35, upstream uclibc has been patched with
+@@ -26,15 +26,15 @@ Fixes:
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+- jitter/gnulib-local/getrandom.c | 1 +
+- gl/getrandom.c                  | 1 +
+  gl-libpoke/getrandom.c          | 1 +
++ gl/getrandom.c                  | 1 +
++ jitter/gnulib-local/getrandom.c | 1 +
+  3 files changed, 3 insertions(+)
+ 
+-diff --git a/jitter/gnulib-local/getrandom.c b/jitter/gnulib-local/getrandom.c
+-index 41212fb32..0ad3f9648 100644
+---- a/jitter/gnulib-local/getrandom.c
+-+++ b/jitter/gnulib-local/getrandom.c
++diff --git a/gl-libpoke/getrandom.c b/gl-libpoke/getrandom.c
++index e146873..3948d8d 100644
++--- a/gl-libpoke/getrandom.c
+++++ b/gl-libpoke/getrandom.c
+ @@ -19,6 +19,7 @@
+  
+  #include <config.h>
+@@ -44,7 +44,7 @@ index 41212fb32..0ad3f9648 100644
+  
+  #include <errno.h>
+ diff --git a/gl/getrandom.c b/gl/getrandom.c
+-index 41212fb32..0ad3f9648 100644
++index e146873..3948d8d 100644
+ --- a/gl/getrandom.c
+ +++ b/gl/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -55,10 +55,10 @@ index 41212fb32..0ad3f9648 100644
+  #include <sys/random.h>
+  
+  #include <errno.h>
+-diff --git a/gl-libpoke/getrandom.c b/gl-libpoke/getrandom.c
+-index 41212fb32..0ad3f9648 100644
+---- a/gl-libpoke/getrandom.c
+-+++ b/gl-libpoke/getrandom.c
++diff --git a/jitter/gnulib-local/getrandom.c b/jitter/gnulib-local/getrandom.c
++index e146873..3948d8d 100644
++--- a/jitter/gnulib-local/getrandom.c
+++++ b/jitter/gnulib-local/getrandom.c
+ @@ -19,6 +19,7 @@
+  
+  #include <config.h>
+@@ -68,5 +68,5 @@ index 41212fb32..0ad3f9648 100644
+  
+  #include <errno.h>
+ -- 
+-2.30.2
++2.31.1
+ 
+diff --git a/package/poke/poke.hash b/package/poke/poke.hash
+index 1367262f54..c30713b91c 100644
+--- a/package/poke/poke.hash
++++ b/package/poke/poke.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  ce054df29560c921230132703ee449fe130b6e25ab03aa6cc796bb401506aa24  poke-1.4.tar.gz
++sha256  cd528e6c1bbc540c3b629c2b4f36b784b30a026b005a38b99283422599442670  poke-2.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  jitter/COPYING
+diff --git a/package/poke/poke.mk b/package/poke/poke.mk
+index ddd03ae3b0..2852673548 100644
+--- a/package/poke/poke.mk
++++ b/package/poke/poke.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RNG_TOOLS_VERSION = 6.14
-+RNG_TOOLS_VERSION = 6.15
- RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
+-POKE_VERSION = 1.4
++POKE_VERSION = 2.1
+ POKE_SITE = $(BR2_GNU_MIRROR)/poke
+ # gnulib license is a mix/mess of public-domain and various GPL and LGPL versions.
+ POKE_LICENSE = GPL-3.0+, GPL-3.0+ (jitter), gnulib license (gnulib)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
