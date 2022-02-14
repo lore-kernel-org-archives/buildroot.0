@@ -4,46 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1AD9C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 16:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAD5DC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 16:24:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E80740231;
-	Mon, 14 Feb 2022 16:24:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5814D40985;
+	Mon, 14 Feb 2022 16:24:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UfV39y6ZU6ux; Mon, 14 Feb 2022 16:24:37 +0000 (UTC)
+	with ESMTP id jGMGqNXG3yqK; Mon, 14 Feb 2022 16:24:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BCCC40211;
-	Mon, 14 Feb 2022 16:24:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B1C1D1BF383
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7011A40940;
+	Mon, 14 Feb 2022 16:24:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C51A11BF97D
  for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 16:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADBE8813CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2D2940211
  for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 16:24:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RrzM95Ktd34R for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YH-IQF75eg4T for <buildroot@lists.busybox.net>;
  Mon, 14 Feb 2022 16:24:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
  [89.40.174.40])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8CE9813CB
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E595640207
  for <buildroot@buildroot.org>; Mon, 14 Feb 2022 16:24:33 +0000 (UTC)
 Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:52294
  helo=pc-ceresoli.dev.aim)
  by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
  (envelope-from <luca@lucaceresoli.net>)
- id 1nJe9P-0001n4-No; Mon, 14 Feb 2022 17:24:31 +0100
+ id 1nJe9P-0001n4-JR; Mon, 14 Feb 2022 17:24:31 +0100
 From: Luca Ceresoli <luca@lucaceresoli.net>
 To: buildroot@buildroot.org
-Date: Mon, 14 Feb 2022 17:24:13 +0100
-Message-Id: <20220214162413.17301-2-luca@lucaceresoli.net>
+Date: Mon, 14 Feb 2022 17:24:12 +0100
+Message-Id: <20220214162413.17301-1-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214162413.17301-1-luca@lucaceresoli.net>
-References: <20220214162413.17301-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
 X-AntiAbuse: This header was added to track abuse,
  please include it with any abuse report
@@ -57,7 +55,7 @@ X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-Subject: [Buildroot] [PATCH 2/2] utils/docker-run: allow interactive use
+Subject: [Buildroot] [PATCH 1/2] utils/docker-run: use portable bash shebang
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,30 +76,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Without -i, the container cannot be used interactively. Allow using it as
-in:
+/usr/bin/bash does not exist on Ubuntu 2018.04. Use the more portable
+alternative /bin/bash.
 
-  $ ./utils/docker-run
-  + exec docker run -v /home/ceresoli/devel/buildroot:/home/br-user -it registry.gitlab.com/buildroot.org/buildroot/base:20220206.1756
-  br-user@1e9508a4ccbb:~$ ls
-  arch  board  boot  CHANGES  Config.in  Config.in.legacy  configs  COPYING  DEVELOPERS  docs  fs  linux	Makefile  Makefile.legacy  output  package  README  support  system  toolchain	utils
-  br-user@1e9508a4ccbb:~$
+Note that currently "/usr/bin/bash" does not appear anywhere in the
+Buildroot source code, while "/bin/bash" is used by many scripts.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Fixes: 242e9d72e7d2 ("utils/docker-run: new script")
 ---
  utils/docker-run | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/utils/docker-run b/utils/docker-run
-index 979aec69b946..9fb895bcc628 100755
+index 0614f1325d78..979aec69b946 100755
 --- a/utils/docker-run
 +++ b/utils/docker-run
-@@ -7,4 +7,4 @@ IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
-         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
- 
- set -x
--exec docker run -v "${MAIN_DIR}:/home/br-user" -t "${IMAGE}" "$@"
-+exec docker run -v "${MAIN_DIR}:/home/br-user" -it "${IMAGE}" "$@"
+@@ -1,4 +1,4 @@
+-#!/usr/bin/bash
++#!/bin/bash
+ set -o errexit -o pipefail
+ DIR=$(dirname "${0}")
+ MAIN_DIR=$(readlink -f "${DIR}/..")
 -- 
 2.35.1
 
