@@ -4,77 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9153C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 21:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C223AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Feb 2022 21:16:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65FB660B50;
-	Mon, 14 Feb 2022 21:11:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EAAD60B78;
+	Mon, 14 Feb 2022 21:16:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hpt1PN-o5rgx; Mon, 14 Feb 2022 21:11:09 +0000 (UTC)
+	with ESMTP id FhjKgfTb-R7M; Mon, 14 Feb 2022 21:16:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7418C60B25;
-	Mon, 14 Feb 2022 21:11:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6475F1BF275
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:10:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EAE560BD5;
+	Mon, 14 Feb 2022 21:16:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 56D6C1BF275
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8A4781496
- for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:10:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F6AA60B8D
+ for <buildroot@lists.busybox.net>; Mon, 14 Feb 2022 21:16:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m5I3uLsApXfD for <buildroot@lists.busybox.net>;
- Mon, 14 Feb 2022 21:10:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0FD9D818C2
- for <buildroot@buildroot.org>; Mon, 14 Feb 2022 21:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1644873052;
- bh=SQesHluTumbJqfYx13Q/NfByW+vhcVmsDe23NSpfQjQ=;
- h=X-UI-Sender-Class:From:To:Subject:Date:In-Reply-To:References;
- b=KgJrsKRlXCgMHQPGrhIgmBQ5hTqOcIdIsEDOjcmUUvHNx2Z8cpsJ9fx8opgTn2FuF
- L0uFqLiscOKiWIhKngzsGkfRJuWqVbzAVamWMUY+x20SXNIc5mwlNxw2RpJRo1Vefp
- Df2GxcfEku6k3gcKDlJm+5rsmXihZZvQATKCEcHA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.232]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1McpNo-1nsEQQ08tG-00ZvL5 for <buildroot@buildroot.org>; Mon, 14 Feb 2022
- 22:10:52 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Mon, 14 Feb 2022 22:10:51 +0100
-Message-Id: <20220214211051.22421-2-ps.report@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214211051.22421-1-ps.report@gmx.net>
-References: <20220214211051.22421-1-ps.report@gmx.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6m5aYLD2Gt6r for <buildroot@lists.busybox.net>;
+ Mon, 14 Feb 2022 21:16:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E662A60B78
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 21:16:22 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id h18so6703249edb.7
+ for <buildroot@buildroot.org>; Mon, 14 Feb 2022 13:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=uHF+rWVn5UerIBvMxEv7w2keo6ule2UZ/SQhO/RDKhc=;
+ b=IFWEBPUK58ZwUaSaX90Arr1sW8Iouf/jy9V7t6Y5CLZ7XBm8Hh5jMg76t9vKXElD2N
+ hGHODv19AMp7fgNlA+JGFltusv+bWeYsckqqD0rW2EAvAAI1oW0zgCrOQQxJdm3GvXOR
+ fb69OTwTjGBix5Ae52YGgNIrEACmElDXMKOXidb/mDG6u8Zxa4NZvSooAc//WEJcxWM6
+ lz5vIM5pEehghrEDinuIA3J6R7DWxwP6NT7LsE+QMRSD+O4SDZzz3jKjtLy8dJKNrfzu
+ 4t0Rx0B3T6s8yrrUaiJfvR0/oTVuyn6+fMM6LpeCkdMi7hSbUqvnHapz8Z9uFDI591jQ
+ ylQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=uHF+rWVn5UerIBvMxEv7w2keo6ule2UZ/SQhO/RDKhc=;
+ b=VYyo1/4UDvKEGBW8T7LfwztxFUfYoWTSjNbrnnOwrvvGIdDvAcjuHDF8Rjtk40YikP
+ EbEasYmgLjKGMWbCiQvd+NIdnTFAtkh3oBVMeN1HWMTHoLm63lGLQxq8yLXl3trvWfwB
+ YVXvzc3w5w9OpUVA6xq7Dm2AW8QA/PbMmPSyFrPoMnOSdu0t4JZDhUTlzthohFdUvLLl
+ yhIBvNa2EqdWOHN8JtQZRuX5zrn4nx5nhWIAYiD3isJNyOEc4MY/VPYQfiFxcXTxzsJ3
+ GEuZT9hxrCYd9jYDAO3e6pCLuQxrUdUi9FEDeAR93nSwo5ihUjFR8d4oyMKMvmUteJIu
+ xP7Q==
+X-Gm-Message-State: AOAM5327Y06cnteIUXK+4Hl178Z/N/4RsScN1WgigpHVmQVGHHnWHbsv
+ r9QYWuASDEX0jfIxkXKBwcTQOQNqB6i5ag==
+X-Google-Smtp-Source: ABdhPJwdqjBxdrM0HPiisoqA26ITWbp0DlvdDeAwaGCDmisQQrti3+UZi4MT8Ipz5ON4DsgXmiEzZQ==
+X-Received: by 2002:a05:6402:2050:: with SMTP id
+ bc16mr737788edb.431.1644873380897; 
+ Mon, 14 Feb 2022 13:16:20 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id o18sm15678317edw.102.2022.02.14.13.16.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 14 Feb 2022 13:16:20 -0800 (PST)
+Message-ID: <1b0d866f-fc09-f23d-3fae-068858ab5304@mind.be>
+Date: Mon, 14 Feb 2022 22:16:19 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:d71/Vkz4GMXKCno/RbvSvHnNadE1cqc0FT6Mvjj4auNVcwZp8VI
- w5m4tTsbw8jbEzWG+DT2xsqbd+YpH9LvW0Hum4D2Ougmn7xVeeaBCprjESRyJsZvZB3vVUd
- EyMxCtaW7kU0Z2+I9nM82yL4QT7Ah/7I6ghSneBFgA21gjKK7+7ncMGwCR/Lr1iITgMusDL
- uoR2RksiX0aFJYdKy3BUw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nUnmvDdtoq0=:NVQ9rF3BZ07Snw3Px6SG2r
- t5kje68UgFP8RlHw4TnRwWe3+jB1tE9e2h/vKSTL9Q0D/PFPEQCvUmNYmdGDaJXrtEtAxwKca
- nAnT4ilGcwgAr+P1rY9WXHw9NGygYhu5njPB5CXUHXzWRVR91O5m22JAbDDqio94Vg7KxwbTj
- w7lV15w+yob63hOA5iwvmIX8fv8eJsdZ2RPAPUOwoZdzWAiDn7QJWB4v32uK9b/CvD5j5/RCZ
- MX2F0DsIZPXTYDq3n2/swMZjUzEchoprJgsz8BMZ55+K7FPamEzq2tFfifpCFE27FZEsEFUTm
- LmHrVlhqu5YDaf6yF6FCywO1jAffisI4/nRfjI4NU4b/B2MEKBCKAZVPmctqFfTtDoIphVFNg
- X453c1ysxw0ailZa8UioIKfa486mcWMqqXgfm5EQYYnQQrcwqxxzv22x2TnsKNtkvlPckEeyc
- r8A8BKGV8SiDaIWDPtF/hThPegV/2qgBu8S0i2cL5lzAMFyvG+mWii8er8j/pNrKUPtMUqwAP
- zaPUEPa2KD8KuH/3uRPFln2J6z4rFnDPNHcBo0KuIsgONfN60xJIk4xc6NTx9gN0SdusDn9S1
- 6L4GQ9BbrX6v20Op0LQ6J6U85lXAoADUse5RzdUGDROebZQ8+sWObTphiM7uDPmsn6w1qmycV
- VsF2EgqUPq84ajzlom8eHV2ZmcI2XiBggN2FKl3pemQSKVg2aoiE2uSFO/jDRXywwIW3c28pE
- AeZlugIkwiIh1dCm7keyQ2QETUwY/I3otYyLdIAARWTwBqgVRxG1mYifQ5CLGoTUe2ZA12Ixb
- Mb6PUilLRb7wic32BJwNS4s7sWrKIlJD1BRhq0JCye3/VhPayLfj49cwvi3xzbaznm3BA9qfM
- RyTvkCjdgqJVAlG7wW922tDCRryRHGYEO3kEEeE610bFjdMhzW4npmjYtRDmcsBcAmMLNth/4
- LZ7SnLhdQHrTCLl+gfZaKoLgfblxIGWdvLHLJdqX5G38YYlDErnjrGcfYlVLATdgsg7f+ItXl
- ChGLJmoqpJpTMXZBc7vx1saIZwldRnpKAftcZAhXCJxZ6O5ACm7cQOahFyS8X+fLIrjONlYU5
- S/0ko5Ftmb6f+w=
-Subject: [Buildroot] [PATCH v1 2/2] package/iwd: bump version to 1.24
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <YgamBwVM9TcIH/i5@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <YgamBwVM9TcIH/i5@waldemar-brodkorb.de>
+Subject: Re: [Buildroot] [PATCH 2/2] package/{glibc,
+ localedef}: update to 2.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,75 +92,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSByZW1vdmUgMDAxLWRwcC1maXgtaW1wbGljaXQtZGVjbGFyYXRpb24tb2YtZnVuY3Rpb24tZXhw
-bGljaXRfYnoucGF0Y2gKICAodXBzdHJlYW0gYXBwbGllZCBbMV0pCgotIENoYW5nZWxvZyAoc2lu
-Y2UgMS4yMSwgZnJvbSBbMl0pOgoKICB2ZXIgMS4yNDoKICAgIEZpeCBpc3N1ZSB3aXRoIGhhbmRz
-aGFrZSBhbmQgbWlzc2luZyByZWtleWluZyBzdXBwb3J0LgogICAgRml4IGlzc3VlIHdpdGggQlNT
-IHJhbmtpbmcgYW5kIHplcm8gc2lnbmFsIHN0cmVuZ3RoLgogICAgRml4IGlzc3VlIHdpdGggc2V0
-dGluZyBPV0UgSUUgbGVuZ3RoIGNvcnJlY3RseS4KCiAgdmVyIDEuMjM6CiAgICBGaXggaXNzdWUg
-d2l0aCBoYW5kbGluZyBoYW5kc2hha2Ugb2ZmbG9hZGluZy4KICAgIEZpeCBpc3N1ZSB3aXRoIGF0
-X2NvbnNvbGUgYW5kIEQtQnVzIHBvbGljeS4KCiAgdmVyIDEuMjI6CiAgICBGaXggaXNzdWUgd2l0
-aCBoYW5kbGluZyBwZXJpb2RpYyBzY2FubmluZy4KICAgIEZpeCBpc3N1ZSB3aXRoIGhhbmRsaW5n
-IHNjYW5uaW5nIGNvbXBsZXRpb24uCiAgICBGaXggaXNzdWUgd2l0aCBoYW5kbGluZyBzY2Fubmlu
-ZyBmb3IgT1dFIGF1dG8tY29ubmVjdC4KICAgIEFkZCBzdXBwb3J0IGZvciBhZGRpdGlvbmFsIERQ
-UCBmZWF0dXJlcy4KClsxXSBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbmV0d29yay93
-aXJlbGVzcy9pd2QuZ2l0L2NvbW1pdC8/aWQ9NmNlNDFmNjIxMTU0ZWZmMDE0NWRhYjQxMzA4YmMx
-NDVjMDQ0MGYxNgpbMl0gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL25ldHdvcmsvd2ly
-ZWxlc3MvaXdkLmdpdC90cmVlL0NoYW5nZUxvZwoKU2lnbmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVy
-ZXIgPHBzLnJlcG9ydEBnbXgubmV0PgotLS0KIC4uLi1kZWNsYXJhdGlvbi1vZi1mdW5jdGlvbi1l
-eHBsaWNpdF9iei5wYXRjaCB8IDQxIC0tLS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvaXdkL2l3
-ZC5oYXNoICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiBwYWNrYWdlL2l3ZC9pd2Qu
-bWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQogMyBmaWxlcyBjaGFuZ2VkLCAy
-IGluc2VydGlvbnMoKyksIDQzIGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2th
-Z2UvaXdkLzAwMDEtZHBwLWZpeC1pbXBsaWNpdC1kZWNsYXJhdGlvbi1vZi1mdW5jdGlvbi1leHBs
-aWNpdF9iei5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvaXdkLzAwMDEtZHBwLWZpeC1pbXBs
-aWNpdC1kZWNsYXJhdGlvbi1vZi1mdW5jdGlvbi1leHBsaWNpdF9iei5wYXRjaCBiL3BhY2thZ2Uv
-aXdkLzAwMDEtZHBwLWZpeC1pbXBsaWNpdC1kZWNsYXJhdGlvbi1vZi1mdW5jdGlvbi1leHBsaWNp
-dF9iei5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggM2U4MDhkZWI4OC4uMDAw
-MDAwMDAwMAotLS0gYS9wYWNrYWdlL2l3ZC8wMDAxLWRwcC1maXgtaW1wbGljaXQtZGVjbGFyYXRp
-b24tb2YtZnVuY3Rpb24tZXhwbGljaXRfYnoucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw0MSAr
-MCwwIEBACi1Gcm9tIDZjZTQxZjYyMTE1NGVmZjAxNDVkYWI0MTMwOGJjMTQ1YzA0NDBmMTYgTW9u
-IFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdt
-eC5uZXQ+Ci1EYXRlOiBNb24sIDEwIEphbiAyMDIyIDIyOjMyOjE4ICswMTAwCi1TdWJqZWN0OiBb
-UEFUQ0hdIGRwcDogZml4IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uIGV4cGxpY2l0
-X2J6ZXJvCi0gd2FybmluZwotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9w
-bGFpbjsgY2hhcnNldD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi0t
-IGFkZCBtaXNzaW5nIHNyYy9taXNzaW5nLmggaW5jbHVkZSBmb3IgZXhwbGljaXRfYnplcm8sIGZp
-eGVzIHVjbGliYwotICBjb21waWxlL2xpbmtpbmcKLQotRml4ZXM6Ci0KLSAgc3JjL2RwcC5jOjE2
-NjoyOiB3YXJuaW5nOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhleHBsaWNp
-dF9iemVyb+KAmSBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KLSAgICAxNjYgfCAg
-ZXhwbGljaXRfYnplcm8oZHBwLT5yX25vbmNlLCBkcHAtPm5vbmNlX2xlbik7Ci0gICAgICAgIHwg
-IF5+fn5+fn5+fn5+fn5+Ci0KLVtiYWNrcG9ydCBmcm9tIHVwc3RyZWFtXQotU2lnbmVkLW9mZi1i
-eTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0PgotW3lhbm4ubW9yaW4uMTk5OEBm
-cmVlLmZyOiBhY3R1YWwgYmFja3BvcnQgbm93IHVwc3RyZWFtbiBhcHBsaWVkXQotU2lnbmVkLW9m
-Zi1ieTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+Ci0tLS0KLSBzcmMv
-ZHBwLmMgfCAxICsKLSAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKLQotZGlmZiAtLWdp
-dCBhL3NyYy9kcHAuYyBiL3NyYy9kcHAuYwotaW5kZXggODRlODlmNmMuLjgwOTFkZWQxIDEwMDY0
-NAotLS0tIGEvc3JjL2RwcC5jCi0rKysgYi9zcmMvZHBwLmMKLUBAIC0zMCw2ICszMCw3IEBACi0g
-Ci0gI2luY2x1ZGUgImxpbnV4L25sODAyMTEuaCIKLSAKLSsjaW5jbHVkZSAic3JjL21pc3Npbmcu
-aCIKLSAjaW5jbHVkZSAic3JjL2RidXMuaCIKLSAjaW5jbHVkZSAic3JjL25ldGRldi5oIgotICNp
-bmNsdWRlICJzcmMvbW9kdWxlLmgiCi0tLSAKLTIuMzQuMQotCmRpZmYgLS1naXQgYS9wYWNrYWdl
-L2l3ZC9pd2QuaGFzaCBiL3BhY2thZ2UvaXdkL2l3ZC5oYXNoCmluZGV4IDhlMzRkMjk4M2YuLjFh
-NThlYzg4ZTggMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvaXdkL2l3ZC5oYXNoCisrKyBiL3BhY2thZ2Uv
-aXdkL2l3ZC5oYXNoCkBAIC0xLDUgKzEsNSBAQAogIyBGcm9tIGh0dHBzOi8vbWlycm9ycy5lZGdl
-Lmtlcm5lbC5vcmcvcHViL2xpbnV4L25ldHdvcmsvd2lyZWxlc3Mvc2hhMjU2c3Vtcy5hc2MKLXNo
-YTI1NiAgYmFjODkxZGY5MWM2MDUyNzFlOTFiNzNjZjAwMTVlMWJhODZmZjc4NDM0N2U1M2ZjNjc2
-MDEzNjY4NTliMzg1MSAgaXdkLTEuMjEudGFyLnh6CitzaGEyNTYgIDYxYjVlNDgzODBjZDNhNmQw
-NTI5ZjcyNWViNjk3NDE1N2YxNDEwYWYxNjVmNWQyNjZiODdhZGQwYmYzOTUyMjQgIGl3ZC0xLjI0
-LnRhci54egogCiAjIExpY2Vuc2UgZmlsZXMKIHNoYTI1NiAgZWM2MGI5OTM4MzVlMmM2Yjc5ZTZk
-OTIyNjM0NWY0ZTYxNGU2ODZlYjU3ZGMxM2I2NDIwYzE1YTMzYTg5OTZlNSAgQ09QWUlORwpkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9pd2QvaXdkLm1rIGIvcGFja2FnZS9pd2QvaXdkLm1rCmluZGV4IGE3
-MGRhODZlY2MuLjU0OGI1MDhlZGIgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvaXdkL2l3ZC5taworKysg
-Yi9wYWNrYWdlL2l3ZC9pd2QubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIwogCi1JV0RfVkVSU0lPTiA9IDEuMjEKK0lXRF9WRVJTSU9OID0gMS4yNAogSVdEX1NP
-VVJDRSA9IGl3ZC0kKElXRF9WRVJTSU9OKS50YXIueHoKIElXRF9TSVRFID0gJChCUjJfS0VSTkVM
-X01JUlJPUikvbGludXgvbmV0d29yay93aXJlbGVzcwogSVdEX0xJQ0VOU0UgPSBMR1BMLTIuMSsK
-LS0gCjIuMzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 11/02/2022 19:08, Waldemar Brodkorb wrote:
+> https://sourceware.org/pipermail/libc-alpha/2022-February/136040.html
+> 
+> - allow to use optimization CFLAGS (not CPPFLAGS) which are nowadays
+>    supported by upstream (except nios2)
+> - enable support for or1k, which is now included upstream
+> - runtime tested with qemu-system for aarch64/arm/microblaze/mips/mips64/nios2/
+>    or1k/powerpc/powerpc64/powerpc64le/riscv32/riscv64/s390x/sh4/sparc64/x86/x86_64
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>   ...v-linux-microblaze-pselect32.c-add-m.patch | 85 -------------------
+>   .../glibc.hash                                |  2 +-
+>   package/glibc/glibc.mk                        | 16 ++--
+>   ...ACK-only-build-and-install-localedef.patch |  0
+>   ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch |  0
+>   .../localedef.hash                            |  2 +-
+>   package/localedef/localedef.mk                |  2 +-
+>   toolchain/toolchain-buildroot/Config.in       |  3 +-
+>   8 files changed, 15 insertions(+), 95 deletions(-)
+>   delete mode 100644 package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
+>   rename package/glibc/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/glibc.hash (70%)
+>   rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/0001-HACK-only-build-and-install-localedef.patch (100%)
+>   rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
+>   rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/localedef.hash (70%)
+
+  with the removal of the csky fork in commit ebc6c7e, there's no longer a need 
+to version the patches, so perhaps you could take this opportunity to move them 
+out of the directory.
+
+[snip]
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 2702994c6b..f258f33c96 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -7,7 +7,7 @@
+>   # Generate version string using:
+>   #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+>   # When updating the version, please also update localedef
+> -GLIBC_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
+> +GLIBC_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
+>   # Upstream doesn't officially provide an https download link.
+>   # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+>   # sometimes the connection times out. So use an unofficial github mirror.
+> @@ -110,16 +110,20 @@ endif
+>   #
+>   #  2. We have to execute the configure script with bash and not sh.
+>   #
+> -# Note that as mentionned in
+> -# http://patches.openembedded.org/patch/38849/, glibc must be
+> -# built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
+> +# Glibc nowadays can be build with optimization flags f.e. -Os
+> +
+> +# crash in qemu-system-nios2 with -Os
+> +ifeq ($(BR2_nios2),y)
+> +TARGET_FCFLAGS := -O2
+
+  You're overriding the global TARGET_FCFLAGS here, that's not allowed.
+
+  Instead, you should use
+
+GLIBC_CFLAGS = $(TARGET_CFLAGS)
+# crash in qemu-system-nios2 with -Os
+ifeq ($(BR2_nios2),y)
+GLIBC_CFLAGS += -O2
+endif
+
+(I'm not sure if += is OK here, if not, just use =)
+
+  And to make the below simpler, you can use
+
+GLIBC_CFLAGS += $(GLIBC_EXTRA_CFLAGS)
+
+  Alternatively, if += is OK for nios, you can use
+
+ifeq ($(BR2_nios2),y)
+GLIBC_EXTRA_CFLAGS += -O2
+endif
+...
+		CFLAGS="$(TARGET_CFLAGS) $(GLIBC_EXTRA_CFLAGS)" \
+
+
+> +endif
+> +
+>   define GLIBC_CONFIGURE_CMDS
+>   	mkdir -p $(@D)/build
+>   	# Do the configuration
+>   	(cd $(@D)/build; \
+>   		$(TARGET_CONFIGURE_OPTS) \
+> -		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+> -		CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
+> +		CFLAGS="$(TARGET_FCFLAGS) $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+
+  FCFLAGS stands for Fortran Compilation flags. You should use TARGET_CFLAGS here.
+
+  Why is CPPFLAGS not set?
+
+
+  Marked as Changes Requested.
+
+  Regards,
+  Arnout
+
+
+> +		CXXFLAGS="$(TARGET_FCFLAGS) $(GLIBC_EXTRA_CFLAGS)" \
+>   		$(GLIBC_CONF_ENV) \
+>   		$(SHELL) $(@D)/configure \
+>   		--target=$(GNU_TARGET_NAME) \
+> diff --git a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/0001-HACK-only-build-and-install-localedef.patch
+> similarity index 100%
+> rename from package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-HACK-only-build-and-install-localedef.patch
+> rename to package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/0001-HACK-only-build-and-install-localedef.patch
+> diff --git a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+> similarity index 100%
+> rename from package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+> rename to package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+> diff --git a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash b/package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/localedef.hash
+> similarity index 70%
+> rename from package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
+> rename to package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/localedef.hash
+> index dfd939020f..f28c15c2a3 100644
+> --- a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
+> +++ b/package/localedef/2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586/localedef.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated (fetched from Github)
+> -sha256  3c299a21468a80356b848ca341f45551616c4928a6c871e6d45cee942e8b0f24  glibc-2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c.tar.gz
+> +sha256  0ca43b2a6cd74609519554303a16e350abdac0e66943c5d98d91228233c826a0  glibc-2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586.tar.gz
+>   
+>   # Hashes for license files
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index f8f0b42984..fb5edde0c2 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -7,7 +7,7 @@
+>   # Use the same VERSION and SITE as target glibc
+>   # As in glibc.mk, generate version string using:
+>   #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> -LOCALEDEF_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
+> +LOCALEDEF_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
+>   LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+>   LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+>   HOST_LOCALEDEF_DL_SUBDIR = glibc
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 4004c0edf8..437daafa74 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -49,7 +49,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>   		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+>   		   BR2_riscv       || BR2_s390x      || BR2_sh          || \
+>   		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze  || \
+> -		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
+> +		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || \
+> +		   BR2_csky 	   || BR2_or1k
+>   	depends on BR2_USE_MMU
+>   	depends on !BR2_STATIC_LIBS
+>   	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
