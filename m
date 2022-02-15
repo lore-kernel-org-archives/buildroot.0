@@ -1,46 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73008C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 11:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D413FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 12:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06CB14011C;
-	Tue, 15 Feb 2022 11:18:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40F5760F65;
+	Tue, 15 Feb 2022 12:46:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ImbzLE7EIKJ7; Tue, 15 Feb 2022 11:18:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XxY1VFfFDch9; Tue, 15 Feb 2022 12:46:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E19940127;
-	Tue, 15 Feb 2022 11:18:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7306A1BF831
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 11:18:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB8B60E5E;
+	Tue, 15 Feb 2022 12:46:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E8F61BF97D
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60C21401B4
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 11:18:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8AA9D8271D
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0pDrqMj3U5Xt for <buildroot@lists.busybox.net>;
- Tue, 15 Feb 2022 11:18:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0FCE401B3
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 11:18:06 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id DB9EE31E0726; Tue, 15 Feb 2022 12:18:02 +0100 (CET)
-Date: Tue, 15 Feb 2022 12:18:02 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o9cLEYJi3SD8 for <buildroot@lists.busybox.net>;
+ Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C6D3D82660
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 12:46:29 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id k25so43966844ejp.5
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 04:46:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zu1j8bhrusqm2OBTfknnxKx9kgbBhOGFUKKrEFlwURs=;
+ b=RdpptzxBN+Tuoejb4a6TlYICYk4pIGWaRyn1L0nx8aT9Dwq7feljZy6WXIARb85WKR
+ 1CPP6Fikt8E37neJsM3eRr1PFizz8IzpmEPvPIAnHaAiLbGo48PR4fAwIO8Z1tqAHTOW
+ Hc6h1HqVSKxQIhvoxO9L5xZBO1P4uz/j/D96a/n69uQCa6DwGj+AOp6lkVawUHZhWTY/
+ sDq0gh9aTWsG+Ma/G7inHDbcnnLXAggGkz7XZJuC6s6CRgMWpCjubMQA8dC5R62J/aFX
+ /kCVSIdOd704dvYldkMIqt8C6dRCs72GKjI2rIdO5mnB1As6jwOR/+MJB5a6zIviqY6+
+ US2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zu1j8bhrusqm2OBTfknnxKx9kgbBhOGFUKKrEFlwURs=;
+ b=UuJcBODtWjawF30c1Q+bH7473uG2r7PoN6phHpjawyzbLFi0Z/Raz4wPkECpP0milQ
+ 2UdmP+XZbLvpocjFtz0wZ4EmF0B6WF2aRpdmbwrWDHAvClFqgCyiWCU43r94byUWTbnx
+ 12PZ4BR1SAZh552muCiNC6Y3UmCR4jzEp0uI0NFF8y834S0BTrxbcLSlP1soa21j2QaI
+ Wx2psCEavbNjdS82+skDg9HjTKNDV9L69a2glC39TImZXeQb5aXkQuHyTDj3mqC7ZSdp
+ H3xuPpZjIOgyBn39pxZcIFWwxbyyazufEbQvE+AWI2lMg2msizWMs6WC1VpqOdFOu+CW
+ bsTg==
+X-Gm-Message-State: AOAM532M6zQaPVbziQrMSDO3Qazb7HxYweDxMZQbto/IgmYKKgIGTwgu
+ 6pr1PkCHthRLUINTISPuaZHeByiD/e42cw==
+X-Google-Smtp-Source: ABdhPJztCHAThPLWC5eIuWu1tq/dg3wjrlhHLFjv9pet5AiDl7svay16EA/4SixP+RlYkD9sbrTrmg==
+X-Received: by 2002:a17:907:c1f:: with SMTP id
+ ga31mr2805253ejc.347.1644929187865; 
+ Tue, 15 Feb 2022 04:46:27 -0800 (PST)
+Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
+ [62.178.205.20])
+ by smtp.gmail.com with ESMTPSA id v30sm2356056ejv.76.2022.02.15.04.46.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Feb 2022 04:46:27 -0800 (PST)
+From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <YguL6gkGFVEhpb1H@waldemar-brodkorb.de>
+Date: Tue, 15 Feb 2022 13:46:17 +0100
+Message-Id: <20220215124619.563502-1-nolange79@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-10-amd64 x86_64
-Subject: [Buildroot] [PATCH v2] package/{glibc, localedef}: update to 2.35
+Subject: [Buildroot] [PATCH 1/2] toolchain: support mismatched merged usr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,265 +86,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://sourceware.org/pipermail/libc-alpha/2022-February/136040.html
+Look at the case where the source toolchain has non-merged usr,
+yet the target will have merged usr.
 
-- allow to use optimization CFLAGS (not CPPFLAGS) which are nowadays
-  supported by upstream (except nios2)
-- enable support for or1k, which is now included upstream
-- runtime tested with qemu-system for aarch64/arm/microblaze/mips/mips64/nios2/
-  or1k/powerpc/powerpc64/powerpc64le/riscv32/riscv64/s390x/sh4/sparc64/x86/x86_64
+sysroot/lib/ld-musl-x86_64.so.1 -> ../usr/lib/libc.so
+sysroot/usr/lib/libc.so
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+What happens is that buildroot copies the ld-*so* symlink
+into usr/lib, at which point it becomes broken.
+
+We now detect these broken symlinks, then try to find the target
+binary in the library directories and fix the link.
+
+Fix the case where the lib directory is a symlink, and no ld-*so*
+is installed by adding -H to find.
+
+Also use `cp -t` instead of some rarely used xargs tricks.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
-v1->v2: - remove subdirs for patches/hash file no longer required,
-          sugested by Arnout
-        - use TARGET_OPTIMIZATION instead of TARGET_FCFLAGS
-          requested by Arnout
----
- ...v-linux-microblaze-pselect32.c-add-m.patch | 85 -------------------
- .../glibc.hash                                |  7 --
- package/glibc/glibc.hash                      |  9 +-
- package/glibc/glibc.mk                        | 17 ++--
- ...ACK-only-build-and-install-localedef.patch |  0
- ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch |  0
- .../localedef.hash                            |  7 --
- package/localedef/localedef.hash              |  9 +-
- package/localedef/localedef.mk                |  2 +-
- toolchain/toolchain-buildroot/Config.in       |  3 +-
- 10 files changed, 28 insertions(+), 111 deletions(-)
- delete mode 100644 package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
- delete mode 100644 package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash
- rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => }/0001-HACK-only-build-and-install-localedef.patch (100%)
- rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => }/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
- delete mode 100644 package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
+ toolchain/helpers.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch b/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
-deleted file mode 100644
-index 3597cd6a11..0000000000
---- a/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
-+++ /dev/null
-@@ -1,85 +0,0 @@
--From af06fe63f9babb6d0179ae5d7d9245daada6bf56 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 26 Dec 2021 10:30:01 +0100
--Subject: [PATCH] sysdeps/unix/sysv/linux/microblaze/pselect32.c: add missing
-- implementation when !__ASSUME_TIME64_SYSCALLS
--
--In commit a92f4e6299fe0e3cb6f77e79de00817aece501ce ("linux: Add time64
--pselect support"), a Microblaze specific implementation of
--__pselect32() was added to cover the case of kernels < 3.15 which lack
--the pselect6 system call.
--
--This new file sysdeps/unix/sysv/linux/microblaze/pselect32.c takes
--precedence over the default implementation
--sysdeps/unix/sysv/linux/pselect32.c.
--
--However sysdeps/unix/sysv/linux/pselect32.c provides an implementation
--of __pselect32() which is needed when __ASSUME_TIME64_SYSCALLS is not
--defined. On Microblaze, which is a 32-bit architecture,
--__ASSUME_TIME64_SYSCALLS is only true for kernels >= 5.1.
--
--Due to sysdeps/unix/sysv/linux/microblaze/pselect32.c taking
--precedence over sysdeps/unix/sysv/linux/pselect32.c, it means that
--when we are with a kernel >= 3.15 but < 5.1, we need a __pselect32()
--implementation, but sysdeps/unix/sysv/linux/microblaze/pselect32.c
--doesn't provide it, and sysdeps/unix/sysv/linux/pselect32.c which
--would provide it is not compiled in.
--
--This causes the following build failure on Microblaze with for example
--Linux kernel headers 4.9:
--
--/home/thomas/buildroot/buildroot/output/host/lib/gcc/microblazeel-buildroot-linux-gnu/10.3.0/../../../../microblazeel-buildroot-linux-gnu/bin/ld: /home/thomas/buildroot/buildroot/output/build/glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/build/libc_pic.os: in function `__pselect64':
--(.text+0x120b44): undefined reference to `__pselect32'
--collect2: error: ld returned 1 exit status
--
--To fix this, we take a crude approach: replicate in
--sysdeps/unix/sysv/linux/microblaze/pselect32.c the
--!__ASSUME_TIME64_SYSCALLS implementation that is already in
--sysdeps/unix/sysv/linux/pselect32.c.
--
--Upstream: https://sourceware.org/pipermail/libc-alpha/2021-December/134635.html
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- .../unix/sysv/linux/microblaze/pselect32.c    | 22 +++++++++++++++++--
-- 1 file changed, 20 insertions(+), 2 deletions(-)
--
--diff --git a/sysdeps/unix/sysv/linux/microblaze/pselect32.c b/sysdeps/unix/sysv/linux/microblaze/pselect32.c
--index 70b7b52a48..6b6b3e8a2e 100644
----- a/sysdeps/unix/sysv/linux/microblaze/pselect32.c
--+++ b/sysdeps/unix/sysv/linux/microblaze/pselect32.c
--@@ -22,7 +22,25 @@
-- #include <sys/poll.h>
-- #include <sysdep-cancel.h>
-- 
---#ifndef __ASSUME_PSELECT
--+#if !defined(__ASSUME_TIME64_SYSCALLS)
--+int
--+__pselect32 (int nfds, fd_set *readfds, fd_set *writefds,
--+	     fd_set *exceptfds, const struct __timespec64 *timeout,
--+	     const sigset_t *sigmask)
--+{
--+  struct timespec ts32, *pts32 = NULL;
--+  if (timeout != NULL)
--+    {
--+      ts32 = valid_timespec64_to_timespec (*timeout);
--+      pts32 = &ts32;
--+    }
--+
--+  return SYSCALL_CANCEL (pselect6, nfds, readfds, writefds, exceptfds,
--+			 pts32,
--+			 ((__syscall_ulong_t[]){ (uintptr_t) sigmask,
--+						 __NSIG_BYTES }));
--+}
--+#elif !defined(__ASSUME_PSELECT)
-- int
-- __pselect32 (int nfds, fd_set *readfds, fd_set *writefds,
-- 	     fd_set *exceptfds, const struct __timespec64 *timeout,
--@@ -57,4 +75,4 @@ __pselect32 (int nfds, fd_set *readfds, fd_set *writefds,
-- 
--   return ret;
-- }
---#endif /* __ASSUME_PSELECT  */
--+#endif
---- 
--2.31.1
--
-diff --git a/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash b/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash
-deleted file mode 100644
-index dfd939020f..0000000000
---- a/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# Locally calculated (fetched from Github)
--sha256  3c299a21468a80356b848ca341f45551616c4928a6c871e6d45cee942e8b0f24  glibc-2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c.tar.gz
--
--# Hashes for license files
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 5316f03b10..f28c15c2a3 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,2 +1,7 @@
--# This hash file is not used; instead, update the
--# hash files in the per-version sub-directories.
-+# Locally calculated (fetched from Github)
-+sha256  0ca43b2a6cd74609519554303a16e350abdac0e66943c5d98d91228233c826a0  glibc-2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586.tar.gz
-+
-+# Hashes for license files
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 2702994c6b..7b46ad42c3 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
-+GLIBC_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-@@ -110,16 +110,21 @@ endif
- #
- #  2. We have to execute the configure script with bash and not sh.
- #
--# Note that as mentionned in
--# http://patches.openembedded.org/patch/38849/, glibc must be
--# built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
-+# Glibc nowadays can be build with optimization flags f.e. -Os
-+
-+GLIBC_CFLAGS = $(TARGET_OPTIMIZATION)
-+# crash in qemu-system-nios2 with -Os
-+ifeq ($(BR2_nios2),y)
-+GLIBC_CFLAGS += -O2
-+endif
-+
- define GLIBC_CONFIGURE_CMDS
- 	mkdir -p $(@D)/build
- 	# Do the configuration
- 	(cd $(@D)/build; \
- 		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
--		CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
-+		CFLAGS="$(GLIBC_CFLAGS) $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
-+		CXXFLAGS="$(GLIBC_CFLAGS) $(GLIBC_EXTRA_CFLAGS)" \
- 		$(GLIBC_CONF_ENV) \
- 		$(SHELL) $(@D)/configure \
- 		--target=$(GNU_TARGET_NAME) \
-diff --git a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
-similarity index 100%
-rename from package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-HACK-only-build-and-install-localedef.patch
-rename to package/localedef/0001-HACK-only-build-and-install-localedef.patch
-diff --git a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-similarity index 100%
-rename from package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-rename to package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-diff --git a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash b/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
-deleted file mode 100644
-index dfd939020f..0000000000
---- a/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# Locally calculated (fetched from Github)
--sha256  3c299a21468a80356b848ca341f45551616c4928a6c871e6d45cee942e8b0f24  glibc-2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c.tar.gz
--
--# Hashes for license files
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
-diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
-index 5316f03b10..f28c15c2a3 100644
---- a/package/localedef/localedef.hash
-+++ b/package/localedef/localedef.hash
-@@ -1,2 +1,7 @@
--# This hash file is not used; instead, update the
--# hash files in the per-version sub-directories.
-+# Locally calculated (fetched from Github)
-+sha256  0ca43b2a6cd74609519554303a16e350abdac0e66943c5d98d91228233c826a0  glibc-2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586.tar.gz
-+
-+# Hashes for license files
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index f8f0b42984..fb5edde0c2 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
-+LOCALEDEF_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 4004c0edf8..437daafa74 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -49,7 +49,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
- 		   BR2_riscv       || BR2_s390x      || BR2_sh          || \
- 		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze  || \
--		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
-+		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || \
-+		   BR2_csky 	   || BR2_or1k
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index ef8e9a5f64..aaf2aecd80 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -135,8 +135,17 @@ copy_toolchain_sysroot = \
+ 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
+ 		done ; \
+ 	fi ; \
+-	if [[ ! $$(find $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
+-		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
++	for i in $$(find -H $(STAGING_DIR)/lib -name 'ld*.so.*' -xtype l); do \
++		LINKTARGET=`readlink $$i`; \
++		rm $$i; \
++		NEWLINKTARGET=$$(find -H $(STAGING_DIR)/$${ARCH_LIB_DIR} $(STAGING_DIR)/lib $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/lib -name "`basename $${LINKTARGET}`" -print -quit); \
++		if [ -n "$${NEWLINKTARGET}" -a -e "$${NEWLINKTARGET}" ]; then \
++			ln -sr $${NEWLINKTARGET} $$i; \
++			echo "Symlinking $$i -> `readlink $$i`" ; \
++		fi; \
++	done; \
++	if [[ ! $$(find -H $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
++		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 cp -t $(STAGING_DIR)/lib/; \
+ 	fi ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
