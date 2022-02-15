@@ -1,66 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CED6C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 08:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B609C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 10:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2244B813F1;
-	Tue, 15 Feb 2022 08:48:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A9A540168;
+	Tue, 15 Feb 2022 10:06:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7zmbXOrCk3qm; Tue, 15 Feb 2022 08:48:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id clxbPwgkzcMo; Tue, 15 Feb 2022 10:06:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A009813E0;
-	Tue, 15 Feb 2022 08:48:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FE131BF292
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 08:48:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3756C4047C;
+	Tue, 15 Feb 2022 10:06:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 099861BF290
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 10:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2ED816005E
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 08:48:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBA8D415BE
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 10:06:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MNbG9hcrNYky for <buildroot@lists.busybox.net>;
- Tue, 15 Feb 2022 08:48:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S_ZUaFfiRVXG for <buildroot@lists.busybox.net>;
+ Tue, 15 Feb 2022 10:06:51 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB31E606B0
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 08:48:43 +0000 (UTC)
-Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:56398
- helo=[192.168.101.73])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nJtVp-0004Wb-Oi; Tue, 15 Feb 2022 09:48:41 +0100
-Message-ID: <a4b608ec-83df-55a1-19cf-370ff5bf8b5b@lucaceresoli.net>
-Date: Tue, 15 Feb 2022 09:48:40 +0100
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A1479415B9
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 10:06:51 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 1FEDC31E07E0; Tue, 15 Feb 2022 11:06:42 +0100 (CET)
+Date: Tue, 15 Feb 2022 11:06:42 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <Ygt7MlnBcs+rY4BD@waldemar-brodkorb.de>
+References: <YgamBwVM9TcIH/i5@waldemar-brodkorb.de>
+ <1b0d866f-fc09-f23d-3fae-068858ab5304@mind.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <20220214203909.251924-1-yann.morin.1998@free.fr>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <20220214203909.251924-1-yann.morin.1998@free.fr>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH] utils/docker-run: improve user experience
+Content-Disposition: inline
+In-Reply-To: <1b0d866f-fc09-f23d-3fae-068858ab5304@mind.be>
+X-Operating-System: Linux 5.10.0-10-amd64 x86_64
+Subject: Re: [Buildroot] [PATCH 2/2] package/{glibc,
+ localedef}: update to 2.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,62 +56,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+Hi Arnout,
+Arnout Vandecappelle wrote,
 
-On 14/02/22 21:39, Yann E. MORIN wrote:
-> Currently, the docker-run script starts a container based on the
-> reference image, in which the user has UID:GID set to 1000:1000,
-> which may or may not be the same as local user uses, which may
-> prevent the commands in the container from creating files, which
-> foils the plan of using the container to run a build...
+> On 11/02/2022 19:08, Waldemar Brodkorb wrote:
+> > https://sourceware.org/pipermail/libc-alpha/2022-February/136040.html
+> > 
+> > - allow to use optimization CFLAGS (not CPPFLAGS) which are nowadays
+> >    supported by upstream (except nios2)
+> > - enable support for or1k, which is now included upstream
+> > - runtime tested with qemu-system for aarch64/arm/microblaze/mips/mips64/nios2/
+> >    or1k/powerpc/powerpc64/powerpc64le/riscv32/riscv64/s390x/sh4/sparc64/x86/x86_64
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >   ...v-linux-microblaze-pselect32.c-add-m.patch | 85 -------------------
+> >   .../glibc.hash                                |  2 +-
+> >   package/glibc/glibc.mk                        | 16 ++--
+> >   ...ACK-only-build-and-install-localedef.patch |  0
+> >   ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch |  0
+> >   .../localedef.hash                            |  2 +-
+> >   package/localedef/localedef.mk                |  2 +-
+> >   toolchain/toolchain-buildroot/Config.in       |  3 +-
+> >   8 files changed, 15 insertions(+), 95 deletions(-)
+> >   delete mode 100644 package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
+> >   rename package/glibc/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/glibc.hash (70%)
+> >   rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/0001-HACK-only-build-and-install-localedef.patch (100%)
+> >   rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
+> >   rename package/localedef/{2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c => 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586}/localedef.hash (70%)
 > 
-> Additionally, the paths in the container differ from the paths
-> the user expects, as the current Buildroot tree is mounted over
-> the in-container user home directory. This is a bit confusing...
-> 
-> Finally, the container is left hanging around after the command
-> finishes, and thus there are as many lingering containers as the
-> user runs docker-run. This is not very nice...
-> 
-> We fix all of that (yeah, should be different patches, but meh):
-> 
->   - we use --mount instead of -v, which allows us to bind-mount
->     the Buildroot tree at the same place in the container, as
->     Docker will create the destination if it does not exist, while
->     -v seems to expect it to exist [0].
-> 
->   - as a consequence, we can also set the working directory as the
->     Buildroot top-directory;
-> 
->   - use --user to force the same UID:GID in the container as the
->     local user, so that files created in the container belong to
->     the local user, and so that files from the local user are
->     accessible from the container;
-> 
->   - use --rm do remove the container once it terminates; starting
->     a new container is very quick anyway, so it is as good as
->     re-using a previous container.
-> 
-> [0] the documentation is not clear about that. It clearly states
-> that the host directory (i.e. the origin, the source) is created
-> if missing, but it says nothing of the destination:
->     https://docs.docker.com/engine/reference/commandline/run/#mount-volume--v---read-only
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  with the removal of the csky fork in commit ebc6c7e, there's no longer a
+> need to version the patches, so perhaps you could take this opportunity to
+> move them out of the directory.
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Okay.
+ 
+> [snip]
+> > diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> > index 2702994c6b..f258f33c96 100644
+> > --- a/package/glibc/glibc.mk
+> > +++ b/package/glibc/glibc.mk
+> > @@ -7,7 +7,7 @@
+> >   # Generate version string using:
+> >   #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> >   # When updating the version, please also update localedef
+> > -GLIBC_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
+> > +GLIBC_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
+> >   # Upstream doesn't officially provide an https download link.
+> >   # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+> >   # sometimes the connection times out. So use an unofficial github mirror.
+> > @@ -110,16 +110,20 @@ endif
+> >   #
+> >   #  2. We have to execute the configure script with bash and not sh.
+> >   #
+> > -# Note that as mentionned in
+> > -# http://patches.openembedded.org/patch/38849/, glibc must be
+> > -# built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
+> > +# Glibc nowadays can be build with optimization flags f.e. -Os
+> > +
+> > +# crash in qemu-system-nios2 with -Os
+> > +ifeq ($(BR2_nios2),y)
+> > +TARGET_FCFLAGS := -O2
+> 
+>  You're overriding the global TARGET_FCFLAGS here, that's not allowed.
+> 
+>  Instead, you should use
+> 
+> GLIBC_CFLAGS = $(TARGET_CFLAGS)
+> # crash in qemu-system-nios2 with -Os
+> ifeq ($(BR2_nios2),y)
+> GLIBC_CFLAGS += -O2
+> endif
+> 
+> (I'm not sure if += is OK here, if not, just use =)
+> 
+>  And to make the below simpler, you can use
+> 
+> GLIBC_CFLAGS += $(GLIBC_EXTRA_CFLAGS)
+> 
+>  Alternatively, if += is OK for nios, you can use
+> 
+> ifeq ($(BR2_nios2),y)
+> GLIBC_EXTRA_CFLAGS += -O2
+> endif
+> ...
+> 		CFLAGS="$(TARGET_CFLAGS) $(GLIBC_EXTRA_CFLAGS)" \
+> 
+> 
+> > +endif
+> > +
+> >   define GLIBC_CONFIGURE_CMDS
+> >   	mkdir -p $(@D)/build
+> >   	# Do the configuration
+> >   	(cd $(@D)/build; \
+> >   		$(TARGET_CONFIGURE_OPTS) \
+> > -		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+> > -		CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
+> > +		CFLAGS="$(TARGET_FCFLAGS) $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+> 
+>  FCFLAGS stands for Fortran Compilation flags. You should use TARGET_CFLAGS here.
+> 
+>  Why is CPPFLAGS not set?
 
--- 
-Luca
+Glibc does not compile with the existing TARGET_CPPFLAGS which are
+added to TARGET_CFLAGS so I can not use TARGET_CFLAGS to optimize
+the build. I will use TARGET_OPTIMIZATION if that is okay.
+
+best regards
+ Waldemar
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
