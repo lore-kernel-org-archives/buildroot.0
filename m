@@ -1,61 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06A74C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 13:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A9CCC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 13:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9637B4016A;
-	Tue, 15 Feb 2022 13:00:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF85E60FA9;
+	Tue, 15 Feb 2022 13:29:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ITkBjI78LUL7; Tue, 15 Feb 2022 13:00:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iyJkYlvRJvuy; Tue, 15 Feb 2022 13:29:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E1474032B;
-	Tue, 15 Feb 2022 13:00:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7E1860FAE;
+	Tue, 15 Feb 2022 13:29:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3E4E11BF97D
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 13:00:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 34A671BF2F8
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 13:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 382934032B
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 13:00:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28B0D4098B
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 13:28:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hsAhuryIT1Kg for <buildroot@lists.busybox.net>;
- Tue, 15 Feb 2022 13:00:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45D3C4016A
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 13:00:39 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.179.156])
- by Aruba Outgoing Smtp  with ESMTPA
- id JxRcnK4cUXmFAJxRdnG6FR; Tue, 15 Feb 2022 14:00:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1644930038; bh=uDThmd1vhrGUnCGRg77w+falsITnnx4QFIFdn2Xdcv0=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=AebOf3MhSajj04uS1K9y7IxOWuE/SnLuDXDcQed3kfKt+7EG3nKhn4dZN5pTXLlKO
- T3zx7R4fbeZQGOPurgHYjJdDIr5VI3h3I9eubJgZ2K1Qc1GaVX6zoKF/UclNjH/Gpb
- Rk5WbEIRMZoYMp2P96C5bb4cVTcFAMREAubxhmSH2miYXSvaOXuC79cv8aAZQXewGn
- gjHul/aF3KKI6b/vXTXcw8FweOY9tqfMDAs9NcuY2+lmhs6jFxKbsvbLxjc5xAED+Q
- 9LI/azAjhdoU/AiHRTWVqJvtwI2OPTYOEKbTpqK86zH0IeZgh+Z/SAtB2kGcEDxlpV
- 5HHptbWdnha7g==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Tue, 15 Feb 2022 14:00:36 +0100
-Message-Id: <E6BF6E53-C2C5-4FA5-8419-34B11400C780@benettiengineering.com>
-References: <Ygs2xMj+B0UhKFxh@APC323>
-In-Reply-To: <Ygs2xMj+B0UhKFxh@APC323>
-To: Yu Chien Peter Lin <peterlin@andestech.com>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfLSkb7gMkY3q0YW00JER6DO8FwYojme8wB1BtH2D9Lm4wDFizcjawwXVqXCNL1JvjT6X00YLCDl9CRAp4gkLLDFg1qK8/CmO/MGOlu4XdB1iUqhcCmo0
- Wp4JQjttX5WuU/vhIM7cGNegW9w/jPPVYdAZOA4AQfdtSc399wcINzl0fuQqoewdoAgu/G+KePzFCRiAFHF/zyrw26d6QAqECG9g63GWzsiDl4vZYadQp1X0
- KnEee2zfmRrkl1Ag218P0A==
-Subject: Re: [Buildroot] [PATCH 2/3] board/andes/ae350: add support for
- Andes AE350
+ with ESMTP id fbj7UKZ1Ux9y for <buildroot@lists.busybox.net>;
+ Tue, 15 Feb 2022 13:28:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A3DFC4098D
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 13:28:57 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ l12-20020a7bc34c000000b003467c58cbdfso1468826wmj.2
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 05:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0Ai9p1NbwXyZST9D9FJGN1zWzcEsXWDoYA1svVbDoeI=;
+ b=N3RPUr3aHzzYsrB3p77E8PIb0UBYxWFKCdzb/izjNNs01A80oNkdba/ii3k3mzJefF
+ w2s/2V1W4n6x+/t6XCBIJXPTjtZf2yYJnZB5FSRjjf+qxx/7Hr+fBNC4GUclD2drpVy2
+ mgS6KB21zsVxiFNzdkNvh0M/KA26LwMQHqDjKZyAS9JnmY70UJOgIAuTaf2PsWGUvrgr
+ eOEiOCOnvETQP3vpZNBfJN4Zh1jS6WSd/QIG/XwBSUTKY0l+2sZsOs2RV7zdsLuWM/SW
+ EGHWCs6uYcTZ0UzNRL4LgnCF43O2ElQXBGISJiFilf4vkFplQ+PgG1T/rJiHAVscwAeA
+ wy1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0Ai9p1NbwXyZST9D9FJGN1zWzcEsXWDoYA1svVbDoeI=;
+ b=K14f8+ntRAfJVvlu72NIbTbXfPMx61jQoKrJXMDrJeYmd/11Q88HRvgXUbdid5C4f3
+ tOolcukxJ8QKE+TePouQSxPqr5Kb/Ptm4TcCmhrUs5eQBtI7+htI63ekJ/fNMd4cH9nR
+ MEHIGcv9XKHtysrsPoekrAUe5WHn27LRHYtQe3xk9gariCULuWZ7aHimDXc2w0y7U7iw
+ 0Bjm3dMip/Ta+2paZJm/vr7kqhkjpKpITsJO01B5EwrCt+nqqYkUmHQgKCbutyj2fI1C
+ lBUMapQBX+0pOyuenb9eOjs7Td/0JV8Ur6RFIgAB4pWiLCCjj0Lkm8MS0nd6GovXHTfS
+ tCzA==
+X-Gm-Message-State: AOAM531CRGceLigyF/HiCms8vi/mTJbS7oZ9TTA8NFRcqlIEuAqoRFr7
+ Ov8r2GV4jzBfDzAo1JfWVMCZnbGgbtw=
+X-Google-Smtp-Source: ABdhPJzufkUzfrY7lJUBv5hPbX0xhM8q620zld8swiENtpnemApid/8M6gAuKsjiJSZmaQkuxGlaBg==
+X-Received: by 2002:a7b:c7c6:: with SMTP id z6mr3116826wmk.1.1644931735543;
+ Tue, 15 Feb 2022 05:28:55 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id w3sm17108397wrl.113.2022.02.15.05.28.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Feb 2022 05:28:55 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 15 Feb 2022 14:29:09 +0100
+Message-Id: <20220215132909.2360674-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/python-pycli: fix build with python >= 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,147 +87,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7051751534515547741=="
+Cc: Geoffrey Ragot <geoffreyragot@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following build failure raised since bump of python3 to version
+3.10.1 in commit 25b1fc2898d68ddf2674b14c738045875fc5a2dc due to the new
+"Multiple Exception types without parentheses" exception
+(https://docs.python.org/3/whatsnew/3.10.html)
 
---===============7051751534515547741==
-Content-Type: multipart/alternative; boundary=Apple-Mail-7D58E209-234D-453D-9CDB-FE1D77FDEC32
-Content-Transfer-Encoding: 7bit
+error:   File "/usr/lib/python3.10/site-packages/cli/app.py", line 242
+    except Exception, e:
+           ^^^^^^^^^^^^
+SyntaxError: multiple exception types must be parenthesized
 
+Fixes:
+ - http://autobuild.buildroot.org/results/8d7b0c23472abffc9447e4a6de273bdd04486d39
 
---Apple-Mail-7D58E209-234D-453D-9CDB-FE1D77FDEC32
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add upstream commits instead of dropping package (even if repository
+   has been archived)
 
-Hi Peter,
+ ...aise-exceptions-in-wrapped-functions.patch | 26 ++++++++++++
+ ...pt-statement-changed-slightly-in-2-6.patch | 41 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch
+ create mode 100644 package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch
 
-> Il giorno 15 feb 2022, alle ore 06:16, Yu Chien Peter Lin <peterlin@andest=
-ech.com> ha scritto:
->=20
-> =EF=BB=BF
->>=20
->>> On Tue, Feb 15, 2022 at 10:32:01AM +0800, Yu Chien Peter Lin wrote:
->>> This patch provides defconfig and basic support for the Andes
->>> 45 series RISC-V architecture.
->>>=20
->>> Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
->>> Signed-off-by: Alan Kao <alankao@andestech.com>
->>> ---
->>> Changes
->>> V1->V2:
->>> * move linux source code and its patches to AndesTech Github repo
->>> * rename ae350_andestar45_defconfig to andes_ae350_45_defconfig
->>> * change C library to uClibc
->>> * remove OpenSSL package
->>> * remove rootfs.cpio and rootfs.tar
->>> * update DEVELOPERS
->>> V2->V3:
->>> * specifiy branch to download from AndesTech linux repo
->>> * change boot.cmd to extlinux.conf
->>> * add post-build.sh for extlinux.conf to retrieve Image and DTB
->>> * fix format and update genimage_sdcard.cfg
->>> * update readme.txt
->>> * add packages (python3, pylibfdt and openssl) for u-boot binman
->>> * reorder item in DEVELOPERS
->>>=20
->=20
-> Sorry, I missed versioning for this revision.
-> I'll resend it and fix changelog format.
-
-Can you please subscribe to patchwork[1] and tag your patches without V3 pre=
-fix as rejected?
-
-[1]: https://patchwork.ozlabs.org/project/buildroot/list/
-
-Thank you!
-Giulio
-
->=20
-> Regards,
-> Yu-Chien Peter Lin
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---Apple-Mail-7D58E209-234D-453D-9CDB-FE1D77FDEC32
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
-utf-8"></head><body dir=3D"auto">Hi Peter,<br><div dir=3D"ltr"><br><blockquo=
-te type=3D"cite">Il giorno 15 feb 2022, alle ore 06:16, Yu Chien Peter Lin &=
-lt;peterlin@andestech.com&gt; ha scritto:<br><br></blockquote></div><blockqu=
-ote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<blockquote type=3D"cite"><span>=
-On Tue, Feb 15, 2022 at 10:32:01AM +0800, Yu Chien Peter Lin wrote:</span><b=
-r></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>Thi=
-s patch provides defconfig and basic support for the Andes</span><br></block=
-quote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span=
->45 series RISC-V architecture.</span><br></blockquote></blockquote><blockqu=
-ote type=3D"cite"><blockquote type=3D"cite"><span></span><br></blockquote></=
-blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>Signed-=
-off-by: Yu Chien Peter Lin &lt;peterlin@andestech.com&gt;</span><br></blockq=
-uote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>=
-Signed-off-by: Alan Kao &lt;alankao@andestech.com&gt;</span><br></blockquote=
-></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>---<=
-/span><br></blockquote></blockquote><blockquote type=3D"cite"><blockquote ty=
-pe=3D"cite"><span>Changes</span><br></blockquote></blockquote><blockquote ty=
-pe=3D"cite"><blockquote type=3D"cite"><span>V1-&gt;V2:</span><br></blockquot=
-e></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* m=
-ove linux source code and its patches to AndesTech Github repo</span><br></b=
-lockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><=
-span>* rename ae350_andestar45_defconfig to andes_ae350_45_defconfig</span><=
-br></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"c=
-ite"><span>* change C library to uClibc</span><br></blockquote></blockquote>=
-<blockquote type=3D"cite"><blockquote type=3D"cite"><span>* remove OpenSSL p=
-ackage</span><br></blockquote></blockquote><blockquote type=3D"cite"><blockq=
-uote type=3D"cite"><span>* remove rootfs.cpio and rootfs.tar</span><br></blo=
-ckquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
-an>* update DEVELOPERS</span><br></blockquote></blockquote><blockquote type=3D=
-"cite"><blockquote type=3D"cite"><span>V2-&gt;V3:</span><br></blockquote></b=
-lockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* specif=
-iy branch to download from AndesTech linux repo</span><br></blockquote></blo=
-ckquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* change b=
-oot.cmd to extlinux.conf</span><br></blockquote></blockquote><blockquote typ=
-e=3D"cite"><blockquote type=3D"cite"><span>* add post-build.sh for extlinux.=
-conf to retrieve Image and DTB</span><br></blockquote></blockquote><blockquo=
-te type=3D"cite"><blockquote type=3D"cite"><span>* fix format and update gen=
-image_sdcard.cfg</span><br></blockquote></blockquote><blockquote type=3D"cit=
-e"><blockquote type=3D"cite"><span>* update readme.txt</span><br></blockquot=
-e></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>* a=
-dd packages (python3, pylibfdt and openssl) for u-boot binman</span><br></bl=
-ockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><s=
-pan>* reorder item in DEVELOPERS</span><br></blockquote></blockquote><blockq=
-uote type=3D"cite"><blockquote type=3D"cite"><span></span><br></blockquote><=
-/blockquote><span></span><br><span>Sorry, I missed versioning for this revis=
-ion.</span><br><span>I'll resend it and fix changelog format.</span><br></di=
-v></blockquote><div><br></div><div>Can you please subscribe to patchwork[1] a=
-nd tag your patches without V3 prefix as rejected?</div><div><br></div><div>=
-[1]:&nbsp;<a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/">h=
-ttps://patchwork.ozlabs.org/project/buildroot/list/</a></div><div><br></div>=
-<div>Thank you!</div><div>Giulio</div><br><blockquote type=3D"cite"><div dir=
-=3D"ltr"><span></span><br><span>Regards,</span><br><span>Yu-Chien Peter Lin<=
-/span><br><span>_______________________________________________</span><br><s=
-pan>buildroot mailing list</span><br><span>buildroot@buildroot.org</span><br=
-><span>https://lists.buildroot.org/mailman/listinfo/buildroot</span><br></di=
-v></blockquote></body></html>=
-
---Apple-Mail-7D58E209-234D-453D-9CDB-FE1D77FDEC32--
-
---===============7051751534515547741==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch b/package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch
+new file mode 100644
+index 0000000000..7ac9d7af9f
+--- /dev/null
++++ b/package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch
+@@ -0,0 +1,26 @@
++From 57c563f8b47a56feefc0a8bcbef05f4b54280549 Mon Sep 17 00:00:00 2001
++From: mmbutter <mario.butter@gmail.com>
++Date: Tue, 9 Jun 2020 11:50:41 -0500
++Subject: [PATCH] Fix problem with re-raise exceptions in wrapped functions.
++
++[Retrieved from:
++https://github.com/whilp/cli/commit/57c563f8b47a56feefc0a8bcbef05f4b54280549]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/cli/app.py | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/lib/cli/app.py b/lib/cli/app.py
++index 7b6db52..f487ab4 100644
++--- a/lib/cli/app.py
+++++ b/lib/cli/app.py
++@@ -240,6 +240,9 @@ def run(self):
++         try:
++             returned = self.main(*args)
++         except Exception, e:
+++        	elif isinstance(e, self.reraise):
+++        	    # raising the last exception preserves traceback
+++        	    raise
++             returned = e
++ 
++         return self.post_run(returned)
+diff --git a/package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch b/package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch
+new file mode 100644
+index 0000000000..75869d6d23
+--- /dev/null
++++ b/package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch
+@@ -0,0 +1,41 @@
++From 2af95cff5609142ec14efdf13b394f9b0121ab2e Mon Sep 17 00:00:00 2001
++From: mmbutter <mario.butter@gmail.com>
++Date: Thu, 11 Jun 2020 15:50:03 -0500
++Subject: [PATCH] except statement changed slightly in 2.6. This could cause
++ problems in newer versions. Updated to the new format.
++
++[Retrieved from:
++https://github.com/whilp/cli/commit/2af95cff5609142ec14efdf13b394f9b0121ab2e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/cli/app.py | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/lib/cli/app.py b/lib/cli/app.py
++index f487ab4..45256b8 100644
++--- a/lib/cli/app.py
+++++ b/lib/cli/app.py
++@@ -239,10 +239,10 @@ def run(self):
++             args = ()
++         try:
++             returned = self.main(*args)
++-        except Exception, e:
++-        	elif isinstance(e, self.reraise):
++-        	    # raising the last exception preserves traceback
++-        	    raise
+++        except self.reraise:
+++            # raising the last exception preserves traceback
+++            raise
+++        except Exception as e:
++             returned = e
++ 
++         return self.post_run(returned)
++@@ -420,7 +420,7 @@ def pre_run(self):
++         """
++         try:
++             ns = self.argparser.parse_args()
++-        except SystemExit, e:
+++        except SystemExit as e:
++             if self.exit_after_main:
++                 raise
++             else:
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7051751534515547741==--
