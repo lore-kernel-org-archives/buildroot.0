@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4389C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 13:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E9DC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 21:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4437E4038B;
-	Tue, 15 Feb 2022 13:50:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31980828DE;
+	Tue, 15 Feb 2022 21:34:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AvE60ydkF1N1; Tue, 15 Feb 2022 13:50:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XYU6XwCTNJzD; Tue, 15 Feb 2022 21:34:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6DBC540364;
-	Tue, 15 Feb 2022 13:50:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7325B1BF2F8
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 13:50:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80F4A827DD;
+	Tue, 15 Feb 2022 21:34:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2956F1BF32E
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 21:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60F214163F
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 13:50:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18B5360E7D
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 21:34:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JbiSEkGOxujy for <buildroot@lists.busybox.net>;
- Tue, 15 Feb 2022 13:50:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ktIHgVkvfGNK for <buildroot@lists.busybox.net>;
+ Tue, 15 Feb 2022 21:34:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7106741637
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 13:50:13 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id e3so32320515wra.0
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 05:50:13 -0800 (PST)
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
+ [IPv6:2607:f8b0:4864:20::12f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EDD9960C0E
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 21:34:33 +0000 (UTC)
+Received: by mail-il1-x12f.google.com with SMTP id o10so63574ilh.0
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 13:34:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=A+z3OZ8rDtbZjpGOYHRVWTPYRh6K19wio0Qyz8ohuAI=;
- b=cLo5pYsWkTo891ANzDyRg6Xpc3x7OhDZJEUT9Y98h99O7YHPuTydM5aaYMk8OvnvS6
- uY90Zpa+OT3zjAbsq0/GW11Kwn8YhfS+qvE3H8wl4/wO58YClLOPGXuDqpix9TTj80yW
- JAMoE6oXjHQZ6OsGi3zSKSI27/HPtysjonckfosx81NBnBRaigyt2YnvE0sY2aJgbQIU
- 0wifTBlpwj0VolKbwhRh8HguvTHu/CFv5ShgC/b+lX7MJ8LfOzX+RawQUOoSnrxQFLFE
- UyOZxt7piEwJtUUhSpJgroyYnYWVUnd/AdE1ERhh56p2aB7d/EBRzCql/Bj9TEiBTEb3
- U6RQ==
+ bh=jMDSK2luoeqrJ+E3+zoJZwohv1eQsQMSQVx/68FkqWE=;
+ b=Go+zynotFNwRWNRKF6LOxb58A6F9V6c/CprxeRb61y8lyP1PYYQw1qZZS5E0eo8xZR
+ Eg5sz50RThXnGm1lTXSQukcxT2pal8Wm2JCMR9ZZ4ETg5AESkxFK1OwAXzdm+3i9D3nF
+ jIG1WbE7xTa4qMer24oguG2rsm5EB/BSW7+rqwv8z1ILktyYUBbnPYjXpqWJzuKQwxFG
+ prsVbcSUTCk0ELJkhJf22LKooU0r98wonISb2BgE4wBcwT/f3uFzJvYnNmpR1H+q3xEq
+ f49jKqdxejXhNTFSE1D1R2xIMeFFOFbViXrjT85Bg8q/bjTcMKMxxklJBeYp6c10JYMj
+ iKgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=A+z3OZ8rDtbZjpGOYHRVWTPYRh6K19wio0Qyz8ohuAI=;
- b=snSaWhvWogfygtx1k0IsBCT5fp8vDN2uLnsbmckgc8lG1TndpbqTlpb946j8HzT1v3
- tXXPYSfkJwRVhlg/UX97bU3MqtfcneOVw5n08PdeTgaR4wu7Dh5OItR7++eyAPPRQNGL
- TUfEjAeg4C3J3n2IM9na9I6wlcFlfEgJm4vsHZapk9pf70Hky+bBm/mjIb12IOB3IPiS
- T9rM0iSTFclQ+xuPctzTrIcYUBXix3DnMDnyBIu8rFc5NQ7Jn8fU1XFfGnZ2yG30QTZL
- aHvjNa/oImTd0tYewXSmHqsnmcGgZ7oVtYKZLyDNBPEQYpXPwutFHh/aNkNFY/leDwaa
- efVA==
-X-Gm-Message-State: AOAM532Ec/DT+cNqYTzvKo/nKc6ubfbWyX3d1RBczwL3vsF3o8Yh8ldO
- EUzqzBRF2RTZJ7cUm7bkf6ggfSNinoM=
-X-Google-Smtp-Source: ABdhPJy5cPksZbJLF8LFtweN58Nbg9vky9hjdifRarnkD5Q6eo8yUstdsunI7YrHS39lBRn54qBl/g==
-X-Received: by 2002:a05:6000:2cc:: with SMTP id
- o12mr3430288wry.234.1644933011376; 
- Tue, 15 Feb 2022 05:50:11 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id s26sm15403713wmh.47.2022.02.15.05.50.10
+ bh=jMDSK2luoeqrJ+E3+zoJZwohv1eQsQMSQVx/68FkqWE=;
+ b=zN3uI0Rh6NqGd54kRyZPKckrbYDeUYIf2ngkTfBicEzpU3DdzzJMmpAI9fY54OfjAd
+ yVpsLacZTc5JRyAsHUeCCQ5P81eWK2nEGOSXtNXasnxSaB/VYmBdXxG9xS37xNSEouXC
+ IqFyqd52zVc3Yx7e81hlxcKCBOlf/OSdnkVaZsPAWgVxpUyOtRc28tfaCg9N/mnKA6un
+ MWXO4srJE0JcuDygg0xhWZShVZcqBxGWfssPVGw0hqJ1uJQUSv8eJhByNtYWXd9FX7VU
+ ApMHcVUmSVHwTXhijVnyBVMyxhT3Z3rN7PrHCE7Hci/DskgZuk228MRJszQITEt4jWls
+ PGwQ==
+X-Gm-Message-State: AOAM533IMBX2A7vJaZcSRxyNwuSkaJxkyGIfOdx7B51++9KVCQK56u9W
+ 4CoRDYeagSSRd8x2O/O9TbzsOtzmSlI=
+X-Google-Smtp-Source: ABdhPJy/M2ObnBQXrQ4fv+EruePCrVZEvM5HWa08gm+XvpMEDjnmK+pQAf5mqUERWltoOYHyxRW97A==
+X-Received: by 2002:a05:6e02:1a8d:: with SMTP id
+ k13mr702756ilv.0.1644960872695; 
+ Tue, 15 Feb 2022 13:34:32 -0800 (PST)
+Received: from james-x399.localdomain (97-118-156-98.hlrn.qwest.net.
+ [97.118.156.98])
+ by smtp.gmail.com with ESMTPSA id e11sm23457902ioq.41.2022.02.15.13.34.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Feb 2022 05:50:10 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Tue, 15 Feb 2022 13:34:32 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Feb 2022 14:41:10 +0100
-Message-Id: <20220215134110.2365539-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 15 Feb 2022 14:34:29 -0700
+Message-Id: <20220215213429.1778225-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5webkit: disable sampling
- profiler on musl
+Subject: [Buildroot] [PATCH 1/1] package/bpftool: bump to version
+ 51d4a12c69c7339f60813b04fc9d0fd6154792a6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,48 +87,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?Ga=C3=ABl=20Portay?= <gael.portay@collabora.com>,
- Julien Corjon <corjon.j@ecagroup.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable sampling profiler on musl to avoid the following build falure
-raised since bump to version 5.212.0-alpha4 in commit
-df0b0fe6919c0d0f3750f439a3cfa765232bd569:
-
-/home/buildroot/autobuild/instance-0/output-1/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/heap/MachineStackMarker.cpp:686:2: error: #error Need a way to get the frame pointer for another thread on this platform
-  686 | #error Need a way to get the frame pointer for another thread on this platform
-      |  ^~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/87f52db7f8ebefa4c1ae3dd70d4a7a460f9aca35
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/qt5/qt5webkit/qt5webkit.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/bpftool/bpftool.hash | 2 +-
+ package/bpftool/bpftool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 2084f3af52..024184e267 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -39,6 +39,10 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5WEBKIT_DEPENDENCIES += qt5declarative
- endif
+diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
+index c7d4ae250e..9cb03ae332 100644
+--- a/package/bpftool/bpftool.hash
++++ b/package/bpftool/bpftool.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  c868cb85bf44195ec6cd20649c3db4f7aff64a38d950a1c2911d981fb2d7042c  bpftool-a7f0e7f057283ae8af3de4578bcb8b7ee80b7144-br1.tar.gz
++sha256  97a91701f0924152eb506d549b46f5df8ce80e738f175c32c364aa8da90ab746  bpftool-51d4a12c69c7339f60813b04fc9d0fd6154792a6-br1.tar.gz
+ sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
+ sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
+diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
+index 4276f91958..66f8932b6d 100644
+--- a/package/bpftool/bpftool.mk
++++ b/package/bpftool/bpftool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+QT5WEBKIT_CONF_OPTS += -DENABLE_SAMPLING_PROFILER=OFF
-+endif
-+
- QT5WEBKIT_CONF_OPTS += \
- 	-DENABLE_TOOLS=OFF \
- 	-DPORT=Qt \
+-BPFTOOL_VERSION = a7f0e7f057283ae8af3de4578bcb8b7ee80b7144
++BPFTOOL_VERSION = 51d4a12c69c7339f60813b04fc9d0fd6154792a6
+ BPFTOOL_SITE = https://github.com/libbpf/bpftool
+ BPFTOOL_SITE_METHOD = git
+ BPFTOOL_GIT_SUBMODULES = YES
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
