@@ -4,77 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D413FC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 12:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37BBC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Feb 2022 12:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40F5760F65;
-	Tue, 15 Feb 2022 12:46:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67F7160F92;
+	Tue, 15 Feb 2022 12:46:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XxY1VFfFDch9; Tue, 15 Feb 2022 12:46:33 +0000 (UTC)
+	with ESMTP id 9imt2u68ioNj; Tue, 15 Feb 2022 12:46:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB8B60E5E;
-	Tue, 15 Feb 2022 12:46:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E8F61BF97D
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4FA260F8A;
+	Tue, 15 Feb 2022 12:46:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EBEB21BF97D
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 12:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8AA9D8271D
- for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D872840190
+ for <buildroot@lists.busybox.net>; Tue, 15 Feb 2022 12:46:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o9cLEYJi3SD8 for <buildroot@lists.busybox.net>;
- Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hTNKbe6aYjgh for <buildroot@lists.busybox.net>;
+ Tue, 15 Feb 2022 12:46:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C6D3D82660
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 12:46:29 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id k25so43966844ejp.5
- for <buildroot@buildroot.org>; Tue, 15 Feb 2022 04:46:29 -0800 (PST)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D01B4016A
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 12:46:30 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id f17so31893314edd.2
+ for <buildroot@buildroot.org>; Tue, 15 Feb 2022 04:46:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zu1j8bhrusqm2OBTfknnxKx9kgbBhOGFUKKrEFlwURs=;
- b=RdpptzxBN+Tuoejb4a6TlYICYk4pIGWaRyn1L0nx8aT9Dwq7feljZy6WXIARb85WKR
- 1CPP6Fikt8E37neJsM3eRr1PFizz8IzpmEPvPIAnHaAiLbGo48PR4fAwIO8Z1tqAHTOW
- Hc6h1HqVSKxQIhvoxO9L5xZBO1P4uz/j/D96a/n69uQCa6DwGj+AOp6lkVawUHZhWTY/
- sDq0gh9aTWsG+Ma/G7inHDbcnnLXAggGkz7XZJuC6s6CRgMWpCjubMQA8dC5R62J/aFX
- /kCVSIdOd704dvYldkMIqt8C6dRCs72GKjI2rIdO5mnB1As6jwOR/+MJB5a6zIviqY6+
- US2w==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=MEeymPLl8XrmXjdfV2I4oniHQmyWVs84bAARbiBl63I=;
+ b=UEB80aITFBy0pGcO495DTqtD9NoY/2m5IjKbMUQ3/A11aeswL8efN22YbvsnU9U4pf
+ OSg+KvTlLvYbBdhAvumrfAdFaWAuIkuDk+vH/07gK2D19yoh5HN/VCLy/2I6BVKfIPlZ
+ SqMyZwc/GtzAPHQJ8S7cmrIhwOu/YFrz90z5OCqR+56PjqVn3QpLa6kY+oKGsgGEbE/n
+ COHeCVdVkGOUYuW/cXCOfH7LOhnKoLdATb2CoWkSaYDafupGJimQEHIP3TU2b2Ax/AgJ
+ mLRjwtpJShhdgUxtmna4rpTsJsfT1StMduSwXFk0hhY0kV4WGb1e/Tj8yHSawlk19gWs
+ myNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zu1j8bhrusqm2OBTfknnxKx9kgbBhOGFUKKrEFlwURs=;
- b=UuJcBODtWjawF30c1Q+bH7473uG2r7PoN6phHpjawyzbLFi0Z/Raz4wPkECpP0milQ
- 2UdmP+XZbLvpocjFtz0wZ4EmF0B6WF2aRpdmbwrWDHAvClFqgCyiWCU43r94byUWTbnx
- 12PZ4BR1SAZh552muCiNC6Y3UmCR4jzEp0uI0NFF8y834S0BTrxbcLSlP1soa21j2QaI
- Wx2psCEavbNjdS82+skDg9HjTKNDV9L69a2glC39TImZXeQb5aXkQuHyTDj3mqC7ZSdp
- H3xuPpZjIOgyBn39pxZcIFWwxbyyazufEbQvE+AWI2lMg2msizWMs6WC1VpqOdFOu+CW
- bsTg==
-X-Gm-Message-State: AOAM532M6zQaPVbziQrMSDO3Qazb7HxYweDxMZQbto/IgmYKKgIGTwgu
- 6pr1PkCHthRLUINTISPuaZHeByiD/e42cw==
-X-Google-Smtp-Source: ABdhPJztCHAThPLWC5eIuWu1tq/dg3wjrlhHLFjv9pet5AiDl7svay16EA/4SixP+RlYkD9sbrTrmg==
-X-Received: by 2002:a17:907:c1f:: with SMTP id
- ga31mr2805253ejc.347.1644929187865; 
- Tue, 15 Feb 2022 04:46:27 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=MEeymPLl8XrmXjdfV2I4oniHQmyWVs84bAARbiBl63I=;
+ b=NQITJWZirWDEMLI3+RNbYjk5G7okVsazRR1nN7wqxPj5V/3dClPVpbT16Eq9AMBvah
+ vy1AM7nbihK7OnPDGCI6W29MPLtK01W8Pabzr9G+CzmDZ7lD80lwBkCIWwwqaSWGLZNh
+ VZ8UllzbDujQBJMq2F9T3Yzgj+OHx6BAQ/btTfhN0AD9OLGyFF7/BKzitmgXHIhcxixZ
+ 4Ru7GCjwxbisJ7MhqnWJZMl8dnPRtze/nFV0HY+tC/s+4v2i5GoNZ48m+P6ZaVOhatAl
+ HB2ArSgoQUsD/xFphVdqnEjK3uFcnuhWLgzqW/Dn3JQxw8Cqw7D8Dfx3DMEbNUJEsTog
+ 4vtw==
+X-Gm-Message-State: AOAM531AEAcmyfOkAlfeGm+SPavkg4oUflY21XoLIEF6NAi0vfU4SVW4
+ NWkymp0pwK+fjclvRZJyXfTReDsqN918SA==
+X-Google-Smtp-Source: ABdhPJw28KhVWgUaJC05sjfWas/AlM3YeC3OPlIVDlNCBfdG+WYcYHkZSlXqLUE7WoPg/Qmo/lkbqQ==
+X-Received: by 2002:a05:6402:f14:: with SMTP id
+ i20mr3820618eda.123.1644929189349; 
+ Tue, 15 Feb 2022 04:46:29 -0800 (PST)
 Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
  [62.178.205.20])
- by smtp.gmail.com with ESMTPSA id v30sm2356056ejv.76.2022.02.15.04.46.27
+ by smtp.gmail.com with ESMTPSA id v30sm2356056ejv.76.2022.02.15.04.46.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Feb 2022 04:46:27 -0800 (PST)
+ Tue, 15 Feb 2022 04:46:29 -0800 (PST)
 From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Feb 2022 13:46:17 +0100
-Message-Id: <20220215124619.563502-1-nolange79@gmail.com>
+Date: Tue, 15 Feb 2022 13:46:18 +0100
+Message-Id: <20220215124619.563502-2-nolange79@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220215124619.563502-1-nolange79@gmail.com>
+References: <20220215124619.563502-1-nolange79@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] toolchain: support mismatched merged usr
+Subject: [Buildroot] [PATCH 2/2] toolchain: prevent infinite loop in
+ copy_toolchain_lib_root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,61 +89,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Look at the case where the source toolchain has non-merged usr,
-yet the target will have merged usr.
-
-sysroot/lib/ld-musl-x86_64.so.1 -> ../usr/lib/libc.so
-sysroot/usr/lib/libc.so
-
-What happens is that buildroot copies the ld-*so* symlink
-into usr/lib, at which point it becomes broken.
-
-We now detect these broken symlinks, then try to find the target
-binary in the library directories and fix the link.
-
-Fix the case where the lib directory is a symlink, and no ld-*so*
-is installed by adding -H to find.
-
-Also use `cp -t` instead of some rarely used xargs tricks.
+This can happen when there are broken symlinks.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- toolchain/helpers.mk | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ toolchain/helpers.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index ef8e9a5f64..aaf2aecd80 100644
+index aaf2aecd80..7623d68123 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -135,8 +135,17 @@ copy_toolchain_sysroot = \
- 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
- 		done ; \
- 	fi ; \
--	if [[ ! $$(find $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
--		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
-+	for i in $$(find -H $(STAGING_DIR)/lib -name 'ld*.so.*' -xtype l); do \
-+		LINKTARGET=`readlink $$i`; \
-+		rm $$i; \
-+		NEWLINKTARGET=$$(find -H $(STAGING_DIR)/$${ARCH_LIB_DIR} $(STAGING_DIR)/lib $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/lib -name "`basename $${LINKTARGET}`" -print -quit); \
-+		if [ -n "$${NEWLINKTARGET}" -a -e "$${NEWLINKTARGET}" ]; then \
-+			ln -sr $${NEWLINKTARGET} $$i; \
-+			echo "Symlinking $$i -> `readlink $$i`" ; \
-+		fi; \
-+	done; \
-+	if [[ ! $$(find -H $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
-+		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 cp -t $(STAGING_DIR)/lib/; \
- 	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+@@ -20,6 +20,7 @@ copy_toolchain_lib_root = \
+ 			if test -h $${LIBPATH} ; then \
+ 				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+ 				LIBPATH="`readlink -f $${LIBPATH}`"; \
++				[ -n "$${LIBPATH}" ] || break; \
+ 			elif test -f $${LIBPATH}; then \
+ 				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+ 				break ; \
 -- 
 2.34.1
 
