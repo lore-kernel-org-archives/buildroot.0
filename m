@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BED25C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 20:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37633C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 20:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75A4641773;
-	Wed, 16 Feb 2022 20:40:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF37541778;
+	Wed, 16 Feb 2022 20:42:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J12xTvF5JIH0; Wed, 16 Feb 2022 20:40:20 +0000 (UTC)
+	with ESMTP id L0P1E0ieozrN; Wed, 16 Feb 2022 20:42:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE09741629;
-	Wed, 16 Feb 2022 20:40:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 47A691BF425
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:40:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEA0741775;
+	Wed, 16 Feb 2022 20:42:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 296781BF425
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35C3D8142C
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:40:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 052B961C37
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:42:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vqtabR7CCMwU for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 20:40:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TtRJuA5lm-ML for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 20:42:31 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3ECFE81425
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 20:40:17 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ABCE661C31
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 20:42:30 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B6BBCC0002;
- Wed, 16 Feb 2022 20:40:14 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B2409FF806;
+ Wed, 16 Feb 2022 20:42:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nKR5y-0005BQ-21; Wed, 16 Feb 2022 21:40:14 +0100
+ id 1nKR88-0005GA-1B; Wed, 16 Feb 2022 21:42:28 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Joachim Wiberg <troglobit@gmail.com>
-References: <20220128084244.2258811-1-troglobit@gmail.com>
-Date: Wed, 16 Feb 2022 21:40:14 +0100
-In-Reply-To: <20220128084244.2258811-1-troglobit@gmail.com> (Joachim Wiberg's
- message of "Fri, 28 Jan 2022 09:42:44 +0100")
-Message-ID: <87y22ah7f5.fsf@dell.be.48ers.dk>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220128094827.2705597-1-bernd.kuhls@t-online.de>
+Date: Wed, 16 Feb 2022 21:42:27 +0100
+In-Reply-To: <20220128094827.2705597-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 28 Jan 2022 10:48:27 +0100")
+Message-ID: <87tucyh7bg.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gdb: backport fix for gdbserver
- 11.1 on aarch64
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,30 +59,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Joachim" == Joachim Wiberg <troglobit@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Backported from upstream GDB geb79b23, with ChangeLogs stripped so the
- > patch applies properly on Buildroot.
-
- >     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=eb79b23
-
- > Fixes the following issue:
-
- >     # gdbserver /dev/hvc1 inadyn -n -l debug
- >     Process inadyn created; pid = 675
- >     Remote debugging using /dev/hvc1
- >     ../../gdbserver/regcache.cc:257: A problem internal to GDBserver has been detected.
- >     Unknown register tag_ctl requested
-
- > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+ > Changelog: https://www.php.net/ChangeLog-8.php#8.0.15
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2021.11.x, thanks.
+
+ > ---
+ >  package/php/php.hash | 2 +-
+ >  package/php/php.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/php/php.hash b/package/php/php.hash
+ > index 329410b54f..e78385cbe7 100644
+ > --- a/package/php/php.hash
+ > +++ b/package/php/php.hash
+ > @@ -1,5 +1,5 @@
+ >  # From https://www.php.net/downloads.php
+ > -sha256  fbde8247ac200e4de73449d9fefc8b495d323b5be9c10cdb645fb431c91156e3  php-8.0.14.tar.xz
+ > +sha256  5f33544061d37d805a2a9ce791f081ef08a7155bd7ba2362e69bba2d06b0f8b2  php-8.0.15.tar.xz
+ 
+ >  # License file
+ >  sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+ > diff --git a/package/php/php.mk b/package/php/php.mk
+ > index ca59334104..c9de8c2c76 100644
+ > --- a/package/php/php.mk
+ > +++ b/package/php/php.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -PHP_VERSION = 8.0.14
+ > +PHP_VERSION = 8.0.15
+ >  PHP_SITE = https://www.php.net/distributions
+ >  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ >  PHP_INSTALL_STAGING = YES
+ > -- 
+ > 2.30.2
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
