@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 947E8C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 20:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 676E0C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 20:50:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50CA640157;
-	Wed, 16 Feb 2022 20:50:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F95941778;
+	Wed, 16 Feb 2022 20:50:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1mbLlspefhlQ; Wed, 16 Feb 2022 20:49:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qrzQ2OE5HsMI; Wed, 16 Feb 2022 20:50:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B931F40164;
-	Wed, 16 Feb 2022 20:49:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F8061BF425
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A6F941773;
+	Wed, 16 Feb 2022 20:50:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2413B1BF9BA
  for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:48:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E338683498
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7A5960BEA
  for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:48:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id URNd5-ctiT19 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Acz1uidrBLYO for <buildroot@lists.busybox.net>;
  Wed, 16 Feb 2022 20:48:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C527583300
+ by smtp3.osuosl.org (Postfix) with ESMTP id C734D60E3F
  for <buildroot@buildroot.org>; Wed, 16 Feb 2022 20:48:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 12585835EC; Wed, 16 Feb 2022 20:40:44 +0000 (UTC)
+ id 284EE835E8; Wed, 16 Feb 2022 20:40:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 21:39:37 +0100
+Date: Wed, 16 Feb 2022 21:43:08 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 73c8fbe2a84934778c869edac72a9d2f410ce737
-X-Git-Newrev: 0139ab83d612b125a4eeeb68b08a9e32e1865837
+X-Git-Oldrev: 0d32c53ee75c2f53f4e50522bf229d1a399a4090
+X-Git-Newrev: d6b61411a3f63355b5b7c5689dea98c724f2b2d8
 X-Patchwork-Hint: ignore
-Message-Id: <20220216204044.12585835EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/gdb: backport fix
- for gdbserver 11.1 on aarch64
+Message-Id: <20220216204044.284EE835E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/{glibc,
+ localedef}: security bump for additional post-2.34.x fixes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,357 +59,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0139ab83d612b125a4eeeb68b08a9e32e1865837
+commit: https://git.buildroot.net/buildroot/commit/?id=d6b61411a3f63355b5b7c5689dea98c724f2b2d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Backported from upstream GDB geb79b23, with ChangeLogs stripped so the
-patch applies properly on Buildroot.
+Fixes the following security issues:
 
-    https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=eb79b23
+  CVE-2022-23219: Passing an overlong file name to the clnt_create
+  legacy function could result in a stack-based buffer overflow when
+  using the "unix" protocol.  Reported by Martin Sebor.
 
-Fixes the following issue:
+  CVE-2022-23218: Passing an overlong file name to the svcunix_create
+  legacy function could result in a stack-based buffer overflow.
 
-    # gdbserver /dev/hvc1 inadyn -n -l debug
-    Process inadyn created; pid = 675
-    Remote debugging using /dev/hvc1
-    ../../gdbserver/regcache.cc:257: A problem internal to GDBserver has been detected.
-    Unknown register tag_ctl requested
+  CVE-2021-3998: Passing a path longer than PATH_MAX to the realpath
+  function could result in a memory leak and potential access of
+  uninitialized memory.  Reported by Qualys.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[yann.morin.1998@free.fr: add SoB in patch, provided live on IRC]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4353c716466fb8860dea265985829e9fae58e016)
+  CVE-2021-3999: Passing a buffer of size exactly 1 byte to the getcwd
+  function may result in an off-by-one buffer underflow and overflow
+  when the current working directory is longer than PATH_MAX and also
+  corresponds to the / directory through an unprivileged mount
+  namespace.  Reported by Qualys.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1983d2e6a30fb6ca1d81f47798467bb0ac4401e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gdb/11.1/0010-gdbserver-aarch64-support.patch  | 320 +++++++++++++++++++++
- 1 file changed, 320 insertions(+)
+ .../0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch     | 0
+ .../glibc.hash                                                          | 2 +-
+ package/glibc/glibc.mk                                                  | 2 +-
+ .../0001-HACK-only-build-and-install-localedef.patch                    | 0
+ .../0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch      | 0
+ .../localedef.hash                                                      | 2 +-
+ package/localedef/localedef.mk                                          | 2 +-
+ 7 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gdb/11.1/0010-gdbserver-aarch64-support.patch b/package/gdb/11.1/0010-gdbserver-aarch64-support.patch
-new file mode 100644
-index 0000000000..3718b1b6fd
---- /dev/null
-+++ b/package/gdb/11.1/0010-gdbserver-aarch64-support.patch
-@@ -0,0 +1,320 @@
-+From eb79b2318066cafb75ffdce310e3bbd44f7c79e3 Mon Sep 17 00:00:00 2001
-+From: Luis Machado <luis.machado@linaro.org>
-+Date: Fri, 29 Oct 2021 14:54:36 -0300
-+Subject: [PATCH] [AArch64] Make gdbserver register set selection dynamic
-+
-+The current register set selection mechanism for AArch64 is static, based
-+on a pre-populated array of register sets.
-+
-+This means that we might potentially probe register sets that are not
-+available. This is OK if the kernel errors out during ptrace, but probing the
-+tag_ctl register, for example, does not result in a ptrace error if the kernel
-+supports the tagged address ABI but not MTE (PR 28355).
-+
-+Making the register set selection dynamic, based on feature checks, solves
-+this and simplifies the code a bit. It allows us to list all of the register
-+sets only once, and pick and choose based on HWCAP/HWCAP2 or other properties.
-+
-+gdb/ChangeLog:
-+
-+2021-11-03  Luis Machado  <luis.machado@linaro.org>
-+
-+	PR gdb/28355
-+
-+	* arch/aarch64.h (struct aarch64_features): New struct.
-+
-+gdbserver/ChangeLog:
-+
-+2021-11-03  Luis Machado  <luis.machado@linaro.org>
-+
-+	PR gdb/28355
-+
-+	* linux-aarch64-low.cc (is_sve_tdesc): Remove.
-+	(aarch64_target::low_arch_setup): Rework to adjust the register sets.
-+	(aarch64_regsets): Update to list all register sets.
-+	(aarch64_regsets_info, regs_info_aarch64): Replace NULL with nullptr.
-+	(aarch64_sve_regsets, aarch64_sve_regsets_info)
-+	(regs_info_aarch64_sve): Remove.
-+	(aarch64_adjust_register_sets): New.
-+	(aarch64_target::get_regs_info): Remove references to removed structs.
-+	(initialize_low_arch): Likewise.
-+
-+Backported from: eb79b2318066cafb75ffdce310e3bbd44f7c79e3
-+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-+---
-+ gdb/arch/aarch64.h             |   9 ++
-+ gdbserver/linux-aarch64-low.cc | 186 ++++++++++++++++++---------------
-+ 4 files changed, 130 insertions(+), 85 deletions(-)
-+
-+diff --git a/gdb/arch/aarch64.h b/gdb/arch/aarch64.h
-+index 0eb702c5b5e..95edb664b55 100644
-+--- a/gdb/arch/aarch64.h
-++++ b/gdb/arch/aarch64.h
-+@@ -22,6 +22,15 @@
-+ 
-+ #include "gdbsupport/tdesc.h"
-+ 
-++/* Holds information on what architectural features are available.  This is
-++   used to select register sets.  */
-++struct aarch64_features
-++{
-++  bool sve = false;
-++  bool pauth = false;
-++  bool mte = false;
-++};
-++
-+ /* Create the aarch64 target description.  A non zero VQ value indicates both
-+    the presence of SVE and the Vector Quotient - the number of 128bit chunks in
-+    an SVE Z register.  HAS_PAUTH_P indicates the presence of the PAUTH
-+diff --git a/gdbserver/linux-aarch64-low.cc b/gdbserver/linux-aarch64-low.cc
-+index daccfef746e..9a8cb4169a7 100644
-+--- a/gdbserver/linux-aarch64-low.cc
-++++ b/gdbserver/linux-aarch64-low.cc
-+@@ -196,16 +196,6 @@ is_64bit_tdesc (void)
-+   return register_size (regcache->tdesc, 0) == 8;
-+ }
-+ 
-+-/* Return true if the regcache contains the number of SVE registers.  */
-+-
-+-static bool
-+-is_sve_tdesc (void)
-+-{
-+-  struct regcache *regcache = get_thread_regcache (current_thread, 0);
-+-
-+-  return tdesc_contains_feature (regcache->tdesc, "org.gnu.gdb.aarch64.sve");
-+-}
-+-
-+ static void
-+ aarch64_fill_gregset (struct regcache *regcache, void *buf)
-+ {
-+@@ -680,40 +670,6 @@ aarch64_target::low_new_fork (process_info *parent,
-+   *child->priv->arch_private = *parent->priv->arch_private;
-+ }
-+ 
-+-/* Matches HWCAP_PACA in kernel header arch/arm64/include/uapi/asm/hwcap.h.  */
-+-#define AARCH64_HWCAP_PACA (1 << 30)
-+-
-+-/* Implementation of linux target ops method "low_arch_setup".  */
-+-
-+-void
-+-aarch64_target::low_arch_setup ()
-+-{
-+-  unsigned int machine;
-+-  int is_elf64;
-+-  int tid;
-+-
-+-  tid = lwpid_of (current_thread);
-+-
-+-  is_elf64 = linux_pid_exe_is_elf_64_file (tid, &machine);
-+-
-+-  if (is_elf64)
-+-    {
-+-      uint64_t vq = aarch64_sve_get_vq (tid);
-+-      unsigned long hwcap = linux_get_hwcap (8);
-+-      unsigned long hwcap2 = linux_get_hwcap2 (8);
-+-      bool pauth_p = hwcap & AARCH64_HWCAP_PACA;
-+-      /* MTE is AArch64-only.  */
-+-      bool mte_p = hwcap2 & HWCAP2_MTE;
-+-
-+-      current_process ()->tdesc
-+-	= aarch64_linux_read_description (vq, pauth_p, mte_p);
-+-    }
-+-  else
-+-    current_process ()->tdesc = aarch32_linux_read_description ();
-+-
-+-  aarch64_linux_get_debug_reg_capacity (lwpid_of (current_thread));
-+-}
-+-
-+ /* Wrapper for aarch64_sve_regs_copy_to_reg_buf.  */
-+ 
-+ static void
-+@@ -730,21 +686,36 @@ aarch64_sve_regs_copy_from_regcache (struct regcache *regcache, void *buf)
-+   return aarch64_sve_regs_copy_from_reg_buf (regcache, buf);
-+ }
-+ 
-++/* Array containing all the possible register sets for AArch64/Linux.  During
-++   architecture setup, these will be checked against the HWCAP/HWCAP2 bits for
-++   validity and enabled/disabled accordingly.
-++
-++   Their sizes are set to 0 here, but they will be adjusted later depending
-++   on whether each register set is available or not.  */
-+ static struct regset_info aarch64_regsets[] =
-+ {
-++  /* GPR registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_PRSTATUS,
-+-    sizeof (struct user_pt_regs), GENERAL_REGS,
-++    0, GENERAL_REGS,
-+     aarch64_fill_gregset, aarch64_store_gregset },
-++  /* Floating Point (FPU) registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_FPREGSET,
-+-    sizeof (struct user_fpsimd_state), FP_REGS,
-++    0, FP_REGS,
-+     aarch64_fill_fpregset, aarch64_store_fpregset
-+   },
-++  /* Scalable Vector Extension (SVE) registers.  */
-++  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_SVE,
-++    0, EXTENDED_REGS,
-++    aarch64_sve_regs_copy_from_regcache, aarch64_sve_regs_copy_to_regcache
-++  },
-++  /* PAC registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_PAC_MASK,
-+-    AARCH64_PAUTH_REGS_SIZE, OPTIONAL_REGS,
-+-    NULL, aarch64_store_pauthregset },
-++    0, OPTIONAL_REGS,
-++    nullptr, aarch64_store_pauthregset },
-++  /* Tagged address control / MTE registers.  */
-+   { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_TAGGED_ADDR_CTRL,
-+-    AARCH64_LINUX_SIZEOF_MTE, OPTIONAL_REGS, aarch64_fill_mteregset,
-+-    aarch64_store_mteregset },
-++    0, OPTIONAL_REGS,
-++    aarch64_fill_mteregset, aarch64_store_mteregset },
-+   NULL_REGSET
-+ };
-+ 
-+@@ -752,47 +723,95 @@ static struct regsets_info aarch64_regsets_info =
-+   {
-+     aarch64_regsets, /* regsets */
-+     0, /* num_regsets */
-+-    NULL, /* disabled_regsets */
-++    nullptr, /* disabled_regsets */
-+   };
-+ 
-+ static struct regs_info regs_info_aarch64 =
-+   {
-+-    NULL, /* regset_bitmap */
-+-    NULL, /* usrregs */
-++    nullptr, /* regset_bitmap */
-++    nullptr, /* usrregs */
-+     &aarch64_regsets_info,
-+   };
-+ 
-+-static struct regset_info aarch64_sve_regsets[] =
-++/* Given FEATURES, adjust the available register sets by setting their
-++   sizes.  A size of 0 means the register set is disabled and won't be
-++   used.  */
-++
-++static void
-++aarch64_adjust_register_sets (const struct aarch64_features &features)
-+ {
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_PRSTATUS,
-+-    sizeof (struct user_pt_regs), GENERAL_REGS,
-+-    aarch64_fill_gregset, aarch64_store_gregset },
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_SVE,
-+-    SVE_PT_SIZE (AARCH64_MAX_SVE_VQ, SVE_PT_REGS_SVE), EXTENDED_REGS,
-+-    aarch64_sve_regs_copy_from_regcache, aarch64_sve_regs_copy_to_regcache
-+-  },
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_PAC_MASK,
-+-    AARCH64_PAUTH_REGS_SIZE, OPTIONAL_REGS,
-+-    NULL, aarch64_store_pauthregset },
-+-  { PTRACE_GETREGSET, PTRACE_SETREGSET, NT_ARM_TAGGED_ADDR_CTRL,
-+-    AARCH64_LINUX_SIZEOF_MTE, OPTIONAL_REGS, aarch64_fill_mteregset,
-+-    aarch64_store_mteregset },
-+-  NULL_REGSET
-+-};
-++  struct regset_info *regset;
-+ 
-+-static struct regsets_info aarch64_sve_regsets_info =
-+-  {
-+-    aarch64_sve_regsets, /* regsets.  */
-+-    0, /* num_regsets.  */
-+-    NULL, /* disabled_regsets.  */
-+-  };
-++  for (regset = aarch64_regsets; regset->size >= 0; regset++)
-++    {
-++      switch (regset->nt_type)
-++	{
-++	case NT_PRSTATUS:
-++	  /* General purpose registers are always present.  */
-++	  regset->size = sizeof (struct user_pt_regs);
-++	  break;
-++	case NT_FPREGSET:
-++	  /* This is unavailable when SVE is present.  */
-++	  if (!features.sve)
-++	    regset->size = sizeof (struct user_fpsimd_state);
-++	  break;
-++	case NT_ARM_SVE:
-++	  if (features.sve)
-++	    regset->size = SVE_PT_SIZE (AARCH64_MAX_SVE_VQ, SVE_PT_REGS_SVE);
-++	  break;
-++	case NT_ARM_PAC_MASK:
-++	  if (features.pauth)
-++	    regset->size = AARCH64_PAUTH_REGS_SIZE;
-++	  break;
-++	case NT_ARM_TAGGED_ADDR_CTRL:
-++	  if (features.mte)
-++	    regset->size = AARCH64_LINUX_SIZEOF_MTE;
-++	  break;
-++	default:
-++	  gdb_assert_not_reached ("Unknown register set found.");
-++	}
-++    }
-++}
-+ 
-+-static struct regs_info regs_info_aarch64_sve =
-+-  {
-+-    NULL, /* regset_bitmap.  */
-+-    NULL, /* usrregs.  */
-+-    &aarch64_sve_regsets_info,
-+-  };
-++/* Matches HWCAP_PACA in kernel header arch/arm64/include/uapi/asm/hwcap.h.  */
-++#define AARCH64_HWCAP_PACA (1 << 30)
-++
-++/* Implementation of linux target ops method "low_arch_setup".  */
-++
-++void
-++aarch64_target::low_arch_setup ()
-++{
-++  unsigned int machine;
-++  int is_elf64;
-++  int tid;
-++
-++  tid = lwpid_of (current_thread);
-++
-++  is_elf64 = linux_pid_exe_is_elf_64_file (tid, &machine);
-++
-++  if (is_elf64)
-++    {
-++      struct aarch64_features features;
-++
-++      uint64_t vq = aarch64_sve_get_vq (tid);
-++      features.sve = (vq > 0);
-++      /* A-profile PAC is 64-bit only.  */
-++      features.pauth = linux_get_hwcap (8) & AARCH64_HWCAP_PACA;
-++      /* A-profile MTE is 64-bit only.  */
-++      features.mte = linux_get_hwcap2 (8) & HWCAP2_MTE;
-++
-++      current_process ()->tdesc
-++	= aarch64_linux_read_description (vq, features.pauth, features.mte);
-++
-++      /* Adjust the register sets we should use for this particular set of
-++	 features.  */
-++      aarch64_adjust_register_sets (features);
-++    }
-++  else
-++    current_process ()->tdesc = aarch32_linux_read_description ();
-++
-++  aarch64_linux_get_debug_reg_capacity (lwpid_of (current_thread));
-++}
-+ 
-+ /* Implementation of linux target ops method "get_regs_info".  */
-+ 
-+@@ -802,9 +821,7 @@ aarch64_target::get_regs_info ()
-+   if (!is_64bit_tdesc ())
-+     return &regs_info_aarch32;
-+ 
-+-  if (is_sve_tdesc ())
-+-    return &regs_info_aarch64_sve;
-+-
-++  /* AArch64 64-bit registers.  */
-+   return &regs_info_aarch64;
-+ }
-+ 
-+@@ -3294,5 +3311,4 @@ initialize_low_arch (void)
-+   initialize_low_arch_aarch32 ();
-+ 
-+   initialize_regsets_info (&aarch64_regsets_info);
-+-  initialize_regsets_info (&aarch64_sve_regsets_info);
-+ }
-+-- 
-+2.27.0
-+
+diff --git a/package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch b/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
+similarity index 100%
+rename from package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
+rename to package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
+diff --git a/package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/glibc.hash b/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash
+similarity index 70%
+rename from package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/glibc.hash
+rename to package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash
+index 595de95a58..dfd939020f 100644
+--- a/package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/glibc.hash
++++ b/package/glibc/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  1c7ed0f69ed268bd66f9754d0cb8fb65e0dafc1f9a1048ea50d1e96d60399686  glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4.tar.gz
++sha256  3c299a21468a80356b848ca341f45551616c4928a6c871e6d45cee942e8b0f24  glibc-2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 3862e0624b..f8950c166b 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4
++GLIBC_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-HACK-only-build-and-install-localedef.patch
+similarity index 100%
+rename from package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-HACK-only-build-and-install-localedef.patch
+rename to package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0001-HACK-only-build-and-install-localedef.patch
+diff --git a/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+similarity index 100%
+rename from package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+rename to package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+diff --git a/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/localedef.hash b/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
+similarity index 70%
+rename from package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/localedef.hash
+rename to package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
+index 595de95a58..dfd939020f 100644
+--- a/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/localedef.hash
++++ b/package/localedef/2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c/localedef.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  1c7ed0f69ed268bd66f9754d0cb8fb65e0dafc1f9a1048ea50d1e96d60399686  glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4.tar.gz
++sha256  3c299a21468a80356b848ca341f45551616c4928a6c871e6d45cee942e8b0f24  glibc-2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 87d921cffe..f8f0b42984 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4
++LOCALEDEF_VERSION = 2.34-109-gd64b08d5ba7ffbc9155630f4843cf2e271b1629c
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
