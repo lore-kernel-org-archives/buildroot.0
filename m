@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF010C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987E0C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 723B480DE9;
-	Wed, 16 Feb 2022 21:07:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57C804179C;
+	Wed, 16 Feb 2022 21:07:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FHw5dGxMpVnZ; Wed, 16 Feb 2022 21:07:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gQemV8CRpn1F; Wed, 16 Feb 2022 21:07:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B832080DCF;
-	Wed, 16 Feb 2022 21:07:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C72BE1BF425
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:04:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0D164178E;
+	Wed, 16 Feb 2022 21:07:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 94DF41BF425
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3BAE83DFD
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:04:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 832F861C53
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:04:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rOt9t48pw-bF for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 21:04:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8GHDTgqM2kYq for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 21:04:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AC3E81390
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:04:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7764A60BEC
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:04:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5B1D7836D1; Wed, 16 Feb 2022 20:56:22 +0000 (UTC)
+ id B7ADB836D7; Wed, 16 Feb 2022 20:56:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 22:03:57 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: faa5ad2c438c63245f4e01830388b27e99c3bc0e
-X-Git-Newrev: 1db408a3512719b3cb6da649be539de9a047b462
+Date: Wed, 16 Feb 2022 22:03:35 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 1e25ae6943e9d62819f690bee46ccba24081f8b8
+X-Git-Newrev: 1c5f3083c71764bb1f6997deb5e98ebf298c8e2d
 X-Patchwork-Hint: ignore
-Message-Id: <20220216205622.5B1D7836D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/vim: security
+Message-Id: <20220216205626.B7ADB836D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/vim: security
  bump to version 8.2.4301
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1db408a3512719b3cb6da649be539de9a047b462
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1c5f3083c71764bb1f6997deb5e98ebf298c8e2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Fix CVE-2022-0393: Out-of-bounds Read in GitHub repository vim/vim prior
 to 8.2.
