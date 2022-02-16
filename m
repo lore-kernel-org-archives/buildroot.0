@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F68CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 20:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9F1C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 20:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A616D60B4B;
-	Wed, 16 Feb 2022 20:48:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D79B5409E7;
+	Wed, 16 Feb 2022 20:48:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S7h8DNXjJgfI; Wed, 16 Feb 2022 20:48:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD87340164;
+	Wed, 16 Feb 2022 20:48:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F0F31BF425
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:48:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AD9D61C31
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:48:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J-g3ITedDqOc; Wed, 16 Feb 2022 20:48:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE58761C3B;
-	Wed, 16 Feb 2022 20:48:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4BC71BF9D1
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:48:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A090D830A7
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 20:48:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id duZtpvzVRoBY for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 20:48:19 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SUxaU7qaXCAW for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 20:48:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E24128308D
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 20:48:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7EB460B6A
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 20:48:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 30805835CC; Wed, 16 Feb 2022 20:40:39 +0000 (UTC)
+ id 09893835E8; Wed, 16 Feb 2022 20:40:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 21:28:00 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 0a395e2a6912ae5e1c11634b2c83deb6919fb78e
-X-Git-Newrev: 6306bed7f5bffd16ca3627671ae3ddf1d850e3e3
+Date: Wed, 16 Feb 2022 21:33:42 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 32181572eba91a6a58fdfff0cf92df940be99b97
+X-Git-Newrev: 73c8fbe2a84934778c869edac72a9d2f410ce737
 X-Patchwork-Hint: ignore
-Message-Id: <20220216204039.30805835CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rtl8723bu: bump
- to version 19b4bdc05483a1e79a4f955a80f8f72cdd5dedc3
+Message-Id: <20220216204044.09893835E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] linux: clarify
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6306bed7f5bffd16ca3627671ae3ddf1d850e3e3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=73c8fbe2a84934778c869edac72a9d2f410ce737
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-This version fixes a bug that prevents the user from switching from one
-access point to another.
+This clarifies that custom DTSI files can be passed too,
+and that the files are compiled after being copied to the
+Linux kernel source tree.
 
-Signed-off-by: Doug Brown <doug@schmorgal.com>
+Signed-off-by: Michael Opdenacker <michael.opdenacker@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 89211450c68df76f3b850c651733c86fb02b40d6)
+(cherry picked from commit 8ef413b59a870b6a593eb9f1a71caef30c1848c3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8723bu/rtl8723bu.hash | 2 +-
- package/rtl8723bu/rtl8723bu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
-index 04bc776a07..1dad7154b4 100644
---- a/package/rtl8723bu/rtl8723bu.hash
-+++ b/package/rtl8723bu/rtl8723bu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  4c7314dccebda1e55ec8dcf0d5ca8915c2490d17a9f56923f25e6e0e945c10cc  rtl8723bu-9ce1c38439f4f574bb7adaf33949835c25536a28.tar.gz
-+sha256  1cd658742ce10b21c92877e09cecc98880680d5f150de3845553005abc542977  rtl8723bu-19b4bdc05483a1e79a4f955a80f8f72cdd5dedc3.tar.gz
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index c35fad5832..e490bddf09 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 264cbde98e..0d7464d1da 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -411,9 +411,10 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	string "Out-of-tree Device Tree Source file paths"
+ 	help
+-	  Path to the out-of-tree device tree source files.
+-	  You can provide a list of dts paths to copy and
+-	  build, separated by spaces.
++	  Paths to out-of-tree Device Tree Source (.dts) and Device Tree
++	  Source Include (.dtsi) files, separated by spaces. These files
++	  will be copied to the kernel sources and the .dts files will
++	  be compiled from there.
  
--RTL8723BU_VERSION = 9ce1c38439f4f574bb7adaf33949835c25536a28
-+RTL8723BU_VERSION = 19b4bdc05483a1e79a4f955a80f8f72cdd5dedc3
- RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
- RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
- 
+ config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
+ 	bool "Keep the directory name of the Device Tree"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
