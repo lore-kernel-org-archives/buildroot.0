@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3A8CC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15C2CC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25D7B40A0E;
-	Wed, 16 Feb 2022 21:23:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7472240157;
+	Wed, 16 Feb 2022 21:23:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2hSeGRZIDu_O; Wed, 16 Feb 2022 21:23:07 +0000 (UTC)
+	with ESMTP id NQPXB67WTwoS; Wed, 16 Feb 2022 21:23:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0EAA740A11;
-	Wed, 16 Feb 2022 21:23:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3A1CD1BF5A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1031540A3F;
+	Wed, 16 Feb 2022 21:23:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 98BA51BF5A9
  for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26D6860BD3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B6D340024
  for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:22:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0owPt-gQE8MW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qHhM5l6Be61o for <buildroot@lists.busybox.net>;
  Wed, 16 Feb 2022 21:22:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12E9060B12
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:22:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 043F041721
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:22:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4B0E48372A; Wed, 16 Feb 2022 21:15:11 +0000 (UTC)
+ id 38A8B83724; Wed, 16 Feb 2022 21:15:11 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 22:22:34 +0100
+Date: Wed, 16 Feb 2022 21:32:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 29a12eb86aee706082f344a25d2e563984b9aa1a
-X-Git-Newrev: cc60c732a19548cfbd3543d3521324ef5faaa116
+X-Git-Oldrev: d1ca33e81230eaa5fe41c4945075c62821128a8b
+X-Git-Newrev: c3810c131761922ae8c046840c78430c4125f16e
 X-Patchwork-Hint: ignore
-Message-Id: <20220216211511.4B0E48372A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-tinycss2: bump
- to version 1.1.1
+Message-Id: <20220216211511.38A8B83724@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-python.mk:
+ refactor build/install opts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,60 +59,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc60c732a19548cfbd3543d3521324ef5faaa116
+commit: https://git.buildroot.net/buildroot/commit/?id=c3810c131761922ae8c046840c78430c4125f16e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This update drops distutils support and requires flit package
-infrastructure.
+The python package infrastructure defines a number of helper variables
+that are used to construct the build and install commands. However,
+there are still a few parts (setup.py and its argument) that are set
+explicitly in _BUILD_CMDS and _INSTALL_CMDS. This creates problems if we
+want to add another setup type that does not use setup.py.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Therefore, move the setup.py part into the helper variables as well.
+Since this means that the variable becomes a full command rather than
+just options, rename them to _BUILD_CMD and _INSTALL_CMD.
+
+While we're at it, also clean up the whitespace in the definition of
+these variables. They were aligned on = at some point, but that
+alignment was already broken.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-tinycss2/Config.in            | 2 ++
- package/python-tinycss2/python-tinycss2.hash | 4 ++--
- package/python-tinycss2/python-tinycss2.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/pkg-python.mk | 45 +++++++++++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 22 deletions(-)
 
-diff --git a/package/python-tinycss2/Config.in b/package/python-tinycss2/Config.in
-index a34717e002..4d6dcca663 100644
---- a/package/python-tinycss2/Config.in
-+++ b/package/python-tinycss2/Config.in
-@@ -3,3 +3,5 @@ config BR2_PACKAGE_PYTHON_TINYCSS2
- 	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
- 	help
- 	  A tiny CSS parser.
-+
-+	  https://www.courtbouillon.org/tinycss2
-diff --git a/package/python-tinycss2/python-tinycss2.hash b/package/python-tinycss2/python-tinycss2.hash
-index eeb3754752..e8e1d93f83 100644
---- a/package/python-tinycss2/python-tinycss2.hash
-+++ b/package/python-tinycss2/python-tinycss2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tinycss2/json
--md5  7caf513c4e87fc2449dcfbf407a8416f  tinycss2-1.1.0.tar.gz
--sha256  fbdcac3044d60eb85fdb2aa840ece43cf7dbe798e373e6ee0be545d4d134e18a  tinycss2-1.1.0.tar.gz
-+md5  60272f58f8d5834b2e09ffbc9bd5de53  tinycss2-1.1.1.tar.gz
-+sha256  b2e44dd8883c360c35dd0d1b5aad0b610e5156c2cb3b33434634e539ead9d8bf  tinycss2-1.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256  6b94acee20ec9f2709333134f3ba70322535fb420af0ce8c1455d9cbe297f1d5  LICENSE
-diff --git a/package/python-tinycss2/python-tinycss2.mk b/package/python-tinycss2/python-tinycss2.mk
-index 4bf5b97766..e4fc5dc9c5 100644
---- a/package/python-tinycss2/python-tinycss2.mk
-+++ b/package/python-tinycss2/python-tinycss2.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 02df061a19..61f0dd6ec2 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -130,27 +130,27 @@ endif
+ # Distutils
+ ifeq ($$($(2)_SETUP_TYPE),distutils)
+ ifeq ($(4),target)
+-$(2)_BASE_ENV         = $$(PKG_PYTHON_DISTUTILS_ENV)
+-$(2)_BASE_BUILD_TGT   = build
+-$(2)_BASE_BUILD_OPTS   = $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
+-$(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
+-$(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
++$(2)_BASE_ENV = $$(PKG_PYTHON_DISTUTILS_ENV)
++$(2)_BASE_BUILD_CMD = setup.py build
++$(2)_BASE_BUILD_OPTS = $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
++$(2)_BASE_INSTALL_TARGET_CMD  = setup.py install --no-compile $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
++$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
+ else
+ $(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_DISTUTILS_ENV)
+-$(2)_BASE_BUILD_TGT   = build
+-$(2)_BASE_INSTALL_OPTS = $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
++$(2)_BASE_BUILD_CMD   = setup.py build
++$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
+ endif
+ # Setuptools
+ else ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifeq ($(4),target)
+-$(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+-$(2)_BASE_BUILD_TGT   = build
+-$(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+-$(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
++$(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
++$(2)_BASE_BUILD_CMD = setup.py build
++$(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
++$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
+ else
+-$(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
+-$(2)_BASE_BUILD_TGT   = build
+-$(2)_BASE_INSTALL_OPTS = $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
++$(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
++$(2)_BASE_BUILD_CMD = setup.py build
++$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+ endif
+ else
+ $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils' or 'setuptools'")
+@@ -186,8 +186,8 @@ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) setup.py \
+-		$$($$(PKG)_BASE_BUILD_TGT) \
++		$$($(2)_PYTHON_INTERPRETER) \
++		$$($$(PKG)_BASE_BUILD_CMD) \
+ 		$$($$(PKG)_BASE_BUILD_OPTS) $$($$(PKG)_BUILD_OPTS))
+ endef
+ endif
+@@ -200,8 +200,9 @@ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) setup.py install \
+-		$$($$(PKG)_BASE_INSTALL_OPTS) $$($$(PKG)_INSTALL_OPTS))
++		$$($(2)_PYTHON_INTERPRETER) \
++		$$($$(PKG)_BASE_INSTALL_CMD) \
++		$$($$(PKG)_INSTALL_OPTS))
+ endef
+ endif
  
--PYTHON_TINYCSS2_VERSION = 1.1.0
-+PYTHON_TINYCSS2_VERSION = 1.1.1
- PYTHON_TINYCSS2_SOURCE = tinycss2-$(PYTHON_TINYCSS2_VERSION).tar.gz
--PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/ce/d3/ece7a98d5826bd134e269a3a3030153d30482194fca71d95a3041812aab8
--PYTHON_TINYCSS2_SETUP_TYPE = distutils
-+PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/1e/5a/576828164b5486f319c4323915b915a8af3fa4a654bbb6f8fc8e87b5cb17
-+PYTHON_TINYCSS2_SETUP_TYPE = flit
- PYTHON_TINYCSS2_LICENSE = BSD-3-Clause
- PYTHON_TINYCSS2_LICENSE_FILES = LICENSE
- 
+@@ -213,8 +214,8 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
+-		$$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
++		$$($(2)_PYTHON_INTERPRETER) \
++		$$($$(PKG)_BASE_INSTALL_TARGET_CMD) \
+ 		$$($$(PKG)_INSTALL_TARGET_OPTS))
+ endef
+ endif
+@@ -227,8 +228,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) setup.py install \
+-		$$($$(PKG)_BASE_INSTALL_STAGING_OPTS) \
++		$$($(2)_PYTHON_INTERPRETER) \
++		$$($$(PKG)_BASE_INSTALL_STAGING_CMD) \
+ 		$$($$(PKG)_INSTALL_STAGING_OPTS))
+ endef
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
