@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08CD0C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 22:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 595D5C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 22:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B00B0416FC;
-	Wed, 16 Feb 2022 22:23:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1094D400BF;
+	Wed, 16 Feb 2022 22:23:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EszNhgdDtNcc; Wed, 16 Feb 2022 22:23:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pXctlUJAAHFP; Wed, 16 Feb 2022 22:23:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0A7F416E3;
-	Wed, 16 Feb 2022 22:23:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EAE3B40157;
+	Wed, 16 Feb 2022 22:23:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EAF631BF59C
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:23:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C1451BF59C
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D969440278
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:23:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEC8040278
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:23:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f1pD9aUau3w8 for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 22:23:11 +0000 (UTC)
+ with ESMTP id UN-RoWvxMLdj for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 22:23:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 276F940274
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 22:23:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4342D40274
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 22:23:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 45F8A8378B; Wed, 16 Feb 2022 22:15:30 +0000 (UTC)
+ id 64E0E83794; Wed, 16 Feb 2022 22:15:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 23:22:48 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1db408a3512719b3cb6da649be539de9a047b462
-X-Git-Newrev: 245a2838267334e2d6e2d62a749f6b386f82a1ba
+Date: Wed, 16 Feb 2022 23:22:30 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 8d79accf96a135bef77875949a3e33e8c92a8033
+X-Git-Newrev: 1a9431d52d43461fb8b844fd2e7d426624cb85c8
 X-Patchwork-Hint: ignore
-Message-Id: <20220216221530.45F8A8378B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/xen: security
+Message-Id: <20220216221536.64E0E83794@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/xen: security
  bump to version 4.14.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=245a2838267334e2d6e2d62a749f6b386f82a1ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1a9431d52d43461fb8b844fd2e7d426624cb85c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Includes a number of bugfixes and the security fixes up to xsa-395:
 https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-4/
