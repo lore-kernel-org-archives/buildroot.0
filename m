@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D12BC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5C99C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4DBD4051B;
-	Wed,  9 Mar 2022 13:32:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 773C840AE2;
+	Wed,  9 Mar 2022 13:32:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aYB-PHtSVLiU; Wed,  9 Mar 2022 13:32:20 +0000 (UTC)
+	with ESMTP id NaATnD7ApQbk; Wed,  9 Mar 2022 13:32:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 85E8C40185;
-	Wed,  9 Mar 2022 13:32:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30B0140AE6;
+	Wed,  9 Mar 2022 13:32:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 541BC1BF9C2
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2AD3C1BF869
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49EBA60BE5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D2B360BEA
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bICq_LCr9hWh for <buildroot@lists.busybox.net>;
+ with ESMTP id KIFmydUaVO_c for <buildroot@lists.busybox.net>;
  Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC7AB60BEB
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:30:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14D6460C2F
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 613B483916; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
+ id 8FDA183915; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 20:49:46 +0100
+Date: Wed, 16 Feb 2022 20:49:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6aca97d6e51a006187bcd3319cb7ff1a92380c66
-X-Git-Newrev: 9a2beaf778d3649ab395c2a931a3935f69191585
+X-Git-Oldrev: f5a8485963dc0112c0201e712d599d31f0081035
+X-Git-Newrev: d1ca33e81230eaa5fe41c4945075c62821128a8b
 X-Patchwork-Hint: ignore
-Message-Id: <20220309132156.613B483916@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2022.01.0
+Message-Id: <20220309132156.8FDA183915@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mutt: bump to version 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,53 +58,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a2beaf778d3649ab395c2a931a3935f69191585
+commit: https://git.buildroot.net/buildroot/commit/?id=d1ca33e81230eaa5fe41c4945075c62821128a8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+libgsasl is an optional dependency since
+https://gitlab.com/muttmua/mutt/-/commit/68caf9140c8217ecf6c848460c4b4d27996b2922
+
+http://www.mutt.org/relnotes/2.2/
+https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-rel/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mutt/mutt.hash |  2 +-
+ package/mutt/mutt.mk   | 12 ++++++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 23f8a5ac8a..c16fea3cea 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2021.12.0"
-+	bool "2022.01.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2021.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2022.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 0a853866b5..3d52d40beb 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
- # From https://www.barebox.org/download/barebox-2021.12.0.tar.bz2.md5
--md5  199b6d7ff3441cec2062ab18a52454dc  barebox-2021.12.0.tar.bz2
-+md5  753ba533ced54f4113f9e97846c13fc1  barebox-2022.01.0.tar.bz2
- 
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index d439b23aa3..bbc9d459b0 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  555569fe9e71524e0bf927eaa2c1aa2e81ee2c34dd71e39fe21620db6ccc8aa6  barebox-2021.12.0.tar.bz2
-+sha256  ddf7898075bec05e4865ce0f7a2ac19c2b1efaaa0d066eba1939494e25711d28  barebox-2022.01.0.tar.bz2
+-sha256  92a309e47e363a97d62425bcb71adceae5ab5c4c413dbcac37fa98ed70c12be0  mutt-2.1.5.tar.gz
++sha256  e84597f06d03ca82f8ca3b5ec8bc294c150709b43ed2a0177bf479c3e3345314  mutt-2.2.0.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 7e9046fe8a..51178ef03d 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+-MUTT_VERSION = 2.1.5
++MUTT_VERSION = 2.2.0
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
+@@ -53,8 +53,15 @@ else
+ MUTT_CONF_OPTS += --disable-pop
+ endif
+ 
+-# SSL support is only used by imap or pop3 module
++# SASL and SSL support are only used by imap or pop3 module
+ ifneq ($(BR2_PACKAGE_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
++ifeq ($(BR2_PACKAGE_LIBGSASL),y)
++MUTT_DEPENDENCIES += libgsasl
++MUTT_CONF_OPTS += --with-gsasl
++else
++MUTT_CONF_OPTS += --without-gsasl
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MUTT_DEPENDENCIES += openssl
+ MUTT_CONF_OPTS += \
+@@ -72,6 +79,7 @@ MUTT_CONF_OPTS += \
+ endif
+ else
+ MUTT_CONF_OPTS += \
++	--without-gsasl \
+ 	--without-gnutls \
+ 	--without-ssl
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
