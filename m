@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F14CC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D12BC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:32:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A3BE40ADD;
-	Wed,  9 Mar 2022 13:32:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4DBD4051B;
+	Wed,  9 Mar 2022 13:32:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmYOMOgGtwlm; Wed,  9 Mar 2022 13:32:07 +0000 (UTC)
+	with ESMTP id aYB-PHtSVLiU; Wed,  9 Mar 2022 13:32:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 229264051B;
-	Wed,  9 Mar 2022 13:32:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 324221BF869
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85E8C40185;
+	Wed,  9 Mar 2022 13:32:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 541BC1BF9C2
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0755684001
+ by smtp3.osuosl.org (Postfix) with ESMTP id 49EBA60BE5
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SaqcWkzIetgC for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bICq_LCr9hWh for <buildroot@lists.busybox.net>;
  Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CC078404C
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC7AB60BEB
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:30:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CB55D83915; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
+ id 613B483916; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 21:27:25 +0100
+Date: Wed, 16 Feb 2022 20:49:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ce909afa98223bbd6bb1b2c65dec6cc8982ad31
-X-Git-Newrev: 1868f372c02760e324f91ebcf5685323855351f1
+X-Git-Oldrev: 6aca97d6e51a006187bcd3319cb7ff1a92380c66
+X-Git-Newrev: 9a2beaf778d3649ab395c2a931a3935f69191585
 X-Patchwork-Hint: ignore
-Message-Id: <20220309132156.CB55D83915@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dialog: bump to version
- 1.3-20220117
+Message-Id: <20220309132156.613B483916@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/barebox: bump version to 2022.01.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +58,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1868f372c02760e324f91ebcf5685323855351f1
+commit: https://git.buildroot.net/buildroot/commit/?id=9a2beaf778d3649ab395c2a931a3935f69191585
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://invisible-mirror.net/dialog/CHANGES.html#index-t20220117
-
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=14596
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/dialog/dialog.hash | 2 +-
- package/dialog/dialog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
-index 2286590b66..3136d18b2b 100644
---- a/package/dialog/dialog.hash
-+++ b/package/dialog/dialog.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  466163e8b97c2b7709d00389199add3156bd813f60ccb0335d0a30f2d4a17f99  dialog-1.3-20200327.tgz
-+sha256  754cb6bf7dc6a9ac5c1f80c13caa4d976e30a5a6e8b46f17b3bb9b080c31041f  dialog-1.3-20220117.tgz
- # Locally computed
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index 1c98d354e3..681f8ec9fe 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 23f8a5ac8a..c16fea3cea 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--DIALOG_VERSION = 1.3-20200327
-+DIALOG_VERSION = 1.3-20220117
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = https://invisible-mirror.net/archives/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2021.12.0"
++	bool "2022.01.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2021.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2022.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 0a853866b5..3d52d40beb 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+ # From https://www.barebox.org/download/barebox-2021.12.0.tar.bz2.md5
+-md5  199b6d7ff3441cec2062ab18a52454dc  barebox-2021.12.0.tar.bz2
++md5  753ba533ced54f4113f9e97846c13fc1  barebox-2022.01.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  555569fe9e71524e0bf927eaa2c1aa2e81ee2c34dd71e39fe21620db6ccc8aa6  barebox-2021.12.0.tar.bz2
++sha256  ddf7898075bec05e4865ce0f7a2ac19c2b1efaaa0d066eba1939494e25711d28  barebox-2022.01.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
