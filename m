@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15C2CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD622C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7472240157;
-	Wed, 16 Feb 2022 21:23:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EF3160B00;
+	Wed, 16 Feb 2022 21:23:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NQPXB67WTwoS; Wed, 16 Feb 2022 21:23:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YN2hhu0t5_qw; Wed, 16 Feb 2022 21:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1031540A3F;
-	Wed, 16 Feb 2022 21:23:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98BA51BF5A9
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:22:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 481E960B12;
+	Wed, 16 Feb 2022 21:23:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B1551BF5A9
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B6D340024
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6DFB960B12
  for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:22:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qHhM5l6Be61o for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1lSUSpU8vI4F for <buildroot@lists.busybox.net>;
  Wed, 16 Feb 2022 21:22:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 043F041721
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:22:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A43160B00
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:22:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 38A8B83724; Wed, 16 Feb 2022 21:15:11 +0000 (UTC)
+ id 417578359D; Wed, 16 Feb 2022 21:15:11 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 21:32:58 +0100
+Date: Wed, 16 Feb 2022 22:16:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d1ca33e81230eaa5fe41c4945075c62821128a8b
-X-Git-Newrev: c3810c131761922ae8c046840c78430c4125f16e
+X-Git-Oldrev: c3810c131761922ae8c046840c78430c4125f16e
+X-Git-Newrev: 29a12eb86aee706082f344a25d2e563984b9aa1a
 X-Patchwork-Hint: ignore
-Message-Id: <20220216211511.38A8B83724@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-python.mk:
- refactor build/install opts
+Message-Id: <20220216211511.417578359D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-flit-core: new
+ package/infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,119 +59,311 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3810c131761922ae8c046840c78430c4125f16e
+commit: https://git.buildroot.net/buildroot/commit/?id=29a12eb86aee706082f344a25d2e563984b9aa1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The python package infrastructure defines a number of helper variables
-that are used to construct the build and install commands. However,
-there are still a few parts (setup.py and its argument) that are set
-explicitly in _BUILD_CMDS and _INSTALL_CMDS. This creates problems if we
-want to add another setup type that does not use setup.py.
+This adds pep517(needed for flit-core to build itself) and flit python
+package types.
 
-Therefore, move the setup.py part into the helper variables as well.
-Since this means that the variable becomes a full command rather than
-just options, rename them to _BUILD_CMD and _INSTALL_CMD.
+We need to add an installer script and pass it appropriate options for
+installing pep517 wheels generated by python-pypa-build during the
+build stage. Unfortunately it seems pep517 does not support builds
+without using the wheel format.
 
-While we're at it, also clean up the whitespace in the definition of
-these variables. They were aligned on = at some point, but that
-alignment was already broken.
+We also need to add a patch fixing the version parser in flit-core.
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Arnout:
+ - fix indentation in pkg-python.mk (tabs, not spaces);
+ - use the new _CMD variables instead of duplicating the entire _CMDS
+   definitions;
+ - no need to filter dependencies (they're not self-referencing);
+ - _NEEDS_HOST_PYTHON no longer exists;
+ - host-python-pypa-build gets added to DEPENDENCIES automatically.
+]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-python.mk | 45 +++++++++++++++++++++++----------------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
+ package/pkg-python.mk                              | 59 +++++++++++++++-
+ ...t-version-parser-for-multiple-assignments.patch | 80 ++++++++++++++++++++++
+ package/python-flit-core/python-flit-core.hash     |  3 +
+ package/python-flit-core/python-flit-core.mk       | 13 ++++
+ support/scripts/pyinstaller.py                     | 69 +++++++++++++++++++
+ 5 files changed, 223 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 02df061a19..61f0dd6ec2 100644
+index 61f0dd6ec2..0c5577362f 100644
 --- a/package/pkg-python.mk
 +++ b/package/pkg-python.mk
-@@ -130,27 +130,27 @@ endif
- # Distutils
- ifeq ($$($(2)_SETUP_TYPE),distutils)
- ifeq ($(4),target)
--$(2)_BASE_ENV         = $$(PKG_PYTHON_DISTUTILS_ENV)
--$(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_BUILD_OPTS   = $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
--$(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
--$(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
-+$(2)_BASE_ENV = $$(PKG_PYTHON_DISTUTILS_ENV)
-+$(2)_BASE_BUILD_CMD = setup.py build
-+$(2)_BASE_BUILD_OPTS = $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
-+$(2)_BASE_INSTALL_TARGET_CMD  = setup.py install --no-compile $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
-+$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_DISTUTILS_ENV)
--$(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_INSTALL_OPTS = $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
-+$(2)_BASE_BUILD_CMD   = setup.py build
-+$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
+@@ -103,6 +103,47 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--root=/ \
+ 	--single-version-externally-managed
+ 
++# Target pep517-based packages
++PKG_PYTHON_PEP517_ENV = \
++	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
++	PATH=$(BR_PATH) \
++	$(TARGET_CONFIGURE_OPTS) \
++	PYTHONPATH="$(PYTHON3_PATH)" \
++	PYTHONNOUSERSITE=1 \
++	_python_sysroot=$(STAGING_DIR) \
++	_python_prefix=/usr \
++	_python_exec_prefix=/usr
++
++PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
++	--interpreter=/usr/bin/python \
++	--script-kind=posix \
++	--purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
++	--scripts=$(TARGET_DIR)/usr/bin \
++	--data=$(TARGET_DIR)/usr
++
++PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
++	--interpreter=/usr/bin/python \
++	--script-kind=posix \
++	--purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
++	--scripts=$(STAGING_DIR)/usr/bin \
++	--data=$(STAGING_DIR)/usr
++
++# Host pep517-based packages
++HOST_PKG_PYTHON_PEP517_ENV = \
++	PATH=$(BR_PATH) \
++	PYTHONNOUSERSITE=1 \
++	$(HOST_CONFIGURE_OPTS)
++
++HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
++	--interpreter=/usr/bin/python \
++	--script-kind=posix \
++	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	--headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
++	--scripts=$(HOST_DIR)/usr/bin \
++	--data=$(HOST_DIR)/usr
++
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
+ # and installation of a Python package should be done, implements a
+@@ -152,8 +193,19 @@ $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
+ $(2)_BASE_BUILD_CMD = setup.py build
+ $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
  endif
- # Setuptools
- else ifeq ($$($(2)_SETUP_TYPE),setuptools)
- ifeq ($(4),target)
--$(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
--$(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
--$(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
-+$(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
-+$(2)_BASE_BUILD_CMD = setup.py build
-+$(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
-+$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
++else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
++ifeq ($(4),target)
++$(2)_BASE_ENV = $$(PKG_PYTHON_PEP517_ENV)
++$(2)_BASE_BUILD_CMD = -m build -n -w
++$(2)_BASE_INSTALL_TARGET_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS)
++$(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS)
++else
++$(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
++$(2)_BASE_BUILD_CMD = -m build -n -w
++$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
++endif
  else
--$(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
--$(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_INSTALL_OPTS = $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
-+$(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
-+$(2)_BASE_BUILD_CMD = setup.py build
-+$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
- endif
- else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils' or 'setuptools'")
-@@ -186,8 +186,8 @@ ifndef $(2)_BUILD_CMDS
- define $(2)_BUILD_CMDS
- 	(cd $$($$(PKG)_BUILDDIR)/; \
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$($(2)_PYTHON_INTERPRETER) setup.py \
--		$$($$(PKG)_BASE_BUILD_TGT) \
-+		$$($(2)_PYTHON_INTERPRETER) \
-+		$$($$(PKG)_BASE_BUILD_CMD) \
- 		$$($$(PKG)_BASE_BUILD_OPTS) $$($$(PKG)_BUILD_OPTS))
- endef
- endif
-@@ -200,8 +200,9 @@ ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
- 	(cd $$($$(PKG)_BUILDDIR)/; \
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$($(2)_PYTHON_INTERPRETER) setup.py install \
--		$$($$(PKG)_BASE_INSTALL_OPTS) $$($$(PKG)_INSTALL_OPTS))
-+		$$($(2)_PYTHON_INTERPRETER) \
-+		$$($$(PKG)_BASE_INSTALL_CMD) \
-+		$$($$(PKG)_INSTALL_OPTS))
- endef
+-$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils' or 'setuptools'")
++$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
  endif
  
-@@ -213,8 +214,8 @@ ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	(cd $$($$(PKG)_BUILDDIR)/; \
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
--		$$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
-+		$$($(2)_PYTHON_INTERPRETER) \
-+		$$($$(PKG)_BASE_INSTALL_TARGET_CMD) \
- 		$$($$(PKG)_INSTALL_TARGET_OPTS))
- endef
- endif
-@@ -227,8 +228,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
- 	(cd $$($$(PKG)_BUILDDIR)/; \
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$($(2)_PYTHON_INTERPRETER) setup.py install \
--		$$($$(PKG)_BASE_INSTALL_STAGING_OPTS) \
-+		$$($(2)_PYTHON_INTERPRETER) \
-+		$$($$(PKG)_BASE_INSTALL_STAGING_CMD) \
- 		$$($$(PKG)_INSTALL_STAGING_OPTS))
- endef
- endif
+ # Target packages need both the python interpreter on the target (for
+@@ -172,6 +224,11 @@ endif # ($(4),target)
+ #
+ ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ $(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
++else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
++$(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
++ifeq ($$($(2)_SETUP_TYPE),flit)
++$(2)_DEPENDENCIES += host-python-flit-core
++endif
+ endif # SETUP_TYPE
+ 
+ # Python interpreter to use for building the package.
+diff --git a/package/python-flit-core/0001-Fix-ast-version-parser-for-multiple-assignments.patch b/package/python-flit-core/0001-Fix-ast-version-parser-for-multiple-assignments.patch
+new file mode 100644
+index 0000000000..5a94e1dcab
+--- /dev/null
++++ b/package/python-flit-core/0001-Fix-ast-version-parser-for-multiple-assignments.patch
+@@ -0,0 +1,80 @@
++From 2cd8b5708be88b90ea2fa0fb35407a5ec2038c8e Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sat, 27 Nov 2021 02:36:15 -0700
++Subject: [PATCH] Fix ast version parser for multiple assignments
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/takluyver/flit/pull/474]
++---
++ flit_core/common.py                 | 21 +++++++++++--------
++ .../tests/samples/moduleunimportabledouble.py |  8 +++++++
++ flit_core/tests/test_common.py      |  5 +++++
++ 3 files changed, 25 insertions(+), 9 deletions(-)
++ create mode 100644 flit_core/tests/samples/moduleunimportabledouble.py
++
++diff --git a/flit_core/common.py b/flit_core/common.py
++index f1f378f..86bcf4b 100644
++--- a/flit_core/common.py
+++++ b/flit_core/common.py
++@@ -132,15 +132,18 @@ def get_docstring_and_version_via_ast(target):
++     for child in node.body:
++         # Only use the version from the given module if it's a simple
++         # string assignment to __version__
++-        is_version_str = (
++-                isinstance(child, ast.Assign)
++-                and len(child.targets) == 1
++-                and isinstance(child.targets[0], ast.Name)
++-                and child.targets[0].id == "__version__"
++-                and isinstance(child.value, ast.Str)
++-        )
++-        if is_version_str:
++-            version = child.value.s
+++        if isinstance(child, ast.Assign):
+++            for target in child.targets:
+++                is_version_str = (
+++                    isinstance(target, ast.Name)
+++                    and target.id == "__version__"
+++                    and isinstance(child.value, ast.Str)
+++                )
+++                if is_version_str:
+++                    version = child.value.s
+++                    break
+++            else:
+++                continue
++             break
++     else:
++         version = None
++diff --git a/flit_core/tests/samples/moduleunimportabledouble.py b/flit_core/tests/samples/moduleunimportabledouble.py
++new file mode 100644
++index 0000000..42d51f3
++--- /dev/null
+++++ b/flit_core/tests/samples/moduleunimportabledouble.py
++@@ -0,0 +1,8 @@
+++
+++"""
+++A sample unimportable module with double assignment
+++"""
+++
+++raise ImportError()
+++
+++VERSION = __version__ = "0.1"
++diff --git a/flit_core/tests/test_common.py b/flit_core/tests/test_common.py
++index 02cfab7..42e230b 100644
++--- a/flit_core/tests/test_common.py
+++++ b/flit_core/tests/test_common.py
++@@ -70,6 +70,11 @@ class ModuleTests(TestCase):
++                                 'version': '0.1'}
++                          )
++ 
+++        info = get_info_from_module(Module('moduleunimportabledouble', samples_dir))
+++        self.assertEqual(info, {'summary': 'A sample unimportable module with double assignment',
+++                                'version': '0.1'}
+++                         )
+++
++         info = get_info_from_module(Module('module1', samples_dir / 'constructed_version'))
++         self.assertEqual(info, {'summary': 'This module has a __version__ that requires runtime interpretation',
++                                 'version': '1.2.3'}
++-- 
++2.33.1
++
+diff --git a/package/python-flit-core/python-flit-core.hash b/package/python-flit-core/python-flit-core.hash
+new file mode 100644
+index 0000000000..bd47fd4f6b
+--- /dev/null
++++ b/package/python-flit-core/python-flit-core.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/flit_core/json
++md5  82143536b81f148851a0213305838e53  flit_core-3.6.0.tar.gz
++sha256  5892962ab8b8ea945835b3a288fe9dd69316f1903d5288c3f5cafdcdd04756ad  flit_core-3.6.0.tar.gz
+diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
+new file mode 100644
+index 0000000000..8971223d1f
+--- /dev/null
++++ b/package/python-flit-core/python-flit-core.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-flit-core
++#
++################################################################################
++
++PYTHON_FLIT_CORE_VERSION = 3.6.0
++PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
++PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/08/e9/0653f7783ba2ec2f954f19442878427f1d5bfccb01842d354453c2809b22
++PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
++PYTHON_FLIT_CORE_SETUP_TYPE = pep517
++
++$(eval $(host-python-package))
+diff --git a/support/scripts/pyinstaller.py b/support/scripts/pyinstaller.py
+new file mode 100755
+index 0000000000..6dd9242327
+--- /dev/null
++++ b/support/scripts/pyinstaller.py
+@@ -0,0 +1,69 @@
++#!/usr/bin/env python3
++
++import argparse
++import glob
++
++from installer import install
++from installer.destinations import SchemeDictionaryDestination
++from installer.sources import WheelFile
++
++
++def main():
++    """Entry point for CLI."""
++    ap = argparse.ArgumentParser("python pyinstaller.py")
++    ap.add_argument("wheel_file", help="Path to a .whl file to install")
++
++    ap.add_argument(
++        "--interpreter", required=True, help="Interpreter path to be used in scripts"
++    )
++    ap.add_argument(
++        "--script-kind",
++        required=True,
++        choices=["posix", "win-ia32", "win-amd64", "win-arm", "win-arm64"],
++        help="Kind of launcher to create for each script",
++    )
++
++    dest_args = ap.add_argument_group("Destination directories")
++    dest_args.add_argument(
++        "--purelib",
++        required=True,
++        help="Directory for platform-independent Python modules",
++    )
++    dest_args.add_argument(
++        "--platlib",
++        help="Directory for platform-dependent Python modules (same as purelib "
++        "if not specified)",
++    )
++    dest_args.add_argument(
++        "--headers", required=True, help="Directory for C header files"
++    )
++    dest_args.add_argument(
++        "--scripts", required=True, help="Directory for executable scripts"
++    )
++    dest_args.add_argument(
++        "--data", required=True, help="Directory for external data files"
++    )
++    args = ap.parse_args()
++
++    destination = SchemeDictionaryDestination(
++        {
++            "purelib": args.purelib,
++            "platlib": args.platlib if args.platlib is not None else args.purelib,
++            "headers": args.headers,
++            "scripts": args.scripts,
++            "data": args.data,
++        },
++        interpreter=args.interpreter,
++        script_kind=args.script_kind,
++    )
++
++    with WheelFile.open(glob.glob(args.wheel_file)[0]) as source:
++        install(
++            source=source,
++            destination=destination,
++            additional_metadata={},
++        )
++
++
++if __name__ == "__main__":
++    main()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
