@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9065C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40258C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 13:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57B0E417B7;
-	Wed,  9 Mar 2022 13:30:40 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WW_xX5H_41IB; Wed,  9 Mar 2022 13:30:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84437415DE;
-	Wed,  9 Mar 2022 13:30:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A61401BF9C2
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9486E60FA2
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F180960B15;
+	Wed,  9 Mar 2022 13:30:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wxwARmZjWa6e for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vdG5pqp3Z6we; Wed,  9 Mar 2022 13:30:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E38260C2F;
+	Wed,  9 Mar 2022 13:30:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AEAD21BF9C8
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 978FC4051B
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 13:30:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GWVHyKIuI2P4 for <buildroot@lists.busybox.net>;
  Wed,  9 Mar 2022 13:30:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDE9F60BE5
+ by smtp2.osuosl.org (Postfix) with ESMTP id C24B940185
  for <buildroot@buildroot.org>; Wed,  9 Mar 2022 13:30:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4917283917; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
+ id 3CBF583916; Wed,  9 Mar 2022 13:21:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Wed, 16 Feb 2022 20:25:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b969c8c8cd30a97a47f7197c114e37c9d12d80b
-X-Git-Newrev: 795c473cfdedc71b6dcf5b691cec729d2845da0b
+X-Git-Oldrev: 80f480381b3b307079c761f14508458782772111
+X-Git-Newrev: 7b969c8c8cd30a97a47f7197c114e37c9d12d80b
 X-Patchwork-Hint: ignore
-Message-Id: <20220309132156.4917283917@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools: bump to version
- 60.8.2
+Message-Id: <20220309132156.3CBF583916@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.16.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=795c473cfdedc71b6dcf5b691cec729d2845da0b
+commit: https://git.buildroot.net/buildroot/commit/?id=7b969c8c8cd30a97a47f7197c114e37c9d12d80b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 8df7155d4c..e04235e041 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  082637e8fbc2e1fd9c637665d8fcccd8  setuptools-60.7.0.tar.gz
--sha256  b83cf328a4f6a987c95610e76b29a30778db05174eef71f771776c48f8f25d1b  setuptools-60.7.0.tar.gz
-+md5  f47a5750f6084cce3418f213a9d97785  setuptools-60.8.2.tar.gz
-+sha256  66b8598da112b8dc8cd941d54cf63ef91d3b50657b374457eda5851f3ff6a899  setuptools-60.8.2.tar.gz
- sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 584f83f7a0..8653c42259 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index 36b0c8c8a1..ff5f80a67b 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d413b6a20a0ce30410388d330e1056715333e0863165369668dda596766e9d5b  xmrig-6.16.3.tar.gz
++sha256  245ba47a6b8ae8e9a9df1c055e90f22f944a7d1219416cb30268881d0c0d377b  xmrig-6.16.4.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index 7fa638a54c..1feab499fc 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 60.7.0
-+PYTHON_SETUPTOOLS_VERSION = 60.8.2
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/29/dd/48d662bb93e5e51e72265ef612f869947d4ae4126328d7156824cd50d440
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ae/0b/e458b0d07dced3d7fa2d21d828e708f374ef82040f2012c05d35f47f9af3
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+-XMRIG_VERSION = 6.16.3
++XMRIG_VERSION = 6.16.4
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
