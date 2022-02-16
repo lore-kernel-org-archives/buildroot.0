@@ -4,80 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9833C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 18:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42036C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 16:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F8DA4091C;
-	Sat, 26 Feb 2022 18:51:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B27704091B;
+	Wed, 16 Feb 2022 16:48:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D9JEVufQuYHS; Sat, 26 Feb 2022 18:51:03 +0000 (UTC)
+	with ESMTP id ulOlRodIMaSX; Wed, 16 Feb 2022 16:48:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AEAC408D1;
-	Sat, 26 Feb 2022 18:51:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2445408F8;
+	Wed, 16 Feb 2022 16:48:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8FCD41BF281
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 18:51:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0BE251BF5AD
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 16:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FFA340125
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 18:51:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDD67409D7
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 16:48:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nxOR8O3cqJX7 for <buildroot@lists.busybox.net>;
- Sat, 26 Feb 2022 18:50:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1C84E400CB
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 18:50:59 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- v2-20020a7bcb42000000b0037b9d960079so3561802wmj.0
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:50:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4yyqXsL1j25WN01dQU/FyUI10khVoBUiraICagg2L6s=;
- b=n2973GzeRfaPcYOgX9l7EfkkIy+Q8xlODOlDfJJnhvqDq/zEv8VRmddZACousdm2Vn
- jfDArutMmN2ZuKKMX9dlPv0VyasbSSur3tbKzA+xQ3851DUeWstC+ntNK7TWPmBS9s1F
- ifNwDQDsCqClo+aibRW1WuaErfpdqufUC5jIRcyaUUUTmM95yFdCR6iF6lGPrr345qLU
- 2hyULzapOTEONtKlw4uh/4GqwTzaTb3eQE8pH5zZklYwqPBQumIBIWv225293d+zKIgH
- kjWbDfse1puqSoi1InJTHkKmYNWib3G1fNwu+WqthUTya5TsXBEDJO/A3t6kDWCCugJP
- MPOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4yyqXsL1j25WN01dQU/FyUI10khVoBUiraICagg2L6s=;
- b=rjFrSMsdZS+mitHfHOZMUDAV81Xnd/g1N5+tcSFrKWuDNPKcM3Iy4+BPb3qUt+Q5fy
- rce7TBge08NKPAQh/LfG38opqaw+S/OwznxrrGy80od5UAL6AIH0p07LJbaTHD+ECrqs
- 587KzIlVjaHVMNGGQQ0kNZSxGvLlPeRtGtoV96zJl8Q9ZBwtOT88NPsVJGf7OgnQu0Bj
- Lf6Wwl7mYnxzt7GwshCL6Pi4n7K1f5LPkp0/otTQODI+fpAHoEUhOQvuNvIMq+vKOJqM
- 0u5lt/OJBp0ZaR3PTN3gIHvJFTZ1YmJBW9KbMrhRK1cnD/rJaoDjaBCsPKWwtq1tEzXZ
- QBjw==
-X-Gm-Message-State: AOAM532MF34Hyu8OBUtMNO+5ndNu4YxPvRUBz0zitjU6k4DklDBri/sE
- UWopeqC5G9TUR+q7AWrVDqSNRT2JhKI=
-X-Google-Smtp-Source: ABdhPJxuEY3+wwrC/8z9r+8KX+6fDT5D8TFZW+ylEtLquPc3eBc6ZPf6azGy2annCcEi0uGRMc8PdA==
-X-Received: by 2002:a05:600c:b4b:b0:381:4834:8c19 with SMTP id
- k11-20020a05600c0b4b00b0038148348c19mr2619290wmr.182.1645901456970; 
- Sat, 26 Feb 2022 10:50:56 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- m21-20020a05600c4f5500b0037d342db78asm10255627wmq.35.2022.02.26.10.50.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Feb 2022 10:50:56 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 26 Feb 2022 19:50:33 +0100
-Message-Id: <20220226185033.3097401-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id jBnPt_tzRyOx for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 16:48:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2912E4053D
+ for <buildroot@uclibc.org>; Wed, 16 Feb 2022 16:48:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id C5B8481441; Wed, 16 Feb 2022 16:40:19 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Wed, 16 Feb 2022 16:47:59 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Outdated package
+X-Bugzilla-Version: 2021.11.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: roman.geile@meyton.eu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone attachments.created
+Message-ID: <bug-14596-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to version
- 5.2.0
+Subject: [Buildroot] [Bug 14596] New: package dialog is outdated and
+ contains a bug
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,53 +70,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-44718, CVE-2022-23408, CVE-2022-25638 and CVE-2022-25640
+https://bugs.busybox.net/show_bug.cgi?id=14596
 
-https://www.wolfssl.com/docs/security-vulnerabilities
-https://github.com/wolfSSL/wolfssl/blob/v5.2.0-stable/ChangeLog.md
+            Bug ID: 14596
+           Summary: package dialog is outdated and contains a bug
+           Product: buildroot
+           Version: 2021.11.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: roman.geile@meyton.eu
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Created attachment 9231
+  --> https://bugs.busybox.net/attachment.cgi?id=9231&action=edit
+updated package files
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 9896713ca7..63eebf93bb 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  50db45f348f47e00c93dd244c24108220120cb3cc9d01434789229c32937c444  wolfssl-4.8.1-stable.tar.gz
-+sha256  409b4646c5f54f642de0e9f3544c3b83de7238134f5b1ff93fb44527bf119d05  wolfssl-5.2.0.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index d3dce0a401..bfb54445e4 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 4.8.1-stable
--WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
-+WOLFSSL_VERSION = 5.2.0
-+WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
- WOLFSSL_LICENSE = GPL-2.0+
+Buildroot 2021.11.1 contains version 1.3-20200327 of the "dialog" package. This
+version of the package is outdated and contains a bug in the "--pause" command
+line parameter.
+
+There are newer versions of dialog available which fix this bug. The current
+version is 1.3-20220117. Please update the package to the current version. 
+
+I included an updated version of dialog.mk and dialog.hash in the attachment.
+
 -- 
-2.34.1
-
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
