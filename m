@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB86BC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37622C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F6F440270;
-	Wed, 16 Feb 2022 21:47:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB3C64177F;
+	Wed, 16 Feb 2022 21:47:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bHH55TX3AjEw; Wed, 16 Feb 2022 21:47:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WM6-wW31eknY; Wed, 16 Feb 2022 21:47:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25FAB40164;
-	Wed, 16 Feb 2022 21:47:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0CFDE1BF5A9
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:47:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27EE7410AA;
+	Wed, 16 Feb 2022 21:47:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CA6F1BF5A9
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:47:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06BA740157
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:47:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AB1F60BEA
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:47:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 52HBRSvozvTC for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 21:47:12 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BkvfmOlGH6Bw for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 21:47:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9345040164
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:47:12 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id f17so6282117edd.2
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 13:47:12 -0800 (PST)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 106B560BE5
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:47:25 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id d10so2266834eje.10
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 13:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=BiS5i7qj9OHdk4aBqXZmqnFxTS9xGZR9p8+AY5EGrwo=;
- b=Kj4LmvanvKqchNeaYm9i2YXg5xa5hyHMWBBy6vi/OP/wbU35LAnV6+RS15vATJlpNT
- 9ldH9q9bDgUdrYV0ZAtd5VUieg5fIXIwg4ei3CZDfFMH53KtnjOb30oLBVfd6bgRB/aG
- aomkPkSu8ku/+Rp+gKMKOQ/RheA17QdvuEiBJJLziNQ6et9qpQYPaijQQ0y4t8lrhXhW
- YAkwvxRew3fexnz6iOElXJ9uVXbOarcDEqep7gHaykXaPAalyM8gLXI3ACfNxF0ERqof
- cwepfORWLok1NmCLfFPiiSOyFUbzx9Tzwwavy+Hs6WrTrQduW3F2mcNq30uv8aAOZRNZ
- ofyA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=8w7+UxjW9pPf2REtQwgS3QrcU++gPujwzgjOxsdAdFg=;
+ b=curHm3Z4AEnkwhFyFowf/B1tUj7Za4NzHao/JX2a8mHllhIJ8MFevy7FY+Ar9pPRto
+ OHR7uRPzNcsYmz18nnjQrHuQ9kDcXxN+fkacW86PxgRLyymruXv7G7muhMuHFN4N9R3b
+ YdFG+xMGyNJHirmKcDiPm4JvZsl89ffelCt/7CcXlk1qGkNy8fyLJrJXn5IRnlFWDuVU
+ aWgLfwIqeKHXsoZkTNtzv0Vxk5KA2OfAl/W8cODbLt+2mTR9WCr6bZLG+pEMZTNC5nyR
+ xG8co6S8092HXs7Z/MjkokHwDFwIlFYxo5ClYocGczQCg8W/DVb2yA0L+wrDd1JTMVvU
+ sM7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=BiS5i7qj9OHdk4aBqXZmqnFxTS9xGZR9p8+AY5EGrwo=;
- b=Pr9DenSqjDiJtU77a+cBXIfFzqfbkM0k0AB97JwroLj3bsKc8/e68cpQ43CK7MgHyS
- co5y1HzTFucByLIZ8PUig9MnD8Hd/L3BFvJYZZu23Q02wliXYzhc/dRSN4qhHFXovGmz
- q+KkQaCDmVfJNftFk/qAj/s+HTXxFDfVJCSK4gGh2TNIwWUQcjUZ6Me8vpBhWL4iV/PP
- 1TM3E7BxDy5+/qIGa6qIdc3+rcZ7sgM/JXmxKu/yME3LI1yvc9FTYVTArx6ypbjkwZMu
- +7/V+cp9DknZN1Bl4vdZP7K12wqTI8GQiberVJowgZNYU6j+lbK5Cg/tJo9kZLYC8VzJ
- /pFg==
-X-Gm-Message-State: AOAM533kO4PNngA0VO8mrbzdcTHcxVFiMtu7VCKAbvKZuoDDsLURPDBu
- YGVCOgWsjB/A82ucU3brq2RL3oxkS5fINw==
-X-Google-Smtp-Source: ABdhPJxPFKrTbdzD9eYauE4dt679Z1jR+NOTQ39+DDPl8Qp7KMSEKuGDP4IShfXQEC8JKu7vIz86DA==
-X-Received: by 2002:a05:6402:1e88:b0:410:ebb4:c329 with SMTP id
- f8-20020a0564021e8800b00410ebb4c329mr5169552edf.300.1645048030686; 
- Wed, 16 Feb 2022 13:47:10 -0800 (PST)
+ bh=8w7+UxjW9pPf2REtQwgS3QrcU++gPujwzgjOxsdAdFg=;
+ b=wvLbrxJSLlkWOizqgjE1KatEEkhumdrFIPwqL5ElPAw4A7oiIo7KXRZPu2CAzN4MWZ
+ cZFrresoY0us80GbeRMdn+Q+/q7jOcBoesZ8rfmsJMH6A7uPbDS04AU3GK4Jvg8CKNp1
+ zbQ1AGh1qqqzf7nSmBpqb6W1gPpDrYEkpDQFfIuID7ujWLNtvFhaAadYImVgOKBXNLU+
+ X0BLJL/xv1eIqaNxg8UbGBPrmk8zEuNuPRNjJwHFtCLppUXO78KTzQTisewFvuvjFU6z
+ ZTZFwP1po8dimCPQE1ay3gSO2MXDRyReyFjeXwC96zOatU+hE2ZEvJl81gSpgWPpj1L0
+ uC9w==
+X-Gm-Message-State: AOAM533xnZYAovm6svl4eSg7HW226aWr5zpHGeVAdGXZBLvJE67PcKXZ
+ T4aXpNqORoklKyLPTHKdQ89lyA==
+X-Google-Smtp-Source: ABdhPJyk0vGwuGBYdY7Xj3Uypr9fZEsS9QQ+Lbo7lt7Fnazys2YffHIPiMOZnND7bMapRGex3KIjDg==
+X-Received: by 2002:a17:906:2b01:b0:6cf:9cdb:b336 with SMTP id
+ a1-20020a1709062b0100b006cf9cdbb336mr3798297ejg.707.1645048044211; 
+ Wed, 16 Feb 2022 13:47:24 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id f14sm2395171edf.67.2022.02.16.13.47.10
+ by smtp.gmail.com with ESMTPSA id f14sm2395439edf.67.2022.02.16.13.47.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 16 Feb 2022 13:47:10 -0800 (PST)
-Message-ID: <97333186-45ec-e81f-8562-266da9fe3230@mind.be>
-Date: Wed, 16 Feb 2022 22:47:09 +0100
+ Wed, 16 Feb 2022 13:47:23 -0800 (PST)
+Message-ID: <155125a2-2bad-5ebc-e080-276729f1a179@mind.be>
+Date: Wed, 16 Feb 2022 22:47:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220213113332.1056370-1-fontaine.fabrice@gmail.com>
+References: <20220213112025.979418-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220213113332.1056370-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: security bump to
- version 5.9.5
+In-Reply-To: <20220213112025.979418-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/safeclib: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +93,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,15 +100,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/02/2022 12:33, Fabrice Fontaine wrote:
-> Fixed a vulnerability in the EAP client implementation that was caused
-> by incorrectly handling early EAP-Success messages. It may allow to
-> bypass the client and in some scenarios even the server authentication,
-> or could lead to a denial-of-service attack. This vulnerability has been
-> registered as CVE-2021-45079:
-> https://www.strongswan.org/blog/2022/01/24/strongswan-vulnerability-(cve-2021-45079).html
+On 13/02/2022 12:20, Fabrice Fontaine wrote:
+> Add -std=c99 to fix the following build failure with gcc 4.8 raised
+> since bump to version 3.7.1 in commit
+> cc27267ae41bf44276c63b1e86042c4fae4adf50:
 > 
-> https://github.com/strongswan/strongswan/releases/tag/5.9.5
+> In file included from abort_handler_s.c:35:0:
+> safeclib_private.h:167:18: error: anonymous variadic macros were introduced in C99 [-Werror=variadic-macros]
+>   #define slprintf(...) fprintf(stderr, __VA_ARGS__)
+>                    ^
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/5c3468585942879b47331e05058d25d324c8cc23
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -119,38 +121,21 @@ On 13/02/2022 12:33, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/strongswan/strongswan.hash | 6 +++---
->   package/strongswan/strongswan.mk   | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
+>   package/safeclib/safeclib.mk | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-> index 69b3547f91..aca7ddf5cd 100644
-> --- a/package/strongswan/strongswan.hash
-> +++ b/package/strongswan/strongswan.hash
-> @@ -1,7 +1,7 @@
-> -# From http://download.strongswan.org/strongswan-5.9.4.tar.bz2.md5
-> -md5  9c387eb77f0159fdefbcf7e81c905c35  strongswan-5.9.4.tar.bz2
-> +# From http://download.strongswan.org/strongswan-5.9.5.tar.bz2.md5
-> +md5  53005324e3cba8592f1fb958b1c2d0e5  strongswan-5.9.5.tar.bz2
->   # Calculated based on the hash above
-> -sha256  45fdf1a4c2af086d8ff5b76fd7b21d3b6f0890f365f83bf4c9a75dda26887518  strongswan-5.9.4.tar.bz2
-> +sha256  983e4ef4a4c6c9d69f5fe6707c7fe0b2b9a9291943bbf4e008faab6bf91c0bdd  strongswan-5.9.5.tar.bz2
->   # Locally calculated
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->   sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-> index 2891e5aa5e..95079aceb3 100644
-> --- a/package/strongswan/strongswan.mk
-> +++ b/package/strongswan/strongswan.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -STRONGSWAN_VERSION = 5.9.4
-> +STRONGSWAN_VERSION = 5.9.5
->   STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
->   STRONGSWAN_SITE = http://download.strongswan.org
->   STRONGSWAN_LICENSE = GPL-2.0+
+> diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
+> index 91b3e26c68..bc58c1a38c 100644
+> --- a/package/safeclib/safeclib.mk
+> +++ b/package/safeclib/safeclib.mk
+> @@ -11,6 +11,7 @@ SAFECLIB_SOURCE = safeclib-$(SAFECLIB_VERSION).tar.xz
+>   SAFECLIB_LICENSE = MIT
+>   SAFECLIB_LICENSE_FILES = COPYING
+>   SAFECLIB_INSTALL_STAGING = YES
+> +SAFECLIB_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
+>   # -fstack-protector-strong is used by default. Disable that so the
+>   # BR2_SSP_* options in the toolchain wrapper are used instead
+>   SAFECLIB_CONF_OPTS = --disable-hardening
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
