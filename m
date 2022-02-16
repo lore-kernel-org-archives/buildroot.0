@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30E99C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77DBEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D08F461C55;
-	Wed, 16 Feb 2022 21:01:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29D6861C6A;
+	Wed, 16 Feb 2022 21:01:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TcJ5cfZG4lzW; Wed, 16 Feb 2022 21:01:43 +0000 (UTC)
+	with ESMTP id nzqXdIXVNi7w; Wed, 16 Feb 2022 21:01:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A59E61C53;
-	Wed, 16 Feb 2022 21:01:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 63C531BF425
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:00:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6051361C3B;
+	Wed, 16 Feb 2022 21:01:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23F0D1BF425
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5107A403C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5627F82983
  for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:00:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zCrnk57RxeR2 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X7QTrX7Y-Jas for <buildroot@lists.busybox.net>;
  Wed, 16 Feb 2022 21:00:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6120240191
+ by smtp1.osuosl.org (Postfix) with ESMTP id 928A7829DC
  for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:00:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9D1B88365C; Wed, 16 Feb 2022 20:52:41 +0000 (UTC)
+ id CE5118365F; Wed, 16 Feb 2022 20:52:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 21:56:21 +0100
+Date: Wed, 16 Feb 2022 21:56:57 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: a26e9e5b08532f72cc709c8ff8dfadda2bd1dd59
-X-Git-Newrev: 2d2664cbecfa10807ca6a1bbd322b1cf6252a339
+X-Git-Oldrev: 3052258b900f2694e2990c090bd41804f68e264b
+X-Git-Newrev: 4784486c0de48e04f068ece5b125f86e3f717ecb
 X-Patchwork-Hint: ignore
-Message-Id: <20220216205241.9D1B88365C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gstreamer1: bump
- version to 1.18.6
+Message-Id: <20220216205241.CE5118365F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gst1-devtools:
+ bump version to 1.18.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,41 +59,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d2664cbecfa10807ca6a1bbd322b1cf6252a339
+commit: https://git.buildroot.net/buildroot/commit/?id=4784486c0de48e04f068ece5b125f86e3f717ecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 58be19b0280e803ebe710c591cd4780cdd037a5e)
+(cherry picked from commit efd9eac4d7579808caa23ee52a0d9661c8f987be)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ package/gstreamer1/gst1-devtools/gst1-devtools.hash | 4 ++--
+ package/gstreamer1/gst1-devtools/gst1-devtools.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index c6282454ca..1202bf2c50 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.hash b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
+index c19254c195..011385e757 100644
+--- a/package/gstreamer1/gst1-devtools/gst1-devtools.hash
++++ b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.5.tar.xz.sha256sum
--sha256  55862232a63459bbf56abebde3085ca9aec211b478e891dacea4d6df8cafe80a  gstreamer-1.18.5.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.6.tar.xz.sha256sum
-+sha256  4ec816010dd4d3a93cf470ad0a6f25315f52b204eb1d71dfa70ab8a1c3bd06e6  gstreamer-1.18.6.tar.xz
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 1aab035e05..27745f3bf9 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+-# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.18.5.tar.xz.sha256sum
+-sha256  fecffc86447daf5c2a06843c757a991d745caa2069446a0d746e99b13f7cb079  gst-devtools-1.18.5.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.18.6.tar.xz.sha256sum
++sha256  3725622c740a635452e54b79d065f963ab7706ca2403de6c43072ae7610a0de4  gst-devtools-1.18.6.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  validate/COPYING
+diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+index 1c25823953..66b509ae2c 100644
+--- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
++++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.18.5
-+GSTREAMER1_VERSION = 1.18.6
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_DEVTOOLS_VERSION = 1.18.5
++GST1_DEVTOOLS_VERSION = 1.18.6
+ GST1_DEVTOOLS_SOURCE = gst-devtools-$(GST1_DEVTOOLS_VERSION).tar.xz
+ GST1_DEVTOOLS_SITE = https://gstreamer.freedesktop.org/src/gst-devtools
+ GST1_DEVTOOLS_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
