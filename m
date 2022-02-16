@@ -1,48 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 405EEC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C849C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E04F2404F4;
-	Wed, 16 Feb 2022 21:54:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D46FD82AAA;
+	Wed, 16 Feb 2022 21:55:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1yHOVP-o4LVP; Wed, 16 Feb 2022 21:54:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CLtYboR9r5-D; Wed, 16 Feb 2022 21:55:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D9CAC40523;
-	Wed, 16 Feb 2022 21:54:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E835D1BF5A9
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:54:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26EA1828E3;
+	Wed, 16 Feb 2022 21:55:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 75B011BF5A9
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:55:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D710E415D2
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:54:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 632C8828E3
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:55:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Rev2aOLVBSU for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 21:54:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DmEFKcmvH-Cb for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 21:55:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2CD20415B4
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:54:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 56C268377B; Wed, 16 Feb 2022 21:47:08 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF7CD82846
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:55:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id EB9378377F; Wed, 16 Feb 2022 21:48:05 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 22:54:35 +0100
+Date: Wed, 16 Feb 2022 22:55:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a14a68a57dee2d8636e616916f48a2f721bd51fe
-X-Git-Newrev: 892834535cdf27c6290a1d45fa8e03b3e1908f35
+X-Git-Oldrev: 892834535cdf27c6290a1d45fa8e03b3e1908f35
+X-Git-Newrev: cc9470c2d8134106792a5a0179fbd0c6ca4d37af
 X-Patchwork-Hint: ignore
-Message-Id: <20220216214708.56C268377B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch: remove
- N/M
+Message-Id: <20220216214805.EB9378377F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/docker-run: hide docker run command
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,30 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=892834535cdf27c6290a1d45fa8e03b3e1908f35
+commit: https://git.buildroot.net/buildroot/commit/?id=cc9470c2d8134106792a5a0179fbd0c6ca4d37af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Found by check-package:
-package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch:4: generate your patches with 'git format-patch -N'
+Since this is a helper script there is not much reason to show the
+command that's been issued. Furthermore, the incantation has been
+slightly extended since the script was introduced.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The only interesting reason to print the command is to know what image
+it is being spawned into. However, this is prominently displayed by
+docker the first time the script is run, as it can't find the image
+locally and has to fetch it first. Afterwards, users can still use
+'docker image ls' to see what images they have locally.
+
+So let's remove 'set -x' before running docker.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr: reword and expand commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/docker-run | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch b/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch
-index e6020f466e..ea299081aa 100644
---- a/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch
-+++ b/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch
-@@ -1,7 +1,7 @@
- From bea5891591402f14940a607eafbdcd169ff8827f Mon Sep 17 00:00:00 2001
- From: Yegor Yefremov <yegorslists@googlemail.com>
- Date: Sun, 6 Feb 2022 07:12:14 +0100
--Subject: [PATCH 2/2] linux_usbfs: fix maybe-uninitialized error
-+Subject: [PATCH] linux_usbfs: fix maybe-uninitialized error
- MIME-Version: 1.0
- Content-Type: text/plain; charset=UTF-8
- Content-Transfer-Encoding: 8bit
+diff --git a/utils/docker-run b/utils/docker-run
+index bdbc979264..5653764254 100755
+--- a/utils/docker-run
++++ b/utils/docker-run
+@@ -6,7 +6,6 @@ MAIN_DIR=$(readlink -f "${DIR}/..")
+ IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
+         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
+ 
+-set -x
+ exec docker run -it --rm \
+     --user $(id -u):$(id -g) \
+     --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
