@@ -1,47 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 595D5C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 22:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE0BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 22:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1094D400BF;
-	Wed, 16 Feb 2022 22:23:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 927FA40141;
+	Wed, 16 Feb 2022 22:33:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pXctlUJAAHFP; Wed, 16 Feb 2022 22:23:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R8fuGRo8IjRk; Wed, 16 Feb 2022 22:33:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EAE3B40157;
-	Wed, 16 Feb 2022 22:23:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC68A4173C;
+	Wed, 16 Feb 2022 22:33:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0C1451BF59C
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:23:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C13941BF59C
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:33:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEC8040278
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:23:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEDBA4173C
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 22:33:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UN-RoWvxMLdj for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 22:23:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4342D40274
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 22:23:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 64E0E83794; Wed, 16 Feb 2022 22:15:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id IGxKXH5DzKOh for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 22:33:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7209641721
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 22:33:51 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id v12so5789001wrv.2
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 14:33:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YoMQ4pUlmY+z93lQ2Wm515j1XFhwgRucfsxuL1NfGxg=;
+ b=oms2Y7lT+bDolpSGPdkPmoG6F6COJPOq1PVbAQ7FGVG+rVW2F7f/tylN3VzG2YOkUY
+ IauMBn5RlsHfmSK2L4iskZYeTYtPorAD7LFDVFJs/fBm3gPYggjharVjfIXeAqcvSnKK
+ p2eiMQA/5JVtZPWh3XGNZ7tZO5/fQdmTahg2VVlC1x3Qd0sJ1NZbJjhruTXlku6Lfz/R
+ xlB1k/o4NhNqszK+KMfi6nGG6wdOHHrWnp774CLjpip6QS+vaFqVx0yCOPS2t2BnFVws
+ fNOvuD3yYsxsP6e+3Z16Dxgh4OWZBGeBQVINwdwMPmvqH3eFiaKVYh3a1w2HNjukpjz1
+ HBeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YoMQ4pUlmY+z93lQ2Wm515j1XFhwgRucfsxuL1NfGxg=;
+ b=RRSaSMS+YGf5Rn6r+yKbL7zYTTHaBxRrqDPEGw3+cCiBp0+HdjxlICoUa6DC70Fs7J
+ pmJYlK1nR3EMGoXnHAwshpW78aa9fLXjeTfK3P3sDdfiMguAhC+NviZnTrF0D4OpI5bi
+ WAqbrJ2GmsUElflbYfAKLjCZV30SyaPolDt70HAHWvsqZXj2XSRj8NLstlCJNrBCBqYu
+ 2MtwtJQzHE1bi1kRXnKlv3l0ysaxkqDoAdaqWgg1pj4aP9lHxgFa9ivj2RKDRLRAa5xh
+ A3v7wfClqilOedjLodz2JQJ5fCOE18T+QJJdRyr0c4C5PNu2kZTxnSEUn9do1E5R0Lzn
+ JJ2w==
+X-Gm-Message-State: AOAM5332MO6LEBZrYmQJUst22esvFbiT79k+qHGdkruO9xJf1neNJ30h
+ hcnC5zBfQi+Sil5pWb9bKMrY0eZWtIE=
+X-Google-Smtp-Source: ABdhPJz1NgzAOnHi6iukvAqmvX0fqCV6rSZVNRQx4MC6ifpw/QejY2bsx1nit3jCxo/4AgP7OsYmBg==
+X-Received: by 2002:adf:912e:0:b0:1e3:d88:bb46 with SMTP id
+ j43-20020adf912e000000b001e30d88bb46mr103116wrj.27.1645050829343; 
+ Wed, 16 Feb 2022 14:33:49 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id r12sm3459528wrz.50.2022.02.16.14.33.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 16 Feb 2022 14:33:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Feb 2022 23:22:30 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 8d79accf96a135bef77875949a3e33e8c92a8033
-X-Git-Newrev: 1a9431d52d43461fb8b844fd2e7d426624cb85c8
-X-Patchwork-Hint: ignore
-Message-Id: <20220216221536.64E0E83794@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/xen: security
- bump to version 4.14.4
+Date: Wed, 16 Feb 2022 23:33:49 +0100
+Message-Id: <20220216223349.2531296-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/luasyslog: fix build with Lua 5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,83 +84,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a9431d52d43461fb8b844fd2e7d426624cb85c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+Fix the following build failure with Lua 5.4 raised since commit
+4f9a5659023c66fc166de28fd39a6c97a9490667:
 
-Includes a number of bugfixes and the security fixes up to xsa-395:
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-4/
+In file included from lsyslog.c:11:
+compat-5.3.h:402:4: error: #error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+  402 | #  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+      |    ^~~~~
 
-Drop the now upstream xsa38* patches.
+Fixes:
+ - http://autobuild.buildroot.org/results/df2aabcf2ae07cad66b869ec4ac76702d2c32dc5
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7d3845f10ccc0810243036439b955cd9f49d3da4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xen/xen.hash | 11 +----------
- package/xen/xen.mk   | 19 +------------------
- 2 files changed, 2 insertions(+), 28 deletions(-)
+ ...002-compat-5.3.h-add-Lua-5.4-support.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/luasyslog/0002-compat-5.3.h-add-Lua-5.4-support.patch
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 10a778053a..a81d05e3f7 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,12 +1,3 @@
- # Locally computed
--sha256  a3dad76a772393a1875e8f44a6059a95fea4bde40f97b800966969ac6f3a498d  xen-4.14.3.tar.gz
-+sha256  e76d56dfcdabf5d80aa06819f44472de49526a518dbb483eb08e7ff9aec2c669  xen-4.14.4.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
--# https://xenbits.xenproject.org/xsa/advisory-385.html
--sha256  831e86c3adfec532b1a48a0b967b7c58c37db3733aee8d78216eb9d535b34f12  xsa385-4.15.patch
--# https://xenbits.xenproject.org/xsa/advisory-386.html
--sha256  f2f83c825e249bba9454437b48bbd8307fe7a224f56484388a67af124dfd279b  xsa386.patch
--# https://xenbits.xenproject.org/xsa/advisory-388.html
--sha256  6917267482101a3f8f1d13905e14994344a0af81370c7a2b92275fb176b321a0  xsa388-4.14-1.patch
--sha256  d5886e046c69f34f98f7e1fc6ffcc36d92f8fc79242b9dc88412c39aa79b4ac3  xsa388-4.14-2.patch
--# https://xenbits.xenproject.org/xsa/advisory-389.html
--sha256  b243284679b32ab8c817a2e41562d8694d9781fa8096c268bb41b0cd91684baa  xsa389-4.14.patch
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index cfc166dc4c..03341d4275 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,30 +4,13 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.14.3
-+XEN_VERSION = 4.14.4
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_CPE_ID_VENDOR = xen
- XEN_CPE_ID_PREFIX = cpe:2.3:o
- XEN_DEPENDENCIES = host-acpica host-python3
--XEN_PATCH = \
--	https://xenbits.xenproject.org/xsa/xsa385-4.15.patch \
--	https://xenbits.xenproject.org/xsa/xsa386.patch \
--	https://xenbits.xenproject.org/xsa/xsa388-4.14-1.patch \
--	https://xenbits.xenproject.org/xsa/xsa388-4.14-2.patch \
--	https://xenbits.xenproject.org/xsa/xsa389-4.14.patch
--
--# xsa385-4.15.patch
--XEN_IGNORE_CVES += CVE-2021-28706
--# xsa386.patch
--XEN_IGNORE_CVES += CVE-2021-28702
--# xsa388-4.14-1.patch
--XEN_IGNORE_CVES += CVE-2021-28704 CVE-2021-28707
--# xsa388-4.14-2.patch
--XEN_IGNORE_CVES += CVE-2021-28708
--# xsa389-4.14.patch
--XEN_IGNORE_CVES += CVE-2021-28705 CVE-2021-28709
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
+diff --git a/package/luasyslog/0002-compat-5.3.h-add-Lua-5.4-support.patch b/package/luasyslog/0002-compat-5.3.h-add-Lua-5.4-support.patch
+new file mode 100644
+index 0000000000..72f337967c
+--- /dev/null
++++ b/package/luasyslog/0002-compat-5.3.h-add-Lua-5.4-support.patch
+@@ -0,0 +1,43 @@
++From 0ec19dad98a18653ea58fbeae058288cf95d3e4a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 16 Feb 2022 23:31:15 +0100
++Subject: [PATCH] compat-5.3.h: add Lua 5.4 support
++
++Fix the following build failure with Lua 5.4:
++
++In file included from lsyslog.c:11:
++compat-5.3.h:402:4: error: #error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
++  402 | #  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
++      |    ^~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/df2aabcf2ae07cad66b869ec4ac76702d2c32dc5
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/ntd/luasyslog/pull/3]
++---
++ compat-5.3.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/compat-5.3.h b/compat-5.3.h
++index 8e10893..4f8e58e 100644
++--- a/compat-5.3.h
+++++ b/compat-5.3.h
++@@ -397,11 +397,11 @@ COMPAT53_API void luaL_requiref (lua_State *L, const char *modname,
++ 
++ 
++ /* other Lua versions */
++-#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 503
+++#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 504
++ 
++-#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+++#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, 5.3 or 5.4)"
++ 
++-#endif /* other Lua versions except 5.1, 5.2, and 5.3 */
+++#endif /* other Lua versions except 5.1, 5.2, 5.3 and 5.4 */
++ 
++ 
++ 
++-- 
++2.34.1
++
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
