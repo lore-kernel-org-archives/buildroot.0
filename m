@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5861EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEBD0C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Feb 2022 21:45:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E57D58133E;
-	Wed, 16 Feb 2022 21:33:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 660A78333E;
+	Wed, 16 Feb 2022 21:45:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MisrqAZ4jXqB; Wed, 16 Feb 2022 21:33:47 +0000 (UTC)
+	with ESMTP id l5HuwONWyN_X; Wed, 16 Feb 2022 21:45:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14351812CC;
-	Wed, 16 Feb 2022 21:33:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45C1F83380;
+	Wed, 16 Feb 2022 21:45:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9FDD91BF5A9
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:33:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AB3481BF5A9
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E22B607A4
- for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:33:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5C3360BEA
+ for <buildroot@lists.busybox.net>; Wed, 16 Feb 2022 21:45:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id syxbuAT2J1Ca for <buildroot@lists.busybox.net>;
- Wed, 16 Feb 2022 21:33:43 +0000 (UTC)
+ with ESMTP id bu98Tr0dq16v for <buildroot@lists.busybox.net>;
+ Wed, 16 Feb 2022 21:45:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5444260777
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:33:43 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id f17so6229111edd.2
- for <buildroot@buildroot.org>; Wed, 16 Feb 2022 13:33:43 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1973B60BE5
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 21:45:52 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id w3so6232541edu.8
+ for <buildroot@buildroot.org>; Wed, 16 Feb 2022 13:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=sEcoPgA8GQddzkc3SO0AICXHa//xA+earEpkQJk7+O4=;
- b=URll0dvfnl7M1VDGOZLE7zwNfzYxPTsDDCxUHA0yb75MK3kfd0ebp4CeQVAwTcHrcO
- 6VonrFDZBMnK4242xuALyylxCMDCaU9dN2nehC7J7xheBBHwlXAj99ADqZaiwI5tv6e9
- FtKWjJaRfyHrcAwG3I8g644LhsKPU2j9TgMSij+9jPrKdb7LlUCknxXN+eCiKZAgDB/M
- od31k4SwGbJD1v4KS/4RhqKp6TcFgfhTB84KB7KQpCOUGWhnKIZpvPcXfJSQgDYoWO3M
- lNNI87kLPxmk9UBtyA3WOQIt9txwSNWTO6jrqW6JtZtaOemXAfY+l1r0NwqrBqIhGdiA
- U6oA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=HJqF2Y38Ykgren/wl3Vjz3uGdSOhdYWf+UvilbnUYPI=;
+ b=aWllur7uAvz4EIs74Bi0Ivty/XW8yjjAsqZVX5UTmhINjTaEZvRkrFY8901LAMzqO3
+ +GyabPv48bQcxVzv2UaH7VKL79e08JBxSmN5csvIwjN0bWEzaaiKb7EXwoKDHS8RE15C
+ 18JwvDJDBuWQDPLA5DEiRO5u4b6AVwbB1pTGTtIyk5nJS0wE/xOtnzqBHVOT0a2Mwd+O
+ zqmO4ifBpcSHESOzwvvyiNkuE8qoKI4SFZ6XTqT7Vq0H2wZddZe+FGpZj6XJFQCs0czM
+ la8inreBOQkE64b+1VUSNbczMrYlfdEE7EKiljJBQJp3GPw6jeeizG01vM47gW8Yxxhy
+ WBFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=sEcoPgA8GQddzkc3SO0AICXHa//xA+earEpkQJk7+O4=;
- b=de5tDK90DPLNA7KYQg03ka6Js5CNQw3Z9cw9A7wNVGvd8ROIvFwg2N2p7HrLkqZsXt
- /Tx6djZo038OF2P2CeJcBeVVDBvvtkMjBidiws2cRFnEenizSqGTIf3nPHUS5JgnM60k
- ECK7jjA8ZR4XveW8di8WWsDUFejkOkp7SmkN2Q1V2uwi9yWe/orU0Hd5/j82MwmSLO2Y
- CBcOp0bnSJzXCV7dIfeJYMSvfyYujItqEU5Zf+QnoMk9r0NC74n0FTTXAOUK8ot8ljyg
- /QUPj24odTZBucbuDqQtKb/D+7w0X+20JRLX1vYFDfDIH/AMcnwy6mP6/r+DsAMhZnIO
- 8oPg==
-X-Gm-Message-State: AOAM531qAyS2GzdpW7QK0/5IM1aipJf4e/YpT3PzapCEBUX8099/x/uf
- 0cSk2arlMvqfPLdrcHbrXUsS3I/0f0wLgw==
-X-Google-Smtp-Source: ABdhPJxbUehfTTvt7Fl3i+mFUno5GSiGQ/ljj9y8ml3Q8mwOwr8cZl+1wOI34dQtwcJVXetaMw0JdQ==
-X-Received: by 2002:a05:6402:5108:b0:410:d312:924 with SMTP id
- m8-20020a056402510800b00410d3120924mr4965265edd.430.1645047221608; 
- Wed, 16 Feb 2022 13:33:41 -0800 (PST)
+ bh=HJqF2Y38Ykgren/wl3Vjz3uGdSOhdYWf+UvilbnUYPI=;
+ b=KRdSiNDV6Z4/O1C/PiOfHNVlwiDLp7u1oD87v9YzmL94EAJkBITOu1Hej4imjJgF5Y
+ KbXD21I5mFuy5g4zEahdqzZwvUgHzh64ZRMZXzRWiYrHxVXNaoOfoxVp8cLY3ajSZQMY
+ c5Ho5G2evAVoA1Cf8arK6aoFqJhgqIB3kDJQM8THR52T4qzShzXI42xFQ0z1CkhVWV0j
+ uqNmA6BtVGVCEMn8VQB/vLCEqHIvfAg49wmpeZt0zaQxBbsUlNZ6m72RMmITxGgjpcc5
+ P8T+IG0x64bapnn6oInesfnbJygZ1hHmw+uTfVdvpEmw+Yp4O8sREYMqHYIVISKkAVPc
+ ojeA==
+X-Gm-Message-State: AOAM53200cxyCV0R4YfExZ+TXEfer3Mc420FyK+txxZfZBe75huIt6y0
+ dCiPj+mq77gUTm/5QGm6cymBPmbmzdvMjA==
+X-Google-Smtp-Source: ABdhPJyDYzvI9+aLZjnvyVyKwZsolID+Z3L1WdFh1vTpI7TqFcFFwjEXgkVev3v4wUFKvIj02KbJnA==
+X-Received: by 2002:aa7:cf93:0:b0:40d:e8eb:1dd2 with SMTP id
+ z19-20020aa7cf93000000b0040de8eb1dd2mr5173444edx.441.1645047950769; 
+ Wed, 16 Feb 2022 13:45:50 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id k7sm352643eje.162.2022.02.16.13.33.40
+ by smtp.gmail.com with ESMTPSA id e14sm2376082edz.52.2022.02.16.13.45.50
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 16 Feb 2022 13:33:41 -0800 (PST)
-Message-ID: <560f93f2-ed19-309b-7d90-84213a3b75ed@mind.be>
-Date: Wed, 16 Feb 2022 22:33:40 +0100
+ Wed, 16 Feb 2022 13:45:50 -0800 (PST)
+Message-ID: <19383fee-9cb4-8a75-2d65-79b5796bc5a1@mind.be>
+Date: Wed, 16 Feb 2022 22:45:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <20220214203909.251924-1-yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220213114721.2738803-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220214203909.251924-1-yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH] utils/docker-run: improve user experience
+In-Reply-To: <20220213114721.2738803-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/kodi: fix build with
+ python-3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +94,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,73 +101,287 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/02/2022 21:39, Yann E. MORIN wrote:
-> Currently, the docker-run script starts a container based on the
-> reference image, in which the user has UID:GID set to 1000:1000,
-> which may or may not be the same as local user uses, which may
-> prevent the commands in the container from creating files, which
-> foils the plan of using the container to run a build...
+On 13/02/2022 12:47, Bernd Kuhls wrote:
+> Fixes build error:
 > 
-> Additionally, the paths in the container differ from the paths
-> the user expects, as the current Buildroot tree is mounted over
-> the in-container user home directory. This is a bit confusing...
+> CMake Error at /usr/share/cmake-3.18/Modules/FindPackageHandleStandardArgs.cmake:165 (message):
+>    Could NOT find PythonLibs (missing: PYTHON_LIBRARIES) (found suitable
+>    version "3.10.2", minimum required is "3.5")
 > 
-> Finally, the container is left hanging around after the command
-> finishes, and thus there are as many lingering containers as the
-> user runs docker-run. This is not very nice...
-> 
-> We fix all of that (yeah, should be different patches, but meh):
-> 
->    - we use --mount instead of -v, which allows us to bind-mount
->      the Buildroot tree at the same place in the container, as
->      Docker will create the destination if it does not exist, while
->      -v seems to expect it to exist [0].
-> 
->    - as a consequence, we can also set the working directory as the
->      Buildroot top-directory;
-> 
->    - use --user to force the same UID:GID in the container as the
->      local user, so that files created in the container belong to
->      the local user, and so that files from the local user are
->      accessible from the container;
-> 
->    - use --rm do remove the container once it terminates; starting
->      a new container is very quick anyway, so it is as good as
->      re-using a previous container.
-> 
-> [0] the documentation is not clear about that. It clearly states
-> that the host directory (i.e. the origin, the source) is created
-> if missing, but it says nothing of the destination:
->      https://docs.docker.com/engine/reference/commandline/run/#mount-volume--v---read-only
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-  Applied to master with the typo fixed, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   utils/docker-run | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+> v2: fixed typo in PYTHON_EXECUTABLE configure option (usr/bin/ -> bin/)
 > 
-> diff --git a/utils/docker-run b/utils/docker-run
-> index 2bca8d8e3a..bdbc979264 100755
-> --- a/utils/docker-run
-> +++ b/utils/docker-run
-> @@ -7,4 +7,8 @@ IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
->           sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
->   
->   set -x
-> -exec docker run -v "${MAIN_DIR}:/home/br-user" -it "${IMAGE}" "$@"
-> +exec docker run -it --rm \
-> +    --user $(id -u):$(id -g) \
-> +    --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}" \
-> +    --workdir "${MAIN_DIR}" \
-> +    "${IMAGE}" "${@}"
+>   package/kodi/0002-cmake-findpython.patch      | 135 ++++++++++++++++++
+>   ...-cmake-search-for-python-interpreter.patch |  48 +++++++
+>   ...-allow-to-override-PYTHON_EXECUTABLE.patch |  39 +++++
+>   package/kodi/kodi.mk                          |   4 +
+>   4 files changed, 226 insertions(+)
+>   create mode 100644 package/kodi/0002-cmake-findpython.patch
+>   create mode 100644 package/kodi/0003-cmake-search-for-python-interpreter.patch
+>   create mode 100644 package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch
+> 
+> diff --git a/package/kodi/0002-cmake-findpython.patch b/package/kodi/0002-cmake-findpython.patch
+> new file mode 100644
+> index 0000000000..60728aa465
+> --- /dev/null
+> +++ b/package/kodi/0002-cmake-findpython.patch
+> @@ -0,0 +1,135 @@
+> +From 52f44ec5c7b728a6afaca867e8d815fced2012ec Mon Sep 17 00:00:00 2001
+> +From: fuzzard <fuzzard@kodi.tv>
+> +Date: Sat, 31 Jul 2021 19:22:08 +1000
+> +Subject: [PATCH] [cmake] findpython
+> +
+> +use cmakes (3.12+) FindPython3 module.
+> +Provide cmake vars for user to overide specific version, and search path
+> +
+> +Backport of https://github.com/xbmc/xbmc/pull/20045
+> +
+> +Patch sent upstream: https://github.com/xbmc/xbmc/pull/20989
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + CMakeLists.txt                 |  4 +-
+> + cmake/modules/FindPython.cmake | 71 ++++++++++++++++++++++++++--------
+> + 2 files changed, 56 insertions(+), 19 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 2d5369798d..9bed54ef40 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -1,4 +1,4 @@
+> +-cmake_minimum_required(VERSION 3.4)
+> ++cmake_minimum_required(VERSION 3.12)
+> + if(WIN32)
+> +   # Version 3.15 is required to use "PREPEND" for dependencies
+> +   cmake_minimum_required(VERSION 3.15)
+> +@@ -187,8 +187,6 @@ core_require_dep(${required_deps})
+> + find_package(TexturePacker REQUIRED)
+> + find_package(JsonSchemaBuilder REQUIRED)
+> +
+> +-SET(PYTHON_VERSION 3.8)
+> +-
+> + if(ENABLE_MARIADBCLIENT AND NOT ENABLE_MARIADBCLIENT STREQUAL AUTO AND ENABLE_MYSQLCLIENT AND NOT ENABLE_MYSQLCLIENT STREQUAL AUTO)
+> +   MESSAGE(FATAL_ERROR "You can not use MySql and MariaDB at the same time. Disable one by adding -DENABLE_MYSQLCLIENT=OFF or -DENABLE_MARIADBCLIENT=OFF.")
+> + elseif(ENABLE_MYSQLCLIENT AND NOT ENABLE_MYSQLCLIENT STREQUAL AUTO)
+> +diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
+> +index c40e12d551..35220b5426 100644
+> +--- a/cmake/modules/FindPython.cmake
+> ++++ b/cmake/modules/FindPython.cmake
+> +@@ -1,17 +1,56 @@
+> +-# - Try to find python
+> +-# Once done this will define
+> ++# FindPython
+> ++# --------
+> ++# Finds Python3 libraries
+> ++#
+> ++# This module will search for the required python libraries on the system
+> ++# If multiple versions are found, the highest version will be used.
+> ++#
+> ++# --------
+> ++#
+> ++# the following variables influence behaviour:
+> ++#
+> ++# PYTHON_PATH - use external python not found in system paths
+> ++#               usage: -DPYTHON_PATH=/path/to/python/lib
+> ++# PYTHON_VER - use exact python version, fail if not found
+> ++#               usage: -DPYTHON_VER=3.8
+> ++#
+> ++# --------
+> ++#
+> ++# This module will define the following variables:
+> + #
+> + # PYTHON_FOUND - system has PYTHON
+> ++# PYTHON_VERSION - Python version number (Major.Minor)
+> + # PYTHON_INCLUDE_DIRS - the python include directory
+> + # PYTHON_LIBRARIES - The python libraries
+> ++# PYTHON_LDFLAGS - Python provided link options
+> ++#
+> ++# --------
+> ++#
+> ++
+> ++# for Depends builds, set search root dir to depends path
+> ++if(KODI_DEPENDSBUILD)
+> ++  set(Python3_USE_STATIC_LIBS TRUE)
+> ++  set(Python3_ROOT_DIR ${DEPENDS_PATH}/lib)
+> ++endif()
+> ++
+> ++# Provide root dir to search for Python if provided
+> ++if(PYTHON_PATH)
+> ++  set(Python3_ROOT_DIR ${PYTHON_PATH})
+> ++
+> ++  # unset cache var so we can generate again with a different dir (or none) if desired
+> ++  unset(PYTHON_PATH CACHE)
+> ++endif()
+> ++
+> ++# Set specific version of Python to find if provided
+> ++if(PYTHON_VER)
+> ++  set(VERSION ${PYTHON_VER})
+> ++  set(EXACT_VER "EXACT")
+> +
+> +-if(PKG_CONFIG_FOUND)
+> +-  pkg_check_modules(PC_PYTHON python3>=3.5 QUIET)
+> ++  # unset cache var so we can generate again with a different ver (or none) if desired
+> ++  unset(PYTHON_VER CACHE)
+> + endif()
+> +
+> +-find_program(PYTHON_EXECUTABLE python3 ONLY_CMAKE_FIND_ROOT_PATH)
+> +-find_library(PYTHON_LIBRARY NAMES python3.9 python3.8 python3.7 python3.6 python3.5 PATHS ${PC_PYTHON_LIBDIR})
+> +-find_path(PYTHON_INCLUDE_DIR NAMES Python.h PATHS ${PC_PYTHON_INCLUDE_DIRS} PATH_SUFFIXES python3.9 python3.8 python3.7 python3.6 python3.5)
+> ++find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Development)
+> +
+> + if(KODI_DEPENDSBUILD)
+> +   find_library(FFI_LIBRARY ffi REQUIRED)
+> +@@ -27,17 +66,17 @@ if(KODI_DEPENDSBUILD)
+> +     endif()
+> +   endif()
+> +
+> +-  set(PYTHON_LIBRARIES ${PYTHON_LIBRARY} ${FFI_LIBRARY} ${EXPAT_LIBRARY} ${INTL_LIBRARY} ${GMP_LIBRARY} ${PYTHON_DEP_LIBRARIES})
+> +-else()
+> +-  find_package(PythonLibs 3.5 REQUIRED)
+> +-  list(APPEND PYTHON_LIBRARIES ${PC_PYTHON_STATIC_LIBRARIES})
+> ++  list(APPEND Python3_LIBRARIES ${FFI_LIBRARY} ${EXPAT_LIBRARY} ${INTL_LIBRARY} ${GMP_LIBRARY} ${PYTHON_DEP_LIBRARIES})
+> + endif()
+> +
+> +-include(FindPackageHandleStandardArgs)
+> +-find_package_handle_standard_args(Python REQUIRED_VARS PYTHON_INCLUDE_DIR PYTHON_LIBRARY PYTHON_LIBRARIES)
+> +-if(PYTHON_FOUND)
+> +-  set(PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_DIR})
+> ++if(Python3_FOUND)
+> +   list(APPEND PYTHON_DEFINITIONS -DHAS_PYTHON=1)
+> ++  # These are all set for easy integration with the rest of our build system
+> ++  set(PYTHON_FOUND ${Python3_FOUND})
+> ++  set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
+> ++  set(PYTHON_LIBRARIES ${Python3_LIBRARIES})
+> ++  set(PYTHON_VERSION "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" CACHE INTERNAL "" FORCE)
+> ++  set(PYTHON_LDFLAGS ${Python3_LINK_OPTIONS})
+> + endif()
+> +
+> +-mark_as_advanced(PYTHON_EXECUTABLE PYTHON_INCLUDE_DIRS PYTHON_INCLUDE_DIR PYTHON_LIBRARY PYTHON_LIBRARIES PYTHON_LDFLAGS FFI_LIBRARY EXPAT_LIBRARY INTL_LIBRARY GMP_LIBRARY)
+> ++mark_as_advanced(PYTHON_EXECUTABLE PYTHON_VERSION PYTHON_INCLUDE_DIRS PYTHON_LDFLAGS FFI_LIBRARY EXPAT_LIBRARY INTL_LIBRARY GMP_LIBRARY)
+> +--
+> +2.30.2
+> +
+> diff --git a/package/kodi/0003-cmake-search-for-python-interpreter.patch b/package/kodi/0003-cmake-search-for-python-interpreter.patch
+> new file mode 100644
+> index 0000000000..158345a212
+> --- /dev/null
+> +++ b/package/kodi/0003-cmake-search-for-python-interpreter.patch
+> @@ -0,0 +1,48 @@
+> +From 6bb112e585f2ffd10e5af70ca28159dd235d063b Mon Sep 17 00:00:00 2001
+> +From: wsnipex <wsnipex@a1.net>
+> +Date: Thu, 19 Aug 2021 08:50:05 +0200
+> +Subject: [PATCH] [cmake] search for python interpreter fixes installing
+> + eventclients on linux
+> +
+> +Backport of https://github.com/xbmc/xbmc/pull/20058
+> +
+> +Patch sent upstream: https://github.com/xbmc/xbmc/pull/20989
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + cmake/modules/FindPython.cmake | 5 +++++
+> + 1 file changed, 5 insertions(+)
+> +
+> +diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
+> +index 35220b5426..c469ed9fb6 100644
+> +--- a/cmake/modules/FindPython.cmake
+> ++++ b/cmake/modules/FindPython.cmake
+> +@@ -20,6 +20,7 @@
+> + #
+> + # PYTHON_FOUND - system has PYTHON
+> + # PYTHON_VERSION - Python version number (Major.Minor)
+> ++# PYTHON_EXECUTABLE - Python interpreter binary
+> + # PYTHON_INCLUDE_DIRS - the python include directory
+> + # PYTHON_LIBRARIES - The python libraries
+> + # PYTHON_LDFLAGS - Python provided link options
+> +@@ -51,6 +52,9 @@ if(PYTHON_VER)
+> + endif()
+> +
+> + find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Development)
+> ++if(CORE_SYSTEM_NAME STREQUAL linux)
+> ++  find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Interpreter)
+> ++endif()
+> +
+> + if(KODI_DEPENDSBUILD)
+> +   find_library(FFI_LIBRARY ffi REQUIRED)
+> +@@ -73,6 +77,7 @@ if(Python3_FOUND)
+> +   list(APPEND PYTHON_DEFINITIONS -DHAS_PYTHON=1)
+> +   # These are all set for easy integration with the rest of our build system
+> +   set(PYTHON_FOUND ${Python3_FOUND})
+> ++  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE} CACHE FILEPATH "Python interpreter" FORCE)
+> +   set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
+> +   set(PYTHON_LIBRARIES ${Python3_LIBRARIES})
+> +   set(PYTHON_VERSION "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" CACHE INTERNAL "" FORCE)
+> +--
+> +2.30.2
+> +
+> diff --git a/package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch b/package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch
+> new file mode 100644
+> index 0000000000..d1e9b3f25f
+> --- /dev/null
+> +++ b/package/kodi/0004-cmake-allow-to-override-PYTHON_EXECUTABLE.patch
+> @@ -0,0 +1,39 @@
+> +From 25681d8adde4a90d5da02051e30f6a3a27322136 Mon Sep 17 00:00:00 2001
+> +From: Jernej Skrabec <jernej.skrabec@gmail.com>
+> +Date: Sat, 25 Sep 2021 07:41:10 +0200
+> +Subject: [PATCH] [cmake] allow to override PYTHON_EXECUTABLE
+> +
+> +If Kodi is being build for distro which has different python version
+> +than host, PYTHON_EXECUTABLE must be overriden and point to distro
+> +version. Otherwise, eventclients will be installed in wrong location and
+> +be thus unusable.
+> +
+> +Use case: Cross compiling Kodi for LibreELEC
+> +
+> +Backport of https://github.com/xbmc/xbmc/pull/20171
+> +
+> +Patch sent upstream: https://github.com/xbmc/xbmc/pull/20989
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + cmake/modules/FindPython.cmake | 4 +++-
+> + 1 file changed, 3 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
+> +index c469ed9fb6..87b8368705 100644
+> +--- a/cmake/modules/FindPython.cmake
+> ++++ b/cmake/modules/FindPython.cmake
+> +@@ -77,7 +77,9 @@ if(Python3_FOUND)
+> +   list(APPEND PYTHON_DEFINITIONS -DHAS_PYTHON=1)
+> +   # These are all set for easy integration with the rest of our build system
+> +   set(PYTHON_FOUND ${Python3_FOUND})
+> +-  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE} CACHE FILEPATH "Python interpreter" FORCE)
+> ++  if(NOT PYTHON_EXECUTABLE)
+> ++    set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE} CACHE FILEPATH "Python interpreter" FORCE)
+> ++  endif()
+> +   set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
+> +   set(PYTHON_LIBRARIES ${Python3_LIBRARIES})
+> +   set(PYTHON_VERSION "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" CACHE INTERNAL "" FORCE)
+> +--
+> +2.30.2
+> +
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 646c6e0ab4..56e901fa17 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -76,6 +76,10 @@ KODI_CONF_OPTS += \
+>   	-DNATIVEPREFIX=$(HOST_DIR) \
+>   	-DDEPENDS_PATH=$(STAGING_DIR)/usr \
+>   	-DENABLE_TESTING=OFF \
+> +	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python \
+> +	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+> +	-DPYTHON_PATH=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+> +	-DPYTHON_VER=$(PYTHON3_VERSION_MAJOR) \
+>   	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/JsonSchemaBuilder \
+>   	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/TexturePacker \
+>   	-DLIBDVDCSS_URL=$(KODI_DL_DIR)/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
