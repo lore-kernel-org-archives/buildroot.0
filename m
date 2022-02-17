@@ -4,53 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE2C5C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 18:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F157C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 18:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80A416F72B;
-	Thu, 17 Feb 2022 18:36:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24E3E60B8F;
+	Thu, 17 Feb 2022 18:42:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w2EImd1nxV8W; Thu, 17 Feb 2022 18:36:14 +0000 (UTC)
+	with ESMTP id 085OoY7A-gTJ; Thu, 17 Feb 2022 18:42:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97FF360B8B;
-	Thu, 17 Feb 2022 18:36:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB8731BF3EB
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:35:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85B096F72B;
+	Thu, 17 Feb 2022 18:42:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FFAB1BF3EB
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:42:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D29794038D
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:35:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C80760B8F
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:42:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w-br7N7D1985 for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 18:35:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3E0784014B
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 18:35:57 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout04.t-online.de (Postfix) with SMTP id 570C67D13;
- Thu, 17 Feb 2022 19:35:54 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.192.64]) by fwd72.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nKldC-2Roe6D0; Thu, 17 Feb 2022 19:35:54 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37376)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nKldB-0003Ny-NU;
- Thu, 17 Feb 2022 19:35:53 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lcipFyL3lQzB for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 18:42:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
+ [IPv6:2a00:1450:4864:20::133])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A1A460B8B
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 18:42:16 +0000 (UTC)
+Received: by mail-lf1-x133.google.com with SMTP id b9so944297lfv.7
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 10:42:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bg6MKUzixsXHHmKJc2Gc58NZ+QEAoyM/mDzfRuX2SJM=;
+ b=C+gfY8Z0bdkUvgHhNjAgQ+dgnQt+nKQy3LvW1zaFdYSdyaEd8I4hwjvoToOo89/8hn
+ sf+dEFG+DlIIDDsew4FoUH5/d85EW0WhnoJsR4FQiW+8RQktimraRY+x/fSs3ia1/6WU
+ e3YoeiwTmGyg/sSQK2BZ1v4u/t75SOc+nYWI7KIi8QKQFwO9IG32pfqDbmB+KsfmaeMd
+ 0IlmOwEHqqqspwvlc9p6Xot9iMWp2xlOVjwANNyqeU0bGvdpg9CS83lJeu+W223lZBW1
+ t8UH/ucnrUpPDSFHHj03ll94pO1ZCmR64jW0jLMqcl2kndqYGJIdFDXo5fF0OxMD1ohH
+ 0ROw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bg6MKUzixsXHHmKJc2Gc58NZ+QEAoyM/mDzfRuX2SJM=;
+ b=BXYNJ7v0jf7LoJh82jGraIb75rQoeVeIlmV4wMbbywQbNMKoxUmew3Eq24V07pViz8
+ J9VEFuIYQy2vz41x1IrfVeBdtuOAjkRqBesmUBkLqsX6yUGfyzmkK+2H/bZ5eOOwQmWS
+ XoliQckJ0wBjmAYa/79ZjT6b3TmHY5VNW3yYQpWx0QttG8CEybkmOfPVx4TOVSTGZ45o
+ YYxPXgutdyE6ljYkBWNBmRIyEzRy+nbuysQjn7CP+kRgZP3m0u442DimiHO+9yatwoQp
+ W4F2JMc30EBZC7DuYJ09R6WXQbAfHRriIvT1IAi0hqc6cLCbKm2dUBlBNm3VmAEm7adj
+ 9iiQ==
+X-Gm-Message-State: AOAM533S00BQkUWLx2w5VJicpIITvV4XnnSZ4Sgn4uNy7crBFkaZ7ile
+ 7LBzXjj3JeXsCWc+V7cQZFCOgm6YIxE=
+X-Google-Smtp-Source: ABdhPJyXG3jCSY3HlE5kfYqAwlXUKGYYBV6OxJuhVfS0lh0YdxA4PpDSOmy38cGATba4OvWxkPzSJw==
+X-Received: by 2002:a05:6512:6c4:b0:437:9409:984c with SMTP id
+ u4-20020a05651206c400b004379409984cmr2896859lff.199.1645123334012; 
+ Thu, 17 Feb 2022 10:42:14 -0800 (PST)
+Received: from hellfire.local ([178.155.5.22])
+ by smtp.gmail.com with ESMTPSA id c8sm40561lfr.119.2022.02.17.10.42.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 17 Feb 2022 10:42:13 -0800 (PST)
+From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Feb 2022 19:35:52 +0100
-Message-Id: <20220217183553.210835-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 17 Feb 2022 21:42:09 +0300
+Message-Id: <20220217184209.16736-1-kuzminov.sergey81@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1645122954-0000B7AB-F7233D33/0/0 CLEAN NORMAL
-X-TOI-MSGID: c606cda5-5649-41ce-8074-b0f90d4207c2
-Subject: [Buildroot] [PATCH/next 1/2] package/intel-mediadriver: bump
- version to 22.2.1
+Subject: [Buildroot] [PATCH] configs/orangepi_pc_defconfig: switch to
+ extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,159 +84,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which was applied upstream:
-https://github.com/intel/media-driver/commit/8eab97af6e1c41fc7b9d72999ecb1c22d9e52db6
+Changes:
+* Switch to common scenarios for multiple boards to create an SD image: board/orangepi/common.
+* Exclude FAT partition, it is no longer needed for U-Boot.
+* Switch SD image from MBR to GPT for partition-uuid to work.
+* Switch to extlinux, this is convenient for debugging.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 ---
- ...001-Add-MEDIA-BUILD-HARDENING-option.patch | 106 ------------------
- .../intel-mediadriver/intel-mediadriver.hash  |   2 +-
- .../intel-mediadriver/intel-mediadriver.mk    |   2 +-
- 3 files changed, 2 insertions(+), 108 deletions(-)
- delete mode 100644 package/intel-mediadriver/0001-Add-MEDIA-BUILD-HARDENING-option.patch
+ board/orangepi/orangepi-pc/boot.cmd     |  8 ------
+ board/orangepi/orangepi-pc/genimage.cfg | 37 -------------------------
+ configs/orangepi_pc_defconfig           |  9 ++----
+ 3 files changed, 3 insertions(+), 51 deletions(-)
+ delete mode 100644 board/orangepi/orangepi-pc/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-pc/genimage.cfg
 
-diff --git a/package/intel-mediadriver/0001-Add-MEDIA-BUILD-HARDENING-option.patch b/package/intel-mediadriver/0001-Add-MEDIA-BUILD-HARDENING-option.patch
+diff --git a/board/orangepi/orangepi-pc/boot.cmd b/board/orangepi/orangepi-pc/boot.cmd
 deleted file mode 100644
-index 968445759a..0000000000
---- a/package/intel-mediadriver/0001-Add-MEDIA-BUILD-HARDENING-option.patch
+index 9da625c803..0000000000
+--- a/board/orangepi/orangepi-pc/boot.cmd
 +++ /dev/null
-@@ -1,106 +0,0 @@
--From 103c00c8d74a1cd87686850212bd93c0e4d59fc9 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 11 Aug 2021 21:34:59 +0200
--Subject: [PATCH] Add MEDIA_BUILD_HARDENING option
+@@ -1,8 +0,0 @@
+-setenv fdt_high ffffffff
 -
--Add MEDIA_BUILD_HARDENING option to allow the user to disable hardening
--options such as stack-protector-all or FORTIFY SOURCE 2 which are not
--always available (e.g. fortify source 2 is only available on glibc >= 6
--and not musl/uclibc-ng)
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 -
--Patch sent upstream: https://github.com/intel/media-driver/pull/1242
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-pc.dtb
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: rebased for version 21.4.1]
-----
-- cmrtlib/linux/CMakeLists.txt                       | 14 ++++++++++----
-- .../cmake/linux/media_compile_flags_linux.cmake    | 12 ++++++++++--
-- media_driver/media_top_cmake.cmake                 |  8 +++++++-
-- 3 files changed, 27 insertions(+), 7 deletions(-)
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-pc/genimage.cfg b/board/orangepi/orangepi-pc/genimage.cfg
+deleted file mode 100644
+index 14e326cc56..0000000000
+--- a/board/orangepi/orangepi-pc/genimage.cfg
++++ /dev/null
+@@ -1,37 +0,0 @@
+-# Minimal SD card image for the OrangePi PC
+-#
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h3-orangepi-pc.dtb",
+-			"boot.scr"
+-		}
+-	}
 -
--diff --git a/cmrtlib/linux/CMakeLists.txt b/cmrtlib/linux/CMakeLists.txt
--index 65f71ceef..b066138d9 100644
----- a/cmrtlib/linux/CMakeLists.txt
--+++ b/cmrtlib/linux/CMakeLists.txt
--@@ -32,12 +32,18 @@ else()
-- endif()
-- 
-- # Set up compile options that will be used for the Linux build
---set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD_OPTION} -fPIC -fpermissive -fstack-protector-all")
---set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-strict-aliasing -D_FORTIFY_SOURCE=2")
--+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD_OPTION} -fPIC -fpermissive")
--+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-strict-aliasing")
-- set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D__DEBUG -O0")
---set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CPP_STANDARD_OPTION} -fPIC -fpermissive -fstack-protector-all")
---set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing -D_FORTIFY_SOURCE=2")
--+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CPP_STANDARD_OPTION} -fPIC -fpermissive")
--+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing")
-- set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D__DEBUG -O0")
--+if(MEDIA_BUILD_HARDENING)
--+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS} -fstack-protector-all")
--+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -D_FORTIFY_SOURCE=2")
--+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS} -fstack-protector-all")
--+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -D_FORTIFY_SOURCE=2")
--+endif()
-- if(MEDIA_BUILD_FATAL_WARNINGS)
--     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS} -Werror")
--     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS} -Werror")
--diff --git a/media_driver/cmake/linux/media_compile_flags_linux.cmake b/media_driver/cmake/linux/media_compile_flags_linux.cmake
--index 7a2bd64b6..98896b131 100755
----- a/media_driver/cmake/linux/media_compile_flags_linux.cmake
--+++ b/media_driver/cmake/linux/media_compile_flags_linux.cmake
--@@ -47,7 +47,6 @@ set(MEDIA_COMPILER_FLAGS_COMMON
--     # Other common flags
--     -fmessage-length=0
--     -fvisibility=hidden
---    -fstack-protector
--     -fdata-sections
--     -ffunction-sections
--     -Wl,--gc-sections
--@@ -64,6 +63,11 @@ set(MEDIA_COMPILER_FLAGS_COMMON
--     -g
-- )
-- 
--+if(MEDIA_BUILD_HARDENING)
--+    set(MEDIA_COMPILER_FLAGS_COMMON
--+        ${MEDIA_COMPILER_FLAGS_COMMON}
--+        -fstack-protector)
--+endif()
-- 
-- if(${UFO_MARCH} STREQUAL "slm")
--     set(MEDIA_COMPILER_FLAGS_COMMON
--@@ -119,9 +123,13 @@ if(${UFO_VARIANT} STREQUAL "default")
--     set(MEDIA_COMPILER_FLAGS_RELEASE
--         ${MEDIA_COMPILER_FLAGS_RELEASE}
--         -O2
---        -D_FORTIFY_SOURCE=2
--         -fno-omit-frame-pointer
--     )
--+    if(MEDIA_BUILD_HARDENING)
--+        set(MEDIA_COMPILER_FLAGS_RELEASE
--+            ${MEDIA_COMPILER_FLAGS_RELEASE}
--+            -D_FORTIFY_SOURCE=2)
--+    endif()
-- endif()
-- 
-- if(NOT ${PLATFORM} STREQUAL "android")
--diff --git a/media_driver/media_top_cmake.cmake b/media_driver/media_top_cmake.cmake
--index f089ea45f..b0b428914 100755
----- a/media_driver/media_top_cmake.cmake
--+++ b/media_driver/media_top_cmake.cmake
--@@ -113,7 +113,13 @@ if(MEDIA_BUILD_FATAL_WARNINGS)
--     set_target_properties(${LIB_NAME_OBJ} PROPERTIES COMPILE_FLAGS "-Werror")
-- endif()
-- 
---set_target_properties(${LIB_NAME} PROPERTIES LINK_FLAGS "-Wl,--no-as-needed -Wl,--gc-sections -z relro -z now -fstack-protector -fPIC")
--+set(MEDIA_LINK_FLAGS "-Wl,--no-as-needed -Wl,--gc-sections -z relro -z now -fPIC")
--+option(MEDIA_BUILD_HARDENING "Enable hardening (stack-protector, fortify source)" ON)
--+if(MEDIA_BUILD_HARDENING)
--+    set(MEDIA_LINK_FLAGS "${MEDIA_LINK_FLAGS} -fstack-protector")
--+endif()
--+set_target_properties(${LIB_NAME} PROPERTIES LINK_FLAGS ${MEDIA_LINK_FLAGS})
--+
-- set_target_properties(${LIB_NAME}        PROPERTIES PREFIX "")
-- set_target_properties(${LIB_NAME_STATIC} PROPERTIES PREFIX "")
-- 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index ceafa20e80..7c615620ae 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6eaa4a9caf58faa8934b253adb4b0ece1c7d5de6f084167d5138b4e3ba423683  intel-media-22.1.1.tar.gz
-+sha256  1a0277306d7bb3a1e20c7693ff090fa4ae5c0b68981aa13452ed1c6df9062854  intel-media-22.2.1.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index d8820379e7..4895c1535d 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 22.1.1
-+INTEL_MEDIADRIVER_VERSION = 22.2.1
- INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-	size = 10M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
+index 44ea9b95c4..fd0f64e0e6 100644
+--- a/configs/orangepi_pc_defconfig
++++ b/configs/orangepi_pc_defconfig
+@@ -5,8 +5,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
+ BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-pc/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
+@@ -14,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-pc/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+@@ -27,9 +29,4 @@ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-pc/boot.cmd"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
