@@ -1,47 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 501C1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 16:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 451DEC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 16:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07D276F738;
-	Thu, 17 Feb 2022 16:37:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E669D4259D;
+	Thu, 17 Feb 2022 16:37:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e6J0MvZRuf7j; Thu, 17 Feb 2022 16:37:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xsaODexRYCrt; Thu, 17 Feb 2022 16:37:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C0C96F73B;
-	Thu, 17 Feb 2022 16:37:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38A0A42595;
+	Thu, 17 Feb 2022 16:37:30 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 016271C113E
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 16:36:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 34E1C1BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 16:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3B4C6F70B
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 16:36:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 21B0660B24
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 16:36:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S0T9f_trJwQB for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 16:36:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C0E360B24
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 16:36:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 952A08378F; Thu, 17 Feb 2022 16:28:52 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id EWs5zRctBEKt for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 16:36:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62EEC6F738
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 16:36:51 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id f3so9885905wrh.7
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 08:36:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qM2Dvs+gu/V7wPgfRq1yckeWXkPay5D50CVjwDQfnAE=;
+ b=brIdjT7ZFHaI5pJzdOCAs3O3a5OUk9TsmFIzaJFqVDer60VY2+O/Nuhxs7MJ1dA+Ri
+ HW4cPsrHQcgFsvTmWC+Ke3VaefL5DLfHzr5ZBWKTil6ulLFtakhyGZhHZL2FTaPdpH4W
+ joKecyVeRXh3RdgFD23MwLDwceI9kGrgaxEUrJVYFZ2RXURsNJ6HJU0YJCNqM7aYzGUZ
+ szTxQHn/FViVAyO42CHMOTeu7l2xk0MDkSgH931471yZi31i33NwCgvumRHIiwdR6wGd
+ QtT6VC2cwYbvewzQRZMXRwUqEY3ldwsQy2TH3iHanuXBHsMxKPrLnzvZYwX+X2v8yFnO
+ kPSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qM2Dvs+gu/V7wPgfRq1yckeWXkPay5D50CVjwDQfnAE=;
+ b=XM4da7ei/qmOYMiJByO2SIm4tcyzyduObhgFfErTk9ZrGefGUKdHeCt78di32DIREA
+ /i0D0trz3LtjOMP/TcN2udgjujmn2aYgk53FBNc+d7jrd8DG39ow/m90w3JttnnGbZlM
+ VqwjP9fWJGgCccM9VBCVCssUOQwXMtL/kt2vrYcro/Z5a6hbWIwxx6MR4pfP+uWerKWq
+ wHtByaKr8NZHwJ0X/RBInWmQzZqObZQA7wpcBtNumhwTnPCTW31UM104dj30qEYLtdtf
+ Pt02ana9FkHb2VrfyN9K6V4ZKlrGb6VutTIOBhzm6Irqx0Wg4ZSBHkSqHGQ6HCJUxojq
+ GjPg==
+X-Gm-Message-State: AOAM533Y/raIDL9akcFDvFJecdH4Z3whkGorBsoWoMYaSqaDvGXtAcC0
+ 4haJKDdyyAnx2xL5HxE6KbL9ThDQb9g=
+X-Google-Smtp-Source: ABdhPJxDKtqeUt8fg+8oAnZR7xDyLNrSSHF9RnY1WfVaEfDNC2qtN5Lr9PuV1T5+n3ZMG5PK6gjnnA==
+X-Received: by 2002:a05:6000:178d:b0:1e8:310a:5a51 with SMTP id
+ e13-20020a056000178d00b001e8310a5a51mr2893520wrg.642.1645115809203; 
+ Thu, 17 Feb 2022 08:36:49 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id 2sm13815662wry.4.2022.02.17.08.36.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 17 Feb 2022 08:36:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Feb 2022 17:34:46 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c8d709529f0fff956032cadf5de68b517b3b38bd
-X-Git-Newrev: a0ccc8d268eafa07f654c27684eb3354c25c510c
-X-Patchwork-Hint: ignore
-Message-Id: <20220217162852.952A08378F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] docs/manual: add section
- on start script recommendations
+Date: Thu, 17 Feb 2022 17:36:54 +0100
+Message-Id: <20220217163655.221545-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/kf5/kf5-kcoreaddons: add python3
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,140 +87,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Pierre Ducroquet <pinaraf@pinaraf.info>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0ccc8d268eafa07f654c27684eb3354c25c510c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+python3 is an optional dependency since the addition of the package in
+commit bf48bf86295bc4628bcd14fd4ca415d6971c8ab8
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4fe33a1b47ba9c1e90c2c794cefb13962ea89b99)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/adding-packages-directory.txt | 96 +++++++++++++++++++++++++++++++
- docs/manual/configure.txt                 |  1 +
- 2 files changed, 97 insertions(+)
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 54d96451fe..23bd293a6c 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -554,3 +554,99 @@ over time. Such patches should not be downloaded, and instead be added
- locally to the package folder.
+diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+index 76be8876cc..9a034ba763 100644
+--- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
++++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+@@ -10,7 +10,10 @@ KF5_KCOREADDONS_SOURCE = kcoreaddons-$(KF5_KCOREADDONS_VERSION).tar.xz
+ KF5_KCOREADDONS_LICENSE = LGPL-2.1
+ KF5_KCOREADDONS_LICENSE_FILES = COPYING.LIB
  
- If the +.hash+ file is missing, then no check is done at all.
-+
-+[[adding-packages-start-script]]
-+=== The +SNNfoo+ start script
-+
-+Packages that provide a system daemon usually need to be started somehow
-+at boot.  Buildroot comes with support for several init systems, some
-+are considered tier one (see xref:init-system[]), while others are also
-+available but do not have the same level of integration.  Ideally, all
-+packages providing a system daemon should provide a start script for
-+BusyBox/SysV init and a systemd unit file.
-+
-+For consistency, the start script must follow the style and composition
-+as shown in the reference: +package/busybox/S01syslogd+. An annotated
-+example of this style is shown below. There is no specific coding style
-+for systemd unit files, but if a package comes with its own unit file,
-+that is preferred over a buildroot specific one, if it is compatible
-+with buildroot.
-+
-+The name of the start script is composed of the +SNN+ and the daemon
-+name.  The +NN+ is the start order number which needs to be carefully
-+chosen.  For example, a program that requires networking to be up should
-+not start before +S40network+.  The scripts are started in alphabetical
-+order, so +S01syslogd+ starts before +S01watchdogd+, and +S02sysctl+
-+start thereafter.
-+
-+------------------------------
-+01: #!/bin/sh
-+02:
-+03: DAEMON="syslogd"
-+04: PIDFILE="/var/run/$DAEMON.pid"
-+05:
-+06: SYSLOGD_ARGS=""
-+07:
-+08: # shellcheck source=/dev/null
-+09: [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+10:
-+11: # BusyBox' syslogd does not create a pidfile, so pass "-n" in the command line
-+12: # and use "-m" to instruct start-stop-daemon to create one.
-+13: start() {
-+14: 	printf 'Starting %s: ' "$DAEMON"
-+15: 	# shellcheck disable=SC2086 # we need the word splitting
-+16: 	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
-+17: 		-- -n $SYSLOGD_ARGS
-+18: 	status=$?
-+19: 	if [ "$status" -eq 0 ]; then
-+20: 		echo "OK"
-+21: 	else
-+22: 		echo "FAIL"
-+23: 	fi
-+24: 	return "$status"
-+25: }
-+26:
-+27: stop() {
-+28: 	printf 'Stopping %s: ' "$DAEMON"
-+29: 	start-stop-daemon -K -q -p "$PIDFILE"
-+30: 	status=$?
-+31: 	if [ "$status" -eq 0 ]; then
-+32: 		rm -f "$PIDFILE"
-+33: 		echo "OK"
-+34: 	else
-+35: 		echo "FAIL"
-+36: 	fi
-+37: 	return "$status"
-+38: }
-+39:
-+40: restart() {
-+41: 	stop
-+42: 	sleep 1
-+43: 	start
-+44: }
-+45:
-+46: case "$1" in
-+47: 	start|stop|restart)
-+48: 		"$1";;
-+49: 	reload)
-+50: 		# Restart, since there is no true "reload" feature.
-+51: 		restart;;
-+52: 	*)
-+53: 		echo "Usage: $0 {start|stop|restart|reload}"
-+54: 		exit 1
-+55: esac
-+------------------------------
-+
-+*Note:* programs that support reloading their configuration in some
-+fashion (+SIGHUP+) should provide a +reload()+ function similar to
-++stop()+.  The +start-stop-daemon+ supports +-K -s HUP+ for this.
-+It is recommended to always append +-x "/sbin/$DAEMON"+ to all the
-++start-stop-daemon+ commands to ensure signals are set to a PID that
-+matches +$DAEMON+.
-+
-+Both start scripts and unit files can source command line arguments from
-++/etc/default/foo+, in general, if such a file does not exist it should
-+not block the start of the daemon, unless there is some site specirfic
-+command line argument the daemon requires to start.  For start scripts a
-++FOO_ARGS="-s -o -m -e -args"+ can be defined to a default value in and
-+the user can override this from +/etc/default/foo+.
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index c9eef567f4..60860d2c71 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -377,6 +377,7 @@ good solution.
- Note that if +systemd+ is chosen as init system, /dev management will
- be performed by the +udev+ program provided by +systemd+.
+-KF5_KCOREADDONS_DEPENDENCIES = kf5-extra-cmake-modules qt5tools
++KF5_KCOREADDONS_DEPENDENCIES = \
++	kf5-extra-cmake-modules \
++	qt5tools \
++	$(if $(BR2_PACKAGE_PYTHON3),python3)
+ KF5_KCOREADDONS_INSTALL_STAGING = YES
  
-+[[init-system]]
- === init system
- 
- The _init_ program is the first userspace program started by the
+ KF5_KCOREADDONS_CXXFLAGS = $(TARGET_CXXFLAGS)
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
