@@ -4,63 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ABB1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 20:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFB41C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 20:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3374560BC6;
-	Thu, 17 Feb 2022 20:50:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 769F960BE8;
+	Thu, 17 Feb 2022 20:52:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LwJnUa_E5c94; Thu, 17 Feb 2022 20:50:14 +0000 (UTC)
+	with ESMTP id W6Tv79WHtv-M; Thu, 17 Feb 2022 20:52:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51F0960A8A;
-	Thu, 17 Feb 2022 20:50:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 78A761BF3B5
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:50:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92FC660A8A;
+	Thu, 17 Feb 2022 20:52:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CBD7C1BF3B5
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7412F83F67
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:50:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B522A400D8
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:52:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0bx06bPr5GEx for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 20:50:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 423E883E93
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 20:50:10 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:d44f:202d:8a3e:695f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 69FB813F87F;
- Thu, 17 Feb 2022 21:50:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1645131007;
- bh=HLvzrvktMYqDzhCuaBgs7/1L2EJHRLugGU+EVkGe60c=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mRIWTR3FoeYIsl1iOBe0kSAFpnrxzImhqqLnidCak/mZF0qZ8SyAHatT/iWIH4HUu
- eD8Sfx7HNGQh2J3YzBaIXY1ZE41lCZtXl3bkd5SOM5z5yeDwXmHVL5PXhTKn6gSPOf
- jG28f0e18H+7UWPYqL7y7aW7wH4Vsjxxo5JXyufmJUBBi2iIDzCePbafz6GXt7oygy
- GxbE/OXbdeX6zbxnewBnJRmNhNdrPUmm0OjZwunb8CrhibKZbTEnl6vwFc1EJopAcO
- JfDe2I6Bmb/7PmW8DtosS/upbJW3ddwqtDEWNMizt7Pj7iSSGfRYraDf6PwVAAJ3Ne
- P0y85Vat70Vzw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 17 Feb 2022 21:50:04 +0100
-Date: Thu, 17 Feb 2022 21:50:04 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220217205004.GK522310@scaer>
-References: <20220213212909.1504992-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220213212909.1504992-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptsetup: openssl is the
- default crypto backend
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qxJu0INNSrjY for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 20:52:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AB6D40227
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 20:52:09 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.188.82])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id Knl2nAsQgSCAGKnl2ne5m0; Thu, 17 Feb 2022 21:52:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1645131128; bh=GPmIoWUPyBlLltKGor3yG7PXPsSMrSXIC7UI6yhKUtk=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=D2oq8Y4dwflMZAeuLQdoWd/UmPs+StJZzy5o5ApgLlPp1YhXtOByK86orfJLGg0kv
+ ar/xr/P4NIihSTF4vL7Yy6I3QSXYBNwdpBrCzbV+P6wHZVpYZnqf9yTMYBRO3jexW7
+ IcLZ5LqpIFYbbgGcCBGC9106A3nL4xVJwFsaWRTTfbZMv9wTYRIWFLNkEsOtG0zBla
+ bk05jPqB+E+SdeIQZt989EdNnfrBf/S38KCNhY+ep/gu/YFov9Aee/54S76sTDQgxZ
+ lBrv2MiXerRpRWT6AIphQ0Jl+sL6hi57cI2oT4U1NAKOgUdVuWNnkXkzVUoWv+4cT2
+ kPl5eSFR9NpdA==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Thu, 17 Feb 2022 21:52:07 +0100
+Message-Id: <72EB6D19-6401-4EF9-B07C-85CC767E3FA3@benettiengineering.com>
+References: <20220217204339.GI522310@scaer>
+In-Reply-To: <20220217204339.GI522310@scaer>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfJItzwb+QsAeDrp5Scje5l2zSvqhgTwc4D9F68NaGPr9qa3zGcTqMwataX0DZ3K7GkNy3maikBjAv0p1dk8b7NSWO0gop/d9YJS2SBA08fo5BmTnBI9A
+ GgydAh7hYwyigJcJn5OgKBYSKsWHuur4unNB3oA3Z/N2Z8SDYdA/eICz0mrTytBwD6RV1NnKQOhU5AcdsejuU5gVfkDMuWHfZb0eLS5RioZO9wkDLczh5rPd
+ crprFsXl+/TpUjnWd4pnkxV9mK1f6ueDW4JcaxLje50YghXOVa6GA2C72fcdnRhgNg/G6TnN+HHusXSm+jIHIA==
+Subject: Re: [Buildroot] [PATCH 1/1] package/cryptsetup: fix build failure
+ with libgcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,71 +69,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+Cc: moritz@h6t.eu, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1140509980489346847=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
 
-On 2022-02-13 22:29 +0100, Fabrice Fontaine spake thusly:
-> openssl is the default crypto backend since version 2.1.0 and
-> https://github.com/mbroz/cryptsetup/commit/bc3d0feb5cd33f9181102b418cc7bf44fe112e82
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+--===============1140509980489346847==
+Content-Type: multipart/alternative; boundary=Apple-Mail-F70BB444-1097-44C4-815C-133672F698FE
+Content-Transfer-Encoding: 7bit
 
-Applied to next, thanks.
 
-Regards,
-Yann E. MORIN.
+--Apple-Mail-F70BB444-1097-44C4-815C-133672F698FE
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  package/cryptsetup/cryptsetup.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 55cc70576c..b50ac698bb 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -22,15 +22,15 @@ CRYPTSETUP_AUTORECONF = YES
->  CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
->  CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
->  
-> -# cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
-> +# cryptsetup uses OpenSSL by default, but can be configured to use libgcrypt
->  # or kernel crypto modules instead
-> -ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +CRYPTSETUP_DEPENDENCIES += openssl
-> +CRYPTSETUP_CONF_OPTS += --with-crypto_backend=openssl
-> +else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  CRYPTSETUP_DEPENDENCIES += libgcrypt
->  CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
->  CRYPTSETUP_CONF_OPTS += --with-crypto_backend=gcrypt
-> -else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -CRYPTSETUP_DEPENDENCIES += openssl
-> -CRYPTSETUP_CONF_OPTS += --with-crypto_backend=openssl
->  else
->  CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
->  endif
-> -- 
-> 2.34.1
-> 
+Hi Yann, Moritz,
+
+> Il giorno 17 feb 2022, alle ore 21:44, Yann E. MORIN <yann.morin.1998@free=
+.fr> ha scritto:
+>=20
+> =EF=BB=BFGiulio, All,
+>=20
+> On 2022-02-17 14:29 +0100, Giulio Benetti spake thusly:
+>>>> Il giorno 17 feb 2022, alle ore 08:55, Moritz Bitsch via buildroot <bui=
+ldroot@buildroot.org> ha scritto:
+>>> The patch 0001-Add-check-program-for-symver-attribute.patch touches
+>>> a autoconf relevant file which causes a configure --recheck in the
+>>> make step without proper CONF_ENV. Running autoreconf prevents this.
+>> Thank you for the contribution, but Fabrice already sent a patch for that=
+:
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20220213210504.14168=
+61-1-fontaine.fabrice@gmail.com/
+>=20
+> Yep, but in this case, I applied Moritz' patch, because Fabrice has
+> waaaayyyy too many commits in his name already! ;-]
+
+Yes, Moritz, feel free to send patches for other build failures you can find=
+ here in autobuilder:
+http://autobuild.buildroot.net/
+
+They are more than welcome!
+
+Kind regards
+Giulio
+
+>=20
+> Regards,
+> Yann E. MORIN.
+>=20
+> --=20
+> .-----------------.--------------------.------------------.---------------=
+-----.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspir=
+acy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___          =
+     |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is=
+ no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspira=
+cy.  |
+> '------------------------------^-------^------------------^---------------=
+-----'
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--Apple-Mail-F70BB444-1097-44C4-815C-133672F698FE
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto"><div>Hi Yann, Moritz,</div><br><div dir=3D"=
+ltr"><blockquote type=3D"cite">Il giorno 17 feb 2022, alle ore 21:44, Yann E=
+. MORIN &lt;yann.morin.1998@free.fr&gt; ha scritto:<br><br></blockquote></di=
+v><blockquote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<span>Giulio, All,</sp=
+an><br><span></span><br><span>On 2022-02-17 14:29 +0100, Giulio Benetti spak=
+e thusly:</span><br><blockquote type=3D"cite"><blockquote type=3D"cite"><spa=
+n>Il giorno 17 feb 2022, alle ore 08:55, Moritz Bitsch via buildroot &lt;bui=
+ldroot@buildroot.org&gt; ha scritto:</span><br></blockquote></blockquote><bl=
+ockquote type=3D"cite"><blockquote type=3D"cite"><span>The patch 0001-Add-ch=
+eck-program-for-symver-attribute.patch touches</span><br></blockquote></bloc=
+kquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>a autoconf r=
+elevant file which causes a configure --recheck in the</span><br></blockquot=
+e></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>mak=
+e step without proper CONF_ENV. Running autoreconf prevents this.</span><br>=
+</blockquote></blockquote><blockquote type=3D"cite"><span>Thank you for the c=
+ontribution, but Fabrice already sent a patch for that:</span><br></blockquo=
+te><blockquote type=3D"cite"><span>https://patchwork.ozlabs.org/project/buil=
+droot/patch/20220213210504.1416861-1-fontaine.fabrice@gmail.com/</span><br><=
+/blockquote><span></span><br><span>Yep, but in this case, I applied Moritz' p=
+atch, because Fabrice has</span><br><span>waaaayyyy too many commits in his n=
+ame already! ;-]</span><br></div></blockquote><div><br></div><div>Yes, Morit=
+z, feel free to send patches for other build failures you can find here in a=
+utobuilder:</div><div><a href=3D"http://autobuild.buildroot.net/">http://aut=
+obuild.buildroot.net/</a></div><div><br></div><div>They are more than welcom=
+e!</div><div><br></div><div>Kind regards</div><div>Giulio</div><div><br></di=
+v><blockquote type=3D"cite"><div dir=3D"ltr"><span></span><br><span>Regards,=
+</span><br><span>Yann E. MORIN.</span><br><span></span><br><span>-- </span><=
+br><span>.-----------------.--------------------.------------------.--------=
+------------.</span><br><span>| &nbsp;Yann E. MORIN &nbsp;| Real-Time Embedd=
+ed | /"\ ASCII RIBBON | Erics' conspiracy: |</span><br><span>| +33 662 376 0=
+56 | Software &nbsp;Designer | \ / CAMPAIGN &nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;=
+___ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;|</span><br><span>| +33 561 099 427 `------------.-------: &nbsp=
+;X &nbsp;AGAINST &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;\e/ &nbsp;There is no=
+ &nbsp;|</span><br><span>| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML M=
+AIL &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;v &nbsp;&nbsp;conspiracy. &nbsp;|</span>=
+<br><span>'------------------------------^-------^------------------^-------=
+-------------'</span><br><span>_____________________________________________=
+__</span><br><span>buildroot mailing list</span><br><span>buildroot@buildroo=
+t.org</span><br><span>https://lists.buildroot.org/mailman/listinfo/buildroot=
+</span><br></div></blockquote></body></html>=
+
+--Apple-Mail-F70BB444-1097-44C4-815C-133672F698FE--
+
+--===============1140509980489346847==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1140509980489346847==--
