@@ -1,63 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 886D6C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 15:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E54FAC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 15:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 242CC83EB7;
-	Thu, 17 Feb 2022 15:27:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9854141753;
+	Thu, 17 Feb 2022 15:32:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sBAZ2f4WTKVr; Thu, 17 Feb 2022 15:27:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 512AE83E87;
-	Thu, 17 Feb 2022 15:27:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6671D1BF2B9
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:27:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50D5D4023B
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:27:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 30rqdLkoPPiI for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 15:27:15 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mj_DX-0sdgoK; Thu, 17 Feb 2022 15:32:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1B924173B;
+	Thu, 17 Feb 2022 15:32:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A0E591BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:32:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88D2741E4A
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:32:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id He7I7oSjPAyW for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 15:32:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
- by smtp4.osuosl.org (Postfix) with ESMTP id 202D240227
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 15:27:14 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.188.82])
- by Aruba Outgoing Smtp  with ESMTPA
- id KiganHUSjiF0aKigbnrhyh; Thu, 17 Feb 2022 16:27:13 +0100
+Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C66BE41E39
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 15:32:45 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.188.82])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Kilvnst6jvHpTKilvnzajH; Thu, 17 Feb 2022 16:32:43 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645111633; bh=4YzUULgvOT1BPYDt9vteDb30t+mFiFTZqtTecp7D53c=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=gliw3fF8iigEjUukC6UwU5CPm52T5+wvBkP325Hku5glsKmG43VQdLEjW/SNypmTS
- WQv3Evxjh20+aFBQB2VnGLRO7+QFc5oYMkGDT0TSI0t+/uwezVxCQa0qfgwVbkEs7S
- e3yDoqzQMdEQPmEYY6S1RAybksvH7J4nBrB1s/hRzmkB3oaJw3r6rjUYS0OMTFjK14
- UyxsOI8qaFOjB8OWsRZC+dZ4oYtm6bz1OPhrwUPg0FAt7a8bUKAsL3zuiu3Z4no2x2
- qkxssj2a42wRsTfb5YB/H/sMOjACqZk1C0sHoRLPQ6Wrw9N0nvwS7HDXNcGGreKx10
- It68HwiaXYIXQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Thu, 17 Feb 2022 16:27:12 +0100
-Message-Id: <964BF830-917A-4CFE-A8BE-DD8DCA18A9F8@benettiengineering.com>
-References: <20220217151054.865073-3-marcus.hoffmann@othermo.de>
-In-Reply-To: <20220217151054.865073-3-marcus.hoffmann@othermo.de>
+ t=1645111963; bh=ljdBYS73e30tI70aiyzUBfjCVAPyBc+2c+BpmxBxuOc=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=O6GnkIspsQ54iyDyTXIV6FSgdlljXQP2xNZOwg/DPpx8+H2E4ZOeTi6KrkwHdQ208
+ bUQoWFxwC11dVH6y7DhbgtDm1Y6JTOPscJqJhrTlj/zJwyqbo2oqJE90eF61s9Dsus
+ HQ9mtYhdCGGKnxIqgxW+NpSBSSEdBi62/d9tw5wummk6OsoRjCUrlwv0//VIxj6uN1
+ 8xoBPBCwzbVrf5MIYCLEj5mZIola97awTGx6vdCB7G3XB8crE6LcD+9XKEfK4LWwuX
+ +RNoyZJxD1lwcly5X7bfjcWtklDzwW3nvUR1Y53usnfL3fpwl5aRLo34x1MyMZkLbL
+ wsCVaF75a7fEA==
+Message-ID: <71ed8019-6b60-7365-6405-b65286a98ad0@benettiengineering.com>
+Date: Thu, 17 Feb 2022 16:32:43 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
 To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfGio1cdUh6b8AEdvPpp1VuCgREMW6S8k1HMnm70vZs4qIu2QRAexKU9zQQi5oXyH5XLHKmAQAISf2GcgUQ/qUMxzqk0y4ed64sTdKtH64zgGsl3K3aNz
- 8dYx3Xrp8Vkysv4VQoCbqHzS1swnL3E7aZBnzMOiFFs8XTZzEoHi5f56Mti3bw5hFlw/NwVMX8AvRoak8XQaiwvzdIfNmWQaOEBVj+XStMHdYyUNE5pMP/bW
- c4QUsiUvw7uNNuWlK/E5LiRz59hGxe6uFSV/C7qrKn+ZpziwOVqS37gjxBdFeqVE
-Subject: Re: [Buildroot] [PATCH 2/2]
- board/orangepi/orangepi-rk3399/genimage: fix partition types for gpt
+References: <20220217151054.865073-2-marcus.hoffmann@othermo.de>
+ <2B25121E-F5E4-4E61-BEA4-627E5689E813@benettiengineering.com>
+ <6a7a1291-9bdd-74f6-e836-ff2426965762@othermo.de>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <6a7a1291-9bdd-74f6-e836-ff2426965762@othermo.de>
+X-CMAE-Envelope: MS4wfInZRtIFcGMVC0U6Jf3xrEI55b8gm+U630jjpxKfWKZsuAO7Ye95VBr90p5srQmW+hM2thoigRPMgd8mu4j0zeDSBxtPXHH1FY6ZVyjqPglYZtbCTzLY
+ WDK+Gmf7KKOHfffQG2ZrcLw/KPhr1PlZtaswG7ETuj5GWyUe4KBPZLgtuIsVz6BPHDmQbuioV8Y3ztSGuxPquXQiqH75wzEr33vkD139TSeYJ7JVazbo4H0L
+ xiC1ZRrKe35LtsN8g/MIYTmxp0aAC8X0puwfLZw9/mQ=
+Subject: Re: [Buildroot] [PATCH 1/2]
+ configs/friendlyarm_nanopi_r2s_defconfig: uboot needs openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,123 +73,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6381313146925550589=="
+Cc: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
---===============6381313146925550589==
-Content-Type: multipart/alternative; boundary=Apple-Mail-90D1982A-20A1-489C-91A7-BD2144036BFB
-Content-Transfer-Encoding: 7bit
-
-
---Apple-Mail-90D1982A-20A1-489C-91A7-BD2144036BFB
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Marcus,
-
-> Il giorno 17 feb 2022, alle ore 16:11, Marcus Hoffmann <marcus.hoffmann@ot=
-hermo.de> ha scritto:
->=20
-> =EF=BB=BFFixes:
->  ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid
->  for mbr and hybrid partition-table-type
-
-Here you should add:
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784375
-
-Thank you
-Best regards
-
-> Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-> ---
-> board/orangepi/orangepi-rk3399/genimage.cfg | 3 +--
-> 1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/=
-orangepi-rk3399/genimage.cfg
-> index c94e0bc7cc..a02166172f 100644
-> --- a/board/orangepi/orangepi-rk3399/genimage.cfg
-> +++ b/board/orangepi/orangepi-rk3399/genimage.cfg
-> @@ -26,14 +26,13 @@ image sdcard.img {
->    }
->=20
->    partition boot {
-> -        partition-type =3D 0xC
-> +        partition-type-uuid =3D F
->        bootable =3D "true"
->        image =3D "boot.vfat"
->        offset =3D 16M
->    }
->=20
->    partition rootfs {
-> -        partition-type =3D 0x83
->        image =3D "rootfs.ext4"
->    }
-> }
-> --=20
-> 2.25.1
->=20
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---Apple-Mail-90D1982A-20A1-489C-91A7-BD2144036BFB
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
-utf-8"></head><body dir=3D"auto">Hi Marcus,<br><div dir=3D"ltr"><br><blockqu=
-ote type=3D"cite">Il giorno 17 feb 2022, alle ore 16:11, Marcus Hoffmann &lt=
-;marcus.hoffmann@othermo.de&gt; ha scritto:<br><br></blockquote></div><block=
-quote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<span>Fixes:</span><br><span> &=
-nbsp;ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid</=
-span><br><span> &nbsp;for mbr and hybrid partition-table-type</span><br></di=
-v></blockquote><div><br></div><div>Here you should add:</div><div>Fixes:</di=
-v><div><a href=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/21037843=
-75">https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784375</a></div><d=
-iv><br></div><div>Thank you</div><div>Best regards</div><div><br></div><bloc=
-kquote type=3D"cite"><div dir=3D"ltr"><span>Signed-off-by: Marcus Hoffmann &=
-lt;marcus.hoffmann@othermo.de&gt;</span><br><span>---</span><br><span> board=
-/orangepi/orangepi-rk3399/genimage.cfg | 3 +--</span><br><span> 1 file chang=
-ed, 1 insertion(+), 2 deletions(-)</span><br><span></span><br><span>diff --g=
-it a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-r=
-k3399/genimage.cfg</span><br><span>index c94e0bc7cc..a02166172f 100644</span=
-><br><span>--- a/board/orangepi/orangepi-rk3399/genimage.cfg</span><br><span=
->+++ b/board/orangepi/orangepi-rk3399/genimage.cfg</span><br><span>@@ -26,14=
- +26,13 @@ image sdcard.img {</span><br><span>  &nbsp; &nbsp;}</span><br><sp=
-an></span><br><span>  &nbsp; &nbsp;partition boot {</span><br><span>- &nbsp;=
- &nbsp; &nbsp; &nbsp;partition-type =3D 0xC</span><br><span>+ &nbsp; &nbsp; &=
-nbsp; &nbsp;partition-type-uuid =3D F</span><br><span>  &nbsp; &nbsp; &nbsp;=
- &nbsp;bootable =3D "true"</span><br><span>  &nbsp; &nbsp; &nbsp; &nbsp;imag=
-e =3D "boot.vfat"</span><br><span>  &nbsp; &nbsp; &nbsp; &nbsp;offset =3D 16=
-M</span><br><span>  &nbsp; &nbsp;}</span><br><span></span><br><span>  &nbsp;=
- &nbsp;partition rootfs {</span><br><span>- &nbsp; &nbsp; &nbsp; &nbsp;parti=
-tion-type =3D 0x83</span><br><span>  &nbsp; &nbsp; &nbsp; &nbsp;image =3D "r=
-ootfs.ext4"</span><br><span>  &nbsp; &nbsp;}</span><br><span> }</span><br><s=
-pan>-- </span><br><span>2.25.1</span><br><span></span><br><span>____________=
-___________________________________</span><br><span>buildroot mailing list</=
-span><br><span>buildroot@buildroot.org</span><br><span>https://lists.buildro=
-ot.org/mailman/listinfo/buildroot</span><br></div></blockquote></body></html=
->=
-
---Apple-Mail-90D1982A-20A1-489C-91A7-BD2144036BFB--
-
---===============6381313146925550589==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6381313146925550589==--
+T24gMTcvMDIvMjIgMTY6MjIsIE1hcmN1cyBIb2ZmbWFubiB3cm90ZToKPiBIaSBHdWxpbywKPiAK
+PiBPbiAxNy4wMi4yMiAxNjoyMCwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IEhpIE1hcmN1cywK
+Pj4KPj4+IElsIGdpb3JubyAxNyBmZWIgMjAyMiwgYWxsZSBvcmUgMTY6MTEsIE1hcmN1cyBIb2Zm
+bWFubiA8bWFyY3VzLmhvZmZtYW5uQG90aGVybW8uZGU+IGhhIHNjcml0dG86Cj4+Pgo+Pj4g77u/
+Rml4ZXMgdGhlIGZvbGxvd2luZyBjb21waWxlIGVycm9yOgo+Pj4KPj4+IEluIGZpbGUgaW5jbHVk
+ZWQgZnJvbSBpbmNsdWRlL2Jvb3RtLmg6MTAsCj4+PiAgICAgICAgICAgICAgICAgICBmcm9tIHRv
+b2xzL2ltYWdlLWhvc3QuYzoxMjoKPj4+IGluY2x1ZGUvaW1hZ2UuaDoxMTc4OjEyOiBmYXRhbCBl
+cnJvcjogb3BlbnNzbC9ldnAuaDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQo+Pj4gMTE3OCB8
+ICMgIGluY2x1ZGUgPG9wZW5zc2wvZXZwLmg+Cj4+PiAgICAgICAgfCAgICAgICAgICAgIF5+fn5+
+fn5+fn5+fn5+fgo+Pj4gY29tcGlsYXRpb24gdGVybWluYXRlZC4KPj4+Cj4+PiBTaWduZWQtb2Zm
+LWJ5OiBNYXJjdXMgSG9mZm1hbm4gPG1hcmN1cy5ob2ZmbWFubkBvdGhlcm1vLmRlPgo+Pj4gLS0t
+Cj4+PiBjb25maWdzL2ZyaWVuZGx5YXJtX25hbm9waV9yMnNfZGVmY29uZmlnIHwgMSArCj4+PiAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvY29uZmln
+cy9mcmllbmRseWFybV9uYW5vcGlfcjJzX2RlZmNvbmZpZyBiL2NvbmZpZ3MvZnJpZW5kbHlhcm1f
+bmFub3BpX3Iyc19kZWZjb25maWcKPj4+IGluZGV4IDgxOGM4NDdmNGIuLmNlMjUyYTVkNzYgMTAw
+NjQ0Cj4+PiAtLS0gYS9jb25maWdzL2ZyaWVuZGx5YXJtX25hbm9waV9yMnNfZGVmY29uZmlnCj4+
+PiArKysgYi9jb25maWdzL2ZyaWVuZGx5YXJtX25hbm9waV9yMnNfZGVmY29uZmlnCj4+PiBAQCAt
+MzAsNiArMzAsNyBAQCBCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDIx
+LjEwIgo+Pj4gQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9Im5hbm9waS1yMnMtcmsz
+MzI4Igo+Pj4gQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQo+Pj4gQlIyX1RBUkdFVF9VQk9P
+VF9ORUVEU19QWUxJQkZEVD15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkK
+Pj4+IEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfQVRGX0JMMzE9eQo+Pj4gQlIyX1RBUkdFVF9VQk9P
+VF9ORUVEU19BVEZfQkwzMV9FTEY9eQo+Pj4gQlIyX1RBUkdFVF9VQk9PVF9GT1JNQVRfQ1VTVE9N
+PXkKPj4KPj4gVGhhbmsgeW91IGZvciB0aGUgcGF0Y2gsIGhhdmUgeW91IHZlcmlmaWVkIGl04oCZ
+cyBlbm91Z2ggYnkgYnVpbGRpbmcgaXQgdXNpbmcgdXRpbHMvZG9ja2VyLXJ1bj8KPiAKPiBZZXMs
+IHRoaXMgZml4ZXMgdGhlIGJ1aWxkIHdpdGggZG9ja2VyLXJ1bi4gKHNhbWUgZm9yIHRoZSBvdGhl
+ciBkZWZjb25maWcpCgpQZXJmZWN0LCBjYW4geW91IHJlLXNlbmQgYm90aCBwYXRjaGVzIHdpdGg6
+CiJGaXhlczoiIGluIGNvbW1pdCBsb2c/CnRhZz8KClRoYW5rIHlvdSEKCkJlc3QgcmVnYXJkcwot
+LSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVlcmluZyBzYXMKCj4gTWFyY3VzCj4gCj4+
+Cj4+IEJlc3QgcmVnYXJkcwo+PiBHaXVsaW8KPj4KPj4+IC0tIAo+Pj4gMi4yNS4xCj4+Pgo+Pj4g
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKPj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+PiBodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPj4KPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
