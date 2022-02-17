@@ -4,58 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28409C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 15:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62EE3C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 15:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B65C83F7D;
-	Thu, 17 Feb 2022 15:56:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06F35833CD;
+	Thu, 17 Feb 2022 15:56:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I-YksNvfNDPR; Thu, 17 Feb 2022 15:56:09 +0000 (UTC)
+	with ESMTP id smjXHI-ruGb9; Thu, 17 Feb 2022 15:56:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D985E833CD;
-	Thu, 17 Feb 2022 15:56:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 370801BF2B9
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:55:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34F6983F87;
+	Thu, 17 Feb 2022 15:56:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DB2EE1BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26044833CD
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:55:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D68CC6F66E
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 15:56:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R-_9KHmsfI_D for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 15:55:58 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=othermo.de
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LOOQMYD5HcqI for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 15:56:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org [195.10.208.51])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7341983367
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 15:55:58 +0000 (UTC)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org
- [IPv6:2001:67c:2050:105:465:1:1:0])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EFCE761C39
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 15:55:59 +0000 (UTC)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
  SHA256) (No client certificate requested)
- by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4JzzvH4MSGz9sSg
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 16:55:55 +0100 (CET)
+ by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4JzzvK30F0z9spc;
+ Thu, 17 Feb 2022 16:55:57 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=othermo.de; s=MBO0001; 
- t=1645113353;
+ t=1645113355;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=vgMZ/O8Ci8g8mALwndhNO35BhYfZR0091e6DFvmdMnM=;
- b=hztEEZzzvgvw9vyp8im2rPHNtsmxcUsN+Kl2rW2GQQXOY1CIzlyvDIClb130Sk/JQ4SrC6
- hpEH7W2EZVVzZwDXctWKn+YKY4AxGxfglNqvzvJovjwfobnZDv2jID43r2QTvEy4YeOeeY
- TqGMKpiWtlv1BEcdWzmKL/J5ntqP+PNDB1WU2+MI1TydMrvldd2FxWJ2S3w21GJ56BLd4U
- 5dGI6w/EWBj6nWo+XpPoUigx69KLb+5sg0whwItE2GeobNv921okH2gngOWFel5qI1tR1/
- MfrEyxs1J7uyM7tfOQMKLjVi0bulObaVbSXUQzMyYqk5pU87nP4LzeILgOEI9g==
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=r3s4hNvYZ3tbhx3OS9JdAw7qS7c9XH/cjH5TkyAR5rw=;
+ b=NlblxvINoreRYtQ3Zj3eRzT6BOLDFH3urBf9mczZJBGsBR3tgwyYQK6c5+grZTzIN4mLqL
+ R5MDBV7bDARYqQRTUBnyU5VscDiB/hSjygWmt6Y+6KUb6MdpG8WhdxLHyG1AxNftsd9WtH
+ DiY+dTOmsED7Sl6IuRNxQGDA6q90W1vCpbjYPmGYcqsgd7mcs4me9RbJxDlUhLjj5Wg7i5
+ 0catIGuI9HI20QWGlxoyv74U8qWsRTQ2jhDaEI4dAHJMFCQqqCIGy5hRSHVEkJZiZGRBlh
+ ZgCcy5yJIMjPSEVWhcZcL94/1whn/FoHp1o5x1WiuJxj9cdxjP2pUxIuZ8b9Qw==
 From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 To: buildroot@buildroot.org
-Date: Thu, 17 Feb 2022 16:55:47 +0100
-Message-Id: <20220217155549.1084829-1-marcus.hoffmann@othermo.de>
+Date: Thu, 17 Feb 2022 16:55:49 +0100
+Message-Id: <20220217155549.1084829-3-marcus.hoffmann@othermo.de>
+In-Reply-To: <20220217155549.1084829-1-marcus.hoffmann@othermo.de>
+References: <20220217155549.1084829-1-marcus.hoffmann@othermo.de>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 0/2] defconfig fixes
+Subject: [Buildroot] [PATCH v2 2/2] board/orangepi/orangepi-rk3399/genimage:
+ fix partition types for gpt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,26 +72,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Suniel Mahesh <sunil@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I was looking at some of the defconfigs and found these two easy to 
-fix issues. I don't have those boards, so these are not tested besides
-being able to compile them again.
+Fixes the following error during image generation:
+  ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid
+  for mbr and hybrid partition-table-type
 
-Changes v1 -> v2:
-  - Add references to gitlab CI's defconfig run failures (Giulio Benetti)
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784375
 
-Marcus Hoffmann (2):
-  configs/friendlyarm_nanopi_r2s_defconfig: uboot needs openssl
-  board/orangepi/orangepi-rk3399/genimage: fix partition types for gpt
-
+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+---
  board/orangepi/orangepi-rk3399/genimage.cfg | 3 +--
- configs/friendlyarm_nanopi_r2s_defconfig    | 1 +
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
+index c94e0bc7cc..a02166172f 100644
+--- a/board/orangepi/orangepi-rk3399/genimage.cfg
++++ b/board/orangepi/orangepi-rk3399/genimage.cfg
+@@ -26,14 +26,13 @@ image sdcard.img {
+ 	}
+ 
+ 	partition boot {
+-		partition-type = 0xC
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+ 	}
+ 
+ 	partition rootfs {
+-		partition-type = 0x83
+ 		image = "rootfs.ext4"
+ 	}
+ }
 -- 
 2.25.1
 
