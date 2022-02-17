@@ -4,75 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F157C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 18:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C2DCC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 18:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24E3E60B8F;
-	Thu, 17 Feb 2022 18:42:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07C5B60BD4;
+	Thu, 17 Feb 2022 18:48:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 085OoY7A-gTJ; Thu, 17 Feb 2022 18:42:20 +0000 (UTC)
+	with ESMTP id HQbByXXxy0i6; Thu, 17 Feb 2022 18:48:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85B096F72B;
-	Thu, 17 Feb 2022 18:42:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A76560B8F;
+	Thu, 17 Feb 2022 18:48:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8FFAB1BF3EB
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:42:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 81D861BF3EB
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C80760B8F
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:42:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7099360B8F
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 18:48:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lcipFyL3lQzB for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 18:42:16 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A1A460B8B
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 18:42:16 +0000 (UTC)
-Received: by mail-lf1-x133.google.com with SMTP id b9so944297lfv.7
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 10:42:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bg6MKUzixsXHHmKJc2Gc58NZ+QEAoyM/mDzfRuX2SJM=;
- b=C+gfY8Z0bdkUvgHhNjAgQ+dgnQt+nKQy3LvW1zaFdYSdyaEd8I4hwjvoToOo89/8hn
- sf+dEFG+DlIIDDsew4FoUH5/d85EW0WhnoJsR4FQiW+8RQktimraRY+x/fSs3ia1/6WU
- e3YoeiwTmGyg/sSQK2BZ1v4u/t75SOc+nYWI7KIi8QKQFwO9IG32pfqDbmB+KsfmaeMd
- 0IlmOwEHqqqspwvlc9p6Xot9iMWp2xlOVjwANNyqeU0bGvdpg9CS83lJeu+W223lZBW1
- t8UH/ucnrUpPDSFHHj03ll94pO1ZCmR64jW0jLMqcl2kndqYGJIdFDXo5fF0OxMD1ohH
- 0ROw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bg6MKUzixsXHHmKJc2Gc58NZ+QEAoyM/mDzfRuX2SJM=;
- b=BXYNJ7v0jf7LoJh82jGraIb75rQoeVeIlmV4wMbbywQbNMKoxUmew3Eq24V07pViz8
- J9VEFuIYQy2vz41x1IrfVeBdtuOAjkRqBesmUBkLqsX6yUGfyzmkK+2H/bZ5eOOwQmWS
- XoliQckJ0wBjmAYa/79ZjT6b3TmHY5VNW3yYQpWx0QttG8CEybkmOfPVx4TOVSTGZ45o
- YYxPXgutdyE6ljYkBWNBmRIyEzRy+nbuysQjn7CP+kRgZP3m0u442DimiHO+9yatwoQp
- W4F2JMc30EBZC7DuYJ09R6WXQbAfHRriIvT1IAi0hqc6cLCbKm2dUBlBNm3VmAEm7adj
- 9iiQ==
-X-Gm-Message-State: AOAM533S00BQkUWLx2w5VJicpIITvV4XnnSZ4Sgn4uNy7crBFkaZ7ile
- 7LBzXjj3JeXsCWc+V7cQZFCOgm6YIxE=
-X-Google-Smtp-Source: ABdhPJyXG3jCSY3HlE5kfYqAwlXUKGYYBV6OxJuhVfS0lh0YdxA4PpDSOmy38cGATba4OvWxkPzSJw==
-X-Received: by 2002:a05:6512:6c4:b0:437:9409:984c with SMTP id
- u4-20020a05651206c400b004379409984cmr2896859lff.199.1645123334012; 
- Thu, 17 Feb 2022 10:42:14 -0800 (PST)
-Received: from hellfire.local ([178.155.5.22])
- by smtp.gmail.com with ESMTPSA id c8sm40561lfr.119.2022.02.17.10.42.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Feb 2022 10:42:13 -0800 (PST)
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+ with ESMTP id bBzggrNLj_Bh for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 18:48:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7938A60ACE
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 18:48:42 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout09.t-online.de (Postfix) with SMTP id 30F963D38;
+ Thu, 17 Feb 2022 19:48:39 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.192.64]) by fwd83.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nKlpV-0RS8jh0; Thu, 17 Feb 2022 19:48:37 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37378)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nKlpU-0005ab-Oy;
+ Thu, 17 Feb 2022 19:48:36 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 17 Feb 2022 21:42:09 +0300
-Message-Id: <20220217184209.16736-1-kuzminov.sergey81@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 17 Feb 2022 19:48:36 +0100
+Message-Id: <20220217184836.418858-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/orangepi_pc_defconfig: switch to
- extlinux
+X-TOI-EXPURGATEID: 150726::1645123717-0000EDC4-3C006E15/0/0 CLEAN NORMAL
+X-TOI-MSGID: 429e4162-2a34-4deb-891f-a5c326e5d561
+Subject: [Buildroot] [PATCH/next 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,119 +61,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
-* Switch to common scenarios for multiple boards to create an SD image: board/orangepi/common.
-* Exclude FAT partition, it is no longer needed for U-Boot.
-* Switch SD image from MBR to GPT for partition-uuid to work.
-* Switch to extlinux, this is convenient for debugging.
+Removed patch which was applied upstream:
+https://github.com/tvheadend/tvheadend/commit/fb7b24114685a7e38d842168dce4c613360cd330
 
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- board/orangepi/orangepi-pc/boot.cmd     |  8 ------
- board/orangepi/orangepi-pc/genimage.cfg | 37 -------------------------
- configs/orangepi_pc_defconfig           |  9 ++----
- 3 files changed, 3 insertions(+), 51 deletions(-)
- delete mode 100644 board/orangepi/orangepi-pc/boot.cmd
- delete mode 100644 board/orangepi/orangepi-pc/genimage.cfg
+ .../0002-configure-add-execinfo-option.patch  | 55 -------------------
+ package/tvheadend/tvheadend.hash              |  2 +-
+ package/tvheadend/tvheadend.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 57 deletions(-)
+ delete mode 100644 package/tvheadend/0002-configure-add-execinfo-option.patch
 
-diff --git a/board/orangepi/orangepi-pc/boot.cmd b/board/orangepi/orangepi-pc/boot.cmd
+diff --git a/package/tvheadend/0002-configure-add-execinfo-option.patch b/package/tvheadend/0002-configure-add-execinfo-option.patch
 deleted file mode 100644
-index 9da625c803..0000000000
---- a/board/orangepi/orangepi-pc/boot.cmd
+index c55d127d58..0000000000
+--- a/package/tvheadend/0002-configure-add-execinfo-option.patch
 +++ /dev/null
-@@ -1,8 +0,0 @@
--setenv fdt_high ffffffff
+@@ -1,55 +0,0 @@
+-From 04c01e631cb1bf47dd50b1ef92a086308e380eff Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 1 Jan 2022 16:53:29 +0100
+-Subject: [PATCH] configure: add execinfo option
 -
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-Add execinfo option to allow the user to disable the feature even if
+-execinfo.h is found on the system
 -
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-pc.dtb
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upsteam status: https://github.com/tvheadend/tvheadend/pull/1431]
+----
+- configure | 17 +++++++++++++++--
+- 1 file changed, 15 insertions(+), 2 deletions(-)
 -
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-pc/genimage.cfg b/board/orangepi/orangepi-pc/genimage.cfg
-deleted file mode 100644
-index 14e326cc56..0000000000
---- a/board/orangepi/orangepi-pc/genimage.cfg
-+++ /dev/null
-@@ -1,37 +0,0 @@
--# Minimal SD card image for the OrangePi PC
--#
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-h3-orangepi-pc.dtb",
--			"boot.scr"
--		}
--	}
+-diff --git a/configure b/configure
+-index 4dad024c4..c087502bf 100755
+---- a/configure
+-+++ b/configure
+-@@ -75,6 +75,7 @@ OPTIONS=(
+-   "ddci:yes"
+-   "cclang_threadsan:no"
+-   "gperftools:no"
+-+  "execinfo:auto"
+- )
+- 
+- #
+-@@ -150,11 +151,23 @@ if [ ${PLATFORM} = "freebsd" ]; then
+-     # If we don't have libunwind then fallback to execinfo.
+-     if ! enabled libunwind
+-     then
+--        check_cc_header execinfo
+-+        if enabled_or_auto execinfo; then
+-+            if check_cc_header execinfo; then
+-+                enable execinfo
+-+            else
+-+                die "execinfo.h not found (use --disable-execinfo)"
+-+           fi
+-+        fi
+-     fi
+- 
+- else
+--    check_cc_header execinfo
+-+    if enabled_or_auto execinfo; then
+-+        if check_cc_header execinfo; then
+-+            enable execinfo
+-+        else
+-+            die "execinfo.h not found (use --disable-execinfo)"
+-+        fi
+-+    fi
+- fi
+- check_cc_option mmx
+- check_cc_option sse2
+--- 
+-2.33.0
 -
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index 44ea9b95c4..fd0f64e0e6 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -5,8 +5,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
- BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-pc/genimage.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
-@@ -14,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-pc/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-@@ -27,9 +29,4 @@ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-pc/boot.cmd"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index db06af53b7..44ff745221 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  11eeca461e74fbe8306916933cab96d35a99fa89d81e26126e194875c41b6fad  tvheadend-b8710206eb073c72b142bce95846b77a0ffa34a6.tar.gz
++sha256  10b8e8387cf341a8c639b3ecbab17dd245dc109afd6c99ca6b7fc3f2b5efc50e  tvheadend-1295dd2be863f5beb764290fce9317b24193dfc0.tar.gz
+ sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 58ebdcb054..d2547b8746 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = b8710206eb073c72b142bce95846b77a0ffa34a6
++TVHEADEND_VERSION = 1295dd2be863f5beb764290fce9317b24193dfc0
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
