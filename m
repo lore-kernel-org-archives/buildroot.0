@@ -4,58 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8ECAC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 20:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 334B9C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 20:29:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C55983F0C;
-	Thu, 17 Feb 2022 20:10:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A30C883F65;
+	Thu, 17 Feb 2022 20:29:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AQa-DmVNvkIo; Thu, 17 Feb 2022 20:10:07 +0000 (UTC)
+	with ESMTP id CIY83sm7Vf0l; Thu, 17 Feb 2022 20:29:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90A2F83F08;
-	Thu, 17 Feb 2022 20:10:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8C3411BF3B5
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:10:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D905983F5E;
+	Thu, 17 Feb 2022 20:29:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 77C631BF3B5
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:29:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8306540227
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:10:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58CB9415FA
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 20:29:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iI99fK0r4vwC for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 20:10:04 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3027400D8
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 20:10:03 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.188.82])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Kn6In74eJNVvLKn6InZrdr; Thu, 17 Feb 2022 21:10:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645128602; bh=P+Sj9Yioy2bo1GKURcMX3PM/EJ+7IBAUu7H7w7/al2c=;
- h=From:To:Subject:Date:MIME-Version;
- b=K9Z+AxGMsAL+9U/UbKGsKe/zblRszlUhPzXxlhmmcK7ZQHLhNDAi7kY9bnvLTPsWg
- c/LeMVo5D2oiThBo5aCAqWd3fSx7pgu0Z9560zRKClNoRjGUaA2/fNwiZ/RQXy9vwI
- ce3RnRAfwLZK2m5u3ddqoUR5jZRW3vFPIwRFPksLiYgdGVw+cal9vrNOr5CNKPUsVR
- fFVoxA344AXoFdVtr6uRcTgyzgou67cGcs+VtdVJxCHldX9GOwixOZvS8V7bmsAgIa
- rd0EKrboi9ui8t0nBOcRAguk8fSbdyoLvO3AuOzoZ1vwQTUerXLnrthgmxyLjd0j4S
- ag7WP+SETi4vQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 81_1Wq507B70 for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 20:29:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 954AF415A7
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 20:29:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id A30E88377E; Thu, 17 Feb 2022 20:21:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 17 Feb 2022 21:10:01 +0100
-Message-Id: <20220217201001.1859113-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfO6+I8cNEHjnztiPNSsJ001VzVSYpaOhc6W05ARCBg5aUUIp4neWFMp3vti1lQ8pwGy0p/7K8tXC+Wr5snJMZ46AuR4cZMTcqxGkCfnn4TsqSTjeayp3
- vAS9sjKgZ9RFHFh4D3UuHXyX50Fv7cICqS7i9mnkFLjojauD/ewIHZ6mf1MEoj8COO7qwLu3gYC92ZujY4dojogak1FfYOo3a7fUDDMo9yfeFZUUqNq/MCKY
- 48O/2ob2oPNXjRcJnc2tThLvflSXmC1LI1dxyYeBdWRpZPy9EJTVi2EIVi9npT4a
-Subject: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: U-Boot
- requires OpenSSL
+Date: Thu, 17 Feb 2022 21:29:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 09a1511abd3ba0f3e20a1e93f36830d344dd1ce3
+X-Git-Newrev: 862db5f610eb847fa859e247755db9d7dcbc0d23
+X-Patchwork-Hint: ignore
+Message-Id: <20220217202156.A30E88377E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/psmisc: don't override
+ PSMISC_CONF_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,36 +53,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784267
+commit: https://git.buildroot.net/buildroot/commit/?id=862db5f610eb847fa859e247755db9d7dcbc0d23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+PSMISC_CONF_OPTS is overridden in a conditional since commit
+953b0f4de8ebcb5b42c8da760c025873ce82550d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/kontron_bl_imx8mm_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/psmisc/psmisc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-index 57e7e9683d..2b7e121e25 100644
---- a/configs/kontron_bl_imx8mm_defconfig
-+++ b/configs/kontron_bl_imx8mm_defconfig
-@@ -45,6 +45,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
- BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
--- 
-2.25.1
-
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index 3d0d2c5367..8b92be11e8 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
+@@ -13,7 +13,7 @@ PSMISC_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
+ # Don't force -fstack-protector when SSP is not available in toolchain
+-PSMISC_CONF_OPTS = --disable-harden-flags
++PSMISC_CONF_OPTS += --disable-harden-flags
+ endif
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
