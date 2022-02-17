@@ -4,61 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEA9DC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 21:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2074C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 17 Feb 2022 21:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A14D812FD;
-	Thu, 17 Feb 2022 21:43:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5651981858;
+	Thu, 17 Feb 2022 21:44:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NgOsYeSwVvBG; Thu, 17 Feb 2022 21:43:40 +0000 (UTC)
+	with ESMTP id ySmljnjF8YlZ; Thu, 17 Feb 2022 21:44:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94FC5812E5;
-	Thu, 17 Feb 2022 21:43:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D9A581470;
+	Thu, 17 Feb 2022 21:44:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71A101BF37A
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 21:43:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 164D41BF37A
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 21:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D68D812A5
- for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 21:43:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12F1D81470
+ for <buildroot@lists.busybox.net>; Thu, 17 Feb 2022 21:44:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id og9VSda2r6EP for <buildroot@lists.busybox.net>;
- Thu, 17 Feb 2022 21:43:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5DBAE81248
- for <buildroot@buildroot.org>; Thu, 17 Feb 2022 21:43:36 +0000 (UTC)
+ with ESMTP id sg8PXHBpHCgn for <buildroot@lists.busybox.net>;
+ Thu, 17 Feb 2022 21:44:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 42B4381426
+ for <buildroot@buildroot.org>; Thu, 17 Feb 2022 21:44:48 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:d44f:202d:8a3e:695f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C8C8913F880;
- Thu, 17 Feb 2022 22:43:31 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7793D13F86E;
+ Thu, 17 Feb 2022 22:44:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1645134214;
- bh=QF3sa9vsRorr5x7eNqsozMw1AcbYR/uSUg8fev6eU4g=;
+ s=smtp-20201208; t=1645134286;
+ bh=kSph8m0Owhz2KCH7LmqS/Kk9g6viVd+cw3rsIS6P9Is=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=unYL51PRE+eFmpce0HT90RIWsBhu677P1aEC9+CBGz1BcYpYEY5MIlnUAf6dDT2aO
- 32DeUwyoI/dv3RiqJlBWaEGdRB2B+wysnSYrdJbGmGILG2LZCAyiWfS0+Ln/qLeAp9
- uaSG1r3+RkVWEIuCmb629VKPUje7lwvfULT5TUqUsvG5GmH2bCOqXU5o3k137I6Ihj
- VfAHq9G3SIYslnXjJM5Vusj8ObZ07ltna7ICtKbc1HxOUPnLvyXDQqRkWbgrDzfxbr
- zUNzVOu5ot+2lEnNAofgR3/6ZXmoWMok9lsIyfZrIVE/RdG78ZzBwx5jXjlwiR6Oyd
- glx8XKRQKJdow==
+ b=kJMgua1O85V+TdaGCZrfEX1bbcsuZd+SIsPd4arWsgpVj3tHXlk0pvZ3KgMBWcS2h
+ wkFjNLjUWXiQoy9ZSpQSAMtBUm0G0hwlnd7+KJOOHVp95p4J30VK8FQ8scUoSHc+jm
+ sp0Ixbyu/rHYY3WDZ7NogNF17IYEMdkBTPMDUDr9H+lUhTPNEDwWCNpQgiNvpZXrVB
+ rgApE6ZJIg85qAXrAvmbiFt55t7N/BJMyX1oRQ0U3Y9JnFvNgg+Oe5MplNUNkh56lm
+ zZzo4kFqsUcnolIindslvYAV8kYdMrUOayTXCHuSq2z/c8doMUdG03ecv/bZ8KLQsP
+ 5vZG8u5naKAJA==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 17 Feb 2022 22:43:31 +0100
-Date: Thu, 17 Feb 2022 22:43:31 +0100
+ Thu, 17 Feb 2022 22:44:43 +0100
+Date: Thu, 17 Feb 2022 22:44:43 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220217214331.GM522310@scaer>
-References: <20220217201001.1859113-1-giulio.benetti@benettiengineering.com>
+To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Message-ID: <20220217214443.GN522310@scaer>
+References: <20220217155549.1084829-1-marcus.hoffmann@othermo.de>
+ <20220217155549.1084829-3-marcus.hoffmann@othermo.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220217201001.1859113-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220217155549.1084829-3-marcus.hoffmann@othermo.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: U-Boot
- requires OpenSSL
+Subject: Re: [Buildroot] [PATCH v2 2/2]
+ board/orangepi/orangepi-rk3399/genimage: fix partition types for gpt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +71,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org
+Cc: Suniel Mahesh <sunil@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+Marcus, All,
 
-On 2022-02-17 21:10 +0100, Giulio Benetti spake thusly:
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784267
+On 2022-02-17 16:55 +0100, Marcus Hoffmann spake thusly:
+> Fixes the following error during image generation:
+>   ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid
+>   for mbr and hybrid partition-table-type
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784375
+> 
+> Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+> ---
+>  board/orangepi/orangepi-rk3399/genimage.cfg | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
+> index c94e0bc7cc..a02166172f 100644
+> --- a/board/orangepi/orangepi-rk3399/genimage.cfg
+> +++ b/board/orangepi/orangepi-rk3399/genimage.cfg
+> @@ -26,14 +26,13 @@ image sdcard.img {
+>  	}
+>  
+>  	partition boot {
+> -		partition-type = 0xC
+> +		partition-type-uuid = F
+>  		bootable = "true"
+>  		image = "boot.vfat"
+>  		offset = 16M
+>  	}
+>  
+>  	partition rootfs {
+> -		partition-type = 0x83
 
-Applied to master, thanks.
+Why don't you also switch this one to partition-type-uuid?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  configs/kontron_bl_imx8mm_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-> index 57e7e9683d..2b7e121e25 100644
-> --- a/configs/kontron_bl_imx8mm_defconfig
-> +++ b/configs/kontron_bl_imx8mm_defconfig
-> @@ -45,6 +45,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
->  BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
+>  		image = "rootfs.ext4"
+>  	}
+>  }
 > -- 
 > 2.25.1
 > 
