@@ -4,53 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B443C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Feb 2022 19:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED3C3C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Feb 2022 21:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17AFE60B7C;
-	Fri, 18 Feb 2022 19:04:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68E6460AC0;
+	Fri, 18 Feb 2022 21:15:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QSb0QZgNfNVz; Fri, 18 Feb 2022 19:04:35 +0000 (UTC)
+	with ESMTP id mSW6tHMKjNvr; Fri, 18 Feb 2022 21:15:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48CAF60B54;
-	Fri, 18 Feb 2022 19:04:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E2A261BF328
- for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 19:04:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF1A160A97;
+	Fri, 18 Feb 2022 21:15:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 183B51BF350
+ for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 21:15:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D137140331
- for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 19:04:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1310D84C06
+ for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 21:15:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RUyI9KbDU65F for <buildroot@lists.busybox.net>;
- Fri, 18 Feb 2022 19:04:32 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=ibm.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yL4HkeuqW0Bh for <buildroot@lists.busybox.net>;
+ Fri, 18 Feb 2022 21:15:08 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1257C40261
- for <buildroot@buildroot.org>; Fri, 18 Feb 2022 19:04:31 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout04.t-online.de (Postfix) with SMTP id 0596D1AC4
- for <buildroot@buildroot.org>; Fri, 18 Feb 2022 20:04:04 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.192.64]) by fwd72.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nL8Xz-2hyPGj0; Fri, 18 Feb 2022 20:04:03 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50528)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nL8Xz-0005yF-9r
- for buildroot@buildroot.org; Fri, 18 Feb 2022 20:04:03 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
+ [148.163.156.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9FAB28403F
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:08 +0000 (UTC)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+ by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IKCI1F018616
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com;
+ h=from : to : subject :
+ date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=2tZoV4xP0kexpbg4DQycQSWgxnu93ea5b0vqViZR4ac=;
+ b=siI61Xw7sxpxNFXHh6JoI5pKzSYc9aKbPHYRA3qjwvTdQheAjHYt6GOnyF8N631QDFiY
+ uegH+j80cRR28IT4V2MZhwJFc086GqF2lM5QLdu/Jzx4Mq/I7hiMO1K+PuJG7ql4rypL
+ UW+kLHq3w/OwbptrUV/I5TMzwes1Pdu9pMHVvdL2WHdpRykHsA9LX0TCoxDaogVpfzGm
+ EFphgqUR0nsLv7sTaUGVTlom/Pn2QMU+8dxVg4QkBxLJOu1kJ2h/qwwCs4cDMCA7eZ4V
+ lU0dPDVOoxWnzkkPwBKKxNjijsxqoz1hrJTbs6gK+EBoTUskdGLaM0A37CM9IYOs6twb WA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com
+ [169.51.49.98])
+ by mx0a-001b2d01.pphosted.com with ESMTP id 3eaj9jh78a-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:05 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+ by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21IL87qU020901
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:03 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com
+ (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+ by ppma03ams.nl.ibm.com with ESMTP id 3e64havcfp-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:03 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com
+ [9.149.105.232])
+ by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 21ILF1af30540128
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:01 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 288F252050
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:01 +0000 (GMT)
+Received: from oc8242746057.ibm.com.com (unknown [9.171.19.251])
+ by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0BB8C5204E
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 21:15:01 +0000 (GMT)
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Feb 2022 20:04:03 +0100
-Message-Id: <20220218190403.475643-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Fri, 18 Feb 2022 22:14:58 +0100
+Message-Id: <20220218211458.197332-1-egorenar@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zEAQua_ISCFnGIfLrZLEkQebhgqZOAgD
+X-Proofpoint-GUID: zEAQua_ISCFnGIfLrZLEkQebhgqZOAgD
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1645211043-0000B7AB-05484A39/0/0 CLEAN NORMAL
-X-TOI-MSGID: b866cd0b-7f8c-4aaa-b19e-312c6c6b7a43
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-zattoo: bump version
- to 19.7.11-Matrix
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-18_09,2022-02-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=815
+ adultscore=0 spamscore=0 clxscore=1011 suspectscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202180129
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version 2.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,36 +107,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+- https://release-monitoring.org/project/10714/
+
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ package/s390-tools/s390-tools.hash | 2 +-
+ package/s390-tools/s390-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index ac4960df92..0b88d5c747 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+index 13c68fbf52f4..6ea8f7ea2076 100644
+--- a/package/s390-tools/s390-tools.hash
++++ b/package/s390-tools/s390-tools.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  8cc02c4627b5108e39bb7b6a6f56f7ba5debbb1adf982c4f23395944aa7d2c8e  kodi-pvr-zattoo-19.7.10-Matrix.tar.gz
-+sha256  07d96b1b0c3b464c0bf02279fa8cab9ccdf675344129f3a970b14bafce225fb4  kodi-pvr-zattoo-19.7.11-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 7a3b230e8b..95c5de0925 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+ # Locally computed:
+-sha256  17dc163e6a1e940f895c64955c130058600e1df834e1ab134410be7266ef724a  s390-tools-2.19.0.tar.gz
++sha256  6fa6add92e896541c0ef74885a4084474fc0d77049e8ac7372872a70a46ddd74  s390-tools-2.20.0.tar.gz
+ sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index 328986bcb37c..3c386af6fd10 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_ZATTOO_VERSION = 19.7.10-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.11-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+-S390_TOOLS_VERSION = 2.19.0
++S390_TOOLS_VERSION = 2.20.0
+ S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
+ S390_TOOLS_LICENSE = MIT
+ S390_TOOLS_LICENSE_FILES = LICENSE
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
