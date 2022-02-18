@@ -1,81 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4368C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Feb 2022 10:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54025C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Feb 2022 11:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33FD041D5A;
-	Fri, 18 Feb 2022 10:59:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE20060B33;
+	Fri, 18 Feb 2022 11:09:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vH_H8V_SqCqC; Fri, 18 Feb 2022 10:59:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D3Rx9iHg4va1; Fri, 18 Feb 2022 11:09:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D91C41834;
-	Fri, 18 Feb 2022 10:59:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 306576119E;
+	Fri, 18 Feb 2022 11:09:21 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A1741BF2F6
- for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 10:59:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 79D6D1C116E
+ for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 11:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46BD660AD4
- for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 10:59:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67BC96119E
+ for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 11:09:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pfw3UiX3o0QV for <buildroot@lists.busybox.net>;
- Fri, 18 Feb 2022 10:59:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C9F8607E1
- for <buildroot@buildroot.org>; Fri, 18 Feb 2022 10:59:14 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- l12-20020a7bc34c000000b003467c58cbdfso8310467wmj.2
- for <buildroot@buildroot.org>; Fri, 18 Feb 2022 02:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2S3N+b2kno+XKX/i9kkFaZjRBphdWW4LnG6ayFIRDp0=;
- b=Ng7xVU7ixMpzZtVgwe9ZOcwPktW+EcdksmObM/amKyQccMzwP2p6xNBsf2Ol8hzIc3
- 0a44/q3/Y9uBOjvMPcnAl3dZpV5uZUSdibsYD6dFP288eYeKR80L6Nm0o8j6TTpq/mwd
- vD8YcmvbggTAYbpdcg9O7WxDFJSTzwr7sFldL0OgnF8zQ3yY5rmujwegicVaoOvqKX3A
- 5VnwGvtS84RCuuUVlIlq66+YUhfDqaFXZwxlBQJdpwspNMlyWDfCeJ9vhzMQqG77zVXD
- yhTEDNFkxHNqZ3lDX6ZQzKDkqajKBi4JyYZzNxTibDlV7cWgBON7obrCPKRYqCQnytGp
- XYPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2S3N+b2kno+XKX/i9kkFaZjRBphdWW4LnG6ayFIRDp0=;
- b=wcspkhPr1LSNaSRVyn9qXcYC5PFgCP4TZATSmoUrbUBSF31D7Q9rUeT/+kb3jso5Rq
- 9cPXqkkjPlSM+/j/zVhx4lTThy9bDc50SS0gyBQUEalHfncG2uEmi0mmF5ihYhhRGkqW
- j/EHUo3mgYLXDyw7kxuz+7yAlkbbkXglLknF7YRmkdsrrx2JQDXma/op8CqncjAHel3m
- j7g5WjYU13IoiYMP0kn9Gu2Bt7+DQSRCj+zUhQ2NbfbuWzP+YwTH+/skOnevT9+KtxSR
- 2iNSKnI4SudyDEKHoYlNyaRWTVRyAu2slGq0tXuJCT/jnczzQUzYfrT56CQpQHmMkB3F
- WkPA==
-X-Gm-Message-State: AOAM531QVfwvXBAHCx+m7LHrtEcav5xLvtfLudHttnHcNplsgWU8WkYM
- Zk7amSzQghD8N2Wa66BGDAod4aDmKBw=
-X-Google-Smtp-Source: ABdhPJxRYhd/DkCEyq7sCRvd+zGMX/w9vLwkm9hrnN8NkTKOXzk6iWuB7vQysUBEN0qBIaKC6MrB9g==
-X-Received: by 2002:a7b:c201:0:b0:350:de40:c295 with SMTP id
- x1-20020a7bc201000000b00350de40c295mr10271626wmi.103.1645181952420; 
- Fri, 18 Feb 2022 02:59:12 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id g22sm3835957wmh.12.2022.02.18.02.59.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 18 Feb 2022 02:59:12 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id B5DGJn-tFBha for <buildroot@lists.busybox.net>;
+ Fri, 18 Feb 2022 11:09:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D421460BBD
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 11:09:18 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.188.82])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id L18VnCqktvHpTL18VnDAbk; Fri, 18 Feb 2022 12:09:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1645182556; bh=ppQxBCCwjte+UCuizQnySjJM60mhWerUj7GUR5/fyUs=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=QgPSicAqren9Z3ASTXMSkMHLGfAuiKZ7fvLd3IaiJSWyQeTzWp4NbVfuClwsLylC0
+ zIU68DK/0DNNzFqaycMPS7cPyenBuvg1A9W0myxwfaBUbRJAT4yOqrteuNBKLUvRcd
+ ggikBtuZlY15Xdz2Au6tapxm1JrrHXfQEWOJFTDhNHkN/OyXVDwRMettX3sFKiY5nZ
+ s3TspF63PkrtdCeS9TqKidWasBZpzip4f6yUyP4nbOJHHxGgBtENFouzXx2QHnLwoy
+ 40rgJg0qbP2KcbOGtkTaxWk74wJgGpUlpy0f/GB4Q8XJx6f52w05PcoTgeWDbcnm16
+ NEmrLu9GLVT6w==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Feb 2022 11:59:24 +0100
-Message-Id: <20220218105924.738666-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 18 Feb 2022 12:09:14 +0100
+Message-Id: <20220218110914.3098061-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.12
+X-CMAE-Envelope: MS4wfPoDZDzv+dEKovBgC10GvJVsoZ6Nl8GA6w9KK/kAhpi/Nz3iSlilQzUyD9veLXQBZHpxvoVmxYWb4Zd/wwDwNSIO5H+Z1qwbiakoiuuhOaN9UQ0vLOsu
+ Pp+OrwcCR3pX/OEw0W+Eh8T5Zxjm6LIj8NpT0xdFmlwB7QYFKaTOfnuSTapKE4qtwMlLGeL2mbW+KUTgYPWe7eIzvFa3gMs0XZxbfM1Ub4CPcCzjlX/+IHhd
+ qnZNLMu8+/vw+WdYhNMBh0KABUdRIFqGSVrlisXJZLRwOg05I6GZTrmdZ782cVFab785UgrIP3EzH+UXmoIUcA==
+Subject: [Buildroot] [PATCH] configs/microchip_sam9x60ek_mmc_dev_defconfig:
+ fix build failure due to previous wrong commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,46 +65,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://discuss.linuxcontainers.org/t/lxc-4-0-12-has-been-released
+Commit 616ba9c90b014637dc9925fa442a0af4a11f04b8 extended rootfs size, but
+the option was listed in the wrong place. Options must be set in the order
+they are specified by Config.in files. So let's move
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M" right after BR2_TARGET_ROOTFS_EXT2_4=y
+as it should be.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784289
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/microchip_sam9x60ek_mmc_dev_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 2b58df2f1d..d460bc6a01 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  afa481e17ca9a9cf9fd3d2d7a04e42a8f6bfe60b323909326c968e852cd9f02c  lxc-4.0.11.tar.gz
-+sha256  db242f8366fc63e8c7588bb2017b354173cf3c4b20abc18780debdc48b14d3ef  lxc-4.0.12.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 08f64bcec7..9311dc8775 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 4.0.11
-+LXC_VERSION = 4.0.12
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+index 00ccd784b5..06e03967c4 100644
+--- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
++++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+@@ -7,7 +7,6 @@ BR2_TARGET_GENERIC_HOSTNAME="sam9x60ek"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sam9x60ek_mmc/genimage.cfg"
+-BR2_TARGET_ROOTFS_EXT2_SIZE=120M
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+@@ -67,6 +66,7 @@ BR2_PACKAGE_HTOP=y
+ BR2_PACKAGE_VIM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
