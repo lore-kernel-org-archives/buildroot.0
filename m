@@ -1,60 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C01EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Feb 2022 17:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0792C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Feb 2022 17:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 960F140499;
-	Fri, 18 Feb 2022 17:36:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E27D41D95;
+	Fri, 18 Feb 2022 17:36:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id apjD27KQnWTX; Fri, 18 Feb 2022 17:36:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sj-I3N7zcQra; Fri, 18 Feb 2022 17:36:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FEBE40360;
-	Fri, 18 Feb 2022 17:36:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BBB381BF48C
- for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 17:36:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8824741D93;
+	Fri, 18 Feb 2022 17:36:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 789FB1BF48C
+ for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 17:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B7AE960B20
- for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 17:36:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66A4584C35
+ for <buildroot@lists.busybox.net>; Fri, 18 Feb 2022 17:36:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OdV6gFMp7c7f for <buildroot@lists.busybox.net>;
- Fri, 18 Feb 2022 17:36:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XaVHptkl0hRx for <buildroot@lists.busybox.net>;
+ Fri, 18 Feb 2022 17:36:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44D1B60B0A
- for <buildroot@buildroot.org>; Fri, 18 Feb 2022 17:36:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6309184C34
+ for <buildroot@buildroot.org>; Fri, 18 Feb 2022 17:36:17 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.188.82])
  by Aruba Outgoing Smtp  with ESMTPSA
- id L7B0nQUksNVvLL7B0nlMfr; Fri, 18 Feb 2022 18:36:15 +0100
+ id L7B0nQUksNVvLL7B1nlMg2; Fri, 18 Feb 2022 18:36:15 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645205775; bh=Zx1jbhSSiIskajVBmFrcnwZWMcUwL/uJO6Gtp+s+EYI=;
+ t=1645205775; bh=14Qy9YE3usypwm0d94g74Mqi/yL+dLGrpWr+SD2WkA0=;
  h=From:To:Subject:Date:MIME-Version;
- b=BgRaFspuoGpkIgsFkDvH1ibIdqrir5qMpRMX3TFQT74EHZryVtyqbJoI377M8fpZz
- wCdSteMUC05xbRnKCdCRo7UwsvI+PKw7NACYIfuJwiA+ayEorw5E31WajTQTsd0NbN
- 2JDLlZ8INnVxbgYUK/ile5vbRa1v9mM9zZak0HiO9t0+Pi4A9hIEeVwCgI08+6XE/N
- P7DaPEBeBCOmDrc2yGHpc/8OQbuAHW8pcfly/OEGGLllfzGV2AvBxc6EePoZ7g/7mV
- 72tq577vGBfOmqx6epqS7GnkOQupEAcdwXhlpiLLjJuay60daRgUIW7L1PXbHWcKec
- xzPMfPdUpJoFw==
+ b=AHJoDTUJ4Dp5kAUKE4bdIhdvL6sLi1hnqvwPT30Aox13j8DbBjyxYXYw+bqVzYJtm
+ 6CsDlPnsYSXBnOvz8NnQb3FW9yqGi23EvwfV+YLJBRBY9+j10Iukx21a6zXe8yf/X7
+ GbuTb5dByuqFJj5AmSXikLiV8X/EQv3PGS4uMU+aB3l6NiXgHkkekkewwTvy2jaWrl
+ s8X1II58+CUAxydGleuP75sy58DpA6KFL/F1+Bu6w7ec4QFv7emI2+YBkPc9db7+KV
+ lgjidDpZLBpGcMF8oPVymp2XirBbgYUsqBnLAEX73iQhpS/Ro0aiZE9sS1S9/B+fHc
+ ALRLP7+NZlAZA==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Feb 2022 18:36:12 +0100
-Message-Id: <20220218173613.315794-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 18 Feb 2022 18:36:13 +0100
+Message-Id: <20220218173613.315794-2-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220218173613.315794-1-giulio.benetti@benettiengineering.com>
+References: <20220218173613.315794-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4wfHCoV8CQPVssWmJjKQ4C4CHZgmfOx9fsWnoakLcoXcHs8FfFW1/KqNM1FkXk+QwBC7R05CSvfXjdHP8Fuv6uOZfe6HijA7SQwjRhLXupmtFmybkNE2nr
  6VZRlNnm7Tr7/bGd37O8jY9BsZ3tacnKCP2sLN7pGQ136tDluSYQ08N1MspUh8Bg3Dp5vMK0V5Oe3w1l9WtN2d3X0xvyteStCVjKMO8bwYRmD8GHixLya0F7
  9RXGfgYUN/3BF4Byidlubds/4SOvMTJHCSfNL1iLbx7I6XHIiqZrqN++PrfsgUajAwcX5+Hdzaa3nHSMdIZuqw==
-Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 3.4.0
+Subject: [Buildroot] [PATCH] package/trace-cmd: bump to version 2.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,32 +77,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 61f2865563..e4674afa87 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index 00cecc7828..4d39e4d5ea 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256  1c13bca136c4f66658059853e2c1253f34c88f4b5c5aba6050aba7b5e0ce2503  harfbuzz-3.3.2.tar.xz
-+sha256  7158a87c4db82521fc506711f0c8864115f0292d95f7136c8812c11811cdf952  harfbuzz-3.4.0.tar.xz
- sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 1f5dfa8822..331b35c530 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+-sha256  45924a763376a700221f64b4034f87263e4038ec88b120a0abfb5743d051d068  trace-cmd-v2.9.6.tar.gz
++sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index fe0cd71ec4..52bb99036c 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 3.3.2
-+HARFBUZZ_VERSION = 3.4.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-TRACE_CMD_VERSION = 2.9.6
++TRACE_CMD_VERSION = 2.9.7
+ TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
+ TRACE_CMD_SITE = \
+ 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
 -- 
 2.25.1
 
