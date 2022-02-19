@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EEDEC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 21:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550F2C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 21:07:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D80160AFD;
-	Sat, 19 Feb 2022 21:01:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1A8260B14;
+	Sat, 19 Feb 2022 21:07:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k4CNavDHEQ2s; Sat, 19 Feb 2022 21:01:58 +0000 (UTC)
+	with ESMTP id y-BMArBdv-2d; Sat, 19 Feb 2022 21:07:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F74360A91;
-	Sat, 19 Feb 2022 21:01:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E50741BF287
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 21:01:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D445860AEF;
+	Sat, 19 Feb 2022 21:07:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EB63B1BF426
+ for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 21:07:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0D6781BC6
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 21:01:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1A384024B
+ for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 21:07:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZksEnzFm9g0C for <buildroot@lists.busybox.net>;
- Sat, 19 Feb 2022 21:01:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e3R9BM6XtMzS for <buildroot@lists.busybox.net>;
+ Sat, 19 Feb 2022 21:07:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0411A81BB4
- for <buildroot@buildroot.org>; Sat, 19 Feb 2022 21:01:53 +0000 (UTC)
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F61740239
+ for <buildroot@buildroot.org>; Sat, 19 Feb 2022 21:07:00 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.188.82])
  by Aruba Outgoing Smtp  with ESMTPSA
- id LWrXnIU0Ckz4hLWrXnyG87; Sat, 19 Feb 2022 22:01:51 +0100
+ id LWwTn7WZHX0z7LWwUnbccD; Sat, 19 Feb 2022 22:06:58 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645304511; bh=aL3ulcsSbk0lMDwpZWb8jeSm9xs0K7SBqCpbzOfKVrs=;
+ t=1645304818; bh=TZWgIH9yS2v8C3MTduMSVxZp3Zsd+NtCQ5ajgh4QcbE=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=NSF66WcnyN5mwYtBDPVsHDnA+CZ/XgtmJq1b/gUGJwVaEySC15/CEN1Sde7WHmIaS
- vFhhdEIsCXqXRcHmLXVLFMqkuvbfUHbX1jd3joxx2o9yRzTY01uVhJbuI4MbFeW5sQ
- ecq7XbPjg0+2T8pMswQpU1fV4Kun6mqpc1qw43NTUHR1gwTF4oR4TAoAOu8NLO9Y0k
- dbv+p3yVEjfJRZTCjVoYvDHq2KSzocFmQuq/4LOsXyAaGlf3TBSI7uTd+UEQPB1tK2
- Okah95vu2ycznv6QqjltuNl4hYkbxdqE0sX1m3p42jClPMbHuBdW0hR7tO+k8wuI9i
- 85wXSXqqLnlRQ==
-Message-ID: <e7a1cacd-c8c6-68b7-bd39-cc287440adb8@benettiengineering.com>
-Date: Sat, 19 Feb 2022 22:01:51 +0100
+ b=NAAAyn/PWm7S668K9oBztsYCDzxUIuJKOBIaMHcFTCnW+h/xr+A4YEVJXRT4DSjyG
+ 4q630J6J1AfCTaodB31P+aOmXHXXumtAMQJ6kVzmiubPk7HegU2fYwD9Cf0mqnMuwL
+ El6X6IslMlw9RchWZ+uugWo3jH2fU42QS5Ll12/eBEePeCZXL15XPBM35769HFgqWf
+ tcwhY2/2onqQOpQK00wIvTNvfwkjAG5bMmavmmzgEpjPojgS8nqp/e+pqORmQEm/Jp
+ eyiMRzZN+dG4vgoTcqgBTCbAEkfD+VGBn5HbgTCZRiXzJxi1fnwdAs360WtgjTSm79
+ WCWEz9m1DHgig==
+Message-ID: <ec546e7c-39c1-5a5d-d807-c167ab5e6eb2@benettiengineering.com>
+Date: Sat, 19 Feb 2022 22:06:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
-To: Peter Thompson <peter.macleod.thompson@gmail.com>
-References: <CAGrGpJBUqrbuLcMNZk3f8ovuMN+RddjNdoV=i=q3x2dRYmW6eA@mail.gmail.com>
- <ECCB3B7E-CCF1-44EE-AE8C-8EB1E8B0BEC7@benettiengineering.com>
- <CAGrGpJD5umJqWjjgLKSGiX1xGzJqHyrw9=5CdH=HSNQj65DUMw@mail.gmail.com>
+To: Michael Durrant <mdurrant@arcturusnetworks.com>,
+ buildroot <buildroot@buildroot.org>
+References: <20220218220905.87503-1-mdurrant@arcturusnetworks.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CAGrGpJD5umJqWjjgLKSGiX1xGzJqHyrw9=5CdH=HSNQj65DUMw@mail.gmail.com>
-X-CMAE-Envelope: MS4wfEOOhpeQc/T3q+u7kmPQ3A0P8C6i648TfsO/y6/NwFvsvFcwxE2jAGjS2wsLVVofU4ttpmwzBN660yWzWIbM4/NY2zjPGsiciWZ5r7GC34+MkrbL1/2D
- mnv8FGyBfZVszwSH9Zm8pshep49LQHk1JBwfDzhv01zeBvstXSQhGq/Q8sd8X8CXUNjTMRbUN2j1V/j0aJ3FILupHxXHVYl8eYPootcaunO4n4bvHQ3jqL0F
- X3AI2Ss+6lGZxnCtpj5U2g==
-Subject: Re: [Buildroot] Buildroot Failure 2022-02-16 02:25:21
+In-Reply-To: <20220218220905.87503-1-mdurrant@arcturusnetworks.com>
+X-CMAE-Envelope: MS4wfPfFfIzTV1R/BXLfp+etQM4JCuACYGl8cPCauRwpVL9D6seg5moVRgIChlimrrr1irmL0Cbx/KXyp75b8rIfY4rISvSMFpJQhY5XldRNLNmjHdcliWLW
+ P06ILCbpjAd5Wl7CBl2VNDRQznH0HWlpC7NNVdyuD1NyRMsEYWAkng0r8i2HGppxhhFUwqEjBKgF35slGNvNWeEUfLmBD5Bd663PrdulDd3fWwMi8vEC93cv
+ Ef9U4yYgvYopwev886sT/g==
+Subject: Re: [Buildroot] [PATCH v4] board/arcturus/aarch64-ucls1012a: bump
+ u-boot and kernel version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,135 +72,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUGV0ZXIsCgorQ2MgQlIgTUwsCgpPbiAxOS8wMi8yMiAxNzowMSwgUGV0ZXIgVGhvbXBzb24g
-d3JvdGU6Cj4gSGkgR2l1bGlvLAo+IAo+IFdoZW4gSSBjb21wYXJlZCB0aGUgbW9zdCByZWNlbnQg
-YnVpbGRyb290IHZpYSAiZ2l0IGNsb25lIiBhbmQgY29tcGFyZWQgCj4gaXQgdG8gdGhlICJidWls
-ZCBpbiBjYmEzNC4uLiIgSSBub3RpY2VkIHRoZSBkaWZmZXJlbmNlIGluIAo+IHBhY2thZ2Uvc2Rs
-Ml90dGYvIHNkbDJfdHRmLm1rIDxodHRwOi8vc2RsMl90dGYubWs+LiDCoCBCdXQgSSBjb3VsZCBu
-b3QgCj4gZmluZCB0aGUgY29tbWl0IGluIGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJv
-amVjdC9idWlsZHJvb3QvIAo+IDxodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3Qv
-YnVpbGRyb290Lz4gd2hlcmUgdGhhdCB3YXMgCj4gY2hhbmdlZC4KClBhdGhjaHdvcmsgZGVhbHMg
-d2l0aCBwYXRjaGVzLCB3aGlsZSB5b3UgZmluZCBjb21taXRzIGluIHRoZSBnaXQgUmVwb3NpdG9y
-eToKaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvbG9nLwoKPiDCoCBJIGxvb2tl
-ZCBmb3IgdGhlIHRpdGxlIHBhY2thZ2Uvc2RsMl90dGYgYW5kIGRpZCBub3Qgc2VlIGl0Pwo+IAo+
-IElzIHRoZXJlIGFuIGVhc3kgd2F5IHRvIHNlYXJjaCBwYXRjaHdvcmsgd2l0aG91dCBnb2luZyB0
-aHJvdWdoIGxpbmUgYnkgCj4gbGluZT/CoMKgwqAgSSBkbyBub3QgaGF2ZSBwd2NsaWVudCBpbnN0
-YWxsZWQgLSBzaG91bGQgST8KCllvdSBjYW4gc3RpbGwgdXNlIHBhdGNod29yayBpdHNlbGY6CjEp
-IGNsaWNrIG9uICJTaG93IHBhdGNoZXMgd2l0aDoiCjIpIHVzZSBwYWNrYWdlIG5hbWUgYXMgIlNl
-YXJjaCIsIHNvIHNkbDJfdHRmCjMpIHNldCBTdGF0ZSBhcyAiYW55Igo0KSBzZXQgQXJjaGl2ZWQg
-YXMgQm90aAoKVGhhdCB3YXkgeW91IHdpbGwgc2VlIGFsbCB0aGUgcGF0Y2hlcywgdGhlIE5ldywg
-QWNjZXB0ZWQsIFN1cGVyc2VkZWQgYW5kIApSZWplY3QuCgpBbm90aGVyIG1ldGhvZCB3b3VsZCBi
-ZSBieSBjaGVja2luZyBCdWlsZHJvb3QgUmVwb3NpdG9yeSBpdHNlbGYuCllvdSBjYW46CiQgY2Qg
-YnVpbGRyb290LwokIGdpdCBsb2cgLS1ncmVwPXNkbDJfdHRmCm9yIHNpbmNlIHlvdSBhbHJlYWR5
-IGtub3cgdGhlIHBhY2thZ2U6CiQgZ2l0IGxvZyBwYWNrYWdlL3NkbDJfdHRmCm9yIGFsc286CiQg
-Z2l0ayBwYWNrYWdlL3NkbDJfdHRmCgpUaGF0IHdpbGwgZ2l2ZSB5b3UgdGhlIGlkZWEgb2Ygd2hh
-dCBpcyByZWFsbHkgYXBwbGllZC4KCk9yIHllcywgeW91IGNhbiB1c2UgcHdjbGllbnQsIGJ1dCB0
-aGF0IGFuZCBwYXRjaHdvcmsgYXJlIHJlYWxseSBwYXRjaCAKb3JpZW50ZWQuIEhlcmUgd2hhdCB5
-b3UgbmVlZCBpcyB0byBjaGVjayBpZiB0aGUgZml4IGlzIGFscmVhZHkgCmNvbW1pdHRlZCwgc28g
-SShhdCBsZWFzdCkgd291bGQgZ28gZm9yIHVzaW5nIGdpdCBtb3N0IG9mIGFsbC4KCkJlc3QgcmVn
-YXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVlcmluZyBzYXMKCj4gVGhhbmtz
-IHNvIG11Y2ggZm9yIHlvdXIgcGF0aWVuY2UgYW5kIGhlbHAuCj4gCj4gUGV0ZXIKPiAKPiAKPiBP
-biBTYXQsIEZlYiAxOSwgMjAyMiBhdCA0OjU0IEFNIEdpdWxpbyBCZW5ldHRpIAo+IDxnaXVsaW8u
-YmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tIAo+IDxtYWlsdG86Z2l1bGlvLmJlbmV0dGlA
-YmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4+IHdyb3RlOgo+IAo+ICAgICBZZXMsIGJ1dCBwcm9iYWJs
-eSBoYXMgYmVlbiBhbHJlYWR5IGZpeGVkLgo+ICAgICBBbnl3YXkgbm93IHlvdSBrbm93IHRoZSBl
-bnRpcmUgd29ya2Zsb3chCj4gCj4gICAgIEdpdWxpbwo+IAo+ICAgICBJbnZpYXRvIGRhIGlQaG9u
-ZQo+IAo+PiAgICAgSWwgZ2lvcm5vIDE5IGZlYiAyMDIyLCBhbGxlIG9yZSAwMzoxNCwgUGV0ZXIg
-VGhvbXBzb24KPj4gICAgIDxwZXRlci5tYWNsZW9kLnRob21wc29uQGdtYWlsLmNvbQo+PiAgICAg
-PG1haWx0bzpwZXRlci5tYWNsZW9kLnRob21wc29uQGdtYWlsLmNvbT4+IGhhIHNjcml0dG86Cj4+
-Cj4+ICAgICDvu78KPj4gICAgIExvdHMgZm9yIG1lIHRvIHdvcmsgb24hISEhwqDCoCBUaGFua3Mg
-c28gbXVjaCBmb3IgeW91ciBoZWxwISEKPj4gICAgIEkgd2lsbCBsZXQgeW91IGtub3cgd2hlbiBJ
-IGhhdmUgc3VjY2Vzcy4KPj4gICAgIFBldGVyCj4+Cj4+ICAgICBPbiBGcmksIEZlYiAxOCwgMjAy
-MiBhdCAyOjQxIFBNIEdpdWxpbyBCZW5ldHRpCj4+ICAgICA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0
-aWVuZ2luZWVyaW5nLmNvbQo+PiAgICAgPG1haWx0bzpnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5n
-aW5lZXJpbmcuY29tPj4gd3JvdGU6Cj4+Cj4+ICAgICAgICAgSGkgUGV0ZXIsCj4+Cj4+ICAgICAg
-ICAgSSBhZGQgTUwgaW4gQ2MsCj4+Cj4+PiAgICAgICAgIElsIGdpb3JubyAxOCBmZWIgMjAyMiwg
-YWxsZSBvcmUgMjA6MDMsIFBldGVyIFRob21wc29uCj4+PiAgICAgICAgIDxwZXRlci5tYWNsZW9k
-LnRob21wc29uQGdtYWlsLmNvbQo+Pj4gICAgICAgICA8bWFpbHRvOnBldGVyLm1hY2xlb2QudGhv
-bXBzb25AZ21haWwuY29tPj4gaGEgc2NyaXR0bzoKPj4+Cj4+PiAgICAgICAgIO+7vwo+Pj4gICAg
-ICAgICBIacKgIEdpdWxpbwo+Pj4KPj4+ICAgICAgICAgV2hldyAtIHRoYXQgd2FzIGZhc3QgLSBJ
-IGFtIGJhY2sgYXNraW5nIHF1ZXN0aW9ucyBhbHJlYWR5IDopLi4uLgo+Pj4KPj4+ICAgICAgICAg
-TXkgYnVtcCBvZiBzZGwyX3R0Zi0yLjAuMTUgdG8gc2RsMl90dGYtMi4wLjE4wqAgY2F1c2VkIGFu
-Cj4+PiAgICAgICAgIGF1dG9idWlsZGVyIGZhaWx1cmXCoCAyMDIyLTAyLTE2IDAyOjI1OjIxLsKg
-wqDCoMKgwqAgVGhlIGxvZwo+Pj4gICAgICAgICBpbmRpY2F0ZXMgdGhlIHByb2JsZW0gaXPCoCBw
-dGhyZWFkLmggbWlzc2luZyB3aGVuIGhhcmZidXp6IGlzCj4+PiAgICAgICAgIHNwZWNpZmllZC7C
-oMKgwqAgU2VlIGxvZyBiZWxvdy4uLgo+Pgo+PiAgICAgICAgIEhlcmUgY2FuIHlvdSBwbGVhc2Ug
-cHJvdmlkZSBtZSB0aGUgbGluayBsaWtlIGJlbG93Pwo+PiAgICAgICAgIGh0dHA6Ly9hdXRvYnVp
-bGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2NiYS9jYmEzNGM0MzFmOGQxMzE1ZTljYTkxNTkyNzQ0
-MjFhODIxOWE3MDFlLy8KPj4gICAgICAgICA8aHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0
-L3Jlc3VsdHMvY2JhL2NiYTM0YzQzMWY4ZDEzMTVlOWNhOTE1OTI3NDQyMWE4MjE5YTcwMWUvLz4K
-Pj4KPj4+Cj4+PiAgICAgICAgIE5vdCBzdXJlIHdoeSBzZGwyX3R0Zi0yLjAuMTUgd29ya2VkIGJl
-Zm9yZS4uLi4uIAo+Pgo+PiAgICAgICAgIEl0IHNlZW1zIGxpa2UgdGhhdCBiZXR3ZWVuIDIuMC4x
-NSB0byAyLjAuMTgobWF5YmUpCj4+ICAgICAgICAgc2RsMl90dGYgb25seSB1c2VzIGhhcmZidXp6
-IHByb3ZpZGVkIGJ5IHNkbDJfdHRmIGl0c2VsZi4KPj4gICAgICAgICBUaGlzIG1lYW5zIGl04oCZ
-cyBza2lwcGluZyB0aGUgb25lIHByb3ZpZGVkIGZyb20gQnVpbGRyb290IHRoYXQKPj4gICAgICAg
-ICBpcyBhbHJlYWR5IHBhdGNoZWQgZm9yIGhhcmZidXp6IHB0aHJlYWQuaCBpc3N1ZS4KPj4KPj4+
-ICAgICAgICAgQW55d2F5cywgSSBwbGFubmVkIHRvIGFkZAo+Pj4gICAgICAgICBTREwyX1RURl9E
-RVBFTkRFTkNJRVMgKz3CoCBwdGhyZWFkCj4+PiAgICAgICAgIHJpZ2h0IHVuZGVyCj4+PiAgICAg
-ICAgIFNETDJfVFRGX0RFUEVOREVOQ0lFUyArPcKgIGhhcmZidXp6Cj4+Cj4+ICAgICAgICAgSSB3
-b3VsZCBpbnN0ZWFkIHRyeSB0byBtYWtlIHNkbDJfdHRmIHRvIGNob29zZSBleHRlcm5hbAo+PiAg
-ICAgICAgIGhhcmZidXp6IGluc3RlYWQgb2YgdXNpbmcgdGhlIGludGVybmFsIG9uZS4gQW5kIGFs
-c28sIHdl4oCZcmUKPj4gICAgICAgICBub3Qgc3VyZSB0aGF0IHBodHJlYWQuaCBpcyBub3QgcHJv
-dmlkZWQgYXQgYWxsLgo+PiAgICAgICAgIFNvbWV0aW1lcyBidWlsZCBzeXN0ZW1zIGZhaWwgdG8g
-cmVjb2duaXplIGhlYWRlcnMgYW5kIGxpYnModGhlCj4+ICAgICAgICAgd2F5IHRoZXkgY2hlY2sg
-aWYgYSBsaWJyYXJ5IGRvZXMgZXhpc3Qgb3Igbm90KS4KPj4KPj4+Cj4+PiAgICAgICAgIEJ1dCBJ
-IGFtIGhhdmluZyB0cm91YmxlIHRlc3RpbmcuIMKgIFdoZW4gSSBzdWJtaXQKPj4+ICAgICAgICAg
-wqAuL2F1dG9idWlsZCDCoCA5MWYyNDFiOGU5NsKgwqAgKCBJIGFzc3VtZSBTSEExIGlzIHRoZSBn
-aXQgaWQgPQo+Pj4gICAgICAgICBjb21taXQgaWQpCj4+PiAgICAgICAgIEkgZ2V0Cj4+PiAgICAg
-ICAgIDQwNCBFcnJvciBDYW5ub3QgZ2V0IGNvbmZpZ3VyYXRpb24gZm9yIGJ1aWxkIDkxZi85MWYy
-NDFiOAo+Pj4gICAgICAgICBTdWdnZXN0aW9ucz8KPj4KPj4gICAgICAgICBIZXJlIHlvdSBuZWVk
-IHRvIHBhc3MgdGhpcyBzaGExOgo+PiAgICAgICAgIGNiYTM0YzQzMWY4ZDEzMTVlOWNhOTE1OTI3
-NDQyMWE4MjE5YTcwMWUKPj4gICAgICAgICB0aGF0IGlzIHRoZSBhdXRvYnVpbGRlciBzaGExIGFu
-ZCBub3QgdGhlIGdpdCBzaGExLgo+Pgo+PiAgICAgICAgIFRha2UgY2FyZSB0byBkb3dubG9hZCB0
-aGUgcmlnaHQgc2NyaXB0Ogo+PiAgICAgICAgIGh0dHA6Ly9naXQuYnVpbGRyb290Lm5ldC9idWls
-ZHJvb3QtdGVzdC9wbGFpbi91dGlscy9ici1yZXByb2R1Y2UtYnVpbGQKPj4gICAgICAgICA8aHR0
-cDovL2dpdC5idWlsZHJvb3QubmV0L2J1aWxkcm9vdC10ZXN0L3BsYWluL3V0aWxzL2JyLXJlcHJv
-ZHVjZS1idWlsZD4KPj4KPj4gICAgICAgICBUaGVuIHRvOgo+PiAgICAgICAgICQgY2htb2QgYSt4
-IGJyLXJlcHJvZHVjZS1idWlsZAo+PiAgICAgICAgIE9wZW4gaXQgYW5kIGFkanVzdCBCdWlsZHJv
-b3QgcGF0aC4KPj4gICAgICAgICBUaGVuIGV4ZWN1dGUgaXQgd2l0aDoKPj4gICAgICAgICAkIC4v
-YnItcmVwcm9kdWNlLWJ1aWxkIGNiYTM0YzQzMWY4ZDEzMTVlOWNhOTE1OTI3NDQyMWE4MjE5YTcw
-MWUKPj4KPj4gICAgICAgICBBbHNvIHJlbWVtYmVyIHRoYXQgaWYgaXQgZmFpbHMgeW91IGNhbjoK
-Pj4gICAgICAgICAkIGNkIGNiYTM0YzQzMWY4ZDEzMTVlOWNhOTE1OTI3NDQyMWE4MjE5YTcwMWUv
-b3V0cHV0Cj4+ICAgICAgICAgJCBtYWtlIHNkbDJfdHRmCj4+ICAgICAgICAgb3IgdG8gcmVidWls
-ZCBwYWNrYWdlIG9ubHk6Cj4+ICAgICAgICAgJCBtYWtlIHNkbDJfdHRmLWRpcmNsZWFuIHNkbDJf
-dHRmCj4+Cj4+Pgo+Pj4gICAgICAgICAtLS0gQUxURVJOQVRFIElERUEgLS0tCj4+Pgo+Pj4gICAg
-ICAgICBBIGJldHRlciB3YXkgdG8gZml4IHRoaXMgaXNzdWUgbWlnaHQgYmUgdG8gZml4Cj4+PiAg
-ICAgICAgIHBhY2thZ2UvaGFyZmJ1enouIMKgIEl0IGlzIHRoYXQgZGVwZW5kZW5jeSB3aGljaCBu
-ZWVkcyBwdGhyZWFkCj4+PiAgICAgICAgIGFuZCB3aGljaCBpcyBjYXVzaW5nIHNkbDJfdHRmIHRv
-IGZhaWwgQUZBSUsuIAo+Pgo+PiAgICAgICAgIElmIGxvb2sgY2xvc2VyIHRoZSBidWlsZCBmYWls
-dXJlIHlvdSB3aWxsIHNlZSB0aGF0IGl04oCZcyBub3QKPj4gICAgICAgICBCdWlsZHJvb3QgaGFy
-ZmJ1enogdGhhdCBmYWlscyBidXQgYSBoYXJmYnV6eiBlbWJlZGRlZCBpbnRvCj4+ICAgICAgICAg
-c2RsMl90dGYuCj4+ICAgICAgICAgU28gd2hhdCBJIHNob3VsZCB0byBpcyB0byB0cnkgdG8gbWFr
-ZSBzZGwyX3R0ZiBkcm9wIGl0cwo+PiAgICAgICAgIGludGVybmFsIGhhcmZidXp6IGFuZCB1c2Ug
-dGhlIEJ1aWxkcm9vdCBvbmUuCj4+Cj4+PiAgICAgICAgIEkgc2VlIGhhcmZidXp6IGlzIG1haW50
-YWluZWQgYnkgeW91IHNvIHlvdSBhcmUgYW4gZXhjZWxsZW50Cj4+PiAgICAgICAgIHBlcnNvbiB0
-byBhc2suCj4+Pgo+Pj4gICAgICAgICBJIGNoZWNrZWQgaGFyZmJ1enogYW5kIHRoZXJlIGlzCj4+
-PiAgICAgICAgIDAwMDEtbWVzb24uYnVpbGQtY2hlY2stZm9yLXB0aHJlYWQuaC5wYXRjaAo+Pj4g
-ICAgICAgICBmcm9tIE5vdiAyMDIwIGJ5IEZhYnJpY2UgRm9udGFpbmUuwqDCoCBOb3Qgc3VyZSBp
-ZiB0aGF0IHBhdGNoCj4+PiAgICAgICAgIHdhcyBhcHBsaWVkIG9yIGlmIGl0IGZpeGVzIG15IGlz
-c3VlLgo+Pgo+PiAgICAgICAgIFRoYXQgaXMgYXBwbGllZCBhbmQgYWN0dWFsbHkgZml4ZXMgaGFy
-ZmJ1enogYnVpbGQgZmFpbHVyZS4gQnV0Cj4+ICAgICAgICAgYXMgZXhwbGFpbmVkIGFib3ZlIHlv
-deKAmXJlIGRlYWxpbmcgd2l0aCB0aGUgb25lIGVtYmVkZGVkIGludG8KPj4gICAgICAgICBzZGwy
-X3R0ZiBwYWNrYWdlLgo+Pgo+Pj4KPj4+ICAgICAgICAgU2hvdWxkIEkgaGF2ZSBjb3BpZWQgdGhl
-IG1haWxpbmcgbGlzdCB3aXRoIHRoZXNlIHF1ZXN0aW9ucz8gCj4+PiAgICAgICAgIEkgYW0gbmV2
-ZXIgc3VyZS4KPj4KPj4gICAgICAgICBJZiB5b3XigJlyZSBpbiBkb3VidCBwdXQgaXQgaW4gQ2Mg
-Oi0pCj4+Cj4+PiAgICAgICAgIEFueXdheSAtIHRoYW5rcyBmb3IgYmVpbmcgdGhlcmUgYW5kIGhl
-bHBpbmcuwqDCoMKgIEl0IGlzCj4+PiAgICAgICAgIGFwcHJlY2lhdGVkLgo+Pgo+PiAgICAgICAg
-IFlvdeKAmXJlIHdlbGNvbWUhCj4+Cj4+ICAgICAgICAgQmVzdCByZWdhcmRzCj4+Cj4+ICAgICAg
-ICAgR2l1bGlvCj4+Cj4+Pgo+Pj4gICAgICAgICBQZXRlcgo+Pj4KPj4+Cj4+PiAgICAgICAgIElu
-IGZpbGUgaW5jbHVkZWQgZnJvbSBleHRlcm5hbC9oYXJmYnV6ei0yLjguMC9zcmMvaGIuaGg6NDcw
-LAo+Pj4gICAgICAgICAgICAgICAgICAgICAgICAgICBmcm9tIGV4dGVybmFsL2hhcmZidXp6LTIu
-OC4wL3NyYy9oYi1hYXQtbGF5b3V0LmNjOjI4Ogo+Pj4gICAgICAgICBleHRlcm5hbC9oYXJmYnV6
-ei0yLjguMC9zcmMvaGItbXV0ZXguaGg6NTM6MTA6IGZhdGFsIGVycm9yOiBwdGhyZWFkLmg6IE5v
-IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKPj4+ICAgICAgICAgICAgIDUzIHwgI2luY2x1ZGUgPHB0
-aHJlYWQuaD4KPj4+ICAgICAgICAgICAgICAgIHwgICAgICAgICAgXn5+fn5+fn5+fn4KPj4+ICAg
-ICAgICAgY29tcGlsYXRpb24gdGVybWluYXRlZC4KPj4+CgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Hi Michael,
+
+On 18/02/22 23:09, Michael Durrant wrote:
+> - Bump Linux to version 5.4.137
+> - Bump U-Boot to add new targets, version remains the same
+> - Drop BR2_ROOTFS_OVERLAY and remove S09modload script because it was only used by PFE and now PFE is loaded directly by the kernel
+> - Use Image.gz instead of Image to have a compressed kernel
+> - Rename ucls1012a.its to br2-ucls1012a.its since post-build.sh and post-image.sh use different name. This fixes the bug that didn't allow the creation of the part0-000000.itb file.
+
+Please wrap your commit log at 72th column. Give a try by auto-sending 
+the patch to yourself and download it so you can verify commit log wraps 
+at 72.
+
+> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+> Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
+
+I've built the defconfig successfully using the gitlab-CI docker and 
+except commit log carriage return:
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Giulio: build tested]
+
+So please send a V5 with above correction including my tags ^^^ after 
+your SoBs.
+
+Thank you!
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> ---
+> V1->V2:
+> - Bump the kernel to "Linux version 5.4.137"
+> - Bootloader version is still "U-Boot 2019.10" but new targets added.
+> - Remove the /etc/init.d/S09modload script to load the pfe firmware
+>    module because now the pfe firmware module is loaded by the kernel
+> - New compressed Image.gz is used
+> V2->V3:
+> - Moved SoB to top of patch
+> - The use of Image.gz replace Image to force use of compression.
+> - Our scripts use br2-ucls1012a.its in error ucls1012a.its was used
+>    in original readme.
+> - Removing extra newline
+> - The NXP Packet Forward Engine (PFE) firmware loader was the only
+>    file used in the overlay.  As the PFE is now loaded directly by
+>    the kernel the BR2_ROOTFS_OVERLAY script has been removed.
+> V3->V4:
+> - Improved commit log by listing all the changed as suggested by Giulio.
+> - Updated header version comment in defconfig to reflect 5.4 series.
+> ---
+>   board/arcturus/aarch64-ucls1012a/post-build.sh     |  1 -
+>   board/arcturus/aarch64-ucls1012a/readme.txt        |  4 ++--
+>   .../rootfs_overlay/etc/init.d/S09modload           | 14 --------------
+>   configs/arcturus_ucls1012a_defconfig               | 10 +++++-----
+>   4 files changed, 7 insertions(+), 22 deletions(-)
+>   delete mode 100755 board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
+> 
+> diff --git a/board/arcturus/aarch64-ucls1012a/post-build.sh b/board/arcturus/aarch64-ucls1012a/post-build.sh
+> index f8ba78095f..372df59c61 100755
+> --- a/board/arcturus/aarch64-ucls1012a/post-build.sh
+> +++ b/board/arcturus/aarch64-ucls1012a/post-build.sh
+> @@ -1,5 +1,4 @@
+>   #!/bin/sh
+>   
+>   mkdir -p ${TARGET_DIR}/lib/firmware
+> -cp -f ${BUILD_DIR}/linux-custom/firmware/ppfe/* ${TARGET_DIR}/lib/firmware/
+>   cp -f ${BUILD_DIR}/linux-custom/br2-ucls1012a.its ${BINARIES_DIR}/
+> diff --git a/board/arcturus/aarch64-ucls1012a/readme.txt b/board/arcturus/aarch64-ucls1012a/readme.txt
+> index 483d5e9aef..b486ecebc7 100644
+> --- a/board/arcturus/aarch64-ucls1012a/readme.txt
+> +++ b/board/arcturus/aarch64-ucls1012a/readme.txt
+> @@ -24,13 +24,13 @@ After building, you should obtain this tree:
+>   
+>       output/images/
+>       +-- arc-ucls1012a.dtb
+> -    +-- Image
+> +    +-- Image.gz
+>       +-- part0-000000.itb
+>       +-- rootfs.cpio
+>       +-- rootfs.cpio.gz
+>       +-- rootfs.tar
+>       +-- u-boot.bin
+> -    +-- ucls1012a.its
+> +    +-- br2-ucls1012a.its
+>   
+>   Flashing
+>   --------
+> diff --git a/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload b/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
+> deleted file mode 100755
+> index c87ffda14f..0000000000
+> --- a/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -#!/bin/sh
+> -#
+> -case "$1" in
+> -       start)
+> -                modprobe pfe
+> -                ;;
+> -        stop)
+> -                ;;
+> -        restart|reload)
+> -                ;;
+> -        *)
+> -                echo "Usage: $0 {start|stop|restart}"
+> -                exit 1
+> -esac
+> diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
+> index fd33ebf1f6..124cc3ff94 100644
+> --- a/configs/arcturus_ucls1012a_defconfig
+> +++ b/configs/arcturus_ucls1012a_defconfig
+> @@ -1,22 +1,22 @@
+>   # Architecture
+>   BR2_aarch64=y
+>   
+> -# Linux headers same as kernel, a 4.14 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+> +# Linux headers same as kernel, a 5.4 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+>   
+>   # System settings
+>   BR2_TARGET_GENERIC_HOSTNAME="ucls1012a"
+>   BR2_TARGET_GENERIC_ISSUE="Welcome to uCLS1012A-SOM"
+>   BR2_SYSTEM_DHCP="eth0"
+> -BR2_ROOTFS_OVERLAY="board/arcturus/aarch64-ucls1012a/rootfs_overlay"
+>   BR2_ROOTFS_POST_BUILD_SCRIPT="board/arcturus/aarch64-ucls1012a/post-build.sh"
+>   BR2_ROOTFS_POST_IMAGE_SCRIPT="board/arcturus/aarch64-ucls1012a/post-image.sh"
+>   
+>   # Kernel
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-kernel,v.20.31)/linux-v.20.31.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-kernel,v.22.06)/linux-v.22.06.tar.gz"
+>   BR2_LINUX_KERNEL_DEFCONFIG="ucls1012a"
+> +BR2_LINUX_KERNEL_IMAGEGZ=y
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>   BR2_LINUX_KERNEL_INTREE_DTS_NAME="arcturus/arc-ucls1012a"
+>   
+> @@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
+>   BR2_TARGET_UBOOT=y
+>   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>   BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-uboot,v.20.31)/uboot-v.20.31.tar.gz"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-uboot,v.22.06)/uboot-v.22.06.tar.gz"
+>   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="UCLS1012A_QSPI128"
+>   
+>   # Tools
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
