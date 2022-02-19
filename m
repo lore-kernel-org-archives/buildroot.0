@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5BBCC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 10:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 258EFC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 10:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EB324091F;
-	Sat, 19 Feb 2022 10:25:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D9A1813F1;
+	Sat, 19 Feb 2022 10:35:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ilFzG6x8znQw; Sat, 19 Feb 2022 10:24:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XCz_u1yZZ3a0; Sat, 19 Feb 2022 10:35:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85FD140902;
-	Sat, 19 Feb 2022 10:24:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 647CA1BF344
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 10:24:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB72381370;
+	Sat, 19 Feb 2022 10:35:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 119FC1BF344
+ for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 10:35:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53B4F607A8
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 10:24:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8E7081370
+ for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 10:35:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7bHROPZK7otG for <buildroot@lists.busybox.net>;
- Sat, 19 Feb 2022 10:24:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 11B1C605E3
- for <buildroot@buildroot.org>; Sat, 19 Feb 2022 10:24:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1645266292;
- bh=mmZ5piSvVB0/n8xhgGZpZGoRk05cJT0HVRx557i0X6M=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=MtcRQmgDLOb7yDYHYqKGTmQgfCxyQLD94nEtQU9rlDCP+0ZTOZml6E3+ZsLi4Nior
- cqxI/1faM8LXofOt4kEtc8f/Ce3wGC28Hp06sCJgkkJt+hrfVmi48Ek7AlNXHxFgG4
- gf1Fq++nGZcZ11sH17DUrWpLLptsdTQAZKzN6Mwo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.232]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N7i8Y-1oGxjq1VUw-014o81; Sat, 19 Feb 2022 11:24:52 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Sat, 19 Feb 2022 11:24:51 +0100
-Message-Id: <20220219102451.25602-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l7snDzfnpwRk for <buildroot@lists.busybox.net>;
+ Sat, 19 Feb 2022 10:35:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B91A280CEA
+ for <buildroot@busybox.net>; Sat, 19 Feb 2022 10:35:23 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id e3so18642713wra.0
+ for <buildroot@busybox.net>; Sat, 19 Feb 2022 02:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=GSzsUDSBeIuyVXqV0vqFTrP/0RdbzJjLQZTAHFHG/tw=;
+ b=PwmAd7m38iL4QbmNEiAlEWnpO9KZK7uVt4gf0CeiH+T50M+BNPXY/GugOgj3lm5bf4
+ hdzRi7F/Z2klz/rcuk9+9Qu5B27SuYel1AQMrcWOSVsrvBgh6EZf76psSJy+Hswoct0F
+ VcHPVB3pJnW2p7WRJlng+LKgxAQDWL7cKXLVgr0f15nB7ZO0V/FKvP0e1BTEk4GMVa0b
+ I6M8q+K5PpBDAGYZnjjljasVLv//alkTck0NTUmMKkZQfojFJMsHuIuEjfsn2gLFZFg7
+ UuGjtlYrkWzuyLjk7Ny56yDliLMrr9ts2dxJEaN72CoK1jOsipyvrzV2AZKYcZpezFMv
+ zbnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=GSzsUDSBeIuyVXqV0vqFTrP/0RdbzJjLQZTAHFHG/tw=;
+ b=zWTnkeQgSsBbo+wG/8ePPoGdlPnCdXI/FriDvg/ew3siCmfTtNMiucxYVW9Jd87WYN
+ 3igAUB//+HfdeYiNhsathh0UdZl34kaGTyamVnZRpMiXejq6mJV2XyWyj5vT/63R2PIS
+ 1d2Ts9L45v3KCiuHogK3+1flZZGnVrz2Xf120Hg1UhRtUo2vD0wsHTP5sXC4FdZic/x3
+ DU5RL0xduITd/wkDkyYaqMUrX3nwiBsG1RtrOrFbY1eon+krqCoRWr/Dvep7DV80UA0m
+ epvZq6cIUgBS32qbBN5LwRM6daIy9pSpHMtBSv1Y626m83vCxKbeyYTmN2Zmo5SbD9tW
+ EP3g==
+X-Gm-Message-State: AOAM533NGsE1eKNL4rHztXo4wWZPOs/cNDM8x0/3TyCtKU+VkhDDuPF1
+ Hqh6IyCdpYYJnpmDLjyAkijmg+Sb5y4=
+X-Google-Smtp-Source: ABdhPJyWltSyo5bpwzT2AqfKan+r7Dq3f//9B3F6S55qRb4kaSgGPzYnffa/DASYVwVnxzF2lQWf8A==
+X-Received: by 2002:a05:6000:1684:b0:1e9:b4fc:ef69 with SMTP id
+ y4-20020a056000168400b001e9b4fcef69mr1196704wrd.206.1645266921731; 
+ Sat, 19 Feb 2022 02:35:21 -0800 (PST)
+Received: from pc-140.home ([2a01:cb15:81e5:ad00:7afb:407b:e9ac:7e79])
+ by smtp.gmail.com with ESMTPSA id e3sm37558460wrr.94.2022.02.19.02.35.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 19 Feb 2022 02:35:21 -0800 (PST)
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+To: buildroot@busybox.net
+Date: Sat, 19 Feb 2022 11:35:07 +0100
+Message-Id: <20220219103507.29176-1-guillaume.bressaix@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ls55HMXeK8qssKVDxmQaBupF00a5+5YSs+v+bZGTNWnfAYkmg1K
- rJJmi7TSD5PHoL7BALohEioFbAnv1rBtcZRnmSB+Xf1648Qj28/1YlZ1f6ADSswWcC/ARAx
- r+WseSQyXtfSjf+s6FgwuZuGT7FuWi9qx4HdGo9qsx2mF0/CUZO8IbepckwolMLp+cbONaG
- zmbIx8fZA5JWeYTHqnGfw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9WbflRomX4c=:6HI/VRadTkJ1ZpVBTCeO3k
- g2GqYpfcv/XYnA6HaHXL9ECIeuqnY2vGp+9BF7OcXbrIv4SKJk030IZ2d+OuGR+7GnzizPsWc
- bahU41RcjVNnosdRKOi7+Prsaz7gsQIJBDtR94LpS7AwmsHB6y7ZMOfU0wyLQMb2cvukB48ol
- 8NO0bmq+SGpWtRXjy0R2LZDQnY/U0zGHaQA1rqgKJVK7XYtocumM9CRKCKJkdnUByPF485jGR
- YVP/hxmZk7/Eesq9q1y2r3cjTUUa+GgBzI43ZgyR7Um7q9TniAMby5SV347LkyeY5l1Gu8run
- I2sqtSxBVvBOgXLw/aCV9GB6FDwwi1GvmPQTgz8sK0bFuehYiBK4qzC5N/pPlwAR778lyug8n
- LyCv/Px+8RZ4yocKouIXJwmLq35dldU8Uu/MlpM+C2qe8l+lqx7RhNz2hwhWnDq11SKKfzKfb
- nOPny10ERUL3YS34fhV/c9ANQa5RVMg7fGscem8Mpy6tD7P7rksa6hAx9f3cpOt3zndBMQIHf
- 0yAQHWC+/cT8ALD1Sfe5/G4X6uZD2IqBiuyFk/LidTsFiFb+KTw5RFpSyvlVkM1laiubx1rob
- Vbp6U29ebPOhq1sMWuTjJWPNtUtiJVR41VTJs+30rfBfLR/wPDhWJOqzbbh0FYS8SW7tFBC90
- FR6Q1VD3+AzFOd08Ga+zh+VnLDCQlXRqvjzQgoZNc6W61P7DVB/45sqLLW7wglzMXTzSemVLO
- Z0rDHoMH0CUHyUAl1ZNgh03dcQcaFiwSgamdKqSeROu4Jbe/uOmP0weqDDUu7sWy+uEzOdTNb
- ywqKriJ6x196vB/YtDm7YJtUlvaXl3YSNLlD2zy6lxJJYcsEBBO+mpOoHYqczOHq0+HGXyZ0i
- 91uPfufVlX/FtkS3gS4kOFiUeYILMddcxgRd3MnaZ3/KzWVA81On2UJob/G2Cz/gQcm6QtXQg
- QP55Noj+ssuPI4W8VCDRLV6QsI333Qds7/TScseWC7dVnaFiVNNUzH1jkUlk23IGIBbxktJHQ
- Hn+2xYkr9zL8BBuAe3s5b98Jbnx6A7Y+/quGIHf0MQDs+Dj21rKHPoCDdfcms3uMEkMCcauSP
- J3CutT7vhhE/vw=
-Subject: [Buildroot] [PATCH v1] package/wireless-regdb: bump version to
- 2022.02.18
+Subject: [Buildroot] [PATCH] package/libnids: bump version to 1.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,60 +83,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dimitrios Siganos <dimitris@siganos.org>
+Cc: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog (since 2021.08.28, [1]):
+Change repo source to official github.com repository which
+is actively maintained. Previous sourceforge.net sources
+remained untouched since 2010.
 
-  e061299 wireless-regdb: Raise DFS TX power limit to 250 mW (24 dBm) for the US
-  2ce78ed wireless-regdb: Update regulatory rules for Croatia (HR) on 6GHz
-  0d39f4c wireless-regdb: Update regulatory rules for South Korea (KR)
-  acad231 wireless-regdb: Update regulatory rules for France (FR) on 6 and 60 GHz
-  ea83a82 wireless-regdb: add support for US S1G channels
-  4408149 wireless-regdb: add 802.11ah bands to world regulatory domain
-  5f3cadc wireless-regdb: Update regulatory rules for Spain (ES) on 6GHz
-  e0ac69b Revert "wireless-regdb: Update regulatory rules for South Korea (KR)"
-  40e5e80 wireless-regdb: Update regulatory rules for South Korea (KR)
-  e427ff2 wireless-regdb: Update regulatory rules for China (CN)
-  0970116 wireless-regdb: Update regulatory rules for the Netherlands (NL) on 6GHz
-  4dac44b wireless-regdb: update regulatory database based on preceding changes
-
-[1] https://lore.kernel.org/linux-wireless/YhBCKWNw3IMfGs0L@ubuntu-x1/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnids/libnids.hash | 4 ++--
+ package/libnids/libnids.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index abe8f6b000..91fcb320d2 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  cff370c410d1e6d316ae0a7fa8ac6278fdf1efca5d3d664aca7cfd2aafa54446  wireless-regdb-2021.08.28.tar.xz
-+sha256  8828c25a4ee25020044004f57374bb9deac852809fad70f8d3d01770bf9ac97f  wireless-regdb-2022.02.18.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 9e01283c01..35a8c6686d 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libnids/libnids.hash b/package/libnids/libnids.hash
+index 4a2949c39d..e51dbf151c 100644
+--- a/package/libnids/libnids.hash
++++ b/package/libnids/libnids.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 314b4793e0902fbf1fdb7fb659af37a3c1306ed1aad5d1c84de6c931b351d359  libnids-1.24.tar.gz
+-sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
++sha256  3f3e9f99a83cd37bc74af83d415c5e3a7505f5b190dfaf456b0849e0054f6733  libnids-1.26.tar.gz
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+index 3e36838c40..57e68654dc 100644
+--- a/package/libnids/libnids.mk
++++ b/package/libnids/libnids.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2021.08.28
-+WIRELESS_REGDB_VERSION = 2022.02.18
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-LIBNIDS_VERSION = 1.24
+-LIBNIDS_SITE = https://sourceforge.net/projects/libnids/files/libnids/$(LIBNIDS_VERSION)
++LIBNIDS_VERSION = 1.26
++LIBNIDS_SITE = $(call github,MITRECND,libnids,$(LIBNIDS_VERSION),$(LIBNIDS_VERSION).tar.gz)
+ LIBNIDS_LICENSE = GPL-2.0
+ LIBNIDS_LICENSE_FILES = COPYING
+ LIBNIDS_CPE_ID_VENDOR = libnids_project
 -- 
-2.35.1
+2.20.1
 
 _______________________________________________
 buildroot mailing list
