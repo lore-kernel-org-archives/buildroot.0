@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC539C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 12:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BAC2C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 12:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1471408D4;
-	Sat, 19 Feb 2022 12:25:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BC154037A;
+	Sat, 19 Feb 2022 12:28:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w8uPePNpDzyV; Sat, 19 Feb 2022 12:25:51 +0000 (UTC)
+	with ESMTP id Kx4yEXMb7UZQ; Sat, 19 Feb 2022 12:28:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C76DF408C2;
-	Sat, 19 Feb 2022 12:25:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D5D01BF3DA
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 12:25:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A207408D4;
+	Sat, 19 Feb 2022 12:28:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B1A7C1BF3DA
+ for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 12:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BD47408C2
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 12:25:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FB67401D5
+ for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 12:28:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mcZjfUQFY4xi for <buildroot@lists.busybox.net>;
- Sat, 19 Feb 2022 12:25:40 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mBgvtqosmr1o for <buildroot@lists.busybox.net>;
+ Sat, 19 Feb 2022 12:28:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7DB7D408BD
- for <buildroot@buildroot.org>; Sat, 19 Feb 2022 12:25:40 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id h6so18867531wrb.9
- for <buildroot@buildroot.org>; Sat, 19 Feb 2022 04:25:40 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D244740128
+ for <buildroot@buildroot.org>; Sat, 19 Feb 2022 12:28:24 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id v12so18928629wrv.2
+ for <buildroot@buildroot.org>; Sat, 19 Feb 2022 04:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=tRteVz8DoESGhWfL7qwVFbUn6AgTNgjkzFr6tSdOMyA=;
- b=kNn93e5lO0Jzq8vvfk95DQco9o5Qn6J4rUbatYujNo2lVEkjoyYHB7wDjaFwuh2WzY
- lPRJ8QQpX+Yv/mJ9yPa9rivOWrUvkSxqfzm9WEx4WhnaKa80SHptUhnhgb+xxAjoYDb4
- 33JCPJSv4lXAeklIO6VOUBAl5hTn60O+nCqPSE/5MmCQOIccFfeVhQPfgddzW/o6Osm3
- fdWmoA/skfTGcQUIhFzp9gfDRJlb16JvxSc4R+NrDB6UMD3LNIyH6HehkslLndQH3FgL
- MQuYOU4pYDIA3vegVFw64ftoKK4wS/25X3I/PPtPDdHlHKLUNdY+b0yIm3jRdDWlHCyc
- DZ2w==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qMFSTGxW91hShDbWNCj3fzoWTEJHWg26gMrgfgQC+bc=;
+ b=a5A4oxL6kDkz6RI8+HiszLuVNermlvHxaLmhc6Wl6Da/FXxrz5kUTPzVfJpPpdqC1N
+ DJ1zXK2Wtv6DYXixW+uib4fcQ6UiWKhUeV7lb9Co1uB/aq6LYQf5sTDUuREPgXbcI/Pc
+ H2avmUCc5MJu8p/WS+vgHppKo637s9vibOt3WGlyOvqpEHidNFtvFEvGbOncps5HElu5
+ 1FXEhXpy7Zj/xixd/N/cTpTNMVcS+HU3OdJJZ81egDuXITUKiDdCHtJqCEvfV9V3Z+fH
+ 6lgNWSb00K6Dp3gzgfrVgAgUiW6ZOqxprTLqtemPIWVXZXVol56V3TLlthgFFZSIg0he
+ +GdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=tRteVz8DoESGhWfL7qwVFbUn6AgTNgjkzFr6tSdOMyA=;
- b=CerXHXMSMJveVvD+H5ILUt/g+hRCYrgDhJ5Tba5ZFejM06vDBk/zEGQxPPA1GoRqGa
- s1fSOzFDqDqJtvoofpDB1ZucFSXT5hJOC7rbaonC1J8SiS4pfGdRdizlLoG4N499oTEJ
- h3R+2FBn8x3ZI8HibJNZHCZ9RGyj2XspWRS3VFbcz+XZmZvg/9l1p9mvULf8Xy7ZNmyz
- qJpw4R54kzT/4fN7CMZEQPNiJf5ldOKF4BADq9oq0adPhDnHR72COzuGqL2KTHLRMBm8
- LiqXMusiXsmPwf+tp2kNzyWMmeGhzZtoegf+0jEDZImxj8dJwle/hgbEjwqW/+nqgsAI
- /wSg==
-X-Gm-Message-State: AOAM531jJJ30RZBu0Sr7oqo555XF8ZYYmGvLjZUjIQ6v8bb+KNB3ddad
- ixKD6gDpNCGh687RKIT4pWbSxOFt0H8=
-X-Google-Smtp-Source: ABdhPJx3JbGTQv2OrS/dGJeo/RNXXAQvLu2uEBJO5m8knlq2uQFMSfWwJvTbP9ffBq5u/brSy3lTCw==
-X-Received: by 2002:adf:80ad:0:b0:1e3:238a:178e with SMTP id
- 42-20020adf80ad000000b001e3238a178emr9627837wrl.551.1645273538222; 
- Sat, 19 Feb 2022 04:25:38 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qMFSTGxW91hShDbWNCj3fzoWTEJHWg26gMrgfgQC+bc=;
+ b=ltMN+3rYQqBSUkpaCehcQI0Ie5hOEWRq5J80GJmPoKcL9kxdcpzkzJu3kVxb1E838V
+ CKWM6PpXNqSFnYCygYrAfTrqS3iO+D3uxlZZEhEuIohSd1aeqm739rNj5MDDOrof+7M7
+ PH16TObZGN0/wrFVFiEW5xVT84GNw5oqfFd16/KekKv+ZlQ54q4x6sqi+77BVynotpa6
+ JCxNceZzNPMkZ+5w+Ih91EjOc5viG7BGFUhy67yLq8k5WC7WLjnQ/3jFvfIM1cDPSQ+Y
+ O5RB9yvlfjNZPUt1/rbbo8SIBPdB2Bi8Tb6vdlI38s0IfCgkAvkATYmBvVLLVV1X5BL/
+ bAkg==
+X-Gm-Message-State: AOAM530K70hXpQwZlHJ4pks02xU+yJvr+Ohb46CaMBs8Ipnsdot4dq4m
+ 77Y27Hkc/skfP2iu0wKCCBdbItuu9o4=
+X-Google-Smtp-Source: ABdhPJy53YAVmI6F/xa+Av2tmQ6S0n2F0l6yZzL4dErihxJemGkD+pU+6xAqFoalEgpdxzp+SWNrlQ==
+X-Received: by 2002:a05:6000:108b:b0:1e3:222a:25dd with SMTP id
+ y11-20020a056000108b00b001e3222a25ddmr9555579wrw.481.1645273702819; 
+ Sat, 19 Feb 2022 04:28:22 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id a9sm27155609wrr.20.2022.02.19.04.25.37
+ by smtp.gmail.com with ESMTPSA id b15sm43364087wri.96.2022.02.19.04.28.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 19 Feb 2022 04:25:37 -0800 (PST)
+ Sat, 19 Feb 2022 04:28:22 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Feb 2022 13:25:26 +0100
-Message-Id: <20220219122526.2954354-2-fontaine.fabrice@gmail.com>
+Date: Sat, 19 Feb 2022 13:28:30 +0100
+Message-Id: <20220219122831.2961097-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220219122526.2954354-1-fontaine.fabrice@gmail.com>
-References: <20220219122526.2954354-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/librsvg: fix loaders.cache
+Subject: [Buildroot] [PATCH 1/2] package/expat: fix tarball sha256
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,82 +92,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
-gdk-pixbuf-query-loaders to build a correct loaders.cache and fix the
-following PPD build failure of adwaita-icon-theme raised since commit
-b06294e9897e90862656416e8b67fdace15488d7 which now correctly updates
-loaders.cache:
-
-Can't load file: Unrecognized image file format
-
-Fixes:
- - http://autobuild.buildroot.org/results/0e00059b09b4445eaaec1030997883187c6a80d6
+Commit ab71ac15ddd7ed6a8ca83cbc23ea0b0cbb343f0f forgot to update sha256
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...r-Makefile.am-set-GDK_PIXBUF_MODULED.patch | 39 +++++++++++++++++++
- package/librsvg/librsvg.mk                    |  2 +
- 2 files changed, 41 insertions(+)
- create mode 100644 package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
+ package/expat/expat.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-new file mode 100644
-index 0000000000..94db8eb143
---- /dev/null
-+++ b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-@@ -0,0 +1,39 @@
-+From 2c472bf55289ccbd7f305aa3e98d6fd70be4e3ab Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 19 Feb 2022 12:02:10 +0100
-+Subject: [PATCH] gdk-pixbuf-loader/Makefile.am: set GDK_PIXBUF_MODULEDIR
-+
-+Set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
-+gdk-pixbuf-query-loaders to build a correct gdk_pixbuf_cache_file and
-+gdk-pixbuf.loaders on 'exotic' systems
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gdk-pixbuf-loader/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdk-pixbuf-loader/Makefile.am b/gdk-pixbuf-loader/Makefile.am
-+index c3493736..de1f9641 100644
-+--- a/gdk-pixbuf-loader/Makefile.am
-++++ b/gdk-pixbuf-loader/Makefile.am
-+@@ -49,7 +49,7 @@ rsvg_loader_LDADD = \
-+ EXTRA_rsvg_loader_DEPENDENCIES = libpixbufloader-svg.la gdk-pixbuf-loaders
-+ 
-+ gdk-pixbuf-loaders: Makefile
-+-	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-++	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-+ 
-+ if CROSS_COMPILING
-+ RUN_QUERY_LOADER_TEST=false
-+@@ -68,7 +68,7 @@ endif
-+ install-data-hook:
-+ 	@if $(RUN_QUERY_LOADER_TEST) ; then \
-+ 		$(mkinstalldirs) $(DESTDIR)$(gdk_pixbuf_binarydir) ; \
-+-		$(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-++		GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-+ 	else \
-+ 	  echo "***" ; \
-+ 	  echo "*** Warning: loaders.cache not built" ; \
-+-- 
-+2.34.1
-+
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e4b1942b79..07a14b4366 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -20,6 +20,8 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libglib2 host-libxml
- LIBRSVG_LICENSE = LGPL-2.1+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
- LIBRSVG_CPE_ID_VENDOR = gnome
-+# We're patching gdk-pixbuf-loader/Makefile.am
-+LIBRSVG_AUTORECONF = YES
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 3129801668..a6f43af291 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -3,5 +3,5 @@ md5  a712d23b7afb32e7527cf0b3fd8f12ac  expat-2.4.4.tar.xz
+ sha1  6028b04d3505fc519c4c7c6bd67e1ad1a08cd7b6  expat-2.4.4.tar.xz
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBRSVG_CONF_OPTS += --enable-introspection
+ # Locally calculated
+-sha256  b1f9f1b1a5ebb0acaa88c9ff79bfa4e145823b78aa5185e5c5d85f060824778a  expat-2.4.3.tar.xz
++sha256  b1f9f1b1a5ebb0acaa88c9ff79bfa4e145823b78aa5185e5c5d85f060824778a  expat-2.4.4.tar.xz
+ sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
 -- 
 2.34.1
 
