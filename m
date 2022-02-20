@@ -1,47 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12BE4C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 15:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84349C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 15:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADBFD4049A;
-	Sun, 20 Feb 2022 15:37:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LAqRqP3_e2t6; Sun, 20 Feb 2022 15:37:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE52B40190;
-	Sun, 20 Feb 2022 15:37:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D1DA1BF303
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 15:37:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B8FE4058C
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 15:37:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2320B4086A;
+	Sun, 20 Feb 2022 15:40:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vY6AyseX1UEr for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 15:37:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 975F94054E
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 15:37:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5A26182A79; Sun, 20 Feb 2022 15:29:23 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Feb 2022 16:36:45 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c4d28922942deb0fc41d11d4057b7fedd25cab1
-X-Git-Newrev: 324f0552526d169c24cd75e9dadf67641f2beef0
-X-Patchwork-Hint: ignore
-Message-Id: <20220220152923.5A26182A79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireless-regdb: bump version to
- 2022.02.18
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VvVAuBV5sS20; Sun, 20 Feb 2022 15:40:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 732364067C;
+	Sun, 20 Feb 2022 15:40:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 237B21BF303
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 15:40:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E7F3813B4
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 15:40:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F1AfYq82FsYH for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 15:40:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F130F813AA
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 15:40:12 +0000 (UTC)
+Received: from [77.244.183.192] (port=62572 helo=[192.168.178.41])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1nLoJm-000CPS-Ne; Sun, 20 Feb 2022 16:40:10 +0100
+Message-ID: <2003d2f6-6938-83b3-fd21-966fecf7e37b@lucaceresoli.net>
+Date: Sun, 20 Feb 2022 16:40:10 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20220219212211.1304441-1-giulio.benetti@benettiengineering.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <20220219212211.1304441-1-giulio.benetti@benettiengineering.com>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH v2] manual: board support: add instructions
+ to test defconfig in the official docker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,62 +73,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=324f0552526d169c24cd75e9dadf67641f2beef0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Giulio,
 
-Changelog (since 2021.08.28, [1]):
 
-  e061299 wireless-regdb: Raise DFS TX power limit to 250 mW (24 dBm) for the US
-  2ce78ed wireless-regdb: Update regulatory rules for Croatia (HR) on 6GHz
-  0d39f4c wireless-regdb: Update regulatory rules for South Korea (KR)
-  acad231 wireless-regdb: Update regulatory rules for France (FR) on 6 and 60 GHz
-  ea83a82 wireless-regdb: add support for US S1G channels
-  4408149 wireless-regdb: add 802.11ah bands to world regulatory domain
-  5f3cadc wireless-regdb: Update regulatory rules for Spain (ES) on 6GHz
-  e0ac69b Revert "wireless-regdb: Update regulatory rules for South Korea (KR)"
-  40e5e80 wireless-regdb: Update regulatory rules for South Korea (KR)
-  e427ff2 wireless-regdb: Update regulatory rules for China (CN)
-  0970116 wireless-regdb: Update regulatory rules for the Netherlands (NL) on 6GHz
-  4dac44b wireless-regdb: update regulatory database based on preceding changes
+On 19/02/22 22:22, Giulio Benetti wrote:
+> Sometimes new boards have not been tested with official docker so let's add
+> instructions to do it with utils/docker-run.
+> 
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * use the available utils/docker-run
+> * improve explanation as suggested by Luca Ceresoli
+> ---
+>  docs/manual/adding-board-support.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+> index 33ed709535..074bab7a00 100644
+> --- a/docs/manual/adding-board-support.txt
+> +++ b/docs/manual/adding-board-support.txt
+> @@ -46,3 +46,11 @@ create a directory +board/<manufacturer>+ and a subdirectory
+>  +board/<manufacturer>/<boardname>+. You can then store your patches
+>  and configurations in these directories, and reference them from the main
+>  Buildroot configuration. Refer to xref:customize[] for more details.
+> +
+> +Before submitting patches for new boards it is recommended to test it by
+> +building it using latest gitlab-CI docker container. To do this use
+> +utils/docker-run script and inside it hint:
 
-[1] https://lore.kernel.org/linux-wireless/YhBCKWNw3IMfGs0L@ubuntu-x1/
+Not sure the verb 'hint' is the correct one. I would expect "type" or
+"issue these commands" or similar.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> +--------------------
+> + $ make +<boardname>_defconfig+
+> + $ make
+> +--------------------
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index abe8f6b000..91fcb320d2 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  cff370c410d1e6d316ae0a7fa8ac6278fdf1efca5d3d664aca7cfd2aafa54446  wireless-regdb-2021.08.28.tar.xz
-+sha256  8828c25a4ee25020044004f57374bb9deac852809fad70f8d3d01770bf9ac97f  wireless-regdb-2022.02.18.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 9e01283c01..35a8c6686d 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2021.08.28
-+WIRELESS_REGDB_VERSION = 2022.02.18
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+With that fixed:
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+-- 
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
