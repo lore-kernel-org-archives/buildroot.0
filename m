@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7822C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 22:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 374E3C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 22:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1BB781439;
-	Sun, 20 Feb 2022 22:20:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE17F404C9;
+	Sun, 20 Feb 2022 22:20:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UquhGufzrMEX; Sun, 20 Feb 2022 22:20:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 259F7404D0;
+	Sun, 20 Feb 2022 22:20:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 13E8E1BF393
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 22:20:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0223481403
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 22:20:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m_5heHmxLNSM; Sun, 20 Feb 2022 22:19:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E429D81403;
-	Sun, 20 Feb 2022 22:19:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C0DC71BF393
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 22:19:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF8E74032E
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 22:19:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aognZlUuDhjd for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 22:19:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DDAAE40324
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 22:19:48 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BFBC820003;
- Sun, 20 Feb 2022 22:19:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nLuYS-005Me0-Un; Sun, 20 Feb 2022 23:19:44 +0100
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HQchs_TjqimM for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 22:20:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5844A81434
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 22:20:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 738C78348D; Sun, 20 Feb 2022 22:12:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220220214328.1739123-1-fontaine.fabrice@gmail.com>
-Date: Sun, 20 Feb 2022 23:19:44 +0100
-In-Reply-To: <20220220214328.1739123-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 20 Feb 2022 22:43:28 +0100")
-Message-ID: <87czjh89kv.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-tdfx:
- don't override XDRIVER_XF86_VIDEO_TDFX_CONF_OPTS
+To: buildroot@buildroot.org
+Date: Sun, 20 Feb 2022 23:18:45 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: aeb138911e773cf4011b81fc4fcec0037f366bb1
+X-Git-Newrev: 3780409bfdb59dae2573f36293f53139132aa5e3
+X-Patchwork-Hint: ignore
+Message-Id: <20220220221236.738C78348D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-mach64:
+ don't override XDRIVER_XF86_VIDEO_MACH64_CONF_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,23 +53,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3780409bfdb59dae2573f36293f53139132aa5e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > XDRIVER_XF86_VIDEO_TDFX_CONF_OPTS is wrongly overridden in a conditional
- > since commit 7614ca037b2f82ac8e7cca1db3bf173d3655e0e2
+XDRIVER_XF86_VIDEO_MACH64_CONF_OPTS is wrongly overridden in a
+conditional since commit cf26ae7dd14f35dd917811f5a23c54a19ea6ed07
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
+index e6f8d7471c..eee8fec2e8 100644
+--- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
++++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
+@@ -13,7 +13,7 @@ XDRIVER_XF86_VIDEO_MACH64_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_MACH64_DEPENDENCIES = xserver_xorg-server xorgproto
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+-XDRIVER_XF86_VIDEO_MACH64_CONF_OPTS = --disable-dri
++XDRIVER_XF86_VIDEO_MACH64_CONF_OPTS += --disable-dri
+ endif
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
