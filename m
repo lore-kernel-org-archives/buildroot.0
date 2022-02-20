@@ -4,64 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84349C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 15:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44308C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 16:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2320B4086A;
-	Sun, 20 Feb 2022 15:40:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B39C840878;
+	Sun, 20 Feb 2022 16:02:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VvVAuBV5sS20; Sun, 20 Feb 2022 15:40:17 +0000 (UTC)
+	with ESMTP id fATclBLVn6gU; Sun, 20 Feb 2022 16:02:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 732364067C;
-	Sun, 20 Feb 2022 15:40:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1B4840876;
+	Sun, 20 Feb 2022 16:02:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 237B21BF303
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 15:40:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F60A1BF303
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 16:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E7F3813B4
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 15:40:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F04D481498
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 16:02:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F1AfYq82FsYH for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 15:40:13 +0000 (UTC)
+ with ESMTP id aixOj7u56So3 for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 16:02:27 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F130F813AA
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 15:40:12 +0000 (UTC)
-Received: from [77.244.183.192] (port=62572 helo=[192.168.178.41])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nLoJm-000CPS-Ne; Sun, 20 Feb 2022 16:40:10 +0100
-Message-ID: <2003d2f6-6938-83b3-fd21-966fecf7e37b@lucaceresoli.net>
-Date: Sun, 20 Feb 2022 16:40:10 +0100
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2D5F7813C0
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 16:02:26 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B9B6BFF803
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 16:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1645372943;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=W2dB5yHgvgPj2x/VBDi6+BlylFKMbiYV6rhkp5v1+10=;
+ b=WAay53Jn66tdQaW4e88/0v7J6C/ol1HpOIfTP+mLjOHHnKOnRoVPnkELsL+zjhRqyqGu7m
+ QLW61/19R++XRQ8/qRv+UfseKVU4/PnJVIRE0KTtOnssccVnexagd4ogeqD1RvTPZPac6Z
+ 91MoWrY7PDjsvUSRf/Rkc294yRrG3pBg5ClnyMxQlVJTEMxm2mGKossf/gcaorTi+UofBy
+ TmflibU0AA/x9uipgl8PmPxY+r5Gkepnc2froxq8UEV2Vl9j2kF/1DrLaJz8q6RKJMb6Y6
+ 4qJwkx7M8qd0bwdKGzSo3l3jfm7HOjT7HYDaojaLnHzlH10TVNk8543AFQodXw==
+Date: Sun, 20 Feb 2022 17:02:22 +0100
+To: buildroot@buildroot.org
+Message-ID: <20220220170222.06d88b45@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20220219212211.1304441-1-giulio.benetti@benettiengineering.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <20220219212211.1304441-1-giulio.benetti@benettiengineering.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH v2] manual: board support: add instructions
- to test defconfig in the official docker
+Subject: [Buildroot] Analysis of runtime test failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,55 +66,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
+Hello,
 
+Six of our runtime tests are failing, so I went ahead and quickly look
+at the error messages. Here is my summary:
 
-On 19/02/22 22:22, Giulio Benetti wrote:
-> Sometimes new boards have not been tested with official docker so let's add
-> instructions to do it with utils/docker-run.
-> 
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * use the available utils/docker-run
-> * improve explanation as suggested by Luca Ceresoli
-> ---
->  docs/manual/adding-board-support.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-> index 33ed709535..074bab7a00 100644
-> --- a/docs/manual/adding-board-support.txt
-> +++ b/docs/manual/adding-board-support.txt
-> @@ -46,3 +46,11 @@ create a directory +board/<manufacturer>+ and a subdirectory
->  +board/<manufacturer>/<boardname>+. You can then store your patches
->  and configurations in these directories, and reference them from the main
->  Buildroot configuration. Refer to xref:customize[] for more details.
-> +
-> +Before submitting patches for new boards it is recommended to test it by
-> +building it using latest gitlab-CI docker container. To do this use
-> +utils/docker-run script and inside it hint:
+=== tests.package.test_ipython.TestIPythonPy3 ===
 
-Not sure the verb 'hint' is the correct one. I would expect "type" or
-"issue these commands" or similar.
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2088684091
 
-> +--------------------
-> + $ make +<boardname>_defconfig+
-> + $ make
-> +--------------------
+Error is:
 
-With that fixed:
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+# ipython -c 'import math; math.floor(12.3)'
+-sh: ipython: not found
 
+=== tests.package.test_python_pyyaml.TestPythonPy3Pyyaml ===
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2088684091
+
+Error is:
+
+# python sample_python_pyyaml_dec.py
+Traceback (most recent call last):
+  File "/root/sample_python_pyyaml_dec.py", line 5, in <module>
+    data = yaml.load(serialized)
+TypeError: load() missing 1 required positional argument: 'Loader'
+
+=== tests.package.test_luasyslog.TestLuaLuasyslog ===
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2088683903
+
+Error is:
+
+>>> luasyslog 2.2.0 Building
+PATH="/builds/buildroot.org/buildroot/test-output/TestLuaLuasyslog/host/bin:/builds/buildroot.org/buildroot/test-output/TestLuaLuasyslog/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"  /usr/bin/make -j33  -C /builds/buildroot.org/buildroot/test-output/TestLuaLuasyslog/build/luasyslog-2.2.0/
+/usr/bin/make  all-am
+  CC       lsyslog.lo
+  CC       compat-5.3.lo
+In file included from lsyslog.c:11:
+compat-5.3.h:402:4: error: #error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+ #  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+    ^~~~~
+In file included from compat-5.3.c:7:
+compat-5.3.h:402:4: error: #error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+ #  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+    ^~~~~
+make[3]: *** [Makefile:710: lsyslog.lo] Error 1
+
+=== tests.package.test_lxc.TestLxc ===
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2088683908
+
+Error is:
+
+# lxc-start -l trace -n lxc_iperf3 -o /tmp/lxc.log -L /tmp/lxc.console.log
+lxc-start: lxc_iperf3: lxccontainer.c: wait_on_daemonized_start: 868 Received container state "ABORTING" instead of "RUNNING"
+lxc-start: lxc_iperf3: tools/lxc_start.c: main: 306 The container failed to start
+lxc-start: lxc_iperf3: tools/lxc_start.c: main: 309 To get more details, run the container in foreground mode
+lxc-start: lxc_iperf3: tools/lxc_start.c: main: 312 Additional information can be obtained by setting the --logfile and --logpriority options
+# echo $?
+
+=== tests.package.test_rust.TestRustBin ===
+
+https://gitlab.com/buildroot.org/buildroot/-/pipelines/470182758/failures
+
+Build issue while building the example Rust application:
+
+          /usr/bin/ld: /tmp/tmpdggplkto-br2-testing-rust/hello-world/target/armv7-unknown-linux-gnueabihf/debug/deps/hello_world-e03f93fef10567c3.1ajq7aud2z9fxhe5.rcgu.o: error adding symbols: file in wrong format
+          collect2: error: ld returned 1 exit status
+
+Could
+https://patchwork.ozlabs.org/project/buildroot/patch/20220217230638.98748-1-moritz@h6t.eu/
+be related ?
+
+=== tests.package.test_rust.TestRust ===
+
+Same error as above.
+
+Best regards,
+
+Thomas
 -- 
-Luca
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
