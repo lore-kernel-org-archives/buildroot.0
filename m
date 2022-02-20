@@ -1,60 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C87AFC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 19 Feb 2022 21:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F7BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 09:53:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3640E408F5;
-	Sat, 19 Feb 2022 21:22:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB72340184;
+	Sun, 20 Feb 2022 09:53:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vCKg5k0On0ck; Sat, 19 Feb 2022 21:22:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JuXq_7CPFUs4; Sun, 20 Feb 2022 09:53:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7559A408F0;
-	Sat, 19 Feb 2022 21:22:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 15CEB1BF2F7
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 21:22:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3F2440445;
+	Sun, 20 Feb 2022 09:53:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 36D2C1BF3F3
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 09:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03C7E408F3
- for <buildroot@lists.busybox.net>; Sat, 19 Feb 2022 21:22:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23F61400F3
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 09:53:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9sJ8owfKfYGL for <buildroot@lists.busybox.net>;
- Sat, 19 Feb 2022 21:22:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp4.osuosl.org (Postfix) with ESMTP id D3648408EF
- for <buildroot@buildroot.org>; Sat, 19 Feb 2022 21:22:15 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.188.82])
- by Aruba Outgoing Smtp  with ESMTPSA
- id LXBGn7h8rX0z7LXBGnbgQF; Sat, 19 Feb 2022 22:22:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645305734; bh=xaRmVC+fsw8hkAgKoLP43rp+biFlQ+KQuos60FkEWJc=;
- h=From:To:Subject:Date:MIME-Version;
- b=g6XlyT86PJkXOretUpfTDC2lenKlMB6Qna3exM9VoVYr2AAdM/8YylouI/59H9WF/
- iBQghTJ9rp+o/HeBMbQQ9232mMSW/gggLIYw3dNhkqmfY7DbJlr+bc7WhdAAnhjMGp
- ANCLoDBdtn9MRFWnC83hYzekT6EjaEZUALqtP/+cv9wzY1i839TrRulp8MIKS2mzyz
- C0hCSDmdDCnP7bm9qGSmWHbN/LZwL1HfWqNU6CcpzXbWdj3t/mqP7Hqap4n5WGAQia
- IgMR9ZuU+dpsorVMCGEgZA0U4bcygnGrPsmiwE986ttceJESkWwWU0svcF2vNpARLj
- um3DK/CI8gOFg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eYHgq1ParCle for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 09:53:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F4B340184
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 09:53:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 624C9812FE; Sun, 20 Feb 2022 09:45:33 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 19 Feb 2022 22:22:11 +0100
-Message-Id: <20220219212211.1304441-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfDad2hySlrAzIjcUDDjIsStLRmXOsxj1Yw1t+2p0AIOOu/xGdEfimJq7gbWA5D7DPst4xVmF5slTvQ9rKu2fWzVaaoVDb7L4ZWAyXX9SBrUd/Z6f95VU
- OJRJ5oDqIEgcvaFn0tCUAv4vv6eMKM7LSplv3P+ewbOc1QaPo80gD+dgyRtbRrHAnWGueGAbVlaR5+DpzIZM9F9yx60ngruwJ+l7/OeyVGbg9du0CHERaFcc
- Lsgao8eofJVZOllsZa5ibtLKGYzvMd4Ukbnd0T2RvE6bEqyVFpd1tJLekJNxOfDq+vLDjnCSXh1pPbjF1ncYW8codN8z61BjB7B9oLv+TyA6UCbxbmw6u9C8
- fCh1GAzt
-Subject: [Buildroot] [PATCH v2] manual: board support: add instructions to
- test defconfig in the official docker
+Date: Sun, 20 Feb 2022 10:52:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 43e2a5e11f07d6fabd15f530ba98f7bbee73dac2
+X-Git-Newrev: 59a813d2a884c2eb247d9695089375b56751b6d5
+X-Patchwork-Hint: ignore
+Message-Id: <20220220094533.624C9812FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/expat: fix tarball sha256
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,46 +52,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sometimes new boards have not been tested with official docker so let's add
-instructions to do it with utils/docker-run.
+commit: https://git.buildroot.net/buildroot/commit/?id=59a813d2a884c2eb247d9695089375b56751b6d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Commit ab71ac15ddd7ed6a8ca83cbc23ea0b0cbb343f0f forgot to update sha256
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: update  hash for real ;-)]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-V1->V2:
-* use the available utils/docker-run
-* improve explanation as suggested by Luca Ceresoli
----
- docs/manual/adding-board-support.txt | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/expat/expat.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index 33ed709535..074bab7a00 100644
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -46,3 +46,11 @@ create a directory +board/<manufacturer>+ and a subdirectory
- +board/<manufacturer>/<boardname>+. You can then store your patches
- and configurations in these directories, and reference them from the main
- Buildroot configuration. Refer to xref:customize[] for more details.
-+
-+Before submitting patches for new boards it is recommended to test it by
-+building it using latest gitlab-CI docker container. To do this use
-+utils/docker-run script and inside it hint:
-+--------------------
-+ $ make +<boardname>_defconfig+
-+ $ make
-+--------------------
--- 
-2.25.1
-
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 3129801668..10e13206d0 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -3,5 +3,5 @@ md5  a712d23b7afb32e7527cf0b3fd8f12ac  expat-2.4.4.tar.xz
+ sha1  6028b04d3505fc519c4c7c6bd67e1ad1a08cd7b6  expat-2.4.4.tar.xz
+ 
+ # Locally calculated
+-sha256  b1f9f1b1a5ebb0acaa88c9ff79bfa4e145823b78aa5185e5c5d85f060824778a  expat-2.4.3.tar.xz
++sha256  b5d25d6e373351c2ed19b562b4732d01d2589ac8c8e9e7962d8df1207cc311b8  expat-2.4.4.tar.xz
+ sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
