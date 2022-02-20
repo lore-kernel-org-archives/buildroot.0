@@ -1,60 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48653C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 11:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1104AC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 12:18:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCF0160A81;
-	Sun, 20 Feb 2022 11:43:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74C874086A;
+	Sun, 20 Feb 2022 12:18:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kWdyIt5TXZKl; Sun, 20 Feb 2022 11:43:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RnGxyzQsh5Gi; Sun, 20 Feb 2022 12:18:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EA8F600C7;
-	Sun, 20 Feb 2022 11:43:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A381C1BF2F7
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 11:43:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93C9740865;
+	Sun, 20 Feb 2022 12:18:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BDEBE1BF371
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 12:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A02C1600C7
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 11:43:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ACD4180BA2
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 12:18:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0QuyhQm3GTad for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 11:43:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp3.osuosl.org (Postfix) with ESMTP id 27695600BB
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 11:43:34 +0000 (UTC)
-Received: from smtpclient.apple ([151.82.115.62])
- by Aruba Outgoing Smtp  with ESMTPA
- id LkcmnT1rpkz4hLkcnn2yGF; Sun, 20 Feb 2022 12:43:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645357413; bh=Fj2hguCtorXpWJaSyN7A1WdqtJlWghSkFaEAOMGetOw=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=OTTABgr1zqROrKeE6mpqAn02aDXhxTE5FP6K6UgeflHuomurcdVd5vzLEeWLa99v3
- doOLdQmJIYRn5nmYH84UqDZ0z/agXw+2fdK5Z/+h4Q4PwKXDeYV2v4925uQCGJrql9
- OEC2cwgt0QjRO28tnnQ49C+7a0/xntC8PktsTmnPQjde4yxo1TEEsm2qXFNxmxcxi1
- O0XeZuAR0nyGoshG4bEzDNdgW1geOCBHbGN4C5wfy9Nz8Iijt20gaku4TwRmedf1Io
- dSrfaeEAH6vRNER5keBov6131+/WgRUjxgiDIfR+cgSWBhWuDz768j0XKZyKKYZOxo
- 98LbJVST3c7yw==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Sun, 20 Feb 2022 12:43:31 +0100
-Message-Id: <893D1C4B-6F6D-4F58-A77C-C71AFED67270@benettiengineering.com>
-References: <CAHnHX5jBPNhPMUZz+TPiUk2_+FpWYV0EoHwCdHoKHNsLsqbM4g@mail.gmail.com>
-In-Reply-To: <CAHnHX5jBPNhPMUZz+TPiUk2_+FpWYV0EoHwCdHoKHNsLsqbM4g@mail.gmail.com>
-To: Mohd Faiz Rohani <mohd.faiz.rohani@gmail.com>
-X-Mailer: iPhone Mail (19D52)
-X-CMAE-Envelope: MS4wfDqPe5pmAV4f37e0jkA+d+a3STEIRgo44gPVq7IeQDLowMthOBwTjQ5XpxIE1nq3tmfHd54cLhLLW5Euf802klpkdP40jp7+2b2WvIJToB9N+9Nhyq8n
- 9zxX5QoAMpxV1j1i7LLI3VAhxiSj4FtPFjLR6fOi62+oms7GzuoNzrrQ/UHmLvNAKAVA83CYqBMLPaNGIuPI5tp77Jud3O3tb+BHc9zM2+bw895v/zINHK/+
- lmZqeGQaGMZQfl8CmBKi0g==
-Subject: Re: [Buildroot] Issue with login
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mIZE9siLfERT for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 12:18:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8892180B87
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 12:18:33 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id u1so22297496wrg.11
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 04:18:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Rdi/mXNXWNUDAevXQgZFTM1zk1Iec0ilkhy/flirslE=;
+ b=JlUHkkuBB1J8ACdPuJb2nzLILP9Ew/vueEmvpb1vRzF1np3TfeE28+tqGVxfunLTXU
+ zqqEtXx+fZu2zRgbx3lbnwcOJ+Kxwj9487kmA2f2A4yVmainVQg9CF4dfXQvOP7QEo7l
+ aVqgtPt6O6ZVWKgUqf8tQ6sN7u5QljCNLSHDYUgF2yvT6irjTw/fl2AULzBX51VtSIUe
+ vG4nixvqX1fverKn3NhOyR43Hv+KheBObPzkQL5xt1PqsYGrJm3JU4WL4UV1yIE6fyFT
+ neaOuOyradnDWFig+M0Oa/hkszI1EtrpqoNzqwPAzE54CVZz9ujRER9QDiWOBJ/dIiCj
+ 132w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Rdi/mXNXWNUDAevXQgZFTM1zk1Iec0ilkhy/flirslE=;
+ b=mgAoePrpfvdCvGi/fhKNeAqSNuova7svdbg9Xp7vmm7cQT+lxP2CIXmzZUQpvYHQx4
+ u7m8tRwX+jEye0TvxmoCAvwEyXuc+GvrUZK607I+2BbbEkp1D+yz58S5zt/uoQLlAaa2
+ WQ02XYu+fzJPwCmZiDIx74JRmkYNhqmDvF3+waQ3OeNSfxl4Ev5t3+KhvZoH9hlOsLLp
+ ERgunsNrGl6Q0Fla2sTZNGvgxHkf+hSyaZ9cWWpxMkY6U6Q/UVxWnEczhn+qflyid+kE
+ 2duCbJth/nEeDgcpGXvCa5q1GY6gd+Nry87eBABtF4nGMuyRKhFYhbiZKo2BaJ1P9FFt
+ eD/Q==
+X-Gm-Message-State: AOAM532B+Z979vF9j80+4zUftBhhEp435POwLxQWB+wLtNbDPLRKvXBp
+ Bb4ft8rSm2lkFYMcvrPZMtcjmWA0zXs=
+X-Google-Smtp-Source: ABdhPJwTYyNhwAh2Ykk/MqpcRLsdALATeyyouLiL2htG2WL5LICNMSLRpX9SjCIZB7eXZ2DepkexHg==
+X-Received: by 2002:a5d:45c4:0:b0:1e3:35b1:3e98 with SMTP id
+ b4-20020a5d45c4000000b001e335b13e98mr12309764wrs.270.1645359511378; 
+ Sun, 20 Feb 2022 04:18:31 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id a10sm19701397wri.74.2022.02.20.04.18.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 20 Feb 2022 04:18:30 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 20 Feb 2022 13:16:36 +0100
+Message-Id: <20220220121637.200393-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/gdk-pixbuf: enable relocatable option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,27 +87,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTW9oZCwKCmhhdmUgeW91IHVzZWQgcm9vdCBhcyB1c2VyPyBPciBkaWQgeW91IHByb3ZpZGUg
-YSB1c2VyIHRhYmxlPwoKR2l1bGlvCgpJbnZpYXRvIGRhIGlQaG9uZQoKPiBJbCBnaW9ybm8gMjAg
-ZmViIDIwMjIsIGFsbGUgb3JlIDExOjU3LCBNb2hkIEZhaXogUm9oYW5pIDxtb2hkLmZhaXoucm9o
-YW5pQGdtYWlsLmNvbT4gaGEgc2NyaXR0bzoKPiAKPiDvu78KPiBIaSBndXlzLAo+IAo+IEkgbWFu
-YWdlZCB0byBjb21waWxlIHdpdGggc3VjY2VzcyB0aGUgVWJvb3QoVS1Cb290IDIwMTkuMDQpLCBM
-aW51eCBrZXJuZWwoNC40LjE1NSlhbmQgcm9vdCBmaWxlIHN5c3RlbShzeXN0ZW1kIDI0OSkgdXNp
-bmcgdGhlIEJ1aWxkcm9vdC0yMDIxLjExLjEuIEl0IHdhcyBhYmxlIHRvIGJvb3Qgc3VjY2Vzc2Z1
-bGx5IHVudGlsIHRoZSBsb2dpbiBwcm9tcHQuIEhvd2V2ZXIsIGl0IHNlZW1zIGxpa2UgdGhlcmUg
-aXMgYW4gZXJyb3Igd2l0aCB0aGUgbG9naW4gcHJvbXB0IGl0IGRvZXMgbm90IHdhbnQgdG8gZW50
-ZXIsIGp1c3QgbG9vcGluZyBhcm91bmQgdGhlIGxvZ2luIHByb21wdCBhZnRlciBJIGhhdmUgZW50
-ZXJlZCB0aGUgbG9naW4gbmFtZSAobm90IHNob3dpbmcgdGhlIHBhc3N3b3JkIHByb21wdCkuIERp
-ZCBhbnlvbmUga25vdyBhYm91dCB0aGlzPwo+IAo+IFRoYW5rcy4KPiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Enable relocatable option to fix the following PPD build failure of
+adwaita-icon-theme:
+
+Can't load file: Unrecognized image file format
+
+This failure is raised because the SVG library is not found by
+gtk-encode-symbolic-svg. To find the SVG library,
+gtk-encode-symbolic-svg depends on libgtk_pixbuf library which reads the
+loaders.cache file using:
+- a hardcoded path (which points to host-gdk-pixbuf per-package
+  directory) if relocatable is disabled. The loaders.cache in this
+  directory doesn't declare SVG support because it has not yet been
+  updated by host-librsvg
+- or a dynamic path corresponding to the binary location if relocatable
+  is enabled.
+
+So obviously, we need to set relocatable to true.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0e00059b09b4445eaaec1030997883187c6a80d6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Drop relocatable from target
+ - Enhance commit message
+
+ package/gdk-pixbuf/gdk-pixbuf.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index cd30d450d5..b22e9568c9 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -26,6 +26,7 @@ HOST_GDK_PIXBUF_CONF_OPTS = \
+ 	-Dgio_sniffing=false \
+ 	-Dinstalled_tests=false \
+ 	-Dintrospection=disabled \
++	-Drelocatable=true \
+ 	-Dman=false
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
