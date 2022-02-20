@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07601C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 19:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9B38C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 20:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD4E44059D;
-	Sun, 20 Feb 2022 19:36:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 121BD60BA8;
+	Sun, 20 Feb 2022 20:22:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mkWtrg4wa1AP; Sun, 20 Feb 2022 19:36:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y6Kqc_3pmlFm; Sun, 20 Feb 2022 20:22:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E94E140598;
-	Sun, 20 Feb 2022 19:36:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C68071BF476
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:36:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F88460B2A;
+	Sun, 20 Feb 2022 20:22:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 622DA1BF4E6
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 20:22:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2828404B2
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:36:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FCE081450
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 20:22:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EUAkJ619dYDK for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 19:36:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NoY8xlFIe1va for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 20:22:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B369E40187
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 19:36:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 15E6F82A9D; Sun, 20 Feb 2022 19:29:05 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65BCD8144E
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 20:22:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id ABBEE832DB; Sun, 20 Feb 2022 20:14:59 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Feb 2022 20:36:20 +0100
+Date: Sun, 20 Feb 2022 21:07:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ca6c2ee3da7be5e4af478e779b49248b89e6514d
-X-Git-Newrev: ffeeb7f3d36df58121ec9876432950bb0ac3a5fb
+X-Git-Oldrev: ffeeb7f3d36df58121ec9876432950bb0ac3a5fb
+X-Git-Newrev: 75361a9aba042799040591fb84192802b137fc3a
 X-Patchwork-Hint: ignore
-Message-Id: <20220220192905.15E6F82A9D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.34.6
+Message-Id: <20220220201459.ABBEE832DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdk-pixbuf: fix run with
+ per-package directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +59,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffeeb7f3d36df58121ec9876432950bb0ac3a5fb
+commit: https://git.buildroot.net/buildroot/commit/?id=75361a9aba042799040591fb84192802b137fc3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This brings the package two minor releases forward, which provides fixes
-for CVE-2022-22589, CVE-2022-22590, CVE-2022-22592, and CVE-2022-22620.
-Release notes can be found at:
+gdk-pixbuf is based on plugins (modules in gdk-pixbuf parlance) that are
+provided either by the gdk-pixbuf package itself, or be installed by
+third-party packages, like librsvg. At runtime, those plugins get loaded
+by helper function in the gdk-pixbuf library.
 
-  https://wpewebkit.org/release/wpewebkit-2.34.5.html
-  https://wpewebkit.org/release/wpewebkit-2.34.6.html
+The location where to find those modules is currently hard-coded at
+build time, to the location where gdb-pixbuf is installed.. This means
+that host-packages that install image-conversion utilities will try to
+look in the path where gdk-pixbuf was installed.
 
-The security advisories covering this update are available at:
+With per-package directories, this fails to find any module that was
+installed bu a third-party package. For example, the module for loading
+an SVG provided by librsvg, so it is not present in the PPD of
+gdk-pixbuf, and thus loading an SVG (e.g. to convert it to another
+format, like adwaita-icon-theme does) will fail with:
 
-  https://wpewebkit.org/security/WSA-2022-0002.html
-  https://wpewebkit.org/security/WSA-2022-0003.html
+    Can't load file: Unrecognized image file format
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+However, gdk-pixbuf can be configured so as to look for the modules
+relative to where the program is run from, rather than hard-coding the
+location at build time. This is exactly what we need in the PPD case
+
+Additionally, even without PPD, this would fail in a similar manner in
+the SDK, as that can be relocated too.
+
+So we unconditionally enable the relocatable option, but only for the
+host variant (there is no reason to enable it for the target, as it is
+not going to be relocated).
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0e00059b09b4445eaaec1030997883187c6a80d6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: reword the already-good commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index b863a0d705..231bbc447d 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.34.4.tar.xz.sums
--md5  b0f7dcb18acfa94cfb42fea0fe10fb0d  wpewebkit-2.34.4.tar.xz
--sha1  de58481b43a6dba054097f619ee486f7889d7a56  wpewebkit-2.34.4.tar.xz
--sha256  3653ba42dbe22a4e6751b3f7cab8d2ebb2db5b7654c5d135a2f9bedf94778cee  wpewebkit-2.34.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.34.6.tar.xz.sums
-+md5  c9705270b342474cca28cf51632ccbbe  wpewebkit-2.34.6.tar.xz
-+sha1  44ae95de1b5ebf0a2b0ea3630b3677153c597402  wpewebkit-2.34.6.tar.xz
-+sha256  301e895c8ed08ce7dccef3192b972f2ccfc2020463244c64069a636f2b05265f  wpewebkit-2.34.6.tar.xz
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index cd30d450d5..b22e9568c9 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -26,6 +26,7 @@ HOST_GDK_PIXBUF_CONF_OPTS = \
+ 	-Dgio_sniffing=false \
+ 	-Dinstalled_tests=false \
+ 	-Dintrospection=disabled \
++	-Drelocatable=true \
+ 	-Dman=false
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 8d564d8223..aa04e78623 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.34.4
-+WPEWEBKIT_VERSION = 2.34.6
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+ ifeq ($(BR2_STATIC_LIBS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
