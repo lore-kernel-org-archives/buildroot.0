@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A372EC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 19:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F7A8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 19:22:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 480AA80CE3;
-	Sun, 20 Feb 2022 19:18:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFEDA60C0C;
+	Sun, 20 Feb 2022 19:22:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r9Wpategv04A; Sun, 20 Feb 2022 19:18:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dIrHOkJcGHfK; Sun, 20 Feb 2022 19:22:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CCBA80C8C;
-	Sun, 20 Feb 2022 19:18:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19C251BF476
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:18:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B8F860D4B;
+	Sun, 20 Feb 2022 19:22:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CEFA31BF476
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 136D8404B7
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:18:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBD144037A
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:22:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P-3UB011hbmn for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 19:18:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E923404B2
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 19:18:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9BA59827FE; Sun, 20 Feb 2022 19:11:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XX6cnYHOOAc7 for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 19:22:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B2E1740348
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 19:22:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5CD5DC0005;
+ Sun, 20 Feb 2022 19:22:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nLrmv-000xBm-IO; Sun, 20 Feb 2022 20:22:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Feb 2022 20:15:26 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 324f0552526d169c24cd75e9dadf67641f2beef0
-X-Git-Newrev: 20c5569f9c2415364a1d873bc5089dc0ff0f8a35
-X-Patchwork-Hint: ignore
-Message-Id: <20220220191100.9BA59827FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/connman: fix build with libexecinfo
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220217094048.2756293-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 Feb 2022 20:22:29 +0100
+In-Reply-To: <20220217094048.2756293-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 17 Feb 2022 10:40:48 +0100")
+Message-ID: <875yp9bax6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/luasyslog: bump to version 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,45 +59,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20c5569f9c2415364a1d873bc5089dc0ff0f8a35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix the following build failure raised on uclibc and musl since the
-addition of libexecinfo package in commit
-eea8ba446c10701a273432552108d80fb2224ef4:
+ > This bump contains a single commit which fixes the following build
+ > failure with Lua 5.4 raised since commit
+ > 4f9a5659023c66fc166de28fd39a6c97a9490667:
 
-/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/10.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: src/backtrace.o: in function `print_backtrace':
-backtrace.c:(.text+0x37): undefined reference to `backtrace'
+ > In file included from lsyslog.c:11:
+ > compat-5.3.h:402:4: error: #error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+ >   402 | #  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
+ >       |    ^~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/74da4f4deab5f0ae9405d063ad52a5d4904a964d
+ > Also update indentation in hash file (two spaces)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/df2aabcf2ae07cad66b869ec4ac76702d2c32dc5
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 61851bd2dc..1b6fd611f5 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -109,4 +109,9 @@ else
- CONNMAN_CONF_OPTS += --disable-client
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+CONNMAN_DEPENDENCIES += libexecinfo
-+CONNMAN_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lexecinfo"
-+endif
-+
- $(eval $(autotools-package))
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
