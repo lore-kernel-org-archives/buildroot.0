@@ -1,46 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE8E2C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 19:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 360B5C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 19:36:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95F5580AD4;
-	Sun, 20 Feb 2022 19:23:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A45FE60BD8;
+	Sun, 20 Feb 2022 19:36:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wrJisjhD475C; Sun, 20 Feb 2022 19:23:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fpBYs5HIYHhm; Sun, 20 Feb 2022 19:36:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9548815AD;
-	Sun, 20 Feb 2022 19:23:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 153F11BF476
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:23:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD11A60BB1;
+	Sun, 20 Feb 2022 19:35:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EBAFE1BF476
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 021D340215
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:23:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C97F64031C
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 19:35:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RcZLhPs89VZp for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 19:23:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5402401DE
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 19:23:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 402D07FF78; Sun, 20 Feb 2022 19:15:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fNBtz7SGrNqP for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 19:35:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 79BA240187
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 19:35:56 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E370B60007;
+ Sun, 20 Feb 2022 19:35:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nLrzt-000xM6-2Q; Sun, 20 Feb 2022 20:35:53 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Feb 2022 20:23:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25fc617963b4ae28b20e9bc07863500f62c0862d
-X-Git-Newrev: ca6c2ee3da7be5e4af478e779b49248b89e6514d
-X-Patchwork-Hint: ignore
-Message-Id: <20220220191524.402D07FF78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zsh: security bump to version 5.8.1
+To: Romain Naour <romain.naour@gmail.com>, james.hilliard1@gmail.com
+References: <20220220170222.06d88b45@windsurf>
+ <842a7d9b-e991-149e-c6a6-9a36b29e9ff3@gmail.com>
+Date: Sun, 20 Feb 2022 20:35:52 +0100
+In-Reply-To: <842a7d9b-e991-149e-c6a6-9a36b29e9ff3@gmail.com> (Romain Naour's
+ message of "Sun, 20 Feb 2022 17:25:04 +0100")
+Message-ID: <87wnhp9vqf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] Analysis of runtime test failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,57 +60,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca6c2ee3da7be5e4af478e779b49248b89e6514d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes the following security issue:
-
-- CVE-2021-45444: In zsh before 5.8.1, an attacker can achieve code
-  execution if they control a command output inside the prompt, as
-  demonstrated by a %F argument.  This occurs because of recursive
-  PROMPT_SUBST expansion.
-
-The 5.8.1 release is not listed in MD5SUM, so drop the md5 hash.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zsh/zsh.hash | 6 +-----
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 2df409c946..5c661ded25 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,7 +1,3 @@
--# From http://www.zsh.org/pub/MD5SUM
--md5  e02a5428620b3dd268800c7843b3dd4d  zsh-5.8.tar.xz
--# Calculated based on the hash above and after checking signature
--# http://www.zsh.org/pub/zsh-5.8.tar.xz.asc
--sha256  dcc4b54cc5565670a65581760261c163d720991f0d06486da61f8d839b52de27  zsh-5.8.tar.xz
- # Locally calculated
-+sha256  b6973520bace600b4779200269b1e5d79e5f505ac4952058c11ad5bbf0dd9919  zsh-5.8.1.tar.xz
- sha256  d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 1a04833211..c5ab7c2fae 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZSH_VERSION = 5.8
-+ZSH_VERSION = 5.8.1
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlJvbWFpbiIgPT0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPiB3
+cml0ZXM6CgogPiBIZWxsbyBUaG9tYXMsCiA+IExlIDIwLzAyLzIwMjIgw6AgMTc6MDIsIFRob21h
+cyBQZXRhenpvbmkgdmlhIGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgogPj4gSGVsbG8sCiA+PiAKID4+
+IFNpeCBvZiBvdXIgcnVudGltZSB0ZXN0cyBhcmUgZmFpbGluZywgc28gSSB3ZW50IGFoZWFkIGFu
+ZCBxdWlja2x5IGxvb2sKID4+IGF0IHRoZSBlcnJvciBtZXNzYWdlcy4gSGVyZSBpcyBteSBzdW1t
+YXJ5OgogPj4gCiA+PiA9PT0gdGVzdHMucGFja2FnZS50ZXN0X2lweXRob24uVGVzdElQeXRob25Q
+eTMgPT09CiA+PiAKID4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9v
+dC8tL2pvYnMvMjA4ODY4NDA5MQogPj4gCiA+PiBFcnJvciBpczoKID4+IAogPj4gIyBpcHl0aG9u
+IC1jICdpbXBvcnQgbWF0aDsgbWF0aC5mbG9vcigxMi4zKScKID4+IC1zaDogaXB5dGhvbjogbm90
+IGZvdW5kCgogPiBpcHl0aG9uIHVzZSBhIHdyb25nIHNoZWJhbmcgb24gdGhlIHRhcmdldDoKCiA+
+ICMgaGVhZCAtbiAxIC91c3IvYmluL2lweXRob24KID4gIyEvaG9tZS9rdWJ1L2J1aWxkcm9vdC90
+ZXN0c3VpdGUtbWFzdGVyL1Rlc3RJUHl0aG9uUHkzL2hvc3QvYmluL3B5dGhvbgoKID4gVGhlIGlz
+c3VlIGNvbWUgZnJvbSBweXRob24zLXNldHVwdG9vbHMgNjAuMC4wIHRoYXQgY2hhbmdlZAogPiBT
+RVRVUFRPT0xTX1VTRV9ESVNUVVRJTFMgWzFdLiBUaGlzIGlzIGFjdHVhbGx5IGEgImJyZWFraW5n
+IiBjaGFuZ2UgWzJdLgoKID4gV2UgaGF2ZSB0byBvdmVycmlkZSBTRVRVUFRPT0xTX1VTRV9ESVNU
+VVRJTFMgdG8gdGhlIHByZXZpb3VzIHZhbHVlICJzdGRsaWIiIHRvCiA+IGZpeGVzIHRoZSBpc3N1
+ZS4KCiA+IFsxXQogPiBodHRwczovL2dpdGh1Yi5jb20vcHlwYS9zZXR1cHRvb2xzL2NvbW1pdC9i
+NmZjYmJkMDBjYjZkNTYwN2M5MjcyZGVjNDUyYTUwNDU3YmRiMjkyCiA+IFsyXSBodHRwczovL2dp
+dGh1Yi5jb20vcHlwYS9zZXR1cHRvb2xzL2Jsb2IvdjYwLjAuMC9DSEFOR0VTLnJzdCNicmVha2lu
+Zy1jaGFuZ2VzCgpUaGlzIGlzIHRoZW4gcHJlc3VtYWJseSBzb21ldGhpbmcgd2Ugd2FudCB0byBk
+byBnbG9iYWxseSB0aGVuPyBKYW1lcywKd2hhdCBkbyB5b3Ugc2F5PwoKLS0gCkJ5ZSwgUGV0ZXIg
+S29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
