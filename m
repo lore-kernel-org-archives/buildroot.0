@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F489C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 21:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38ACBC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 21:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B62A760AF4;
-	Sun, 20 Feb 2022 21:29:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E41E960AAB;
+	Sun, 20 Feb 2022 21:29:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JkwwkZamahl3; Sun, 20 Feb 2022 21:29:33 +0000 (UTC)
+	with ESMTP id 0AcUO_oq09Y0; Sun, 20 Feb 2022 21:29:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BDFD60AAB;
-	Sun, 20 Feb 2022 21:29:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 159B060C0C;
+	Sun, 20 Feb 2022 21:29:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 626251BF3D7
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 21:29:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 170DE1BF3D7
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 21:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50C82404D5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 690D14017C
  for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 21:29:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tv05ZfRhsl3c for <buildroot@lists.busybox.net>;
+ with ESMTP id dHzJU_De3WBA for <buildroot@lists.busybox.net>;
  Sun, 20 Feb 2022 21:29:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 202ED4017C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A3FD404C5
  for <buildroot@buildroot.org>; Sun, 20 Feb 2022 21:29:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 491E283483; Sun, 20 Feb 2022 21:21:27 +0000 (UTC)
+ id 567BA821A5; Sun, 20 Feb 2022 21:21:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Feb 2022 22:27:40 +0100
+Date: Sun, 20 Feb 2022 22:28:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c10bb052d94cb9d96881344d149a29a6bfb73b5
-X-Git-Newrev: 70980a154b18c5fe6db940faf36f07ee20e27a70
+X-Git-Oldrev: 70980a154b18c5fe6db940faf36f07ee20e27a70
+X-Git-Newrev: f6009ac821abf096ea8cb1010e3ed1e11f010b64
 X-Patchwork-Hint: ignore
-Message-Id: <20220220212127.491E283483@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pygame: replace
- PYTHON_VERSION_MAJOR
+Message-Id: <20220220212127.567BA821A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati:
+ don't override XDRIVER_XF86_VIDEO_ATI_CONF_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,31 +59,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70980a154b18c5fe6db940faf36f07ee20e27a70
+commit: https://git.buildroot.net/buildroot/commit/?id=f6009ac821abf096ea8cb1010e3ed1e11f010b64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace PYTHON_VERSION_MAJOR by PYTHON3_VERSION_MAJOR now that python2
-has been dropped
+XDRIVER_XF86_VIDEO_ATI_CONF_OPTS is wrongly overridden in a conditional
+since commit daa433bff6d2d9934705feacd3619a7618d13ae5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pygame/python-pygame.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
-index 8deb42a90c..600dd9e743 100644
---- a/package/python-pygame/python-pygame.mk
-+++ b/package/python-pygame/python-pygame.mk
-@@ -103,7 +103,7 @@ PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index f7aeba8ba6..edb8b11add 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -16,9 +16,9 @@ XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
+ 	xserver_xorg-server
  
- ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES),y)
- define PYTHON_PYGAME_REMOVE_EXAMPLES
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/pygame/examples
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/pygame/examples
- endef
- PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_EXAMPLES
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
+-XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --enable-glamor
++XDRIVER_XF86_VIDEO_ATI_CONF_OPTS += --enable-glamor
+ else
+-XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --disable-glamor
++XDRIVER_XF86_VIDEO_ATI_CONF_OPTS += --disable-glamor
  endif
+ 
+ # xdriver_xf86-video-ati requires O_CLOEXEC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
