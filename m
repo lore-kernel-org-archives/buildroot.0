@@ -1,84 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ED01C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 12:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F27C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 12:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C79A060B2A;
-	Sun, 20 Feb 2022 12:18:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5550E8175B;
+	Sun, 20 Feb 2022 12:45:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rmqi26ncWpv8; Sun, 20 Feb 2022 12:18:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bpo338g0FUEX; Sun, 20 Feb 2022 12:45:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6CE4605B2;
-	Sun, 20 Feb 2022 12:18:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CF728146E;
+	Sun, 20 Feb 2022 12:45:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 569E31BF371
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 12:18:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E27A1BF371
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 12:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 538DF80C7A
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 12:18:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C2B38146E
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 12:45:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 33seIUHh5RGr for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 12:18:36 +0000 (UTC)
+ with ESMTP id xoSxuNDts23A for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 12:45:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C6DED80BFA
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 12:18:35 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id d3so6674548wrf.1
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 04:18:35 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DD4A8146B
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 12:45:48 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id p9so22358513wra.12
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 04:45:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=OUZeLr41afJ4HxBpZmJDVai+m7JhXwTjSWZbQQGKk4U=;
- b=KOYHmq+cxS8YWc2biaV0jTKBeCfJ9kcKJt+OfeF6xGeHUssbmpgJKXlc09aiyZzINd
- Pfz1ECcKe5kcWz/z9x8jepGcUzVMvPfcARiB/YE/9swKUEyTbqEh0qs5/6tDIc9t2lsD
- IkV+4Z+SNqowTMlVZgIv3WNdDGcARlQA1ePLqtTHym0wUeflzIpoWtDU0O5VIBNR0pKG
- SmHb4sFo6bMFjOOjTUqqDDLGvkgpDbnq0urEMuaAK4lEhb4OWCDQ6dGifqtfv4olqs+b
- rOnKppWVLh32XXGTPlBLPOOW5BPj8gCrE1FCYVXBEIu8wGhyzgjUst3GSLxCS2uCucYZ
- 4V3Q==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=64JI3ulUsNcCsl4pfP+sRthVnIeQ6qJabRIw5WJt2vg=;
+ b=FMdLQgyn8IKb6YfMmn/GHRdUoZOR9S+YvvOHPztPQlsUtovihZFiSCjP9QQOhd0EBk
+ 6Usfz8ws9QWDBTFkQNaodGh+0RWUedbmo9ayoxtExqiI35/wieAfRxXqIBVADPobLP5F
+ LYPJmg0YDbGsPDkqdXRTpdJxfjfYQk4Dt7nAGmS/X/7icJBgwss5lwm6tqMRagWAxFPX
+ HkC/kvUAi/hHrAomg87aOv27dGK2OxLVgsF1+9Dg5dZf3kNB53hoGDN66CT+SzTDqFx+
+ rzzCQq8EmiAFYNN5gdNRa/CSLK89BmxKcmwxLsXWe2C2O34hopShqrlLVx/Uh7DUaWQN
+ avPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=OUZeLr41afJ4HxBpZmJDVai+m7JhXwTjSWZbQQGKk4U=;
- b=6j09+bdqkEgCaNF+swAeNS1AqiR54m8a8HsjjTAeuvZPivhgR/iz65Lzd8LiE4G+HW
- OnYLVZUxsGnqCoNSYz/jTK/SYP9J7bQpKQCfTM8hLQ4DlMH5mDe2u9x5KZJ/ufCCpjUc
- PSOJ+vsxyF792PLzs129utGX74i0oaFvjRUT2cuntGvd3LzHJXfPujYGDkSZIPL+dCi4
- zWvCBKFl3qtFnZLKJSEnPnS4ukNUze63AvDys0XnAaeoAUJO81Z0KrBYfyknGDP9UUgR
- pz9pNutjm2dlne23F0mMjg3rEN892PxRVBl61SH6zglSavioYs1atiSKZ0IrfWTnKtaT
- giOw==
-X-Gm-Message-State: AOAM531SbhZb2TgXfdDkA1ltbTwznBSIQsHPT+4qdYUyT+LQz6ScprxO
- ad7OkuMolIiEy3tiwQxcp5n5C+vtdjU=
-X-Google-Smtp-Source: ABdhPJxW5zfaCOvYp59yLFb4eTc+fxaViVrGXl23tWrT9Jb4xPYSW12v5xiDL9d19uQWYkirBfM4xw==
-X-Received: by 2002:a05:6000:144a:b0:1e6:2783:b3fd with SMTP id
- v10-20020a056000144a00b001e62783b3fdmr12104975wrx.156.1645359513662; 
- Sun, 20 Feb 2022 04:18:33 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id a10sm19701397wri.74.2022.02.20.04.18.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 20 Feb 2022 04:18:33 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Feb 2022 13:16:37 +0100
-Message-Id: <20220220121637.200393-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220220121637.200393-1-fontaine.fabrice@gmail.com>
-References: <20220220121637.200393-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=64JI3ulUsNcCsl4pfP+sRthVnIeQ6qJabRIw5WJt2vg=;
+ b=eERFUmCm26FzliPmN64/XdPolBLbdxpseUGkE6jWsFqIHI8ID+jJyNEFGr3Mlo03ea
+ +CDWGEvatxdfUFUEIT+3akTKLuUSb0V6V2iGmdzLoqhoqAhN0MuDDLIv0l/KOWar6VPE
+ KEVEaADbfBDy6+GkYXq7LWo3iFJG9pHByvOCyVPidMB1vhq7C6m320f1/QS+JNRzOIen
+ NNABp1n3jgQWq6mf0SUfh+iiAQvByPIwLJp6id+HlwNzUrg752UYPAM3wB76ZhzoQkgo
+ oEzBJl3udgVMDeffgeOKOQYNmuKCmIVLQ9bZmUqXEw8dioSKcgwilFkGrDO5YR4U2N09
+ 8nJQ==
+X-Gm-Message-State: AOAM532sDtGBYnFD58rdG35/wJf047fguLgdyEh80XIZVHUssk6SwFh8
+ XdJSPXS0RyPGfgNfv9oq3hdbJLVyCRDYEJSHm/KnLlFSuAM=
+X-Google-Smtp-Source: ABdhPJy/rHiI8kzHKet6uziLwvhzbylWpG40YZgFg1TddFlVyxik6arkth5RDRB69VcAYoOwEbbugY21LQ8TlLdUNbc=
+X-Received: by 2002:a5d:634d:0:b0:1e6:f150:522e with SMTP id
+ b13-20020a5d634d000000b001e6f150522emr12601635wrw.439.1645361146061; Sun, 20
+ Feb 2022 04:45:46 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/librsvg: fix loaders.cache with with per-package
- directories
+References: <CAHnHX5jBPNhPMUZz+TPiUk2_+FpWYV0EoHwCdHoKHNsLsqbM4g@mail.gmail.com>
+ <893D1C4B-6F6D-4F58-A77C-C71AFED67270@benettiengineering.com>
+In-Reply-To: <893D1C4B-6F6D-4F58-A77C-C71AFED67270@benettiengineering.com>
+From: Mohd Faiz Rohani <mohd.faiz.rohani@gmail.com>
+Date: Sun, 20 Feb 2022 20:45:34 +0800
+Message-ID: <CAHnHX5jOqW2fg--vVGjygya_QMo76DqDsYyEYiqpOmWHW3EHQg@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] Issue with login
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,117 +80,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============3556507917138120497=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-librsvg invokes the gdk-pixbuf-queryloaders to update loaders.cache
-(which is originally built by host-gdk-pixbuf). loaders.cache contains
-the list of all the gdk-pixbuf modules; that includes paths to
-dlopen()ed shared libs. host-librsvg must update this file to add the
-path to its SVG shared library.
+--===============3556507917138120497==
+Content-Type: multipart/alternative; boundary="000000000000a3680d05d8727ef9"
 
-By default, gdk-pixbuf-queryloaders uses a hardcoded path to find the
-installed shared libs and this path will point to the location of the
-host-gdk-pixbuf per-package directory. Obviously, this is wrong, the SVG
-library installed by host-librsvg is installed in its own per-package
-directory.
+--000000000000a3680d05d8727ef9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-So set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
-gdk-pixbuf-query-loaders to build a correct loaders.cache.
-gdk_pixbuf_moduledir is already retrieved from host-pkgconfig in
-configure.ac and so will point to the correct location (thanks to
-PPD_FIXUP_PATHS).
+Hi Giulio,
 
-After this update, the loaders.cache will be correctly updated in
-host-librsvg per-package directory and so the loaders.cache installed in
-adwaita-icon-theme per-package directory will also be correct (thanks to
-PPD_FIXUP_PATHS).
+Yes I have used root as a user. unfortunately i didn't set the path to the
+users tables. Could this be a problem? If so, where to set them? I
+understand that the users list are kept in paswd file correct?
 
-This will fix the following PPD build failure of adwaita-icon-theme:
+Thanks
 
-Can't load file: Unrecognized image file format
+On Sun, Feb 20, 2022 at 7:43 PM Giulio Benetti <
+giulio.benetti@benettiengineering.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/0e00059b09b4445eaaec1030997883187c6a80d6
+> Hi Mohd,
+>
+> have you used root as user? Or did you provide a user table?
+>
+> Giulio
+>
+> Inviato da iPhone
+>
+> > Il giorno 20 feb 2022, alle ore 11:57, Mohd Faiz Rohani <
+> mohd.faiz.rohani@gmail.com> ha scritto:
+> >
+> > =EF=BB=BF
+> > Hi guys,
+> >
+> > I managed to compile with success the Uboot(U-Boot 2019.04), Linux
+> kernel(4.4.155)and root file system(systemd 249) using the
+> Buildroot-2021.11.1. It was able to boot successfully until the login
+> prompt. However, it seems like there is an error with the login prompt it
+> does not want to enter, just looping around the login prompt after I have
+> entered the login name (not showing the password prompt). Did anyone know
+> about this?
+> >
+> > Thanks.
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Enhance commit message
- - Add patch upstream status
+--000000000000a3680d05d8727ef9
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- ...r-Makefile.am-set-GDK_PIXBUF_MODULED.patch | 41 +++++++++++++++++++
- package/librsvg/librsvg.mk                    |  2 +
- 2 files changed, 43 insertions(+)
- create mode 100644 package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
+<div dir=3D"ltr">Hi=C2=A0Giulio,<div><br></div><div>Yes I have used root as=
+ a user. unfortunately i didn&#39;t=C2=A0set the path to the users tables. =
+Could this be a problem? If so, where to set them? I understand that the us=
+ers list are kept in paswd=C2=A0file correct?</div><div><br></div><div>Than=
+ks</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmai=
+l_attr">On Sun, Feb 20, 2022 at 7:43 PM Giulio Benetti &lt;<a href=3D"mailt=
+o:giulio.benetti@benettiengineering.com">giulio.benetti@benettiengineering.=
+com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
+in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
+x">Hi Mohd,<br>
+<br>
+have you used root as user? Or did you provide a user table?<br>
+<br>
+Giulio<br>
+<br>
+Inviato da iPhone<br>
+<br>
+&gt; Il giorno 20 feb 2022, alle ore 11:57, Mohd Faiz Rohani &lt;<a href=3D=
+"mailto:mohd.faiz.rohani@gmail.com" target=3D"_blank">mohd.faiz.rohani@gmai=
+l.com</a>&gt; ha scritto:<br>
+&gt; <br>
+&gt; =EF=BB=BF<br>
+&gt; Hi guys,<br>
+&gt; <br>
+&gt; I managed to compile with success the Uboot(U-Boot 2019.04), Linux ker=
+nel(4.4.155)and root file system(systemd 249) using the Buildroot-2021.11.1=
+. It was able to boot successfully until the login prompt. However, it seem=
+s like there is an error with the login prompt it does not want to enter, j=
+ust looping around the login prompt after I have entered the login name (no=
+t showing the password prompt). Did anyone know about this?<br>
+&gt; <br>
+&gt; Thanks.<br>
+&gt; _______________________________________________<br>
+&gt; buildroot mailing list<br>
+&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
+@buildroot.org</a><br>
+&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
+nfo/buildroot</a><br>
+<br>
+</blockquote></div>
 
-diff --git a/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-new file mode 100644
-index 0000000000..761ff92605
---- /dev/null
-+++ b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-@@ -0,0 +1,41 @@
-+From 2c472bf55289ccbd7f305aa3e98d6fd70be4e3ab Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 19 Feb 2022 12:02:10 +0100
-+Subject: [PATCH] gdk-pixbuf-loader/Makefile.am: set GDK_PIXBUF_MODULEDIR
-+
-+Set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
-+gdk-pixbuf-query-loaders to build a correct gdk_pixbuf_cache_file and
-+gdk-pixbuf.loaders on 'exotic' systems
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/668]
-+---
-+ gdk-pixbuf-loader/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdk-pixbuf-loader/Makefile.am b/gdk-pixbuf-loader/Makefile.am
-+index c3493736..de1f9641 100644
-+--- a/gdk-pixbuf-loader/Makefile.am
-++++ b/gdk-pixbuf-loader/Makefile.am
-+@@ -49,7 +49,7 @@ rsvg_loader_LDADD = \
-+ EXTRA_rsvg_loader_DEPENDENCIES = libpixbufloader-svg.la gdk-pixbuf-loaders
-+ 
-+ gdk-pixbuf-loaders: Makefile
-+-	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-++	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-+ 
-+ if CROSS_COMPILING
-+ RUN_QUERY_LOADER_TEST=false
-+@@ -68,7 +68,7 @@ endif
-+ install-data-hook:
-+ 	@if $(RUN_QUERY_LOADER_TEST) ; then \
-+ 		$(mkinstalldirs) $(DESTDIR)$(gdk_pixbuf_binarydir) ; \
-+-		$(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-++		GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-+ 	else \
-+ 	  echo "***" ; \
-+ 	  echo "*** Warning: loaders.cache not built" ; \
-+-- 
-+2.34.1
-+
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e4b1942b79..07a14b4366 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -20,6 +20,8 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libglib2 host-libxml
- LIBRSVG_LICENSE = LGPL-2.1+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
- LIBRSVG_CPE_ID_VENDOR = gnome
-+# We're patching gdk-pixbuf-loader/Makefile.am
-+LIBRSVG_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBRSVG_CONF_OPTS += --enable-introspection
--- 
-2.34.1
+--000000000000a3680d05d8727ef9--
+
+--===============3556507917138120497==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3556507917138120497==--
