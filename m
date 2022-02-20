@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA93CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 17:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ABC6C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Feb 2022 17:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A71A81499;
-	Sun, 20 Feb 2022 17:22:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8454640386;
+	Sun, 20 Feb 2022 17:36:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DhcFVIWe4Rfh; Sun, 20 Feb 2022 17:22:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1i6nx9wRwevL; Sun, 20 Feb 2022 17:36:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CD3881497;
-	Sun, 20 Feb 2022 17:22:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC9C04035D;
+	Sun, 20 Feb 2022 17:36:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9781A1BF20F
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 17:22:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 453321BF20F
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 17:36:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8651160B62
- for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 17:22:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D87D605AD
+ for <buildroot@lists.busybox.net>; Sun, 20 Feb 2022 17:36:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gGdG7IPCqcy3 for <buildroot@lists.busybox.net>;
- Sun, 20 Feb 2022 17:22:03 +0000 (UTC)
+ with ESMTP id Br2PYmMyBIrL for <buildroot@lists.busybox.net>;
+ Sun, 20 Feb 2022 17:36:51 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
- by smtp3.osuosl.org (Postfix) with ESMTP id CAB816059B
- for <buildroot@buildroot.org>; Sun, 20 Feb 2022 17:22:02 +0000 (UTC)
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0ED326059A
+ for <buildroot@buildroot.org>; Sun, 20 Feb 2022 17:36:50 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.188.82])
  by Aruba Outgoing Smtp  with ESMTPSA
- id LpuJnmiqDroAhLpuKnRuh5; Sun, 20 Feb 2022 18:22:00 +0100
+ id Lq8enmrnAroAhLq8fnRzxy; Sun, 20 Feb 2022 18:36:49 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645377720; bh=57E/nj9BVem6KJShk/Xu02tCPm8i596+tqC08MNXbqo=;
+ t=1645378609; bh=cdUxR2b+i4+so8GogJRIbO/WVdCjuJPCTQDyEetdngY=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=fgj6qgEjlrniLdITrtV7552N572r1eTgZTnRVckTKpX6NyG5Xos05T3/QrTgiC1RX
- 4g8Ws77UUOYOxAPpirJ5fdAS8CmUNP6PTmoLq6XJCSF6oKDGlSk+7QXl4UGSKoFA63
- yuBuFgNtXL4WH2eO+dYWmJRfjo+KFpdM9xlSdOgYumn3uPwobbk+z53Hj9l2X+OFzT
- SHGOGtYGRkiaDa4Bqs1sN5383J5kpBBShntrFG6WM+HrLNWiiz7wfFBfMqLP53y+SI
- CDrxaizyN9i5qIkTxHK7CRdTYGK/O2k5bt+QDQJB1DlXAb8dfZ6L4rMB5C1fl0Ci83
- hsZQM759jFaDw==
-Message-ID: <b49c7676-1864-d838-fcf7-7a1208d6ba78@benettiengineering.com>
-Date: Sun, 20 Feb 2022 18:21:59 +0100
+ b=Q91BIire6nDtNpKmq0TZO6h2AeLDIDpj56id5sxLyRoYtCJ6MptnuxHw1WwLmfs7a
+ G7ByBR/tYCLPbAbBSD87FN/tdfvSFBN41buXSW8UwuzsaIcOofShca1P3ZPOve3ypy
+ h182yZGzEcmbwlQa/2/WB7P9o00Vl4zQFIs8Mj2i3dVmGDHJz2DkoXekyJ6MXf0Azi
+ NuxmSxgoMWNUmzfjZeWqlefLYp17KVdCuBNhFNj9hkZA4q5jP3DmfP9S4Pve+DQRcn
+ ranSgaxNSLJn5MfpTlYIulA2hLtn4LGP2bzSHAmnT0iFGjUiVn1f+7WV5kc7isJ5ok
+ TH5FZFjAYZMNg==
+Message-ID: <1d826e4c-b6ee-0caf-901a-97cd9755e188@benettiengineering.com>
+Date: Sun, 20 Feb 2022 18:36:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
-To: Mohd Faiz Rohani <mohd.faiz.rohani@gmail.com>
-References: <CAHnHX5jAJw2ON8-e6UBmvDLR6j3p1iUYY1GvRpbULHBjF80SrQ@mail.gmail.com>
- <186B6238-5452-4211-BD9D-29A3C921DE42@benettiengineering.com>
- <CAHnHX5grmd94PGaBJn=XkJttwCEFdc=tWaE6v7PpZCN5UL8tSg@mail.gmail.com>
+To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>,
+ Arnout Vandecappelle <arnout@mind.be>
+References: <CAOf5uw=9FxAfegsPf7F2TG3ZPBvyhTb9aCOCJwZLogZvVRJWJw@mail.gmail.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CAHnHX5grmd94PGaBJn=XkJttwCEFdc=tWaE6v7PpZCN5UL8tSg@mail.gmail.com>
-X-CMAE-Envelope: MS4wfFE4xnDri/OnLTudOgSXFim1KleCbkyTTiUtrTLIq9yzykCnYZWZso0H5XVK6fIvQQ4JEsY7MjIAUjqmK9paabmJ1gK9FLT6atQjdCKwcxbGg8Fn2rez
- NX+N1cow7EQ/YRYbkEeHgOvjMXQ5wwDyqrg3cr73o2DegkIjPvBMZjrTYGNlzOj3I7jEgPf4uyyqqlUTCtceJugpZ+m9hqkZ4upP2/KWiCX/uDgTpjfJdpQI
- UzJuaWYfy37qmrO0JoVl1g==
-Subject: Re: [Buildroot] Issue with login
+In-Reply-To: <CAOf5uw=9FxAfegsPf7F2TG3ZPBvyhTb9aCOCJwZLogZvVRJWJw@mail.gmail.com>
+X-CMAE-Envelope: MS4wfOWR6EEWcg7QUnav0MpmtIqj5tODxz4BxykaahyHU9/9nnuXEYrXSpjL8u8KBjaUfn+Xon+MV0vyw/Cp3cHPjFpoVx5H+eoSkgUIf+NszQz1QVF2lDsl
+ YR31KQhTqn0AWDYX/3EWrKAV+Yub3cEScfEH2qXG/cE4ncvc1pNSZMA9J9XRU1vC+4XJ9FRY7iDSc/n6gXsnG4/n/6jnljiZvq82JD4BacfknNijMRSbN3SC
+ no7T+uDwtn7dZTXvHdVVrdppqv0+iM0MZWP/gyq9S3tsGiuKov6IOWLmXoUVCtjEaHfqZNeihbwAJ9ogs7iSHQ8gyuOxCsvd+YZZ/gr9FOs=
+Subject: Re: [Buildroot] imx8 common script problem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,110 +72,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Fabio Estevam <festevam@gmail.com>,
+ Stephane Viau <stephane.viau@oss.nxp.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTW9oZCwKCk9uIDIwLzAyLzIyIDE1OjAxLCBNb2hkIEZhaXogUm9oYW5pIHdyb3RlOgo+IGtp
-bmRseSBwbGVhc2UgZmluZCB0aGUgYXR0YWNoZWQuIAoKTmV4dCB0aW1lIHBsZWFzZSB1c2UgaHR0
-cHM6Ly9wYXN0ZWJpbi5jb20vCgo+IEknbSBoYXZpbmcgYSBwcm9ibGVtIGRvd25sb2FkaW5nIHRo
-ZSAKPiBuZXcgdmVyc2lvbiBmcm9tIHRoZSBMaW5hcm8gd2Vic2l0ZSBzbyBJIGp1c3QgdXNlZCB0
-aGUgdmVyc2lvbiB0aGF0IEkgCj4gaGF2ZS4gCgpJdCdzIHN0aWxsIGF2YWlsYWJsZSBoZXJlOgpo
-dHRwczovL3JlbGVhc2VzLmxpbmFyby5vcmcvY29tcG9uZW50cy90b29sY2hhaW4vYmluYXJpZXMv
-bGF0ZXN0LTcvYXJtLWxpbnV4LWdudWVhYmloZi8KCj4gQmFzaWNhbGx5IEknbSBuZXcgdG8gQnVp
-bGRyb290IGFuZCBsZWFybmluZyBpdCBmb3IgdGhlIG1vbWVudCAKPiB0aHJvdWdoIFVkZW15LgoK
-SSBkb24ndCBrbm93IHdoaWNoIGNvdXJzZSB5b3UncmUgZm9sbG93aW5nLCBidXQgYXMgSSBjYW4g
-dW5kZXJzdGFuZCBmcm9tIAp5b3VyIGRlZmNvbmZpZyBpcyB0aGF0IHlvdSdyZSB1c2luZyBhIGJl
-YWdsZWJvbmUgYm9hcmQuCi9tZWRpYS9mYWl6L0xpbnV4RGF0YS9Eb2N1bWVudHMvQkJCMS9idWls
-ZHJvb3QtMjAyMS4xMS4xL2NvbmZpZ3MvYmVhZ2xlYm9uZV9kZWZjb25maWcKCj4gSSB3aWxsIHRy
-eSB0aGUgQnVpbGRyb290IHRvb2xjaGFpbiBub3cgdG8gc2VlIGlmIHRoZSBzYW1lIAo+IHByb2Js
-ZW0gYXJpc2VzLgoKWWVzLCBwbGVhc2UuCgpCZWxvdyB5b3UndmUgbWVudGlvbmVkIHlvdSdyZSB1
-c2luZyBzeXN0ZW1kIGFzIEluaXQgU3lzdGVtLCBidXQgaXQncyBub3QgCnRydWUsIHlvdSdyZSB1
-c2luZyBCdXN5Ym94OgpCUjJfSU5JVF9CVVNZQk9YPXkKCldoYXQgSSBjYW4gc3VnZ2VzdCB5b3Ug
-aXMgdG8gYmVnaW4gZnJvbSBzY3JhdGNoIGJ5IHVzaW5nIHRoZSBhbHJlYWR5IApwcmVzZW50IGJl
-YWdsZWJvbmVfZGVmY29uZmlnIG9yIGJlYWdsZWJvbmVfcXQ1X2RlZmNvbmZpZywgdGhvc2UgYXJl
-IAptYWludGFpbmVkIGFuZCBzaG91bGQgd29yayBvdXQgb2YgdGhlIHNoZWxmLiBBbmQgZnJvbSB0
-aGVyZSBvbiBJIHdvdWxkIAp0cnkgdG8gdHdlYWsgYnVpbGRyb290LgoKSSBkb24ndCBoYXZlIGEg
-YmVhZ2xlYm9uZSBib2FyZCBoZXJlLCBzbyBJIGNhbid0IHRlc3QgaXQsIGJ1dCBJJ3ZlIAptYW5h
-Z2VkIHRvIGJ1aWxkIHlvdXIgZGVmY29uZmlnIHN1Y2Nlc3NmdWxseS4gQnV0IGl0J3MgZGlmZmlj
-dWx0IHRvIGhlbHAgCmZvciBtZSA6LS8KClRoZSBwb2ludCBpcywgZG8geW91IHJlYWxseSBuZWVk
-IHRvIHVzZSB0aGF0IHNwZWNpZmljIGRlZmNvbmZpZyBvciBjYW4gCnlvdSBnbyB3aXRoIHRoZSBj
-b25maWdzL2JlYWdsZWJvbmVfZGVmY29uZmlnPwoKVGhhdCB3YXkgeW91IGNvdWxkIGFsc28gaGVs
-cCB1cyB0byB1cGRhdGUgdGhvc2UgdmVyeSBvbGQgbGludXgvdWJvb3QgCnZlcnNpb25zIGJ5IHNl
-bmRpbmcgcGF0Y2hlcyBmb3IgYWxsIGJlYWdsZWJvYXJkIGRlZmNvbmZpZ3MuCgpXaGF0IGFib3V0
-IGJlY29taW5nIGEgQnVpbGRyb290IGNvbnRyaWJ1dG9yPyA6LSkKCkJlc3QgcmVnYXJkcwotLSAK
-R2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVlcmluZyBzYXMKCj4gVGhhbmtzCj4gCj4gT24g
-U3VuLCBGZWIgMjAsIDIwMjIgYXQgOToyNSBQTSBHaXVsaW8gQmVuZXR0aSAKPiA8Z2l1bGlvLmJl
-bmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbSAKPiA8bWFpbHRvOmdpdWxpby5iZW5ldHRpQGJl
-bmV0dGllbmdpbmVlcmluZy5jb20+PiB3cm90ZToKPiAKPiAKPj4gICAgIElsIGdpb3JubyAyMCBm
-ZWIgMjAyMiwgYWxsZSBvcmUgMTQ6MDgsIE1vaGQgRmFpeiBSb2hhbmkKPj4gICAgIDxtb2hkLmZh
-aXoucm9oYW5pQGdtYWlsLmNvbSA8bWFpbHRvOm1vaGQuZmFpei5yb2hhbmlAZ21haWwuY29tPj4K
-Pj4gICAgIGhhIHNjcml0dG86Cj4+Cj4+ICAgICDvu78KPj4KPj4gICAgIFllcyBJIGhhdmUgdHJp
-ZWQgcHV0dGluZyByb290IGFzIHRoZSBsb2dpbiwgYnV0IHN0aWxsIG5vdAo+PiAgICAgd29ya2lu
-Zy7CoCBJIGhhdmUgdHJpZWQgYm90aCBjb25kaXRpb25zLCB3aXRoIHBhc3N3b3JkIHNldCBhcyB3
-ZWxsCj4+ICAgICBhcyBubyBwYXNzd29yZCBzZXQgaW4gdGhlIEJ1aWxkcm9vdCBtZW51Y29uZmln
-IGFuZCByZWNvbXBpbGUuIEJ1dAo+PiAgICAgdGhlIHJlc3VsdHMgYXJlIHRoZSBzYW1lLiBJIGV2
-ZW4gZGlzYWJsZWQgdGhlIGxvZ2luIHByb21wdAo+PiAgICAgb3B0aW9ucywgYnV0IHdoZW4gSSBy
-dW5uaW5nIHRoZSBib2FyZCBsb2dpbiBwcm9tcHQga2VlcCBjb21pbmcuCj4+ICAgICBGeWnCoCBp
-IGhhdmUgdXNlZCB0aGUgZ2NjLWxpbmFyby03LjUuMC0yMDE5IHRvb2xjaGFpbiBpbiB1YnVudHUg
-MjAuMDQuCj4gCj4gICAgIE1taCwgY2FuIHlvdSBwcm92aWRlIHlvdXIgZGVmY29uZmlnPwo+ICAg
-ICBQbGVhc2UgY3JlYXRlIGl0IHdpdGg6Cj4gICAgICQgbWFrZSBzYXZlZGVmY29uZmlnCj4gICAg
-IHlvdSBzaG91bGQgZmluZCBhIGRlZmNvbmZpZyBpbiB5b3VyIEJ1aWxkcm9vdCBmb2xkZXIgYW5k
-IHBhc3RlYmluIGl0Cj4gICAgIHNvIHdlIGNhbiByZXByb2R1Y2UgaXQobWF5YmUpLgo+IAo+ICAg
-ICBCeSB0aGUgd2F5LCB3aHkgYXJlIHlvdSB1c2luZyBzdWNoIG9sZCB0b29sY2hhaW4/Cj4gICAg
-IEFuZCBBRkFJSyBCdWlsZHJvb3QgMjAyMS4xMS4xIHNob3VsZG7igJl0IHByb3ZpZGUgaXQgYXMg
-ZXh0ZXJuYWwKPiAgICAgdG9vbGNoYWluLCBzbyB0aGlzIG1lYW5zIHlvdSBoYXZlIHByb3ZpZGVk
-IGl0IGFuZCBpdHMgc3BlY2lmaWMKPiAgICAgb3B0aW9ucywgc28gbWF5YmUgdGhlcmUgc29tZSBt
-aXN0YWtlIHRoZXJlLgo+ICAgICBIYXZlIHlvdSBpbnN0ZWFkIHRyaWVkIGJ1aWxkaW5nIHVzaW5n
-IHRoZSBCdWlsZHJvb3QgdG9vbGNoYWluPwo+IAo+ICAgICBMaW51eCA0LjQuKiBzaG91bGQgd29y
-ayBvayB3aXRoIG1vcmUgcmVjZW50IHRvb2xjaGFpbiB2ZXJzaW9ucy4KPiAKPiAgICAgQmVzdCBy
-ZWdhcmRzCj4gICAgIEdpdWxpbwo+IAo+Pgo+Pgo+PiAgICAgT24gU3VuLCBGZWIgMjAsIDIwMjIs
-IDg6NTUgUE0gR2l1bGlvIEJlbmV0dGkKPj4gICAgIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5n
-aW5lZXJpbmcuY29tCj4+ICAgICA8bWFpbHRvOmdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVl
-cmluZy5jb20+PiB3cm90ZToKPj4KPj4gICAgICAgICBIaSBNb2hkLAo+Pgo+Pj4gICAgICAgICBJ
-bCBnaW9ybm8gMjAgZmViIDIwMjIsIGFsbGUgb3JlIDEzOjQ2LCBNb2hkIEZhaXogUm9oYW5pCj4+
-PiAgICAgICAgIDxtb2hkLmZhaXoucm9oYW5pQGdtYWlsLmNvbQo+Pj4gICAgICAgICA8bWFpbHRv
-Om1vaGQuZmFpei5yb2hhbmlAZ21haWwuY29tPj4gaGEgc2NyaXR0bzoKPj4+Cj4+PiAgICAgICAg
-IO+7vwo+Pj4gICAgICAgICBIacKgR2l1bGlvLAo+Pj4KPj4+ICAgICAgICAgWWVzIEkgaGF2ZSB1
-c2VkIHJvb3QgYXMgYSB1c2VyLiB1bmZvcnR1bmF0ZWx5IGkgZGlkbid0wqBzZXQKPj4+ICAgICAg
-ICAgdGhlIHBhdGggdG8gdGhlIHVzZXJzIHRhYmxlcy4gQ291bGQgdGhpcyBiZSBhIHByb2JsZW0/
-IElmIHNvLAo+Pj4gICAgICAgICB3aGVyZSB0byBzZXQgdGhlbT8gSSB1bmRlcnN0YW5kIHRoYXQg
-dGhlIHVzZXJzIGxpc3QgYXJlIGtlcHQKPj4+ICAgICAgICAgaW4gcGFzd2TCoGZpbGUgY29ycmVj
-dD8KPj4KPj4gICAgICAgICBCZWZvcmUgZ2V0dGluZyB0byB1c2VycyB0YWJsZSBsZXTigJlzIGNo
-ZWNrIHdoeSByb290IGRvZXNu4oCZdCB3b3JrLgo+Pgo+PiAgICAgICAgIEhhdmUgeW91IHRyaWVk
-IGlzc3Vpbmc6Cj4+ICAgICAgICAgcm9vdAo+PiAgICAgICAgIEFuZCBubyBwYXNzd29yZCBhdCBh
-bGwgYW5kIHByZXNzIOKAnGVudGVy4oCdIGtleT8KPj4KPj4gICAgICAgICBJdOKAmXMgcHJldHR5
-IHN0cmFuZ2UgaXQgZG9lc27igJl0IHdvcmsKPj4KPj4gICAgICAgICBHaXVsaW8KPj4KPj4+Cj4+
-PiAgICAgICAgIFRoYW5rcwo+Pj4KPj4+ICAgICAgICAgT24gU3VuLCBGZWIgMjAsIDIwMjIgYXQg
-Nzo0MyBQTSBHaXVsaW8gQmVuZXR0aQo+Pj4gICAgICAgICA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0
-aWVuZ2luZWVyaW5nLmNvbQo+Pj4gICAgICAgICA8bWFpbHRvOmdpdWxpby5iZW5ldHRpQGJlbmV0
-dGllbmdpbmVlcmluZy5jb20+PiB3cm90ZToKPj4+Cj4+PiAgICAgICAgICAgICBIaSBNb2hkLAo+
-Pj4KPj4+ICAgICAgICAgICAgIGhhdmUgeW91IHVzZWQgcm9vdCBhcyB1c2VyPyBPciBkaWQgeW91
-IHByb3ZpZGUgYSB1c2VyIHRhYmxlPwo+Pj4KPj4+ICAgICAgICAgICAgIEdpdWxpbwo+Pj4KPj4+
-ICAgICAgICAgICAgIEludmlhdG8gZGEgaVBob25lCj4+Pgo+Pj4gICAgICAgICAgICAgPiBJbCBn
-aW9ybm8gMjAgZmViIDIwMjIsIGFsbGUgb3JlIDExOjU3LCBNb2hkIEZhaXogUm9oYW5pCj4+PiAg
-ICAgICAgICAgICA8bW9oZC5mYWl6LnJvaGFuaUBnbWFpbC5jb20KPj4+ICAgICAgICAgICAgIDxt
-YWlsdG86bW9oZC5mYWl6LnJvaGFuaUBnbWFpbC5jb20+PiBoYSBzY3JpdHRvOgo+Pj4gICAgICAg
-ICAgICAgPgo+Pj4gICAgICAgICAgICAgPiDvu78KPj4+ICAgICAgICAgICAgID4gSGkgZ3V5cywK
-Pj4+ICAgICAgICAgICAgID4KPj4+ICAgICAgICAgICAgID4gSSBtYW5hZ2VkIHRvIGNvbXBpbGUg
-d2l0aCBzdWNjZXNzIHRoZSBVYm9vdChVLUJvb3QKPj4+ICAgICAgICAgICAgIDIwMTkuMDQpLCBM
-aW51eCBrZXJuZWwoNC40LjE1NSlhbmQgcm9vdCBmaWxlCj4+PiAgICAgICAgICAgICBzeXN0ZW0o
-c3lzdGVtZCAyNDkpIHVzaW5nIHRoZSBCdWlsZHJvb3QtMjAyMS4xMS4xLiBJdCB3YXMKPj4+ICAg
-ICAgICAgICAgIGFibGUgdG8gYm9vdCBzdWNjZXNzZnVsbHkgdW50aWwgdGhlIGxvZ2luIHByb21w
-dC4KPj4+ICAgICAgICAgICAgIEhvd2V2ZXIsIGl0IHNlZW1zIGxpa2UgdGhlcmUgaXMgYW4gZXJy
-b3Igd2l0aCB0aGUgbG9naW4KPj4+ICAgICAgICAgICAgIHByb21wdCBpdCBkb2VzIG5vdCB3YW50
-IHRvIGVudGVyLCBqdXN0IGxvb3BpbmcgYXJvdW5kIHRoZQo+Pj4gICAgICAgICAgICAgbG9naW4g
-cHJvbXB0IGFmdGVyIEkgaGF2ZSBlbnRlcmVkIHRoZSBsb2dpbiBuYW1lIChub3QKPj4+ICAgICAg
-ICAgICAgIHNob3dpbmcgdGhlIHBhc3N3b3JkIHByb21wdCkuIERpZCBhbnlvbmUga25vdyBhYm91
-dCB0aGlzPwo+Pj4gICAgICAgICAgICAgPgo+Pj4gICAgICAgICAgICAgPiBUaGFua3MuCj4+PiAg
-ICAgICAgICAgICA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4+PiAgICAgICAgICAgICA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPj4+ICAgICAgICAg
-ICAgID4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcgPG1haWx0bzpidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZz4KPj4+ICAgICAgICAgICAgID4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cj4+PiAgICAgICAgICAgICA8aHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Pgo+Pj4KCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Michael, Stephan, All,
+
+On 20/02/22 18:05, Michael Nazzareno Trimarchi wrote:
+> HI all
+> 
+> I found that in order to generate a correct flash.bin image, the
+> script at the moment are broken at least for imx8mn. It works only
+> with this change
+> 
+>    ${HOST_DIR}/bin/mkimage_imx8 -fit -loader
+> ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BIN
+> ARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+>          elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y$"
+> ${BR2_CONFIG}; then
+> -               cat ${BINARIES_DIR}/u-boot-spl.bin
+> ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+> +               dd if=${BINARIES_DIR}/u-boot-spl.bin
+> of=${BINARIES_DIR}/u-boot-spl-pad.bin bs=4 conv=sync
+> +               cat ${BINARIES_DIR}/u-boot-spl-pad.bin
+> ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+>                  BL31=${BINARIES_DIR}/bl31.bin
+> BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00960000
+> ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} >
+> ${BINARIES_DIR}/u-boot.its
+>                  ${HOST_DIR}/bin/mkimage -E -p 0x3000 -f
+> ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+> -               rm -f ${BINARIES_DIR}/u-boot.its
+> +               #rm -f ${BINARIES_DIR}/u-boot.its
+> 
+> 
+> The padding seems correct even in the origina soc.mk of imx tools. Can
+> anyone comment?
+
+I think the correct person to ask is Stephan that added support for:
+board/freescale/imx8mnevk/
+configs/freescale_imx8mnevk_defconfig
+and he maintains him as you can find in DEVELOPERS file.
+
+Michael, can you please send a patch --in-reply= to this e-mail with 
+these changes putting in Cc all people I've listed here? So it's easier 
+to review it. Especially for Stephan or who else owns a board with this SoC.
+
+Unfortunately I don't have such hardware :-/
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
