@@ -1,79 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5538BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 21:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78124C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 22:00:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A4E660E7F;
-	Mon, 21 Feb 2022 21:58:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 210C5408DF;
+	Mon, 21 Feb 2022 22:00:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uDVqBQ61u-IS; Mon, 21 Feb 2022 21:58:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F62A60BF2;
-	Mon, 21 Feb 2022 21:58:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1AF7E1BF3AB
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 21:58:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 086AD4023C
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 21:58:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MbUDgPkUFgEh for <buildroot@lists.busybox.net>;
- Mon, 21 Feb 2022 21:58:28 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qZlmA5y1PvzB; Mon, 21 Feb 2022 22:00:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FEA3408D7;
+	Mon, 21 Feb 2022 22:00:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A5EF1BF3AB
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 22:00:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 252174058C
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 22:00:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nlmo78HTeiPI for <buildroot@lists.busybox.net>;
+ Mon, 21 Feb 2022 22:00:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com
- [IPv6:2607:f8b0:4864:20::c33])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EEBFB4020E
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 21:58:27 +0000 (UTC)
-Received: by mail-oo1-xc33.google.com with SMTP id
- p206-20020a4a2fd7000000b0031bfec11983so14901563oop.13
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 13:58:27 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 74C5F400D6
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 22:00:34 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id d27so29357173wrb.5
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 14:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=aerf324mSeCfLq8o4Nx7cbidLEr6zMvrulAD0+5mTVc=;
- b=fjTjBr9YV3pG3dDZyDvT4Emul07UNYGezLb5fLyt9Fi65BXOetRR9hYcyRpHbXePVt
- 6pnoc4rJfdWtKp2B0KEgjM8bTIF2/Md1MX5cqBSa6QhOzkzbK14dSzs283r5ghFF+7dq
- bpbLQhjtEtnACQhTilLCufWdhhCw6BajqfJtKjP2JWamm8zVqpBv9k5hy61yw4LnPGGb
- kWPwLe1DhhomyrUjd/sIZLXwft5sc+qSzsZGJ8wq1MrnW0/TPpLUp5LQa7BBihqeDQov
- niu48BqjVpgtNEha0dchArco7N8UyDJs3husXqGD5BoLT0t7syZI5lZGQ7OK8y330Z4u
- h7HQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=To0kC9R44Lgi8oFq2eFTSlx0B+8+cIiYVz5E68+1PVw=;
+ b=q3fLfbEEV107TtIO5YtrKf9UKlAcez66vYw6AelqfDZIdgSTh0HgQGm/hqM329cZTZ
+ M3LLiQJlz9bgoSVN+8luoOcRKTo4zdWZkCpTvD+ZqzPhyFNU6sS9pgzvETB6B99cVLZ1
+ SJWfZNfD+lrveYd5M5MWEzKltOnt7vdDCWlA1Bm31ZtlKGikAWQGgbukO7eBvnyK86aX
+ fESNXNPGiDBCxbLi8P33hhBFSC3iGbO2b0fyfUL5d9oTsJ3QBpnkt8yTDID5a4xjSEEj
+ lnrtTglUe4VD6sE57LitwAxZEfGmtDq1dV9JJIVTgwxoQYDhjz0MQ+/7zXaWpUGDJniy
+ 9ELg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=aerf324mSeCfLq8o4Nx7cbidLEr6zMvrulAD0+5mTVc=;
- b=dqzfBrqZMEfDfMFKiLFffgWMvXi0DOiOyrA413JpXZhm9EexzNU+TgNH9ILTxmEjcv
- dV2PFDuRVB+6VFZUO4ty/7f1Fgupheyh0mKMumy7uIn0aGgh6SZKkctNKFg7l8/IWLHr
- HGazxxAP3WovsTV+zQw84xy21yIHhrf8yq9WJRnJV8nJC8+M/MtY02vojfytX9t96zkH
- k2CETcSLw9jrwZOiihPeDKDqvCqQP4rrh6cNpJACEi0NLPeTNEoSkclj7DsyqIolO/pw
- 3X7G9o1iqVdmuRpn229nxtB/st5fGuYyFbsI9nIUCEsgdYqEl53IPqLFOE9kgHjDAASi
- PcdQ==
-X-Gm-Message-State: AOAM530ArNRoaVfvOCA2tWbjGYIIY8kLDKl1Tr8icszfhZErzqJBYxVg
- EpudbRlQn+MM5rmBzlndBHBrfkYsSLHqHTquYe8=
-X-Google-Smtp-Source: ABdhPJwVdht2ZwnIWExuvf2oLaIaZEFCbaTfziDVNIrZnXZxH2g1+K7n9gwhN/5DHOschZEpwEHvXpIAF8EIcccKsuc=
-X-Received: by 2002:a05:6870:8c2f:b0:d0:88cf:27be with SMTP id
- ec47-20020a0568708c2f00b000d088cf27bemr408374oab.60.1645480706846; Mon, 21
- Feb 2022 13:58:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20220221172621.1937610-1-fontaine.fabrice@gmail.com>
- <20220221204235.GB2166282@scaer> <20220221220745.3fb583e5@gmx.net>
-In-Reply-To: <20220221220745.3fb583e5@gmx.net>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=To0kC9R44Lgi8oFq2eFTSlx0B+8+cIiYVz5E68+1PVw=;
+ b=Ne32YxheNLhn7AKkl+3sbTe841gMilC26s7a2BB55eSoaTjRfNJTWAQSvKhWRrdtcO
+ AItz3tQzeeer16TkLBeQcX5kQFhsol3eYz7A7/9/ga/plyg6PNZrttJkohHFligKPN7U
+ iyWuWUreMR/3AWkPlWjnrxRG32lTIm8bv2SONSaFUekTxc+IYJ5zEP3Iqz25S9D7vjUT
+ CCwQrBg7hLb0L0VjORXhU5hjLoTNsTWgy5EZhAS60lh35SKBNTLrSK5hkDSEwpY8/a/N
+ OwzPkEx6ByA2e1jhtN1+iw7H+gc9bNCz5bmLqy9xcF0BuH6ELEFKXOi3Jbi7PdJT9jcF
+ 1CAw==
+X-Gm-Message-State: AOAM532NAXIk2ctHa9PDLkCJG1+GqTP8R3ojYX00+2aZ/hD3qsI4lHUu
+ Gt1hnKTGQ253Y9G2VdduIgZiNP67cfI=
+X-Google-Smtp-Source: ABdhPJyQYWkhwvfwqUXMq5TnAcZziZyQarBoRXH98YVt+5j5pUqho/ATC/ntu8MlLRB+67KvO7eL0A==
+X-Received: by 2002:a5d:49c5:0:b0:1e0:8842:aebe with SMTP id
+ t5-20020a5d49c5000000b001e08842aebemr17766048wrs.337.1645480832256; 
+ Mon, 21 Feb 2022 14:00:32 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ f21-20020a7bcd15000000b0037bf83d99a2sm548899wmj.1.2022.02.21.14.00.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 21 Feb 2022 14:00:31 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 21 Feb 2022 22:58:20 +0100
-Message-ID: <CAPi7W83tVPJ++zOP+0QNt88gNyRUDyAZ+m5DGPJm9zgtsLa6qQ@mail.gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/flac: security bump to version
- 1.3.4
+To: buildroot@buildroot.org
+Date: Mon, 21 Feb 2022 23:00:25 +0100
+Message-Id: <20220221220025.2198034-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/flac: security bump to version 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,133 +89,215 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpMZSBsdW4uIDIxIGbDqXZyLiAyMDIyIMOgIDIyOjA3LCBQZXRlciBTZWlkZXJlciA8
-cHMucmVwb3J0QGdteC5uZXQ+IGEgw6ljcml0IDoKPgo+IEhlbGxvIEZhYmljZSwgWWFubiwKPgo+
-IE9uIE1vbiwgMjEgRmViIDIwMjIgMjE6NDI6MzUgKzAxMDAsICJZYW5uIEUuIE1PUklOIiA8eWFu
-bi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+Cj4gPiBGYWJyaWNlLCBBbGwsCj4gPgo+ID4g
-T24gMjAyMi0wMi0yMSAxODoyNiArMDEwMCwgRmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6
-Cj4gPiA+IFRoaXMgcmVsZWFzZSBtb3N0bHkgZml4ZXMgKHNlY3VyaXR5IHJlbGF0ZWQpIGJ1Z3Mg
-aW5jbHVkaW5nOgo+ID4gPiAgLSBGaXggMTIgZGVjb2RlciBidWdzIGZvdW5kIGJ5IG9zcy1mdXp6
-LCBpbmNsdWRpbmcgQ1ZFLTIwMjAtMDQ5OQo+ID4gPiAgLSBGaXggZW5jb2RlciBidWcgQ1ZFLTIw
-MjEtMDU2MQo+ID4gPgo+ID4gPiBBbHNvOgo+ID4gPiAgLSBSZXBsYWNlIGZpcnN0IHBhdGNoIHdo
-aWNoIHdhcyByZXZlcnRlZCBieQo+ID4gPiAgICBodHRwczovL2dpdGh1Yi5jb20veGlwaC9mbGFj
-L2NvbW1pdC80ZmJiNmQ0ZjJlY2YyYTk2YzE3ZWE5ODgwMTA4NDA5Zjg1MmMwOGE5Cj4gPgo+ID4g
-WW91IHJlbW92ZWQgdGhhdCBwYXRjaCBlbnRpcmVseSwgYnV0IGZvcmdvdCB0byBkcm9wIEZMQUNf
-QVVUT1JFQ09ORj1ZRVMuCj4gPgo+ID4gSSBoYWQgYSBsb29rIGF0IHRoYXQgdXBzdHJlYW0gY29t
-bWl0LCBhbmQgSSB3YXMgd29uZGVyaW5nIGhvdyB0aGV5IGdvdAo+ID4gdG8gZml4IHRoYXQgYnVp
-bGQgaXNzdWUgaWYgdGhleSByZXZlcnRlZCB0aGUgcGF0Y2guIEFuZCBpbmRlZWQgaXQgaXMgbm90
-Cj4gPiBmaXhlZCBhbmQgc3RpbGwgaGFwcGVuczoKPiA+Cj4gPiAgICAgY3B1LmM6NTg6MTA6IGZh
-dGFsIGVycm9yOiBzeXMvYXV4di5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5Cj4gPiAgICAg
-ICNpbmNsdWRlIDxzeXMvYXV4di5oPgo+ID4gICAgICAgICAgICAgICBefn5+fn5+fn5+fn4KPiA+
-ICAgICBjb21waWxhdGlvbiB0ZXJtaW5hdGVkLgo+ID4gICAgIG1ha2VbNl06ICoqKiBbTWFrZWZp
-bGU6NzM5OiBjcHUubG9dIEVycm9yIDEKPiA+ICAgICBtYWtlWzVdOiAqKiogW01ha2VmaWxlOjc5
-NjogYWxsLXJlY3Vyc2l2ZV0gRXJyb3IgMQo+ID4gICAgIG1ha2VbNF06ICoqKiBbTWFrZWZpbGU6
-NDM1OiBhbGwtcmVjdXJzaXZlXSBFcnJvciAxCj4gPiAgICAgbWFrZVszXTogKioqIFtNYWtlZmls
-ZTo1MDA6IGFsbC1yZWN1cnNpdmVdIEVycm9yIDEKPiA+ICAgICBtYWtlWzJdOiAqKiogW01ha2Vm
-aWxlOjQzMjogYWxsXSBFcnJvciAyCj4gPgo+ID4gU28gd2UgbmVlZCB0byBhZGFwdCB0aGF0IHBh
-dGNoIGluc3RlYWQgb2YgZHJvcHBpbmcgaXQgKGFuZCB0aHVzIHdlIG5lZWQKPiA+IHRvIGtlZXAg
-QVVUT1JFQ09ORj1ZRVMsIG9mIGNvdXJzZSkuCj4KPiBTYW1lIGNvbmNsdXNpb24vdGVzdCBmcm9t
-IG15IHNpZGUuLi4sIGp1c3Qga2VlcGluZyB0aGUgcGF0Y2ggKGFuZCBhdXRvcmVjb25mKSB3b3Jr
-cy4uLgpJIGZvcmdvdCB0byBhZGQgbXkgb3duIHBhdGNoLiBJJ2xsIHNlbmQgYSB2Mi4KPgo+IFJl
-Z2FyZHMsCj4gUGV0ZXIKPgo+Cj4gPgo+ID4gUmVnYXJkcywKPiA+IFlhbm4gRS4gTU9SSU4uCj4g
-Pgo+ID4gPiAgLSBEaXNhYmxlIHN0YWNrIHByb3RlY3Rpb24gKGVuYWJsZWQgYnkgZGVmYXVsdCBz
-aW5jZQo+ID4gPiAgICBodHRwczovL2dpdGh1Yi5jb20veGlwaC9mbGFjL2NvbW1pdC9mNzA2ZjI4
-MzIyNzBhMGI3ODUxY2RmZmU2MmFkMzdhY2RhOTQyM2ZlKQo+ID4gPiAgLSBEcm9wIG1kNSB3aGlj
-aCBpcyBub3QgcHJvdmlkZWQgYW55bW9yZQo+ID4gPiAgLSBVcGRhdGUgaW5kZW50YXRpb24gaW4g
-aGFzaCBmaWxlICh0d28gc3BhY2VzKQo+ID4gPgo+ID4gPiBodHRwczovL2dpdGh1Yi5jb20veGlw
-aC9mbGFjL3JlbGVhc2VzL3RhZy8xLjMuNAo+ID4gPgo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBGYWJy
-aWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+ID4gLS0tCj4gPiA+
-ICAuLi5jay1mb3Itc3lzLWF1eHYuaC1iZWZvcmUtZGVmaW5pbmctRkwucGF0Y2ggfCAzNiAtLS0t
-LS0tLS0tLS0tLS0tLS0tCj4gPiA+ICBwYWNrYWdlL2ZsYWMvZmxhYy5oYXNoICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAxMiArKystLS0tCj4gPiA+ICBwYWNrYWdlL2ZsYWMvZmxhYy5tayAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgNSArLS0KPiA+ID4gIDMgZmlsZXMgY2hhbmdlZCwgOCBp
-bnNlcnRpb25zKCspLCA0NSBkZWxldGlvbnMoLSkKPiA+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBw
-YWNrYWdlL2ZsYWMvMDAwMS1jb25maWd1cmUuYWMtY2hlY2stZm9yLXN5cy1hdXh2LmgtYmVmb3Jl
-LWRlZmluaW5nLUZMLnBhdGNoCj4gPiA+Cj4gPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2ZsYWMv
-MDAwMS1jb25maWd1cmUuYWMtY2hlY2stZm9yLXN5cy1hdXh2LmgtYmVmb3JlLWRlZmluaW5nLUZM
-LnBhdGNoIGIvcGFja2FnZS9mbGFjLzAwMDEtY29uZmlndXJlLmFjLWNoZWNrLWZvci1zeXMtYXV4
-di5oLWJlZm9yZS1kZWZpbmluZy1GTC5wYXRjaAo+ID4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2
-NDQKPiA+ID4gaW5kZXggZDEzOThkNGIzZS4uMDAwMDAwMDAwMAo+ID4gPiAtLS0gYS9wYWNrYWdl
-L2ZsYWMvMDAwMS1jb25maWd1cmUuYWMtY2hlY2stZm9yLXN5cy1hdXh2LmgtYmVmb3JlLWRlZmlu
-aW5nLUZMLnBhdGNoCj4gPiA+ICsrKyAvZGV2L251bGwKPiA+ID4gQEAgLTEsMzYgKzAsMCBAQAo+
-ID4gPiAtRnJvbSAxNGEwNzEzMzg5ZmJmZWY1OTIyNWQwMjdlYTQ2NmViYjQ3OGE4YzZiIE1vbiBT
-ZXAgMTcgMDA6MDA6MDAgMjAwMQo+ID4gPiAtRnJvbTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9y
-dEBnbXgubmV0Pgo+ID4gPiAtRGF0ZTogVGh1LCAxOSBTZXAgMjAxOSAyMToxODowNCArMDIwMAo+
-ID4gPiAtU3ViamVjdDogW1BBVENIXSBjb25maWd1cmUuYWM6IGNoZWNrIGZvciBzeXMvYXV4di5o
-IGJlZm9yZSBkZWZpbmluZyBGTEFDX19DUFVfUFBDCj4gPiA+IC0KPiA+ID4gLVVwc3RyZWFtOiBo
-dHRwczovL2dpdGh1Yi5jb20veGlwaC9mbGFjL3B1bGwvMTQyCj4gPiA+IC1TaWduZWQtb2ZmLWJ5
-OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Cj4gPiA+IC0tLS0KPiA+ID4gLSBj
-b25maWd1cmUuYWMgfCA0ICsrLS0KPiA+ID4gLSAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQo+ID4gPiAtCj4gPiA+IC1kaWZmIC0tZ2l0IGEvY29uZmlndXJl
-LmFjIGIvY29uZmlndXJlLmFjCj4gPiA+IC1pbmRleCAwMjI4YTEyLi42NGNiM2YyIDEwMDY0NAo+
-ID4gPiAtLS0tIGEvY29uZmlndXJlLmFjCj4gPiA+IC0rKysgYi9jb25maWd1cmUuYWMKPiA+ID4g
-LUBAIC0xNDQsNyArMTQ0LDcgQEAgY2FzZSAiJGhvc3RfY3B1IiBpbgo+ID4gPiAtICAgcG93ZXJw
-YzY0fHBvd2VycGM2NGxlKQo+ID4gPiAtICAgICAgICAgICBjcHVfcHBjNjQ9dHJ1ZQo+ID4gPiAt
-ICAgICAgICAgICBjcHVfcHBjPXRydWUKPiA+ID4gLS0gICAgICAgICAgQUNfREVGSU5FKEZMQUNf
-X0NQVV9QUEMpCj4gPiA+IC0rICAgICAgICAgIEFDX0NIRUNLX0hFQURFUihzeXMvYXV4di5oLCBB
-Q19ERUZJTkUoRkxBQ19fQ1BVX1BQQykpCj4gPiA+IC0gICAgICAgICAgIEFIX1RFTVBMQVRFKEZM
-QUNfX0NQVV9QUEMsIFtkZWZpbmUgaWYgYnVpbGRpbmcgZm9yIFBvd2VyUENdKQo+ID4gPiAtICAg
-ICAgICAgICBBQ19ERUZJTkUoRkxBQ19fQ1BVX1BQQzY0KQo+ID4gPiAtICAgICAgICAgICBBSF9U
-RU1QTEFURShGTEFDX19DUFVfUFBDNjQsIFtkZWZpbmUgaWYgYnVpbGRpbmcgZm9yIFBvd2VyUEM2
-NF0pCj4gPiA+IC1AQCAtMTUyLDcgKzE1Miw3IEBAIGNhc2UgIiRob3N0X2NwdSIgaW4KPiA+ID4g
-LSAgICAgICAgICAgOzsKPiA+ID4gLSAgIHBvd2VycGN8cG93ZXJwY2xlKQo+ID4gPiAtICAgICAg
-ICAgICBjcHVfcHBjPXRydWUKPiA+ID4gLS0gICAgICAgICAgQUNfREVGSU5FKEZMQUNfX0NQVV9Q
-UEMpCj4gPiA+IC0rICAgICAgICAgIEFDX0NIRUNLX0hFQURFUihzeXMvYXV4di5oLCBBQ19ERUZJ
-TkUoRkxBQ19fQ1BVX1BQQykpCj4gPiA+IC0gICAgICAgICAgIEFIX1RFTVBMQVRFKEZMQUNfX0NQ
-VV9QUEMsIFtkZWZpbmUgaWYgYnVpbGRpbmcgZm9yIFBvd2VyUENdKQo+ID4gPiAtICAgICAgICAg
-ICBhc21fb3B0aW1pc2F0aW9uPSRhc21fb3B0Cj4gPiA+IC0gICAgICAgICAgIDs7Cj4gPiA+IC0t
-LQo+ID4gPiAtMi4yMy4wCj4gPiA+IC0KPiA+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmxhYy9m
-bGFjLmhhc2ggYi9wYWNrYWdlL2ZsYWMvZmxhYy5oYXNoCj4gPiA+IGluZGV4IGRmN2MyZDFiOTUu
-LjI0NDQ1MzVlMGYgMTAwNjQ0Cj4gPiA+IC0tLSBhL3BhY2thZ2UvZmxhYy9mbGFjLmhhc2gKPiA+
-ID4gKysrIGIvcGFja2FnZS9mbGFjL2ZsYWMuaGFzaAo+ID4gPiBAQCAtMSwxMCArMSw4IEBACj4g
-PiA+IC0jIEZyb20gaHR0cHM6Ly9mdHAub3N1b3NsLm9yZy9wdWIveGlwaC9yZWxlYXNlcy9mbGFj
-L01ENVNVTVMKPiA+ID4gLW1kNSAyNjcwM2VkMjg1OGMxZmM5ZmZjMDUxMzZkMTNkYWE2OSAgZmxh
-Yy0xLjMuMy50YXIueHoKPiA+ID4gICMgRnJvbSBodHRwczovL2Z0cC5vc3Vvc2wub3JnL3B1Yi94
-aXBoL3JlbGVhc2VzL2ZsYWMvU0hBMVNVTVMKPiA+ID4gLXNoYTEgNmFjMmU4ZjFkZDE4YzliMDIx
-NGM0ZDgxYmQ3MGNkYzFlOTQzY2ZmZSAgZmxhYy0xLjMuMy50YXIueHoKPiA+ID4gK3NoYTEgIDk5
-YzI4NDgyYThiMmQ4MWRlYWY3NDA2MzllNGNiNTU2NTg0Mjc0MjAgIGZsYWMtMS4zLjQudGFyLnh6
-Cj4gPiA+ICAjIEZyb20gaHR0cDovL2Rvd25sb2Fkcy54aXBoLm9yZy9yZWxlYXNlcy9mbGFjL1NI
-QTI1NlNVTVMudHh0Cj4gPiA+IC1zaGEyNTYgMjEzZTgyYmQ3MTZjOWRlNmRiMmY5OGJjYWRiYzRj
-MjRjN2UyZWZlOGM3NTkzOWExYTg0ZTI4NTM5YzRlMTc0OCAgZmxhYy0xLjMuMy50YXIueHoKPiA+
-ID4gK3NoYTI1NiAgOGZmMDYwN2U3NWEzMjJkZDdjZDZlYzQ4ZjRmMjI1NDcxNDA0YWUyNzMwZDBl
-YTk0NTEyN2IxMzU1MTU1ZTczNyAgZmxhYy0xLjMuNC50YXIueHoKPiA+ID4gICMgTG9jYWxseSBj
-b21wdXRlZAo+ID4gPiAtc2hhMjU2IDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYxODRkOGZmOTg2YzY3
-NWFmYjUxNGQ0ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIENPUFlJTkcuR1BMCj4gPiA+IC1zaGEyNTYg
-NWRmMDcwMDcxOTg5ODljNjIyZjVkNDFkZThkNzAzZTdiZWYzZDBlNzlkNjJlMjQzMzJlZTczOWE0
-NTJhZjYyYSAgQ09QWUlORy5MR1BMCj4gPiA+IC1zaGEyNTYgZmEyN2NiMTFmMTNmOTdiMGM1ZjNm
-ZjM2M2IxZTI2MTBjNmVmZTg3ZWQxNzU3NzljYjJhNzhlNDRlYjE5ZDM0YyAgQ09QWUlORy5YaXBo
-Cj4gPiA+ICtzaGEyNTYgIDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYxODRkOGZmOTg2YzY3NWFmYjUx
-NGQ0ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIENPUFlJTkcuR1BMCj4gPiA+ICtzaGEyNTYgIDVkZjA3
-MDA3MTk4OTg5YzYyMmY1ZDQxZGU4ZDcwM2U3YmVmM2QwZTc5ZDYyZTI0MzMyZWU3MzlhNDUyYWY2
-MmEgIENPUFlJTkcuTEdQTAo+ID4gPiArc2hhMjU2ICBmYTI3Y2IxMWYxM2Y5N2IwYzVmM2ZmMzYz
-YjFlMjYxMGM2ZWZlODdlZDE3NTc3OWNiMmE3OGU0NGViMTlkMzRjICBDT1BZSU5HLlhpcGgKPiA+
-ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmxhYy9mbGFjLm1rIGIvcGFja2FnZS9mbGFjL2ZsYWMu
-bWsKPiA+ID4gaW5kZXggOWFhMDBiN2ZmZC4uMmZmMDQ4YjZlNiAxMDA2NDQKPiA+ID4gLS0tIGEv
-cGFja2FnZS9mbGFjL2ZsYWMubWsKPiA+ID4gKysrIGIvcGFja2FnZS9mbGFjL2ZsYWMubWsKPiA+
-ID4gQEAgLTQsNyArNCw3IEBACj4gPiA+ICAjCj4gPiA+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-Iwo+ID4gPgo+ID4gPiAtRkxBQ19WRVJTSU9OID0gMS4zLjMKPiA+ID4gK0ZMQUNfVkVSU0lPTiA9
-IDEuMy40Cj4gPiA+ICBGTEFDX1NJVEUgPSBodHRwOi8vZG93bmxvYWRzLnhpcGgub3JnL3JlbGVh
-c2VzL2ZsYWMKPiA+ID4gIEZMQUNfU09VUkNFID0gZmxhYy0kKEZMQUNfVkVSU0lPTikudGFyLnh6
-Cj4gPiA+ICBGTEFDX0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ID4gPiBAQCAtMTksNyArMTksOCBA
-QCBGTEFDX0FVVE9SRUNPTkYgPSBZRVMKPiA+ID4gIEZMQUNfQ09ORl9PUFRTID0gXAo+ID4gPiAg
-ICAgJChpZiAkKEJSMl9JTlNUQUxMX0xJQlNURENQUCksLS1lbmFibGUtY3BwbGlicywtLWRpc2Fi
-bGUtY3BwbGlicykgXAo+ID4gPiAgICAgLS1kaXNhYmxlLXhtbXMtcGx1Z2luIFwKPiA+ID4gLSAg
-IC0tZGlzYWJsZS1hbHRpdmVjCj4gPiA+ICsgICAtLWRpc2FibGUtYWx0aXZlYyBcCj4gPiA+ICsg
-ICAtLWRpc2FibGUtc3RhY2stc21hc2gtcHJvdGVjdGlvbgo+ID4gPgo+ID4gPiAgaWZlcSAoJChC
-UjJfUEFDS0FHRV9MSUJPR0cpLHkpCj4gPiA+ICBGTEFDX0NPTkZfT1BUUyArPSAtLXdpdGgtb2dn
-PSQoU1RBR0lOR19ESVIpL3Vzcgo+ID4gPiAtLQo+ID4gPiAyLjM0LjEKPiA+ID4KPiA+ID4gX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+ID4gYnVpbGRy
-b290IG1haWxpbmcgbGlzdAo+ID4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gPiBodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiA+Cj4K
-QmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+This release mostly fixes (security related) bugs including:
+ - Fix 12 decoder bugs found by oss-fuzz, including CVE-2020-0499
+ - Fix encoder bug CVE-2021-0561
+
+Also:
+ - Replace first patch which was reverted by
+   https://github.com/xiph/flac/commit/4fbb6d4f2ecf2a96c17ea9880108409f852c08a9
+ - Disable stack protection (enabled by default since
+   https://github.com/xiph/flac/commit/f706f2832270a0b7851cdffe62ad37acda9423fe)
+ - Drop md5 which is not provided anymore
+ - Update indentation in hash file (two spaces)
+
+https://github.com/xiph/flac/releases/tag/1.3.4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin and Peter Seiderer):
+ - Add upstream patch
+
+ package/flac/0001-Fix-uclibc-build.patch      | 81 +++++++++++++++++++
+ ...ck-for-sys-auxv.h-before-defining-FL.patch | 36 ---------
+ package/flac/flac.hash                        | 12 ++-
+ package/flac/flac.mk                          |  5 +-
+ 4 files changed, 89 insertions(+), 45 deletions(-)
+ create mode 100644 package/flac/0001-Fix-uclibc-build.patch
+ delete mode 100644 package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
+
+diff --git a/package/flac/0001-Fix-uclibc-build.patch b/package/flac/0001-Fix-uclibc-build.patch
+new file mode 100644
+index 0000000000..fcba670fae
+--- /dev/null
++++ b/package/flac/0001-Fix-uclibc-build.patch
+@@ -0,0 +1,81 @@
++From 4c62082f64132bfcbcb6569aa914c5ec283303f9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 21 Feb 2022 18:21:11 +0100
++Subject: [PATCH] Fix uclibc build
++
++Commit 4fbb6d4f2ecf2a96c17ea9880108409f852c08a9 reverted commit
++44036c9a9b45d03373fe90e9c112852bfc054c51 and so broke again the build on
++uclibc
++
++So put back the sys/auxv.h check as well as a getauxval check in a way
++that doesn't break iOS
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/xiph/flac/pull/292]
++---
++ configure.ac      | 5 ++++-
++ src/libFLAC/cpu.c | 9 ++++-----
++ 2 files changed, 8 insertions(+), 6 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 4d7dc2e4..6f32fa45 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -69,7 +69,7 @@ AC_C_INLINE
++ AC_C_VARARRAYS
++ AC_C_TYPEOF
++ 
++-AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
+++AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/auxv.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
++ 
++ XIPH_C_BSWAP32
++ XIPH_C_BSWAP16
++@@ -101,6 +101,9 @@ fi
++ # For the XMMS plugin.
++ AC_CHECK_TYPES(socklen_t, [], [])
++ 
+++dnl check for getauxval in standard library
+++AC_CHECK_FUNCS(getauxval)
+++
++ dnl check for getopt in standard library
++ dnl AC_CHECK_FUNCS(getopt_long , , [LIBOBJS="$LIBOBJS getopt.o getopt1.o"] )
++ AC_CHECK_FUNCS(getopt_long, [], [])
++diff --git a/src/libFLAC/cpu.c b/src/libFLAC/cpu.c
++index 8b92f4c7..64c6acad 100644
++--- a/src/libFLAC/cpu.c
+++++ b/src/libFLAC/cpu.c
++@@ -53,11 +53,9 @@
++ #define dfprintf(file, format, ...)
++ #endif
++ 
++-#if defined FLAC__CPU_PPC
++-#if defined(__linux__) || (defined(__FreeBSD__) && (__FreeBSD__ >= 12))
+++#if defined(HAVE_SYS_AUXV_H)
++ #include <sys/auxv.h>
++ #endif
++-#endif
++ 
++ #if (defined FLAC__CPU_IA32 || defined FLAC__CPU_X86_64) && (defined FLAC__HAS_NASM || FLAC__HAS_X86INTRIN) && !defined FLAC__NO_ASM
++ 
++@@ -247,7 +245,7 @@ ppc_cpu_info (FLAC__CPUInfo *info)
++ #define PPC_FEATURE2_ARCH_2_07		0x80000000
++ #endif
++ 
++-#ifdef __linux__
+++#if defined (__linux__) && defined(HAVE_GETAUXVAL)
++ 	if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_3_00) {
++ 		info->ppc.arch_3_00 = true;
++ 	} else if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_2_07) {
++@@ -267,7 +265,8 @@ ppc_cpu_info (FLAC__CPUInfo *info)
++ 	info->ppc.arch_2_07 = false;
++ 	info->ppc.arch_3_00 = false;
++ #else
++-#error Unsupported platform! Please add support for reading ppc hwcaps.
+++	info->ppc.arch_2_07 = false;
+++	info->ppc.arch_3_00 = false;
++ #endif
++ 
++ #else
++-- 
++2.34.1
++
+diff --git a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch b/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
+deleted file mode 100644
+index d1398d4b3e..0000000000
+--- a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 14a0713389fbfef59225d027ea466ebb478a8c6b Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 19 Sep 2019 21:18:04 +0200
+-Subject: [PATCH] configure.ac: check for sys/auxv.h before defining FLAC__CPU_PPC
+-
+-Upstream: https://github.com/xiph/flac/pull/142
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0228a12..64cb3f2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -144,7 +144,7 @@ case "$host_cpu" in
+- 	powerpc64|powerpc64le)
+- 		cpu_ppc64=true
+- 		cpu_ppc=true
+--		AC_DEFINE(FLAC__CPU_PPC)
+-+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
+- 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
+- 		AC_DEFINE(FLAC__CPU_PPC64)
+- 		AH_TEMPLATE(FLAC__CPU_PPC64, [define if building for PowerPC64])
+-@@ -152,7 +152,7 @@ case "$host_cpu" in
+- 		;;
+- 	powerpc|powerpcle)
+- 		cpu_ppc=true
+--		AC_DEFINE(FLAC__CPU_PPC)
+-+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
+- 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
+- 		asm_optimisation=$asm_opt
+- 		;;
+---
+-2.23.0
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+index df7c2d1b95..2444535e0f 100644
+--- a/package/flac/flac.hash
++++ b/package/flac/flac.hash
+@@ -1,10 +1,8 @@
+-# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
+-md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
+ # From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
+-sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
++sha1  99c28482a8b2d81deaf740639e4cb55658427420  flac-1.3.4.tar.xz
+ # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
+-sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
++sha256  8ff0607e75a322dd7cd6ec48f4f225471404ae2730d0ea945127b1355155e737  flac-1.3.4.tar.xz
+ # Locally computed
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+-sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
+-sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
++sha256  fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index 9aa00b7ffd..2ff048b6e6 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLAC_VERSION = 1.3.3
++FLAC_VERSION = 1.3.4
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
+@@ -19,7 +19,8 @@ FLAC_AUTORECONF = YES
+ FLAC_CONF_OPTS = \
+ 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
+ 	--disable-xmms-plugin \
+-	--disable-altivec
++	--disable-altivec \
++	--disable-stack-smash-protection
+ 
+ ifeq ($(BR2_PACKAGE_LIBOGG),y)
+ FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
