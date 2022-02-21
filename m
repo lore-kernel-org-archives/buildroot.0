@@ -4,74 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BB9FC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 21:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C544C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 21:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11B4181347;
-	Mon, 21 Feb 2022 21:39:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F87C81467;
+	Mon, 21 Feb 2022 21:57:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wYlA6Pzk0Rnr; Mon, 21 Feb 2022 21:39:41 +0000 (UTC)
+	with ESMTP id 8dXlR4vKyqfR; Mon, 21 Feb 2022 21:57:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91C1081335;
-	Mon, 21 Feb 2022 21:39:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB22C1BF3AB
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 21:39:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C75908141D;
+	Mon, 21 Feb 2022 21:57:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B11C1BF3AB
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 21:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9782C403B9
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 21:39:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0925B60BF2
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 21:57:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BDsu4TCqsYEy for <buildroot@lists.busybox.net>;
- Mon, 21 Feb 2022 21:39:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1ABE8400D6
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 21:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1645479574;
- bh=qVt/dfT4PwxegbTROa6mQGzrHQ5/vRYMKzw8RDL39M8=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=O5lZlIEXtD1BH6Ccq7OpuM0P64JhVjrSG7nbllUZAvGyz34nooszbt1mWUmPVPM+P
- RSvukn4ww9QiSKBNLQCZl0A0dSDZa3mBZJhmsbmqW/F4MCpOfUIECzOCW5a9a+CmTY
- riPU0buqNjcGF5XdqCTUB+Uk3qt+m5J7CHuCDeBU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.189]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MQvCv-1nZGi121UV-00NyWm; Mon, 21 Feb 2022 22:39:34 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WJJ4Htb60jVS for <buildroot@lists.busybox.net>;
+ Mon, 21 Feb 2022 21:57:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0C6B060BD3
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 21:57:08 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id j17so2635068wrc.0
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 13:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=csrHbhQFV1N7fML6M5PLXnsOr06rBjseA3Dvwfc3/s8=;
+ b=jpifPgDeRxxg4LpevCIsqFxSZ8lTVKzyDuFUYqauyoba4T5gyLu/govsAOAI0uxDSe
+ MbtOPo7GTY9QGrpUdKY2PlgWGs1+dEIh1++uVRgaob2cWzGk4MtICpS7WR9UD6N4V1FM
+ Xl8jDMO0CSUeB/THMXjvU2rpLAunO+VWPKIJbGK2DnZSRX2uOI3xvB1XeoRudyVnJSmN
+ GDNTwSQvORGnXQyd1zOvSWE5kpHRhGcSSky5ZsTQYSWOD49WlpsS45lu0HEGIPnkN2gf
+ VBl/mta0uHnXPq3m9aJjV4IZST+THjxhs9mwAafjJ+ji6ido6ROpGYk3sZfKok6yeDSN
+ jUuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=csrHbhQFV1N7fML6M5PLXnsOr06rBjseA3Dvwfc3/s8=;
+ b=tSixjFtmyUAEF383VNTv8LSbNVv2+edrsVqfE2zfANwcPiiDBX0J8WNOK7Un9v/WzD
+ kD+vAlC72A5+rsmK5fdWje/TMSuSbBqIjWN7FF0l8QAtX2ThArK8pinJqsUxDYpo+W3Z
+ 9XykGNiUr+7inqmJv792bzaJSgHqGbZUbfofwjIxUw3wxktgIhH3H66LizK0JPHsuFO4
+ piGn3gT4tBpmsw3BvaRK/UYUZfPy3TsGAflzD66fKhO1DXENooMf6iqNm0SX59ZaI4rv
+ GirGXBJHg5j/aPG2XP94PvV1NXObT9oVHbxNZ61A+y1SnmncfYeD1LmIWBSssRQSK9XG
+ CAGA==
+X-Gm-Message-State: AOAM531wNQnOWvkhqGJh3lZ347z2mtMg9OYYAMVZK+RY1jFGlWsCV6go
+ +QjWe12qbtHWoQGCdU+9Ay19GONECh0=
+X-Google-Smtp-Source: ABdhPJxphmXja6PL7HyXpK7IkdtaI8YzULzu3SETPZps+V/Ynl79OCoTlMAq6ltrfZNCnpqytH+OHQ==
+X-Received: by 2002:a5d:4b48:0:b0:1e6:309b:f1f9 with SMTP id
+ w8-20020a5d4b48000000b001e6309bf1f9mr17150031wrs.501.1645480627191; 
+ Mon, 21 Feb 2022 13:57:07 -0800 (PST)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id k19sm482991wmo.8.2022.02.21.13.57.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 21 Feb 2022 13:57:06 -0800 (PST)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Feb 2022 22:39:33 +0100
-Message-Id: <20220221213933.457-1-ps.report@gmx.net>
+Date: Mon, 21 Feb 2022 22:57:02 +0100
+Message-Id: <20220221215702.8461-1-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:PH7CKEQVB0p2ESIknyQQCGzkpSqTMI5w9TM2u7trOiV4VHbRx5D
- agr76+QubHXBjFiWykwzJ2jf+O4oQWh0+T1X3DJsN+8LfSLRi6yOcF3g2BVB7qCqUqSILvu
- pVe1/+DLVFsX5Yjj8UM+o+4H4G8JsbSrt1pS+fs1YoFq908QIxdR7N3tPnyfFkw3i+kH9IY
- FbVBXRVjfqBYTQsAdvldQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:C44LP20T/E0=:dbWk5JmxvDl7IqavRH2cnj
- U3OZnw7m7c6oQkfY1VsSwYlA+6SlRVGBC1wvTR5tMYhBMfNgRPRrS1dzJK0fxBkTpoDcGK0yN
- z9xFWgSA4iLWnRZ0Kx2xfo0Ra56fXlacsCPpgRfyNAoUyifc2BQvwnu2c2gPgCY9MhbZi71yY
- G0uShmE79R9A006TYkoEtS2Z/dpFlyl/zJk4AelA8zrzSKY4RbGCDvmE7EQJu6laoSt9AFhWk
- gEdR5RUX+/uHWTH1Z4EgYiEX/eBZYjC/V6GptzrjY1M61s9v6YsMWyV8dRxlTep9xcUb8KBEN
- KCZq+OPIPuHKJso+JJmeqosGQ4e+SFX+xOtFJDdGUytWht2L4fG5WUVE0zUTXVyyuZCLdINZo
- A6pI1FG30+/x1XDDcCasR0+SeKtqj0/nLtY+B5iBy0YMaLgLU9ehIFrnU6kP6pjwN1m4ZFyCr
- SQeBFPJKHWVi2tNYN3W6kJkpQmQIFAxnDsXw1WP5QJmoT8a5hKuzif/lG0w1bQH96Umdr9xFc
- O9meqhyP6Zc22EVK+cBMrHa9rT9vlC1CNYBb60ZR2Rt1rV8X4Dvx5QPpQW/IJ2yp6BQtdAXld
- bDGBa8cuKRU684d8NVJ7YJegy4+URtCFuhJ4HxpUfp2d6zOfjrSdvfYVJQCDcWbDKTKBQuHsT
- HUDkS7DDyb2FuX/ilUYM1MuW4RXBcJihh0LRPtIKl9yrAGezwIbYYSxRgeQf5j3iZXVLwNWQ4
- oejziwcFe6L8nXIP5NGpZjWDwSx65NU9GuM9ze0UFIvO9kIYVI2nnKDEteWJMeTqSn13h18mh
- srd8SWmtb3pfyihobzlDQxSQ7u8DjLFHYskyrYqool3lZ4x+pVmBtze9gmNBdKP7sWadQNsdA
- BGySoHEPBRKTT9wpftWdTlNKaEfxrgLs2yAAAtn/Lz/RFouQG7TPJ7jA0AieVidq60fC2HMrs
- VX8T7pdazTXS24GnS01wlQBPAQ7vW58f7R+nbgvZk0G4PCKeEiORo5GOzeII7bsMxVQ63NRSy
- lixuZrkhRu0DAJED2Q9OCUHFWkkrPyCkn8Xh1D6UPKhx+uj4TmVJPx5xNPXt8yacHu6kYueGL
- JZNFLbL93VBoXc=
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.20.0
+Subject: [Buildroot] [PATCH] package/python-twisted: add missing python
+ typing extensions runtime dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,56 +88,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- change site URL to new gitlab.freedesktop.org location
-- change hash from upstream provided to locally computed (and drop sha512)
+ # python sample_python_txtorcon.py
+ Traceback (most recent call last):
+   File "/root/sample_python_txtorcon.py", line 1, in <module>
+     import txtorcon  # noqa
+   File "/usr/lib/python3.10/site-packages/txtorcon/__init__.py", line 11, in <module>
+   File "/usr/lib/python3.10/site-packages/txtorcon/router.py", line 10, in <module>
+   File "/usr/lib/python3.10/site-packages/txtorcon/util.py", line 17, in <module>
+   File "/usr/lib/python3.10/site-packages/twisted/internet/defer.py", line 42, in <module>
+ ModuleNotFoundError: No module named 'typing_extensions'
 
-For details see [1] and [2].
+python typing_extensions is required since python-twisted 22.1.0 [1]
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2022-February/042111.html
-[2] https://gitlab.freedesktop.org/libinput/libinput/-/releases/1.20.0
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2116202537
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[1] https://github.com/twisted/twisted/commit/6e768da0a10c8ab42a57a1c0fa505ebe2d8bfb30
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/libinput/libinput.hash | 5 ++---
- package/libinput/libinput.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-twisted/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index f18a727810..d1c7cfb104 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-December/042068.html
--sha256  3cae78ccde19d7d0f387e58bc734d4d17ab5f6426f54a9e8b728c90b17baa068  libinput-1.19.3.tar.xz
--sha512  f4b776d0da78c687ba21b430a04941ac6b43f68970c82ec9f7360358fdea5ed6a873948ce66a25bcdd64d4b95fa4bf705cc24dbc25c7c0f5fd2d0efbd763f298  libinput-1.19.3.tar.xz
-+# Locally computed
-+sha256  6c1f97892a7d599f97349e5e7c1239901fe00edcd4f6289f410034d5dc06cc85  libinput-1.20.0.tar.bz2
- 
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 2f9c639c22..b814e3416d 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.19.3
--LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
--LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
-+LIBINPUT_VERSION = 1.20.0
-+LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
-+LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
- LIBINPUT_INSTALL_STAGING = YES
- LIBINPUT_LICENSE = MIT
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index 49a21c4204..8596025e9c 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_TWISTED
+ 	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
+ 	select BR2_PACKAGE_PYTHON_PYHAMCREST # runtime
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
++	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	help
+ 	  Twisted is an event-driven networking engine written in
+ 	  Python.
 -- 
 2.35.1
 
