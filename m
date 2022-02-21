@@ -1,76 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF387C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 20:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3BDEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 20:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6397960C0F;
-	Mon, 21 Feb 2022 20:12:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 210A3400A8;
+	Mon, 21 Feb 2022 20:42:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2TRa1KlEsTd2; Mon, 21 Feb 2022 20:12:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8807960B87;
-	Mon, 21 Feb 2022 20:12:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 506AE1BF279
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:12:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D633401AD
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:12:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=googlemail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J13e4vsFohbX for <buildroot@lists.busybox.net>;
- Mon, 21 Feb 2022 20:12:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 03847400A8
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 20:12:12 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id i11so30000317eda.9
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 12:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=zyMS4r9a/W6qLT3iioT0PhgMx8Gu35B75k9n/Ozhdvk=;
- b=D1X3YZFNazoI6DUrdGchEYl1n4x/0DW1WmqFEgSZvRbxxH0mieXUdVE/r8+iN2O3fW
- wOIWU1KD08Oys0DsE3LZ+ODztAsuhAWNIUh6mM8072TcxOPbt8EQIxFrpiZr72r3PO1t
- Z+j1qdf9vPvsBzWwaO1Ij4DkhyuA2o7dN/EO7w5xIFsa3oYInaqgbAZxDF8a6Xa7I0yf
- 9dS7mLZpUsRcNIj3hX8cSbM3XDHcz6R0SVure9FozHH43GiPWNFii8gcicaeL/E8JEqo
- XD87ppeqU+2tBDxUC4+/Bpw/Nm/zlC++mTjnwTXK7e2kgeqfGJnY9jxwC/28sDsdKPPr
- n4fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=zyMS4r9a/W6qLT3iioT0PhgMx8Gu35B75k9n/Ozhdvk=;
- b=byWP2VywB4zt9rB3FQOHT4jUg3ndzhgC165CSR+piFZxvOkCLuI26dR99wZsJPZSnT
- tfVZTiSxRhGhjVdmbEPvyfClv1EfwLy7+t1JA2+u9Qsyf6o788e2memaWvcIqj8v1+UH
- fb2Xf812Xw6oIzFysj/CxAuyD0gnKnieBp4Awav/YxM8ThZrAopu+U/QIY6eggc7z6Uq
- zXFhxBWGZdqSFqr+h0Em+pR4PYob5No5vejJQbMqnraM0nQOXP1ArcsEriss8ERb5WbC
- NxM49LYQUzEB2Z7k9ZETjOrfZZcnLXWOMrKzYU/cx0LGIPEz4Wxz9DvbSkurWwG/m4fn
- Kg3Q==
-X-Gm-Message-State: AOAM532+1uRJX7boPzn9ZyDh1264pO8U2cdMs+C7we09HkT3/K0ML/bs
- 6bq5ku2RKzCv8iwnYfs8wxNK9heTqZtJhe6of7n9OuajX8E=
-X-Google-Smtp-Source: ABdhPJzGLMhjE2H/6Gns8AUwEBdRp3vB44JPp8xFxAgqFyfOA0WQQgi02LisNwegR4+H5jKQg640XMKR0FT1hS7SQoo=
-X-Received: by 2002:a05:6402:90b:b0:412:a7cc:f5f9 with SMTP id
- g11-20020a056402090b00b00412a7ccf5f9mr21937423edz.136.1645474330913; Mon, 21
- Feb 2022 12:12:10 -0800 (PST)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pAfLpHS9fRSd; Mon, 21 Feb 2022 20:42:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3E884018B;
+	Mon, 21 Feb 2022 20:42:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D1481BF279
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:42:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2AB2D408C4
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:42:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VoNRh8fNs-Kr for <buildroot@lists.busybox.net>;
+ Mon, 21 Feb 2022 20:42:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD94A4049A
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 20:42:41 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c4d2:14e:83d5:3704])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id D8C5219F574;
+ Mon, 21 Feb 2022 21:42:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1645476159;
+ bh=qMNYGiWsMaC+K9y/03gL/m1/3wT47TCzZqQ03uTgdSc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=IKDJA3kAZ95sbqqNa7x8oAokfOHQakmJgshzr7jJ8SndtrUiNr2PLlgv28sMLlZAD
+ lchAn7EmhrGTkvrsfisvdOS0YbYTs/GbtP5ms74mkq82McW+eVDzrr9Mb9AXQYj0FG
+ 4QjM5nhiapGvegz7GzSAJdP3mTKPgynf+8co4IB5WqMPwoRZRdecKWs138VoZvC1nq
+ M+gemDZB7WX9fsna4PRcObaQ9e/2voQt9UVIcMPQZP0f+dyI2kHM8r5iYoJv713dtj
+ 12ZjaZXRyQbTCI/EUGZPyJPlH+LH8jNffxJpRbsjMbTIS5G2l1KnUIYSVjERcgiO98
+ l6PEIOPNkeoVQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 21 Feb 2022 21:42:35 +0100
+Date: Mon, 21 Feb 2022 21:42:35 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220221204235.GB2166282@scaer>
+References: <20220221172621.1937610-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-References: <20220221192302.20698-1-petr.vorel@gmail.com>
-In-Reply-To: <20220221192302.20698-1-petr.vorel@gmail.com>
-Date: Mon, 21 Feb 2022 21:11:59 +0100
-Message-ID: <CAGm1_kt2LGV11DEOZdYEyKDijRY6TL7SezpsnMNQ3hHUaB-YsA@mail.gmail.com>
-To: Petr Vorel <petr.vorel@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.16.10
+Content-Disposition: inline
+In-Reply-To: <20220221172621.1937610-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/flac: security bump to version
+ 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,79 +72,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Aleksander Morgado <aleksander@aleksander.es>,
- buildroot <buildroot@buildroot.org>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Petr,
+Fabrice, All,
 
-On Mon, Feb 21, 2022 at 8:23 PM Petr Vorel <petr.vorel@gmail.com> wrote:
->
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+On 2022-02-21 18:26 +0100, Fabrice Fontaine spake thusly:
+> This release mostly fixes (security related) bugs including:
+>  - Fix 12 decoder bugs found by oss-fuzz, including CVE-2020-0499
+>  - Fix encoder bug CVE-2021-0561
+> 
+> Also:
+>  - Replace first patch which was reverted by
+>    https://github.com/xiph/flac/commit/4fbb6d4f2ecf2a96c17ea9880108409f852c08a9
+
+You removed that patch entirely, but forgot to drop FLAC_AUTORECONF=YES.
+
+I had a look at that upstream commit, and I was wondering how they got
+to fix that build issue if they reverted the patch. And indeed it is not
+fixed and still happens:
+
+    cpu.c:58:10: fatal error: sys/auxv.h: No such file or directory
+     #include <sys/auxv.h>
+              ^~~~~~~~~~~~
+    compilation terminated.
+    make[6]: *** [Makefile:739: cpu.lo] Error 1
+    make[5]: *** [Makefile:796: all-recursive] Error 1
+    make[4]: *** [Makefile:435: all-recursive] Error 1
+    make[3]: *** [Makefile:500: all-recursive] Error 1
+    make[2]: *** [Makefile:432: all] Error 2
+
+So we need to adapt that patch instead of dropping it (and thus we need
+to keep AUTORECONF=YES, of course).
+
+Regards,
+Yann E. MORIN.
+
+>  - Disable stack protection (enabled by default since
+>    https://github.com/xiph/flac/commit/f706f2832270a0b7851cdffe62ad37acda9423fe)
+>  - Drop md5 which is not provided anymore
+>  - Update indentation in hash file (two spaces)
+> 
+> https://github.com/xiph/flac/releases/tag/1.3.4
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Tested:
->
->                     bootlin-armv5-uclibc [1/6]: OK
->                      bootlin-armv7-glibc [2/6]: OK
->                    bootlin-armv7m-uclibc [3/6]: SKIPPED
->                      bootlin-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: OK
->                             sourcery-arm [6/6]: OK
-> 6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
->
->                              andes-nds32 [ 1/45]: FAILED # not related to this change
->                              arm-aarch64 [ 2/45]: OK
->                    bootlin-aarch64-glibc [ 3/45]: OK
->                bootlin-arcle-hs38-uclibc [ 4/45]: OK
->                     bootlin-armv5-uclibc [ 5/45]: OK
->                      bootlin-armv7-glibc [ 6/45]: OK
->                    bootlin-armv7m-uclibc [ 7/45]: SKIPPED
->                       bootlin-armv7-musl [ 8/45]: OK
->              bootlin-microblazeel-uclibc [ 9/45]: OK
->                    bootlin-mipsel-uclibc [10/45]: OK
->                 bootlin-mipsel32r6-glibc [11/45]: OK
->                 bootlin-m68k-5208-uclibc [12/45]: SKIPPED
->                bootlin-m68k-68040-uclibc [13/45]: OK
->
->  package/modem-manager/modem-manager.hash | 2 +-
->  package/modem-manager/modem-manager.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> index 14597215df..ea91f42fe0 100644
-> --- a/package/modem-manager/modem-manager.hash
-> +++ b/package/modem-manager/modem-manager.hash
-> @@ -1,4 +1,4 @@
+>  ...ck-for-sys-auxv.h-before-defining-FL.patch | 36 -------------------
+>  package/flac/flac.hash                        | 12 +++----
+>  package/flac/flac.mk                          |  5 +--
+>  3 files changed, 8 insertions(+), 45 deletions(-)
+>  delete mode 100644 package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
+> 
+> diff --git a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch b/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
+> deleted file mode 100644
+> index d1398d4b3e..0000000000
+> --- a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
+> +++ /dev/null
+> @@ -1,36 +0,0 @@
+> -From 14a0713389fbfef59225d027ea466ebb478a8c6b Mon Sep 17 00:00:00 2001
+> -From: Peter Seiderer <ps.report@gmx.net>
+> -Date: Thu, 19 Sep 2019 21:18:04 +0200
+> -Subject: [PATCH] configure.ac: check for sys/auxv.h before defining FLAC__CPU_PPC
+> -
+> -Upstream: https://github.com/xiph/flac/pull/142
+> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ----
+> - configure.ac | 4 ++--
+> - 1 file changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/configure.ac b/configure.ac
+> -index 0228a12..64cb3f2 100644
+> ---- a/configure.ac
+> -+++ b/configure.ac
+> -@@ -144,7 +144,7 @@ case "$host_cpu" in
+> - 	powerpc64|powerpc64le)
+> - 		cpu_ppc64=true
+> - 		cpu_ppc=true
+> --		AC_DEFINE(FLAC__CPU_PPC)
+> -+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
+> - 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
+> - 		AC_DEFINE(FLAC__CPU_PPC64)
+> - 		AH_TEMPLATE(FLAC__CPU_PPC64, [define if building for PowerPC64])
+> -@@ -152,7 +152,7 @@ case "$host_cpu" in
+> - 		;;
+> - 	powerpc|powerpcle)
+> - 		cpu_ppc=true
+> --		AC_DEFINE(FLAC__CPU_PPC)
+> -+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
+> - 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
+> - 		asm_optimisation=$asm_opt
+> - 		;;
+> ---
+> -2.23.0
+> -
+> diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+> index df7c2d1b95..2444535e0f 100644
+> --- a/package/flac/flac.hash
+> +++ b/package/flac/flac.hash
+> @@ -1,10 +1,8 @@
+> -# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
+> -md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
+>  # From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
+> -sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
+> +sha1  99c28482a8b2d81deaf740639e4cb55658427420  flac-1.3.4.tar.xz
+>  # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
+> -sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
+> +sha256  8ff0607e75a322dd7cd6ec48f4f225471404ae2730d0ea945127b1355155e737  flac-1.3.4.tar.xz
 >  # Locally computed
-> -sha256  2ccf1f716c2d121e8e6709bcf8af29ee86971a90adacca2e8d6288b30278862e  ModemManager-1.16.10.tar.xz
-> +sha256  d4f804b31cf504239c5f1d4973c62095c00cba1ee9abb503718dac6d146a470a  ModemManager-1.18.6.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index a881edc272..d7e2c55bf8 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
+> -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+> -sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
+> -sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
+> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+> +sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
+> +sha256  fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
+> diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+> index 9aa00b7ffd..2ff048b6e6 100644
+> --- a/package/flac/flac.mk
+> +++ b/package/flac/flac.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
->
-> -MODEM_MANAGER_VERSION = 1.16.10
-> +MODEM_MANAGER_VERSION = 1.18.6
->  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
->  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
->  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
-> --
-> 2.35.1
+>  
+> -FLAC_VERSION = 1.3.3
+> +FLAC_VERSION = 1.3.4
+>  FLAC_SITE = http://downloads.xiph.org/releases/flac
+>  FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+>  FLAC_INSTALL_STAGING = YES
+> @@ -19,7 +19,8 @@ FLAC_AUTORECONF = YES
+>  FLAC_CONF_OPTS = \
+>  	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
+>  	--disable-xmms-plugin \
+> -	--disable-altivec
+> +	--disable-altivec \
+> +	--disable-stack-smash-protection
+>  
+>  ifeq ($(BR2_PACKAGE_LIBOGG),y)
+>  FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-The patch title should be about version 1.18.6 and not 1.16.10.
-
-Yegor
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
