@@ -1,66 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3BDEC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 20:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C23EAC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 20:49:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 210A3400A8;
-	Mon, 21 Feb 2022 20:42:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64D76813CD;
+	Mon, 21 Feb 2022 20:49:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pAfLpHS9fRSd; Mon, 21 Feb 2022 20:42:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9GrgN_cWiOSa; Mon, 21 Feb 2022 20:49:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3E884018B;
-	Mon, 21 Feb 2022 20:42:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E96981394;
+	Mon, 21 Feb 2022 20:49:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3D1481BF279
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:42:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D034E1BF279
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AB2D408C4
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:42:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CAD39402B1
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 20:49:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VoNRh8fNs-Kr for <buildroot@lists.busybox.net>;
- Mon, 21 Feb 2022 20:42:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD94A4049A
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 20:42:41 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c4d2:14e:83d5:3704])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id D8C5219F574;
- Mon, 21 Feb 2022 21:42:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1645476159;
- bh=qMNYGiWsMaC+K9y/03gL/m1/3wT47TCzZqQ03uTgdSc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IKDJA3kAZ95sbqqNa7x8oAokfOHQakmJgshzr7jJ8SndtrUiNr2PLlgv28sMLlZAD
- lchAn7EmhrGTkvrsfisvdOS0YbYTs/GbtP5ms74mkq82McW+eVDzrr9Mb9AXQYj0FG
- 4QjM5nhiapGvegz7GzSAJdP3mTKPgynf+8co4IB5WqMPwoRZRdecKWs138VoZvC1nq
- M+gemDZB7WX9fsna4PRcObaQ9e/2voQt9UVIcMPQZP0f+dyI2kHM8r5iYoJv713dtj
- 12ZjaZXRyQbTCI/EUGZPyJPlH+LH8jNffxJpRbsjMbTIS5G2l1KnUIYSVjERcgiO98
- l6PEIOPNkeoVQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 21 Feb 2022 21:42:35 +0100
-Date: Mon, 21 Feb 2022 21:42:35 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220221204235.GB2166282@scaer>
-References: <20220221172621.1937610-1-fontaine.fabrice@gmail.com>
+ with ESMTP id sY_UuS-6qqqc for <buildroot@lists.busybox.net>;
+ Mon, 21 Feb 2022 20:49:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD42B40296
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 20:49:45 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id c192so10193957wma.4
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 12:49:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=R+On+xmCT4Q3AhgGV0Fzgqge5sqo7Im8mer4BEWepWc=;
+ b=FQ0dodONJtRgivqvGfqyV0HDDXAfNJ1vdbzwm6HqQc6fhmbVUlJd5OkQxw/1KLmN7f
+ UAj19PEKwmgV+8IpFK/6I0i6sBRTgJk80tqJpctIWWInBbXD5IbKI1oYG2uyWG5Hi+2g
+ 2Gn9/uVidsa8BJsDk+X1cPmXCBYDJ91ZTZfYaSivCZaqNELaHVaCi8ktof2knWh4QhYH
+ V7Gwq2QQDBuN7zDp1vqxmsaH269vlf0mUxVpHaa3/sbwl1XmhmdP86NZKJs+XfSIgDlc
+ Ym2dHwlIjPt7URoyY5nfx5eR6wdzX+rRnKgzclWhvwCREvM9D2UKOWJkqDT8JDeLhQp1
+ ukcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=R+On+xmCT4Q3AhgGV0Fzgqge5sqo7Im8mer4BEWepWc=;
+ b=JqfFXna4RlkPq36d8+KKqPjwUN6n+HZKPUqolBclZ9U3mXqTEw/4QouhwTA71AbtDe
+ RreVHl3a4FHkREpgqXQVJ3frPwlH62V48BaEpJR2lq0CTYd/LZmn5kvnFoSWHUZn6Kgp
+ x3UfOZ/e2t9VMwZqFWf3G6l5855X34oKhSdHfKS7dP2OV9sISwrlrOC/7J6Owo7x3Ba7
+ FAAUehKDhFJW5HmoGppNes6Vrc1cxhmHvcdGnz0hvtzGWTVS5Th2jfv2jv7YZw3H/1Uq
+ ivcbF2en9iboVjWB2ufDYLdZ99maXFAcrhggHjo0SlbfXVf6y1QXtGBNF3b9O1WVmLFC
+ NIYQ==
+X-Gm-Message-State: AOAM5336gDSnrMRiFisGFcbufwh1+tneAozCSniDCXF0WUp6VcHvHkeH
+ d5cdhNv6qiYsuuSKwnQtZJo=
+X-Google-Smtp-Source: ABdhPJzNy20UNMctja7tpaqjwZMUqlbwIesouj8mXx4jsxgV9g1+Y+hSKKn/2yYV/dfLPkstk0iSzw==
+X-Received: by 2002:a7b:c341:0:b0:37b:c619:c9f4 with SMTP id
+ l1-20020a7bc341000000b0037bc619c9f4mr657657wmj.38.1645476584009; 
+ Mon, 21 Feb 2022 12:49:44 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id o12sm1867216wrh.89.2022.02.21.12.49.42
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 21 Feb 2022 12:49:43 -0800 (PST)
+Message-ID: <57f6d974-4c01-908a-3895-e64a64ef67f8@gmail.com>
+Date: Mon, 21 Feb 2022 21:49:41 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220221172621.1937610-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/flac: security bump to version
- 1.3.4
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org,
+ james.hilliard1@gmail.com
+References: <20220220211055.1273368-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20220220211055.1273368-1-peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH]
+ support/testing/../sample_python_pyyaml_dec.py: unbreak after move to pyaml
+ 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,161 +95,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
-
-On 2022-02-21 18:26 +0100, Fabrice Fontaine spake thusly:
-> This release mostly fixes (security related) bugs including:
->  - Fix 12 decoder bugs found by oss-fuzz, including CVE-2020-0499
->  - Fix encoder bug CVE-2021-0561
-> 
-> Also:
->  - Replace first patch which was reverted by
->    https://github.com/xiph/flac/commit/4fbb6d4f2ecf2a96c17ea9880108409f852c08a9
-
-You removed that patch entirely, but forgot to drop FLAC_AUTORECONF=YES.
-
-I had a look at that upstream commit, and I was wondering how they got
-to fix that build issue if they reverted the patch. And indeed it is not
-fixed and still happens:
-
-    cpu.c:58:10: fatal error: sys/auxv.h: No such file or directory
-     #include <sys/auxv.h>
-              ^~~~~~~~~~~~
-    compilation terminated.
-    make[6]: *** [Makefile:739: cpu.lo] Error 1
-    make[5]: *** [Makefile:796: all-recursive] Error 1
-    make[4]: *** [Makefile:435: all-recursive] Error 1
-    make[3]: *** [Makefile:500: all-recursive] Error 1
-    make[2]: *** [Makefile:432: all] Error 2
-
-So we need to adapt that patch instead of dropping it (and thus we need
-to keep AUTORECONF=YES, of course).
-
-Regards,
-Yann E. MORIN.
-
->  - Disable stack protection (enabled by default since
->    https://github.com/xiph/flac/commit/f706f2832270a0b7851cdffe62ad37acda9423fe)
->  - Drop md5 which is not provided anymore
->  - Update indentation in hash file (two spaces)
-> 
-> https://github.com/xiph/flac/releases/tag/1.3.4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ck-for-sys-auxv.h-before-defining-FL.patch | 36 -------------------
->  package/flac/flac.hash                        | 12 +++----
->  package/flac/flac.mk                          |  5 +--
->  3 files changed, 8 insertions(+), 45 deletions(-)
->  delete mode 100644 package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
-> 
-> diff --git a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch b/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
-> deleted file mode 100644
-> index d1398d4b3e..0000000000
-> --- a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -From 14a0713389fbfef59225d027ea466ebb478a8c6b Mon Sep 17 00:00:00 2001
-> -From: Peter Seiderer <ps.report@gmx.net>
-> -Date: Thu, 19 Sep 2019 21:18:04 +0200
-> -Subject: [PATCH] configure.ac: check for sys/auxv.h before defining FLAC__CPU_PPC
-> -
-> -Upstream: https://github.com/xiph/flac/pull/142
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - configure.ac | 4 ++--
-> - 1 file changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 0228a12..64cb3f2 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -144,7 +144,7 @@ case "$host_cpu" in
-> - 	powerpc64|powerpc64le)
-> - 		cpu_ppc64=true
-> - 		cpu_ppc=true
-> --		AC_DEFINE(FLAC__CPU_PPC)
-> -+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
-> - 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
-> - 		AC_DEFINE(FLAC__CPU_PPC64)
-> - 		AH_TEMPLATE(FLAC__CPU_PPC64, [define if building for PowerPC64])
-> -@@ -152,7 +152,7 @@ case "$host_cpu" in
-> - 		;;
-> - 	powerpc|powerpcle)
-> - 		cpu_ppc=true
-> --		AC_DEFINE(FLAC__CPU_PPC)
-> -+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
-> - 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
-> - 		asm_optimisation=$asm_opt
-> - 		;;
-> ---
-> -2.23.0
-> -
-> diff --git a/package/flac/flac.hash b/package/flac/flac.hash
-> index df7c2d1b95..2444535e0f 100644
-> --- a/package/flac/flac.hash
-> +++ b/package/flac/flac.hash
-> @@ -1,10 +1,8 @@
-> -# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
-> -md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
->  # From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
-> -sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
-> +sha1  99c28482a8b2d81deaf740639e4cb55658427420  flac-1.3.4.tar.xz
->  # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
-> -sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
-> +sha256  8ff0607e75a322dd7cd6ec48f4f225471404ae2730d0ea945127b1355155e737  flac-1.3.4.tar.xz
->  # Locally computed
-> -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
-> -sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
-> -sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
-> +sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
-> +sha256  fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
-> diff --git a/package/flac/flac.mk b/package/flac/flac.mk
-> index 9aa00b7ffd..2ff048b6e6 100644
-> --- a/package/flac/flac.mk
-> +++ b/package/flac/flac.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FLAC_VERSION = 1.3.3
-> +FLAC_VERSION = 1.3.4
->  FLAC_SITE = http://downloads.xiph.org/releases/flac
->  FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
->  FLAC_INSTALL_STAGING = YES
-> @@ -19,7 +19,8 @@ FLAC_AUTORECONF = YES
->  FLAC_CONF_OPTS = \
->  	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
->  	--disable-xmms-plugin \
-> -	--disable-altivec
-> +	--disable-altivec \
-> +	--disable-stack-smash-protection
->  
->  ifeq ($(BR2_PACKAGE_LIBOGG),y)
->  FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUGV0ZXIsCgpMZSAyMC8wMi8yMDIyIMOgIDIyOjEwLCBQZXRlciBLb3JzZ2FhcmQgYSDDqWNy
+aXTCoDoKPiBGaXhlcyBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3Qv
+LS9qb2JzLzIwODg2ODQwOTEKPiAKPiBweXRob24gc2FtcGxlX3B5dGhvbl9weXlhbWxfZGVjLnB5
+Cj4gVHJhY2ViYWNrIChtb3N0IHJlY2VudCBjYWxsIGxhc3QpOgo+ICAgRmlsZSAiL3Jvb3Qvc2Ft
+cGxlX3B5dGhvbl9weXlhbWxfZGVjLnB5IiwgbGluZSA1LCBpbiA8bW9kdWxlPgo+ICAgICBkYXRh
+ID0geWFtbC5sb2FkKHNlcmlhbGl6ZWQpCj4gVHlwZUVycm9yOiBsb2FkKCkgbWlzc2luZyAxIHJl
+cXVpcmVkIHBvc2l0aW9uYWwgYXJndW1lbnQ6ICdMb2FkZXInCj4gCj4geWFtbC5sb2FkKCkgcmVx
+dWlyZXMgYSBsb2FkZXIgYXJndW1lbnQgc2luY2UgdGhlIG1vdmUgdG8gdmVyc2lvbiA2LjA6Cj4g
+aHR0cHM6Ly9naXRodWIuY29tL3lhbWwvcHl5YW1sL3B1bGwvNTYxCj4gCj4gVGhlIHRlc3QgZG9l
+cyBub3QgbmVlZCB0aGUgZXh0cmEgZnVuY3Rpb25hbGl0eSBvZiBsb2FkKCksIHNvIGluc3RlYWQg
+bW92ZSB0bwo+IHRoZSByZWNvbW1lbmRlZCBzYWZlX2xvYWQoKS4KPiAKPiBTaWduZWQtb2ZmLWJ5
+OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+CgpJIGRpZCB0aGUgc2FtZSBj
+aGFuZ2Ugd2hpbGUgaW52ZXN0aWdhdGluZyB0aGlzIGlzc3VlIGJlZm9yZSByZXBseWluZyB0bzoK
+Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIwMjItRmVicnVh
+cnkvNjM3NDE0Lmh0bWwKClRlc3RlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21h
+aWwuY29tPgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IC0tLQo+ICBzdXBwb3J0L3Rlc3Rpbmcv
+dGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3B5eWFtbF9kZWMucHkgfCAyICstCj4gIDEgZmls
+ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQg
+YS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3B5eWFtbF9kZWMu
+cHkgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3B5eWFtbF9k
+ZWMucHkKPiBpbmRleCA5YWI4OTMxMTk3Li5iYjkwOTM0ZjI2IDEwMDY0NAo+IC0tLSBhL3N1cHBv
+cnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRob25fcHl5YW1sX2RlYy5weQo+ICsr
+KyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRob25fcHl5YW1sX2Rl
+Yy5weQo+IEBAIC0yLDcgKzIsNyBAQCBpbXBvcnQgeWFtbAo+ICAKPiAgd2l0aCBvcGVuKCIvdG1w
+L2RhdGEueW1sIiwgInJiIikgYXMgZjoKPiAgICAgIHNlcmlhbGl6ZWQgPSBmLnJlYWQoKQo+IC1k
+YXRhID0geWFtbC5sb2FkKHNlcmlhbGl6ZWQpCj4gK2RhdGEgPSB5YW1sLnNhZmVfbG9hZChzZXJp
+YWxpemVkKQo+ICBwcmludChkYXRhKQo+ICBhc3NlcnQoZGF0YVsibmFtZSJdID09ICJweXRob24t
+cHl5YW1sIikKPiAgYXNzZXJ0KGRhdGFbInZlcnNpb25zIl0gPT0gWyIxIiwgIjIiXSkKCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
