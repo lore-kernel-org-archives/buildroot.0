@@ -1,79 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47680C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 09:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80DDCC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Feb 2022 09:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACDC560E26;
-	Mon, 21 Feb 2022 09:33:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 050C9404FC;
+	Mon, 21 Feb 2022 09:43:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iH7lcg6NtPBj; Mon, 21 Feb 2022 09:33:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qfwwh6OJR_h9; Mon, 21 Feb 2022 09:43:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89CA460E1E;
-	Mon, 21 Feb 2022 09:33:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 466A61BF2BA
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 09:33:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A61A40519;
+	Mon, 21 Feb 2022 09:43:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D62C71BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 09:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 311D260E1E
- for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 09:33:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFD3980DD5
+ for <buildroot@lists.busybox.net>; Mon, 21 Feb 2022 09:43:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lTHd-zXc5Dft for <buildroot@lists.busybox.net>;
- Mon, 21 Feb 2022 09:33:16 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C462460E18
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 09:33:15 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id o24so25943275wro.3
- for <buildroot@buildroot.org>; Mon, 21 Feb 2022 01:33:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=RaydjXyws23pF1At/T2MDO6D8FzoeVKhJvPTmn1+Vt8=;
- b=ZRZsaW4J6VnENmT76BLZmdLSB/ywsuMjZGGGfTzv5wMvNtgZ8/YLd9/2NT0QEe+dKq
- TNs0aI1QcVG1hnVx2lUG85yHG/qMQ+LkNeuL4DornaJBUARMGCs0nUBxZKrz1y6OwpnZ
- dqXi1tJ0ibz5w5T/O50/5iMPcoYIo+UK5qfA+6NTTI54e9sUhoCOj71xo3exzRKLt00Z
- Thr2BHLIOM5gl+9/4lEUHN4WA6kKoShOG0cYQK8h1Dm3d3miaUKb+uIAtSarjb6PMHK6
- BjzQ6Ne7/ktUafBeozfVv1mH5GDUCd5gKs93mvqIL9Osiwjp/E/lCpBihtaXGxLwG8sb
- soTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=RaydjXyws23pF1At/T2MDO6D8FzoeVKhJvPTmn1+Vt8=;
- b=y68GK5IlvAZEIMGHd+OSBnx91YdYM78DOJ2Z0ZWm5TLL2t1Jyz2Dih57REcd2O+AtV
- jFWwSOII1LvepGdtH+CxZK3jOIfgoHnzBeVo2Fb4/XGGx1z83vaSbo9QdSXKxq3AzRqC
- XKziZLOZsdc6GCBWq7XkmaEp7OciYVc/euZm9cTGL5dK5q9yNDxkCjOIvfNqnycKNAXv
- c1e1KSyixTBOcmTEb7ITMZDGH0KlzsTNl50WB60B9WOWyeSe7atLwoX0S0U2cxU2CK9W
- uvHPk90JxKmp/zbTuE6Le0cDKorkYda2kp9hwjx4jGE0jIEQdNv6UF7kY+XfsFb19xi+
- bl7A==
-X-Gm-Message-State: AOAM533qulGQhR12ibzdviXMBwD0FLFBDsmNPll+V5ZkyfeSi6cKu9p0
- q3NnwtoeCVW/dTf9hDiShiv5xQFXzZZ53gv3k7Ad4DfDlMM=
-X-Google-Smtp-Source: ABdhPJwKFESbh1WTKLjvYZbpqmi2DjDrc5q82RMZfBjKK76Rb4AAuQQlWdAqCRjj3PBrGTKiNLVgCptz/Cf+x8ns/jA=
-X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id
- t6-20020adfeb86000000b001e68c92af6bmr15124640wrn.116.1645435993836; Mon, 21
- Feb 2022 01:33:13 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHnHX5jAJw2ON8-e6UBmvDLR6j3p1iUYY1GvRpbULHBjF80SrQ@mail.gmail.com>
- <186B6238-5452-4211-BD9D-29A3C921DE42@benettiengineering.com>
- <CAHnHX5grmd94PGaBJn=XkJttwCEFdc=tWaE6v7PpZCN5UL8tSg@mail.gmail.com>
- <469c0dbc-6101-be6c-7272-400ac4512b86@grenoble.cnrs.fr>
- <4d8f6289-f16f-9602-a458-2b5836a817e6@benettiengineering.com>
- <CAHnHX5gJ2_=u09ntg_WxJeM1XwHrgOsgvjDYrUsHJk7AdUVyLQ@mail.gmail.com>
- <CAHnHX5i3M890wBfkx_C4QEAKHv3S-Np2mEqZX=nEySXrQ8Bg=g@mail.gmail.com>
- <71b0c2b1-0b71-9aca-5209-33ea3a6cacf1@benettiengineering.com>
-In-Reply-To: <71b0c2b1-0b71-9aca-5209-33ea3a6cacf1@benettiengineering.com>
-From: Mohd Faiz Rohani <mohd.faiz.rohani@gmail.com>
-Date: Mon, 21 Feb 2022 17:33:01 +0800
-Message-ID: <CAHnHX5gEBk0L3OT5J-RR-H-QCRgJQeO_Hnujz2rxObOmJHMscw@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Woj1wZU_dFSL for <buildroot@lists.busybox.net>;
+ Mon, 21 Feb 2022 09:43:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEDF280D3D
+ for <buildroot@buildroot.org>; Mon, 21 Feb 2022 09:43:51 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.188.82])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id M5EQnlK6tBBmwM5ERnDUbL; Mon, 21 Feb 2022 10:43:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1645436629; bh=wIAb1ZhSjlkwUrRRlXaJ/pXMUhjrAV3S1EH8JNccdnc=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=gWBKP/6onF+G+iQDtFr32Hysh+Sw6tUh8cjEQoRA4w3dYv37YsVnYpymvoufGxA0/
+ 8Cu9exJnNh9YFwh4egKD1RN+xeUV6QvxFLs6MvLDZdaysaruRhjPUV3yn2m0hdKUKH
+ op38TaJ5diKbk64FLLCXoIR4razmo4rVswkVqbXCNO/3dTdKzKortOqup/WgPRkDiF
+ jrjiTGjPX5AhWXGAYlzkEtJ2cbPIDgnu6O7iFMPVOtwIEItiqfJwQ3coML1R3SaKE3
+ doCC51paV6HQX2Pp4aEIrKZ4ynPbwNNocf2L5nDJRpk2jpWu6mOneNhPCsPH7hLDCD
+ ZtRqy0bIK0R9w==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Mon, 21 Feb 2022 10:43:46 +0100
+Message-Id: <843DF5BA-BFB7-4EEF-BF74-0CB8894652B7@benettiengineering.com>
+References: <CAHnHX5gEBk0L3OT5J-RR-H-QCRgJQeO_Hnujz2rxObOmJHMscw@mail.gmail.com>
+In-Reply-To: <CAHnHX5gEBk0L3OT5J-RR-H-QCRgJQeO_Hnujz2rxObOmJHMscw@mail.gmail.com>
+To: Mohd Faiz Rohani <mohd.faiz.rohani@gmail.com>
+X-Mailer: iPhone Mail (19D52)
+X-CMAE-Envelope: MS4wfAZwP8BEZshMt+W3cgkYfX/mmFp+Z9bWFI+UzMF2KkfFVHiTdowJOoD6sDR3TgdC3Sd6WZoYo4la6280kzjiFHZcDFCyYoucOHxPi8uzGe9VJxRQfqpU
+ qT9szvwNmoHIzWtZprnxKDlVIdgJ6G8Hy5Mkn/a9J+Iel1ITqQfGUBAI8cRyO9RwwN4cDmAPZuLjKqBRs7mtdV9ZwwN7wnQYF5fARpJ5I1Jxc0Q7TUcNdq3/
+ gJuZ1VxMS0RLX5k54XL9t44mU9oJgo/NMxgcz5xZLMk=
 Subject: Re: [Buildroot] Issue with login
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -87,209 +69,247 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8625626139481253297=="
+Content-Type: multipart/mixed; boundary="===============5122924350736727621=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8625626139481253297==
-Content-Type: multipart/alternative; boundary="000000000000e9cf9805d883eb4c"
 
---000000000000e9cf9805d883eb4c
-Content-Type: text/plain; charset="UTF-8"
+--===============5122924350736727621==
+Content-Type: multipart/alternative; boundary=Apple-Mail-D99A9B97-D73A-488A-88E8-D01530D4176D
+Content-Transfer-Encoding: 7bit
 
-Btw, is the mailing list correct platform for Buildroot Q&A? Do you have
-any related forum for the purpose? Thanks
 
-On Mon, Feb 21, 2022, 4:44 PM Giulio Benetti <
-giulio.benetti@benettiengineering.com> wrote:
-
-> Hi Mohd,
->
-> On 21/02/22 06:16, Mohd Faiz Rohani wrote:
-> > Hi guys,
-> >
-> > Thank you for your help.I have overlooked the required setting as
-> > normally I will leave the setting to the default, as I assume Buildroot
-> > has selected the required settings. Anyway I have managed to login
-> > successfully now.
-> >
-> > I have turned on BR2_PACKAGE_SYSTEMD_LOGIND and
-> > BR2_PACKAGE_UTIL_LINUX_LOGIN settings, while the rest does not change.
->
-> Perfect, team working with Edgar worked :-)
->
-> > Fyi, I have tried the newer versions of Linux Kernel (5.15) and Uboot
-> > (v2022.01) with the Linaro 7.5 toolchain, but got an error during the
-> > booting process where the RFS cannot be mounted. It may be my fault
-> > through the settings though, that is why I am trying the old version and
-> > it worked.
->
-> I would avoid using gcc 7.5 on such new kernel/uboot. Maybe if you try
-> to rebuild using an external prebuilt toolchain like the Bootlin one, or
-> you build a Buildroot toolchain with latest versions, like gcc 10.x you
-> could obtain different results.
->
-> > I am planning to use Buildroot for my future development and keen to
-> > contribute wherever I can. Still lots to learn though.
->
-> Well!
->
-> > Thank you again guys.
->
-> You're welcome
->
-> Best regards
-> --
-> Giulio Benetti
-> Benetti Engineering sas
->
-> > Regards.
-> > Faiz
-> >
-> >
-> >
-> >
-> > On Mon, Feb 21, 2022 at 2:33 AM Mohd Faiz Rohani
-> > <mohd.faiz.rohani@gmail.com <mailto:mohd.faiz.rohani@gmail.com>> wrote:
-> >
-> >     Thanks, I'll check them out. Will update the outcome once the
-> >     installation is done.
-> >
-> >     Thank you.
-> >
-> >     On Mon, Feb 21, 2022, 1:56 AM Giulio Benetti
-> >     <giulio.benetti@benettiengineering.com
-> >     <mailto:giulio.benetti@benettiengineering.com>> wrote:
-> >
-> >         Hi Edgar,
-> >
-> >         please reply to all in Mailing List, I add Mohd in Cc,
-> >
-> >         On 20/02/22 17:18, Edgar Bonet wrote:
-> >          > Hi!
-> >          >
-> >          > In his config file, Mohd wrote:
-> >          >> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=y
-> >          >> BR2_LINUX_KERNEL_VERSION="4.4.155"
-> >          >
-> >          > This may cause problems. C.f. docs/manual/configure.txt:
-> >          >
-> >          >      If you use kernel headers that are more recent than the
-> >         Linux
-> >          >      kernel you run on your embedded system, then the C
-> >         library might
-> >          >      be using interfaces that are not provided by your Linux
-> >         kernel.
-> >
-> >         Good catch Edgar!
-> >         So Mohd, what you need here is a toolchain with older libc.
-> >
-> https://buildroot.org/downloads/manual/manual.html#_cross_compilation_toolchain
-> >         <
-> https://buildroot.org/downloads/manual/manual.html#_cross_compilation_toolchain
-> >
-> >
-> >         But again, do you really need to use so such old versions
-> >         instead of try
-> >         to use buildroot's beaglebone_defconfig?
-> >
-> >          > In the same config file, there is:
-> >          >> # BR2_PACKAGE_BUSYBOX is not set
-> >          >
-> >          > When disabling busybox, you should have seen the message:
-> >          >
-> >          >      You may need to enable other packages to get a working
-> >         system
-> >          >      You better know what you're doing!
-> >
-> >         Despite of what I've written on my previous e-mail(my test was
-> >         wrong),
-> >         he has BR2_INIT_SYSTEMD=y that works as Init System, so that's
-> ok.
-> >
-> >          > And then:
-> >          >> # BR2_PACKAGE_SYSTEMD_LOGIND is not set
-> >
-> >         Good catch again Edgar! This ^^^ should be the point. Because
-> it's
-> >         exactly the systemd login dameon.
-> >
-> >          >> # BR2_PACKAGE_UTIL_LINUX_LOGIN is not set
-> >
-> >         This ^^^ is not selected by systemd, so I expect
-> >         BR2_PACKAGE_SYSTEMD_LOGIND to do the job(even if I'm not a
-> systemd
-> >         expoert at all).
-> >
-> >         But as Edgar pointed linux headers don't match so you have 3
-> >         choices:
-> >         1) find a toolchain with linux-headers <= 4.4.*
-> >         2) update linux version
-> >         3) start from scratch using buildroot beaglebone_defconfig
-> >
-> >         Best regards
-> >         --
-> >         Giulio Benetti
-> >         Benetti Engineering sas
-> >
->
->
-
---000000000000e9cf9805d883eb4c
-Content-Type: text/html; charset="UTF-8"
+--Apple-Mail-D99A9B97-D73A-488A-88E8-D01530D4176D
+Content-Type: text/plain;
+	charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"auto">Btw, is the mailing list correct platform for Buildroot Q=
-&amp;A? Do you have any related forum for the purpose? Thanks</div><br><div=
- class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Feb 21=
-, 2022, 4:44 PM Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benetti=
-engineering.com">giulio.benetti@benettiengineering.com</a>&gt; wrote:<br></=
-div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-lef=
-t:1px #ccc solid;padding-left:1ex">Hi Mohd,<br>
+
+> Il giorno 21 feb 2022, alle ore 10:33, Mohd Faiz Rohani <mohd.faiz.rohani@=
+gmail.com> ha scritto:
+>=20
+> =EF=BB=BF
+> Btw, is the mailing list correct platform for Buildroot Q&A? Do you have a=
+ny related forum for the purpose? Thanks
+
+It=E2=80=99s one of its purpose, but I suggest you to also join IRC #buildro=
+ot channel.
+
+Best regards
+Giulio
+
+>=20
+>> On Mon, Feb 21, 2022, 4:44 PM Giulio Benetti <giulio.benetti@benettiengin=
+eering.com> wrote:
+>> Hi Mohd,
+>>=20
+>> On 21/02/22 06:16, Mohd Faiz Rohani wrote:
+>> > Hi guys,
+>> >=20
+>> > Thank you for your help.I have overlooked the required setting as=20
+>> > normally I will leave the setting to the default, as I assume Buildroot=
+=20
+>> > has selected the required settings. Anyway I have managed to login=20
+>> > successfully now.
+>> >=20
+>> > I have turned on BR2_PACKAGE_SYSTEMD_LOGIND and=20
+>> > BR2_PACKAGE_UTIL_LINUX_LOGIN settings, while the rest does not change.
+>>=20
+>> Perfect, team working with Edgar worked :-)
+>>=20
+>> > Fyi, I have tried the newer versions of Linux Kernel (5.15) and Uboot=20=
+
+>> > (v2022.01) with the Linaro 7.5 toolchain, but got an error during the=20=
+
+>> > booting process where the RFS cannot be mounted. It may be my fault=20
+>> > through the settings though, that is why I am trying the old version an=
+d=20
+>> > it worked.
+>>=20
+>> I would avoid using gcc 7.5 on such new kernel/uboot. Maybe if you try=20=
+
+>> to rebuild using an external prebuilt toolchain like the Bootlin one, or=20=
+
+>> you build a Buildroot toolchain with latest versions, like gcc 10.x you=20=
+
+>> could obtain different results.
+>>=20
+>> > I am planning to use Buildroot for my future development and keen to=20=
+
+>> > contribute wherever I can. Still lots to learn though.
+>>=20
+>> Well!
+>>=20
+>> > Thank you again guys.
+>>=20
+>> You're welcome
+>>=20
+>> Best regards
+>> --=20
+>> Giulio Benetti
+>> Benetti Engineering sas
+>>=20
+>> > Regards.
+>> > Faiz
+>> >=20
+>> >=20
+>> >=20
+>> >=20
+>> > On Mon, Feb 21, 2022 at 2:33 AM Mohd Faiz Rohani=20
+>> > <mohd.faiz.rohani@gmail.com <mailto:mohd.faiz.rohani@gmail.com>> wrote:=
+
+>> >=20
+>> >     Thanks, I'll check them out. Will update the outcome once the
+>> >     installation is done.
+>> >=20
+>> >     Thank you.
+>> >=20
+>> >     On Mon, Feb 21, 2022, 1:56 AM Giulio Benetti
+>> >     <giulio.benetti@benettiengineering.com
+>> >     <mailto:giulio.benetti@benettiengineering.com>> wrote:
+>> >=20
+>> >         Hi Edgar,
+>> >=20
+>> >         please reply to all in Mailing List, I add Mohd in Cc,
+>> >=20
+>> >         On 20/02/22 17:18, Edgar Bonet wrote:
+>> >          > Hi!
+>> >          >
+>> >          > In his config file, Mohd wrote:
+>> >          >> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=3Dy
+>> >          >> BR2_LINUX_KERNEL_VERSION=3D"4.4.155"
+>> >          >
+>> >          > This may cause problems. C.f. docs/manual/configure.txt:
+>> >          >
+>> >          >      If you use kernel headers that are more recent than the=
+
+>> >         Linux
+>> >          >      kernel you run on your embedded system, then the C
+>> >         library might
+>> >          >      be using interfaces that are not provided by your Linux=
+
+>> >         kernel.
+>> >=20
+>> >         Good catch Edgar!
+>> >         So Mohd, what you need here is a toolchain with older libc.
+>> >         https://buildroot.org/downloads/manual/manual.html#_cross_compi=
+lation_toolchain
+>> >         <https://buildroot.org/downloads/manual/manual.html#_cross_comp=
+ilation_toolchain>
+>> >=20
+>> >         But again, do you really need to use so such old versions
+>> >         instead of try
+>> >         to use buildroot's beaglebone_defconfig?
+>> >=20
+>> >          > In the same config file, there is:
+>> >          >> # BR2_PACKAGE_BUSYBOX is not set
+>> >          >
+>> >          > When disabling busybox, you should have seen the message:
+>> >          >
+>> >          >      You may need to enable other packages to get a working
+>> >         system
+>> >          >      You better know what you're doing!
+>> >=20
+>> >         Despite of what I've written on my previous e-mail(my test was
+>> >         wrong),
+>> >         he has BR2_INIT_SYSTEMD=3Dy that works as Init System, so that'=
+s ok.
+>> >=20
+>> >          > And then:
+>> >          >> # BR2_PACKAGE_SYSTEMD_LOGIND is not set
+>> >=20
+>> >         Good catch again Edgar! This ^^^ should be the point. Because i=
+t's
+>> >         exactly the systemd login dameon.
+>> >=20
+>> >          >> # BR2_PACKAGE_UTIL_LINUX_LOGIN is not set
+>> >=20
+>> >         This ^^^ is not selected by systemd, so I expect
+>> >         BR2_PACKAGE_SYSTEMD_LOGIND to do the job(even if I'm not a syst=
+emd
+>> >         expoert at all).
+>> >=20
+>> >         But as Edgar pointed linux headers don't match so you have 3
+>> >         choices:
+>> >         1) find a toolchain with linux-headers <=3D 4.4.*
+>> >         2) update linux version
+>> >         3) start from scratch using buildroot beaglebone_defconfig
+>> >=20
+>> >         Best regards
+>> >         --=20
+>> >         Giulio Benetti
+>> >         Benetti Engineering sas
+>> >=20
+>>=20
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--Apple-Mail-D99A9B97-D73A-488A-88E8-D01530D4176D
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto"><br><div dir=3D"ltr"><blockquote type=3D"ci=
+te">Il giorno 21 feb 2022, alle ore 10:33, Mohd Faiz Rohani &lt;mohd.faiz.ro=
+hani@gmail.com&gt; ha scritto:<br><br></blockquote></div><blockquote type=3D=
+"cite"><div dir=3D"ltr">=EF=BB=BF<div dir=3D"auto">Btw, is the mailing list c=
+orrect platform for Buildroot Q&amp;A? Do you have any related forum for the=
+ purpose? Thanks</div></div></blockquote><div><br></div><div>It=E2=80=99s on=
+e of its purpose, but I suggest you to also join IRC #buildroot channel.</di=
+v><div><br></div><div>Best regards</div><div>Giulio</div><br><blockquote typ=
+e=3D"cite"><div dir=3D"ltr"><br><div class=3D"gmail_quote"><div dir=3D"ltr" c=
+lass=3D"gmail_attr">On Mon, Feb 21, 2022, 4:44 PM Giulio Benetti &lt;<a href=
+=3D"mailto:giulio.benetti@benettiengineering.com">giulio.benetti@benettiengi=
+neering.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Mohd,<br>=
+
 <br>
 On 21/02/22 06:16, Mohd Faiz Rohani wrote:<br>
 &gt; Hi guys,<br>
 &gt; <br>
-&gt; Thank you for your=C2=A0help.I have overlooked the required setting as=
+&gt; Thank you for your&nbsp;help.I have overlooked the required setting as <=
+br>
+&gt; normally I will leave the setting&nbsp;to the default, as I assume Buil=
+droot <br>
+&gt; has selected&nbsp;the required settings. Anyway I have managed to login=
  <br>
-&gt; normally I will leave the setting=C2=A0to the default, as I assume Bui=
-ldroot <br>
-&gt; has selected=C2=A0the required settings. Anyway I have managed to logi=
-n <br>
-&gt; successfully=C2=A0now.<br>
+&gt; successfully&nbsp;now.<br>
 &gt; <br>
 &gt; I have turned on BR2_PACKAGE_SYSTEMD_LOGIND and <br>
-&gt; BR2_PACKAGE_UTIL_LINUX_LOGIN settings, while the rest does not change.=
-<br>
+&gt; BR2_PACKAGE_UTIL_LINUX_LOGIN settings, while the rest does not change.<=
+br>
 <br>
 Perfect, team working with Edgar worked :-)<br>
 <br>
-&gt; Fyi, I have tried the newer versions of Linux Kernel (5.15) and Uboot =
-<br>
-&gt; (v2022.01) with the Linaro 7.5 toolchain, but got an error during the =
-<br>
-&gt; booting process where the RFS cannot be mounted. It may be my fault <b=
-r>
-&gt; through the settings though, that is why I am trying the old version a=
-nd <br>
+&gt; Fyi, I have tried the newer versions of Linux Kernel (5.15) and Uboot <=
+br>
+&gt; (v2022.01) with the Linaro 7.5 toolchain, but got an error during the <=
+br>
+&gt; booting process where the RFS cannot be mounted. It may be my fault <br=
+>
+&gt; through the settings though, that is why I am trying the old version an=
+d <br>
 &gt; it worked.<br>
 <br>
 I would avoid using gcc 7.5 on such new kernel/uboot. Maybe if you try <br>
-to rebuild using an external prebuilt toolchain like the Bootlin one, or <b=
-r>
-you build a Buildroot toolchain with latest versions, like gcc 10.x you <br=
+to rebuild using an external prebuilt toolchain like the Bootlin one, or <br=
 >
+you build a Buildroot toolchain with latest versions, like gcc 10.x you <br>=
+
 could obtain different results.<br>
 <br>
-&gt; I am planning to use Buildroot for my future development and keen to <=
-br>
-&gt; contribute wherever=C2=A0I can. Still lots to learn though.<br>
+&gt; I am planning to use Buildroot for my future development and keen to <b=
+r>
+&gt; contribute wherever&nbsp;I can. Still lots to learn though.<br>
 <br>
 Well!<br>
 <br>
 &gt; Thank you again guys.<br>
 <br>
-You&#39;re welcome<br>
+You're welcome<br>
 <br>
 Best regards<br>
 -- <br>
@@ -303,129 +323,133 @@ Benetti Engineering sas<br>
 &gt; <br>
 &gt; <br>
 &gt; On Mon, Feb 21, 2022 at 2:33 AM Mohd Faiz Rohani <br>
-&gt; &lt;<a href=3D"mailto:mohd.faiz.rohani@gmail.com" target=3D"_blank" re=
-l=3D"noreferrer">mohd.faiz.rohani@gmail.com</a> &lt;mailto:<a href=3D"mailt=
-o:mohd.faiz.rohani@gmail.com" target=3D"_blank" rel=3D"noreferrer">mohd.fai=
-z.rohani@gmail.com</a>&gt;&gt; wrote:<br>
+&gt; &lt;<a href=3D"mailto:mohd.faiz.rohani@gmail.com" target=3D"_blank" rel=
+=3D"noreferrer">mohd.faiz.rohani@gmail.com</a> &lt;mailto:<a href=3D"mailto:=
+mohd.faiz.rohani@gmail.com" target=3D"_blank" rel=3D"noreferrer">mohd.faiz.r=
+ohani@gmail.com</a>&gt;&gt; wrote:<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Thanks, I&#39;ll check them out. Will update the ou=
-tcome once the<br>
-&gt;=C2=A0 =C2=A0 =C2=A0installation is done.<br>
+&gt;&nbsp; &nbsp; &nbsp;Thanks, I'll check them out. Will update the outcome=
+ once the<br>
+&gt;&nbsp; &nbsp; &nbsp;installation is done.<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Thank=C2=A0you.<br>
+&gt;&nbsp; &nbsp; &nbsp;Thank&nbsp;you.<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0On Mon, Feb 21, 2022, 1:56 AM Giulio Benetti<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"mailto:giulio.benetti@benettienginee=
-ring.com" target=3D"_blank" rel=3D"noreferrer">giulio.benetti@benettiengine=
-ering.com</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:giulio.benetti@benetti=
-engineering.com" target=3D"_blank" rel=3D"noreferrer">giulio.benetti@benett=
-iengineering.com</a>&gt;&gt; wrote:<br>
+&gt;&nbsp; &nbsp; &nbsp;On Mon, Feb 21, 2022, 1:56 AM Giulio Benetti<br>
+&gt;&nbsp; &nbsp; &nbsp;&lt;<a href=3D"mailto:giulio.benetti@benettiengineer=
+ing.com" target=3D"_blank" rel=3D"noreferrer">giulio.benetti@benettiengineer=
+ing.com</a><br>
+&gt;&nbsp; &nbsp; &nbsp;&lt;mailto:<a href=3D"mailto:giulio.benetti@benettie=
+ngineering.com" target=3D"_blank" rel=3D"noreferrer">giulio.benetti@benettie=
+ngineering.com</a>&gt;&gt; wrote:<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Hi Edgar,<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Hi Edgar,<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0please reply to all in Mailing List, =
-I add Mohd in Cc,<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;please reply to all in Mailing List, I=
+ add Mohd in Cc,<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0On 20/02/22 17:18, Edgar Bonet wrote:=
-<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; Hi!<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; In his config file, Mohd wrote:=
-<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; BR2_TOOLCHAIN_EXTERNAL_HEAD=
-ERS_4_10=3Dy<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; BR2_LINUX_KERNEL_VERSION=3D=
-&quot;4.4.155&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; This may cause problems. C.f. d=
-ocs/manual/configure.txt:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 If you use =
-kernel headers that are more recent than the<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Linux<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 kernel you =
-run on your embedded system, then the C<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0library might<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 be using in=
-terfaces that are not provided by your Linux<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel.<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;On 20/02/22 17:18, Edgar Bonet wrote:<=
+br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Hi!<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; In his config file, Mohd wrote:<=
+br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&gt; BR2_TOOLCHAIN_EXTERNAL_HEADE=
+RS_4_10=3Dy<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&gt; BR2_LINUX_KERNEL_VERSION=3D"=
+4.4.155"<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; This may cause problems. C.f. do=
+cs/manual/configure.txt:<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&nbsp; &nbsp; &nbsp; If you use k=
+ernel headers that are more recent than the<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Linux<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&nbsp; &nbsp; &nbsp; kernel you r=
+un on your embedded system, then the C<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;library might<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&nbsp; &nbsp; &nbsp; be using int=
+erfaces that are not provided by your Linux<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;kernel.<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Good catch Edgar!<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0So Mohd, what you need here is a tool=
-chain with older libc.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://buildroot.org/down=
-loads/manual/manual.html#_cross_compilation_toolchain" rel=3D"noreferrer no=
-referrer" target=3D"_blank">https://buildroot.org/downloads/manual/manual.h=
-tml#_cross_compilation_toolchain</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://buildroot.org/=
-downloads/manual/manual.html#_cross_compilation_toolchain" rel=3D"noreferre=
-r noreferrer" target=3D"_blank">https://buildroot.org/downloads/manual/manu=
-al.html#_cross_compilation_toolchain</a>&gt;<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Good catch Edgar!<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;So Mohd, what you need here is a toolc=
+hain with older libc.<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href=3D"https://buildroot.org/downl=
+oads/manual/manual.html#_cross_compilation_toolchain" rel=3D"noreferrer nore=
+ferrer" target=3D"_blank">https://buildroot.org/downloads/manual/manual.html=
+#_cross_compilation_toolchain</a><br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;<a href=3D"https://buildroot.org/d=
+ownloads/manual/manual.html#_cross_compilation_toolchain" rel=3D"noreferrer n=
+oreferrer" target=3D"_blank">https://buildroot.org/downloads/manual/manual.h=
+tml#_cross_compilation_toolchain</a>&gt;<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0But again, do you really need to use =
-so such old versions<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0instead of try<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0to use buildroot&#39;s beaglebone_def=
-config?<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;But again, do you really need to use s=
+o such old versions<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;instead of try<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;to use buildroot's beaglebone_defconfi=
+g?<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; In the same config file, there =
-is:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; # BR2_PACKAGE_BUSYBOX is no=
-t set<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; When disabling busybox, you sho=
-uld have seen the message:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 You may nee=
-d to enable other packages to get a working<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0system<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 You better =
-know what you&#39;re doing!<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; In the same config file, there i=
+s:<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&gt; # BR2_PACKAGE_BUSYBOX is not=
+ set<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; When disabling busybox, you shou=
+ld have seen the message:<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&nbsp; &nbsp; &nbsp; You may need=
+ to enable other packages to get a working<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;system<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&nbsp; &nbsp; &nbsp; You better k=
+now what you're doing!<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Despite of what I&#39;ve written on m=
-y previous e-mail(my test was<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0wrong),<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0he has BR2_INIT_SYSTEMD=3Dy that work=
-s as Init System, so that&#39;s ok.<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Despite of what I've written on my pre=
+vious e-mail(my test was<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;wrong),<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;he has BR2_INIT_SYSTEMD=3Dy that works=
+ as Init System, so that's ok.<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; And then:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; # BR2_PACKAGE_SYSTEMD_LOGIN=
-D is not set<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; And then:<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&gt; # BR2_PACKAGE_SYSTEMD_LOGIND=
+ is not set<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Good catch again Edgar! This ^^^ shou=
-ld be the point. Because it&#39;s<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0exactly the systemd login dameon.<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Good catch again Edgar! This ^^^ shoul=
+d be the point. Because it's<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;exactly the systemd login dameon.<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; # BR2_PACKAGE_UTIL_LINUX_LO=
-GIN is not set<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;&gt; # BR2_PACKAGE_UTIL_LINUX_LOG=
+IN is not set<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0This ^^^ is not selected by systemd, =
-so I expect<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BR2_PACKAGE_SYSTEMD_LOGIND to do the =
-job(even if I&#39;m not a systemd<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0expoert at all).<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;This ^^^ is not selected by systemd, s=
+o I expect<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;BR2_PACKAGE_SYSTEMD_LOGIND to do the j=
+ob(even if I'm not a systemd<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;expoert at all).<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0But as Edgar pointed linux headers do=
-n&#39;t match so you have 3<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0choices:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A01) find a toolchain with linux-header=
-s &lt;=3D 4.4.*<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A02) update linux version<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A03) start from scratch using buildroot=
- beaglebone_defconfig<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;But as Edgar pointed linux headers don=
+'t match so you have 3<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;choices:<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1) find a toolchain with linux-headers=
+ &lt;=3D 4.4.*<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2) update linux version<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3) start from scratch using buildroot b=
+eaglebone_defconfig<br>
 &gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Best regards<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-- <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Giulio Benetti<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Benetti Engineering sas<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Best regards<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-- <br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Giulio Benetti<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Benetti Engineering sas<br>
 &gt; <br>
 <br>
 </blockquote></div>
+<span>_______________________________________________</span><br><span>buildr=
+oot mailing list</span><br><span>buildroot@buildroot.org</span><br><span>htt=
+ps://lists.buildroot.org/mailman/listinfo/buildroot</span><br></div></blockq=
+uote></body></html>=
 
---000000000000e9cf9805d883eb4c--
+--Apple-Mail-D99A9B97-D73A-488A-88E8-D01530D4176D--
 
---===============8625626139481253297==
+--===============5122924350736727621==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -436,4 +460,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8625626139481253297==--
+--===============5122924350736727621==--
