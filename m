@@ -1,82 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6887FC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 12:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E90CC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 12:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F6B4410C6;
-	Tue, 22 Feb 2022 12:57:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB16860EB2;
+	Tue, 22 Feb 2022 12:57:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LurdyjyFl7BP; Tue, 22 Feb 2022 12:57:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZgMW0DvlLuUM; Tue, 22 Feb 2022 12:57:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A47D5410BB;
-	Tue, 22 Feb 2022 12:57:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3FF760ECB;
+	Tue, 22 Feb 2022 12:57:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BAD3D1BF97F
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 12:57:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E94C91BF97F
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 12:57:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A81248140F
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 12:57:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1D3D81A9C
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 12:57:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 90F8mBdN3Ayt for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 12:57:31 +0000 (UTC)
+ with ESMTP id 0DAhEgmtjk0e for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 12:57:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9A59813B5
- for <buildroot@busybox.net>; Tue, 22 Feb 2022 12:57:31 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- l2-20020a7bc342000000b0037fa585de26so921598wmj.1
- for <buildroot@busybox.net>; Tue, 22 Feb 2022 04:57:31 -0800 (PST)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EA3D58140F
+ for <buildroot@busybox.net>; Tue, 22 Feb 2022 12:57:32 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id u1so33043715wrg.11
+ for <buildroot@busybox.net>; Tue, 22 Feb 2022 04:57:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=eEE9ZGFLtntVvkas/gQw/A9JkyH+cwgBAvrs+bjumUc=;
- b=TGlGzCo7jffKeDjUHmnjjiK6Kvlp59J8VXSyKB5OZ4RBDY29CebJX1F2LJyDmovSz0
- D8t0Lr2lMMS4LynZ5hRg+tnEyDMyasYXDbrb+aJnBLWeDckAZp0nwYSr+KwSwb3mdIeo
- 1DYD/sXTDNHQLtcpzmNaPYrO/XNrKeKpcvtYOgqYTsO+4qGnHr+ngydJmBvZfXMeRmis
- vsGGaLnbfLVk6SKjhcAHJZNMK6ShjBlhyz7dw7burcCqqVg1zA1KYjLQYtWIAkKtzmz9
- Mh7QLLGp4rfBB5ItlBZnX50ByirE5aNRMa3m1de56MV+97pZtXZx6aCISr6sUekwQpcz
- M9yA==
+ bh=Dr+eKNNDY+WgQEj9zmec15T7+Z6JXyGpIWZc15nRJUo=;
+ b=o8xfTq6OcvU2R29869zUAgmWLc35xS7GS5S7l/wxY5c1Tz/muwmErpthybWQsfjXTR
+ /of98m83d0a0y5bwzbduMgd6KHe38qKZysyegPX6TqSmGZUM6dfm5zLdLW9Qo36wXMre
+ INYmK6QuDZjLYp96bYN8ObVBk9bOuYDn6WYlkDfFkfECTfUa4BGjnpQA2UUiBHa1fWlM
+ OkQv92LtwrvmRGvjtgHh87xgkQh6sHgLp5C8vVxH8I0gR9ZH6xVJIRUiap5xcZNE3WOD
+ 2CaLD7Pi3/0FDN7b1tkos12ZIGk6jPN4J9/3WDH+2hAFiQHD+vsd3HsrepQzvi/BeCRU
+ UIYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=eEE9ZGFLtntVvkas/gQw/A9JkyH+cwgBAvrs+bjumUc=;
- b=jTZLXTzOuUs8YdrnAtTC30jRWLzE8ba0lIUwhTYV/Z2RhQPD0pKtc3JXgeVXsENA+M
- /CCaE87diPOhZ3NAAiUJ+w8FQS7F7bIDB3LyrObDmcoBM1ZRlpHWPaL+VdQxMSEtrQO1
- RPFFplhgLONqlYtbMVW1uxpCQZC234xkVBk8nwnLIsgjfB3OnEwVwIjRjNfkhClPx0xW
- 6KRXxao+oU8+OrvihCDkuq/QUJYs7Al8yE9uJNYIzDYqepw3lftRzHoZ0B0fJx5SoxwU
- +c5y5lPQLu4WeSvyo/xp2R7dTvKjz3SmdA422TJSkkvcZ3+CJlkJzwTzS4/271miedph
- b8yg==
-X-Gm-Message-State: AOAM532/+zCtxy0hhPfpLvKOOsX+FP6EBJ9GRzd9D0ImGesJEUvNOjl6
- 0T/BuC63lB16WaD42qjaULhuLEB9EUE=
-X-Google-Smtp-Source: ABdhPJz2cNXKNPeZFhqPaXRWeUrcoeMvtsvCA6ntakB146Fe0t7muZq0po+Q7vZaN1BaSmTUmwYQAQ==
-X-Received: by 2002:a1c:6a01:0:b0:37f:1b18:6b17 with SMTP id
- f1-20020a1c6a01000000b0037f1b186b17mr3222321wmc.146.1645534649771; 
- Tue, 22 Feb 2022 04:57:29 -0800 (PST)
+ bh=Dr+eKNNDY+WgQEj9zmec15T7+Z6JXyGpIWZc15nRJUo=;
+ b=2wnV0TyXOd8tutdo03hEJBUaW+Kx9h+2O3srpE00j89LgFZZ5w8BDRuRYiJvTcgGr/
+ 8oNjl5hyPsZTjADca2OEvRpqLr+io0ARChlmdj1Hh0s3fntshKCsXyYFl7Bxlx7lon1S
+ a7V5/pIzw4+7mdfRlspTo8LBvaXK0Hs4I62MERViQNwijqk0KMZzSVjuaQ5n0PDw8w8t
+ 0szq0KRGVHYOnRsPIM25HsqHGdhCqKfaT1hm7f8UhgGNPUEfNGtdBE6kIwqnJqwqNtoh
+ bAkoqNI2jSsCkShJHOzs0wX7rPqAe7Ey0d1GOqmKwG3aWWzeUNCl91Vq9oK5OHnXUdG7
+ R5WA==
+X-Gm-Message-State: AOAM5316srriWalJWnbAVwXmVWQSrPqJbThC6FmvnQaAvbedhg28i6Zv
+ 5wt6HeHyIRKLS7U4xN81IOsPfWHulMw=
+X-Google-Smtp-Source: ABdhPJwl4/xEt47NuD+zKgw7xa/RhU//SiK24PpZzylPqTIieLajHtEltiTN31snmolqgo9lJwMgfQ==
+X-Received: by 2002:a5d:55c1:0:b0:1ea:961e:2ce4 with SMTP id
+ i1-20020a5d55c1000000b001ea961e2ce4mr2107567wrw.45.1645534651085; 
+ Tue, 22 Feb 2022 04:57:31 -0800 (PST)
 Received: from pc-140.home ([2a01:cb15:81e5:ad00:7afb:407b:e9ac:7e79])
- by smtp.gmail.com with ESMTPSA id ay12sm36702281wrb.73.2022.02.22.04.57.29
+ by smtp.gmail.com with ESMTPSA id ay12sm36702281wrb.73.2022.02.22.04.57.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Feb 2022 04:57:29 -0800 (PST)
+ Tue, 22 Feb 2022 04:57:30 -0800 (PST)
 From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 To: buildroot@busybox.net
-Date: Tue, 22 Feb 2022 13:57:22 +0100
-Message-Id: <20220222125724.11079-2-guillaume.bressaix@gmail.com>
+Date: Tue, 22 Feb 2022 13:57:23 +0100
+Message-Id: <20220222125724.11079-3-guillaume.bressaix@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220222125724.11079-1-guillaume.bressaix@gmail.com>
 References: <20220222125724.11079-1-guillaume.bressaix@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 2/4] package/python-beniget: new host-only
+Subject: [Buildroot] [PATCH v4 3/4] package/python-pythran: new host-only
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -99,47 +98,52 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Generated with scanpypi and converted to host.
 
-It is a dependency of python-pythran.
+It is a dependency of python-scipy.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- package/python-beniget/python-beniget.hash |  5 +++++
- package/python-beniget/python-beniget.mk   | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/python-beniget/python-beniget.hash
- create mode 100644 package/python-beniget/python-beniget.mk
+ package/python-pythran/python-pythran.hash |  6 ++++++
+ package/python-pythran/python-pythran.mk   | 19 +++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+ create mode 100644 package/python-pythran/python-pythran.hash
+ create mode 100644 package/python-pythran/python-pythran.mk
 
-diff --git a/package/python-beniget/python-beniget.hash b/package/python-beniget/python-beniget.hash
+diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
 new file mode 100644
-index 0000000000..cd4fa7b873
+index 0000000000..a24bb4dc4c
 --- /dev/null
-+++ b/package/python-beniget/python-beniget.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/beniget/json
-+md5  a2bbe7f17f10f9c127d8ef00692ddc55  beniget-0.4.1.tar.gz
-+sha256  75554b3b8ad0553ce2f607627dad3d95c60c441189875b98e097528f8e23ac0c  beniget-0.4.1.tar.gz
++++ b/package/python-pythran/python-pythran.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/pythran/json
++md5  e09e90484771937ab499380858bdb18d  pythran-0.11.0.tar.gz
++sha256  0b2cba712e09f7630879dff69f268460bfe34a6d6000451b47d598558a92a875  pythran-0.11.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  64ad3e304e9d2d8731c26ac3e652335a6016e38be2f71fe30350be51c6d500b0  LICENSE
-diff --git a/package/python-beniget/python-beniget.mk b/package/python-beniget/python-beniget.mk
++sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
++sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
+diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
 new file mode 100644
-index 0000000000..9970546b14
+index 0000000000..8234513af3
 --- /dev/null
-+++ b/package/python-beniget/python-beniget.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-pythran/python-pythran.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# python-beniget
++# python-pythran
 +#
 +################################################################################
 +
-+PYTHON_BENIGET_VERSION = 0.4.1
-+PYTHON_BENIGET_SOURCE = beniget-$(PYTHON_BENIGET_VERSION).tar.gz
-+PYTHON_BENIGET_SITE = https://files.pythonhosted.org/packages/14/e7/50cbac38f77eca8efd39516be6651fdb9f3c4c0fab8cf2cf05f612578737
-+PYTHON_BENIGET_SETUP_TYPE = setuptools
-+PYTHON_BENIGET_LICENSE = BSD-3-Clause
-+PYTHON_BENIGET_LICENSE_FILES = LICENSE
-+HOST_PYTHON_BENIGET_DEPENDENCIES = host-python-gast
++PYTHON_PYTHRAN_VERSION = 0.11.0
++PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
++PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/88/9f/161f08131abf7f23920cee29b691de27f10fd97ac09fb2f3532b3a7f9b96
++PYTHON_PYTHRAN_SETUP_TYPE = setuptools
++PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
++PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
++HOST_PYTHON_PYTHRAN_DEPENDENCIES = \
++	host-python-beniget \
++	host-python-gast \
++	host-python-numpy \
++	host-python-ply
 +
 +$(eval $(host-python-package))
 -- 
