@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 400F4C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 16:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B7BFC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 16:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7F7B409C1;
-	Tue, 22 Feb 2022 16:53:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CF3881327;
+	Tue, 22 Feb 2022 16:54:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SSb03db_zMFp; Tue, 22 Feb 2022 16:53:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g9nILGZB5DMr; Tue, 22 Feb 2022 16:54:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0561140292;
-	Tue, 22 Feb 2022 16:53:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7144B812A8;
+	Tue, 22 Feb 2022 16:54:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 80D3A1BF3CB
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:53:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 66D511BF3CB
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A2D6405AE
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:53:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62911402C3
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:54:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jmqDwtFx0aNl for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 16:53:28 +0000 (UTC)
+ with ESMTP id OVPkymTBnbOa for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 16:54:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF671401CC
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 16:53:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C824B40604
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 16:54:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC45B83829; Tue, 22 Feb 2022 16:45:34 +0000 (UTC)
+ id BBFC38382E; Tue, 22 Feb 2022 16:46:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 17:53:20 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 16a75a76af63147a94c7df1c38e5568eb0ab8609
-X-Git-Newrev: f3da0a3fce561e961c47a436838b1ffe9ac41b5e
+Date: Tue, 22 Feb 2022 17:54:04 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 674f2f0d451192ceb497f2f92bdecc67100b52d9
+X-Git-Newrev: c61c94a84e0afeb48a9b672153bece6b49a70a28
 X-Patchwork-Hint: ignore
-Message-Id: <20220222164534.EC45B83829@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/libarchive:
+Message-Id: <20220222164613.BBFC38382E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libarchive:
  security bump to version 3.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3da0a3fce561e961c47a436838b1ffe9ac41b5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c61c94a84e0afeb48a9b672153bece6b49a70a28
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Libarchive 3.5.3 is a security release
 
