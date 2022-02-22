@@ -1,80 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69067C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3282C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:37:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21756408AE;
-	Tue, 22 Feb 2022 10:23:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68C0C819FC;
+	Tue, 22 Feb 2022 10:37:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0n2wA9VzE-EU; Tue, 22 Feb 2022 10:23:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HlIgKhwsGx9y; Tue, 22 Feb 2022 10:37:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AC5240287;
-	Tue, 22 Feb 2022 10:23:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4879A1BF280
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CC4381A46;
+	Tue, 22 Feb 2022 10:37:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D7081BF280
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:37:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37CD34089A
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AE2A40137
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:37:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u9aXTaUX-CZu for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 10:22:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8444C40892
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:22:32 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id i11so34019441eda.9
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 02:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=+BR7jIZYPVNEt5s6iIiVfvZMLXHE5YlrgpA0mKIVmyk=;
- b=kD/Qq/b7fdD2xfKY7Nu1Pay3XCPhcf24Q+OWss/t8IQrhgW1f7CQn9KQOpoeShDQ0n
- LidsBv0v3BSekMYsIebscIHKZPFkmARdtxUN0LQiHtHrMROtYg/hXeyl/wXRzBJ69dKt
- YIwARHycq+8WwUtUV1R/gR2GnAUXFO6UjRSXD0Orl3PcCPIcHPdpDODoot2OnQA+rlei
- LHAXSBJWnrFZpYhXeDvWGXwPC1p2rpqE3Czhs4OCWMFItKYn9kU/vM9Suc4Q9q6LQlkz
- xo7Ft8VywPjryZUVEwvd02QrZpWNnuq9XHxoS5YyXP3yoJv+L4wyBRdPpRYNhvuKzv+8
- jgOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=+BR7jIZYPVNEt5s6iIiVfvZMLXHE5YlrgpA0mKIVmyk=;
- b=DPUU1h1C7yNFTGxhu2oNCuN4yiBzfDiaFd1FapoqyhYG6qdKHJpHeocOYMBjmJ06a5
- NWh7rd7isCtmesXPqwNiEAaskBv56abHA+/HEiol8zwNYkEE0q6ctklbDA4D0FcVfg/M
- KdQIvl9ScbVQNyhVPt7lG4zVMi8mlj3XUMfhR0B7EWYfee1bXLA3LwQx23pKpimPnDLp
- WIUhE8qoC/Jv+vw3LzQ2+Qq9nPAydrVeSKOntFDQJyGRMkmHPMoIfU3JRb7K6v6AbRPz
- MaicVzOIbuiL0E4PsyHsqGS/kMwtNCUcnQK1K+JE1PL9CkDOFl/Y04QW0uJbCBwTS4sV
- MbxA==
-X-Gm-Message-State: AOAM531dV+Cu/yVuytMPhHYm8r8lw3Bnq83xm9PH+o84I6fV9iWILnl5
- H9Klo7xM72GmVuqcG8rhLi/0ykO9A+5Ykg==
-X-Google-Smtp-Source: ABdhPJyIDM33EEye6eXtfV6cKa5f2IerQxH3JaukHpGdrDe4kpK4g0bUtez5qQVA4k5T82VDrzTnRw==
-X-Received: by 2002:a05:6402:11cc:b0:40f:b100:492a with SMTP id
- j12-20020a05640211cc00b0040fb100492amr26183302edw.282.1645525350756; 
- Tue, 22 Feb 2022 02:22:30 -0800 (PST)
-Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
- [62.178.205.20])
- by smtp.gmail.com with ESMTPSA id c24sm6097032ejj.60.2022.02.22.02.22.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Feb 2022 02:22:30 -0800 (PST)
-From: Norbert Lange <nolange79@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 11:22:10 +0100
-Message-Id: <20220222102211.74573-8-nolange79@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220222102211.74573-1-nolange79@gmail.com>
-References: <20220222102211.74573-1-nolange79@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wXH_-VSZQ2Y6 for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 10:37:00 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A2F99405A0
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:36:59 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CE806240038;
+ Tue, 22 Feb 2022 10:36:31 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nMSX0-0060oM-W6; Tue, 22 Feb 2022 11:36:31 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20220221233745.520318-1-aperez@igalia.com>
+Date: Tue, 22 Feb 2022 11:36:30 +0100
+In-Reply-To: <20220221233745.520318-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Tue, 22 Feb 2022 01:37:45 +0200")
+Message-ID: <87pmnf6vdd.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 7/7] package/zsh: enable static regex module
+Subject: Re: [Buildroot] [PATCH 1/1] package/xdg-dbus-proxy: bump to version
+ 0.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,42 +60,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- Phil Eichinger <phil.eichinger@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-the builtin string =~ regexp operator needs to load the regex
-module. This operator is readily used in zsh scripts,
-so always enable it.
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/zsh/zsh.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > This is a minor maintenance release. The release incorporates
+ > "0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch", which
+ > can now be removed.
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index c26a00c430..85c214372a 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -44,6 +44,12 @@ ZSH_CONF_OPTS += zsh_cv_shared_environ=yes zsh_cv_shared_tgetent=yes \
- 	zsh_cv_sys_dynamic_strip_exe=yes zsh_cv_sys_dynamic_strip_lib=yes
- endif
- 
-+# regex is commonly used by completion scripts, link it statically
-+define ZSH_USE_STATIC_REGEX_MODULE
-+	$(SED) 's,echo dynamic,echo static,' $(@D)/Src/Modules/regex.mdd
-+endef
-+ZSH_POST_PATCH_HOOKS += ZSH_USE_STATIC_REGEX_MODULE
-+
- # Add /bin/zsh to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define ZSH_ADD_ZSH_TO_SHELLS
+ > Release notes:
+
+ >   https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.3
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed to master given the small amount of changes, thanks.
+
+ > +++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+ > @@ -1,5 +1,5 @@
+ > -# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.2
+ > -sha256 1749d6f9f46dcc9edc87725641cf56cf91dcad1b01707891ea0850c1000c520f xdg-dbus-proxy-0.1.2.tar.xz
+ > +# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.3
+ > +sha256 03b5d28ca879253ddbbce31098909becca1495ea811a6377a492e28f16c09b9b xdg-dbus-proxy-0.1.3.tar.xz
+
+The "new" agreement is two spaces - And check-package complains about,
+so I've fixed that while applying.
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
