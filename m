@@ -1,83 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 588BBC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:23:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9271FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE061409D3;
-	Tue, 22 Feb 2022 10:23:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35F1E405A8;
+	Tue, 22 Feb 2022 10:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7UgdrdqDCiCd; Tue, 22 Feb 2022 10:23:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2583F408AE;
-	Tue, 22 Feb 2022 10:23:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC4BD1BF280
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7ED940155
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z2tlWv96In_M for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 10:22:29 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RByQifvcDPar; Tue, 22 Feb 2022 10:23:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40623405A0;
+	Tue, 22 Feb 2022 10:23:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D965B1BF280
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D631360B12
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8iv0iZgtXIxO for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 10:22:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 998E340137
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:22:29 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id p14so41266864ejf.11
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 02:22:29 -0800 (PST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2E1F560ABE
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:22:31 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id bg10so41386531ejb.4
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 02:22:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=BlhgwX52PWWusRbIt9/bBEyHNhloRixe2WJoJ1iaXxU=;
- b=nBYkcdYSM4RU49S5FRXBhzO0NK37G7peHscgNUnXjoXC2Q06RDaN2EScB5PEhdWP+Q
- bQrDIzNCOSVkfpE2zv6ehUf2H1TJkgNIIx0maDjTT/LJE34RAyGvBB0KYdYn7yW58UQh
- /1pheOQV1k59VFtNRianmMHY5A5lPDFB0sS0S/CRwFpYq5/EKNqknNW5RDl6Ds/S8Yum
- zb/SI146L61ipvbGLi1Ct+mucwtrM4uko/3PxcWZpCC7366WPvAiHec4TN8iOj2GcSk7
- w+5hpR+yjsMleaKA6UamnO6eVIwnPGU5WKbmhcgM0gQvmf+k2Uu/vfKAK9n+uPPB8b7R
- RB1w==
+ bh=uZCGr6y+9EeKeb4a5/F1yD8dFWNcrLDzcnkxBPAmc8k=;
+ b=gGB7MFnEkGsk4ZvYnRbcYAmIlh0o5kIvVnVc7/yPzYumyS++XiFiB8hSTslQ4YR7F0
+ wLbdC9SAC54WV2++jF8uY2SuZGRuUKfVtn1wsWCvIqVpr9ZI2nqDq43Mtv+iX7DH+SSf
+ 9kdDtimV10v649lNDkYgSvH9/+D/Yo51Lv1PmU1QEe5aQFzJ+2SMbxLUDIQIPBsdBn/X
+ W3ThmpNT5wcCKkQT2MN0ORTcRU6Nd6jL0wk4AyzBMQWXMbRIW9LrKSSOSH3gQgU6KDl4
+ J7f37QOdxW3Dfd6GwESqnILAbThvqkys1Syy78YV4Djoyi5A7DVp7AbFEsNupwiFz64t
+ UUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=BlhgwX52PWWusRbIt9/bBEyHNhloRixe2WJoJ1iaXxU=;
- b=xb94znLWi+CMQbwzjuULaDtzOn+VQKFejY1BaH8IJImCYkrtGpYEMr9LcSIudmsB1e
- 2cdODDPCPsCOAm6y0AYQPsWjoln8aRlN3b9319bOtGpHOjTfHOsIGcE+h8jSErAPHkKF
- Qz/uZKipyKo58dOhjSu8CsMSGLd4aJWWm9IeNxwXpWPfG/GpiPM8agzgSze5QfuupOZ2
- kocJM2PthSGILB5MzAnvxcQ8u1QpxPNIkT/KwTpwQr006Fa8o/Mg6yFwRDsG6fjKt9S3
- iFn8Hv1bqDzkb5CK1plfOL9W/vQ7pkppuZyNGrvzZiHknNKz0Zs9hAXMaKh7vxRyUS5t
- t1tg==
-X-Gm-Message-State: AOAM530HlrS2p2iURFAX51VhKYeMQ1OWlfIgMfKGMiWjR+TTnavTIr3U
- dZwCQMc72aUACvnrqRvSl8+PWUJ/qdKfTA==
-X-Google-Smtp-Source: ABdhPJzpEpibaZ2Sz9uWDRsWapJBUGNiiE4nPHb2aVS60VEyQkw80qAdjSAX+O32fen5jNK9/G80cw==
-X-Received: by 2002:a17:906:50b:b0:6d0:9ebc:b9df with SMTP id
- j11-20020a170906050b00b006d09ebcb9dfmr14898371eja.67.1645525347769; 
- Tue, 22 Feb 2022 02:22:27 -0800 (PST)
+ bh=uZCGr6y+9EeKeb4a5/F1yD8dFWNcrLDzcnkxBPAmc8k=;
+ b=bTE1ZTULhT0pv0rsAnvYpeRYf+stSu6UdsXKgfgdH+Qxh7gnc47Opy7KImIMFSSkQR
+ t9bjI1nzY9czAoaL933gvMJP9rEDalwBYobgmuJsVVdi4YrI3BifRufN6jz+ap8Zm6yO
+ 4AOlpm7cLy68sqNpVbT/vTa7KkOwFXFEsF24aMqiBiV4pxkoWp+Fnqe9np6jL4Km7xl0
+ 6ujx3Jh5UnswFP1jGtau2TUx+etcwSVZt65KbvKJEgcFlKhXk6IpyYGLlIvszPm+SUBQ
+ YEF1BqJJAve9w5QIXODUnbXDePDR4NbpfpSHQpIWTZ/Rif4UE1+8+7dvYgtwHVkTXD7S
+ ED/A==
+X-Gm-Message-State: AOAM532ARMDhFu6GvWTRVR5jzY4KhGOh3erpIHLFCmnBPIv1J0TQyg7J
+ cwZgMyon8MSLn2WCKrAxW4+IAaMQkPeuRg==
+X-Google-Smtp-Source: ABdhPJw1UMS1xYVf1ojgf/Jr0EDCEMImYOhRLgRBv3gjmOENOO3Gtyi3jn91Ux/a4xsfjLWq3ch+AA==
+X-Received: by 2002:a17:906:a398:b0:6ce:71b:deff with SMTP id
+ k24-20020a170906a39800b006ce071bdeffmr18752221ejz.204.1645525349345; 
+ Tue, 22 Feb 2022 02:22:29 -0800 (PST)
 Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
  [62.178.205.20])
- by smtp.gmail.com with ESMTPSA id c24sm6097032ejj.60.2022.02.22.02.22.27
+ by smtp.gmail.com with ESMTPSA id c24sm6097032ejj.60.2022.02.22.02.22.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Feb 2022 02:22:27 -0800 (PST)
+ Tue, 22 Feb 2022 02:22:29 -0800 (PST)
 From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 11:22:08 +0100
-Message-Id: <20220222102211.74573-6-nolange79@gmail.com>
+Date: Tue, 22 Feb 2022 11:22:09 +0100
+Message-Id: <20220222102211.74573-7-nolange79@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220222102211.74573-1-nolange79@gmail.com>
 References: <20220222102211.74573-1-nolange79@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 5/7] Makefile: remove /usr/lib/rpm directory
- on target
+Subject: [Buildroot] [PATCH v3 6/7] package/zsh: Enable dynamic modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,42 +88,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Norbert Lange <nolange79@gmail.com>,
+ Phil Eichinger <phil.eichinger@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-this directory is used by the rpm package manager, and packages
-like systemd will install "macros" for this system.
+The autoconf scripts seem to assume that no dynamic loader
+is available if crosscompiling.
+This results in only a small set of modules being enabled
+and linked statically.
 
-It should be deleted just like the similar
-/usr/share/aclocal directory from Autoconf.
+For comparison, debian patches the fallback to enable
+dynamic modules (unconditionally).
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
-v1 -> v2
--   see https://lists.buildroot.org/pipermail/buildroot/2020-June/284213.html
--   improved commit message
+This commit enables modules if shared libraries are enabled.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index d92438166f..4953b382ca 100644
---- a/Makefile
-+++ b/Makefile
-@@ -734,7 +734,7 @@ target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake \
--		$(TARGET_DIR)/usr/doc
-+		$(TARGET_DIR)/usr/lib/rpm $(TARGET_DIR)/usr/doc
- 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/lib/ $(TARGET_DIR)/usr/lib/ $(TARGET_DIR)/usr/libexec/ \
- 		\( -name '*.a' -o -name '*.la' -o -name '*.prl' \) -print0 | xargs -0 rm -f
+---
+v1:
+-   so far only tested with glibc
+---
+ package/zsh/zsh.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index c5ab7c2fae..c26a00c430 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -36,6 +36,14 @@ else
+ ZSH_CONF_OPTS += --disable-pcre
+ endif
+ 
++ifneq ($(BR2_STATIC_LIBS),y)
++# zsh assumes shared libs to be not available when crosscompiling
++ZSH_CONF_OPTS += zsh_cv_shared_environ=yes zsh_cv_shared_tgetent=yes \
++	zsh_cv_shared_tigetstr=yes zsh_cv_sys_dynamic_clash_ok=yes \
++	zsh_cv_sys_dynamic_rtld_global=yes zsh_cv_sys_dynamic_execsyms=yes \
++	zsh_cv_sys_dynamic_strip_exe=yes zsh_cv_sys_dynamic_strip_lib=yes
++endif
++
+ # Add /bin/zsh to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connection. See man shells.
+ define ZSH_ADD_ZSH_TO_SHELLS
 -- 
 2.34.1
 
