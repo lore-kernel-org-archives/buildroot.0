@@ -1,47 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 977D7C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B77BC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF8660EAD;
-	Tue, 22 Feb 2022 10:13:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21D4381A46;
+	Tue, 22 Feb 2022 10:22:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cQ2a8MX6ws25; Tue, 22 Feb 2022 10:13:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WlWB4PJsCDm6; Tue, 22 Feb 2022 10:22:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EA6560B4F;
-	Tue, 22 Feb 2022 10:13:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CBF351BF280
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:12:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AA108174F;
+	Tue, 22 Feb 2022 10:22:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 85B471BF280
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB25860AB5
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:12:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 745864089A
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CrEaZ4KbKrwu for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 10:12:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D066F608D8
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:12:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8555B802B2; Tue, 22 Feb 2022 10:05:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0onG6vmLP8qr for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 10:22:22 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8EB5B40892
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:22:22 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id z22so35698504edd.1
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 02:22:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B7AdkT2B7JDaw4OI2yekDde5Y9paKRklbRbLnYWbz0A=;
+ b=GJOl+8mTt8ZhwH+agNVom3egZ2ejWtYDrYkQ06kpPZOnHI9sshzpErCHFp6Bn0yOtN
+ tYkfB2dP0zMl+WCJyePmh1FTfJ8+HlofFF76Ghe91M/+c3cA+KYAuRYDgt83Q3Xz3XWc
+ J1SBp9Zy083DRLQENdUcWWWm1Uzu9744i/mzKQHjX8ivQ0hCipMvj10kUF7qTmunq+yB
+ uk495ChONtOdQTqmSetL/rtaEqI/Ne3MVXANITvDdHiJycBkQOR0Wwm5m/uHiIFKG8jQ
+ RcZFrBP4IeedMw3il5VQgKZV9DVFWbL4x5RYsfFKY9ub1gp8IGsAm8FKmS4+7O8RzHsu
+ 2L+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B7AdkT2B7JDaw4OI2yekDde5Y9paKRklbRbLnYWbz0A=;
+ b=dTQndnEgD7uppvGtgCe8Y0U/biYniCzVC4ZMzNDk1VmYGWCItR/XujzrbsClzZabsq
+ gT8lEOj+CMXwXH0iy/q6Mk38ywUhpvBR7VbuyMBJun1rAHHJ9APiiilxTliADMZgMLEw
+ PjaDKbDlG9zymaWHFjTyomkOsw9tycuMfvd8e7r1MOjPaSfismYOIbjgb+xK58MeX9az
+ hrJDKfZhcEctkvAM02r4LuxeBrHGhkBATLG53ngFHQx9+AoORzOPzFzmPb4K4FX2+kgQ
+ kl7mVKuuhyz1/DUgytU3TAe6OZyT1SXIVyTMFpS5LZqyytzPsAaFHaO2nKFdvlPPBb/Y
+ MIyQ==
+X-Gm-Message-State: AOAM5308UBzLfYb66MpM14xb1xBgYEl5dCzK9lgQPBRTgmIIPfIjgbd7
+ JrHdvsKcuU+iJZGCWXxBLMGkPTVuTvtbbw==
+X-Google-Smtp-Source: ABdhPJwVnX7XdXJHgnNGACdh71vVu3C1cssLBCeXsklrhJjVaE0t9/MwhCQZGVqxBOOBD8hYJQsFRA==
+X-Received: by 2002:aa7:dbd6:0:b0:408:4a31:97a5 with SMTP id
+ v22-20020aa7dbd6000000b004084a3197a5mr25995062edt.186.1645525340735; 
+ Tue, 22 Feb 2022 02:22:20 -0800 (PST)
+Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
+ [62.178.205.20])
+ by smtp.gmail.com with ESMTPSA id c24sm6097032ejj.60.2022.02.22.02.22.20
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Feb 2022 02:22:20 -0800 (PST)
+From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 11:10:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b43ba475cf3dbf2b3990144758d5b1d4b74862c0
-X-Git-Newrev: 4c7e250c699b23051a64bc0c2ef3e3f2bd020b3d
-X-Patchwork-Hint: ignore
-Message-Id: <20220222100500.8555B802B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flac: security bump to version
- 1.3.4
+Date: Tue, 22 Feb 2022 11:22:03 +0100
+Message-Id: <20220222102211.74573-1-nolange79@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] Patch series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,210 +87,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c7e250c699b23051a64bc0c2ef3e3f2bd020b3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As is was suggested I pulled my patches in a series,
+this should combine most of my open work.
 
-This release mostly fixes (security related) bugs including:
- - Fix 12 decoder bugs found by oss-fuzz, including CVE-2020-0499
- - Fix encoder bug CVE-2021-0561
+It does *not* contain:
 
-Also:
- - Replace first patch which was reverted by
-   https://github.com/xiph/flac/commit/4fbb6d4f2ecf2a96c17ea9880108409f852c08a9
- - Disable stack protection (enabled by default since
-   https://github.com/xiph/flac/commit/f706f2832270a0b7851cdffe62ad37acda9423fe)
- - Drop md5 which is not provided anymore
- - Update indentation in hash file (two spaces)
+-   toolchain: support mismatched merged usr [1]
+    recent enough
 
-https://github.com/xiph/flac/releases/tag/1.3.4
+-   package/dbus-broker: new package [2]
+    recent enough
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flac/0001-Fix-uclibc-build.patch           | 81 ++++++++++++++++++++++
- ...c-check-for-sys-auxv.h-before-defining-FL.patch | 36 ----------
- package/flac/flac.hash                             | 12 ++--
- package/flac/flac.mk                               |  5 +-
- 4 files changed, 89 insertions(+), 45 deletions(-)
+-   package/openssh: improve integration for systemd [3]
+    outdated, no time to fix it
 
-diff --git a/package/flac/0001-Fix-uclibc-build.patch b/package/flac/0001-Fix-uclibc-build.patch
-new file mode 100644
-index 0000000000..fcba670fae
---- /dev/null
-+++ b/package/flac/0001-Fix-uclibc-build.patch
-@@ -0,0 +1,81 @@
-+From 4c62082f64132bfcbcb6569aa914c5ec283303f9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 21 Feb 2022 18:21:11 +0100
-+Subject: [PATCH] Fix uclibc build
-+
-+Commit 4fbb6d4f2ecf2a96c17ea9880108409f852c08a9 reverted commit
-+44036c9a9b45d03373fe90e9c112852bfc054c51 and so broke again the build on
-+uclibc
-+
-+So put back the sys/auxv.h check as well as a getauxval check in a way
-+that doesn't break iOS
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/xiph/flac/pull/292]
-+---
-+ configure.ac      | 5 ++++-
-+ src/libFLAC/cpu.c | 9 ++++-----
-+ 2 files changed, 8 insertions(+), 6 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4d7dc2e4..6f32fa45 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -69,7 +69,7 @@ AC_C_INLINE
-+ AC_C_VARARRAYS
-+ AC_C_TYPEOF
-+ 
-+-AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
-++AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/auxv.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
-+ 
-+ XIPH_C_BSWAP32
-+ XIPH_C_BSWAP16
-+@@ -101,6 +101,9 @@ fi
-+ # For the XMMS plugin.
-+ AC_CHECK_TYPES(socklen_t, [], [])
-+ 
-++dnl check for getauxval in standard library
-++AC_CHECK_FUNCS(getauxval)
-++
-+ dnl check for getopt in standard library
-+ dnl AC_CHECK_FUNCS(getopt_long , , [LIBOBJS="$LIBOBJS getopt.o getopt1.o"] )
-+ AC_CHECK_FUNCS(getopt_long, [], [])
-+diff --git a/src/libFLAC/cpu.c b/src/libFLAC/cpu.c
-+index 8b92f4c7..64c6acad 100644
-+--- a/src/libFLAC/cpu.c
-++++ b/src/libFLAC/cpu.c
-+@@ -53,11 +53,9 @@
-+ #define dfprintf(file, format, ...)
-+ #endif
-+ 
-+-#if defined FLAC__CPU_PPC
-+-#if defined(__linux__) || (defined(__FreeBSD__) && (__FreeBSD__ >= 12))
-++#if defined(HAVE_SYS_AUXV_H)
-+ #include <sys/auxv.h>
-+ #endif
-+-#endif
-+ 
-+ #if (defined FLAC__CPU_IA32 || defined FLAC__CPU_X86_64) && (defined FLAC__HAS_NASM || FLAC__HAS_X86INTRIN) && !defined FLAC__NO_ASM
-+ 
-+@@ -247,7 +245,7 @@ ppc_cpu_info (FLAC__CPUInfo *info)
-+ #define PPC_FEATURE2_ARCH_2_07		0x80000000
-+ #endif
-+ 
-+-#ifdef __linux__
-++#if defined (__linux__) && defined(HAVE_GETAUXVAL)
-+ 	if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_3_00) {
-+ 		info->ppc.arch_3_00 = true;
-+ 	} else if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_2_07) {
-+@@ -267,7 +265,8 @@ ppc_cpu_info (FLAC__CPUInfo *info)
-+ 	info->ppc.arch_2_07 = false;
-+ 	info->ppc.arch_3_00 = false;
-+ #else
-+-#error Unsupported platform! Please add support for reading ppc hwcaps.
-++	info->ppc.arch_2_07 = false;
-++	info->ppc.arch_3_00 = false;
-+ #endif
-+ 
-+ #else
-+-- 
-+2.34.1
-+
-diff --git a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch b/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
-deleted file mode 100644
-index d1398d4b3e..0000000000
---- a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 14a0713389fbfef59225d027ea466ebb478a8c6b Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Thu, 19 Sep 2019 21:18:04 +0200
--Subject: [PATCH] configure.ac: check for sys/auxv.h before defining FLAC__CPU_PPC
--
--Upstream: https://github.com/xiph/flac/pull/142
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- configure.ac | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 0228a12..64cb3f2 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -144,7 +144,7 @@ case "$host_cpu" in
-- 	powerpc64|powerpc64le)
-- 		cpu_ppc64=true
-- 		cpu_ppc=true
---		AC_DEFINE(FLAC__CPU_PPC)
--+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
-- 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
-- 		AC_DEFINE(FLAC__CPU_PPC64)
-- 		AH_TEMPLATE(FLAC__CPU_PPC64, [define if building for PowerPC64])
--@@ -152,7 +152,7 @@ case "$host_cpu" in
-- 		;;
-- 	powerpc|powerpcle)
-- 		cpu_ppc=true
---		AC_DEFINE(FLAC__CPU_PPC)
--+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
-- 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
-- 		asm_optimisation=$asm_opt
-- 		;;
----
--2.23.0
--
-diff --git a/package/flac/flac.hash b/package/flac/flac.hash
-index df7c2d1b95..2444535e0f 100644
---- a/package/flac/flac.hash
-+++ b/package/flac/flac.hash
-@@ -1,10 +1,8 @@
--# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
--md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
- # From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
--sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
-+sha1  99c28482a8b2d81deaf740639e4cb55658427420  flac-1.3.4.tar.xz
- # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
--sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
-+sha256  8ff0607e75a322dd7cd6ec48f4f225471404ae2730d0ea945127b1355155e737  flac-1.3.4.tar.xz
- # Locally computed
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
--sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
--sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
-+sha256  fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
-diff --git a/package/flac/flac.mk b/package/flac/flac.mk
-index 9aa00b7ffd..2ff048b6e6 100644
---- a/package/flac/flac.mk
-+++ b/package/flac/flac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLAC_VERSION = 1.3.3
-+FLAC_VERSION = 1.3.4
- FLAC_SITE = http://downloads.xiph.org/releases/flac
- FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
- FLAC_INSTALL_STAGING = YES
-@@ -19,7 +19,8 @@ FLAC_AUTORECONF = YES
- FLAC_CONF_OPTS = \
- 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
- 	--disable-xmms-plugin \
--	--disable-altivec
-+	--disable-altivec \
-+	--disable-stack-smash-protection
- 
- ifeq ($(BR2_PACKAGE_LIBOGG),y)
- FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
+
+Patch 1 and 2 set the runstatedir for CMake and Autotools (new patches)
+
+Patch 3 and 4 are rebased and adopted to feedback.
+
+Patch 5 contains a better commit message
+
+Patch 6 and 7 are new
+
+
+[PATCH v3 1/7] package/pkg-cmake.mk: use /run as runtime path
+[PATCH v3 2/7] pkg-autotools: optimistically set runstatedir
+[PATCH v3 3/7] package/systemd: use current tool for generating HWDB
+[PATCH v3 4/7] package/systemd: remove hwdb-update service
+[PATCH v3 5/7] Makefile: remove /usr/lib/rpm directory on target
+[PATCH v3 6/7] package/zsh: Enable dynamic modules
+[PATCH v3 7/7] package/zsh: enable static regex module
+
+[1] - https://lists.buildroot.org/pipermail/buildroot/2022-February/637079.html
+[2] - https://patchwork.ozlabs.org/project/buildroot/patch/20220109221650.777610-1-nolange79@gmail.com/
+[3] - https://patchwork.ozlabs.org/project/buildroot/patch/20200611091407.12688-2-nolange79@gmail.com/
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
