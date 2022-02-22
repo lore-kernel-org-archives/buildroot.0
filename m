@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB31C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 16:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28015C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 16:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 671E760EEF;
-	Tue, 22 Feb 2022 16:46:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4032405D6;
+	Tue, 22 Feb 2022 16:47:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wA91YQoVJxFI; Tue, 22 Feb 2022 16:46:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n-vkz4eDog1Z; Tue, 22 Feb 2022 16:47:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE7C60EC4;
-	Tue, 22 Feb 2022 16:46:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C43F1BF3CB
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:46:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A93B2402C3;
+	Tue, 22 Feb 2022 16:47:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C3CDC1BF3CB
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76C3160EC4
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:46:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0B07402C3
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 16:47:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cq5XJEOHhWfk for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 16:46:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ya1uCcho-VEa for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 16:47:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6588D60C2C
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 16:46:23 +0000 (UTC)
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B66C40153
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 16:47:53 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D63E3C000A;
- Tue, 22 Feb 2022 16:46:20 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8DC63C0003;
+ Tue, 22 Feb 2022 16:47:51 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nMYIt-006EQ1-QY; Tue, 22 Feb 2022 17:46:19 +0100
+ id 1nMYKM-006EV7-SY; Tue, 22 Feb 2022 17:47:50 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-References: <20220208202150.3CF6A82B8F@busybox.osuosl.org>
-Date: Tue, 22 Feb 2022 17:46:19 +0100
-In-Reply-To: <20220208202150.3CF6A82B8F@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Tue, 8 Feb 2022 21:24:41 +0100")
-Message-ID: <87czje7stg.fsf@dell.be.48ers.dk>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20220209202625.6067482B8F@busybox.osuosl.org>
+Date: Tue, 22 Feb 2022 17:47:50 +0100
+In-Reply-To: <20220209202625.6067482B8F@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Wed, 9 Feb 2022 21:31:36 +0100")
+Message-ID: <878ru27sqx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] linux/linux.mk: correct
- LINUX_ARCH_PATH for sparc64
+Subject: Re: [Buildroot] [git commit] package/python-pyzmq: drop python2
+ dependency for comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,21 +66,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=0ecfdc093227c37ed1083e43404b748e8ee8a323
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6e9ecaa0c9d9aea41212566a58ffab5e25e52bda
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Buildroot uses variable LINUX_ARCH_PATH to refer to the arch-specific
- > directory in the Linux tree, which may not necessarily be arch/$(KERNEL_ARCH).
+ > The package was updated to support python3 in commit 4a8bedc51d9
+ > (python-pyzmq: enable PyZMQ for Python 3), but the comment dependency was
+ > missed.
 
- > Buildroot already accounts for the case of KERNEL_ARCH=i386 and
- > KERNEL_ARCH=x86_64, but does not for KERNEL_ARCH=sparc64, in which case the
- > correct directory is arch/sparc.
-
- > Reported-by: Romain Naour <romain.naour@gmail.com>
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2021.02.x and 2021.11.x, thanks.
 
