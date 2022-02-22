@@ -1,59 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DFE3C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 18:52:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E4AAC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 19:29:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEF1040390;
-	Tue, 22 Feb 2022 18:52:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB5DC408D9;
+	Tue, 22 Feb 2022 19:29:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T5VxygR8IOzz; Tue, 22 Feb 2022 18:52:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OKUtVSTjUrGw; Tue, 22 Feb 2022 19:29:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B969F401CC;
-	Tue, 22 Feb 2022 18:52:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0023340897;
+	Tue, 22 Feb 2022 19:29:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B60D41BF376
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 18:52:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EFE8C1BF39F
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 19:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E0BE60EE0
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 18:52:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE18260B24
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 19:29:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aoNKPpQbo-sk for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 18:52:27 +0000 (UTC)
+ with ESMTP id kHSLu2FHQdJj for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 19:29:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6478160EEF
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 18:52:27 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.171.16.238])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id AA0B5B00579;
- Tue, 22 Feb 2022 19:52:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1645555944;
- bh=49HaqTohGFFUsZZnjfnbT7MX8jmC9mRxMCCL5e+mcNw=;
- h=From:To:Cc:Subject:Date:From;
- b=qMjWCt4Aa6XnrX2IgWCBRgErcdmuFnB3P65Ke0tjN53o+1ym3+vOSycXPCvaZECng
- JNO/NLXhjEBhSXtapIrcKqHXTRV46XXHrbDkkkWcxtiunkvN5Wq7BrzBYYE2GzvOY5
- Wp+yVl8iOnFRclJidSDjqUM0b8ZbkhbtSyl//tkuA5XARAme3SqaOw8/edxoorDaZS
- RCv2Y2tpdAFS4E2C3ixC4FFqA8wMbkBKN4XjvfDqSB0MHzG5CTLCP15GD8vqMa/a3v
- 1/JEFs0bj00O5pdF7A3dm5/956Q/fpyk4r+SaYgAvd99DM7WYGS9n8smlHiKC7DxWr
- nBkAWAqJC8yNw==
-From: Julien Olivain <ju.o@free.fr>
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E860660AA7
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 19:29:15 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id bg10so46048348ejb.4
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 11:29:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=7Nx4O0D10WydGcHucyFZrcFNJyObEUU8sop8itpvxkg=;
+ b=N6Ra0EJS12mwm1+6FCqj4cTeFna3OVFlENimzzN5rRdzkLOmt8Qg+8Jt183Ma5ADP6
+ Xt1NPLsCc0l3kf7aRQphRQUqtLud5jQ4xVr7CKddnuymN+Q4eXrlgTLsOSnQFXjKybFF
+ MbXL60MXvd7dc5hKHlAdn8SoIbeTmei/F+/7AwU5W1IeiuLGh+0UiTB5821SzRF+KX44
+ 8T0UMStgX+FgAW72UTwGWbnNFkXDETPAAQYklRlc/tQzwo5ccKYZOVT5XvTaEMkDe+SJ
+ Ehsf71crMm5C/G39+/fv/e+HLNaMS+MATf5dGHfYW4CKCLROZF6qAdQ4ArrvCKZjZE4Q
+ /oHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=7Nx4O0D10WydGcHucyFZrcFNJyObEUU8sop8itpvxkg=;
+ b=j1ABBOZwqpXwCTQY45C9k3y8QQzoy5+M3DHfyE3ucFr5zfed976z7Yb8//RUpmsX/l
+ KasdyxsAOapkN29FCAh5tuNEwD4s/xj9//Qr7p54VpaKf086HseCW6fe71B0h+IIl9QJ
+ 9yKYNprgDPw8UrvEatdCWELIHkoCXzCQOjAx9jfsvtYz1/XmM2Ia+9J7m5TmQl4eRTyp
+ 63xVGn8OJfJ0x3FkLiALRx7tzKm8Dgd7kkTPgxS5xqrnMQfifoXRwlx0imBmrPLjxT+t
+ mOzqk1No0pyMKlXSk1lIc005NPA8mzAVzTAC5HtY3N1tKzzLgOQbR6H0kzjwFKvVdwwO
+ G+wQ==
+X-Gm-Message-State: AOAM530r7hA1GZ07CGsgUmoAO/zpIiPGelr0v4sdOCblVtuHxYguJ+YY
+ QMGJquQSYUVmBGm9lGKR4kAadR7EStd8oA==
+X-Google-Smtp-Source: ABdhPJzLLAhlj6C67LLViqrFrS37heRMeBKUWYAilwq7ZCaGoGu7VJP8hwaSOGd2VWs1slscjUswug==
+X-Received: by 2002:a17:906:3803:b0:6cf:56b9:60a9 with SMTP id
+ v3-20020a170906380300b006cf56b960a9mr19211424ejc.716.1645558153995; 
+ Tue, 22 Feb 2022 11:29:13 -0800 (PST)
+Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id q12sm10164115edv.99.2022.02.22.11.29.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Feb 2022 11:29:13 -0800 (PST)
+From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 19:52:06 +0100
-Message-Id: <20220222185206.230318-1-ju.o@free.fr>
+Date: Tue, 22 Feb 2022 20:29:05 +0100
+Message-Id: <20220222192905.20456-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-distro: bump to version 1.7.0
+Subject: [Buildroot] [PATCH v2 1/1] package/modem-manager: bump version to
+ 1.18.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,50 +86,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 1.6.0, see:
-- https://github.com/python-distro/distro/releases/tag/v1.7.0
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
-Tested with:
-support/testing/run-tests \
-  -d dl -o output_folder -k \
-  tests.package.test_python_distro.TestPythonPy3Distro
----
- package/python-distro/python-distro.hash | 2 +-
- package/python-distro/python-distro.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1->v2:
+* fix version in commit message subject (Yegor Yefremov)
 
-diff --git a/package/python-distro/python-distro.hash b/package/python-distro/python-distro.hash
-index e2b3c0a444..8f09197156 100644
---- a/package/python-distro/python-distro.hash
-+++ b/package/python-distro/python-distro.hash
-@@ -1,3 +1,3 @@
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 14597215df..ea91f42fe0 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  83f5e5a09f9c5f68f60173de572930effbcc0287bb84fdc4426cb4168c088424  distro-1.6.0.tar.gz
-+sha256  151aeccf60c216402932b52e40ee477a939f8d58898927378a02abbe852c1c39  distro-1.7.0.tar.gz
- sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-diff --git a/package/python-distro/python-distro.mk b/package/python-distro/python-distro.mk
-index 753e74d020..c69849b7ac 100644
---- a/package/python-distro/python-distro.mk
-+++ b/package/python-distro/python-distro.mk
-@@ -4,8 +4,8 @@
+-sha256  2ccf1f716c2d121e8e6709bcf8af29ee86971a90adacca2e8d6288b30278862e  ModemManager-1.16.10.tar.xz
++sha256  d4f804b31cf504239c5f1d4973c62095c00cba1ee9abb503718dac6d146a470a  ModemManager-1.18.6.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a881edc272..d7e2c55bf8 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DISTRO_VERSION = 1.6.0
--PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/a5/26/256fa167fe1bf8b97130b4609464be20331af8a3af190fb636a8a7efd7a2
-+PYTHON_DISTRO_VERSION = 1.7.0
-+PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/b5/7e/ddfbd640ac9a82e60718558a3de7d5988a7d4648385cf00318f60a8b073a
- PYTHON_DISTRO_SOURCE = distro-$(PYTHON_DISTRO_VERSION).tar.gz
- PYTHON_DISTRO_LICENSE = Apache-2.0
- PYTHON_DISTRO_LICENSE_FILES = LICENSE
+-MODEM_MANAGER_VERSION = 1.16.10
++MODEM_MANAGER_VERSION = 1.18.6
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
 -- 
 2.35.1
 
