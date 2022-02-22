@@ -1,81 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1B7BC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 20:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87076C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 21:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59988400CB;
-	Tue, 22 Feb 2022 20:53:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FF2E81B3E;
+	Tue, 22 Feb 2022 21:00:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UY2BjvMnfd0i; Tue, 22 Feb 2022 20:53:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8mCVwpb2iUIr; Tue, 22 Feb 2022 21:00:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 383834011C;
-	Tue, 22 Feb 2022 20:53:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 55E521BF33C
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 20:53:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BC8B81AD1;
+	Tue, 22 Feb 2022 21:00:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 958B11BF33C
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 21:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 441CE402C4
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 20:53:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83F2981324
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 21:00:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8AoaIUkJY5Aa for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 20:53:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D17A8402A4
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 20:53:49 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id d3so20118700wrf.1
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 12:53:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=DUNh0FXGPVyAmOOApBS3NQFwk19Ck0eXXFN+mXHDtUI=;
- b=XjKVQsdsGQ3E9GOnw6aOXSc214qe9Owt5WktfsJeDcHpTPwFvc2m2U7YNgb+gf++IZ
- IxpRf+72k+H+N9T1H4C03z5Spwwr7dgkpChL/4NFyZG4ToSKu9RqfQTgMGPqJ+EyivtG
- f2iRSLLNiDRrof7aRCDz841J1dJ02zJ9DZRJ+VER1hpLMAl/AGlI238UqttoV1i96TJr
- 1oTUZkNxv/G7L1XbE0vAnvVj7h4+voUZKYMHVsAqGSiN4ToC3OOtOTi7lULtfNDWWOOC
- EgnsIxwq6CtbQuu4YDY9VFlEqxpwhiTJDnbNGb19C2M9zkX0zAV4sUu18eWpM2J3WVg3
- v+UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=DUNh0FXGPVyAmOOApBS3NQFwk19Ck0eXXFN+mXHDtUI=;
- b=0zypRIR5IbxGLh/hB624p6OjiXbyXRqnf+aJ873+1LELGIjI6Ft03/0LWOPQpWg8QT
- dDnH+rz4zhAfr5iCGP9oheEELE5ksE7DBX2wl0dUmk5UamhFDr6uevicew8HfqdFAVGm
- B3cPUFzR94xbe6srbeY9EBTg8gYRX2x1bQrr7r5Pi3y5mb+dOBijFGjMQ2ONAhklbzhS
- 3tUo1n2hutLYdmsSYkBxuJXEElsxLbyxv5PnXJq9iTZJN5iXDnkn38EWWGU2/LKEDK9z
- 06YPvDm/qP6J65dU3TXUkR1dzcKfMuiCrZhhxKnnd12ez5k0bOX86nI2iPvN2NJNidO+
- Rayg==
-X-Gm-Message-State: AOAM530uJQJfHg2cfpUEArel1iaZ5Aic67Kimr4UVUi6isU6zsMNrOV1
- /jXCOoWZWiXdyJxXWsgwi0IF3ZuW8fU=
-X-Google-Smtp-Source: ABdhPJwDmLwc7n82n0OnKYgPrKnJ4QL973+V0oFnolRpwzibMlkdc4+XzBmMIPRLGvfFNz0j0W5cWQ==
-X-Received: by 2002:a5d:6d8f:0:b0:1dd:1ced:4050 with SMTP id
- l15-20020a5d6d8f000000b001dd1ced4050mr20792914wrs.549.1645563227699; 
- Tue, 22 Feb 2022 12:53:47 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id e7sm33428304wrg.44.2022.02.22.12.53.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Feb 2022 12:53:47 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D2r4vp_PvU-b for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 21:00:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.73.133])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 117C3812D3
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 21:00:28 +0000 (UTC)
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com
+ [10.225.0.209])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8961242664;
+ Tue, 22 Feb 2022 21:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+ t=1645563627; bh=JOYaIFvLby25IrZWUeJMswSseYo66vB1DupjhF50z0k=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hInimG7usHpyxEP2QC0s2Jx/j4A/LYlDiFPr+1ndphcBw6NBJLT65iruWyyF0Gl8G
+ EzMLUIg65Og61tvwNEikIDZcnRIJGe9GqwSlKlOaqJJiT60E98HF3y83hMm13GpbjU
+ PMoNWkIzQ58EitVyNCRs+Br/xzLu/A3wV1ZiJKMYH1pYtBCPBm/YG+GGMc/dyHng99
+ eYDIse9Qremu+YeC1D6i7XACuBSmuLpObXfY0dIW8Gdifknz3FVMQJ2uORwn2rDFrD
+ Z8AWm8CvZMIKRFbVWyjcXFylbzJpAiO8aBauFENsORd+0a3XOaDfpuri4SHVJ8r89M
+ PaoR3pnQgdaOg==
+Received: from abrodkin-5550.internal.synopsys.com (unknown [10.121.15.29])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client did not present a certificate)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id 931FAA0061;
+ Tue, 22 Feb 2022 21:00:23 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 21:53:17 +0100
-Message-Id: <20220222205317.3161653-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 23 Feb 2022 00:00:24 +0300
+Message-Id: <20220222210024.6013-1-abrodkin@synopsys.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/libnetfilter_conntrack: bump
- to version 1.0.9
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5webkit: needs OpenSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,95 +70,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch | 38 -------------------
- .../libnetfilter_conntrack.hash               |  4 +-
- .../libnetfilter_conntrack.mk                 |  2 +-
- 3 files changed, 3 insertions(+), 41 deletions(-)
- delete mode 100644 package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-
-diff --git a/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-deleted file mode 100644
-index 0b373d9261..0000000000
---- a/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 93bbd7e56cefc8488a61892b3bf5df63a175d20d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 12 Apr 2020 14:05:15 +0200
--Subject: [PATCH] libnetfilter_conntrack.pc.in: add LIBMNL_LIBS to Libs.Private
--
--Since version 1.0.8 and commit
--c1c0f16c1fedb46547c2e104beeaaeac5933b214, libnetfilter_conntrack depends
--on libmnl so add it to Libs.Private.
--
--Otherwise, applications such as dnsmasq will fail to link on:
--
--/home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -Wl,-elf2flt -static -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o radv.o slaac.o auth.o ipset.o domain.o dnssec.o blockdata.o tables.o loop.o inotify.o poll.o rrfilter.o edns0.o arp.o crypto.o dump.o ubus.o metrics.o -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnetfilter_conntrack -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnfnetlink
--/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
--api.c:(.text+0x34): undefined reference to `mnl_nlmsg_put_header'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: commit e94172f09e4d]
-----
-- libnetfilter_conntrack.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libnetfilter_conntrack.pc.in b/libnetfilter_conntrack.pc.in
--index 857f993..fbd7132 100644
----- a/libnetfilter_conntrack.pc.in
--+++ b/libnetfilter_conntrack.pc.in
--@@ -12,5 +12,5 @@ Version: @VERSION@
-- Requires: libnfnetlink
-- Conflicts:
-- Libs: -L${libdir} -lnetfilter_conntrack
---Libs.private: @LIBNFNETLINK_LIBS@
--+Libs.private: @LIBNFNETLINK_LIBS@ @LIBMNL_LIBS@
-- Cflags: -I${includedir}
---- 
--2.25.1
--
-diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
-index 19520aa3f0..205eecf1f3 100644
---- a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
-+++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
-@@ -1,5 +1,5 @@
--# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.8.tar.bz2.sha256sum
--sha256  0cd13be008923528687af6c6b860f35392d49251c04ee0648282d36b1faec1cf  libnetfilter_conntrack-1.0.8.tar.bz2
-+# From https://www.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.9.tar.bz2.sha256sum
-+sha256  67bd9df49fe34e8b82144f6dfb93b320f384a8ea59727e92ff8d18b5f4b579a8  libnetfilter_conntrack-1.0.9.tar.bz2
- 
- # Hash for license file:
- sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-index 0a5a94be8f..e10bdd02e9 100644
---- a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-+++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNETFILTER_CONNTRACK_VERSION = 1.0.8
-+LIBNETFILTER_CONNTRACK_VERSION = 1.0.9
- LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
- LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
- LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Vy9vIE9wZW5TU0wgUVQ1V2Via2l0IGZhaWxzIHRvIGJ1aWxkIHRoYXQgd2F5OgotLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLT44LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KLi4u
+L2J1aWxkL3F0NXdlYmtpdC01LjIxMi4wLWFscGhhNC9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9u
+ZXR3b3JrL3F0L1Jlc291cmNlUmVxdWVzdFF0LmNwcDogSW4gc3RhdGljIG1lbWJlciBmdW5jdGlv
+biDigJhzdGF0aWMgYm9vbCBXZWJDb3JlOjpSZXNvdXJjZVJlcXVlc3Q6OmFscG5Jc1N1cHBvcnRl
+ZCgp4oCZOgouLi4vYnVpbGQvcXQ1d2Via2l0LTUuMjEyLjAtYWxwaGE0L1NvdXJjZS9XZWJDb3Jl
+L3BsYXRmb3JtL25ldHdvcmsvcXQvUmVzb3VyY2VSZXF1ZXN0UXQuY3BwOjY4OjEyOiBlcnJvcjog
+4oCYUVNzbFNvY2tldOKAmSBoYXMgbm90IGJlZW4gZGVjbGFyZWQKICAgNjggfCAgICAgcmV0dXJu
+IFFTc2xTb2NrZXQ6OnNzbExpYnJhcnlWZXJzaW9uTnVtYmVyKCkgPiAweDEwMDAyMDAwTCAmJgog
+ICAgICB8ICAgICAgICAgICAgXn5+fn5+fn5+fgouLi4vYnVpbGQvcXQ1d2Via2l0LTUuMjEyLjAt
+YWxwaGE0L1NvdXJjZS9XZWJDb3JlL3BsYXRmb3JtL25ldHdvcmsvcXQvUmVzb3VyY2VSZXF1ZXN0
+UXQuY3BwOjY5Ojk6IGVycm9yOiDigJhRU3NsU29ja2V04oCZIGhhcyBub3QgYmVlbiBkZWNsYXJl
+ZAogICA2OSB8ICAgICAgICAgUVNzbFNvY2tldDo6c3NsTGlicmFyeVZlcnNpb25TdHJpbmcoKS5z
+dGFydHNXaXRoKFFMYXRpbjFTdHJpbmcoIk9wZW5TU0wiKSk7CiAgICAgIHwgICAgICAgICBefn5+
+fn5+fn5+Ci0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPjgtLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQoKU2lnbmVkLW9mZi1ieTogQWxleGV5IEJyb2RraW4gPGFicm9ka2luQHN5
+bm9wc3lzLmNvbT4KQ2M6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwu
+Y29tPgpDYzogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+CkNjOiBQ
+ZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+CkNjOiBZYW5uIEUuIE1PUklOIDx5YW5u
+Lm1vcmluLjE5OThAZnJlZS5mcj4KLS0tCgpDaGFuZ2VzIHYxIC0+IHYyOgoKICogQWRkZWQgIm9w
+ZW5zc2wiIHRvIFFUNVdFQktJVF9ERVBFTkRFTkNJRVMsIHRoYW5rcyBZYW5uIGZvcgogICBzcG90
+dGluZyB0aGlzIG9uZS4KCk5vdGUgdGhhdCBJIGludGVybnRpb25hbGx5IGFkZGVkICJvcGVuc3Ns
+IiBub3QgZm9sbG93aW5nCmFscGhhYmV0aWMgb3JkZXIgYmVjYXVzZToKCiAxLiBFeGlzdGluZyBk
+ZXBlbmRlbmNpZXMgYXJlIGFscmVhZHkgYSBiaXQgc2h1ZmZmbGVkCiAyLiBJIHdhbnRlZCB0byBr
+ZWVwIHRoaXMgZGlmZiBhcyBzbWFsbCBhcyBwb3NzaWJsZSwgdy9vCiAgICByZS1zaHVmZmxpbmcg
+bXVsdGlwbGUgbGluZXMuIElmIHJlYWxseSBuZWVkZWQgd2UgbWF5IGRvCiAgICByZW9yZGVyaW5n
+IGluIGEgc2VwYXJhdGUgcGF0Y2guCgotLS0KIHBhY2thZ2UvcXQ1L3F0NXdlYmtpdC9Db25maWcu
+aW4gICAgfCAxICsKIHBhY2thZ2UvcXQ1L3F0NXdlYmtpdC9xdDV3ZWJraXQubWsgfCAyICstCiAy
+IGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvcXQ1L3F0NXdlYmtpdC9Db25maWcuaW4gYi9wYWNrYWdlL3F0NS9xdDV3ZWJr
+aXQvQ29uZmlnLmluCmluZGV4IGVkODdlZmNhOTUuLjI2YzM4OTdkMWQgMTAwNjQ0Ci0tLSBhL3Bh
+Y2thZ2UvcXQ1L3F0NXdlYmtpdC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9xdDUvcXQ1d2Via2l0
+L0NvbmZpZy5pbgpAQCAtMTUsNiArMTUsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUVQ1V0VCS0lU
+CiAJc2VsZWN0IEJSMl9QQUNLQUdFX0pQRUcKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTEVWRUxEQgog
+CXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJQTkcKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTAog
+CXNlbGVjdCBCUjJfUEFDS0FHRV9RVDVCQVNFX0lDVQogCXNlbGVjdCBCUjJfUEFDS0FHRV9RVDVC
+QVNFX0dVSQogCXNlbGVjdCBCUjJfUEFDS0FHRV9RVDVCQVNFX1dJREdFVFMKZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvcXQ1L3F0NXdlYmtpdC9xdDV3ZWJraXQubWsgYi9wYWNrYWdlL3F0NS9xdDV3ZWJr
+aXQvcXQ1d2Via2l0Lm1rCmluZGV4IDJlOTZhY2MwMGYuLmM5YjM1NGU3MjUgMTAwNjQ0Ci0tLSBh
+L3BhY2thZ2UvcXQ1L3F0NXdlYmtpdC9xdDV3ZWJraXQubWsKKysrIGIvcGFja2FnZS9xdDUvcXQ1
+d2Via2l0L3F0NXdlYmtpdC5tawpAQCAtMTAsNyArMTAsNyBAQCBRVDVXRUJLSVRfU09VUkNFID0g
+cXR3ZWJraXQtJChRVDVXRUJLSVRfVkVSU0lPTikudGFyLnh6CiBRVDVXRUJLSVRfREVQRU5ERU5D
+SUVTID0gXAogCWhvc3QtYmlzb24gaG9zdC1mbGV4IGhvc3QtZ3BlcmYgaG9zdC1weXRob24zIGhv
+c3QtcnVieSBnc3RyZWFtZXIxIFwKIAlnc3QxLXBsdWdpbnMtYmFzZSBpY3UgbGV2ZWxkYiBqcGVn
+IGxpYnBuZyBsaWJ4bWwyIGxpYnhzbHQgcXQ1bG9jYXRpb24gXAotCXF0NXNlbnNvcnMgcXQ1d2Vi
+Y2hhbm5lbCBzcWxpdGUgd2VicCB3b2ZmMgorCW9wZW5zc2wgcXQ1c2Vuc29ycyBxdDV3ZWJjaGFu
+bmVsIHNxbGl0ZSB3ZWJwIHdvZmYyCiBRVDVXRUJLSVRfSU5TVEFMTF9TVEFHSU5HID0gWUVTCiAK
+IFFUNVdFQktJVF9MSUNFTlNFX0ZJTEVTID0gU291cmNlL1dlYkNvcmUvTElDRU5TRS1MR1BMLTIg
+U291cmNlL1dlYkNvcmUvTElDRU5TRS1MR1BMLTIuMQotLSAKMi4yNS4xCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
