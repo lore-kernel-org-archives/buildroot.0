@@ -1,78 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF45AC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 09:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA06BC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 10:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DF2A81372;
-	Tue, 22 Feb 2022 09:49:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B309405AA;
+	Tue, 22 Feb 2022 10:06:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P8NkrioEGKfs; Tue, 22 Feb 2022 09:49:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FrSiD5zbLI00; Tue, 22 Feb 2022 10:06:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A43AB8133E;
-	Tue, 22 Feb 2022 09:49:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 400DC1BF2B0
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 09:49:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30511405A8;
+	Tue, 22 Feb 2022 10:06:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 75EC41BF280
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E7784099E
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 09:49:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DF0340137
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 10:06:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5uMaZGsw5Wpv for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 09:49:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0AD3440998
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 09:49:27 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id s14so18125889edw.0
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 01:49:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Igqpsg74u+VBM6Q4MsQ5SuFRzkZbnPqwqmmHL2JMIGA=;
- b=EhlnmPmuHY+6KerduKgxAs1z9POpPhrf2U74sPP6CaGBgdE3CjEAcyNFaHle/BBDAl
- tTowapDt5zUm0w7wSaqBuHk4nC50HfHwlM6UBbLPnOb0Y55iEPQ88gXTjLCTEf/zZ95b
- wTefi05N/EHo3KUWVs7dVk0YvHLXURygaFT7M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Igqpsg74u+VBM6Q4MsQ5SuFRzkZbnPqwqmmHL2JMIGA=;
- b=T6rBvIhGON63fpIIP63tUP5WeCb8y1Yc74IQEYAvbJ5EgmaSs55d3Mjf9gJUpkbdIF
- XulgyK6Csb3FIXoWDtxxtl8BsJPkstji03RqI46trVceB6VrUifN6ft0GTids1k8MCfc
- pYWX4sSn2aRFmSqhDal0KUoGNCrTAFW6SjTX8vuUD6uXfShEwPC5dlNIA0QECioXh4cw
- 8+RUjZocf6nQtp/ZJ2bQK0syGuZ1nAHKwUF2/7snM++H+S8lmNt00zQWYF0y/Fel+oQS
- wmE+MvGPPNQUC8i6CgKqDC56Tsn2F5//ZJkslW1w7e/7lEf8be4W/+iKPS72nzlO8j3m
- uaBQ==
-X-Gm-Message-State: AOAM533MG9qbYEtM1m8zdvCfIykOSTTeJh7V4cCFL6f9fcP8O2rHfpwf
- IZCIZo4xlGddb5VYjBxXIOXV3CkMvz03Ow==
-X-Google-Smtp-Source: ABdhPJyku9mjXKJXQVJSzSCpT5/JJA8OB3LBOUv1AF9hXAtUNlVrK1ENKAa9Un+KLdYAUzCgrz4vFA==
-X-Received: by 2002:a05:6402:34c1:b0:412:d12c:e713 with SMTP id
- w1-20020a05640234c100b00412d12ce713mr18546592edc.312.1645523366289; 
- Tue, 22 Feb 2022 01:49:26 -0800 (PST)
-Received: from localhost.localdomain (host185127038042.static.fidoka.tech.
- [185.127.38.42])
- by smtp.gmail.com with ESMTPSA id f10sm131845ejq.18.2022.02.22.01.49.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Feb 2022 01:49:25 -0800 (PST)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JULsf6JSkhPa for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 10:06:42 +0000 (UTC)
+X-Greylist: delayed 00:07:37 by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08BF7405AD
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 10:06:41 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1M2wCg-1nNYrZ3QFQ-003J7T; Tue, 22 Feb 2022 10:53:57 +0100
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 10:49:23 +0100
-Message-Id: <20220222094923.2220294-1-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Date: Tue, 22 Feb 2022 10:53:40 +0100
+Message-Id: <20220222095340.29327-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.12
+X-Provags-ID: V03:K1:jZjBNQEEnVv1w2PCdslYLeAQ982favVARYdbaQNQjQgTSBCTRZG
+ MrvZ8b7QmpXsBo+NQSN4OxyOYJesFCj+IT8Hw7Wk1NFyTW/4Cp+lrP7WYQ8vocPl0uPfyUF
+ ADXvj6F7pK6dFnDbmSdVsSWIa5CnGhtlJdWmRN2+z+XEaoYwXA2o2eXbzQX3SqhIoj6wW6G
+ /Dt0Xj91HaCMyDDtM44Mg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+nQMu/LQh6c=:Bv5ZTQb0k0RCpeF5+loU9B
+ 263HpQ38SKA2KQFybsicF9JQcPoneL9XBj95CWHITdCdEfzYzg4t+xE3shcNlaKJUseNb52Ge
+ uUS8sDecQjScooGUOTxKSrIvaVmoauZaQbZRvViHL6HthlZSO8JXh7fTKsG4mZf5IgCy7Q+CN
+ aUWNGzH0L3rES/jiKQuvMKxGMBx3YzFeS8pN4TjmCDaByZJVIx0pEw/p3ezWjvf8g1h1u+er8
+ OGnKqyO/N/Q8j76UmoYNR786w7NYaW0aLa6F4j0lk2LYcu9WrD+NGphjVSOTjPzc7GXtXC+6F
+ K/KCgIooJwT2LORqkOhCPLlnmJcjZQ0oVQ4HNfeznznjjnJ64to7LecqyZ1DA3NXlrHPZgzUW
+ gZbII5am+uJ9KXGKUZ/nMM5hXtkTAU00r2kwkzcpOfw8ICgNi6n/X1p3XfQRbVGKHZtp8kH5f
+ VqXNLqDsxHK1y36oMu3g8yyRgNCyp1Dg5tqMncaF8JfCW1rjhm9mumm7KE1r0mywIs1N9+Uqr
+ mb3WaZZHfxv/ic5c1yCvXBt7Q2Uf+42ryLW2sMvHGiMwHWxX4VFn/ZJsXK7JgvNvTPAcZPITI
+ NpamY3DBlVA+TgmkGIr97bna+ynbuC+mdZE3mGmAadRc1e3hvKXUSw7wOBSJHQhWDihIzirJd
+ btpQKJeYAY8uxPGckb0DS1CgWqj2jwReXueUAfIpAkFGWRgNmNDo1rEla7DuGsHb2t4hOSuHN
+ wqqmX5JwKSRhpgAHE5xzOhRIdAqkBjMOxwarFw==
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump version to 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,42 +68,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/cups-filters/cups-filters.hash | 2 +-
- package/cups-filters/cups-filters.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Licence changes mostly concern vendored dependencies (that buildroot does
+not use) and a new bundled PRNG used to reimplement mkstemp()
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index aefb67f651..5a95b998eb 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
+Some buildsystem options also changed:
+- THREADSAFE is now USE_THREADS
+- BUILD_CLAR is now BUILD_TESTS, which the cmake infra already give.
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/libgit2/libgit2.hash | 4 ++--
+ package/libgit2/libgit2.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 07b1a260a4..a6b5ecff1a 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256 8cb40355287d65ea03e90dfa7e2d34f0d46752957c8a6d4e96ab6fe6c581e5d2  cups-filters-1.28.10.tar.gz
-+sha256 3265017d2369e1130e732090165d6b4e3c0838d7ca9aa60978b087bee12247ff  cups-filters-1.28.12.tar.gz
- sha256 38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index c8f2dd0aae..f8ff42f0f4 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  192eeff84596ff09efb6b01835a066f2df7cd7985e0991c79595688e6b36444e  libgit2-1.3.0.tar.gz
+-sha256  8b7e4f54f8bf210c8fe010a49571a1ee57463ef020cc43f051d4d3fbb74942af  COPYING
++sha256  fccd371a271133e29d002dd207490d22a0c9b06992b874b8edb8366532a94f54  libgit2-1.4.1.tar.gz
++sha256  0092f24acc306ee3287dc05b5e85cb9e0e48cd3f11c60c4625b1a673a5912616  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 6cc0f1ea74..47cb0cbcd8 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,21 +4,20 @@
  #
  ################################################################################
  
--CUPS_FILTERS_VERSION = 1.28.10
-+CUPS_FILTERS_VERSION = 1.28.12
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
+-LIBGIT2_VERSION = 1.3.0
++LIBGIT2_VERSION = 1.4.1
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+-LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch)
++LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch), CC0-1.0 (xoroshiro256)
+ LIBGIT2_LICENSE_FILES = COPYING
+ LIBGIT2_CPE_ID_VENDOR = libgit2_project
+ LIBGIT2_INSTALL_STAGING = YES
+ 
+ LIBGIT2_CONF_OPTS = \
+ 	-DUSE_GSSAPI=OFF \
+-	-DBUILD_CLAR=OFF \
+ 	-DUSE_ICONV=ON \
+ 	-DREGEX_BACKEND=regcomp \
+ 	-DUSE_HTTP_PARSER=system \
+ 	-DUSE_NTLMCLIENT=OFF \
+-	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
++	-DUSE_THREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
+ 
+ LIBGIT2_DEPENDENCIES = zlib libhttpparser
+ 
 -- 
-2.25.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
