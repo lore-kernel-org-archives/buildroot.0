@@ -4,44 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D903DC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 21:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 238ECC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 21:41:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C51381C6F;
-	Tue, 22 Feb 2022 21:33:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B858981CA7;
+	Tue, 22 Feb 2022 21:41:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ykuxrzucYHfb; Tue, 22 Feb 2022 21:33:15 +0000 (UTC)
+	with ESMTP id eqSm8tOv0E-i; Tue, 22 Feb 2022 21:41:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4AFF81C21;
-	Tue, 22 Feb 2022 21:33:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B0271BF39A
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 21:33:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E781481426;
+	Tue, 22 Feb 2022 21:41:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 520811BF39A
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 21:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 935D540168
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 21:33:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 40B8660C2C
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 21:41:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b2i_jF0tpZRi for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 21:33:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D7CB404CF
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 21:33:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1DD3883837; Tue, 22 Feb 2022 21:25:15 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xBwU2Yi37zQF for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 21:41:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 072E360BAD
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 21:41:18 +0000 (UTC)
+Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
+ by mailout01.t-online.de (Postfix) with SMTP id 0711712C4
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 22:41:16 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd78.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nMcuI-1HLQx70; Tue, 22 Feb 2022 22:41:14 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58116)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nMcuI-0001hI-6r
+ for buildroot@buildroot.org; Tue, 22 Feb 2022 22:41:14 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 17:55:03 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c61c94a84e0afeb48a9b672153bece6b49a70a28
-X-Git-Newrev: ec034ba9dee122c51cb59703c85df839dc973a54
-X-Patchwork-Hint: ignore
-Message-Id: <20220222212515.1DD3883837@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gauche: drop
- autoreconf
+Date: Tue, 22 Feb 2022 22:41:14 +0100
+Message-Id: <20220222214114.374855-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1645566074-0000AD4E-7CDA4347/0/0 CLEAN NORMAL
+X-TOI-MSGID: 8b9d9052-7628-45f4-bebe-6839a6ac3d80
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.15.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,39 +62,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec034ba9dee122c51cb59703c85df839dc973a54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Release notes: https://www.samba.org/samba/history/samba-4.15.5.html
 
-Commit 11cb72be570409be77d4bb49c17b4a2feef31be7 forgot to drop
-autoreconf
+Fixes CVE-2021-44141, CVE-2021-44142 & CVE-2022-0336.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5f703276e0713b746f2c937c4c4fc02ef6ad1d77)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gauche/gauche.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-index 2520379369..fe0a613a9d 100644
---- a/package/gauche/gauche.mk
-+++ b/package/gauche/gauche.mk
-@@ -10,8 +10,6 @@ GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
- GAUCHE_LICENSE = BSD-3-Clause, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
- GAUCHE_LICENSE_FILES = COPYING
- GAUCHE_DEPENDENCIES = host-gauche
--# We're patching configure.ac
--GAUCHE_AUTORECONF = YES
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 130b628e32..503ec2ce37 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.15.4.tar.asc
+-sha256  499065a589b7b9ffb8e3eb6efa8575985919a2999972afc469520a47322aec11  samba-4.15.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.15.5.tar.asc
++sha256  69115e33831937ba5151be0247943147765aece658ba743f44741672ad68d17f  samba-4.15.5.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 1d4b985437..0ad3c2f742 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_GAUCHE_CONF_OPTS = --without-zlib
- GAUCHE_CONF_OPTS = --without-libatomic-ops
+-SAMBA4_VERSION = 4.15.4
++SAMBA4_VERSION = 4.15.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
