@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19AC5C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 11:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABED3C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Feb 2022 11:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6FF14089A;
-	Tue, 22 Feb 2022 11:33:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56148405B3;
+	Tue, 22 Feb 2022 11:34:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id US7gJz6YMqb7; Tue, 22 Feb 2022 11:33:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WCei0w1xbgHf; Tue, 22 Feb 2022 11:34:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE4554099E;
-	Tue, 22 Feb 2022 11:33:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B58CD1BF865
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 11:33:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35468405AD;
+	Tue, 22 Feb 2022 11:34:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7832D1BF865
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 11:34:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B28DE60A9C
- for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 11:33:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64A3C403D8
+ for <buildroot@lists.busybox.net>; Tue, 22 Feb 2022 11:34:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dQ1TzvKNLDqv for <buildroot@lists.busybox.net>;
- Tue, 22 Feb 2022 11:33:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vNbYIqsHYV-7 for <buildroot@lists.busybox.net>;
+ Tue, 22 Feb 2022 11:33:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A836B6006A
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 11:33:40 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id a8so42040874ejc.8
- for <buildroot@buildroot.org>; Tue, 22 Feb 2022 03:33:40 -0800 (PST)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A96BE4099E
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 11:33:59 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id p14so41850872ejf.11
+ for <buildroot@buildroot.org>; Tue, 22 Feb 2022 03:33:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=AseLixs+Yfp9R9xqe11KT7hHwhkRG1nCbMJA+Dn66AM=;
- b=B+O8nz6Znvfhoe1+EM0FWuWRi5I7tPoZQKy9A/Pm9rnaWiyPVDRXbdU81p+u5wnNYd
- GSAGoEkf3WtpG8WdKESFtxbDvXIXB0/7ucSeXQEJ4CXzsl7eUWs+XTZu878I+vcrk8R1
- ooBskRIoyRhC9c2mNj2aGc7RwY6v1uTidhaqs=
+ bh=R7Rh/pOJwj+BzoqWSOHQIIP2PAIJCje3BY+tiFPcFV8=;
+ b=G0Mj5a9vba7jCjAz/CcwQTE4SmD8A12wSQ4nNdlW1bnSNJBM20ruwCPfF3AMqnylAi
+ juGbnzyodew9J/EyNbFn0X15wx6W0vAQ8bgchwyvlG0WHWRKVqVW1GWTXqb1aS9M75eN
+ Sk2P2c3Wt0tR6GBohuMBA9M7rdqyABl2f+aXw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=AseLixs+Yfp9R9xqe11KT7hHwhkRG1nCbMJA+Dn66AM=;
- b=VFS7uF0s3I0w6J7o9Cx/mf24z+Q8ZDXHUM5Dm7OnIimihaS2V+lDpN8uSI0F622Qpc
- 8zbaxiSzZeAmza35w/nVuNAoxfEZ5New3wd17qpSuayWSEh8bKxRn91ZYguXSWHHFVcr
- N+J1OVn7XkM0GITXapkyn5zr1jMyeNzw+C9exySBToL5+BWA2H679EoyxVfQsEYh7U6A
- 1L8PcVJR0oYv3tZo6YTqrReKpbLtVlg+NO6AEj1AJ+hVZpQCB9OPO/hdC/2J8VsVa+W/
- Uxd3Wtup4TMZzh5BW8R4uCngsFXCf2pqj2rYe7CAsThT02CBig6OBO5mWABFjbcWl1/i
- xXjQ==
-X-Gm-Message-State: AOAM533D2SnJcDRZC3B6THjZseGgYRFg9oP8nHfOdSoXB6Z/hE1Ws4mY
- rapakweB+zJGYVUBPxXJ6vcyCOkwPfKglQ==
-X-Google-Smtp-Source: ABdhPJxaZhIe9RxihruHd8RWxj39ZjY7aACj3Od9oO9t3c6dJ59FBbrvqXzxOFwy277DD4BNuMuajA==
-X-Received: by 2002:a17:907:2358:b0:6ce:98a4:5ee5 with SMTP id
- we24-20020a170907235800b006ce98a45ee5mr19384070ejb.464.1645529618876; 
- Tue, 22 Feb 2022 03:33:38 -0800 (PST)
+ bh=R7Rh/pOJwj+BzoqWSOHQIIP2PAIJCje3BY+tiFPcFV8=;
+ b=MsCIdyzeQeqTxvOTellWgdAI+XA7z/hDFbcdeU+aChTqSDvvlH307R96VmfuGF/C6W
+ WwJGyWyZjwAlncyH2ZV8YQCvCT2Qdu2GabFu+wPYqkpSmiacCaDJTOgsEOauSF6uQbCi
+ 5oq7ipx9rnPrmAFxdgz8SrwDnQtiQEFNL5B9Qpb24LtxVmlujAY5fTWcX6xPCd8+i3Vm
+ gO8O+fEkyGR99UywguMiHGy6jVn7eiPSJB9Y7RoDtC7WA625qN571Ln73VXU28gDgZ9T
+ MRXyffunejH07V2Wo0sgqWTVfEXFKUc07aav1Ap8bEEo5ADwxMkq4IdvGrXi6NYdmBOB
+ NbjA==
+X-Gm-Message-State: AOAM531pEolHEP28WJlx6r25X09lEFzOlumnGnrTTpMfX8t5JqARO6O8
+ GERTqvZsqx4/DXP0FFBI2Ytp0jhxC6beEQ==
+X-Google-Smtp-Source: ABdhPJxfvFmslSs/tu5Ys5ORXMEkJbky/sjoqEuS4StyQaswXxgUhIjkKdAldPGr0hKsUPqLiquAlQ==
+X-Received: by 2002:a17:907:12d5:b0:6cf:bb0d:9b2f with SMTP id
+ vp21-20020a17090712d500b006cfbb0d9b2fmr19280713ejb.138.1645529637915; 
+ Tue, 22 Feb 2022 03:33:57 -0800 (PST)
 Received: from localhost.localdomain (host185127038042.static.fidoka.tech.
  [185.127.38.42])
- by smtp.gmail.com with ESMTPSA id e1sm6177920ejy.103.2022.02.22.03.33.38
+ by smtp.gmail.com with ESMTPSA id eq6sm9678975edb.83.2022.02.22.03.33.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Feb 2022 03:33:38 -0800 (PST)
+ Tue, 22 Feb 2022 03:33:57 -0800 (PST)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Feb 2022 12:33:36 +0100
-Message-Id: <20220222113336.2608916-1-angelo@amarulasolutions.com>
+Date: Tue, 22 Feb 2022 12:33:54 +0100
+Message-Id: <20220222113354.2609277-1-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 9.0.1
+Subject: [Buildroot] [PATCH] package/python-pydal: bump to version 20220213.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,38 +92,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pydal/python-pydal.hash | 2 +-
+ package/python-pydal/python-pydal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index f3ca8e6014..88a5d7cada 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  c5af6e413d2fe9247cf16ce25c816b14  Pillow-9.0.0.tar.gz
--sha256  ee6e2963e92762923956fe5d3479b1fdc3b76c83f290aad131a2f98c3df0593e  Pillow-9.0.0.tar.gz
-+md5  8deffccb4f402df154fd2fd504d8487c  Pillow-9.0.1.tar.gz
-+sha256  6c8bc8238a7dfdaf7a75f5ec5a663f4173f8c367e5a39f87e720495e1eed75fa  Pillow-9.0.1.tar.gz
- 
- # Locally computed sha256 checksums
- sha256  a6554cb737ba6c9b47d3301f78de03b4ed0d3f08d6cf9400714f3d4c894f6943  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 2f2e817882..901876e0ee 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index eef00030bd..46271dfd91 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  9634f34a31d4411588b73825c8acc7f73ca69ba8a665bb00d0a9b5baff69498b  python-pydal-20210626.3.tar.gz
++sha256  40a2cafb5aa830d51ababfe34a8f8a0e3b630bc4f931f04db75ed84c3f55ea38  python-pydal-20220213.2.tar.gz
+ sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index 428999f5c1..c3be683dda 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 9.0.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/b0/43/3e286c93b9fa20e233d53532cc419b5aad8a468d91065dbef4c846058834
-+PYTHON_PILLOW_VERSION = 9.0.1
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/03/a3/f61a9a7ff7969cdef2a6e0383a346eb327495d20d25a2de5a088dbb543a6
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 20210626.3
++PYTHON_PYDAL_VERSION = 20220213.2
+ PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
 -- 
 2.25.1
 
