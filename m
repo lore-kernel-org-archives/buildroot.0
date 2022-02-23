@@ -4,53 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCD97C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 16:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDBB0C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 16:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54C27408E8;
-	Wed, 23 Feb 2022 16:06:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43169408E3;
+	Wed, 23 Feb 2022 16:39:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a0AqoqLqmWe0; Wed, 23 Feb 2022 16:06:39 +0000 (UTC)
+	with ESMTP id jmqWdK8hWK7W; Wed, 23 Feb 2022 16:39:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24606408E1;
-	Wed, 23 Feb 2022 16:06:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3068D1BF5F8
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 16:06:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12C8D4022C;
+	Wed, 23 Feb 2022 16:39:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B1171BF5F8
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 16:39:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CBD1825C7
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 16:06:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC9A54022C
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 16:39:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w495WzbvIDd4 for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 16:06:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D7B382503
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 16:06:34 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout10.t-online.de (Postfix) with SMTP id BEA6A1B8F8
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 17:06:30 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd71.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nMu9u-3dXP2P0; Wed, 23 Feb 2022 17:06:30 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44826)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nMu9u-0000p7-5I
- for buildroot@buildroot.org; Wed, 23 Feb 2022 17:06:30 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 17:06:30 +0100
-Message-Id: <20220223160630.835866-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pD2nDZtB_clU for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 16:39:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD9F540142
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 16:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+ Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description; bh=wsyvxBGhNcxbruKbulgGsJY9D3o48Wwt5sGndeNQT2Y=; b=tVPwn
+ RZ7WIDELl18nTzYuOOAsvnvwPwWkR8nlxDAQA4tgmleewyBR03AKBbKWTp3UmKf2xFkpSD0c77OHm
+ KxD1BCjrUZmqzLRKsm5rNJZk30uWiRRINBwfKEhnwqhpsYrAt23i2oc8BYe/WYGY+KN2owIGovQ4d
+ lQ6VC4dGPxUGkXVViGUOxOjUDExvtctx6vHHeX0G+OOK1a539qSs4Pf9OpL7GvAk2zmxflFxCmT1B
+ szYWNT5CrofrLhgQaZCC9C/XXj6XLjAS9LIViEYJ2iP9vqAwL6p1mnKvi+Q0rn8jRS1yla8QYYdpN
+ tmgi4Jkcmnqgm1yRutvhsG7TZ1C5Q==;
+Received: from [81.174.171.191] (helo=donbot)
+ by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.93) (envelope-from <john@metanate.com>)
+ id 1nMufc-000708-8E; Wed, 23 Feb 2022 16:39:16 +0000
+Date: Wed, 23 Feb 2022 16:39:15 +0000
+From: John Keeping <john@metanate.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <YhZjM9a0Pnoqskin@donbot>
+References: <20220223115506.1191031-1-john@metanate.com>
+ <20220223142731.GA189337@scaer> <20220223155141.0223462b@windsurf>
+ <20220223151732.GB189337@scaer>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1645632390-00001674-B7360486/0/0 CLEAN NORMAL
-X-TOI-MSGID: 13eea78e-41ef-4331-a536-ae8a41c5d5c6
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-qxl: fix
- build error
+Content-Disposition: inline
+In-Reply-To: <20220223151732.GB189337@scaer>
+X-Authenticated: YES
+Subject: Re: [Buildroot] [RFC PATCH] package/libiberty: use the same version
+ as binutils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,90 +68,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIHVwc3RyZWFtIGNvbW1pdCB0byBmaXggYnVpbGQgd2l0aCB4b3JnLXNlcnZlciAyMS4xIHdo
-aWNoIHdhcyBidW1wZWQKd2l0aCBjb21taXQgZDkxODVjNmJhMzg0MzBhMDE3ZWQ5OTZjNDE4MGUx
-NDE4ODFiYTU3MC4KCk5vIGF1dG9idWlsZCBlcnJvcnMgZm91bmQgeWV0LgoKU2lnbmVkLW9mZi1i
-eTogQmVybmQgS3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgotLS0KIC4uLjEtRml4LWEt
-YnVpbGQtZXJyb3Itd2l0aC1Yb3JnLW1hc3Rlci5wYXRjaCB8IDEwNiArKysrKysrKysrKysrKysr
-KysKIDEgZmlsZSBjaGFuZ2VkLCAxMDYgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UveDExcjcveGRyaXZlcl94Zjg2LXZpZGVvLXF4bC8wMDAxLUZpeC1hLWJ1aWxkLWVy
-cm9yLXdpdGgtWG9yZy1tYXN0ZXIucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3gxMXI3L3hk
-cml2ZXJfeGY4Ni12aWRlby1xeGwvMDAwMS1GaXgtYS1idWlsZC1lcnJvci13aXRoLVhvcmctbWFz
-dGVyLnBhdGNoIGIvcGFja2FnZS94MTFyNy94ZHJpdmVyX3hmODYtdmlkZW8tcXhsLzAwMDEtRml4
-LWEtYnVpbGQtZXJyb3Itd2l0aC1Yb3JnLW1hc3Rlci5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCAwMDAwMDAwMDAwLi5kMzI1N2ZiYTIwCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2Fn
-ZS94MTFyNy94ZHJpdmVyX3hmODYtdmlkZW8tcXhsLzAwMDEtRml4LWEtYnVpbGQtZXJyb3Itd2l0
-aC1Yb3JnLW1hc3Rlci5wYXRjaApAQCAtMCwwICsxLDEwNiBAQAorRnJvbSA0ZTE5NjNhODEyZjJj
-MTc3N2JhNWQ1NmVhOWU5MzlhM2U0MGEwNDk2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJv
-bTogPT9VVEYtOD9xP1pvbHQ9QzM9QTFuPTIwQj1DMz1CNnN6PUMzPUI2cm09QzM9QTlueWk/PQor
-IDx6Ym9zem9yQGdtYWlsLmNvbT4KK0RhdGU6IFNhdCwgMjggQXVnIDIwMjEgMTU6Mzg6NDAgKzAy
-MDAKK1N1YmplY3Q6IFtQQVRDSF0gRml4IGEgYnVpbGQgIGVycm9yIHdpdGggWG9yZyBtYXN0ZXIK
-K01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRG
-LTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworVXNlIHhmODZSZXR1cm5PcHRW
-YWxCb29sKCkgaW4gZ2V0X2Jvb2xfb3B0aW9uKCkgaW5zdGVhZCBvZgorb3B0aW9uc1tvcHRpb25f
-aW5kZXhdLnZhbHVlLmJvb2wgdG8gZml4IGEgY29tcGlsZXIgZXJyb3Igd2l0aAorY3VycmVudCBY
-b3JnIHhzZXJ2ZXIgbWFzdGVyIGJyYW5jaC4KKworQWxzbyB1c2UgeGY4NkdldE9wdFZhbEludGVn
-ZXIoKSBpbiBnZXRfaW50X29wdGlvbigpIGFuZAoreGY4NkdldE9wdFZhbFN0cmluZygpIGluIGdl
-dF9zdHJfb3B0aW9uKCkgZm9yIGNvbnNpc3RlbmN5LgorCitUaGUgY2hhbmdlIGNhdXNlcyBhIHNs
-aWdodCBwZXJmb3JtYW5jZSBkcm9wIGR1cmluZyBvcHRpb24gcGFyc2luZworYmVjYXVzZSB0aGUg
-cGFzc2VkLWluIGluZGV4X3ZhbHVlIGlzIG5vIGxvbmdlciB1c2VkIGFzIGFuIGluZGV4CitpbnRv
-IHRoZSBvcHRpb25zIGFycmF5LgorCitJbnN0ZWFkLCBpdCdzIHVzZWQgYXMgYSB0b2tlbiBub3cg
-Zm9yIHRoZSBzdGFuZGFyZCBvcHRpb24gZ2V0dGVyCitmdW5jdGlvbnMgd2hpY2ggd29ya3Mgc2lu
-Y2UgdGhlIGluZGV4X3ZhbHVlIHRvIHRoZSBnZXRfKl9vcHRpb24oKQorZnVuY3Rpb25zIGFyZSBp
-ZGVudGljYWwgdG8gdGhlIHZhbHVlIG9mIG9wdGlvbnNbbl0udG9rZW4gaW4gdGhlCitwYXNzZWQt
-aW4gT3B0aW9uSW5mb1JlYyBhcnJheS4KKworQWxzbyByZW5hbWUgImludCBvcHRpb25faW5kZXgi
-IHRvICJpbnQgdG9rZW4iIGZvciBjbGFyaXR5IGluIGFsbAordGhyZWUgZnVuY3Rpb25zLgorCitT
-aWduZWQtb2ZmLWJ5OiBab2x0w6FuIELDtnN6w7ZybcOpbnlpIDx6Ym9zem9yQGdtYWlsLmNvbT4K
-KworRG93bmxvYWRlZCBmcm9tIHVwc3RyZWFtIGNvbW1pdAoraHR0cHM6Ly9naXRsYWIuZnJlZWRl
-c2t0b3Aub3JnL3hvcmcvZHJpdmVyL3hmODYtdmlkZW8tcXhsLy0vY29tbWl0LzRlMTk2M2E4MTJm
-MmMxNzc3YmE1ZDU2ZWE5ZTkzOWEzZTQwYTA0OTYKKworU2lnbmVkLW9mZi1ieTogQmVybmQgS3Vo
-bHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgorLS0tCisgc3JjL3F4bF9vcHRpb25faGVscGVy
-cy5jIHwgMTMgKysrKysrKy0tLS0tLQorIHNyYy9xeGxfb3B0aW9uX2hlbHBlcnMuaCB8ICA2ICsr
-Ky0tLQorIDIgZmlsZXMgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkK
-KworZGlmZiAtLWdpdCBhL3NyYy9xeGxfb3B0aW9uX2hlbHBlcnMuYyBiL3NyYy9xeGxfb3B0aW9u
-X2hlbHBlcnMuYworaW5kZXggMmFiYTY3Ny4uNzcwN2I3YyAxMDA2NDQKKy0tLSBhL3NyYy9xeGxf
-b3B0aW9uX2hlbHBlcnMuYworKysrIGIvc3JjL3F4bF9vcHRpb25faGVscGVycy5jCitAQCAtMTAs
-MzEgKzEwLDMyIEBACisgCisgI2luY2x1ZGUgInF4bF9vcHRpb25faGVscGVycy5oIgorIAorLWlu
-dCBnZXRfaW50X29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGludCBvcHRpb25faW5kZXgs
-CisraW50IGdldF9pbnRfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9ucywgaW50IHRva2VuLAor
-ICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZfbmFtZSkKKyB7CisrICAgIGludCB2
-YWx1ZTsKKyAgICAgaWYgKGVudl9uYW1lICYmIGdldGVudihlbnZfbmFtZSkpIHsKKyAgICAgICAg
-IHJldHVybiBhdG9pKGdldGVudihlbnZfbmFtZSkpOworICAgICB9CistICAgIHJldHVybiBvcHRp
-b25zW29wdGlvbl9pbmRleF0udmFsdWUubnVtOworKyAgICByZXR1cm4geGY4NkdldE9wdFZhbElu
-dGVnZXIob3B0aW9ucywgdG9rZW4sICZ2YWx1ZSkgPyB2YWx1ZSA6IDA7CisgfQorIAorLWNvbnN0
-IGNoYXIgKmdldF9zdHJfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9ucywgaW50IG9wdGlvbl9p
-bmRleCwKKytjb25zdCBjaGFyICpnZXRfc3RyX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMs
-IGludCB0b2tlbiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZf
-bmFtZSkKKyB7CisgICAgIGlmIChnZXRlbnYoZW52X25hbWUpKSB7CisgICAgICAgICByZXR1cm4g
-Z2V0ZW52KGVudl9uYW1lKTsKKyAgICAgfQorLSAgICByZXR1cm4gb3B0aW9uc1tvcHRpb25faW5k
-ZXhdLnZhbHVlLnN0cjsKKysgICAgcmV0dXJuIHhmODZHZXRPcHRWYWxTdHJpbmcob3B0aW9ucywg
-dG9rZW4pOworIH0KKyAKKy1pbnQgZ2V0X2Jvb2xfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9u
-cywgaW50IG9wdGlvbl9pbmRleCwKKytpbnQgZ2V0X2Jvb2xfb3B0aW9uKE9wdGlvbkluZm9QdHIg
-b3B0aW9ucywgaW50IHRva2VuLAorICAgICAgICAgICAgICAgICAgICAgIGNvbnN0IGNoYXIgKmVu
-dl9uYW1lKQorIHsKKyAgICAgY29uc3QgY2hhciogdmFsdWUgPSBnZXRlbnYoZW52X25hbWUpOwor
-IAorICAgICBpZiAoIXZhbHVlKSB7CistICAgICAgICByZXR1cm4gb3B0aW9uc1tvcHRpb25faW5k
-ZXhdLnZhbHVlLmJvb2w7CisrICAgICAgICByZXR1cm4geGY4NlJldHVybk9wdFZhbEJvb2wob3B0
-aW9ucywgdG9rZW4sIEZBTFNFKTsKKyAgICAgfQorICAgICBpZiAoc3RyY21wKHZhbHVlLCAiMCIp
-ID09IDAgfHwKKyAgICAgICAgIHN0cmNhc2VjbXAodmFsdWUsICJvZmYiKSA9PSAwIHx8CitkaWZm
-IC0tZ2l0IGEvc3JjL3F4bF9vcHRpb25faGVscGVycy5oIGIvc3JjL3F4bF9vcHRpb25faGVscGVy
-cy5oCitpbmRleCA3YzU0YzcyLi42NmQwYTE3IDEwMDY0NAorLS0tIGEvc3JjL3F4bF9vcHRpb25f
-aGVscGVycy5oCisrKysgYi9zcmMvcXhsX29wdGlvbl9oZWxwZXJzLmgKK0BAIC00LDEzICs0LDEz
-IEBACisgI2luY2x1ZGUgPHhmODZDcnRjLmg+CisgI2luY2x1ZGUgPHhmODZPcHQuaD4KKyAKKy1p
-bnQgZ2V0X2ludF9vcHRpb24oT3B0aW9uSW5mb1B0ciBvcHRpb25zLCBpbnQgb3B0aW9uX2luZGV4
-LAorK2ludCBnZXRfaW50X29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGludCB0b2tlbiwK
-KyAgICAgICAgICAgICAgICAgICAgY29uc3QgY2hhciAqZW52X25hbWUpOworIAorLWNvbnN0IGNo
-YXIgKmdldF9zdHJfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9ucywgaW50IG9wdGlvbl9pbmRl
-eCwKKytjb25zdCBjaGFyICpnZXRfc3RyX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGlu
-dCB0b2tlbiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZfbmFt
-ZSk7CisgCistaW50IGdldF9ib29sX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGludCBv
-cHRpb25faW5kZXgsCisraW50IGdldF9ib29sX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMs
-IGludCB0b2tlbiwKKyAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZfbmFtZSk7
-CisgCisgI2VuZGlmIC8vIE9QVElPTl9IRUxQRVJTX0gKKy0tIAorR2l0TGFiCisKLS0gCjIuMzAu
-MgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+On Wed, Feb 23, 2022 at 04:17:32PM +0100, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2022-02-23 15:51 +0100, Thomas Petazzoni spake thusly:
+> > On Wed, 23 Feb 2022 15:27:31 +0100
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > Although this works, this is by pure chance: binutils is included before
+> > > libiberty, so BINUTILS_VERSION is defined. But we try and avoid such a
+> > > situation, unless we explicitly guarantee the include ordering (eg. gcc,
+> > > fftw, util-linux, or previously, qt5).
+> > > Instead, in such a case, we prefer that the version strin is duplicated,
+> > > and a comment added above to note that both shoujld be updated in sync.
+> > > See for example bluez5_utils and bluez5_utils-headers, mesa3d and
+> > > mesa3d-headers.
+> > libiberty/binutils is different than mesa3d or bluez5_utils, as the
+> > version is user-selectable, or even different depending on the selected
+> > CPU architecture.
+> 
+> Right, I forgot about that... But still, I don't like that we rely on
+> the implied include order here, as we try and avoid that elsewhere...
+> 
+> > So we would have to replicate all the version selection logic (like we
+> > admittedly do for linux vs. linux-headers).
+> 
+> That would not be very convenient and maintainable in the long run, as
+> we update binutils to newer versions with various arch support changes:
+> indeed, as we can see here, we'd eventually forget to update libibert in
+> sync.
+> 
+> Unless we move libiberty as a sub-directory in pacage/binutils/libiberty/
+> (like for util-linux-libs) to make it obvious that we need to share the
+> version... That'd be my favourite option.
+
+If we're doing that, should it be in gdb instead of binutils?
+
+The gdb and binutils source all comes from the same repository but gdb
+is the one package for which we actually use host-libiberty so tying
+this in to the gdb version seems more sensible than using the binutils
+version.
+
+For example, given the default versions of binutils and gdb gives:
+
+    $ git log --left-right --oneline binutils-2_36_1...gdb-10.2-release -- libiberty/
+    > f42f69f6f38 libiberty: Support the new ("v0") mangling scheme in rust-demangle
+    < d750c713c9a Update libiberty with latest sources from gcc mainline
+    < f9a6a8f09dc PR27116, Spelling errors found by Debian style checker
+    < 250d07de5cf Update year range in copyright notice of binutils files
+    < d7b477c541b Sync libiberty and include with GCC for get_DW_UT_name.
+
+so the GDB branch has a new feature (not included in the binutils
+branch) whereas binutils has some updates not included for GDB.
+
+It's a bit of a mess, but given where we need libiberty (for
+prelink-cross) and what uses the package version (host-gdb) it looks
+like it would make more sense to move this to the gdb package source.
+
+What do you think?
+
+
+John
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
