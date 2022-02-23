@@ -1,60 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4A0C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 21:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEBEBC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 21:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E16914090B;
-	Wed, 23 Feb 2022 21:22:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DD3B82C35;
+	Wed, 23 Feb 2022 21:27:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D-7Eg-1FrZkf; Wed, 23 Feb 2022 21:22:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vGyBKorzdYKd; Wed, 23 Feb 2022 21:27:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5BB7403B3;
-	Wed, 23 Feb 2022 21:22:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31AB81BF36F
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 21:22:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0E2C82C21;
+	Wed, 23 Feb 2022 21:27:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CE3A1BF36F
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 21:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2BACB403B3
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 21:22:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF43982C21
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 21:27:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RI_bLYlPTPXt for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 21:22:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E1A9400F5
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 21:22:26 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.188.82])
- by Aruba Outgoing Smtp  with ESMTPA
- id Mz5bn8dVeXmFAMz5cntlsK; Wed, 23 Feb 2022 22:22:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645651344; bh=JsI9YVQj7PWBZz/0lmk1PERjqqzZCmVgcnF/OxVvFiM=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=ZGs9za3hE2CBSJcAWi8akdi7NP2RPN7PrTDjzH7fmDv0Q7x2Y8Fo4ow9hj6QS8/37
- W5qeZYlFTtuok7Funcn0+yVgPpi0ZTsl8GWQkiAuw6wvZYBoq14WbRk8L4CzeR6Mhw
- Cv43PEAAk/wvxPfpKLVHlR4IPuu4EwrWdfkA5X9FIH00RljJsQQCBiNz0+LKr6fl3d
- 33K9TpwNdn6xDKtsJvKTfddspXd9A/x6zehKngBWxLDOnIM/DQRgA8dKy5FXA4nbkP
- hiFEVr+H8A3dTHpqmkqJgLPQm18Bv5QDxGPwM7LBpi7xrP7SUABSKvuZP/CIrp3Yg0
- HNUhZkKccbcmA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Wed, 23 Feb 2022 22:22:23 +0100
-Message-Id: <9C91AA22-A5B2-433B-AD37-7000F7D5EB20@benettiengineering.com>
-References: <872b9dab-c446-adca-905c-1d5481c00a3b@armadeus.com>
-In-Reply-To: <872b9dab-c446-adca-905c-1d5481c00a3b@armadeus.com>
-To: fabien.marteau@armadeus.com
-X-Mailer: iPhone Mail (19D52)
-X-CMAE-Envelope: MS4wfAew3tWT3SbU1CyHHFVLHhrp2VcxEsat0ryLQE6Qz+Ek+uQUFYq6TD0/9wyKliPBdPyKHc/1FbLKzco+MrNFu2QdH1ZAJSbCl1+yElNlI5VpKJUs3NES
- hbk8lVCO8lJiBJGcEfrRcDUEHjslZr4rot8mWI5BK4uwszr6YpKTTK56X+isp+GIq2/SB7b0Q0+bDMpY2JPzB1pz1Wzi+ntaDEJCU+LYsxzD8FedtkJbrpBe
- PDNcQjMYqUFtYC8yOgIAWQ==
-Subject: Re: [Buildroot] zynq_zc706_defconfig target works on zc702 board
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JSowKLALe9R2 for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 21:27:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 295648274E
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 21:27:23 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id a23so161498eju.3
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 13:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=FvaFFWtMdzr4+e0gzPN3nsBq9ko6/lPsFdpRXXLV64E=;
+ b=YQyw/JNWmaYEPDZCV+x2c/1ZU4uT3N/EIAgF/LVeAqUg3KjKx34JvJI1dC4RQ998Nv
+ DtkkTbKUa9GCXxEqKJDi6fIPVUkVWA6LoHW8/DYbfF04tJB2uX28eyI8Whw/8/EDObMt
+ EGHKfCEmS5FIijsoHXDMaOwBky7wS+354WPzttAriTR3/nHR4Jp771bAqZl3VWEpe94n
+ 7lJWmJg0PgT2kvHmn3OtsEvtxEdXkhDMOAf/ywa8BTM5MpsMjfwGmC7R/GGGxAdfXWAX
+ zlGZzYJJUzrZsQqpcAtTgog97QyMd7GBg7t9jBCl89Nb2D3GUlq467zQy34RzWRjtolp
+ qJiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+ :references:mime-version:content-disposition:in-reply-to;
+ bh=FvaFFWtMdzr4+e0gzPN3nsBq9ko6/lPsFdpRXXLV64E=;
+ b=ScN397PDnMIojoLuRArOczMc1cvH9tigfm6jqeOfJ/NB7r9rfO+uDPwBMeSiNZF6I8
+ Ka2phAhqIwaTV4L9JyzI29pQJV3u6lnTlTZl+0iIBiIFQuun5/bnAc2RmcSvsxAfg+c7
+ /xhEwJT4KCoQ1DTTTjNFqSnqiZkNoYDsb19ZvhfbJHin54PSXg/6osM7aGCEUi1pGxUR
+ ar1Oukn+Wkc5Xb4fMSmyBf6LGlA7iC0HXa0JsQ1wD9cM0rNb7eZrnXlkEsExtrS3asWU
+ /hTTB4aZpBZson9wMWcCpLnfvc7kVuwqwCkEzA9yjV34KfW739CilcSgyJNdToJXGjgr
+ Xgtw==
+X-Gm-Message-State: AOAM532kMKdcp3w8M001puZ2YzSDlAiZuGa3oURj52bEA26TWAujNjqp
+ w/CZEAXt1hOsgWYRh8Vl/sak2ObbubWUig==
+X-Google-Smtp-Source: ABdhPJy1nHsXM+cSPq8q8dqDoP4g9XpaPcTHqDdk9dR4Ul6siuzqRvv2QtHyF2we0YmhcslJ2Z6Mdg==
+X-Received: by 2002:a17:906:954b:b0:6ce:a859:71f8 with SMTP id
+ g11-20020a170906954b00b006cea85971f8mr1181097ejy.380.1645651641782; 
+ Wed, 23 Feb 2022 13:27:21 -0800 (PST)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id bn15sm337743ejb.93.2022.02.23.13.27.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Feb 2022 13:27:21 -0800 (PST)
+Date: Wed, 23 Feb 2022 22:27:17 +0100
+From: Petr Vorel <petr.vorel@gmail.com>
+To: buildroot@buildroot.org
+Message-ID: <YhamtUnWXh4Qis0z@pevik>
+References: <20220222220255.22327-1-petr.vorel@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220222220255.22327-1-petr.vorel@gmail.com>
+Subject: Re: [Buildroot] [RFC][PATCH 1/1] package/bind: bump to version
+ 9.16.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,70 +86,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRmFiaWVuLAoKPiBJbCBnaW9ybm8gMjMgZmViIDIwMjIsIGFsbGUgb3JlIDIxOjU5LCBGYWJp
-ZW4gTWFydGVhdSA8ZmFiaWVuLm1hcnRlYXVAYXJtYWRldXMuY29tPiBoYSBzY3JpdHRvOgo+IAo+
-IO+7v0hlbGxvLAo+IAo+IEkganVzdCB0cnlpZWQgdG8gY29tcGlsZSBidWlsZHJvb3QgZm9yIFpD
-NzAyIGJvYXJkIHVzaW5nIHRhcmdldCB6eW5xX3pjNzA2X2RlZmNvbmZpZyAoWkM3MDYpLgo+IAo+
-IFdpdGggbGFzdCBidWlsZHJvb3QgZ2l0IDoKPiAKPiBtYWtlIHp5bnFfemM3MDZfZGVmY29uZmln
-Cj4gc3VkbyBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi9tbWNibGswCj4g
-Cj4gQm9vdGluZyB0aGUgYm9hcmQgd2l0aCBTRENhcmQgZnJlc2hseSBmb3JtYXR0ZWQgOgo+IAo+
-IDxkZWJ1Z191YXJ0PiBEZWJ1ZyB1YXJ0IGVuYWJsZWQKPiAKPiBVLUJvb3QgU1BMIDIwMTguMDEg
-KEZlYiAyMyAyMDIyIC0gMTE6NDM6MTUpCj4gbW1jIGJvb3QKPiBUcnlpbmcgdG8gYm9vdCBmcm9t
-IE1NQzEKPiBzcGxfbG9hZF9pbWFnZV9mYXQ6IGVycm9yIHJlYWRpbmcgaW1hZ2UgZnBnYS5iaW4s
-IGVyciAtIC0yCj4gc3BsOiBlcnJvciByZWFkaW5nIGltYWdlIGZwZ2EuYmluLCBlcnIgLSAxCj4g
-c3BsX2xvYWRfaW1hZ2VfZmF0X29zOiBlcnJvciByZWFkaW5nIGltYWdlIHN5c3RlbS5kdGIsIGVy
-ciAtIC0yCj4gcmVhZGluZyB1LWJvb3QuaW1nCj4gcmVhZGluZyB1LWJvb3QuaW1nCj4gCj4gCj4g
-VS1Cb290IDIwMTguMDEgKEZlYiAyMyAyMDIyIC0gMTE6NDM6MTUgKzAxMDApIFhpbGlueCBaeW5x
-IFpDNzA2Cj4gCj4gTW9kZWw6IFp5bnEgWkM3MDYgRGV2ZWxvcG1lbnQgQm9hcmQKPiBCb2FyZDog
-WGlsaW54IFp5bnEKPiBTaWxpY29uOiB2MC4wCj4gSTJDOiAgIHJlYWR5Cj4gRFJBTTogIEVDQyBk
-aXNhYmxlZCAxIEdpQgo+IE1NQzogICBzZGhjaUBlMDEwMDAwMDogMCAoU0QpCj4gU0Y6IERldGVj
-dGVkIG4yNXExMjhhIHdpdGggcGFnZSBzaXplIDUxMiBCeXRlcywgZXJhc2Ugc2l6ZSAxMjggS2lC
-LCB0b3RhbCAzMiBNaUIKPiAqKiogV2FybmluZyAtIGJhZCBDUkMsIHVzaW5nIGRlZmF1bHQgZW52
-aXJvbm1lbnQKPiAKPiBJbjogICAgc2VyaWFsQGUwMDAxMDAwCj4gT3V0OiAgIHNlcmlhbEBlMDAw
-MTAwMAo+IEVycjogICBzZXJpYWxAZTAwMDEwMDAKPiBOZXQ6ICAgWllOUSBHRU06IGUwMDBiMDAw
-LCBwaHlhZGRyIDcsIGludGVyZmFjZSByZ21paS1pZAo+IGV0aDA6IGV0aGVybmV0QGUwMDBiMDAw
-Cj4gSGl0IGFueSBrZXkgdG8gc3RvcCBhdXRvYm9vdDogIDAKPiBaeW5xPgo+IAo+IFRoZW4gYm9v
-dGluZyBMaW51eCA6Cj4gCj4gWnlucT4gYm9vdAo+IERldmljZTogc2RoY2lAZTAxMDAwMDAKPiBN
-YW51ZmFjdHVyZXIgSUQ6IDI3Cj4gT0VNOiA1MDQ4Cj4gTmFtZTogU0QxNkcKPiBUcmFuIFNwZWVk
-OiA1MDAwMDAwMAo+IFJkIEJsb2NrIExlbjogNTEyCj4gU0QgdmVyc2lvbiAzLjAKPiBIaWdoIENh
-cGFjaXR5OiBZZXMKPiBDYXBhY2l0eTogMTQuNCBHaUIKPiBCdXMgV2lkdGg6IDQtYml0Cj4gRXJh
-c2UgR3JvdXAgU2l6ZTogNTEyIEJ5dGVzCj4gKiogVW5hYmxlIHRvIHJlYWQgZmlsZSB1RW52LnR4
-dCAqKgo+IENvcHlpbmcgTGludXggZnJvbSBTRCB0byBSQU0uLi4KPiByZWFkaW5nIHVJbWFnZQo+
-IDM3MzIyNTYgYnl0ZXMgcmVhZCBpbiAyMTIgbXMgKDE2LjggTWlCL3MpCj4gcmVhZGluZyBkZXZp
-Y2V0cmVlLmR0Ygo+IDEzNjY3IGJ5dGVzIHJlYWQgaW4gMTQgbXMgKDk1My4xIEtpQi9zKQo+IHJl
-YWRpbmcgdXJhbWRpc2suaW1hZ2UuZ3oKPiA5NTE0ODggYnl0ZXMgcmVhZCBpbiA2NSBtcyAoMTQg
-TWlCL3MpCj4gIyMgQm9vdGluZyBrZXJuZWwgZnJvbSBMZWdhY3kgSW1hZ2UgYXQgMDIwODAwMDAg
-Li4uCj4gICBJbWFnZSBOYW1lOiAgIExpbnV4LTQuOS4wLXhpbGlueAo+ICAgSW1hZ2UgVHlwZTog
-ICBBUk0gTGludXggS2VybmVsIEltYWdlICh1bmNvbXByZXNzZWQpCj4gICBEYXRhIFNpemU6ICAg
-IDM3MzIxOTIgQnl0ZXMgPSAzLjYgTWlCCj4gICBMb2FkIEFkZHJlc3M6IDAwMDA4MDAwCj4gICBF
-bnRyeSBQb2ludDogIDAwMDA4MDAwCj4gICBWZXJpZnlpbmcgQ2hlY2tzdW0gLi4uIE9LCj4gIyMg
-TG9hZGluZyBpbml0IFJhbWRpc2sgZnJvbSBMZWdhY3kgSW1hZ2UgYXQgMDQwMDAwMDAgLi4uCj4g
-ICBJbWFnZSBOYW1lOgo+ICAgSW1hZ2UgVHlwZTogICBBUk0gTGludXggUkFNRGlzayBJbWFnZSAo
-dW5jb21wcmVzc2VkKQo+ICAgRGF0YSBTaXplOiAgICA5NTE0MjQgQnl0ZXMgPSA5MjkuMSBLaUIK
-PiAgIExvYWQgQWRkcmVzczogMDAwMDAwMDAKPiAgIEVudHJ5IFBvaW50OiAgMDAwMDAwMDAKPiAg
-IFZlcmlmeWluZyBDaGVja3N1bSAuLi4gT0sKPiAjIyBGbGF0dGVuZWQgRGV2aWNlIFRyZWUgYmxv
-YiBhdCAwMjAwMDAwMAo+ICAgQm9vdGluZyB1c2luZyB0aGUgZmR0IGJsb2IgYXQgMHgyMDAwMDAw
-Cj4gICBMb2FkaW5nIEtlcm5lbCBJbWFnZSAuLi4gT0sKPiAgIExvYWRpbmcgUmFtZGlzayB0byAx
-ZmYxNzAwMCwgZW5kIDFmZmZmNDgwIC4uLiBPSwo+ICAgTG9hZGluZyBEZXZpY2UgVHJlZSB0byAx
-ZmYxMDAwMCwgZW5kIDFmZjE2NTYyIC4uLiBPSwo+IAo+IFN0YXJ0aW5nIGtlcm5lbCAuLi4KPiAK
-PiBCb290aW5nIExpbnV4IG9uIHBoeXNpY2FsIENQVSAweDAKPiAKPiBbLi4uXQo+IAo+IFN0YXJ0
-aW5nIG5ldHdvcms6IE9LCj4gCj4gV2VsY29tZSB0byBCdWlsZHJvb3QKPiBidWlsZHJvb3QgbG9n
-aW46Cj4gCj4gCj4gSXQgd29ya3MgYXMgaXMgXG8vCj4gCj4gRG8gSSBoYXZlIHRvIG1ha2UgYSBw
-YXRjaCB0byBhZGQgdGhlIHRhcmdldD8KClN1cmUsIHlvdSBjYW4gZG8gdGhhdCBhbmQgYWRkIGFu
-IGVudHJ5IGluIERFVkVMT1BFUlMgd2l0aCB5b3UgdG8gbWFpbnRhaW4gaXQuCgpCdXQgaGVyZSBJ
-IHRoaW5rIHdlIG5lZWQgc3BlY2lmaWMgdGFnIG5hbWVzLCBkdHMgZmlsZXMgZXRjIGZvciB6Yzcw
-Mi4KQW5kIHBvc3NpYmx5IGJ1bXAgYWxsIHRoZSB2ZXJzaW9ucyBmb3IgdWJvb3QgYW5kIExpbnV4
-LgoKQ2FuIHlvdSBkbyB0aGF0PwoKQmVzdCByZWdhcmRzCkdpdWxpbwoKPiAKPiBCZXN0IHJlZ2Fy
-ZHMsCj4gRmFiaWVuIE1hcnRlYXUKPiBBcm1hZGV1cyBTeXN0ZW0KPiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Hi,
+
+Build tested:
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: SKIPPED
+                            sourcery-arm [6/6]: OK
+6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+                             andes-nds32 [ 1/45]: OK
+                             arm-aarch64 [ 2/45]: OK
+                   bootlin-aarch64-glibc [ 3/45]: OK
+               bootlin-arcle-hs38-uclibc [ 4/45]: OK
+                    bootlin-armv5-uclibc [ 5/45]: OK
+                     bootlin-armv7-glibc [ 6/45]: OK
+                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
+                      bootlin-armv7-musl [ 8/45]: OK
+             bootlin-microblazeel-uclibc [ 9/45]: OK
+                   bootlin-mipsel-uclibc [10/45]: OK
+                bootlin-mipsel32r6-glibc [11/45]: OK
+                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
+               bootlin-m68k-68040-uclibc [13/45]: OK
+                     bootlin-nios2-glibc [14/45]: OK
+                 bootlin-openrisc-uclibc [15/45]: OK
+           bootlin-powerpc-e500mc-uclibc [16/45]: OK
+        bootlin-powerpc64le-power8-glibc [17/45]: OK
+                   bootlin-riscv32-glibc [18/45]: OK
+                   bootlin-riscv64-glibc [19/45]: OK
+                    bootlin-riscv64-musl [20/45]: OK
+                      bootlin-sh4-uclibc [21/45]: OK
+                    bootlin-sparc-uclibc [22/45]: SKIPPED
+                   bootlin-sparc64-glibc [23/45]: OK
+                   bootlin-xtensa-uclibc [24/45]: OK
+                    bootlin-x86-64-glibc [25/45]: OK
+                     bootlin-x86-64-musl [26/45]: OK
+                   bootlin-x86-64-uclibc [27/45]: OK
+                            br-arm-basic [28/45]: OK
+                    br-arm-full-nothread [29/45]: SKIPPED
+                      br-arm-full-static [30/45]: SKIPPED
+                br-i386-pentium-mmx-musl [31/45]: OK
+                   br-i386-pentium4-full [32/45]: OK
+                      br-mips64-n64-full [33/45]: OK
+                 br-mips64r6-el-hf-glibc [34/45]: OK
+               br-powerpc-603e-basic-cpp [35/45]: OK
+               br-powerpc64-power7-glibc [36/45]: OK
+                       linaro-aarch64-be [37/45]: OK
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: OK
+                            sourcery-arm [41/45]: OK
+                     sourcery-arm-thumb2 [42/45]: OK
+                           sourcery-mips [43/45]: OK
+                         sourcery-mips64 [44/45]: OK
+                          sourcery-nios2 [45/45]: OK
+45 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+Kind regards,
+Petr
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
