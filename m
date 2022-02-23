@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE90C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 10:05:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A39C5C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 10:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 369F460F4A;
-	Wed, 23 Feb 2022 10:05:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54D1260F47;
+	Wed, 23 Feb 2022 10:10:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 03fmJZ00d3fm; Wed, 23 Feb 2022 10:05:44 +0000 (UTC)
+	with ESMTP id WmJRlZATrY1L; Wed, 23 Feb 2022 10:10:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6077460AED;
-	Wed, 23 Feb 2022 10:05:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 869851BF3FF
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 10:05:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DC1F60AED;
+	Wed, 23 Feb 2022 10:10:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2690D1BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 10:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 824F160D91
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 10:05:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11E2540195
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 10:10:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WHTUj0qt3ZeK for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 10:05:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LBxJjILDWnAD for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 10:10:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 91397607B4
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 10:05:24 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8C35A4000C;
- Wed, 23 Feb 2022 10:05:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nMoWN-008m0S-Mm; Wed, 23 Feb 2022 11:05:19 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Luca Ceresoli <luca@lucaceresoli.net>
-References: <20220211144402.1626443-1-neal.frager@xilinx.com>
- <69189572-6eba-ed26-52dd-08a8b098f124@lucaceresoli.net>
- <87bkzcnqpx.fsf@dell.be.48ers.dk>
-Date: Wed, 23 Feb 2022 11:05:19 +0100
-In-Reply-To: <87bkzcnqpx.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sat, 12 Feb 2022 14:45:30 +0100")
-Message-ID: <87o82x6gps.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from Atcsqr.andestech.com (atcsqr.andestech.com [60.248.187.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D03E40147
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 10:10:20 +0000 (UTC)
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+ by Atcsqr.andestech.com with ESMTP id 21NAA7Vn072588;
+ Wed, 23 Feb 2022 18:10:07 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from APC323 (10.0.12.98) by ATCPCS16.andestech.com (10.0.1.222) with
+ Microsoft SMTP Server id 14.3.498.0; Wed, 23 Feb 2022 18:10:03 +0800
+Date: Wed, 23 Feb 2022 18:09:08 +0800
+From: Yu Chien Peter Lin <peterlin@andestech.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <YhYHxAZuz+wY4Nl+@APC323>
+References: <20220223071049.21153-1-peterlin@andestech.com>
+ <84e159d2-0123-e5b1-c42e-99b70c99f43c@benettiengineering.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v6 1/2] configs/zynqmp_zcu106: bump
- ATF/U-Boot/Linux to Xilinx 2022
+Content-Disposition: inline
+In-Reply-To: <84e159d2-0123-e5b1-c42e-99b70c99f43c@benettiengineering.com>
+User-Agent: Mutt/2.1.4 (93ef06ae) (2021-12-11)
+X-Originating-IP: [10.0.12.98]
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 21NAA7Vn072588
+Subject: Re: [Buildroot] [PATCH v4 1/3] board/andes: rearrange andes folder
+ structure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +63,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Neal Frager <neal.frager@xilinx.com>, giulio.benetti@benettiengineering.com,
- michal.simek@xilinx.com, buildroot@buildroot.org
+Cc: alankao@andestech.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hi Giulio,
 
- >>> +#endif
- >>> +{
- >>> +	/**********************************************************************/
- >>> +	/* HEADER */
- >>> +	2,	/* Number of remaining words in the header */
- >>> +	8,	/* Number of sections included in config object */
- >>> +	1U,	/* Type of config object as base */
+> On Wed, Feb 23, 2022 at 10:19:08AM +0100, Giulio Benetti wrote:
+> > Hi Peter,
+> > 
+> > On 23/02/22 08:10, Yu Chien Peter Lin wrote:
+> > > Rename ae3xx to ae300 for nds32 architecture and add ae350 platform.
+> > > 
+> > > AE300 (NDS32):
+> > > - http://www.andestech.com/en/products-solutions/andeshape-platforms/ae300/
+> > > AE350 (RISC-V):
+> > > - http://www.andestech.com/en/products-solutions/andeshape-platforms/ae350-axi-based-platform-pre-integrated-with-n25f-nx25f-a25-ax25/
+> > > 
+> > > Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+> > > Signed-off-by: Alan Kao <alankao@andestech.com>
+> > > ---
+> > > Changes v1 -> v2:
+> > >     - move linux source code and its patches to AndesTech Github repo
+> > >     - rename ae350_andestar45_defconfig to andes_ae350_45_defconfig
+> > >     - change C library to uClibc
+> > >     - remove OpenSSL package
+> > >     - remove rootfs.cpio and rootfs.tar
+> > >     - update DEVELOPERS
+> > > Changes v2 -> v3:
+> > >     - specifiy branch to download from AndesTech linux repo
+> > >     - change boot.cmd to extlinux.conf
+> > >     - add post-build.sh for extlinux.conf to retrieve Image and DTB
+> > >     - fix format and update genimage_sdcard.cfg
+> > >     - update readme.txt
+> > >     - add packages (python3, pylibfdt and openssl) for u-boot binman
+> > >     - reorder item in DEVELOPERS
+> > > Changes v3 -> v4:
+> > >     - rename ae3xx folder to ae300
+> > >     - rename andes_ae3xx_defconfig to andes_ae300_defconfig
+> > >     - update readme.txt and item in DEVELOPERS
+> > 
+> > Some of these change ^^^ must have been moved to the single patch, like
+> > DEVELOPERS is updated in patch 3/3. I've also forgotten to point you to add
+> > a --cover-letter, so keep in mind both points for next time.
+> > 
+> > I've built tested both defconfig successfully, so:
+> > Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> > Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> > [Giulio: build tested only]
+> > 
+> > And the other patches of this series is all reviewed, so to me it's ready to
+> > be committed, but this will happen after Buildroot 2022.02 is released,
+> > since between rc1 to the release Maintainers only accept fixes. Another
+> > possibility is that they will commit these patches to next branch.
+> > 
+> > Please remember to tag V3.
+> > 
+> > Thank you for your effort!
+> > 
+> > Best regards
+> > -- 
+> > Giulio Benetti
+> > Benetti Engineering sas
 
- >> Here's where you have manually replaced "PM_CONFIG_OBJECT_TYPE_BASE" ->
- >> "1U", right? Well, it should be well noted in the commit message. This
- >> file is supposed to be generated by Vitis and used untouched, any manual
- >> edits whould be documented.
+Thanks for reviewing my patches and the guidance.
+I will make a new patch for the Config.in,
+The last question, is it tag V5 for the next submission?
 
- >> Or, even better, use the U-Boot patch I sent (see other e-mail I just
- >> wrote) and use an unmodified pm_cfg_obj.c
-
- > Ups, I applied the series before seeing this comment. Lets handle it as
- > a followup patch for zcu102/106.
-
-Neal, will you send a followup patch for this?
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Yu Chien Peter Lin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
