@@ -1,86 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6D57C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1D4DC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60E59415EC;
-	Wed, 23 Feb 2022 20:25:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BECB60FC8;
+	Wed, 23 Feb 2022 20:27:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f7GXsVKqKQJe; Wed, 23 Feb 2022 20:25:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SuY6yiH8e7MM; Wed, 23 Feb 2022 20:27:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12EDC4156E;
-	Wed, 23 Feb 2022 20:25:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 832741BF5AA
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:24:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D26260FC1;
+	Wed, 23 Feb 2022 20:27:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8315B1BF5AA
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FBB94156E
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:24:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D87382983
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:27:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CoPkUax_3HPX for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 20:24:57 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PyTLjD46ImvP for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 20:27:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B0124156D
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:24:57 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id vz16so54973104ejb.0
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 12:24:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3AEE980CF2
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:27:05 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id l13so520830wrt.2
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 12:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=h7lfD1jD1qgK0+Hj4q/KE8UdldXwSQT9jKk9Av59HMM=;
- b=hLL8ojUIMOiGjcEA1wP87pv0LXAEw36fd3tAP+KLOOwBwMHpGLoXZetAOdZ0p2S/9e
- 2BfafUPH14dsp9AKHNfre82cI5cIh50wqwj3zyFwFDvGLK+zCAV5H0w+hhVZpqh9wvnt
- abRABO5V/erWl00j+yIFrLR3Yus3Pxe1nUq+/A4MWnTlQ51WDXoflSTAsuDdW3kmn9Zd
- H9nPS0OdGEe363KVRZqI/8RRtpTRukDri1PqjSQa0dNAR8nH1bxVEs6yaP/co6C1RMUh
- 3tCM+XfbtqldWMBGogsCIT9b/8emuDpci63KnCRw8eqTat0bhbEZG7VnpN8rbxu8kSxk
- JDWw==
+ bh=/LS2A+LeVXI1qOsx4XPVFUT7pLfGDBEbIRxml0Jdc8I=;
+ b=L6q5NBjyD8tdWwF/Dt45xdKWWZWCkjlrQeZqsm+hNNQFLhW6jMieBJIQm762daM0kP
+ s0DBIz8CJqRFUm+z/y4iouUZ0lpRb47SBHM1qXFXrxH0UBXkhSstyac9PVcHTJzbaZwy
+ eOsr+jpa4kmkS+k4xZo37ruS+cf6IcuryWURDxHrlXGM28rj24nrY18hsueVtslR84Q/
+ vP9hLodibc8hEKrf+hTJ/TmGRvUCyxJfHm+9r8NG8O+GuQrK+ObBJZP/fOkVivRdrqVk
+ sEMCIXv+O8CgX29ePO1dSOkVjzP1PoCb3MSFCe9KmhqD6ipBKA3cFhIllD1OnCv6p3b7
+ H8DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=h7lfD1jD1qgK0+Hj4q/KE8UdldXwSQT9jKk9Av59HMM=;
- b=i+KqKealzKq/PkMdWBwimTuuWBSouJkYm1/hXpXpZ8V0M+Uum8CZsWg2eZrwsYTqsE
- r1X0kj21KNc0Zjssnp8Rl1/czDwu+Ub52WX210tu2pClAtRLqgZb+lVfkn+w6iMpX+Nq
- bipnOD7M8GRQG7j6IIs3aLqel7kUFe80aQ9Jrax8dEcARGigpmxIK7H5c73EbIhBbjlG
- k5uwWFWkDMqbuiYgdxxA07bEoNkqy4SY0LDrSrzOHp/7Qt9D+eLj/xllydiqcvNEbuVo
- +v8ssGMDa05LVQXpqdTe5yThogB8LUJNj30varn2x/yE9bCQieEriE+G+lCuz9e1WtFT
- lHcg==
-X-Gm-Message-State: AOAM533OAWrVQuJnBUfNdlmL4VWbKyk9nf4gYMWTuNc+HoMlKZg9zuuQ
- /EzZIDyMsPIJq9jxHpop9OQj5A==
-X-Google-Smtp-Source: ABdhPJzgEB7Tel4VV7W/C+6fOnCUAXuUCQ5YhEsBQBcXk3eVuGQNmFHkxtSz5xbM9J6wv8z40wYdqA==
-X-Received: by 2002:a17:906:6d09:b0:6b9:2e0e:5bdd with SMTP id
- m9-20020a1709066d0900b006b92e0e5bddmr1008975ejr.246.1645647895317; 
- Wed, 23 Feb 2022 12:24:55 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id ka26sm273983ejc.170.2022.02.23.12.24.54
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 23 Feb 2022 12:24:54 -0800 (PST)
-Message-ID: <4ed0a044-0d93-8dca-8a13-312c85a5be79@mind.be>
-Date: Wed, 23 Feb 2022 21:24:54 +0100
+ bh=/LS2A+LeVXI1qOsx4XPVFUT7pLfGDBEbIRxml0Jdc8I=;
+ b=Qc8fHRapcFaKTvuUgwVG8BxSEt8ZW1Xa1la7CVCMug61F7dywL1OSc1fkGB1Mcg6hp
+ tNI7MQU/GKLau416ql8clMojSd4ChyPFsteDnvh9wTNUodTPvvXNj5YKVsmzq+abOS+V
+ 6oSmIMBdcGHv5KXxPCfdSaj1G5RgbIkhJhcSOy9MFQaOn4GudnY5a2Vm1BbkprZAXfaf
+ DaOsZEb+pvlgDnWPz9fHr0WWKcLUzj07+Nf9ZKGL2sLYi3UhkIvLZg4GYY5yRZafn0+f
+ Yech7H4J3vN1HefbZ3L6f6LP258TJdclcF+xk/+dJX8G2ncSCUXmN+W6HY/lwAZIz1GO
+ VwQg==
+X-Gm-Message-State: AOAM531lsKTE+UWP3oyq/GeyckaX9b9AOo46csqoPXeXjJmLVvgx+o7z
+ Bf/VWCCMQJiq7orwqff0VedlVYrZ6N0=
+X-Google-Smtp-Source: ABdhPJyyQNJWzg2YfENjPP8/JZqk7WDqMXnHbN25r4doyUB38kz8usnhe1Pg1h295AeNBbmRU1wHBg==
+X-Received: by 2002:a5d:64aa:0:b0:1ea:8265:9740 with SMTP id
+ m10-20020a5d64aa000000b001ea82659740mr1007208wrp.572.1645648023166; 
+ Wed, 23 Feb 2022 12:27:03 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id u14sm673992wmq.41.2022.02.23.12.27.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Feb 2022 12:27:02 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 23 Feb 2022 21:26:48 +0100
+Message-Id: <20220223202648.3398307-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220216142213.1472039-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220216142213.1472039-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/frr: set FRR_XREF_NO_NOTE
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/ghostscript: disable tesseract without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,67 +87,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+ghostscript embeds a local copy of tesseract-ocr which is enabled by
+default since version 9.53.0 and
+https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=7322ef87546c55b29056c1d96d8bdbb7f3ba53ef
 
+Since version 9.55.0 and
+https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=5459f7aca1ded3b7cf96c339a2419f418aa406c7,
+ghostscript expects that tesseract is disabled if threads are not
+available resulting in the following build failure since commit
+7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22:
 
-On 16/02/2022 15:22, Fabrice Fontaine wrote:
-> Set FRR_XREF_NO_NOTE to avoid the following build failures with
-> microblazeel, nds32 and xtensa raised since bump to version 8.1 in
-> commit ca2753fd47d47e5ad0eec16ea62f7b7f096331b6:
-> 
-> _clippy.ELFAccessError: virtual address (538157256) not found in program headers
-> 
-> [...]
-> 
-> /tmp/ccFGv94v.s:13: Error: can't resolve `__start_xref_array' {*UND* section} - `L0' {.note.FRR section}
-> /tmp/ccFGv94v.s:14: Error: can't resolve `__stop_xref_array' {*UND* section} - `L0' {.note.FRR section}
-> 
-> Here is an extract of
-> https://github.com/FRRouting/frr/blob/7347a4859d4b984cea0aef769a16622d3f02e44f/lib/xref.h:
-> "FRR itself does not need this note to operate correctly, so if you have
-> some build issue with it just add -DFRR_XREF_NO_NOTE to your build flags
-> to disable it."
+configure: error: Threading disabled or not available. Tesseract OCR relies on threading. Rerun configure with "--without-tesseract" to exclude OCR from the build
 
-  There's some more text a bit higher up that says that it actually *is* needed 
-for "external tools reading xrefs out of an ELF shared library or executable". 
-But it seems pretty unlikely that this is going to be an issue in Buildroot 
-context. So I just extended the commit message with that and applied to master, 
-thanks.
+So disable tesseract if threads are not available. It should be noted
+that there is no way to tell ghostscript to use a system provided
+tesseract-ocr package.
 
-  Regards,
-  Arnout
+Fixes:
+ - http://autobuild.buildroot.org/results/fd35a47b2a77cf57c243ec1c88802b53ddca8f52
 
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/3cdb50f5e5a1b3f37a6edcd4276fcbf015e28828
->   - http://autobuild.buildroot.org/results/a3cc0b5090a1faa2bca9c8dfe0fec9b6a918ba4d
->   - http://autobuild.buildroot.org/results/694cc65478a82ec93d2074252892036855cdc49d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   package/frr/frr.mk | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-> index cc83016f9f..0e6ab7a815 100644
-> --- a/package/frr/frr.mk
-> +++ b/package/frr/frr.mk
-> @@ -17,7 +17,9 @@ FRR_DEPENDENCIES = host-frr readline json-c libyang libnl \
->   
->   HOST_FRR_DEPENDENCIES = host-flex host-bison host-elfutils host-python3
->   
-> -FRR_CONF_ENV = ac_cv_lib_cunit_CU_initialize_registry=no
-> +FRR_CONF_ENV = \
-> +	ac_cv_lib_cunit_CU_initialize_registry=no \
-> +	CFLAGS="$(TARGET_CFLAGS) -DFRR_XREF_NO_NOTE"
->   
->   FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
->   	--sysconfdir=/etc/frr \
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v2 -> v3 (after review of Arnout Vandecappelle):
+ - Only disable tesseract without threads
+
+Changes v1 -> v2:
+ - Unconditionally disable tesseract
+
+ package/ghostscript/ghostscript.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 24a0c489a8..02cb35fcfc 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -83,4 +83,8 @@ else
+ GHOSTSCRIPT_CONF_OPTS += --without-x
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++GHOSTSCRIPT_CONF_OPTS += --without-tesseract
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
