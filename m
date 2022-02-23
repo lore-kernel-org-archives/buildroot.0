@@ -1,58 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D5B6C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 15:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BDA0C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 15:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1386408D9;
-	Wed, 23 Feb 2022 15:21:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2918828C5;
+	Wed, 23 Feb 2022 15:51:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q8KnfJYbaSvz; Wed, 23 Feb 2022 15:20:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WrXVlUZ0hS4z; Wed, 23 Feb 2022 15:51:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D86944022C;
-	Wed, 23 Feb 2022 15:20:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 387C41BF83B
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:20:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD2CF828AF;
+	Wed, 23 Feb 2022 15:51:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FE471BF83B
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27B67415BF
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:20:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2EA4160F81
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:51:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0rui2jYthUJ4 for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 15:20:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QxkBRHngffGW for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 15:51:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1C69D415BC
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 15:20:45 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout05.t-online.de (Postfix) with SMTP id 10DD9CAD6;
- Wed, 23 Feb 2022 16:20:43 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd83.t-online.de
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 24DAA60F7E
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 15:51:33 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout07.t-online.de (Postfix) with SMTP id 3BC45AB14
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 16:51:30 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd85.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nMtRY-0zpWoj0; Wed, 23 Feb 2022 16:20:40 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44820)
+ esmtp id 1nMtvM-1scw4H0; Wed, 23 Feb 2022 16:51:28 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44822)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nMtRY-0001Qx-7a;
- Wed, 23 Feb 2022 16:20:40 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nMtvM-0006iq-3p
+ for buildroot@buildroot.org; Wed, 23 Feb 2022 16:51:28 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 16:20:40 +0100
-Message-Id: <20220223152040.188210-2-bernd.kuhls@t-online.de>
+Date: Wed, 23 Feb 2022 16:51:28 +0100
+Message-Id: <20220223155128.818822-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220223152040.188210-1-bernd.kuhls@t-online.de>
-References: <20220223152040.188210-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1645629640-0000EDC4-F9CB01C1/0/0 CLEAN NORMAL
-X-TOI-MSGID: b081391c-9b7d-48b0-9dcb-4a8455faa75b
-Subject: [Buildroot] [PATCH/next 2/2] package/libva-utils: bump version to
- 2.14.0
+X-TOI-EXPURGATEID: 150726::1645631488-00014AB5-57B19F17/0/0 CLEAN NORMAL
+X-TOI-MSGID: c18fa089-63ba-4ade-bcd4-aa0636b34d7d
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-mach64:
+ fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +62,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/intel/libva-utils/releases/tag/2.14.0
+Add upstream commit to fix build with xorg-server 21.1 which was bumped
+with commit d9185c6ba38430a017ed996c4180e141881ba570.
 
-Upstream does not provide a tarball so switch to github helper.
-Switch build system to meson to avoid autoreconf.
+Fixes:
+http://autobuild.buildroot.net/results/f0a/f0a0224a2b368c11236fcc7d14db5175c0a829d1/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libva-utils/libva-utils.hash | 4 +---
- package/libva-utils/libva-utils.mk   | 7 +++----
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ ...me-bool-to-boolean-for-OptionInfoRec.patch | 84 +++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-video-mach64/0002-Rename-bool-to-boolean-for-OptionInfoRec.patch
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 18a078dc1c..5f21af800e 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,3 @@
--# From https://github.com/intel/libva-utils/releases/download/2.13.0/libva-utils-2.13.0.tar.bz2.sha1sum
--sha1  7ab945cf232387f762891f9e4f7a6cb41e0766e8  libva-utils-2.13.0.tar.bz2
- # Locally computed
--sha256  db3ae0bd63c2a3f6ef498450c29ffc99c387ce611e1eb5db6a8da1f88845d612  libva-utils-2.13.0.tar.bz2
-+sha256  0ad6410aaa27d7b15dadee0f4d775d54d6394b582bf315353a4657b49c78ac31  libva-utils-2.14.0.tar.gz
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index e6e31df8bd..4c527a748c 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--LIBVA_UTILS_VERSION = 2.13.0
--LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
--LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
-+LIBVA_UTILS_VERSION = 2.14.0
-+LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
- LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+diff --git a/package/x11r7/xdriver_xf86-video-mach64/0002-Rename-bool-to-boolean-for-OptionInfoRec.patch b/package/x11r7/xdriver_xf86-video-mach64/0002-Rename-bool-to-boolean-for-OptionInfoRec.patch
+new file mode 100644
+index 0000000000..fe3e21f8c2
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-mach64/0002-Rename-bool-to-boolean-for-OptionInfoRec.patch
+@@ -0,0 +1,84 @@
++From 3ab2c144ef34199ceaf95115538a67f932e76f7d Mon Sep 17 00:00:00 2001
++From: Josselin Poiret <dev@jpoiret.xyz>
++Date: Thu, 18 Nov 2021 13:18:25 +0000
++Subject: [PATCH] Rename bool to boolean for OptionInfoRec.
++
++* src/aticonfig.c: Change uses of .value.bool to .value.boolean
++
++Downloaded from upstream commit
++https://gitlab.freedesktop.org/xorg/driver/xf86-video-mach64/-/commit/3ab2c144ef34199ceaf95115538a67f932e76f7d
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/aticonfig.c | 38 +++++++++++++++++++-------------------
++ 1 file changed, 19 insertions(+), 19 deletions(-)
++
++diff --git a/src/aticonfig.c b/src/aticonfig.c
++index bad6474..6995b9a 100644
++--- a/src/aticonfig.c
+++++ b/src/aticonfig.c
++@@ -311,42 +311,42 @@ ATIProcessOptions
++ 
++     (void)memcpy(PublicOption, ATIPublicOptions, ATIPublicOptionSize);
++ 
++-#   define ProbeSparse   PublicOption[ATI_OPTION_PROBE_SPARSE].value.bool
++-#   define Accel         PublicOption[ATI_OPTION_ACCEL].value.bool
++-#   define BIOSDisplay   PrivateOption[ATI_OPTION_BIOS_DISPLAY].value.bool
++-#   define Blend         PrivateOption[ATI_OPTION_BLEND].value.bool
++-#   define CRTDisplay    PublicOption[ATI_OPTION_CRT_DISPLAY].value.bool
++-#   define CRTScreen     PrivateOption[ATI_OPTION_CRT_SCREEN].value.bool
++-#   define CSync         PublicOption[ATI_OPTION_CSYNC].value.bool
++-#   define Devel         PrivateOption[ATI_OPTION_DEVEL].value.bool
++-#   define HWCursor      PublicOption[ATI_OPTION_HWCURSOR].value.bool
+++#   define ProbeSparse   PublicOption[ATI_OPTION_PROBE_SPARSE].value.boolean
+++#   define Accel         PublicOption[ATI_OPTION_ACCEL].value.boolean
+++#   define BIOSDisplay   PrivateOption[ATI_OPTION_BIOS_DISPLAY].value.boolean
+++#   define Blend         PrivateOption[ATI_OPTION_BLEND].value.boolean
+++#   define CRTDisplay    PublicOption[ATI_OPTION_CRT_DISPLAY].value.boolean
+++#   define CRTScreen     PrivateOption[ATI_OPTION_CRT_SCREEN].value.boolean
+++#   define CSync         PublicOption[ATI_OPTION_CSYNC].value.boolean
+++#   define Devel         PrivateOption[ATI_OPTION_DEVEL].value.boolean
+++#   define HWCursor      PublicOption[ATI_OPTION_HWCURSOR].value.boolean
++ 
++ #ifdef XF86DRI_DEVEL
++ 
++-#   define IsPCI       PublicOption[ATI_OPTION_IS_PCI].value.bool
+++#   define IsPCI       PublicOption[ATI_OPTION_IS_PCI].value.boolean
++ #   define DMAMode     PublicOption[ATI_OPTION_DMA_MODE].value.str
++ #   define AGPMode     PublicOption[ATI_OPTION_AGP_MODE].value.num
++ #   define AGPSize     PublicOption[ATI_OPTION_AGP_SIZE].value.num
++-#   define LocalTex    PublicOption[ATI_OPTION_LOCAL_TEXTURES].value.bool
+++#   define LocalTex    PublicOption[ATI_OPTION_LOCAL_TEXTURES].value.boolean
++ #   define BufferSize  PublicOption[ATI_OPTION_BUFFER_SIZE].value.num
++ 
++ #endif /* XF86DRI_DEVEL */
++ 
++ #ifdef TV_OUT
++ 
++-#   define TvOut        PublicOption[ATI_OPTION_TV_OUT].value.bool
+++#   define TvOut        PublicOption[ATI_OPTION_TV_OUT].value.boolean
++ #   define TvStd        PublicOption[ATI_OPTION_TV_STD].value.str
++ 
++ #endif /* TV_OUT */
++ 
++-#   define CacheMMIO     PublicOption[ATI_OPTION_MMIO_CACHE].value.bool
++-#   define TestCacheMMIO PublicOption[ATI_OPTION_TEST_MMIO_CACHE].value.bool
++-#   define PanelDisplay  PublicOption[ATI_OPTION_PANEL_DISPLAY].value.bool
++-#   define ShadowFB      PublicOption[ATI_OPTION_SHADOW_FB].value.bool
++-#   define SWCursor      PublicOption[ATI_OPTION_SWCURSOR].value.bool
+++#   define CacheMMIO     PublicOption[ATI_OPTION_MMIO_CACHE].value.boolean
+++#   define TestCacheMMIO PublicOption[ATI_OPTION_TEST_MMIO_CACHE].value.boolean
+++#   define PanelDisplay  PublicOption[ATI_OPTION_PANEL_DISPLAY].value.boolean
+++#   define ShadowFB      PublicOption[ATI_OPTION_SHADOW_FB].value.boolean
+++#   define SWCursor      PublicOption[ATI_OPTION_SWCURSOR].value.boolean
++ #   define AccelMethod   PublicOption[ATI_OPTION_ACCELMETHOD].value.str
++-#   define RenderAccel   PublicOption[ATI_OPTION_RENDER_ACCEL].value.bool
++-#   define LCDSync       PrivateOption[ATI_OPTION_LCDSYNC].value.bool
+++#   define RenderAccel   PublicOption[ATI_OPTION_RENDER_ACCEL].value.boolean
+++#   define LCDSync       PrivateOption[ATI_OPTION_LCDSYNC].value.boolean
++ 
++ #   define ReferenceClock \
++         PublicOption[ATI_OPTION_REFERENCE_CLOCK].value.freq.freq
++-- 
++GitLab
++
 -- 
 2.30.2
 
