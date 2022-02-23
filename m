@@ -1,46 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61294C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7FC5C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A90F415B1;
-	Wed, 23 Feb 2022 20:03:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E08860FC4;
+	Wed, 23 Feb 2022 20:05:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6P91YqoprPWK; Wed, 23 Feb 2022 20:03:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O8jCvyY5TEmh; Wed, 23 Feb 2022 20:05:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2297C41513;
-	Wed, 23 Feb 2022 20:03:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D455C1BF5EA
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:03:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B826560FA0;
+	Wed, 23 Feb 2022 20:05:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6618D1BF5AA
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BEBDD403B3
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:03:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61A5360FA0
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:05:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U5DQUKAVyhfO for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 20:03:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C36D140502
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:03:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5059C83879; Wed, 23 Feb 2022 19:55:26 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 20:59:59 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 833f79fdeff1433396b7fa680fb6cbd6f1c65f36
-X-Git-Newrev: 72021742574acd4d43ee1977cd2af3133245787a
-X-Patchwork-Hint: ignore
-Message-Id: <20220223195526.5059C83879@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: drop fbdev
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wCrPH6sK_1cy for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 20:05:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 75AD760F76
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:05:46 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id i11so44234842eda.9
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 12:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=tMQEARmqhEp1tdDwkvKfxqNEa6UkGlSi0eXZewQX0/4=;
+ b=M7gz+xZn9tqGwMc2JLg87tQoGE3ca9PzR6pASveADGffFN5wSYt4sGYrGmwBs24j/V
+ mLiPnMjtmrRP7blCSXBq9b0zf92pN6QOgI17sKWrx3Cl4v5Fkry6dn3UWgv0YMQPGbl6
+ A1V5VKHGnX6qo5spNd/kE7xJab+YAEQQFkyQ8ZvcVyeDjhe3VS0nIuWyllB2C2UwheVr
+ ZI65HiX4SmvGVCeYiPq/GScerJTf/VR9XRRbbOKt1RPmkkZrYMQad0bBMJ9YBm7lsPy4
+ 04LUKIdKEovtLWDJibi24b6MuR6lkpH0IG6j4Jup/faRTwNnRYFfCW0Ci1pJzWROF5Lb
+ wIPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=tMQEARmqhEp1tdDwkvKfxqNEa6UkGlSi0eXZewQX0/4=;
+ b=c6xKAZ2Mb8/N67v+vmYwxK25IJAmNg99hiEVd6//VJW9ZpF4qZwG68oY6o75ew+eHw
+ /vzRye+UYz/J44XxdH1iw82af/ElvXOeaS4HP6itJpc9XQ+26gAapVunLYlPcT/JkODx
+ NTxHbqkfnOnEObZcsTqaTHfJE6AoYDiUVpejeqLboVQGpcPrg7Dzyy3ubX4+heanD+Ea
+ zd8ScLpH8wrWhdS3MLCmTwr8jZbzdQ2QG+XUqAN5BPHOr9zMVp6rNI+JzjdjBG85Lc5C
+ FfLzgQBPVZ68ZpsdlqprzEMv1bG4cRcg6Nu7xjalEHhfo5mkJ7mxPP0ohrkTOcybJloH
+ 8lfw==
+X-Gm-Message-State: AOAM5301iTUbLlSOteHisTvHtvj4LdmGilXq94il+zjRgHB5GjNw8agA
+ l5Ejqr6qmxP+F7VrJysH6lFyX5gYojfRfw==
+X-Google-Smtp-Source: ABdhPJwi+UgCqfeel56rzrXtqVD1A5BkkRtsXSL4cqOs0kZH6nF4G4Vu1JaNOPiS5FS8s7JpdBBDKw==
+X-Received: by 2002:a50:9b45:0:b0:410:7cdb:5d3a with SMTP id
+ a5-20020a509b45000000b004107cdb5d3amr1033790edj.275.1645646744611; 
+ Wed, 23 Feb 2022 12:05:44 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id p16sm293706ejn.33.2022.02.23.12.05.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 23 Feb 2022 12:05:44 -0800 (PST)
+Message-ID: <d8ca7ab8-3aa3-20aa-c39a-10fc2e4466af@mind.be>
+Date: Wed, 23 Feb 2022 21:05:42 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220214212301.4142823-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220214212301.4142823-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/ghostscript: disable tesseract
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,109 +93,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72021742574acd4d43ee1977cd2af3133245787a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fbdev raises the following build failure since bump to version 10.0.0 in
-commit f67a6e9b7a7be9adbc405b3126000056120a01af and
-https://gitlab.freedesktop.org/wayland/weston/-/commit/6338dbd5816689b2f08f48b359a972e16ff038d8:
 
-../output-1/build/weston-10.0.0/meson.build:133:7: ERROR: Tried to access unknown option 'backend-fbdev'.
+On 14/02/2022 22:23, Fabrice Fontaine wrote:
+> ghostscript embeds a local copy of tesseract-ocr which is enabled by
+> default since version 9.53.0 and
+> https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=7322ef87546c55b29056c1d96d8bdbb7f3ba53ef
+> 
+> Since version 9.55.0 and
+> https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=5459f7aca1ded3b7cf96c339a2419f418aa406c7,
+> ghostscript expects that tesseract is disabled if threads are not
+> available resulting in the following build failure since commit
+> 7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22:
+> 
+> configure: error: Threading disabled or not available. Tesseract OCR relies on threading. Rerun configure with "--without-tesseract" to exclude OCR from the build
+> 
+> So disable tesseract as there is no way to tell ghostscript to use a
+> system provided tesseract-ocr package
 
-Drop fbdev to avoid this build failure as upstream is reluctant to
-properly fix this issue by renaming the fbdev option in stable release:
-https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/791
+  I understand that v1 of this patch was not OK for that reason. However, we 
+can't we keep on using the bundled tesseract in a build with threads?
 
-Fixes:
- - http://autobuild.buildroot.org/results/e669a6237c19783c627169c819d7372e20daaf54
+  Regards,
+  Arnout
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy         | 12 ++++++++++++
- package/weston/Config.in |  8 --------
- package/weston/weston.mk |  6 ------
- 3 files changed, 12 insertions(+), 14 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index aefb0ba6ea..b90b9dbcbc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,18 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_WESTON_DEFAULT_FBDEV
-+	bool "weston fbdev removed"
-+	select BR2_LEGACY
-+	help
-+	  fbdev was deprecated in weston 10.0.0.
-+
-+config BR2_PACKAGE_WESTON_FBDEV
-+	bool "weston fbdev compositor removed"
-+	select BR2_LEGACY
-+	help
-+	  fbdev compositor was deprecated in weston 10.0.0.
-+
- config BR2_PACKAGE_LINUX_TOOLS_BPFTOOL
- 	bool "bpftool was moved"
- 	select BR2_LEGACY
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 073a3ae567..6ad8241caa 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -34,10 +34,6 @@ if BR2_PACKAGE_WESTON
- choice
- 	prompt "default compositor"
- 
--config BR2_PACKAGE_WESTON_DEFAULT_FBDEV
--	bool "fbdev (deprecated)"
--	select BR2_PACKAGE_WESTON_FBDEV
--
- config BR2_PACKAGE_WESTON_DEFAULT_DRM
- 	bool "drm"
- 	select BR2_PACKAGE_WESTON_DRM
-@@ -62,7 +58,6 @@ endchoice
- 
- config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
- 	string
--	default "fbdev"    if BR2_PACKAGE_WESTON_DEFAULT_FBDEV
- 	default "drm"      if BR2_PACKAGE_WESTON_DEFAULT_DRM
- 	default "headless" if BR2_PACKAGE_WESTON_DEFAULT_HEADLESS
- 	default "wayland"  if BR2_PACKAGE_WESTON_DEFAULT_WAYLAND
-@@ -71,9 +66,6 @@ config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
- config BR2_PACKAGE_WESTON_DRM
- 	bool "DRM compositor"
- 
--config BR2_PACKAGE_WESTON_FBDEV
--	bool "fbdev compositor (deprecated)"
--
- # FreeRDP needs threads and !static, already the case for weston
- config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index a0a18d9358..90cf160688 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -85,12 +85,6 @@ else
- WESTON_CONF_OPTS += -Dbackend-rdp=false
- endif
- 
--ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
--WESTON_CONF_OPTS += -Ddeprecated-backend-fbdev=true
--else
--WESTON_CONF_OPTS += -Ddeprecated-backend-fbdev=false
--endif
--
- ifeq ($(BR2_PACKAGE_WESTON_DRM),y)
- WESTON_CONF_OPTS += -Dbackend-drm=true
- else
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/fd35a47b2a77cf57c243ec1c88802b53ddca8f52
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Unconditionally disable tesseract
+> 
+>   package/ghostscript/ghostscript.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+> index 24a0c489a8..b2e5fe16bb 100644
+> --- a/package/ghostscript/ghostscript.mk
+> +++ b/package/ghostscript/ghostscript.mk
+> @@ -44,6 +44,7 @@ GHOSTSCRIPT_CONF_OPTS = \
+>   	--disable-gtk \
+>   	--without-libpaper \
+>   	--without-pdf \
+> +	--without-tesseract \
+>   	--with-system-libtiff
+>   
+>   ifeq ($(BR2_PACKAGE_JBIG2DEC),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
