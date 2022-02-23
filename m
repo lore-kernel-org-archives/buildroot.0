@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD721C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 14:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F323C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 15:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79F5A828B5;
-	Wed, 23 Feb 2022 14:51:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9F9C82846;
+	Wed, 23 Feb 2022 15:17:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3tAFYPlXZcwk; Wed, 23 Feb 2022 14:51:49 +0000 (UTC)
+	with ESMTP id Zk5WsCvkz7Rl; Wed, 23 Feb 2022 15:17:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAEA9827A9;
-	Wed, 23 Feb 2022 14:51:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 254FE1BF3DD
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 14:51:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10DF78282C;
+	Wed, 23 Feb 2022 15:17:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1064D1BF83B
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:17:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1257B4039D
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 14:51:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C6958282C
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:17:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hgP1_iwp3z6o for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 14:51:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A2F4A400CD
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 14:51:45 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2E75BFF80B;
- Wed, 23 Feb 2022 14:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1645627902;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=jegVpKc1Dt9u88VYkx3CHlurX7FL7an8mUiMQxvqhpM=;
- b=JttDgGr7g75phAOE1Skb6B1AnDBAqGpb0zGHRKveNt+cABms0YInaVDQ5EnrnhDxg6hv8O
- gebeRYgSfhYbT+tUzMG7malHF6j+3THpJ+k0FFvPnF5J6+5aDOIqNZ7Ui5gu4Zq/gesYH8
- LSXTX0aU0F34mUGRzQplOep1WBLqlqHb5kVEKsogsbr/BXJ5ca2di/uNik89zdYdEa8HFh
- l/i/HvLTvKnRHeOkB3fZMD9dRHcCYYDfKktG7CnGH6wffwW/xgePoxfjAQVY5aWWQpQmWI
- 7oy6YNEdk2HPO+i0kJdDcyMt/C++Wg/6zNj9jIhaYulsWMVEtLAFG+k2pOp+jg==
-Date: Wed, 23 Feb 2022 15:51:41 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220223155141.0223462b@windsurf>
-In-Reply-To: <20220223142731.GA189337@scaer>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P0i1w9MsJK-q for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 15:17:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC5408281A
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 15:17:38 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:f0be:eb0a:9f13:7f4d])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 56944B00579;
+ Wed, 23 Feb 2022 16:17:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1645629455;
+ bh=Ajx6mCG2XFy1WgKUdDWW99rukRR6Z6Cd/vGEKVfm6Lo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=KDRzM4tgFi+jd90K1jnR3QCZWYSyOYSeUfJrv71+HdIFB86j1nhWktM6Ovlc86HS7
+ t/euCTr+vszCoHlyBdSiz9wlmURdwMQhFRm6RuDeoKhYYwBPEkCtCfRPx4c1rjzsJd
+ T1mfbz0aP5eIjEp4RCm5ilmjTWxCYJk8GJ8FnMHlbL40hUFCm98RIrKluJccZax3bt
+ 5+s6TpzMfGRVi0TrwIqUb4m1ERnA0O0HJWP+SOsZFV4GkMIwZb8Z7zFvTX5UKcM1j8
+ xVHfUkSOTwhc6x7eQeAX705gtQ39MgLyBu2KBFNO2lDBsmyDYMxcFGIgxROfWIXfdh
+ 1wwSdz+44yZ5A==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 23 Feb 2022 16:17:32 +0100
+Date: Wed, 23 Feb 2022 16:17:32 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220223151732.GB189337@scaer>
 References: <20220223115506.1191031-1-john@metanate.com>
- <20220223142731.GA189337@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+ <20220223142731.GA189337@scaer> <20220223155141.0223462b@windsurf>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220223155141.0223462b@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 Subject: Re: [Buildroot] [RFC PATCH] package/libiberty: use the same version
  as binutils
 X-BeenThere: buildroot@buildroot.org
@@ -71,39 +71,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: John Keeping <john@metanate.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 23 Feb 2022 15:27:31 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Thomas, All,
 
-> Although this works, this is by pure chance: binutils is included before
-> libiberty, so BINUTILS_VERSION is defined. But we try and avoid such a
-> situation, unless we explicitly guarantee the include ordering (eg. gcc,
-> fftw, util-linux, or previously, qt5).
-> 
-> Instead, in such a case, we prefer that the version strin is duplicated,
-> and a comment added above to note that both shoujld be updated in sync.
-> See for example bluez5_utils and bluez5_utils-headers, mesa3d and
-> mesa3d-headers.
+On 2022-02-23 15:51 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 23 Feb 2022 15:27:31 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Although this works, this is by pure chance: binutils is included before
+> > libiberty, so BINUTILS_VERSION is defined. But we try and avoid such a
+> > situation, unless we explicitly guarantee the include ordering (eg. gcc,
+> > fftw, util-linux, or previously, qt5).
+> > Instead, in such a case, we prefer that the version strin is duplicated,
+> > and a comment added above to note that both shoujld be updated in sync.
+> > See for example bluez5_utils and bluez5_utils-headers, mesa3d and
+> > mesa3d-headers.
+> libiberty/binutils is different than mesa3d or bluez5_utils, as the
+> version is user-selectable, or even different depending on the selected
+> CPU architecture.
 
-libiberty/binutils is different than mesa3d or bluez5_utils, as the
-version is user-selectable, or even different depending on the selected
-CPU architecture.
+Right, I forgot about that... But still, I don't like that we rely on
+the implied include order here, as we try and avoid that elsewhere...
 
-So we would have to replicate all the version selection logic (like we
-admittedly do for linux vs. linux-headers).
+> So we would have to replicate all the version selection logic (like we
+> admittedly do for linux vs. linux-headers).
 
-Thomas
+That would not be very convenient and maintainable in the long run, as
+we update binutils to newer versions with various arch support changes:
+indeed, as we can see here, we'd eventually forget to update libibert in
+sync.
+
+Unless we move libiberty as a sub-directory in pacage/binutils/libiberty/
+(like for util-linux-libs) to make it obvious that we need to share the
+version... That'd be my favourite option.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
