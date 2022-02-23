@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69E12C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 19:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8153EC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 19:14:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06CC160FC4;
-	Wed, 23 Feb 2022 19:02:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2833E408F3;
+	Wed, 23 Feb 2022 19:14:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6RBMLnQw7a01; Wed, 23 Feb 2022 19:02:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RfsB4MZE1xqA; Wed, 23 Feb 2022 19:14:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E79D60FC2;
-	Wed, 23 Feb 2022 19:02:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2EF8C1BF5F5
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 19:02:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11D32403E9;
+	Wed, 23 Feb 2022 19:14:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B24841BF5EA
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 19:14:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16C3A415FD
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 19:02:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8912D408F1
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 19:14:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lYudR10UuDQR for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 19:02:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D1C8415FB
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 19:02:48 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 332FACD2261B;
- Wed, 23 Feb 2022 20:02:46 +0100 (CET)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lnUUAKNn3ibV for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 19:14:41 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24077403B3
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 19:14:41 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id d23so32840264lfv.13
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 11:14:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DG8u712zO1d8Ifv6TxAur9vbbsQKILfW3JnMQc33XeU=;
+ b=LRvb5MyAMFtLG55+TXRsHc3erCXtXAKOBWHBi5AfcvvDzELENNxysCgFuXqw96Rw0p
+ rSOAlucEH284JyF/F8Qs8aEHl+uXNYromkA5GHxR1oXxgP0aMq9JnInQDi/oFRHB5iuz
+ BaJnXCXvY5tDz03L2pbXbJhHjHIVEs+efIunX5+H0DwNAnjcfsUyaku0pbEbaU0bXvMB
+ 2Lbi6MY/FOLv/QLg5+BavRVzNMceWiEy+zYd/X+HLrYk0Uc3BZHFrIZI//a6E+2e8Isb
+ QeSWvdMpTb3O29YGQJoM2c13P84TuS0C4S4PmK4YR8PNSjE5wnMxKYHkvrN3HgrN9IsJ
+ u80A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DG8u712zO1d8Ifv6TxAur9vbbsQKILfW3JnMQc33XeU=;
+ b=yVbwjE2BGX88e8GpbJ8vHZn1xn16jtOSY4YciHjlsByX8nJyELiyn0sNxG522xVxOE
+ SFAsCt+0EuvOJg2DFa/i5+9DGKcIB/hmKRfE6bv+U7vxQwejacekhl7XYvDrFjUZDEqI
+ CaEbiH8mdPXYvk93b1RwU0LtRaJwNd/s9+UO+JqEsTWYFf2NXGf88A91Puq+H/c1ve0U
+ xa48M5C6Q0tAGsNr8l9xHC8l/0tW4At4wKclFpYZKMGN5OqOUgKLcsqVwhfHOoHAolY7
+ 1EsBdrpwZyLQqCTEu4n4B+YDqL6vX+h2fT0spcj6xxgevgRtlJgDe/GSGZTKxkzBcEBH
+ W95A==
+X-Gm-Message-State: AOAM530XldYwNfTmccDoRvGFQS45C6wNq6bAoFyXEZ4EP+MoD4Gwo5WR
+ NNiqb8XeF8mzlGgXPY428yKKXpYAA7t45Q==
+X-Google-Smtp-Source: ABdhPJxlaeGPypWUHfSV1k2qxZEeRa8rRW6p7w4B0fVAcLd8VN4K+opGgoAIOdRPKm+SsnRrII78tw==
+X-Received: by 2002:a05:6512:694:b0:442:be61:2e02 with SMTP id
+ t20-20020a056512069400b00442be612e02mr699706lfe.35.1645643678735; 
+ Wed, 23 Feb 2022 11:14:38 -0800 (PST)
+Received: from localhost.localdomain ([5.188.167.245])
+ by smtp.googlemail.com with ESMTPSA id o22sm31750lfr.92.2022.02.23.11.14.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Feb 2022 11:14:38 -0800 (PST)
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 23 Feb 2022 22:14:32 +0300
+Message-Id: <20220223191436.3045255-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Date: Wed, 23 Feb 2022 19:02:46 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: William Tambe <tambewilliam@gmail.com>
-In-Reply-To: <CAF8i9mNy1khsU+m1A60hBofY-fv=7wsS5ee=01QttxbXdVMGhA@mail.gmail.com>
-References: <mailman.17975.1645600292.66748.buildroot@buildroot.org>
- <256f0da3b8d983a84ea84de250c56bb0@umbiko.net>
- <CAF8i9mNy1khsU+m1A60hBofY-fv=7wsS5ee=01QttxbXdVMGhA@mail.gmail.com>
-Message-ID: <5ecd33a2418e1a181df7444064c8050b@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] STAGING_DIR does not contain executables found in
- TARGET_DIR
+Subject: [Buildroot] [PATCH 0/4] orangepi: convert more boards to extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,107 +83,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot <buildroot@buildroot.org>
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi all,
 
-On 2022-02-23 18:29, William Tambe wrote:
-> On Wed, Feb 23, 2022 at 5:30 AM Andreas Ziegler <br015@umbiko.net> 
-> wrote:
->> 
->> Hi William,
->> 
->> On 2022-02-23 07:11, William Tambe <tambewilliam@gmail.com> wrote:
->> 
->> > Please help determining why STAGING_DIR does not contain executables
->> > found in TARGET_DIR ?
->> >
->> > I am expecting to find debug version of all executables in TARGET_DIR,
->> > but executables such as /bin/busybox are missing from STAGING_DIR .
->> 
->> If you look at your packages' definition (.mk) files, you will find a
->> few with *_INSTALL_STAGING = YES. This is responsible for the
->> (additional) installation in STAGING_DIR. The reason for this is that
->> some packages need to provide information during the build process, 
->> that
->> is not needed later for operation on the target. To save space on the
->> target system, a two-stage approach is used.
->> 
->> Example: your configuration includes zlib-ng: the library itself is
->> present both in STAGING_DIR and in TARGET_DIR, header and
->> ldconfig-related files will be found in STAGING_DIR only.  On the 
->> other
->> hand, Busybox is not referenced by other packages (it does not export
->> any interfaces), so it does not have an installation in STAGING_DIR.
->> 
-> 
-> Is there a temporary hack I could use to have a `bin/busybox` in 
-> STAGING_DIR ?
+Recently extlinux infrastructure has been added for  orangepi boards by
+Sergey Kuzminov: see commit c0312f71cc89 ("configs/orangepi_zero_defconfig:
+switch to extlinux"). This patch series converts to extlinux some of the
+boards that I have at my disposal:
+- orangepi-zero-plus2
+- orangepi-pc-plus
+- orangepi-one
 
-You might try to just enable BUSYBOX_INSTALL_STAGING = YES, but it will 
-probably also need definition of BUSYBOX_INSTALL_STAGING_CMDS. Another 
-option would be a post-install hook:
+All these changes have been build- and boot- tested. Also I added
+orangepi-zero-plus2 to my list in DEVELOPERS file to keep an eye
+on its build failures.
 
-define BUSYBOX_INSTALL_STAGING
-   $(INSTALL) -m 0755 &(@D)/busybox_unstripped $(STAGING_DIR)/bin/busybox
-endef
-BUSYBOX_POST_INSTALL_TARGET_HOOKS += BUSYBOX_INSTALL_STAGING
+Regards,
+Sergey
 
->> Your target binaries will be stripped of symbols, unless you prevent
->> this via BR2_STRIP_EXCLUDE_{FILE, DIRS} ...
->> 
->> Remote debugging has less impact on your target installation. For this
->> you would need BR2_PACKAGE_HOST_GDB and BR2_PACKAGE_GDB_SERVER [1].
->> 
->> Kind regards,
->> Andreas
->> 
->> > I am using 2021.08.3
->> >
->> > Full config is as follow
->> > ```
->> > BR2_pu32=y
->> > BR2_ENABLE_DEBUG=y
->> > BR2_DEBUG_3=y
->> > BR2_STATIC_LIBS=y
->> > BR2_FORTIFY_SOURCE_NONE=y
->> > BR2_TOOLCHAIN_EXTERNAL=y
->> > BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/pu32-toolchain/"
->> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-elf"
->> > BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_5=y
->> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
->> > # BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
->> > # BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
->> > BR2_TOOLCHAIN_EXTERNAL_CXX=y
->> > BR2_TARGET_GENERIC_ISSUE=""
->> > BR2_ROOTFS_MERGED_USR=y
->> > BR2_TARGET_GENERIC_ROOT_PASSWD="root"
->> > BR2_SYSTEM_BIN_SH_BASH=y
->> > BR2_TARGET_GENERIC_GETTY_TERM="linux"
->> > BR2_TARGET_GENERIC_GETTY_OPTIONS="-n -l /bin/-bash"
->> > BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
->> > BR2_PACKAGE_GDB=y
->> > BR2_PACKAGE_ZLIB=y
->> > BR2_PACKAGE_ZLIB_NG=y
->> > BR2_PACKAGE_DHCP=y
->> > BR2_PACKAGE_DHCP_CLIENT=y
->> > BR2_PACKAGE_IPROUTE2=y
->> > BR2_PACKAGE_LRZSZ=y
->> > BR2_PACKAGE_SOCAT=y
->> > BR2_PACKAGE_HTOP=y
->> > BR2_PACKAGE_NANO=y
->> > # BR2_PACKAGE_NANO_TINY is not set
->> > BR2_TARGET_ROOTFS_EXT2=y
->> > BR2_TARGET_ROOTFS_EXT2_4=y
->> > BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
->> > # BR2_TARGET_ROOTFS_TAR is not set
->> > ```
->> 
->> [1] 
->> https://sourceware.org/gdb/current/onlinedocs/gdb/Server.html#Server
+Sergey Matyukevich (4):
+  board/orangepi/orangepi-zero-plus2: switch to extlinux
+  board/orangepi/orangepi-pc-plus: switch to extlinux
+  board/orangepi/orangepi-one: switch to extlinux
+  DEVELOPERS: add myself for orangepi-zero-plus2
+
+ DEVELOPERS                                    |  2 +
+ board/orangepi/orangepi-one/boot.cmd          |  8 ----
+ board/orangepi/orangepi-one/genimage.cfg      | 37 ----------------
+ board/orangepi/orangepi-pc-plus/boot.cmd      |  8 ----
+ board/orangepi/orangepi-pc-plus/genimage.cfg  | 43 -------------------
+ board/orangepi/orangepi-zero-plus2/boot.cmd   |  6 ---
+ .../orangepi/orangepi-zero-plus2/genimage.cfg | 41 ------------------
+ configs/orangepi_one_defconfig                |  9 ++--
+ configs/orangepi_pc_plus_defconfig            |  9 ++--
+ configs/orangepi_zero_plus2_defconfig         | 14 +++---
+ 10 files changed, 16 insertions(+), 161 deletions(-)
+ delete mode 100644 board/orangepi/orangepi-one/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-one/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-pc-plus/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-pc-plus/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
+
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
