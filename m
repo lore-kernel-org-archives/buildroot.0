@@ -1,56 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73E5FC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 15:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCD97C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 16:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2279B60F86;
-	Wed, 23 Feb 2022 15:59:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54C27408E8;
+	Wed, 23 Feb 2022 16:06:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1CcF8pHiAu41; Wed, 23 Feb 2022 15:59:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a0AqoqLqmWe0; Wed, 23 Feb 2022 16:06:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4462D60F76;
-	Wed, 23 Feb 2022 15:59:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 305B81BF20F
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:59:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24606408E1;
+	Wed, 23 Feb 2022 16:06:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3068D1BF5F8
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 16:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F12B60F76
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 15:59:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CBD1825C7
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 16:06:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pUJbAFHpumJX for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 15:59:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w495WzbvIDd4 for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 16:06:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 00E1560803
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 15:59:45 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout03.t-online.de (Postfix) with SMTP id 65C6E242A
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 16:59:43 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd75.t-online.de
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D7B382503
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 16:06:34 +0000 (UTC)
+Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
+ by mailout10.t-online.de (Postfix) with SMTP id BEA6A1B8F8
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 17:06:30 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd71.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nMu3K-32wnYH0; Wed, 23 Feb 2022 16:59:42 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44824)
+ esmtp id 1nMu9u-3dXP2P0; Wed, 23 Feb 2022 17:06:30 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44826)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nMu3K-00086z-GI
- for buildroot@buildroot.org; Wed, 23 Feb 2022 16:59:42 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nMu9u-0000p7-5I
+ for buildroot@buildroot.org; Wed, 23 Feb 2022 17:06:30 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 16:59:42 +0100
-Message-Id: <20220223155942.831349-1-bernd.kuhls@t-online.de>
+Date: Wed, 23 Feb 2022 17:06:30 +0100
+Message-Id: <20220223160630.835866-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1645631982-000184BD-B0B34B2C/0/0 CLEAN NORMAL
-X-TOI-MSGID: da767f31-a627-447f-a06f-4c515de05ed6
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-nouveau:
- fix build error
+X-TOI-EXPURGATEID: 150726::1645632390-00001674-B7360486/0/0 CLEAN NORMAL
+X-TOI-MSGID: 13eea78e-41ef-4331-a536-ae8a41c5d5c6
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-qxl: fix
+ build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,100 +62,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add upstream commit to fix build with xorg-server 21.1 which was bumped
-with commit d9185c6ba38430a017ed996c4180e141881ba570.
-
-No autobuild errors found yet.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...au-fixup-driver-for-new-X-server-ABI.patch | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
-
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch b/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
-new file mode 100644
-index 0000000000..96be4909e7
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
-@@ -0,0 +1,68 @@
-+From e80e73ced69b15662103d0fd6837db4ce6c6eb5b Mon Sep 17 00:00:00 2001
-+From: Dave Airlie <airlied@redhat.com>
-+Date: Mon, 13 Jul 2020 09:20:15 +1000
-+Subject: [PATCH] nouveau: fixup driver for new X server ABI
-+
-+Downloaded from upstream commit
-+https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/commit/e80e73ced69b15662103d0fd6837db4ce6c6eb5b
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/compat-api.h  | 4 ++++
-+ src/nouveau_exa.c | 2 +-
-+ src/nv_driver.c   | 6 +++---
-+ 3 files changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/compat-api.h b/src/compat-api.h
-+index fde2f4b..8a1fcf9 100644
-+--- a/src/compat-api.h
-++++ b/src/compat-api.h
-+@@ -102,4 +102,8 @@
-+ 
-+ #endif
-+ 
-++#if ABI_VIDEODRV_VERSION < SET_ABI_VERSION(25, 2)
-++#define secondary_dst slave_dst
-++#endif
-++
-+ #endif
-+diff --git a/src/nouveau_exa.c b/src/nouveau_exa.c
-+index 55df6f8..db3b112 100644
-+--- a/src/nouveau_exa.c
-++++ b/src/nouveau_exa.c
-+@@ -157,7 +157,7 @@ nouveau_exa_destroy_pixmap(ScreenPtr pScreen, void *priv)
-+ 
-+ #ifdef NOUVEAU_PIXMAP_SHARING
-+ static Bool
-+-nouveau_exa_share_pixmap_backing(PixmapPtr ppix, ScreenPtr slave, void **handle_p)
-++nouveau_exa_share_pixmap_backing(PixmapPtr ppix, ScreenPtr secondary, void **handle_p)
-+ {
-+ 	struct nouveau_bo *bo = nouveau_pixmap_bo(ppix);
-+ 	struct nouveau_pixmap *nvpix = nouveau_pixmap(ppix);
-+diff --git a/src/nv_driver.c b/src/nv_driver.c
-+index e72a6b6..f9ab4af 100644
-+--- a/src/nv_driver.c
-++++ b/src/nv_driver.c
-+@@ -559,16 +559,16 @@ redisplay_dirty(ScreenPtr screen, PixmapDirtyUpdatePtr dirty)
-+ {
-+ 	RegionRec pixregion;
-+ 
-+-	PixmapRegionInit(&pixregion, dirty->slave_dst);
-++	PixmapRegionInit(&pixregion, dirty->secondary_dst);
-+ 
-+-	DamageRegionAppend(&dirty->slave_dst->drawable, &pixregion);
-++	DamageRegionAppend(&dirty->secondary_dst->drawable, &pixregion);
-+ #ifdef HAS_DIRTYTRACKING_ROTATION
-+ 	PixmapSyncDirtyHelper(dirty);
-+ #else
-+ 	PixmapSyncDirtyHelper(dirty, &pixregion);
-+ #endif
-+ 
-+-	DamageRegionProcessPending(&dirty->slave_dst->drawable);
-++	DamageRegionProcessPending(&dirty->secondary_dst->drawable);
-+ 	RegionUninit(&pixregion);
-+ }
-+ 
-+-- 
-+GitLab
-+
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QWRkIHVwc3RyZWFtIGNvbW1pdCB0byBmaXggYnVpbGQgd2l0aCB4b3JnLXNlcnZlciAyMS4xIHdo
+aWNoIHdhcyBidW1wZWQKd2l0aCBjb21taXQgZDkxODVjNmJhMzg0MzBhMDE3ZWQ5OTZjNDE4MGUx
+NDE4ODFiYTU3MC4KCk5vIGF1dG9idWlsZCBlcnJvcnMgZm91bmQgeWV0LgoKU2lnbmVkLW9mZi1i
+eTogQmVybmQgS3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgotLS0KIC4uLjEtRml4LWEt
+YnVpbGQtZXJyb3Itd2l0aC1Yb3JnLW1hc3Rlci5wYXRjaCB8IDEwNiArKysrKysrKysrKysrKysr
+KysKIDEgZmlsZSBjaGFuZ2VkLCAxMDYgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UveDExcjcveGRyaXZlcl94Zjg2LXZpZGVvLXF4bC8wMDAxLUZpeC1hLWJ1aWxkLWVy
+cm9yLXdpdGgtWG9yZy1tYXN0ZXIucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3gxMXI3L3hk
+cml2ZXJfeGY4Ni12aWRlby1xeGwvMDAwMS1GaXgtYS1idWlsZC1lcnJvci13aXRoLVhvcmctbWFz
+dGVyLnBhdGNoIGIvcGFja2FnZS94MTFyNy94ZHJpdmVyX3hmODYtdmlkZW8tcXhsLzAwMDEtRml4
+LWEtYnVpbGQtZXJyb3Itd2l0aC1Yb3JnLW1hc3Rlci5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0
+NAppbmRleCAwMDAwMDAwMDAwLi5kMzI1N2ZiYTIwCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2Fn
+ZS94MTFyNy94ZHJpdmVyX3hmODYtdmlkZW8tcXhsLzAwMDEtRml4LWEtYnVpbGQtZXJyb3Itd2l0
+aC1Yb3JnLW1hc3Rlci5wYXRjaApAQCAtMCwwICsxLDEwNiBAQAorRnJvbSA0ZTE5NjNhODEyZjJj
+MTc3N2JhNWQ1NmVhOWU5MzlhM2U0MGEwNDk2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJv
+bTogPT9VVEYtOD9xP1pvbHQ9QzM9QTFuPTIwQj1DMz1CNnN6PUMzPUI2cm09QzM9QTlueWk/PQor
+IDx6Ym9zem9yQGdtYWlsLmNvbT4KK0RhdGU6IFNhdCwgMjggQXVnIDIwMjEgMTU6Mzg6NDAgKzAy
+MDAKK1N1YmplY3Q6IFtQQVRDSF0gRml4IGEgYnVpbGQgIGVycm9yIHdpdGggWG9yZyBtYXN0ZXIK
+K01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRG
+LTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworVXNlIHhmODZSZXR1cm5PcHRW
+YWxCb29sKCkgaW4gZ2V0X2Jvb2xfb3B0aW9uKCkgaW5zdGVhZCBvZgorb3B0aW9uc1tvcHRpb25f
+aW5kZXhdLnZhbHVlLmJvb2wgdG8gZml4IGEgY29tcGlsZXIgZXJyb3Igd2l0aAorY3VycmVudCBY
+b3JnIHhzZXJ2ZXIgbWFzdGVyIGJyYW5jaC4KKworQWxzbyB1c2UgeGY4NkdldE9wdFZhbEludGVn
+ZXIoKSBpbiBnZXRfaW50X29wdGlvbigpIGFuZAoreGY4NkdldE9wdFZhbFN0cmluZygpIGluIGdl
+dF9zdHJfb3B0aW9uKCkgZm9yIGNvbnNpc3RlbmN5LgorCitUaGUgY2hhbmdlIGNhdXNlcyBhIHNs
+aWdodCBwZXJmb3JtYW5jZSBkcm9wIGR1cmluZyBvcHRpb24gcGFyc2luZworYmVjYXVzZSB0aGUg
+cGFzc2VkLWluIGluZGV4X3ZhbHVlIGlzIG5vIGxvbmdlciB1c2VkIGFzIGFuIGluZGV4CitpbnRv
+IHRoZSBvcHRpb25zIGFycmF5LgorCitJbnN0ZWFkLCBpdCdzIHVzZWQgYXMgYSB0b2tlbiBub3cg
+Zm9yIHRoZSBzdGFuZGFyZCBvcHRpb24gZ2V0dGVyCitmdW5jdGlvbnMgd2hpY2ggd29ya3Mgc2lu
+Y2UgdGhlIGluZGV4X3ZhbHVlIHRvIHRoZSBnZXRfKl9vcHRpb24oKQorZnVuY3Rpb25zIGFyZSBp
+ZGVudGljYWwgdG8gdGhlIHZhbHVlIG9mIG9wdGlvbnNbbl0udG9rZW4gaW4gdGhlCitwYXNzZWQt
+aW4gT3B0aW9uSW5mb1JlYyBhcnJheS4KKworQWxzbyByZW5hbWUgImludCBvcHRpb25faW5kZXgi
+IHRvICJpbnQgdG9rZW4iIGZvciBjbGFyaXR5IGluIGFsbAordGhyZWUgZnVuY3Rpb25zLgorCitT
+aWduZWQtb2ZmLWJ5OiBab2x0w6FuIELDtnN6w7ZybcOpbnlpIDx6Ym9zem9yQGdtYWlsLmNvbT4K
+KworRG93bmxvYWRlZCBmcm9tIHVwc3RyZWFtIGNvbW1pdAoraHR0cHM6Ly9naXRsYWIuZnJlZWRl
+c2t0b3Aub3JnL3hvcmcvZHJpdmVyL3hmODYtdmlkZW8tcXhsLy0vY29tbWl0LzRlMTk2M2E4MTJm
+MmMxNzc3YmE1ZDU2ZWE5ZTkzOWEzZTQwYTA0OTYKKworU2lnbmVkLW9mZi1ieTogQmVybmQgS3Vo
+bHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgorLS0tCisgc3JjL3F4bF9vcHRpb25faGVscGVy
+cy5jIHwgMTMgKysrKysrKy0tLS0tLQorIHNyYy9xeGxfb3B0aW9uX2hlbHBlcnMuaCB8ICA2ICsr
+Ky0tLQorIDIgZmlsZXMgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkK
+KworZGlmZiAtLWdpdCBhL3NyYy9xeGxfb3B0aW9uX2hlbHBlcnMuYyBiL3NyYy9xeGxfb3B0aW9u
+X2hlbHBlcnMuYworaW5kZXggMmFiYTY3Ny4uNzcwN2I3YyAxMDA2NDQKKy0tLSBhL3NyYy9xeGxf
+b3B0aW9uX2hlbHBlcnMuYworKysrIGIvc3JjL3F4bF9vcHRpb25faGVscGVycy5jCitAQCAtMTAs
+MzEgKzEwLDMyIEBACisgCisgI2luY2x1ZGUgInF4bF9vcHRpb25faGVscGVycy5oIgorIAorLWlu
+dCBnZXRfaW50X29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGludCBvcHRpb25faW5kZXgs
+CisraW50IGdldF9pbnRfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9ucywgaW50IHRva2VuLAor
+ICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZfbmFtZSkKKyB7CisrICAgIGludCB2
+YWx1ZTsKKyAgICAgaWYgKGVudl9uYW1lICYmIGdldGVudihlbnZfbmFtZSkpIHsKKyAgICAgICAg
+IHJldHVybiBhdG9pKGdldGVudihlbnZfbmFtZSkpOworICAgICB9CistICAgIHJldHVybiBvcHRp
+b25zW29wdGlvbl9pbmRleF0udmFsdWUubnVtOworKyAgICByZXR1cm4geGY4NkdldE9wdFZhbElu
+dGVnZXIob3B0aW9ucywgdG9rZW4sICZ2YWx1ZSkgPyB2YWx1ZSA6IDA7CisgfQorIAorLWNvbnN0
+IGNoYXIgKmdldF9zdHJfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9ucywgaW50IG9wdGlvbl9p
+bmRleCwKKytjb25zdCBjaGFyICpnZXRfc3RyX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMs
+IGludCB0b2tlbiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZf
+bmFtZSkKKyB7CisgICAgIGlmIChnZXRlbnYoZW52X25hbWUpKSB7CisgICAgICAgICByZXR1cm4g
+Z2V0ZW52KGVudl9uYW1lKTsKKyAgICAgfQorLSAgICByZXR1cm4gb3B0aW9uc1tvcHRpb25faW5k
+ZXhdLnZhbHVlLnN0cjsKKysgICAgcmV0dXJuIHhmODZHZXRPcHRWYWxTdHJpbmcob3B0aW9ucywg
+dG9rZW4pOworIH0KKyAKKy1pbnQgZ2V0X2Jvb2xfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9u
+cywgaW50IG9wdGlvbl9pbmRleCwKKytpbnQgZ2V0X2Jvb2xfb3B0aW9uKE9wdGlvbkluZm9QdHIg
+b3B0aW9ucywgaW50IHRva2VuLAorICAgICAgICAgICAgICAgICAgICAgIGNvbnN0IGNoYXIgKmVu
+dl9uYW1lKQorIHsKKyAgICAgY29uc3QgY2hhciogdmFsdWUgPSBnZXRlbnYoZW52X25hbWUpOwor
+IAorICAgICBpZiAoIXZhbHVlKSB7CistICAgICAgICByZXR1cm4gb3B0aW9uc1tvcHRpb25faW5k
+ZXhdLnZhbHVlLmJvb2w7CisrICAgICAgICByZXR1cm4geGY4NlJldHVybk9wdFZhbEJvb2wob3B0
+aW9ucywgdG9rZW4sIEZBTFNFKTsKKyAgICAgfQorICAgICBpZiAoc3RyY21wKHZhbHVlLCAiMCIp
+ID09IDAgfHwKKyAgICAgICAgIHN0cmNhc2VjbXAodmFsdWUsICJvZmYiKSA9PSAwIHx8CitkaWZm
+IC0tZ2l0IGEvc3JjL3F4bF9vcHRpb25faGVscGVycy5oIGIvc3JjL3F4bF9vcHRpb25faGVscGVy
+cy5oCitpbmRleCA3YzU0YzcyLi42NmQwYTE3IDEwMDY0NAorLS0tIGEvc3JjL3F4bF9vcHRpb25f
+aGVscGVycy5oCisrKysgYi9zcmMvcXhsX29wdGlvbl9oZWxwZXJzLmgKK0BAIC00LDEzICs0LDEz
+IEBACisgI2luY2x1ZGUgPHhmODZDcnRjLmg+CisgI2luY2x1ZGUgPHhmODZPcHQuaD4KKyAKKy1p
+bnQgZ2V0X2ludF9vcHRpb24oT3B0aW9uSW5mb1B0ciBvcHRpb25zLCBpbnQgb3B0aW9uX2luZGV4
+LAorK2ludCBnZXRfaW50X29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGludCB0b2tlbiwK
+KyAgICAgICAgICAgICAgICAgICAgY29uc3QgY2hhciAqZW52X25hbWUpOworIAorLWNvbnN0IGNo
+YXIgKmdldF9zdHJfb3B0aW9uKE9wdGlvbkluZm9QdHIgb3B0aW9ucywgaW50IG9wdGlvbl9pbmRl
+eCwKKytjb25zdCBjaGFyICpnZXRfc3RyX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGlu
+dCB0b2tlbiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZfbmFt
+ZSk7CisgCistaW50IGdldF9ib29sX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMsIGludCBv
+cHRpb25faW5kZXgsCisraW50IGdldF9ib29sX29wdGlvbihPcHRpb25JbmZvUHRyIG9wdGlvbnMs
+IGludCB0b2tlbiwKKyAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICplbnZfbmFtZSk7
+CisgCisgI2VuZGlmIC8vIE9QVElPTl9IRUxQRVJTX0gKKy0tIAorR2l0TGFiCisKLS0gCjIuMzAu
+MgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
