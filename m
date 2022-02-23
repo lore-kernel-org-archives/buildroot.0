@@ -4,43 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 546A6C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E4AC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E861040273;
-	Wed, 23 Feb 2022 20:33:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6213A403E9;
+	Wed, 23 Feb 2022 20:36:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 443_sykyArP4; Wed, 23 Feb 2022 20:33:04 +0000 (UTC)
+	with ESMTP id 0HJi349L1aeY; Wed, 23 Feb 2022 20:36:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC12A403B3;
-	Wed, 23 Feb 2022 20:33:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3B85A1BF5AA
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:32:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 699A5403B3;
+	Wed, 23 Feb 2022 20:36:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F09161BF5AA
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2978582A2D
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:32:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDE78415E4
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:36:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nIGlW1LK14Lg for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 20:32:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C904982A17
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:32:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 45521838B8; Wed, 23 Feb 2022 20:24:49 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kp93IZsS2-0V for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 20:36:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4C27D415D7
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:36:40 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ k3-20020a1ca103000000b0037bdea84f9cso59738wme.1
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 12:36:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=PFNzN26Ck6RlqpBjULm+ELHfzd0nYTxev7cB38On+Y4=;
+ b=QCh0KyAcKUnUsPpvoBMjdQH0rY4fRSHvzI8x25Dh/4kkQ9jHhI2egssiakJRYmEeY2
+ 6olU2xOPJ3sPQZqw0iRQrzsr4UsrIeBJ1iiJprLHUsiUJ79wgVBzSzWGTwLsuANubPsE
+ silciNYPP6Sc2sLl88taLAiY07SRgFiaqBnywVT3IOFYAQULR4QGI4+OLDXy6M2jUwiG
+ ccwwktVYpNVp/V55LeCIspfMjcIYXnRK29zIdybw80I6VhCypenrp6pGJr2ovTJlS6rU
+ Bd+tn2npqcJIg1T5UeviBffjHEC1YGKd2Avhb337RNYYe7Ua6mhpEtbcqifzfRiq/vuU
+ v81g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=PFNzN26Ck6RlqpBjULm+ELHfzd0nYTxev7cB38On+Y4=;
+ b=3O0jBBgG4xYh5mVVF3lKnSXd0DvmwzmaOYjpG1DtLbUsy/yG0+NvjdKtYwl64y+jBR
+ Qe6JvmeTuOg+a0u84C6xOj48DLr/tnNX7l+8YaCMzl6GEFrIOO1t9+SKiSdMGksm7fxV
+ 7TkDOByqYXEATqAeoLGnplRscNeFaDjX2bv/w/sSbtOCUFr7TAJaSfzNIVK9HGJm9v0G
+ pDUL5kGXHQdlSZCJtSg7pDigKYlTNsPA7Ev4HhXn8J8ElsiuUEL5+PaihhtO6/y8ngDe
+ Mhgq6RqUzt5HbOhd9Co74AQ5yVjRx6ncyTWJ/X57uT5U7Q857BilONitCaoRW5kx+e+u
+ gUuw==
+X-Gm-Message-State: AOAM530l91Vl/0m1+3X53leEWh8oCEmLSnzBOwuXjxSrVVIDbE/w1O/f
+ fN406YABXtG6cQSUQ5EErT4qgtRk+GE=
+X-Google-Smtp-Source: ABdhPJzzUBgCIB1rMtcMh1H7z7uBrNqiKZ7WfwstAtmPqvPmJbcZapHdHa03xrdoP/j7dZSBduHwfg==
+X-Received: by 2002:a1c:a4c6:0:b0:380:d32b:b429 with SMTP id
+ n189-20020a1ca4c6000000b00380d32bb429mr8123309wme.9.1645648598277; 
+ Wed, 23 Feb 2022 12:36:38 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id z3sm648932wmp.42.2022.02.23.12.36.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Feb 2022 12:36:37 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 21:31:33 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7062df3272be4a012e0b8288f17bb7e0220bbdb
-X-Git-Newrev: a14268d1385831038b5972430a28fee08c6ae33f
-X-Patchwork-Hint: ignore
-Message-Id: <20220223202449.45521838B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftool: bump to version 6.7.0
+Date: Wed, 23 Feb 2022 21:36:31 +0100
+Message-Id: <20220223203631.3398950-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib/lib_mk.py: check
+ CONF_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,49 +88,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a14268d1385831038b5972430a28fee08c6ae33f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As already done for {FOO}_DEPENDENCIES in commit
+4910a175b3f1f4b55ff257a75945d8ffb14a4ceb, check that {FOO}_CONF_OPTS are
+never overridden in a conditional
 
-Fixes:
-http://autobuild.buildroot.net/results/8bf/8bfc2abe3ab7a0b53aa717c800a4c7a3c964f426
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bpftool/bpftool.hash | 2 +-
- package/bpftool/bpftool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/checkpackagelib/lib_mk.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
-index c7d4ae250e..2e414b8eb8 100644
---- a/package/bpftool/bpftool.hash
-+++ b/package/bpftool/bpftool.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  c868cb85bf44195ec6cd20649c3db4f7aff64a38d950a1c2911d981fb2d7042c  bpftool-a7f0e7f057283ae8af3de4578bcb8b7ee80b7144-br1.tar.gz
-+sha256  e4ce219d3b87dd70d8dbfb8f02bd356f70c010f739f17baca1c8912199a8a72b  bpftool-v6.7.0-br1.tar.gz
- sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
- sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
-diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
-index 4276f91958..8742917253 100644
---- a/package/bpftool/bpftool.mk
-+++ b/package/bpftool/bpftool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 153754b6f1..b50a19ac62 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -90,6 +90,7 @@ class OverriddenVariable(_CheckFunction):
+         r"_SOURCE\s*=\s*",
+         r"_VERSION\s*=\s*"])))
+     FORBIDDEN_OVERRIDDEN = re.compile(r"^[A-Z0-9_]+({})".format("|".join([
++        r"_CONF_OPTS\s*=\s*",
+         r"_DEPENDENCIES\s*=\s*"])))
  
--BPFTOOL_VERSION = a7f0e7f057283ae8af3de4578bcb8b7ee80b7144
-+BPFTOOL_VERSION = v6.7.0
- BPFTOOL_SITE = https://github.com/libbpf/bpftool
- BPFTOOL_SITE_METHOD = git
- BPFTOOL_GIT_SUBMODULES = YES
+     def before(self):
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
