@@ -1,81 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1D4DC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9839C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Feb 2022 20:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BECB60FC8;
-	Wed, 23 Feb 2022 20:27:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D7804151F;
+	Wed, 23 Feb 2022 20:28:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SuY6yiH8e7MM; Wed, 23 Feb 2022 20:27:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QfSf1B7H8njV; Wed, 23 Feb 2022 20:28:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D26260FC1;
-	Wed, 23 Feb 2022 20:27:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8315B1BF5AA
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:27:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD3B74156E;
+	Wed, 23 Feb 2022 20:28:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A1C21BF5AA
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D87382983
- for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:27:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68EDD60FC1
+ for <buildroot@lists.busybox.net>; Wed, 23 Feb 2022 20:28:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PyTLjD46ImvP for <buildroot@lists.busybox.net>;
- Wed, 23 Feb 2022 20:27:05 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rCX1Uzl7aE1i for <buildroot@lists.busybox.net>;
+ Wed, 23 Feb 2022 20:28:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3AEE980CF2
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:27:05 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id l13so520830wrt.2
- for <buildroot@buildroot.org>; Wed, 23 Feb 2022 12:27:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=/LS2A+LeVXI1qOsx4XPVFUT7pLfGDBEbIRxml0Jdc8I=;
- b=L6q5NBjyD8tdWwF/Dt45xdKWWZWCkjlrQeZqsm+hNNQFLhW6jMieBJIQm762daM0kP
- s0DBIz8CJqRFUm+z/y4iouUZ0lpRb47SBHM1qXFXrxH0UBXkhSstyac9PVcHTJzbaZwy
- eOsr+jpa4kmkS+k4xZo37ruS+cf6IcuryWURDxHrlXGM28rj24nrY18hsueVtslR84Q/
- vP9hLodibc8hEKrf+hTJ/TmGRvUCyxJfHm+9r8NG8O+GuQrK+ObBJZP/fOkVivRdrqVk
- sEMCIXv+O8CgX29ePO1dSOkVjzP1PoCb3MSFCe9KmhqD6ipBKA3cFhIllD1OnCv6p3b7
- H8DQ==
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5A1E660AA8
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 20:28:03 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id s1so12957586edd.13
+ for <buildroot@buildroot.org>; Wed, 23 Feb 2022 12:28:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=goRnqAchln2GAC2Rf6R+LsvR5e6D9rIQOhglivs55YQ=;
+ b=Iq/0YsF0Lvf85U7uf196O47ZRFaXDkeqEoj89rYbxbhSVpAhTXohILFeC6J/OGtp6A
+ zcoANe/Qv5fy5nY5zX9++bxL8elEzDfaLyN5WypC/vAFud8XrSpfzZofLwJgRDMpVZ26
+ yWaehe26mJgtb2SZaNwZ1OY9a0vKx8jFujF2+Hq76JepYwbJFODZQfiGoXHBsJGUr+xK
+ nhBgyAMOJC8kXlpv1DI9JhtICKfsKfW39psk7w5j2oav1eDpcM0bggXBlNNPKAtTmqPO
+ WcvRgnOKAMoEmIzSbGvEi9LV3aELuOhtjRmucjN9uZIHeQ6if6AdYdeouFrBcMvj7xWU
+ up1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/LS2A+LeVXI1qOsx4XPVFUT7pLfGDBEbIRxml0Jdc8I=;
- b=Qc8fHRapcFaKTvuUgwVG8BxSEt8ZW1Xa1la7CVCMug61F7dywL1OSc1fkGB1Mcg6hp
- tNI7MQU/GKLau416ql8clMojSd4ChyPFsteDnvh9wTNUodTPvvXNj5YKVsmzq+abOS+V
- 6oSmIMBdcGHv5KXxPCfdSaj1G5RgbIkhJhcSOy9MFQaOn4GudnY5a2Vm1BbkprZAXfaf
- DaOsZEb+pvlgDnWPz9fHr0WWKcLUzj07+Nf9ZKGL2sLYi3UhkIvLZg4GYY5yRZafn0+f
- Yech7H4J3vN1HefbZ3L6f6LP258TJdclcF+xk/+dJX8G2ncSCUXmN+W6HY/lwAZIz1GO
- VwQg==
-X-Gm-Message-State: AOAM531lsKTE+UWP3oyq/GeyckaX9b9AOo46csqoPXeXjJmLVvgx+o7z
- Bf/VWCCMQJiq7orwqff0VedlVYrZ6N0=
-X-Google-Smtp-Source: ABdhPJyyQNJWzg2YfENjPP8/JZqk7WDqMXnHbN25r4doyUB38kz8usnhe1Pg1h295AeNBbmRU1wHBg==
-X-Received: by 2002:a5d:64aa:0:b0:1ea:8265:9740 with SMTP id
- m10-20020a5d64aa000000b001ea82659740mr1007208wrp.572.1645648023166; 
- Wed, 23 Feb 2022 12:27:03 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id u14sm673992wmq.41.2022.02.23.12.27.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Feb 2022 12:27:02 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 23 Feb 2022 21:26:48 +0100
-Message-Id: <20220223202648.3398307-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=goRnqAchln2GAC2Rf6R+LsvR5e6D9rIQOhglivs55YQ=;
+ b=iYOCQPZP/CxeCwXEG55eQa1eyi/zqdgYwrnS+V7gi6LDVoeEnaNKkzsT1FGBvzjQk+
+ /1hy3j/JHqPqFI8rgLtb5Hvktq0nQkicfcqN34bBVUhJaZOB9Qv6Inyz/s6nYKelbbyc
+ YmIhONo2xxP3LFpn8KJH8uaxv4ZouV7uZz0/IySqqCPnYBTG5uMPWQ4Ur6FIS6mVWb75
+ zP78MBr0kxpX/iH8Bazynh2X0bYDHFZH2WdxU2Zkz3f8IItyScrV4CFpqPQHi7AjpqnL
+ 1mjkPDumzLP9OmuaKClWZObrwrtV0YtSSOYqLF38JAAcIkjdxHQuWHLbO+jo19blxK9S
+ CxzQ==
+X-Gm-Message-State: AOAM531w+C5WNmte/jre9dSY2sTE8m1+0eE46wkpSyPMCt5Pf7SNRnI+
+ /aQ0/guODlEobGkk+YwgB7O1yNVjSqwA3A==
+X-Google-Smtp-Source: ABdhPJwsM8TtL4pKS5an3v5X8iqs6rTnsxY29nt7tBuVTYtx9ciOBcprCKbNy/v5peExoKZSy6hzig==
+X-Received: by 2002:a05:6402:142b:b0:413:2b86:7af2 with SMTP id
+ c11-20020a056402142b00b004132b867af2mr1136494edx.102.1645648081772; 
+ Wed, 23 Feb 2022 12:28:01 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id b14sm279727ejb.160.2022.02.23.12.28.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 23 Feb 2022 12:28:01 -0800 (PST)
+Message-ID: <aca890fa-8ce8-ce5a-b127-2a51018cb2e5@mind.be>
+Date: Wed, 23 Feb 2022 21:27:57 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/ghostscript: disable tesseract without threads
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220216204538.2450673-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220216204538.2450673-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/dialog: bump to version
+ 1.3-20220117
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,59 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ghostscript embeds a local copy of tesseract-ocr which is enabled by
-default since version 9.53.0 and
-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=7322ef87546c55b29056c1d96d8bdbb7f3ba53ef
 
-Since version 9.55.0 and
-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=5459f7aca1ded3b7cf96c339a2419f418aa406c7,
-ghostscript expects that tesseract is disabled if threads are not
-available resulting in the following build failure since commit
-7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22:
 
-configure: error: Threading disabled or not available. Tesseract OCR relies on threading. Rerun configure with "--without-tesseract" to exclude OCR from the build
+On 16/02/2022 21:45, Fabrice Fontaine wrote:
+> https://invisible-mirror.net/dialog/CHANGES.html#index-t20220117
+> 
+> Fixes:
+>   - https://bugs.buildroot.org/show_bug.cgi?id=14596
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-So disable tesseract if threads are not available. It should be noted
-that there is no way to tell ghostscript to use a system provided
-tesseract-ocr package.
+  Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/fd35a47b2a77cf57c243ec1c88802b53ddca8f52
+  Regards,
+  Arnout
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3 (after review of Arnout Vandecappelle):
- - Only disable tesseract without threads
-
-Changes v1 -> v2:
- - Unconditionally disable tesseract
-
- package/ghostscript/ghostscript.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 24a0c489a8..02cb35fcfc 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -83,4 +83,8 @@ else
- GHOSTSCRIPT_CONF_OPTS += --without-x
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+GHOSTSCRIPT_CONF_OPTS += --without-tesseract
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.34.1
-
+> ---
+>   package/dialog/dialog.hash | 2 +-
+>   package/dialog/dialog.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
+> index 2286590b66..3136d18b2b 100644
+> --- a/package/dialog/dialog.hash
+> +++ b/package/dialog/dialog.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated after checking pgp signature
+> -sha256  466163e8b97c2b7709d00389199add3156bd813f60ccb0335d0a30f2d4a17f99  dialog-1.3-20200327.tgz
+> +sha256  754cb6bf7dc6a9ac5c1f80c13caa4d976e30a5a6e8b46f17b3bb9b080c31041f  dialog-1.3-20220117.tgz
+>   # Locally computed
+>   sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+> diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+> index 1c98d354e3..681f8ec9fe 100644
+> --- a/package/dialog/dialog.mk
+> +++ b/package/dialog/dialog.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -DIALOG_VERSION = 1.3-20200327
+> +DIALOG_VERSION = 1.3-20220117
+>   DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+>   DIALOG_SITE = https://invisible-mirror.net/archives/dialog
+>   DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
