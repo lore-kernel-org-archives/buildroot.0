@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA660C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 01:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 224A4C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 06:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 379AA60FD1;
-	Thu, 24 Feb 2022 01:45:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 835EB82AC3;
+	Thu, 24 Feb 2022 06:35:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iMF4ULI3rqzJ; Thu, 24 Feb 2022 01:45:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id roOTIVAg4f5n; Thu, 24 Feb 2022 06:35:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 614F860BF5;
-	Thu, 24 Feb 2022 01:45:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 98D3F1BF5A4
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 01:44:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E645A82A5D;
+	Thu, 24 Feb 2022 06:35:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A48401BF5E0
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 06:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7853A40328
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 01:44:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 918CD82A5D
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 06:35:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a4KSFNW7l1sU for <buildroot@lists.busybox.net>;
- Thu, 24 Feb 2022 01:44:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q7_FKPqlIy4u for <buildroot@lists.busybox.net>;
+ Thu, 24 Feb 2022 06:35:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8E30400AF
- for <buildroot@uclibc.org>; Thu, 24 Feb 2022 01:44:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A531829FD
+ for <buildroot@uclibc.org>; Thu, 24 Feb 2022 06:35:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id A21BE837D1; Thu, 24 Feb 2022 01:37:01 +0000 (UTC)
+ id 198378379E; Thu, 24 Feb 2022 06:27:14 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 24 Feb 2022 01:44:58 +0000
+Date: Thu, 24 Feb 2022 06:35:11 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: brock@cottonwoodcomputer.com
+X-Bugzilla-Severity: critical
+X-Bugzilla-Who: info@hifiberry.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14606-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14601-163-l2xPHrZYzf@https.bugs.busybox.net/>
+In-Reply-To: <bug-14601-163@https.bugs.busybox.net/>
+References: <bug-14601-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14606] New: Updated qt5webkit issue in 2022.02-rc2
+Subject: [Buildroot] [Bug 14601] Python build fails on 2022.02-rc2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,30 +74,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14606
+https://bugs.busybox.net/show_bug.cgi?id=14601
 
-            Bug ID: 14606
-           Summary: Updated qt5webkit issue in 2022.02-rc2
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: brock@cottonwoodcomputer.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #2 from HiFiBerry (Daniel) <info@hifiberry.com> ---
+Might not have to do with the -O option (that was just a guess), but the
+install path is clearly incorrect. 
 
-Testing my build against 2022.02-rc2 and qmake fails to build our Qt project:
-Project ERROR: Unknown module(s) in QT: webkit
+My config here is quite complex and uses lots of additional stuff. However, it
+was working fine up to 2021.11
 
-Digging into it a bit, the updated qt5webkit package appears to be installing
-the mkspecs into the target instead of the host.  Also the mkspecs have
-hardcoded library and include paths instead of using $$QT_MODULE_INCLUDE_BASE
-etc like the other Qt packages
+Any recommendation how to go on debugging this?
 
 -- 
 You are receiving this mail because:
