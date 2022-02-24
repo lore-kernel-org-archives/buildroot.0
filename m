@@ -1,66 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DB34C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 14:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3070C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 15:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4717833A0;
-	Thu, 24 Feb 2022 14:08:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63E95409DB;
+	Thu, 24 Feb 2022 15:12:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RbVjGZqxG_zQ; Thu, 24 Feb 2022 14:08:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3rPucJjKIlRm; Thu, 24 Feb 2022 15:12:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CF2382FEA;
-	Thu, 24 Feb 2022 14:08:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3922A4046D;
+	Thu, 24 Feb 2022 15:12:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BD8D1BF2B8
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 14:08:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9EB301BF389
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 15:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0870A4046D
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 14:08:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BE6C40204
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 15:12:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=othermo.de
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rTr_LMAWQOVZ for <buildroot@lists.busybox.net>;
- Thu, 24 Feb 2022 14:08:08 +0000 (UTC)
+ with ESMTP id GtqQcSEtgvmi for <buildroot@lists.busybox.net>;
+ Thu, 24 Feb 2022 15:12:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A19BF4026E
- for <buildroot@buildroot.org>; Thu, 24 Feb 2022 14:08:08 +0000 (UTC)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4K4F9f3RV2z9sXS
- for <buildroot@buildroot.org>; Thu, 24 Feb 2022 15:08:06 +0100 (CET)
-Message-ID: <9f038ee9-b8c4-3c56-36eb-971690a40b8c@othermo.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=othermo.de; s=MBO0001; 
- t=1645711684;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=AZKFPCpc2yahh2VbMmXthJuWLlHQc0UsRimAEYibLS8=;
- b=L3+IhieGE0xa7hsAgqF8VsqGmMQSMRtpNG7IkERk10iEvhDjSQ2jD8cqcLvSkdJlvvuUGQ
- y5kO3H07LW1kUmKMsRzpI1fhhe/C6TVEAkqb21cuLH/2uULk87Oop/ZtLxfX1f/3kvReuc
- cG+XFqcCoL2PD/qlkYHeIWesbljch4dj7TIaZW+Um+/3kWKJyaRkQ0USMcU9ZzDNOnziwk
- 7HENTGVv1bElQT/kJIy0JGDNg8JrYODbqBtiiytQy0aFM1i/aJG7ynV6qT4RQEptR0PWGy
- jUFaURoVpEIUODP7ZM+UI7BagZtittTaH4iQ6dBJPvzh8f+VZgA/UKy3D6Tovg==
-Date: Thu, 24 Feb 2022 15:07:59 +0100
+Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8ABC401B7
+ for <buildroot@buildroot.org>; Thu, 24 Feb 2022 15:12:14 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.16.188])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id NFmsnarbX0FuyNFmtn7VjD; Thu, 24 Feb 2022 16:12:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1645715532; bh=YKMsA+UhaDkZL1LETOWgk8bpAoL6biRrWEcmyJ54wyk=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=lwztkaudHUjk8zfbC+uWAOMGQKV9pty8+QuEafpXaz0921ralUgVcxSaMw8PNUh8u
+ Q+inZQC+4hskBi7Sqjmz1LW92H6kPMYw1xNriOjg1AnHoxOX+f+mdfiRrGscQVzOvo
+ /22ST8vc26rFYbQ2mT8wgnL/kNvkAVHVBKBKwXsJj1aTJKYm0d30MZq8h6unL/TQh6
+ WWhgWdfFvV5nJHRgygPCNZmhcarCNXy03gEubeM/0U1yzPZhw8SfWkWB+8WXLdk/ge
+ bzy09vvI6Y8/ukGhG6mDI5IJmYwt5Nf+2w77NntIQx1PrUl5F77uVtTiGim+JorjjQ
+ ia2KdBVEnCUUA==
+Message-ID: <111a4578-2489-09db-909c-774017800746@benettiengineering.com>
+Date: Thu, 24 Feb 2022 16:12:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Content-Language: en-US
-To: buildroot@buildroot.org
-References: <20220221120657.4095013-1-tianyuanhao3@163.com>
-From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-In-Reply-To: <20220221120657.4095013-1-tianyuanhao3@163.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/docker-engine: remove unused
- sqlite
+To: Yu Chien Peter Lin <peterlin@andestech.com>
+References: <20220223071049.21153-1-peterlin@andestech.com>
+ <84e159d2-0123-e5b1-c42e-99b70c99f43c@benettiengineering.com>
+ <YhYHxAZuz+wY4Nl+@APC323>
+ <dcb73632-8dda-4314-838f-2db1c9f91102@benettiengineering.com>
+ <YhbwYcWi9WtPm4Mo@APC323>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <YhbwYcWi9WtPm4Mo@APC323>
+X-CMAE-Envelope: MS4wfHXj3HxQIOHCK5gVNuMkP/gtTsQmlpFv/ZPLVChWOcuVOxNwlS2WUVubGw/B645Qq40sV5sPZQguijhNJIKuQRy14D/kPNlFQ6DckQM5DCkKrhD7oFhR
+ kFvQrtyIp8GdNvlzeN8NS0bWIg2y0v1sPJbR8itRyKlbxtdzgddVnWY0UmSI84I/fgqIUIniMiqCoSsuz6uRwwI2+BpfSWRAsSuc3y+IDgFFqfIpUG8OHHyX
+ 5C0eTlk+gsi+Nl09SXKa9WnYTBOh9nmlIeMD2D4TPrY=
+Subject: Re: [Buildroot] [PATCH v4 1/3] board/andes: rearrange andes folder
+ structure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,40 +73,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: alankao@andestech.com, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Peter,
 
-
-On 21.02.22 13:06, TIAN Yuanhao wrote:
-> Dependency on sqlite has been removed since v17.04.0-ce.
+On 24/02/22 03:41, Yu Chien Peter Lin wrote:
+> Hi Giulio,
 > 
-> See: https://github.com/moby/moby/pull/30208
+>>>>>>> Changes v3 -> v4:
+>>>>>>>       - rename ae3xx folder to ae300
+>>>>>>>       - rename andes_ae3xx_defconfig to andes_ae300_defconfig
+>>>>>>>       - update readme.txt and item in DEVELOPERS
+>>>>>>
+>>>>>> Some of these change ^^^ must have been moved to the single patch, like
+>>>>>> DEVELOPERS is updated in patch 3/3. I've also forgotten to point you to add
+>>>>>> a --cover-letter, so keep in mind both points for next time.
+>>>>>>
+>>>>>> I've built tested both defconfig successfully, so:
+>>>>>> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>>>> Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>>>> [Giulio: build tested only]
+>>>>>>
+>>>>>> And the other patches of this series is all reviewed, so to me it's ready to
+>>>>>> be committed, but this will happen after Buildroot 2022.02 is released,
+>>>>>> since between rc1 to the release Maintainers only accept fixes. Another
+>>>>>> possibility is that they will commit these patches to next branch.
+>>>>>>
+>>>>>> Please remember to tag V3.
 > 
-> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+> Oh, I thought you were refering to format-patch with v3, sorry.
+> I will mark the patch on patchwork to rejected state except the latest
+> patch version.
 
-Tested to work on arm64, various docker functionality still works fine.
+Ok, V3 it's still tagged as new in patchwork for the moment.
 
-Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-
-> ---
->   package/docker-engine/Config.in | 1 -
->   1 file changed, 1 deletion(-)
+>>>>>> Thank you for your effort!
+>>>>>>
+>>>>>> Best regards
+>>>>>> -- 
+>>>>>> Giulio Benetti
+>>>>>> Benetti Engineering sas
+>>>>
+>>>> Thanks for reviewing my patches and the guidance.
+>>>
+>>> You're welcome.
+>>>
+>>>> I will make a new patch for the Config.in,
+>>>
+>>> Which one? I only see:
+>>> toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+>>>
+>>> Do you mean you will add an entry in DEVELOPERS for it?
 > 
-> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-> index 911cbfe428..1f0efb8fcc 100644
-> --- a/package/docker-engine/Config.in
-> +++ b/package/docker-engine/Config.in
-> @@ -9,7 +9,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
->   	select BR2_PACKAGE_CONTAINERD # runtime dependency
->   	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
->   	select BR2_PACKAGE_IPTABLES # runtime dependency
-> -	select BR2_PACKAGE_SQLITE # runtime dependency
->   	help
->   	  Docker is a platform to build, ship,
->   	  and run applications as lightweight containers.
+> I found the modifications on these files in Git history, usually have
+> its own patch. 
+
+No, maybe you mean there is a cover-letter that summarize the changes of 
+all patches in patchset and then in every patch you list the changes of 
+on that patch.
+
+> So in PATCH v5, I will split [PATCH 1/3] to [PATCH 1/4]
+> and [PATCH 2/4] for
+> toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+> other patches remain the same, 
+
+No, wait. I've meant you only need to split:
+---
+Changes v1->v2:
+*
+*
+[..]
+---
+for every patch. So, don't summarize all the changes on patch [1/3], 
+because those changes are related to different patches. For example in 
+V1->V2 you state:
+- update DEVELOPERS
+but you do it in patch [3/3], so you only have to move the changes into 
+the right patch, that's all.
+
+> and attach [PATCH 0/4] cover letter.
+
+And yes please, add a cover letter that briefly explain what patchset 
+does and that's it.
+
+>>>> The last question, is it tag V5 for the next submission?
+>>>
+>>> It depends if you need to modify these patches. Or if you add a new patch
+>>> that depends on these patches, then yes, please send a V5 with all changes
+>>> moved to the different patches, including adding the patch if this is your
+>>> goal.
+>>>
+>>> Best regards
+>>> -- 
+>>> Giulio Benetti
+>>> Benetti Engineering sas
+> 
+> Is there any the new comment?
+> Again, thanks for your help. :)
+
+For the moment I don't see anything wrong except the changelog.
+
+Thank you!
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
