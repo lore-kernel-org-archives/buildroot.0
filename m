@@ -4,55 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD0CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 15:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24F8AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 15:41:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46CE341610;
-	Thu, 24 Feb 2022 15:23:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B33BA41711;
+	Thu, 24 Feb 2022 15:41:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MLR3sOk-vDuE; Thu, 24 Feb 2022 15:23:46 +0000 (UTC)
+	with ESMTP id 6F7bTpO0HJGU; Thu, 24 Feb 2022 15:41:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF78641617;
-	Thu, 24 Feb 2022 15:23:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0CD591BF309
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 15:23:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3FC441649;
+	Thu, 24 Feb 2022 15:41:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 54F501BF309
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 15:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08ECB41617
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 15:23:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 433AE611D2
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 15:41:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lauEFEE9JRrJ for <buildroot@lists.busybox.net>;
- Thu, 24 Feb 2022 15:23:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CDC641610
- for <buildroot@buildroot.org>; Thu, 24 Feb 2022 15:23:42 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.16.188])
- by Aruba Outgoing Smtp  with ESMTPSA
- id NFy1nb4YI0FuyNFy1n7e54; Thu, 24 Feb 2022 16:23:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645716221; bh=s870K+8EdpHG/Ei7qHl6MMUt3irP/nEqd8s1AAErjSg=;
- h=From:To:Subject:Date:MIME-Version;
- b=fBN5vBJPIJbMj7S1JmYxBWv2NX+x5OhtCUOk0mH50IvFL5Swdy8Jd+AYm9lpJcWTl
- NpkuC/0PqGPjrAyFd6LQQaN5zYiXFCxCSnFq69m8ovs3kwD4an2USsdL5DdPQqUsHq
- qfEHE+arx+XcSemoa7Wfd7bJueOsr7h3geeLQD1a1kzTRRW0LgbAnJ6X8lrfPlvDum
- 92p22wA2FHjErXyf2XhLWTFtvASnhx+9TjQAPnk2sM0HwSCm58rm/H/Hr+flJuwpqe
- nTAPH+GRQYWZc+7ePhyFE6bHLjHHwJyeLAjdQ2Z8thfd58KHluM5+84b0iNRGVHN5X
- Eo1omxM2u4xOQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2S6PVvnsYW1Y for <buildroot@lists.busybox.net>;
+ Thu, 24 Feb 2022 15:41:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3E688611CF
+ for <buildroot@buildroot.org>; Thu, 24 Feb 2022 15:41:24 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ r187-20020a1c2bc4000000b003810e6b192aso49122wmr.1
+ for <buildroot@buildroot.org>; Thu, 24 Feb 2022 07:41:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=mwQG6vrINQmBy/ytejDe8iClVHkAqzelEOWioRN/ZJQ=;
+ b=PeOong5aHuJfjrSuox5qy5bXstt3hn+wVPfsz3hdluKAnaq2LJB2opYbZixXx+L4k2
+ gj/lvX5uRbBezKCbjUyrATCfExJneFwCZUCqb4qKolgdALQoU598/uaqSSCmJ9o92cWe
+ 92C3DxvqCl+fhU3fWuRqONHhw5thtK8tMU9ZjkuqjYnvLy3rvA/6fdzfwzONx2WDedqX
+ 8/WVcFg9A5FDtOiFfZdHGGgAmYFfPifjesIvwdlwsMV5kQkJVUMM41jvNMjPw1gvthH0
+ sMklkZbfs+1tQ2hcEEnRzywt3m2vvS7Vsyfxu+j8PzmODEltf7uvSDwMS9cUUOmEdvED
+ DDTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=mwQG6vrINQmBy/ytejDe8iClVHkAqzelEOWioRN/ZJQ=;
+ b=68b+xvJzK5Cx0COxB+W/+dGA1u/9wWcaH1DkcDDJenMU62KeFY11PrbcykvM0fGQTS
+ MOyyxOX837KFGYbQs2Y/QqR+y5Utnj0o1A73Hei2JGbGJS1UpjjjPYob/s0/j5LQ6l/M
+ ruimtHX8A4sX+4K/c8fbBWIZvMev2vOUX/Znyyu25OnaO4Y6WPi7nY5CoLAjSxIVqSii
+ U/qeyIfwuIuGtOpmINRwkpzx9QsesJuagM8eNrCKIp+vbvHIQAog5cAhbIZsqBBYaIxB
+ Fgnyhw2xxc9EyjSGl6ns7BSiiPhzpPy+osMB5bspaGIqAxAvD9+hiufChhkjCgdTD7wf
+ bktw==
+X-Gm-Message-State: AOAM531O3JCG5KjHWEvcof/qbA7fXcS+QrYh8C3mK/nXGeqBEic4Z7Jz
+ 1yv643vg/Nfw5OAwWRwztxnVhQFe+ds=
+X-Google-Smtp-Source: ABdhPJxZp8oNoC3i9/i3FnxCdYu89IF4VX2j6bwK/J02YFQivOElcKKE1OrdDhlHmns+f1adpPCvsA==
+X-Received: by 2002:a05:600c:19d2:b0:37b:b8cc:5ca5 with SMTP id
+ u18-20020a05600c19d200b0037bb8cc5ca5mr2888311wmq.22.1645717282304; 
+ Thu, 24 Feb 2022 07:41:22 -0800 (PST)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id s19sm3321095wrb.25.2022.02.24.07.41.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 24 Feb 2022 07:41:21 -0800 (PST)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 24 Feb 2022 16:23:39 +0100
-Message-Id: <20220224152339.442421-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Thu, 24 Feb 2022 16:41:18 +0100
+Message-Id: <20220224154118.220408-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfPIwMtPJnAhSAlYfvx+dQvcjzr8E3t1BsjPRllczpTwJ9eIvIjnv+1MVN8Q1/1Ey9z2iI3VmZUWLxnEaDDNWumL2+qieRdCgp3Wgd30fv0id0fiRUn7X
- PD5ICxqfTL0/K5MaBVYU7U2lyYP+NO/esTklsKYf83omQsZKycGGKcx85Fv61K34Z9+iOSnIsrzHC8+3cvMqJJagS/0M4cR0DnxnpnBRq/fCBlvqDVK4Wg3a
- 2iaoi6ZvA5oZBRFD/sOuUXve3H3LDYbH01rnKsIu4DuErO27XB3R29eSctmq4jfSgI/+x6cvU32FFxNaqer8Yg==
-Subject: [Buildroot] [PATCH] package/erlang-jiffy: bump version to 1.1.1
+Subject: [Buildroot] [PATCH] package/pkg-python: use
+ SETUPTOOLS_USE_DISTUTILS=stdlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +89,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Johan Oudinet <johan.oudinet@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/erlang-jiffy/erlang-jiffy.hash | 2 +-
- package/erlang-jiffy/erlang-jiffy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+-sh: ipython: not found
 
-diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
-index 93c5e1f8c8..f172d1476e 100644
---- a/package/erlang-jiffy/erlang-jiffy.hash
-+++ b/package/erlang-jiffy/erlang-jiffy.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  45c224afe0ea2d3ece39e227f01f5585ad53b8b91d2d6924f9f50548874ae879  erlang-jiffy-1.0.9.tar.gz
-+sha256  a999351d956d3ed10c33a6dd7e9435e674e519b5b82a46d60361afdb83062fd8  erlang-jiffy-1.1.1.tar.gz
- sha256  0fa8afad2f02c08850a16e36fe55376ee19732b3a116a0207f2a73c857777a49  LICENSE
-diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
-index cd94632962..de2e4749fb 100644
---- a/package/erlang-jiffy/erlang-jiffy.mk
-+++ b/package/erlang-jiffy/erlang-jiffy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ipython use a wrong shebang on the target:
+
+ # head -n 1 /usr/bin/ipython
+ #!/home/kubu/buildroot/testsuite-master/TestIPythonPy3/host/bin/python
+
+The issue come from python3-setuptools 60.0.0 that changed
+SETUPTOOLS_USE_DISTUTILS default value from stdlib to local [1] to use
+its local copy of distutils. This is actually a "breaking" change [2].
+
+We have to override SETUPTOOLS_USE_DISTUTILS to the previous value
+"stdlib" to fixes the issue.
+
+While at it, use distutils from stdlib for the host.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2088684091
+
+[1] https://github.com/pypa/setuptools/commit/b6fcbbd00cb6d5607c9272dec452a50457bdb292
+[2] https://github.com/pypa/setuptools/blob/v60.0.0/CHANGES.rst#breaking-changes
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/pkg-python.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index b8dc9cd9e5..e81a1a3102 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -40,6 +40,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+ 	PYTHONNOUSERSITE=1 \
++	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ 	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+ 	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+ 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+@@ -62,6 +63,7 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	PYTHONNOUSERSITE=1 \
++	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ 	$(HOST_CONFIGURE_OPTS)
  
--ERLANG_JIFFY_VERSION = 1.0.9
-+ERLANG_JIFFY_VERSION = 1.1.1
- ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
- ERLANG_JIFFY_LICENSE = MIT (core), \
- 	BSD-3-Clause (Google double conversion library), \
+ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+@@ -76,6 +78,7 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+ 	PYTHONNOUSERSITE=1 \
++	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+@@ -96,6 +99,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	PYTHONNOUSERSITE=1 \
++	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ 	$(HOST_CONFIGURE_OPTS)
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
 -- 
-2.25.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
