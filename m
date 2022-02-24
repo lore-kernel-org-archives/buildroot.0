@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE17AC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 21:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B82C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 21:36:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 965A9415A3;
-	Thu, 24 Feb 2022 21:28:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3D8083E6F;
+	Thu, 24 Feb 2022 21:36:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DFnTdKaUXLzY; Thu, 24 Feb 2022 21:28:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id osxfx_xAvzoT; Thu, 24 Feb 2022 21:36:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4EDB4090A;
-	Thu, 24 Feb 2022 21:28:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC8231BF31E
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 21:28:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1948C83E58;
+	Thu, 24 Feb 2022 21:36:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B5091BF31E
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 21:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7769400B8
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 21:28:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89D8083E58
+ for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 21:36:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=protonmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pb5om3kRTaf4 for <buildroot@lists.busybox.net>;
- Thu, 24 Feb 2022 21:28:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CM2vo9pMkF-j for <buildroot@lists.busybox.net>;
+ Thu, 24 Feb 2022 21:36:42 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F5A440017
- for <buildroot@buildroot.org>; Thu, 24 Feb 2022 21:28:21 +0000 (UTC)
-Date: Thu, 24 Feb 2022 21:28:13 +0000
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch
+ [185.70.40.134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 98A3A83E52
+ for <buildroot@buildroot.org>; Thu, 24 Feb 2022 21:36:42 +0000 (UTC)
+Date: Thu, 24 Feb 2022 21:36:33 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
- s=protonmail3; t=1645738097;
+ s=protonmail3; t=1645738599;
  bh=oGfjugONMn/Tb6LxvWWJfo06IiNkDziGS5RPnCjupY8=;
  h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
  Subject:Reply-To:Feedback-ID:Message-ID;
- b=RK/BcplmHmBTkJ1yzfXHkJS4HHvWRjZDMlFbqdE+AjYABye/cLybpxrD5mi32FP/N
- bOogZyQLnOyxWHxTrENlirLwMOycON+qW3rWYAvCrITzQq6ib9pXVTNioTAUipVD5y
- NcYSJaVO9N4uI6bRjQzxt3dDtZyZGAdHYiTUbEacPDhlrxm3DsnMtY3Wft4pnx4MKo
- hjus4RuZ9/r8rk6kUw8rtjpA04UHLH3+/dtyZxM9bbMKQxhVzqhdO9Br3uLQzq8cRn
- BsK9hdclpG3BBsX937MskCZ5HRq6KPi5BF5+k5mJRWxmhCfV1xct0Rus5YS9a/nQ+F
- 9vewC8FxIFNrw==
+ b=ZbV6iH+wldMNp0yCxQrZGJeL2Fwjp/FmgTNgV1Umyr5vUGXTZju6m1JhaM5bNjrwV
+ IBvYdTFd1PXKkGb/KaACc6QzBWrustLapzw2r936a9r4faJ0mupWhXinRb2pLOZbw/
+ EyH0VEEBAZVPVqZhq9ofIXYmcnyj6tG1eAFlz8tFruojBmuG8qQEbdP2iTDLT317sL
+ QsgaKzNcPWZwPlTXlXeUJshuMiCQ4Jqu8BuPhM4qR1Q174g99gF9v/mSmbI8DS3GWq
+ n/a4klBv+AUh6w4MN6utCNyC/C4B55mi4Eei22KYyfA7Gdy2Z4xLUHtf2cBwP76zNZ
+ EfiKcXLiA6nkQ==
 To: buildroot@buildroot.org
-Message-ID: <20220224212755.4856-1-andrei.gherghescu@protonmail.com>
+Message-ID: <20220224213620.5899-1-andrei.gherghescu@protonmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] directfb: change upstream site
+Subject: [Buildroot] [PATCH 1/1] package/directfb: change upstream site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
