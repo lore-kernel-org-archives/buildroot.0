@@ -1,64 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3D9AC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Feb 2022 23:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE497C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 07:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8592861211;
-	Thu, 24 Feb 2022 23:27:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 087F483ED6;
+	Fri, 25 Feb 2022 07:26:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b3mRrFyK1XRa; Thu, 24 Feb 2022 23:27:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OGQ2OK1jQ4Ur; Fri, 25 Feb 2022 07:26:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB2806120D;
-	Thu, 24 Feb 2022 23:27:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 50FFD1BF29C
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 23:27:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB8CA83ED5;
+	Fri, 25 Feb 2022 07:26:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A02CE1BF354
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 07:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F25A6120D
- for <buildroot@lists.busybox.net>; Thu, 24 Feb 2022 23:27:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8CB2840395
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 07:26:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fEJPTG5Krggc for <buildroot@lists.busybox.net>;
- Thu, 24 Feb 2022 23:27:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6284260B14
- for <buildroot@buildroot.org>; Thu, 24 Feb 2022 23:27:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=9woDZFKkDhw8fguGBVz1IXLkIPA0jlZaxK66JFrOm/s=; b=HPtLcFHp5v97Pjy6M49TQgEpT4
- u/Yjx+NL6Pmcc4UGeeRze1k5QKO2W3O2uUmFGaOgCBBg07GldrNJTt01Lw/vjcwrbIjrrtKxjAOqM
- wCuSYUHTaicuC48upH06gtz0YIeAJK+ffnNaeqD/ypEcrvUbc1+XkuCAjAhbOzRLLRdQsFu9j8L4+
- TYllip5It9Zw+aLre0/0SsCox05Lj1V9WctQf5tFt3GwFrC9aq0DjMPeleTaW5XPC1AoifWBH+5Ls
- 2a4dmK06jXdqqXcdEQeGK+moxuTD9THL5MvTpMbXz/Zx7yfHzdinL1+HLRlPh4gpCMkLJe0QBgNHN
- 1qLLF3sw==;
-Received: from 163.179.165.83.dynamic.reverse-mundo-r.com ([83.165.179.163]
- helo=momiji) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1nNNVi-000CMk-Dg; Fri, 25 Feb 2022 00:26:58 +0100
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 466fbe5d;
- Thu, 24 Feb 2022 23:26:48 +0000 (UTC)
-Date: Fri, 25 Feb 2022 00:26:44 +0100
-Message-ID: <20220225002644.GB1672112@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 95LymyD6ApKE for <buildroot@lists.busybox.net>;
+ Fri, 25 Feb 2022 07:26:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 91C2D40151
+ for <buildroot@buildroot.org>; Fri, 25 Feb 2022 07:26:26 +0000 (UTC)
+Received: by mail-lj1-x233.google.com with SMTP id p20so6283643ljo.0
+ for <buildroot@buildroot.org>; Thu, 24 Feb 2022 23:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YxP/RU7sq2r2ln6dbXQw7F2XcajQLIUkQOW3IgcQKy8=;
+ b=XDKNLRPPRUKHIGLTdcbE7shiA314sA9G+J4faSjZTMwN/QcYGfoE72B6/vtYJqb2wg
+ UdKMKLwScuwop93cUtIppIp7wB5HLkRWDS7fMQFq/qbuP00o68wseczrQDccebVo+O95
+ nmYNpDFxFdX3UAhRUJo4FfsI6zf7mePDsTlm8JKfX00E+vcwFuT+KSXNqIHVcx7l5DeP
+ semvTCjlqECkvR1c4KPWaxYgbKuH67W+1df4XYdChW+Pk6nGIF2x9necaDrxh2Rq4q/S
+ uK/NKCkYtyE2eDOxaLaPKzF62+0lmpPLFVw4wPl8I7J6UaWSk/8G8+gwcKUxDXD4hq31
+ 3b5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YxP/RU7sq2r2ln6dbXQw7F2XcajQLIUkQOW3IgcQKy8=;
+ b=x23brC6g1EJO3c+w0oybjlhCqLiaqSEykIDzIS0eNQ0vYmQrqPc8j77cISylp+Vwav
+ FNtbCC7I4x5mj8IwIAyJUJ8weqc5dQ8C2hMjeODm7AZFtOpE+Uophc7Trfq44d4Gl01e
+ 4Zo0wilXNyv3wOrzosmC2gMT8vdJ3NssbznuU2Q5IFz5f7PNbc9I0HrCMmQLdv7RJUDA
+ 0vKhx+wrNRsJDjmUyQwdJ/uc+IIw26eSRXTqm/4Dr6XDk86beao/Scz56ml789kNPzRx
+ jbtdqjtphhKi2jw2jh1S9yyl7dmOI/v+VR8dADbrckciR7RGKBvp2PwdLyuiv2VfYbHn
+ Pnfw==
+X-Gm-Message-State: AOAM533HFtR2w4oOT2ESVagLioVD07tD3oNi5IjtgFY3hFVwzFZ4+gyH
+ Ec3Uoh7yq6DHZikP7BEPswNgRCF3FiQ=
+X-Google-Smtp-Source: ABdhPJxKLtf0loOb8EvH2xJ7IpzaXC0ibyeW92SnLfjPDUyMIxJEgrsXnbH9gQMpECi+hWh+p7PcCw==
+X-Received: by 2002:a2e:8e6f:0:b0:246:4306:e412 with SMTP id
+ t15-20020a2e8e6f000000b002464306e412mr4536035ljk.8.1645773984157; 
+ Thu, 24 Feb 2022 23:26:24 -0800 (PST)
+Received: from localhost.localdomain ([5.188.167.245])
+ by smtp.googlemail.com with ESMTPSA id
+ z25-20020a2eb539000000b00244db8751a7sm184592ljm.67.2022.02.24.23.26.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 24 Feb 2022 23:26:23 -0800 (PST)
+From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-In-Reply-To: <20220224232159.1103756-1-aperez@igalia.com>
-References: <20220224232159.1103756-1-aperez@igalia.com>
+Date: Fri, 25 Feb 2022 10:26:16 +0300
+Message-Id: <20220225072622.3584480-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.12.1
+Subject: [Buildroot] [PATCH v2 0/6] orangepi/linksprite: convert more
+ allwinner boards to extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,60 +87,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2111841988991418682=="
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi all,
 
---===============2111841988991418682==
-Content-Type: multipart/signed; boundary="jWERmYFePGyNtVyc"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+Recently extlinux infrastructure has been added for  orangepi boards by
+Sergey Kuzminov: see commit c0312f71cc89 ("configs/orangepi_zero_defconfig:
+switch to extlinux"). This patch series converts to extlinux some of the
+boards that I have at my disposal:
+- orangepi-zero-plus2
+- orangepi-pc-plus
+- orangepi-one
+- linksprite-pcduino
+
+All these changes have been build- and boot- tested. Also I added
+orangepi-zero-plus2 to my list in DEVELOPERS file to keep an eye
+on its build failures.
+
+Regards,
+Sergey
+
+v1 -> v2
+- add linksprite-pcduino changes
+- update commit messages according to Giulio Benetti comments
 
 
---jWERmYFePGyNtVyc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+Sergey Matyukevich (6):
+  board/orangepi/orangepi-zero-plus2: switch to extlinux
+  board/orangepi/orangepi-pc-plus: switch to extlinux
+  board/orangepi/orangepi-one: switch to extlinux
+  board/linksprite/pcduino: switch to extlinux
+  configs/linksprite_pcduino_defconfig: update Linux/U-Boot versions
+  DEVELOPERS: add Sergey Matyukevich for orangepi-zero-plus2
 
-SGksCgpPbiBGcmksIDI1IEZlYiAyMDIyIDAxOjIxOjU5ICswMjAwIEFkcmlhbiBQZXJleiBkZSBD
-YXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPiB3cm90ZToKPiBUaGlzIGlzIGEgbWlub3IgcmVsZWFz
-ZSB3aGljaCBmaXhlcyBhbiBpbnN0YWxsYXRpb24gcGF0aCBhbmQgYSBjcmFzaAo+IHdpdGggY2Vy
-dGFpbiBXYXlsYW5kIGNvbXBvc2l0b3JzLiBSZWxlYXNlIG5vdGVzIGNhbiBiZSBmb3VuZCBhdDoK
-PiAKPiAgIGh0dHBzOi8vd3Bld2Via2l0Lm9yZy9yZWxlYXNlL2NvZy0wLjEyLjEuaHRtbAo+IAo+
-IFNpZ25lZC1vZmYtYnk6IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29t
-Pgo+IC0tLQo+ICBwYWNrYWdlL2NvZy9jb2cuaGFzaCB8IDggKysrKy0tLS0KPiAgcGFja2FnZS9j
-b2cvY29nLm1rICAgfCAyICstCj4gIDIgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1
-IGRlbGV0aW9ucygtKQoKSkZUUiwgdGhpcyByZWxlYXNlIGhhcyBvbmx5IGEgY291cGxlIG9mIGZp
-eGVzIGFuZCB0aGF0J3MgdGhlIHJlYXNvbiBJIGRpZG4ndApzZXQgdGhlIHN1YmplY3QgcHJlZml4
-IHRvICJQQVRDSC9uZXh0IjogSSB0aGluayBpdCdzIHdvcnRoIGluY2x1ZGluZyBpbiB0aGUKbmV4
-dCBzdGFibGUgdmVyc2lvbiBldmVuIGlmIHdlIG1pZ2h0IGJlIGEgYml0IGxhdGUgaW4gdGhlIGRl
-dmVsb3BtZW50IGN5Y2xlCihJIGFtIHdlbGwgYXdhcmUgdGhlcmUgYXJlIGFscmVhZHkgcmVsZWFz
-ZSBjYW5kaWRhdGVzISkKCklmIG90aGVycyB0aGluayBpdCdzIGJldHRlciB0byBtZXJnZSB0aGlz
-IGluICJuZXh0IiwgdGhhdCdsbCBiZSBva2F5LCBidXQgdGhlbgphdCBsZWFzdCB3ZSB3b3VsZCB3
-YW50IHRvIGluY2x1ZGUgYSB3b3JrYXJvdW5kIGZvciB0aGUgcGx1Zy1pbiBpbnN0YWxsYXRpb24K
-cGF0aCAoc2hvdWxkIGJlIGEgb25lLWxpbmUgcGF0Y2gsIGlmIHdlIGdvIGVuZCB1cCBnb2luZyB0
-aGlzIHdheSkuCgpDaGVlcnMsCuKAlEFkcmnDoW4K
+ DEVELOPERS                                    |  2 +
+ board/linksprite/pcduino/boot.cmd             |  8 ----
+ board/linksprite/pcduino/genimage.cfg         | 43 -------------------
+ board/linksprite/pcduino/post-build.sh        | 11 -----
+ board/linksprite/pcduino/post-image.sh        | 16 -------
+ board/orangepi/orangepi-one/boot.cmd          |  8 ----
+ board/orangepi/orangepi-one/genimage.cfg      | 37 ----------------
+ board/orangepi/orangepi-pc-plus/boot.cmd      |  8 ----
+ board/orangepi/orangepi-pc-plus/genimage.cfg  | 43 -------------------
+ board/orangepi/orangepi-zero-plus2/boot.cmd   |  6 ---
+ .../orangepi/orangepi-zero-plus2/genimage.cfg | 41 ------------------
+ configs/linksprite_pcduino_defconfig          | 18 ++++----
+ configs/orangepi_one_defconfig                |  9 ++--
+ configs/orangepi_pc_plus_defconfig            |  9 ++--
+ configs/orangepi_zero_plus2_defconfig         | 14 +++---
+ 15 files changed, 24 insertions(+), 249 deletions(-)
+ delete mode 100644 board/linksprite/pcduino/boot.cmd
+ delete mode 100644 board/linksprite/pcduino/genimage.cfg
+ delete mode 100755 board/linksprite/pcduino/post-build.sh
+ delete mode 100755 board/linksprite/pcduino/post-image.sh
+ delete mode 100644 board/orangepi/orangepi-one/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-one/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-pc-plus/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-pc-plus/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
 
---jWERmYFePGyNtVyc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYhgUNQAKCRCRxVnb5MkS
-O9HfAJ9+JAxTuhekfL5lad+XBJt/Le//vwCfcQHlRarp7pavunFlYpVJiA39704=
-=BIgy
------END PGP SIGNATURE-----
-
---jWERmYFePGyNtVyc--
-
---===============2111841988991418682==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2111841988991418682==--
