@@ -4,76 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9614BC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 23:05:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 208EEC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 23:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1C3360EDD;
-	Fri, 25 Feb 2022 23:05:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3E1F612FE;
+	Fri, 25 Feb 2022 23:06:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KPnZu63_izSb; Fri, 25 Feb 2022 23:05:50 +0000 (UTC)
+	with ESMTP id admRmjDDkpgm; Fri, 25 Feb 2022 23:06:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C9D260BB2;
-	Fri, 25 Feb 2022 23:05:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A65611BF2A7
- for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 23:05:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A7B060F23;
+	Fri, 25 Feb 2022 23:06:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BE3461BF2A7
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 23:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92FE160BB2
- for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 23:05:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD69141863
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 23:05:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OzNKHSYNgT54 for <buildroot@lists.busybox.net>;
- Fri, 25 Feb 2022 23:05:45 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mE8a2UHknD5Q for <buildroot@lists.busybox.net>;
+ Fri, 25 Feb 2022 23:05:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 866E860B8C
- for <buildroot@buildroot.org>; Fri, 25 Feb 2022 23:05:45 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id y5so2505018wmi.0
- for <buildroot@buildroot.org>; Fri, 25 Feb 2022 15:05:45 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 030BB4185E
+ for <buildroot@buildroot.org>; Fri, 25 Feb 2022 23:05:49 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id s1so6525789wrg.10
+ for <buildroot@buildroot.org>; Fri, 25 Feb 2022 15:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=x8sYsbNQeHsfdK7vYLux4gOctWqSd4scyhcz+RDoAJc=;
- b=ld1Gr7kdoxwBfFpT3m0tzps25ZWw0O7cnBs5lQI8UD6jLHnHqzt9CubTtqg0WFb6cT
- nFTVoYcGAVx2TXpbSy1rAgowjadHPOXxlBe4vDA0XS/BrzCw0Xd3R66ugNp1Dzv7oxEw
- DvF6D+L3TboVzoMnrkqAoDN53RJBZh7sN1whjkVaw2RwEoGJZhTwSwADTai5MhwMOMku
- n566ZTPCni0Nz8/sv9tULZ45sEQtzKAq9k1JM0VF7k+1B5wNdNAvuOGZpw3pt7DgfgY5
- +AZo02HRsUmZdDltsmHyxacl4ie/AjE0m0s75Iw/2Ch3klD9YIXi13d3aCmjnuzBsedV
- Kzwg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=nlatPE8DExEtYf/QtYn/Vtg1CUgXeMIRtJo42DsSZ7U=;
+ b=X/V8CT+YY/wSkb48jcwK85THrfX++VE9grtCuqyQ1xmUHbFxyA4P06NG0hFylXe516
+ /X43sXv7+DR+fEjyGZNNn9a3VSCOy92doKMVzxO02llDr4ghmJvCZO6oBX3k2Mqj3SFv
+ 64gOTyAUIklNAlieD4yis6/PtRa5hm9fmsPbSTzmqe5RBxqnwILHjMHAu36aH5JAI6sO
+ BJrdemDn407+9eUgoWf/v3BLXMC4LGpj38lUQXsJfqJHp2DApHd4w7uD+8gZ1+f24KHj
+ sUwUIEawMfDiQzydxzALLf40PFr98k2gScMDg+LNgir+vJMOjszH2PJcviOs46WSP/QA
+ dz8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=x8sYsbNQeHsfdK7vYLux4gOctWqSd4scyhcz+RDoAJc=;
- b=tTihmGlTvoJYYeaksGKqEOzBBP7XfWotpi2GHfAk/Up+fX1IDJtV4Seynu06XhE5lC
- XXn86fXZ4XR1eC/x4Fc9eQUnimEzKdA2Z1CqTvh10ns+inkxJc8rEX7cxMGkl4T/Z9Kw
- u9xU85lJWPZ3Cc2dqz5WSRM99+jw65k5LeF3w83kWCg+iRaqUKkqLtZjx1fo1A20RPqA
- /+gJrjj4dTr61R2lo+wrGvbjpi8iU7/StXmIPkxb9pYGpW+tBfjw3R4YqSdEb9GxVGQT
- pXX2Im+5i+oJRgAgaf4OsF9g0k4+7WpLw+CFkK/9mZx6WVdHnOwW2++enJT2uJdxIhcY
- qlJQ==
-X-Gm-Message-State: AOAM532914iqpJN+vQG/kHUSqr96jx1fo8w7EfY6Vl8gC6KAmkeod+4H
- hv1e9+twhoax01TPRpeTeoO+HNlFngU=
-X-Google-Smtp-Source: ABdhPJwSMmg5BlaTmEJfzBJiknfKV12WyHT0RKxZggziLiaqfz0e+bRmQPC8VUOBJPhaY3P8qX6BSg==
-X-Received: by 2002:a05:600c:1f14:b0:37b:c475:2de0 with SMTP id
- bd20-20020a05600c1f1400b0037bc4752de0mr4516772wmb.70.1645830343339; 
- Fri, 25 Feb 2022 15:05:43 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=nlatPE8DExEtYf/QtYn/Vtg1CUgXeMIRtJo42DsSZ7U=;
+ b=5kD4h8JXk45fR+ii4QzVJxfnYynwCLuc+Qqn2omp5Vu14upfsVvfa9b5p2PryNUQWm
+ viwmzaNhsWjBLAyo+qjURRKNTv8GrMITB4GfWWqIdvMVWMm6je2aDokocTKXzdgidhNY
+ 6KIFUFHUa2+Y6ENyXh9vj0nFtpeuBxb82YyiDGwL8pw7Q3aoVCuyDZ5ym4o0ebiHztuG
+ tCvcdiKZNfeGua/KWFqmB+2h03yEla009TW8AsvQ/pEhT7hDhJQ8r9UmEQ7wPhegDgHg
+ izFCjdU3zENUKaqdv4A+LpBbXluYQ8nBi/4Cx5jL1fffi6JXzWqK9deGnHRPTDdl2PNY
+ kLrQ==
+X-Gm-Message-State: AOAM530onLDcMV/JujxpAqxFsHXYmKVGKkpAn6H2fsxy12xwHkDeJSrm
+ RLrbAMSbdbdtPp06bF65iDBFE1tNli4=
+X-Google-Smtp-Source: ABdhPJwZjRPsYfD1LsRVSw0qVLZiMy1/qZriGudIuFHutdgmKfnSadYhXwlwbhm1zXUDdVR7atnUJA==
+X-Received: by 2002:a5d:6da7:0:b0:1ea:78a4:8e00 with SMTP id
+ u7-20020a5d6da7000000b001ea78a48e00mr7590387wrs.129.1645830347907; 
+ Fri, 25 Feb 2022 15:05:47 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- m5-20020a05600c3b0500b00380da3ac789sm4089329wms.1.2022.02.25.15.05.42
+ m5-20020a05600c3b0500b00380da3ac789sm4089329wms.1.2022.02.25.15.05.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Feb 2022 15:05:42 -0800 (PST)
+ Fri, 25 Feb 2022 15:05:47 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Feb 2022 00:05:18 +0100
-Message-Id: <20220225230519.1584174-1-fontaine.fabrice@gmail.com>
+Date: Sat, 26 Feb 2022 00:05:19 +0100
+Message-Id: <20220225230519.1584174-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220225230519.1584174-1-fontaine.fabrice@gmail.com>
+References: <20220225230519.1584174-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/zabbix: fix shared netsnmp build
+Subject: [Buildroot] [PATCH 2/2] package/zabbix: netsnmp needs mib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,94 +91,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Alexey Lukyanchuk <skif@skif-web.ru>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following shared build failure with netsnmp raised since the
-addition of the package in commit
-42382a171277ead59e365f5920e757f01c04ac77:
-
-configure: error: "libnetsnmp.a static library was not found in /home/buildroot/autobuild/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib"
-
-Fixes:
- - http://autobuild.buildroot.org/results/0f541e45d1fa27b3302968683bf64949131ec1c9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-netsnmp.m4-fix-shared-netsnmp-build.patch | 44 +++++++++++++++++++
- package/zabbix/zabbix.mk                      |  2 +
- 2 files changed, 46 insertions(+)
- create mode 100644 package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch
-
-diff --git a/package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch b/package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch
-new file mode 100644
-index 0000000000..ffb1f54ba2
---- /dev/null
-+++ b/package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch
-@@ -0,0 +1,44 @@
-+From 3e810c0804ec40ad6e111a9791cdb2033ecdad71 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 25 Feb 2022 23:30:19 +0100
-+Subject: [PATCH] m4/netsnmp.m4: fix shared netsnmp build
-+
-+Since commit fe391e8689c523d3c7ea6b173d25aa5dba3a6902, the build fails
-+with the following error if the user provides the path of
-+net-snmp-config through the --with-net-snmp option:
-+
-+configure: error: "libnetsnmp.a static library was not found in /home/buildroot/autobuild/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib"
-+
-+However, the assumption that a static library will be provided by the
-+system is just plain wrong so replace AC_MSG_ERROR by AC_MSG_WARN
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0f541e45d1fa27b3302968683bf64949131ec1c9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zabbix/zabbix/pull/61]
-+---
-+ m4/netsnmp.m4 | 7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/m4/netsnmp.m4 b/m4/netsnmp.m4
-+index 5e84d84303..87e21a67e6 100644
-+--- a/m4/netsnmp.m4
-++++ b/m4/netsnmp.m4
-+@@ -140,8 +140,11 @@ AC_HELP_STRING([--with-net-snmp@<:@=ARG@:>@],
-+ 			test [ "x$static_linking_support" = "xno" -o -z "$static_linking_support" ] -a -z "$_libsnmp_dir_lib" && AC_MSG_ERROR(["Compiler not support statically linked libs from default folders"])
-+ 
-+ 			if test "x$static_linking_support" = "xno" -o -z "$static_linking_support"; then
-+-				test -f $_libsnmp_dir_lib/libnetsnmp.a || AC_MSG_ERROR(["libnetsnmp.a static library was not found in $_libsnmp_dir_lib"])
-+-				SNMP_LIBS=`echo "$SNMP_LIBS"|sed "s|-lnetsnmp|$_libsnmp_dir_lib/libnetsnmp.a|g"`
-++				if test -f $_libsnmp_dir_lib/libnetsnmp.a; then
-++					SNMP_LIBS=`echo "$SNMP_LIBS"|sed "s|-lnetsnmp|$_libsnmp_dir_lib/libnetsnmp.a|g"`
-++				else
-++					AC_MSG_WARN(["libnetsnmp.a static library was not found in $_libsnmp_dir_lib"])
-++				fi
-+ 			else
-+ 				SNMP_LIBS=`echo "$SNMP_LIBS"|sed "s/-lnetsnmp/${static_linking_support}static -lnetsnmp ${static_linking_support}dynamic/g"`
-+ 			fi
-+-- 
-+2.34.1
-+
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index e6564e68fd..a8ecbb42db 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -10,6 +10,8 @@ ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJO
- ZABBIX_LICENSE = GPL-2.0+
- ZABBIX_LICENSE_FILES = README COPYING
- ZABBIX_CPE_ID_VENDOR = zabbix
-+# We're patching m4/netsnmp.m4
-+ZABBIX_AUTORECONF = YES
- 
- ZABBIX_DEPENDENCIES = pcre
- ZABBIX_CONF_OPTS = \
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+bmV0c25tcCBzdXBwb3J0IG5lZWRzIG1pYiB0byBhdm9pZCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZh
+aWx1cmUgcmFpc2VkCnNpbmNlIHRoZSBhZGRpdGlvbiBvZiB0aGUgcGFja2FnZSBpbiBjb21taXQK
+NDIzODJhMTcxMjc3ZWFkNTllMzY1ZjU5MjBlNzU3ZjAxYzA0YWM3NzoKCmNoZWNrc19zbm1wLmM6
+IEluIGZ1bmN0aW9uIOKAmHpieF9zbm1wX2dldF9vY3RldF9zdHJpbmfigJk6CmNoZWNrc19zbm1w
+LmM6Njk0OjM1OiBlcnJvcjogaW52YWxpZCB1c2Ugb2YgdW5kZWZpbmVkIHR5cGUg4oCYc3RydWN0
+IHRyZWXigJkKICA2OTQgfCAgaGludCA9IChOVUxMICE9IHN1YnRyZWUgPyBzdWJ0cmVlLT5oaW50
+IDogTlVMTCk7CiAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+CgpG
+aXhlczoKIC0gTm8gYXV0b2J1aWxkZXIgZmFpbHVyZXMgKHlldCkKClNpZ25lZC1vZmYtYnk6IEZh
+YnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotLS0KIHBhY2thZ2Uv
+emFiYml4L3phYmJpeC5tayB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvemFiYml4L3phYmJpeC5tayBiL3Bh
+Y2thZ2UvemFiYml4L3phYmJpeC5tawppbmRleCBhOGVjYmI0MmRiLi5hZGM1NDAyOGFkIDEwMDY0
+NAotLS0gYS9wYWNrYWdlL3phYmJpeC96YWJiaXgubWsKKysrIGIvcGFja2FnZS96YWJiaXgvemFi
+Yml4Lm1rCkBAIC01NSw3ICs1NSw3IEBAIGVsc2UKIFpBQkJJWF9DT05GX09QVFMgKz0gLS13aXRo
+b3V0LWxpYnhtbDIKIGVuZGlmCiAKLWlmZXEgKCQoQlIyX1BBQ0tBR0VfTkVUU05NUCkseSkKK2lm
+ZXEgKCQoQlIyX1BBQ0tBR0VfTkVUU05NUF9FTkFCTEVfTUlCUykseSkKIFpBQkJJWF9DT05GX09Q
+VFMgKz0gLS13aXRoLW5ldC1zbm1wPSQoU1RBR0lOR19ESVIpL3Vzci9iaW4vbmV0LXNubXAtY29u
+ZmlnCiBaQUJCSVhfREVQRU5ERU5DSUVTICs9IG5ldHNubXAKIGVsc2UKLS0gCjIuMzQuMQoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
