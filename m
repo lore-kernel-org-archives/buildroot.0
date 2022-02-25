@@ -1,82 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C07FEC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 18:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4327C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 21:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 400D2418D8;
-	Fri, 25 Feb 2022 18:52:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E9A684C28;
+	Fri, 25 Feb 2022 21:52:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jF-mtF40lwTi; Fri, 25 Feb 2022 18:52:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D2gBbPPeJtMW; Fri, 25 Feb 2022 21:52:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47A5D418B0;
-	Fri, 25 Feb 2022 18:52:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6681684C25;
+	Fri, 25 Feb 2022 21:52:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 350FA1BF3BA
- for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 18:52:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 38D951BF3A9
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 21:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22087404DD
- for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 18:52:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2720640AC6
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 21:52:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 31qSYp0C62Q1 for <buildroot@lists.busybox.net>;
- Fri, 25 Feb 2022 18:52:27 +0000 (UTC)
+ with ESMTP id A597bChtB7NH for <buildroot@lists.busybox.net>;
+ Fri, 25 Feb 2022 21:52:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B1A3540323
- for <buildroot@buildroot.org>; Fri, 25 Feb 2022 18:52:26 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id i19so2171828wmq.5
- for <buildroot@buildroot.org>; Fri, 25 Feb 2022 10:52:26 -0800 (PST)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BFD3740385
+ for <buildroot@buildroot.org>; Fri, 25 Feb 2022 21:52:50 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id d17so6336354wrc.9
+ for <buildroot@buildroot.org>; Fri, 25 Feb 2022 13:52:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=IuFabWjpcQpkj2HMzCT3W3KaKrorRE0zkw1gsStyBvg=;
- b=gbMmx+6qId1hzugvIKD7aienb/Ckr4CyDJIZB7lIF+0XtesTUaFM+NG9GZSlBKyDD3
- ldkD2ugz6leILxl5eBDsngSPlK+5Kw6+sAhWYAypkbI1m40rCVhqAytdNb0tGir1eFn6
- ljRl2FoJV1uGgtCmdy5XcHxB/iiFlwYFzzkGR2wlSK4Xs8HeWeAunVOiXzc7FT0f7hs8
- 80raI0AA9NtFtkvF7xsYrR7iRzIxmz9hjjsA4UREovjf7J0SXPWAgABzOcZIGjZhmcdo
- Ft6FBRO53r+5Sb3GRWHVWzapg7DNp2+/H+xJj3/ZgdAXMDYrGdJtfxMod1EiKtS5CkeT
- ZoMw==
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=65Pt+//BUuoflna20fUwSecvBRyv3ffJpH3fd4bcH9M=;
+ b=nqr18dFDzQC9YuBewhizvDGUirjGRDRIFBO6Zr6IOMGdmeWgwbNTgVfxY+4ULYM/dX
+ NwvGCLr/6JwpsgKuTJ3VcrDXpzXOaIS0274CtLT2mhKFpvCy3wV9tozNkVSM6Cl2fjQo
+ PDaAjUNDlkQqMSyRrhZDFfInduDZThlUBFIgnjCoApFU8NnA3R7jLgWnusvBTXBe18Ut
+ PeUJhkfqnAKtT2dG8pocndrZLoWuKd0uSQd4B5hwxbDWpRe11bUbYtpd2zlKHAG/u5wi
+ zUfH+kNAL/vmdnvYwb1X2p2TAoQWpO2dLbWI9RxJwfJEGYgH6ocVk8sNq8qEjmw+Peb5
+ drIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
  :content-transfer-encoding;
- bh=IuFabWjpcQpkj2HMzCT3W3KaKrorRE0zkw1gsStyBvg=;
- b=3jCYLKvc4tY9i1jTaTjsrSXZnMLp+gZTR2Yy1hXLCKrFEHruI9yvH7mlZVuUrQXtAM
- cDOR92q4tygn2vKjqAK7MAvcDMo2rdu4zdjs6/7somO5qRHWRuMcxfQHQ83k7yBEgdGL
- SWU4tfRqDzXN7N3MDkTs0VkfiKd2wSr2aAmZisidB4MaK70y+tR7pgYyXxEdmm+uORJh
- +P4kk9SbDFuyhHcMe/Bsvtq8HRECINUg1WmLbz+Z18IPzCps04CFXvsPvOHwoLwlZGAa
- gtA+WTV8mt5griQfMvHQbRJ6nZhYIhpHPa0EOtJTGnqJyZz5YAv7brypk4JBat9oKJs9
- 3XSA==
-X-Gm-Message-State: AOAM530jzrWA/rCmx/kRy7D5pIg/WZ827cBbA+O2bk9/Ql6j66xzobSt
- N0PlMZdB0ABB6nCmMuTUByT2Tvy2d5I=
-X-Google-Smtp-Source: ABdhPJziSZlfIbNulGPz1wZpfyiEBDy0F3YahI6Uof+nlVnNsfSopCLieFqe8guDW1pF8xgOwSNASg==
-X-Received: by 2002:a05:600c:4f54:b0:37b:fe6a:ea9c with SMTP id
- m20-20020a05600c4f5400b0037bfe6aea9cmr3997242wmq.169.1645815144612; 
- Fri, 25 Feb 2022 10:52:24 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=65Pt+//BUuoflna20fUwSecvBRyv3ffJpH3fd4bcH9M=;
+ b=je6AVjASPdZPXwXQBndDtm2lshQdHXg6bszAH/KHIw9e5V20n8Dxgj/I2oPHeNpqWq
+ 7Ca9xKH9ZaGI3+hgcSIrwiw0wpNRcT29+v+oiqmdplklGYPyrXzHsxQgNSi2LLaY2oT+
+ 7QViTD8nNES3wvTAhsINcjW9FtGZmAaf8s+9xSgcwCnZ97R7BVVkKvDDm5jWS52Gz9K1
+ w7NLdKg8wfHvBwPilXLOaHQ14NCQ07Thg9r7RiEE4s6ic7144eSNiNCoPuJULgl56YBj
+ vHjjiRVyrk0ny/n+0M+loxYeRTS+qzo8s8cHNysT4b5Dz1TkPn8bow6IeOE+079A6I39
+ MurQ==
+X-Gm-Message-State: AOAM533k0txxPtzP5rJwzBwVAoKE5f2aUyoLH8FtB+hS9KDKJO3FaVqk
+ YuWnnnVTqr3WH0TApZOsrK8n8pv3RtM=
+X-Google-Smtp-Source: ABdhPJyasEoWB/I7WdlzhOULXuzAQAOvo1afUPJdn53HfG0+4AdhCmnmsce0zaE4f0s8GaCWmO0RVw==
+X-Received: by 2002:a5d:4ccd:0:b0:1ed:a139:708f with SMTP id
+ c13-20020a5d4ccd000000b001eda139708fmr7326890wrt.672.1645825967318; 
+ Fri, 25 Feb 2022 13:52:47 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
  by smtp.gmail.com with ESMTPSA id
- u9-20020a05600c19c900b0037c050d73dcsm7304449wmq.46.2022.02.25.10.52.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Feb 2022 10:52:24 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 25 Feb 2022 19:52:04 +0100
-Message-Id: <20220225185204.1043277-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ m10-20020adfe94a000000b001ef57f562ccsm3360481wrn.51.2022.02.25.13.52.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 25 Feb 2022 13:52:46 -0800 (PST)
+Message-ID: <e59b1624-6a7e-69c2-5e36-a1f54fd53e81@gmail.com>
+Date: Fri, 25 Feb 2022 22:52:45 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rpi-userland: fix build with
- libexecinfo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20220224154118.220408-1-romain.naour@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20220224154118.220408-1-romain.naour@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/pkg-python: use
+ SETUPTOOLS_USE_DISTUTILS=stdlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,113 +94,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised on uclibc and musl since the
-addition of libexecinfo package in commit
-eea8ba446c10701a273432552108d80fb2224ef4:
-
-/home/peko/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../build/lib/libvcos.so: undefined reference to `backtrace_symbols'
-
-Fixes:
- - http://autobuild.buildroot.org/results/93d3b8cc2ac5dfa9d4b44946c0b4d8171e8f52a1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...on-t-override-CMAKE_EXE_LINKER_FLAGS.patch | 58 +++++++++++++++++++
- package/rpi-userland/rpi-userland.mk          |  5 ++
- 2 files changed, 63 insertions(+)
- create mode 100644 package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch
-
-diff --git a/package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch b/package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch
-new file mode 100644
-index 0000000000..bf2a9eb6ea
---- /dev/null
-+++ b/package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch
-@@ -0,0 +1,58 @@
-+From 87febf8b7b1c0a6d0ea1d26770d3665008d66fd2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 25 Feb 2022 19:21:06 +0100
-+Subject: [PATCH] don't override CMAKE_EXE_LINKER_FLAGS
-+
-+Don't override CMAKE_EXE_LINKER_FLAGS as it could be used by the user to
-+pass additional flags such as -lexecinfo on musl and uclibc-ng
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/raspberrypi/userland/pull/719]
-+---
-+ host_applications/android/apps/vidtex/CMakeLists.txt | 2 +-
-+ host_applications/linux/apps/raspicam/CMakeLists.txt | 2 +-
-+ makefiles/cmake/arm-linux.cmake                      | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/host_applications/android/apps/vidtex/CMakeLists.txt b/host_applications/android/apps/vidtex/CMakeLists.txt
-+index e7206cc..16c64db 100644
-+--- a/host_applications/android/apps/vidtex/CMakeLists.txt
-++++ b/host_applications/android/apps/vidtex/CMakeLists.txt
-+@@ -5,7 +5,7 @@ SET(COMPILE_DEFINITIONS -Werror -Wall)
-+ # Set --no-as-needed to stop the linker discarding mmal_vc_client
-+ # as it can't see that the constructor registers a load of functionality
-+ # with the MMAL core.
-+-SET( CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed" )
-++SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" )
-+ 
-+ include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
-+ 
-+diff --git a/host_applications/linux/apps/raspicam/CMakeLists.txt b/host_applications/linux/apps/raspicam/CMakeLists.txt
-+index e6bd373..2f72eb2 100644
-+--- a/host_applications/linux/apps/raspicam/CMakeLists.txt
-++++ b/host_applications/linux/apps/raspicam/CMakeLists.txt
-+@@ -6,7 +6,7 @@ SET(COMPILE_DEFINITIONS -Werror)
-+ # Set --no-as-needed to stop the linker discarding mmal_vc_client
-+ # as it can't see that the constructor registers a load of functionality
-+ # with the MMAL core.
-+-SET( CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed" )
-++SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" )
-+ 
-+ include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
-+ include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/apps/raspicam/)
-+diff --git a/makefiles/cmake/arm-linux.cmake b/makefiles/cmake/arm-linux.cmake
-+index 957846a..e172282 100644
-+--- a/makefiles/cmake/arm-linux.cmake
-++++ b/makefiles/cmake/arm-linux.cmake
-+@@ -93,7 +93,7 @@ if(ANDROID)
-+     set(CMAKE_SHARED_LINKER_FLAGS "-nostdlib ${ANDROID_CRTBEGIN} -Wl,-Bdynamic -Wl,-T${ANDROID_LDSCRIPTS}/armelf.x")
-+ 
-+     link_directories(${ANDROID_LIBS})
-+-    set(CMAKE_EXE_LINKER_FLAGS "-nostdlib ${ANDROID_CRTBEGIN} -nostdlib -Wl,-z,noexecstack") 
-++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -nostdlib ${ANDROID_CRTBEGIN} -nostdlib -Wl,-z,noexecstack") 
-+     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-dynamic-linker,/system/bin/linker -Wl,-rpath,${CMAKE_INSTALL_PREFIX}/lib")
-+     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-T${ANDROID_LDSCRIPTS}/armelf.x -Wl,--gc-sections")
-+     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,nocopyreloc -Wl,-z,noexecstack -Wl,--fix-cortex-a8 -Wl,--no-undefined")
-+-- 
-+2.34.1
-+
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 84050b6df3..3564ec0703 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -13,6 +13,11 @@ RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
- 
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
- 
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+RPI_USERLAND_DEPENDENCIES += libexecinfo
-+RPI_USERLAND_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lexecinfo
-+endif
-+
- ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
- 
- RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgMjQvMDIvMjAyMiDDoCAxNjo0MSwgUm9tYWluIE5hb3VyIGEgw6ljcml0wqA6Cj4gLXNoOiBp
+cHl0aG9uOiBub3QgZm91bmQKPiAKPiBpcHl0aG9uIHVzZSBhIHdyb25nIHNoZWJhbmcgb24gdGhl
+IHRhcmdldDoKPiAKPiAgIyBoZWFkIC1uIDEgL3Vzci9iaW4vaXB5dGhvbgo+ICAjIS9ob21lL2t1
+YnUvYnVpbGRyb290L3Rlc3RzdWl0ZS1tYXN0ZXIvVGVzdElQeXRob25QeTMvaG9zdC9iaW4vcHl0
+aG9uCj4gCj4gVGhlIGlzc3VlIGNvbWUgZnJvbSBweXRob24zLXNldHVwdG9vbHMgNjAuMC4wIHRo
+YXQgY2hhbmdlZAo+IFNFVFVQVE9PTFNfVVNFX0RJU1RVVElMUyBkZWZhdWx0IHZhbHVlIGZyb20g
+c3RkbGliIHRvIGxvY2FsIFsxXSB0byB1c2UKPiBpdHMgbG9jYWwgY29weSBvZiBkaXN0dXRpbHMu
+IFRoaXMgaXMgYWN0dWFsbHkgYSAiYnJlYWtpbmciIGNoYW5nZSBbMl0uCj4gCj4gV2UgaGF2ZSB0
+byBvdmVycmlkZSBTRVRVUFRPT0xTX1VTRV9ESVNUVVRJTFMgdG8gdGhlIHByZXZpb3VzIHZhbHVl
+Cj4gInN0ZGxpYiIgdG8gZml4ZXMgdGhlIGlzc3VlLgo+IAo+IFdoaWxlIGF0IGl0LCB1c2UgZGlz
+dHV0aWxzIGZyb20gc3RkbGliIGZvciB0aGUgaG9zdC4KPiAKPiBGaXhlczoKPiBodHRwczovL2dp
+dGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzIwODg2ODQwOTEKPiAKPiBb
+MV0gaHR0cHM6Ly9naXRodWIuY29tL3B5cGEvc2V0dXB0b29scy9jb21taXQvYjZmY2JiZDAwY2I2
+ZDU2MDdjOTI3MmRlYzQ1MmE1MDQ1N2JkYjI5Mgo+IFsyXSBodHRwczovL2dpdGh1Yi5jb20vcHlw
+YS9zZXR1cHRvb2xzL2Jsb2IvdjYwLjAuMC9DSEFOR0VTLnJzdCNicmVha2luZy1jaGFuZ2VzCgpJ
+IG5vdGljZWQgdGhhdCBRZW11IGluY2x1ZGVkIGEgd29ya2Fyb3VuZCBmb3Igc2V0dXB0b29scyA+
+PSA2MDoKCmh0dHBzOi8vZ2l0LnFlbXUub3JnLz9wPXFlbXUuZ2l0O2E9Y29tbWl0ZGlmZjtoPTc2
+MmMyODBkNWYzYzE3YTIzOTIwNGE3Mzg1NWQ4Nzc4ZjZkYzIxMTMKCkJlc3QgcmVnYXJkcywKUm9t
+YWluCgo+IAo+IFNpZ25lZC1vZmYtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdtYWls
+LmNvbT4KPiBDYzogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4g
+LS0tCj4gIHBhY2thZ2UvcGtnLXB5dGhvbi5tayB8IDQgKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwg
+NCBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLXB5dGhvbi5tayBi
+L3BhY2thZ2UvcGtnLXB5dGhvbi5tawo+IGluZGV4IGI4ZGM5Y2Q5ZTUuLmU4MWExYTMxMDIgMTAw
+NjQ0Cj4gLS0tIGEvcGFja2FnZS9wa2ctcHl0aG9uLm1rCj4gKysrIGIvcGFja2FnZS9wa2ctcHl0
+aG9uLm1rCj4gQEAgLTQwLDYgKzQwLDcgQEAgUEtHX1BZVEhPTl9ESVNUVVRJTFNfRU5WID0gXAo+
+ICAJTERTSEFSRUQ9IiQoVEFSR0VUX0NST1NTKWdjYyAtc2hhcmVkIiBcCj4gIAlQWVRIT05QQVRI
+PSIkKFBZVEhPTjNfUEFUSCkiIFwKPiAgCVBZVEhPTk5PVVNFUlNJVEU9MSBcCj4gKwlTRVRVUFRP
+T0xTX1VTRV9ESVNUVVRJTFM9c3RkbGliIFwKPiAgCV9QWVRIT05fSE9TVF9QTEFURk9STT0iJChQ
+S0dfUFlUSE9OX0hPU1RfUExBVEZPUk0pIiBcCj4gIAlfUFlUSE9OX1BST0pFQ1RfQkFTRT0iJChQ
+WVRIT04zX0RJUikiIFwKPiAgCV9QWVRIT05fU1lTQ09ORklHREFUQV9OQU1FPSIkKFBLR19QWVRI
+T05fU1lTQ09ORklHREFUQV9OQU1FKSIgXAo+IEBAIC02Miw2ICs2Myw3IEBAIFBLR19QWVRIT05f
+RElTVFVUSUxTX0lOU1RBTExfU1RBR0lOR19PUFRTID0gXAo+ICBIT1NUX1BLR19QWVRIT05fRElT
+VFVUSUxTX0VOViA9IFwKPiAgCVBBVEg9JChCUl9QQVRIKSBcCj4gIAlQWVRIT05OT1VTRVJTSVRF
+PTEgXAo+ICsJU0VUVVBUT09MU19VU0VfRElTVFVUSUxTPXN0ZGxpYiBcCj4gIAkkKEhPU1RfQ09O
+RklHVVJFX09QVFMpCj4gIAo+ICBIT1NUX1BLR19QWVRIT05fRElTVFVUSUxTX0lOU1RBTExfT1BU
+UyA9IFwKPiBAQCAtNzYsNiArNzgsNyBAQCBQS0dfUFlUSE9OX1NFVFVQVE9PTFNfRU5WID0gXAo+
+ICAJJChUQVJHRVRfQ09ORklHVVJFX09QVFMpIFwKPiAgCVBZVEhPTlBBVEg9IiQoUFlUSE9OM19Q
+QVRIKSIgXAo+ICAJUFlUSE9OTk9VU0VSU0lURT0xIFwKPiArCVNFVFVQVE9PTFNfVVNFX0RJU1RV
+VElMUz1zdGRsaWIgXAo+ICAJX3B5dGhvbl9zeXNyb290PSQoU1RBR0lOR19ESVIpIFwKPiAgCV9w
+eXRob25fcHJlZml4PS91c3IgXAo+ICAJX3B5dGhvbl9leGVjX3ByZWZpeD0vdXNyCj4gQEAgLTk2
+LDYgKzk5LDcgQEAgUEtHX1BZVEhPTl9TRVRVUFRPT0xTX0lOU1RBTExfU1RBR0lOR19PUFRTID0g
+XAo+ICBIT1NUX1BLR19QWVRIT05fU0VUVVBUT09MU19FTlYgPSBcCj4gIAlQQVRIPSQoQlJfUEFU
+SCkgXAo+ICAJUFlUSE9OTk9VU0VSU0lURT0xIFwKPiArCVNFVFVQVE9PTFNfVVNFX0RJU1RVVElM
+Uz1zdGRsaWIgXAo+ICAJJChIT1NUX0NPTkZJR1VSRV9PUFRTKQo+ICAKPiAgSE9TVF9QS0dfUFlU
+SE9OX1NFVFVQVE9PTFNfSU5TVEFMTF9PUFRTID0gXAoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
