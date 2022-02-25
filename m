@@ -1,80 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCB0C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 08:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65694C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 25 Feb 2022 09:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7896183EAF;
-	Fri, 25 Feb 2022 08:30:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9B1260B5C;
+	Fri, 25 Feb 2022 09:25:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QN_ZJgukxZEZ; Fri, 25 Feb 2022 08:30:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f9ZKeDFj0w2V; Fri, 25 Feb 2022 09:25:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B570683EA2;
-	Fri, 25 Feb 2022 08:30:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F4621BF384
- for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 08:30:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2303560B47;
+	Fri, 25 Feb 2022 09:25:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B3B4D1BF395
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 09:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5BE0983EA2
- for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 08:30:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A04DA40151
+ for <buildroot@lists.busybox.net>; Fri, 25 Feb 2022 09:25:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yaktZ0UVijQk for <buildroot@lists.busybox.net>;
- Fri, 25 Feb 2022 08:30:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 601E983E9F
- for <buildroot@buildroot.org>; Fri, 25 Feb 2022 08:30:44 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id d28so3293350wra.4
- for <buildroot@buildroot.org>; Fri, 25 Feb 2022 00:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Gmj/E0HJ2+xV3v9+s2Y377sPHqvievaXY1Cevw8pE0U=;
- b=Xnaejpzkdw/sjKuPJ8B2ZGA2lmYPU6euhxIhdnFwnV3B4rmqVZt0nnE5XvVjSxvHBl
- 8C0pip0DrT1FDiLAZrm4V5mXI/U1xnVKIKd1OGeucdoZKL3s66oOZzbW3p4DvMkTznM0
- UWvdPvVxK8DxP6f6eg9Ux8+ML0EFPlWaa7NFp/2gk8O1JKTlLN+f8MeRZkC9nPi52777
- DmZ0Q4bvfSQBeGOKjgYdtQilng+YWNFJKWXrXFVTC/hw+x2pWdyjEcR0LMAByFslcHG8
- 3XeUO0+iXM3AxHEqkjnHi93nuBg0/X3y1ur8piAIL7tfXVyYc2f0duiVTus33kiljt7Q
- HyPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Gmj/E0HJ2+xV3v9+s2Y377sPHqvievaXY1Cevw8pE0U=;
- b=jAD3ocw8DdGTKljSFn9VsO/cNVS5ZCu+K8fHqs7LYkq1Ay9TzDSr+k0TXG3expC8N+
- FqspUtj/xqaj7kzjrDrLFMpwKrmf3SJ5M5/6nLqvyZqsVMMiJJvZbpfNCYxheN1xRSAA
- AiQL7HapTklrXH63S41WrBD5DXtmQd568Y1CtXc80hvNxqUD1okcqlwBgFg02y5vyaee
- Dy4Xdz4zTI/1C3UAPth1i18sAGzAWfKQgnwC1u7tjk2+WBnbYWcxsJRcTjGaqVW9c8TJ
- Kh/89i1ByA3b3R4bc+nz3FVBY7BljG9KOCGGzVObwiDQaa8cLudiNnHDKb4lmwX8ClTL
- u9xQ==
-X-Gm-Message-State: AOAM532yiCfK/hLzz6cwKK/SQShDJ0CJie7tzoSmRvCr8BEa83+t908b
- DSNQ1UQYLP8UGLGR1mVcItqhB3jnAsI=
-X-Google-Smtp-Source: ABdhPJzpCUW2CbGHidzTpuRo6k/1SbPgDLmEiCrLI7vXAepljMEEugklvAADRKlnQUcCv9llIlr9Vg==
-X-Received: by 2002:adf:ec47:0:b0:1e4:a380:bb73 with SMTP id
- w7-20020adfec47000000b001e4a380bb73mr5279682wrn.86.1645777842467; 
- Fri, 25 Feb 2022 00:30:42 -0800 (PST)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id
- e17-20020a05600c219100b0038114228b81sm3720071wme.2.2022.02.25.00.30.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Feb 2022 00:30:41 -0800 (PST)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 25 Feb 2022 09:30:37 +0100
-Message-Id: <20220225083037.229109-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DENYROuY1Rkq for <buildroot@lists.busybox.net>;
+ Fri, 25 Feb 2022 09:25:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from Atcsqr.andestech.com (exmail.andestech.com [60.248.187.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4980640004
+ for <buildroot@buildroot.org>; Fri, 25 Feb 2022 09:25:39 +0000 (UTC)
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+ by Atcsqr.andestech.com with ESMTP id 21P9PMLU056744;
+ Fri, 25 Feb 2022 17:25:22 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from atcfdc88.andestech.com (10.0.15.120) by ATCPCS16.andestech.com
+ (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0;
+ Fri, 25 Feb 2022 17:25:19 +0800
+From: Yu Chien Peter Lin <peterlin@andestech.com>
+To: <buildroot@buildroot.org>
+Date: Fri, 25 Feb 2022 17:25:06 +0800
+Message-ID: <20220225092509.16478-1-peterlin@andestech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/rust: set musl-root for musl toolchains
+X-Originating-IP: [10.0.15.120]
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 21P9PMLU056744
+Subject: [Buildroot] [PATCH v5 0/3] Add andes ae350 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,45 +59,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Yu Chien Peter Lin <peterlin@andestech.com>, alankao@andestech.com,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Without musl-root in config.toml the build stop with the following error:
+This patchset
+- renames andes/ae3xx and its defconfig to ae300 for nds32 architecture.
+- adds ae350 platform support and andes_ae350_45_defconfig.
 
-thread 'main' panicked at 'couldn't find libc.a in musl libdir: output/host/arm-buildroot-linux-musleabihf/sysroot/lib/lib', src/bootstrap/sanity.rs:192:25
+Yu Chien Peter Lin (3):
+  board/andes: rearrange andes folder structure
+  board/andes/ae350: add support for Andes AE350
+  DEVELOPERS: add Yu-Chien Lin to board/andes
 
-musl-root is needed to provide the path to libc.a and libunwind.a because
-rust link them statically into the standard library and liblibc [1].
+ DEVELOPERS                                    |   5 +-
+ .../ae3xx.fragment => ae300/ae300.fragment}   |   0
+ ...0001-nds32-Fix-boot-messages-garbled.patch |   0
+ ...ve-redundant-YYLOC-global-declaratio.patch |   0
+ board/andes/{ => ae300}/readme.txt            |  10 +-
+ board/andes/ae350/ae350.dts                   | 274 ++++++++++++++++++
+ board/andes/ae350/genimage_sdcard.cfg         |  26 ++
+ ...isable-PIC-explicitly-for-assembling.patch |  29 ++
+ ...2-Enable-cache-for-opensbi-jump-mode.patch |  25 ++
+ ...001-Fix-mmc-no-partition-table-error.patch |  27 ++
+ ...2-Prevent-fw_dynamic-from-relocation.patch |  27 ++
+ ...0003-Fix-u-boot-proper-booting-issue.patch |  26 ++
+ ...04-Enable-printing-OpenSBI-boot-logo.patch |  25 ++
+ board/andes/ae350/post-build.sh               |   3 +
+ board/andes/ae350/readme.txt                  |  65 +++++
+ .../boot/extlinux/extlinux.conf               |   4 +
+ board/andes/ae350/uboot.config.fragment       |   5 +
+ ..._ae3xx_defconfig => andes_ae300_defconfig} |   4 +-
+ configs/andes_ae350_45_defconfig              |  43 +++
+ .../toolchain-external-andes-nds32/Config.in  |   2 +-
+ 20 files changed, 590 insertions(+), 10 deletions(-)
+ rename board/andes/{ae3xx/ae3xx.fragment => ae300/ae300.fragment} (100%)
+ rename board/andes/{ => ae300}/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch (100%)
+ rename board/andes/{ => ae300}/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch (100%)
+ rename board/andes/{ => ae300}/readme.txt (71%)
+ create mode 100755 board/andes/ae350/ae350.dts
+ create mode 100644 board/andes/ae350/genimage_sdcard.cfg
+ create mode 100644 board/andes/ae350/patches/opensbi/0001-Disable-PIC-explicitly-for-assembling.patch
+ create mode 100644 board/andes/ae350/patches/opensbi/0002-Enable-cache-for-opensbi-jump-mode.patch
+ create mode 100644 board/andes/ae350/patches/uboot/0001-Fix-mmc-no-partition-table-error.patch
+ create mode 100644 board/andes/ae350/patches/uboot/0002-Prevent-fw_dynamic-from-relocation.patch
+ create mode 100644 board/andes/ae350/patches/uboot/0003-Fix-u-boot-proper-booting-issue.patch
+ create mode 100644 board/andes/ae350/patches/uboot/0004-Enable-printing-OpenSBI-boot-logo.patch
+ create mode 100755 board/andes/ae350/post-build.sh
+ create mode 100644 board/andes/ae350/readme.txt
+ create mode 100644 board/andes/ae350/rootfs_overlay/boot/extlinux/extlinux.conf
+ create mode 100644 board/andes/ae350/uboot.config.fragment
+ rename configs/{andes_ae3xx_defconfig => andes_ae300_defconfig} (69%)
+ create mode 100644 configs/andes_ae350_45_defconfig
 
-For other libc, musl-root is not used and ignored [2].
-
-[1] https://github.com/rust-lang/rust/commit/cd980b3bee5bd48e8a6cd4c0d7c8e0fb0fdb64dd
-[2] https://github.com/rust-lang/rust/blob/1.58.1/src/bootstrap/sanity.rs#L181
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-Runtime tested with TestRust with ripgrep and bat packages.
----
- package/rust/rust.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 4a6b04dc8c..c2e0a361dd 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -56,6 +56,7 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
- 		echo '[rust]'; \
- 		echo 'channel = "stable"'; \
-+		echo 'musl-root = "$(STAGING_DIR)"' ; \
- 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
- 		echo 'cc = "$(TARGET_CROSS)gcc"'; \
- 		echo '[llvm]'; \
 -- 
-2.35.1
+2.17.1
 
 _______________________________________________
 buildroot mailing list
