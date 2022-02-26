@@ -1,81 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACD91C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 15:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08ED2C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 16:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A7CF40320;
-	Sat, 26 Feb 2022 15:52:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85AF8833AE;
+	Sat, 26 Feb 2022 16:05:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oGeQSo0-UcsF; Sat, 26 Feb 2022 15:52:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MITqucjPfe04; Sat, 26 Feb 2022 16:05:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F25EC4015A;
-	Sat, 26 Feb 2022 15:52:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 161BC1BF284
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 15:52:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B190182B08;
+	Sat, 26 Feb 2022 16:05:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9401A1BF422
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 16:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F313B60810
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 15:52:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81DC982D0F
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 16:05:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g-SaxC0MpZAF for <buildroot@lists.busybox.net>;
- Sat, 26 Feb 2022 15:52:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5NxqhUrf8oGQ for <buildroot@lists.busybox.net>;
+ Sat, 26 Feb 2022 16:05:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28DB1606E7
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 15:52:53 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id v21so8836066wrv.5
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 07:52:52 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 274F682923
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 16:05:20 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id r10so8898797wrp.3
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 08:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=TYcfN4MBbZqC9I0Ri4D76yvF1De2Ys2nY1cf1IC3fmc=;
- b=apH0T6keSUEGnPr+2PXio3fVdaVnCyTO/T7EPdRDjOX/JC2Pj/amoo41cG79yiXGDO
- 5bYXGaB04N/ENoZKHBNaYROHAdhdIeGj5WdzKZ8ub7DPbAn3s1Y3gGZHIQoBaYsNJZd9
- oyh4eGuBbwMjHRAMdVZJH49t57OzT0OA9LuOdCexJ1FzvRiX5ooPQhulry9jU+3YPzK1
- ZxrJx5BHkN9eDsI9PhzXVL4uYd3Kbj5Fa1azM3JuRneHHLyiHMK3d+ATfm8BvOnNoxFR
- +Bxwpx/wz1fMGvW9Yt/nOmK7giWX3w+GVQ8thwSv5dzCs0imlCzfEyhJWWVzSX2wAwgf
- RdPA==
+ bh=illfe8Cvcy4p57wRi5beWnIhjZAfllMU3894F7Onjbk=;
+ b=XJ2r7V+b2cqwTZYW05hPSmFqxMObNDA2khsomc9M32OZxav3Ye2n2bSNJNjZR/qjkf
+ ZMIMbV0cY+3yaY62sogbKQZfPtKklOt3fuFo9DFTyMtB1fxxTOCWSnt7m6xnx691kGL/
+ 081ntNh0QUHdtkNgSCMMKuNx9mIDi/oYtefgEDkANJY9ytBO55qV23gn9vcbQbuIqakP
+ PYeC7/BL7HU+D73h2Mwn+Op7ppGWN7bjB0Rj8bUN9Axv9+xvDJRqXOONZBqJduIeLInb
+ egVVMKXHo1dj4YwxtiLUiL7Gs2lmedEoE+JR7PNmE2E32x/FhDxN752eLhYVd3U/fNyh
+ ie4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=TYcfN4MBbZqC9I0Ri4D76yvF1De2Ys2nY1cf1IC3fmc=;
- b=yC9Vj+EJLunqeW56578OpKb0vVH1vd/7EOSnHR4WCoL1Tjx8omkRIu9yBFDpsrNit5
- rGa8WjJfM1gJpDDU2QpZcF3zCU2jYdlM6uS2zwjGOEZmrTBTwTq3+D+Qad6JCqxOPUNX
- Tu1p9eWPGozb4eFFGrIoymZHAgK3JmVnO8R9dE9AJOpIP59HmTn87xinXBt+OYw9svGK
- WGX+QpzriGQzShpVE7pAbtDhWkr8xOGqbOPNzCnkbCFE5kOSdyIM4IGrMSm0zGsrOUeW
- ADSPpuNOo6qonIi4rdc8r7WS4sAwoX/iZEPDlLyalhC4rHn8m4omrK93lpeHTj1UYyOD
- TQOw==
-X-Gm-Message-State: AOAM532Cxnl/j4jdPpLlCVQxwH68i+qjxxoIckyTqakVAD5JQDcp7Iuk
- BoaIUjWz5zE8O7P49iADm4WP09atfwM=
-X-Google-Smtp-Source: ABdhPJx4Z3mM44f9yBgn2rGm8oMOdRST0CMjGgosk6Km7JiHg8CPeLNlGeoasuT28Ct5iqpARK2rOw==
-X-Received: by 2002:a5d:6b8a:0:b0:1ef:87f3:c590 with SMTP id
- n10-20020a5d6b8a000000b001ef87f3c590mr2163104wrx.302.1645890771085; 
- Sat, 26 Feb 2022 07:52:51 -0800 (PST)
+ bh=illfe8Cvcy4p57wRi5beWnIhjZAfllMU3894F7Onjbk=;
+ b=MsGx+7XNLKEFFxQZmjAkkXjgp5pmc5z4m1uvMfmEH6XVEeB0VACcYUq0902Oa/pnp3
+ jB46Khn6hnr+2sIvWS9+OqzYY+YhOfsizaT/ew5M9+Htj3DxCjBIuFsRLKP4JAMAT6ON
+ 5gI8cY9evGmmYx1rRTj/V1UllxBV07ifM8NN0U0DDa3rAMR8odyFq1oVBZuFYRmrCTrz
+ KXOfOgcZ5ADD3CxNpmcC36TnK4WOh7iPLOtjOSpq/73tY7N3AtlUf9cBAW4JNJTAVTd2
+ 08DiD467ZHftAWfJmfUcZHvFjXbQrzsgbfpYENh0s5g6m1Jr5KWyAtJdYLpCGWPnz3c7
+ 8oAw==
+X-Gm-Message-State: AOAM532RF0UCY9GEDCsIIBJjcVooHfmeFJBtmqTRw1Zm/hPLVJvOB3j3
+ 8jtZet3NsEi0+BJQOQvrcLKwixwhnK4=
+X-Google-Smtp-Source: ABdhPJx3dvh5L9OE5ni2E+KXn37QniuzJER8LqcKBDvOxJhfVzqzZUFU/L6rcoS3phDuFTPB5Medog==
+X-Received: by 2002:a5d:4f03:0:b0:1ed:9eb4:9e45 with SMTP id
+ c3-20020a5d4f03000000b001ed9eb49e45mr9775346wru.464.1645891518128; 
+ Sat, 26 Feb 2022 08:05:18 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- m13-20020a05600c3b0d00b0037c00e01771sm9635788wms.34.2022.02.26.07.52.50
+ s3-20020a5d4ec3000000b001ea95eba44dsm5152493wrv.109.2022.02.26.08.05.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Feb 2022 07:52:50 -0800 (PST)
+ Sat, 26 Feb 2022 08:05:17 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Feb 2022 16:52:33 +0100
-Message-Id: <20220226155233.2605318-1-fontaine.fabrice@gmail.com>
+Date: Sat, 26 Feb 2022 17:05:03 +0100
+Message-Id: <20220226160503.2703879-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/frr: fix elf_py TLS section handling
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: security bump to version
+ 2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,65 +86,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>,
+Cc: Luca Ceresoli <luca@lucaceresoli.net>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised on mipsel, or1k, powerpc raised
-since bump to version 8.1 in commit
-ca2753fd47d47e5ad0eec16ea62f7b7f096331b6:
+Fix the following security issues (i.e. CVE-2021-37706, CVE-2021-41141,
+CVE-2021-43804, CVE-2021-43845, CVE-2022-21722 and CVE-2022-21723):
+- Potential integer underflow upon receiving STUN message
+  (GHSA-2qpg-f6wf-w984)
+- Use after free of dialog set (GHSA-ffff-m5fm-qm62)
+- Missing unreleased of locks in failure cases (GHSA-8fmx-hqw7-6gmc)
+- Potential out-of-bounds read when parsing RTCP BYE message
+  (GHSA-3qx3-cg72-wrh9)
+- Prevent OOB read for RTCP XR block (GHSA-r374-qrwv-86hh)
+- Potential buffer overflow in pjsua_player_create(),
+  pjsua_recorder_create(), pjmedia_wav_player_create(), and
+  pjsua_call_dump() (GHSA-qcvw-h34v-c7r9)
+- Potential out-of-bound read during RTP/RTCP parsing
+  (GHSA-m66q-q64c-hv36)
+- Prevent OOB read in multipart parsing (GHSA-7fw8-54cv-r7pm)
+- Use after free of dialog set (GHSA-ffff-m5fm-qm62)
 
-struct.error: unpack requires a buffer of 20 bytes
-
-Fixes:
- - http://autobuild.buildroot.org/results/74f39c6f14e3f60babdcabceb5e42656f69cdaa7
+https://github.com/pjsip/pjproject/releases/tag/2.12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-lib-fix-elf_py-TLS-section-handling.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch
+ package/libpjsip/libpjsip.hash | 2 +-
+ package/libpjsip/libpjsip.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch b/package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch
-new file mode 100644
-index 0000000000..d491cb1a7d
---- /dev/null
-+++ b/package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch
-@@ -0,0 +1,31 @@
-+From 3942ee1f7bc754dd0dd9ae79f89d0f2635be334f Mon Sep 17 00:00:00 2001
-+From: David Lamparter <equinox@opensourcerouting.org>
-+Date: Wed, 10 Nov 2021 15:30:07 +0100
-+Subject: [PATCH] lib: fix elf_py TLS section handling
-+
-+... need to ignore TLS sections, their address is effectively
-+meaningless but can overlap other sections we actually need to access.
-+
-+Signed-off-by: David Lamparter <equinox@opensourcerouting.org>
-+
-+[Retrieved from:
-+https://github.com/FRRouting/frr/commit/3942ee1f7bc754dd0dd9ae79f89d0f2635be334f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/elf_py.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/lib/elf_py.c b/lib/elf_py.c
-+index 1c306893ad8..f230add6957 100644
-+--- a/lib/elf_py.c
-++++ b/lib/elf_py.c
-+@@ -636,6 +636,9 @@ static Elf_Scn *elf_find_addr(struct elffile *ef, uint64_t addr, size_t *idx)
-+ 		Elf_Scn *scn = elf_getscn(ef->elf, i);
-+ 		GElf_Shdr _shdr, *shdr = gelf_getshdr(scn, &_shdr);
-+ 
-++		/* virtual address is kinda meaningless for TLS sections */
-++		if (shdr->sh_flags & SHF_TLS)
-++			continue;
-+ 		if (addr < shdr->sh_addr ||
-+ 		    addr >= shdr->sh_addr + shdr->sh_size)
-+ 			continue;
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index f39ebf4060..74331ab6fb 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  45f6604372df3f49293749cd7c0b42cb21c4fb666c66f8ed9765de004d1eae38  pjproject-2.11.1.tar.gz
++sha256  b3b94d9be4aba8f6d2d1cb164603e81b0a6ee17352f9e2ba5b58e325e610ca5a  pjproject-2.12.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index b05cc31a83..32cfa8c53c 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBPJSIP_VERSION = 2.11.1
++LIBPJSIP_VERSION = 2.12
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+-# https://github.com/pjsip/pjproject/archive/2.11.1.tar.gz
++# https://github.com/pjsip/pjproject/archive/2.12.tar.gz
+ 
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
 -- 
 2.34.1
 
