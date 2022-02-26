@@ -1,64 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DC98C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 10:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18DEDC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 14:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5419F404E0;
-	Sat, 26 Feb 2022 10:53:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68D6C818A1;
+	Sat, 26 Feb 2022 14:05:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZePK-PHEz3Jj; Sat, 26 Feb 2022 10:53:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Vowff2v6LqSz; Sat, 26 Feb 2022 14:05:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36C9A4010E;
-	Sat, 26 Feb 2022 10:53:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9668281871;
+	Sat, 26 Feb 2022 14:05:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BC0C71BF484
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:53:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 143A61BF3A3
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 14:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA06F401A3
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:53:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02028400FB
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 14:05:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ctGsuvL1sarZ for <buildroot@lists.busybox.net>;
- Sat, 26 Feb 2022 10:53:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1C5C4010E
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:53:29 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.7.124])
- by Aruba Outgoing Smtp  with ESMTPSA
- id NuhcnT8XOroAhNuhdnImiZ; Sat, 26 Feb 2022 11:53:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645872809; bh=KggUfjkA5M2O0JRBg7+VyKZI/oMJ4GnnD0upRS3HB58=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=FvBNSB9B6llyvaDRISsaFszHSz7X/sTHFZtBy3c7T2lNOGmpwAUvNlUtq53unZt15
- QFVfcRp0XN3YuCDOzEDDPiS4UvcBD6blsba1ATok/a+UxSy3Pq1V7hIAJe4MTxi+t9
- iwNOgU208ECsfyI22/oiG80mipC9RnElPbhPsNHrXZISa98eilYCr3aZ8qSDOBGFRh
- kj3tP+aMzBAc/ym51GGdDfSOepdlibXuhm5LJ1sUflDST5IS5A7ElrNGuPMNgBU6uI
- G+CBZKUiUavlZls+Gy9PXkjzmt18J9YkveheWJ7SwYC+XtxcBGWfW4LcWwtF+1+sfx
- 9gVfJYxJgjpXQ==
-Message-ID: <9e70bc4b-875c-a01a-1931-a5de940b18df@benettiengineering.com>
-Date: Sat, 26 Feb 2022 11:53:28 +0100
+ with ESMTP id mNOF5czwR88V for <buildroot@lists.busybox.net>;
+ Sat, 26 Feb 2022 14:05:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com
+ [IPv6:2607:f8b0:4864:20::a32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A04644002B
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 14:05:04 +0000 (UTC)
+Received: by mail-vk1-xa32.google.com with SMTP id x62so2990650vkg.6
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 06:05:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=n3z3XWLyxVYk6qOFTym76M4WUGmoOfscpufnSWBQszM=;
+ b=dyNeQ+ZWKjtgYIJI/xCnFBTebtnxJ2Kxhlk3CZeE7bYVAjHoRyAz54DCSlMFVCn0B/
+ 39CLNiZIZX+iJQGvToLi0Lxx3artqrk3Pz9BnhbSEtLRupv6BP8FCKSxswNRQJkXrZA3
+ ec/4M0KtzkZE6MybGWH09vGY1fFPngzQtN85Zizu7tA/SBBf+HPE3vGH169/5vfSFZ0r
+ bS+UBeJM5dhIzthA5ly3JprgKltuRlew99or5FqeNjQObluds9PT88Amld4/+rEjizZE
+ 3/9xOaykZIKH35YCk4gphRYZ8SR3ZWgJN4sfBIo0o8LSamhwkxl5DzM+8EFImv4aIV3i
+ FAlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=n3z3XWLyxVYk6qOFTym76M4WUGmoOfscpufnSWBQszM=;
+ b=w70AswB7d0RgJ5a7QfTjW8U2Cx7uSIXxUYLTNbw4ZyP8amk3WNcN2uP+LySo3e7ySo
+ xWQKpbqRGhHgvuOPaafSGRVh801peeyvcr2lF4K3RZG9kQ8i23gwAMiErK8sMJArCKQe
+ b9oy43ylhEvCiQNZJ//b62AOg3runrash4hAJwlHCp8Ke5p2BsFonz5imVAISUBy9jAQ
+ UfHbHf5j4YJjUNUb++x1XQsH32ocUYSiBKs5wpb4NnTuXbTxEoCB9eShVvWYsOj3sHEP
+ 4doxJC5RnMWhY5IvC5wMY4YtvXONLxUGdYnL7On5JTvWnNZzjjRlOdqgc6E0aQov39oX
+ XjAw==
+X-Gm-Message-State: AOAM533s/pITqImuKiXuWRXHyRfTrcMcdIXht5f2ppdyk1QO3swAiVAz
+ sk5/9sJuLRnUB51HPsdsCxi25+U738kJHNSVRifum8uc
+X-Google-Smtp-Source: ABdhPJyC9dVeTilIwfZO/aK7HvXDgows2DWtksDmNgxLCSS2/PfHf33qotiwivSIRbXFQxQlMitQRalTNS6w7NjMZGM=
+X-Received: by 2002:a05:6122:c61:b0:331:90bf:d93f with SMTP id
+ i33-20020a0561220c6100b0033190bfd93fmr5011066vkr.34.1645884303244; Sat, 26
+ Feb 2022 06:05:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
-References: <20220225072622.3584480-1-geomatsi@gmail.com>
- <20220225072622.3584480-6-geomatsi@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220225072622.3584480-6-geomatsi@gmail.com>
-X-CMAE-Envelope: MS4wfK6qvR9HX1ye6pgsR00/ONpuICtq+bfDLSp5kKB1HyoHmcHxxLemXX7vfzcWAm+4TZw+7MNlLsuW1oGtDXubaDTFQBNvj5mqxImdqRQYxCubK0LCJnKz
- GWDNm1OVxsReHQs2qHFXuXhvkRWN5YwFWLgFmtsbLH7t/eQDxMe9VIb7l68v6dW9TTQK1nMrj1Fpmu/QkfxE17/1eA3Vvj1nwJaUXyESYxLdwSlz4XrnWAcG
- 8YNYxBBN8sHBBKKDBhhppHrjCngfgnU/OqfvN9kiWrU=
-Subject: Re: [Buildroot] [PATCH v2 5/6]
- configs/linksprite_pcduino_defconfig: update Linux/U-Boot versions
+References: <20220222213202.642708-1-ju.o@free.fr>
+In-Reply-To: <20220222213202.642708-1-ju.o@free.fr>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sat, 26 Feb 2022 15:04:52 +0100
+Message-ID: <CAKcgs2znPw=ZxsjMSk1dWtC3i9PpXONoeQJuwCp-ykE64F2sKA@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: fix mysql.service
+ failing to create log directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,70 +83,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Sergey,
-
-On 25/02/22 08:26, Sergey Matyukevich wrote:
-> Bump Linux kernel to 5.16.1 and U-Boot to 2022.01. Select option
-> BR2_TARGET_UBOOT_NEEDS_OPENSSL since U-Boot requires openssl.
-> Drop redundant U-Boot options.
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Giulio: build tested only]
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
->   configs/linksprite_pcduino_defconfig | 9 ++++-----
->   1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-> index 05b25aede4..806c4f0697 100644
-> --- a/configs/linksprite_pcduino_defconfig
-> +++ b/configs/linksprite_pcduino_defconfig
-> @@ -19,12 +19,12 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
->   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
->   
->   # Linux headers same as kernel, a 5.10 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
->   
->   # Kernel
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
->   BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
-> @@ -40,13 +40,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-> -BR2_TARGET_UBOOT_USE_DEFCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
->   BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->   BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> -BR2_TARGET_UBOOT_FORMAT_BIN=y
->   BR2_TARGET_UBOOT_SPL=y
->   BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
->   
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSnVsaWVuLCBhbGwsCgpMZSBtYXIuIDIyIGbDqXZyLiAyMDIyIMOgIDIyOjMyLCBKdWxpZW4g
+T2xpdmFpbiA8anUub0BmcmVlLmZyPiBhIMOpY3JpdCA6Cj4KPiBXaGVuIGVuYWJsaW5nIE1hcmlh
+REIgKEJSMl9QQUNLQUdFX01BUklBREI9eSkgYW5kIHN5c3RlbWQKPiAoQlIyX0lOSVRfU1lTVEVN
+RD15KSBpbiBidWlsZHJvb3QsIHRoZSBteXNxbGQuc2VydmljZSBmYWlsIHRvIHN0YXJ0Cj4gd2l0
+aCBhIHBlcm1pc3Npb24gZXJyb3IuICBTZWUgb3V0cHV0IG9mIGNvbW1hbmQ6Cj4KPiAgICAgam91
+cm5hbGN0bCAtLXVuaXQ9bXlzcWxkCj4KPiBXaGljaCBzaG93czoKPgo+ICAgICBzeXN0ZW1kWzFd
+OiBTdGFydGluZyBNeVNRTCBkYXRhYmFzZSBzZXJ2ZXIuLi4KPiAgICAgaW5zdGFsbFsxMDJdOiBp
+bnN0YWxsOiBjYW4ndCBjcmVhdGUgZGlyZWN0b3J5ICcvdmFyL2xvZy9teXNxbCc6IFBlcm1pc3Np
+b24gZGVuaWVkCj4gICAgIHN5c3RlbWRbMV06IG15c3FsZC5zZXJ2aWNlOiBDb250cm9sIHByb2Nl
+c3MgZXhpdGVkLCBjb2RlPWV4aXRlZCwgc3RhdHVzPTEvRkFJTFVSRQo+Cj4gU2luY2UgdGhlIHNl
+cnZpY2UgZmlsZSBpbmNsdWRlcyB0aGUgIlVzZXI9bXlzcWwiIGRpcmVjdGl2ZSwgdGhlCj4gIkV4
+ZWNTdGFydFByZT0iIGlzIGV4ZWN1dGVkIGFzIHRoaXMgdXNlciwgd2hpY2ggZG9lcyBub3QgaGF2
+ZQo+IHBlcm1pc3Npb24gdG8gY3JlYXRlIGEgZGlyZWN0b3J5IGluICIvdmFyL2xvZyIuCj4KPiBU
+aGlzIGNvbW1pdCBmaXhlcyB0aGlzIGlzc3VlIGJ5IGFkZGluZyB0aGUgIiEiIHByZWZpeCwgd2hp
+Y2ggd2lsbAo+IGV4ZWN1dGUgdGhlIGNvbW1hbmQgd2l0aCBmdWxsIHByaXZpbGVnZXMuICBTZWUg
+dGhlIHN5c3RlbWQuc2VydmljZSBtYW51YWwKPiBwYWdlIGVudHJ5IGZvciAiRXhlY1N0YXJ0PSIs
+IHRhYmxlICJTcGVjaWFsIGV4ZWN1dGFibGUgcHJlZml4ZXMiOgo+IGh0dHBzOi8vd3d3LmZyZWVk
+ZXNrdG9wLm9yZy9zb2Z0d2FyZS9zeXN0ZW1kL21hbi9zeXN0ZW1kLnNlcnZpY2UuaHRtbCNFeGVj
+U3RhcnQ9Cj4gb3IgaHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbWQvc3lzdGVtZC9ibG9iL3YyNTAv
+bWFuL3N5c3RlbWQuc2VydmljZS54bWwjTDMzOQo+Cj4gTW9yZW92ZXIsIHRoZSAibXlzcWxfaW5z
+dGFsbF9kYiIgaW52b2NhdGlvbiBkb2VzIG5vdCBuZWVkIHRoaXMgc3BlY2lhbAo+IHByZWZpeCwg
+YXMgdGhlICIvdmFyL2xpYi9teXNxbCIgZGlyZWN0b3J5IG9uIHRhcmdldCBpcyBhbHJlYWR5IG93
+bmVkCj4gYnkgdGhlICJteXNxbCIgdXNlci4gIFRoZSAiY2hvd24iIGNvbW1hbmQgaXMgYWxzbyB1
+c2VsZXNzIGFuZCBpcwo+IHJlbW92ZWQgaW4gdGhpcyBjb21taXQuCj4KPiBSZXBvcnRlZC1ieTog
+R2lsbGVzIFRhbGlzIDxnaWxsZXMudGFsaXNAZ21haWwuY29tPgo+IFNpZ25lZC1vZmYtYnk6IEp1
+bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+Cj4gLS0tCj4gIHBhY2thZ2UvbWFyaWFkYi9teXNx
+bGQuc2VydmljZSB8IDQgKystLQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAy
+IGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWFyaWFkYi9teXNxbGQuc2Vy
+dmljZSBiL3BhY2thZ2UvbWFyaWFkYi9teXNxbGQuc2VydmljZQo+IGluZGV4IGQ5ZWE3NGViYzMu
+LjUzNzQzMGU5YTIgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9tYXJpYWRiL215c3FsZC5zZXJ2aWNl
+Cj4gKysrIGIvcGFja2FnZS9tYXJpYWRiL215c3FsZC5zZXJ2aWNlCj4gQEAgLTIsOCArMiw4IEBA
+Cj4gIERlc2NyaXB0aW9uPU15U1FMIGRhdGFiYXNlIHNlcnZlcgo+Cj4gIFtTZXJ2aWNlXQo+IC1F
+eGVjU3RhcnRQcmU9L2Jpbi9zaCAtYyAndGVzdCAiYGxzIC0xIC92YXIvbGliL215c3FsIHwgd2Mg
+LWxgIiAhPSAiMCIgfHwgbXlzcWxfaW5zdGFsbF9kYiAtLWJhc2VkaXI9L3VzciAtLWRhdGFkaXI9
+L3Zhci9saWIvbXlzcWwgJiYgY2hvd24gLVIgbXlzcWw6bXlzcWwgL3Zhci9saWIvbXlzcWwnCj4g
+LUV4ZWNTdGFydFByZT1pbnN0YWxsIC1kIC1vIG15c3FsIC1nIHJvb3QgLW0gMDc1NSAvdmFyL2xv
+Zy9teXNxbAo+ICtFeGVjU3RhcnRQcmU9L2Jpbi9zaCAtYyAndGVzdCAiYGxzIC0xIC92YXIvbGli
+L215c3FsIHwgd2MgLWxgIiAhPSAiMCIgfHwgbXlzcWxfaW5zdGFsbF9kYiAtLWJhc2VkaXI9L3Vz
+ciAtLWRhdGFkaXI9L3Zhci9saWIvbXlzcWwnCj4gK0V4ZWNTdGFydFByZT0haW5zdGFsbCAtZCAt
+byBteXNxbCAtZyByb290IC1tIDA3NTUgL3Zhci9sb2cvbXlzcWwKPiAgRXhlY1N0YXJ0PS91c3Iv
+YmluL215c3FsZF9zYWZlIC0tbG9nLWVycm9yPS92YXIvbG9nL215c3FsL215c3FsZC5sb2cKPiAg
+UmVzdGFydD1hbHdheXMKPiAgVXNlcj1teXNxbAo+IC0tCj4gMi4zNS4xCj4KVGhhbmtzIGZvciB0
+aGUgcGF0Y2guIFN1Y2Nlc3NmdWxseSB0ZXN0ZWQgb24gYW4gYWFyY2g2NCBzeXN0ZW0uIFNvLAoK
+VGVzdGVkLUJ5OiBHaWxsZXMgVGFsaXMgPGdpbGxlcy50YWxpc0BnbWFpbC5jb20+Cgp0aGFua3MK
+R2lsbGVzLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
