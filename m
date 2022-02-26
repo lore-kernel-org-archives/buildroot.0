@@ -1,82 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 158DAC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 18:11:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB475C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 18:15:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99ECA60C2F;
-	Sat, 26 Feb 2022 18:11:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D9134043B;
+	Sat, 26 Feb 2022 18:15:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GHvEpUnOlEbt; Sat, 26 Feb 2022 18:11:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4TUHpohWodti; Sat, 26 Feb 2022 18:15:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C081460C22;
-	Sat, 26 Feb 2022 18:11:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF0D14036F;
+	Sat, 26 Feb 2022 18:15:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D2B761BF281
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 18:11:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DDFF1BF281
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 18:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6C7D40A00
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 18:11:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A1E840A00
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 18:15:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PnSZuGC5J3Xo for <buildroot@lists.busybox.net>;
- Sat, 26 Feb 2022 18:11:06 +0000 (UTC)
+ with ESMTP id Ka2ejkTgr7U3 for <buildroot@lists.busybox.net>;
+ Sat, 26 Feb 2022 18:15:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DBE8C40961
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 18:11:05 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id d17so9144516wrc.9
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:11:05 -0800 (PST)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B3E5409FA
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 18:15:23 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id r10so3450680wma.2
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:15:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=yieFLUM3ZkqRAotaUTi2BBrjF+f1J21+iRmdDk6eqh4=;
- b=WjfkCXldBKcOQ/qvRCcqekv6AHuii3fjuOVn8F6owMpR1uR7R6WLOj+qQm3C2JITgT
- aaD16mezjtyN4UEzKwDDrN6BJ0ehdoSfZdm6AbGf1eI+1D5ncP+RRLWHJ/yVWdbmtbbq
- F9gDrXgl2gKNv4V9Or+uoenPK8JCxxjexcmJ5dYs9RxGM761DANEcnNT9ITHQBpN3WyA
- PbmixkLN34mgTaFVlMENp5I4Jms6257My3PhU8HlJiS+emerRUXWPHqNXX8naJjqTK80
- mIorB1vUphKqihCOfdk8yetteWKlScz2z9IszG1KGAO78RxdtXlroIPlrPCioGgwD1rc
- ltfg==
+ bh=JUzMZEik5ppmvv1RIZvS8tV2JB1KHDi9yp2N2sQ7WBo=;
+ b=RQsM50T7hPyx8A+I4lDewCk7titK0NBzLMRBWmf0/t2PV5VNS+lIU1i7QdS8yooZX7
+ n6mDl2yTRZj50uT1jSNZ072MntXEmzaYvNkb/ZMGS1798Egprddd9cynLw+8YmZe/CEd
+ D55CQsfrNqPAX9H7tt2Pv5WkxXU9O9v89aJTsH3uuW2AdQL5gE0fduFarSqsPIgD/BmF
+ U45F9C0UE/By766We1u9L80pZfeb1cTP1L11Rv5gARSu5h0s+locRM11/saqQl3Rr3Xo
+ DmNbzuoIDlRlxHlu5v4tq5jzcumIW2Ef2bQmYKepgIdB6lSKpET/BJYCUo81yxiNwFKq
+ Uk8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=yieFLUM3ZkqRAotaUTi2BBrjF+f1J21+iRmdDk6eqh4=;
- b=R1hWSWGAdqgpfPtWnDVLP1bHHKIG/YUdV0yRMhPjv361vJVsDOfSMw10vQ4vRv5PwH
- 6z++2eF+ycplUQzG0f27l2skHE8tbih6A+CTCBe9Taan/sjLWll7EPFiWZoECiX5c6tb
- 4xxPSYss9S2cjxzoWAYCBbT8hftox4feQ6PDEe0RY+kfymrYImRE2/p6RHANuOyI9mcv
- wbe/kkg6GlLIyiYZLHGeQ5NwgQJ9M959+Ycwr+YKRlu2LUqLQFVnMfY/HlpzCsDNgauN
- AQB/PTbaEFvun/8b5WE4j8XRYT+AkXFyovZ0gcaB0y2AWRzSjDaD2inyp3WXoAbsLQHD
- 3ZVw==
-X-Gm-Message-State: AOAM531k0kPAmmezWLmG4H0yN1PC4ovN4y1iXXm5Y/Y9ZQT/UoC49svC
- 7yRQ24jVaJzgEm656NBZ05wR/aOLODk=
-X-Google-Smtp-Source: ABdhPJzA4qYA9AE2eOwD9N3ky5kHArQPRpnJpDKsgwLqI1HqGAamGaGUWoswL/0GS1F4GW0ds7WocQ==
-X-Received: by 2002:adf:80ad:0:b0:1e3:238a:178e with SMTP id
- 42-20020adf80ad000000b001e3238a178emr10815564wrl.551.1645899063857; 
- Sat, 26 Feb 2022 10:11:03 -0800 (PST)
+ bh=JUzMZEik5ppmvv1RIZvS8tV2JB1KHDi9yp2N2sQ7WBo=;
+ b=xJR72KkRxO2M0v+1zDfv6iZz/eare4SRRiPYUoEYQXYdgKo4mTBHMTyNQ4/ujAI2w5
+ uPtmfrB/ZbsSFIVNeJ4j8jbZE6q5hgnZAWG0KibAN5dxGKrGlE8PV1wlMTekvubHBbjr
+ 8R4k1j83aUfXQDrjEz9asygvddtimc6IcgIfMzcyDRFuT2EjjCuSOauVbSmxSefGI8/t
+ xvxSX33Q/cmSgcTAGIpMwnZDKLDFoVoKQB4dop9bg4CvfNiwqdboG99f4v13UkldR+5t
+ +WRYtbIMO8DnIBOb+wvEmTvHp0rvMWSRofylYLZBmUsE1kgWpjpUJ5R9Y3d8YKLKPWMw
+ A3MA==
+X-Gm-Message-State: AOAM532vT6p0nQH4TBmKywY5XWsFntgrl4kVxsWKH0t04jWpFpAdQKmu
+ Nb3rnWozBYxqrpilTx//NgfEIIXr1Sc=
+X-Google-Smtp-Source: ABdhPJy2mLb+NjB+t/RrEFd8/EeP4XZ7hHnTyapNb3SBi3i2+4rIbSkTNYvQHjhdIUyi5xRMXOtOQQ==
+X-Received: by 2002:a05:600c:4f90:b0:350:d962:8944 with SMTP id
+ n16-20020a05600c4f9000b00350d9628944mr7341170wmq.48.1645899321248; 
+ Sat, 26 Feb 2022 10:15:21 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- s16-20020adfecd0000000b001e7be443a17sm8181029wro.27.2022.02.26.10.11.02
+ i15-20020a5d522f000000b001e85b14dadcsm5618815wra.5.2022.02.26.10.15.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Feb 2022 10:11:03 -0800 (PST)
+ Sat, 26 Feb 2022 10:15:20 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Feb 2022 19:10:45 +0100
-Message-Id: <20220226181045.2922875-1-fontaine.fabrice@gmail.com>
+Date: Sat, 26 Feb 2022 19:15:08 +0100
+Message-Id: <20220226181508.3011361-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
- 3.4.12
+Subject: [Buildroot] [PATCH 1/1] package/xterm: security bump to version 371
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +93,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-4190, CVE-2022-0581, CVE-2022-0582, CVE-2022-0583,
-CVE-2022-0585 and CVE-2022-0586
+Fix CVE-2022-24130: xterm through Patch 370, when Sixel support is
+enabled, allows attackers to trigger a buffer overflow in set_sixel in
+graphics_sixel.c via crafted text.
 
-https://www.wireshark.org/security/wnpa-sec-2021-22.html
-https://www.wireshark.org/security/wnpa-sec-2022-01.html
-https://www.wireshark.org/security/wnpa-sec-2022-02.html
-https://www.wireshark.org/security/wnpa-sec-2022-03.html
-https://www.wireshark.org/security/wnpa-sec-2022-04.html
-https://www.wireshark.org/security/wnpa-sec-2022-05.html
+Update hash of COPYING (update in year)
+
+https://invisible-island.net/xterm/xterm.log.html#xterm_371
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xterm/xterm.hash | 4 ++--
+ package/xterm/xterm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 7b67e316ed..db1f71e9ef 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.11.txt
--sha1  b656d8709b8b0b3d2a94665af6bec88495ad994c  wireshark-3.4.11.tar.xz
--sha256  a0e227bce2cc3a51ef3301891a0243231990b52a39b68a84a6e32f69c4e75279  wireshark-3.4.11.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.12.txt
-+sha1  91ca69b0029e58b9c824266237ab392a62f0a248  wireshark-3.4.12.tar.xz
-+sha256  881a13303e263b7dc7fe337534c8a541d4914552287879bed30bbe76c5bf68ca  wireshark-3.4.12.tar.xz
- 
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index d6d80ad977..3f6ec765ce 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  27f1a8b1c756e269fd5684e60802b545f0be9b36b8b5d6bdbc840c6b000dc51f  xterm-367.tgz
++sha256  32f888277b19e28ebc0a3112bff000607c07bed0679caa0beebb36f9cad484f5  xterm-371.tgz
  # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0361d0bb64..a5ca4b1f73 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+-sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
++sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index e09d350a7d..95984f1cf9 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.4.11
-+WIRESHARK_VERSION = 3.4.12
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-XTERM_VERSION = 367
++XTERM_VERSION = 371
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
 -- 
 2.34.1
 
