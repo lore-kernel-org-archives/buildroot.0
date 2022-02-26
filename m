@@ -1,66 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59DA6C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 10:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DC98C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 10:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FEE084010;
-	Sat, 26 Feb 2022 10:53:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5419F404E0;
+	Sat, 26 Feb 2022 10:53:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4KAR14RIGmA2; Sat, 26 Feb 2022 10:53:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZePK-PHEz3Jj; Sat, 26 Feb 2022 10:53:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8F5284008;
-	Sat, 26 Feb 2022 10:53:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3ED8C1BF484
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:53:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 36C9A4010E;
+	Sat, 26 Feb 2022 10:53:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BC0C71BF484
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D49A60B04
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:53:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA06F401A3
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:53:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b9z6tZdoHS4L for <buildroot@lists.busybox.net>;
- Sat, 26 Feb 2022 10:53:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ctGsuvL1sarZ for <buildroot@lists.busybox.net>;
+ Sat, 26 Feb 2022 10:53:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2658B60A81
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:53:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1C5C4010E
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:53:29 +0000 (UTC)
 Received: from [192.168.50.220] ([146.241.7.124])
  by Aruba Outgoing Smtp  with ESMTPSA
- id NuhMnT8OCroAhNuhMnImbR; Sat, 26 Feb 2022 11:53:12 +0100
+ id NuhcnT8XOroAhNuhdnImiZ; Sat, 26 Feb 2022 11:53:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1645872792; bh=55k0ndEiZhj11VmpYZACLZhP0DnulHbrjYj+NH3verU=;
+ t=1645872809; bh=KggUfjkA5M2O0JRBg7+VyKZI/oMJ4GnnD0upRS3HB58=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=H5k+bo7NBUIx4QbftNFfFcgo7AH6JZq9i7+U2Y3GccEc7SY53nXBj7LBMxBejXrdh
- 4CSB/RbPcHdXWHCRqRZfMiyH5QsSF8F0e0x+cEtZREBrjGOQ5Cepiq7DsSVH4YHlYZ
- fsWzjZem1OTXpR74FxZgmoXcHMxh3k/f0Hy0Bnns0XvYYHcXov0LzrXty0sLJJLbRf
- KC3WP4mpz5ENygYu3Oq2Oqd3sqJC9zkikXgjIXWlNcDLQGd98RNrq3NIRK1iUbpLQv
- vCPtOhIsI1etmw2lCh5G+Ebyv4Kw+lsN+MxaVwinAyEZa315QqTwo2/2UlRmeVBvzO
- BO2smkBHmR90w==
-Message-ID: <740a0d74-bbfd-d8a6-bd60-b92cc5005c6d@benettiengineering.com>
-Date: Sat, 26 Feb 2022 11:53:12 +0100
+ b=FvBNSB9B6llyvaDRISsaFszHSz7X/sTHFZtBy3c7T2lNOGmpwAUvNlUtq53unZt15
+ QFVfcRp0XN3YuCDOzEDDPiS4UvcBD6blsba1ATok/a+UxSy3Pq1V7hIAJe4MTxi+t9
+ iwNOgU208ECsfyI22/oiG80mipC9RnElPbhPsNHrXZISa98eilYCr3aZ8qSDOBGFRh
+ kj3tP+aMzBAc/ym51GGdDfSOepdlibXuhm5LJ1sUflDST5IS5A7ElrNGuPMNgBU6uI
+ G+CBZKUiUavlZls+Gy9PXkjzmt18J9YkveheWJ7SwYC+XtxcBGWfW4LcWwtF+1+sfx
+ 9gVfJYxJgjpXQ==
+Message-ID: <9e70bc4b-875c-a01a-1931-a5de940b18df@benettiengineering.com>
+Date: Sat, 26 Feb 2022 11:53:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
 To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
 References: <20220225072622.3584480-1-geomatsi@gmail.com>
- <20220225072622.3584480-5-geomatsi@gmail.com>
+ <20220225072622.3584480-6-geomatsi@gmail.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220225072622.3584480-5-geomatsi@gmail.com>
-X-CMAE-Envelope: MS4wfEYf9PFbotkwMHOaObPr8JmNOm+ZKbz5sp5uPfubIuksPxxSbhDnx68t3yo0Ex7sQXOqenwwvJrUxsahVVxJ73wBBj3VLUV5CPtaXazcnvbnoVT5dOc7
- 7a5PIECX1Qf97bO9hY3ippIeS89+8uPgPl9WDTDKTLDOMr97gF1X5pPyx7OuOJ12Ab4qMAPl/UlNQK/EHpBmeOGTzX+yV1kfhPzlGqa0koqaQYUeGKgjr/fG
- GV7iklVg5iUy3ucSZcJr4o5fiJkPD+2YJnGnnshSrCI=
-Subject: Re: [Buildroot] [PATCH v2 4/6] board/linksprite/pcduino: switch to
- extlinux
+In-Reply-To: <20220225072622.3584480-6-geomatsi@gmail.com>
+X-CMAE-Envelope: MS4wfK6qvR9HX1ye6pgsR00/ONpuICtq+bfDLSp5kKB1HyoHmcHxxLemXX7vfzcWAm+4TZw+7MNlLsuW1oGtDXubaDTFQBNvj5mqxImdqRQYxCubK0LCJnKz
+ GWDNm1OVxsReHQs2qHFXuXhvkRWN5YwFWLgFmtsbLH7t/eQDxMe9VIb7l68v6dW9TTQK1nMrj1Fpmu/QkfxE17/1eA3Vvj1nwJaUXyESYxLdwSlz4XrnWAcG
+ 8YNYxBBN8sHBBKKDBhhppHrjCngfgnU/OqfvN9kiWrU=
+Subject: Re: [Buildroot] [PATCH v2 5/6]
+ configs/linksprite_pcduino_defconfig: update Linux/U-Boot versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,9 +79,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Hi Sergey,
 
 On 25/02/22 08:26, Sergey Matyukevich wrote:
-> Switch to extlinux instead of U-Boot boot script. Drop custom
-> boot script and genimage config. Instead use common orangepi
-> files from board/orangepi/common.
+> Bump Linux kernel to 5.16.1 and U-Boot to 2022.01. Select option
+> BR2_TARGET_UBOOT_NEEDS_OPENSSL since U-Boot requires openssl.
+> Drop redundant U-Boot options.
 > 
 > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
@@ -97,155 +95,44 @@ Giulio Benetti
 Benetti Engineering sas
 
 > ---
->   board/linksprite/pcduino/boot.cmd      |  8 -----
->   board/linksprite/pcduino/genimage.cfg  | 43 --------------------------
->   board/linksprite/pcduino/post-build.sh | 11 -------
->   board/linksprite/pcduino/post-image.sh | 16 ----------
->   configs/linksprite_pcduino_defconfig   |  9 +++---
->   5 files changed, 4 insertions(+), 83 deletions(-)
->   delete mode 100644 board/linksprite/pcduino/boot.cmd
->   delete mode 100644 board/linksprite/pcduino/genimage.cfg
->   delete mode 100755 board/linksprite/pcduino/post-build.sh
->   delete mode 100755 board/linksprite/pcduino/post-image.sh
+>   configs/linksprite_pcduino_defconfig | 9 ++++-----
+>   1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/board/linksprite/pcduino/boot.cmd b/board/linksprite/pcduino/boot.cmd
-> deleted file mode 100644
-> index 0db8363599..0000000000
-> --- a/board/linksprite/pcduino/boot.cmd
-> +++ /dev/null
-> @@ -1,8 +0,0 @@
-> -setenv fdt_high ffffffff
-> -
-> -setenv bootargs console=ttyS0,115200 console=tty1 earlyprintk root=/dev/mmcblk0p2 rootwait panic=10 ${extra}
-> -
-> -fatload mmc 0 $kernel_addr_r zImage
-> -fatload mmc 0 $fdt_addr_r sun4i-a10-pcduino.dtb
-> -
-> -bootz $kernel_addr_r - $fdt_addr_r
-> diff --git a/board/linksprite/pcduino/genimage.cfg b/board/linksprite/pcduino/genimage.cfg
-> deleted file mode 100644
-> index db33322118..0000000000
-> --- a/board/linksprite/pcduino/genimage.cfg
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -#
-> -# Minimal SD card image for the pcDuino
-> -#
-> -
-> -image boot.vfat {
-> -	vfat {
-> -		files = {
-> -			"zImage",
-> -			"sun4i-a10-pcduino.dtb",
-> -			"boot.scr"
-> -		}
-> -	}
-> -
-> -	size = 16M
-> -}
-> -
-> -#
-> -# Note: u-boot environment is stored between u-boot and boot partitions
-> -#
-> -
-> -image sdcard.img {
-> -	hdimage {
-> -	}
-> -
-> -	partition u-boot {
-> -		in-partition-table = "no"
-> -		image = "u-boot-sunxi-with-spl.bin"
-> -		offset = 8K
-> -		size = 1016K # 1MB - 8KB
-> -	}
-> -
-> -	partition boot {
-> -		partition-type = 0xC
-> -		bootable = "true"
-> -		image = "boot.vfat"
-> -		offset = 1M
-> -	}
-> -
-> -	partition rootfs {
-> -		partition-type = 0x83
-> -		image = "rootfs.ext4"
-> -	}
-> -}
-> diff --git a/board/linksprite/pcduino/post-build.sh b/board/linksprite/pcduino/post-build.sh
-> deleted file mode 100755
-> index e1e1877671..0000000000
-> --- a/board/linksprite/pcduino/post-build.sh
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -#!/bin/sh
-> -# post-build.sh for pcDuino taken from OrangePi post-build.sh
-> -# 2013, Carlo Caione <carlo.caione@gmail.com>
-> -
-> -BOARD_DIR="$(dirname $0)"
-> -MKIMAGE=$HOST_DIR/bin/mkimage
-> -BOOT_CMD=$BOARD_DIR/boot.cmd
-> -BOOT_CMD_H=$BINARIES_DIR/boot.scr
-> -
-> -# U-Boot script
-> -$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
-> diff --git a/board/linksprite/pcduino/post-image.sh b/board/linksprite/pcduino/post-image.sh
-> deleted file mode 100755
-> index c82b189f9c..0000000000
-> --- a/board/linksprite/pcduino/post-image.sh
-> +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -#!/bin/sh
-> -
-> -BOARD_DIR="$(dirname $0)"
-> -GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> -GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> -
-> -rm -rf "${GENIMAGE_TMP}"
-> -
-> -genimage                               \
-> -	--rootpath "${TARGET_DIR}"     \
-> -	--tmppath "${GENIMAGE_TMP}"    \
-> -	--inputpath "${BINARIES_DIR}"  \
-> -	--outputpath "${BINARIES_DIR}" \
-> -	--config "${GENIMAGE_CFG}"
-> -
-> -exit $?
 > diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-> index b58f970493..05b25aede4 100644
+> index 05b25aede4..806c4f0697 100644
 > --- a/configs/linksprite_pcduino_defconfig
 > +++ b/configs/linksprite_pcduino_defconfig
-> @@ -11,8 +11,9 @@ BR2_TARGET_GENERIC_GETTY=y
->   BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->   
->   # SD image scripts
-> -BR2_ROOTFS_POST_BUILD_SCRIPT="board/linksprite/pcduino/post-build.sh"
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
->   
->   # For kernel modules autoloading
+> @@ -19,12 +19,12 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
 >   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-> @@ -29,6 +30,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
->   BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/linksprite/pcduino/linux-extras.config"
->   BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
 >   
->   # Filesystem
->   BR2_TARGET_ROOTFS_EXT2=y
-> @@ -49,10 +51,7 @@ BR2_TARGET_UBOOT_SPL=y
+>   # Linux headers same as kernel, a 5.10 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+>   
+>   # Kernel
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
+>   BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>   BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+> @@ -40,13 +40,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+>   BR2_TARGET_UBOOT=y
+>   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+> -BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
+>   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
+>   BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+>   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+>   BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+> -BR2_TARGET_UBOOT_FORMAT_BIN=y
+>   BR2_TARGET_UBOOT_SPL=y
 >   BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
 >   
->   # Host packages
-> -BR2_PACKAGE_HOST_DOSFSTOOLS=y
->   BR2_PACKAGE_HOST_GENIMAGE=y
-> -BR2_PACKAGE_HOST_MTOOLS=y
-> -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
->   
->   # Target packages: wireless support for pcduino-lite-wifi
->   BR2_PACKAGE_IW=y
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
