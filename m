@@ -4,59 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55D79C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 10:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A12BC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 26 Feb 2022 10:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFA608404E;
-	Sat, 26 Feb 2022 10:42:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB5988404A;
+	Sat, 26 Feb 2022 10:52:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qPTi-L2HiRgZ; Sat, 26 Feb 2022 10:42:13 +0000 (UTC)
+	with ESMTP id C-vd0NW_HLNq; Sat, 26 Feb 2022 10:52:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 146D184044;
-	Sat, 26 Feb 2022 10:42:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 51DBC1BF484
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:42:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F160784008;
+	Sat, 26 Feb 2022 10:52:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B5D61BF484
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 405B2416AF
- for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:42:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9FB460A81
+ for <buildroot@lists.busybox.net>; Sat, 26 Feb 2022 10:52:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=163.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qwl01Fta88TH for <buildroot@lists.busybox.net>;
- Sat, 26 Feb 2022 10:42:08 +0000 (UTC)
-X-Greylist: delayed 00:16:22 by SQLgrey-1.8.0
-Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47F04403CC
- for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
- s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=4GYTK
- bfGyRgvIT6WvKSHeRHFRlYzY7UECwe/e/SajmQ=; b=MpRow1StGaG0Eu1HPW5t3
- xi3OfOB5mHE9icWse5hRKOX7zsO0XjlRST5IW7ZiF2QXQGzUyw75evMvSXB/oPdz
- WMvW+YLJUaqx0uU391xLK+A5XffnDYDqR2LcGRWs9W/7YefA1IDDWRBOQIke9/Nt
- bmyCGjC02BXn1b/lbS3A+Y=
-Received: from localhost.localdomain (unknown [123.185.181.179])
- by smtp11 (Coremail) with SMTP id D8CowABnl48MABpifiO7AA--.17399S2;
- Sat, 26 Feb 2022 18:25:16 +0800 (CST)
-From: TIAN Yuanhao <tianyuanhao3@163.com>
-To: buildroot@buildroot.org
-Date: Sat, 26 Feb 2022 02:24:18 -0800
-Message-Id: <20220226102418.943851-1-tianyuanhao3@163.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6lLQkyuE-j_p for <buildroot@lists.busybox.net>;
+ Sat, 26 Feb 2022 10:52:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35E38600C6
+ for <buildroot@buildroot.org>; Sat, 26 Feb 2022 10:52:28 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.7.124])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id NugcnT7vqroAhNugdnImNl; Sat, 26 Feb 2022 11:52:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1645872747; bh=y+8VVLdaZKctu+wDwIOny+MbshAk0+2rgVU9PlHVuKc=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=clgIWoTvzMo3IxHzfE6uxfkOkKx5/P4xJfYyszcoWVBRiCz/c85Q1h9NQydg4NW67
+ GluOzr2ict5NKdAd9ikA+htXbaNKj6/SDTmwIVSHU2uOWK4lRapAUz47xXIgnlcDej
+ OSIbGGI7D1m7I8lnEc19j7z2tQzECAbX3AdCMrI7idL4AJ0liMWHS0lyY9YBJf/yT3
+ iFzOZ/LGxETmElLLoTMbE5cPaCyUK37YPjQ2swTxcEuP0P9LB2dOlg3hrk1LolNjSg
+ nvyY9SXAZ8VJG6CAe6dmyaebE5Uumm4xd/nADukAIDeuhyjFFqscpBBi9wuN7ery6i
+ Sk26hOppkUnag==
+Message-ID: <b0e7b78e-4c69-8a90-8157-d9a7e3da6882@benettiengineering.com>
+Date: Sat, 26 Feb 2022 11:52:26 +0100
 MIME-Version: 1.0
-X-CM-TRANSID: D8CowABnl48MABpifiO7AA--.17399S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Ww4rtr4UGFyUtFWrXryDtrb_yoW7trWrpF
- Z3J3yrur40qF40yrW7Cr9I9asIqr1kGr1UJ3ZrXw1jv3WkWw42yrWDtFnYqF4UZr4xtw4x
- XFs7Jryfur4Ut3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zMWlv9UUUUU=
-X-Originating-IP: [123.185.181.179]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbBRw2zjWDkXNIhkQAAsO
-Subject: [Buildroot] [PATCH/next 1/1] package/balena-engine: bump to version
- 20.10.12
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+References: <20220225072622.3584480-1-geomatsi@gmail.com>
+ <20220225072622.3584480-2-geomatsi@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220225072622.3584480-2-geomatsi@gmail.com>
+X-CMAE-Envelope: MS4wfAXeCQCYy+u5VNgvtB6pUun/mcNnA+V6duXdtIW+9N9Z45HBGmMelBQDYoKjHBOOfZ5/RvUmhNB817rm57ZOXY2YlSFrt2qKBjnxvtKDerCZyeWNnw2M
+ 12oBcN1EG0jc5aRnvXS3pAQ4qzdWg5trXST/RC1kc94UxfYP39hbNsyFGx9j/S4PX73O3Nkich9dcQ26v8MuHyLyr5ydlWI51KptsBgl05AOjeWbIh59F34R
+ SlyWIrTjC7mwC7XF8PWDuTCLgnC5/qrzleo2XLGdKjc=
+Subject: Re: [Buildroot] [PATCH v2 1/6] board/orangepi/orangepi-zero-plus2:
+ switch to extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,152 +72,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Refik Tuzakli <tuzakli.refik@gmail.com>,
- TIAN Yuanhao <tianyuanhao3@163.com>, Matt Weber <matthew.weber@collins.com>,
- Kyle Harding <kyle@balena.io>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also:
-- drop unused dependencies
-- drop invalid tags
-- drop the autogen step
-- simplify kconfigs just to run hello-world
+Hi Sergey,
 
-https://github.com/balena-os/balena-engine/blob/v20.10.12/CHANGELOG.md
+On 25/02/22 08:26, Sergey Matyukevich wrote:
+> Switch to extlinux instead of U-Boot boot script. Drop custom boot
+> script and genimage config. Instead use common orangepi files from
+> board/orangepi/common. To help extlinux to find DTB without U-Boot
+> environment changes, do not strip arm64 board specific directory
+> from DTB name when installing it in /boot directory. For this
+> purpose use BR2_KERNEL_DTB_KEEP_DIRNAME config option. Finally,
+> tidy up configuration file adding section names.
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
----
- package/balena-engine/Config.in          |  1 -
- package/balena-engine/balena-engine.hash |  2 +-
- package/balena-engine/balena-engine.mk   | 42 +++++-------------------
- 3 files changed, 9 insertions(+), 36 deletions(-)
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Giulio: build tested only]
 
-diff --git a/package/balena-engine/Config.in b/package/balena-engine/Config.in
-index f48f361dc2..02f694515e 100644
---- a/package/balena-engine/Config.in
-+++ b/package/balena-engine/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_BALENA_ENGINE
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime
- 	select BR2_PACKAGE_IPTABLES # runtime
--	select BR2_PACKAGE_SQLITE # runtime
- 	select BR2_PACKAGE_UTIL_LINUX # runtime
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES # runtime
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT # runtime
-diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
-index 3f632ef381..ef590881f5 100644
---- a/package/balena-engine/balena-engine.hash
-+++ b/package/balena-engine/balena-engine.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  389282706562118608b6ac580e7beacd6a43f0bb3481c69fb1856bed9ac49b85  balena-engine-19.03.14.tar.gz
-+sha256  43f4c985b855a4f731a5cdac214f1adf6c4cc2021cbad3f93856009df246d61c  balena-engine-20.10.12.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
-index b3eb2ca75b..0afcea3d7e 100644
---- a/package/balena-engine/balena-engine.mk
-+++ b/package/balena-engine/balena-engine.mk
-@@ -4,34 +4,33 @@
- #
- ################################################################################
- 
--BALENA_ENGINE_VERSION = 19.03.14
-+BALENA_ENGINE_VERSION = 20.10.12
- BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
- 
- BALENA_ENGINE_LICENSE = Apache-2.0
- BALENA_ENGINE_LICENSE_FILES = LICENSE
- 
--BALENA_ENGINE_DEPENDENCIES = host-pkgconf
- BALENA_ENGINE_GOMOD = github.com/docker/docker
- 
- BALENA_ENGINE_LDFLAGS = \
--	-X github.com/docker/cli/cli/version.Version=N/A \
--	-X github.com/docker/cli/cli/version.GitCommit= \
--	-X github.com/docker/cli/cli/version.BuildTime= \
-+	-X $(BALENA_ENGINE_GOMOD)/dockerversion.GitCommit= \
-+	-X $(BALENA_ENGINE_GOMOD)/dockerversion.Version=$(BALENA_ENGINE_VERSION) \
- 	-X github.com/containerd/containerd/version.Version=N/A \
-+	-X github.com/docker/cli/cli/version.BuildTime= \
-+	-X github.com/docker/cli/cli/version.GitCommit= \
-+	-X github.com/docker/cli/cli/version.Version=N/A \
- 	-X github.com/opencontainers/runc.version=N/A
- 
- BALENA_ENGINE_TAGS = \
- 	cgo \
--	exclude_graphdriver_zfs \
--	autogen \
--	no_buildkit \
- 	no_btrfs \
- 	no_cri \
- 	no_devmapper \
- 	no_zfs \
- 	exclude_disk_quota \
- 	exclude_graphdriver_btrfs \
--	exclude_graphdriver_devicemapper
-+	exclude_graphdriver_devicemapper \
-+	exclude_graphdriver_zfs
- 
- BALENA_ENGINE_BUILD_TARGETS = cmd/balena-engine
- 
-@@ -40,16 +39,6 @@ BALENA_ENGINE_DEPENDENCIES += systemd
- BALENA_ENGINE_TAGS += journald
- endif
- 
--define BALENA_ENGINE_RUN_AUTOGEN
--	cd $(@D) && \
--		VERSION=$(BALENA_ENGINE_VERSION) \
--		PKG_CONFIG=$(PKG_CONFIG_HOST_BINARY) \
--		$(TARGET_MAKE_ENV) \
--		$(SHELL) hack/make/.go-autogen
--endef
--
--BALENA_ENGINE_POST_CONFIGURE_HOOKS += BALENA_ENGINE_RUN_AUTOGEN
--
- define BALENA_ENGINE_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 $(@D)/contrib/init/systemd/balena-engine.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/balena-engine.service
-@@ -64,35 +53,20 @@ endef
- define BALENA_ENGINE_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CPUSETS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_IPVS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
- endef
- 
- define BALENA_ENGINE_INSTALL_SYMLINK
+Best regards
 -- 
-2.25.1
+Giulio Benetti
+Benetti Engineering sas
+
+> ---
+>   board/orangepi/orangepi-zero-plus2/boot.cmd   |  6 ---
+>   .../orangepi/orangepi-zero-plus2/genimage.cfg | 41 -------------------
+>   configs/orangepi_zero_plus2_defconfig         | 14 ++++---
+>   3 files changed, 8 insertions(+), 53 deletions(-)
+>   delete mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
+>   delete mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
+> 
+> diff --git a/board/orangepi/orangepi-zero-plus2/boot.cmd b/board/orangepi/orangepi-zero-plus2/boot.cmd
+> deleted file mode 100644
+> index aa5162004b..0000000000
+> --- a/board/orangepi/orangepi-zero-plus2/boot.cmd
+> +++ /dev/null
+> @@ -1,6 +0,0 @@
+> -setenv bootargs console=ttyS0,115200 earlyprintk root=PARTLABEL=rootfs rootwait
+> -
+> -fatload mmc 0 $kernel_addr_r Image
+> -fatload mmc 0 $fdt_addr_r sun50i-h5-orangepi-zero-plus2.dtb
+> -
+> -booti $kernel_addr_r - $fdt_addr_r
+> diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
+> deleted file mode 100644
+> index 5a7ee7707a..0000000000
+> --- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -image boot.vfat {
+> -	vfat {
+> -		files = {
+> -			"Image",
+> -			"sun50i-h5-orangepi-zero-plus2.dtb",
+> -			"boot.scr"
+> -		}
+> -	}
+> -
+> -	size = 64M
+> -}
+> -
+> -image sdcard.img {
+> -	hdimage {
+> -		# for root=PARTLABEL support
+> -		partition-table-type = "gpt"
+> -		# default GPT location conflicts with bootloaders, move it after
+> -		gpt-location = 1M
+> -	}
+> -
+> -	partition spl {
+> -		in-partition-table = "no"
+> -		image = "u-boot-sunxi-with-spl.bin"
+> -		offset = 8K
+> -		size = 1016K # 1MB - 8KB
+> -	}
+> -
+> -	partition boot {
+> -		partition-type-uuid = "F"
+> -		bootable = "true"
+> -		image = "boot.vfat"
+> -	}
+> -
+> -	# 'rootfs' will be used as the partition label, used
+> -	# with root=PARTLABEL=rootfs kernel command line
+> -	partition rootfs {
+> -		partition-type-uuid = "L"
+> -		image = "rootfs.ext4"
+> -		size = 256M
+> -	}
+> -}
+> diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+> index 9d88b37ac9..ef171c3ad3 100644
+> --- a/configs/orangepi_zero_plus2_defconfig
+> +++ b/configs/orangepi_zero_plus2_defconfig
+> @@ -27,9 +27,6 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+>   BR2_TARGET_UBOOT_SPL=y
+>   BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+>   BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
+> -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> -BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+> -BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd"
+>   
+>   # Kernel
+>   BR2_LINUX_KERNEL=y
+> @@ -40,6 +37,8 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>   BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
+>   BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero-plus2/linux-extras.config"
+>   BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
+>   
+>   # wireless firmware
+>   BR2_PACKAGE_LINUX_FIRMWARE=y
+> @@ -58,8 +57,11 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero Plus2"
+>   BR2_TARGET_ROOTFS_EXT2=y
+>   BR2_TARGET_ROOTFS_EXT2_4=y
+>   BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> -BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +
+> +# host tools
+>   BR2_PACKAGE_HOST_GENIMAGE=y
+> -BR2_PACKAGE_HOST_MTOOLS=y
+> +
+> +# image scripts
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
+>   BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero-plus2/genimage.cfg"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
 
 _______________________________________________
 buildroot mailing list
