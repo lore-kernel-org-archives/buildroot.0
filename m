@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D46C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 17:52:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D2EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B49E8408E1;
-	Sun, 27 Feb 2022 17:52:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ypvIoUR6kb64; Sun, 27 Feb 2022 17:52:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01646408DC;
-	Sun, 27 Feb 2022 17:52:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D4931BF285
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:52:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A26181C93
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:52:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 233B781BB2;
+	Sun, 27 Feb 2022 19:17:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uxaJYiyZv2VT for <buildroot@lists.busybox.net>;
- Sun, 27 Feb 2022 17:52:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E231B81BB2
- for <buildroot@buildroot.org>; Sun, 27 Feb 2022 17:52:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A74D182DFE; Sun, 27 Feb 2022 17:44:19 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gx-L-2GNvoOC; Sun, 27 Feb 2022 19:17:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B63F81B70;
+	Sun, 27 Feb 2022 19:17:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A4F91BF356
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:16:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4654040148
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:16:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cDjpd4SKU0qC for <buildroot@lists.busybox.net>;
+ Sun, 27 Feb 2022 19:16:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8DCF240143
+ for <buildroot@buildroot.org>; Sun, 27 Feb 2022 19:16:56 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 25042200006;
+ Sun, 27 Feb 2022 19:16:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nOP2K-00Dpn0-14; Sun, 27 Feb 2022 20:16:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 27 Feb 2022 18:50:56 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 953e0595f8f1e6a1c94d612dcde0027f89014692
-X-Git-Newrev: d5658ab951023d3f2a9a8bdd34de19a41e087bd1
-X-Patchwork-Hint: ignore
-Message-Id: <20220227174419.A74D182DFE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/thermald: update
- URL in the docs
+To: =?utf-8?Q?J=C3=B6rg?= Krause <joerg.krause@embedded.rocks>
+References: <20220131202151.937124-1-joerg.krause@embedded.rocks>
+Date: Sun, 27 Feb 2022 20:16:51 +0100
+In-Reply-To: <20220131202151.937124-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Mon, 31 Jan 2022 20:21:51 +0000")
+Message-ID: <87v8x02k7w.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] linux: build after wireless-regdb if
+ enabled for early loading support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,40 +60,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5658ab951023d3f2a9a8bdd34de19a41e087bd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
-
-Old project homepage was removed, so switch to github, already in use to
-download the sources.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 1ddced072abefa001a10df56b9820e96db1b2b6f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/thermald/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/thermald/Config.in b/package/thermald/Config.in
-index f32a4b274e..8950e939b3 100644
---- a/package/thermald/Config.in
-+++ b/package/thermald/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_THERMALD
- 	  reaches a certain threshold, the Linux daemon activates
- 	  various cooling methods to try to cool the system.
- 
--	  https://01.org/linux-thermal-daemon
-+	  https://github.com/intel/thermal_daemon
- 
- comment "thermald needs a toolchain w/ C++, wchar, threads"
- 	depends on BR2_i386 || BR2_x86_64
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkrDtnJnIiA9PSBKw7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRlZC5yb2Nr
+cz4gd3JpdGVzOgoKID4gVG8gc3VwcG9ydCBidWlsZGluZyBpbiB0aGUgd2lyZWxlc3MgcmVndWxh
+dG9yeSBkYXRhYmFzZSBmaWxlcyAocmVndWxhdG9yeS5kYiopCiA+IGludG8gdGhlIGtlcm5lbCB1
+c2luZyB0aGUgQ09ORklHX0VYVFJBX0ZJUk1XQVJFIG9wdGlvbiwgd2UgbmVlZCB0byBlbnN1cmUg
+dGhhdAogPiB0aGUgZGF0YWJhc2UgZmlsZXMgYXJlIGluc3RhbGxlZCBiZWZvcmUgdGhlIExpbnV4
+IGtlcm5lbCBpcyBidWlsdC4KCiA+IFNpZ25lZC1vZmYtYnk6IErDtnJnIEtyYXVzZSA8am9lcmcu
+a3JhdXNlQGVtYmVkZGVkLnJvY2tzPgoKQ29tbWl0dGVkIHRvIDIwMjEuMDIueCBhbmQgMjAyMS4x
+MS54LCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
