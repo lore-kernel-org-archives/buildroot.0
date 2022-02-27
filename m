@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C199AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33DE6C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E99C60D7B;
-	Sun, 27 Feb 2022 19:46:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D44C040903;
+	Sun, 27 Feb 2022 19:47:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ro-Kjv52qfoe; Sun, 27 Feb 2022 19:46:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r2Jtvm54ENTG; Sun, 27 Feb 2022 19:47:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89BA860D80;
-	Sun, 27 Feb 2022 19:46:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08084408F2;
+	Sun, 27 Feb 2022 19:47:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BD4951BF3EC
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:45:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D6A61BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AAFFE40534
+ by smtp2.osuosl.org (Postfix) with ESMTP id CED3240220
  for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:45:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id By5aGIXe_tn7 for <buildroot@lists.busybox.net>;
+ with ESMTP id pnj5X8awgSLl for <buildroot@lists.busybox.net>;
  Sun, 27 Feb 2022 19:45:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 941A440220
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF35A40533
  for <buildroot@buildroot.org>; Sun, 27 Feb 2022 19:45:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2B4E1836B3; Sun, 27 Feb 2022 19:37:28 +0000 (UTC)
+ id 45A23836B3; Sun, 27 Feb 2022 19:37:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Feb 2022 20:34:00 +0100
+Date: Sun, 27 Feb 2022 20:34:50 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 757a02e0498f349f9bb5bd1be274c9599418c402
-X-Git-Newrev: 67d948e4a21126e0321bad8b2713e0db255b330d
+X-Git-Oldrev: b7179080ca9b0d9c7f8933050325bb4a5d13123b
+X-Git-Newrev: 307f91968d2b7e7c6f005326e23664939e1600df
 X-Patchwork-Hint: ignore
-Message-Id: <20220227193728.2B4E1836B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/util-linux: fix
- build with headers < 3.14
+Message-Id: <20220227193728.45A23836B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/util-linux: bump
+ version to 2.37.3 (fixes CVE-2021-3996, CVE-2021-3995)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,79 +59,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67d948e4a21126e0321bad8b2713e0db255b330d
+commit: https://git.buildroot.net/buildroot/commit/?id=307f91968d2b7e7c6f005326e23664939e1600df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following build failure raised since bump to version 2.37.2 in
-commit 27a46793b1a0c6c13c00b07d07bd5743e2c9c7b6 and the addition of
-uclampset in
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=9dd95bea42a3b467c1f773fd2e781cc9f0d88847:
+- add 'touch' workaround for missing disk-utils/raw.8 file ([1], [2]) in
+  util-linux-2.37.3 release download package
 
-checking for syscall sched_setattr... no
-configure: WARNING: Unable to detect syscall sched_setattr.
-checking for syscall sched_setattr... (cached) no
-configure: WARNING: Unable to detect syscall sched_setattr.
-configure: error: uclampset selected but sched_setattr syscall not found
+For details see [1].
 
-Fix this build failure by adding a dependency on headers >= 3.14 for
-scheduling utilities:
-https://github.com/torvalds/linux/commit/e6cfc0295c7d51b008999a8b13a44fb43f8685ea
+[1] https://www.spinics.net/lists/util-linux-ng/msg17037.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/9fe26ab98c93b67f937293f28625843da7ccb77f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2033992ac079c38ed3c2d38eb693d345fb0d5c89)
+[Arnout: put fix in POST_PATCH instead of PRE_COMPILE hook]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit b292f1d41a8734b6cdcbcf2ae726b51f9e1338a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/Config.in | 6 ++++--
- package/util-linux/Config.in  | 6 +++++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ package/util-linux/util-linux.hash | 2 +-
+ package/util-linux/util-linux.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index ceb58c668a..f459b41762 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -83,6 +83,7 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	depends on BR2_USE_MMU  # bash
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # util-linux schedutils
- 	select BR2_PACKAGE_LINUX_TOOLS
- 	select BR2_PACKAGE_BASH # runtime
- 	select BR2_PACKAGE_NCURSES
-@@ -104,9 +105,10 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	  This is very much a use at your risk option and may not work
- 	  for every setup or every architecture.
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index eafbe9254a..9c10a42dca 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/util-linux/v2.37/sha256sums.asc
+-sha256  6a0764c1aae7fb607ef8a6dd2c0f6c47d5e5fd27aa08820abaad9ec14e28e9d9  util-linux-2.37.2.tar.xz
++sha256  590c592e58cd6bf38519cb467af05ce6a1ab18040e3e3418f24bcfb2f55f9776  util-linux-2.37.3.tar.xz
+ # License files, locally calculated
+ sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index cf0fee409b..e59ef7dadc 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,7 +8,7 @@
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
--comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dynamic library"
-+comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dynamic library and headers >= 3.14"
- 	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || BR2_STATIC_LIBS
-+	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ UTIL_LINUX_VERSION_MAJOR = 2.37
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
  
- config BR2_PACKAGE_LINUX_TOOLS_TMON
- 	bool "tmon"
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 1f33eb5514..1dc00d21d9 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -326,8 +326,12 @@ comment "runuser needs a uClibc or glibc toolchain w/ wchar, locale, dynamic lib
+@@ -35,6 +35,13 @@ UTIL_LINUX_CONF_OPTS += \
  
- config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
- 	bool "scheduling utilities"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	help
--	  Scheduling utilities (chrt, ionice, taskset)
-+	  Scheduling utilities (chrt, ionice, taskset, uclampset)
+ UTIL_LINUX_LINK_LIBS = $(TARGET_NLS_LIBS)
+ 
++# workaround missing disk-utils/raw.8 file in util-linux-2.37.3
++# release download package
++define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
++	touch $(@D)/disk-utils/raw.8
++endef
++UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
 +
-+comment "scheduling utilities need a toolchain w/ headers >= 3.14"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
  
- config BR2_PACKAGE_UTIL_LINUX_SETPRIV
- 	bool "setpriv"
+ # We also don't want the host-python dependency
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
