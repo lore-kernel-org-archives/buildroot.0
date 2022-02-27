@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E245C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 542A0C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:48:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27C72827F3;
-	Sun, 27 Feb 2022 19:47:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 145F082ADD;
+	Sun, 27 Feb 2022 19:48:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mg5HATovWKKI; Sun, 27 Feb 2022 19:47:51 +0000 (UTC)
+	with ESMTP id 4SId_33h1GSD; Sun, 27 Feb 2022 19:48:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 528D1827A1;
-	Sun, 27 Feb 2022 19:47:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F310C82A4F;
+	Sun, 27 Feb 2022 19:48:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 05EE91BF3EC
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:45:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 174FC1BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7545540220
+ by smtp2.osuosl.org (Postfix) with ESMTP id E09554042B
  for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:45:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cqjaVpE6hmNT for <buildroot@lists.busybox.net>;
+ with ESMTP id Q5gnbJwO0OXi for <buildroot@lists.busybox.net>;
  Sun, 27 Feb 2022 19:45:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AED814052B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C42B402C3
  for <buildroot@buildroot.org>; Sun, 27 Feb 2022 19:45:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 56241827CC; Sun, 27 Feb 2022 19:37:28 +0000 (UTC)
+ id 34582827CC; Sun, 27 Feb 2022 19:37:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Feb 2022 20:35:08 +0100
+Date: Sun, 27 Feb 2022 20:34:24 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: af705b14a91b2c025d36e77f2f876abc3602835d
-X-Git-Newrev: baf475e84743d2f97b657e220f9bff10f3ee4c70
+X-Git-Oldrev: 67d948e4a21126e0321bad8b2713e0db255b330d
+X-Git-Newrev: 477fa607517c892e21e5d667457276a250d12819
 X-Patchwork-Hint: ignore
-Message-Id: <20220227193728.56241827CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/util-linux:
- improve host build failure fix
+Message-Id: <20220227193728.34582827CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/util-linux: fix
+ mount -a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,167 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=baf475e84743d2f97b657e220f9bff10f3ee4c70
+commit: https://git.buildroot.net/buildroot/commit/?id=477fa607517c892e21e5d667457276a250d12819
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-As suggested by Peter Seiderer package util-linux doesn't need raw support
-when built for host, so let's remove:
-HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
-in favor of:
-HOST_UTIL_LINUX_CONF_OPTS += --disable-raw
-This is a better approach than my commit:
-https://git.buildroot.net/buildroot/commit/?id=d895bd973b35fde10d3dd7db530d9e4782926497
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=14351
 
-Suggested-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 498117df1261c582ca70851c8a4f58db95632f2c)
+(cherry picked from commit 2f5068640161f7b267099e28b69d4c2280b4ded3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ ...mark-cache-as-probed-if-sys-not-available.patch | 141 +++++++++++++++++++++
+ 1 file changed, 141 insertions(+)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 5a4ff64d01..40fd518a58 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -41,7 +41,6 @@ define UTIL_LINUX_FIX_DISK_UTILS_COMPILE
- 	touch $(@D)/disk-utils/raw.8
- endef
- UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
--HOST_UTIL_LINUX_POST_PATCH_HOOKS += UTIL_LINUX_FIX_DISK_UTILS_COMPILE
- 
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
-@@ -202,6 +201,11 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--without-ncursesw \
- 	--without-tinfo
- 
-+# Disable raw command since starting from version 2.37 needs a
-+# work-around to build but in the end we don't need at all.
-+HOST_UTIL_LINUX_CONF_OPTS += \
-+	--disable-raw
+diff --git a/package/util-linux/0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch b/package/util-linux/0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch
+new file mode 100644
+index 0000000000..bfc8f60834
+--- /dev/null
++++ b/package/util-linux/0002-libblkid-don-t-mark-cache-as-probed-if-sys-not-available.patch
+@@ -0,0 +1,141 @@
++From 84d38ae3eca523ef990cb848563cc63de25266e6 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Fri, 19 Nov 2021 14:19:03 +0100
++Subject: [PATCH] libblkid: don't mark cache as "probed" if /sys not available
 +
- ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
- HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
- # disable commands that have ncurses dependency, as well as
++For "mount --all" we need to read the cache more than once in a short
++time. The library checks the delay between probes, and if the delay is
++too short, it does not read devices. This is a problem on boot when there
++are no /sys, and the cache is empty. In this case, we need to check
++for /sys until it's available constantly.
++
++https://github.com/util-linux/util-linux/issues/1492
++Signed-off-by: Karel Zak <kzak@redhat.com>
++
++[Retrieved from:
++https://github.com/util-linux/util-linux/commit/84d38ae3eca523ef990cb848563cc63de25266e6]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libblkid/src/devname.c | 26 +++++++++++++++++---------
++ libblkid/src/resolve.c |  2 +-
++ libblkid/src/tag.c     |  8 +++++---
++ 3 files changed, 23 insertions(+), 13 deletions(-)
++
++diff --git a/libblkid/src/devname.c b/libblkid/src/devname.c
++index 90a8245fc9..9a173e3489 100644
++--- a/libblkid/src/devname.c
+++++ b/libblkid/src/devname.c
++@@ -429,6 +429,8 @@ sysfs_probe_all(blkid_cache cache, int only_if_new, int only_removable)
++ 	if (!sysfs)
++ 		return -BLKID_ERR_SYSFS;
++ 
+++	DBG(DEVNAME, ul_debug(" probe /sys/block"));
+++
++ 	/* scan /sys/block */
++ 	while ((dev = xreaddir(sysfs))) {
++ 		DIR *dir = NULL;
++@@ -533,14 +535,18 @@ sysfs_probe_all(blkid_cache cache, int only_if_new, int only_removable)
++ /*
++  * Read the device data for all available block devices in the system.
++  */
++-static int probe_all(blkid_cache cache, int only_if_new)
+++static int probe_all(blkid_cache cache, int only_if_new, int update_interval)
++ {
+++	int rc;
+++
++ 	if (!cache)
++ 		return -BLKID_ERR_PARAM;
++ 
++ 	if (cache->bic_flags & BLKID_BIC_FL_PROBED &&
++-	    time(NULL) - cache->bic_time < BLKID_PROBE_INTERVAL)
+++	    time(NULL) - cache->bic_time < BLKID_PROBE_INTERVAL) {
+++		DBG(PROBE, ul_debug("don't re-probe [delay < %d]", BLKID_PROBE_INTERVAL));
++ 		return 0;
+++	}
++ 
++ 	blkid_read_cache(cache);
++ #ifdef VG_DIR
++@@ -548,7 +554,13 @@ static int probe_all(blkid_cache cache, int only_if_new)
++ #endif
++ 	ubi_probe_all(cache, only_if_new);
++ 
++-	sysfs_probe_all(cache, only_if_new, 0);
+++	rc = sysfs_probe_all(cache, only_if_new, 0);
+++
+++	/* Don't mark the change as "probed" if /sys not avalable */
+++	if (update_interval && rc == 0) {
+++		cache->bic_time = time(NULL);
+++		cache->bic_flags |= BLKID_BIC_FL_PROBED;
+++	}
++ 
++ 	blkid_flush_cache(cache);
++ 	return 0;
++@@ -567,11 +579,7 @@ int blkid_probe_all(blkid_cache cache)
++ 	int ret;
++ 
++ 	DBG(PROBE, ul_debug("Begin blkid_probe_all()"));
++-	ret = probe_all(cache, 0);
++-	if (ret == 0) {
++-		cache->bic_time = time(NULL);
++-		cache->bic_flags |= BLKID_BIC_FL_PROBED;
++-	}
+++	ret = probe_all(cache, 0, 1);
++ 	DBG(PROBE, ul_debug("End blkid_probe_all() [rc=%d]", ret));
++ 	return ret;
++ }
++@@ -589,7 +597,7 @@ int blkid_probe_all_new(blkid_cache cache)
++ 	int ret;
++ 
++ 	DBG(PROBE, ul_debug("Begin blkid_probe_all_new()"));
++-	ret = probe_all(cache, 1);
+++	ret = probe_all(cache, 1, 0);
++ 	DBG(PROBE, ul_debug("End blkid_probe_all_new() [rc=%d]", ret));
++ 	return ret;
++ }
++diff --git a/libblkid/src/resolve.c b/libblkid/src/resolve.c
++index 641b022860..16653fa8e1 100644
++--- a/libblkid/src/resolve.c
+++++ b/libblkid/src/resolve.c
++@@ -32,7 +32,7 @@ char *blkid_get_tag_value(blkid_cache cache, const char *tagname,
++ 	blkid_cache c = cache;
++ 	char *ret = NULL;
++ 
++-	DBG(TAG, ul_debug("looking for %s on %s", tagname, devname));
+++	DBG(TAG, ul_debug("looking for tag %s on %s device", tagname, devname));
++ 
++ 	if (!devname)
++ 		return NULL;
++diff --git a/libblkid/src/tag.c b/libblkid/src/tag.c
++index 390a648648..178336505f 100644
++--- a/libblkid/src/tag.c
+++++ b/libblkid/src/tag.c
++@@ -326,14 +326,14 @@ blkid_dev blkid_find_dev_with_tag(blkid_cache cache,
++ 	blkid_dev	dev;
++ 	int		pri;
++ 	struct list_head *p;
++-	int		probe_new = 0;
+++	int		probe_new = 0, probe_all = 0;
++ 
++ 	if (!cache || !type || !value)
++ 		return NULL;
++ 
++ 	blkid_read_cache(cache);
++ 
++-	DBG(TAG, ul_debug("looking for %s=%s in cache", type, value));
+++	DBG(TAG, ul_debug("looking for tag %s=%s in cache", type, value));
++ 
++ try_again:
++ 	pri = -1;
++@@ -366,9 +366,11 @@ blkid_dev blkid_find_dev_with_tag(blkid_cache cache,
++ 		goto try_again;
++ 	}
++ 
++-	if (!dev && !(cache->bic_flags & BLKID_BIC_FL_PROBED)) {
+++	if (!dev && !probe_all
+++	    && !(cache->bic_flags & BLKID_BIC_FL_PROBED)) {
++ 		if (blkid_probe_all(cache) < 0)
++ 			return NULL;
+++		probe_all++;
++ 		goto try_again;
++ 	}
++ 	return dev;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
