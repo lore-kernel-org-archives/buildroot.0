@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F87C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 10:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFAFBC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 10:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7286240500;
-	Sun, 27 Feb 2022 10:10:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A89A828E3;
+	Sun, 27 Feb 2022 10:36:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6YFyHs4_dkfT; Sun, 27 Feb 2022 10:10:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3GWmfxnA-A6c; Sun, 27 Feb 2022 10:36:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5DA2640165;
-	Sun, 27 Feb 2022 10:10:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 831EB82894;
+	Sun, 27 Feb 2022 10:36:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D29DF1BF2F9
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 10:10:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8CACB1BF2F9
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 10:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB2E6600C7
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 10:10:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 892D8606E7
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 10:36:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mA9lkSqmql6q for <buildroot@lists.busybox.net>;
- Sun, 27 Feb 2022 10:10:55 +0000 (UTC)
+ with ESMTP id Msa2vDKDh19P for <buildroot@lists.busybox.net>;
+ Sun, 27 Feb 2022 10:36:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 13EF660087
- for <buildroot@buildroot.org>; Sun, 27 Feb 2022 10:10:54 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id n14so10978470wrq.7
- for <buildroot@buildroot.org>; Sun, 27 Feb 2022 02:10:54 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82E9C6068F
+ for <buildroot@buildroot.org>; Sun, 27 Feb 2022 10:36:10 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id d28so11074112wra.4
+ for <buildroot@buildroot.org>; Sun, 27 Feb 2022 02:36:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Tg5YxJrbWBD4OloNU/dCDFRe1US+emd0zgxDrIwsFjg=;
- b=fya0KUnrTcfEohb9tMWphY2uEKjV1jULA/YPE6BNC2H+rHABP8yi1vxaAJQOEMxuIZ
- PycYRywzjYqKXkFqVerX0TPiVSEWXNB9jSK9me8WVkg2vbrxLhDvcVnsRiatWliZG74V
- c5FWmxqpWOJUh0J1lwqkZAjHyR4oAxY0OE1qFxEyvUHNcnlMZ+TTYaohueh46I15L09M
- cP9k6ENBDGep+MDdhS3ZvxXP8HDxJquGFebxwQivUrkFGaCqkLzXVMNtBAQd1cO7nGTe
- NIA01KXKnOwiu1YrMYZYhp4KLzfzPIadxJRrT6WjeVZmeEzUNvm+Wgw90kHBeW7n52uM
- +kmg==
+ bh=D9s1WHsNNKV5yzU2cdtKhaxIGG0UU0FTyHHrcaAJmXM=;
+ b=a25qmBXgRt5p3088NAzLvF1wM11EU8u+PxrUOV4ILy4W43DWKkgqTF3w5ZFbR30QBP
+ uBU6rpGKccj4tSuSeaou2++9NaVwOwIAb+OwaYETryXMWzPWL2Mj6vzhvqtJUHJJHRLH
+ asBDBjgvz62u5sOC10syegkZAJBbQdOGmRvSbdSz8qfbqXrvskReRDhIaWao8zx8L0Ba
+ 9zZ7EK4JMAQTHDBtFaZxEgWA8UCb3tezdXBoxemuDKXv0d9LonTVVQ5YuDPLilBdf/YD
+ OJSyH4InxjlnUrfx3aK30dETjkmAsgxPtBCdW5DzWaf2KD/heb3wbdGfkzXUQVsDf0kl
+ qC8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Tg5YxJrbWBD4OloNU/dCDFRe1US+emd0zgxDrIwsFjg=;
- b=2jqgudkGY/a5J+UOSQxSWXKqgwMwGpj/ITLvGt+SK6qSOHYIE/sXRwdtdPwqnf1CZR
- fBt0VG6UVfhbXnd7BC3o6n9hplmCl9K43KqfRMDw2qOvLB8xwZi9WZCJ9n6RXfF/6GKc
- S13po2Rtk3ysj/tqxtYtkMd1P2A/h2B5JJQOSW6pD2gacUwO00WnpHc3/hpt5w7Fsu/h
- rLNhX+TLlFc0/jEYfGGyrVk0hgv5jIZ/JY3WMf7Kdw7yQH6SHHdRhlvtYD5WN20f0LO1
- HYhvnexywFOg/ODo2xHNzdP4ZCmUrqXV6pA/A++WKRPCm69OpJ1hkaEioGiOsg8se6xL
- QJ0A==
-X-Gm-Message-State: AOAM533SOjUesvA42xbWXzy/HaKtIXIVQwxzOSom7cJ7djEkdrJXj9Yj
- VFjmx8noQIoH67+738CMOYtZ20gOpU0=
-X-Google-Smtp-Source: ABdhPJxM15FK5XG3Nl1yT2fj7hN5wGg4n2dHEp8CdaEvlvuRTMXDGoqNAndnS2+QDsMMOh6LvjSwRA==
-X-Received: by 2002:a05:6000:1a8f:b0:1e8:3301:1273 with SMTP id
- f15-20020a0560001a8f00b001e833011273mr12349135wry.707.1645956653053; 
- Sun, 27 Feb 2022 02:10:53 -0800 (PST)
+ bh=D9s1WHsNNKV5yzU2cdtKhaxIGG0UU0FTyHHrcaAJmXM=;
+ b=MUuHYTBIcV9O4uzP7pnS5t291cmfqVcXgU15td89Tz/D71Sfr0lpcYXpTMGgdbiljh
+ s+HXlJRDHqloDNBxImkZgtiyS1AQ7OEFjS6wiqZqUXiLCnQ17FWgGvxYpBznR5xbR+sN
+ 3yUUip0eP1ftuJJmLEgX86gAtcGrUUajoaizVM5O2cnDNyNQbO3BkckYu+kWqeIINhfo
+ 3Ke3MLrWbXYzYigD5ZdLUrOeSiVb5FqZlCtrF7j53JVw8hyqaW404KFnlPBInTxgU6Cp
+ EvxF4MMlLHe01p4a11M9sj1VgxyACSRXeVZ3YpxFinsaNfs+5Ne75fYbx0dfxBzY8YFa
+ 5sfQ==
+X-Gm-Message-State: AOAM5334q9MKD1wQ1hFGeQ3XizG0CJOf+Z9/7KJIefTXDk+xwRWk8uDI
+ AqnzcS54RyQtyWvQZMTmVeIo8mDwxwc=
+X-Google-Smtp-Source: ABdhPJxZ0fKjsdAZ9TZxCvEeTtDL9C+rzUOz3xpcF1f9Ohp2Y3pvHd4g281gveq72k8E46lJQBiemw==
+X-Received: by 2002:a5d:6106:0:b0:1ed:b56f:73f7 with SMTP id
+ v6-20020a5d6106000000b001edb56f73f7mr13179043wrt.601.1645958168491; 
+ Sun, 27 Feb 2022 02:36:08 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- m12-20020adfe0cc000000b001ede2dd604esm7092493wri.106.2022.02.27.02.10.52
+ a3-20020adfe5c3000000b001e68a5e1c20sm7293835wrn.4.2022.02.27.02.36.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Feb 2022 02:10:52 -0800 (PST)
+ Sun, 27 Feb 2022 02:36:08 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Feb 2022 11:10:03 +0100
-Message-Id: <20220227101003.3702134-1-fontaine.fabrice@gmail.com>
+Date: Sun, 27 Feb 2022 11:35:27 +0100
+Message-Id: <20220227103528.3888282-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/ocrad: bump to version 0.28
+Subject: [Buildroot] [PATCH/next 1/2] package/valijson: drop boost dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,64 +87,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gilles Talis <gilles.talis@gmail.com>,
+Cc: Matt Weber <matthew.weber@collins.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Add libpng mandatory dependency
-- Update indentation in hash file (two spaces)
+boost is not mandatory since the deactivation of tests when bumping to
+version 0.2.0 in commit d8e2876104be3f9f01613b17d3e60120883be1a1 and
+https://github.com/tristanpenman/valijson/commit/1844241d2a2379bca79a0d654f4b007209b10883
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ocrad/Config.in  | 1 +
- package/ocrad/ocrad.hash | 4 ++--
- package/ocrad/ocrad.mk   | 3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/valijson/Config.in   | 8 ++------
+ package/valijson/valijson.mk | 1 -
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/ocrad/Config.in b/package/ocrad/Config.in
-index 38d37c612a..b6c4300f86 100644
---- a/package/ocrad/Config.in
-+++ b/package/ocrad/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OCRAD
- 	bool "ocrad"
+diff --git a/package/valijson/Config.in b/package/valijson/Config.in
+index 10721b3703..07706cd963 100644
+--- a/package/valijson/Config.in
++++ b/package/valijson/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_VALIJSON
+ 	bool "valijson"
+-	depends on BR2_USE_WCHAR
  	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBPNG
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_REGEX
  	help
- 	  GNU Ocrad is an OCR (Optical Character Recognition) program
- 	  based on a feature extraction method.
-diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
-index 7ae38c30e8..cd5b0039ea 100644
---- a/package/ocrad/ocrad.hash
-+++ b/package/ocrad/ocrad.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 a9bfe67e9a040907aff5640dca56392476b6a89e48e37dc94ba846c5b6733b36  ocrad-0.27.tar.lz
--sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-+sha256  34ccea576dbdadaa5979e6202344c3ff68737d829ca7b66f71c8497d36bbbf2e  ocrad-0.28.tar.lz
-+sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-index e037a08195..982bb002c9 100644
---- a/package/ocrad/ocrad.mk
-+++ b/package/ocrad/ocrad.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
+ 	  Valijson is a header-only JSON Schema Validation library for
+ 	  C++. Valijson provides a simple validation API that allows
+@@ -14,5 +10,5 @@ config BR2_PACKAGE_VALIJSON
  
--OCRAD_VERSION = 0.27
-+OCRAD_VERSION = 0.28
- OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
- OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
- OCRAD_LICENSE = GPL-3.0+
- OCRAD_LICENSE_FILES = COPYING
- OCRAD_INSTALL_STAGING = YES
-+OCRAD_DEPENDENCIES = libpng
+ 	  https://github.com/tristanpenman/valijson
  
- # This is not a true autotools package.
- define OCRAD_CONFIGURE_CMDS
+-comment "valijson needs a toolchain w/ C++, threads, wchar  support"
+-	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++comment "valijson needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+index e425757d26..71c5b05f2b 100644
+--- a/package/valijson/valijson.mk
++++ b/package/valijson/valijson.mk
+@@ -11,7 +11,6 @@ VALIJSON_LICENSE_FILES = LICENSE
+ VALIJSON_CPE_ID_VENDOR = valijson_project
+ VALIJSON_INSTALL_STAGING = YES
+ VALIJSON_INSTALL_TARGET = NO
+-VALIJSON_DEPENDENCIES = boost
+ VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE -Dvalijson_BUILD_TESTS=FALSE
+ 
+ $(eval $(cmake-package))
 -- 
 2.34.1
 
