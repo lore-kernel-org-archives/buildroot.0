@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B2B8C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 17:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310AEC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 17:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8AAFD40543;
-	Sun, 27 Feb 2022 17:34:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE815408C5;
+	Sun, 27 Feb 2022 17:35:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ljX1HdNtGUv; Sun, 27 Feb 2022 17:34:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ez35sfSGcHL8; Sun, 27 Feb 2022 17:35:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEE584053D;
-	Sun, 27 Feb 2022 17:34:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16F5D40898;
+	Sun, 27 Feb 2022 17:35:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 22AC41BF285
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:34:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACC5E1BF285
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EB86607FF
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:34:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A87F9607FF
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:35:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VF3nrn3RoExV for <buildroot@lists.busybox.net>;
- Sun, 27 Feb 2022 17:34:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C8B9607EC
- for <buildroot@buildroot.org>; Sun, 27 Feb 2022 17:34:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C6A4B82E00; Sun, 27 Feb 2022 17:26:12 +0000 (UTC)
+ with ESMTP id oIUtApTK-rpc for <buildroot@lists.busybox.net>;
+ Sun, 27 Feb 2022 17:35:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5781B607EC
+ for <buildroot@buildroot.org>; Sun, 27 Feb 2022 17:35:07 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A91D3200002;
+ Sun, 27 Feb 2022 17:35:04 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nONRm-00DngJ-S5; Sun, 27 Feb 2022 18:35:02 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 27 Feb 2022 18:33:18 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: ec034ba9dee122c51cb59703c85df839dc973a54
-X-Git-Newrev: b7ed73bcda079346fb1858d4f8e8e5c193b5d517
-X-Patchwork-Hint: ignore
-Message-Id: <20220227172612.C6A4B82E00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
- to 1.16.14
+To: Christian Stewart <christian@paral.in>
+References: <20220210235906.23355-1-christian@paral.in>
+ <877da1sr8x.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Feb 2022 18:35:02 +0100
+In-Reply-To: <877da1sr8x.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 11 Feb 2022 10:10:38 +0100")
+Message-ID: <87czj843i1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/go: security bump to 1.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,48 +59,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7ed73bcda079346fb1858d4f8e8e5c193b5d517
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+ >> go1.17.7 includes security fixes to the crypto/elliptic, math/big packages and
+ >> to the go command, as well as bug fixes to the compiler, linker, runtime, the go
+ >> command, and the debug/macho, debug/pe, and net/http/httptest packages.
 
-go1.16.14 includes security fixes to the crypto/elliptic, math/big packages
-and to the go command, as well as bug fixes to the compiler, linker,
-runtime, the go command, and the debug/macho, debug/pe, net/http/httptest,
-and testing packages.
+ >> https://github.com/golang/go/issues?q=milestone%3AGo1.17.7+label%3ACherryPickApproved
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> Signed-off-by: Christian Stewart <christian@paral.in>
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 7071fcd99d..b4d4e05e3c 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  b0926654eaeb01ef43816638f42d7b1681f2d3f41b9559f07735522b7afad41a  go1.16.13.src.tar.gz
-+sha256  467898cd3a216de54dcb9014f541efe77e9b79a7154dbc1fd2dd778b0c63fb56  go1.16.14.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index cac83c65ff..cc57d0d86d 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.16.13
-+GO_VERSION = 1.16.14
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Committed to 2021.11.x, thanks. For 2021.02.x I will instead bump to
+1.16.14.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
