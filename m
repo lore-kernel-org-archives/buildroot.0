@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70957C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF81AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 19:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FC1E80C64;
-	Sun, 27 Feb 2022 19:28:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 726E881CE9;
+	Sun, 27 Feb 2022 19:29:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VlhfgO_dNmJb; Sun, 27 Feb 2022 19:28:55 +0000 (UTC)
+	with ESMTP id hAxEE04HA3S6; Sun, 27 Feb 2022 19:29:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5372D813A1;
-	Sun, 27 Feb 2022 19:28:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9DE2D1BF97C
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:28:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F1B881CDB;
+	Sun, 27 Feb 2022 19:29:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CB7021BF356
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CF2E60A6C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85E0481A6F
  for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 19:28:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ex27E2eQY-hR for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JdAtE7_BUPgB for <buildroot@lists.busybox.net>;
  Sun, 27 Feb 2022 19:28:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC8AF607C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id D43D781B60
  for <buildroot@buildroot.org>; Sun, 27 Feb 2022 19:28:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7D577835F9; Sun, 27 Feb 2022 19:20:02 +0000 (UTC)
+ id 755708349D; Sun, 27 Feb 2022 19:20:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Feb 2022 20:22:15 +0100
+Date: Sun, 27 Feb 2022 20:22:05 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 701ce0ad69580854076df85eaa1b8db3da51e20f
-X-Git-Newrev: 9ca49fba1a45ca1f7d9aa22ec005f6056d1d9af5
+X-Git-Oldrev: e91440b904a6bae850a503f0938f833a5691d951
+X-Git-Newrev: 701ce0ad69580854076df85eaa1b8db3da51e20f
 X-Patchwork-Hint: ignore
-Message-Id: <20220227192002.7D577835F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] linux: fix build with
- host-gcc 10+
+Message-Id: <20220227192002.755708349D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] boot/uboot: fix build
+ with host-gcc 10+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,23 +59,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ca49fba1a45ca1f7d9aa22ec005f6056d1d9af5
+commit: https://git.buildroot.net/buildroot/commit/?id=701ce0ad69580854076df85eaa1b8db3da51e20f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Some older versions of linux, or custom versions (like forks for some
+Some older versions of U-Boot, or custom versions (like forks for some
 boards), fail to build with host-gcc 10+, because of redefined symbols:
 
       HOSTLD  scripts/dtc/dtc
     /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition
     of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
     collect2: error: ld returned 1 exit status
+    make[4]: *** [scripts/Makefile.host:106: scripts/dtc/dtc] E
 
 Since this has been fixed in recent-ish versions, we can't use an
 unconditionaly patch, so we must have a conditional patch. However, a
-patch may not always apply to arbitrary Linux versions or forks.
+patch may not always apply to arbitrary U-Boot versions or forks.
 
 Upstream just dropped that line altogether:
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33a814e772cdc36436c8c188d8c42d019fda639
+    https://source.denx.de/u-boot/u-boot/-/commit/018921ee79d3f30893614b3b2b63b588d8544f73
 
 So, we use a little sed-grep combo to do the exact same change.
 
@@ -85,30 +86,30 @@ Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9b41b54be07711c10ad13ce157be272ed1cf402e)
+(cherry picked from commit 3b3859cc7df8edce10e5b4dad9005bd05342c8c3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 7 +++++++
+ boot/uboot/uboot.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 960a4ebd63..7eacb22998 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -260,6 +260,13 @@ endef
- 
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 9661f901ea..0765e66c4a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -238,6 +238,13 @@ endef
+ UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+ UBOOT_POST_RSYNC_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
  
 +# Older versions break on gcc 10+ because of redefined symbols
-+define LINUX_DROP_YYLLOC
++define UBOOT_DROP_YYLLOC
 +	$(Q)grep -Z -l -r -E '^YYLTYPE yylloc;$$' $(@D) \
 +	|xargs -0 -r $(SED) '/^YYLTYPE yylloc;$$/d'
 +endef
-+LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
++UBOOT_POST_PATCH_HOOKS += UBOOT_DROP_YYLLOC
 +
- # Older linux kernels use deprecated perl constructs in timeconst.pl
- # that were removed for perl 5.22+ so it breaks on newer distributions
- # Try a dry-run patch to see if this applies, if it does go ahead
+ ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
+ define UBOOT_XTENSA_OVERLAY_EXTRACT
+ 	$(call arch-xtensa-overlay-extract,$(@D),u-boot)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
