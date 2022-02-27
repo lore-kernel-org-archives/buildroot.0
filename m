@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3C26C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 17:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05835C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 17:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B37781CA0;
-	Sun, 27 Feb 2022 17:37:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A64D6408C5;
+	Sun, 27 Feb 2022 17:41:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yskfKxRzsi19; Sun, 27 Feb 2022 17:37:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QwthzWSgbAgA; Sun, 27 Feb 2022 17:41:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B344F81C11;
-	Sun, 27 Feb 2022 17:37:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A922B40898;
+	Sun, 27 Feb 2022 17:41:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 759FC1BF285
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:37:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 682F01BF285
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 632C9607FF
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:37:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6450E60ABE
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 17:41:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U6GHho9clYpa for <buildroot@lists.busybox.net>;
- Sun, 27 Feb 2022 17:37:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5825F607EC
- for <buildroot@buildroot.org>; Sun, 27 Feb 2022 17:37:54 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A44CA1C0004;
- Sun, 27 Feb 2022 17:37:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nONUT-00Dnol-Eq; Sun, 27 Feb 2022 18:37:49 +0100
+ with ESMTP id 6DPw6Lfn6gpd for <buildroot@lists.busybox.net>;
+ Sun, 27 Feb 2022 17:41:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B986D60AA3
+ for <buildroot@buildroot.org>; Sun, 27 Feb 2022 17:41:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 80EBE813A8; Sun, 27 Feb 2022 17:33:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20220211052629.2289507-1-giulio.benetti@benettiengineering.com>
-Date: Sun, 27 Feb 2022 18:37:49 +0100
-In-Reply-To: <20220211052629.2289507-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Fri, 11 Feb 2022 06:26:29 +0100")
-Message-ID: <878rtw43de.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] docs/manual/adding-packages-generic: remove
- useless carriage return
+To: buildroot@buildroot.org
+Date: Sun, 27 Feb 2022 18:41:10 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: b52ed0eaf493393d1646756f5b1ace27c18f9df6
+X-Git-Newrev: 1b949740731be09fba6c1c5a90a07ecf68ede60e
+X-Patchwork-Hint: ignore
+Message-Id: <20220227173324.80EBE813A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/casync: fix zstd
+ dependency to correct package name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,21 +53,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b949740731be09fba6c1c5a90a07ecf68ede60e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Nuno Goncalves <nunojpg@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 807bf505f42997f98f8acb7c7046ca5f97df08bb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/casync/casync.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/casync/casync.mk b/package/casync/casync.mk
+index d74cb1bfe8..bb9bd8ccac 100644
+--- a/package/casync/casync.mk
++++ b/package/casync/casync.mk
+@@ -40,8 +40,8 @@ else
+ CASYNC_CONF_OPTS += -Dudev=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBZSTD),y)
+-CASYNC_DEPENDENCIES += libzstd
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++CASYNC_DEPENDENCIES += zstd
+ CASYNC_CONF_OPTS += -Dlibzstd=enabled
+ else
+ CASYNC_CONF_OPTS += -Dlibzstd=disabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
