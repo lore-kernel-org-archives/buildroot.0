@@ -4,51 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8E0C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 20:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202ACC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Feb 2022 20:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A85960ABE;
-	Sun, 27 Feb 2022 20:02:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEA1C60670;
+	Sun, 27 Feb 2022 20:04:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kWvbgaPH0s8A; Sun, 27 Feb 2022 20:02:31 +0000 (UTC)
+	with ESMTP id tCzxd_sl8piH; Sun, 27 Feb 2022 20:04:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C00D60670;
-	Sun, 27 Feb 2022 20:02:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F2B9605B2;
+	Sun, 27 Feb 2022 20:04:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AFB6B1BF3EC
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 20:02:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 460791BF2AA
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 20:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AADC481025
- for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 20:02:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3062B813D6
+ for <buildroot@lists.busybox.net>; Sun, 27 Feb 2022 20:04:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CpeAvahvxbXq for <buildroot@lists.busybox.net>;
- Sun, 27 Feb 2022 20:02:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ACAF880D5E
- for <buildroot@buildroot.org>; Sun, 27 Feb 2022 20:02:27 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AFC5C40005;
- Sun, 27 Feb 2022 20:02:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nOPkO-00E2Za-29; Sun, 27 Feb 2022 21:02:24 +0100
+ with ESMTP id C0_RsusQ_2VK for <buildroot@lists.busybox.net>;
+ Sun, 27 Feb 2022 20:04:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87B70813D3
+ for <buildroot@buildroot.org>; Sun, 27 Feb 2022 20:04:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 1849B83611; Sun, 27 Feb 2022 19:56:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20220203094746.22715-1-br015@umbiko.net>
-Date: Sun, 27 Feb 2022 21:02:24 +0100
-In-Reply-To: <20220203094746.22715-1-br015@umbiko.net> (Andreas Ziegler's
- message of "Thu, 3 Feb 2022 10:47:46 +0100")
-Message-ID: <871qzo2i3z.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: ignore CVE-2020-746[56]
- intended for FreeBSD PPP daemon
+To: buildroot@buildroot.org
+Date: Sun, 27 Feb 2022 20:53:03 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 2a9bd16cbf946b71aaca3ca99ba811ec97d117f7
+X-Git-Newrev: af251fb0e9c7d67c196bcd121814fcd275190f1f
+X-Patchwork-Hint: ignore
+Message-Id: <20220227195637.1849B83611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: remove Martin
+ Hicks from file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,31 +53,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?J=C3=B6rg?= Krause <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=af251fb0e9c7d67c196bcd121814fcd275190f1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > cpe:2.3:a:mpd_project:mpd:*:*:*:*:*:*:*:* is not a valid CPE 
- > identifier for mpd (musicpd.org); this string refers to 
- > MPD /FreeBSD PPP daemon (sourceforge.net/projects/mpd)
+Martin Hicks asked to not maintain cryptsetup anymore:
+https://lists.buildroot.org/pipermail/buildroot/2022-February/635413.html
 
- > Since mpd does not have entries in the CVE database, put these 
- > two CVE identifiers on the mpd ignore list:
+Also he doesn't mantain any other package, so let's remove him from this
+file.
 
- >   https://nvd.nist.gov/vuln/detail/CVE-2020-7465
- >   https://nvd.nist.gov/vuln/detail/CVE-2020-7466
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit d06bf4a9d73e7a05e651e737e26abac86080878e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0a7845a155..1370495a84 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1691,9 +1691,6 @@ F:	package/rpi-wifi-firmware/
+ F:	package/tzdata/
+ F:	package/zic/
+ 
+-N:	Martin Hicks <mort@bork.org>
+-F:	package/cryptsetup/
+-
+ N:	Martin Kepplinger <martink@posteo.de>
+ F:	package/tslib/
+ F:	package/x11r7/xdriver_xf86-input-tslib/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
