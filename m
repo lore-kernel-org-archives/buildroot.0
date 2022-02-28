@@ -1,46 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DCF5C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 21:20:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC139C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 21:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D04E9403A5;
-	Mon, 28 Feb 2022 21:20:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s9IRYsdhiT9t; Mon, 28 Feb 2022 21:20:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C1FC405E3;
-	Mon, 28 Feb 2022 21:20:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ABF3E1BF2FF
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:20:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A884E60E6C
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:20:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80B6960E7D;
+	Mon, 28 Feb 2022 21:29:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YYNhwLquBhAb for <buildroot@lists.busybox.net>;
- Mon, 28 Feb 2022 21:20:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAC1D60E6B
- for <buildroot@buildroot.org>; Mon, 28 Feb 2022 21:20:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 18F1682655; Mon, 28 Feb 2022 21:12:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 28 Feb 2022 22:18:33 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c4d496bf10675bacfdc1c0901c755e79f157699
-X-Git-Newrev: 7af7acabe051c1b394f53fd02084be7b97d8a8d8
-X-Patchwork-Hint: ignore
-Message-Id: <20220228211234.18F1682655@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus: bump to version 1.12.22
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jCyomzxWqmWM; Mon, 28 Feb 2022 21:29:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0A7F60E75;
+	Mon, 28 Feb 2022 21:29:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F06181BF2FF
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:29:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEEE181678
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:29:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S24InSZoIYV7 for <buildroot@lists.busybox.net>;
+ Mon, 28 Feb 2022 21:29:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 611198175A
+ for <buildroot@buildroot.org>; Mon, 28 Feb 2022 21:29:28 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.7.124])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id OnaAnNgwdINkEOnaBn1nRv; Mon, 28 Feb 2022 22:29:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1646083767; bh=z9UZGzNI2N8Z92oyoTc4bEfato1T/XuL3lYC/YleTqI=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=XACYv7j0iVHX9OlGMbj9tAHZb0u2FcuMasuymzsveDoJYXGVjFZzNU1/4h4SnocAP
+ AbJZ0raSD+C2mWz0BcTCtWM1/CSEgbKRX8f31B+CMbYxWfIOcBgjn3dgbkfm3stD0H
+ xgU2CkdFGsInQc/INKSbJKG0yfzJdXZKC8SQJl3dX0NQVoShakuzluHaYf6W6EUHnN
+ 8KzlemoK3nqIo2IN4JQc9DpCXU8cTFFDFj1a6vIxsY4h2IoPRXY/vRmOF0IopVTBgB
+ oCh9UUh7gGhNyuKYZN3EgfKp1JubTShvtArKcRvsquj/yGt29NYHwr8rF3P+M207Oo
+ MJScIMetO5wyg==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Mon, 28 Feb 2022 22:29:26 +0100
+Message-Id: <3C088CA7-EE28-4D60-8DDD-68492CE9D73D@benettiengineering.com>
+References: <87y21uy9hg.fsf@dell.be.48ers.dk>
+In-Reply-To: <87y21uy9hg.fsf@dell.be.48ers.dk>
+To: Peter Korsgaard <peter@korsgaard.com>
+X-Mailer: iPhone Mail (19D52)
+X-CMAE-Envelope: MS4xfN8RhKg9IghkHb/iK5byz6JOV07jIM5sonvl7DLYYNWuxzhYdfoOz+rcfuU1RDetwEDaIzSPTZ5Ul59QvK6qEndyX9pSS8cxNArgIRao3de6nNhdFYf9
+ P5dtBDbzmvIiVJMDczAlepgB/JISqe9Ug8/g9jC/ZrPpejsb0dNp6yYymgmX0HVB1USQns0t3jJtRu1aFdxPH08E4DGMVq1YwBUrNYmfdABk5biBPRiat8v8
+ /dMyo1Mo/818ytybkrlMKA==
+Subject: Re: [Buildroot] [PATCH] package/at: bump version to 3.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,52 +68,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7af7acabe051c1b394f53fd02084be7b97d8a8d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-1.12.22/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 06512e5656..176396fe2f 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.20.tar.gz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.22.tar.gz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  f77620140ecb4cdc67f37fb444f8a6bea70b5b6461f12f1cbe2cec60fa7de5fe  dbus-1.12.20.tar.gz
-+sha256  8d25785c798ec4f892e6f9d177fb0ceeb8b29867b119798f9d5228561d3ad474  dbus-1.12.22.tar.gz
- 
- # Locally calculated
- sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d78e102427..de447d8680 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.12.20
-+DBUS_VERSION = 1.12.22
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUGV0ZXIsCgo+IElsIGdpb3JubyAyOCBmZWIgMjAyMiwgYWxsZSBvcmUgMjI6MjAsIFBldGVy
+IEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4gaGEgc2NyaXR0bzoKPiAKPiDvu78KPj4g
+Cj4+Pj4+PiAiR2l1bGlvIiA9PSBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0
+aWVuZ2luZWVyaW5nLmNvbT4gd3JpdGVzOgo+IAo+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVu
+ZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KPiAKPiBBbnkgc3Bl
+Y2lmaWMgcmVhc29uIHRoaXMgc2hvdWxkIGdvIHRvIG1hc3RlciBhbmQgbm90IG5leHQ/CgpTb3Jy
+eSwgSeKAmXZlIGZvcmdvdHRlbiB0byBhZGQg4oCcbmV4dOKAnSwgdGhpcyBpcyBmb3IgbmV4dCBi
+cmFuY2guCgpCZXN0IHJlZ2FyZHMK4oCULQpHaXVsaW8gQmVuZXR0aQpCZW5ldHRpIEVuZ2luZWVy
+aW5nIHNhcwoKPiAKPiAtLSAKPiBCeWUsIFBldGVyIEtvcnNnYWFyZAo+IF9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlz
+dAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
