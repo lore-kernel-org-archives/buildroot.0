@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F25EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 18:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54D12C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 18:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9701040142;
-	Mon, 28 Feb 2022 18:48:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BC7740110;
+	Mon, 28 Feb 2022 18:48:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z-GRh15akkFp; Mon, 28 Feb 2022 18:48:37 +0000 (UTC)
+	with ESMTP id h_auB6whENAr; Mon, 28 Feb 2022 18:48:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2792740124;
-	Mon, 28 Feb 2022 18:48:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3941F1BF2CE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E47340124;
+	Mon, 28 Feb 2022 18:48:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F1B01BF9AA
  for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 340E540110
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E87C60E3E
  for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:48:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g3_1kcQKBfT1 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8qI5KjlUI52c for <buildroot@lists.busybox.net>;
  Mon, 28 Feb 2022 18:48:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37BD0400CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62F0A60E4C
  for <buildroot@buildroot.org>; Mon, 28 Feb 2022 18:48:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 94BFF823A2; Mon, 28 Feb 2022 18:40:00 +0000 (UTC)
+ id C460583611; Mon, 28 Feb 2022 18:40:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Feb 2022 19:36:50 +0100
+Date: Mon, 28 Feb 2022 19:45:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db0f8006c1c8685dc98446b5b9e768e52d2f2591
-X-Git-Newrev: 2de5cd85423083662eb0625978ef6da7577d76c6
+X-Git-Oldrev: 4b6703847376838d0b091acd9b0e0193b6439657
+X-Git-Newrev: 5ed26bb378c02f2ce7f7377481853b12ad55d808
 X-Patchwork-Hint: ignore
-Message-Id: <20220228184000.94BFF823A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xterm: security bump to version 371
+Message-Id: <20220228184000.C460583611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpjsip: security bump to version
+ 2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,48 +59,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2de5cd85423083662eb0625978ef6da7577d76c6
+commit: https://git.buildroot.net/buildroot/commit/?id=5ed26bb378c02f2ce7f7377481853b12ad55d808
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2022-24130: xterm through Patch 370, when Sixel support is
-enabled, allows attackers to trigger a buffer overflow in set_sixel in
-graphics_sixel.c via crafted text.
+Fix the following security issues (i.e. CVE-2021-37706, CVE-2021-41141,
+CVE-2021-43804, CVE-2021-43845, CVE-2022-21722 and CVE-2022-21723):
+- Potential integer underflow upon receiving STUN message
+  (GHSA-2qpg-f6wf-w984)
+- Use after free of dialog set (GHSA-ffff-m5fm-qm62)
+- Missing unreleased of locks in failure cases (GHSA-8fmx-hqw7-6gmc)
+- Potential out-of-bounds read when parsing RTCP BYE message
+  (GHSA-3qx3-cg72-wrh9)
+- Prevent OOB read for RTCP XR block (GHSA-r374-qrwv-86hh)
+- Potential buffer overflow in pjsua_player_create(),
+  pjsua_recorder_create(), pjmedia_wav_player_create(), and
+  pjsua_call_dump() (GHSA-qcvw-h34v-c7r9)
+- Potential out-of-bound read during RTP/RTCP parsing
+  (GHSA-m66q-q64c-hv36)
+- Prevent OOB read in multipart parsing (GHSA-7fw8-54cv-r7pm)
+- Use after free of dialog set (GHSA-ffff-m5fm-qm62)
 
-Update hash of COPYING (update in year)
-
-https://invisible-island.net/xterm/xterm.log.html#xterm_371
+https://github.com/pjsip/pjproject/releases/tag/2.12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xterm/xterm.hash | 4 ++--
- package/xterm/xterm.mk   | 2 +-
+ package/libpjsip/libpjsip.hash | 2 +-
+ package/libpjsip/libpjsip.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index d6d80ad977..3f6ec765ce 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  27f1a8b1c756e269fd5684e60802b545f0be9b36b8b5d6bdbc840c6b000dc51f  xterm-367.tgz
-+sha256  32f888277b19e28ebc0a3112bff000607c07bed0679caa0beebb36f9cad484f5  xterm-371.tgz
- # Locally calculated
--sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
-+sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index e09d350a7d..95984f1cf9 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index f39ebf4060..74331ab6fb 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  45f6604372df3f49293749cd7c0b42cb21c4fb666c66f8ed9765de004d1eae38  pjproject-2.11.1.tar.gz
++sha256  b3b94d9be4aba8f6d2d1cb164603e81b0a6ee17352f9e2ba5b58e325e610ca5a  pjproject-2.12.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index b05cc31a83..32cfa8c53c 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--XTERM_VERSION = 367
-+XTERM_VERSION = 371
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-LIBPJSIP_VERSION = 2.11.1
++LIBPJSIP_VERSION = 2.12
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+-# https://github.com/pjsip/pjproject/archive/2.11.1.tar.gz
++# https://github.com/pjsip/pjproject/archive/2.12.tar.gz
+ 
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
