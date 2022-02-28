@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54D12C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 18:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 529F5C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 18:49:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BC7740110;
-	Mon, 28 Feb 2022 18:48:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11C2781416;
+	Mon, 28 Feb 2022 18:49:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h_auB6whENAr; Mon, 28 Feb 2022 18:48:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5YREE08GmcRd; Mon, 28 Feb 2022 18:49:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E47340124;
-	Mon, 28 Feb 2022 18:48:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F1B01BF9AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E204813E4;
+	Mon, 28 Feb 2022 18:49:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 55E271BF5A7
  for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E87C60E3E
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:48:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED6E9402AD
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8qI5KjlUI52c for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RehiDhh5gWFX for <buildroot@lists.busybox.net>;
  Mon, 28 Feb 2022 18:48:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62F0A60E4C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4888A40261
  for <buildroot@buildroot.org>; Mon, 28 Feb 2022 18:48:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C460583611; Mon, 28 Feb 2022 18:40:00 +0000 (UTC)
+ id A7BEF83611; Mon, 28 Feb 2022 18:40:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Feb 2022 19:45:24 +0100
+Date: Mon, 28 Feb 2022 19:41:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b6703847376838d0b091acd9b0e0193b6439657
-X-Git-Newrev: 5ed26bb378c02f2ce7f7377481853b12ad55d808
+X-Git-Oldrev: 55f1d0a3592253df2a356c195e5131a970eade9b
+X-Git-Newrev: 14e0c4de719a0d63192cc5de66a608f75297f37d
 X-Patchwork-Hint: ignore
-Message-Id: <20220228184000.C460583611@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpjsip: security bump to version
- 2.12
+Message-Id: <20220228184000.A7BEF83611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wolfssl: security bump to version
+ 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ed26bb378c02f2ce7f7377481853b12ad55d808
+commit: https://git.buildroot.net/buildroot/commit/?id=14e0c4de719a0d63192cc5de66a608f75297f37d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following security issues (i.e. CVE-2021-37706, CVE-2021-41141,
-CVE-2021-43804, CVE-2021-43845, CVE-2022-21722 and CVE-2022-21723):
-- Potential integer underflow upon receiving STUN message
-  (GHSA-2qpg-f6wf-w984)
-- Use after free of dialog set (GHSA-ffff-m5fm-qm62)
-- Missing unreleased of locks in failure cases (GHSA-8fmx-hqw7-6gmc)
-- Potential out-of-bounds read when parsing RTCP BYE message
-  (GHSA-3qx3-cg72-wrh9)
-- Prevent OOB read for RTCP XR block (GHSA-r374-qrwv-86hh)
-- Potential buffer overflow in pjsua_player_create(),
-  pjsua_recorder_create(), pjmedia_wav_player_create(), and
-  pjsua_call_dump() (GHSA-qcvw-h34v-c7r9)
-- Potential out-of-bound read during RTP/RTCP parsing
-  (GHSA-m66q-q64c-hv36)
-- Prevent OOB read in multipart parsing (GHSA-7fw8-54cv-r7pm)
-- Use after free of dialog set (GHSA-ffff-m5fm-qm62)
+Fix CVE-2021-44718, CVE-2022-23408, CVE-2022-25638 and CVE-2022-25640
 
-https://github.com/pjsip/pjproject/releases/tag/2.12
+https://www.wolfssl.com/docs/security-vulnerabilities
+https://github.com/wolfSSL/wolfssl/blob/v5.2.0-stable/ChangeLog.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 2 +-
- package/libpjsip/libpjsip.mk   | 4 ++--
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index f39ebf4060..74331ab6fb 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  45f6604372df3f49293749cd7c0b42cb21c4fb666c66f8ed9765de004d1eae38  pjproject-2.11.1.tar.gz
-+sha256  b3b94d9be4aba8f6d2d1cb164603e81b0a6ee17352f9e2ba5b58e325e610ca5a  pjproject-2.12.tar.gz
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 9896713ca7..63eebf93bb 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  50db45f348f47e00c93dd244c24108220120cb3cc9d01434789229c32937c444  wolfssl-4.8.1-stable.tar.gz
++sha256  409b4646c5f54f642de0e9f3544c3b83de7238134f5b1ff93fb44527bf119d05  wolfssl-5.2.0.tar.gz
+ 
+ # Hash for license files:
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index b05cc31a83..32cfa8c53c 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index d3dce0a401..bfb54445e4 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBPJSIP_VERSION = 2.11.1
-+LIBPJSIP_VERSION = 2.12
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
- LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
--# https://github.com/pjsip/pjproject/archive/2.11.1.tar.gz
-+# https://github.com/pjsip/pjproject/archive/2.12.tar.gz
+-WOLFSSL_VERSION = 4.8.1-stable
+-WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
++WOLFSSL_VERSION = 5.2.0
++WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
+ WOLFSSL_INSTALL_STAGING = YES
  
- LIBPJSIP_DEPENDENCIES = libsrtp
- LIBPJSIP_LICENSE = GPL-2.0+
+ WOLFSSL_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
