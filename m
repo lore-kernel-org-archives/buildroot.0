@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1F9C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 18:54:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B24C0C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 18:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81897405DD;
-	Mon, 28 Feb 2022 18:54:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74038814B7;
+	Mon, 28 Feb 2022 18:54:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rIkIqqslGOGu; Mon, 28 Feb 2022 18:54:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SBWffOJBq9fs; Mon, 28 Feb 2022 18:54:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8767C405DF;
-	Mon, 28 Feb 2022 18:54:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E5D681304;
+	Mon, 28 Feb 2022 18:54:14 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F2231BF5A7
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:53:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24C911BF2CE
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E1A680E48
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD4A8812DE
  for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 18:53:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4zZ4DeEqySVN for <buildroot@lists.busybox.net>;
+ with ESMTP id HTfH0un8F042 for <buildroot@lists.busybox.net>;
  Mon, 28 Feb 2022 18:53:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C127812D3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FA91812C2
  for <buildroot@buildroot.org>; Mon, 28 Feb 2022 18:53:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D768E837B6; Mon, 28 Feb 2022 18:45:39 +0000 (UTC)
+ id CADD1837AA; Mon, 28 Feb 2022 18:45:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Feb 2022 19:52:49 +0100
+Date: Mon, 28 Feb 2022 19:52:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28c9cb5ff34aa98bf2d0db63f593745db006c910
-X-Git-Newrev: 212b020bb43f13121d6cde464f871d5d1cf6cfbe
+X-Git-Oldrev: 266318937ae72cefd17f38b76de9d400bd4d9f47
+X-Git-Newrev: 28c9cb5ff34aa98bf2d0db63f593745db006c910
 X-Patchwork-Hint: ignore
-Message-Id: <20220228184539.D768E837B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnutls: security bump to version
- 3.7.3
+Message-Id: <20220228184539.CADD1837AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: security bump to version
+ 8.2.4450
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=212b020bb43f13121d6cde464f871d5d1cf6cfbe
+commit: https://git.buildroot.net/buildroot/commit/?id=28c9cb5ff34aa98bf2d0db63f593745db006c910
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-see https://www.gnutls.org/security-new.html#GNUTLS-SA-2022-01-17
+Fix CVE-2022-0554: Use of Out-of-range Pointer Offset in GitHub
+repository vim/vim prior to 8.2.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 5d4fd1a0dc..2ffc6c1b4e 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz.sig
--sha256  646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752  gnutls-3.7.2.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.3.tar.xz.sig
-+sha256  fc59c43bc31ab20a6977ff083029277a31935b8355ce387b634fa433f8f6c49a  gnutls-3.7.3.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index dbf7593854..7317a3bb1e 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index fa3ca53cc8..8b60b7461f 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  b40b4e341de6b65cdeacd4c816dea8fe5e3b385ee5e17af73fc69c00bd7c440b  vim-8.2.4301.tar.gz
++sha256  b0a5acbe83bbdd4b1412abd9dc2ae2e3593c6cff8ff11c551fda3e6e2a87ec81  vim-8.2.4450.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 98a5f153a8..28fd33c8ef 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).3
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+-VIM_VERSION = 8.2.4301
++VIM_VERSION = 8.2.4450
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
