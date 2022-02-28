@@ -4,54 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6C7CC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 16:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F305C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 17:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62D73405D2;
-	Mon, 28 Feb 2022 16:33:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C42B405D8;
+	Mon, 28 Feb 2022 17:53:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1j0KZuQ-KEPJ; Mon, 28 Feb 2022 16:33:03 +0000 (UTC)
+	with ESMTP id HecZNYmy7CIR; Mon, 28 Feb 2022 17:53:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38E2A405CE;
-	Mon, 28 Feb 2022 16:33:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D68481BF307
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 16:33:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 428624022C;
+	Mon, 28 Feb 2022 17:53:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 464671BF5A7
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 17:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9BA4405CD
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 16:33:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E47740216
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 17:53:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vk1GO1ah5nj1 for <buildroot@lists.busybox.net>;
- Mon, 28 Feb 2022 16:32:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04A21401F8
- for <buildroot@buildroot.org>; Mon, 28 Feb 2022 16:32:58 +0000 (UTC)
-Received: (Authenticated sender: theo.lebrun@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1FDBEE000D;
- Mon, 28 Feb 2022 16:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1646065977;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=UH9zndt/PtSupZRYokWVYI68fgiPkJFW7hNM9LQ8IFI=;
- b=Y4RLcIRwHEgPT3pBfA/V/MWMkUjVE/IhjZSudMJwCgMNqeLeLp61ERNhT4gOIpFE2HT7Sn
- t5enC9T0RRU5tHI4qEpqWM3Bwfo+xBisuHD/gMqRzqL2BxVOA8+RJrzGq2CSq+oL6skMNb
- 0ZMgNm729EsqcdOLVlZ316pwiv0O7lOtOFNZvo7lffLlukZ+5in8CcVNIk1h0ul2iCo9sR
- S77rxyud1Qh2DH0TBLzHHYJ4DVqot2/JM8KCic974ln2vMT3qAlCPNb5E7W4wjGUpHH3Wl
- H70O6RHrYHFTzKiFJBhJ9yeD1oVVHRledepk0pyLtJIMYOF8HE4qBO2LNMkmNA==
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GJVRfsJDPihM for <buildroot@lists.busybox.net>;
+ Mon, 28 Feb 2022 17:53:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 25E61401F5
+ for <buildroot@buildroot.org>; Mon, 28 Feb 2022 17:53:11 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id p9so16673209wra.12
+ for <buildroot@buildroot.org>; Mon, 28 Feb 2022 09:53:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=s4Jh43E5+GaICP3HFIoRc0XmVeo5GKww99/BXNjaO5A=;
+ b=SK3gWQZBApWmpaDPybKPN/2apmL4iqcHYGMqjKF1cESS4XdW+Rg43CnjDL22gk3PK4
+ tb1VUxYACUIExJsN6i96YYJfUfrRP12zjWjZRkRlDKlkWLKo8QPWM8mG2uDEL8pEd99J
+ DWdMsz7EwnENncOulRFF/pxBsl9tC8Tlg/VZ7ZZrlCfycYUWPnVYby77l4ehSIPPr7AT
+ eJaXox9ldVYtfKEll4GFD5cNbOKNXm82GsAe4IsKRlhBEs28FuuHDRhCaXG88KhvROKI
+ trIwzkf2AuVsopXATZKv0GU2Z5Nr7FHYmkBZsVzedehHxOz3kgtVXhuuvcLQ26oIC1d+
+ he4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=s4Jh43E5+GaICP3HFIoRc0XmVeo5GKww99/BXNjaO5A=;
+ b=CV/AcnDOKnmPviaxFxPu+NNUGbZZkwDoFFDtHjrsmNTqryOPSpceQNFzAmHmGBT8SL
+ C2iyXH2hlqlOGXzmBGrqBZa+Cx348bZODieVUAA907LpgT2loyn2bMa9e0PNLSadL4Eb
+ vUUgddRuo/pshZoqUAvJUSwNcLT3bZTvB8c6Nfawd1KLm9CvuICJVH5M/u/po7UhEz/3
+ IQ5hHmJT4rTwwdK1uPrH0DcLFmX7/YBLR0fVo2pJNp7Z7WAZBdz/2FZJa9rBtazxfU3Y
+ 9gRGwsvrBDbSQJXa1pTfc4wjCpoYDWDbS/LLkARoKcyMdS5ulfFbbJui649LQj1H1HPZ
+ ulqg==
+X-Gm-Message-State: AOAM5318kUNOjXmQ+TXpZlTHUvmf2rw7H3p8/LdNTMZK6EFJf4hhi0ZP
+ FVYGrY6Gs7CxMc3kPKf9uTYpAiMxeWo=
+X-Google-Smtp-Source: ABdhPJzLbrA1gy6jBnMOZvSupGyAu74LtRlkjg+h++Ly1oSa2X7XpveI+snmOIXfUq4wVO2tINM5iQ==
+X-Received: by 2002:adf:f3c8:0:b0:1ed:9cd9:5bf with SMTP id
+ g8-20020adff3c8000000b001ed9cd905bfmr16937826wrp.380.1646070789048; 
+ Mon, 28 Feb 2022 09:53:09 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ a17-20020a5d5091000000b001edb61b2687sm15838826wrt.63.2022.02.28.09.53.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 28 Feb 2022 09:53:08 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Feb 2022 17:32:38 +0100
-Message-Id: <20220228163238.405627-1-theo.lebrun@bootlin.com>
-X-Mailer: git-send-email 2.35.1
+Date: Mon, 28 Feb 2022 18:52:45 +0100
+Message-Id: <20220228175245.1585-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] docs: fix links to AsciiDoc
+Subject: [Buildroot] [PATCH 1/1] package/libxml2: security bump to version
+ 2.9.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +88,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Th=C3=A9o_Lebrun_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
-Cc: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGlua3Mgd2VyZSBhaW1lZCBhdCB0aGUgbWV0aG9kcy5jby5ueiBkb21haW4sIHdoaWNoIGlzIG5v
-dyByZXR1cm5pbmcKNDA0cy4gVGhlIGN1cnJlbnQgc2l0dWF0aW9uIG9mIEFzY2lpRG9jIGlzIHVu
-Y2xlYXIgdG8gbWU6IHRoZSBGZWRvcmEKcGFja2FnZSBwb2ludHMgdG8gdGhpcyB3ZWJzaXRlLCB0
-aGV5IG93biBhc2NpaWRvYy5vcmcsIFdpa2lwZWRpYSBwb2ludHMKdG8gdGhpcyBwcm9qZWN0IGFz
-IHdlbGwgYnV0IHRoZWlyIEdpdCByZXBvJ3MgUkVBRE1FIGluY2x1ZGVzIHRoZQpmb2xsb3dpbmcg
-cGFyYWdyYXBoOgoKPiBBc2NpaURvYy5weSBpcyBhIGxlZ2FjeSBwcm9jZXNzb3IgZm9yIHRoaXMg
-c3ludGF4LCBoYW5kbGluZyBhbiBvbGRlcgo+IHJlbmRpdGlvbiBvZiBBc2NpaURvYy4gQXMgc3Vj
-aCwgdGhpcyB3aWxsIG5vdCBwcm9wZXJseSBoYW5kbGUgdGhlCj4gY3VycmVudCBBc2NpaURvYyBz
-cGVjaWZpY2F0aW9uLiBJdCBpcyBzdWdnZXN0ZWQgdGhhdCB1bmxlc3MgeW91Cj4gc3BlY2lmaWNh
-bGx5IHJlcXVpcmUgdGhlIEFzY2lpRG9jLnB5IHRvb2xjaGFpbiwgeW91IHNob3VsZCBmaW5kIGEK
-PiBwcm9jZXNzb3IgdGhhdCBoYW5kbGVzIHRoZSBtb2Rlcm4gQXNjaWlEb2Mgc3ludGF4LgotLS0g
-aHR0cHM6Ly9naXRodWIuY29tL2FzY2lpZG9jLXB5L2FzY2lpZG9jLXB5L2Jsb2IvMTAuMS4zL1JF
-QURNRS5tZAoKIkFzY2lpRG9jIHNwZWNpZmljYXRpb24iIHBvaW50aW5nIHRvd2FyZHM6Cmh0dHBz
-Oi8vcHJvamVjdHMuZWNsaXBzZS5vcmcvcHJvamVjdHMvYXNjaWlkb2MuYXNjaWlkb2MtbGFuZwoK
-U2lnbmVkLW9mZi1ieTogVGjDqW8gTGVicnVuIDx0aGVvLmxlYnJ1bkBib290bGluLmNvbT4KLS0t
-CiBkb2NzL2NvbmYvYXNjaWlkb2MtdGV4dC5jb25mICB8IDIgKy0KIGRvY3MvbWFudWFsL3dyaXRp
-bmctcnVsZXMudHh0IHwgNCArKy0tCiAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwg
-MyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kb2NzL2NvbmYvYXNjaWlkb2MtdGV4dC5jb25m
-IGIvZG9jcy9jb25mL2FzY2lpZG9jLXRleHQuY29uZgppbmRleCA0NzBiZGVjZmMyLi5iYjYxNGI5
-ZDg1IDEwMDY0NAotLS0gYS9kb2NzL2NvbmYvYXNjaWlkb2MtdGV4dC5jb25mCisrKyBiL2RvY3Mv
-Y29uZi9hc2NpaWRvYy10ZXh0LmNvbmYKQEAgLTEsNSArMSw1IEBACiAjIFJlZmVyIHRvIGZvbGxv
-d2luZyBhc2NpaWRvYyBkb2N1bWVudGF0aW9uOgotIyAgICAgaHR0cDovL3d3dy5tZXRob2RzLmNv
-Lm56L2FzY2lpZG9jL3VzZXJndWlkZS5odG1sCisjICAgICBodHRwczovL2FzY2lpZG9jLXB5Lmdp
-dGh1Yi5pby91c2VyZ3VpZGUuaHRtbAogIyBJbiBwYXJ0aWN1bGFyIHNlY3Rpb25zICJNYWNyb3Mi
-IGFuZCAiQXR0cmlidXRlIFJlZmVyZW5jZXMiCiAjCiAjIEZvciBoeXBlcmxpbmtzLCBzaG93ICds
-aW5rIHRleHQgW1VSTF0nIChpZiBsaW5rIHRleHQgcHJvdmlkZWQpIG9yICdVUkwnCmRpZmYgLS1n
-aXQgYS9kb2NzL21hbnVhbC93cml0aW5nLXJ1bGVzLnR4dCBiL2RvY3MvbWFudWFsL3dyaXRpbmct
-cnVsZXMudHh0CmluZGV4IDU3YmE2MWJkYjEuLjg0ZDhmNzY0MzEgMTAwNjQ0Ci0tLSBhL2RvY3Mv
-bWFudWFsL3dyaXRpbmctcnVsZXMudHh0CisrKyBiL2RvY3MvbWFudWFsL3dyaXRpbmctcnVsZXMu
-dHh0CkBAIC0yMDcsMTAgKzIwNywxMCBAQCBodHRwczovL2dpdGh1Yi5jb20vcGVuZ3V0cm9uaXgv
-Z2VuaW1hZ2UvYmxvYi9tYXN0ZXIvUkVBRE1FLnJzdFtdLgogPT09IFRoZSBkb2N1bWVudGF0aW9u
-CiAKIFRoZSBkb2N1bWVudGF0aW9uIHVzZXMgdGhlCi1odHRwOi8vd3d3Lm1ldGhvZHMuY28ubnov
-YXNjaWlkb2MvW2FzY2lpZG9jXSBmb3JtYXQuCitodHRwczovL2FzY2lpZG9jLXB5LmdpdGh1Yi5p
-by9bYXNjaWlkb2NdIGZvcm1hdC4KIAogRm9yIGZ1cnRoZXIgZGV0YWlscyBhYm91dCB0aGUgYXNj
-aWlkb2Mgc3ludGF4LCByZWZlciB0bwotaHR0cDovL3d3dy5tZXRob2RzLmNvLm56L2FzY2lpZG9j
-L3VzZXJndWlkZS5odG1sW10uCitodHRwczovL2FzY2lpZG9jLXB5LmdpdGh1Yi5pby91c2VyZ3Vp
-ZGUuaHRtbFtdLgogCiA9PT0gU3VwcG9ydCBzY3JpcHRzCiAKLS0gCjIuMzUuMQoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fix the following security issues:
+- [CVE-2022-23308] Use-after-free of ID and IDREF attributes
+- Use-after-free in xmlXIncludeCopyRange
+- Fix Null-deref-in-xmlSchemaGetComponentTargetNs
+- Fix memory leak in xmlXPathCompNodeTest
+- Fix null pointer deref in xmlStringGetNodeList
+- Fix several memory leaks found by Coverity
+
+https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.9.13
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 7 +++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index ce6c3c4825..81ac3e3f31 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature
+-sha256  c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92  libxml2-2.9.12.tar.gz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.9/libxml2-2.9.13.sha256sum
++sha256  276130602d12fe484ecc03447ee5e759d0465558fbc9d6bd144e3745306ebf0e  libxml2-2.9.13.tar.xz
+ # License files, locally calculated
+ sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 023a461472..5382f28ec4 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,8 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBXML2_VERSION = 2.9.12
+-LIBXML2_SITE = http://xmlsoft.org/sources
++LIBXML2_VERSION_MAJOR = 2.9
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).13
++LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
++LIBXML2_SITE = \
++	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
+ LIBXML2_LICENSE_FILES = COPYING
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
