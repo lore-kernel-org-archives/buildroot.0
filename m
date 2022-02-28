@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23473C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 21:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6283C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Feb 2022 21:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C272E405ED;
-	Mon, 28 Feb 2022 21:12:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BB6E81BC2;
+	Mon, 28 Feb 2022 21:17:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QfmWLdwHqizM; Mon, 28 Feb 2022 21:12:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 63VfYR4gBGj8; Mon, 28 Feb 2022 21:17:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7998D403A5;
-	Mon, 28 Feb 2022 21:12:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A90C81756;
+	Mon, 28 Feb 2022 21:17:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 349211BF97E
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:12:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B00E1BF2FF
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:17:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 22CE7815CA
- for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:12:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 964C581756
+ for <buildroot@lists.busybox.net>; Mon, 28 Feb 2022 21:17:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ef9Z4yUn3j8Q for <buildroot@lists.busybox.net>;
- Mon, 28 Feb 2022 21:12:24 +0000 (UTC)
+ with ESMTP id gcw4IZRILVgT for <buildroot@lists.busybox.net>;
+ Mon, 28 Feb 2022 21:17:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61C4381516
- for <buildroot@buildroot.org>; Mon, 28 Feb 2022 21:12:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E577481498
+ for <buildroot@buildroot.org>; Mon, 28 Feb 2022 21:17:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 890BF811FD; Mon, 28 Feb 2022 21:04:16 +0000 (UTC)
+ id 0E71583850; Mon, 28 Feb 2022 21:09:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Feb 2022 22:11:49 +0100
+Date: Mon, 28 Feb 2022 22:14:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67b160c3e39861ee01726763e2a7f65871abdbb5
-X-Git-Newrev: 746d00ef9ff3772236b61e6477597a7af84e3e1e
+X-Git-Oldrev: 746d00ef9ff3772236b61e6477597a7af84e3e1e
+X-Git-Newrev: 526da6145f81e3ac0753d550ec8f3afee66a6c2a
 X-Patchwork-Hint: ignore
-Message-Id: <20220228210416.890BF811FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: update for 2021.11.2
+Message-Id: <20220228210935.0E71583850@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2021.02.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,96 +58,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=746d00ef9ff3772236b61e6477597a7af84e3e1e
+commit: https://git.buildroot.net/buildroot/commit/?id=526da6145f81e3ac0753d550ec8f3afee66a6c2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f1d3b87d3d49a377b6fccc48ddd8531c4d293168)
+[Peter: drop Makefile/Vagrantfile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 7d9fad4d9f..b4f7ecc3ce 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/CHANGES b/CHANGES
+index 0a76fec045..7c1f014e13 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -736,6 +736,26 @@
+ 	#13751: libopenssl (static): huge drop in performance in newer ..
+ 	#13771: package htop has undeclared dependency on host python
  
--      <h3 style="text-align: center;">Latest stable release: <b>2021.11.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2021.11.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2021.11.1.tar.gz">buildroot-2021.11.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.11.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.11.2.tar.gz">buildroot-2021.11.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.11.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.11.1.tar.xz">buildroot-2021.11.1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.11.1.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.11.2.tar.xz">buildroot-2021.11.2.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.11.2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index e571c86a2e..ed37d0a898 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2021.11.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 February 2022</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2021.11.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2021.11.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.11.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2022-February/637876.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2021.11.2.tar.xz">2021.11.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2021.02.10, released February 28th, 2022
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Defconfigs: Andes ae3xx, Intel galileo: Fix build with host
++	gcc >= 10, ROC-RK3399-PC: Bump rootfs size to fix build issue.
++
++	Add conditional patching logic to fix build issues for older
++	U-Boot / Linux kernel versions when built with a host gcc >=
++	10.
++
++	Updated/fixed packages: casync, cgilua, connman, expat,
++	gauche, gensio, go, gst-omx, gst1-devtools, gst1-libav,
++	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
++	gst1-plugins-ugly, gst1-python, gst1-rtsp-server, gst1-vaapi,
++	gstreamer1, gstreamer1-editing-services,
++	kf5-extra-cmake-modules, kodi, libarchive, linux, lm-sensors,
++	log4cxx, mpd, nfs-utils, pistache, prosody, python-django,
++	python-pyzmq, rtl8723bu, thermald, tiff, util-linux, vim, xen
++
+ 2021.02.9, released January 29th, 2022
+ 
+ 	Important / security related fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
