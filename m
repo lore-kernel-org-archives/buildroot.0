@@ -1,56 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A018C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Mar 2022 17:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16E93C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Mar 2022 17:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF5E08125A;
-	Wed,  2 Mar 2022 17:34:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C6C560F1E;
+	Wed,  2 Mar 2022 17:45:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tGy-yeMnoUmo; Wed,  2 Mar 2022 17:34:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lMT9atmdSWen; Wed,  2 Mar 2022 17:45:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D25FE80F04;
-	Wed,  2 Mar 2022 17:34:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9ADE760F13;
+	Wed,  2 Mar 2022 17:45:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B1CF21BF842
- for <buildroot@lists.busybox.net>; Wed,  2 Mar 2022 17:34:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CA481BF842
+ for <buildroot@lists.busybox.net>; Wed,  2 Mar 2022 17:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE0DD80F04
- for <buildroot@lists.busybox.net>; Wed,  2 Mar 2022 17:34:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 285EE8138D
+ for <buildroot@lists.busybox.net>; Wed,  2 Mar 2022 17:45:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zcH5vKxRIWFk for <buildroot@lists.busybox.net>;
- Wed,  2 Mar 2022 17:34:38 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8209680C0D
- for <buildroot@buildroot.org>; Wed,  2 Mar 2022 17:34:38 +0000 (UTC)
-Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
- by mailout03.t-online.de (Postfix) with SMTP id 839C93FE6;
- Wed,  2 Mar 2022 18:34:35 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.196.238]) by fwd86.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nPSrx-4X9PHt0; Wed, 2 Mar 2022 18:34:33 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47492)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nPSrx-0000oC-Bg;
- Wed, 02 Mar 2022 18:34:33 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id RspTU3mYoghl for <buildroot@lists.busybox.net>;
+ Wed,  2 Mar 2022 17:45:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1EBB18138B
+ for <buildroot@buildroot.org>; Wed,  2 Mar 2022 17:45:34 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id b5so3997027wrr.2
+ for <buildroot@buildroot.org>; Wed, 02 Mar 2022 09:45:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Jwvv9L1F6RT48YklHd1EmarRwPlfW1aHzMB+trfHumQ=;
+ b=mvoh+xBcZJaW9HrRFELnuDNUjM/OZ1nZPwt/itdiAcIc3JKkm1Z3Zw1+hvUUrTuCFn
+ EYMyEd1xuayBeyiPHC9ugD1nBNMJ7ZP9SiefGwARITdqyUfEKVBT1ZOH1W8xgivqecNP
+ MEgURcIhUEphuBPGHRxJWn2fkblYPXnot46wybcxFCZnV4QJZTFKFT9WezAaMadJzOwC
+ 5ViNdQwKB6gyuw1jRugk08SGL1rW+bYTVKhFYoF53TSex2eN4E1ySbxOpQycp1Bebm0U
+ nj4T0vLBhAMOed7UUwviUK6ZD5LqkD2+lrAR6HaDHDb4KI9tqNicDmqXuaqxtUx+z3cQ
+ kItQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Jwvv9L1F6RT48YklHd1EmarRwPlfW1aHzMB+trfHumQ=;
+ b=OK7vpck8owXbAs9TVhnNQK/QjvEnwYPLuaIxYKnmlGFTldMhBzys3fmtA5gz1eEO8E
+ qZ+kLSN5Vg1ra8hC00W1FRF9GTf2hCzEWcM8uNZP8vEJekUJxKQ0MP1UuzAE9BSffBy2
+ WojSwlYWl0Y9vXXW2k/9Rmkxa0abZagSRhm9wxABpCmeTud7L0ZogrgqdshzeUH3WXHe
+ Yb2s9y4nmJamh7DrB3+Has7hjcNrrmx1LUA4QfcknwASAIUMN6Ixz3AMJCBvoU/CwAKm
+ Fcrxw2g6FGGXwGdCCnSrf3pLeV1kOY1oDCibS3Rw7Xo6sl1IEcGA0nkkVYmWVPZh66WF
+ joEw==
+X-Gm-Message-State: AOAM533vlpbz21GxCD+xVUd7qkjky/CdTSbvzvrt83Pcs6jYBh6Vvg6q
+ +KGdi1C3yQ2LL6HdD1iISE9dS6TJngs=
+X-Google-Smtp-Source: ABdhPJzVwwmntQJV431rLxxGYAJlmKYXKo5VSWD1f0P5Ylt9inelDU4uIem3ZOKMo9psxP0LEbagIg==
+X-Received: by 2002:a5d:47c8:0:b0:1ef:8e97:2b8c with SMTP id
+ o8-20020a5d47c8000000b001ef8e972b8cmr15973765wrc.545.1646243131915; 
+ Wed, 02 Mar 2022 09:45:31 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ t9-20020a05600c198900b0037c0342cb62sm8473347wmq.4.2022.03.02.09.45.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Mar 2022 09:45:31 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Mar 2022 18:34:33 +0100
-Message-Id: <20220302173433.28939-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Wed,  2 Mar 2022 18:44:55 +0100
+Message-Id: <20220302174456.1641125-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1646242473-000116DC-BFDC2AED/0/0 CLEAN NORMAL
-X-TOI-MSGID: 1104f541-84e2-4ab6-a397-b3f9050ba81a
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.3.7
+Subject: [Buildroot] [PATCH 1/2] package/gdk-pixbuf-xlib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,65 +87,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Simon Dawson <spdawson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2022-February/000664.html
+Deprecated Xlib integration for GdkPixbuf.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+gdk-pixbuf-xlib has been deprecated and split off of gdk-pixbuf since
+version 2.42.0 and
+https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/3362e94c2595440f322798dc4d15f1ed24a4c52c
+resulting in the following "hidden" warnings with xscreensaver since
+commit a7b51ed3013c919b293deb95299e33363fb9df70:
+
+   Warning: GTK version 2.24.33 was found, but at least one supporting
+            library (gdk-pixbuf-xlib-2.0) was not, so GTK can't be used.
+            Perhaps some of the development packages are not installed?
+
+   Warning: The GTK libraries do not seem to be available; the
+            `xscreensaver-demo' program requires them.
+
+   Warning: The GDK-Pixbuf library was not found.
+
+            The PNG library is being used instead.
+
+            Some of the demos will not use images as much as they could.
+            You should consider installing GDK-Pixbuf and re-running
+            configure.
+
+https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/gdk-pixbuf-xlib/Config.in            | 17 +++++++++++++++++
+ package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash |  5 +++++
+ package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk   | 16 ++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/gdk-pixbuf-xlib/Config.in
+ create mode 100644 package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash
+ create mode 100644 package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index c8573fafad..736dedc25e 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.3.6
-+MESA3D_HEADERS_VERSION = 21.3.7
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d64b833100..b680411051 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2022-February/000663.html
--sha256  96bb761fd546e9aa41d025fcc025225c5668443839dae21e3731959beb096736  mesa-21.3.6.tar.xz
--sha512  8c930e04eade29f689384ee7d6e2f178acbbf30fa6c9fdf132281279658c3c221ec7f9b1318e3c0a654c6136f925a5c0a35eaf849b65db7674641127c71e8a4f  mesa-21.3.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2022-February/000664.html
-+sha256  b4fa9db7aa61bf209ef0b40bef83080999d86ad98df8b8b4fada7c128a1efc3d  mesa-21.3.7.tar.xz
-+sha512  0991543e9435457fa4d077517408b3f197be32ed61a6c7ca34ddb3906eed208791f1a57227f74115f99df18e612efab1d2c6809b7cf426d273633b53d4aefc88  mesa-21.3.7.tar.xz
- 
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 95618b2072..d0b12932c4 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.3.6
-+MESA3D_VERSION = 21.3.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2b2cb8c357..897a4dcfee 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -877,6 +877,7 @@ F:	package/duktape/
+ F:	package/expat/
+ F:	package/flatbuffers/
+ F:	package/freeipmi/
++F:	package/gdk-pixbuf-xlib/
+ F:	package/gerbera/
+ F:	package/gtksourceview/
+ F:	package/gssdp/
+diff --git a/package/Config.in b/package/Config.in
+index fb0595377e..85fa91190e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1492,6 +1492,7 @@ menu "Graphics"
+ 	source "package/freetype/Config.in"
+ 	source "package/gd/Config.in"
+ 	source "package/gdk-pixbuf/Config.in"
++	source "package/gdk-pixbuf-xlib/Config.in"
+ 	source "package/giblib/Config.in"
+ 	source "package/giflib/Config.in"
+ 	source "package/granite/Config.in"
+diff --git a/package/gdk-pixbuf-xlib/Config.in b/package/gdk-pixbuf-xlib/Config.in
+new file mode 100644
+index 0000000000..2efc5d4d66
+--- /dev/null
++++ b/package/gdk-pixbuf-xlib/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_GDK_PIXBUF_XLIB
++	bool "gdk-pixbuf-xlib"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU # gdk-pixbuf -> glib2
++	depends on BR2_USE_WCHAR # gdk-pixbuf -> glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gdk-pixbuf -> glib2
++	select BR2_PACKAGE_GDK_PIXBUF
++	select BR2_PACKAGE_XLIB_LIBX11
++	help
++	  Deprecated Xlib integration for GdkPixbuf.
++
++	  https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
++
++comment "gdk-pixbuf-xlib needs a toolchain w/ wchar, threads"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash
+new file mode 100644
+index 0000000000..e7f74e2b4b
+--- /dev/null
++++ b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash
+@@ -0,0 +1,5 @@
++# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf-xlib/2.40/gdk-pixbuf-xlib-2.40.2.sha256sum
++sha256  8b8e1c270ec16a06f665ea841f8e4e167eaa0118d0cbfeeade43745f09198ff7  gdk-pixbuf-xlib-2.40.2.tar.xz
++
++# Hash for license file
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk
+new file mode 100644
+index 0000000000..3e61373b3a
+--- /dev/null
++++ b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# gdk-pixbuf-xlib
++#
++################################################################################
++
++GDK_PIXBUF_XLIB_VERSION_MAJOR = 2.40
++GDK_PIXBUF_XLIB_VERSION = $(GDK_PIXBUF_XLIB_VERSION_MAJOR).2
++GDK_PIXBUF_XLIB_SOURCE = gdk-pixbuf-xlib-$(GDK_PIXBUF_XLIB_VERSION).tar.xz
++GDK_PIXBUF_XLIB_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf-xlib/$(GDK_PIXBUF_XLIB_VERSION_MAJOR)
++GDK_PIXBUF_XLIB_LICENSE = LGPL-2.1+
++GDK_PIXBUF_XLIB_LICENSE_FILES = COPYING
++GDK_PIXBUF_XLIB_INSTALL_STAGING = YES
++GDK_PIXBUF_XLIB_DEPENDENCIES = gdk-pixbuf xlib_libX11
++
++$(eval $(meson-package))
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
