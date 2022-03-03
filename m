@@ -1,81 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C117C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Mar 2022 21:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80DF5C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  3 Mar 2022 06:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B64C8408D1;
-	Wed,  2 Mar 2022 21:52:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DADB584123;
+	Thu,  3 Mar 2022 06:13:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nKzBz3y5R_xJ; Wed,  2 Mar 2022 21:52:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9lbTktRsam10; Thu,  3 Mar 2022 06:13:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88016404E2;
-	Wed,  2 Mar 2022 21:52:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 030548411B;
+	Thu,  3 Mar 2022 06:13:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5EC6F1BF3F2
- for <buildroot@lists.busybox.net>; Wed,  2 Mar 2022 21:52:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 981BD1BF8A8
+ for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 06:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B25F81D73
- for <buildroot@lists.busybox.net>; Wed,  2 Mar 2022 21:52:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8320A8410A
+ for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 06:13:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4itEEtYccddZ for <buildroot@lists.busybox.net>;
- Wed,  2 Mar 2022 21:52:23 +0000 (UTC)
+ with ESMTP id MslrfqjgX4Hx for <buildroot@lists.busybox.net>;
+ Thu,  3 Mar 2022 06:13:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 08645812AC
- for <buildroot@buildroot.org>; Wed,  2 Mar 2022 21:52:22 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id m6so4853771wrr.10
- for <buildroot@buildroot.org>; Wed, 02 Mar 2022 13:52:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YWtdtvRqUWXJBod/2ARzhFiMGL6QWNlSAkO+dLZlI5M=;
- b=YIs2ONbJtTcEMIBBHiMOeaf8Xc8AmuMEyhsq8cWSd3/ytmGmCJwiIH1khAWJdLDEn8
- Zx5vavVkwYVCT+Kqq2rUPwDhRN3RK7wqV0GgugIuZ96eV7/0L3T5ZJuxmadmnZvgpFQU
- GUHCgb2uNTrWXPursL4GNhYseXJxO62ob2PsVGRa3XMBQAtzJJuU24qwMQdYOefKWOet
- /d1pnTYFpRwW5RDr1NUxThsrEgyH9Kl0Mhh4/K7CeFvP38DTrPTPmMOktXCsqwStZHV+
- 6JZUouX1Y1MWIJsBGk6htrUcJrWKE3sMfqJrh3z5jffbG2KtYLnip41xCntGQ/9IEyNL
- sW+g==
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com
+ [209.85.208.179])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F37084109
+ for <buildroot@buildroot.org>; Thu,  3 Mar 2022 06:13:03 +0000 (UTC)
+Received: by mail-lj1-f179.google.com with SMTP id t14so5371944ljh.8
+ for <buildroot@buildroot.org>; Wed, 02 Mar 2022 22:13:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YWtdtvRqUWXJBod/2ARzhFiMGL6QWNlSAkO+dLZlI5M=;
- b=1W/FUd/AuZB+eDtz/CvLdkWHp9RjLkLhR6PpzS+C1GzOUrZCA0KODqCT1+He5/XSp6
- oPnwg1GweDtsFuGM4ZoSMk0VvW3ufWPppvMy4IfEY6zG7pM1DCtxDxq/X6q8NtZHsY0J
- 8hs5FE3juFdXKqyzV73/G58TbGun57d7TUITr1ARtAucGPLFKwX9/1Bw6JyGdGjymKVg
- bPU58HFvk4lwRKKda7C6BbeH0KVZ527WWpMyaplEuukASD0VsD7MX+7v/JckAKl9Z2sI
- sUNOVVLkX7lxbhwzldSDsb188+J7Fmj0ZW8rd6mM3dA2dLYSL7t8myE1pWz6SJgXcHy+
- Fv0A==
-X-Gm-Message-State: AOAM532a/J2RQhpngiBd52McPzwm0PGE08W2zD4IxnC/GaoCRnsMAA8L
- f/DcykBETnwEqIeoL8qMtBag0dKSlmY=
-X-Google-Smtp-Source: ABdhPJyZugBnBwIg+cN3LyRvIoVFTunqLbH7j6rx/0Xi2nkwDTFjzlIVlOeng6zeVxmD4TvHhDA08A==
-X-Received: by 2002:adf:f382:0:b0:1f0:22ef:bb97 with SMTP id
- m2-20020adff382000000b001f022efbb97mr5671689wro.271.1646257941052; 
- Wed, 02 Mar 2022 13:52:21 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- t9-20020a05600c198900b0037bd5fabd10sm229807wmq.48.2022.03.02.13.52.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Mar 2022 13:52:20 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  2 Mar 2022 22:51:31 +0100
-Message-Id: <20220302215131.2479736-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=yXgTffA2vUQ19D1fIvUFeUhgEO5FrRwT/0LaA6wG8tI=;
+ b=mGuEyqopLtDSeoo7pLVPD4aIsEPPAUxZVo9A7vUMz9+DPEeJWjK9DIisWBmNjrVae5
+ xJll97xkQD651snBnZbdh1YEIuhKeeSyD6sqAB6Y+jzsCEed1WqXDkrYzaCVbm8V1a+s
+ AaQf0BHXiptmLbJSDVa1aYxu3Apl8N9aivzcpXoEn9ITdhg4SILuvikkiYZMK59Od1R5
+ EYtje8RRWcjDdozhiKSkQQrWRvI+lEL+gAf0f0Y38KxBTfoaFUTdpeUKTJgz9TZvEd+G
+ AmrS5Y+CkG3FGSKXpLAfIspOfjCRJok9k0F16rjjho6OtcGk770xhJn4SurX7vGYveNX
+ saBg==
+X-Gm-Message-State: AOAM533LRSgZasdrBbPf9Amt3JTeTl3wd4tsZzmKvBLIIHmwakqKGT4X
+ BxSnLPhK9IG+lof7ZxaJ84FBXBeYkV8Yl+RqsKkMz1etTx3sDA==
+X-Google-Smtp-Source: ABdhPJwp+uqoW/l1bp7HICJrigubjLhnfLTc24Sk6GSHKR+K9IAX4DH7+fiYUhydn0yXuWctkl8gcsLoyUn7EhprFQ4=
+X-Received: by 2002:a05:651c:49d:b0:244:ca08:f811 with SMTP id
+ s29-20020a05651c049d00b00244ca08f811mr22395676ljc.379.1646287982089; Wed, 02
+ Mar 2022 22:13:02 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/tree: bump to version 2.0.2
+References: <87pmn6y8hv.fsf@dell.be.48ers.dk>
+In-Reply-To: <87pmn6y8hv.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 3 Mar 2022 07:12:50 +0100
+Message-ID: <CAB0FRsseLgz+bpirX0XScARnNhxox-36V5a0O9fm8QMK1o2t_A@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] Buildroot 2022.02-rc3 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,50 +70,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============0869719523152169869=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+--===============0869719523152169869==
+Content-Type: multipart/alternative; boundary="0000000000005eec6f05d94a4ab5"
 
-http://mama.indstate.edu/users/ice/tree/changes.html
+--0000000000005eec6f05d94a4ab5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/tree/tree.hash | 4 ++--
- package/tree/tree.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Le lun. 28 f=C3=A9vr. 2022 =C3=A0 22:41, Peter Korsgaard <peter@korsgaard.c=
+om> a
+=C3=A9crit :
 
-diff --git a/package/tree/tree.hash b/package/tree/tree.hash
-index 6bffaa5ec0..298153c89c 100644
---- a/package/tree/tree.hash
-+++ b/package/tree/tree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	715d5d4b434321ce74706d0dd067505bb60c5ea83b5f0b3655dae40aa6f9b7c2	tree-1.8.0.tgz
--sha256	204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994	LICENSE
-+sha256  7d693a1d88d3c4e70a73e03b8dbbdc12c2945d482647494f2f5bd83a479eeeaf  tree-2.0.2.tgz
-+sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/tree/tree.mk b/package/tree/tree.mk
-index b6c63c0244..7c111b47d2 100644
---- a/package/tree/tree.mk
-+++ b/package/tree/tree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TREE_VERSION = 1.8.0
-+TREE_VERSION = 2.0.2
- TREE_SOURCE = tree-$(TREE_VERSION).tgz
- TREE_SITE = http://mama.indstate.edu/users/ice/tree/src
- TREE_LICENSE = GPL-2.0+
--- 
-2.34.1
+> Hi,
+>
+> Buildroot 2022.02-rc3 is released - Go download it at:
+>
+> http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.gz
+>
+> or
+>
+> http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.xz
+>
+>
+These 2 links are broken.
+
+Fran=C3=A7ois
+
+$ wget http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.gz
+--2022-03-03 07:11:19--
+http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.gz
+Resolving buildroot.net (buildroot.net)... 140.211.167.122
+Connecting to buildroot.net (buildroot.net)|140.211.167.122|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2022-03-03 07:11:19 ERROR 404: Not Found.
+
+
+
+> Or get it from Git:
+>
+> git://git.buildroot.net/buildroot
+>
+> Another week, another release candidate.
+>
+>
+>
+
+--0000000000005eec6f05d94a4ab5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 28 f=C3=A9vr. 2022 =C3=
+=A0=C2=A022:41, Peter Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">=
+peter@korsgaard.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">Hi,<br>
+<br>
+Buildroot 2022.02-rc3 is released - Go download it at:<br>
+<br>
+<a href=3D"http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.gz" rel=
+=3D"noreferrer" target=3D"_blank">http://buildroot.net/downloads/buildroot-=
+2022.02-rc3.tar.gz</a><br>
+<br>
+or<br>
+<br>
+<a href=3D"http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.xz" rel=
+=3D"noreferrer" target=3D"_blank">http://buildroot.net/downloads/buildroot-=
+2022.02-rc3.tar.xz</a><br>
+<br></blockquote><div><br></div><div>These 2 links are broken.</div><div><b=
+r></div><div>Fran=C3=A7ois <br></div><div><br></div><div>$ wget <a href=3D"=
+http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.gz">http://buildro=
+ot.net/downloads/buildroot-2022.02-rc3.tar.gz</a><br>--2022-03-03 07:11:19-=
+- =C2=A0<a href=3D"http://buildroot.net/downloads/buildroot-2022.02-rc3.tar=
+.gz">http://buildroot.net/downloads/buildroot-2022.02-rc3.tar.gz</a><br>Res=
+olving <a href=3D"http://buildroot.net">buildroot.net</a> (<a href=3D"http:=
+//buildroot.net">buildroot.net</a>)... 140.211.167.122<br>Connecting to <a =
+href=3D"http://buildroot.net">buildroot.net</a> (<a href=3D"http://buildroo=
+t.net">buildroot.net</a>)|140.211.167.122|:80... connected.<br>HTTP request=
+ sent, awaiting response... 404 Not Found<br>2022-03-03 07:11:19 ERROR 404:=
+ Not Found.<br></div><div><br></div><div>=C2=A0</div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
+,204,204);padding-left:1ex">
+Or get it from Git:<br>
+<br>
+git://<a href=3D"http://git.buildroot.net/buildroot" rel=3D"noreferrer" tar=
+get=3D"_blank">git.buildroot.net/buildroot</a><br>
+<br>
+Another week, another release candidate.<br>
+<br><br>
+</blockquote></div></div>
+
+--0000000000005eec6f05d94a4ab5--
+
+--===============0869719523152169869==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0869719523152169869==--
