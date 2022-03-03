@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 924B6C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Mar 2022 17:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BCEBC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Mar 2022 17:41:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 101A960A9E;
-	Thu,  3 Mar 2022 17:38:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAFDB60AC1;
+	Thu,  3 Mar 2022 17:41:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yi8RCq98G2YI; Thu,  3 Mar 2022 17:38:41 +0000 (UTC)
+	with ESMTP id 26Iuw-hAeemZ; Thu,  3 Mar 2022 17:41:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28B1960A74;
-	Thu,  3 Mar 2022 17:38:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B513A1BF3BC
- for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 17:38:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D330560A8D;
+	Thu,  3 Mar 2022 17:41:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 41C691BF3BC
+ for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 17:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A3A3560A74
- for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 17:38:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A98541582
+ for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 17:41:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aroFd2MhdIIo for <buildroot@lists.busybox.net>;
- Thu,  3 Mar 2022 17:38:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wiMqu5ELuafr for <buildroot@lists.busybox.net>;
+ Thu,  3 Mar 2022 17:41:26 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5CEA0608B7
- for <buildroot@buildroot.org>; Thu,  3 Mar 2022 17:38:37 +0000 (UTC)
-Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
- by mailout05.t-online.de (Postfix) with SMTP id DB6B9EB7C
- for <buildroot@buildroot.org>; Thu,  3 Mar 2022 18:38:34 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.199.122]) by fwd81.t-online.de
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 075444156F
+ for <buildroot@buildroot.org>; Thu,  3 Mar 2022 17:41:25 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout02.t-online.de (Postfix) with SMTP id 7032B16C7
+ for <buildroot@buildroot.org>; Thu,  3 Mar 2022 18:41:23 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.199.122]) by fwd72.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nPpPO-3WrpTt0; Thu, 3 Mar 2022 18:38:34 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:32818)
+ esmtp id 1nPpS6-4bTVyL0; Thu, 3 Mar 2022 18:41:22 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:32820)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nPpPN-0007RS-Ub
- for buildroot@buildroot.org; Thu, 03 Mar 2022 18:38:34 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nPpS5-0007us-Tz
+ for buildroot@buildroot.org; Thu, 03 Mar 2022 18:41:22 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  3 Mar 2022 18:38:33 +0100
-Message-Id: <20220303173833.54609-1-bernd.kuhls@t-online.de>
+Date: Thu,  3 Mar 2022 18:41:21 +0100
+Message-Id: <20220303174121.55867-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1646329114-0000BD0E-9B47DB6B/0/0 CLEAN NORMAL
-X-TOI-MSGID: 29858fc1-fd69-432e-9b33-9ec7ce6560f6
-Subject: [Buildroot] [PATCH/next v2 1/1] package/kodi: bump version to 19.4
+X-TOI-EXPURGATEID: 150726::1646329282-0000B7AB-BC27A8CC/0/0 CLEAN NORMAL
+X-TOI-MSGID: 2ec8392d-15a7-4b32-bb8d-6df7be74c1ef
+Subject: [Buildroot] [PATCH/next v3 1/1] package/kodi: bump version to 19.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,14 +71,15 @@ https://github.com/xbmc/xbmc/pull/20462
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v3: removed remnants from internal patch, sorry for the noise
 v2: added dependencies to giflib, libjpeg and libpng
 
  package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
  package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
  package/kodi/Config.in                                   | 3 +++
  package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 7 +++++--
- 5 files changed, 11 insertions(+), 5 deletions(-)
+ package/kodi/kodi.mk                                     | 5 ++++-
+ 5 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
 index 81fc2bb9f1..8cc2297bdb 100644
@@ -139,21 +140,18 @@ index 7f96af385a..a17e0fb29f 100644
  sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
  sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 56e901fa17..f4c5bfc685 100644
+index 56e901fa17..7326cd536d 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -6,9 +6,9 @@
+@@ -6,7 +6,7 @@
  
  # When updating the version, please also update kodi-jsonschemabuilder
  # and kodi-texturepacker
 -KODI_VERSION_MAJOR = 19.3
 +KODI_VERSION_MAJOR = 19.4
  KODI_VERSION_NAME = Matrix
--KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
-+KODI_VERSION = 6586a6c535b72896e00733f25fde93980d5f0cca
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
  KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
 @@ -25,6 +25,7 @@ KODI_DEPENDENCIES = \
  	fontconfig \
  	freetype \
