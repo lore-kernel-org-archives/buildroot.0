@@ -4,44 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94A01C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Mar 2022 22:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D371C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Mar 2022 22:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E613409E1;
-	Thu,  3 Mar 2022 22:00:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8116409DD;
+	Thu,  3 Mar 2022 22:09:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m-aXTNBz0oMx; Thu,  3 Mar 2022 22:00:19 +0000 (UTC)
+	with ESMTP id quIbJc8yu25c; Thu,  3 Mar 2022 22:09:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E6B09409DD;
-	Thu,  3 Mar 2022 22:00:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD88C40363;
+	Thu,  3 Mar 2022 22:09:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B7901BF385
- for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 22:00:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE51C1BF383
+ for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 22:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80F9F409DD
- for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 22:00:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7C1040363
+ for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 22:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kDVWIqlSlhEh for <buildroot@lists.busybox.net>;
- Thu,  3 Mar 2022 22:00:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FC0340363
- for <buildroot@buildroot.org>; Thu,  3 Mar 2022 22:00:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D1F5E8144C; Thu,  3 Mar 2022 21:52:00 +0000 (UTC)
+ with ESMTP id NObYv41J-cP6 for <buildroot@lists.busybox.net>;
+ Thu,  3 Mar 2022 22:09:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3CA54400DA
+ for <buildroot@buildroot.org>; Thu,  3 Mar 2022 22:09:52 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B45761C0005;
+ Thu,  3 Mar 2022 22:09:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nPtdr-000eGl-QU; Thu, 03 Mar 2022 23:09:47 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 3 Mar 2022 22:57:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 610f52f3bea153a3293e67b95f7c4f31e74d2ffd
-X-Git-Newrev: 5dc3cfbff11934a3b29f8b2b98aed22ec01e7c42
-X-Patchwork-Hint: ignore
-Message-Id: <20220303215200.D1F5E8144C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-headers: default to 5.15
- series for _HEADERS_AS_KERNEL / KERNEL_LATEST_VERSION
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220302174456.1641125-1-fontaine.fabrice@gmail.com>
+Date: Thu, 03 Mar 2022 23:09:47 +0100
+In-Reply-To: <20220302174456.1641125-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 2 Mar 2022 18:44:55 +0100")
+Message-ID: <87k0daadsk.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/gdk-pixbuf-xlib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,45 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dc3cfbff11934a3b29f8b2b98aed22ec01e7c42
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes #14611
+ > Deprecated Xlib integration for GdkPixbuf.
+ > gdk-pixbuf-xlib has been deprecated and split off of gdk-pixbuf since
+ > version 2.42.0 and
+ > https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/3362e94c2595440f322798dc4d15f1ed24a4c52c
+ > resulting in the following "hidden" warnings with xscreensaver since
+ > commit a7b51ed3013c919b293deb95299e33363fb9df70:
 
-BR2_KERNEL_HEADERS_LATEST_VERSION selects a 5.15.x series kernel (as that is
-current LTS), but support for 5.16.x kernel headers has been added, so by
-default the "custom kernel headers series" option ends up with 5.16.x (the
-first option), leading to confusing errors:
+ >    Warning: GTK version 2.24.33 was found, but at least one supporting
+ >             library (gdk-pixbuf-xlib-2.0) was not, so GTK can't be used.
+ >             Perhaps some of the development packages are not installed?
 
-Incorrect selection of kernel headers: expected 5.16.x, got 5.15.x
+ >    Warning: The GTK libraries do not seem to be available; the
+ >             `xscreensaver-demo' program requires them.
 
-As a help, default to the correct 5.15.x series when this combination is
-used.
+ >    Warning: The GDK-Pixbuf library was not found.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 2 ++
- 1 file changed, 2 insertions(+)
+ >             The PNG library is being used instead.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 248a9a2d97..8543f1cd21 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -127,6 +127,8 @@ endif
- 
- choice
- 	bool "Custom kernel headers series"
-+	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15 if \
-+		(BR2_KERNEL_HEADERS_AS_KERNEL && BR2_LINUX_KERNEL_LATEST_VERSION)
- 	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
- 		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
- 	help
+ >             Some of the demos will not use images as much as they could.
+ >             You should consider installing GDK-Pixbuf and re-running
+ >             configure.
+
+ > https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
