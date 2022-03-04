@@ -1,46 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AA7EC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Mar 2022 22:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E2B9C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  4 Mar 2022 04:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 272FD409DC;
-	Thu,  3 Mar 2022 22:10:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IvxInNgTm0bR; Thu,  3 Mar 2022 22:10:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F20C840363;
-	Thu,  3 Mar 2022 22:10:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 534A71C1135
- for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 22:10:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EFAC83FB6
- for <buildroot@lists.busybox.net>; Thu,  3 Mar 2022 22:10:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CD3C83E27;
+	Fri,  4 Mar 2022 04:25:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rxf0-Mp253Lf for <buildroot@lists.busybox.net>;
- Thu,  3 Mar 2022 22:10:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8152B83F25
- for <buildroot@buildroot.org>; Thu,  3 Mar 2022 22:10:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B764C819DE; Thu,  3 Mar 2022 22:02:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qu7ttca1Zjck; Fri,  4 Mar 2022 04:25:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB135813D9;
+	Fri,  4 Mar 2022 04:25:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B87CB1BF271
+ for <buildroot@lists.busybox.net>; Fri,  4 Mar 2022 04:25:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD30040164
+ for <buildroot@lists.busybox.net>; Fri,  4 Mar 2022 04:25:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pT56WU61YDVQ for <buildroot@lists.busybox.net>;
+ Fri,  4 Mar 2022 04:25:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com
+ [209.85.215.177])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B278E400BF
+ for <buildroot@buildroot.org>; Fri,  4 Mar 2022 04:25:06 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id o8so6482968pgf.9
+ for <buildroot@buildroot.org>; Thu, 03 Mar 2022 20:25:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cryNa77NHnaNK/UHhs4OQ96/EaQqwy9P8Eh6zMa4M0s=;
+ b=OZtNuYpNhpal2MzzDsznu9qKYoA933FEV8kqWZtPwJMG+9RWVkY4ib0gtvWFtHBAbu
+ fpbjh9uwqqTt70ckw5xKCsZa1nZYEJa87JQY8rgoYBALbS3nXpVTHmIQOwXYhlFLadvh
+ on1hEh4y95gIKhuUkfmbLLhGWZj1Z4T8y04ko9dKz6SO+Dob3eFClNe9Y5hAD/p8Bgta
+ sYJ/9PaGtUCBKDxsLutMcmzGocMwa4pQC/W1eplMnOEyuus27AK8cEZmNOr0H0dK2LQz
+ 0BbexKLU1AWmp86WQVwP3SfrYI8uKUX6w5bsnPws1NXkYA/31EF1uq9pkFdY+MtL2A6c
+ A7uw==
+X-Gm-Message-State: AOAM5303BQn6MijaA4p7ZE/sqw+nx/EY74Yl9s7Wy3vSe+76eaX8woya
+ ecYDLyGPquI6QUf7L/zEcRNA9u7GHSk=
+X-Google-Smtp-Source: ABdhPJwVSouf2G4fb9jrHE+VHl1U6fF41VA1kiJAmE6k0qi3eIAVb4NVkeYn7A2aw7A6dT/JABiLuQ==
+X-Received: by 2002:a05:6a00:9a9:b0:4ca:c2f1:c685 with SMTP id
+ u41-20020a056a0009a900b004cac2f1c685mr41102663pfg.12.1646367905605; 
+ Thu, 03 Mar 2022 20:25:05 -0800 (PST)
+Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
+ by smtp.gmail.com with ESMTPSA id
+ j8-20020a056a00174800b004f26d3f5b03sm4156849pfc.39.2022.03.03.20.25.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Mar 2022 20:25:05 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu, 3 Mar 2022 23:03:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5dc3cfbff11934a3b29f8b2b98aed22ec01e7c42
-X-Git-Newrev: 559df4ef2888efda8a0142a9b61a1206e6ab0fff
-X-Patchwork-Hint: ignore
-Message-Id: <20220303220221.B764C819DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdk-pixbuf-xlib: new package
+Date: Thu,  3 Mar 2022 20:25:02 -0800
+Message-Id: <20220304042502.56629-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump to 1.17.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,130 +73,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=559df4ef2888efda8a0142a9b61a1206e6ab0fff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+go1.17.8 includes a security fix to the regexp/syntax package, as well as bug
+fixes to the compiler, runtime, the go command, and the crypto/x509, and net
+packages.
 
-Deprecated Xlib integration for GdkPixbuf.
+https://go.dev/doc/devel/release#go1.17.minor
 
-gdk-pixbuf-xlib has been deprecated and split off of gdk-pixbuf since
-version 2.42.0 and
-https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/3362e94c2595440f322798dc4d15f1ed24a4c52c
-resulting in the following "hidden" warnings with xscreensaver since
-commit a7b51ed3013c919b293deb95299e33363fb9df70:
-
-   Warning: GTK version 2.24.33 was found, but at least one supporting
-            library (gdk-pixbuf-xlib-2.0) was not, so GTK can't be used.
-            Perhaps some of the development packages are not installed?
-
-   Warning: The GTK libraries do not seem to be available; the
-            `xscreensaver-demo' program requires them.
-
-   Warning: The GDK-Pixbuf library was not found.
-
-            The PNG library is being used instead.
-
-            Some of the demos will not use images as much as they could.
-            You should consider installing GDK-Pixbuf and re-running
-            configure.
-
-https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/gdk-pixbuf-xlib/Config.in            | 17 +++++++++++++++++
- package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash |  5 +++++
- package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk   | 16 ++++++++++++++++
- 5 files changed, 40 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ac702d8d0f..b7a7c8771c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -877,6 +877,7 @@ F:	package/duktape/
- F:	package/expat/
- F:	package/flatbuffers/
- F:	package/freeipmi/
-+F:	package/gdk-pixbuf-xlib/
- F:	package/gerbera/
- F:	package/gtksourceview/
- F:	package/gssdp/
-diff --git a/package/Config.in b/package/Config.in
-index 10209d84d7..8d2d550a64 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1492,6 +1492,7 @@ menu "Graphics"
- 	source "package/freetype/Config.in"
- 	source "package/gd/Config.in"
- 	source "package/gdk-pixbuf/Config.in"
-+	source "package/gdk-pixbuf-xlib/Config.in"
- 	source "package/giblib/Config.in"
- 	source "package/giflib/Config.in"
- 	source "package/granite/Config.in"
-diff --git a/package/gdk-pixbuf-xlib/Config.in b/package/gdk-pixbuf-xlib/Config.in
-new file mode 100644
-index 0000000000..2efc5d4d66
---- /dev/null
-+++ b/package/gdk-pixbuf-xlib/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_GDK_PIXBUF_XLIB
-+	bool "gdk-pixbuf-xlib"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU # gdk-pixbuf -> glib2
-+	depends on BR2_USE_WCHAR # gdk-pixbuf -> glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gdk-pixbuf -> glib2
-+	select BR2_PACKAGE_GDK_PIXBUF
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  Deprecated Xlib integration for GdkPixbuf.
-+
-+	  https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
-+
-+comment "gdk-pixbuf-xlib needs a toolchain w/ wchar, threads"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash
-new file mode 100644
-index 0000000000..e7f74e2b4b
---- /dev/null
-+++ b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.hash
-@@ -0,0 +1,5 @@
-+# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf-xlib/2.40/gdk-pixbuf-xlib-2.40.2.sha256sum
-+sha256  8b8e1c270ec16a06f665ea841f8e4e167eaa0118d0cbfeeade43745f09198ff7  gdk-pixbuf-xlib-2.40.2.tar.xz
-+
-+# Hash for license file
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk
-new file mode 100644
-index 0000000000..3e61373b3a
---- /dev/null
-+++ b/package/gdk-pixbuf-xlib/gdk-pixbuf-xlib.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# gdk-pixbuf-xlib
-+#
-+################################################################################
-+
-+GDK_PIXBUF_XLIB_VERSION_MAJOR = 2.40
-+GDK_PIXBUF_XLIB_VERSION = $(GDK_PIXBUF_XLIB_VERSION_MAJOR).2
-+GDK_PIXBUF_XLIB_SOURCE = gdk-pixbuf-xlib-$(GDK_PIXBUF_XLIB_VERSION).tar.xz
-+GDK_PIXBUF_XLIB_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf-xlib/$(GDK_PIXBUF_XLIB_VERSION_MAJOR)
-+GDK_PIXBUF_XLIB_LICENSE = LGPL-2.1+
-+GDK_PIXBUF_XLIB_LICENSE_FILES = COPYING
-+GDK_PIXBUF_XLIB_INSTALL_STAGING = YES
-+GDK_PIXBUF_XLIB_DEPENDENCIES = gdk-pixbuf xlib_libX11
-+
-+$(eval $(meson-package))
+diff --git a/package/go/go.hash b/package/go/go.hash
+index fdf342e602..85e6adfb8c 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  c108cd33b73b1911a02b697741df3dea43e01a5c4e08e409e8b3a0e3745d2b4d  go1.17.7.src.tar.gz
++sha256  2effcd898140da79a061f3784ca4f8d8b13d811fb2abe9dad2404442dabbdf7a  go1.17.8.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 56a21dfe55..3df16c9a68 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.17.7
++GO_VERSION = 1.17.8
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
