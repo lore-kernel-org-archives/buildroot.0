@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C139AC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Mar 2022 14:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7204BC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  5 Mar 2022 14:56:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81745817A9;
-	Sat,  5 Mar 2022 14:56:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F292408F7;
+	Sat,  5 Mar 2022 14:56:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tJV5BseXefjI; Sat,  5 Mar 2022 14:56:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ihZSEIehZEar; Sat,  5 Mar 2022 14:56:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A60428140C;
-	Sat,  5 Mar 2022 14:56:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 447D9408F5;
+	Sat,  5 Mar 2022 14:56:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D2011BF616
- for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 14:54:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F12B1BF616
+ for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 14:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 735B6403BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB6B640438
  for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 14:54:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EBy7s0RsWa7U for <buildroot@lists.busybox.net>;
+ with ESMTP id YRfLbp872QAm for <buildroot@lists.busybox.net>;
  Sat,  5 Mar 2022 14:54:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 705E640438
+ by smtp2.osuosl.org (Postfix) with ESMTP id 756BF40523
  for <buildroot@buildroot.org>; Sat,  5 Mar 2022 14:54:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DAC20826C4; Sat,  5 Mar 2022 14:46:36 +0000 (UTC)
+ id D1A11826D4; Sat,  5 Mar 2022 14:46:36 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 5 Mar 2022 15:10:36 +0100
+Date: Sat, 5 Mar 2022 15:09:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10780e8d6df83d7a92b6dd3282e91fdc0ba369af
-X-Git-Newrev: a586f0a283cd69f436bc6d0cff484460b412a1ce
+X-Git-Oldrev: 2baaf5bcd748521a3bfcc178c284bc2b302993ed
+X-Git-Newrev: 10780e8d6df83d7a92b6dd3282e91fdc0ba369af
 X-Patchwork-Hint: ignore
-Message-Id: <20220305144636.DAC20826C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/util-linux: bump version to 2.37.4
- (fixes CVE-2022-0563)
+Message-Id: <20220305144636.D1A11826D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgee: bump to version 0.20.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +58,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a586f0a283cd69f436bc6d0cff484460b412a1ce
+commit: https://git.buildroot.net/buildroot/commit/?id=10780e8d6df83d7a92b6dd3282e91fdc0ba369af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1] and [2].
+Drop patch (already in version) and so autoreconf
 
-[1] https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.37/v2.37.4-ChangeLog
-[2] https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.37/v2.37.4-ReleaseNotes
+https://gitlab.gnome.org/GNOME/libgee/-/blob/0.20.5/NEWS
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/util-linux/util-linux.hash | 2 +-
- package/util-linux/util-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...akefile.am-include-Makefile.introspection.patch | 40 ----------------------
+ package/libgee/libgee.hash                         |  4 +--
+ package/libgee/libgee.mk                           |  4 +--
+ 3 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 9c10a42dca..748a36e0be 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
+diff --git a/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch b/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+deleted file mode 100644
+index 0906275ae3..0000000000
+--- a/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From d771e8ddb5e40f234459966e46880d10f34aaa1a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 20 Nov 2021 23:57:33 +0100
+-Subject: [PATCH] gee/Makefile.am: include Makefile.introspection
+-
+-Include Makefile.introspection instead of using a custom rule which will
+-result in the following build failure when cross-compiling on buildroot
+-because of missing --includedir:
+-
+-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler -l `/usr/bin/sed -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libgee-0.8.la` -o Gee-0.8.typelib Gee-0.8.gir libgee-0.8.la
+-Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+-error parsing file Gee-0.8.gir: Failed to parse included gir GObject-2.0
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/884faa0f84c8dc43ed1ca6cde9caf21c731a4b35
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.gnome.org/GNOME/libgee/-/merge_requests/8]
+----
+- gee/Makefile.am | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/gee/Makefile.am b/gee/Makefile.am
+-index 5634bcb..e0d950e 100644
+---- a/gee/Makefile.am
+-+++ b/gee/Makefile.am
+-@@ -167,7 +167,8 @@ INTROSPECTION_COMPILER_ARGS= \
+- 	-l $(libgee_dlname)
+- Gee-0.8.gir: libgee_0_8_la_vala.stamp
+- Gee-0.8.typelib: Gee-0.8.gir libgee-0.8.la
+--	@INTROSPECTION_COMPILER@ $(INTROSPECTION_COMPILER_ARGS) -o $@ $^
+-+
+-+-include $(INTROSPECTION_MAKEFILE)
+- endif
+- 
+- MOSTLYCLEANFILES = \
+--- 
+-2.33.0
+-
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+index 72d2c21ced..54a46f954c 100644
+--- a/package/libgee/libgee.hash
++++ b/package/libgee/libgee.hash
 @@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.37/sha256sums.asc
--sha256  590c592e58cd6bf38519cb467af05ce6a1ab18040e3e3418f24bcfb2f55f9776  util-linux-2.37.3.tar.xz
-+sha256  634e6916ad913366c3536b6468e7844769549b99a7b2bf80314de78ab5655b83  util-linux-2.37.4.tar.xz
- # License files, locally calculated
- sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
- sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index a25b69d910..891c17d1d9 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,7 +8,7 @@
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.4.sha256sum
+-sha256  524c1bf390f9cdda4fbd9a47b269980dc64ab5280f0801b53bc69d782c72de0e  libgee-0.20.4.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.5.sha256sum
++sha256  31863a8957d5a727f9067495cabf0a0889fa5d3d44626e54094331188d5c1518  libgee-0.20.5.tar.xz
  
- UTIL_LINUX_VERSION_MAJOR = 2.37
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).4
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ # Hash for license file:
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 64beef30df..7d8d3d4863 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
+ LIBGEE_VERSION_MAJOR = 0.20
+-LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).4
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).5
+ LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
+ LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+@@ -13,8 +13,6 @@ LIBGEE_INSTALL_STAGING = YES
+ LIBGEE_LICENSE = LGPL-2.1+
+ LIBGEE_LICENSE_FILES = COPYING
+ LIBGEE_CPE_ID_VENDOR = gnome
+-# We're patching gee/Makefile.am
+-LIBGEE_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ LIBGEE_CONF_OPTS += --enable-introspection
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
