@@ -4,85 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB90AC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Mar 2022 14:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83D4DC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  5 Mar 2022 15:02:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 808A4408FB;
-	Sat,  5 Mar 2022 14:56:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32399408B2;
+	Sat,  5 Mar 2022 15:02:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gUbfZHW57oIP; Sat,  5 Mar 2022 14:56:41 +0000 (UTC)
+	with ESMTP id 5lZ1d1IALCWV; Sat,  5 Mar 2022 15:02:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93E5C408F4;
-	Sat,  5 Mar 2022 14:56:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E7191BF616
- for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 14:55:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 533D140347;
+	Sat,  5 Mar 2022 15:02:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CAD3B1BF616
+ for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 15:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B8CE60B4B
- for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 14:55:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3FD5812C0
+ for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 15:02:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id omw5EmZ0fclO for <buildroot@lists.busybox.net>;
- Sat,  5 Mar 2022 14:55:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G60FbWJsfqgs for <buildroot@lists.busybox.net>;
+ Sat,  5 Mar 2022 15:02:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5276B60B10
- for <buildroot@buildroot.org>; Sat,  5 Mar 2022 14:55:24 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id qa43so23105369ejc.12
- for <buildroot@buildroot.org>; Sat, 05 Mar 2022 06:55:24 -0800 (PST)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D1B58129D
+ for <buildroot@buildroot.org>; Sat,  5 Mar 2022 15:02:00 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id qa43so23125586ejc.12
+ for <buildroot@buildroot.org>; Sat, 05 Mar 2022 07:02:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=aNQNIqXrxJtcWJUKFwJT2xpeyZErv198IlA1KmGa6PM=;
- b=YSovOToPrFISrOFQukHKkrYwNop9UsWsJ6fsar5wQ63FJf7fsYEWCyXlrWVN2H0fmD
- kezp2zDHcJppEabCQOL+UsRORKc/plrifPuanA0N8rMn8+xD6vAJ6ZAkMZbnam+77xCo
- 4mC5uyVU7GRwVlwg/3M9UXn8zPMbM9WJ7rOknCC7/SDpGHBAKEg9P+pD00S1Y15Avfxz
- kqut2SHoVwr5O3TJGjmyYGp/5zvOBwHpVKCEPcmJMlw0yAwZD7rSmnTgCl10qGDpDqcO
- i2VB7utcZhxOWhQbcPwUf0bKd1U8MvbyHVhOeAeaG9voxRlxfQ/drHVuFntAodT2dZhz
- aOHw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=93T/ge4qpNwY1ppmb3lHNz5Af8SNcFxt2q8pCvu2l1M=;
+ b=d+U3UTnM8hT1ZwC0ZDnJ+TdZ55HLU9+iMBitt/kYSzhHJ5iiY8ElbZCM8W+fp1Pm2v
+ Fn7/cxs0CS7pFjrI/f1AsicXaulKWu6kChgdYWRcqqTb05Rh81tzxLHRcDAiQtaOEZk8
+ 12vOqkxMeZw9fmzlkrpUKgckilNkeJOThSbMRsbgwiv2NckMp8m27iAqIj7WzYY4TKyj
+ mlaWHLIQQwcDkenOnidlkNHeuztQVBu254SyxSx3dzY6tREDugc6QJcB0dIj6Noveb3l
+ sQAkDpQPsISOZDQOm8prgH4LFhOyhSZb5yifAGFgclBYuVzqDZVWDPAcZXxCI8vWbqKB
+ byzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=aNQNIqXrxJtcWJUKFwJT2xpeyZErv198IlA1KmGa6PM=;
- b=OkgdAVbCmckjOk98SZVsWR4He5UqUvba7U05av7rhxbK5bPtgO33CZbiRPAuJlPdMP
- cOkWvVxBZWHkB7qJ9nsFTwtCLDCtXshdt2Q0V4LKZwBb3uXGtB6ZQ3wu0U8l6ToG2jU2
- ldA8cwSc7DH8kLSWC6LjaOA8d/50jGw0d/rb0euEwGsZhBNAoSAmRH5BLCF+QN3mV9Ul
- M+eDiWHVgB20o/Y9LeAaYUPhUD4JLkY6bqrRX92W1Se/Fx35uqWhKY+Ma+5VUCJRnnM/
- 2zwGGuxE/xN9+uvGXBQBd5hwm92YGrqkNaPBW4gDHLtMNwZ3izdqQoJ9/Urs3BUoY7mT
- Hnbg==
-X-Gm-Message-State: AOAM531iFL2tS6xUH4g176rZ35eeMFQehsfVCOEwxetwSClp0YNjI9SC
- 8sD6LW3BhwBGna4KVwtu81tTZg==
-X-Google-Smtp-Source: ABdhPJxgJ1Bnnz4dNlYhkFftNk1+iA1il2q0V6StdzWKgE95F4BQMp+9j3kB7MS/E0WczidC7dirQw==
-X-Received: by 2002:a17:907:2d22:b0:6da:91fe:15a5 with SMTP id
- gs34-20020a1709072d2200b006da91fe15a5mr3147981ejc.448.1646492122454; 
- Sat, 05 Mar 2022 06:55:22 -0800 (PST)
+ bh=93T/ge4qpNwY1ppmb3lHNz5Af8SNcFxt2q8pCvu2l1M=;
+ b=gMwRHczU1NBy0M5OfEVYCKPp1KH6DtesdHjgBs5hrl+D+BrpyH5LsNbdKCZdthZeiy
+ Yeq6s9WQALSLamgT045Q0t8Us1PnRSuCPPK+WBJ+3lEGB8KCj64bTp3F0F5ONI1xD1cv
+ 0ytF57se2365Ir0x0mPbDmExXqqhfa8M1lTNnDUV/QzHQyxwv9fjx+ZJraBP0V90Iaa0
+ NyxAkjVvyVY42ocbcBMKT4vbHat76lYJTInm0D62G6IeSIPODxUD9XSitSet5nKaGQiy
+ R5g4PLivuzjPgOxTyrrxDs7MQf2SLsmcLZuFC5do+FBwckwyGMItsyQIN3WPBa5kg38s
+ whrw==
+X-Gm-Message-State: AOAM531N0929rOn5o8COVa5ECJBCIL0139Zq6K0xjG4yMAS2aEalEpbY
+ DxHIyp/yucEqeK8Yk6nsZU6a5z1QK5J4NQ==
+X-Google-Smtp-Source: ABdhPJza9vL3b6wX7TCjiP39b+6i7jqBOjDw8388fa0zyLvd2Us2x1n57pPMgB4yqXP/ezwAR66GeQ==
+X-Received: by 2002:a17:907:7ba6:b0:6d7:1888:d553 with SMTP id
+ ne38-20020a1709077ba600b006d71888d553mr3121546ejc.98.1646492518772; 
+ Sat, 05 Mar 2022 07:01:58 -0800 (PST)
 Received: from ?IPV6:2a02:1811:b032:6b00:cb7e:b535:458f:f512?
  (ptr-cyunlkwzu35hsouvwnm.18120a2.ip6.access.telenet.be.
  [2a02:1811:b032:6b00:cb7e:b535:458f:f512])
  by smtp.gmail.com with ESMTPSA id
- hg11-20020a1709072ccb00b006cee4fb36c7sm2991693ejc.64.2022.03.05.06.55.21
+ cy1-20020a0564021c8100b003e359e4f54asm3548023edb.43.2022.03.05.07.01.57
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 05 Mar 2022 06:55:21 -0800 (PST)
-Message-ID: <80abb66f-709f-a91d-d183-c9a72693428a@mind.be>
-Date: Sat, 5 Mar 2022 15:55:21 +0100
+ Sat, 05 Mar 2022 07:01:58 -0800 (PST)
+Message-ID: <863fa1b5-dd78-2643-580e-fb5b231e5da1@mind.be>
+Date: Sat, 5 Mar 2022 16:01:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220217135539.3784058-1-fontaine.fabrice@gmail.com>
+To: Marcus Hoffmann <marcus.hoffmann@othermo.de>, buildroot@buildroot.org
+References: <20220217155549.1084829-1-marcus.hoffmann@othermo.de>
+ <20220217155549.1084829-3-marcus.hoffmann@othermo.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220217135539.3784058-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/safeclib: disable tests
+In-Reply-To: <20220217155549.1084829-3-marcus.hoffmann@othermo.de>
+Subject: Re: [Buildroot] [PATCH v2 2/2]
+ board/orangepi/orangepi-rk3399/genimage: fix partition types for gpt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,6 +97,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Suniel Mahesh <sunil@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,123 +105,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 17/02/2022 14:55, Fabrice Fontaine wrote:
-> Disable tests to avoid the following build failure raised since bump to
-> version 3.7.1 in commit cc27267ae41bf44276c63b1e86042c4fae4adf50 and
-> https://github.com/rurban/safeclib/commit/b90c52b1691fe82ce0a0681a503e1d45584f0162:
+On 17/02/2022 16:55, Marcus Hoffmann wrote:
+> Fixes the following error during image generation:
+>    ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid
+>    for mbr and hybrid partition-table-type
 > 
-> In file included from perf_memcpy32_s.c:7:
-> perf_private.h: In function 'rdtsc':
-> perf_private.h:72:3: error: 'asm' undeclared (first use in this function)
->     72 |   asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(pmuseren));
->        |   ^~~
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784375
 > 
-> Fixes:
->   - http://autobuild.buildroot.org/results/ceb13c071b1461eb6d73f5940d6b010095127f41
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 
-  The patch was rejected upstream, and instead the underlying issue was fixed. 
-Care to submit the upstream patch instead?
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   .../0001-Add-an-option-to-disable-tests.patch | 66 +++++++++++++++++++
->   package/safeclib/safeclib.mk                  |  4 +-
->   2 files changed, 69 insertions(+), 1 deletion(-)
->   create mode 100644 package/safeclib/0001-Add-an-option-to-disable-tests.patch
+>   board/orangepi/orangepi-rk3399/genimage.cfg | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/package/safeclib/0001-Add-an-option-to-disable-tests.patch b/package/safeclib/0001-Add-an-option-to-disable-tests.patch
-> new file mode 100644
-> index 0000000000..420578fe2e
-> --- /dev/null
-> +++ b/package/safeclib/0001-Add-an-option-to-disable-tests.patch
-> @@ -0,0 +1,66 @@
-> +From 55b861a098434843f5614adcaab469defed95321 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Thu, 17 Feb 2022 14:36:51 +0100
-> +Subject: [PATCH] Add an option to disable tests
-> +
-> +Add an option to disable tests which are not always needed (e.g. on
-> +embedded systems) and can raise the following build failure on some
-> +architectures such as ARM cortex-a9:
-> +
-> +In file included from perf_memcpy32_s.c:7:
-> +perf_private.h: In function 'rdtsc':
-> +perf_private.h:72:3: error: 'asm' undeclared (first use in this function)
-> +   72 |   asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(pmuseren));
-> +      |   ^~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/ceb13c071b1461eb6d73f5940d6b010095127f41
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/rurban/safeclib/pull/115]
-> +---
-> + Makefile.am  |  6 +++++-
-> + configure.ac | 10 ++++++++++
-> + 2 files changed, 15 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index 429a84b2..7d14afb6 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -34,7 +34,11 @@
-> + ACLOCAL_AMFLAGS = -I m4 --install ${ACLOCAL_FLAGS}
-> +
-> + # Sub-directories to preform recursive make in
-> +-SUBDIRS = src tests
-> ++SUBDIRS = src
-> ++
-> ++if ENABLE_TESTS
-> ++SUBDIRS += tests
-> ++endif
-> +
-> + # Library header files
-> + pkginclude_HEADERS    = \
-> +diff --git a/configure.ac b/configure.ac
-> +index b7fd03e9..8c8fbee7 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -360,6 +360,16 @@ AC_ARG_ENABLE(doc,
-> + 	esac], [enable_doc=true])
-> + AM_CONDITIONAL(ENABLE_DOC, test "x$enable_doc" = "xtrue")
-> +
-> ++AC_ARG_ENABLE(tests,
-> ++	AS_HELP_STRING([--disable-tests],
-> ++	               [disable tests @<:@default=no@:>@]),
-> ++	[case "${enableval}" in
-> ++	yes) enable_tests=true ;;
-> ++	no)  enable_tests=false ;;
-> ++	*)   AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
-> ++	esac], [enable_tests=true])
-> ++AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "xtrue")
-> ++
-> + dnl for windows dllimport. checking pic_flag DLL_EXPORT would be better,
-> + dnl but this is only enabled for the shared objs, and we need it in the config
-> + dnl for our tests.
-> +--
-> +2.34.1
-> +
-> diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
-> index bc58c1a38c..8f909f729b 100644
-> --- a/package/safeclib/safeclib.mk
-> +++ b/package/safeclib/safeclib.mk
-> @@ -11,9 +11,11 @@ SAFECLIB_SOURCE = safeclib-$(SAFECLIB_VERSION).tar.xz
->   SAFECLIB_LICENSE = MIT
->   SAFECLIB_LICENSE_FILES = COPYING
->   SAFECLIB_INSTALL_STAGING = YES
-> +# We're patching configure.ac
-> +SAFECLIB_AUTORECONF = YES
->   SAFECLIB_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
->   # -fstack-protector-strong is used by default. Disable that so the
->   # BR2_SSP_* options in the toolchain wrapper are used instead
-> -SAFECLIB_CONF_OPTS = --disable-hardening
-> +SAFECLIB_CONF_OPTS = --disable-hardening --disable-tests
+> diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
+> index c94e0bc7cc..a02166172f 100644
+> --- a/board/orangepi/orangepi-rk3399/genimage.cfg
+> +++ b/board/orangepi/orangepi-rk3399/genimage.cfg
+> @@ -26,14 +26,13 @@ image sdcard.img {
+>   	}
 >   
->   $(eval $(autotools-package))
+>   	partition boot {
+> -		partition-type = 0xC
+> +		partition-type-uuid = F
+>   		bootable = "true"
+>   		image = "boot.vfat"
+>   		offset = 16M
+>   	}
+>   
+>   	partition rootfs {
+> -		partition-type = 0x83
+>   		image = "rootfs.ext4"
+>   	}
+>   }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
