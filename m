@@ -1,83 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C39C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  5 Mar 2022 20:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 218EDC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Mar 2022 09:15:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5E6681886;
-	Sat,  5 Mar 2022 20:45:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 944F960B6C;
+	Sun,  6 Mar 2022 09:15:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4gwjTdYmVDne; Sat,  5 Mar 2022 20:45:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QDZkHI040l1b; Sun,  6 Mar 2022 09:15:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16E2281858;
-	Sat,  5 Mar 2022 20:45:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EA4CA1BF5B4
- for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 20:45:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A24A607E1;
+	Sun,  6 Mar 2022 09:15:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 289831BF4E2
+ for <buildroot@lists.busybox.net>; Sun,  6 Mar 2022 09:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7CA540360
- for <buildroot@lists.busybox.net>; Sat,  5 Mar 2022 20:45:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1788D607E1
+ for <buildroot@lists.busybox.net>; Sun,  6 Mar 2022 09:15:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v8RSu9RtT4jX for <buildroot@lists.busybox.net>;
- Sat,  5 Mar 2022 20:45:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CUWx8lufmWa6 for <buildroot@lists.busybox.net>;
+ Sun,  6 Mar 2022 09:15:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B2DC40124
- for <buildroot@buildroot.org>; Sat,  5 Mar 2022 20:45:30 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- m42-20020a05600c3b2a00b00382ab337e14so7911477wms.3
- for <buildroot@buildroot.org>; Sat, 05 Mar 2022 12:45:30 -0800 (PST)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DFCE8607B5
+ for <buildroot@buildroot.org>; Sun,  6 Mar 2022 09:15:16 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id t11so18884888wrm.5
+ for <buildroot@buildroot.org>; Sun, 06 Mar 2022 01:15:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+cxtYDHKzTu27M9OxKf8/5Fn/McxT+RgAB7vXnD1dsY=;
- b=qdJeYJNpXQAetYPjJRp3EVsAfRuw7yVuFlGFSl3SeN+qPMJPVLqkCTJFhAXakdV9Of
- qRnmfYyFRcOwxXLmpOkpYc+XIyWDaBRxE1CLbVBhsKPiDAOf/fhSmfmQA7I8mOqhtj1B
- PtrBExOq2CCgc0k12z3CBf6dNxTW8qSu3Uvp/aViw7VZqPCarjQqy4Nj76WhZHMokj/p
- BNg1674mgkGw9RA2ac+4wuT33GQg9hmA46mGu84Hpfal7pQ4xLYMfnxSNeHzPLdC3v/z
- VPi4EeRdNJBOy9kmToKgMO7YclP0rmZbP/zsDsNlZpmXu/gveF8Af+5PP9r6zLU0LGb5
- BYuQ==
+ bh=mqK/eS1Bb6XO+u+dJ+7p5hO3tqe/mn8exhC+WnoVm3k=;
+ b=nO5cU1bEF3SylNTAUDAJWGP2SksLeRP3JnWbc75eyyRfbMGcmXP9lwumZuYQGMMc6B
+ QMplPmb8dTgmtPxersHi5r70bSD9AZOQSJQ37GSrtAnZ0k9fZKrcp1VIy33UlEqNXku9
+ LqJL+KPILKlJTgTcz6zYG2ibcL/ENKolQxVFJDiW6P38WwNbAHvGT4y++5Vb4WD7L7ki
+ 54B+nsFCuEsnCOZQbxXxB03M3C9so9hiunNzVnaObO5oo8INomjcbLnyp2Bn1CXu9CuJ
+ yos2AatlrHvwGA4MVUjs1wraNV2v8Ix21JhRM6ZIAVseMNltB9pvCqq6J7w5/pUwTKNT
+ a6GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+cxtYDHKzTu27M9OxKf8/5Fn/McxT+RgAB7vXnD1dsY=;
- b=cRfDlnTazyeVuumHZ/2cS9LUA4NcAy+6mSyis9WFfMxMFWF6+aRfA2uieaGDfPEzyZ
- VKrSaooYDU9GtbTfE0fdJqt+p0eDAeP5yaJG+XoTtCSaTyS1lLnbDPt6DMSHe+DDzH9n
- cuVL1JgGtHeWP9cZVwWNVfAbPKBw0pYXFboWEsxEB1aIy4/IfWXv2aII78/XByqXi0MM
- wTQGCf+3cth0+3Sm9w55z887kHGRgiYwNljPJNhKUPLkj9Ii0ZwFWZgEGwvwb0OnLVCp
- ik3CcKQrjT6sH4ph42CR6SrKHMkFaiLgHYrC5M+lQqGjexaIOwbRwy3SK0IJQJ2R7JK2
- Lh4Q==
-X-Gm-Message-State: AOAM533MEi2nb7jIQ8pv9oNC4mw3xjb/kDtc3zVENatiVRRGngodlHUv
- Gs3UYDW11/G8iyH0nAV4nKZfHr+02Ro=
-X-Google-Smtp-Source: ABdhPJx7lqGsCo4hr1ljKJAkR9VaWGmV5mhZ63hcR2xqiB5itghN9l3wynHM5/veuglWWoZ3EwrlGg==
-X-Received: by 2002:a05:600c:4fd6:b0:37f:2a37:87a3 with SMTP id
- o22-20020a05600c4fd600b0037f2a3787a3mr3463856wmq.152.1646513128116; 
- Sat, 05 Mar 2022 12:45:28 -0800 (PST)
+ bh=mqK/eS1Bb6XO+u+dJ+7p5hO3tqe/mn8exhC+WnoVm3k=;
+ b=hoqjbMUQL13VRr3LhMNXoEsWM02Z3CGER2gYbyIOr+B3++6Ku49I4gRHF5REwR+X/2
+ TvfGPed3EXYbSFnS5pTZ7BaPur8rhsO+TYnBGckzD8TlZBRBVQipMyPvgrMNGOKyiMRR
+ cXkT/UD+OTYNe2AUkevz1A7SVXuKnrWvkU9Yv7bKX8HTMpy05mhw2dwBwEmwXtuOnI27
+ RTF48/2pATZ4i5p5OZ+ec56e3BL+x6rfH4GQx1U6BEYF7wq4isJokEueNGAfqFa+OkE/
+ Eo4HOnU9AB3RAJu0EsUWddlVQ0nUtszOE1kF/PXiZNHB31FGeWXVgjy8SHrUpYoQ8sKm
+ e9RA==
+X-Gm-Message-State: AOAM533ma+VTiSrVbs8fqUai9UKzlPnpWGz4aRPH9eIf1wzsuCtmO/uL
+ mf9573gxcD6VMmrLeyhvrbCG+wxOaDg=
+X-Google-Smtp-Source: ABdhPJybO1Uaor2mwelfesfZ3WFZNCs32JWdCpi0Pz2F5Gfksk3k88bwRFtAcoR6jF/Xqh9J4clmoQ==
+X-Received: by 2002:a5d:4d4b:0:b0:1f1:d99e:1122 with SMTP id
+ a11-20020a5d4d4b000000b001f1d99e1122mr4756109wru.604.1646558114741; 
+ Sun, 06 Mar 2022 01:15:14 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- p5-20020a05600c358500b0038167e239a2sm9415021wmq.19.2022.03.05.12.45.27
+ z5-20020a05600c0a0500b0037fa93193a8sm11860649wmp.44.2022.03.06.01.15.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 05 Mar 2022 12:45:27 -0800 (PST)
+ Sun, 06 Mar 2022 01:15:14 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  5 Mar 2022 21:44:46 +0100
-Message-Id: <20220305204446.823802-1-fontaine.fabrice@gmail.com>
+Date: Sun,  6 Mar 2022 10:13:23 +0100
+Message-Id: <20220306091323.93313-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/azure-iot-sdk-c: drop custom
- install rules
+Subject: [Buildroot] [PATCH 1/1] package/libglfw: fiw wayland build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,92 +85,231 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop custom install rules which have been added since the addition of
-the package in commit 2d837933e55216dc31a2206b063689cfd04a4c01 but are
-now resulting in a broken installion
+Fix the following build failure raised since bump to version 3.3.6 in
+commit 3cd9bb4f2a91d3739c5da96f5e4dd37d3ae13799:
+
+CMake Error at CMakeLists.txt:252 (find_package):
+  Could not find a package configuration file provided by "ECM" with any of
+  the following names:
+
+    ECMConfig.cmake
+    ecm-config.cmake
 
 Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=14636
+ - http://autobuild.buildroot.org/results/0d7420aff7392c294614fd12e65ac7cd57787e98
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 58 ----------------------
- 1 file changed, 58 deletions(-)
+ ...emove-extra-cmake-modules-dependency.patch | 121 ++++++++++++++++++
+ ...xt-allow-override-of-wayland-pkgdata.patch |  32 +++++
+ package/libglfw/Config.in                     |   2 +
+ package/libglfw/libglfw.mk                    |   6 +-
+ 4 files changed, 160 insertions(+), 1 deletion(-)
+ create mode 100644 package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+ create mode 100644 package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 3f00db3ff4..e6de8c851b 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -14,62 +14,4 @@ AZURE_IOT_SDK_C_INSTALL_STAGING = YES
- AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
- AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
+diff --git a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+new file mode 100644
+index 0000000000..d5ee7c829a
+--- /dev/null
++++ b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+@@ -0,0 +1,121 @@
++From 2747e47393cbca2d09db56223e735bd94b21e2eb Mon Sep 17 00:00:00 2001
++From: Joel Winarske <joel.winarske@gmail.com>
++Date: Mon, 28 Sep 2020 22:23:02 -0700
++Subject: [PATCH] Wayland: Remove extra-cmake-modules dependency
++
++Fixes #1774.
++
++[Retrieved (and backported) from:
++https://github.com/glfw/glfw/commit/2747e47393cbca2d09db56223e735bd94b21e2eb]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ .gitignore         |  4 ---
++ CMakeLists.txt     | 16 ++++++------
++ src/CMakeLists.txt | 62 ++++++++++++++++++++++++++++------------------
++ 3 files changed, 45 insertions(+), 37 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 42bfa1806d..394827520b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -191,20 +191,18 @@ endif()
++ # Use Wayland for window creation
++ #--------------------------------------------------------------------
++ if (_GLFW_WAYLAND)
++-    find_package(ECM REQUIRED NO_MODULE)
++-    list(APPEND CMAKE_MODULE_PATH "${ECM_MODULE_PATH}")
++ 
++-    find_package(Wayland REQUIRED Client Cursor Egl)
++-    find_package(WaylandScanner REQUIRED)
++-    find_package(WaylandProtocols 1.15 REQUIRED)
+++    include(FindPkgConfig)
+++    pkg_check_modules(Wayland REQUIRED
+++        wayland-client>=0.2.7
+++        wayland-cursor>=0.2.7
+++        wayland-egl>=0.2.7
+++        xkbcommon)
++ 
++     list(APPEND glfw_PKG_DEPS "wayland-client")
++ 
++     list(APPEND glfw_INCLUDE_DIRS "${Wayland_INCLUDE_DIRS}")
++-    list(APPEND glfw_LIBRARIES "${Wayland_LIBRARIES}" "${CMAKE_THREAD_LIBS_INIT}")
++-
++-    find_package(XKBCommon REQUIRED)
++-    list(APPEND glfw_INCLUDE_DIRS "${XKBCOMMON_INCLUDE_DIRS}")
+++    list(APPEND glfw_LIBRARIES "${Wayland_LINK_LIBRARIES}" "${CMAKE_THREAD_LIBS_INIT}")
++ 
++     include(CheckIncludeFiles)
++     include(CheckFunctionExists)
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 2f2bdd883d..e834506c6c 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -45,30 +45,44 @@ if (_GLFW_X11 OR _GLFW_WAYLAND)
++                      posix_time.c posix_thread.c xkb_unicode.c
++                      egl_context.c osmesa_context.c)
++ 
++-    ecm_add_wayland_client_protocol(glfw_SOURCES
++-        PROTOCOL
++-        "${WAYLAND_PROTOCOLS_PKGDATADIR}/stable/xdg-shell/xdg-shell.xml"
++-        BASENAME xdg-shell)
++-    ecm_add_wayland_client_protocol(glfw_SOURCES
++-        PROTOCOL
++-        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml"
++-        BASENAME xdg-decoration)
++-    ecm_add_wayland_client_protocol(glfw_SOURCES
++-        PROTOCOL
++-        "${WAYLAND_PROTOCOLS_PKGDATADIR}/stable/viewporter/viewporter.xml"
++-        BASENAME viewporter)
++-    ecm_add_wayland_client_protocol(glfw_SOURCES
++-        PROTOCOL
++-        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/relative-pointer/relative-pointer-unstable-v1.xml"
++-        BASENAME relative-pointer-unstable-v1)
++-    ecm_add_wayland_client_protocol(glfw_SOURCES
++-        PROTOCOL
++-        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml"
++-        BASENAME pointer-constraints-unstable-v1)
++-    ecm_add_wayland_client_protocol(glfw_SOURCES
++-        PROTOCOL
++-        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml"
++-        BASENAME idle-inhibit-unstable-v1)
+++    find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
+++    pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
+++    pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+++
+++    macro(wayland_generate protocol_file output_file)
+++          add_custom_command(OUTPUT ${output_file}.h
+++              COMMAND ${WAYLAND_SCANNER_EXECUTABLE} client-header
+++              < ${protocol_file} > ${output_file}.h
+++              DEPENDS ${protocol_file})
+++          list(APPEND glfw_SOURCES ${output_file}.h)
+++
+++          add_custom_command(OUTPUT ${output_file}.c 
+++              COMMAND ${WAYLAND_SCANNER_EXECUTABLE} private-code
+++              < ${protocol_file} > ${output_file}.c
+++              DEPENDS ${protocol_file})
+++          list(APPEND glfw_SOURCES ${output_file}.c)
+++    endmacro()
+++
+++    set(GLFW_WAYLAND_PROTOCOL_SOURCES)
+++    wayland_generate(
+++        ${WAYLAND_PROTOCOLS_BASE}/stable/xdg-shell/xdg-shell.xml
+++        ${CMAKE_BINARY_DIR}/src/wayland-xdg-shell-client-protocol)
+++    wayland_generate(
+++        ${WAYLAND_PROTOCOLS_BASE}/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml
+++        ${CMAKE_BINARY_DIR}/src/wayland-xdg-decoration-client-protocol)
+++    wayland_generate(
+++        ${WAYLAND_PROTOCOLS_BASE}/stable/viewporter/viewporter.xml
+++        ${CMAKE_BINARY_DIR}/src/wayland-viewporter-client-protocol)
+++    wayland_generate(
+++        ${WAYLAND_PROTOCOLS_BASE}/unstable/relative-pointer/relative-pointer-unstable-v1.xml
+++        ${CMAKE_BINARY_DIR}/src/wayland-relative-pointer-unstable-v1-client-protocol)
+++    wayland_generate(
+++        ${WAYLAND_PROTOCOLS_BASE}/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml
+++        ${CMAKE_BINARY_DIR}/src/wayland-pointer-constraints-unstable-v1-client-protocol)
+++    wayland_generate(
+++        ${WAYLAND_PROTOCOLS_BASE}/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml
+++        ${CMAKE_BINARY_DIR}/src/wayland-idle-inhibit-unstable-v1-client-protocol)
+++
++ elseif (_GLFW_OSMESA)
++     set(glfw_HEADERS ${common_HEADERS} null_platform.h null_joystick.h
++                      posix_time.h posix_thread.h osmesa_context.h)
+diff --git a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
+new file mode 100644
+index 0000000000..4bcb5e4eb7
+--- /dev/null
++++ b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
+@@ -0,0 +1,32 @@
++From 46aaf2b2b4d3ec240b9aad175bb3eddb6ae11ead Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 4 Mar 2022 17:59:19 +0100
++Subject: [PATCH] src/CMakeLists.txt: allow override of wayland pkgdatadir
++
++Allow the user to override WAYLAND_{PROTOCOLS_BASE,CLIENT_PKGDATADIR}
++(needed when cross-compiling)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/glfw/glfw/pull/2053]
++---
++ src/CMakeLists.txt | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 01f191c9..475ce882 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -75,7 +75,9 @@ if (GLFW_BUILD_WAYLAND)
++     include(FindPkgConfig)
++     find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
++     pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
++-    pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+++    if (NOT WAYLAND_PROTOCOLS_BASE)
+++        pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+++    endif()
++ 
++     macro(wayland_generate protocol_file output_file)
++         add_custom_command(OUTPUT "${output_file}.h"
++-- 
++2.34.1
++
+diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
+index 281b55df7b..e5e96036ff 100644
+--- a/package/libglfw/Config.in
++++ b/package/libglfw/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBGLFW
+ 	bool "libglfw"
+ 	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
+ 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXI if BR2_PACKAGE_XORG7
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index 2ba31fd674..0a3986f662 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
+@@ -29,7 +29,11 @@ LIBGLFW_DEPENDENCIES += libgles
+ endif
  
--# The project only supports building one kind of library.
--# Further the install target installs the wrong files, so we do it here:
--ifeq ($(BR2_STATIC_LIBS),y)
--AZURE_IOT_SDK_C_LIBS += \
--	uamqp/libuamqp.a \
--	c-utility/libaziotsharedutil.a \
--	iothub_client/libiothub_client.a \
--	iothub_client/libiothub_client_mqtt_ws_transport.a \
--	iothub_client/libiothub_client_amqp_ws_transport.a \
--	iothub_client/libiothub_client_http_transport.a \
--	iothub_client/libiothub_client_amqp_transport.a \
--	iothub_client/libiothub_client_mqtt_transport.a \
--	iothub_service_client/libiothub_service_client.a \
--	serializer/libserializer.a \
--	umqtt/libumqtt.a \
--	deps/uhttp/libuhttp.a \
--	deps/umock-c/libumock_c.a \
--	libparson.a
--else
--AZURE_IOT_SDK_C_LIBS += \
--	uamqp/libuamqp.so \
--	c-utility/libaziotsharedutil.so \
--	iothub_client/libiothub_client.so \
--	iothub_client/libiothub_client_mqtt_ws_transport.so \
--	iothub_client/libiothub_client_amqp_ws_transport.so \
--	iothub_client/libiothub_client_http_transport.so \
--	iothub_client/libiothub_client_amqp_transport.so \
--	iothub_client/libiothub_client_mqtt_transport.so \
--	iothub_service_client/libiothub_service_client.so \
--	serializer/libserializer.so \
--	umqtt/libumqtt.so.1.1.12 \
--	deps/uhttp/libuhttp.so \
--	deps/umock-c/libumock_c.so \
--	libparson.so
--
--define AZURE_IOT_SDK_C_CREATE_SYMLINKS
--	ln -sf libumqtt.so.1.1.12 $(1)/usr/lib/libumqtt.so.1
--	ln -sf libumqtt.so.1.1.12 $(1)/usr/lib/libumqtt.so
--endef
--endif
--
--define AZURE_IOT_SDK_C_INSTALL_LIBS
--	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
--		$(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir $(l))
--	)
--	$(call AZURE_IOT_SDK_C_CREATE_SYMLINKS,$(1))
--endef
--
--define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
--	$(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(STAGING_DIR))
--	cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
--	cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
--endef
--
--define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
--	$(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(TARGET_DIR))
--endef
--
- $(eval $(cmake-package))
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-LIBGLFW_CONF_OPTS +=  -DGLFW_USE_WAYLAND=1
++LIBGLFW_DEPENDENCIES += libxkbcommon wayland-protocols
++# Override pkg-config pkgdatadir variable, it needs the prefix
++LIBGLFW_CONF_OPTS += \
++	-DGLFW_USE_WAYLAND=1 \
++	-DWAYLAND_PROTOCOLS_BASE=$(STAGING_DIR)/usr/share/wayland-protocols
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
 -- 
 2.34.1
 
