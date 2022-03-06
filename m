@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 218EDC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  6 Mar 2022 09:15:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE42C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  6 Mar 2022 10:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 944F960B6C;
-	Sun,  6 Mar 2022 09:15:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1D9540227;
+	Sun,  6 Mar 2022 10:28:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QDZkHI040l1b; Sun,  6 Mar 2022 09:15:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a7qGFJ5TEXyW; Sun,  6 Mar 2022 10:28:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A24A607E1;
-	Sun,  6 Mar 2022 09:15:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7DD4401E2;
+	Sun,  6 Mar 2022 10:28:08 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 289831BF4E2
- for <buildroot@lists.busybox.net>; Sun,  6 Mar 2022 09:15:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0809A1BF4DA
+ for <buildroot@lists.busybox.net>; Sun,  6 Mar 2022 10:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1788D607E1
- for <buildroot@lists.busybox.net>; Sun,  6 Mar 2022 09:15:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAC9060AF6
+ for <buildroot@lists.busybox.net>; Sun,  6 Mar 2022 10:28:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CUWx8lufmWa6 for <buildroot@lists.busybox.net>;
- Sun,  6 Mar 2022 09:15:17 +0000 (UTC)
+ with ESMTP id GIfF6l3U4yus for <buildroot@lists.busybox.net>;
+ Sun,  6 Mar 2022 10:28:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DFCE8607B5
- for <buildroot@buildroot.org>; Sun,  6 Mar 2022 09:15:16 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id t11so18884888wrm.5
- for <buildroot@buildroot.org>; Sun, 06 Mar 2022 01:15:16 -0800 (PST)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8E45D605B2
+ for <buildroot@buildroot.org>; Sun,  6 Mar 2022 10:28:05 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id u1so18987648wrg.11
+ for <buildroot@buildroot.org>; Sun, 06 Mar 2022 02:28:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=mqK/eS1Bb6XO+u+dJ+7p5hO3tqe/mn8exhC+WnoVm3k=;
- b=nO5cU1bEF3SylNTAUDAJWGP2SksLeRP3JnWbc75eyyRfbMGcmXP9lwumZuYQGMMc6B
- QMplPmb8dTgmtPxersHi5r70bSD9AZOQSJQ37GSrtAnZ0k9fZKrcp1VIy33UlEqNXku9
- LqJL+KPILKlJTgTcz6zYG2ibcL/ENKolQxVFJDiW6P38WwNbAHvGT4y++5Vb4WD7L7ki
- 54B+nsFCuEsnCOZQbxXxB03M3C9so9hiunNzVnaObO5oo8INomjcbLnyp2Bn1CXu9CuJ
- yos2AatlrHvwGA4MVUjs1wraNV2v8Ix21JhRM6ZIAVseMNltB9pvCqq6J7w5/pUwTKNT
- a6GA==
+ bh=bhXxsCaeE3i7jAuVq/NF2fAviqz80phXm1PXwepIies=;
+ b=AvrIBGIYW+IIe8B7tMC77boX+C3/ATjpWmuCpqZFGBHVWpQQR53NRY/cygdUD09gj3
+ h7RN7jRDFyYAwDj9/2MSqyhoF99dvvZBgSAy3TMMRRb92/foCzjCe/ZDryOYMkTTwShy
+ pwi9wFfB8Uh3is0JPWMaKAAbW0QjemA+VQnv1TkgaasOpDNuITwetI4eswNhHwmzQY9E
+ ASCPsMVJhWdwpF6NQS3bf6TTSsrkcPaKQduZK9ybs8wublKas7RJTim4I5ersnACnzDr
+ mUpe+7PTVia07zbfueUcvsQp+nfq5FMIkS6K9Unynqt35Qn+aBxJACyhhNT82Nz3iszg
+ XqRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=mqK/eS1Bb6XO+u+dJ+7p5hO3tqe/mn8exhC+WnoVm3k=;
- b=hoqjbMUQL13VRr3LhMNXoEsWM02Z3CGER2gYbyIOr+B3++6Ku49I4gRHF5REwR+X/2
- TvfGPed3EXYbSFnS5pTZ7BaPur8rhsO+TYnBGckzD8TlZBRBVQipMyPvgrMNGOKyiMRR
- cXkT/UD+OTYNe2AUkevz1A7SVXuKnrWvkU9Yv7bKX8HTMpy05mhw2dwBwEmwXtuOnI27
- RTF48/2pATZ4i5p5OZ+ec56e3BL+x6rfH4GQx1U6BEYF7wq4isJokEueNGAfqFa+OkE/
- Eo4HOnU9AB3RAJu0EsUWddlVQ0nUtszOE1kF/PXiZNHB31FGeWXVgjy8SHrUpYoQ8sKm
- e9RA==
-X-Gm-Message-State: AOAM533ma+VTiSrVbs8fqUai9UKzlPnpWGz4aRPH9eIf1wzsuCtmO/uL
- mf9573gxcD6VMmrLeyhvrbCG+wxOaDg=
-X-Google-Smtp-Source: ABdhPJybO1Uaor2mwelfesfZ3WFZNCs32JWdCpi0Pz2F5Gfksk3k88bwRFtAcoR6jF/Xqh9J4clmoQ==
-X-Received: by 2002:a5d:4d4b:0:b0:1f1:d99e:1122 with SMTP id
- a11-20020a5d4d4b000000b001f1d99e1122mr4756109wru.604.1646558114741; 
- Sun, 06 Mar 2022 01:15:14 -0800 (PST)
+ bh=bhXxsCaeE3i7jAuVq/NF2fAviqz80phXm1PXwepIies=;
+ b=U/l37i0delK2U7so0Wl4PB/PGfiiariVs0I7p8vLMMhyHt6BpBja0jLPiTdMaHD0lR
+ NI7Mn7QPe0/LOiL7AQVjVD9MdB5V3PGFqZ/XRNiXcX5DuPLnvEgbLyKOhj2o1a+NP9Xc
+ jwPaX/0kzIvCFlKkMeyhiJTCmWLn6Fl1kfxSeAFqZx1qP6x6nBW9JrB93YVL4cl3j7HD
+ I3Xk9mYXcnK6fySxlPzphZ0L8ge/rnH5kQNaq6ySTtQCzfVazD9GeVWSgZLELLcUoV5g
+ /tJ9e+vab4wAMul5VJCmBuU91AwpDW5ePYiOU62XaFGJkcoHExU0Lcj7CnusSETZ+pJT
+ x2ww==
+X-Gm-Message-State: AOAM533adI+HxuRVBJpQfz1N0vHzxf2hiD/5seng3mNVuKUs7OduW9l1
+ f+rCL4SYiEK6MQ11XpcbC0LvjQy1aN0=
+X-Google-Smtp-Source: ABdhPJyfLlE3pqwSzRTOl4NKP7+Tv3mAhCPQpH5QtkfdibkagrfeWo1GLY07CBTf/SD34CZj4wdOhQ==
+X-Received: by 2002:adf:eb81:0:b0:1e3:2bf5:132 with SMTP id
+ t1-20020adfeb81000000b001e32bf50132mr4900221wrn.246.1646562483168; 
+ Sun, 06 Mar 2022 02:28:03 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- z5-20020a05600c0a0500b0037fa93193a8sm11860649wmp.44.2022.03.06.01.15.14
+ c12-20020a05600c0a4c00b00381141f4967sm12829050wmq.35.2022.03.06.02.28.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Mar 2022 01:15:14 -0800 (PST)
+ Sun, 06 Mar 2022 02:28:02 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Mar 2022 10:13:23 +0100
-Message-Id: <20220306091323.93313-1-fontaine.fabrice@gmail.com>
+Date: Sun,  6 Mar 2022 11:27:22 +0100
+Message-Id: <20220306102722.129713-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libglfw: fiw wayland build
+Subject: [Buildroot] [PATCH v2,1/1] package/libglfw: fix wayland build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,6 +109,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix typo in title
+
  ...emove-extra-cmake-modules-dependency.patch | 121 ++++++++++++++++++
  ...xt-allow-override-of-wayland-pkgdata.patch |  32 +++++
  package/libglfw/Config.in                     |   2 +
