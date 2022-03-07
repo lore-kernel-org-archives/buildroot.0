@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4753AC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:30:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD5F2C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:30:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFC6B41715;
-	Mon,  7 Mar 2022 19:30:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D04A41728;
+	Mon,  7 Mar 2022 19:30:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1-QAfS7XXVAv; Mon,  7 Mar 2022 19:30:05 +0000 (UTC)
+	with ESMTP id 7C5zhDLzoiqV; Mon,  7 Mar 2022 19:30:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28DCF41714;
-	Mon,  7 Mar 2022 19:30:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 948631BF36D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7330E41719;
+	Mon,  7 Mar 2022 19:30:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AF5C1BF982
  for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 822694170F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 828A960B5E
  for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:29:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SCTLUZL7JQaS for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PV-8mFU3D84F for <buildroot@lists.busybox.net>;
  Mon,  7 Mar 2022 19:29:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BFB441711
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD6C660E74
  for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0C5C882DB9; Mon,  7 Mar 2022 19:21:14 +0000 (UTC)
+ id 1FA8B81D75; Mon,  7 Mar 2022 19:21:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 20:12:30 +0100
+Date: Mon, 7 Mar 2022 20:26:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 301b7c3c8120e6bd05872777b6c292ebc8230a27
-X-Git-Newrev: 43c8f8b77bf2d318882c5fffb886852872ca74b7
+X-Git-Oldrev: ec532199d6b404a1e51b5ed0dfdb21b18a8a3ed5
+X-Git-Newrev: efcb7eeabc22df47ca09e69c99f73e9183ed6cf3
 X-Patchwork-Hint: ignore
-Message-Id: <20220307192114.0C5C882DB9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/frr: fix elf_py TLS section
- handling
+Message-Id: <20220307192114.1FA8B81D75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs: fix links to AsciiDoc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,67 +53,78 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5351939820293310151=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43c8f8b77bf2d318882c5fffb886852872ca74b7
+--===============5351939820293310151==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=efcb7eeabc22df47ca09e69c99f73e9183ed6cf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised on mipsel, or1k, powerpc raised
-since bump to version 8.1 in commit
-ca2753fd47d47e5ad0eec16ea62f7b7f096331b6:
+Links were aimed at the methods.co.nz domain, which is now returning
+404s. The current situation of AsciiDoc is unclear to me: the Fedora
+package points to this website, they own asciidoc.org, Wikipedia points
+to this project as well but their Git repo's README includes the
+following paragraph:
 
-struct.error: unpack requires a buffer of 20 bytes
+> AsciiDoc.py is a legacy processor for this syntax, handling an older
+> rendition of AsciiDoc. As such, this will not properly handle the
+> current AsciiDoc specification. It is suggested that unless you
+> specifically require the AsciiDoc.py toolchain, you should find a
+> processor that handles the modern AsciiDoc syntax.
 
-Fixes:
- - http://autobuild.buildroot.org/results/74f39c6f14e3f60babdcabceb5e42656f69cdaa7
+https://github.com/asciidoc-py/asciidoc-py/blob/10.1.3/README.md
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+"AsciiDoc specification" pointing towards:
+https://projects.eclipse.org/projects/asciidoc.asciidoc-lang
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-lib-fix-elf_py-TLS-section-handling.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ docs/conf/asciidoc-text.conf  | 2 +-
+ docs/manual/writing-rules.txt | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch b/package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch
-new file mode 100644
-index 0000000000..d491cb1a7d
---- /dev/null
-+++ b/package/frr/0002-lib-fix-elf_py-TLS-section-handling.patch
-@@ -0,0 +1,31 @@
-+From 3942ee1f7bc754dd0dd9ae79f89d0f2635be334f Mon Sep 17 00:00:00 2001
-+From: David Lamparter <equinox@opensourcerouting.org>
-+Date: Wed, 10 Nov 2021 15:30:07 +0100
-+Subject: [PATCH] lib: fix elf_py TLS section handling
-+
-+... need to ignore TLS sections, their address is effectively
-+meaningless but can overlap other sections we actually need to access.
-+
-+Signed-off-by: David Lamparter <equinox@opensourcerouting.org>
-+
-+[Retrieved from:
-+https://github.com/FRRouting/frr/commit/3942ee1f7bc754dd0dd9ae79f89d0f2635be334f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/elf_py.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/lib/elf_py.c b/lib/elf_py.c
-+index 1c306893ad8..f230add6957 100644
-+--- a/lib/elf_py.c
-++++ b/lib/elf_py.c
-+@@ -636,6 +636,9 @@ static Elf_Scn *elf_find_addr(struct elffile *ef, uint64_t addr, size_t *idx)
-+ 		Elf_Scn *scn = elf_getscn(ef->elf, i);
-+ 		GElf_Shdr _shdr, *shdr = gelf_getshdr(scn, &_shdr);
-+ 
-++		/* virtual address is kinda meaningless for TLS sections */
-++		if (shdr->sh_flags & SHF_TLS)
-++			continue;
-+ 		if (addr < shdr->sh_addr ||
-+ 		    addr >= shdr->sh_addr + shdr->sh_size)
-+ 			continue;
+diff --git a/docs/conf/asciidoc-text.conf b/docs/conf/asciidoc-text.conf
+index 470bdecfc2..bb614b9d85 100644
+--- a/docs/conf/asciidoc-text.conf
++++ b/docs/conf/asciidoc-text.conf
+@@ -1,5 +1,5 @@
+ # Refer to following asciidoc documentation:
+-#     http://www.methods.co.nz/asciidoc/userguide.html
++#     https://asciidoc-py.github.io/userguide.html
+ # In particular sections "Macros" and "Attribute References"
+ #
+ # For hyperlinks, show 'link text [URL]' (if link text provided) or 'URL'
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index 57ba61bdb1..84d8f76431 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -207,10 +207,10 @@ https://github.com/pengutronix/genimage/blob/master/README.rst[].
+ === The documentation
+ 
+ The documentation uses the
+-http://www.methods.co.nz/asciidoc/[asciidoc] format.
++https://asciidoc-py.github.io/[asciidoc] format.
+ 
+ For further details about the asciidoc syntax, refer to
+-http://www.methods.co.nz/asciidoc/userguide.html[].
++https://asciidoc-py.github.io/userguide.html[].
+ 
+ === Support scripts
+ 
+
+--===============5351939820293310151==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5351939820293310151==--
