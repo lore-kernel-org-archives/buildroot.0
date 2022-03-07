@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECA5EC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4006C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:09:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95008408C9;
-	Mon,  7 Mar 2022 22:09:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6394B8291C;
+	Mon,  7 Mar 2022 22:09:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tE-zJJjq5eSh; Mon,  7 Mar 2022 22:09:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pLSqw1SP8rtd; Mon,  7 Mar 2022 22:09:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79615408AF;
-	Mon,  7 Mar 2022 22:09:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 083221BF39D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 922DD828F7;
+	Mon,  7 Mar 2022 22:09:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B487E1BF39D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7AF6404F3
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A456141744
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o6twnNm8BGyz for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 22:09:05 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yOK7wEhtjev3 for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 22:09:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 05088408CB
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:09:04 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id s10so712598edd.0
- for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:09:04 -0800 (PST)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 66C544173F
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:09:34 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id a8so35043676ejc.8
+ for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:09:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=3s3miSnuZRWHhZ686w6PzCxlO7200QEwH40gcRKFCdw=;
- b=canYKr9qm+Py6kiKXuEMQgA1d8kVkhhBI6y+wUYO0N5ggA2gy7WWW0jMGT6bup+2VT
- xNRRhpjN/FlSDEumOIkDf/4PsuAJ0IDeFp3O+ZDeeg72NOaYHuCXjWNDbx3OtMwGWO2E
- NyhXG2M5gBJI1qo7OCkFqFrY0e2MMlw0j5uqC3H7GLQE3cnLhljztUWF7pZn8F5FvlGs
- P6BbaTQx2hrzyjWSofEe/6CqatkgVGEjDwrAxDutnw9PMzj7vOuYI5qAmNRmQ/cCkfmY
- 1xStdfYDvSoiMMnPXtwqE4AfU7vpdzryLbhqqk5eyBhH/VrG4HX2su1XwP4/Je0tENyT
- ioug==
+ bh=qv+bY0RASHXvdH6K9soXDzXcDQV54RDfpre1dg16jO4=;
+ b=bQ/7WkTRfV3fbLEV3fZoWDLXAC2EU4QjnYUJJxDceU6ebANr0nS9ltK/bHS5o3OIc1
+ 8GQw1koRw8wLT7IRELIZQDsNTaOY4wqkTnHRWr3Cn56mElaORGGGevSDzE4Okxnrd/wd
+ qowKKHj7W5f5dgPzQEJ6Sp34C65EJkE77Fz+MUiygqxV7cLkzaNpk3mmuBenFaekZjpP
+ eZa0m7AgOlM5nU/2ErOZfu1hlH1crbkmd8hjhNbvzz+rTe6/h1K7m0/dDQwTSJ340ljA
+ lT/KSgzUebylrJCDix2g7mOMUXptD9esgzW6XoBNrx4kj2fCvdQvEokpwW+IrOYYY5rV
+ vbGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=3s3miSnuZRWHhZ686w6PzCxlO7200QEwH40gcRKFCdw=;
- b=jt0zvDqkylKY1a6/eiTgRJtIK1XDhu3gr39n6BlPa1RdeUojPiQp7jClhykua26IAd
- CU5LvQlwYImbrUMVrkNnn72d8G/2GXnT21wANkW9QcBcarM9l3ACcBIXrSTr1PKnX3U5
- p4gweM0Gz2dNwwjWN6pz5W030ovA3zTLRB1WPZk2Wlx09sDIGBEhj1x7vqE9eqL6rDbU
- 2lwf95ZcHF+kN4oRT0LZJTNB4+uX9M5qy+WueHh45o8PJ2dnpXG/F5kKWEMC+NG4uac2
- g3+Fvs5fM8gHlbyAVWa3jPdyuSphi8/7FET+jPZwW3L9zwkmtFvC1KS4GTz/qvGylFfS
- EqZw==
-X-Gm-Message-State: AOAM533pYx+GArjxwIVdfiYHdK5brGLgV1HeLmRwrAliA55jQEaCFY0j
- O6EAlEPp+v+7LYeF+GjtpaMFOQ==
-X-Google-Smtp-Source: ABdhPJwwwX0x/aS+G6LPqZEpSJ4pa0LlvN7/jufcr94zkarvcFHBoNv2idV0v1lG65WcdcKmb2wR0w==
-X-Received: by 2002:a05:6402:37a:b0:415:9501:e112 with SMTP id
- s26-20020a056402037a00b004159501e112mr13334259edw.402.1646690943171; 
- Mon, 07 Mar 2022 14:09:03 -0800 (PST)
+ bh=qv+bY0RASHXvdH6K9soXDzXcDQV54RDfpre1dg16jO4=;
+ b=ggvqm3fbg5USXHiGnvv+m46+pEdImUPh6gDYkXTIX4m/JQ2tTZaFsmkeNUz2Kb0niu
+ 6hZXFSAHc9FpEIDx0p4Uni6y7WOu2R3KKWuNnp1PdkIFJFDqkhbSvDHNamhkwYOkE9l6
+ BoTOhV4ClEtq/V0ADROVxK6Wwwz8D/0qTIiegdpHh7Bo8EwPVW/uTDmYFRQ/hMouIS+W
+ I1S7JT0EZj7ESBDsZrCgZRmNjPclo6AIbSbApfPa8Ae1GYDT9EIUf75Q0Ojc4BdFSeef
+ H0ux8i/C4sgtQ2pfRLbCv/kQe90kIcu1JsgJOyDhnd7b83kWYjOOdtmPy0ZOc+9Blgiz
+ sGDQ==
+X-Gm-Message-State: AOAM532KnwtpaEeK5la+yBwSKQRDitJNci0Gxp0BSSXHYLMCVi9JoBHm
+ Rc0LUT1Vin1jFYdGDqP8mguFMw==
+X-Google-Smtp-Source: ABdhPJxlDdefzBHhxh5KZoSP49FCm3zPHeg8/emkwrTtWeOEs7WqKqEcBiI7HFxix2q122c45a46VA==
+X-Received: by 2002:a17:906:2646:b0:6d5:d889:c92b with SMTP id
+ i6-20020a170906264600b006d5d889c92bmr10892711ejc.696.1646690972648; 
+ Mon, 07 Mar 2022 14:09:32 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- f26-20020a50ee9a000000b004160c295356sm4998044edr.5.2022.03.07.14.09.02
+ dn14-20020a05640222ee00b00410b88abd6fsm6772478edb.45.2022.03.07.14.09.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 07 Mar 2022 14:09:02 -0800 (PST)
-Message-ID: <9dd7ff0e-ad7b-6407-e569-dc12a8f55e6d@mind.be>
-Date: Mon, 7 Mar 2022 23:09:02 +0100
+ Mon, 07 Mar 2022 14:09:32 -0800 (PST)
+Message-ID: <ee2b1896-bc30-9674-ecad-d18a4f1e41cd@mind.be>
+Date: Mon, 7 Mar 2022 23:09:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-GB
-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>, buildroot@buildroot.org
-References: <20220222210024.6013-1-abrodkin@synopsys.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20220222213202.642708-1-ju.o@free.fr>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220222210024.6013-1-abrodkin@synopsys.com>
-Subject: Re: [Buildroot] [PATCH v2] package/qt5/qt5webkit: needs OpenSSL
+In-Reply-To: <20220222213202.642708-1-ju.o@free.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: fix mysql.service
+ failing to create log directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,68 +96,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAyMi8wMi8yMDIyIDIyOjAwLCBBbGV4ZXkgQnJvZGtpbiB2aWEgYnVpbGRyb290IHdyb3Rl
-Ogo+IFcvbyBPcGVuU1NMIFFUNVdlYmtpdCBmYWlscyB0byBidWlsZCB0aGF0IHdheToKPiAtLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLT44LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0KPiAuLi4vYnVpbGQvcXQ1d2Via2l0LTUuMjEyLjAtYWxwaGE0L1NvdXJjZS9XZWJDb3JlL3Bs
-YXRmb3JtL25ldHdvcmsvcXQvUmVzb3VyY2VSZXF1ZXN0UXQuY3BwOiBJbiBzdGF0aWMgbWVtYmVy
-IGZ1bmN0aW9uIOKAmHN0YXRpYyBib29sIFdlYkNvcmU6OlJlc291cmNlUmVxdWVzdDo6YWxwbklz
-U3VwcG9ydGVkKCnigJk6Cj4gLi4uL2J1aWxkL3F0NXdlYmtpdC01LjIxMi4wLWFscGhhNC9Tb3Vy
-Y2UvV2ViQ29yZS9wbGF0Zm9ybS9uZXR3b3JrL3F0L1Jlc291cmNlUmVxdWVzdFF0LmNwcDo2ODox
-MjogZXJyb3I6IOKAmFFTc2xTb2NrZXTigJkgaGFzIG5vdCBiZWVuIGRlY2xhcmVkCj4gICAgIDY4
-IHwgICAgIHJldHVybiBRU3NsU29ja2V0Ojpzc2xMaWJyYXJ5VmVyc2lvbk51bWJlcigpID4gMHgx
-MDAwMjAwMEwgJiYKPiAgICAgICAgfCAgICAgICAgICAgIF5+fn5+fn5+fn4KPiAuLi4vYnVpbGQv
-cXQ1d2Via2l0LTUuMjEyLjAtYWxwaGE0L1NvdXJjZS9XZWJDb3JlL3BsYXRmb3JtL25ldHdvcmsv
-cXQvUmVzb3VyY2VSZXF1ZXN0UXQuY3BwOjY5Ojk6IGVycm9yOiDigJhRU3NsU29ja2V04oCZIGhh
-cyBub3QgYmVlbiBkZWNsYXJlZAo+ICAgICA2OSB8ICAgICAgICAgUVNzbFNvY2tldDo6c3NsTGli
-cmFyeVZlcnNpb25TdHJpbmcoKS5zdGFydHNXaXRoKFFMYXRpbjFTdHJpbmcoIk9wZW5TU0wiKSk7
-Cj4gICAgICAgIHwgICAgICAgICBefn5+fn5+fn5+Cj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0+OC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gCj4gU2lnbmVkLW9mZi1i
-eTogQWxleGV5IEJyb2RraW4gPGFicm9ka2luQHN5bm9wc3lzLmNvbT4KPiBDYzogRmFicmljZSBG
-b250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4gQ2M6IEphbWVzIEhpbGxpYXJk
-IDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+IENjOiBQZXRlciBTZWlkZXJlciA8cHMucmVw
-b3J0QGdteC5uZXQ+Cj4gQ2M6IFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZy
-PgoKICBBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAt
-LS0KPiAKPiBDaGFuZ2VzIHYxIC0+IHYyOgo+IAo+ICAgKiBBZGRlZCAib3BlbnNzbCIgdG8gUVQ1
-V0VCS0lUX0RFUEVOREVOQ0lFUywgdGhhbmtzIFlhbm4gZm9yCj4gICAgIHNwb3R0aW5nIHRoaXMg
-b25lLgo+IAo+IE5vdGUgdGhhdCBJIGludGVybnRpb25hbGx5IGFkZGVkICJvcGVuc3NsIiBub3Qg
-Zm9sbG93aW5nCj4gYWxwaGFiZXRpYyBvcmRlciBiZWNhdXNlOgo+IAo+ICAgMS4gRXhpc3Rpbmcg
-ZGVwZW5kZW5jaWVzIGFyZSBhbHJlYWR5IGEgYml0IHNodWZmZmxlZAo+ICAgMi4gSSB3YW50ZWQg
-dG8ga2VlcCB0aGlzIGRpZmYgYXMgc21hbGwgYXMgcG9zc2libGUsIHcvbwo+ICAgICAgcmUtc2h1
-ZmZsaW5nIG11bHRpcGxlIGxpbmVzLiBJZiByZWFsbHkgbmVlZGVkIHdlIG1heSBkbwo+ICAgICAg
-cmVvcmRlcmluZyBpbiBhIHNlcGFyYXRlIHBhdGNoLgo+IAo+IC0tLQo+ICAgcGFja2FnZS9xdDUv
-cXQ1d2Via2l0L0NvbmZpZy5pbiAgICB8IDEgKwo+ICAgcGFja2FnZS9xdDUvcXQ1d2Via2l0L3F0
-NXdlYmtpdC5tayB8IDIgKy0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAx
-IGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0NXdlYmtpdC9Db25m
-aWcuaW4gYi9wYWNrYWdlL3F0NS9xdDV3ZWJraXQvQ29uZmlnLmluCj4gaW5kZXggZWQ4N2VmY2E5
-NS4uMjZjMzg5N2QxZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3F0NS9xdDV3ZWJraXQvQ29uZmln
-LmluCj4gKysrIGIvcGFja2FnZS9xdDUvcXQ1d2Via2l0L0NvbmZpZy5pbgo+IEBAIC0xNSw2ICsx
-NSw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9RVDVXRUJLSVQKPiAgIAlzZWxlY3QgQlIyX1BBQ0tB
-R0VfSlBFRwo+ICAgCXNlbGVjdCBCUjJfUEFDS0FHRV9MRVZFTERCCj4gICAJc2VsZWN0IEJSMl9Q
-QUNLQUdFX0xJQlBORwo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX09QRU5TU0wKPiAgIAlzZWxlY3Qg
-QlIyX1BBQ0tBR0VfUVQ1QkFTRV9JQ1UKPiAgIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUVQ1QkFTRV9H
-VUkKPiAgIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUVQ1QkFTRV9XSURHRVRTCj4gZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvcXQ1L3F0NXdlYmtpdC9xdDV3ZWJraXQubWsgYi9wYWNrYWdlL3F0NS9xdDV3ZWJr
-aXQvcXQ1d2Via2l0Lm1rCj4gaW5kZXggMmU5NmFjYzAwZi4uYzliMzU0ZTcyNSAxMDA2NDQKPiAt
-LS0gYS9wYWNrYWdlL3F0NS9xdDV3ZWJraXQvcXQ1d2Via2l0Lm1rCj4gKysrIGIvcGFja2FnZS9x
-dDUvcXQ1d2Via2l0L3F0NXdlYmtpdC5tawo+IEBAIC0xMCw3ICsxMCw3IEBAIFFUNVdFQktJVF9T
-T1VSQ0UgPSBxdHdlYmtpdC0kKFFUNVdFQktJVF9WRVJTSU9OKS50YXIueHoKPiAgIFFUNVdFQktJ
-VF9ERVBFTkRFTkNJRVMgPSBcCj4gICAJaG9zdC1iaXNvbiBob3N0LWZsZXggaG9zdC1ncGVyZiBo
-b3N0LXB5dGhvbjMgaG9zdC1ydWJ5IGdzdHJlYW1lcjEgXAo+ICAgCWdzdDEtcGx1Z2lucy1iYXNl
-IGljdSBsZXZlbGRiIGpwZWcgbGlicG5nIGxpYnhtbDIgbGlieHNsdCBxdDVsb2NhdGlvbiBcCj4g
-LQlxdDVzZW5zb3JzIHF0NXdlYmNoYW5uZWwgc3FsaXRlIHdlYnAgd29mZjIKPiArCW9wZW5zc2wg
-cXQ1c2Vuc29ycyBxdDV3ZWJjaGFubmVsIHNxbGl0ZSB3ZWJwIHdvZmYyCj4gICBRVDVXRUJLSVRf
-SU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gICAKPiAgIFFUNVdFQktJVF9MSUNFTlNFX0ZJTEVTID0g
-U291cmNlL1dlYkNvcmUvTElDRU5TRS1MR1BMLTIgU291cmNlL1dlYkNvcmUvTElDRU5TRS1MR1BM
-LTIuMQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 22/02/2022 22:32, Julien Olivain wrote:
+> When enabling MariaDB (BR2_PACKAGE_MARIADB=y) and systemd
+> (BR2_INIT_SYSTEMD=y) in buildroot, the mysqld.service fail to start
+> with a permission error.  See output of command:
+> 
+>      journalctl --unit=mysqld
+> 
+> Which shows:
+> 
+>      systemd[1]: Starting MySQL database server...
+>      install[102]: install: can't create directory '/var/log/mysql': Permission denied
+>      systemd[1]: mysqld.service: Control process exited, code=exited, status=1/FAILURE
+> 
+> Since the service file includes the "User=mysql" directive, the
+> "ExecStartPre=" is executed as this user, which does not have
+> permission to create a directory in "/var/log".
+> 
+> This commit fixes this issue by adding the "!" prefix, which will
+> execute the command with full privileges.  See the systemd.service manual
+> page entry for "ExecStart=", table "Special executable prefixes":
+> https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
+> or https://github.com/systemd/systemd/blob/v250/man/systemd.service.xml#L339
+> 
+> Moreover, the "mysql_install_db" invocation does not need this special
+> prefix, as the "/var/lib/mysql" directory on target is already owned
+> by the "mysql" user.  The "chown" command is also useless and is
+> removed in this commit.
+> 
+> Reported-by: Gilles Talis <gilles.talis@gmail.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+  Applied to master, thanks.
+
+  Excellent commit message BTW.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/mariadb/mysqld.service | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
+> index d9ea74ebc3..537430e9a2 100644
+> --- a/package/mariadb/mysqld.service
+> +++ b/package/mariadb/mysqld.service
+> @@ -2,8 +2,8 @@
+>   Description=MySQL database server
+>   
+>   [Service]
+> -ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
+> -ExecStartPre=install -d -o mysql -g root -m 0755 /var/log/mysql
+> +ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
+> +ExecStartPre=!install -d -o mysql -g root -m 0755 /var/log/mysql
+>   ExecStart=/usr/bin/mysqld_safe --log-error=/var/log/mysql/mysqld.log
+>   Restart=always
+>   User=mysql
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
