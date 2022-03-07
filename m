@@ -4,79 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7AA3C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8084C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84C8541711;
-	Mon,  7 Mar 2022 22:34:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 637C04174D;
+	Mon,  7 Mar 2022 22:36:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pR1HnplTZcWY; Mon,  7 Mar 2022 22:34:46 +0000 (UTC)
+	with ESMTP id 56OaRpwNGJF4; Mon,  7 Mar 2022 22:36:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 077AB410A3;
-	Mon,  7 Mar 2022 22:34:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F1571BF39D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:34:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88D12410B3;
+	Mon,  7 Mar 2022 22:36:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D78B1BF39D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DE4860BA3
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:34:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CB3982835
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:36:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 39q38_-eQWKF for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 22:34:43 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AyP5FHMk-kOc for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 22:36:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C808660597
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:34:42 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- bi14-20020a05600c3d8e00b00386f2897400so309669wmb.5
- for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:34:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=JzHm0cmPfUXp453w9/aaIZIYR/IbRVb5QRV+qfHeAI4=;
- b=VOhM5/Rj9xsZ2SW3JbHX3JQe7g4PAX52Uip04DshpzrXQWecYYMDuTQshhG5ThjQd5
- H3ob+UKvjDYTuBnIlKjC3m4ID7mHecIZaRGWzMIiEwS1K/Byp86ykoz2HXfZMGOGp2mu
- 0LdMnk4oYgjzwKOpd4IvHaiB7UC8iwGnr3Blbj0o8W8TIMe+4UKKUJtqeZbS1RbyaYXS
- xwFudddbjs3aeC2IJodBSF3A+eraGkN4HwhGbRjmWIx0hQErihpoyVMjgi87iLxsik8h
- yo7MOkn6QEbGEe0W7QymqXkPRtoXes7F1QpQwEsJRalv6sWCcllvq/hSQB46W0QSPQag
- Znnw==
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96697825DC
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:36:20 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id z19so615919edb.12
+ for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:36:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=3u3VLG6rzIYgr02ss0VkHK6Z5fGpJIgSA/WuxcO3a64=;
+ b=Oh7S4fzgIiDGS09VhLeVNnWF++f6Erjm0/R9Ow/zjnscGfyXcPUargbCPLEYEeFunx
+ oNErapU76tlK5ox84/GP1Of59UrdczfZo7yoyVxm0nfkij/oDnKwnPUaqFMhlU3x7y9f
+ ww9Jr4jP2uBEjZnlMu1yvtenIzRcN2R+7Ty8vANUT/5GE0Qzj8H3fo2V152z7St8lpAw
+ Iywm23x8UPIeqUxTwdWf0TMsHWSctxwYNvYhLMlO1w7+rm50lbivdHp8brGPFYummEMO
+ ZKPvCEUADrjGuOZC9exgYJtlWRZxKq7ubSsiajMLlqTkqqY8ud5esAxeH+mlOkLUhnqD
+ lqxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=JzHm0cmPfUXp453w9/aaIZIYR/IbRVb5QRV+qfHeAI4=;
- b=US7pf6qP4qw4k0PTJ4pk2VDei27pDUzt53T4Qo3yqyB7HJqaUliSroibX7RcQ1+2Np
- WaNWmK84gslvLyG4Qn5ERLWXhKSMzhJCF/rAT2OvM8pMsJ6qY3bUxzd7LE5A99/TYBx5
- Z5RfnIeLu0MHl5312KS2Z+IoKly7tkjGHE56E9RdFit+hitoH6Bhtx51dZnrJaYHJ9dz
- omdGMz3bT61MbCTH6wfAPuhVylbDyit/XpPTKY3wP9GP42g+aqSmIClokLfVuP0eX4oX
- tIsAEBCgkfd5hibmqqFUPspapW/T5FrLq7eVyUxlgR76rEzmjapFcnR93S9VjkOtCoTm
- If+g==
-X-Gm-Message-State: AOAM533eqqZtYGLG1IMXDHIh/q3BGmpbyfwYWCvw/LC0QRr8E84bQtrn
- PwcTZEc3wpqFlDO769kSqtXYZAdhZcY=
-X-Google-Smtp-Source: ABdhPJzd9A+4uGtxS6aTljadmVccrsQi8gG6gWhWuVF/BvYZ0/bNle2WhFvJ9Z/AYOFdBJU8Jh0HTA==
-X-Received: by 2002:a05:600c:418a:b0:384:224e:1817 with SMTP id
- p10-20020a05600c418a00b00384224e1817mr907208wmh.123.1646692480728; 
- Mon, 07 Mar 2022 14:34:40 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=3u3VLG6rzIYgr02ss0VkHK6Z5fGpJIgSA/WuxcO3a64=;
+ b=b7Xdj7V40mLbGUWT9X4ogLUtVoqXpX4ukGgbgq3FMAKpw7JQlD80PHdxdBEh5RVloC
+ 7XXojxfXTytqZCWq8Hzp1LmSDmkiNgL9ro9+DlIsjWnFuH7L+P+xgVPVLhQD9V5cndpz
+ KkjFIQWDIAhyUaOzbt2IJFD/R8XZjnQMtZl7AUC9iuJ8rNpM1ToRf4ESBblCWwTNwsVS
+ LgTRcNeDTUob5su08vK8Auwge5IlL8q7W+gH+9Qgh5ZGDR3deWWQBHfhIl0w9ZvV0rNu
+ 8diDix9/XUjAbe53OnFa6EDkEEmfVyP3XguOgQAKBz3+mkNui22nyQLt8lUkCpqpZHJn
+ 8Dag==
+X-Gm-Message-State: AOAM530ahz8L930bhIF21ytTN7MICXDq4Dserz1rpynhi0bM2xhaOB/6
+ weka0VgUAheBrYUg8NKEknClXmS6W+gNiw==
+X-Google-Smtp-Source: ABdhPJwtUBhE0ieUs+AU467HgDjyOLa5tOSz+N8ZGX9M4YAgxw2pmEX2sGvyVzdEKFFiqw0xZYHNxQ==
+X-Received: by 2002:a05:6402:5111:b0:416:1ffb:a6da with SMTP id
+ m17-20020a056402511100b004161ffba6damr12403963edd.312.1646692578936; 
+ Mon, 07 Mar 2022 14:36:18 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- 11-20020a05600c22cb00b00382a960b17csm518710wmg.7.2022.03.07.14.34.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Mar 2022 14:34:40 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  7 Mar 2022 23:33:55 +0100
-Message-Id: <20220307223355.945328-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ l20-20020a1709062a9400b006ce71a88bf5sm5156775eje.183.2022.03.07.14.36.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 07 Mar 2022 14:36:18 -0800 (PST)
+Message-ID: <6aaa39df-836f-055e-6f40-a077f690b669@mind.be>
+Date: Mon, 7 Mar 2022 23:36:17 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/oprofile: drop custom install rules
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Jacques Samoun <jacques.samoun33@gmail.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+References: <CACaKL1wxLACzdRqojEaji9p70okZ+EcBMJkUNOwYuDyvU-5AuQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CACaKL1wxLACzdRqojEaji9p70okZ+EcBMJkUNOwYuDyvU-5AuQ@mail.gmail.com>
+Subject: Re: [Buildroot] cannot make the device_table
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,92 +95,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop custom install rules which have added since commit
-676797d57f33fbe9d5adc81932847154ebd1ce93. Indeed, they result in a
-broken installation. Especially, they are trying to "guess" what must
-be installed based on BR2_ARCH but oprofile has its own logic. For
-example, goldmont microarchitecture files must be installed in i386
-directory even if this architecture is 64 bits:
-https://sourceforge.net/p/oprofile/oprofile/ci/0ad5a9e6af86a88e1dd41180f45bc48b646eba6a
 
-This will result in the following runtime failure:
 
-oprofile: could not open unit mask description file /usr/share/oprofile//i386/goldmont/unit_masks
-Unable to find info for event cpu_clk_unhalted
+On 06/03/2022 13:46, Jacques Samoun wrote:
+> Hello,
+> despite all my tries, i just cannot make the "device_table" feature work as 
+> described in the manual.
+> Basically, i am trying to set 666 rights to /dev/tty + add a dialout group, so i 
+> created the following file (device_table.txt"
+> 
+> /dev/tty c 666 root dialout 5 0 - - -
+> 
+> and have set the correct variable in menuconfig. I know for sure that the build 
+> has handled this file ... but looking at the /dev/tty, it is clear that nothing 
+> has happened, the permissions are still 600 and the dialout group has not been set.
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=14641
+  When you say "looking at /dev/tty", do you mean looking at the contents of the 
+tarball (or rootfs), or do you mean what appears after boot? Unless you have a 
+very specific configuration (i.e. device managemnt: Static using device table), 
+/dev will be a devtmpfs and the kernel will override anything you have set in 
+device_table. So in that case you need dynamic handling using udev or mdev.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/oprofile/oprofile.mk | 41 ------------------------------------
- 1 file changed, 41 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 85bc4efa9b..265d6ebd18 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -14,51 +14,10 @@ OPROFILE_CONF_OPTS = \
- 	--enable-gui=no \
- 	--with-kernel=$(STAGING_DIR)/usr
- 
--OPROFILE_BINARIES = \
--	utils/ophelp pp/opannotate pp/oparchive pp/opgprof \
--	pp/opreport opjitconv/opjitconv \
--	utils/op-check-perfevents libabi/opimport \
--	pe_counting/ocount pe_profiling/operf
--
--ifeq ($(BR2_i386),y)
--OPROFILE_ARCH = i386
--endif
--ifeq ($(BR2_mipsel),y)
--OPROFILE_ARCH = mips
--endif
--ifeq ($(BR2_powerpc),y)
--OPROFILE_ARCH = ppc
--endif
--ifeq ($(BR2_x86_64),y)
--OPROFILE_ARCH = x86-64
--endif
--ifeq ($(OPROFILE_ARCH),)
--OPROFILE_ARCH = $(BR2_ARCH)
--endif
--
- OPROFILE_DEPENDENCIES = popt binutils host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBPFM4),y)
- OPROFILE_DEPENDENCIES += libpfm4
- endif
- 
--ifeq ($(BR2_STATIC_LIBS),)
--define OPROFILE_INSTALL_SHARED_LIBRARY
--	$(INSTALL) -m 755 $(@D)/libopagent/.libs/*.so* $(TARGET_DIR)/usr/lib/oprofile
--endef
--endif
--
--define OPROFILE_INSTALL_TARGET_CMDS
--	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
--	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
--	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/oprofile
--	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
--		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
--			$(TARGET_DIR)/usr/share/oprofile; \
--	fi
--	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
--	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
--	$(OPROFILE_INSTALL_SHARED_LIBRARY)
--endef
--
- $(eval $(autotools-package))
--- 
-2.34.1
+  Regards,
+  Arnout
 
+> 
+> Am I missing something ?
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
