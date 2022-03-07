@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD850C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 10:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15696C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 10:39:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66F9081B71;
-	Mon,  7 Mar 2022 10:37:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A27364047B;
+	Mon,  7 Mar 2022 10:39:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kb3H2DMWOgVg; Mon,  7 Mar 2022 10:37:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P4FhjDGkQydR; Mon,  7 Mar 2022 10:39:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 995F681B3E;
-	Mon,  7 Mar 2022 10:37:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0FDB91BF3A8
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:37:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1EC540396;
+	Mon,  7 Mar 2022 10:39:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E89DE1BF3A8
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F30D781B3E
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:37:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8047408A3
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:39:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eSghaFQojGdZ for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 10:37:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jFRC7J5rCpVY for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 10:39:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C2D2A81B35
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 10:37:46 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F220D4033C
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 10:39:18 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 03979100008;
- Mon,  7 Mar 2022 10:37:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 936FA60007;
+ Mon,  7 Mar 2022 10:39:15 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nRAkH-000p03-Ql; Mon, 07 Mar 2022 11:37:41 +0100
+ id 1nRAlm-000p1N-9E; Mon, 07 Mar 2022 11:39:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220223155128.818822-1-bernd.kuhls@t-online.de>
-Date: Mon, 07 Mar 2022 11:37:41 +0100
-In-Reply-To: <20220223155128.818822-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 23 Feb 2022 16:51:28 +0100")
-Message-ID: <87k0d682ve.fsf@dell.be.48ers.dk>
+References: <20220223155942.831349-1-bernd.kuhls@t-online.de>
+Date: Mon, 07 Mar 2022 11:39:14 +0100
+In-Reply-To: <20220223155942.831349-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 23 Feb 2022 16:59:42 +0100")
+Message-ID: <87fsnu82st.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Subject: Re: [Buildroot] [PATCH 1/1]
- package/x11r7/xdriver_xf86-video-mach64: fix build error
+ package/x11r7/xdriver_xf86-video-nouveau: fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,10 +71,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > Add upstream commit to fix build with xorg-server 21.1 which was bumped
  > with commit d9185c6ba38430a017ed996c4180e141881ba570.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/f0a/f0a0224a2b368c11236fcc7d14db5175c0a829d1/
+ > No autobuild errors found yet.
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+..
+
+ > ++++ b/src/nv_driver.c
+ > +@@ -559,16 +559,16 @@ redisplay_dirty(ScreenPtr screen, PixmapDirtyUpdatePtr dirty)
+ > + {
+ > + 	RegionRec pixregion;
+ > + 
+ > +-	PixmapRegionInit(&pixregion, dirty->slave_dst);
+ > ++	PixmapRegionInit(&pixregion, dirty->secondary_dst);
+ > + 
+ > +-	DamageRegionAppend(&dirty->slave_dst->drawable, &pixregion);
+ > ++	DamageRegionAppend(&dirty->secondary_dst->drawable, &pixregion);
+
+Grr, silly PC churn.
 
 Committed, thanks.
 
