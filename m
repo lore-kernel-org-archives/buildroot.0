@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8564CC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:44:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C470C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 21:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 489A28132D;
-	Mon,  7 Mar 2022 19:44:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4P6WiGlNp1oY; Mon,  7 Mar 2022 19:44:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8432C8130D;
-	Mon,  7 Mar 2022 19:44:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D79001BF36D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:44:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C730440308
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:44:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EBD441620;
+	Mon,  7 Mar 2022 21:29:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Q_Xg6xuBV4a for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 19:44:27 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BOQalzj1kJjc; Mon,  7 Mar 2022 21:29:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 467FD41523;
+	Mon,  7 Mar 2022 21:29:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 492011BF2C3
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:29:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4562F81D3A
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:29:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OVpzT2soiHbW for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 21:29:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39236402FA
- for <buildroot@uclibc.org>; Mon,  7 Mar 2022 19:44:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC34C81BE3
+ for <buildroot@uclibc.org>; Mon,  7 Mar 2022 21:29:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 99C8F82A9F; Mon,  7 Mar 2022 19:36:03 +0000 (UTC)
+ id E2AB282941; Mon,  7 Mar 2022 21:21:19 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 07 Mar 2022 19:44:26 +0000
+Date: Mon, 07 Mar 2022 21:29:43 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2018.02
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocker
+X-Bugzilla-Severity: normal
 X-Bugzilla-Who: jacmet@uclibc.org
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: FIXED
@@ -51,14 +51,14 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-13126-163-idokOVWKPS@https.bugs.busybox.net/>
-In-Reply-To: <bug-13126-163@https.bugs.busybox.net/>
-References: <bug-13126-163@https.bugs.busybox.net/>
+Message-ID: <bug-14631-163-WHGCe0JliK@https.bugs.busybox.net/>
+In-Reply-To: <bug-14631-163@https.bugs.busybox.net/>
+References: <bug-14631-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 13126] make fails - bzip2-1.0.6.tar.gz and
- DirectFB-1.7.7.tar.gz aren't tarballs
+Subject: [Buildroot] [Bug 14631] host-go-bootstrap: go not being built for
+ package in external tree
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,7 +75,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=13126
+https://bugs.busybox.net/show_bug.cgi?id=14631
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
 
@@ -84,9 +84,10 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
          Resolution|---                         |FIXED
              Status|NEW                         |RESOLVED
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed for directfb{,-examples} as well with
-https://git.buildroot.org/buildroot/commit/?id=89ab2a5a3f4588891ab1e9e76feb8c3f69402d5c
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=3539f45ca09558a22fb5816baae9088c34490380,
+thanks
 
 -- 
 You are receiving this mail because:
