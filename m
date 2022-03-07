@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F8D3C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FD45C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 309DD60D57;
-	Mon,  7 Mar 2022 22:39:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4AF260EF9;
+	Mon,  7 Mar 2022 22:42:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3vO12llJyyxp; Mon,  7 Mar 2022 22:39:21 +0000 (UTC)
+	with ESMTP id 5AUtIaRURa-l; Mon,  7 Mar 2022 22:42:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6041E60EF9;
-	Mon,  7 Mar 2022 22:39:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF0AD1BF39D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:39:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9FA160773;
+	Mon,  7 Mar 2022 22:42:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 20EC81BF39D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:42:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC7C2812D8
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:39:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0DD1360773
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:42:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NnCrheDPYRux for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 22:39:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp1.osuosl.org (Postfix) with ESMTP id 546528131E
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:39:16 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.7.124])
- by Aruba Outgoing Smtp  with ESMTPSA
- id RM0Wn9f61POoWRM0Wnhy2U; Mon, 07 Mar 2022 23:39:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1646692753; bh=kufbrQEVYnnGDxoNNcuu6220z9gBux/KQ/IrDIpZrSc=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=MorBfdWmJASDXOcY81fTLkdd+D8SlMpAgJA6QRwd3OHRCClBURSI8m1vTRLKM/P7u
- xgc2TLLzG+espAohBb2gRCU8JC/ids+XAe1Gljbs0n6iwtMBEf++B/ZVYm9xG0aHJ/
- hz9sFe1iHvZ+hgvKKPXtYDo84jiLkHm2Qp8j0U4Ql+mzsmpYmTc3rX9lVdsBT1jQfc
- nROeBmdREcG0+k+53eVIt/us4eze4SicjDBqRFDTIn+bqt4VToNei3uNCBnNsH/KXc
- cdB/Q1VsIQI82UakacjPE8emnOFxLvsVHn6ndcsUxHOECLhlTcmIcIfM8WK7SIYhJ2
- Bt3sUcy2MaWPw==
-Message-ID: <5226fc1a-8e39-26ea-8ef8-ad435bc317f8@benettiengineering.com>
-Date: Mon, 7 Mar 2022 23:39:12 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X4IBLZgAQZmP for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 22:42:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com
+ [209.85.216.45])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8814D60597
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:42:30 +0000 (UTC)
+Received: by mail-pj1-f45.google.com with SMTP id v4so15419839pjh.2
+ for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:42:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=JtWSOjOcKOJvIIdfhJGoZKJF0+1HWsc2HRmc/1q8dj4=;
+ b=kb0Ylx3ug1HMcJamDXiF5+tg1Ea8mUkPSNhf15QJWVpS4o/SwEKe63RAujSwQDjpzo
+ WNiow9WxF20dpA3VJDRlRTT6OtA+jUhYGVWliVSM2bPC8SoAFHOd5ZaESSHIuuE7R0pX
+ QcCO+W6Jrn/saOrebyFqkGvf3f7hpnalzHbpCTGm+UwzG3Q/TXZny7fv1Swd475M6ZTf
+ Qg9frJIIK2cBwUmcwmrSKu6Cu8RYBl/gxpvVvLhWD9TO6ai5VAyMGGZOxhi8p8hRiI70
+ YYPf1gGPGxu7mW7kg8oDC8LWftWLRLdDJATwYDmhf0Ao9P93XXZtbmggMv0NGaft+68Z
+ 6HCg==
+X-Gm-Message-State: AOAM533RQCRQ/4Qf6CmQs4GG2tt4/A1YKTh9jZ7+eU+s8+8OIlRsMDXv
+ w9fkh9GijyevG8iCT8FEgJV0HPVYF4g=
+X-Google-Smtp-Source: ABdhPJzoQRuHbhiHsaI8uAnnhfZ70YaWFhcd8o6BFKC6fjnPOOxSmoeILhLwM1C6R8Tw0bLgItJIjQ==
+X-Received: by 2002:a17:902:6b4a:b0:14d:474f:4904 with SMTP id
+ g10-20020a1709026b4a00b0014d474f4904mr14440814plt.122.1646692949582; 
+ Mon, 07 Mar 2022 14:42:29 -0800 (PST)
+Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
+ by smtp.gmail.com with ESMTPSA id
+ on18-20020a17090b1d1200b001b9cfbfbf00sm349108pjb.40.2022.03.07.14.42.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Mar 2022 14:42:29 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Mon,  7 Mar 2022 14:42:26 -0800
+Message-Id: <20220307224226.1375696-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20220218110914.3098061-1-giulio.benetti@benettiengineering.com>
- <67313303-db84-93cd-d96b-56db0c73976b@mind.be>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <67313303-db84-93cd-d96b-56db0c73976b@mind.be>
-X-CMAE-Envelope: MS4wfDLV8yfD5Z8RvQe9SYsYs2tugELT+PKrNPzT998rGQTXH5kITkW/YjxJ8k9kQbrZCPS/YpkUvHLt+esPhlitmZZNWHMbhk2ArawYkSS0USpUmWief4Fg
- cpwduJ6rOCACvz0nS8STcs8MYhf6SgEq+uN/jHqsVvZxkTC+25aX1ZjvEQAFfyycwgksXT2+pmVm2dtX2Bd2LcDDZD2bN0XgjcjDPE5FDV/2dmWmfKCK7wEC
- aBr0TlkqPXFOA8vUdgxDveJ5Qp7ElbjN3PiXejaJP5o=
-Subject: Re: [Buildroot] [PATCH]
- configs/microchip_sam9x60ek_mmc_dev_defconfig: fix build failure due to
- previous wrong commit
+Subject: [Buildroot] [PATCH v2 1/1] package/rpi-userland: add support for
+ aarch64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,70 +74,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/03/22 22:46, Arnout Vandecappelle wrote:
-> 
-> 
-> On 18/02/2022 12:09, Giulio Benetti wrote:
->> Commit 616ba9c90b014637dc9925fa442a0af4a11f04b8 extended rootfs size, but
->> the option was listed in the wrong place. Options must be set in the order
-> 
->    Order doesn't matter in kconfig. The problem was the lack of quotes.
+Tested on Pi4 Model B (aarch64).
 
-Oh, maybe I was told only because of style some time ago. I didn't see 
-the quotes.. probably I was/am cooked.
+Note: rpi-userland and upstream rpi os now support arm64.
 
->    Updated the commit message and applied to master, thanks.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/rpi-userland/Config.in       | 4 ++--
+ package/rpi-userland/rpi-userland.mk | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Thank you!
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 342faf26e3..81f3588822 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_RPI_USERLAND
+ 	bool "rpi-userland"
+-	depends on BR2_arm
++	depends on BR2_arm || BR2_aarch64
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+@@ -40,6 +40,6 @@ config BR2_PACKAGE_RPI_USERLAND_HELLO
+ endif
+ 
+ comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
+-	depends on BR2_arm
++	depends on BR2_arm || BR2_aarch64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 84050b6df3..8a05bf2b51 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -13,6 +13,10 @@ RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
+ 
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+ 
++ifeq ($(BR2_aarch64),y)
++RPI_USERLAND_CONF_OPTS += -DARM64=ON
++endif
++
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
+ 
+ RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->    Regards,
->    Arnout
-> 
->> they are specified by Config.in files. So let's move
->> BR2_TARGET_ROOTFS_EXT2_SIZE="120M" right after BR2_TARGET_ROOTFS_EXT2_4=y
->> as it should be.
->>
->> Fixes:
->> https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784289
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>    configs/microchip_sam9x60ek_mmc_dev_defconfig | 2 +-
->>    1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
->> index 00ccd784b5..06e03967c4 100644
->> --- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
->> +++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
->> @@ -7,7 +7,6 @@ BR2_TARGET_GENERIC_HOSTNAME="sam9x60ek"
->>    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->>    BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->>    BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sam9x60ek_mmc/genimage.cfg"
->> -BR2_TARGET_ROOTFS_EXT2_SIZE=120M
->>    BR2_LINUX_KERNEL=y
->>    BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->>    BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
->> @@ -67,6 +66,7 @@ BR2_PACKAGE_HTOP=y
->>    BR2_PACKAGE_VIM=y
->>    BR2_TARGET_ROOTFS_EXT2=y
->>    BR2_TARGET_ROOTFS_EXT2_4=y
->> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->>    BR2_TARGET_AT91BOOTSTRAP3=y
->>    BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
->>    BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+2.35.1
 
 _______________________________________________
 buildroot mailing list
