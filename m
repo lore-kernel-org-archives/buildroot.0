@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DDFDC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46DB5C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B732C83E60;
-	Mon,  7 Mar 2022 22:09:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RH3T1f6uKc6L; Mon,  7 Mar 2022 22:09:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E261E8294A;
-	Mon,  7 Mar 2022 22:09:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EB761BF39D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C7B041744
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BE8241747;
+	Mon,  7 Mar 2022 22:10:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cZaX3Ae9rJEB for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CAQ6wRoBRFIY; Mon,  7 Mar 2022 22:10:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3080F41745;
+	Mon,  7 Mar 2022 22:10:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B70A1BF982
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 676E740734
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mLbHl0o7zp77 for <buildroot@lists.busybox.net>;
  Mon,  7 Mar 2022 22:09:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AED5F4173F
+ by smtp2.osuosl.org (Postfix) with ESMTP id A69BB404F3
  for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:09:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D663282DD8; Mon,  7 Mar 2022 22:01:26 +0000 (UTC)
+ id CB48E82941; Mon,  7 Mar 2022 22:01:26 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 22:53:39 +0100
+Date: Mon, 7 Mar 2022 22:52:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4811802acbd16488adc32a7e340067700cec85c
-X-Git-Newrev: b5b4496c425576e4e444b65474d397aeb4a7cd42
+X-Git-Oldrev: 1e1976a25d2a967759fddb747a074343678b42ef
+X-Git-Newrev: d4811802acbd16488adc32a7e340067700cec85c
 X-Patchwork-Hint: ignore
-Message-Id: <20220307220126.D663282DD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-treq: fix dependencies
+Message-Id: <20220307220126.CB48E82941@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/osm2pgsql: disable external fmt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +58,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5b4496c425576e4e444b65474d397aeb4a7cd42
+commit: https://git.buildroot.net/buildroot/commit/?id=d4811802acbd16488adc32a7e340067700cec85c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-python-treq needs TLS support in twisted so select
-BR2_PACKAGE_PYTHON_TWISTED_TLS moreover it doesn't depend directly on
-service_identity and pyOpenSSL since version 17.3.0 and
-https://github.com/twisted/treq/commit/ef2ac7ea2b74774adb9fef7675facc6017bfda89
+osm2pgsql doesn't support fmt > 8.0 yet resulting in the following build
+failure since bump of fmt to version 8.1.1 in commit
+ec7fd50d08690a383fec40748ac9b78c3f764316:
 
-Finally, python-idna was never a direct dependency of python-treq
+/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/fmt/core.h:1728:7: error: static assertion failed: Cannot format an argument. To make type T formattable provide a formatter<T> specialization: https://fmt.dev/latest/api.html#udt
+ 1728 |       formattable,
+      |       ^~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5af1a0ea176559a5dc787ba945a3a83823f5b1bb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-treq/Config.in | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/osm2pgsql/Config.in    | 5 ++---
+ package/osm2pgsql/osm2pgsql.mk | 5 +++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index f781b37305..7c02a35638 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -1,16 +1,13 @@
- config BR2_PACKAGE_PYTHON_TREQ
- 	bool "python-treq"
--	# python-pyopenssl -> python-cryptography
-+	# twisted TLS -> python-{pyopenssl,service-identity}
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
--	# python-idna, python-pyopenssl -> python-cryptography
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
--	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
--	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
--	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
-+	select BR2_PACKAGE_PYTHON_TWISTED_TLS # runtime
- 	help
- 	  treq is an HTTP library inspired by requests but written on
- 	  top of Twisted's Agents. It provides a simple, higher level
+diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
+index 315f496d8e..e903e92c49 100644
+--- a/package/osm2pgsql/Config.in
++++ b/package/osm2pgsql/Config.in
+@@ -1,17 +1,16 @@
+ config BR2_PACKAGE_OSM2PGSQL
+ 	bool "osm2pgsql"
+-	depends on BR2_INSTALL_LIBSTDCPP # boost, fmt, libosmium, protozero
++	depends on BR2_INSTALL_LIBSTDCPP # boost, libosmium, protozero
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libosmium
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+-	depends on BR2_USE_WCHAR # boost, fmt, libosmium
++	depends on BR2_USE_WCHAR # boost, libosmium
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_FMT
+ 	select BR2_PACKAGE_LIBOSMIUM
+ 	select BR2_PACKAGE_PROTOZERO
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
+index b00976d28b..d389fff590 100644
+--- a/package/osm2pgsql/osm2pgsql.mk
++++ b/package/osm2pgsql/osm2pgsql.mk
+@@ -10,12 +10,13 @@ OSM2PGSQL_LICENSE = GPL-2.0+
+ OSM2PGSQL_LICENSE_FILES = COPYING
+ OSM2PGSQL_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+-OSM2PGSQL_DEPENDENCIES = boost bzip2 expat fmt libosmium postgresql protozero zlib
++OSM2PGSQL_DEPENDENCIES = boost bzip2 expat libosmium postgresql protozero zlib
+ 
++# fmt > 8.0 is not yet supported
+ OSM2PGSQL_CONF_OPTS = \
+ 	-DBUILD_TESTS=OFF \
+ 	-DBUILD_COVERAGE=OFF \
+-	-DEXTERNAL_FMT=ON \
++	-DEXTERNAL_FMT=OFF \
+ 	-DEXTERNAL_LIBOSMIUM=ON \
+ 	-DEXTERNAL_PROTOZERO=ON
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
