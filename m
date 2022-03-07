@@ -1,80 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE54C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 05:29:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACD2EC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 09:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA35660DC6;
-	Mon,  7 Mar 2022 05:29:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EB4E40472;
+	Mon,  7 Mar 2022 09:56:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ifVQlnsRHOH7; Mon,  7 Mar 2022 05:29:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dm8TOrrp9S0V; Mon,  7 Mar 2022 09:56:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1E7360E2A;
-	Mon,  7 Mar 2022 05:29:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D6F011BF410
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 05:29:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E347B40396;
+	Mon,  7 Mar 2022 09:56:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED28C1BF3D8
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 09:56:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD9C860DED
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 05:29:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E982F815AC
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 09:56:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Z4xtCY3BnTQ for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 05:29:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
- [IPv6:2607:f8b0:4864:20::1033])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 244A760DB7
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 05:29:08 +0000 (UTC)
-Received: by mail-pj1-x1033.google.com with SMTP id
- p3-20020a17090a680300b001bbfb9d760eso15601331pjj.2
- for <buildroot@buildroot.org>; Sun, 06 Mar 2022 21:29:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=H0VGlebZxvC+A+XkrWcq69LuLFbwp7k1Enbr4I5zcvA=;
- b=TGnw8r2zaLZ/GPbq1oOBy996O3B50A7TkAUnljwLID83kjgxEdZ+J/vDBvCGQIb/15
- kw6PJ6PriMM+cTghHJhi5GbqG/JN2OQ3aDzu5if20pE9QVuDK3JAXGHwoVOzavftYrVr
- OK08PsYMwLeC80bS0ENQC2hMVTIJxXM2DUSNvb0Rwe3D6aqjKGd9VuzzGkRrBQHgHe+U
- vRWXjQZxZs1NkW3c9MuKyMtimRO8BD2G2zFmJbeXavS6H4n4HUFedSlhOTsd9J8Nr50J
- vSw6UZWsHBh01O/m5K60T36EQI7jyTVJqVj8mobEzo8Bxhh4pv5F4a13RKrgrTWuZ52E
- VS9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=H0VGlebZxvC+A+XkrWcq69LuLFbwp7k1Enbr4I5zcvA=;
- b=CfWpWhKUXTaWPVo1K1xzOBiBYzxhE7xQlEYzBadcwy/paNz2FjY8R5lfnRdwhPh1tY
- puztmErteIwF/b4oNOJmke5VYLRwNxcQwGwIwAzCMjyr1hHvu7sWG3TDVtuidh33gdRP
- QrDht38KNnC4I6RG8w673Ym//IXpmYtdz5YC4XjJNNbxrPyM36+UcRp4ZjFd43pbbgtk
- FFYPAQlOL7sZBrqC3bSu2dsC7vBYXXwYW1Q6Z/g4TOSw5a4ArE8ePr5s0T0uXQekjiVM
- 5PGJXv94gXUejvTn7xDuhW71ruikGC4O6rF7cJgg30WH12lw2+f/ZDJ+Ps8Ncxq8VJe5
- V2Jw==
-X-Gm-Message-State: AOAM532pzwNGRXaY13Hk+NepvIS/MN0roOI2IiOr+ut7IhELdP8LG/Ds
- jJYlUzx/ftSSygWlWPOBxPS7K39IH/uKyA==
-X-Google-Smtp-Source: ABdhPJyvJA0SfwmNi8Ev4t3D/5pZdcXLlkh5Mx+El7FXofkcXt0Rg+sEvSZlp7WnKt+kW7IhD8Fx5w==
-X-Received: by 2002:a17:90b:3886:b0:1bf:1a16:25d4 with SMTP id
- mu6-20020a17090b388600b001bf1a1625d4mr11217427pjb.193.1646630946685; 
- Sun, 06 Mar 2022 21:29:06 -0800 (PST)
-Received: from localhost.localdomain ([45.124.203.14])
- by smtp.gmail.com with ESMTPSA id
- z23-20020a17090a609700b001bf5a1830f3sm2728165pji.10.2022.03.06.21.29.04
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Mar 2022 21:29:05 -0800 (PST)
-From: Joel Stanley <joel@jms.id.au>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=audified.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9IQFV1lJi4cq for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 09:56:36 +0000 (UTC)
+X-Greylist: delayed 00:21:15 by SQLgrey-1.8.0
+Received: from scanner02.mail.supportedns.com (scanner02.mail.supportedns.com
+ [162.244.253.253])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0040E81324
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 09:56:35 +0000 (UTC)
+Received: from [162.244.253.208] (helo=s1.supportedns.com)
+ by scanner02.mail.supportedns.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <jan.havran@audified.com>)
+ id 1nR9ln-0004Dr-VG; Mon, 07 Mar 2022 04:35:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=audified.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:
+ To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=aTtLtuu/uaB6///X3CSf6Euj6RvuQrWWf/2kmz+v4Hs=; b=CmpaF5ry7yBG2ZmkjM7NEysJiB
+ 0grB5Oln5yye+rl63XGiOLaxvdPXW+4sJRXVXy/v+MCS+/UPaD9A9WcBaNWv5iCPvrrBq/Rsa7ZOX
+ Bnl2S9UfFzeUAe1fKpPydTuSP5h9vhVeVVYi8pddmj3eQTMWp8sDelEfmcSGhYQ33GqaijNqe/rHT
+ CK9fQxH4e3qDNTA0quK8MC0UeGEhwfhlQqNFLTFHDVgnO+Lno8kUIBz+dcbLljSN/L7TFGCiHUBT7
+ ldK5r+nfPOe2aQMXOuReMoxOGE0QDJ+hFT1FKr//3IyTBm49t2iGs3RR/uBjc25BiO0f+mZvFt/EW
+ Ch5SXU0A==;
+Received: from s1.supportedns.com
+ by s1.supportedns.com with esmtpsa (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+ (Exim 4.94.2) (envelope-from <jan.havran@audified.com>)
+ id 1nR9ln-0007ck-I4 ; Mon, 07 Mar 2022 04:35:10 -0500
+Date: Mon, 7 Mar 2022 10:35:00 +0100
+From: Jan Havran <jan.havran@audified.com>
 To: buildroot@buildroot.org
-Date: Mon,  7 Mar 2022 15:58:57 +1030
-Message-Id: <20220307052858.1245393-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.34.1
+Message-ID: <YiXRxFsrmOttLX0v@jan-lenovo>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/pdbg: bump version to v3.5
+Content-Disposition: inline
+X-Get-Message-Sender-Via: s1.supportedns.com: authenticated_id:
+ jan.havran@audified.com
+X-Authenticated-Sender: s1.supportedns.com: jan.havran@audified.com
+X-Originating-IP: 162.244.253.208
+X-SpamExperts-Domain: s1.supportedns.com
+X-SpamExperts-Username: 162.244.253.208
+Authentication-Results: mail.supportedns.com;
+ auth=pass smtp.auth=162.244.253.208@s1.supportedns.com
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00645131855388)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9Chp9m+HIvtXJBqOHTDCarPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xKipkaFeQDP2JiLCjsOSqCBHoJjdDPbdunZvlh+03gE741
+ MorrYTp3Q2sRstCycaO/tSxrFVzsbIOEYxo+kpKoFR7G4CDxv3qkX9mSMRuqPWXx2azEPCntGfKY
+ yhVHoImV7BznWA0019tmBCZ0egyK8R7nxCYULOfy7ludBe2Yqk/fot9zk6afHB2YKtuAY6tYkAy7
+ PO1lcLquvjHah/AdQKZ/6LmfyRFsGfqBKh4kLpR8CwVlrjZob8/qX7YBgn0MnhyuiI+nAIuKWhYn
+ SNHXAdeXjCDBOomVNP9963OKUwZXTaHOP7oKW7n27myvseKRqlQE9b1hXhIRJ1bJW0V1UYfuzJ1m
+ 8O31zlHQ8Dw4NmzfO6ib3rryOBZGk86Mee0fTjrYxVWetnNJmJU0xg+4Ro+qoaYPDKfQI/iQ02Sw
+ RkEqJ2YhaHYKPX4HHcW4fmLwMaxU9kdAsUlmPBVm5ea27cOhWXDfK9TM6YsdwzcbK97RSj4ScLDP
+ 7kMqPugOu2x6SorezLi5Ns+jiqHUYs4vIK/1NH5THMtlYvyHAYGOGiINloeONSMv6A+sGH/yfiSl
+ jMAtJ8Ou1AejrJGC3KslqcVyvgi3CSrlr4MXN1OsIqXL02oiVHXkdX7f8FjevLNKC5XROoL23kHH
+ 2wGTQk+5wT9Zy3KQJnQJEecdHvi2TiSKfT7CA9xPZsL2NgPZtmghxPoESTct0v5flu4eVCQeLqi5
+ qdcpdqU+BhmA5lIzK7Durnj0BmnqE4oDmeBwVyH1rJaoSVT6HPVKGY1p+m4qHL7vn0r+6mmiV6xb
+ nbfM91z1pRXWhjh9fdbl44I0Df2LHdMSnToGnh7oyUdL0AoYfdT8cU4JbwpG9wnU6h5/wZljkqi2
+ PdylKQ9l32xiDbg7by9QBeC+QdCKB3sSx1B9thRNgs7Ig4l/XErpYn3glWd7BMxKTTLmQIbtKN15
+ yV5Ww7t0zMxjdDUrXXKvN8YFtaly/uPaPGs4IuAYIIDnngDDN8ifMVT2aXkkKNtx9gT1LN6ds+4K
+ JfXy9tm3nWzZ
+X-Report-Abuse-To: spam@scanner01.mail.supportedns.com
+Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,41 +100,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Wojciech M. Zabolotny" <wzab01@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- package/pdbg/pdbg.hash | 2 +-
- package/pdbg/pdbg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+- Fix URL for 'JACK DBus packaging' GitHub Wiki page.
 
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-index df7ba314bfbc..58c256e6ceb2 100644
---- a/package/pdbg/pdbg.hash
-+++ b/package/pdbg/pdbg.hash
+https://github.com/jackaudio/jack2/releases/tag/v1.9.18
+https://github.com/jackaudio/jack2/releases/tag/v1.9.19
+https://github.com/jackaudio/jack2/releases/tag/v1.9.20
+
+Signed-off-by: Jan Havran <jan.havran@audified.com>
+---
+ package/jack2/Config.in  | 4 ++--
+ package/jack2/jack2.hash | 2 +-
+ package/jack2/jack2.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index bc883190d5..8abdda6376 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_JACK2_LEGACY
+ 	help
+ 	  Build and use jackd.
+ 
+-	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
++	  https://github.com/jackaudio/jackaudio.github.com/wiki/JACK-DBus-packaging
+ 
+ config BR2_PACKAGE_JACK2_DBUS
+ 	bool "dbus jack2"
+@@ -42,7 +42,7 @@ config BR2_PACKAGE_JACK2_DBUS
+ 	help
+ 	  Build and use jackdbus.
+ 
+-	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
++	  https://github.com/jackaudio/jackaudio.github.com/wiki/JACK-DBus-packaging
+ 
+ endif
+ 
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+index df708f7ca5..6361473cf7 100644
+--- a/package/jack2/jack2.hash
++++ b/package/jack2/jack2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 5b721fd5551591cd5626ccf72c8d9096d902de4da10324097a37b4763815f0d7 pdbg-3.4.tar.gz
-+sha256 7bdbab4e14b8cf50dbf6242955e46e58882c37b1a52671d9e6f3073885629dfa pdbg-3.5.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-index 5a5cfbc62d8a..871bf953f23e 100644
---- a/package/pdbg/pdbg.mk
-+++ b/package/pdbg/pdbg.mk
+-sha256  38f674bbc57852a8eb3d9faa1f96a0912d26f7d5df14c11005ad499c8ae352f2  jack2-1.9.17.tar.gz
++sha256  915ad2900992159bdb729b9fc4ea134b962ce32b2df0b384fee40a2c5808835d  jack2-1.9.20.tar.gz
+ sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index e6a036bac9..2e55169984 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PDBG_VERSION = 3.4
-+PDBG_VERSION = 3.5
- PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
- PDBG_LICENSE = Apache-2.0
- PDBG_LICENSE_FILES = COPYING
+-JACK2_VERSION = 1.9.17
++JACK2_VERSION = 1.9.20
+ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
