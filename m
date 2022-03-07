@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 054E0C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2424EC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E649E408DA;
-	Mon,  7 Mar 2022 19:39:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D02FD83E60;
+	Mon,  7 Mar 2022 19:43:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ijWu5gVFRYyX; Mon,  7 Mar 2022 19:39:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GmS85ShlnjpN; Mon,  7 Mar 2022 19:43:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A70C940A7E;
-	Mon,  7 Mar 2022 19:39:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 269F91BF36D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:39:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7DA083487;
+	Mon,  7 Mar 2022 19:43:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 74C4C1BF36D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1489540A8B
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:39:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D65C60EA5
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:43:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2C-1np1HpUfP for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 19:39:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB444404AB
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:39:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 47D9C82A9F; Mon,  7 Mar 2022 19:31:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mKf0Ex3cbLmL for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 19:43:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 438A860B5E
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:43:10 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3C097FF805;
+ Mon,  7 Mar 2022 19:43:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nRJG8-000z7B-E0; Mon, 07 Mar 2022 20:43:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 20:38:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4eebf191c781a3ea6b5eb1811cc17ae92ea2fb2
-X-Git-Newrev: 4386bbdf0895dbb35e02c25f42603bae9af64451
-X-Patchwork-Hint: ignore
-Message-Id: <20220307193103.47D9C82A9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python: use
- SETUPTOOLS_USE_DISTUTILS=stdlib
+To: Andrei Gherghescu via buildroot <buildroot@buildroot.org>
+References: <20220224213620.5899-1-andrei.gherghescu@protonmail.com>
+Date: Mon, 07 Mar 2022 20:43:08 +0100
+In-Reply-To: <20220224213620.5899-1-andrei.gherghescu@protonmail.com> (Andrei
+ Gherghescu via buildroot's message of "Thu, 24 Feb 2022 21:36:33
+ +0000")
+Message-ID: <878rtl7dmb.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/directfb: change upstream site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,81 +60,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Andrei Gherghescu <andrei.gherghescu@protonmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4386bbdf0895dbb35e02c25f42603bae9af64451
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Andrei" == Andrei Gherghescu via buildroot <buildroot@buildroot.org> writes:
 
- # ipython -c 'import math; math.floor(12.3)'
--sh: ipython: not found
+ > The http://www.directfb.org/ has been down since 2015.
+ > Use the Buildroot backup download site.
 
-ipython use a wrong shebang on the target:
+ > Fixes:
+ >    - https://bugs.busybox.net/show_bug.cgi?id=13731
 
- # head -n 1 /usr/bin/ipython
- #!/home/kubu/buildroot/testsuite-master/TestIPythonPy3/host/bin/python
+That bug is about readline. I guess you mean
+https://bugs.busybox.net/show_bug.cgi?id=13126 instead?
 
-The issue come from python3-setuptools 60.0.0 that changed
-SETUPTOOLS_USE_DISTUTILS default value from stdlib to local [1] to use
-its local copy of distutils. This is actually a "breaking" change [2].
+Committed, thanks.
 
-We have to override SETUPTOOLS_USE_DISTUTILS to the previous value
-"stdlib" to fixes the issue.
+ > Signed-off-by: Andrei Gherghescu <andrei.gherghescu@protonmail.com>
+ > ---
+ >  package/directfb-examples/Config.in            | 6 ++++--
+ >  package/directfb-examples/directfb-examples.mk | 2 +-
+ >  package/directfb/directfb.mk                   | 2 +-
+ >  3 files changed, 6 insertions(+), 4 deletions(-)
 
-While at it, use distutils from stdlib for the host.
+ > diff --git a/package/directfb-examples/Config.in b/package/directfb-examples/Config.in
+ > index 216e036577..4d5de03068 100644
+ > --- a/package/directfb-examples/Config.in
+ > +++ b/package/directfb-examples/Config.in
+ > @@ -4,6 +4,8 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES
+ >  	help
+ >  	  The DirectFB-examples package contains a set of simple
+ >  	  DirectFB applications that can be used to test and demonstrate
+ > -	  various DirectFB features.
+ > +	  various DirectFB features. As of 4 October 2015, DirectFB's
+ > +	  website http://www.directfb.org/ is down. See alternative site
+ > +	  listed below.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2088684091
+ > -	  http://directfb.org/downloads/Extras/README.DirectFB-examples
+ > +	  http://elinux.org/DirectFB
+ > diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
+ > index 46263da733..c8d09b3e33 100644
+ > --- a/package/directfb-examples/directfb-examples.mk
+ > +++ b/package/directfb-examples/directfb-examples.mk
+ > @@ -5,7 +5,7 @@
+ >  ################################################################################
 
-[1] https://github.com/pypa/setuptools/commit/b6fcbbd00cb6d5607c9272dec452a50457bdb292
-[2] https://github.com/pypa/setuptools/blob/v60.0.0/CHANGES.rst#breaking-changes
+ >  DIRECTFB_EXAMPLES_VERSION = 1.7.0
+ > -DIRECTFB_EXAMPLES_SITE = http://www.directfb.org/downloads/Extras
+ > +DIRECTFB_EXAMPLES_SITE = http://sources.buildroot.net/directfb-examples
+ >  DIRECTFB_EXAMPLES_SOURCE = DirectFB-examples-$(DIRECTFB_EXAMPLES_VERSION).tar.gz
+ >  DIRECTFB_EXAMPLES_LICENSE = MIT
+ >  DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
+ > diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+ > index 0b32162d8f..56a396ab99 100644
+ > --- a/package/directfb/directfb.mk
+ > +++ b/package/directfb/directfb.mk
+ > @@ -6,7 +6,7 @@
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-python.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ >  DIRECTFB_VERSION_MAJOR = 1.7
+ >  DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
+ > -DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ > +DIRECTFB_SITE = http://sources.buildroot.net/directfb
+ >  DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ >  DIRECTFB_LICENSE = LGPL-2.1+
+ >  DIRECTFB_LICENSE_FILES = COPYING
+ > --
+ > 2.35.1
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index b8dc9cd9e5..e81a1a3102 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -40,6 +40,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
- 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
- 	PYTHONPATH="$(PYTHON3_PATH)" \
- 	PYTHONNOUSERSITE=1 \
-+	SETUPTOOLS_USE_DISTUTILS=stdlib \
- 	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
- 	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
- 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
-@@ -62,6 +63,7 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
- HOST_PKG_PYTHON_DISTUTILS_ENV = \
- 	PATH=$(BR_PATH) \
- 	PYTHONNOUSERSITE=1 \
-+	SETUPTOOLS_USE_DISTUTILS=stdlib \
- 	$(HOST_CONFIGURE_OPTS)
- 
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
-@@ -76,6 +78,7 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	PYTHONPATH="$(PYTHON3_PATH)" \
- 	PYTHONNOUSERSITE=1 \
-+	SETUPTOOLS_USE_DISTUTILS=stdlib \
- 	_python_sysroot=$(STAGING_DIR) \
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
-@@ -96,6 +99,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
- HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PATH=$(BR_PATH) \
- 	PYTHONNOUSERSITE=1 \
-+	SETUPTOOLS_USE_DISTUTILS=stdlib \
- 	$(HOST_CONFIGURE_OPTS)
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
