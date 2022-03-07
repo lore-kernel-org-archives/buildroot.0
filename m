@@ -1,46 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 724E1C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 20:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3712C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 20:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B2E660777;
-	Mon,  7 Mar 2022 20:07:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A07E882ACD;
+	Mon,  7 Mar 2022 20:36:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PD_dskBUipV2; Mon,  7 Mar 2022 20:07:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tB7_QNvQGF8b; Mon,  7 Mar 2022 20:36:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 609F860B38;
-	Mon,  7 Mar 2022 20:07:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E8BA1BF3A0
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 20:07:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC5DD82A4F;
+	Mon,  7 Mar 2022 20:36:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B89CF1BF3A0
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 20:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C17F40364
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 20:07:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99FF3416AB
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 20:36:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u9x1wap9ZEng for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 20:07:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2325A4016A
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 20:07:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 785D982A9F; Mon,  7 Mar 2022 19:58:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CYi85al4v64i for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 20:36:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 53361416A5
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 20:36:12 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F170360004;
+ Mon,  7 Mar 2022 20:36:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nRK5R-0010Wg-40; Mon, 07 Mar 2022 21:36:09 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 21:05:34 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6105ad3f72fcb98a7d9aba543c6bb7311827c1d4
-X-Git-Newrev: 25fd3b0a523805db14682f7c559cc1c9c366ed55
-X-Patchwork-Hint: ignore
-Message-Id: <20220307195855.785D982A9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/re2: fix build with gcc <= 5
+To: Simon Doppler <dopsi@dopsi.ch>
+References: <20220307141321.307200-1-dopsi@dopsi.ch>
+Date: Mon, 07 Mar 2022 21:36:09 +0100
+In-Reply-To: <20220307141321.307200-1-dopsi@dopsi.ch> (Simon Doppler's message
+ of "Mon, 7 Mar 2022 15:13:21 +0100")
+Message-ID: <87h7895wli.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] docs/manual: Document Kconfig requirements
+ for uboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,68 +60,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25fd3b0a523805db14682f7c559cc1c9c366ed55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Simon" == Simon Doppler <dopsi@dopsi.ch> writes:
 
-Fix the following build failure with gcc <= 5 raised since bump to
-version 2022-02-01 in commit d2cf91e0c6a082261cc7ebb06dfdbd7bc2c2956f
-and
-https://github.com/google/re2/commit/a022cc0c55b0519629d64d775e7a5195af34a477
+ > When using uboot's legacy build system, the 'make uboot-menuconfig'
+ > and 'make uboot-savedefconfig' targets are not available as they
+ > are created by 'kconfig-package'.
 
-./re2/sparse_array.h:266:37: warning: defaulted and deleted functions only available with -std=c++11 or -std=gnu++11
- SparseArray<Value>::SparseArray() = default;
-                                     ^
-./re2/sparse_array.h: In copy constructor 're2::SparseArray<Value>::SparseArray(const re2::SparseArray<Value>&)':
-./re2/sparse_array.h:273:3: error: 'copy_n' is not a member of 'std'
-   std::copy_n(src.sparse_.data(), src.max_size(), sparse_.data());
-   ^
+ > Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
 
-Fixes:
- - http://autobuild.buildroot.org/results/8ebbac67f32fe24416a1f72aad0afd42b567b403
+Committed, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/re2/re2.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 41392cb179..30791a68e5 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
-@@ -10,19 +10,23 @@ RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
- RE2_INSTALL_STAGING = YES
- 
-+RE2_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+
- define RE2_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
- 		-C $(@D) $(if $(BR2_STATIC_LIBS),static)
- endef
- 
- define RE2_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
- 		DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) \
- 		$(if $(BR2_STATIC_LIBS),static-install,install)
- endef
- 
- define RE2_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
- 		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) \
- 		$(if $(BR2_STATIC_LIBS),static-install,install)
- endef
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
