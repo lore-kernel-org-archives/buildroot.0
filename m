@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CC89C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23661C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8C82408D5;
-	Mon,  7 Mar 2022 19:43:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB55082894;
+	Mon,  7 Mar 2022 19:45:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P0kY4TaDxuOd; Mon,  7 Mar 2022 19:43:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q6O0Kubgqtki; Mon,  7 Mar 2022 19:45:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17A6F404A9;
-	Mon,  7 Mar 2022 19:43:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 631E21BF36D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:43:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1833582883;
+	Mon,  7 Mar 2022 19:45:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AAD8F1BF36D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 524F160B5E
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:43:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99EA282871
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WaFpWVTqjyjD for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 19:43:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B40960087
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:43:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DAE1C82A9F; Mon,  7 Mar 2022 19:35:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gS9CyFQA7xw4 for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 19:45:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7FFEB82868
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:45:37 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 23C2560002;
+ Mon,  7 Mar 2022 19:45:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nRJIV-000zFo-6C; Mon, 07 Mar 2022 20:45:35 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 20:41:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4386bbdf0895dbb35e02c25f42603bae9af64451
-X-Git-Newrev: 89ab2a5a3f4588891ab1e9e76feb8c3f69402d5c
-X-Patchwork-Hint: ignore
-Message-Id: <20220307193518.DAE1C82A9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/directfb: change upstream site
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20220224232159.1103756-1-aperez@igalia.com>
+Date: Mon, 07 Mar 2022 20:45:35 +0100
+In-Reply-To: <20220224232159.1103756-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Fri, 25 Feb 2022 01:21:59 +0200")
+Message-ID: <874k497di8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,70 +59,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89ab2a5a3f4588891ab1e9e76feb8c3f69402d5c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-The http://www.directfb.org/ has been down since 2015.
-Use the Buildroot backup download site.
+ > This is a minor release which fixes an installation path and a crash
+ > with certain Wayland compositors. Release notes can be found at:
 
-Fixes:
-   - https://bugs.busybox.net/show_bug.cgi?id=13126
+ >   https://wpewebkit.org/release/cog-0.12.1.html
 
-Signed-off-by: Andrei Gherghescu <andrei.gherghescu@protonmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/directfb-examples/Config.in            | 6 ++++--
- package/directfb-examples/directfb-examples.mk | 2 +-
- package/directfb/directfb.mk                   | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-diff --git a/package/directfb-examples/Config.in b/package/directfb-examples/Config.in
-index 216e036577..4d5de03068 100644
---- a/package/directfb-examples/Config.in
-+++ b/package/directfb-examples/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The DirectFB-examples package contains a set of simple
- 	  DirectFB applications that can be used to test and demonstrate
--	  various DirectFB features.
-+	  various DirectFB features. As of 4 October 2015, DirectFB's
-+	  website http://www.directfb.org/ is down. See alternative site
-+	  listed below.
- 
--	  http://directfb.org/downloads/Extras/README.DirectFB-examples
-+	  http://elinux.org/DirectFB
-diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
-index 46263da733..c8d09b3e33 100644
---- a/package/directfb-examples/directfb-examples.mk
-+++ b/package/directfb-examples/directfb-examples.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DIRECTFB_EXAMPLES_VERSION = 1.7.0
--DIRECTFB_EXAMPLES_SITE = http://www.directfb.org/downloads/Extras
-+DIRECTFB_EXAMPLES_SITE = http://sources.buildroot.net/directfb-examples
- DIRECTFB_EXAMPLES_SOURCE = DirectFB-examples-$(DIRECTFB_EXAMPLES_VERSION).tar.gz
- DIRECTFB_EXAMPLES_LICENSE = MIT
- DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 0b32162d8f..56a396ab99 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -6,7 +6,7 @@
- 
- DIRECTFB_VERSION_MAJOR = 1.7
- DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
--DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
-+DIRECTFB_SITE = http://sources.buildroot.net/directfb
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_LICENSE = LGPL-2.1+
- DIRECTFB_LICENSE_FILES = COPYING
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
