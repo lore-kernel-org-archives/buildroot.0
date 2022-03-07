@@ -1,68 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BCB4C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 15:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3297CC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 16:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9849240629;
-	Mon,  7 Mar 2022 15:43:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC97240350;
+	Mon,  7 Mar 2022 16:43:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N5SMy0b-z6e0; Mon,  7 Mar 2022 15:43:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5602E40610;
-	Mon,  7 Mar 2022 15:43:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0DA531BF313
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 15:43:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDA1240200
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 15:43:18 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=orange.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NS1q636Sqbey for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 15:43:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3797B40915
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 15:43:18 +0000 (UTC)
-Received: from opfedar02.francetelecom.fr (unknown [xx.xx.xx.4])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar20.francetelecom.fr (ESMTP service) with ESMTPS id 4KC2mM6v2Vz8spg; 
- Mon,  7 Mar 2022 16:43:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
- s=ORANGE001; t=1646667796;
- bh=uTWXKmcHoqEhxRvMt8SIj6bCy93PHTIPbV8cuSh2q6E=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:Content-Type;
- b=uIhhb8IXE567IM0TX9JAGDgSJmBDuQabKnZYs3r2jLkEKY3v+6GL7Kfn5bKlkNIBq
- 3esuTO0LuxHCaTjh6WExAXwmAN9T6V629QkWdk0EKQo/NNCLQFKXVdgbp8Sw0TQSIu
- 9NFR/zqKaZ4a0XwxyR4Xg/AqH1+P4DKIq3v6QNcdR5fKg2E/rb9oST7rG5iZHS09Bo
- AzVd+a1G4Cdw3mNsk7qGW2GK9R2E06WNI7lS0eILE7eyMWuRN1OrdDx7dj7gJ/kUjb
- lt/09Ui/wgIywOnkJ1ueYZtDOlg6QOc+c46usYvOFSc1eQODK495fNRefdPWTVlJQB
- 0ZSGjtl9FDV1A==
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Mon, 07 Mar 2022 16:43:13 +0100
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Mon, 7 Mar 2022 16:43:13 +0100
-Message-ID: <22645_1646667795_62262813_22645_170_3_aabbdb8dc24868de9188190a6e1e7e1f1b6b12bc.1646667793.git.yann.morin@orange.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bBNHy_tX8R1g; Mon,  7 Mar 2022 16:43:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02E53402C4;
+	Mon,  7 Mar 2022 16:43:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D9F181BF36A
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 16:43:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3F09823AA
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 16:43:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bERyyTgGdoUZ for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 16:43:17 +0000 (UTC)
+X-Greylist: delayed 01:50:00 by SQLgrey-1.8.0
+Received: from 14.mo583.mail-out.ovh.net (14.mo583.mail-out.ovh.net
+ [188.165.51.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B437D8239A
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 16:43:17 +0000 (UTC)
+Received: from player716.ha.ovh.net (unknown [10.108.4.24])
+ by mo583.mail-out.ovh.net (Postfix) with ESMTP id 1E331211DB
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 14:13:32 +0000 (UTC)
+Received: from dopsi.ch (unknown [147.87.105.170])
+ (Authenticated sender: dopsi@dopsi.ch)
+ by player716.ha.ovh.net (Postfix) with ESMTPSA id 21904280FA7E8;
+ Mon,  7 Mar 2022 14:13:30 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass
+ (GARM-103G005573865ea-bca2-415c-8429-c0b146579933,
+ 8AFCA4340CFC43748FAE0634748708AC83408C53) smtp.auth=dopsi@dopsi.ch
+X-OVh-ClientIp: 147.87.105.170
+From: Simon Doppler <dopsi@dopsi.ch>
+To: buildroot@buildroot.org
+Date: Mon,  7 Mar 2022 15:13:21 +0100
+Message-Id: <20220307141321.307200-1-dopsi@dopsi.ch>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX606.corporate.adroot.infra.ftgroup
- (10.115.27.30) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-Subject: [Buildroot] [PATCH] package/pkg-golang: don't export unused BR_GOMOD
+X-Ovh-Tracer-Id: 1372190512895801528
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddruddugedgiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhimhhonhcuffhophhplhgvrhcuoeguohhpshhiseguohhpshhirdgthheqnecuggftrfgrthhtvghrnhepueetteegveeukefggfegtdelfeegleeghfeufeeukedtkedvfedujedvhfegjeeinecukfhppedtrddtrddtrddtpddugeejrdekjedruddthedrudejtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeduiedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpeguohhpshhiseguohhpshhirdgthhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+Subject: [Buildroot] [PATCH] docs/manual: Document Kconfig requirements for
+ uboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,58 +66,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin@orange.com>, Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Simon Doppler <dopsi@dopsi.ch>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+When using uboot's legacy build system, the 'make uboot-menuconfig'
+and 'make uboot-savedefconfig' targets are not available as they
+are created by 'kconfig-package'.
 
-BR_GOMOD is a remnant from a previous iteration of the golang download
-infrastructure; it is currently used nowhere.
-
-Do not set it.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Anisse Astier <anisse@astier.eu>
-Cc: Christian Stewart <christian@paral.in>
+Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
 ---
- package/pkg-golang.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ docs/manual/make-tips.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index f1c5cfd350..0cb2ed73cc 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -87,8 +87,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
- $(2)_DOWNLOAD_POST_PROCESS = go
- $(2)_DL_ENV += \
- 	$$(HOST_GO_COMMON_ENV) \
--	GOPROXY=direct \
--	BR_GOMOD=$$($(2)_GOMOD)
-+	GOPROXY=direct
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 869b6807dd..df3b888c25 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -35,7 +35,8 @@ some settings in the +.config+ file may hide some targets:
+ * +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
+   +barebox+ bootloader is enabled.
+ * +uboot-menuconfig+ and +uboot-savedefconfig+ only work when the
+-  +U-Boot+ bootloader is enabled.
++  +U-Boot+ bootloader is enabled and the +uboot+ build system is set
++  to +Kconfig+.
  
- # Due to vendoring, it is pretty likely that not all licenses are
- # listed in <pkg>_LICENSE.
+ .Cleaning:
+ 
 -- 
 2.25.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 
 _______________________________________________
 buildroot mailing list
