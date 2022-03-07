@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11089C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 21:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 075A5C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 21:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF42140475;
-	Mon,  7 Mar 2022 21:10:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A666660EFA;
+	Mon,  7 Mar 2022 21:10:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id okIdY6eyx_Aj; Mon,  7 Mar 2022 21:10:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e8aI2YHLGWCm; Mon,  7 Mar 2022 21:10:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EF0E4016A;
-	Mon,  7 Mar 2022 21:10:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6A4091BF2C3
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D572160EE3;
+	Mon,  7 Mar 2022 21:10:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 466131BF2C3
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65D744012E
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 355CA8188A
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DILqJ0YfaabW for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 21:10:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JxUJ8FyhFEZf for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 21:10:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 78C0D4016A
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 21:10:04 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 56812812E9
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 21:10:11 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 05963240002;
- Mon,  7 Mar 2022 21:10:01 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id EA4F2100002;
+ Mon,  7 Mar 2022 21:10:07 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nRKcD-001HeM-41; Mon, 07 Mar 2022 22:10:01 +0100
+ id 1nRKcJ-001Hee-3C; Mon, 07 Mar 2022 22:10:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: <yann.morin@orange.com>
-References: <817_1646667779_62262803_817_313_1_9705b574ea82a36b8f676e04876817b58ebb6e3c.1646667776.git.yann.morin@orange.com>
-Date: Mon, 07 Mar 2022 22:10:01 +0100
-In-Reply-To: <817_1646667779_62262803_817_313_1_9705b574ea82a36b8f676e04876817b58ebb6e3c.1646667776.git.yann.morin@orange.com>
- (yann morin's message of "Mon, 7 Mar 2022 16:42:56 +0100")
-Message-ID: <87a6e14ggm.fsf@dell.be.48ers.dk>
+References: <22645_1646667795_62262813_22645_170_3_aabbdb8dc24868de9188190a6e1e7e1f1b6b12bc.1646667793.git.yann.morin@orange.com>
+Date: Mon, 07 Mar 2022 22:10:07 +0100
+In-Reply-To: <22645_1646667795_62262813_22645_170_3_aabbdb8dc24868de9188190a6e1e7e1f1b6b12bc.1646667793.git.yann.morin@orange.com>
+ (yann morin's message of "Mon, 7 Mar 2022 16:43:13 +0100")
+Message-ID: <875yop4ggg.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/pkg-golang: fix build with
- per-package directories
+Subject: Re: [Buildroot] [PATCH] package/pkg-golang: don't export unused
+ BR_GOMOD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,24 +70,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>>   <yann.morin@orange.com> writes:
 
  > From: "Yann E. MORIN" <yann.morin@orange.com>
- > Build with per-package directory is broken, because go is not found in
- > the PATH, when trying to download and vendor a go package.
+ > BR_GOMOD is a remnant from a previous iteration of the golang download
+ > infrastructure; it is currently used nowhere.
 
- > This is because FOO_DL_ENV contains $(HOST_GO_COMMON_ENV), which defines
- > the PATH as PATH=$(BR_PATH). This is correct, except this is expanded at
- > the time the golang-package macro is evaluated, which means PATH
- > contains the 'global' BR_PATH, i.e.: $(O)/host/bin:$(O)/host/sbin:...
-
- > However, with PPD, this does not yet exist at build time; only the
- > per-package hoqt directory exists.
-
-s/hoqt/host/
-
- > We want to have it expanded at the time the recipe is run, so like all
- > other variables, we need to $$-expand it.
-
- > At the same time, also $$-expand two other variables (even though those
- > are benign, it is better for consistency that they be $$-expanded).
+ > Do not set it.
 
  > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
