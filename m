@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFBC3C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 21:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D06F8C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 21:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FE2440475;
-	Mon,  7 Mar 2022 21:11:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93A064016A;
+	Mon,  7 Mar 2022 21:11:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gBGeFSYWM0yy; Mon,  7 Mar 2022 21:11:14 +0000 (UTC)
+	with ESMTP id 6gG2Zmz1lzoo; Mon,  7 Mar 2022 21:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54C404016A;
-	Mon,  7 Mar 2022 21:11:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A5D511BF982
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B50D404AA;
+	Mon,  7 Mar 2022 21:11:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 03D681BF2C3
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91137404A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CD0760EF3
  for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 21:10:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c8u3sgmCPMqa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T4P2RRV8lfAE for <buildroot@lists.busybox.net>;
  Mon,  7 Mar 2022 21:10:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A706540475
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7EC860BE7
  for <buildroot@buildroot.org>; Mon,  7 Mar 2022 21:10:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E64E182DFB; Mon,  7 Mar 2022 21:02:10 +0000 (UTC)
+ id 15E92826D4; Mon,  7 Mar 2022 21:02:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 22:06:53 +0100
+Date: Mon, 7 Mar 2022 22:09:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b59ed35a2d08fedd8b77e4c70d10bf22a0ce1e1
-X-Git-Newrev: e7327aeafca93c68bcc120180d0cea1cd8cf1667
+X-Git-Oldrev: 9ad1437c5ec697bdef0a567ea47f1dc696a7d64d
+X-Git-Newrev: 48e5cc084253bbfeb3cb3957deb4e125060f5dcb
 X-Patchwork-Hint: ignore
-Message-Id: <20220307210210.E64E182DFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-cargo: host-rustc is also a
- build dependency
+Message-Id: <20220307210211.15E92826D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-golang: don't export unused
+ BR_GOMOD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7327aeafca93c68bcc120180d0cea1cd8cf1667
+commit: https://git.buildroot.net/buildroot/commit/?id=48e5cc084253bbfeb3cb3957deb4e125060f5dcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, host-rustc is a download dependency, because we need cargo
-for the vendoring during the download step.
+BR_GOMOD is a remnant from a previous iteration of the golang download
+infrastructure; it is currently used nowhere.
 
-However, when using a package in override-srcdir, there is no download
-step, so host-rustc is not pulled in as a dependency which breaks
-running the build of a single package from scratch:
-    $ make clean
-    $ make my-rust-package
-    [...]
-    [...] cargo build --offline --release --manifest-path Cargo.toml --locked
-    /bin/sh: cargo: command not found
-
-We fix that by adding host-rustc as a standard dependency too.
+Do not set it.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Anisse Astier <anisse@astier.eu>
+Cc: Christian Stewart <christian@paral.in>
+Reviewed-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cargo.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/pkg-golang.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 8b246abfed..6f5125f1d4 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -65,8 +65,10 @@ HOST_PKG_CARGO_ENV = \
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index f1c5cfd350..0cb2ed73cc 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -87,8 +87,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+ $(2)_DOWNLOAD_POST_PROCESS = go
+ $(2)_DL_ENV += \
+ 	$$(HOST_GO_COMMON_ENV) \
+-	GOPROXY=direct \
+-	BR_GOMOD=$$($(2)_GOMOD)
++	GOPROXY=direct
  
- define inner-cargo-package
- 
--# We need host-rustc to run cargo
-+# We need host-rustc to run cargo at download time (for vendoring),
-+# and at build and install time.
- $(2)_DOWNLOAD_DEPENDENCIES += host-rustc
-+$(2)_DEPENDENCIES += host-rustc
- 
- $(2)_DOWNLOAD_POST_PROCESS = cargo
- $(2)_DL_ENV += CARGO_HOME=$$(HOST_DIR)/share/cargo
+ # Due to vendoring, it is pretty likely that not all licenses are
+ # listed in <pkg>_LICENSE.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
