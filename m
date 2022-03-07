@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C547DC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C78F6C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:28:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75D9F60B7C;
-	Mon,  7 Mar 2022 22:27:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 751DA40918;
+	Mon,  7 Mar 2022 22:28:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z3WPoPprMFd2; Mon,  7 Mar 2022 22:27:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y9yTzgfuHmS6; Mon,  7 Mar 2022 22:28:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6BFC60B1B;
-	Mon,  7 Mar 2022 22:27:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 989951BF39D
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1656408C9;
+	Mon,  7 Mar 2022 22:27:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ADD711BF982
  for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94C2E60B62
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D5C58294A
  for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:27:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3BrqY0ScwpZE for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qfXeFwfiT2rZ for <buildroot@lists.busybox.net>;
  Mon,  7 Mar 2022 22:27:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3B796070A
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDE7782948
  for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:27:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 114A882DD8; Mon,  7 Mar 2022 22:19:17 +0000 (UTC)
+ id 0892581375; Mon,  7 Mar 2022 22:19:17 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 23:15:46 +0100
+Date: Mon, 7 Mar 2022 23:15:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4adbfaf2e6153ad0e811b4debcf945ff5788c76
-X-Git-Newrev: 4dc48e8b9d832889edbeeed28c2dcf0a7bf01718
+X-Git-Oldrev: fd03d4f057bdbd343f78360bd732df1b47d774a0
+X-Git-Newrev: b4adbfaf2e6153ad0e811b4debcf945ff5788c76
 X-Patchwork-Hint: ignore
-Message-Id: <20220307221917.114A882DD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/checkpackagelib/lib_mk.py: check
- CONF_OPTS
+Message-Id: <20220307221917.0892581375@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ghostscript: disable tesseract
+ without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,31 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dc48e8b9d832889edbeeed28c2dcf0a7bf01718
+commit: https://git.buildroot.net/buildroot/commit/?id=b4adbfaf2e6153ad0e811b4debcf945ff5788c76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As already done for {FOO}_DEPENDENCIES in commit
-4910a175b3f1f4b55ff257a75945d8ffb14a4ceb, check that {FOO}_CONF_OPTS are
-never overridden in a conditional
+ghostscript embeds a local copy of tesseract-ocr which is enabled by
+default since version 9.53.0 and
+https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=7322ef87546c55b29056c1d96d8bdbb7f3ba53ef
+
+Since version 9.55.0 and
+https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=5459f7aca1ded3b7cf96c339a2419f418aa406c7,
+ghostscript expects that tesseract is disabled if threads are not
+available resulting in the following build failure since commit
+7a4944569ce83b0b7b0cabd6e8aa184b8cb72a22:
+
+configure: error: Threading disabled or not available. Tesseract OCR relies on threading. Rerun configure with "--without-tesseract" to exclude OCR from the build
+
+So disable tesseract if threads are not available. It should be noted
+that there is no way to tell ghostscript to use a system provided
+tesseract-ocr package.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fd35a47b2a77cf57c243ec1c88802b53ddca8f52
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- utils/checkpackagelib/lib_mk.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/ghostscript/ghostscript.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 153754b6f1..b50a19ac62 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -90,6 +90,7 @@ class OverriddenVariable(_CheckFunction):
-         r"_SOURCE\s*=\s*",
-         r"_VERSION\s*=\s*"])))
-     FORBIDDEN_OVERRIDDEN = re.compile(r"^[A-Z0-9_]+({})".format("|".join([
-+        r"_CONF_OPTS\s*=\s*",
-         r"_DEPENDENCIES\s*=\s*"])))
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 24a0c489a8..02cb35fcfc 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -83,4 +83,8 @@ else
+ GHOSTSCRIPT_CONF_OPTS += --without-x
+ endif
  
-     def before(self):
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++GHOSTSCRIPT_CONF_OPTS += --without-tesseract
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
