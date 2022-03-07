@@ -1,69 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C378C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 15:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BCB4C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 15:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5A0940243;
-	Mon,  7 Mar 2022 15:43:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9849240629;
+	Mon,  7 Mar 2022 15:43:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zBqEOayv3qOQ; Mon,  7 Mar 2022 15:43:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N5SMy0b-z6e0; Mon,  7 Mar 2022 15:43:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0250940200;
-	Mon,  7 Mar 2022 15:43:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B2CB1BF313
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 15:43:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5602E40610;
+	Mon,  7 Mar 2022 15:43:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DA531BF313
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 15:43:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7AB80813E2
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 15:43:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDA1240200
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 15:43:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=orange.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3cvpdZCd-Mt0 for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 15:43:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NS1q636Sqbey for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 15:43:18 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.40])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 97B0C813B1
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 15:43:01 +0000 (UTC)
-Received: from opfedar00.francetelecom.fr (unknown [xx.xx.xx.11])
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3797B40915
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 15:43:18 +0000 (UTC)
+Received: from opfedar02.francetelecom.fr (unknown [xx.xx.xx.4])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by opfedar27.francetelecom.fr (ESMTP service) with ESMTPS id 4KC2m31bN1z2xPV; 
- Mon,  7 Mar 2022 16:42:59 +0100 (CET)
+ by opfedar20.francetelecom.fr (ESMTP service) with ESMTPS id 4KC2mM6v2Vz8spg; 
+ Mon,  7 Mar 2022 16:43:15 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
- s=ORANGE001; t=1646667779;
- bh=tWpXibZqwpVpFZ1r0AvIvRqivM3rx33RV3VTeKowr4s=;
+ s=ORANGE001; t=1646667796;
+ bh=uTWXKmcHoqEhxRvMt8SIj6bCy93PHTIPbV8cuSh2q6E=;
  h=From:To:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding:Content-Type;
- b=Vj7QXGLLh/CjMA3mEKtD3wN6LJ/P4/u4lipxNph2GpaBxUjwTlIRb5uMGryglI/Aw
- +jHtSpOZ24ubVUn/UuKlJyEv+t3gzNQgis3aGsdE1mDD0zntmwJtY/8juXU7ox8Xr3
- 7FlQS9QnZbfvX0GDoVR9sfip2r48T6pDkpcaQvLmv91/zldMXw8LdqwDmAHjNQUtIw
- o4tuK7uotDU90MBq9xS4V0w7gudQyvuBz34R5Ju/SEStJTDoRgUqPUxPZmJpe4v+Qv
- W4abCBXxJKWXUdvAj3YFRRF9UNpzBXpht84jDwNn4txMGLrVVRBO1aw9WLIufRXIjV
- h4g8vA1jiRyVA==
+ b=uIhhb8IXE567IM0TX9JAGDgSJmBDuQabKnZYs3r2jLkEKY3v+6GL7Kfn5bKlkNIBq
+ 3esuTO0LuxHCaTjh6WExAXwmAN9T6V629QkWdk0EKQo/NNCLQFKXVdgbp8Sw0TQSIu
+ 9NFR/zqKaZ4a0XwxyR4Xg/AqH1+P4DKIq3v6QNcdR5fKg2E/rb9oST7rG5iZHS09Bo
+ AzVd+a1G4Cdw3mNsk7qGW2GK9R2E06WNI7lS0eILE7eyMWuRN1OrdDx7dj7gJ/kUjb
+ lt/09Ui/wgIywOnkJ1ueYZtDOlg6QOc+c46usYvOFSc1eQODK495fNRefdPWTVlJQB
+ 0ZSGjtl9FDV1A==
 Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Mon, 07 Mar 2022 16:42:57 +0100
+ Mon, 07 Mar 2022 16:43:13 +0100
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Mon, 7 Mar 2022 16:42:56 +0100
-Message-ID: <817_1646667779_62262803_817_313_1_9705b574ea82a36b8f676e04876817b58ebb6e3c.1646667776.git.yann.morin@orange.com>
+Date: Mon, 7 Mar 2022 16:43:13 +0100
+Message-ID: <22645_1646667795_62262813_22645_170_3_aabbdb8dc24868de9188190a6e1e7e1f1b6b12bc.1646667793.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
+X-Originating-IP: [10.115.27.51]
 X-ClientProxiedBy: OPE16NORMBX606.corporate.adroot.infra.ftgroup
  (10.115.27.30) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
-Subject: [Buildroot] [PATCH] package/pkg-golang: fix build with per-package
- directories
+Subject: [Buildroot] [PATCH] package/pkg-golang: don't export unused BR_GOMOD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,71 +83,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Build with per-package directory is broken, because go is not found in
-the PATH, when trying to download and vendor a go package.
+BR_GOMOD is a remnant from a previous iteration of the golang download
+infrastructure; it is currently used nowhere.
 
-This is because FOO_DL_ENV contains $(HOST_GO_COMMON_ENV), which defines
-the PATH as PATH=$(BR_PATH). This is correct, except this is expanded at
-the time the golang-package macro is evaluated, which means PATH
-contains the 'global' BR_PATH, i.e.: $(O)/host/bin:$(O)/host/sbin:...
-
-However, with PPD, this does not yet exist at build time; only the
-per-package hoqt directory exists.
-
-We want to have it expanded at the time the recipe is run, so like all
-other variables, we need to $$-expand it.
-
-At the same time, also $$-expand two other variables (even though those
-are benign, it is better for consistency that they be $$-expanded).
+Do not set it.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Anisse Astier <anisse@astier.eu>
 Cc: Christian Stewart <christian@paral.in>
 ---
- package/pkg-golang.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/pkg-golang.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index ddefdf1214..f1c5cfd350 100644
+index f1c5cfd350..0cb2ed73cc 100644
 --- a/package/pkg-golang.mk
 +++ b/package/pkg-golang.mk
-@@ -45,7 +45,7 @@ $(2)_BUILD_OPTS += \
- 	-modcacherw \
- 	-tags "$$($(2)_TAGS)" \
- 	-trimpath \
--	-p $(PARALLEL_JOBS)
-+	-p $$(PARALLEL_JOBS)
- 
- # Target packages need the Go compiler on the host at download time (for
- # vendoring), and at build and install time.
-@@ -86,7 +86,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
- 
+@@ -87,8 +87,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
  $(2)_DOWNLOAD_POST_PROCESS = go
  $(2)_DL_ENV += \
--	$(HOST_GO_COMMON_ENV) \
-+	$$(HOST_GO_COMMON_ENV) \
- 	GOPROXY=direct \
- 	BR_GOMOD=$$($(2)_GOMOD)
+ 	$$(HOST_GO_COMMON_ENV) \
+-	GOPROXY=direct \
+-	BR_GOMOD=$$($(2)_GOMOD)
++	GOPROXY=direct
  
-@@ -134,7 +134,7 @@ endif
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	$$(foreach d,$$($(2)_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(TARGET_DIR)/usr/bin/$$(d)
-+		$$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(TARGET_DIR)/usr/bin/$$(d)
- 	)
- endef
- endif
-@@ -143,7 +143,7 @@ endif
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
- 	$$(foreach d,$$($(2)_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(HOST_DIR)/bin/$$(d)
-+		$$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(HOST_DIR)/bin/$$(d)
- 	)
- endef
- endif
+ # Due to vendoring, it is pretty likely that not all licenses are
+ # listed in <pkg>_LICENSE.
 -- 
 2.25.1
 
