@@ -1,89 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8084C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:36:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F8D3C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 637C04174D;
-	Mon,  7 Mar 2022 22:36:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 309DD60D57;
+	Mon,  7 Mar 2022 22:39:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 56OaRpwNGJF4; Mon,  7 Mar 2022 22:36:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3vO12llJyyxp; Mon,  7 Mar 2022 22:39:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88D12410B3;
-	Mon,  7 Mar 2022 22:36:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6041E60EF9;
+	Mon,  7 Mar 2022 22:39:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D78B1BF39D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:36:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DF0AD1BF39D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CB3982835
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:36:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC7C2812D8
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:39:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AyP5FHMk-kOc for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 22:36:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96697825DC
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:36:20 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id z19so615919edb.12
- for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=3u3VLG6rzIYgr02ss0VkHK6Z5fGpJIgSA/WuxcO3a64=;
- b=Oh7S4fzgIiDGS09VhLeVNnWF++f6Erjm0/R9Ow/zjnscGfyXcPUargbCPLEYEeFunx
- oNErapU76tlK5ox84/GP1Of59UrdczfZo7yoyVxm0nfkij/oDnKwnPUaqFMhlU3x7y9f
- ww9Jr4jP2uBEjZnlMu1yvtenIzRcN2R+7Ty8vANUT/5GE0Qzj8H3fo2V152z7St8lpAw
- Iywm23x8UPIeqUxTwdWf0TMsHWSctxwYNvYhLMlO1w7+rm50lbivdHp8brGPFYummEMO
- ZKPvCEUADrjGuOZC9exgYJtlWRZxKq7ubSsiajMLlqTkqqY8ud5esAxeH+mlOkLUhnqD
- lqxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=3u3VLG6rzIYgr02ss0VkHK6Z5fGpJIgSA/WuxcO3a64=;
- b=b7Xdj7V40mLbGUWT9X4ogLUtVoqXpX4ukGgbgq3FMAKpw7JQlD80PHdxdBEh5RVloC
- 7XXojxfXTytqZCWq8Hzp1LmSDmkiNgL9ro9+DlIsjWnFuH7L+P+xgVPVLhQD9V5cndpz
- KkjFIQWDIAhyUaOzbt2IJFD/R8XZjnQMtZl7AUC9iuJ8rNpM1ToRf4ESBblCWwTNwsVS
- LgTRcNeDTUob5su08vK8Auwge5IlL8q7W+gH+9Qgh5ZGDR3deWWQBHfhIl0w9ZvV0rNu
- 8diDix9/XUjAbe53OnFa6EDkEEmfVyP3XguOgQAKBz3+mkNui22nyQLt8lUkCpqpZHJn
- 8Dag==
-X-Gm-Message-State: AOAM530ahz8L930bhIF21ytTN7MICXDq4Dserz1rpynhi0bM2xhaOB/6
- weka0VgUAheBrYUg8NKEknClXmS6W+gNiw==
-X-Google-Smtp-Source: ABdhPJwtUBhE0ieUs+AU467HgDjyOLa5tOSz+N8ZGX9M4YAgxw2pmEX2sGvyVzdEKFFiqw0xZYHNxQ==
-X-Received: by 2002:a05:6402:5111:b0:416:1ffb:a6da with SMTP id
- m17-20020a056402511100b004161ffba6damr12403963edd.312.1646692578936; 
- Mon, 07 Mar 2022 14:36:18 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- l20-20020a1709062a9400b006ce71a88bf5sm5156775eje.183.2022.03.07.14.36.18
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 07 Mar 2022 14:36:18 -0800 (PST)
-Message-ID: <6aaa39df-836f-055e-6f40-a077f690b669@mind.be>
-Date: Mon, 7 Mar 2022 23:36:17 +0100
+ with ESMTP id NnCrheDPYRux for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 22:39:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 546528131E
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:39:16 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.7.124])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id RM0Wn9f61POoWRM0Wnhy2U; Mon, 07 Mar 2022 23:39:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1646692753; bh=kufbrQEVYnnGDxoNNcuu6220z9gBux/KQ/IrDIpZrSc=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=MorBfdWmJASDXOcY81fTLkdd+D8SlMpAgJA6QRwd3OHRCClBURSI8m1vTRLKM/P7u
+ xgc2TLLzG+espAohBb2gRCU8JC/ids+XAe1Gljbs0n6iwtMBEf++B/ZVYm9xG0aHJ/
+ hz9sFe1iHvZ+hgvKKPXtYDo84jiLkHm2Qp8j0U4Ql+mzsmpYmTc3rX9lVdsBT1jQfc
+ nROeBmdREcG0+k+53eVIt/us4eze4SicjDBqRFDTIn+bqt4VToNei3uNCBnNsH/KXc
+ cdB/Q1VsIQI82UakacjPE8emnOFxLvsVHn6ndcsUxHOECLhlTcmIcIfM8WK7SIYhJ2
+ Bt3sUcy2MaWPw==
+Message-ID: <5226fc1a-8e39-26ea-8ef8-ad435bc317f8@benettiengineering.com>
+Date: Mon, 7 Mar 2022 23:39:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Content-Language: en-GB
-To: Jacques Samoun <jacques.samoun33@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-References: <CACaKL1wxLACzdRqojEaji9p70okZ+EcBMJkUNOwYuDyvU-5AuQ@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CACaKL1wxLACzdRqojEaji9p70okZ+EcBMJkUNOwYuDyvU-5AuQ@mail.gmail.com>
-Subject: Re: [Buildroot] cannot make the device_table
+Content-Language: en-US
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+References: <20220218110914.3098061-1-giulio.benetti@benettiengineering.com>
+ <67313303-db84-93cd-d96b-56db0c73976b@mind.be>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <67313303-db84-93cd-d96b-56db0c73976b@mind.be>
+X-CMAE-Envelope: MS4wfDLV8yfD5Z8RvQe9SYsYs2tugELT+PKrNPzT998rGQTXH5kITkW/YjxJ8k9kQbrZCPS/YpkUvHLt+esPhlitmZZNWHMbhk2ArawYkSS0USpUmWief4Fg
+ cpwduJ6rOCACvz0nS8STcs8MYhf6SgEq+uN/jHqsVvZxkTC+25aX1ZjvEQAFfyycwgksXT2+pmVm2dtX2Bd2LcDDZD2bN0XgjcjDPE5FDV/2dmWmfKCK7wEC
+ aBr0TlkqPXFOA8vUdgxDveJ5Qp7ElbjN3PiXejaJP5o=
+Subject: Re: [Buildroot] [PATCH]
+ configs/microchip_sam9x60ek_mmc_dev_defconfig: fix build failure due to
+ previous wrong commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,43 +73,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 06/03/2022 13:46, Jacques Samoun wrote:
-> Hello,
-> despite all my tries, i just cannot make the "device_table" feature work as 
-> described in the manual.
-> Basically, i am trying to set 666 rights to /dev/tty + add a dialout group, so i 
-> created the following file (device_table.txt"
+On 07/03/22 22:46, Arnout Vandecappelle wrote:
 > 
-> /dev/tty c 666 root dialout 5 0 - - -
 > 
-> and have set the correct variable in menuconfig. I know for sure that the build 
-> has handled this file ... but looking at the /dev/tty, it is clear that nothing 
-> has happened, the permissions are still 600 and the dialout group has not been set.
-
-  When you say "looking at /dev/tty", do you mean looking at the contents of the 
-tarball (or rootfs), or do you mean what appears after boot? Unless you have a 
-very specific configuration (i.e. device managemnt: Static using device table), 
-/dev will be a devtmpfs and the kernel will override anything you have set in 
-device_table. So in that case you need dynamic handling using udev or mdev.
-
-
-  Regards,
-  Arnout
-
+> On 18/02/2022 12:09, Giulio Benetti wrote:
+>> Commit 616ba9c90b014637dc9925fa442a0af4a11f04b8 extended rootfs size, but
+>> the option was listed in the wrong place. Options must be set in the order
 > 
-> Am I missing something ?
+>    Order doesn't matter in kconfig. The problem was the lack of quotes.
+
+Oh, maybe I was told only because of style some time ago. I didn't see 
+the quotes.. probably I was/am cooked.
+
+>    Updated the commit message and applied to master, thanks.
+
+Thank you!
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+>    Regards,
+>    Arnout
 > 
+>> they are specified by Config.in files. So let's move
+>> BR2_TARGET_ROOTFS_EXT2_SIZE="120M" right after BR2_TARGET_ROOTFS_EXT2_4=y
+>> as it should be.
+>>
+>> Fixes:
+>> https://gitlab.com/buildroot.org/buildroot/-/jobs/2103784289
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>    configs/microchip_sam9x60ek_mmc_dev_defconfig | 2 +-
+>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+>> index 00ccd784b5..06e03967c4 100644
+>> --- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
+>> +++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+>> @@ -7,7 +7,6 @@ BR2_TARGET_GENERIC_HOSTNAME="sam9x60ek"
+>>    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>>    BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>>    BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sam9x60ek_mmc/genimage.cfg"
+>> -BR2_TARGET_ROOTFS_EXT2_SIZE=120M
+>>    BR2_LINUX_KERNEL=y
+>>    BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>>    BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+>> @@ -67,6 +66,7 @@ BR2_PACKAGE_HTOP=y
+>>    BR2_PACKAGE_VIM=y
+>>    BR2_TARGET_ROOTFS_EXT2=y
+>>    BR2_TARGET_ROOTFS_EXT2_4=y
+>> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>>    BR2_TARGET_AT91BOOTSTRAP3=y
+>>    BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+>>    BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
