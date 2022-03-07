@@ -4,43 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039C6C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:11:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36708C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 22:25:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0B3D60EFD;
-	Mon,  7 Mar 2022 22:11:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9A4560D57;
+	Mon,  7 Mar 2022 22:25:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zCAOahQUQmCB; Mon,  7 Mar 2022 22:11:20 +0000 (UTC)
+	with ESMTP id 6pvPjdhzjdqL; Mon,  7 Mar 2022 22:25:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA31260EE3;
-	Mon,  7 Mar 2022 22:11:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDEB960B1B;
+	Mon,  7 Mar 2022 22:25:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F36AC1BF39D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C8581BF39D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:25:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C53EE60D87
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:09:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33BC160B1B
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 22:25:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AEGZNeqpHBJK for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 22:09:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C71E460BDD
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:09:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F000182941; Mon,  7 Mar 2022 22:01:26 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 22:57:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3fc9d586a3acd091653da3a62f471041d329d6bd
-X-Git-Newrev: 0e9565f831da2377622c79bfd6e5be37f7baaa7c
-X-Patchwork-Hint: ignore
-Message-Id: <20220307220126.F000182941@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pycli: drop package
+ with ESMTP id 1DlxFvmqnQLS for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 22:25:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8F0C06070A
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 22:25:41 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id y12so8442290edt.9
+ for <buildroot@buildroot.org>; Mon, 07 Mar 2022 14:25:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=vLvp9bpbN7pHIifEIFB15rKXRWAJee21oNJ4hIH7Guk=;
+ b=W0lfG0D4VzSEpg0BUKTRfXXbuGEOTocpKICm4ulrG6yLLISpCHQL9z8yfy4XbiqO/x
+ V+J1AhMiSLGhaapOMJbAhTZbYG3/03n4wZcWnNKz4Egga7c8R9Uk1ESuNMpsETycAwUY
+ NkbZwzeWw1CB+5yhKMNgvzJGgAPHOC2QALpNNZVPdiYnJnUUCqKYMoPjvQ99ehCtztlN
+ nI3TfCpq5YHlIJTg6Gn8dPKy7Ij7hPFBscJtvzxvu7YdPkZxkKIYkzJUBgW4tJ98QbeL
+ VYy7rzDq+Ziaoh7LMc/xAM1BX7RlpBaw77c/5jhV+DSPasoYhV/RiBu7hL3SzY1b0CWW
+ mOBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=vLvp9bpbN7pHIifEIFB15rKXRWAJee21oNJ4hIH7Guk=;
+ b=KC5o4Fwzk2F7u6WwKTtuuPZKDYGaBkE4jQEUDSro2BpXHJDGLUVBGCh+QcNo7/+pfF
+ cTZF+H4O7SkWSh2yElPh33QoIgAde0zfyv8bUZjw8Gbl4C4AsqRSvVYkYG9dtmxlqHN/
+ AfsMWrGv9QjCUVkjqJgfB92WUEXqINa77h/tguchz4rBI27YS19MDXjBNmRVIiofLFPK
+ zEFPHi82dxO5V47pBVwl3MOdyfYTFUQoq+NYInThUE2VxZwE8n6VwQ62BFxvK+EGJ8/M
+ Rjy5iz8DefMwBmxJknRnOtslgGluDJVC5EXaVTDn/l8ZgHGwwb9LCDHm3fUSJ8ZkpUO/
+ XNKA==
+X-Gm-Message-State: AOAM531RNHqUJDQXNmAHi0VJfGqhdDzZJb0f5nIers+b1YXmfMsjWP/A
+ jSN+B8bfNMsRuh/gfe+9EWtblg==
+X-Google-Smtp-Source: ABdhPJz1kHg81wXD/M1kodZNHNrrKEGRvZjMazKNvacU3D5CMgMHY5lZllTLFBNKZelC6SWj968JQw==
+X-Received: by 2002:a05:6402:3691:b0:415:ce4f:ac5a with SMTP id
+ ej17-20020a056402369100b00415ce4fac5amr13007209edb.231.1646691940027; 
+ Mon, 07 Mar 2022 14:25:40 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ me17-20020a170906aed100b006db0dcf6746sm2252812ejb.216.2022.03.07.14.25.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 07 Mar 2022 14:25:39 -0800 (PST)
+Message-ID: <9622b23e-22d8-c3c2-7255-d49feb46f552@mind.be>
+Date: Mon, 7 Mar 2022 23:25:38 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220223202648.3398307-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220223202648.3398307-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH v3,
+ 1/1] package/ghostscript: disable tesseract without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,211 +94,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e9565f831da2377622c79bfd6e5be37f7baaa7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Even with the two upstream patches added in commit
-b2e6e376a2d7551ccf146855ec4e99a65c35bd16, python-pycli still raises the
-following build failure since bump of python3 to version 3.10.1 in
-commit 25b1fc2898d68ddf2674b14c738045875fc5a2dc due to the new "Multiple
-Exception types without parentheses" exception
-(https://docs.python.org/3/whatsnew/3.10.html):
-
-error:   File "/usr/lib/python3.10/site-packages/cli/test.py", line 142
-    except raises, e:
-           ^^^^^^^^^
-SyntaxError: multiple exception types must be parenthesized
-
-So drop the package as the last release was made 10 years ago.
-
-Fixes:
- - http://autobuild.buildroot.org/results/6112e1830ce608abcea4a26b659c10e5ff09a66a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy                                   |  7 ++++
- DEVELOPERS                                         |  1 -
- package/Config.in                                  |  1 -
- ...-re-raise-exceptions-in-wrapped-functions.patch | 26 --------------
- ...-except-statement-changed-slightly-in-2-6.patch | 41 ----------------------
- package/python-pycli/Config.in                     |  7 ----
- package/python-pycli/python-pycli.hash             |  5 ---
- package/python-pycli/python-pycli.mk               | 14 --------
- 8 files changed, 7 insertions(+), 95 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b90b9dbcbc..3b066bbf72 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -158,6 +158,13 @@ config BR2_PACKAGE_WESTON_FBDEV
- 	help
- 	  fbdev compositor was deprecated in weston 10.0.0.
- 
-+config BR2_PACKAGE_PYTHON_PYCLI
-+	bool "python-pycli removed"
-+	select BR2_LEGACY
-+	help
-+	  Package was removed because it is not compatible with python
-+	  3.10 and is not maintained anymore (no release since 2012).
-+
- config BR2_PACKAGE_LINUX_TOOLS_BPFTOOL
- 	bool "bpftool was moved"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b7a7c8771c..b5183711b5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1061,7 +1061,6 @@ N:	Geoff Levand <geoff@infradead.org>
- F:	package/flannel/
- 
- N:	Geoffrey Ragot <geoffreyragot@gmail.com>
--F:	package/python-pycli/
- F:	package/python-pyyaml/
- 
- N:	Gerome Burlats <gerome.burlats@smile.fr>
-diff --git a/package/Config.in b/package/Config.in
-index 8d2d550a64..517e66cce7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1144,7 +1144,6 @@ menu "External python modules"
- 	source "package/python-pybind/Config.in"
- 	source "package/python-pycairo/Config.in"
- 	source "package/python-pycares/Config.in"
--	source "package/python-pycli/Config.in"
- 	source "package/python-pycparser/Config.in"
- 	source "package/python-pycryptodomex/Config.in"
- 	source "package/python-pycups/Config.in"
-diff --git a/package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch b/package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch
-deleted file mode 100644
-index 7ac9d7af9f..0000000000
---- a/package/python-pycli/0001-Fix-problem-with-re-raise-exceptions-in-wrapped-functions.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 57c563f8b47a56feefc0a8bcbef05f4b54280549 Mon Sep 17 00:00:00 2001
--From: mmbutter <mario.butter@gmail.com>
--Date: Tue, 9 Jun 2020 11:50:41 -0500
--Subject: [PATCH] Fix problem with re-raise exceptions in wrapped functions.
--
--[Retrieved from:
--https://github.com/whilp/cli/commit/57c563f8b47a56feefc0a8bcbef05f4b54280549]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/cli/app.py | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/lib/cli/app.py b/lib/cli/app.py
--index 7b6db52..f487ab4 100644
----- a/lib/cli/app.py
--+++ b/lib/cli/app.py
--@@ -240,6 +240,9 @@ def run(self):
--         try:
--             returned = self.main(*args)
--         except Exception, e:
--+        	elif isinstance(e, self.reraise):
--+        	    # raising the last exception preserves traceback
--+        	    raise
--             returned = e
-- 
--         return self.post_run(returned)
-diff --git a/package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch b/package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch
-deleted file mode 100644
-index 75869d6d23..0000000000
---- a/package/python-pycli/0002-except-statement-changed-slightly-in-2-6.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 2af95cff5609142ec14efdf13b394f9b0121ab2e Mon Sep 17 00:00:00 2001
--From: mmbutter <mario.butter@gmail.com>
--Date: Thu, 11 Jun 2020 15:50:03 -0500
--Subject: [PATCH] except statement changed slightly in 2.6. This could cause
-- problems in newer versions. Updated to the new format.
--
--[Retrieved from:
--https://github.com/whilp/cli/commit/2af95cff5609142ec14efdf13b394f9b0121ab2e]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/cli/app.py | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/lib/cli/app.py b/lib/cli/app.py
--index f487ab4..45256b8 100644
----- a/lib/cli/app.py
--+++ b/lib/cli/app.py
--@@ -239,10 +239,10 @@ def run(self):
--             args = ()
--         try:
--             returned = self.main(*args)
---        except Exception, e:
---        	elif isinstance(e, self.reraise):
---        	    # raising the last exception preserves traceback
---        	    raise
--+        except self.reraise:
--+            # raising the last exception preserves traceback
--+            raise
--+        except Exception as e:
--             returned = e
-- 
--         return self.post_run(returned)
--@@ -420,7 +420,7 @@ def pre_run(self):
--         """
--         try:
--             ns = self.argparser.parse_args()
---        except SystemExit, e:
--+        except SystemExit as e:
--             if self.exit_after_main:
--                 raise
--             else:
-diff --git a/package/python-pycli/Config.in b/package/python-pycli/Config.in
-deleted file mode 100644
-index e1ce3b99a6..0000000000
---- a/package/python-pycli/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_PYTHON_PYCLI
--	bool "python-pycli"
--	help
--	  The cli package is a framework for making simple, correct
--	  command line applications in Python.
--
--	  https://pythonhosted.org/pyCLI/
-diff --git a/package/python-pycli/python-pycli.hash b/package/python-pycli/python-pycli.hash
-deleted file mode 100644
-index f0890e83a9..0000000000
---- a/package/python-pycli/python-pycli.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5 from https://pypi.python.org/pypi/pycli/json
--md5 89c487e7c8068ce05d63394d2ae7ebad pyCLI-2.0.3.tar.gz
--# Locally computed
--sha256  bc53e6c5db031ae1c05d131641f153d22a201c5e82cc8c9324a945752efbb622  pyCLI-2.0.3.tar.gz
--sha256  591490b2ef462a4ad2be1aae5dd47738cb17e191c82d3ba38c3ae906d288e6ba  lib/cli/__init__.py
-diff --git a/package/python-pycli/python-pycli.mk b/package/python-pycli/python-pycli.mk
-deleted file mode 100644
-index 7aff1c6200..0000000000
---- a/package/python-pycli/python-pycli.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-pycli
--#
--################################################################################
--
--PYTHON_PYCLI_VERSION = 2.0.3
--PYTHON_PYCLI_SOURCE = pyCLI-$(PYTHON_PYCLI_VERSION).tar.gz
--PYTHON_PYCLI_SITE = https://pypi.python.org/packages/95/fc/b2d86a5fbdac4072bcf70b01674b612e1a13026f54962c878fe3eca36fd1
--PYTHON_PYCLI_LICENSE = ISC-like
--PYTHON_PYCLI_LICENSE_FILES = lib/cli/__init__.py
--PYTHON_PYCLI_SETUP_TYPE = setuptools
--
--$(eval $(python-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Ck9uIDIzLzAyLzIwMjIgMjE6MjYsIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6Cj4gZ2hvc3RzY3Jp
+cHQgZW1iZWRzIGEgbG9jYWwgY29weSBvZiB0ZXNzZXJhY3Qtb2NyIHdoaWNoIGlzIGVuYWJsZWQg
+YnkKPiBkZWZhdWx0IHNpbmNlIHZlcnNpb24gOS41My4wIGFuZAo+IGh0dHBzOi8vZ2l0Lmdob3N0
+c2NyaXB0LmNvbS8/cD1naG9zdHBkbC5naXQ7YT1jb21taXQ7aD03MzIyZWY4NzU0NmM1NWIyOTA1
+NmMxZDk2ZDhiZGJiN2YzYmE1M2VmCj4KPiBTaW5jZSB2ZXJzaW9uIDkuNTUuMCBhbmQKPiBodHRw
+czovL2dpdC5naG9zdHNjcmlwdC5jb20vP3A9Z2hvc3RwZGwuZ2l0O2E9Y29tbWl0O2g9NTQ1OWY3
+YWNhMWRlZDNiN2NmOTZjMzM5YTI0MTlmNDE4YWE0MDZjNywKPiBnaG9zdHNjcmlwdCBleHBlY3Rz
+IHRoYXQgdGVzc2VyYWN0IGlzIGRpc2FibGVkIGlmIHRocmVhZHMgYXJlIG5vdAo+IGF2YWlsYWJs
+ZSByZXN1bHRpbmcgaW4gdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIHNpbmNlIGNvbW1pdAo+
+IDdhNDk0NDU2OWNlODNiMGI3YjBjYWJkNmU4YWExODRiOGNiNzJhMjI6Cj4KPiBjb25maWd1cmU6
+IGVycm9yOiBUaHJlYWRpbmcgZGlzYWJsZWQgb3Igbm90IGF2YWlsYWJsZS4gVGVzc2VyYWN0IE9D
+UiByZWxpZXMgb24gdGhyZWFkaW5nLiBSZXJ1biBjb25maWd1cmUgd2l0aCAiLS13aXRob3V0LXRl
+c3NlcmFjdCIgdG8gZXhjbHVkZSBPQ1IgZnJvbSB0aGUgYnVpbGQKPgo+IFNvIGRpc2FibGUgdGVz
+c2VyYWN0IGlmIHRocmVhZHMgYXJlIG5vdCBhdmFpbGFibGUuIEl0IHNob3VsZCBiZSBub3RlZAo+
+IHRoYXQgdGhlcmUgaXMgbm8gd2F5IHRvIHRlbGwgZ2hvc3RzY3JpcHQgdG8gdXNlIGEgc3lzdGVt
+IHByb3ZpZGVkCj4gdGVzc2VyYWN0LW9jciBwYWNrYWdlLgo+Cj4gRml4ZXM6Cj4gICAtIGh0dHA6
+Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2ZkMzVhNDdiMmE3N2NmNTdjMjQzZWMx
+Yzg4ODAyYjUzZGRjYThmNTIKPgo+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZv
+bnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgoKIMKgQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
+CiDCoFJlZ2FyZHMsCiDCoEFybm91dAoKPiAtLS0KPiBDaGFuZ2VzIHYyIC0+IHYzIChhZnRlciBy
+ZXZpZXcgb2YgQXJub3V0IFZhbmRlY2FwcGVsbGUpOgo+ICAgLSBPbmx5IGRpc2FibGUgdGVzc2Vy
+YWN0IHdpdGhvdXQgdGhyZWFkcwo+Cj4gQ2hhbmdlcyB2MSAtPiB2MjoKPiAgIC0gVW5jb25kaXRp
+b25hbGx5IGRpc2FibGUgdGVzc2VyYWN0Cj4KPiAgIHBhY2thZ2UvZ2hvc3RzY3JpcHQvZ2hvc3Rz
+Y3JpcHQubWsgfCA0ICsrKysKPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykKPgo+
+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dob3N0c2NyaXB0L2dob3N0c2NyaXB0Lm1rIGIvcGFja2Fn
+ZS9naG9zdHNjcmlwdC9naG9zdHNjcmlwdC5tawo+IGluZGV4IDI0YTBjNDg5YTguLjAyY2IzNWZj
+ZmMgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9naG9zdHNjcmlwdC9naG9zdHNjcmlwdC5tawo+ICsr
+KyBiL3BhY2thZ2UvZ2hvc3RzY3JpcHQvZ2hvc3RzY3JpcHQubWsKPiBAQCAtODMsNCArODMsOCBA
+QCBlbHNlCj4gICBHSE9TVFNDUklQVF9DT05GX09QVFMgKz0gLS13aXRob3V0LXgKPiAgIGVuZGlm
+Cj4gICAKPiAraWZlcSAoJChCUjJfVE9PTENIQUlOX0hBU19USFJFQURTKSwpCj4gK0dIT1NUU0NS
+SVBUX0NPTkZfT1BUUyArPSAtLXdpdGhvdXQtdGVzc2VyYWN0Cj4gK2VuZGlmCj4gKwo+ICAgJChl
+dmFsICQoYXV0b3Rvb2xzLXBhY2thZ2UpKQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
