@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86BF4C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 10:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44415C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 10:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DB6A812EB;
-	Mon,  7 Mar 2022 10:42:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9F254093F;
+	Mon,  7 Mar 2022 10:42:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yQsGsUEwKA6i; Mon,  7 Mar 2022 10:42:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m6gdpwyyVpZY; Mon,  7 Mar 2022 10:42:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4346481B72;
-	Mon,  7 Mar 2022 10:42:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DAC191BF982
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:42:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E38F040910;
+	Mon,  7 Mar 2022 10:42:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 336AE1BF3A8
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C945C60E32
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:42:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20DEA40396
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 10:42:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0rC3jp_mVOtd for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BGOvs_bpN7tf for <buildroot@lists.busybox.net>;
  Mon,  7 Mar 2022 10:42:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18CEA60E2E
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 10:42:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04DB24012D
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 10:42:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5601D82A79; Mon,  7 Mar 2022 10:33:51 +0000 (UTC)
+ id 3E4AD82A91; Mon,  7 Mar 2022 10:33:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 11:41:38 +0100
+Date: Mon, 7 Mar 2022 11:35:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 512b329882bfb773badb6b5e5df31a38dfabd2e0
-X-Git-Newrev: 402d85ef4e3d5161869d5da918ec679a9571c417
+X-Git-Oldrev: 5beea70361d08cf737c6be4fafd7f8e32b8434b4
+X-Git-Newrev: b78caa449844fa12b5dbc89bde28786999a3b238
 X-Patchwork-Hint: ignore
-Message-Id: <20220307103351.5601D82A79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/expat: bump to version 2.4.7
+Message-Id: <20220307103351.3E4AD82A91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-nouveau:
+ fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,52 +59,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=402d85ef4e3d5161869d5da918ec679a9571c417
+commit: https://git.buildroot.net/buildroot/commit/?id=b78caa449844fa12b5dbc89bde28786999a3b238
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release relaxes the fix to CVE-2022-25236 (introduced with release
-2.4.5) which some of you have been waiting for, due to related
-incompatibilities.
+Add upstream commit to fix build with xorg-server 21.1 which was bumped
+with commit d9185c6ba38430a017ed996c4180e141881ba570.
 
-https://blog.hartwork.org/posts/expat-2-4-7-released
-https://github.com/libexpat/libexpat/blob/R_2_4_7/expat/Changes
+No autobuild errors found yet.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...nouveau-fixup-driver-for-new-X-server-ABI.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 0d9f60931f..26f1098b7a 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.4.6/
--md5  22a30c888752fdda9f8dd1b7281c54b0  expat-2.4.6.tar.xz
--sha1  26e223c4795c242814b0e3299a5027c22b9dc733  expat-2.4.6.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.4.7/
-+md5  75a1f475e30281a00cb6f083ea481159  expat-2.4.7.tar.xz
-+sha1  032ceaa11cd791d4bc622bbf0d835b8766207796  expat-2.4.7.tar.xz
- 
- # Locally calculated
--sha256  de55794b7a9bc214852fdc075beaaecd854efe1361597e6268ee87946951289b  expat-2.4.6.tar.xz
-+sha256  9875621085300591f1e64c18fd3da3a0eeca4a74f884b9abac2758ad1bd07a7d  expat-2.4.7.tar.xz
- sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index c481b5c225..b29b0e1d26 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.4.6
-+EXPAT_VERSION = 2.4.7
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch b/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
+new file mode 100644
+index 0000000000..96be4909e7
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
+@@ -0,0 +1,68 @@
++From e80e73ced69b15662103d0fd6837db4ce6c6eb5b Mon Sep 17 00:00:00 2001
++From: Dave Airlie <airlied@redhat.com>
++Date: Mon, 13 Jul 2020 09:20:15 +1000
++Subject: [PATCH] nouveau: fixup driver for new X server ABI
++
++Downloaded from upstream commit
++https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/commit/e80e73ced69b15662103d0fd6837db4ce6c6eb5b
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/compat-api.h  | 4 ++++
++ src/nouveau_exa.c | 2 +-
++ src/nv_driver.c   | 6 +++---
++ 3 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/src/compat-api.h b/src/compat-api.h
++index fde2f4b..8a1fcf9 100644
++--- a/src/compat-api.h
+++++ b/src/compat-api.h
++@@ -102,4 +102,8 @@
++ 
++ #endif
++ 
+++#if ABI_VIDEODRV_VERSION < SET_ABI_VERSION(25, 2)
+++#define secondary_dst slave_dst
+++#endif
+++
++ #endif
++diff --git a/src/nouveau_exa.c b/src/nouveau_exa.c
++index 55df6f8..db3b112 100644
++--- a/src/nouveau_exa.c
+++++ b/src/nouveau_exa.c
++@@ -157,7 +157,7 @@ nouveau_exa_destroy_pixmap(ScreenPtr pScreen, void *priv)
++ 
++ #ifdef NOUVEAU_PIXMAP_SHARING
++ static Bool
++-nouveau_exa_share_pixmap_backing(PixmapPtr ppix, ScreenPtr slave, void **handle_p)
+++nouveau_exa_share_pixmap_backing(PixmapPtr ppix, ScreenPtr secondary, void **handle_p)
++ {
++ 	struct nouveau_bo *bo = nouveau_pixmap_bo(ppix);
++ 	struct nouveau_pixmap *nvpix = nouveau_pixmap(ppix);
++diff --git a/src/nv_driver.c b/src/nv_driver.c
++index e72a6b6..f9ab4af 100644
++--- a/src/nv_driver.c
+++++ b/src/nv_driver.c
++@@ -559,16 +559,16 @@ redisplay_dirty(ScreenPtr screen, PixmapDirtyUpdatePtr dirty)
++ {
++ 	RegionRec pixregion;
++ 
++-	PixmapRegionInit(&pixregion, dirty->slave_dst);
+++	PixmapRegionInit(&pixregion, dirty->secondary_dst);
++ 
++-	DamageRegionAppend(&dirty->slave_dst->drawable, &pixregion);
+++	DamageRegionAppend(&dirty->secondary_dst->drawable, &pixregion);
++ #ifdef HAS_DIRTYTRACKING_ROTATION
++ 	PixmapSyncDirtyHelper(dirty);
++ #else
++ 	PixmapSyncDirtyHelper(dirty, &pixregion);
++ #endif
++ 
++-	DamageRegionProcessPending(&dirty->slave_dst->drawable);
+++	DamageRegionProcessPending(&dirty->secondary_dst->drawable);
++ 	RegionUninit(&pixregion);
++ }
++ 
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
