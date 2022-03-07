@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1770C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC233C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A482060EEF;
-	Mon,  7 Mar 2022 19:33:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAB440918;
+	Mon,  7 Mar 2022 19:39:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0a2vYzrUaHGc; Mon,  7 Mar 2022 19:33:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y82MKcWJfq4L; Mon,  7 Mar 2022 19:39:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D62EA60EAD;
-	Mon,  7 Mar 2022 19:33:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8EBAD1BF36D
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:33:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64600403F8;
+	Mon,  7 Mar 2022 19:39:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A4721BF36D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:39:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89F9C833D3
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:33:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38074403F8
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:39:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id agaW3_kY2ws2 for <buildroot@lists.busybox.net>;
- Mon,  7 Mar 2022 19:33:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CCE6A832EB
- for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:33:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3B9FA82815; Mon,  7 Mar 2022 19:24:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PyAbbNQJGXsn for <buildroot@lists.busybox.net>;
+ Mon,  7 Mar 2022 19:39:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 86EBF4016A
+ for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:39:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C3C61C0002;
+ Mon,  7 Mar 2022 19:39:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nRJCG-000yYv-MY; Mon, 07 Mar 2022 20:39:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 20:30:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f41d47f15b63a4bbe026834478e63acba85d33fe
-X-Git-Newrev: c4eebf191c781a3ea6b5eb1811cc17ae92ea2fb2
-X-Patchwork-Hint: ignore
-Message-Id: <20220307192455.3B9FA82815@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpa_supplicant: fix
- libwpa_client.so build
+To: Romain Naour <romain.naour@gmail.com>
+References: <20220224154118.220408-1-romain.naour@gmail.com>
+Date: Mon, 07 Mar 2022 20:39:08 +0100
+In-Reply-To: <20220224154118.220408-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 24 Feb 2022 16:41:18 +0100")
+Message-ID: <87czix7dsz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/pkg-python: use
+ SETUPTOOLS_USE_DISTUTILS=stdlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,104 +60,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4eebf191c781a3ea6b5eb1811cc17ae92ea2fb2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Build target libwpa_client.so is not built regardless of whether the
-option CONFIG_BUILD_WPA_CLIENT_SO is set or not. Add patch that
-fixes wpa_supplicant build regression.
+ > -sh: ipython: not found
+ > ipython use a wrong shebang on the target:
 
-Fixes:
-http://autobuild.buildroot.net/results/001981339f3b895ecd9208a747a0e47d07c9583a/
-http://autobuild.buildroot.net/results/318f9ecd4060d34cc8385891b56d0a0e6275f2c9/
+It looks like git ate your '# ' line, so I've added
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-enable-options-for-libwpa_client.so-and-.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ # ipython -c 'import math; math.floor(12.3)'
 
-diff --git a/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch b/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
-new file mode 100644
-index 0000000000..156d0e7e2c
---- /dev/null
-+++ b/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
-@@ -0,0 +1,68 @@
-+From e6a6a4e3df52cc60425fcd037d3ec68a38f948ce Mon Sep 17 00:00:00 2001
-+From: Sergey Matyukevich <geomatsi@gmail.com>
-+Date: Sun, 20 Feb 2022 10:12:28 +0300
-+Subject: [PATCH] build: re-enable options for libwpa_client.so and wpa_passphrase
-+
-+Commit a41a29192e5d ("build: Pull common fragments into a build.rules
-+file") introduced regression into wpa_supplicant build process. Build
-+target libwpa_client.so is not built regardless of whether the option
-+CONFIG_BUILD_WPA_CLIENT_SO is set or not. This happens because config
-+option is used before it is imported from the configuration file.
-+Moving its usage after including build.rules does not help: variable
-+ALL is processed by build.rules and further changes are not applied.
-+Similarly, option CONFIG_NO_WPA_PASSPHRASE also does not work as
-+expected: wpa_passphrase is always built regardless of whether the
-+option is set or not.
-+
-+This commit re-enables options adding both build targets to _all
-+dependencies.
-+
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+---
-+ wpa_supplicant/Makefile | 19 ++++++++++++-------
-+ 1 file changed, 12 insertions(+), 7 deletions(-)
-+
-+diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
-+index cb66defac..e384cc6b8 100644
-+--- a/wpa_supplicant/Makefile
-++++ b/wpa_supplicant/Makefile
-+@@ -1,24 +1,29 @@
-+ BINALL=wpa_supplicant wpa_cli
-+ 
-+-ifndef CONFIG_NO_WPA_PASSPHRASE
-+-BINALL += wpa_passphrase
-+-endif
-+-
-+ ALL = $(BINALL)
-+ ALL += systemd/wpa_supplicant.service
-+ ALL += systemd/wpa_supplicant@.service
-+ ALL += systemd/wpa_supplicant-nl80211@.service
-+ ALL += systemd/wpa_supplicant-wired@.service
-+ ALL += dbus/fi.w1.wpa_supplicant1.service
-+-ifdef CONFIG_BUILD_WPA_CLIENT_SO
-+-ALL += libwpa_client.so
-+-endif
-+ 
-+ EXTRA_TARGETS=dynamic_eap_methods
-+ 
-+ CONFIG_FILE=.config
-+ include ../src/build.rules
-+ 
-++ifdef CONFIG_BUILD_WPA_CLIENT_SO
-++# add the dependency this way to allow CONFIG_BUILD_WPA_CLIENT_SO
-++# being set in the config which is read by build.rules
-++_all: libwpa_client.so
-++endif
-++
-++ifndef CONFIG_NO_WPA_PASSPHRASE
-++# add the dependency this way to allow CONFIGNO_WPA_PASSPHRASE
-++# being set in the config which is read by build.rules
-++_all: wpa_passphrase
-++endif
-++
-+ ifdef LIBS
-+ # If LIBS is set with some global build system defaults, clone those for
-+ # LIBS_c and LIBS_p to cover wpa_passphrase and wpa_cli as well.
-+-- 
-+2.35.1
-+
+And committed, thanks.
+
+ >  # head -n 1 /usr/bin/ipython
+ >  #!/home/kubu/buildroot/testsuite-master/TestIPythonPy3/host/bin/python
+
+ > The issue come from python3-setuptools 60.0.0 that changed
+ > SETUPTOOLS_USE_DISTUTILS default value from stdlib to local [1] to use
+ > its local copy of distutils. This is actually a "breaking" change [2].
+
+ > We have to override SETUPTOOLS_USE_DISTUTILS to the previous value
+ > "stdlib" to fixes the issue.
+
+ > While at it, use distutils from stdlib for the host.
+
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/2088684091
+
+ > [1] https://github.com/pypa/setuptools/commit/b6fcbbd00cb6d5607c9272dec452a50457bdb292
+ > [2] https://github.com/pypa/setuptools/blob/v60.0.0/CHANGES.rst#breaking-changes
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: James Hilliard <james.hilliard1@gmail.com>
+ > ---
+ >  package/pkg-python.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+ > index b8dc9cd9e5..e81a1a3102 100644
+ > --- a/package/pkg-python.mk
+ > +++ b/package/pkg-python.mk
+ > @@ -40,6 +40,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ >  	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+ >  	PYTHONPATH="$(PYTHON3_PATH)" \
+ >  	PYTHONNOUSERSITE=1 \
+ > +	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ >  	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+ >  	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+ >  	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+ > @@ -62,6 +63,7 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+ >  HOST_PKG_PYTHON_DISTUTILS_ENV = \
+ >  	PATH=$(BR_PATH) \
+ >  	PYTHONNOUSERSITE=1 \
+ > +	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ >  	$(HOST_CONFIGURE_OPTS)
+ 
+ >  HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ > @@ -76,6 +78,7 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+ >  	$(TARGET_CONFIGURE_OPTS) \
+ >  	PYTHONPATH="$(PYTHON3_PATH)" \
+ >  	PYTHONNOUSERSITE=1 \
+ > +	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ >  	_python_sysroot=$(STAGING_DIR) \
+ >  	_python_prefix=/usr \
+ >  	_python_exec_prefix=/usr
+ > @@ -96,6 +99,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+ >  HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ >  	PATH=$(BR_PATH) \
+ >  	PYTHONNOUSERSITE=1 \
+ > +	SETUPTOOLS_USE_DISTUTILS=stdlib \
+ >  	$(HOST_CONFIGURE_OPTS)
+ 
+ >  HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ > -- 
+
+ > 2.35.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
