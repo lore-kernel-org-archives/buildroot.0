@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD5F2C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B66CC433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Mar 2022 19:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D04A41728;
-	Mon,  7 Mar 2022 19:30:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDE9F40918;
+	Mon,  7 Mar 2022 19:30:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7C5zhDLzoiqV; Mon,  7 Mar 2022 19:30:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dItPCaE8K409; Mon,  7 Mar 2022 19:30:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7330E41719;
-	Mon,  7 Mar 2022 19:30:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DAFF0403F8;
+	Mon,  7 Mar 2022 19:30:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9AF5C1BF982
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:29:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 004251BF36D
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 828A960B5E
- for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:29:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF76960B5E
+ for <buildroot@lists.busybox.net>; Mon,  7 Mar 2022 19:29:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PV-8mFU3D84F for <buildroot@lists.busybox.net>;
+ with ESMTP id 5leNcEM4w9BN for <buildroot@lists.busybox.net>;
  Mon,  7 Mar 2022 19:29:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD6C660E74
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4C3D60EAD
  for <buildroot@buildroot.org>; Mon,  7 Mar 2022 19:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1FA8B81D75; Mon,  7 Mar 2022 19:21:14 +0000 (UTC)
+ id 288D082DB9; Mon,  7 Mar 2022 19:21:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Mar 2022 20:26:24 +0100
+Date: Mon, 7 Mar 2022 20:28:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec532199d6b404a1e51b5ed0dfdb21b18a8a3ed5
-X-Git-Newrev: efcb7eeabc22df47ca09e69c99f73e9183ed6cf3
+X-Git-Oldrev: efcb7eeabc22df47ca09e69c99f73e9183ed6cf3
+X-Git-Newrev: f41d47f15b63a4bbe026834478e63acba85d33fe
 X-Patchwork-Hint: ignore
-Message-Id: <20220307192114.1FA8B81D75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs: fix links to AsciiDoc
+Message-Id: <20220307192114.288D082DB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera-apps: link with -latomic
+ if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,78 +54,43 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5351939820293310151=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5351939820293310151==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=efcb7eeabc22df47ca09e69c99f73e9183ed6cf3
+commit: https://git.buildroot.net/buildroot/commit/?id=f41d47f15b63a4bbe026834478e63acba85d33fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Links were aimed at the methods.co.nz domain, which is now returning
-404s. The current situation of AsciiDoc is unclear to me: the Fedora
-package points to this website, they own asciidoc.org, Wikipedia points
-to this project as well but their Git repo's README includes the
-following paragraph:
+Link with -latomic if needed to avoid the following build failure raised
+since the addition of the package in commit
+7227d005d2435ec7b38995a6247d233ddb5ba365:
 
-> AsciiDoc.py is a legacy processor for this syntax, handling an older
-> rendition of AsciiDoc. As such, this will not properly handle the
-> current AsciiDoc specification. It is suggested that unless you
-> specifically require the AsciiDoc.py toolchain, you should find a
-> processor that handles the modern AsciiDoc syntax.
+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/libcamera-still.dir/libcamera_still.cpp.o: undefined reference to symbol '__atomic_fetch_sub_4@@LIBATOMIC_1.0'
 
-https://github.com/asciidoc-py/asciidoc-py/blob/10.1.3/README.md
+Fixes:
+ - http://autobuild.buildroot.org/results/b20465140f3a5281f9b586f442b67fd400e7184a
 
-"AsciiDoc specification" pointing towards:
-https://projects.eclipse.org/projects/asciidoc.asciidoc-lang
-
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/conf/asciidoc-text.conf  | 2 +-
- docs/manual/writing-rules.txt | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcamera-apps/libcamera-apps.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/docs/conf/asciidoc-text.conf b/docs/conf/asciidoc-text.conf
-index 470bdecfc2..bb614b9d85 100644
---- a/docs/conf/asciidoc-text.conf
-+++ b/docs/conf/asciidoc-text.conf
-@@ -1,5 +1,5 @@
- # Refer to following asciidoc documentation:
--#     http://www.methods.co.nz/asciidoc/userguide.html
-+#     https://asciidoc-py.github.io/userguide.html
- # In particular sections "Macros" and "Attribute References"
- #
- # For hyperlinks, show 'link text [URL]' (if link text provided) or 'URL'
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index 57ba61bdb1..84d8f76431 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -207,10 +207,10 @@ https://github.com/pengutronix/genimage/blob/master/README.rst[].
- === The documentation
+diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
+index 210d4e1e52..f4fc019c17 100644
+--- a/package/libcamera-apps/libcamera-apps.mk
++++ b/package/libcamera-apps/libcamera-apps.mk
+@@ -45,4 +45,8 @@ else
+ LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=0
+ endif
  
- The documentation uses the
--http://www.methods.co.nz/asciidoc/[asciidoc] format.
-+https://asciidoc-py.github.io/[asciidoc] format.
- 
- For further details about the asciidoc syntax, refer to
--http://www.methods.co.nz/asciidoc/userguide.html[].
-+https://asciidoc-py.github.io/userguide.html[].
- 
- === Support scripts
- 
-
---===============5351939820293310151==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LIBCAMERA_APPS_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5351939820293310151==--
