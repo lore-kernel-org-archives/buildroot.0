@@ -1,74 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D8A8C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Mar 2022 00:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8FCC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Mar 2022 08:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B6E760F0F;
-	Tue,  8 Mar 2022 00:58:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB973401EB;
+	Tue,  8 Mar 2022 08:58:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 30mgi-nc6oLK; Tue,  8 Mar 2022 00:58:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 854C560BDD;
-	Tue,  8 Mar 2022 00:58:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8B4C21BF9AA
- for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 00:58:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AB4041725
- for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 00:58:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=broadcom.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QWJSknrZqEwf for <buildroot@lists.busybox.net>;
- Tue,  8 Mar 2022 00:58:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com
- [IPv6:2607:f8b0:4864:20::f32])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B3AA4171C
- for <buildroot@buildroot.org>; Tue,  8 Mar 2022 00:58:49 +0000 (UTC)
-Received: by mail-qv1-xf32.google.com with SMTP id x3so13466132qvd.8
- for <buildroot@buildroot.org>; Mon, 07 Mar 2022 16:58:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=broadcom.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=ouW1hDf2YPSP6YdRFEOLJVD+mq/1ebFdketq+FKMs4k=;
- b=RpsGKM56aDcwrfoN3FcDcrhhk1JCl1ppLSAPs+gBDDFkbMTFba52Kai7rt80petvDP
- AVBTw47ZtsGaVg7JBYAYnu9Mbux+Q9ilU+lyo0PgGxffoSfQGWAAIioEeKm1/yPayk33
- b6KdF020pq4H1rJZtpUgpY0cD9Wx0O7Rh0tOE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=ouW1hDf2YPSP6YdRFEOLJVD+mq/1ebFdketq+FKMs4k=;
- b=Sc4t8JSW4iOftsBxoopB/nSVKdEz49Mu5HO9YDNKfQk9iEiuvIOPaF4t8ya5epqsYQ
- SWD4AwuIQ4RO62c2EuRIbrxU9kbw4M59pP4YgEC7tA3Q42nhB4QHO4TbiKAIz91oV0nZ
- qc8uHOeo0tSADLvEiLDG0zLanscIf2DAHcaVcugHgvCUHG/m/4WxsLK6YPR1ZruURQkB
- FwTLI4c6ePoGY7aUepRx+eHGGRF2eWq+ux1v067ZBqqCQ0LSJr/z5gZPl1fPjQEoBc75
- y2/j1qAfpsG+k7W09XABIKMn83eYaYTToB4A9r2s3lpFacz/AkdhsPMIUhayKuv6mYfx
- 7tww==
-X-Gm-Message-State: AOAM530PlUzzQcSLlhImeYmokJXar/uRJPUhbwa675VRw7XWlBXdIN2i
- C9wsZbLNmqRddqoQb+WrO2huz9NnPQDgqLMdbkJNPw==
-X-Google-Smtp-Source: ABdhPJwQQaGwkNHwEHKJFqcgNtlV2hbdZWWNSIwKBhkK+S6RZk7/MqW9cX3NavTNqporwRW4gLRfkDisiDhv5H7C9cA=
-X-Received: by 2002:a05:6214:21e8:b0:435:4b70:8993 with SMTP id
- p8-20020a05621421e800b004354b708993mr10200612qvj.15.1646701128372; Mon, 07
- Mar 2022 16:58:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20220305000052.491721-1-mmayer@broadcom.com>
- <20220305002209.493816-1-mmayer@broadcom.com>
- <20220305091849.GB228549@scaer>
-In-Reply-To: <20220305091849.GB228549@scaer>
-Date: Mon, 7 Mar 2022 16:58:37 -0800
-Message-ID: <CAGt4E5sOMgmqJ5asDhWD3Mtk2+6u8DAvtgaQ541vENNUuqXKcA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] linux: limit YYLTYPE kernel modification
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 24iMGht06E8G; Tue,  8 Mar 2022 08:58:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13B2140204;
+	Tue,  8 Mar 2022 08:58:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C36531BF32D
+ for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 08:58:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1F5460B57
+ for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 08:58:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=dbrgn.ch header.b="UXHdebbh";
+ dkim=pass (2048-bit key) header.d=messagingengine.com
+ header.b="APIcWg5c"
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DU71kCLzC7VM for <buildroot@lists.busybox.net>;
+ Tue,  8 Mar 2022 08:58:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com
+ [64.147.123.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5403160ACF
+ for <buildroot@buildroot.org>; Tue,  8 Mar 2022 08:58:24 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailout.west.internal (Postfix) with ESMTP id A47423200C20
+ for <buildroot@buildroot.org>; Tue,  8 Mar 2022 03:58:20 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+ by compute3.internal (MEProxy); Tue, 08 Mar 2022 03:58:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dbrgn.ch; h=cc
+ :content-type:date:date:from:from:in-reply-to:message-id
+ :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; bh=8
+ +jGrlmWo9Fq/HyVqv0/UJi98RVN72d492AjfROiXPg=; b=UXHdebbhHa2mRPU8E
+ meqh5Oq8AZietj49Jon6Nkup35ErukYfwRCPacVQTCYLJYMhrcchoPX/mfSJJgnh
+ X+OX9fBdtXqvQ3C4/X5kP8AqLaZ8cjz0oNPlONNbFfylFWVK6Jg+whXoVDUS+tdC
+ +b0mrMCbHe2JVsnZVxgES5devPpnsbSjsoTPHD6mCGE5yO1Yazs+OC8S1xg1hXyv
+ Qzf+92WYFTsaLambRCiRYFKfKiEpgcDm5BWVIla3E/ugCRIHr/wn0QRNmts6xF5J
+ ZNqhiHNegArWnM0bhNWU5Vabblgt/XxfO+JNoK6yKxiFFGjJtzvtpoDJaGGIa97P
+ 1zmvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ messagingengine.com; h=cc:content-type:date:date:from:from
+ :in-reply-to:message-id:mime-version:reply-to:sender:subject
+ :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+ :x-sasl-enc; s=fm2; bh=8+jGrlmWo9Fq/HyVqv0/UJi98RVN72d492AjfROiX
+ Pg=; b=APIcWg5cl0+vnUPULNr8P9knB0639GEedcZG9PWNowcIAQ8d8XBprwVQi
+ AkrlD31+fY0Nb9UKflmjhHgYuV2dF3Y/KNdmJLbn4mmFKegcbAK3PWYWo7okBBpt
+ jjQRVaeNARWb2nUBLGKbk1F3C9tYgJ6giQix483k9yh4iuASyb3vzybIe2y1Ak5l
+ ZFksgpoXBYQC991f6hAJWNIYqqqwaSrFOTBuZ7MNieyk2LppvOTyIlKkmIVtYABM
+ cInuJYPVo6goEyR0Bheul7LLnQI4vjGGmxGjp5FU1/RnFOKKadiNbMR+dRqcb15M
+ 9Aw4Ozjgr0hO4zIWWDuN9dYIP16hQ==
+X-ME-Sender: <xms:qxonYoE7Sk3A2d8v3zLZJpeLJDMS-eOhk4FSlQrFKmXjkb10AZCBQg>
+ <xme:qxonYhVY85rqTg6Plq0t-WT1hYwUcC2S6Y__jEiiTTV-1GX5MuubC6HEoCarB_JkE
+ gV_Vvze7dUypU31>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudduhedguddvgecutefuodetggdotefrod
+ ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+ necuuegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkfffhvffutgesthdtre
+ dtreertdenucfhrhhomhepffgrnhhilhhouceomhgrihhlsegusghrghhnrdgthheqnecu
+ ggftrfgrthhtvghrnheptddtkeduffeiveefgfeuhffgheeivdffjefgveffjefhtdekgf
+ eivedujedthfdvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+ rhhomhepmhgrihhlsegusghrghhnrdgthh
+X-ME-Proxy: <xmx:qxonYiK3e_uqF7qhRaudkl9mojHoGQR4ICCAnuacwhgV106Rk6eX6A>
+ <xmx:qxonYqHxcM4R1EDXIDlTC9ssIimsSkllin7O8Y6wBEh9hQJ3feKhhA>
+ <xmx:qxonYuVL3fltLdjqr_tUgR7rlqfhgYwJD7NJUaLhB3opY44JljqoLw>
+ <xmx:rBonYnfW5_-rk0XHIS_l_mC9jPE_GMzaFK9vERp8STUwZbSTZI1W6w>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+ id BA5E321E006E; Tue,  8 Mar 2022 03:58:19 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
+Mime-Version: 1.0
+Message-Id: <0e6293a1-fa3e-4399-b963-14634d3578ad@www.fastmail.com>
+Date: Tue, 08 Mar 2022 09:57:53 +0100
+From: Danilo <mail@dbrgn.ch>
+To: buildroot@buildroot.org
+Subject: [Buildroot] Patching buildroot package makefiles with BR2_EXTERNAL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,116 +97,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCA1IE1hciAyMDIyIGF0IDAxOjE4LCBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5
-OThAZnJlZS5mcj4gd3JvdGU6Cj4KPiBNYXJrdXMsIEFsbCwKPgo+IE9uIDIwMjItMDMtMDQgMTY6
-MjIgLTA4MDAsIE1hcmt1cyBNYXllciBzcGFrZSB0aHVzbHk6Cj4gPiBDb21taXQgOWI0MWI1NGJl
-MDc3MTFjMTBhZDEzY2UxNTdiZTI3MmVkMWNmNDAyZSBhZGRyZXNzZXMgYSBidWlsZCBpc3N1ZQo+
-ID4gcmVnYXJkaW5nIHJlLWRlZmluZWQgWUFDQyBzeW1ib2xzLiBVbmZvcnR1bmF0ZWx5LCB0aGlz
-IGNhbiBicmVhayB0aGUKPiA+IGJ1aWxkIGZvciBvbGRlciB0b29sY2hhaW5zLgo+ID4KPiA+IFRv
-IHByZXZlbnQgdW5pbnRlbnRpb25hbCBicmVha2FnZSwgbWFrZSB0aGUgc291cmNlIGNvZGUgbW9k
-aWZpY2F0aW9uCj4gPiBjb25kaXRpb25hbCBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF8x
-MC4gQWxzbyBpbmZvcm0gdGhlIHVzZXIgYWJvdXQKPiA+IHRoZSBtb2RpZmljYXRpb24gd2hlbiBp
-dCBpcyBwZXJmb3JtZWQsIHNvIGl0IGJlY29tZXMgbW9yZSBvYnZpb3VzIHdoYXQKPiA+IGlzIGhh
-cHBlbmluZyBpbiBjYXNlIG9mIHVuZm9yc2VlbiBwcm9ibGVtcy4KWy4uLl0KPiA+IGRpZmYgLS1n
-aXQgYS9saW51eC9saW51eC5tayBiL2xpbnV4L2xpbnV4Lm1rCj4gPiBpbmRleCA5NDBkYzI4NDlm
-Li4zODJhM2Y2NzllIDEwMDY0NAo+ID4gLS0tIGEvbGludXgvbGludXgubWsKPiA+ICsrKyBiL2xp
-bnV4L2xpbnV4Lm1rCj4gPiBAQCAtMjkzLDEyICsyOTMsMTUgQEAgZW5kZWYKPiA+Cj4gPiAgTElO
-VVhfUE9TVF9QQVRDSF9IT09LUyArPSBMSU5VWF9BUFBMWV9MT0NBTF9QQVRDSEVTCj4gPgo+ID4g
-K2lmZXEgKCQoQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfMTApLHkpCj4KPiBUaGF0IGlzIHdy
-b25nLCBiZWNhdXNlIHRoaXMgaXMgYnVpbHQgd2l0aCB0aGUgX2hvc3RfIGNvbXBpbGVyLCBub3Qg
-dGhlCj4gdGFyZ2V0IGNvbXBpbGVyLCBhbmQgQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfWFgg
-aXMgYWJvdXQgdGhlIHRhcmdldAo+IGNvbXBpbGVyLgoKVmVyeSBnb29kIHBvaW50LiBJIGNvbnZv
-bHV0ZWQgaG9zdCBhbmQgdGFyZ2V0IGNvbXBpbGVycy4gVGhlIGlzc3VlIHdhcwpzZWVuIG9uIGEg
-VWJ1bnR1IDIwIGJ1aWxkIGhvc3QsIHdoaWNoIG1lYW5zIGl0IHdhcyB1c2luZyBHQ0MgOS4zLjAg
-YXMKdGhlIGhvc3QgY29tcGlsZXIuCgo+IFNvLCBpZiB3ZSB3YW50ZWQgdG8gbWFrZSB0aGF0IGNv
-bmRpdGlvbmFsLCB0aGF0IHdvdWxkIGhhdmUgdG8gYmUKPiBjb25kaXRpb25hbCBvbiBCUjJfSE9T
-VF9HQ0NfQVRfTEVBU1RfMTAgKHdlIG9ubHkgaGF2ZSB1cCB0byBnY2MtOSBmb3IKPiB0aGUgaG9z
-dCBmb3Igbm93LCBzbyB3ZSdkIG5lZWQgdG8gYWRkIGl0IGZvciBnY2MtMTAgYW5kIDExOyBoaW50
-OiBzZWFyY2gKPiBmb3IgQlIyX0hPU1RfR0NDX0FUX0xFQVNUXzksIEhPU1RfR0NDX1ZFUlNJT04s
-IEhPU1RDQ19WRVJTSU9OLCBhbmQKPiBIT1NUQ0NfTUFYX1ZFUlNJT04pLgo+Cj4gRnVydGhlcm1v
-cmUsIHRoYXQgaXMgc3RpbGwgd3JvbmcgaW4geW91ciBjYXNlOiBpZiB5b3Ugc3dpdGNoIHRvIGEK
-PiBkaXN0cmlidXRpb24gdGhhdCBoYXMgZ2NjIDEwIChzbywgYXMgaG9zdCBjb21wbGVyISksIHRo
-ZW4gdGhpcyBmaXh1cAo+IHdpbGwgYmUgYXBwbGllZCBhZ2FpbiwgYW5kIHlvdXIgYnVpbGQgd2ls
-bCBicmVhayBhZ2FpbiwgYmVjYXVzZSB5b3VyCj4ga2VybmVsIGlzIChwcm9iYWJseSkgbWlzc2lu
-ZyB0aGUgZm9sbG93aW5nIGNvbW1pdHMgKG9mIHRoZSAyOSB0aGF0Cj4gdG91Y2ggc2NyaXB0cy9k
-dGMvIGJldHdlZW4gNC4xIGFuZCBlMzNhODE0ZTc3MmMpOgoKWWVzLiBVbmZvcnR1bmF0ZWx5LCB0
-aGlzIGlzIHRydWUuIFVzaW5nIEdDQyAxMCwgdGhlIGJ1aWxkIHN0dW1ibGVzCm92ZXIgeXlsbG9j
-IGFnYWluLiAgSSBpbnN0YWxsZWQgZ2NjLTEwIGFuZCBnYXZlIGl0IGFub3RoZXIgc3BpbjoKClsu
-Li5dCi91c3IvYmluL2djYy0xMCAtTzIKLUkvbG9jYWwvdXNlcnMvbW1heWVyL2J1aWxkcm9vdC9v
-dXRwdXQvYXJtNjQvaG9zdC9pbmNsdWRlIC1ETkRFQlVHCi1ML2xvY2FsL3VzZXJzL21tYXllci9i
-dWlsZHJvb3Qvb3V0cHV0L2FybTY0L2hvc3QvbGliCi1XbCwtcnBhdGgsL2xvY2FsL3VzZXJzL21t
-YXllci9idWlsZHJvb3Qvb3V0cHV0L2FybTY0L2hvc3QvbGliCi1XcCwtTUQsc2NyaXB0cy9kdGMv
-LmR0Yy1sZXhlci5sZXguby5kIC1XYWxsIC1XbWlzc2luZy1wcm90b3R5cGVzCi1Xc3RyaWN0LXBy
-b3RvdHlwZXMgLU8yIC1mb21pdC1mcmFtZS1wb2ludGVyIC1zdGQ9Z251ODkKLUlzY3JpcHRzL2R0
-YyAtSXNjcmlwdHMvZHRjL2xpYmZkdCAtYyAtbyBzY3JpcHRzL2R0Yy9kdGMtbGV4ZXIubGV4Lm8K
-c2NyaXB0cy9kdGMvZHRjLWxleGVyLmxleC5jCmR0Yy1sZXhlci5sZXguYzogSW4gZnVuY3Rpb24g
-4oCYeXlsZXjigJk6CmR0Yy1sZXhlci5sOjQ2OjE4OiBlcnJvcjog4oCYeXlsbG9j4oCZIHVuZGVj
-bGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzCmZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuIOKAmHl5YWxs
-b2PigJk/CmR0Yy1sZXhlci5sZXguYzo4NDU6Mjogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3Jv
-IOKAmFlZX1VTRVJfQUNUSU9O4oCZCmR0Yy1sZXhlci5sZXguYzo5Mzk6MTogbm90ZTogaW4gZXhw
-YW5zaW9uIG9mIG1hY3JvIOKAmFlZX1JVTEVfU0VUVVDigJkKZHRjLWxleGVyLmw6NDY6MTg6IG5v
-dGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVkIG9ubHkKb25jZSBmb3Ig
-ZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluCmR0Yy1sZXhlci5sZXguYzo4NDU6Mjogbm90ZTog
-aW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmFlZX1VTRVJfQUNUSU9O4oCZCmR0Yy1sZXhlci5sZXgu
-Yzo5Mzk6MTogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmFlZX1JVTEVfU0VUVVDigJkK
-bWFrZVs0XTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmhvc3Q6MTA4OiBzY3JpcHRzL2R0Yy9kdGMt
-bGV4ZXIubGV4Lm9dIEVycm9yIDEKbWFrZVszXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxk
-OjQ3Njogc2NyaXB0cy9kdGNdIEVycm9yIDIKbWFrZVsyXTogKioqIFtNYWtlZmlsZTo1NTU6IHNj
-cmlwdHNdIEVycm9yIDIKbWFrZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1rOjI5MjoK
-L2xvY2FsL3VzZXJzL21tYXllci9idWlsZHJvb3Qvb3V0cHV0L2FybTY0L2J1aWxkL2xpbnV4LXN0
-Yi00LjEvLnN0YW1wX2J1aWx0XQpFcnJvciAyCm1ha2U6ICoqKiBbTWFrZWZpbGU6Mjc6IF9hbGxd
-IEVycm9yIDIKCj4gICAgICQgZ2l0IHNsb2cgLUcnWVlMVFlQRSB5eWxsb2M7JyB2NC4xLi5lMzNh
-ODE0ZTc3MmNkYzM2NDM2YzhjMTg4ZDhjNDJkMDE5ZmRhNjM5IC0tIHNjcmlwdHMvZHRjLwo+ICAg
-ICBlMzNhODE0ZTc3MmNkIHNjcmlwdHMvZHRjOiBSZW1vdmUgcmVkdW5kYW50IFlZTE9DIGdsb2Jh
-bCBkZWNsYXJhdGlvbgo+ICAgICBlMDM5MTM5YmU4YzI1IHNjcmlwdHMvZHRjOiBnZW5lcmF0ZSBs
-ZXhlciBhbmQgcGFyc2VyIGR1cmluZyBidWlsZCBpbnN0ZWFkIG9mIHNoaXBwaW5nCj4gICAgIDQ3
-NjA1OTcxMTZlMzQgc2NyaXB0cy9kdGM6IFVwZGF0ZSB0byB1cHN0cmVhbSB2ZXJzaW9uIDlkMzY0
-OWJkM2JlMjQ1YzkKCkNvcnJlY3QuIFdlIGRvbid0IGhhdmUgdGhvc2UuIEhvd2V2ZXIsIGl0IG1p
-Z2h0IGJlIHBvc3NpYmxlIGZvciB1cyB0bwpwdWxsIHNvbWUgb2YgdGhlbSBpbi4gTm90IHN1cmUg
-eWV0LiBJJ2QgaGF2ZSB0byB0YWtlIGEgY2xvc2VyIGxvb2suCgo+IEhvd2V2ZXIsIHlvdSBzdGls
-bCBoYXZlIGEgcG9pbnQ6IHRoaXMgaXMgYnJlYWtpbmcgb2xkZXIga2VybmVscyB0aGF0IGRvCj4g
-bm90IGhhdmUgYSByZWNlbnQtZW5vdWdoIGJ1bmRsZWQgZHRjLCB3aGV0aGVyIHRoZXkgYmUgYnVp
-bHQgd2l0aCBhIGhvc3QKPiBnY2MgMTArIG9yIG5vdC4uLgoKQWdyZWVkLiBXZSBtaWdodCBiZSBh
-YmxlIHRvIG92ZXJjb21lIHRoZSBpc3N1ZSBieSBsb29raW5nIGF0IHRoZQphZm9yZW1lbnRpb25l
-ZCBrZXJuZWwgcGF0Y2hlcywgYnV0IG90aGVycyBtaWdodCBzdGlsbCBydW4gaW50byBpdC4KCj4g
-TWF5YmUgd2UgbmVlZCB0byBmaW5kIGEgYmV0dGVyIGhldXJpc3RpYyB0byBkZXRlY3QgdGhlIGNh
-c2Ugd2hlbiB3ZSBuZWVkCj4gdG8gYXBwbHkgdGhlIGZpeCwgYnV0IHRoZW4gSSBhbSBhZnJhaWQg
-dGhpcyBpcyBnb2luZyB0byBiZSBhIG5pZ2h0bWFyZQo+IG9mIHNvIG1hbnkgY29ybmVyIGNhc2Vz
-IHdpdGggdmVuZG9yLXNwZWNpZmljIGZyYW5rZW4ta2VybmVscy4KPgo+IEkgYW0gbm90IHN1cmUg
-d2hlcmUgdG8gZ28gZnJvbSBoZXJlLCB0aG91Z2guLi4KCkxldCBtZSBtdWxsIHRoaXMgb25lIG92
-ZXIgZm9yIGEgYml0LCBhcyB3ZWxsLiBJIGFtIGd1ZXNzaW5nIHlvdSdsbApoYXZlIHRob3VnaHQg
-b2YgbW9zdCBhcHByb2FjaGVzIGFscmVhZHksIGJ1dCBvbmUgbmV2ZXIga25vd3Mgd2hhdCBvbmUK
-bWlnaHQgc3R1bWJsZSB1cG9uLgoKPiA+ICAjIE9sZGVyIHZlcnNpb25zIGJyZWFrIG9uIGdjYyAx
-MCsgYmVjYXVzZSBvZiByZWRlZmluZWQgc3ltYm9scwo+ID4gIGRlZmluZSBMSU5VWF9EUk9QX1lZ
-TExPQwo+ID4gKyAgICAgQGVjaG8gIlJlbW92aW5nICdZWUxUWVBFIHl5bGxvYzsnIGZyb20ga2Vy
-bmVsIHNvdXJjZXMuLi4iCj4KPiBUaGVyZSBhcmUgc28gbWFueSBmaXhlcyBhbmQgdHdlYWtzIHdl
-IGRvIHdpdGhvdXQgaW5mb3JtaW5nIHRoZSB1c2VyLiBJZgo+IHdlIHdlcmUgdG8sIHRoZSBidWls
-ZCB3b3VsZCBiZSBldmVuIG1vcmUgdmVyYm9zZSB0aGFuIGl0IGN1cnJlbnRseSBpcy4KPiBGaW5k
-aW5nIGEgcmVmZXJlbmNlIHRvIHl5bGxvYyBpbiB0aGUgYnVpbGQgbG9nIHdvdWxkIGp1c3QgbWVh
-biBncmVwcGluZwo+IGZvciBpdCwgc28geW91IHdvdWxkIGFjaGlldmUgYWJvdXQgdGhlIHNhbWUg
-YnkgcnVubmluZzoKPgo+ICAgICAkIG1ha2UgVj0xCj4KPiBhcyB0aGF0IHdvdWxkIHByaW50IHRo
-ZSBmaXh1cCBsaW5lLgoKVHJ1ZSBhbmQgSSBzZWUgeW91ciBwb2ludCByZWdhcmRpbmcgc3VwZXIt
-dmVyYm9zZSBvdXRwdXQsIGhvd2V2ZXIsIHRoZQpwcm9ibGVtIEkgd2FzIGZhY2luZyBoZXJlIHdh
-cyB0aGF0IEkgZGlkbid0ICprbm93KiB0byBydW4gIm1ha2UgVj0xIgpvbiBidWlsZHJvb3QgYXMg
-YSB3aG9sZSAtLSBhbmQgdGhhdCBJIHdvdWxkIGhhdmUgdG8gZG8gc28gKmJlZm9yZSogaXQKcGF0
-Y2hlZCB0aGUga2VybmVsLiBJdCB3b24ndCBnbyB0aHJvdWdoIHRoYXQgc3RhZ2UgYWdhaW4gaWYg
-eW91IGp1c3QKcmVjb25maWd1cmUgb3IgcmVidWlsZCBMaW51eC4gSSB3YXMgdGhpbmtpbmcgdGhh
-dCB0aGUgTGludXggYnVpbGQKc3lzdGVtIGl0c2VsZiB3YXMgc29tZWhvdyBtZXNzaW5nIHdpdGgg
-dGhlIGZpbGVzLiBTbywgSSB3YXMgbG9va2luZyBpbgp0aGUgY29tcGxldGVseSB3cm9uZyBwbGFj
-ZSBmb3IgYSB3aGlsZS4KCkkgYW0gbm90IHNheWluZyBhIG1lc3NhZ2Ugbm90IHJlbHlpbmcgb24g
-IlY9MSIgaW4gdGhlIGJ1aWxkcm9vdCBidWlsZApsb2cgd291bGQgaGF2ZSBhY3R1YWxseSBoZWxw
-ZWQgbWUgZmluZCB0aGlzIGlzc3VlIG11Y2ggbW9yZSBxdWlja2x5LApidXQgaXQgY291bGQgaGF2
-ZSBzZXJ2ZWQgYXMgYSBwb2ludGVyIHRvIGxvb2sgYXQgdGhlIEJ1aWxkcm9vdCBwYXRjaApzdGFn
-ZSBtb3JlIGNsb3NlbHkgYW5kIG5vdCB0aGUga2VybmVsIGJ1aWxkIHN5c3RlbS4gQW5kIHRoYXQK
-ZGVmaW5pdGVseSB3b3VsZG4ndCBoYXZlIGh1cnQuCgpSZWdhcmRzLAotTWFya3VzCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hello
+
+I'm trying to set up an Nginx module package (nginx-rtmp-module) in a Buildroot
+project that uses BR2_EXTERNAL. I added the new external package, that works.
+However, Nginx modules need to be compiled along with Nginx, which means that I
+need to patch the Buildroot nginx.mk file, right?
+
+What I need to inject into the makefile, is the following:
+
+    NGINX_DEPENDENCIES += nginx-rtmp-module
+    NGINX_CONF_OPTS += --add-module=$(NGINX_RTMP_MODULE_DIR)
+
+Is there a mechanism to do this from outside the Buildroot source? It seems
+that BR2_GLOBAL_PATCH_DIR only works for packet sources, but not for Buildroot
+makefiles, correct?
+
+I tried adding the assignments above into the package makefile
+(nginx-rtmp-module.mk), but that doesn't seem to work.
+
+Any help would be appreciated!
+Danilo
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
