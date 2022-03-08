@@ -1,81 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F2B7C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Mar 2022 21:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1557C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  8 Mar 2022 22:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F125A409FD;
-	Tue,  8 Mar 2022 21:13:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83D4E417B6;
+	Tue,  8 Mar 2022 22:09:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id el8RD-EJ8oxl; Tue,  8 Mar 2022 21:13:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D1B9840108;
-	Tue,  8 Mar 2022 21:13:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 968C01BF30B
- for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 21:13:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8683040192
- for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 21:13:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ukTnQXAUhT3n for <buildroot@lists.busybox.net>;
- Tue,  8 Mar 2022 21:13:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 723014013D
- for <buildroot@buildroot.org>; Tue,  8 Mar 2022 21:13:27 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id k24so54367wrd.7
- for <buildroot@buildroot.org>; Tue, 08 Mar 2022 13:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zaZdpEfj83bnOGMcRLtsOvL51OCWlBvKAdlAwo3SA6I=;
- b=KTO+T0dX4+Kc75LtZIr/PrMoU6vbaNEP78lCMX+JLn+MEHQB1V1/8ImIa6zNaRNjrl
- MhE3C6xja6VLYNUn2SnnwfRu1uZxq1IoHP3yZtrshpIWEuEu+sPp+bMbLvRqoplp4aqy
- /jlidTJcsip0CSQb24mh2EDUYYsWVD2/9kfgJmBtOJqPq+5e3FXA5oChr+hYiAffzsy6
- imUvHiKGRHkOJP+Z6aYyRL84plA+5K1YEmHbxwDWqype7wA+lw5y+qrdxv1b5Iv53xYK
- 1M/OmMDkimIt4l1i6V0HjgenmF0hWX/R3DxmpXG9ucspHJNSzFTetURz82M9fmSRwuQG
- ++oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zaZdpEfj83bnOGMcRLtsOvL51OCWlBvKAdlAwo3SA6I=;
- b=gPhaNffwBl6Cdmx/uwGuJXGfKdk/2hDCk8g5zEpK8Zge9uHSHDTZKBll1qvYLIb4GS
- pLiL412zpKUT0ck+RdCHkQvGMvUZcLdzunMz0QtQhd6R+GWIsgx4lwp8sGYv7MuEDAUt
- iMD4/j1z3ZwN+qoi8pmM07+L7yv+IT/c5LoRqMP2xlmUlQNehBpCsoTekQ8QhTfMdtcC
- 73M7UPIQCKWIQy0zd278qEv9lcNeo6/1Mg+5dciafxpDdWnhnj7HUF/1dniD2lD1fGwn
- lnFtEV3+54F9S/VVKzMF8VZO+TmuSUGesxZmQNpwFmhssm2xDP60iFSTdlIHyUkWXn23
- zq8Q==
-X-Gm-Message-State: AOAM532bt5Shie7/ijl9Rcc9e1ed5eklWA8IVGas8ziMrZT3YFXyP4xY
- JtbVxOyDI0EJBtlI/Xc/aqujW5iqPwE=
-X-Google-Smtp-Source: ABdhPJz8v54ochS5zXkC0gylp5KZvRpe/mt6reS8Iuj4MsIwBN+tnVIRDWil3yquM6AHb+9QthBr6A==
-X-Received: by 2002:a5d:6d41:0:b0:1ef:f32c:18ee with SMTP id
- k1-20020a5d6d41000000b001eff32c18eemr13595765wri.532.1646774005270; 
- Tue, 08 Mar 2022 13:13:25 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- t9-20020a05600c198900b0037c0342cb62sm4016617wmq.4.2022.03.08.13.13.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 08 Mar 2022 13:13:24 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rJiw9xZmzL96; Tue,  8 Mar 2022 22:09:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86EC7417BA;
+	Tue,  8 Mar 2022 22:09:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C6A71BF588
+ for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 22:08:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 193DE80BE7
+ for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 22:08:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mQyG9nJKIPGV for <buildroot@lists.busybox.net>;
+ Tue,  8 Mar 2022 22:08:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 111D880BE6
+ for <buildroot@buildroot.org>; Tue,  8 Mar 2022 22:08:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id EAA1883874; Tue,  8 Mar 2022 22:00:31 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue,  8 Mar 2022 22:12:05 +0100
-Message-Id: <20220308211205.3682-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/boinc: disable fcgi
+Date: Tue, 8 Mar 2022 23:08:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4d8c29e7ac8ff2558656340bb88a7d044279d302
+X-Git-Newrev: 08967921c4a91eb7d966c31f755a0720914e8bff
+X-Patchwork-Hint: ignore
+Message-Id: <20220308220031.EAA1883874@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2022.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,67 +52,190 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libfcgi raises the following build failure with glibc 2.34 and gcc
-11.2.0:
+commit: https://git.buildroot.net/buildroot/commit/?id=08967921c4a91eb7d966c31f755a0720914e8bff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In file included from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/features.h:488,
-                 from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/libc-header-start.h:33,
-                 from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdio.h:27,
-                 from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/fcgi_stdio.h:18,
-                 from boinc_fcgi.h:19,
-                 from coproc.cpp:22:
-/home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/wchar.h:582:24: error: 'malloc' attribute argument 1 is ambiguous
-  582 |   __attribute_malloc__ __attr_dealloc_fclose;
-      |                        ^~~~~~~~~~~~~~~~~~~~~
-
-RawTherapee has the same kind of issue:
- - https://github.com/Beep6581/RawTherapee/issues/6324
- - https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101747
-
-Fixes:
- - http://autobuild.buildroot.org/results/232dae62570ed7927a10864d83dccaf9b6214500
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boinc/boinc.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ CHANGES                    | 33 +++++++++++++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 68 insertions(+), 14 deletions(-)
 
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 7f78c427ea..0d992f136c 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -26,6 +26,7 @@ BOINC_CONF_ENV = \
- BOINC_CONF_OPTS = \
- 	--disable-apps \
- 	--disable-boinczip \
-+	--disable-fcgi \
- 	--disable-manager \
- 	--disable-server \
- 	--enable-client \
-@@ -38,13 +39,6 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- BOINC_DEPENDENCIES += freetype
- endif
+diff --git a/CHANGES b/CHANGES
+index 8e8ecd1a72..59ae8f15ce 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,36 @@
++2022.02, released March 8th, 2022
++
++	Various fixes.
++
++	Fixes to cargo and golang packaging infrastructure.
++
++	Defconfigs: OrangePi RK3399: Fix genimage format
++
++	Updated/fixed packages: azure-iot-sdk-c, bpftool, cog,
++	directfb, directfb-examples, dnsmasq, docker-engine, expat,
++	freerdp, frr, gdb, ghostscript, glib-networking, go, haproxy,
++	hostapd, kf5-extra-cmake-modules, kf5-kcoreaddons,
++	kf5-modemmanager-qt, kf5-networkmanager-qt, libcamera-apps,
++	libgee, libglfw, librstp, libtorrent, libvirt, libxslt, linux,
++	mariadb, oprofile, osm2pgsql, pulseview, python-cryptography,
++	python-gnupg, python-treq, qt5base, qt5webkit, rauc, re2,
++	rygel, safeclib, sconeserver, seatd, sord, upmpdcli,
++	util-linux, weston, wpa_supplicant, xdriver_xf86-video-mach64,
++	xdriver_xf86-video-nouveau, xdriver_xf86-video-qxl,
++	xscreensaver, zabbix
++
++	New packages: gdk-pixbuf-xlib
++
++	Removed packages: python-pycli
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13126: make fails - bzip2-1.0.6.tar.gz and DirectFB-1.7.7.tar..
++	#14611: 2022.02-rc2: Build of BR2_x86_64 with BR2_LINUX_KERNEL_..
++	#14631: host-go-bootstrap: go not being built for package in ..
++	#14636: azure-iot-sdk-c: Installed headers do not compile
++	#14641: oprofile can not find the events files
++
+ 2022.02-rc3, released February 28th, 2022
  
--ifeq ($(BR2_PACKAGE_LIBFCGI),y)
--BOINC_DEPENDENCIES += libfcgi
--BOINC_CONF_OPTS += --enable-fcgi
--else
--BOINC_CONF_OPTS += --disable-fcgi
--endif
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 4f693d40a9..71f8096b71 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.02-rc3
++export BR2_VERSION := 2022.02
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1646083800
++BR2_VERSION_EPOCH = 1646777000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 891221e155..18a9254cbf 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.10</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2022.02</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2021.02.10.tar.gz">buildroot-2021.02.10.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.10.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.02.tar.gz">buildroot-2022.02.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.02.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2021.02.10.tar.bz2">buildroot-2021.02.10.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.10.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.02.tar.xz">buildroot-2022.02.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.02.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
 -
- BOINC_MAKE_OPTS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++<!--
+       <h3 style="text-align: center;">Latest stable release: <b>2021.11.2</b></h3>
  
- # Remove boinc-client because it is incompatible with buildroot
--- 
-2.34.1
-
+       <div class="row mt centered">
+@@ -109,7 +109,7 @@
+ 	  <p><a href="/downloads/buildroot-2022.02-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 88885a058f..de80a5f23d 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.02 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>8 March 2022</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2022.02 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.02">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.02.tar.xz">2022.02 release</a>.</p>
++
++	  <p>Notice that this is a long term support release which will be
++	  supported with security and other important fixes until March 2023.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 37981d7932..a5a0e3f41a 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2021.11.2'
++RELEASE='2022.02'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
