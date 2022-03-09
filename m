@@ -1,66 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07A5C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 21:26:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28010C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 21:35:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5367A40142;
-	Wed,  9 Mar 2022 21:26:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B580960FAC;
+	Wed,  9 Mar 2022 21:35:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yxqf9fC5vr1q; Wed,  9 Mar 2022 21:26:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5VoxaFSTT0BS; Wed,  9 Mar 2022 21:35:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE08F4055E;
-	Wed,  9 Mar 2022 21:26:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D560B60F88;
+	Wed,  9 Mar 2022 21:35:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 73B421BF37E
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:26:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 098201BF37E
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62E37418C3
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:26:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE116415F8
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:35:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KbC3XIdSscSy for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 21:26:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DE0A9418BC
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 21:26:24 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:959:4871:d6cd:4ee3])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E181913F854;
- Wed,  9 Mar 2022 22:26:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1646861182;
- bh=ujhc0b6VFq22uWpqo98U52ZfCVwWx8xHqcYuWQF+y5w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RsePoiD42FrxOzK3Be+Ity7ApIJe7Bh6GYLwW3WQ13fh2BOgtTAGEOS0hQvZPkE9/
- +GFY+fjzgwyfSX2/RbuHMZFBBk8ZLAecgJ5HADbBmQHChOWA4gulz0OLa/3MURaS11
- USSHeDv/8uoZIUtfsX9Gk26HWUITmvPy6AA762M8LVH/ZWKWflPQ2UHecdsOU7GSFz
- gDWT3sWNCNv7fHjXPdz1MBZtNvhJThoHdsftZBv4i5to2SSRpLf87t1/XNWzih5jF7
- 9g+SWcc/VHrTqyxj70WhMpaBRZmtsaISG/xCmWQBiC9VRxVl52MN0EiL3D7GrYbI29
- gSyXwFwCvqvuQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 09 Mar 2022 22:26:18 +0100
-Date: Wed, 9 Mar 2022 22:26:18 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220309212618.GE23050@scaer>
-References: <20220309173503.527227-1-fontaine.fabrice@gmail.com>
+ with ESMTP id K8-65WqzfH3l for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 21:35:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 10615415EA
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 21:35:50 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id t11so5033826wrm.5
+ for <buildroot@buildroot.org>; Wed, 09 Mar 2022 13:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HGq/npOQ8Y/vZnUP72zzUHBR7pTAeI3KlNg42seZdeo=;
+ b=aByjsjZxoJwa63ilUs3RUdyKLUJ+coeh7fiHwWJhLzJVxJN/dSwcjx3gkRJ1WRSI8K
+ 0W78GinbfS5CixY5bWYyZxKUoXzY/KzlwF5cfB7gEFsKsx12TlWwx/c5Pdo5T2AbMUyU
+ OID2r2eHJzzecF4/8TIXXS0NOdzgZ2KGldKiFY5OXqnvZq2UYVoq/chSQ4S+WOt5HAMd
+ QxDm7keZN6TsmjnrMT2kgAJjq4Ecm/27NIpoQE3kwik7nUFt0+TBRh/hTSuXg7aLb50U
+ XNXOE5gBXH0svPvNmvVnYPXASCPiAG6tUNqQcVKiuwJdUfQc39U74PM9PhdbPB1weyvm
+ nOyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HGq/npOQ8Y/vZnUP72zzUHBR7pTAeI3KlNg42seZdeo=;
+ b=Esv2hFLIKLpuj43qeVlO1tyRjlw4enGxYMoaUF/rwcd2d+dllHrQHCglzjeuKmNISR
+ 99I2QIN5zgAl0bE9WQaBRhHoY+kvLbe8WgKr8IPtGY5F74d9Hhcmw4djBejsFeRGdrJm
+ rCrWIgPlwDiZZacBbL2H0bJzA9m2TpHvL17On0SuvljiICVFJ7nS3KXwRuW/WMMdjAgs
+ P243beZEBkpzgtoRmU0/fvIG+KEvYxHjHObcwzkHlK6AUo7OnC/84mu5zpC+qjZOXXHB
+ viwad01vWISh3eJfBDO4/gZ4AU/Bb1w8XGEABCcxizH625Og8z+t/thLxIJIpJvEHG/g
+ /Qrw==
+X-Gm-Message-State: AOAM530aH2thZFN291s4c1S3Tj+7qpd4MrSC7XjEs6SebuJq3rK0Sf99
+ aGm01IdkPJr5SJpTDQ0/6tuyz/brH3U=
+X-Google-Smtp-Source: ABdhPJyKsUoEeQ97q7qg3K93fyewKnBIGet+jUF/lfddxItycSvNkD7yH5ZXjOf3o5SIlNxYAxikgw==
+X-Received: by 2002:a5d:4d4b:0:b0:203:75dc:b1a2 with SMTP id
+ a11-20020a5d4d4b000000b0020375dcb1a2mr1189314wru.167.1646861748907; 
+ Wed, 09 Mar 2022 13:35:48 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ u10-20020a05600c19ca00b00389860c6d3asm6877516wmq.23.2022.03.09.13.35.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 09 Mar 2022 13:35:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  9 Mar 2022 22:34:59 +0100
+Message-Id: <20220309213459.677932-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220309173503.527227-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/gnutls: fix build without
- threads
+Subject: [Buildroot] [PATCH 1/1] package/usbguard: add USBGUARD_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,239 +87,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+cpe:2.3:a:usbguard_project:usbguard is a valid CPE identifier for this
+package:
 
-On 2022-03-09 18:35 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure without threads raised since bump to
-> version 3.7.3 in commit 212b020bb43f13121d6cde464f871d5d1cf6cfbe:
-> 
-> kx.c: In function '_gnutls_nss_keylog_write':
-> kx.c:164:33: error: 'keylog_mutex' undeclared (first use in this function); did you mean 'keylog_once'?
->   164 |   if (gnutls_static_mutex_lock(&keylog_mutex) < 0) {
->       |                                 ^~~~~~~~~~~~
->       |                                 keylog_once
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e092bc11ce4b5908cb6285aa77a3594b8626eeec
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ausbguard_project%3Ausbguard
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/usbguard/usbguard.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...cks-define-lock-functions-as-a-macro.patch | 179 ++++++++++++++++++
->  1 file changed, 179 insertions(+)
->  create mode 100644 package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
-> 
-> diff --git a/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
-> new file mode 100644
-> index 0000000000..52965c051d
-> --- /dev/null
-> +++ b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
-> @@ -0,0 +1,179 @@
-> +From 5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd Mon Sep 17 00:00:00 2001
-> +From: Daiki Ueno <ueno@gnu.org>
-> +Date: Wed, 9 Mar 2022 08:07:58 +0100
-> +Subject: [PATCH] locks: define lock functions as a macro
-> +
-> +When threads are not supported, glthread_* functions are defined as
-> +no-op and thus dereferencing lock variables in inline functions will
-> +cause compilation error.  This change fixes it by redefining our lock
-> +functions as a macro so it will also be compiled out.
-> +
-> +Reported by Fabrice Fontaine in:
-> +https://gitlab.com/gnutls/gnutls/-/issues/1330
-> +
-> +Signed-off-by: Daiki Ueno <ueno@gnu.org>
-> +
-> +[Retrieved from:
-> +https://gitlab.com/gnutls/gnutls/-/commit/5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + lib/locks.c       | 54 -----------------------------------------------
-> + lib/locks.h       | 28 ++++++++++++++++++------
-> + lib/pkcs11.c      |  2 +-
-> + lib/priority.c    |  2 +-
-> + lib/verify-tofu.c |  2 +-
-> + 5 files changed, 25 insertions(+), 63 deletions(-)
-> +
-> +diff --git a/lib/locks.c b/lib/locks.c
-> +index d61504e077..8888ed6b12 100644
-> +--- a/lib/locks.c
-> ++++ b/lib/locks.c
-> +@@ -63,57 +63,3 @@ gnutls_global_set_mutex(mutex_init_func init, mutex_deinit_func deinit,
-> + 	gnutls_mutex_lock = lock;
-> + 	gnutls_mutex_unlock = unlock;
-> + }
-> +-
-> +-int
-> +-gnutls_static_mutex_lock(gnutls_static_mutex_t lock)
-> +-{
-> +-	if (unlikely(glthread_lock_lock(lock))) {
-> +-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-> +-	}
-> +-	return 0;
-> +-}
-> +-
-> +-int
-> +-gnutls_static_mutex_unlock(gnutls_static_mutex_t lock)
-> +-{
-> +-	if (unlikely(glthread_lock_unlock(lock))) {
-> +-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-> +-	}
-> +-	return 0;
-> +-}
-> +-
-> +-int
-> +-gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock)
-> +-{
-> +-	if (unlikely(glthread_rwlock_rdlock(rwlock))) {
-> +-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-> +-	}
-> +-	return 0;
-> +-}
-> +-
-> +-int
-> +-gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock)
-> +-{
-> +-	if (unlikely(glthread_rwlock_wrlock(rwlock))) {
-> +-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-> +-	}
-> +-	return 0;
-> +-}
-> +-
-> +-int
-> +-gnutls_rwlock_unlock(gnutls_rwlock_t rwlock)
-> +-{
-> +-	if (unlikely(glthread_rwlock_unlock(rwlock))) {
-> +-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-> +-	}
-> +-	return 0;
-> +-}
-> +-
-> +-int
-> +-gnutls_once(gnutls_once_t once, void (*init_func) (void))
-> +-{
-> +-	if (unlikely(glthread_once(once, init_func))) {
-> +-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-> +-	}
-> +-	return 0;
-> +-}
-> +diff --git a/lib/locks.h b/lib/locks.h
-> +index a1ff0fa9d7..907adfc134 100644
-> +--- a/lib/locks.h
-> ++++ b/lib/locks.h
-> +@@ -40,8 +40,14 @@ extern mutex_unlock_func gnutls_mutex_unlock;
-> +  */
-> + #define GNUTLS_STATIC_MUTEX(lock) gl_lock_define_initialized(static, lock)
-> + typedef gl_lock_t *gnutls_static_mutex_t;
-> +-int gnutls_static_mutex_lock(gnutls_static_mutex_t lock);
-> +-int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
-> ++
-> ++#define gnutls_static_mutex_lock(LOCK)			\
-> ++	(unlikely(glthread_lock_lock(LOCK)) ?		\
-> ++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-> ++
-> ++#define gnutls_static_mutex_unlock(LOCK)		\
-> ++	(unlikely(glthread_lock_unlock(LOCK)) ?		\
-> ++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-> + 
-> + /* Unlike static mutexes, static rwlocks can be locked/unlocked with
-> +  * the functions defined below, because there is no way to replace
-> +@@ -50,13 +56,23 @@ int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
-> + #define GNUTLS_RWLOCK(rwlock) gl_rwlock_define_initialized(static, rwlock)
-> + typedef gl_rwlock_t *gnutls_rwlock_t;
-> + 
-> +-int gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock);
-> +-int gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock);
-> +-int gnutls_rwlock_unlock(gnutls_rwlock_t rwlock);
-> ++#define gnutls_rwlock_rdlock(RWLOCK)			\
-> ++	(unlikely(glthread_rwlock_rdlock(RWLOCK)) ?	\
-> ++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-> ++
-> ++#define gnutls_rwlock_wrlock(RWLOCK)			\
-> ++	(unlikely(glthread_rwlock_wrlock(RWLOCK)) ?	\
-> ++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-> ++
-> ++#define gnutls_rwlock_unlock(RWLOCK)			\
-> ++	(unlikely(glthread_rwlock_unlock(RWLOCK)) ?	\
-> ++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-> + 
-> + #define GNUTLS_ONCE(once) gl_once_define(static, once)
-> + typedef gl_once_t *gnutls_once_t;
-> + 
-> +-int gnutls_once(gnutls_once_t once, void (*init_func) (void));
-> ++#define gnutls_once(ONCE, INIT_FUNC)			\
-> ++	(unlikely(glthread_once(ONCE, INIT_FUNC)) ?	\
-> ++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-> + 
-> + #endif /* GNUTLS_LIB_LOCKS_H */
-> +diff --git a/lib/pkcs11.c b/lib/pkcs11.c
-> +index 8dda0f07c9..ba8ac0c375 100644
-> +--- a/lib/pkcs11.c
-> ++++ b/lib/pkcs11.c
-> +@@ -351,7 +351,7 @@ int _gnutls_pkcs11_check_init(init_level_t req_level, void *priv, pkcs11_reinit_
-> + 	ret = sret;
-> + 
-> +  cleanup:
-> +-	gnutls_static_mutex_unlock(&pkcs11_mutex);
-> ++	(void)gnutls_static_mutex_unlock(&pkcs11_mutex);
-> + 
-> + 	return ret;
-> + }
-> +diff --git a/lib/priority.c b/lib/priority.c
-> +index d17a923318..55ae185c1f 100644
-> +--- a/lib/priority.c
-> ++++ b/lib/priority.c
-> +@@ -2505,7 +2505,7 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
-> + 	}
-> + 
-> +  out:
-> +-	gnutls_rwlock_unlock(&system_wide_config_rwlock);
-> ++	(void)gnutls_rwlock_unlock(&system_wide_config_rwlock);
-> + 	return ret;
-> + }
-> + 
-> +diff --git a/lib/verify-tofu.c b/lib/verify-tofu.c
-> +index 40b7acdc8a..97f47385e6 100644
-> +--- a/lib/verify-tofu.c
-> ++++ b/lib/verify-tofu.c
-> +@@ -434,7 +434,7 @@ int store_pubkey(const char *db_name, const char *host,
-> + 	if (fp != NULL)
-> + 		fclose(fp);
-> + 
-> +-	gnutls_static_mutex_unlock(&file_mutex);
-> ++	(void)gnutls_static_mutex_unlock(&file_mutex);
-> + 	gnutls_free(b64key.data);
-> + 
-> + 	return ret;
-> +-- 
-> +GitLab
-> +
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
+index 8df8aedeb3..54a4031056 100644
+--- a/package/usbguard/usbguard.mk
++++ b/package/usbguard/usbguard.mk
+@@ -8,6 +8,7 @@ USBGUARD_VERSION = 1.0.0
+ USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
+ USBGUARD_LICENSE = GPL-2.0+
+ USBGUARD_LICENSE_FILES = LICENSE
++USBGUARD_CPE_ID_VENDOR = usbguard_project
+ USBGUARD_SELINUX_MODULES = usbguard
+ USBGUARD_CONF_OPTS = \
+ 	--with-bundled-catch \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
