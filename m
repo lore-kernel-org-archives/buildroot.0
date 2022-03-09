@@ -1,78 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D44FC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Mar 2022 23:18:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA8C5C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 07:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31CAA400DA;
-	Tue,  8 Mar 2022 23:18:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3291260F72;
+	Wed,  9 Mar 2022 07:43:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A_Gj7RkZvwFA; Tue,  8 Mar 2022 23:18:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HV2vhbz_yujC; Wed,  9 Mar 2022 07:43:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFC2540131;
-	Tue,  8 Mar 2022 23:18:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4751F1BF363
- for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 23:18:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3866B60D4E;
+	Wed,  9 Mar 2022 07:43:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B162B1BF364
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 07:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32D0C40131
- for <buildroot@lists.busybox.net>; Tue,  8 Mar 2022 23:18:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF1FB4089C
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 07:43:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FttZJEhf54-u for <buildroot@lists.busybox.net>;
- Tue,  8 Mar 2022 23:18:26 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD276400DA
- for <buildroot@buildroot.org>; Tue,  8 Mar 2022 23:18:25 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id t11so431748wrm.5
- for <buildroot@buildroot.org>; Tue, 08 Mar 2022 15:18:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wXa/eVyGH3otGTWdDVvcsl8ZfvIKzb6zUYCglOWP2Co=;
- b=nhs59RwFbJtehtss4rWmfdM8Y3O9l68v74hnMXRXCm/mLZZsHHSlhvWdPNNETQ3/s9
- tMHXLMytHG24q089L9ecnzeBca2vIydu8VKhWt8N6Tsr0yEStKMr/O+8+DI8hgVmZpDg
- AHNa1bLhiGzhMDz12Dy+BiQDn9rui8Azp2De9QzDcafi8d4GChLMmpfYE7x+NQybN1in
- sJrD4Y5PqrADksgwuD/uztWUnkfSwgG4C/0qxTPthodJQb7M0WJdKk45c4KIlRdRFX1H
- R592vyqHmaMj740OeMap3msZriV48N/vbqayC/XJVqa8XN9WOgZs4zK6E9EqDWzOhp7t
- O8dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wXa/eVyGH3otGTWdDVvcsl8ZfvIKzb6zUYCglOWP2Co=;
- b=YRPzZo2YnxW7wrd7YFTdi/NOgxIrULXC/8TkFR/J3UMHna1XXS46j/gw5d30TsoN7v
- j0NCher4Yob/jqBlGVklgOrloeAm/V0CHRnlFA/y4QWDLcNLfJvu7hymVFOHJID025Sw
- PdGFZ8a9Yw/oVYKm+/EdSivmj/2i+QK7dWsXO3qfUmd8bSYhw/Ln04N09ONquTWwg6+f
- /8AIbVnUHlh9ypVhcxqit2PXeG4Df3JPY/hJRBNA9EHvJF2pdaMIhdOD9T/ZScC+cJMZ
- W/YQMzTnK31PjNRLQKSM+nZF8XaaYQ8B0ZpaXUA7/AZCkKzSROrXDI6IwJxcCpM3wtkH
- rmww==
-X-Gm-Message-State: AOAM530JsVloNXVfSbgpaI+D+oWee1FCJ6CDCgG+JTPIzyqo8oWu50/y
- Vq+musngq5zrsaLmiDiWbuATvKqAYUE=
-X-Google-Smtp-Source: ABdhPJy0glS0pfmDldBsKHzDfMPrUekzjTC9d2mY0ra0MQC/ELtnErPbFer9Fvpg9qw63WtTrjcXeg==
-X-Received: by 2002:a5d:5507:0:b0:1f0:5eb8:c7b3 with SMTP id
- b7-20020a5d5507000000b001f05eb8c7b3mr13626764wrv.13.1646781503613; 
- Tue, 08 Mar 2022 15:18:23 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-1338-205.w86-229.abo.wanadoo.fr.
- [86.229.185.205]) by smtp.gmail.com with ESMTPSA id
- v14-20020a7bcb4e000000b0034492fa24c6sm142048wmj.34.2022.03.08.15.18.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 08 Mar 2022 15:18:23 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  9 Mar 2022 00:17:33 +0100
-Message-Id: <20220308231733.176991-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LJYpbmpHNQeb for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 07:43:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EFAB540358
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 07:43:33 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D99E11BF211
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 07:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1646811810; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=ccI558qSIOzegcgGBqd48gbIS3i/A8FFilkHNz05aZg=;
+ b=mzIQT1nbDyU/jK2i9SVS5Exo/+X1u/QTU+EycfzSb6lGRt0xGSuXgB2o92uZQfqcbB7khi
+ y4m8dhijgA1u9EXqYQHEd+eiMc9LP1bv7E8PlvikZNemKVmOV1JemuXIURMegsOWLb8yfR
+ RNDN++qeJxto+cMztJlic3hYeBKCwGhaNgsXoTzGdqPxgvXbM3BwyOlAQ3lNQJKv3JxkMq
+ 23SdXHx0wPggFPIFIe2bevRqIvvesLPfLm44ySinLYqNY8fPljhGxNKph5xWo7I+SLpTAL
+ jW/X6XqXMNlU2IntONx+vqdaLqQODCqw0YoOvtjYdPKFpYF+P5+aHQMwDHismg==
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix dnssec static build
+To: buildroot@buildroot.org
+Date: Wed, 09 Mar 2022 07:43:30 -0000
+Message-Id: <20220309074335.AF1FB4089C@smtp4.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-03-08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,50 +63,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop -DHAVE_DNSSEC_STATIC which has been added by commit
-e913527b94e2e47b4ea6fcf13e281d5969f54fd6 but is not needed and raises
-the following static build failure because dnsmasq will wrongly append
-"-Wl,-Bstatic -lgmp -Wl,-Bdynamic":
+Hello,
 
-/home/buildroot/autobuild/instance-2/output-1/host/bin/x86_64-linux-gcc -static -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o radv.o slaac.o auth.o ipset.o pattern.o domain.o dnssec.o blockdata.o tables.o loop.o inotify.o poll.o rrfilter.o edns0.o arp.o crypto.o dump.o ubus.o metrics.o hash-questions.o domain-match.o -Wl,-Bstatic -L/home/buildroot/autobuild/instance-2/output-1/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/lib -lhogweed -lgmp -lnettle  -Wl,-Bdynamic -Wl,-Bstatic -lgmp -Wl,-Bdynamic
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/10.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: attempted static link of dynamic object `/home/buildroot/autobuild/instance-2/output-1/host/x86_64-buildroot-linux-musl/sysroot/lib/../lib64/libc.so'
+Autobuild statistics for 2022-03-08
+===================================
 
-Strangely enough, this is the first time this build failure is raised by
-the autobuilders whereas "-Wl,-Bdynamic" is set since a very long time:
-https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=c979fa04a40ff12370c8d3a82ad27d9d3b5907e3
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 16  |  4  |  0  | 20  |
+  2021.11.x  |  4  |  0  |  0  |  4  |
+    master   | 34  | 12  |  0  | 46  |
 
-Fixes:
- - http://autobuild.buildroot.org/results/99b419ddb5a3be561d39e715833510a59519213e
+Classification of failures by reason for master
+-----------------------------------------------
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/dnsmasq/dnsmasq.mk | 3 ---
- 1 file changed, 3 deletions(-)
+             bluez5_utils-5.63 | 1 
+                  dnsmasq-2.86 | 1 
+                    efl-1.26.1 | 1 
+                     file-5.41 | 1 
+                       frr-8.1 | 1 
+                   gstd-0.13.0 | 1 
+           host-libselinux-3.3 | 1 
+librtlsdr-ed0317e6a58c09887... | 1 
+                safeclib-3.7.1 | 1 
+               target-finalize | 1 
+                       unknown | 1 
+                 wavemon-0.9.4 | 1 
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 0569475fc4..230e4a8116 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -26,9 +26,6 @@ endif
- ifeq ($(BR2_PACKAGE_DNSMASQ_DNSSEC),y)
- DNSMASQ_DEPENDENCIES += gmp nettle
- DNSMASQ_COPTS += -DHAVE_DNSSEC
--ifeq ($(BR2_STATIC_LIBS),y)
--DNSMASQ_COPTS += -DHAVE_DNSSEC_STATIC
--endif
- endif
- 
- ifneq ($(BR2_PACKAGE_DNSMASQ_TFTP),y)
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/32ba5bde054ceee823af0a27e2cb849031c226cb |     
+   x86_64    |          dnsmasq-2.86          | NOK | http://autobuild.buildroot.net/results/99b419ddb5a3be561d39e715833510a59519213e |     
+  powerpc    |           efl-1.26.1           | NOK | http://autobuild.buildroot.net/results/0a462c2de955d145a43aae657adf1ecc5ffba4f9 |     
+    arm      |           file-5.41            | NOK | http://autobuild.buildroot.net/results/2c8f26162e5c0e8202b58930930c08cf529bdb0f | ORPH
+    arc      |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/43fd833d5d6562b54988641cf8ad37e327d4fc8c |     
+    arm      |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/cd485ea788be73a3dc52aa89f6c8993928f9734c | ORPH
+   xtensa    |      host-libselinux-3.3       | NOK | http://autobuild.buildroot.net/results/08c6207fd5f86e4cf786408d36bdda2797b60dd9 |     
+   x86_64    | librtlsdr-ed0317e6a58c09887... | NOK | http://autobuild.buildroot.net/results/ba76e152edad04134708f3d00ce78a194a18327c |     
+  sparc64    |         safeclib-3.7.1         | NOK | http://autobuild.buildroot.net/results/024103bf9b624f25026cc9c9f60cdc3087379410 |     
+    arc      |        target-finalize         | NOK | http://autobuild.buildroot.net/results/b7092e72d59aa1b55b494f7718cab3e8287d117e |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/5b00e08bd10723985eb666d87544ea2ee6ff980a |     
+   x86_64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/f7f8969613ee6f2710cbf3d02fed1c3f22b7b029 |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+          gstreamer1-mm-1.10.0 | 1 
+                  ndisc6-1.0.4 | 1 
+                       unknown | 1 
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/fc67af8a06c3a6d583be2a4211439d9fc3556846 | ORPH
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/3d6e0a40b64ddf37429cf2b6870e0002a9d53810 | ORPH
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/b5bd8c5dc46eb98a7958fc88e02bb9ae122fb6a6 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/78b0bd1d3f5eab2c2b41d156c42b7da11e178424 |     
+
+
+
 -- 
-2.34.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
