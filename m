@@ -1,81 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D7EC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 21:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 716F6C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 21:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CE0184338;
-	Wed,  9 Mar 2022 21:10:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EB0140A0D;
+	Wed,  9 Mar 2022 21:26:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yfbD_OdAlG1U; Wed,  9 Mar 2022 21:10:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pdvadsmdUYBh; Wed,  9 Mar 2022 21:26:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4D558432B;
-	Wed,  9 Mar 2022 21:10:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B69301BF303
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:10:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 881BE401CC;
+	Wed,  9 Mar 2022 21:26:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 736CB1BF37E
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC52460FA6
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:10:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58B42401CC
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:25:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2P4S3m-FuPrd for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 21:10:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D170760F88
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 21:10:48 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id q14so4990562wrc.4
- for <buildroot@buildroot.org>; Wed, 09 Mar 2022 13:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wqDzKQL8/JpddJo5CbEURw96ibx5rvaKWkw4mZg/bkU=;
- b=FgQYiWmkfjPxN5/9kNmrHxtf7XjYVl76ciSo4C1kKGAncPbHnsoSqCon/7if+U22bH
- k+LtdDAbQCnLepiX4/2STxtIst8iNjqRHt2m+tzK7AGe2XtL//RC1hZwrDjDavWb5M2c
- 5ahaHh3szu8ok37YkBjYFpNvrhshS5nv0tNqpSykRBZadXmDdWMFFFTtCVm+BXk3BFQV
- KjmpNqiniK/rUsElC0JgGkGo1dlLGoYaOGxoyKOEzDGx2C0mkzW1KwQ1MjmWC6nileGL
- 08CmifNzxhgpwClJ73CLVaawFfUsCKyYQeA0leHMkXS9kHH214LItD8Oiuy7KR7FonYe
- t0pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wqDzKQL8/JpddJo5CbEURw96ibx5rvaKWkw4mZg/bkU=;
- b=EhZPZCOztLCP7+npurvTQ7Ko6CH4dbi7DePu8uafvAAAIoW0gAEJJpfVcmk8w7eEyr
- vi6TN1853LUbq545PQLUNIU2eYojk1nGzvwiCM6He+FFgbqrTRO7B6M+e03+tPBvMZYZ
- f2fKqQankMbf9QeiLSxcOZ9r/aqT/miaA9WeLrkIAOG+QvGK0oWJ0Eo9ApsAcZKKkF2y
- Rib0HGOdn7TZ6U8U7OfOVi8TSL6Bno9kBfaGq+hp+XI8biFNHoYaT2TFsLGDsWIzOVNN
- sdfk84h9OdVKcxeKJrBehwB4bAadU5rVPbwvhl4tD4OD+MOEiXLYBn1my9u4d02kTxhP
- eXPQ==
-X-Gm-Message-State: AOAM531jnyUlB2nas3iB28nodzUAg0XH9fisyuHw7hUu5pqzUCmMlOBu
- TL0vbQ+2uP8xlghZJ2T35K9nlWxgRno=
-X-Google-Smtp-Source: ABdhPJy1Tx9JJFttMQ+kWm0rYxPCxRgX6VgbiakS01yYsc+i96xyWYpV6xTRDzI0Uopa8a9ZN4nTvA==
-X-Received: by 2002:a5d:5849:0:b0:1ef:f98a:5406 with SMTP id
- i9-20020a5d5849000000b001eff98a5406mr97666wrf.8.1646860246598; 
- Wed, 09 Mar 2022 13:10:46 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- m34-20020a05600c3b2200b00380e3225af9sm2995774wms.0.2022.03.09.13.10.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Mar 2022 13:10:46 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bc7yZggiXr3Y for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 21:25:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E4EB40142
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 21:25:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 20D8683A4A; Wed,  9 Mar 2022 21:17:28 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  9 Mar 2022 22:09:53 +0100
-Message-Id: <20220309210953.540376-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: bump to version 6.03
+Date: Wed, 9 Mar 2022 22:25:37 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7e8714f54fab704be63a8b7dc1d82afaf1e785a8
+X-Git-Newrev: 2f4f57b62b371252425bde4440cedcac45fcaebd
+X-Patchwork-Hint: ignore
+Message-Id: <20220309211728.20D8683A4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: fix build without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,93 +52,218 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-xlib_libXft and xlib_libXi are now mandatory
+commit: https://git.buildroot.net/buildroot/commit/?id=2f4f57b62b371252425bde4440cedcac45fcaebd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.jwz.org/xscreensaver/changelog.html
+Fix the following build failure without threads raised since bump to
+version 3.7.3 in commit 212b020bb43f13121d6cde464f871d5d1cf6cfbe:
+
+kx.c: In function '_gnutls_nss_keylog_write':
+kx.c:164:33: error: 'keylog_mutex' undeclared (first use in this function); did you mean 'keylog_once'?
+  164 |   if (gnutls_static_mutex_lock(&keylog_mutex) < 0) {
+      |                                 ^~~~~~~~~~~~
+      |                                 keylog_once
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e092bc11ce4b5908cb6285aa77a3594b8626eeec
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xscreensaver/Config.in         |  2 ++
- package/xscreensaver/xscreensaver.hash |  2 +-
- package/xscreensaver/xscreensaver.mk   | 18 +++---------------
- 3 files changed, 6 insertions(+), 16 deletions(-)
+ ...01-locks-define-lock-functions-as-a-macro.patch | 179 +++++++++++++++++++++
+ 1 file changed, 179 insertions(+)
 
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index 10b2b7012c..48eefdfa70 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_XSCREENSAVER
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXFT
-+	select BR2_PACKAGE_XLIB_LIBXI
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	help
- 	  XScreenSaver is the standard screen saver collection shipped
-diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
-index 26ecd8bbbf..27ef7d8f00 100644
---- a/package/xscreensaver/xscreensaver.hash
-+++ b/package/xscreensaver/xscreensaver.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  7016df6736ba0126a68c1f35abcf411a695fe93bc01a18ebd9df46c9a9f4d50d  xscreensaver-5.45.tar.gz
-+sha256  328d51797352acf58ca5bab49e76fbf26034e7cad785f651ea11ce7b43fba25a  xscreensaver-6.03.tar.gz
- sha256  8a03451ba5c4c9af669b53e47e50c38c149b9e152d3d627809b962da7b760bbd  hacks/screenhack.h
- sha256  56db580415bb313a4a82c5e08f106304904d15d42faf8e6ab14b34e14e2087a5  hacks/glx/chessmodels.h
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 46dedc3211..0a91d22d14 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSCREENSAVER_VERSION = 5.45
-+XSCREENSAVER_VERSION = 6.03
- XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
- 
- # N.B. GPL-2.0+ code (in the hacks/glx subdirectory) is not currently built.
-@@ -20,6 +20,8 @@ XSCREENSAVER_DEPENDENCIES = \
- 	libgtk2 \
- 	libxml2 \
- 	xlib_libX11 \
-+	xlib_libXft \
-+	xlib_libXi \
- 	xlib_libXt \
- 	$(TARGET_NLS_DEPENDENCIES) \
- 	host-intltool
-@@ -51,20 +53,6 @@ else
- XSCREENSAVER_CONF_OPTS += --with-systemd=no
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
--XSCREENSAVER_CONF_OPTS += --with-xft=yes
--XSCREENSAVER_DEPENDENCIES += xlib_libXft
--else
--XSCREENSAVER_CONF_OPTS += --with-xft=no
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
--XSCREENSAVER_CONF_OPTS += --with-xinput-ext=yes
--XSCREENSAVER_DEPENDENCIES += xlib_libXi
--else
--XSCREENSAVER_CONF_OPTS += --with-xinput-ext=no
--endif
--
- ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
- XSCREENSAVER_CONF_OPTS += --with-xinerama-ext=yes
- XSCREENSAVER_DEPENDENCIES += xlib_libXinerama
--- 
-2.34.1
-
+diff --git a/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
+new file mode 100644
+index 0000000000..52965c051d
+--- /dev/null
++++ b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
+@@ -0,0 +1,179 @@
++From 5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd Mon Sep 17 00:00:00 2001
++From: Daiki Ueno <ueno@gnu.org>
++Date: Wed, 9 Mar 2022 08:07:58 +0100
++Subject: [PATCH] locks: define lock functions as a macro
++
++When threads are not supported, glthread_* functions are defined as
++no-op and thus dereferencing lock variables in inline functions will
++cause compilation error.  This change fixes it by redefining our lock
++functions as a macro so it will also be compiled out.
++
++Reported by Fabrice Fontaine in:
++https://gitlab.com/gnutls/gnutls/-/issues/1330
++
++Signed-off-by: Daiki Ueno <ueno@gnu.org>
++
++[Retrieved from:
++https://gitlab.com/gnutls/gnutls/-/commit/5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/locks.c       | 54 -----------------------------------------------
++ lib/locks.h       | 28 ++++++++++++++++++------
++ lib/pkcs11.c      |  2 +-
++ lib/priority.c    |  2 +-
++ lib/verify-tofu.c |  2 +-
++ 5 files changed, 25 insertions(+), 63 deletions(-)
++
++diff --git a/lib/locks.c b/lib/locks.c
++index d61504e077..8888ed6b12 100644
++--- a/lib/locks.c
+++++ b/lib/locks.c
++@@ -63,57 +63,3 @@ gnutls_global_set_mutex(mutex_init_func init, mutex_deinit_func deinit,
++ 	gnutls_mutex_lock = lock;
++ 	gnutls_mutex_unlock = unlock;
++ }
++-
++-int
++-gnutls_static_mutex_lock(gnutls_static_mutex_t lock)
++-{
++-	if (unlikely(glthread_lock_lock(lock))) {
++-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
++-	}
++-	return 0;
++-}
++-
++-int
++-gnutls_static_mutex_unlock(gnutls_static_mutex_t lock)
++-{
++-	if (unlikely(glthread_lock_unlock(lock))) {
++-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
++-	}
++-	return 0;
++-}
++-
++-int
++-gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock)
++-{
++-	if (unlikely(glthread_rwlock_rdlock(rwlock))) {
++-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
++-	}
++-	return 0;
++-}
++-
++-int
++-gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock)
++-{
++-	if (unlikely(glthread_rwlock_wrlock(rwlock))) {
++-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
++-	}
++-	return 0;
++-}
++-
++-int
++-gnutls_rwlock_unlock(gnutls_rwlock_t rwlock)
++-{
++-	if (unlikely(glthread_rwlock_unlock(rwlock))) {
++-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
++-	}
++-	return 0;
++-}
++-
++-int
++-gnutls_once(gnutls_once_t once, void (*init_func) (void))
++-{
++-	if (unlikely(glthread_once(once, init_func))) {
++-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
++-	}
++-	return 0;
++-}
++diff --git a/lib/locks.h b/lib/locks.h
++index a1ff0fa9d7..907adfc134 100644
++--- a/lib/locks.h
+++++ b/lib/locks.h
++@@ -40,8 +40,14 @@ extern mutex_unlock_func gnutls_mutex_unlock;
++  */
++ #define GNUTLS_STATIC_MUTEX(lock) gl_lock_define_initialized(static, lock)
++ typedef gl_lock_t *gnutls_static_mutex_t;
++-int gnutls_static_mutex_lock(gnutls_static_mutex_t lock);
++-int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
+++
+++#define gnutls_static_mutex_lock(LOCK)			\
+++	(unlikely(glthread_lock_lock(LOCK)) ?		\
+++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+++
+++#define gnutls_static_mutex_unlock(LOCK)		\
+++	(unlikely(glthread_lock_unlock(LOCK)) ?		\
+++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
++ 
++ /* Unlike static mutexes, static rwlocks can be locked/unlocked with
++  * the functions defined below, because there is no way to replace
++@@ -50,13 +56,23 @@ int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
++ #define GNUTLS_RWLOCK(rwlock) gl_rwlock_define_initialized(static, rwlock)
++ typedef gl_rwlock_t *gnutls_rwlock_t;
++ 
++-int gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock);
++-int gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock);
++-int gnutls_rwlock_unlock(gnutls_rwlock_t rwlock);
+++#define gnutls_rwlock_rdlock(RWLOCK)			\
+++	(unlikely(glthread_rwlock_rdlock(RWLOCK)) ?	\
+++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+++
+++#define gnutls_rwlock_wrlock(RWLOCK)			\
+++	(unlikely(glthread_rwlock_wrlock(RWLOCK)) ?	\
+++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+++
+++#define gnutls_rwlock_unlock(RWLOCK)			\
+++	(unlikely(glthread_rwlock_unlock(RWLOCK)) ?	\
+++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
++ 
++ #define GNUTLS_ONCE(once) gl_once_define(static, once)
++ typedef gl_once_t *gnutls_once_t;
++ 
++-int gnutls_once(gnutls_once_t once, void (*init_func) (void));
+++#define gnutls_once(ONCE, INIT_FUNC)			\
+++	(unlikely(glthread_once(ONCE, INIT_FUNC)) ?	\
+++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
++ 
++ #endif /* GNUTLS_LIB_LOCKS_H */
++diff --git a/lib/pkcs11.c b/lib/pkcs11.c
++index 8dda0f07c9..ba8ac0c375 100644
++--- a/lib/pkcs11.c
+++++ b/lib/pkcs11.c
++@@ -351,7 +351,7 @@ int _gnutls_pkcs11_check_init(init_level_t req_level, void *priv, pkcs11_reinit_
++ 	ret = sret;
++ 
++  cleanup:
++-	gnutls_static_mutex_unlock(&pkcs11_mutex);
+++	(void)gnutls_static_mutex_unlock(&pkcs11_mutex);
++ 
++ 	return ret;
++ }
++diff --git a/lib/priority.c b/lib/priority.c
++index d17a923318..55ae185c1f 100644
++--- a/lib/priority.c
+++++ b/lib/priority.c
++@@ -2505,7 +2505,7 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
++ 	}
++ 
++  out:
++-	gnutls_rwlock_unlock(&system_wide_config_rwlock);
+++	(void)gnutls_rwlock_unlock(&system_wide_config_rwlock);
++ 	return ret;
++ }
++ 
++diff --git a/lib/verify-tofu.c b/lib/verify-tofu.c
++index 40b7acdc8a..97f47385e6 100644
++--- a/lib/verify-tofu.c
+++++ b/lib/verify-tofu.c
++@@ -434,7 +434,7 @@ int store_pubkey(const char *db_name, const char *host,
++ 	if (fp != NULL)
++ 		fclose(fp);
++ 
++-	gnutls_static_mutex_unlock(&file_mutex);
+++	(void)gnutls_static_mutex_unlock(&file_mutex);
++ 	gnutls_free(b64key.data);
++ 
++ 	return ret;
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
