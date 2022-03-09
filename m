@@ -1,52 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC8ECC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 22:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 102D6C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 22:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 737AF84355;
-	Wed,  9 Mar 2022 22:37:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9B4460C2D;
+	Wed,  9 Mar 2022 22:40:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nu9J9HPDfZEb; Wed,  9 Mar 2022 22:37:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jWhVVGI-vlSA; Wed,  9 Mar 2022 22:40:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB5EA8434F;
-	Wed,  9 Mar 2022 22:37:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7576C60FB4;
+	Wed,  9 Mar 2022 22:40:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 061E61BF4E7
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 22:37:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 72E701BF4E7
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 22:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D3EA0416B7
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 22:37:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 697544171C
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 22:40:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DHHuHIb2TnJW for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 22:37:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F34B416AF
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 22:37:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DB735200005;
- Wed,  9 Mar 2022 22:37:41 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nS4w8-002Q26-Fh; Wed, 09 Mar 2022 23:37:40 +0100
+ with ESMTP id X41YVWLV_oTW for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 22:40:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3A1B416D7
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 22:40:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 41A2783A8D; Wed,  9 Mar 2022 22:31:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Joel Stanley <joel@jms.id.au>
-References: <20220307052858.1245393-1-joel@jms.id.au>
-Date: Wed, 09 Mar 2022 23:37:40 +0100
-In-Reply-To: <20220307052858.1245393-1-joel@jms.id.au> (Joel Stanley's message
- of "Mon, 7 Mar 2022 15:58:57 +1030")
-Message-ID: <87r17azr9n.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/pdbg: bump version to v3.5
+To: buildroot@buildroot.org
+Date: Wed, 9 Mar 2022 23:39:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 11a3989dbf7ac2535fac04b24ab3d959da3686b3
+X-Git-Newrev: 5030d7f4ea5004b24025eb93d421ddadb0f8ee06
+X-Patchwork-Hint: ignore
+Message-Id: <20220309223137.41A2783A8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pdbg: bump version to v3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,20 +52,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5030d7f4ea5004b24025eb93d421ddadb0f8ee06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pdbg/pdbg.hash | 4 ++--
+ package/pdbg/pdbg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index df7ba314bf..f859930dd6 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5b721fd5551591cd5626ccf72c8d9096d902de4da10324097a37b4763815f0d7 pdbg-3.4.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
++sha256  7bdbab4e14b8cf50dbf6242955e46e58882c37b1a52671d9e6f3073885629dfa  pdbg-3.5.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 5a5cfbc62d..871bf953f2 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 3.4
++PDBG_VERSION = 3.5
+ PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
