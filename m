@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDFE9C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 12:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0E4BC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 12:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5345884012;
-	Wed,  9 Mar 2022 12:57:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C04D409E3;
+	Wed,  9 Mar 2022 12:57:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gkt74_fQf-Ek; Wed,  9 Mar 2022 12:57:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3MQX6lzjsO32; Wed,  9 Mar 2022 12:57:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A553D83FB6;
-	Wed,  9 Mar 2022 12:57:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BE58E1BF28E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EE754029F;
+	Wed,  9 Mar 2022 12:57:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C10231BF9C2
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 12:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC8D560804
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF2FC415E3
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 12:57:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tmFmrp4I1a_3 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XgaaYhZr7GfS for <buildroot@lists.busybox.net>;
  Wed,  9 Mar 2022 12:57:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9866560030
+ by smtp4.osuosl.org (Postfix) with ESMTP id 96385415E2
  for <buildroot@buildroot.org>; Wed,  9 Mar 2022 12:57:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1EAE88386E; Wed,  9 Mar 2022 12:49:06 +0000 (UTC)
+ id 150C683903; Wed,  9 Mar 2022 12:49:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 9 Mar 2022 13:56:12 +0100
+Date: Wed, 9 Mar 2022 13:55:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 501263241ce6b38f3c45e737c7928a1ae1c66927
-X-Git-Newrev: 722dffca13a8f129a8fb2938a02def5f454991fb
+X-Git-Oldrev: 08967921c4a91eb7d966c31f755a0720914e8bff
+X-Git-Newrev: 501263241ce6b38f3c45e737c7928a1ae1c66927
 X-Patchwork-Hint: ignore
-Message-Id: <20220309124906.1EAE88386E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Kickoff 2022.05 cycle
+Message-Id: <20220309124906.150C683903@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2022.02
+ announcement link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,26 +59,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=722dffca13a8f129a8fb2938a02def5f454991fb
+commit: https://git.buildroot.net/buildroot/commit/?id=501263241ce6b38f3c45e737c7928a1ae1c66927
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 71f8096b71..6756945819 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.02
-+export BR2_VERSION := 2022.05-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1646777000
+diff --git a/docs/website/news.html b/docs/website/news.html
+index de80a5f23d..3b7234b307 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2022.02 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.02">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2022-March/638160.html">announcement</a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2022.02.tar.xz">2022.02 release</a>.</p>
  
 _______________________________________________
 buildroot mailing list
