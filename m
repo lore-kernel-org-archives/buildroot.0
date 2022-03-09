@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B1AC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B72D8C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:30:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08C3E60FAC;
-	Wed,  9 Mar 2022 20:29:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E6D260FB5;
+	Wed,  9 Mar 2022 20:30:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WBa5sSQkxQJH; Wed,  9 Mar 2022 20:29:55 +0000 (UTC)
+	with ESMTP id ok_yr6c_yptl; Wed,  9 Mar 2022 20:30:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46E7060F8C;
-	Wed,  9 Mar 2022 20:29:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A934360F18;
+	Wed,  9 Mar 2022 20:30:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F2211BF403
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:29:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC8E31BF403
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C76060F8C
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:29:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB42760F18
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:30:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gpli20paz51t for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 20:29:52 +0000 (UTC)
+ with ESMTP id DMMiYm3bgOO7 for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 20:30:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 286AC60F18
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 20:29:51 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D772F60615
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 20:30:21 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 361A3100007;
- Wed,  9 Mar 2022 20:29:47 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 52205200008;
+ Wed,  9 Mar 2022 20:30:18 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nS2wM-002NrT-Oe; Wed, 09 Mar 2022 21:29:46 +0100
+ id 1nS2wq-002Nuf-G7; Wed, 09 Mar 2022 21:30:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220308174832.1414005-1-fontaine.fabrice@gmail.com>
-Date: Wed, 09 Mar 2022 21:29:46 +0100
-In-Reply-To: <20220308174832.1414005-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 8 Mar 2022 18:48:32 +0100")
-Message-ID: <87cziu27k5.fsf@dell.be.48ers.dk>
+References: <20220308182845.1832681-1-fontaine.fabrice@gmail.com>
+Date: Wed, 09 Mar 2022 21:30:16 +0100
+In-Reply-To: <20220308182845.1832681-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 8 Mar 2022 19:28:45 +0100")
+Message-ID: <878rti27jb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/oprofile: add s390x support
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/libaacs: bump to version
+ 0.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,7 +60,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -66,7 +68,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > s390x is supported since at least 2003 (see ChangeLog-2003)
+ > Drop patch (not needed since
+ > https://code.videolan.org/videolan/libaacs/-/commit/a2ef3313bae4550f54ba842fa342d5b9b5f97145)
+
+ > https://code.videolan.org/videolan/libaacs/-/blob/0.11.1/ChangeLog
+
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
