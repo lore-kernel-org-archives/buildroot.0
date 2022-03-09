@@ -1,47 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0B1EC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:48:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B766C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DE6041845;
-	Wed,  9 Mar 2022 20:48:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iItniG_rpfsp; Wed,  9 Mar 2022 20:48:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39E764174F;
-	Wed,  9 Mar 2022 20:48:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 556481BF403
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:48:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 433724051F
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:48:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4422F40A0A;
+	Wed,  9 Mar 2022 20:48:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SwqK1ZC-O2_O for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 20:47:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C77340142
- for <buildroot@buildroot.org>; Wed,  9 Mar 2022 20:47:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id C06FA839AF; Wed,  9 Mar 2022 20:39:30 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 9 Mar 2022 21:47:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57eb983832a848dd406bf6c6403d01394bc5fc78
-X-Git-Newrev: 0b058e15f5334dac93f42b92ea31525afdc2c27c
-X-Patchwork-Hint: ignore
-Message-Id: <20220309203930.C06FA839AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fix links to Technologic Systems web
- resources
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BfMkR-m6mAAM; Wed,  9 Mar 2022 20:48:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C78F40541;
+	Wed,  9 Mar 2022 20:48:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B9BEB1BF403
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:48:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A942F81254
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:48:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 59uUx-XJL2bX for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 20:48:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D0EC680E3F
+ for <buildroot@buildroot.org>; Wed,  9 Mar 2022 20:48:38 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:959:4871:d6cd:4ee3])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 4914613F880;
+ Wed,  9 Mar 2022 21:48:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1646858917;
+ bh=htsfDr7EQtDPRbAI1wv4a+HM6bactGIKm3j5bofydrs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ZML1KIfLeEJH2edeXqgTbw5i3J5n2Uef23Lyur2JzIc41jJlh+hgtuMTyVpdFCGep
+ fwoL+NCr+RhhFaeIgCbmSUJrhcG6pSGX+rjt5e/rqePGwo8HDQayB82d2llA+n9MGE
+ ORhsoRSm39Ff67xrbCn7PRJl/Nc2i+0rHBXPXB6nMRZ8Z9wMEjSIDbn53Us7nFbtYv
+ MO3sIAQuVbx7ixZBaOzZJ25kwIIJVNuburplDmkNAGA0rIQqoXwC9ja5/CL89tUBxK
+ 7P34RfW9x7RZAzIe6bcgt0OCY8Scmr7QjicM6YWY++sUT66GAP+Cc4zx5A27sXa9Wu
+ h6On447A/CsgA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 09 Mar 2022 21:48:34 +0100
+Date: Wed, 9 Mar 2022 21:48:34 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220309204834.GC23050@scaer>
+References: <20220309175931.538771-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220309175931.538771-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/ola: drop autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,145 +71,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b058e15f5334dac93f42b92ea31525afdc2c27c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Technologic Systems has rebranded as embeddedTS with the current
-domain eventually going offline. Update web/doc URLs to correct
-resource locations.
+On 2022-03-09 18:59 +0100, Fabrice Fontaine spake thusly:
+> OLA_AUTORECONF has been set since re-introduction of package in commit
+> 16ff948444c3978d63f483344a3d92d994c64312 but it is not needed as no
+> patches are touching Makefile.am or ola.m4 anymore
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- board/technologic/ts4900/readme.txt  | 4 ++--
- board/technologic/ts5500/readme.txt  | 4 ++--
- board/technologic/ts7680/readme.txt  | 4 ++--
- configs/ts7680_defconfig             | 2 +-
- package/ts4900-fpga/Config.in        | 2 +-
- package/ts4900-fpga/ts4900-fpga.hash | 6 +++---
- package/ts4900-fpga/ts4900-fpga.mk   | 4 ++--
- 7 files changed, 13 insertions(+), 13 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/technologic/ts4900/readme.txt b/board/technologic/ts4900/readme.txt
-index 679454fdeb..121e639749 100644
---- a/board/technologic/ts4900/readme.txt
-+++ b/board/technologic/ts4900/readme.txt
-@@ -9,7 +9,7 @@ Freescale i.MX6 Single or Quad Core ARM Cortex-A9 CPU clocked at
- 1GHz. The TS-4900 features Gigabit Ethernet, SATA II Port, PCI Express
- Bus, high speed USB host and device (OTG), and microSD card.
- More details on the board here:
--   http://wiki.embeddedarm.com/wiki/TS-4900
-+   https://docs.embeddedTS.com/TS-4900
- 
- The TS-4900 is not currently supported by mainline Linux, so a
- Technologic Systems Linux is used based on Linux 4.1.
-@@ -48,5 +48,5 @@ connector etc.
- The bootloader comes pre-flashed on the board on an SPI flash. Since
- updating the bootloader is risky and not trivial, it is not included
- in the Buildroot defconfig. Refer to
--http://wiki.embeddedarm.com/wiki/TS-4900#U-Boot for details on which
-+https://docs.embeddedTS.com/TS-4900#U-Boot for details on which
- U-Boot config to use and how to flash it.
-diff --git a/board/technologic/ts5500/readme.txt b/board/technologic/ts5500/readme.txt
-index 1e73ab3ea1..1fe384faae 100644
---- a/board/technologic/ts5500/readme.txt
-+++ b/board/technologic/ts5500/readme.txt
-@@ -5,7 +5,7 @@ This document explains how to set up a basic Buildroot system for the
- Technologic Systems TS-5x00 serie of x86-based Single Board Computers.
- 
- TS-5x00 Single Board Computers are based on the AMD Elan520 processor. For more
--information please have a look at http://wiki.embeddedarm.com/wiki/#AMD
-+information please have a look at https://docs.embeddedTS.com/Documentation_Home#AMD
- 
- The kernel configuration works for any AMD Elan520-based SBCs, but the support
- is enhanced for the TS-5500 and TS-5400 models (on-board devices registration
-@@ -45,7 +45,7 @@ config, the BIOS must use Logical Block Addressing (LBA). You can do it by
- choosing "Ide 0: AUTOCONFIG, LBA" under "IDE DRIVE GEOMETRY" in the "Basic CMOS
- Configuration" screen. Also, don't forget to set the 'active' (or 'bootable')
- flag on partition 1. For details about the CMOS setup, please see:
--http://wiki.embeddedarm.com/wiki/TS-5500#System_BIOS_Setup_Screens
-+https://docs.embeddedts.com/TS-5500#System_BIOS_Setup_Screens
- 
- Connect a terminal program to the rs232 connector marked "COM2"
- with baudrate set to 115200, insert the Compact Flash card into the socket,
-diff --git a/board/technologic/ts7680/readme.txt b/board/technologic/ts7680/readme.txt
-index 43d5d135e8..3f703330bf 100644
---- a/board/technologic/ts7680/readme.txt
-+++ b/board/technologic/ts7680/readme.txt
-@@ -8,7 +8,7 @@ The TS-7680 SBC is based on the Freescale i.MX286 ARM ARM926EJ-S
- running at 454MHz. The TS-7680 features are 10/100 Ethernet ports,
- Wi-Fi, microSD card, eMMC, NOR Flash, USB host port, CAN ports,
- relays and ADC/DAC. More details on the board here:
--https://wiki.embeddedarm.com/wiki/TS-7680
-+https://docs.embeddedTS.com/TS-7680
- 
- The TS-7680 uses a 4.9 Linux kernel provided by Technologic Systems.
- 
-@@ -46,5 +46,5 @@ the SD jumper is present and the U-Boot jumper is not.
- The bootloader comes pre-flashed on the board on an SPI flash. Since
- updating the bootloader is risky and not trivial, it is not included
- in the Buildroot defconfig. Refer to
--https://wiki.embeddedarm.com/wiki/TS-7680#U-Boot for details on
-+https://docs.embeddedts.com/TS-7680#U-Boot for details on
- which U-Boot config to use and how to flash it.
-diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
-index 7eb57ab1c5..e4f5c1aabd 100644
---- a/configs/ts7680_defconfig
-+++ b/configs/ts7680_defconfig
-@@ -4,7 +4,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/technologic/ts7680/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedarm,linux-4.9.y,d03d426e6abd95a973bc669315206295713c17e8)/linux-d03d426e6abd95a973bc669315206295713c17e8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedTS,linux-4.9.y,d03d426e6abd95a973bc669315206295713c17e8)/linux-d03d426e6abd95a973bc669315206295713c17e8.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="ts_imx28"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-diff --git a/package/ts4900-fpga/Config.in b/package/ts4900-fpga/Config.in
-index 7aa94e26f2..9f704fbc8c 100644
---- a/package/ts4900-fpga/Config.in
-+++ b/package/ts4900-fpga/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_TS4900_FPGA
- 	  It is loaded by U-Boot during the boot sequence, the default
- 	  U-boot script expects to find it in the /boot folder.
- 
--	  http://wiki.embeddedarm.com/wiki/TS-4900#FPGA_Changelog
-+	  https://docs.embeddedts.com/TS-4900#FPGA_Changelog
-diff --git a/package/ts4900-fpga/ts4900-fpga.hash b/package/ts4900-fpga/ts4900-fpga.hash
-index 2147aeb3c2..9ffff643af 100644
---- a/package/ts4900-fpga/ts4900-fpga.hash
-+++ b/package/ts4900-fpga/ts4900-fpga.hash
-@@ -1,5 +1,5 @@
--# From ftp://ftp.embeddedarm.com/ts-socket-macrocontrollers/ts-4900-linux/fpga/ts4900-fpga-20150930.bin.md5
--md5 bf93c03ef914cf008287c8cd60781cc8  ts4900-fpga-20150930.bin
-+# From https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga//ts4900-fpga-20150930.bin.md5
-+md5  bf93c03ef914cf008287c8cd60781cc8  ts4900-fpga-20150930.bin
- 
- # Locally calculated
--sha256 242ac6a90bea9a95c937ea8952cdc9b02f543cea24a0359bed66a408a6dd8bf9 ts4900-fpga-20150930.bin
-+sha256  242ac6a90bea9a95c937ea8952cdc9b02f543cea24a0359bed66a408a6dd8bf9  ts4900-fpga-20150930.bin
-diff --git a/package/ts4900-fpga/ts4900-fpga.mk b/package/ts4900-fpga/ts4900-fpga.mk
-index 7bb62a3984..a3e42c0812 100644
---- a/package/ts4900-fpga/ts4900-fpga.mk
-+++ b/package/ts4900-fpga/ts4900-fpga.mk
-@@ -6,9 +6,9 @@
- 
- TS4900_FPGA_VERSION = 20150930
- TS4900_FPGA_SOURCE = ts4900-fpga-$(TS4900_FPGA_VERSION).bin
--TS4900_FPGA_SITE = ftp://ftp.embeddedarm.com/ts-socket-macrocontrollers/ts-4900-linux/fpga
-+TS4900_FPGA_SITE = https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga
- # No license file provided, Yocto recipe from the vendor claims MIT.
--# https://github.com/embeddedarm/meta-ts/blob/f31860f1204b64f765a5380d3b93a2cf18234f90/recipes-extras/ts4900-fpga/ts4900-fpga.bb#L6
-+# https://github.com/embeddedTS/meta-ts/blob/f31860f1204b64f765a5380d3b93a2cf18234f90/recipes-extras/ts4900-fpga/ts4900-fpga.bb#L6
- 
- define TS4900_FPGA_EXTRACT_CMDS
- 	cp $(TS4900_FPGA_DL_DIR)/$(TS4900_FPGA_SOURCE) $(@D)
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>  - Fix typo in title
+> 
+>  package/ola/ola.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+> index 5090076175..1874350784 100644
+> --- a/package/ola/ola.mk
+> +++ b/package/ola/ola.mk
+> @@ -9,7 +9,6 @@ OLA_SITE = https://github.com/OpenLightingProject/ola/releases/download/$(OLA_VE
+>  OLA_LICENSE = LGPL-2.1+ (libola, libolacommon, Python bindings), GPL-2.0+ (libolaserver, olad, Python examples and tests)
+>  OLA_LICENSE_FILES = COPYING GPL LGPL LICENCE
+>  OLA_INSTALL_STAGING = YES
+> -OLA_AUTORECONF = YES
+>  
+>  # util-linux provides uuid lib
+>  OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex host-ola
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
