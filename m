@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB174C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34D6BC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B27660FAD;
-	Wed,  9 Mar 2022 20:48:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEC894154E;
+	Wed,  9 Mar 2022 20:48:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FR0sZPBdO89t; Wed,  9 Mar 2022 20:48:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e7C3RbjG-PXk; Wed,  9 Mar 2022 20:48:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A31260F9E;
-	Wed,  9 Mar 2022 20:48:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CCAEE1BF403
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2BDF40912;
+	Wed,  9 Mar 2022 20:48:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D70A61BF9C2
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB11A60F9E
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6EA084352
  for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:47:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kH_nUQatnj9K for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HznN_a6xtuDH for <buildroot@lists.busybox.net>;
  Wed,  9 Mar 2022 20:47:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B54060F18
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12ED28434F
  for <buildroot@buildroot.org>; Wed,  9 Mar 2022 20:47:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id D366A839C4; Wed,  9 Mar 2022 20:39:30 +0000 (UTC)
+ id C8DFF83972; Wed,  9 Mar 2022 20:39:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
 Date: Wed, 9 Mar 2022 21:47:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9051a6322187129ba65249b5ee2228e045a4fa8c
-X-Git-Newrev: 66d348ae18c6e73d6ff9d935a241e55a65948be6
+X-Git-Oldrev: 0b058e15f5334dac93f42b92ea31525afdc2c27c
+X-Git-Newrev: 9051a6322187129ba65249b5ee2228e045a4fa8c
 X-Patchwork-Hint: ignore
-Message-Id: <20220309203930.D366A839C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ola: drop autoreconf
+Message-Id: <20220309203930.C8DFF83972@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pppd: fix CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,31 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66d348ae18c6e73d6ff9d935a241e55a65948be6
+commit: https://git.buildroot.net/buildroot/commit/?id=9051a6322187129ba65249b5ee2228e045a4fa8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OLA_AUTORECONF has been set since re-introduction of package in commit
-16ff948444c3978d63f483344a3d92d994c64312 but it is not needed as no
-patches are touching Makefile.am or ola.m4 anymore
+samba:ppp, added by commit 63332c33aa0771532807fd2684d4eee4eb952435, has
+been deprecated in February 2020:
+
+<cpe-item name="cpe:/a:samba:ppp:2.4.7" deprecated="true" deprecation_date="2020-02-24T15:55:39.787Z">
+    <cpe-23:cpe23-item name="cpe:2.3:a:samba:ppp:2.4.7:*:*:*:*:*:*:*">
+
+cpe:2.3:a:point-to-point_protocol_project:point-to-point_protocol is the
+correct CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apoint-to-point_protocol_project%3Apoint-to-point_protocol
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ola/ola.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/pppd/pppd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index 5090076175..1874350784 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -9,7 +9,6 @@ OLA_SITE = https://github.com/OpenLightingProject/ola/releases/download/$(OLA_VE
- OLA_LICENSE = LGPL-2.1+ (libola, libolacommon, Python bindings), GPL-2.0+ (libolaserver, olad, Python examples and tests)
- OLA_LICENSE_FILES = COPYING GPL LGPL LICENCE
- OLA_INSTALL_STAGING = YES
--OLA_AUTORECONF = YES
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 19b6f3ccce..d9d6244f10 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -10,8 +10,8 @@ PPPD_LICENSE = LGPL-2.0+, LGPL, BSD-4-Clause, BSD-3-Clause, GPL-2.0+
+ PPPD_LICENSE_FILES = \
+ 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
+ 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
+-PPPD_CPE_ID_VENDOR = samba
+-PPPD_CPE_ID_PRODUCT = ppp
++PPPD_CPE_ID_VENDOR = point-to-point_protocol_project
++PPPD_CPE_ID_PRODUCT = point-to-point_protocol
+ PPPD_SELINUX_MODULES = ppp
  
- # util-linux provides uuid lib
- OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex host-ola
+ PPPD_MAKE_OPTS = HAVE_INET6=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
