@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE751C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 20:14:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 431C0C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  9 Mar 2022 21:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5564C8239A;
-	Wed,  9 Mar 2022 20:14:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDB5D40543;
+	Wed,  9 Mar 2022 21:44:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BqZAoIF4q5Ow; Wed,  9 Mar 2022 21:44:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id C15EF40525;
+	Wed,  9 Mar 2022 21:44:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 75AEB1BF37E
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:44:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64FE78136F
+ for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 21:44:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iksXMRRICkc5; Wed,  9 Mar 2022 20:14:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AA84817F5;
-	Wed,  9 Mar 2022 20:14:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E1DF01BF403
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:14:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1A1541754
- for <buildroot@lists.busybox.net>; Wed,  9 Mar 2022 20:14:18 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yOx04Es7NHOI for <buildroot@lists.busybox.net>;
- Wed,  9 Mar 2022 20:14:17 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5J64gJi0yiwg for <buildroot@lists.busybox.net>;
+ Wed,  9 Mar 2022 21:44:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05940416AF
- for <buildroot@uclibc.org>; Wed,  9 Mar 2022 20:14:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE2A981367
+ for <buildroot@uclibc.org>; Wed,  9 Mar 2022 21:44:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C9530838ED; Wed,  9 Mar 2022 20:05:48 +0000 (UTC)
+ id 597A283A4A; Wed,  9 Mar 2022 21:35:52 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 09 Mar 2022 20:14:16 +0000
+Date: Wed, 09 Mar 2022 21:44:20 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -42,23 +42,22 @@ X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: WONTFIX
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: ps.report@gmx.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status cc resolution
-Message-ID: <bug-14656-163-rupLOBRfNE@https.bugs.busybox.net/>
-In-Reply-To: <bug-14656-163@https.bugs.busybox.net/>
-References: <bug-14656-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14651-163-cX3QG58rvm@https.bugs.busybox.net/>
+In-Reply-To: <bug-14651-163@https.bugs.busybox.net/>
+References: <bug-14651-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14656] Adding dependencies from an external tree
- does not work
+Subject: [Buildroot] [Bug 14651] OpenSSH 8.9p1 compiler error under ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,34 +74,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14656
+https://bugs.busybox.net/show_bug.cgi?id=14651
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to mf from comment #0)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998@free.fr
-         Resolution|---                         |WONTFIX
+- from build/openssh-8.9p1/ChangeLog:
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Simon, All,
+ 2692 commit 39f2111b1d5f00206446257377dcce58cc72369f
+ 2693 Author: Darren Tucker <dtucker@dtucker.net>
+ 2694 Date:   Wed Sep 29 10:53:55 2021 +1000
+ 2695 
+ 2696     Add new compiler hardening flags.
+ 2697     
+ 2698     Add -fzero-call-used-regs and -ftrivial-auto-var-init to the list of
+ 2699     compiler hardening flags that configure checks for.  These are
+support      ed
+ 2700     by clang and gcc, and make ROP gadgets less useful and mitigate
+ 2701     stack-based infoleaks respectively.  ok djm@
 
-As I explained on the list [0], it is not possible to use a br2-external
-tree to modify the dependencies of a package.
+
+- from openssh-8.9p1/configure.ac:
+
+ 195         OSSH_CHECK_CFLAG_COMPILE([-fzero-call-used-regs=all])
 
 
-[0]
-https://lore.kernel.org/buildroot/20220309201030.GA23050@scaer/T/#m4bacf3a6047b2da82554d088f2afd805bef5a312
+- from build/openssh-8.9p1/config.log:
 
-There is for now no way to achieve what you need without directly modifying
-the original package's .mk file.
+  716 configure:6832: checking if
+.../host/bin/arm-buildroot-linux-gnueabihf-gcc supports compile flag      
+-fzero-call-used-regs=all
+  717 configure:6865: .../hos      t/bin/arm-buildroot-linux-gnueabihf-gcc -c
+-D_LARGEFILE_SOURCE -D_LARGEFIL      E64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0
+-D_FORTIFY_SOURCE=1 -pipe -Wno-      error=format-truncation -Wall -Wextra
+-Wpointer-arith -Wuninitialized -Wsi      gn-compare -Wformat-security
+-Wsizeof-pointer-memaccess -Wno-pointer-sign       -Wno-unused-parameter
+-Wno-unused-result -Wimplicit-fallthrough -Wmisleadi      ng-indentation
+-fno-strict-aliasing -ftrapv -Werror -fzero-call-used-regs=      all
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conft     
+est.c >&5
+  718 arm-buildroot-linux-gnueabihf-gcc.br_real: error: unrecognized
+command-lin      e option '-fzero-call-used-regs=all'
+[...]
+  766 configure:6878: result: no
 
-(note: there have been a few ideas floated around in the past, but they are
-far from trivial to apply, if at all.)
 
-Regards,
-Yann E. MORIN.
+So 'zero-call-used-regs' not supported (gcc-10.3, raspberrypi0w_defconfig) is
+detected correctly here...
+
+Same test with  gcc-11.2, from build/openssh-8.9p1/config.log:
+
+configure:6832: checking if .../host/bin/arm-buildroot-linux-gnueabihf-gcc
+supports compile flag -fzero-call-used-regs=all
+configure:6865: .../host/bin/arm-buildroot-linux-gnueabihf-gcc -c
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0
+-D_FORTIFY_SOURCE=1 -pipe -Wno-error=format-truncation -Wall -Wextra
+-Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security
+-Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-parameter
+-Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation
+-fno-strict-aliasing -ftrapv -Werror -fzero-call-used-regs=all
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+configure:6865: $? = 0
+configure:6873: result: yes
+
+
+Which compiler do you use? For which target do you compile?
+
+Can you provide a failing .config/defconfig file?
 
 -- 
 You are receiving this mail because:
