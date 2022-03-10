@@ -4,84 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 275B1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 20:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E19C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8ADF68473E;
-	Thu, 10 Mar 2022 20:10:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 582B384792;
+	Thu, 10 Mar 2022 20:15:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1kyDq5sD_L_1; Thu, 10 Mar 2022 20:10:44 +0000 (UTC)
+	with ESMTP id Rx6syBxF8D3T; Thu, 10 Mar 2022 20:15:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A8438436B;
-	Thu, 10 Mar 2022 20:10:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8DD9D1BF331
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:10:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78F9E8478F;
+	Thu, 10 Mar 2022 20:15:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F0BB81BF331
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86BBE8436B
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:10:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC5ED60D94
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:15:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6EGiL0WRVSXk for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 20:10:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7V_CV-atPQCY for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 20:15:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E70428428D
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 20:10:39 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id bg10so14590071ejb.4
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 12:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=7bGUHs9DwEqovNvQ3F8kTWxpIG4tgM6TbXS+HTKVrVA=;
- b=D41ciRqI+1ajbqGUgqddtvaV/0LmlVkfqFobs5r6+MhSCemuBy04HM8ziO2FxWDfdw
- HfAXF14xwGI2ES89bn9i/U/tUPnZqUSHAh2Z6U2GGv5QKCtx53MdiE1QyofRhJYNQXtS
- iB/GjFEUOXvX1LcukiFKQEpFKRKn5vjZJEgwQA71HEPeEBE9dTu2x0lSbbzvmljiSqfD
- isJCE4HmYGDqE9J4ucJHl2VCo+PO18rY3DMQ1i6mux22N9Wjm9cmwhgiM+WGAoAmOeQW
- 0TnqCccQsPTqHDH7a78mvLgyMKFbdt0zSXYcR0t6x/C6BUe4+NHCRJW3crqQYhHkNsav
- z75A==
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com
+ [209.85.208.42])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A114060B8D
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 20:15:44 +0000 (UTC)
+Received: by mail-ed1-f42.google.com with SMTP id c20so8419570edr.8
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 12:15:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=7bGUHs9DwEqovNvQ3F8kTWxpIG4tgM6TbXS+HTKVrVA=;
- b=Wx3L5Gc+kdjNBzoboegWzgcySpLg4pssI94609qk6JYtNAzYpcNKUNQVraWjAYzko0
- kvF9UhemUyCeOIAzX6XflOmTrw1XQ0yv2dGa5eH9qoEMXnQqAFRu+5J+mQk7NeBlDJLx
- hNseAYMWCP9GoGldEgWoN9twp828uHcG23+oa6VuejsutT7boweGrbfXpqM1pSmrTUIL
- utPqTUHsyRatlL2/N2PD6sQyt8s+4+m6K4ls+NuDZvkz8nuV6qJVClECAsmw1PbT34DN
- 152jZvfwjas+mGkKy8yv8wXUYdK5NMhlKsViJphh4XqGFC7xe8Jc4YcjjY63pM8YPq8A
- WN5w==
-X-Gm-Message-State: AOAM532XAM7xlXz2lngxMQQ5Wt/GwSei4TmU4q7CN08eBn8TDX+XiPs+
- VIbP8wX79Yd1yAZGV5oOAE3xE73zDIqyCw==
-X-Google-Smtp-Source: ABdhPJwpontHUGxG175tTqJRJKC1V8vXSh1fDC1ir3ibjrRYvNAqrmwN7bNj5UFV/T2IeaQ2lrYixw==
-X-Received: by 2002:a17:906:280b:b0:6ce:f3c7:688f with SMTP id
- r11-20020a170906280b00b006cef3c7688fmr5852077ejc.468.1646943037939; 
- Thu, 10 Mar 2022 12:10:37 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=X40iV/KBHjpEBc8U2jXNyTTf/8+kCa54v+J8bVptVlE=;
+ b=mxcfCo0tu+DdtFQxeDdn0Fa4KM5/ZE7Zm0pIP5e8Ij5n9POVzzSvZRKY8mCcdtT/TP
+ 9Z/kq4q95uFPUgiOzGLLRadoUQljFPqacL3BQVFw9taeRsgJw81NEiY5/YfTJXb8GU24
+ pIzEOMoPY+FfkIsB5bqL5dd2LKz1alZffQoSKzP2FsnxTPEKod+O3gVSmuoaTmaPxdSh
+ cj0rp6J4USLcXhaDEK6QENN1f/lUCIWx9xwEVSlYObuFtXeXKUudnGTVQvMlJoDX2+VK
+ uA/Ce/7azws4nueikhcNPX27iBVKzMSbL304LqonYy6EpHBSgVq3WmT1QtaBr9UNIUVj
+ w5tw==
+X-Gm-Message-State: AOAM5330kkCq7eeN9RpaeRlcqFKmZCdOhbidWyTOcesJ1ddyastC2F5x
+ TC09OgiPuPybXe+VNLmSbwE=
+X-Google-Smtp-Source: ABdhPJydRCexsz4X8Sczq67N5Pqge4M1ACF3VD1m9KUYfmmmfZtNQJ0NwgQBYlFj10VQfzzBkaYcBQ==
+X-Received: by 2002:a50:e60f:0:b0:415:9509:32a2 with SMTP id
+ y15-20020a50e60f000000b00415950932a2mr5988847edm.235.1646943342748; 
+ Thu, 10 Mar 2022 12:15:42 -0800 (PST)
+Received: from localhost (tmo-098-218.customers.d1-online.com. [80.187.98.218])
  by smtp.gmail.com with ESMTPSA id
- r14-20020a1709067fce00b006db0edb8a80sm2145263ejs.225.2022.03.10.12.10.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 10 Mar 2022 12:10:37 -0800 (PST)
-Message-ID: <e47e01eb-0992-20ba-130e-f53df351c1c9@mind.be>
-Date: Thu, 10 Mar 2022 21:10:36 +0100
+ lj2-20020a170906f9c200b006da6f29bc01sm2092887ejb.158.2022.03.10.12.15.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 10 Mar 2022 12:15:41 -0800 (PST)
+Date: Thu, 10 Mar 2022 21:15:32 +0100
+From: Thomas Huth <huth@tuxfamily.org>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Message-ID: <20220310211532.51f8d789@tuxfamily.org>
+In-Reply-To: <20220309215639.786189-1-fontaine.fabrice@gmail.com>
+References: <20220309215639.786189-1-fontaine.fabrice@gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-GB
-To: Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org
-References: <20220309142913.2102898-1-foss+buildroot@0leil.net>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220309142913.2102898-1-foss+buildroot@0leil.net>
-Subject: Re: [Buildroot] [PATCH] package/qt5/qt5base: fix CVE-2022-25255
+Subject: Re: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: bump to version
+ 2022-03-08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,131 +77,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
+Cc: Matt Weber <matthew.weber@collins.com>, Cyril Bur <cyrilbur@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Quentin,
+Am Wed,  9 Mar 2022 22:56:39 +0100
+schrieb Fabrice Fontaine <fontaine.fabrice@gmail.com>:
 
-On 09/03/2022 15:29, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> - Switch site:
+>   https://git.kernel.org/pub/scm/virt/kvm/kvm-unit-tests.git/commit/?id=f271e1b630a1b8b5f4eae2331654fc1e70abfd66
+> - Update first and second patches
+> - Drop third and fourth patches (already in version)
+> - This bump will fix the following build failure with powerpc and gcc 11
+>   thanks to
+>   https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/commit/0c111b370ad3c5a89e11caee79bc93a66fd004f2
 > 
-> This fixes CVE-2022-25255[1] by using a patch provided by Qt for 5.15.
+> /tmp/ccSlivNE.s:348: Error: `lswx' invalid when little-endian
 > 
-> The patch fails to apply because of a conflict in copyright year so it
-> needed some additional handling after downloading.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/746e87892ac545e8fb97c17d4bfd7bd7bbc9d8be
 > 
-> The patch file was added by running the following command:
-> wget https://download.qt.io/archive/qt/5.15/CVE-2022-25255-qprocess5-15.diff -q -O - | sed -e 's/Copyright (C) 2021 The Qt Company Ltd./Copyright (C) 2016 The Qt Company Ltd./' > 0008-CVE-2022-25255-qprocess5-15.diff.patch
-> 
-> [1] https://nvd.nist.gov/vuln/detail/CVE-2022-25255
-> 
-> Cc: Quentin Schulz <foss+buildroot@0leil.net>
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->   ...008-CVE-2022-25255-qprocess5-15.diff.patch | 56 +++++++++++++++++++
->   package/qt5/qt5base/qt5base.mk                |  2 +
->   2 files changed, 58 insertions(+)
->   create mode 100644 package/qt5/qt5base/0008-CVE-2022-25255-qprocess5-15.diff.patch
+>  ...emove-Werror-to-avoid-build-failures.patch | 17 +++---
+>  ...vm-unit-tests-test-for-rdseed-rdrand.patch | 24 ++++----
+>  ...3-Makefile-fix-stack-protector-tests.patch | 36 -----------
+>  ...issue-with-the-linker-from-Fedora-32.patch | 61 -------------------
+>  package/kvm-unit-tests/kvm-unit-tests.hash    |  2 +-
+>  package/kvm-unit-tests/kvm-unit-tests.mk      |  6 +-
+>  6 files changed, 27 insertions(+), 119 deletions(-)
+>  delete mode 100644 package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+>  delete mode 100644 package/kvm-unit-tests/0004-Fix-powerpc-issue-with-the-linker-from-Fedora-32.patch
 > 
-> diff --git a/package/qt5/qt5base/0008-CVE-2022-25255-qprocess5-15.diff.patch b/package/qt5/qt5base/0008-CVE-2022-25255-qprocess5-15.diff.patch
-> new file mode 100644
-> index 0000000000..dfab92a9ef
-> --- /dev/null
-> +++ b/package/qt5/qt5base/0008-CVE-2022-25255-qprocess5-15.diff.patch
-
-  Please make the patch something that approaches git-formatted. At the very 
-least, the patch itself must have a description of what it does (i.e. a commit 
-message) and a Signed-off-by from you. Ideally, though, you look for the 
-appropriate commit in the upstream repository [1] and use that instead of a 
-random diff. In that case, add something like this at the end of the description 
-part:
-
-[Quentin: backport from upstream commit ab6915f0efb12cfe48d1f126f4a828212f853ce5 
-in 6.2 branch]
-Signed-off-by: ...
-
-
-  Regards,
-  Arnout
-
-[1] 
-https://invent.kde.org/qt/qt/qtbase/-/commit/ab6915f0efb12cfe48d1f126f4a828212f853ce5.patch
-
-
-> @@ -0,0 +1,56 @@
-> +--- a/src/corelib/io/qprocess_unix.cpp
-> ++++ b/src/corelib/io/qprocess_unix.cpp
-> +@@ -1,7 +1,7 @@
-> + /****************************************************************************
-> + **
-> + ** Copyright (C) 2016 The Qt Company Ltd.
-> +-** Copyright (C) 2016 Intel Corporation.
-> ++** Copyright (C) 2022 Intel Corporation.
-> + ** Contact: https://www.qt.io/licensing/
-> + **
-> + ** This file is part of the QtCore module of the Qt Toolkit.
-> +@@ -422,14 +422,15 @@ void QProcessPrivate::startProcess()
-> +     // Add the program name to the argument list.
-> +     argv[0] = nullptr;
-> +     if (!program.contains(QLatin1Char('/'))) {
-> ++        // findExecutable() returns its argument if it's an absolute path,
-> ++        // otherwise it searches $PATH; returns empty if not found (we handle
-> ++        // that case much later)
-> +         const QString &exeFilePath = QStandardPaths::findExecutable(program);
-> +-        if (!exeFilePath.isEmpty()) {
-> +-            const QByteArray &tmp = QFile::encodeName(exeFilePath);
-> +-            argv[0] = ::strdup(tmp.constData());
-> +-        }
-> +-    }
-> +-    if (!argv[0])
-> ++        const QByteArray &tmp = QFile::encodeName(exeFilePath);
-> ++        argv[0] = ::strdup(tmp.constData());
-> ++    } else {
-> +         argv[0] = ::strdup(encodedProgramName.constData());
-> ++    }
+> diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
+> index cbfa3a87e6..d07b9b6912 100644
+> --- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
+> +++ b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
+> @@ -6,6 +6,8 @@ Subject: [PATCH] Makefile: remove -Werror to avoid build failures
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  [Matthew: Refactoring of Thomas Petazzoni's original.]
+>  Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +[Fabrice: updated for 2022-03-08]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  ---
+>   Makefile | 1 -
+>   1 file changed, 1 deletion(-)
+> @@ -14,14 +16,15 @@ diff --git a/Makefile b/Makefile
+>  index 7231334..d9ad42b 100644
+>  --- a/Makefile
+>  +++ b/Makefile
+> -@@ -53,7 +53,6 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
+> - COMMON_CFLAGS += -g $(autodepend-flags)
+> - COMMON_CFLAGS += -Wall -Wwrite-strings -Wclobbered -Wempty-body -Wuninitialized
+> - COMMON_CFLAGS += -Wignored-qualifiers -Wunused-but-set-parameter
+> --COMMON_CFLAGS += -Werror
+> +@@ -53,7 +53,7 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
+> + 
+> + COMMON_CFLAGS += -g $(autodepend-flags) -fno-strict-aliasing -fno-common
+> + COMMON_CFLAGS += -Wall -Wwrite-strings -Wempty-body -Wuninitialized
+> +-COMMON_CFLAGS += -Wignored-qualifiers -Werror -Wno-missing-braces
+> ++COMMON_CFLAGS += -Wignored-qualifiers -Wno-missing-braces
 > +
-> +     // Add every argument to the list
-> +     for (int i = 0; i < arguments.count(); ++i)
-> +@@ -983,15 +984,16 @@ bool QProcessPrivate::startDetached(qint64 *pid)
-> +                 envp = _q_dupEnvironment(environment.d.constData()->vars, &envc);
-> +             }
-> +
-> +-            QByteArray tmp;
-> +             if (!program.contains(QLatin1Char('/'))) {
-> ++                // findExecutable() returns its argument if it's an absolute path,
-> ++                // otherwise it searches $PATH; returns empty if not found (we handle
-> ++                // that case much later)
-> +                 const QString &exeFilePath = QStandardPaths::findExecutable(program);
-> +-                if (!exeFilePath.isEmpty())
-> +-                    tmp = QFile::encodeName(exeFilePath);
-> ++                const QByteArray &tmp = QFile::encodeName(exeFilePath);
-> ++                argv[0] = ::strdup(tmp.constData());
-> ++            } else {
-> ++                argv[0] = ::strdup(QFile::encodeName(program));
-> +             }
-> +-            if (tmp.isEmpty())
-> +-                tmp = QFile::encodeName(program);
-> +-            argv[0] = tmp.data();
-> +
-> +             if (envp)
-> +                 qt_safe_execve(argv[0], argv, envp);
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index ef38d03253..ac0781c430 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -15,6 +15,8 @@ QT5BASE_SYNC_QT_HEADERS = YES
->   # 0010-Avoid-processing-intensive-painting-of-high-number-o.patch
->   # 0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
->   QT5BASE_IGNORE_CVES += CVE-2021-38593
-> +# 0008-CVE-2022-25255-qprocess5-15.diff.patch
-> +QT5BASE_IGNORE_CVES += CVE-2022-25255
->   
->   # A few comments:
->   #  * -no-pch to workaround the issue described at
+>   frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
+>   fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
+> - fnostack_protector := $(call cc-option, -fno-stack-protector, "")
+> --- 
+> +- 
+>  2.14.2
+>  
+> diff --git a/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+> index 1a1a90ce99..80549fd32a 100644
+> --- a/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+> +++ b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+> @@ -13,6 +13,8 @@ Upstream:
+>  https://marc.info/?l=kvm&m=151580743523259&w=2
+
+If I've get that old patch description right, this patch 0002 was only there
+for supporting old binutils versions < 2.23 ... but buildroot does not
+support those versions anymore, so I think you could simply drop the 0002
+patch completely instead?
+
+Apart from that, your patch looks fine to me.
+
+ Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
