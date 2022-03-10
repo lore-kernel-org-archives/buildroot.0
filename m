@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00FC9C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6802C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2A0184783;
-	Thu, 10 Mar 2022 21:45:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A176B8186E;
+	Thu, 10 Mar 2022 21:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AeN0VDGI0ErG; Thu, 10 Mar 2022 21:45:25 +0000 (UTC)
+	with ESMTP id N6wsP8CDPkxI; Thu, 10 Mar 2022 21:45:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5F608477B;
-	Thu, 10 Mar 2022 21:45:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 448701BF2C1
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:45:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5878384792;
+	Thu, 10 Mar 2022 21:45:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 54B6D1BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:45:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3606F40550
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:45:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 438CF605A4
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:45:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bWsZxt1vmXZZ for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 21:45:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EhONaUpLdBUu for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 21:45:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1EA340BC1
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:45:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7DAEE60B10
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:45:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4A37983C33; Thu, 10 Mar 2022 21:36:35 +0000 (UTC)
+ id E090A83C3B; Thu, 10 Mar 2022 21:36:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 22:44:15 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 51aa106ba3194ae49e119fb3c0bd91ddd81608fa
-X-Git-Newrev: 8368a375e2680399bc4cd04bf70ae2fceb899d58
+Date: Thu, 10 Mar 2022 22:43:00 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: bfe590a9594b94debfcf2db0c5c6d887aeab9e7b
+X-Git-Newrev: 15d2938c2440b6d87616c9231aba3e497da8497f
 X-Patchwork-Hint: ignore
-Message-Id: <20220310213635.4A37983C33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wireless-regdb:
- drop spurious space
+Message-Id: <20220310213651.E090A83C3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/wireless-regdb:
+ bump version to 2022.02.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8368a375e2680399bc4cd04bf70ae2fceb899d58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=15d2938c2440b6d87616c9231aba3e497da8497f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Drop spurious space added by commit
-71dc107d41e5daf45e0955740b302367313aa23f
+Changelog (since 2021.08.28, [1]):
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+  e061299 wireless-regdb: Raise DFS TX power limit to 250 mW (24 dBm) for the US
+  2ce78ed wireless-regdb: Update regulatory rules for Croatia (HR) on 6GHz
+  0d39f4c wireless-regdb: Update regulatory rules for South Korea (KR)
+  acad231 wireless-regdb: Update regulatory rules for France (FR) on 6 and 60 GHz
+  ea83a82 wireless-regdb: add support for US S1G channels
+  4408149 wireless-regdb: add 802.11ah bands to world regulatory domain
+  5f3cadc wireless-regdb: Update regulatory rules for Spain (ES) on 6GHz
+  e0ac69b Revert "wireless-regdb: Update regulatory rules for South Korea (KR)"
+  40e5e80 wireless-regdb: Update regulatory rules for South Korea (KR)
+  e427ff2 wireless-regdb: Update regulatory rules for China (CN)
+  0970116 wireless-regdb: Update regulatory rules for the Netherlands (NL) on 6GHz
+  4dac44b wireless-regdb: update regulatory database based on preceding changes
+
+[1] https://lore.kernel.org/linux-wireless/YhBCKWNw3IMfGs0L@ubuntu-x1/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2210ab8385cfa4729ed117a7724c0d05478cf356)
+(cherry picked from commit 324f0552526d169c24cd75e9dadf67641f2beef0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless-regdb/wireless-regdb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index abe8f6b000..91fcb320d2 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256  cff370c410d1e6d316ae0a7fa8ac6278fdf1efca5d3d664aca7cfd2aafa54446  wireless-regdb-2021.08.28.tar.xz
++sha256  8828c25a4ee25020044004f57374bb9deac852809fad70f8d3d01770bf9ac97f  wireless-regdb-2022.02.18.tar.xz
+ # Locally computed
+ sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
 diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 0db8c6f345..9e01283c01 100644
+index 9e01283c01..35a8c6686d 100644
 --- a/package/wireless-regdb/wireless-regdb.mk
 +++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -12,7 +12,7 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
- WIRELESS_REGDB_CPE_ID_VENDOR = kernel
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_CRDA),y)
--define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
-+define WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
- 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+-WIRELESS_REGDB_VERSION = 2021.08.28
++WIRELESS_REGDB_VERSION = 2022.02.18
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
