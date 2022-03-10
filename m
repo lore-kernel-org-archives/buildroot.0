@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49046C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB945C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:28:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0488A60F74;
-	Thu, 10 Mar 2022 21:28:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 926CF40BA0;
+	Thu, 10 Mar 2022 21:28:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zYW3ECO4h2EJ; Thu, 10 Mar 2022 21:28:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gYaDz61OPdKQ; Thu, 10 Mar 2022 21:28:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 219366127C;
-	Thu, 10 Mar 2022 21:28:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4BB61C1135
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 752F540B8E;
+	Thu, 10 Mar 2022 21:28:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 267481BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E27D24197C
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22C6C8476C
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8uDZjUKRChH5 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UxVqKy8_FK6p for <buildroot@lists.busybox.net>;
  Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 201AD41973
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6668E8436C
  for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8874783C16; Thu, 10 Mar 2022 21:18:43 +0000 (UTC)
+ id D028783C1A; Thu, 10 Mar 2022 21:18:43 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 22:09:14 +0100
+Date: Thu, 10 Mar 2022 22:09:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10c1d887d6082d8806b38b86097c212c4c3ec8f9
-X-Git-Newrev: 8d88189202e61653850fe1a6d9b4e4d90ebcb1cf
+X-Git-Oldrev: c2e32e655802ad917eb240b8c2b7ac343ab55ec1
+X-Git-Newrev: c01a8397d9923c38b14a0d083ba1cf3ee3a3049a
 X-Patchwork-Hint: ignore
-Message-Id: <20220310211843.8874783C16@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: bump to version
- d16bf02a11953dcac01dca73e6f3778f293adefe
+Message-Id: <20220310211843.D028783C1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ell: bump version to 0.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +58,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d88189202e61653850fe1a6d9b4e4d90ebcb1cf
+commit: https://git.buildroot.net/buildroot/commit/?id=c01a8397d9923c38b14a0d083ba1cf3ee3a3049a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+- Changelog (since 0.47, from [1]):
+
+  ver 0.48:
+    Fix issue with memory leaking from ICMPv6 RA.
+
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qt5/qt5base/qt5base.hash | 2 +-
- package/qt5/qt5base/qt5base.mk   | 2 +-
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 396f5044ff..1b9ff43ab2 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index cd724eae2d..4bde1ab677 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  269ae20ed74cb949420ac3abac0bdef3b65501ea47c9312c01e8f9073baf24fe  qtbase-53a047c212af7fbded6505651f648172f9d7a34d.tar.bz2
-+sha256  96b1c96041ae7b5186c94f231979217bd50e3c0a4caeba32982faa8054a6d113  qtbase-d16bf02a11953dcac01dca73e6f3778f293adefe.tar.bz2
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  4901a0baac4eb24163ceafb44fd448430361d25d8f17d89ff29f8b0b162b3eb9  ell-0.47.tar.xz
++sha256  9894943042a5d6165d3e5cc354f92274fb1304004d02b4bee682ab6067cdbbd5  ell-0.48.tar.xz
  
- # Hashes for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ef38d03253..010df7ec75 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 3ce64b6f2f..267b44e5f0 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QT5BASE_VERSION = 53a047c212af7fbded6505651f648172f9d7a34d
-+QT5BASE_VERSION = d16bf02a11953dcac01dca73e6f3778f293adefe
- QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
- QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
- 
+-ELL_VERSION = 0.47
++ELL_VERSION = 0.48
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
