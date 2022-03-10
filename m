@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49324C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 11:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0446C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 11:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E800B84391;
-	Thu, 10 Mar 2022 11:41:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 865768471F;
+	Thu, 10 Mar 2022 11:41:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HI21Occm4889; Thu, 10 Mar 2022 11:41:02 +0000 (UTC)
+	with ESMTP id TinEEtzyeGGB; Thu, 10 Mar 2022 11:41:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F12698438C;
-	Thu, 10 Mar 2022 11:41:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C34D8438F;
+	Thu, 10 Mar 2022 11:41:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BBE9F1BF868
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:40:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1362C1BF868
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:41:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA8088438C
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:40:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 025C78438F
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:41:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ES7PvW3dzPVD for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 11:40:56 +0000 (UTC)
+ with ESMTP id 5lMS4G4T3ewm for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 11:41:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
  [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F33584374
- for <buildroot@busybox.net>; Thu, 10 Mar 2022 11:40:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC1118438B
+ for <buildroot@busybox.net>; Thu, 10 Mar 2022 11:41:31 +0000 (UTC)
 Received: by mail-wm1-x32d.google.com with SMTP id
- l1-20020a05600c4f0100b00389645443d2so3209784wmq.2
- for <buildroot@busybox.net>; Thu, 10 Mar 2022 03:40:56 -0800 (PST)
+ bg31-20020a05600c3c9f00b00381590dbb33so3195188wmb.3
+ for <buildroot@busybox.net>; Thu, 10 Mar 2022 03:41:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=35Fmc7jv5JBkbqukiHtq0uiXu4UOUcT068rmdi1qS7o=;
- b=lXN3fTJWm1ZPrFT6XqHgluBeaoGgUKMmIxuQoNti8OwzPDQzBiuhu+KXRSONhFO2qB
- TA9SRXplRXkspc/D4bjnZpg4C8bD2BertLd0VxuL52uZFSldV8wF4Fr7uln33Ct5vgif
- zG8jAFouhxh2NpR1zzY9wLIJIgQDTCvQ2u8OSk2MI/MEX90gW0BUUOMdSsxC57s33jX1
- ydCZpExrvPCnS/ZE2oOzISRu0gxB5YIXQXqvaN7ALRTDy1BwOEY0ljoAOR9gqJMvzlxu
- 3E0juFVvHJyT7SXZUgbv426wAk8JACltVIZG4vClWx6BHxh+VeEEwISGCaEqDAnrTgaa
- IWdw==
+ bh=g88mZ0AaBS8szeEtuJ/ZIwuvKlczT43b7OozAzWXxvo=;
+ b=bwHliLFboE1ibYFXNoajSucwvPiZZZ1VcvvP1krJP8nYRnGZxeVkcbHqWLej361IQ+
+ cAhKDbPGebsN4CLL6NoxgwGPkcSuC3NJExdFeqIGIyL1J2Q7E2tE9MIofMI8G7cy5jLf
+ RwQ3rbUuCUB0EKiVSVgQnUFbG11QIF1ZUBUBqCNfEUrd8WYGec4OJmfgIwTvVqsZXE6i
+ VE6NJsTTKJHWM7s1d1/3gTTG24ibf15IfbmCjgGNub22Qj/huYe+ZNj/ljgDPLITs1Iw
+ 96ko3WaSBlV5ceJRDr1uma71OWKU7sqhq78VJR7ymbkY/+G3U4/7yf8Ja741t+NrNOJn
+ NAvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=35Fmc7jv5JBkbqukiHtq0uiXu4UOUcT068rmdi1qS7o=;
- b=gMQMPrQQGuO9prVnog3uxxeRb4KcIRE9h4Y2qo94QxmT4EOcaTfqiXWr6+9EpHWq2g
- Yry71lPHr/C3EYm8U0hsYjnFF7mx3WTfaG4UzFmHbaOlpOgXn/wCgCPNPJVpw1JTZtlM
- BYeLY6VO7+Tpfjya6r7LnohBiG2YqThJ6V+1+qfG/NjKvFjwoyxJY2Vuv59tIk0Gjdy7
- eH0booSO34QIK6A6cXQ255TOuPmWr0JtL84NlOwwlTALJaugGzlV63jVOEbTnXlLIMqS
- y2o/pwIlJwFVzCNcQYIMxoJCCQBPLCToveMAWam8Tun/bIOldWgvooLaI01veAO5qbhz
- B0Pg==
-X-Gm-Message-State: AOAM533w3wRYJQUVxgBkcTZOghQK0Zc+cPRwG+wE989g1a3WmAAHM/Iv
- yRDpeQmC3e9eSpEVzeGweMdC0oWcIOk=
-X-Google-Smtp-Source: ABdhPJylT9IyT3qgoqhmEgPTe6UilMDoONQWGVlc4pw9WPNwasuVlYNpH58CtlTmEMo6q1SbQtOKDg==
-X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id
- z19-20020a1cf413000000b0037bd1de5762mr3255516wma.108.1646912454264; 
- Thu, 10 Mar 2022 03:40:54 -0800 (PST)
+ bh=g88mZ0AaBS8szeEtuJ/ZIwuvKlczT43b7OozAzWXxvo=;
+ b=KcEiiK9QHrRvjLqI1OjkqWaaF1oq+AjDbmGUVC51QhKeP8xWZQIZiHv0fjx9v1DEN8
+ 6ufgINyO0gGwqBtjyh4y0RD1ICGmAofq5Wdp6Ts8geGI9LehwdTDrBqg8ocp8lk7kXFv
+ 8EFHfHH9TshVSN4XjNAICng5Iwf/zbZkGC0ZSrAzQCPQiPGimNAAxdl7WNOW+UtjmH8p
+ yuVmfy2nOB8aw9UYcmYumHrXcOKedK/Ds3Mk0nbVGrkuPjj0RrjagrKFvaU+SeEV2kcd
+ lVAikKj9MfpBQRgFlq9v/dElCcJJTBnDJSBrcpnOrhsqOIZNfNO1Yxlwobqbvuq7SK/2
+ jqVQ==
+X-Gm-Message-State: AOAM530cQwzy+TRUc/j+Lnb3WwAH63mddF6gWTrB6c86qS9Kw0e+oZOA
+ Hgu8H/O8R2SrEjPbuSR6lM9FQA6i5AU=
+X-Google-Smtp-Source: ABdhPJyvsnWLVeX3H/SIFdlcYa65TTuJf+jzuUB2OtXzXmJDFp643Z4/dccA5N7D1RprYZhGjEtJUA==
+X-Received: by 2002:a1c:ed1a:0:b0:37f:a539:5d5e with SMTP id
+ l26-20020a1ced1a000000b0037fa5395d5emr11364277wmh.37.1646912490234; 
+ Thu, 10 Mar 2022 03:41:30 -0800 (PST)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- y10-20020adfee0a000000b001f0639001ffsm5985923wrn.9.2022.03.10.03.40.53
+ n15-20020a05600c4f8f00b003842f011bc5sm8047087wmq.2.2022.03.10.03.41.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Mar 2022 03:40:53 -0800 (PST)
+ Thu, 10 Mar 2022 03:41:29 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Thu, 10 Mar 2022 12:40:47 +0100
-Message-Id: <20220310114047.919725-1-francois.perrad@gadz.org>
+Date: Thu, 10 Mar 2022 12:41:22 +0100
+Message-Id: <20220310114122.919781-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libgcrypt: bump to version 1.10.0
+Subject: [Buildroot] [PATCH] package/libglib2: bump to version 2.70.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,51 +93,103 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0001-configure.ac-add-an-option-to-disable-tests.patch  | 2 +-
- package/libgcrypt/libgcrypt.hash                            | 6 ++----
- package/libgcrypt/libgcrypt.mk                              | 2 +-
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ package/libglib2/0002-remove-cpp-requirement.patch          | 6 +++---
+ ...03-Add-Wno-format-nonliteral-to-compiler-arguments.patch | 2 +-
+ ...son.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch | 4 ++--
+ package/libglib2/libglib2.hash                              | 4 ++--
+ package/libglib2/libglib2.mk                                | 2 +-
+ 5 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-index 4ef02fba6..e32f93863 100644
---- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-+++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-@@ -44,7 +44,7 @@ diff --git a/configure.ac b/configure.ac
- index e8c8cd39..1a6b61e5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3198,6 +3198,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-+@@ -3230,6 +3230,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-  AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
+diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
+index 2f9522893..b5603c92f 100644
+--- a/package/libglib2/0002-remove-cpp-requirement.patch
++++ b/package/libglib2/0002-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.70.0',
++   version : '2.70.4',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+@@ -46,7 +46,7 @@ index 4bbf4c2..ac59f4e 100644
   
+  cc_can_run = not meson.is_cross_build() or meson.has_exe_wrapper()
   
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 23562d0ed..2ea4d74c2 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,5 @@
--# From https://www.gnupg.org/download/integrity_check.html
--sha1  1bccc8393482fa1953323ff429c6b5ba5676eb1a  libgcrypt-1.9.4.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.0.tar.bz2.sig
- # using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7  libgcrypt-1.9.4.tar.bz2
-+sha256  6a00f5c05caa4c4acc120c46b63857da0d4ff61dc4b4b03933fa8d46013fae81  libgcrypt-1.10.0.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index e5fdfcfc8..c6c88f607 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
+-@@ -1679,20 +1678,6 @@ if g_have_iso_c_varargs
++@@ -1696,20 +1695,6 @@ if g_have_iso_c_varargs
+  #endif''')
+  endif
+  
+@@ -67,7 +67,7 @@ index 4bbf4c2..ac59f4e 100644
+  g_have_gnuc_varargs = cc.compiles('''
+    void some_func (void) {
+      int a(int p1, int p2, int p3);
+-@@ -2330,7 +2315,6 @@ subdir('gobject')
++@@ -2339,7 +2324,6 @@ subdir('gobject')
+  subdir('gthread')
+  subdir('gmodule')
+  subdir('gio')
+diff --git a/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+index 67aea7982..e21239301 100644
+--- a/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
++++ b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+@@ -16,7 +16,7 @@ diff --git a/meson.build b/meson.build
+ index 3c615b7..7cae4e8 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -431,6 +431,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++@@ -435,6 +435,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+      # building with -Wbad-function-cast.
+      '-Wno-bad-function-cast',
+      '-Wno-cast-function-type',
+diff --git a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+index a29587bd3..db77a7320 100644
+--- a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
++++ b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+@@ -23,7 +23,7 @@ diff --git a/gio/meson.build b/gio/meson.build
+ index 29473d26b..112d4ada9 100644
+ --- a/gio/meson.build
+ +++ b/gio/meson.build
+-@@ -831,6 +831,7 @@ pkg.generate(libgio,
++@@ -841,6 +841,7 @@ pkg.generate(libgio,
+    variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
+                 'schemasdir=' + join_paths('${datadir}', schemas_subdir),
+                 'bindir=' + join_paths('${prefix}', get_option('bindir')),
+@@ -35,7 +35,7 @@ diff --git a/glib/meson.build b/glib/meson.build
+ index f78f32969..6c5486699 100644
+ --- a/glib/meson.build
+ +++ b/glib/meson.build
+-@@ -377,6 +377,7 @@ pkg.generate(libglib,
++@@ -384,6 +384,7 @@ pkg.generate(libglib,
+    subdirs : ['glib-2.0'],
+    extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
+    variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 580be3e08..f0f0cb55a 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.70/glib-2.70.0.sha256sum
+-sha256  200d7df811c5ba634afbf109f14bb40ba7fde670e89389885da14e27c0840742  glib-2.70.0.tar.xz
++# https://download.gnome.org/sources/glib/2.70/glib-2.70.4.sha256sum
++sha256  ab3d176f3115dcc4e5d02db795984e04e4f4b48d836252e23e8c468e9d423c33  glib-2.70.4.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d3cba1a8b..18f5b329c 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.9.4
-+LIBGCRYPT_VERSION = 1.10.0
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ LIBGLIB2_VERSION_MAJOR = 2.70
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 -- 
 2.32.0
 
