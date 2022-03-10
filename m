@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5821BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D798C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E5024057A;
-	Thu, 10 Mar 2022 21:29:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFF504196C;
+	Thu, 10 Mar 2022 21:30:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CHAL_5AKQ5kT; Thu, 10 Mar 2022 21:29:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rNt7agIH3umb; Thu, 10 Mar 2022 21:30:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC85840BA6;
-	Thu, 10 Mar 2022 21:29:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AC0641983;
+	Thu, 10 Mar 2022 21:30:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 907E01BF2C1
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FD801BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CC2D6127C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84F8B61287
  for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qxFHrTGHbqD3 for <buildroot@lists.busybox.net>;
+ with ESMTP id 3UM_HcIOmXBL for <buildroot@lists.busybox.net>;
  Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7361261287
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADF5C61286
  for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DC0A183C1B; Thu, 10 Mar 2022 21:18:43 +0000 (UTC)
+ id 2360F83C16; Thu, 10 Mar 2022 21:18:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 22:09:36 +0100
+Date: Thu, 10 Mar 2022 22:26:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c01a8397d9923c38b14a0d083ba1cf3ee3a3049a
-X-Git-Newrev: 92e0fe71de85d0d7647aefbcab843e66f9bcca99
+X-Git-Oldrev: 1b117664aca0e5b81236c0fc7ad5f0ccb4e0267a
+X-Git-Newrev: 629fc34cb6b1f0ca8982b7f7e145afc7c110e27d
 X-Patchwork-Hint: ignore
-Message-Id: <20220310211843.DC0A183C1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iwd: bump version to 1.24
+Message-Id: <20220310211844.2360F83C16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/assimp: bump version to 5.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,128 +53,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0737012867231996431=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0737012867231996431==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=92e0fe71de85d0d7647aefbcab843e66f9bcca99
+commit: https://git.buildroot.net/buildroot/commit/?id=629fc34cb6b1f0ca8982b7f7e145afc7c110e27d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- remove 001-dpp-fix-implicit-declaration-of-function-explicit_bz.patch
-  (upstream applied [1])
+For details see [1].
 
-- Changelog (since 1.21, from [2]):
-
-  ver 1.24:
-    Fix issue with handshake and missing rekeying support.
-    Fix issue with BSS ranking and zero signal strength.
-    Fix issue with setting OWE IE length correctly.
-
-  ver 1.23:
-    Fix issue with handling handshake offloading.
-    Fix issue with at_console and D-Bus policy.
-
-  ver 1.22:
-    Fix issue with handling periodic scanning.
-    Fix issue with handling scanning completion.
-    Fix issue with handling scanning for OWE auto-connect.
-    Add support for additional DPP features.
-
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=6ce41f621154eff0145dab41308bc145c0440f16
-[2] https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
+[1] https://github.com/assimp/assimp/releases/tag/v5.2.1
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...licit-declaration-of-function-explicit_bz.patch | 41 ----------------------
- package/iwd/iwd.hash                               |  2 +-
- package/iwd/iwd.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ package/assimp/assimp.hash | 2 +-
+ package/assimp/assimp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iwd/0001-dpp-fix-implicit-declaration-of-function-explicit_bz.patch b/package/iwd/0001-dpp-fix-implicit-declaration-of-function-explicit_bz.patch
-deleted file mode 100644
-index 3e808deb88..0000000000
---- a/package/iwd/0001-dpp-fix-implicit-declaration-of-function-explicit_bz.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 6ce41f621154eff0145dab41308bc145c0440f16 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 10 Jan 2022 22:32:18 +0100
--Subject: [PATCH] dpp: fix implicit declaration of function explicit_bzero
-- warning
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--- add missing src/missing.h include for explicit_bzero, fixes uclibc
--  compile/linking
--
--Fixes:
--
--  src/dpp.c:166:2: warning: implicit declaration of function ‘explicit_bzero’ [-Wimplicit-function-declaration]
--    166 |  explicit_bzero(dpp->r_nonce, dpp->nonce_len);
--        |  ^~~~~~~~~~~~~~
--
--[backport from upstream]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--[yann.morin.1998@free.fr: actual backport now upstreamn applied]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- src/dpp.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/dpp.c b/src/dpp.c
--index 84e89f6c..8091ded1 100644
----- a/src/dpp.c
--+++ b/src/dpp.c
--@@ -30,6 +30,7 @@
-- 
-- #include "linux/nl80211.h"
-- 
--+#include "src/missing.h"
-- #include "src/dbus.h"
-- #include "src/netdev.h"
-- #include "src/module.h"
---- 
--2.34.1
--
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 8e34d2983f..1a58ec88e8 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  bac891df91c605271e91b73cf0015e1ba86ff784347e53fc67601366859b3851  iwd-1.21.tar.xz
-+sha256  61b5e48380cd3a6d0529f725eb6974157f1410af165f5d266b87add0bf395224  iwd-1.24.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index a70da86ecc..548b508edb 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+index 50f0b3e6d6..a778b79132 100644
+--- a/package/assimp/assimp.hash
++++ b/package/assimp/assimp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  52ad3a3776ce320c8add531dbcb2d3b93f2e1f10fcff5ac30178b09ba934d084  assimp-5.1.6.tar.gz
++sha256  c9cbbc8589639cd8c13f65e94a90422a70454e8fa150cf899b6038ba86e9ecff  assimp-5.2.1.tar.gz
+ sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 766b2c9b5a..42440f0fa9 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IWD_VERSION = 1.21
-+IWD_VERSION = 1.24
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
-
---===============0737012867231996431==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-ASSIMP_VERSION = 5.1.6
++ASSIMP_VERSION = 5.2.1
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0737012867231996431==--
