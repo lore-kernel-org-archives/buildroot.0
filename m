@@ -1,61 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 665BBC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 08:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CBB2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 09:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 049B7418D5;
-	Thu, 10 Mar 2022 08:51:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B92238436B;
+	Thu, 10 Mar 2022 09:56:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2w-PDpBQyaoP; Thu, 10 Mar 2022 08:51:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C-5WkiuHjAT8; Thu, 10 Mar 2022 09:56:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1180418CC;
-	Thu, 10 Mar 2022 08:51:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D67308434D;
+	Thu, 10 Mar 2022 09:56:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D75721BF38D
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 08:51:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D3FF21BF3B9
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 09:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE57D418CC
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 08:51:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2D87416CE
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 09:56:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w8mTuiKz2QaQ for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 08:51:52 +0000 (UTC)
+ with ESMTP id xlDX4MDcnOi6 for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 09:56:08 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2A349418C6
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 08:51:51 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 01E5F416CD
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 09:56:07 +0000 (UTC)
 Received: (Authenticated sender: kamel.bouhara@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 282676000D;
- Thu, 10 Mar 2022 08:51:47 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4B3ADC000E;
+ Thu, 10 Mar 2022 09:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1646902308;
+ t=1646906165;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=DcVsji07H7eC/AYUFu3Ympcdb8ok/024n8RR6Gve+Wc=;
- b=V1xgIYKxwgiC3FIGdLSr6Ct+q6HL1uvul7PhIqVnhdk1Iv9aXXEm0NAkCz8JXtCcAcy2sV
- 5cmNCqXjQ2BWaWB3Dbd2e+ju9EhI6yPytPhCXdj70i1LR/d4XRDQ/mRvAaOmBf2xCBXyad
- mCpTC31q7Mcw1cJcJM0A88To71rB4gFtNlSesWaMOBrJMXIR26gkSSORcwxU9GDGRDxTys
- 3HmxO2sAtZsOQ92UzZQ89oMDYvTvJsZ2AyoUIuXsNBPVjuB2kszEQzyzjoNQL0QC7NlwRx
- hTjL88oXFBr+LCPIzgHsMKkh56tx9arFlkwtGHhNra0s2uEWPj8ynyBlYgj+og==
-Date: Thu, 10 Mar 2022 09:51:46 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Yim8Im1WiRShHIxH@kb-xps>
-References: <20220225113400.802049-1-kamel.bouhara@bootlin.com>
- <20220225113400.802049-5-kamel.bouhara@bootlin.com>
- <20220226113538.6def80d0@windsurf>
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=TrWqA7bsHQEhuadbp8KcThEmdJk1jDKhqKi3bUsab6E=;
+ b=BGeHTqh4PgNMWmrsMEzjkhmC1wNIWiYH/oz4+6lCVOa7nPTEcYFi/E7xc+yL2Uoz74YV/U
+ GOxF5WZDxalS5uZ4T6LDUdfJqt7PcCeyEgE1rcDXgmbuBGf/CdRlSts16CSbOqgiSqSfMZ
+ qAcaOnxONpvgFWQKQR7r5sFyKVcj7xaVKwoND9Mlc/QaN9ZloFZRw3lftyGcA9bJScKWEJ
+ q9vIYuQCRfusUoAdfWAjACtMb3Zhm5G0zydCRBuFwI8dvY7Yex3WWKfST5ydh8dsDc4ZvE
+ JauwdTJe9HmRRpAb3nTdjsP3Bws62jyLuYXWP7d2Kn0KkE77A3gqTQSavIpDdQ==
+To: buildroot@buildroot.org
+Date: Thu, 10 Mar 2022 10:55:58 +0100
+Message-Id: <20220310095602.2435745-1-kamel.bouhara@bootlin.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220226113538.6def80d0@windsurf>
-Subject: Re: [Buildroot] [PATCH 4/4] package/libodb-boost: add host variant
+Subject: [Buildroot] [PATCH v2 0/4] Add odb host variant and fix gcc-11 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,70 +67,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Kamel Bouhara via buildroot <buildroot@buildroot.org>
 Reply-To: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Cc: Kamel Bouhara via buildroot <buildroot@buildroot.org>
+Cc: Kamel Bouhara <kamel.bouhara@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Feb 26, 2022 at 11:35:38AM +0100, Thomas Petazzoni wrote:
-> On Fri, 25 Feb 2022 12:34:00 +0100
-> Kamel Bouhara via buildroot <buildroot@buildroot.org> wrote:
->
-> > Add host variant of libodb-boost required by host-odb package.
->
-> This is a bit short, and I think just like PATCH 3/4, it needs a more
-> extensive explanation that the ODB compiler needs the libodb-boost
-> headers at compile time, and therefore installed in $(HOST_DIR).
->
+Hello,
 
-Ack.
+Here is a short patch series that fix odb build issue with gcc-11 
+and add a host variant of the libodb package required by the host-odb 
+compiler. The host-libodb-boost variant is only required when boost 
+package is enabled.
 
-> > diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
-> > index bac5f1e78f..7f2ad1fe72 100644
-> > --- a/package/libodb-boost/libodb-boost.mk
-> > +++ b/package/libodb-boost/libodb-boost.mk
-> > @@ -11,7 +11,10 @@ LIBODB_BOOST_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_BOOST_VE
-> >  LIBODB_BOOST_INSTALL_STAGING = YES
-> >  LIBODB_BOOST_LICENSE = GPL-2.0
-> >  LIBODB_BOOST_LICENSE_FILES = LICENSE
-> > -LIBODB_BOOST_DEPENDENCIES = boost libodb
-> > +LIBODB_BOOST_DEPENDENCIES = boost libodb \
-> > +			    host-boost \
-> > +			    host-libodb
->
-> This seems wrong. Why is libodb-boost depending on host-libodb-boost.
-> At least, this makes the dependencies added in your PATCH 2/4 a bit
-> irrelevant.
->
+Changes v1 -> v2:
+	- Fix patch order issue.
+	- Add a more extensive commit description for the libodb-boost.
+	- Use HOST_*_DEPENDENCIES when appropriate.
+	- Use BR2_PACKAGE_LIBODB_BOOST in odb.mk to check for optional
+	  dependencies.
 
-Actually, that is the host variant that is depending on it. Your
-following comments are completely right.
+Kamel Bouhara (1):
+  package/libodb-boost: add host variant
 
-Thanks !
+Thomas Petazzoni (3):
+  package/odb: backport more upstream commits to fix build with gcc 11.x
+  package/libodb: add host variant
+  package/odb: add dependency on host-libodb
 
-> I guess what you need to do instead is:
->
-> HOST_LIBODB_BOOST_DEPENDENCIES = hoost-boost host-libodb
->
-> And rely on the logic in odb.mk to pull in host-libodb-boost when
-> BR2_PACKAGE_LIBODB_BOOST=y.
->
+ package/libodb-boost/libodb-boost.mk          |  2 +
+ package/libodb/libodb.mk                      |  2 +
+ .../0012-Adjust-to-changes-in-GCC-11.patch    | 50 ++++++++++++++
+ ...kup-ambiguity-causing-error-with-GCC.patch | 68 +++++++++++++++++++
+ package/odb/odb.mk                            |  8 ++-
+ 5 files changed, 129 insertions(+), 1 deletion(-)
+ create mode 100644 package/odb/0012-Adjust-to-changes-in-GCC-11.patch
+ create mode 100644 package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch
 
-> Could you fix your patch series, and send a new iteration?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+-- 
+2.25.1
 
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
