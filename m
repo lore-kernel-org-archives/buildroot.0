@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C11BCC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8015EC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79C12847A2;
-	Thu, 10 Mar 2022 21:50:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D06260B4B;
+	Thu, 10 Mar 2022 21:51:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y7Qodw2OO_N2; Thu, 10 Mar 2022 21:50:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dzBagLYFjDTH; Thu, 10 Mar 2022 21:51:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1E6684792;
-	Thu, 10 Mar 2022 21:50:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3908B60B10;
+	Thu, 10 Mar 2022 21:50:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A26A1BF2C1
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:50:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 533781BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:50:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0766F84792
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:50:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50D2284783
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:50:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BLPwM405rk-5 for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 21:50:45 +0000 (UTC)
+ with ESMTP id e1Lti4B6q-3I for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 21:50:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04BE68434F
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:50:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 904BA84792
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:50:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 61D6B83C48; Thu, 10 Mar 2022 21:42:14 +0000 (UTC)
+ id F0F4983C4C; Thu, 10 Mar 2022 21:42:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 22:49:21 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 3d357990204241bc832a8543ad1007a5789d8f62
-X-Git-Newrev: 9884d674d1788124194e0dc8757830ad832af320
+Date: Thu, 10 Mar 2022 22:48:56 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: f45f6bae0db3df1ee3666df52dc711e609890d0a
+X-Git-Newrev: d9395a06b18b8472ac139232d9779d65fcd4a713
 X-Patchwork-Hint: ignore
-Message-Id: <20220310214214.61D6B83C48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gdk-pixbuf: fix
+Message-Id: <20220310214220.F0F4983C4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/gdk-pixbuf: fix
  run with per-package directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9884d674d1788124194e0dc8757830ad832af320
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d9395a06b18b8472ac139232d9779d65fcd4a713
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 gdk-pixbuf is based on plugins (modules in gdk-pixbuf parlance) that are
 provided either by the gdk-pixbuf package itself, or be installed by
