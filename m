@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B75C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 20:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 917C9C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 20:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA11460B34;
-	Thu, 10 Mar 2022 20:45:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kZMokQfcqF1T; Thu, 10 Mar 2022 20:45:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B16DB6126C;
-	Thu, 10 Mar 2022 20:45:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 321E61BF331
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:45:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F1B1416CD
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:45:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CFAA416CE;
+	Thu, 10 Mar 2022 20:46:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T_YQY0Xsf5NS for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GXnnTN0S3PYA; Thu, 10 Mar 2022 20:46:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38E92416BF;
+	Thu, 10 Mar 2022 20:45:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 33E601C1135
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:45:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F88D847AA
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:45:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jdUwaI40BhbP for <buildroot@lists.busybox.net>;
  Thu, 10 Mar 2022 20:45:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A07F416B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F82F847A8
  for <buildroot@buildroot.org>; Thu, 10 Mar 2022 20:45:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DCCAE83B75; Thu, 10 Mar 2022 20:37:13 +0000 (UTC)
+ id E644A83A8A; Thu, 10 Mar 2022 20:37:13 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 21:34:29 +0100
+Date: Thu, 10 Mar 2022 21:35:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5030d7f4ea5004b24025eb93d421ddadb0f8ee06
-X-Git-Newrev: 866ffbe0e63aff5788f29007b8fabc3fa49cd5ad
+X-Git-Oldrev: 866ffbe0e63aff5788f29007b8fabc3fa49cd5ad
+X-Git-Newrev: 933447c27c41ebcdb5eb9fa2a374456699ae33f2
 X-Patchwork-Hint: ignore
-Message-Id: <20220310203713.DCCAE83B75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/orangepi_pc_defconfig: switch to
- extlinux
+Message-Id: <20220310203713.E644A83A8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-treq: bump to version 22.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,115 +58,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=866ffbe0e63aff5788f29007b8fabc3fa49cd5ad
+commit: https://git.buildroot.net/buildroot/commit/?id=933447c27c41ebcdb5eb9fa2a374456699ae33f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-* Switch to common orangepi scenario for multiple boards (board/orangepi/common) to create an SD image.
-* Exclude FAT partition, it is no longer needed for U-Boot.
-* Switch SD image from MBR to GPT for partition-uuid to work.
-* Switch to extlinux, this is convenient for debugging.
+- hyperlink is a dependency since version 20.4.0 and
+  https://github.com/twisted/treq/commit/5475def96f3ec93075ff95709fec4acd154e6fed
+- six is not a dependency since version 21.5.0 and
+  https://github.com/twisted/treq/commit/22bdb399a03b0eebaa93023b80d348f584f567d5
 
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/orangepi/orangepi-pc/boot.cmd     |  8 -------
- board/orangepi/orangepi-pc/genimage.cfg | 37 ---------------------------------
- configs/orangepi_pc_defconfig           |  9 +++-----
- 3 files changed, 3 insertions(+), 51 deletions(-)
+ package/python-treq/Config.in        | 2 +-
+ package/python-treq/python-treq.hash | 4 ++--
+ package/python-treq/python-treq.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/orangepi/orangepi-pc/boot.cmd b/board/orangepi/orangepi-pc/boot.cmd
-deleted file mode 100644
-index 9da625c803..0000000000
---- a/board/orangepi/orangepi-pc/boot.cmd
-+++ /dev/null
-@@ -1,8 +0,0 @@
--setenv fdt_high ffffffff
--
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-pc.dtb
--
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-pc/genimage.cfg b/board/orangepi/orangepi-pc/genimage.cfg
-deleted file mode 100644
-index 14e326cc56..0000000000
---- a/board/orangepi/orangepi-pc/genimage.cfg
-+++ /dev/null
-@@ -1,37 +0,0 @@
--# Minimal SD card image for the OrangePi PC
--#
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-h3-orangepi-pc.dtb",
--			"boot.scr"
--		}
--	}
--
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index 44ea9b95c4..fd0f64e0e6 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -5,8 +5,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
- BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-pc/genimage.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
-@@ -14,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-pc/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-@@ -27,9 +29,4 @@ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-pc/boot.cmd"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 7c02a35638..5d76a5cdd6 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -3,9 +3,9 @@ config BR2_PACKAGE_PYTHON_TREQ
+ 	# twisted TLS -> python-{pyopenssl,service-identity}
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
+ 	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
+ 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED_TLS # runtime
+ 	help
+diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+index 288279cbd8..aecf71aad8 100644
+--- a/package/python-treq/python-treq.hash
++++ b/package/python-treq/python-treq.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/treq/json
+-md5  b75f6c89fd481989a9cfdec8d61a6d84  treq-20.3.0.tar.gz
+-sha256  a72d7587d6f81c7a32620b00175825b4334bafbde73d37098d139ac7b11dca98  treq-20.3.0.tar.gz
++md5  43892086d556e7596392134f1e10bdef  treq-22.2.0.tar.gz
++sha256  df757e3f141fc782ede076a604521194ffcb40fa2645cf48e5a37060307f52ec  treq-22.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 320f57b6f2..57dc50ee74 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TREQ_VERSION = 20.3.0
++PYTHON_TREQ_VERSION = 22.2.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+-PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/98/09/25064d7224efde9fd51e8865353d516c53306e476eab27ab21fb258cf7d4
++PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/cd/c8/b68ab17d994133baf6edbcb5551ba81e1494bdc6d5e21a9d4f3bc4315140
+ PYTHON_TREQ_LICENSE = MIT
+ PYTHON_TREQ_LICENSE_FILES = LICENSE
+ PYTHON_TREQ_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
