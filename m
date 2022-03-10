@@ -1,58 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F83C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 17:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CED95C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 18:03:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 700EB4192A;
-	Thu, 10 Mar 2022 17:00:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B62961212;
+	Thu, 10 Mar 2022 18:03:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Km3dIlEhLl8A; Thu, 10 Mar 2022 17:00:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id owelumii2vWi; Thu, 10 Mar 2022 18:03:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B48841798;
-	Thu, 10 Mar 2022 17:00:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 882A960B6B;
+	Thu, 10 Mar 2022 18:03:43 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 317791BF2F3
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 16:59:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E0C0F1BF408
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 18:03:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9EAD41929
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 16:59:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCA43409A0
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 18:03:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=email.cz
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WD9xx52n7Uv9 for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 16:59:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F6DC414CC
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 16:59:04 +0000 (UTC)
-Received: (Authenticated sender: clement.leger@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0AD5560005;
- Thu, 10 Mar 2022 16:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1646931542;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=LoX0Z7n1zpwk1MdBOqTAuBm8I1H+YJBTPNVDWtpO6o8=;
- b=LPNqBKx9gYCcp+5uOwcWb0Wwdmo7N9nV5+umTdzXtEOsn1nLexVB30kFX9DbSAwCMex53C
- OYUShR7tw6scDOkEQwEPC83vWTrVDsdzC64GfKqVBfsNZfz/nobAdna1mZwsTPKagnv5Ve
- 4iC3p6xhI7YmVCJa8hssDPP8rNWS6jVO6T7YVNPQUuNty8de7/lmoe1hhYThhVAbu3SdpH
- Ybd9k05KtF+u4d5eKr9EXpaG27pUPw4KGzCLzniqDtaeVRjaMsbXNPG3bmESEeERPVug/R
- /8jYVMfje7A7VFBLHZnt8wBkAtJc9hGAbq3SSlPIPZCmjq/EPKWOMIXNwjRZeQ==
-To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 17:57:28 +0100
-Message-Id: <20220310165735.1102802-1-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id DfjY9lVOaGQS for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 18:03:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1CBD740997
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 18:03:40 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc11a.ng.seznam.cz (email-smtpc11a.ng.seznam.cz [10.23.11.75])
+ id 3d392022bdde4abf3f4d1e4c; Thu, 10 Mar 2022 19:03:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz; s=beta;
+ t=1646935418; bh=/9SFpEnCvUbSQ9A3+ztGNFcgB6XNyM3GY68fX2gt7NE=;
+ h=Received:Date:From:To:Cc:Subject:Message-ID:References:
+ MIME-Version:Content-Type:Content-Disposition:
+ Content-Transfer-Encoding:In-Reply-To:X-szn-frgn:X-szn-frgc;
+ b=mb5PMWB8RADABY5TkCcE/JThU3DdRxGw1DoheL11n5OABGMMYUVduwpwEN8DZX27K
+ eCdsZTdcG1QM659VTP/8ndjrThz9TU91njsJvefeL81SmlUOenVWhV//8CPpY6QDgQ
+ O4PygMFyH79Djcm/XsaL3hFl1TFBOn0cOtyMeVz8=
+Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
+ by email-relay27.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
+ Thu, 10 Mar 2022 19:03:37 +0100 (CET)  
+Date: Thu, 10 Mar 2022 19:03:32 +0100
+From: Jan Havran <havran.jan@email.cz>
+To: Sourabh Hegde <hrsourabh011@gmail.com>
+Message-ID: <Yio9dHRYViMb7+iG@arch-zen.localdomain>
+References: <CADYjeSsCzsQbWw25kghn49m6vZ9XBMi5NQfBHhTh5X6E3z=JFg@mail.gmail.com>
+ <CADYjeStJRry=ed46Km6nsaFk+wtbaxs0bLDfiPmtJ7xwZs2UwA@mail.gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 0/7] boot/optee-os: support new optee-os
- 3.16.0 build dependencies
+Content-Disposition: inline
+In-Reply-To: <CADYjeStJRry=ed46Km6nsaFk+wtbaxs0bLDfiPmtJ7xwZs2UwA@mail.gmail.com>
+X-szn-frgn: <5ab5bb75-1ac6-4eb5-bcca-043738416cb5>
+X-szn-frgc: <0>
+Subject: Re: [Buildroot] How to connect to Wifi on start-up using Buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +70,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>,
- =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmV3ZXIgdmVyc2lvbnMgb2Ygb3B0ZWUtb3MgKD49IDMuMTYuMCkgdXNlcyBweXRob24tY3J5cHRv
-Z3JhcGh5IGluc3RlYWQKb2YgcHl0aG9uLXB5Y3J5cHRvZG9tZXggdG8gYnVpbGQuIFRoaXMgc2Vy
-aWVzIGFkZHMgc3VwcG9ydCB0byBidWlsZApob3N0LXB5dGhvbi1jcnlwdG9ncmFwaHkgYW5kIHVz
-ZXMgaXQgaW4gb3B0ZWUtb3MgcGFja2FnZSB0byBidWlsZCB0aGUKMy4xNi4wIHZlcnNpb24uIEFs
-c28gYnVtcCBvcHRlZS1jbGllbnQsIG9wdGVlLWJlbmNobWFyaywgb3B0ZWUtZXhhbXBsZXMKYW5k
-IG9wdGVlLXRlc3Qgd2hpY2ggbmVlc3MgdG8gYmUgYWxpZ25lZCB3aXRoIG9wdGVlLW9zIHZlcnNp
-b24uCgotLS0tCgpDaGFuZ2VzIGluIHYyOgotIEJ1bXAgb3B0ZWUtY2xpZW50LCBvcHRlZS1iZW5j
-aG1hcmssIG9wdGVlLWV4YW1wbGVzIGFuZCBvcHRlZS10ZXN0CgpDbMOpbWVudCBMw6lnZXIgKDQp
-OgogIHBhY2thZ2UvcHl0aG9uLWNyeXB0b2dyYXBoeTogZW5hYmxlIGhvc3QgcGFja2FnZQogIGJv
-b3Qvb3B0ZWUtb3M6IGFkZCBzdXBwb3J0IHRvIGJ1aWxkIHdpdGggcHl0aG9uLWNyeXB0b2dyYXBo
-eQogIGJvb3Qvb3B0ZWUtb3M6IGJ1bXAgdG8gdmVyc2lvbiAzLjE2LjAKICBwYWNrYWdlL29wdGVl
-LXRlc3Q6IGJ1bXAgdG8gdmVyc2lvbiAzLjE2LjAKCkV0aWVubmUgQ2FycmllcmUgKDMpOgogIHBh
-Y2thZ2Uvb3B0ZWUtZXhhbXBsZXM6IGJ1bXAgdG8gdmVyc2lvbiAzLjE2LjAKICBwYWNrYWdlL29w
-dGVlLWNsaWVudDogYnVtcCB0byB2ZXJzaW9uIDMuMTYuMAogIHBhY2thZ2Uvb3B0ZWUtYmVuY2ht
-YXJrOiBidW1wIHRvIHZlcnNpb24gMy4xNi4wCgogYm9vdC9vcHRlZS1vcy9Db25maWcuaW4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAxMyArKysrKysrKysrKy0tCiBib290L29wdGVlLW9z
-L29wdGVlLW9zLmhhc2ggICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiBib290L29wdGVl
-LW9zL29wdGVlLW9zLm1rICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3ICsrKysrKy0KIHBh
-Y2thZ2Uvb3B0ZWUtYmVuY2htYXJrL29wdGVlLWJlbmNobWFyay5oYXNoICAgICAgIHwgIDQgKyst
-LQogcGFja2FnZS9vcHRlZS1iZW5jaG1hcmsvb3B0ZWUtYmVuY2htYXJrLm1rICAgICAgICAgfCAg
-MiArLQogcGFja2FnZS9vcHRlZS1jbGllbnQvb3B0ZWUtY2xpZW50Lmhhc2ggICAgICAgICAgICAg
-fCAgNCArKy0tCiBwYWNrYWdlL29wdGVlLWNsaWVudC9vcHRlZS1jbGllbnQubWsgICAgICAgICAg
-ICAgICB8ICAyICstCiBwYWNrYWdlL29wdGVlLWV4YW1wbGVzL29wdGVlLWV4YW1wbGVzLmhhc2gg
-ICAgICAgICB8ICA0ICsrLS0KIHBhY2thZ2Uvb3B0ZWUtZXhhbXBsZXMvb3B0ZWUtZXhhbXBsZXMu
-bWsgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3B0ZWUtdGVzdC9vcHRlZS10ZXN0Lmhhc2gg
-ICAgICAgICAgICAgICAgIHwgIDQgKystLQogcGFja2FnZS9vcHRlZS10ZXN0L29wdGVlLXRlc3Qu
-bWsgICAgICAgICAgICAgICAgICAgfCAgMiArLQogcGFja2FnZS9weXRob24tY3J5cHRvZ3JhcGh5
-L3B5dGhvbi1jcnlwdG9ncmFwaHkubWsgfCAgNyArKysrKysrCiAxMiBmaWxlcyBjaGFuZ2VkLCAz
-NyBpbnNlcnRpb25zKCspLCAxNiBkZWxldGlvbnMoLSkKCi0tIAoyLjM0LjEKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Sourabh,
+
+after enabling RPi firmware you must load the Wifi driver - since you are u=
+sing
+systemd, it should by handled by udev on start I think.
+
+So you probably just need to configure /etc/network/interfaces to start wpa=
+_supplicant
+on wlan0 with /etc/wpa_supplicant.conf file, where you can put your credent=
+ials.
+Or at least that is what I have done, but I am not using systemd.
+
+I did something similar some time ago, you can check it here:
+https://gitlab.com/sonicpp/gnss-pi/-/commit/caf0317c024e51fc7e322deacd09ec9=
+346d47e26
+
+(note that to make "my" credentials public in that commit was an intention).
+
+P.S.: if you want to have any modifications to be part of your image with f=
+ilesystem,
+you can do it by using rootfs overlays for example:
+https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+
+Regards,
+
+Jan Havran
+
+V=A0Thu, Mar 10, 2022 at 05:43:27PM +0100,=A0Sourabh Hegde napsal(a):
+> Hello All,
+> =
+
+> I am trying to connect my Raspberry Pi CM4 to Wifi automatically after
+> start-up. I am using Buildroot based Linux distribution. I have worked wi=
+th
+> Yocto before and it provides systemd-networkd and wpa_supplicant feature =
+to
+> connect to wifi on boot. I am lloking something similar in Buildroot but
+> couldn't find any notes online.
+> =
+
+> So far, I think I have enabled the necessary config/driver using "make
+> menuconfig" :
+> [image: wpa_supplicant.png]
+> [image: firmware.png]
+> =
+
+> But now, how can I set-up wpa_supplicant.conf? Any link to notes or
+> suggestion would be helpful.
+> =
+
+> Can anyone please let me know how to proceed further with it?
+> =
+
+> Your help will be much appreciated.
+> =
+
+> Thanks in advance.
+> =
+
+> P.S: I am using Buildroot 2022.02 release and also using systemd feature
+> and let me know if any info is missing here.
+> =
+
+> Regards,
+> =
+
+> Sourabh
+
+
+
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
