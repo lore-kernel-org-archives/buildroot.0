@@ -4,68 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E19C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 20:15:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBFDBC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 20:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 582B384792;
-	Thu, 10 Mar 2022 20:15:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 854E28478F;
+	Thu, 10 Mar 2022 20:21:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rx6syBxF8D3T; Thu, 10 Mar 2022 20:15:48 +0000 (UTC)
+	with ESMTP id JS7dHQot7DhT; Thu, 10 Mar 2022 20:21:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78F9E8478F;
-	Thu, 10 Mar 2022 20:15:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F0BB81BF331
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:15:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE19E84730;
+	Thu, 10 Mar 2022 20:21:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC1421BF331
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC5ED60D94
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:15:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA4BA40998
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 20:21:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7V_CV-atPQCY for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 20:15:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com
- [209.85.208.42])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A114060B8D
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 20:15:44 +0000 (UTC)
-Received: by mail-ed1-f42.google.com with SMTP id c20so8419570edr.8
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 12:15:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=X40iV/KBHjpEBc8U2jXNyTTf/8+kCa54v+J8bVptVlE=;
- b=mxcfCo0tu+DdtFQxeDdn0Fa4KM5/ZE7Zm0pIP5e8Ij5n9POVzzSvZRKY8mCcdtT/TP
- 9Z/kq4q95uFPUgiOzGLLRadoUQljFPqacL3BQVFw9taeRsgJw81NEiY5/YfTJXb8GU24
- pIzEOMoPY+FfkIsB5bqL5dd2LKz1alZffQoSKzP2FsnxTPEKod+O3gVSmuoaTmaPxdSh
- cj0rp6J4USLcXhaDEK6QENN1f/lUCIWx9xwEVSlYObuFtXeXKUudnGTVQvMlJoDX2+VK
- uA/Ce/7azws4nueikhcNPX27iBVKzMSbL304LqonYy6EpHBSgVq3WmT1QtaBr9UNIUVj
- w5tw==
-X-Gm-Message-State: AOAM5330kkCq7eeN9RpaeRlcqFKmZCdOhbidWyTOcesJ1ddyastC2F5x
- TC09OgiPuPybXe+VNLmSbwE=
-X-Google-Smtp-Source: ABdhPJydRCexsz4X8Sczq67N5Pqge4M1ACF3VD1m9KUYfmmmfZtNQJ0NwgQBYlFj10VQfzzBkaYcBQ==
-X-Received: by 2002:a50:e60f:0:b0:415:9509:32a2 with SMTP id
- y15-20020a50e60f000000b00415950932a2mr5988847edm.235.1646943342748; 
- Thu, 10 Mar 2022 12:15:42 -0800 (PST)
-Received: from localhost (tmo-098-218.customers.d1-online.com. [80.187.98.218])
- by smtp.gmail.com with ESMTPSA id
- lj2-20020a170906f9c200b006da6f29bc01sm2092887ejb.158.2022.03.10.12.15.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Mar 2022 12:15:41 -0800 (PST)
-Date: Thu, 10 Mar 2022 21:15:32 +0100
-From: Thomas Huth <huth@tuxfamily.org>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Message-ID: <20220310211532.51f8d789@tuxfamily.org>
-In-Reply-To: <20220309215639.786189-1-fontaine.fabrice@gmail.com>
-References: <20220309215639.786189-1-fontaine.fabrice@gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uu29u-HnfumF for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 20:21:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 48E9240979
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 20:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1646943687;
+ bh=aEzc+3VYBdIamZOI5iVwbJRdrWZa6PJ9KbXAYUf4wOE=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=eA8ugdgptdMk0hKoUiYgTRwwREBUGS/xtdeKNy0Ip12z85GpF1/803vvYhjg0GLMj
+ dI6EUYYVitm7oywOMp9K522OY6a/1JNp7vop3QT79aXnT7qmUAR1ZeV8SS21Q3HGb+
+ 5BIWE+nvr2Qj2iyEhU+mJcAyCtexBYx+SvI0x7zA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.204]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MrQEn-1nyBHM16RT-00oUQN for <buildroot@buildroot.org>; Thu, 10 Mar 2022
+ 21:21:27 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: buildroot@buildroot.org
+Date: Thu, 10 Mar 2022 21:21:26 +0100
+Message-Id: <20220310202126.8379-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: bump to version
- 2022-03-08
+X-Provags-ID: V03:K1:n8a3YhwxWZg9EscBTkHFS7l0+0Y9MGA9+txBpBR2+zKTBv/6140
+ MoYoLx6rQo886AFPDFdsrcaNutn/OlelrI5AXDibdPxJyTLmvLmURit/bQKO5w6SWBbkhQ/
+ LAGRNSM77A5tfD05vHW+DYamzf06TQA+ljLMPewLLJY6oqKA6AIZlrYwBjLAeP9L8p2IhGY
+ WS+C38x3EhJvlZDsbvlEw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ammJOrxrGKI=:vFh3o/HOtK0Jbx+kfbPS1X
+ 1Qxk0cRL313MN+3LXUf0x9NQX7KsjG0PzTxa4F/I0Z/8io5+oHEBmVv9tt0E8J7FEDr5DO4Wi
+ Fnlw+Vdf2mcJB4KLrZOOZIWYNHFwv6K9uM6qGsPlRMHl6bdi3S0lQqQep1CjPYQ6kg2L7pGSA
+ 0HJP8MKsVHd7ZXbWKcV6ZRIeM/k1C0lUdjVqjt5qCmir9uaqeCwCGNTAD2p8H9nx1oJXKuhsT
+ 5nm3/h2ekLuTrDd/DLKUaCF8SZZkiAs/2NYl6nIpQ064YbZHctrh5ujk6wGMOcvN9PbR21vgS
+ krUucDjm1mULu/G7Yk/AjxJJi58+flDoNImI1YjfFFejc8hB/WzR4u2IfxxC9iDBgopk82xg2
+ Ajgayt/MQo1UZKiTlW/Do6JImDnRjHy6mmIYqxDufxfrBnntDwC5hB9+lhkWQiktxaVr9JDxC
+ gUrR1gc819bkx6I5JGohUNFiDPy8ZVvEmyByEbyO2qu+24yrjOfuuFmQNW7CjFRHB6koXShJh
+ 5rswrzB0LtRlkyVqbePDoJ3jN00OG8BZZZyQ/TIrU9J6P+tp6ycYd2rb3/IMjDHqRaxQ4MAiq
+ 46YwCWcqdw0fCnP/7vLh8nalHaHHrQ7PGiB7EMXO3I0y+25rLqxfKiKmp/kt/bHSBdCGXVubC
+ 0iARavogqYiLIE2RC8EXiDJ1WAitiYNIr8vcJo4+kdBhYUDGMWXEdA9E/Y3F3qyL2UT28PSlq
+ hFy7sca4xjHC/Bxjz9IERqBG/mWOhvK6GKX25nODNn5l8xOHSh1GjI05wX5VIz+eeDbg3m0h1
+ f9+i33M8yJr6TJwegr5clvhIXlrWvoYT1DoQk/4kzpoIfyHCLHTH2DY6u21XN20T1g+pXtAm2
+ r1kvvrNT+aRXvMco5e2dZDGCg8ArsapztQ8lVXCW2OYcKbROfYuhtpipLImK50z+nCBbDr9HQ
+ gpHpWET+UA0Pgw1jZ37/yn7FX4xoLGf+oH8lDj4QdmMOEZQWtnZb9wgpdoFtFy6YznhWuxsGt
+ E9+fuc6VdOsWcFXFc0uV3mpfhgKNxw8t480Dnn6I9gMXV6qAETbwxFC5ZAbjy3CReaMNlrUn0
+ +Jse5/R8jTsSf0=
+Subject: [Buildroot] [PATCH v1] package/openssh: fix '-fzero-call-used-regs'
+ option support detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,92 +85,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, Cyril Bur <cyrilbur@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Wed,  9 Mar 2022 22:56:39 +0100
-schrieb Fabrice Fontaine <fontaine.fabrice@gmail.com>:
-
-> - Switch site:
->   https://git.kernel.org/pub/scm/virt/kvm/kvm-unit-tests.git/commit/?id=f271e1b630a1b8b5f4eae2331654fc1e70abfd66
-> - Update first and second patches
-> - Drop third and fourth patches (already in version)
-> - This bump will fix the following build failure with powerpc and gcc 11
->   thanks to
->   https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/commit/0c111b370ad3c5a89e11caee79bc93a66fd004f2
-> 
-> /tmp/ccSlivNE.s:348: Error: `lswx' invalid when little-endian
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/746e87892ac545e8fb97c17d4bfd7bd7bbc9d8be
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...emove-Werror-to-avoid-build-failures.patch | 17 +++---
->  ...vm-unit-tests-test-for-rdseed-rdrand.patch | 24 ++++----
->  ...3-Makefile-fix-stack-protector-tests.patch | 36 -----------
->  ...issue-with-the-linker-from-Fedora-32.patch | 61 -------------------
->  package/kvm-unit-tests/kvm-unit-tests.hash    |  2 +-
->  package/kvm-unit-tests/kvm-unit-tests.mk      |  6 +-
->  6 files changed, 27 insertions(+), 119 deletions(-)
->  delete mode 100644 package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
->  delete mode 100644 package/kvm-unit-tests/0004-Fix-powerpc-issue-with-the-linker-from-Fedora-32.patch
-> 
-> diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-> index cbfa3a87e6..d07b9b6912 100644
-> --- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-> +++ b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-> @@ -6,6 +6,8 @@ Subject: [PATCH] Makefile: remove -Werror to avoid build failures
->  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  [Matthew: Refactoring of Thomas Petazzoni's original.]
->  Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> +[Fabrice: updated for 2022-03-08]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  ---
->   Makefile | 1 -
->   1 file changed, 1 deletion(-)
-> @@ -14,14 +16,15 @@ diff --git a/Makefile b/Makefile
->  index 7231334..d9ad42b 100644
->  --- a/Makefile
->  +++ b/Makefile
-> -@@ -53,7 +53,6 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
-> - COMMON_CFLAGS += -g $(autodepend-flags)
-> - COMMON_CFLAGS += -Wall -Wwrite-strings -Wclobbered -Wempty-body -Wuninitialized
-> - COMMON_CFLAGS += -Wignored-qualifiers -Wunused-but-set-parameter
-> --COMMON_CFLAGS += -Werror
-> +@@ -53,7 +53,7 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
-> + 
-> + COMMON_CFLAGS += -g $(autodepend-flags) -fno-strict-aliasing -fno-common
-> + COMMON_CFLAGS += -Wall -Wwrite-strings -Wempty-body -Wuninitialized
-> +-COMMON_CFLAGS += -Wignored-qualifiers -Werror -Wno-missing-braces
-> ++COMMON_CFLAGS += -Wignored-qualifiers -Wno-missing-braces
-> +
->   frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
->   fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
-> - fnostack_protector := $(call cc-option, -fno-stack-protector, "")
-> --- 
-> +- 
->  2.14.2
->  
-> diff --git a/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
-> index 1a1a90ce99..80549fd32a 100644
-> --- a/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
-> +++ b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
-> @@ -13,6 +13,8 @@ Upstream:
->  https://marc.info/?l=kvm&m=151580743523259&w=2
-
-If I've get that old patch description right, this patch 0002 was only there
-for supporting old binutils versions < 2.23 ... but buildroot does not
-support those versions anymore, so I think you could simply drop the 0002
-patch completely instead?
-
-Apart from that, your patch looks fine to me.
-
- Thomas
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+LSBhZGQgdXBzdHJlYW0gcGF0Y2ggKFsxXSkgdG8gZml4ICctZnplcm8tY2FsbC11c2VkLXJlZ3Mn
+IGdjYyBjb21waWxlciBvcHRpb24KICBzdXBwb3J0IGRldGVjdGlvbgoKLSBhZGQgYXV0b3JlY29u
+ZiBhcyB0aGUgcGF0Y2ggdG91Y2hlcyBtNC9vcGVuc3NoLm00CgpGaXhlczoKCiAgLSBodHRwczov
+L2J1Z3MuYnVzeWJveC5uZXQvc2hvd19idWcuY2dpP2lkPTE0NjUxCgogIGJpdG1hcC5jOiBJbiBm
+dW5jdGlvbiDigJhyZXNlcnZl4oCZOgogIGJpdG1hcC5jOjk4OjE6IHNvcnJ5LCB1bmltcGxlbWVu
+dGVkOiDigJgtZnplcm8tY2FsbC11c2VkLXJlZ3PigJkgbm90IHN1cHBvcnRlZCBvbiB0aGlzIHRh
+cmdldAogICAgIDk4IHwgfQogICAgICAgIHwgXgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVu
+c3NoL29wZW5zc2gtcG9ydGFibGUvY29tbWl0L2YxMDc0NjcxNzk0MjhhMGUzZWE5ZTRhYTk3Mzhh
+YzEyZmYwMjgyMmQucGF0Y2gKClNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBv
+cnRAZ214Lm5ldD4KLS0tCiAuLi5uLW9mLWZ6ZXJvLWNhbGwtdXNlZC1yZWdzLWFsbC1zdXBwb3Iu
+cGF0Y2ggfCAzOCArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL29wZW5zc2gvb3BlbnNzaC5t
+ayAgICAgICAgICAgICAgICAgICAgfCAgNCArKwogMiBmaWxlcyBjaGFuZ2VkLCA0MiBpbnNlcnRp
+b25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9vcGVuc3NoLzAwMDEtSW1wcm92ZS1k
+ZXRlY3Rpb24tb2YtZnplcm8tY2FsbC11c2VkLXJlZ3MtYWxsLXN1cHBvci5wYXRjaAoKZGlmZiAt
+LWdpdCBhL3BhY2thZ2Uvb3BlbnNzaC8wMDAxLUltcHJvdmUtZGV0ZWN0aW9uLW9mLWZ6ZXJvLWNh
+bGwtdXNlZC1yZWdzLWFsbC1zdXBwb3IucGF0Y2ggYi9wYWNrYWdlL29wZW5zc2gvMDAwMS1JbXBy
+b3ZlLWRldGVjdGlvbi1vZi1memVyby1jYWxsLXVzZWQtcmVncy1hbGwtc3VwcG9yLnBhdGNoCm5l
+dyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmNlNWM1NTM5ZmYKLS0tIC9kZXYv
+bnVsbAorKysgYi9wYWNrYWdlL29wZW5zc2gvMDAwMS1JbXByb3ZlLWRldGVjdGlvbi1vZi1memVy
+by1jYWxsLXVzZWQtcmVncy1hbGwtc3VwcG9yLnBhdGNoCkBAIC0wLDAgKzEsMzggQEAKK0Zyb20g
+YjVmZWU1ZmU5OGY3MDhjMWRjNjFhMTU2NGRiMzVlYWNhZGJmZThiMyBNb24gU2VwIDE3IDAwOjAw
+OjAwIDIwMDEKK0Zyb206IENvbGluIFdhdHNvbiA8Y2p3YXRzb25AZGViaWFuLm9yZz4KK0RhdGU6
+IFRodSwgMjQgRmViIDIwMjIgMTY6MDQ6MTggKzAwMDAKK1N1YmplY3Q6IFtQQVRDSF0gSW1wcm92
+ZSBkZXRlY3Rpb24gb2YgLWZ6ZXJvLWNhbGwtdXNlZC1yZWdzPWFsbCBzdXBwb3J0CisKK0dDQyBk
+b2Vzbid0IHRlbGwgdXMgd2hldGhlciB0aGlzIG9wdGlvbiBpcyBzdXBwb3J0ZWQgdW5sZXNzIGl0
+IHJ1bnMgaW50bwordGhlIHNpdHVhdGlvbiB3aGVyZSBpdCB3b3VsZCBuZWVkIHRvIGVtaXQgY29y
+cmVzcG9uZGluZyBjb2RlLgorCitbVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuc3No
+L29wZW5zc2gtcG9ydGFibGUvY29tbWl0L2YxMDc0NjcxNzk0MjhhMGUzZWE5ZTRhYTk3MzhhYzEy
+ZmYwMjgyMmQucGF0Y2hdCitTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0
+QGdteC5uZXQ+CistLS0KKyBtNC9vcGVuc3NoLm00IHwgMyArKysKKyAxIGZpbGUgY2hhbmdlZCwg
+MyBpbnNlcnRpb25zKCspCisKK2RpZmYgLS1naXQgYS9tNC9vcGVuc3NoLm00IGIvbTQvb3BlbnNz
+aC5tNAoraW5kZXggNGY5YzM3OS4uOGMzM2M3MCAxMDA2NDQKKy0tLSBhL200L29wZW5zc2gubTQK
+KysrKyBiL200L29wZW5zc2gubTQKK0BAIC0xNCw2ICsxNCw4IEBAIEFDX0RFRlVOKFtPU1NIX0NI
+RUNLX0NGTEFHX0NPTVBJTEVdLCBbeworIAlBQ19DT01QSUxFX0lGRUxTRShbQUNfTEFOR19TT1VS
+Q0UoW1sKKyAjaW5jbHVkZSA8c3RkbGliLmg+CisgI2luY2x1ZGUgPHN0ZGlvLmg+CisrLyogVHJp
+dmlhbCBmdW5jdGlvbiB0byBoZWxwIHRlc3QgZm9yIC1memVyby1jYWxsLXVzZWQtcmVncyAqLwor
+K3ZvaWQgZihpbnQgbikge30KKyBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpIHsKKyAJ
+KHZvaWQpYXJndjsKKyAJLyogU29tZSBtYXRoIHRvIGNhdGNoIC1mdHJhcHYgcHJvYmxlbXMgaW4g
+dGhlIHRvb2xjaGFpbiAqLworQEAgLTIxLDYgKzIzLDcgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNo
+YXIgKiphcmd2KSB7CisgCWZsb2F0IGwgPSBpICogMi4xOworIAlkb3VibGUgbSA9IGwgLyAwLjU7
+CisgCWxvbmcgbG9uZyBpbnQgbiA9IGFyZ2MgKiAxMjM0NUxMLCBvID0gMTIzNDVMTCAqIChsb25n
+IGxvbmcgaW50KWFyZ2M7CisrCWYoMCk7CisgCXByaW50ZigiJWQgJWQgJWQgJWYgJWYgJWxsZCAl
+bGxkXG4iLCBpLCBqLCBrLCBsLCBtLCBuLCBvKTsKKyAJLyoKKyAJICogVGVzdCBmYWxsdGhyb3Vn
+aCBiZWhhdmlvdXIuICBjbGFuZyAxMCdzIC1XaW1wbGljaXQtZmFsbHRocm91Z2ggZG9lcworLS0g
+CisyLjM1LjEKKwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuc3NoL29wZW5zc2gubWsgYi9wYWNr
+YWdlL29wZW5zc2gvb3BlbnNzaC5tawppbmRleCAwZTBkNTllNmFiLi44NGFkZDk1NjNkIDEwMDY0
+NAotLS0gYS9wYWNrYWdlL29wZW5zc2gvb3BlbnNzaC5taworKysgYi9wYWNrYWdlL29wZW5zc2gv
+b3BlbnNzaC5tawpAQCAtMTIsNiArMTIsMTAgQEAgT1BFTlNTSF9DUEVfSURfVVBEQVRFID0gJChP
+UEVOU1NIX1ZFUlNJT05fTUlOT1IpCiBPUEVOU1NIX1NJVEUgPSBodHRwOi8vZnRwLm9wZW5ic2Qu
+b3JnL3B1Yi9PcGVuQlNEL09wZW5TU0gvcG9ydGFibGUKIE9QRU5TU0hfTElDRU5TRSA9IEJTRC0z
+LUNsYXVzZSwgQlNELTItQ2xhdXNlLCBQdWJsaWMgRG9tYWluCiBPUEVOU1NIX0xJQ0VOU0VfRklM
+RVMgPSBMSUNFTkNFCisKKyMgcGF0Y2ggdG91Y2hpbmcgbTQvb3BlbnNzaC5tNAorT1BFTlNTSF9B
+VVRPUkVDT05GID0gWUVTCisKIE9QRU5TU0hfQ09ORl9FTlYgPSBcCiAJTEQ9IiQoVEFSR0VUX0ND
+KSIgXAogCUxERkxBR1M9IiQoVEFSR0VUX0NGTEFHUykiIFwKLS0gCjIuMzUuMQoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
