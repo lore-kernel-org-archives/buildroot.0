@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026ABC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 11:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59DF6C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 11:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0694418E9;
-	Thu, 10 Mar 2022 11:42:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 196FE8471F;
+	Thu, 10 Mar 2022 11:42:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fyAbPyiygFag; Thu, 10 Mar 2022 11:42:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rumZOmVmoNU6; Thu, 10 Mar 2022 11:42:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD0D3418E6;
-	Thu, 10 Mar 2022 11:42:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51CAE84390;
+	Thu, 10 Mar 2022 11:42:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A326B1BF868
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:42:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 323D41BF868
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92B608438D
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:42:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2130384390
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:42:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xGmz2U5lp7GD for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 11:42:18 +0000 (UTC)
+ with ESMTP id GmyntEVQdU3U for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 11:42:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
  [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8595384390
- for <buildroot@busybox.net>; Thu, 10 Mar 2022 11:42:18 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id p9so7464930wra.12
- for <buildroot@busybox.net>; Thu, 10 Mar 2022 03:42:18 -0800 (PST)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2CF9F8438D
+ for <buildroot@busybox.net>; Thu, 10 Mar 2022 11:42:28 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id j17so7584625wrc.0
+ for <buildroot@busybox.net>; Thu, 10 Mar 2022 03:42:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=S4dczZ4OgM4V/eRMqAG6Mf3a7PIbkoWb6tGC2Dq/FJk=;
- b=nlpt2rffIcFt3K0gSRlSqU67zm5IpRgwQb6y1npnqC4iqwodZLz1IxicuMmWy+mb76
- TkM5aGIrVqIz2+pfk1/uLgagKgfrbF0d45wf2L3BraTBWYrIZbiCy5uhcBTTVYMQmx+Q
- TL6yjUJ1K9HBoEufqp0gS9XLy5wOBeLTIeH6Icjh4mW0pWSn6omhYuFeNmt7oD5Luvwt
- lQaDu0MIyWzMnJerM/X9ii3dFcD+kjWzagSzfLXAZun4HAsAKU1YF0KbHKKvQAP8/qyf
- zLvvQp2z3zKUlW2swLEEVCs1jCzurDqc3BrCsjH1pevVAWsBoWVSALna3GHZXecwj9IT
- qsyA==
+ bh=FWnUO2vyA/lQ732G1BfA/8LQamrnT4LuzMmZ0rkooTI=;
+ b=UqZV21j8OuOB4IBsnUqk37r7pyYVT+PODH4kSCKIt6Ft/k6sVJUkAbov3lINpewdoS
+ zuvNgg3js8JwHBx7MJJn7FpztTeSUvNbR7YKostDqrmvXSo3sbj2DFMLjPcMs/tEvNhK
+ KSqEEFT/NckJj3cHspGX0MnHTovXN/6AXc3Fy+/TgQIFrjlUyEiFyc9ROE2FtbZF/UwR
+ DQoHGRV7TrMhJhQdZeMY8Lt7G5wCoY3eqbbbKtCACrJJ6lpGc8p8HspiYYN29otFPSys
+ 2ZaQ5ZI2omvSTKuVyKj43427IxDPFRPeZkMGdwI9bTlIUFqJI2udoa+UXEZJCoZjsNCs
+ owng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=S4dczZ4OgM4V/eRMqAG6Mf3a7PIbkoWb6tGC2Dq/FJk=;
- b=SgKn1B1ohKcOq26eLH0rqGwG/tRzg3N3VYi9PYJhibkmZZHl5BLcefEyUv6mhAsuvA
- UxglNBskn2WUctYkYiFCgni3eZwLY+3d5acrlhrccOJSLj8GAk3WcbVgNSHR1qohoUKq
- GgW/+UtZkczyUdvv68y3FZ9EXDIKPjAOGwEmXsAjT9m4OF9nvbkQ7I5jycS2WMt3kCez
- obcjZEDIszQ8qBL5OXKOblrzxWy0KLRisGcejmcdif0DbXIc+a8kHuZia1k/dAWHgy5J
- 6CSDpSpTVpv4vj6McKxzLh7BBET/GplIOevQIUFNkSuyHBQngkxfoynVfJMp7ned8JJz
- 8MLQ==
-X-Gm-Message-State: AOAM533VLIjI1s1LxwLVig6wbfzmHCm7gFc8u22qcEwlPTVx4djkbMXB
- G+XNS6vX9PrLxuzuelyZuuJgE5gk8ok=
-X-Google-Smtp-Source: ABdhPJxfypv+NnDZ40AgcvJcdFKRbltJnwv9CeLEFDRZOv3M+AhTPWA6460fr4QfiPksHIxKEsXeeA==
-X-Received: by 2002:adf:dc91:0:b0:1f0:728c:8faf with SMTP id
- r17-20020adfdc91000000b001f0728c8fafmr3283985wrj.287.1646912536774; 
- Thu, 10 Mar 2022 03:42:16 -0800 (PST)
+ bh=FWnUO2vyA/lQ732G1BfA/8LQamrnT4LuzMmZ0rkooTI=;
+ b=7AbD381YStTkR9lO3hXHgp8bkMK5tvkcyO0M9mM7ojRbrcs3p3YSjqO2tJ8CAAKmRS
+ hWWVpHgEUmKElh0TKdPQU2aY44UpJo0tlEbiSF2qyQ5aLMFeSEjz7F27Nftxohbiuinm
+ UOWnKZ46GYtokTSnpHoiWOmYQIL4NhXAivIViK0pe/ZJcrbf6FaqzAYEgoqGPdc5fUXV
+ OdFiPIHUKr2x1o7Uwnaes4jc/VFIgNi/tUOaD+zLMLtsvKGM4qV0P3dS6egKP182C1DK
+ pzpuHaqfwtOXOMBK33KSDjWP+TmaSmV3n7oCiuH70xzflfyjoYjxlrFyeqm+53cmO+0q
+ 8dIA==
+X-Gm-Message-State: AOAM533xS1z3YZle9Idm5DlUS418+Cde2f82n59/OI9lwPosx+2F9tNA
+ My4EuUyE1xtIvrMyPK+zDr3Nvel0exk=
+X-Google-Smtp-Source: ABdhPJyD0Ai8NBUOCNbkSUmjh36RHYQFY1s0W2XMFGgRTopufXs7HkzeZTGrcxN2IPKqztOy05GHkQ==
+X-Received: by 2002:adf:f006:0:b0:203:723d:a2e5 with SMTP id
+ j6-20020adff006000000b00203723da2e5mr3361524wro.188.1646912546467; 
+ Thu, 10 Mar 2022 03:42:26 -0800 (PST)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- r13-20020a05600c35cd00b00389e8aaad51sm321801wmq.12.2022.03.10.03.42.16
+ s8-20020adfc548000000b001f07639a704sm4069229wrf.7.2022.03.10.03.42.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Mar 2022 03:42:16 -0800 (PST)
+ Thu, 10 Mar 2022 03:42:26 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Thu, 10 Mar 2022 12:42:11 +0100
-Message-Id: <20220310114211.920001-1-francois.perrad@gadz.org>
+Date: Thu, 10 Mar 2022 12:42:20 +0100
+Message-Id: <20220310114220.920056-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/pango: bump to version 1.50.5
+Subject: [Buildroot] [PATCH] package/webp: bump to version 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,35 +92,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index a6c924a8c..319d9778c 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.3.sha256sum
--sha256  4add05edf51c1fb375a1ccde7498914120e23cb280dd7395b1aeb441f1838a4c  pango-1.50.3.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.5.sha256sum
-+sha256  6d136872da6207fe88c5cd2c95c36bcaf4ed29402b854663a86cd7efe99b0cf5  pango-1.50.5.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 684407228..69ec5bb49 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index cf7b1dc9d..a95086e81 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  808b98d2f5b84e9b27fdef6c5372dac769c3bda4502febbfa5031bd3c4d7d018  libwebp-1.2.1.tar.gz
++sha256  7656532f837af5f4cec3ff6bafe552c044dc39bf453587bd5b77450802f4aee6  libwebp-1.2.2.tar.gz
+ sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index f23e1c92e..670a7b801 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).3
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).5
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+-WEBP_VERSION = 1.2.1
++WEBP_VERSION = 1.2.2
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
 -- 
 2.32.0
 
