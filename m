@@ -1,89 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61187C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFDFEC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 104F840132;
-	Thu, 10 Mar 2022 21:08:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CE9260BBC;
+	Thu, 10 Mar 2022 21:22:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OLeA_W06MB0J; Thu, 10 Mar 2022 21:07:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id msWQX-xYdOQq; Thu, 10 Mar 2022 21:22:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FE1E4057F;
-	Thu, 10 Mar 2022 21:07:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87ADF60B09;
+	Thu, 10 Mar 2022 21:22:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 49C4B1BF2C1
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:07:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3541BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:22:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37A8A41943
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:07:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BB0A408AD
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:22:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0gZoycrPfxTL for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 21:07:55 +0000 (UTC)
+ with ESMTP id x_Qa0tD7bcSe for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 21:22:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 011D84193F
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:07:54 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id a8so14857444ejc.8
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 13:07:54 -0800 (PST)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 21A7140878
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:22:19 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id yy13so14979425ejb.2
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 13:22:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:cc:organization:in-reply-to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=712YTS2NrGYX7k2/5//wUOa79/6kDG5X8UA/NpVAl3U=;
- b=KLmKqVSwCQLAo+iwgFZLlZh/j5SaYdQtmQBzd4C8PKDcwT/KdrTB2x8/5iuYcx0X0T
- yDPUNVj6Rhhzh+CHJJMkjN7eqVYmXmJue4liZH8dR4brd/yfZQtHULb5wm45Dq6u62Ql
- pT4K1Zwq297sXy/1KkkH8aKNKM+jm2+EJZYBIKpCV7rV5Fq1oPZ9+wTYoRQUYU94GA91
- zlZyzf0V4TCEEd8I4qOhZy7M4n139jQjngrwPk4Wb8+Pqs36JbxUb/8HYdB1HncGNVYE
- vKlz8hdmnHJmeiRde4w1fXRKVSnMb+tjzkBTKEEJBgQoJuydq5IG8OY5YvyOqtfcID+H
- BrVQ==
+ bh=j5OZ0n5+H7m7lvK7sVg1HSVoxvO/yr8rDigvmHsWmRQ=;
+ b=I+Elnm8vsJ5GMRo8iRRz34iOhDv3zcjOmnIEUkMYTnEZNK615Ee5cxKnCBihUcLU4D
+ q5QbL73QRuGTu0t4NePQVAAXtXRtr0J9bnKEQDQ8d0KDmM++eT0KISWBVxLPIVgJDfKT
+ XWCO/yEA2wtQXD2mzWhgp9TKnjrYY35Fg24EcdVzguFXZAwft/7tNyHN9WuTtogXcV7u
+ z5gBXaq/N1QisAqWbME+ozbDDTsEsPnybmHdWxZ2pg2j5XjDLP1TM9bs2tdghXjIO5wB
+ QpGQ0lw+gQvHcwyigF4tNBkrI6Vg/F0sY9b2zqKZBQrGUkc7ub3V0Ey1bO9SOw9Q54pZ
+ BPQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:cc:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=712YTS2NrGYX7k2/5//wUOa79/6kDG5X8UA/NpVAl3U=;
- b=l8CeTxlERzwhewFAegLgv2lHnrmWJA366H/x4W4R253ojCpXTkND3oHl1m4WnqtBln
- E7mrKlFHfMfy/LEGqmQ6easjiueIrjSEOtEsP5mIld315YLTumCua5r4S0+ww8tyh5UV
- OA/4OutxiT4uGnPO8sA5EBy7Ot/owRDqNpp2oHXsMnvoaftXO00As3YlnCoMquVX0RpA
- bb84qVD8g4Fwv0EZfbgqLjm/H+p53jH36kkvuaGX1V8UPJNbGsTbXpLPEbKZIZVtBDLM
- 5CjnBPYoWv0HzRodwhAO9hOuMGx/06BfbOCtZi98q9D7KzwCalAWr8Kp5dO18aqsyhuZ
- vLBg==
-X-Gm-Message-State: AOAM5300wEGfHKThcJnFcWKpTvOcKh1N7nI6ol9OQsTPQZX6lk3+zlaT
- ERLN/cgvFh1ZH6RNtbz7RAWMpw==
-X-Google-Smtp-Source: ABdhPJwh0d9nXT0rQJSE28CwDP6MuwZeyoJyC/jXWXV7L9BsdvzoHaYBq/0FBK0n+VNLnYOtk3kAPA==
-X-Received: by 2002:a17:907:97cc:b0:6da:a8fb:d1db with SMTP id
- js12-20020a17090797cc00b006daa8fbd1dbmr6048479ejc.267.1646946472927; 
- Thu, 10 Mar 2022 13:07:52 -0800 (PST)
+ bh=j5OZ0n5+H7m7lvK7sVg1HSVoxvO/yr8rDigvmHsWmRQ=;
+ b=IL8ePNnDDLFzKQgB2NQwftdoFhC0yhfeqDgi1rN57SXOliYa/+SScKafAMq8lTHYgB
+ 1PxmtxVOMdvxkrfMahDIMhmJLwmSwkMk579idTdpAKIFH6LL3SsN4ni+KBzx5Sn+rxH+
+ yM3lB2VtFBoCCgK6wY1F35RRtmA+4MOB06i1mOdZSTUQOpU7f2Yw9CbTkOOk82OHorF9
+ Vribz1SvGMSGyc71uit0z4AY3eC2DtTo/hMOYxW+ssuPe5rsQyXbC6DQABwDtmQaMprv
+ RX/WZfkR9XAiaxVNALi/oY3Gi7Ac5+OGRmfbx3T9BGYpKAuFO7nAkwwGHDcpyqRXvEsD
+ RAKg==
+X-Gm-Message-State: AOAM532UzE7z2TxDumFWZBrUWfBFl8+SVIlA7wOzhZFJY0gI8Sr8Fvt9
+ j4ql4tOZXhpQOlfQraR8igliAw==
+X-Google-Smtp-Source: ABdhPJyEA85TUARi1baHTpXIMuAy/NiMXhqv8ussEZIk4cC766u81vuhiZsjAi++25dqeHWryFtIuA==
+X-Received: by 2002:a17:906:4108:b0:6db:6b07:34c3 with SMTP id
+ j8-20020a170906410800b006db6b0734c3mr6172126ejk.407.1646947338167; 
+ Thu, 10 Mar 2022 13:22:18 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- s21-20020a170906961500b006daac87ddb0sm2169232ejx.140.2022.03.10.13.07.51
+ a7-20020a170906468700b006da636fdbe3sm2149554ejr.105.2022.03.10.13.22.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 10 Mar 2022 13:07:52 -0800 (PST)
-Message-ID: <c6613a63-cf14-3e1f-59a7-afe208548925@mind.be>
-Date: Thu, 10 Mar 2022 22:07:51 +0100
+ Thu, 10 Mar 2022 13:22:17 -0800 (PST)
+Message-ID: <60819f52-11e9-40e0-b3ec-b399c1c7b1fa@mind.be>
+Date: Thu, 10 Mar 2022 22:22:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-GB
-To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
-References: <20220222105531.2498422-1-angelo@amarulasolutions.com>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220206212028.1786742-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220222105531.2498422-1-angelo@amarulasolutions.com>
-Subject: Re: [Buildroot] [PATCH] package/mender: bump to version 3.2.1
+In-Reply-To: <20220206212028.1786742-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5base: bump to version
+ d16bf02a11953dcac01dca73e6f3778f293adefe
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,131 +104,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/02/2022 11:55, Angelo Compagnucci wrote:
-> Main LICENSE file hash is changed due to a copyright year update.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+On 06/02/2022 22:20, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-  Same comment as the earlier patch from Adam [1]:
-
-   I'm sorry Adam, but that's not enough. When you say "update license hashes due
-to removals and additions" it sounds like there were clauses removed to or added
-to the license - which would mean the license has changed. Did you mean the
-following?
-
-Update license hashes due to year changes. Remove license files of vendored
-dependencies that are no longer used. Add license files for new vendored
-dependencies.
-
-   Also, did you check if MENDER_LICENSE needs to be updated due to the added or
-removed vendored dependencies?
-
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=284884
-
-
 > ---
->   package/mender/mender.hash | 15 ++++++++-------
->   package/mender/mender.mk   |  7 ++++---
->   2 files changed, 12 insertions(+), 10 deletions(-)
+>   package/qt5/qt5base/qt5base.hash | 2 +-
+>   package/qt5/qt5base/qt5base.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-> index 40d82f072f..3a7a675341 100644
-> --- a/package/mender/mender.hash
-> +++ b/package/mender/mender.hash
-> @@ -1,12 +1,12 @@
->   # Locally computed:
-> -sha256  716ba7110dd68cdafc5caa989706ff67bbac0617c284d666aa81605850be5763  3.1.0.tar.gz
-> +sha256  8dd04f963f1816350c5406312969f5b11d45c772274a8c32f7a9da8b2cc36561  3.2.1.tar.gz
+> diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+> index 396f5044ff..1b9ff43ab2 100644
+> --- a/package/qt5/qt5base/qt5base.hash
+> +++ b/package/qt5/qt5base/qt5base.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated
+> -sha256  269ae20ed74cb949420ac3abac0bdef3b65501ea47c9312c01e8f9073baf24fe  qtbase-53a047c212af7fbded6505651f648172f9d7a34d.tar.bz2
+> +sha256  96b1c96041ae7b5186c94f231979217bd50e3c0a4caeba32982faa8054a6d113  qtbase-d16bf02a11953dcac01dca73e6f3778f293adefe.tar.bz2
 >   
->   # Vendor licenses
->   # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
->   
->   # Apache-2.0 license.
-> -sha256  b4acfcfa2a0ba1a8c82ec3965fbcee886cff8394ca4214e0ddac0a36beb1e05a  LICENSE
-> -sha256  32714818ad6f98ee0185a52e23a475d89122e3efd2b2c26c733781c28e798c99  vendor/github.com/mendersoftware/mender-artifact/LICENSE
-> +sha256  1033348db7606a7e61b6484f293847cf8d7a35766efebb97e304d4bd5d7f3f6b  LICENSE
-> +sha256  b4acfcfa2a0ba1a8c82ec3965fbcee886cff8394ca4214e0ddac0a36beb1e05a  vendor/github.com/mendersoftware/mender-artifact/LICENSE
->   sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
->   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
->   sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
-> @@ -14,26 +14,27 @@ sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor
->   # BSD 2 Clause license.
->   sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
->   sha256  e4646a82a976369d7ae8f6ed5c11d35dc0af18433a8ccc24c85b459ad8b95128  vendor/github.com/godbus/dbus/LICENSE
-> +sha256  2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d  vendor/github.com/gorilla/websocket/LICENSE
->   #
->   # BSD 3 Clause license.
-> -sha256  16f848582e4b276a7392cd34496b7a33d6f65c0e190c163ff3a056a7c61219ce  vendor/github.com/klauspost/compress/LICENSE
-> +sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/github.com/klauspost/compress/LICENSE
->   sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
-> -sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
->   sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
->   sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
->   sha256  87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor/github.com/remyoudompheng/go-liblzma/LICENSE
-> +sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/term/LICENSE
->   #
->   # ISC license.
->   sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
->   #
->   # MIT license.
->   sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor/github.com/klauspost/pgzip/LICENSE
-> +sha256  5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor/github.com/klauspost/cpuid/v2/LICENSE
->   sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
->   sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
->   sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
->   sha256  da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/github.com/urfave/cli/v2/LICENSE
->   sha256  b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor/github.com/stretchr/objx/LICENSE
-> -sha256  95b8ef9c4137a8f75ddd3101ffdc4cfd594fa875b261697b68baddc16b0e537c  vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE
->   sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/gopkg.in/yaml.v3/LICENSE
->   sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/github.com/mattn/go-isatty/LICENSE
->   #
-> @@ -41,4 +42,4 @@ sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor
->   sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
->   
->   # sha256 of all the vendor licenses combined
-> -sha256  4f3541ea69b9b6e3959679576c146b42ba9a840a9dc4e593bff43e5e3a313d24  LIC_FILES_CHKSUM.sha256
-> +sha256  e6d8321e71be932e08b8923fe9e24e06a95c7e74a6b86e6f73696436ae0ea54f  LIC_FILES_CHKSUM.sha256
-> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-> index ddf3e43be2..33b4611a5f 100644
-> --- a/package/mender/mender.mk
-> +++ b/package/mender/mender.mk
+>   # Hashes for license files:
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index d8a0bf1d16..37ad9c652c 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -MENDER_VERSION = 3.1.0
-> +MENDER_VERSION = 3.2.1
->   MENDER_SITE = https://github.com/mendersoftware/mender/archive
->   MENDER_SOURCE = $(MENDER_VERSION).tar.gz
->   MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
-> @@ -20,20 +20,21 @@ MENDER_LICENSE_FILES = \
->   	vendor/github.com/mendersoftware/progressbar/LICENSE \
->   	vendor/github.com/pkg/errors/LICENSE \
->   	vendor/github.com/godbus/dbus/LICENSE \
-> +	vendor/github.com/gorilla/websocket/LICENSE \
->   	vendor/github.com/klauspost/compress/LICENSE \
->   	vendor/github.com/pmezard/go-difflib/LICENSE \
-> -	vendor/golang.org/x/crypto/LICENSE \
->   	vendor/golang.org/x/sys/LICENSE \
->   	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
->   	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
-> +	vendor/golang.org/x/term/LICENSE \
->   	vendor/github.com/davecgh/go-spew/LICENSE \
->   	vendor/github.com/klauspost/pgzip/LICENSE \
-> +	vendor/github.com/klauspost/cpuid/v2/LICENSE \
->   	vendor/github.com/sirupsen/logrus/LICENSE \
->   	vendor/github.com/stretchr/testify/LICENSE \
->   	vendor/github.com/ungerik/go-sysfs/LICENSE \
->   	vendor/github.com/urfave/cli/v2/LICENSE \
->   	vendor/github.com/stretchr/objx/LICENSE \
-> -	vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE \
->   	vendor/gopkg.in/yaml.v3/LICENSE \
->   	vendor/github.com/mattn/go-isatty/LICENSE \
->   	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+> -QT5BASE_VERSION = 53a047c212af7fbded6505651f648172f9d7a34d
+> +QT5BASE_VERSION = d16bf02a11953dcac01dca73e6f3778f293adefe
+>   QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
+>   QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
