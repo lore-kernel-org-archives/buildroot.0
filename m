@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 538B9C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 22:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD43C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 22:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D700D40BB1;
-	Thu, 10 Mar 2022 22:35:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A25CE40BC3;
+	Thu, 10 Mar 2022 22:36:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YdgpXc7SEdiT; Thu, 10 Mar 2022 22:35:55 +0000 (UTC)
+	with ESMTP id AEKsIxfjH7MV; Thu, 10 Mar 2022 22:36:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D8B740BB0;
-	Thu, 10 Mar 2022 22:35:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E82F81BF34D
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 22:35:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CCBE40BB0;
+	Thu, 10 Mar 2022 22:36:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6B11BF34D
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 22:36:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D504A408FB
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 22:35:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BD3061297
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 22:36:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RQJYO8QnOlF6 for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 22:35:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZagbAOPfTEgj for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 22:35:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F9B5408F8
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 22:35:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E87BB61281
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 22:35:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C91AF83C72; Thu, 10 Mar 2022 22:27:20 +0000 (UTC)
+ id 42F2683C75; Thu, 10 Mar 2022 22:27:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 23:35:47 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: f1db1922e460d4f5862be16ef2b3f0c84c3201ce
-X-Git-Newrev: 19214951bb25f215e26d3065204f3faf7527c0d1
+Date: Thu, 10 Mar 2022 23:35:55 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: be2ef38faa9b0d843417bbc213917220a6e2dd3d
+X-Git-Newrev: 2ecadb5fca1cd987b05dc5c566a888c3a64b6863
 X-Patchwork-Hint: ignore
-Message-Id: <20220310222720.C91AF83C72@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/expat: bump to
+Message-Id: <20220310222728.42F2683C75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/expat: bump to
  version 2.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19214951bb25f215e26d3065204f3faf7527c0d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2ecadb5fca1cd987b05dc5c566a888c3a64b6863
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 This release fixes a regression introduced by one of the security fixes
 in 2.4.5.
