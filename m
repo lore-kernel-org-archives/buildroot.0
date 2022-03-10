@@ -4,76 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59DF6C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 11:42:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C62ECC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 11:52:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 196FE8471F;
-	Thu, 10 Mar 2022 11:42:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 780E88471F;
+	Thu, 10 Mar 2022 11:52:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rumZOmVmoNU6; Thu, 10 Mar 2022 11:42:44 +0000 (UTC)
+	with ESMTP id WGWD36c5Q6-7; Thu, 10 Mar 2022 11:52:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51CAE84390;
-	Thu, 10 Mar 2022 11:42:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 323D41BF868
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:42:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BFEB84393;
+	Thu, 10 Mar 2022 11:52:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E0801BF868
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:52:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2130384390
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:42:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B725418EF
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 11:52:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GmyntEVQdU3U for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 11:42:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2CF9F8438D
- for <buildroot@busybox.net>; Thu, 10 Mar 2022 11:42:28 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id j17so7584625wrc.0
- for <buildroot@busybox.net>; Thu, 10 Mar 2022 03:42:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=FWnUO2vyA/lQ732G1BfA/8LQamrnT4LuzMmZ0rkooTI=;
- b=UqZV21j8OuOB4IBsnUqk37r7pyYVT+PODH4kSCKIt6Ft/k6sVJUkAbov3lINpewdoS
- zuvNgg3js8JwHBx7MJJn7FpztTeSUvNbR7YKostDqrmvXSo3sbj2DFMLjPcMs/tEvNhK
- KSqEEFT/NckJj3cHspGX0MnHTovXN/6AXc3Fy+/TgQIFrjlUyEiFyc9ROE2FtbZF/UwR
- DQoHGRV7TrMhJhQdZeMY8Lt7G5wCoY3eqbbbKtCACrJJ6lpGc8p8HspiYYN29otFPSys
- 2ZaQ5ZI2omvSTKuVyKj43427IxDPFRPeZkMGdwI9bTlIUFqJI2udoa+UXEZJCoZjsNCs
- owng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=FWnUO2vyA/lQ732G1BfA/8LQamrnT4LuzMmZ0rkooTI=;
- b=7AbD381YStTkR9lO3hXHgp8bkMK5tvkcyO0M9mM7ojRbrcs3p3YSjqO2tJ8CAAKmRS
- hWWVpHgEUmKElh0TKdPQU2aY44UpJo0tlEbiSF2qyQ5aLMFeSEjz7F27Nftxohbiuinm
- UOWnKZ46GYtokTSnpHoiWOmYQIL4NhXAivIViK0pe/ZJcrbf6FaqzAYEgoqGPdc5fUXV
- OdFiPIHUKr2x1o7Uwnaes4jc/VFIgNi/tUOaD+zLMLtsvKGM4qV0P3dS6egKP182C1DK
- pzpuHaqfwtOXOMBK33KSDjWP+TmaSmV3n7oCiuH70xzflfyjoYjxlrFyeqm+53cmO+0q
- 8dIA==
-X-Gm-Message-State: AOAM533xS1z3YZle9Idm5DlUS418+Cde2f82n59/OI9lwPosx+2F9tNA
- My4EuUyE1xtIvrMyPK+zDr3Nvel0exk=
-X-Google-Smtp-Source: ABdhPJyD0Ai8NBUOCNbkSUmjh36RHYQFY1s0W2XMFGgRTopufXs7HkzeZTGrcxN2IPKqztOy05GHkQ==
-X-Received: by 2002:adf:f006:0:b0:203:723d:a2e5 with SMTP id
- j6-20020adff006000000b00203723da2e5mr3361524wro.188.1646912546467; 
- Thu, 10 Mar 2022 03:42:26 -0800 (PST)
-Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- s8-20020adfc548000000b001f07639a704sm4069229wrf.7.2022.03.10.03.42.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Mar 2022 03:42:26 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Thu, 10 Mar 2022 12:42:20 +0100
-Message-Id: <20220310114220.920056-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.32.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x99T8wDx5kaV for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 11:52:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from eu-smtp-delivery-151.mimecast.com
+ (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D9237418ED
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 11:52:12 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-122-oG7tTW-XPzCD6DjRqA5OIw-1; Thu, 10 Mar 2022 11:52:09 +0000
+X-MC-Unique: oG7tTW-XPzCD6DjRqA5OIw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 11:52:08 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 10 Mar 2022 11:52:08 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Mat' <mat@parad0x.org>
+Thread-Topic: [Buildroot] [PATCH 1/1] fs/common.mk: use find instead of shell
+ glob patterns
+Thread-Index: AQHYNGk1T+9nJKOaGEy6uS9IhKyXC6y4bnOAgAAN+YCAAAD6QA==
+Date: Thu, 10 Mar 2022 11:52:08 +0000
+Message-ID: <35a9243ae72142ac8380675e9caa0fcf@AcuMS.aculab.com>
+References: <20220310101826.GA2353@parad0x.org>
+ <34cb1e87c9ff49b897ae79c543278d03@AcuMS.aculab.com>
+ <20220310113310.GA9122@parad0x.org>
+In-Reply-To: <20220310113310.GA9122@parad0x.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/webp: bump to version 1.2.2
+Authentication-Results: relay.mimecast.com;
+ auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH 1/1] fs/common.mk: use find instead of shell
+ glob patterns
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,42 +78,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/webp/webp.hash | 2 +-
- package/webp/webp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Mat
+> Sent: 10 March 2022 11:33
+> 
+> On Thu, Mar 10, 2022 at 10:45:41AM +0000, David Laight wrote:
+> > From: Mathieu Mirmont
+> > > Sent: 10 March 2022 10:18
+> > >
+> > > Different shells can have different behaviours when it comes to
+> > > globbing patterns. The dash shell (/bin/sh) on Debian testing switched
+> > > to a different fnmatch/glob implementation that results in this new
+> > > behaviour:
+> > >
+> > > Using bash:
+> > > $ mkdir /tmp/foo
+> > > $ echo /tmp/foo/.[^.]*
+> > > /tmp/foo/.[^.]*
+> > >
+> > > Using dash:
+> > > $ mkdir /tmp/foo
+> > > $ echo /tmp/foo/.[^.]*
+> > > /tmp/foo/..
+> >
+> > That is just broken.
+> > Does the [^x] pattern work at all?
+> >
+> > Raise a bug on 'Debian testing' hopefully they'll
+> > fix it before it actually gets released anywhere.
+> 
+> The new behaviour of dash is very strange indeed, but also according
+> to POSIX the wildcard pattern [^x] is undefined so we should not rely
+> on it.
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index cf7b1dc9d..a95086e81 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  808b98d2f5b84e9b27fdef6c5372dac769c3bda4502febbfa5031bd3c4d7d018  libwebp-1.2.1.tar.gz
-+sha256  7656532f837af5f4cec3ff6bafe552c044dc39bf453587bd5b77450802f4aee6  libwebp-1.2.2.tar.gz
- sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index f23e1c92e..670a7b801 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBP_VERSION = 1.2.1
-+WEBP_VERSION = 1.2.2
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3-Clause
--- 
-2.32.0
+Well [^x] originally meant '^' or 'x' (the same as [x^] but then
+shells started treating [^x] the same as [!x].
+So I guess POSIX has allowed such shells to be conformant by
+making [^x] undefined.
 
+I'm not sure how many shells treat [^x] the same as [!x] but
+enough do that people (including me) have forgotten the difference.
+ash from a recent buildroot treats [^x] as [!x} but a cygwin
+ash I've got doesn't.
+A quick search failed to find dash.
+
+ISTR dash is badly broken in other places, try:
+$ x=aaab234; echo ${x##${x%%b*}}
+b234
+
+It is worth checking whether Debian have changed the behaviour of dash
+or whether they've just changed the default root shell to dash.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
