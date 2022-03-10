@@ -1,64 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F0E1C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 08:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 665BBC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 08:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7DC840A04;
-	Thu, 10 Mar 2022 08:18:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 049B7418D5;
+	Thu, 10 Mar 2022 08:51:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3rwb-_yEZpaL; Thu, 10 Mar 2022 08:18:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2w-PDpBQyaoP; Thu, 10 Mar 2022 08:51:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3854140260;
-	Thu, 10 Mar 2022 08:18:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 60DAB1BF38D
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 08:18:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1180418CC;
+	Thu, 10 Mar 2022 08:51:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D75721BF38D
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 08:51:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 489C68133B
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 08:18:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE57D418CC
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 08:51:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P39k244LIuFP for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 08:18:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w8mTuiKz2QaQ for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 08:51:52 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA65880E42
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 08:18:30 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id B8AC1CEE76
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 08:09:47 +0000 (UTC)
-Received: (Authenticated sender: clement.leger@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 574F96000B;
- Thu, 10 Mar 2022 08:09:42 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A349418C6
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 08:51:51 +0000 (UTC)
+Received: (Authenticated sender: kamel.bouhara@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 282676000D;
+ Thu, 10 Mar 2022 08:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1646899782;
+ t=1646902308;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=5SzVCFQSC0+nNUTHxaOt3Qw5Bne82U12jogwb/DFmGM=;
- b=nOH950SiB7CosC+DbPZudjG7dWN0cv55+s9XKOMLzZE7YXJb2TYsCclxyaAH32ULiaB49+
- K2zpY6TvMeu//LwWMC8MTwzyDgeFNoGjk+jgdehHKneJc49VUE+nf6IrurAWLHif/PbJmc
- Ma7g71G3ATkGZH/gEkC8NM7rz9Go4ETOdFwgQFcrPMsXPH+qmV9IsXG9Q1tu+RjjsO/DjI
- IHJVZ2UeFLZW7Bc/6p9660C/ab7oVt1/8WMyX+lCpCAI0cfLMHemhkqj0tVAd0ImZWxfBM
- Z6aKNPXyyjDCN2ou8q5lT62ac3ab5JOL1OHjhNx47fW28MBYiPgLwZojGA/R0g==
-To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 09:07:45 +0100
-Message-Id: <20220310080745.16903-4-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220310080745.16903-1-clement.leger@bootlin.com>
-References: <20220310080745.16903-1-clement.leger@bootlin.com>
+ bh=DcVsji07H7eC/AYUFu3Ympcdb8ok/024n8RR6Gve+Wc=;
+ b=V1xgIYKxwgiC3FIGdLSr6Ct+q6HL1uvul7PhIqVnhdk1Iv9aXXEm0NAkCz8JXtCcAcy2sV
+ 5cmNCqXjQ2BWaWB3Dbd2e+ju9EhI6yPytPhCXdj70i1LR/d4XRDQ/mRvAaOmBf2xCBXyad
+ mCpTC31q7Mcw1cJcJM0A88To71rB4gFtNlSesWaMOBrJMXIR26gkSSORcwxU9GDGRDxTys
+ 3HmxO2sAtZsOQ92UzZQ89oMDYvTvJsZ2AyoUIuXsNBPVjuB2kszEQzyzjoNQL0QC7NlwRx
+ hTjL88oXFBr+LCPIzgHsMKkh56tx9arFlkwtGHhNra0s2uEWPj8ynyBlYgj+og==
+Date: Thu, 10 Mar 2022 09:51:46 +0100
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <Yim8Im1WiRShHIxH@kb-xps>
+References: <20220225113400.802049-1-kamel.bouhara@bootlin.com>
+ <20220225113400.802049-5-kamel.bouhara@bootlin.com>
+ <20220226113538.6def80d0@windsurf>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] boot/optee-os: bump to version 3.16.0
+Content-Disposition: inline
+In-Reply-To: <20220226113538.6def80d0@windsurf>
+Subject: Re: [Buildroot] [PATCH 4/4] package/libodb-boost: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +67,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>,
- =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kamel Bouhara via buildroot <buildroot@buildroot.org>
+Reply-To: Kamel Bouhara <kamel.bouhara@bootlin.com>
+Cc: Kamel Bouhara via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QnVtcCBPUC1URUUgT1MgcGFja2FnZSB2ZXJzaW9uIHRvIE9QLVRFRSByZWxlYXNlIDMuMTYuMCBh
-bmQgc2V0CkJSMl9UQVJHRVRfT1BURUVfT1NfTkVFRFNfUFlUSE9OX0NSWVBUT0dSQVBIWSBkZWZh
-dWx0IHRvICd5JyBzaW5jZQpweXRob24tY3J5cHRvZ3JhcGh5IGlzIG5vdyBuZWVkZWQgdG8gYnVp
-bGQgb3B0ZWUtb3MuCgpTaWduZWQtb2ZmLWJ5OiBDbMOpbWVudCBMw6lnZXIgPGNsZW1lbnQubGVn
-ZXJAYm9vdGxpbi5jb20+Ci0tLQogYm9vdC9vcHRlZS1vcy9Db25maWcuaW4gICAgIHwgNSArKyst
-LQogYm9vdC9vcHRlZS1vcy9vcHRlZS1vcy5oYXNoIHwgMyArLS0KIDIgZmlsZXMgY2hhbmdlZCwg
-NCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2Jvb3Qvb3B0ZWUt
-b3MvQ29uZmlnLmluIGIvYm9vdC9vcHRlZS1vcy9Db25maWcuaW4KaW5kZXggZjg0MjZmOWFiMi4u
-NmZlMmFlOTVhYyAxMDA2NDQKLS0tIGEvYm9vdC9vcHRlZS1vcy9Db25maWcuaW4KKysrIGIvYm9v
-dC9vcHRlZS1vcy9Db25maWcuaW4KQEAgLTE4LDcgKzE4LDcgQEAgY2hvaWNlCiAJICBTZWxlY3Qg
-dGhlIHZlcnNpb24gb2YgT1AtVEVFIE9TIHlvdSB3YW50IHRvIHVzZQogCiBjb25maWcgQlIyX1RB
-UkdFVF9PUFRFRV9PU19MQVRFU1QKLQlib29sICIzLjE1LjAiCisJYm9vbCAiMy4xNi4wIgogCWhl
-bHAKIAkgIFVzZSB0aGUgbGF0ZXN0IHJlbGVhc2UgdGFnIGZyb20gdGhlIE9QLVRFRSBPUyBvZmZp
-Y2lhbCBHaXQKIAkgIHJlcG9zaXRvcnkuCkBAIC01MCw2ICs1MCw3IEBAIGVuZGlmCiAKIGNvbmZp
-ZyBCUjJfVEFSR0VUX09QVEVFX09TX05FRURTX1BZVEhPTl9DUllQVE9HUkFQSFkKIAlib29sICJv
-cHRlZS1vcyBuZWVkcyBob3N0LXB5dGhvbi1jcnlwdG9ncmFwaHkgdG8gYnVpbGQiCisJZGVmYXVs
-dCB5CiAJaGVscAogCSAgT1AtVEVFIHZlcnNpb24gYmVsb3cgMy4xNiB1c2VkIHB5dGhvbi1weWNy
-eXB0b2RvbWV4IHBhY2thZ2UKIAkgIGluIHB5dGhvbiBzY3JpcHRzLiBOZXdlciB2ZXJzaW9uIHVz
-ZXMgcHl0aG9uLWNyeXB0b2dyYXBoeS4KQEAgLTU4LDcgKzU5LDcgQEAgY29uZmlnIEJSMl9UQVJH
-RVRfT1BURUVfT1NfTkVFRFNfUFlUSE9OX0NSWVBUT0dSQVBIWQogCiBjb25maWcgQlIyX1RBUkdF
-VF9PUFRFRV9PU19WRVJTSU9OCiAJc3RyaW5nCi0JZGVmYXVsdCAiMy4xNS4wIglpZiBCUjJfVEFS
-R0VUX09QVEVFX09TX0xBVEVTVAorCWRlZmF1bHQgIjMuMTYuMCIJaWYgQlIyX1RBUkdFVF9PUFRF
-RV9PU19MQVRFU1QKIAlkZWZhdWx0IEJSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX1JFUE9fVkVS
-U0lPTiBcCiAJCQkJaWYgQlIyX1RBUkdFVF9PUFRFRV9PU19DVVNUT01fR0lUCiAKZGlmZiAtLWdp
-dCBhL2Jvb3Qvb3B0ZWUtb3Mvb3B0ZWUtb3MuaGFzaCBiL2Jvb3Qvb3B0ZWUtb3Mvb3B0ZWUtb3Mu
-aGFzaAppbmRleCAzYzMyZTI1YjM2Li5iMzI3NmQ3MDJhIDEwMDY0NAotLS0gYS9ib290L29wdGVl
-LW9zL29wdGVlLW9zLmhhc2gKKysrIGIvYm9vdC9vcHRlZS1vcy9vcHRlZS1vcy5oYXNoCkBAIC0x
-LDQgKzEsMyBAQAotIyBGcm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9PUC1URUUvb3B0ZWVfb3MvYXJj
-aGl2ZS8zLjE1LjAvb3B0ZWUtb3MtMy4xNS4wLnRhci5negotc2hhMjU2IGU1YmIzZDllZWRhZjc3
-ODVhZjA5MTYwMmFkZGFjNWI1MjExOGY0Y2RjMTA4YWY5Y2Q2ZjZjOTZiMjE1MDNhYjggIG9wdGVl
-LW9zLTMuMTUuMC50YXIuZ3oKICMgTG9jYWxseSBjb21wdXRlZAorc2hhMjU2IGViYzhlMThhZDIw
-MzllZTk3YzM0Zjc0YTc1NDZkZTkxMTllMjZmMDRjMzY4YjZjN2ZkMGM1NWY5M2QzM2QyZDYgIG9w
-dGVlLW9zLTMuMTYuMC50YXIuZ3oKIHNoYTI1NiAxMjQ3ZWU5MDg1OGY0MDM3YjZjYWM2M2NiZmZk
-ZGZlZDQzNWQwZDczYzYzMWIzN2Q3OGMxZTZlNmFiM2U1ZDFhICBMSUNFTlNFCi0tIAoyLjM0LjEK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On Sat, Feb 26, 2022 at 11:35:38AM +0100, Thomas Petazzoni wrote:
+> On Fri, 25 Feb 2022 12:34:00 +0100
+> Kamel Bouhara via buildroot <buildroot@buildroot.org> wrote:
+>
+> > Add host variant of libodb-boost required by host-odb package.
+>
+> This is a bit short, and I think just like PATCH 3/4, it needs a more
+> extensive explanation that the ODB compiler needs the libodb-boost
+> headers at compile time, and therefore installed in $(HOST_DIR).
+>
+
+Ack.
+
+> > diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
+> > index bac5f1e78f..7f2ad1fe72 100644
+> > --- a/package/libodb-boost/libodb-boost.mk
+> > +++ b/package/libodb-boost/libodb-boost.mk
+> > @@ -11,7 +11,10 @@ LIBODB_BOOST_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_BOOST_VE
+> >  LIBODB_BOOST_INSTALL_STAGING = YES
+> >  LIBODB_BOOST_LICENSE = GPL-2.0
+> >  LIBODB_BOOST_LICENSE_FILES = LICENSE
+> > -LIBODB_BOOST_DEPENDENCIES = boost libodb
+> > +LIBODB_BOOST_DEPENDENCIES = boost libodb \
+> > +			    host-boost \
+> > +			    host-libodb
+>
+> This seems wrong. Why is libodb-boost depending on host-libodb-boost.
+> At least, this makes the dependencies added in your PATCH 2/4 a bit
+> irrelevant.
+>
+
+Actually, that is the host variant that is depending on it. Your
+following comments are completely right.
+
+Thanks !
+
+> I guess what you need to do instead is:
+>
+> HOST_LIBODB_BOOST_DEPENDENCIES = hoost-boost host-libodb
+>
+> And rely on the logic in odb.mk to pull in host-libodb-boost when
+> BR2_PACKAGE_LIBODB_BOOST=y.
+>
+
+> Could you fix your patch series, and send a new iteration?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+
+--
+Kamel Bouhara, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
