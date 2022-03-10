@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F9C7C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCF2C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2773741989;
-	Thu, 10 Mar 2022 21:27:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A669F84762;
+	Thu, 10 Mar 2022 21:27:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7HWKpbmY-BeZ; Thu, 10 Mar 2022 21:27:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M0G4CLUicBX6; Thu, 10 Mar 2022 21:27:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 269BA4196F;
-	Thu, 10 Mar 2022 21:27:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B3E6E1BF2C1
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC8EC84390;
+	Thu, 10 Mar 2022 21:27:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D33D51BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0FDC4057A
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD39761288
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IgjGX7jPVeGk for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 21:27:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4GIVIVYt0j4i for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85A7240132
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:27:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC81C83C15; Thu, 10 Mar 2022 21:18:35 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29B0360B43
+ for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:27:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 9370883C1A; Thu, 10 Mar 2022 21:18:43 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 10 Mar 2022 20:37:06 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: eeb8c004daf3e09eecdc62af993c74a118e5e5f9
-X-Git-Newrev: 42ecaeb1ce83823552dbe73997f5e401f0a021df
+Date: Thu, 10 Mar 2022 22:09:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8d88189202e61653850fe1a6d9b4e4d90ebcb1cf
+X-Git-Newrev: 27be79eeeb8e6d60c5ae01499b6d4eb2e063e3ea
 X-Patchwork-Hint: ignore
-Message-Id: <20220310211835.EC81C83C15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/expat: security
- bump to version 2.4.5
+Message-Id: <20220310211843.9370883C1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5declarative: bump to
+ version 1d49a5b678957adde7e2db23a485a3f48157bc8f
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,81 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42ecaeb1ce83823552dbe73997f5e401f0a021df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=27be79eeeb8e6d60c5ae01499b6d4eb2e063e3ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Security fixes:
- #562  CVE-2022-25235 -- Passing malformed 2- and 3-byte UTF-8
-       sequences (e.g. from start tag names) to the XML
-       processing application on top of Expat can cause
-       arbitrary damage (e.g. code execution) depending
-       on how invalid UTF-8 is handled inside the XML
-       processor; validation was not their job but Expat's.
-       Exploits with code execution are known to exist.
- #561  CVE-2022-25236 -- Passing (one or more) namespace separator
-       characters in "xmlns[:prefix]" attribute values
-       made Expat send malformed tag names to the XML
-       processor on top of Expat which can cause
-       arbitrary damage (e.g. code execution) depending
-       on such unexpectable cases are handled inside the XML
-       processor; validation was not their job but Expat's.
-       Exploits with code execution are known to exist.
- #558  CVE-2022-25313 -- Fix stack exhaustion in doctype parsing
-       that could be triggered by e.g. a 2 megabytes
-       file with a large number of opening braces.
-       Expected impact is denial of service or potentially
-       arbitrary code execution.
- #560  CVE-2022-25314 -- Fix integer overflow in function copyString;
-       only affects the encoding name parameter at parser creation
-       time which is often hardcoded (rather than user input),
-       takes a value in the gigabytes to trigger, and a 64-bit
-       machine.  Expected impact is denial of service.
- #559  CVE-2022-25315 -- Fix integer overflow in function storeRawNames;
-       needs input in the gigabytes and a 64-bit machine.
-       Expected impact is denial of service or potentially
-       arbitrary code execution.
-
-https://blog.hartwork.org/posts/expat-2-4-5-released/
-https://github.com/libexpat/libexpat/blob/R_2_4_5/expat/Changes
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 21c07c0aaa7e43b8f676c564f173a510d345a77a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/qt5/qt5declarative/qt5declarative.hash | 2 +-
+ package/qt5/qt5declarative/qt5declarative.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 10e13206d0..cd2e8c7fb9 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.4.4/
--md5  a712d23b7afb32e7527cf0b3fd8f12ac  expat-2.4.4.tar.xz
--sha1  6028b04d3505fc519c4c7c6bd67e1ad1a08cd7b6  expat-2.4.4.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.4.5/
-+md5  9dc183e6c1eebc1b658c1e71be0885e1  expat-2.4.5.tar.xz
-+sha1  360a49b55c442e91cb7b328bc0335083909ddf4f  expat-2.4.5.tar.xz
- 
+diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
+index adda7e03ba..e5b016fc20 100644
+--- a/package/qt5/qt5declarative/qt5declarative.hash
++++ b/package/qt5/qt5declarative/qt5declarative.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  b5d25d6e373351c2ed19b562b4732d01d2589ac8c8e9e7962d8df1207cc311b8  expat-2.4.4.tar.xz
-+sha256  f2af8fc7cdc63a87920da38cd6d12cb113c3c3a3f437495b1b6541e0cff32579  expat-2.4.5.tar.xz
- sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 250600c25e..7815d61027 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
+-sha256  14a4b9640a2cd94771108dc3658a77c04c680f3d6444750d55e313b20774ce00  qtdeclarative-9349f3975d26632befc036fc9f2ea6e03aee2182.tar.bz2
++sha256  afea60cbfa48f88c1f0f54b8dbbf90370f6d2535179b4ccaf489db8133ff37ea  qtdeclarative-1d49a5b678957adde7e2db23a485a3f48157bc8f.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index e63a78021a..54aa3be1cb 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.4.4
-+EXPAT_VERSION = 2.4.5
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+-QT5DECLARATIVE_VERSION = 9349f3975d26632befc036fc9f2ea6e03aee2182
++QT5DECLARATIVE_VERSION = 1d49a5b678957adde7e2db23a485a3f48157bc8f
+ QT5DECLARATIVE_SITE = $(QT5_SITE)/qtdeclarative/-/archive/$(QT5DECLARATIVE_VERSION)
+ QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5DECLARATIVE_VERSION).tar.bz2
+ QT5DECLARATIVE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
