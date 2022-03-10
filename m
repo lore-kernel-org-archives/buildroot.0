@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BDC4C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:24:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B118BC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 10 Mar 2022 21:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36A0941969;
-	Thu, 10 Mar 2022 21:24:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6733B60BBC;
+	Thu, 10 Mar 2022 21:25:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id byLptGTsu7QE; Thu, 10 Mar 2022 21:24:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gMHUInZK1AQt; Thu, 10 Mar 2022 21:25:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E27641974;
-	Thu, 10 Mar 2022 21:24:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 776B360B09;
+	Thu, 10 Mar 2022 21:25:17 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C5EE1BF2C1
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:24:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A7CFD1BF2C1
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 842E1841DE
- for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:24:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 96A3E84222
+ for <buildroot@lists.busybox.net>; Thu, 10 Mar 2022 21:25:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FL2ciPjWroZK for <buildroot@lists.busybox.net>;
- Thu, 10 Mar 2022 21:24:14 +0000 (UTC)
+ with ESMTP id YjPdvA6qYkEK for <buildroot@lists.busybox.net>;
+ Thu, 10 Mar 2022 21:25:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C5BB84222
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 21:24:14 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id qx21so14882895ejb.13
- for <buildroot@buildroot.org>; Thu, 10 Mar 2022 13:24:14 -0800 (PST)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 364CB841DE
+ for <buildroot@busybox.net>; Thu, 10 Mar 2022 21:25:14 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id dr20so14846388ejc.6
+ for <buildroot@busybox.net>; Thu, 10 Mar 2022 13:25:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=3BHePGQXWQ8Zv5gZrjoE6ZuQYG86RZSzuEF29lba7xM=;
- b=CvywtfQUQ3btORKUZpwXmUufpPljMNc4lam1K+P4sDSS7Fnkddv4w0QEpxBemxGk6+
- rTWkjER1WAlo3mjVHI+gDYxjaFzvSvczKZd13l8NGziuiSWsPujQeW3ETXn1Vjrgm/T3
- /+0MHpbYOXsLzx94SAX3rD1vcSVNzMUUn59wciIGjZJnywn9gpG32+gK/Y5AFzn/UG7r
- boqWuN0G/dGzjHj0gNdxLwcIQrxdhx49D37hGc/IfQ92mSJwDhH+nFJqHAryLLcUn/Au
- Ds+B5YxZ0SQ6IqBn/f9QerNEiwdBG4Q5SZUeDhClNT9fXh7Bv5QUV2MaOp7HeAuT/aC6
- MYZg==
+ bh=iK76a8CocrfEiwArK1nV7JEfGn3sKOUf0Sefa/VmmC8=;
+ b=M0YuA6LMezTp4UwPrwrUO0LvEDSSwDwHg4PjAe2n+9XfHStz8IYzSM9NHc7UWC3iyD
+ 7FLout9/RlvLe69kJ1Myb9/qVbIC/ePiu3xmS383gmTV7oLBNyrWi9122LETFoFVXWbo
+ XFuqxzzN+YOUXW5mWbmox6XNVX5ETrDrdV14JV1bpvtHxp1OLhAIjedVpRh/wfubuVL6
+ OfR+Lem9siHN+/2d9+8ovYZ1spS2DmItJ70Hu2xibyztN7V1v0dkPew5dgH5mjBTkGGS
+ kE8v6I1eiOfbq4Ihw6qFy3nB2fY18RjogZdpf7CaxykItd/RzB+I2Zg/IkeYkoIFmoH0
+ QgEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=3BHePGQXWQ8Zv5gZrjoE6ZuQYG86RZSzuEF29lba7xM=;
- b=pGnq83rFqcu5Lh52LL0nOyuWpzmQc0WQJjPKPLJtb/Far22RAwcDr4rB0cZWTXJO96
- 7V0iO7QVBOGBp/aveTXUDhMCvbD/0LWLOyffbIvsBTjafDEJRcAarW7PCB1PBuJh7BKB
- rskKX04CEEiqnfYkFKSY/iZQ2d/Py3zSVGf/ldf9DlP07k8hoogJC1pWoo1W6JuUvDD4
- Q54SyplURalVadOdyBgspP+S+vHo5KHVpNM2mYXx5eYT8OdXt+b1UjEFs3tmuqXgD+aX
- 19XIgesR8lEtXGEQu3R3uVywEv1V9fcBRn6kVfPlnqh+Pvgb16Lv/QQNg/UySnxqY2VH
- BJHg==
-X-Gm-Message-State: AOAM530O6IjtC4OssbuHk+2Rp9kofVdXZdHJNYWg1f7sFVAc2lssY34I
- Uqaln+u+SfsR81CtanTtqUx9sxGs/ph0ag==
-X-Google-Smtp-Source: ABdhPJxSjC2m9bJqFAsOFQYT+AvPCRWM3TrAMeXhpxJmwugZSO6TFeZK/cMPmTbPVqs0BjdckhqJLw==
-X-Received: by 2002:a17:907:720b:b0:6db:8b63:ed3 with SMTP id
- dr11-20020a170907720b00b006db8b630ed3mr3372606ejc.234.1646947452642; 
- Thu, 10 Mar 2022 13:24:12 -0800 (PST)
+ bh=iK76a8CocrfEiwArK1nV7JEfGn3sKOUf0Sefa/VmmC8=;
+ b=nwlhb2PKPHtw4ut/xugn/rvPRoVo38MTf+cmA/1NpQYBrOP2qQD6m6eU0STBE7uDTy
+ mhsUziPjJlLdlSGYCnDn8ZbKII8Pau31UNx+emto73Qo9iUQ7leRI6RnBGPEpxzZFi4Y
+ t4ncOS2U51GMnEiwEZHGX45OI8w0pWt6e5kUXrbjCYtlUBea7Ny84poKcqf5kv+pS4JV
+ fW75pVB2UPV8W7rqBSFjlbQBsegFYGdfU+zSrdX9huo97cjC4+yN1+CBHFLIWUjheMGa
+ fox4rwUbBSrRjicCRDx3JR2yCWMQNJZQyi6XCfCRMz6Ijnf/FX9zD42RJRtg258zyuiA
+ j2Cw==
+X-Gm-Message-State: AOAM5310LGMJWxqXgtkBDD/dKH8j81CjZOST1TCPYgwItr0bavf0qtRG
+ vWgFixMpD1984/u+2q7B3HDmzw==
+X-Google-Smtp-Source: ABdhPJwQ2a0mF3E1LIy5MI6j6hXP/NBlSMlftQD6R9uuxsUfletyLs5s48ws+aY4fjKkUqb0xusMkA==
+X-Received: by 2002:a17:907:9606:b0:6da:68e4:d880 with SMTP id
+ gb6-20020a170907960600b006da68e4d880mr5856224ejc.405.1646947512188; 
+ Thu, 10 Mar 2022 13:25:12 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- a1-20020aa7d901000000b00416217c99bcsm2462775edr.65.2022.03.10.13.24.11
+ z8-20020a170906270800b006bbd3efa6b8sm2205655ejc.80.2022.03.10.13.25.11
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 10 Mar 2022 13:24:12 -0800 (PST)
-Message-ID: <a06d3855-2dab-2264-fd0a-aa93e8096bf1@mind.be>
-Date: Thu, 10 Mar 2022 22:24:11 +0100
+ Thu, 10 Mar 2022 13:25:11 -0800 (PST)
+Message-ID: <a730da07-4eec-fa19-e3af-e405ec69d491@mind.be>
+Date: Thu, 10 Mar 2022 22:25:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-GB
-To: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
-References: <20220214211927.3673441-1-judge.packham@gmail.com>
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220215070739.2199760-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220214211927.3673441-1-judge.packham@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] syslog-ng: Bump version to 3.35.1
+In-Reply-To: <20220215070739.2199760-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH 1/2] package/perl-gd: bump to version 2.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,54 +101,89 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/02/2022 22:19, Chris Packham wrote:
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+On 15/02/2022 08:07, Francois Perrad wrote:
+> remove upstreamed patch
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-  Applied to master, thanks.
+  Both applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/syslog-ng/syslog-ng.conf | 2 +-
->   package/syslog-ng/syslog-ng.hash | 2 +-
->   package/syslog-ng/syslog-ng.mk   | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
+>   ...-fix-cross-compilation-with-gdlib.pc.patch | 34 -------------------
+>   package/perl-gd/perl-gd.hash                  |  4 +--
+>   package/perl-gd/perl-gd.mk                    |  2 +-
+>   3 files changed, 3 insertions(+), 37 deletions(-)
+>   delete mode 100644 package/perl-gd/0001-Makefile.PL-fix-cross-compilation-with-gdlib.pc.patch
 > 
-> diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-> index 55d01501cb..64ff980593 100644
-> --- a/package/syslog-ng/syslog-ng.conf
-> +++ b/package/syslog-ng/syslog-ng.conf
-> @@ -1,4 +1,4 @@
-> -@version: 3.34
-> +@version: 3.35
+> diff --git a/package/perl-gd/0001-Makefile.PL-fix-cross-compilation-with-gdlib.pc.patch b/package/perl-gd/0001-Makefile.PL-fix-cross-compilation-with-gdlib.pc.patch
+> deleted file mode 100644
+> index af053c560..000000000
+> --- a/package/perl-gd/0001-Makefile.PL-fix-cross-compilation-with-gdlib.pc.patch
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -From 11dc017e902397c452331425eb6101b3315572fa Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Sun, 24 Jan 2021 10:59:31 +0100
+> -Subject: [PATCH] Makefile.PL: fix cross-compilation with gdlib.pc
+> -
+> -Cross-compilation will fail if gdlib.pc does not contain any cflags.
+> -Indeed, if cflags is empty, Makefile.PL will use the default value for
+> -INC (i.e. -I/usr/include -I/usr/include/gd)
+> -
+> -It should be noted that gdlib-config has been dropped from gd since
+> -version 2.3.0
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Upstream status: probably not upstreamable]
+> ----
+> - Makefile.PL | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/Makefile.PL b/Makefile.PL
+> -index 25f2f93..7da3651 100644
+> ---- a/Makefile.PL
+> -+++ b/Makefile.PL
+> -@@ -47,7 +47,7 @@ If you want to try to compile anyway, please rerun this script with the option -
+> - END
+> - }
+> -
+> --@INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+> -+#@INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+> - @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
+> - @LIBS    = qw(-lgd) unless @LIBS;
+> -
+> ---
+> -2.29.2
+> -
+> diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+> index 780b1d1e2..97f1da821 100644
+> --- a/package/perl-gd/perl-gd.hash
+> +++ b/package/perl-gd/perl-gd.hash
+> @@ -1,6 +1,6 @@
+>   # retrieved by scancpan from http://cpan.metacpan.org/
+> -md5  c2bf1ca56d15e33d2432e4d8ba5aeadf  GD-2.73.tar.gz
+> -sha256  491c9e73238522e2987e66725a20935f4268a3864202ecbaf4659a1691ba322b  GD-2.73.tar.gz
+> +md5  fb4bacab10ed4f28d52c2aabdaf866bb  GD-2.76.tar.gz
+> +sha256  693d9e3d709e9188a682cb9090a77b70aac12a04e84128677577b94e4331775b  GD-2.76.tar.gz
 >   
->   source s_sys {
->   	file("/proc/kmsg" program_override("kernel"));
-> diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-> index 99ed363eca..ab643627e8 100644
-> --- a/package/syslog-ng/syslog-ng.hash
-> +++ b/package/syslog-ng/syslog-ng.hash
-> @@ -1,5 +1,5 @@
->   # Locally computed
-> -sha256  cece39ec1c68c88d493705e0a528b83d038da384e89d4838393ccc75f62a2d4c  syslog-ng-3.34.1.tar.gz
-> +sha256  1d0238b06b3e5987c859e5b529ecee738f75bacff04b149398b1fe8cbb121e53  syslog-ng-3.35.1.tar.gz
->   sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
->   sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
->   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-> index c05ec9785c..fc57a56820 100644
-> --- a/package/syslog-ng/syslog-ng.mk
-> +++ b/package/syslog-ng/syslog-ng.mk
-> @@ -6,7 +6,7 @@
+>   # computed by scancpan
+>   sha256  1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f  LICENSE
+> diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+> index b402dfff4..9787cc12f 100644
+> --- a/package/perl-gd/perl-gd.mk
+> +++ b/package/perl-gd/perl-gd.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   # When updating the version, please check at runtime if the version in
->   # syslog-ng.conf header needs to be updated
-> -SYSLOG_NG_VERSION = 3.34.1
-> +SYSLOG_NG_VERSION = 3.35.1
->   SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
->   SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
->   SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+> -PERL_GD_VERSION = 2.73
+> +PERL_GD_VERSION = 2.76
+>   PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+>   PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+>   PERL_GD_DEPENDENCIES = host-perl-extutils-pkgconfig zlib gd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
