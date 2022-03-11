@@ -1,81 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C66CC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 22:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 665D7C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 23:30:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D24240302;
-	Fri, 11 Mar 2022 22:56:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 028148491E;
+	Fri, 11 Mar 2022 23:30:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4-RWMZ942wiq; Fri, 11 Mar 2022 22:56:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AHKevsB00AWr; Fri, 11 Mar 2022 23:30:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26457405E7;
-	Fri, 11 Mar 2022 22:56:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12CA5848DE;
+	Fri, 11 Mar 2022 23:30:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CFFA1BF33A
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 22:56:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4BAFD1BF4E4
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 23:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BFFD60C05
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 22:56:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39B8B60C05
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 23:30:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S2d8bax9kEaq for <buildroot@lists.busybox.net>;
- Fri, 11 Mar 2022 22:56:12 +0000 (UTC)
+ with ESMTP id PV5-1alI-2sF for <buildroot@lists.busybox.net>;
+ Fri, 11 Mar 2022 23:30:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 597E260ACD
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 22:56:12 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id i1so7016375ila.7
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 14:56:12 -0800 (PST)
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6AE9F60B59
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 23:30:53 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id d62so11860544iog.13
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 15:30:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=x93+k8SWQSh/kT0LMiXYA+/EjEr7QOc2rR8so5TnnHA=;
- b=NtmK2k4P1gTLiwvC7kfljlCeWE4jG6Zi71UAQ47LwIuIld3do02jSpwuK2TZusTGsI
- LuVB/gPAlGEPmoXwVy/eRUmlIzG99rb4EEVWBtQasSeD7F/0KQZq8Y7741dyatySNYwY
- OorXtE2Qu1/uapgtWaCf/khEicQSuuarCvajVRCZhlu9yUNa9Xi9Y3TPZs7ULNoHnXwj
- aqBikFn7tHRJBrj6l1gT6/rzYh21q9Tng53dTNYiEjttwwaSpQUvAGBX1/hnASwnrr41
- L+1qUyxJC8BksBW8/R6xhQRHvx33Y3n77P7X4mPFpZoeODz2p/mOs9YYIRXPY1xCGsCY
- 5a2w==
+ bh=KG4O+xUMNEQmBMGPJwlh0vUsUAWPhxfVH7r/W0x57Zo=;
+ b=Eo/aa4ie0lGsCg8Eat2rSlfqyRdOQN04airEgHDeLbbJl/GHciQW/ee+txTCSaWJ5l
+ 0yqEO+aE3ycr5ezIXWO2tUQAm8xvGKYEIQWotH3/3xk5j0uVclJa1DXMqAgClUddX2bq
+ NupYB0piQkj7GTvHxWoesOUaq997MedtxXXRk1JrKiJ+l+sknNlK0wubEnZN3ccTeIFD
+ WLBEWs13oAj1Gn1KOk/FubTacciFK6/mMnzB/ZMA2u4DZw412BzD0iaBRFsas5q94pjg
+ i0y7jnxp0C/ZtlFwmjTAxHIl3Lhp9ej3t1w0EtX7MJsVrse0p0pZQpE6HcFFfIyYwQSd
+ ImKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=x93+k8SWQSh/kT0LMiXYA+/EjEr7QOc2rR8so5TnnHA=;
- b=lVi0LIryFhRjdsxKI/Ybw3tLL8uqo9t6P+e6dD0K1VwUp/aFFp2ORGqmmDpOcBs3Kg
- Zz2cjj+FiMQUSff8vhyghMYdnMAhfNCY7xq8LLT1xv4HIlupUlYr2lt+9EiLpMazw+sP
- fik86Pj3ZywnkIcgSFcRI2BZ1KgSBFRS8LqfGDUcnV9WwjbQypICO3XBiq/AzkPRq/uy
- mQjeaq6gg42k0iR5GAeesYIQVq64d4zIVyGnp5YaK6rsAzDqq+Yw1MijCiLZsjHLQSCS
- /IIKC/6fibrw94ZafQ+BSVRa5uHn9FPi8fvFc5SXdQT/CV1QStFllwCObmY8NQ52ohEv
- 3CXg==
-X-Gm-Message-State: AOAM533oYPi5SN3SolZuf5neteMwI0PYPlJBZSikSoRb+PC1gLEVqlqA
- 8G2CPKqsnmvNYmEHrMqE6bEIN5cv0tw=
-X-Google-Smtp-Source: ABdhPJwHzRbZJO4zGl8B2ctyEFrdoUYMSsGeTIjBx2EvPleFwRLs7WKrtDSjUfFx05y+Op5RDNWXHw==
-X-Received: by 2002:a05:6e02:1a8e:b0:2c7:6e36:e154 with SMTP id
- k14-20020a056e021a8e00b002c76e36e154mr6683643ilv.180.1647039371268; 
- Fri, 11 Mar 2022 14:56:11 -0800 (PST)
+ bh=KG4O+xUMNEQmBMGPJwlh0vUsUAWPhxfVH7r/W0x57Zo=;
+ b=xAs4iOaIE0BMhKMyeqngHK3CKIHC8hf8HU6spmWaBIpKbod7k25nYE9FTII2SQXcw/
+ fCMyN3ruvQx1yJgS26qMQVBcYiGPVk2+RCNMWQQDLIMBQ9A33bFzLq23dRAwfKjxbxRE
+ DDAqlG0TMDSpRB1go8N/J6xbfcxg0kFsZ1GzNKrzftO0KcxKN9CiQlfU1LIZxxbwCKYS
+ qaY3Cb5ik4GvKwJ61N4EDrOlYNCyNDvyiDuS0lpsQK9PqMpB/1fg7LDPAvBO/cCgLGyr
+ 92phvOpJCKFoiS7dDg++xHsKSfxqhoEV7Pv5sieAQpYjy2Fk6mSgo+pa4Ai5Xat4Jw/d
+ pphA==
+X-Gm-Message-State: AOAM532e5ibFWCebfg4TZWEpe2lrt4X2a8FNVPxeOrOpCsWIDAlFgzXC
+ B6sxlMZX9L43YYGXrYiJzjARuHYIbuI=
+X-Google-Smtp-Source: ABdhPJxbMhuW/QOERvUkFo2NK+f15QH4JJarCimawgR1MgZBdVyZ3n7Sk6mE1jJz9BoxyXCO+DVaEQ==
+X-Received: by 2002:a05:6602:2d44:b0:648:c8a4:c6a with SMTP id
+ d4-20020a0566022d4400b00648c8a40c6amr3208988iow.89.1647041452343; 
+ Fri, 11 Mar 2022 15:30:52 -0800 (PST)
 Received: from james-x399.localdomain (97-118-243-247.hlrn.qwest.net.
  [97.118.243.247]) by smtp.gmail.com with ESMTPSA id
- k1-20020a056e021a8100b002c64cf94399sm5588591ilv.44.2022.03.11.14.56.10
+ s12-20020a056602168c00b00648a9d133f3sm3061798iow.25.2022.03.11.15.30.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Mar 2022 14:56:10 -0800 (PST)
+ Fri, 11 Mar 2022 15:30:51 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Mar 2022 15:56:09 -0700
-Message-Id: <20220311225609.3975018-1-james.hilliard1@gmail.com>
+Date: Fri, 11 Mar 2022 16:30:50 -0700
+Message-Id: <20220311233050.4686-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pyphen: bump to version
- 0.12.0
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,49 +86,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Set new x11-xfixes meson config option.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyphen/python-pyphen.hash | 4 ++--
- package/python-pyphen/python-pyphen.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
-index 75ee909351..14938de9c4 100644
---- a/package/python-pyphen/python-pyphen.hash
-+++ b/package/python-pyphen/python-pyphen.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/Pyphen/json
--md5  f8ec095e4fe30dc2b518a918788b33ed  pyphen-0.11.0.tar.gz
--sha256  e2c3ed82c3a04317df5102addafe89652b0876bc6c6265f5dd4c3efaf02315e8  pyphen-0.11.0.tar.gz
-+md5  99a01a3806cc750c242cae330429a90f  pyphen-0.12.0.tar.gz
-+sha256  b7d3dfc24b6f2178cdb2b1757ace0bd5d222de3e62c28d22ac578c5f22a13e9b  pyphen-0.12.0.tar.gz
- # Locally computed sha256 checksums
- sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
- sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
-diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
-index 80f67c77c7..ac0bcf8aab 100644
---- a/package/python-pyphen/python-pyphen.mk
-+++ b/package/python-pyphen/python-pyphen.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index a9d59663ae..e6fad56698 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  76291373f7ab271664df5b6a22b678ad57e485e25c73ee9c78e049a67b7886d2  pipewire-0.3.45.tar.bz2
++sha256  68bbf83b4c12bbcaef5d4bfb0dda86177583cf0abe0026efcfedd837b2e4926e  pipewire-0.3.48.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index fc521c86ac..80246cc8d0 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYPHEN_VERSION = 0.11.0
-+PYTHON_PYPHEN_VERSION = 0.12.0
- PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
--PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/f8/af869a4983c1b3159945479510260985714265d48baf27d61f72b1ec8cbf
--PYTHON_PYPHEN_SETUP_TYPE = distutils
-+PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/0e/21/9e0841aa76db69e2d74cd64ea2271151d7332fa627a5f03eb0d9ccf3da87
-+PYTHON_PYPHEN_SETUP_TYPE = flit
- PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
- PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
+-PIPEWIRE_VERSION = 0.3.45
++PIPEWIRE_VERSION = 0.3.48
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -136,6 +136,13 @@ else
+ PIPEWIRE_CONF_OPTS += -Dx11=disabled
+ endif
  
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++PIPEWIRE_CONF_OPTS += -Dx11-xfixes=enabled
++PIPEWIRE_DEPENDENCIES += xlib_libXfixes
++else
++PIPEWIRE_CONF_OPTS += -Dx11-xfixes=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ PIPEWIRE_CONF_OPTS += -Dlibusb=enabled
+ PIPEWIRE_DEPENDENCIES += libusb
 -- 
 2.25.1
 
