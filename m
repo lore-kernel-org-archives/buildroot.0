@@ -1,78 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5136C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 07:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52FECC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 09:34:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B6B9812FF;
-	Fri, 11 Mar 2022 07:33:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B09C6405CE;
+	Fri, 11 Mar 2022 09:34:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V2OpyfzufgiE; Fri, 11 Mar 2022 07:33:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DIEV2dmSUple; Fri, 11 Mar 2022 09:34:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72AC281000;
-	Fri, 11 Mar 2022 07:33:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EFD64059E;
+	Fri, 11 Mar 2022 09:34:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1DDEC1BF297
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 07:33:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 054D61BF39C
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 09:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D98D40119
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 07:33:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3938405AE
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 09:34:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xb4lPHMvxiX6 for <buildroot@lists.busybox.net>;
- Fri, 11 Mar 2022 07:33:37 +0000 (UTC)
+ with ESMTP id DZUKA3OObhtz for <buildroot@lists.busybox.net>;
+ Fri, 11 Mar 2022 09:34:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE203400E9
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 07:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1646984013;
- bh=HKuGKTHbtZU3EJ+Lbhe+wySI5JSCOqkH5Y6oCpePOPQ=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=Qn7JUHN0P2gWg2mPeoCWXF+mqVos6B3jE9IwzXwo2coxq2hWtJNVO5TSeDIlAB7Ci
- VgstGWb1fOcCkT7thbOEKfgqW2Zk66kRJitWNnWeSP9GHzekeyQYxMJXw64vNRKt9P
- Gn3Z/Kn9U1vSyWoiGxF2W5vr1+er9uKphhsz8mhw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.204]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MCKBc-1nJBrL2NaU-009RHn; Fri, 11 Mar 2022 08:33:33 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3FBEA4059E
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 09:34:12 +0000 (UTC)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1EDA7200005;
+ Fri, 11 Mar 2022 09:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1646991251;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YDScwy52vVVUlj0Fxf1Nnq9epIdBvWxJNwrLbXOFGag=;
+ b=GdyO/1BUzfXJwT0KoqYQNLrStwJ/F+ynuOwIzNX0Cuo1ueKrXVka5VgMec0U+5aFg2woQq
+ S+U/fun2onIB1gwzfuWInxYgXfE0YkKxFJ/31QkXeA3/g/leyZwH912D1s0wkoPLuLLCqm
+ b+hE7/caJ87+8SHXxZlwh5ttG+d4mLgDhn99sEfWbcppQxXg3lYs4NG87uJCyHKX2BGryS
+ xjBzg3CA+qlWQNJCa+nRUQAD55/wO2m6lIbsJ52v6r4+HS8MEU2Ix+6nAZj3wp7LAXFcIF
+ r2xnKhn7bIBr7Unb01WGpUJYdxBZj9a7X6DNBLluzxbjmWNH7RyEVEbkc4CjvQ==
+Date: Fri, 11 Mar 2022 10:32:46 +0100
 To: buildroot@buildroot.org
-Date: Fri, 11 Mar 2022 08:33:33 +0100
-Message-Id: <20220311073333.29596-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.35.1
+Message-ID: <20220311103246.471185ee@fixe.home>
+In-Reply-To: <20220310165735.1102802-1-clement.leger@bootlin.com>
+References: <20220310165735.1102802-1-clement.leger@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:hg3+4axZ2AeDKzVeuZIOxH1ta0pZxZKZVghMV8UCtBJqZj430r4
- bwoilRROHfNHJ8hFjuaNFJkCb455qMSBGihwQzmAAv8pcGV+BFjfO1Epgb4gxu/ZPZjOHA3
- dBQ2XlZLQuZtOnjeaz4h4Ggh2HzdgynudoHp6V5p9ehDqA+dcr96Oyqd4JpkYAaNEf3uXqO
- T28SrioyfDN++x4FeP24Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zJ9MHbaZr4c=:k/UU/jdUYOK1w9Y7sj3J0K
- Ngc7Rw2FwVM0jQTKnOy8Ui3yqCpQcX4aMEk3vtkiM7J5mkAcJwzt1ovm1de2/Or1P92B2rsKw
- QRsRMT/qhF3rDkfizUiwucfS943YaWe8CIBIw7oBBFj6USAJuyOtcoSvUpiW/FVqWlQSN6KMy
- n253GGldgJRPO92oV3HtbVYN6Hjg9OrhJHui38KZt+XP0wC4HSRueQxaZiwfnHbO/FsWzWt8f
- dl1DqsPFYU0OHCyrJCXfrjT5TbBS/nc+pTNLbHoPeq9ebErrfIIPt6X/8RcPhw3gHqJwerQLo
- /FCSbO+TwjPOFzrboaK/9pM/jJtBxVZQUG8XkeIh1YSbp9E1bq+j0gBq+xUDrNlv6qHX07htN
- 0p21ef6aUmW36hAGPe7k7j8BSBeqlWSsjdqdiBEmIapX8ooclC25GBIj3Wf33mMWGNOlG4jvU
- OIXZu2YRXQp1GNyJO6KRxZ8Gx6GDkGx5YJ5JRV0lu6ViZuG/L2AvfilIRwgpWnmt7ki9uMPNk
- mZJW+1NU3qbqtW6ffTEJYmiZuBb46mzuon9qUnpR/wwLr8xgGNivPRuIQfbDP733Kj5BSjn1b
- llDe7pFJby4KYuGyMyrWAX9OKA/T+mRXv13N2PiVFf0UOVfZPs7HGkD6l0F1KC+h+VtwumHO0
- gy5rv3ITpj+M2CGFejoqv0dp/SJuRQUseVbxvaTCeiHPoMollaqW/PKfMN//UtcF2U+pqFtIC
- v0m0TejocloXjuoXFAtVtZ+siwd6lkuWOzDWEr0EAn205HsQ4tXCyLM1ZXjh8gaKexnztxfVM
- Ws7HzBxb9bKE8Ij1/Z0E0CzQsaEmPRH5RNL3jC5QHvpjcQxFix7AwC6jcb1VhUv56A5b0fyPO
- kRRRTogRJ8ULk6xMiDmqK4aSNgN9T+IXFH15mApIs1PcwQzXpSXKIe2IjC2ATzwbpXCUpXUVj
- IofsiNKtBCr00x4HpKozYnFFNs+pLQ0G3jIr1QEEOp2WQc4Kol7tENXAb/HeQxGkkz6ePQipj
- ZZ3o9mB3CjUjq5cOWBqg5kPsMWi3wAI0tSCvFj734kKVnihRTWJW5OBozK6DehMhQeCndC1Bk
- jF0VG5xuXQmOUI=
-Subject: [Buildroot] [PATCH v1] package/linux-firmware: bump version to
- 20220310
+Subject: Re: [Buildroot] [PATCH v2 0/7] boot/optee-os: support new optee-os
+ 3.16.0 build dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,65 +67,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc: Etienne Carriere <etienne.carriere@linaro.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- update hash of WHENCE file
-
-- update hash of LICENSE.amdgpu (copyright year update, see [1])
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=34f9f8994a61192abfb597fc55810e3c27269ebf
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/linux-firmware/linux-firmware.hash | 6 +++---
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 83275ec6d7..382e9cb2ba 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,9 +1,9 @@
- # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
--sha256  eeddb4e6bef31fd1a3757f12ccc324929bbad97855c0b9ec5ed780f74de1837d  linux-firmware-20211216.tar.xz
-+sha256  5938ee717b2023b48f6bfcf344b40ddc947e3e22c0bc36d4c3418f90fea68182  linux-firmware-20220310.tar.xz
- 
- # Hash for license files
- sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
--sha256  8d5847d2971241d4d6a51c16e206379de53a6d4e203fa6f8e1c1e9279c7c4ad0  LICENSE.amdgpu
-+sha256  a6c0ec4338bc89480da52812bea7f9e4b52bc7118e3e352141f99d779c397c53  LICENSE.amdgpu
- sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
- sha256  802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2  LICENCE.atheros_firmware
- sha256  3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53  ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
-@@ -33,6 +33,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
- sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
- sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
- sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
--sha256  dfb98c5474d6264a6554322b3936e305e9d73cc7b683932e3f17550dc7d2d29b  WHENCE
-+sha256  75afdb5d45a21ff95ff7aa82d67bc42a83830f2def98ea937c01d6e7603d76f9  WHENCE
- sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
- sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 2d103df05c..5ccb7f10dd 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUX_FIRMWARE_VERSION = 20211216
-+LINUX_FIRMWARE_VERSION = 20220310
- LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
- LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
- LINUX_FIRMWARE_INSTALL_IMAGES = YES
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgVGh1LCAxMCBNYXIgMjAyMiAxNzo1NzoyOCArMDEwMCwKQ2zDqW1lbnQgTMOpZ2VyIDxjbGVt
+ZW50LmxlZ2VyQGJvb3RsaW4uY29tPiBhIMOpY3JpdCA6Cgo+IE5ld2VyIHZlcnNpb25zIG9mIG9w
+dGVlLW9zICg+PSAzLjE2LjApIHVzZXMgcHl0aG9uLWNyeXB0b2dyYXBoeSBpbnN0ZWFkCj4gb2Yg
+cHl0aG9uLXB5Y3J5cHRvZG9tZXggdG8gYnVpbGQuIFRoaXMgc2VyaWVzIGFkZHMgc3VwcG9ydCB0
+byBidWlsZAo+IGhvc3QtcHl0aG9uLWNyeXB0b2dyYXBoeSBhbmQgdXNlcyBpdCBpbiBvcHRlZS1v
+cyBwYWNrYWdlIHRvIGJ1aWxkIHRoZQo+IDMuMTYuMCB2ZXJzaW9uLiBBbHNvIGJ1bXAgb3B0ZWUt
+Y2xpZW50LCBvcHRlZS1iZW5jaG1hcmssIG9wdGVlLWV4YW1wbGVzCj4gYW5kIG9wdGVlLXRlc3Qg
+d2hpY2ggbmVlc3MgdG8gYmUgYWxpZ25lZCB3aXRoIG9wdGVlLW9zIHZlcnNpb24uCj4gCj4gLS0t
+LQo+IAo+IENoYW5nZXMgaW4gdjI6Cj4gLSBCdW1wIG9wdGVlLWNsaWVudCwgb3B0ZWUtYmVuY2ht
+YXJrLCBvcHRlZS1leGFtcGxlcyBhbmQgb3B0ZWUtdGVzdAo+IAo+IENsw6ltZW50IEzDqWdlciAo
+NCk6Cj4gICBwYWNrYWdlL3B5dGhvbi1jcnlwdG9ncmFwaHk6IGVuYWJsZSBob3N0IHBhY2thZ2UK
+PiAgIGJvb3Qvb3B0ZWUtb3M6IGFkZCBzdXBwb3J0IHRvIGJ1aWxkIHdpdGggcHl0aG9uLWNyeXB0
+b2dyYXBoeQo+ICAgYm9vdC9vcHRlZS1vczogYnVtcCB0byB2ZXJzaW9uIDMuMTYuMAo+ICAgcGFj
+a2FnZS9vcHRlZS10ZXN0OiBidW1wIHRvIHZlcnNpb24gMy4xNi4wCj4gCj4gRXRpZW5uZSBDYXJy
+aWVyZSAoMyk6Cj4gICBwYWNrYWdlL29wdGVlLWV4YW1wbGVzOiBidW1wIHRvIHZlcnNpb24gMy4x
+Ni4wCj4gICBwYWNrYWdlL29wdGVlLWNsaWVudDogYnVtcCB0byB2ZXJzaW9uIDMuMTYuMAo+ICAg
+cGFja2FnZS9vcHRlZS1iZW5jaG1hcms6IGJ1bXAgdG8gdmVyc2lvbiAzLjE2LjAKPiAKPiAgYm9v
+dC9vcHRlZS1vcy9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxMyArKysr
+KysrKysrKy0tCj4gIGJvb3Qvb3B0ZWUtb3Mvb3B0ZWUtb3MuaGFzaCAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KPiAgYm9vdC9vcHRlZS1vcy9vcHRlZS1vcy5tayAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgNyArKysrKystCj4gIHBhY2thZ2Uvb3B0ZWUtYmVuY2htYXJrL29wdGVl
+LWJlbmNobWFyay5oYXNoICAgICAgIHwgIDQgKystLQo+ICBwYWNrYWdlL29wdGVlLWJlbmNobWFy
+ay9vcHRlZS1iZW5jaG1hcmsubWsgICAgICAgICB8ICAyICstCj4gIHBhY2thZ2Uvb3B0ZWUtY2xp
+ZW50L29wdGVlLWNsaWVudC5oYXNoICAgICAgICAgICAgIHwgIDQgKystLQo+ICBwYWNrYWdlL29w
+dGVlLWNsaWVudC9vcHRlZS1jbGllbnQubWsgICAgICAgICAgICAgICB8ICAyICstCj4gIHBhY2th
+Z2Uvb3B0ZWUtZXhhbXBsZXMvb3B0ZWUtZXhhbXBsZXMuaGFzaCAgICAgICAgIHwgIDQgKystLQo+
+ICBwYWNrYWdlL29wdGVlLWV4YW1wbGVzL29wdGVlLWV4YW1wbGVzLm1rICAgICAgICAgICB8ICAy
+ICstCj4gIHBhY2thZ2Uvb3B0ZWUtdGVzdC9vcHRlZS10ZXN0Lmhhc2ggICAgICAgICAgICAgICAg
+IHwgIDQgKystLQo+ICBwYWNrYWdlL29wdGVlLXRlc3Qvb3B0ZWUtdGVzdC5tayAgICAgICAgICAg
+ICAgICAgICB8ICAyICstCj4gIHBhY2thZ2UvcHl0aG9uLWNyeXB0b2dyYXBoeS9weXRob24tY3J5
+cHRvZ3JhcGh5Lm1rIHwgIDcgKysrKysrKwo+ICAxMiBmaWxlcyBjaGFuZ2VkLCAzNyBpbnNlcnRp
+b25zKCspLCAxNiBkZWxldGlvbnMoLSkKPiAKClNhZGx5LCBJIHVzZWQgY29tbWl0cyBmcm9tIEV0
+aWVubmUgQ2FycmllcmUgYXMgaW5pdGlhbCBjb21taXRzIG1lc3NhZ2VzCih1c2luZyAtYykuIEkg
+ZGlkIG5vdCBub3RpY2VkIGl0IHJldXNlZCB0aGUgb3JpZ2luYWwgY29tbWl0IGF1dGhvci4KSSB3
+aWxsIHJlc2VuZCBhIFYzIHdpdGggYXV0aG9yc2hpcCBmaXhlZCBwcm9wZXJseS4gU29ycnkgZm9y
+IHRoZQppbmNvbnZlbmllbmNlLgoKLS0gCkNsw6ltZW50IEzDqWdlciwKRW1iZWRkZWQgTGludXgg
+YW5kIEtlcm5lbCBlbmdpbmVlciBhdCBCb290bGluCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
