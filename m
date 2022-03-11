@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F2D3C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 21:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A536C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 21:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38E5441599;
-	Fri, 11 Mar 2022 21:23:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54B9940325;
+	Fri, 11 Mar 2022 21:23:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H88Jf6hp0WuI; Fri, 11 Mar 2022 21:23:11 +0000 (UTC)
+	with ESMTP id uXouCDLKw_BB; Fri, 11 Mar 2022 21:23:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 175EA40940;
-	Fri, 11 Mar 2022 21:23:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 933171BF38E
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:23:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5CD6419C4;
+	Fri, 11 Mar 2022 21:23:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F4631BF38E
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F154409B1
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:23:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E8A5848DC
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:23:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0TblXVGMznKm for <buildroot@lists.busybox.net>;
- Fri, 11 Mar 2022 21:23:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5XHudtsFOILk for <buildroot@lists.busybox.net>;
+ Fri, 11 Mar 2022 21:23:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEF6640111
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 21:23:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C2CF848E5
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 21:23:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2505F83CA0; Fri, 11 Mar 2022 21:14:32 +0000 (UTC)
+ id 556E983CA4; Fri, 11 Mar 2022 21:14:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Mar 2022 22:23:01 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 84fd98b48b53065ec30f88ded5ea9a5f8c313591
-X-Git-Newrev: 27503b58aa7d245981be1334111e4cbe98649144
+Date: Fri, 11 Mar 2022 22:22:32 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: fe570807b0fa02a839320250362759e327f7ad0b
+X-Git-Newrev: 37683e06b9daa9eff057ede540b844a12d0744f5
 X-Patchwork-Hint: ignore
-Message-Id: <20220311211432.2505F83CA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/flac: security
+Message-Id: <20220311211437.556E983CA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/flac: security
  bump to version 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27503b58aa7d245981be1334111e4cbe98649144
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=37683e06b9daa9eff057ede540b844a12d0744f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 This release mostly fixes (security related) bugs including:
  - Fix 12 decoder bugs found by oss-fuzz, including CVE-2020-0499
