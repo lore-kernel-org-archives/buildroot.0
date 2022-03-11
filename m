@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FCE8C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 21:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40E23C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 21:22:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61CD3848DC;
-	Fri, 11 Mar 2022 21:22:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2B1C419E5;
+	Fri, 11 Mar 2022 21:22:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kSV3ASCSIUcV; Fri, 11 Mar 2022 21:22:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KOsF5gkU1Cd8; Fri, 11 Mar 2022 21:22:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 399BD848D4;
-	Fri, 11 Mar 2022 21:22:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0EA7419C4;
+	Fri, 11 Mar 2022 21:22:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 740481BF38E
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:21:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 973421BF38E
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60E5E419C4
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:21:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85E22419C5
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:22:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D4iVrSsUeyOI for <buildroot@lists.busybox.net>;
- Fri, 11 Mar 2022 21:21:56 +0000 (UTC)
+ with ESMTP id OdtLd_4GGRZm for <buildroot@lists.busybox.net>;
+ Fri, 11 Mar 2022 21:22:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36D8E419C2
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 21:21:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6884419C4
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 21:22:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5689483C8F; Fri, 11 Mar 2022 21:13:23 +0000 (UTC)
+ id F13A783C9E; Fri, 11 Mar 2022 21:13:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Mar 2022 22:14:22 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 19214951bb25f215e26d3065204f3faf7527c0d1
-X-Git-Newrev: 9a08294ba1263d07cdd8e4a80ef7ea3c7577e4a6
+Date: Fri, 11 Mar 2022 22:17:02 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: d3ddfdf64c189c2e08ae83146730f4aae660784d
+X-Git-Newrev: fe570807b0fa02a839320250362759e327f7ad0b
 X-Patchwork-Hint: ignore
-Message-Id: <20220311211323.5689483C8F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/librsvg: fix
- loaders.cache with with per-package directories
+Message-Id: <20220311211327.F13A783C9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/python-ipython:
+ security bump to version 7.31.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,120 +59,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a08294ba1263d07cdd8e4a80ef7ea3c7577e4a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fe570807b0fa02a839320250362759e327f7ad0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-host-librsvg installs a gdk-pixbuf module (aka plugin). As such, it needs
-to update [0] the modules cache (a kind of registry of which modules are
-installed and what the can handle). To that effect, it calls the utility
-gdk-pixbuf-queryloaders, which generates the cache of existing modules.
+Fix CVE-2022-21699: IPython (Interactive Python) is a command shell for
+interactive computing in multiple programming languages, originally
+developed for the Python programming language. Affected versions are
+subject to an arbitrary code execution vulnerability achieved by not
+properly managing cross user temporary files. This vulnerability allows
+one user to run code as another on the same machine. All users are
+advised to upgrade.
 
-gdk-pixbuf-queryloaders, from the gdk-pixbuf package, has been
-configured to be relocatable. However, it still embeds the path to where
-it was instaled, and thus where to look modules from. If it is run from
-its install location, then gdk-pixbuf-queryloaders looks modules in that
-location, and generates a modules cache with relative paths; otherwise,
-it still looks at that location, but generates a cache with absolute
-paths. In the later case, it will miss the modules that have not been
-installed by gdk-pixbuf itself.
+Also update indentation in hash file (two spaces)
 
-In the case of host-librsvg, that will miss the fact that librsvg just
-happened to have installed a module. Further down the road, packages
-that depend on host-librsvg, will get their PPD prepared, the path fixup
-hook run, so that the cache properly points to the current package's
-PPD, but the cache will not include the SVG module, which causes
-failures to load SVG images:
-
-    Can't load file: Unrecognized image file format
-
-So, we need to tell gdk-pixbuf-queryloaders where the module path is,
-which restores the relativity of the paths it reports, by specifying the
-modules path pointing to the current package's PPD, passed in the
-environement variable GDK_PIXBUF_MODULEDIR.
-
-We need to do that at install time, so that the SVG module is properly
-listed in the cache, so that dependees can use it.
-
-A temporary cache is also generated at build time, but its usefullness
-is dubious; it seem to only be used by the test tool, which we do not
-run. However, for consistency-sake, we also fix that.
-
-Fixes:
- - http://autobuild.buildroot.org/results/0e00059b09b4445eaaec1030997883187c6a80d6
-
-[0] This will trigger file-overwrite detection in the future... But we
-currently do not have infrastructure to properly handle such a cache.
+https://github.com/ipython/ipython/security/advisories/GHSA-pq7m-3gw7-gq5x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: reword and extend an already-good commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 63b780f5e96e2f9282fb48b2846bab1c0f4f9455)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit aeb138911e773cf4011b81fc4fcec0037f366bb1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch | 41 ++++++++++++++++++++++
- package/librsvg/librsvg.mk                         |  2 ++
- 2 files changed, 43 insertions(+)
+ package/python-ipython/python-ipython.hash | 8 ++++----
+ package/python-ipython/python-ipython.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-new file mode 100644
-index 0000000000..761ff92605
---- /dev/null
-+++ b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-@@ -0,0 +1,41 @@
-+From 2c472bf55289ccbd7f305aa3e98d6fd70be4e3ab Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 19 Feb 2022 12:02:10 +0100
-+Subject: [PATCH] gdk-pixbuf-loader/Makefile.am: set GDK_PIXBUF_MODULEDIR
-+
-+Set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
-+gdk-pixbuf-query-loaders to build a correct gdk_pixbuf_cache_file and
-+gdk-pixbuf.loaders on 'exotic' systems
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/668]
-+---
-+ gdk-pixbuf-loader/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdk-pixbuf-loader/Makefile.am b/gdk-pixbuf-loader/Makefile.am
-+index c3493736..de1f9641 100644
-+--- a/gdk-pixbuf-loader/Makefile.am
-++++ b/gdk-pixbuf-loader/Makefile.am
-+@@ -49,7 +49,7 @@ rsvg_loader_LDADD = \
-+ EXTRA_rsvg_loader_DEPENDENCIES = libpixbufloader-svg.la gdk-pixbuf-loaders
-+ 
-+ gdk-pixbuf-loaders: Makefile
-+-	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-++	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-+ 
-+ if CROSS_COMPILING
-+ RUN_QUERY_LOADER_TEST=false
-+@@ -68,7 +68,7 @@ endif
-+ install-data-hook:
-+ 	@if $(RUN_QUERY_LOADER_TEST) ; then \
-+ 		$(mkinstalldirs) $(DESTDIR)$(gdk_pixbuf_binarydir) ; \
-+-		$(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-++		GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-+ 	else \
-+ 	  echo "***" ; \
-+ 	  echo "*** Warning: loaders.cache not built" ; \
-+-- 
-+2.34.1
-+
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e4b1942b79..07a14b4366 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -20,6 +20,8 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libglib2 host-libxml
- LIBRSVG_LICENSE = LGPL-2.1+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
- LIBRSVG_CPE_ID_VENDOR = gnome
-+# We're patching gdk-pixbuf-loader/Makefile.am
-+LIBRSVG_AUTORECONF = YES
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index 5f591129a4..cd18c3d125 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5  f733048322cd34ce392ec5404813540b  ipython-7.28.0.tar.gz
+-sha256  2097be5c814d1b974aea57673176a924c4c8c9583890e7a5f082f547b9975b11  ipython-7.28.0.tar.gz
++md5  6907b67691ba697173a3befb2c35f7ac  ipython-7.31.1.tar.gz
++sha256  b5548ec5329a4bcf054a5deed5099b0f9622eb9ea51aaa7104d215fece201d8c  ipython-7.31.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
+-sha256	e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
++sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
++sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index c669dd1b92..389ebfa897 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBRSVG_CONF_OPTS += --enable-introspection
+-PYTHON_IPYTHON_VERSION = 7.28.0
++PYTHON_IPYTHON_VERSION = 7.31.1
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/e2/c8/7046d0409a90e31263d5bbaa708347d522ac584a1140c01a951d9deb1792
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/fb/39/c1947dc1bb993a35469ca474535cb3214c91f5f9a7752a1fcbd9b6b37dde
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
