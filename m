@@ -1,52 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED93DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 17:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96849C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 19:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 615868411D;
-	Fri, 11 Mar 2022 17:30:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F04224029B;
+	Fri, 11 Mar 2022 19:17:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wZE7x_CAoNTZ; Fri, 11 Mar 2022 17:30:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cbSqOvl1nCYD; Fri, 11 Mar 2022 19:17:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BA9D8403D;
-	Fri, 11 Mar 2022 17:30:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A939C40116;
+	Fri, 11 Mar 2022 19:17:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A1A7A1BF339
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 17:30:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 665201BF479
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 19:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88FF9400AF
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 17:30:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A63F40116
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 19:17:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V4ZJcpQVET-x for <buildroot@lists.busybox.net>;
- Fri, 11 Mar 2022 17:29:58 +0000 (UTC)
-X-Greylist: delayed 00:16:29 by SQLgrey-1.8.0
-Received: from hetzy.fluff.org (test-v6.fluff.org [IPv6:2a01:4f8:222:2004::3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 767C540018
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 17:29:58 +0000 (UTC)
-Received: from ben by hetzy.fluff.org with local (Exim 4.89)
- (envelope-from <ben@fluff.org>)
- id 1nSipR-00034a-9q; Fri, 11 Mar 2022 17:13:25 +0000
-Date: Fri, 11 Mar 2022 17:13:25 +0000
-From: Ben Dooks <ben@fluff.org>
+ with ESMTP id hH5ySQjm_OF0 for <buildroot@lists.busybox.net>;
+ Fri, 11 Mar 2022 19:17:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 52F4A40018
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 19:17:20 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id w7so11241281ioj.5
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 11:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=niQk+7SzI4lYjT2nwXjAMUwO73mQijTWpjL0SeTStig=;
+ b=JLkwhWRCcFeCKbFQFmnLYm6XsJqmgc0lPcNczSUq3MnnCSJxlRCUGavZUPt/Z/KIbB
+ 3vfpLYfBgd4QGWj6+042dyUtvst92bREqkTQVrU5rPLUvO3Mxe7/LZaFiZ/Sa6I8MJaA
+ STAQmw2c0HLefJLln2y6tB3arGUzwpQpkFxl8l9SO2ZLI72dmkeakRCiyds4DS6Lj0Tg
+ EbMizelcZcwAGIlAjOoGOhmwrlunLQXtR28f62vnIHKNN3/B6EQKJqXFUyo3Vqa7Crae
+ QSFIaU34u6j3oFSMwYnGLxxWBFsaZtqAgU4FYM7E5CQfTkR4dxS+FqlpN6rbwZfUyP2A
+ xE3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=niQk+7SzI4lYjT2nwXjAMUwO73mQijTWpjL0SeTStig=;
+ b=Q5nMnslH0PEFXC45/hVpKCCmPnZTRAzwJso/P9bHswrp8ZSvUouYAHDBs4CQaMU5p/
+ Cc8bLNnlGoPRJ1/iCkbkdMp3ZoVCZ4jZ4G+CqCM7STRf/aoETl8jVkBxvwsRd0GpHu6h
+ 5FoievU3PkN3vZx3dnsBgT5dGXWkRWZOqq7LVM+qve8nwHdEyGMh7VN0Aqiy1FmOlUrL
+ d+rqxvNILlCo+2gHw1lvxFcqzxYusIDNuBRcKHHjXRkVuvYRhboAgAymkeNscL3PuZee
+ 0GjjBJ2W+OD3da+2eJ+uVypgI3cU+XrliIrtKvhw6RVCNwqcSBGcIoDtoqxgnWkJ5rB9
+ gNtQ==
+X-Gm-Message-State: AOAM5314esXuKkb8+WsoZsWgh8EVfq7DfSUVfeTP6zGYPo3lrmsLtFXP
+ 8QjgEsr1We+5Egpgf4loMb4OERGKuPg=
+X-Google-Smtp-Source: ABdhPJwH30AYyyT+x43jNdDvQlUOJzVvthl91WZy2tUVOYOW8ecr86LgLGxe91TWi9upaufVhqyD9Q==
+X-Received: by 2002:a05:6602:3ca:b0:63d:dfc8:fa66 with SMTP id
+ g10-20020a05660203ca00b0063ddfc8fa66mr8940432iov.128.1647026239678; 
+ Fri, 11 Mar 2022 11:17:19 -0800 (PST)
+Received: from james-x399.localdomain (97-118-243-247.hlrn.qwest.net.
+ [97.118.243.247]) by smtp.gmail.com with ESMTPSA id
+ g5-20020a05660203c500b006463f6dd453sm4854799iov.34.2022.03.11.11.17.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 11 Mar 2022 11:17:19 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <20220311171325.jwcww5qb7ao5vnpy@hetzy.fluff.org>
+Date: Fri, 11 Mar 2022 12:17:17 -0700
+Message-Id: <20220311191717.3878852-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Disclaimer: These are my views alone.
-X-URL: http://www.fluff.org/
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: ben@fluff.org
-X-SA-Exim-Scanned: No (on hetzy.fluff.org); SAEximRunCond expanded to false
-Subject: [Buildroot] error during cpio build failing to rm
+Subject: [Buildroot] [PATCH 1/1] package/python-weasyprint: bump to version
+ 54.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +85,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I'm getting the following error with upstream buildroot:
+Migrate from distutils to flit package infrastructure.
 
-rm: refusing to remove '.' or '..' directory: skipping '/home/ben/project/buildrot/output/build/buildroot-fs/cpio/target/run/..'
-rm: refusing to remove '.' or '..' directory: skipping '/home/ben/project/buildrot/output/build/buildroot-fs/cpio/target/tmp/..'
-make: *** [fs/cpio/cpio.mk:74: /home/ben/project/buildroot/output/images/rootfs.c
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-weasyprint/python-weasyprint.hash | 4 ++--
+ package/python-weasyprint/python-weasyprint.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I've temprarily fixed this with:
-
-diff --git a/fs/common.mk b/fs/common.mk
-index 45beb5ae7b..6bb993663f 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -186,7 +186,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
-
-        $$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
-
-	                $$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
-			-       echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[^.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[^.]*" >> $$(FAKEROOT_SCRIPT)
-			+       echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/tmp/*" >> $$(FAKEROOT_SCRIPT)
-			        $$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
-				        $$(call PRINTF,$$(ROOTFS_SELINUX)) >> $$(FAKEROOT_SCRIPT)
-					        $$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-
-It looks like this was introduced in 5e78e7e97d772124f0d31653aca33731abe5b4db
-
-Author: Norbert Lange <nolange79@gmail.com>
-Date:   Sat Jun 6 00:48:57 2020 +0200
-
-    fs: clean the volatile /run and /tmp directories
-    
-
-Any ideas on how to fix properly?
-
-
+diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
+index 8d231c50ba..90ccc1d057 100644
+--- a/package/python-weasyprint/python-weasyprint.hash
++++ b/package/python-weasyprint/python-weasyprint.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/weasyprint/json
+-md5  a90fd2d5a581a0e218943af3a8b64a31  weasyprint-53.4.tar.gz
+-sha256  10ccb17d55c73096bdf1edd3efe58cb855b07e4c307d9bad4ebc9a3f13ff4580  weasyprint-53.4.tar.gz
++md5  3917447c277db6931b8370f1d725db49  weasyprint-54.2.tar.gz
++sha256  d5e8aa82e3e2a2477a4543f0646d9fb14080c9ba34a0859751eb23757cc00466  weasyprint-54.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
+diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
+index 0a944825bb..925de855bc 100644
+--- a/package/python-weasyprint/python-weasyprint.mk
++++ b/package/python-weasyprint/python-weasyprint.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEASYPRINT_VERSION = 53.4
++PYTHON_WEASYPRINT_VERSION = 54.2
+ PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
+-PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/72/25/336e274fde0e48cf9979d44667411fbcfa55d323fd7672068807b6de2f89
+-PYTHON_WEASYPRINT_SETUP_TYPE = distutils
++PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/f3/dc/d3d6f1d87a0a0b09637a1f5076790e229cc803c3584ed4edb76553844001
++PYTHON_WEASYPRINT_SETUP_TYPE = flit
+ PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
+ PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+ 
 -- 
-Ben Dooks, ben@fluff.org, http://www.fluff.org/ben/
-
-Large Hadron Colada: A large Pina Colada that makes the universe disappear.
+2.25.1
 
 _______________________________________________
 buildroot mailing list
