@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 321F9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 21:22:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F2D3C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 11 Mar 2022 21:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF8D860D5F;
-	Fri, 11 Mar 2022 21:22:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oDtLczGEg3xG; Fri, 11 Mar 2022 21:22:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 860E961315;
-	Fri, 11 Mar 2022 21:22:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B0E5C1BF38E
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:22:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA1EF419C4
- for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:22:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38E5441599;
+	Fri, 11 Mar 2022 21:23:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YrWDRPgTYZqe for <buildroot@lists.busybox.net>;
- Fri, 11 Mar 2022 21:22:00 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H88Jf6hp0WuI; Fri, 11 Mar 2022 21:23:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 175EA40940;
+	Fri, 11 Mar 2022 21:23:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 933171BF38E
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:23:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F154409B1
+ for <buildroot@lists.busybox.net>; Fri, 11 Mar 2022 21:23:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0TblXVGMznKm for <buildroot@lists.busybox.net>;
+ Fri, 11 Mar 2022 21:23:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB0FC419C2
- for <buildroot@buildroot.org>; Fri, 11 Mar 2022 21:22:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EEF6640111
+ for <buildroot@buildroot.org>; Fri, 11 Mar 2022 21:23:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E567E83C9B; Fri, 11 Mar 2022 21:13:27 +0000 (UTC)
+ id 2505F83CA0; Fri, 11 Mar 2022 21:14:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Mar 2022 21:51:17 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 2ecadb5fca1cd987b05dc5c566a888c3a64b6863
-X-Git-Newrev: d3ddfdf64c189c2e08ae83146730f4aae660784d
+Date: Fri, 11 Mar 2022 22:23:01 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 84fd98b48b53065ec30f88ded5ea9a5f8c313591
+X-Git-Newrev: 27503b58aa7d245981be1334111e4cbe98649144
 X-Patchwork-Hint: ignore
-Message-Id: <20220311211327.E567E83C9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/librsvg: fix
- loaders.cache with with per-package directories
+Message-Id: <20220311211432.2505F83CA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/flac: security
+ bump to version 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,120 +59,206 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3ddfdf64c189c2e08ae83146730f4aae660784d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=27503b58aa7d245981be1334111e4cbe98649144
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-host-librsvg install a gdk-pixbuf module (aka plugin). As such, it needs
-to update [0] the modules cache (a kind of registry of which modules are
-installed and what the can handle). To that effect, it calls the utility
-gdk-pixbuf-queryloaders, which generates the cache of existing modules.
+This release mostly fixes (security related) bugs including:
+ - Fix 12 decoder bugs found by oss-fuzz, including CVE-2020-0499
+ - Fix encoder bug CVE-2021-0561
 
-gdk-pixbuf-queryloaders, from the gdk-pixbuf package, has been
-configured to be relocatable. However, it still embeds the path to where
-it was instaled, and thus where to look modules from. If it is run from
-its install location, then gdk-pixbuf-queryloaders looks modules in that
-location, and generates a modules cache with relative paths; otherwise,
-it still looks at that location, but generates a cache with absolute
-paths. In the later case, it will miss the modules that have not been
-installed by gdk-pixbuf itself.
+Also:
+ - Replace first patch which was reverted by
+   https://github.com/xiph/flac/commit/4fbb6d4f2ecf2a96c17ea9880108409f852c08a9
+ - Disable stack protection (enabled by default since
+   https://github.com/xiph/flac/commit/f706f2832270a0b7851cdffe62ad37acda9423fe)
+ - Drop md5 which is not provided anymore
+ - Update indentation in hash file (two spaces)
 
-In the case of host-librsvg, that will miss the fact that librsvg just
-happened to have installed a module. Further down the road, packages
-that depend on host-librsvg, will get their PPD prepared, the path fixup
-hook run, so that the cache properly points to the current package's
-PPD, but the cache will not include the SVG module, which causes
-failures to load CVG images:
-
-    Can't load file: Unrecognized image file format
-
-So, we need to tell gdk-pixbuf-queryloaders where the module path is,
-which restores the relativity of the paths it reports, by specifying the
-modules path pointing to the current package's PPD, passed in the
-environement variable GDK_PIXBUF_MODULEDIR.
-
-We need to do that at install time, so that the SVG module is properly
-listed in the cache, so that dependees can use it.
-
-A temporary cache is also generated at build time, but its usefullness
-is dubious; it seem to only be used by the test tool, which we do not
-run. However, for consistency-sake, we also fix that.
-
-Fixes:
- - http://autobuild.buildroot.org/results/0e00059b09b4445eaaec1030997883187c6a80d6
-
-[0] This will trigger file-overwrite detection in the future... But we
-currently do not have infrastructure to properly handle such a cache.
+https://github.com/xiph/flac/releases/tag/1.3.4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: reword and extend an already-good commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 63b780f5e96e2f9282fb48b2846bab1c0f4f9455)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4c7e250c699b23051a64bc0c2ef3e3f2bd020b3d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch | 41 ++++++++++++++++++++++
- package/librsvg/librsvg.mk                         |  2 ++
- 2 files changed, 43 insertions(+)
+ package/flac/0001-Fix-uclibc-build.patch           | 81 ++++++++++++++++++++++
+ ...c-check-for-sys-auxv.h-before-defining-FL.patch | 36 ----------
+ package/flac/flac.hash                             | 12 ++--
+ package/flac/flac.mk                               |  5 +-
+ 4 files changed, 89 insertions(+), 45 deletions(-)
 
-diff --git a/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
+diff --git a/package/flac/0001-Fix-uclibc-build.patch b/package/flac/0001-Fix-uclibc-build.patch
 new file mode 100644
-index 0000000000..761ff92605
+index 0000000000..fcba670fae
 --- /dev/null
-+++ b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
-@@ -0,0 +1,41 @@
-+From 2c472bf55289ccbd7f305aa3e98d6fd70be4e3ab Mon Sep 17 00:00:00 2001
++++ b/package/flac/0001-Fix-uclibc-build.patch
+@@ -0,0 +1,81 @@
++From 4c62082f64132bfcbcb6569aa914c5ec283303f9 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 19 Feb 2022 12:02:10 +0100
-+Subject: [PATCH] gdk-pixbuf-loader/Makefile.am: set GDK_PIXBUF_MODULEDIR
++Date: Mon, 21 Feb 2022 18:21:11 +0100
++Subject: [PATCH] Fix uclibc build
 +
-+Set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
-+gdk-pixbuf-query-loaders to build a correct gdk_pixbuf_cache_file and
-+gdk-pixbuf.loaders on 'exotic' systems
++Commit 4fbb6d4f2ecf2a96c17ea9880108409f852c08a9 reverted commit
++44036c9a9b45d03373fe90e9c112852bfc054c51 and so broke again the build on
++uclibc
++
++So put back the sys/auxv.h check as well as a getauxval check in a way
++that doesn't break iOS
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/668]
++[Upstream status: https://github.com/xiph/flac/pull/292]
 +---
-+ gdk-pixbuf-loader/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ configure.ac      | 5 ++++-
++ src/libFLAC/cpu.c | 9 ++++-----
++ 2 files changed, 8 insertions(+), 6 deletions(-)
 +
-+diff --git a/gdk-pixbuf-loader/Makefile.am b/gdk-pixbuf-loader/Makefile.am
-+index c3493736..de1f9641 100644
-+--- a/gdk-pixbuf-loader/Makefile.am
-++++ b/gdk-pixbuf-loader/Makefile.am
-+@@ -49,7 +49,7 @@ rsvg_loader_LDADD = \
-+ EXTRA_rsvg_loader_DEPENDENCIES = libpixbufloader-svg.la gdk-pixbuf-loaders
++diff --git a/configure.ac b/configure.ac
++index 4d7dc2e4..6f32fa45 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -69,7 +69,7 @@ AC_C_INLINE
++ AC_C_VARARRAYS
++ AC_C_TYPEOF
 + 
-+ gdk-pixbuf-loaders: Makefile
-+-	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
-++	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
++-AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
+++AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/auxv.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
 + 
-+ if CROSS_COMPILING
-+ RUN_QUERY_LOADER_TEST=false
-+@@ -68,7 +68,7 @@ endif
-+ install-data-hook:
-+ 	@if $(RUN_QUERY_LOADER_TEST) ; then \
-+ 		$(mkinstalldirs) $(DESTDIR)$(gdk_pixbuf_binarydir) ; \
-+-		$(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-++		GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
-+ 	else \
-+ 	  echo "***" ; \
-+ 	  echo "*** Warning: loaders.cache not built" ; \
++ XIPH_C_BSWAP32
++ XIPH_C_BSWAP16
++@@ -101,6 +101,9 @@ fi
++ # For the XMMS plugin.
++ AC_CHECK_TYPES(socklen_t, [], [])
++ 
+++dnl check for getauxval in standard library
+++AC_CHECK_FUNCS(getauxval)
+++
++ dnl check for getopt in standard library
++ dnl AC_CHECK_FUNCS(getopt_long , , [LIBOBJS="$LIBOBJS getopt.o getopt1.o"] )
++ AC_CHECK_FUNCS(getopt_long, [], [])
++diff --git a/src/libFLAC/cpu.c b/src/libFLAC/cpu.c
++index 8b92f4c7..64c6acad 100644
++--- a/src/libFLAC/cpu.c
+++++ b/src/libFLAC/cpu.c
++@@ -53,11 +53,9 @@
++ #define dfprintf(file, format, ...)
++ #endif
++ 
++-#if defined FLAC__CPU_PPC
++-#if defined(__linux__) || (defined(__FreeBSD__) && (__FreeBSD__ >= 12))
+++#if defined(HAVE_SYS_AUXV_H)
++ #include <sys/auxv.h>
++ #endif
++-#endif
++ 
++ #if (defined FLAC__CPU_IA32 || defined FLAC__CPU_X86_64) && (defined FLAC__HAS_NASM || FLAC__HAS_X86INTRIN) && !defined FLAC__NO_ASM
++ 
++@@ -247,7 +245,7 @@ ppc_cpu_info (FLAC__CPUInfo *info)
++ #define PPC_FEATURE2_ARCH_2_07		0x80000000
++ #endif
++ 
++-#ifdef __linux__
+++#if defined (__linux__) && defined(HAVE_GETAUXVAL)
++ 	if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_3_00) {
++ 		info->ppc.arch_3_00 = true;
++ 	} else if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_2_07) {
++@@ -267,7 +265,8 @@ ppc_cpu_info (FLAC__CPUInfo *info)
++ 	info->ppc.arch_2_07 = false;
++ 	info->ppc.arch_3_00 = false;
++ #else
++-#error Unsupported platform! Please add support for reading ppc hwcaps.
+++	info->ppc.arch_2_07 = false;
+++	info->ppc.arch_3_00 = false;
++ #endif
++ 
++ #else
 +-- 
 +2.34.1
 +
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e4b1942b79..07a14b4366 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -20,6 +20,8 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libglib2 host-libxml
- LIBRSVG_LICENSE = LGPL-2.1+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
- LIBRSVG_CPE_ID_VENDOR = gnome
-+# We're patching gdk-pixbuf-loader/Makefile.am
-+LIBRSVG_AUTORECONF = YES
+diff --git a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch b/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
+deleted file mode 100644
+index d1398d4b3e..0000000000
+--- a/package/flac/0001-configure.ac-check-for-sys-auxv.h-before-defining-FL.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 14a0713389fbfef59225d027ea466ebb478a8c6b Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 19 Sep 2019 21:18:04 +0200
+-Subject: [PATCH] configure.ac: check for sys/auxv.h before defining FLAC__CPU_PPC
+-
+-Upstream: https://github.com/xiph/flac/pull/142
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0228a12..64cb3f2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -144,7 +144,7 @@ case "$host_cpu" in
+- 	powerpc64|powerpc64le)
+- 		cpu_ppc64=true
+- 		cpu_ppc=true
+--		AC_DEFINE(FLAC__CPU_PPC)
+-+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
+- 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
+- 		AC_DEFINE(FLAC__CPU_PPC64)
+- 		AH_TEMPLATE(FLAC__CPU_PPC64, [define if building for PowerPC64])
+-@@ -152,7 +152,7 @@ case "$host_cpu" in
+- 		;;
+- 	powerpc|powerpcle)
+- 		cpu_ppc=true
+--		AC_DEFINE(FLAC__CPU_PPC)
+-+		AC_CHECK_HEADER(sys/auxv.h, AC_DEFINE(FLAC__CPU_PPC))
+- 		AH_TEMPLATE(FLAC__CPU_PPC, [define if building for PowerPC])
+- 		asm_optimisation=$asm_opt
+- 		;;
+---
+-2.23.0
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+index df7c2d1b95..2444535e0f 100644
+--- a/package/flac/flac.hash
++++ b/package/flac/flac.hash
+@@ -1,10 +1,8 @@
+-# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
+-md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
+ # From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
+-sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
++sha1  99c28482a8b2d81deaf740639e4cb55658427420  flac-1.3.4.tar.xz
+ # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
+-sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
++sha256  8ff0607e75a322dd7cd6ec48f4f225471404ae2730d0ea945127b1355155e737  flac-1.3.4.tar.xz
+ # Locally computed
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+-sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
+-sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
++sha256  fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index 9aa00b7ffd..2ff048b6e6 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBRSVG_CONF_OPTS += --enable-introspection
+-FLAC_VERSION = 1.3.3
++FLAC_VERSION = 1.3.4
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
+@@ -19,7 +19,8 @@ FLAC_AUTORECONF = YES
+ FLAC_CONF_OPTS = \
+ 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
+ 	--disable-xmms-plugin \
+-	--disable-altivec
++	--disable-altivec \
++	--disable-stack-smash-protection
+ 
+ ifeq ($(BR2_PACKAGE_LIBOGG),y)
+ FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
