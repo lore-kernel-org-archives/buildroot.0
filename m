@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6819FC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0ED1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27B8940524;
-	Sat, 12 Mar 2022 17:12:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B60382468;
+	Sat, 12 Mar 2022 17:13:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FoU1CWcE3qWa; Sat, 12 Mar 2022 17:13:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8119F82457;
+	Sat, 12 Mar 2022 17:13:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 26A191BF5F8
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8EA0E40488
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3cxASph-A4Mo; Sat, 12 Mar 2022 17:12:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E28340412;
-	Sat, 12 Mar 2022 17:12:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B2BF31BF5F8
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDA3160E52
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Lz-XL7ND7_J for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GppCHeeUcuhE for <buildroot@lists.busybox.net>;
  Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01A9D60E56
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A0B0404B2
  for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5A5E282AD0; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
+ id 91AA382AFE; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 12 Mar 2022 18:08:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9cddb7bd56b8e430f6b798426b5c111c7b7d8fdd
-X-Git-Newrev: bac3eadda80eea6bac376571a2cfd51b91731f4a
+X-Git-Oldrev: f9b4c11ed67055564c1b6bc8c44ec944bf458a87
+X-Git-Newrev: 726e974f5eaff5c5abd7550e100a117a3fa0b6c8
 X-Patchwork-Hint: ignore
-Message-Id: <20220312170118.5A5E282AD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cups: bump to version 2.4.1
+Message-Id: <20220312170118.91AA382AFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-distro: bump to version
+ 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +59,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bac3eadda80eea6bac376571a2cfd51b91731f4a
+commit: https://git.buildroot.net/buildroot/commit/?id=726e974f5eaff5c5abd7550e100a117a3fa0b6c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NOTICE hash is changed due to a copyright year update.
+For change log since 1.6.0, see:
+- https://github.com/python-distro/distro/releases/tag/v1.7.0
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cups/cups.hash | 4 ++--
- package/cups/cups.mk   | 2 +-
+ package/python-distro/python-distro.hash | 2 +-
+ package/python-distro/python-distro.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index b0e3654b3d..8308b7b803 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  9abecec128ca6847c5bb2d3e3d30c87b782c0697b9acf284d16fa38f80a3a6de  cups-2.4.0-source.tar.gz
-+sha256  c7339f75f8d4f2dec50c673341a45fc06b6885bb6d4366d6bf59a4e6c10ae178  cups-2.4.1-source.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
--sha256  a2a46d024e4d78dd2475d89f2f3d905578edfeca7dcb041e1d0ba079d9a87b48  NOTICE
-+sha256  7a7bd639e3a8457ae40b0dcfb74ea3cc6a8132b06c726142e993625d33eb6de5  NOTICE
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index e406d3bc64..298a6ed879 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-distro/python-distro.hash b/package/python-distro/python-distro.hash
+index e2b3c0a444..8f09197156 100644
+--- a/package/python-distro/python-distro.hash
++++ b/package/python-distro/python-distro.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  83f5e5a09f9c5f68f60173de572930effbcc0287bb84fdc4426cb4168c088424  distro-1.6.0.tar.gz
++sha256  151aeccf60c216402932b52e40ee477a939f8d58898927378a02abbe852c1c39  distro-1.7.0.tar.gz
+ sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-distro/python-distro.mk b/package/python-distro/python-distro.mk
+index 753e74d020..c69849b7ac 100644
+--- a/package/python-distro/python-distro.mk
++++ b/package/python-distro/python-distro.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CUPS_VERSION = 2.4.0
-+CUPS_VERSION = 2.4.1
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+-PYTHON_DISTRO_VERSION = 1.6.0
+-PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/a5/26/256fa167fe1bf8b97130b4609464be20331af8a3af190fb636a8a7efd7a2
++PYTHON_DISTRO_VERSION = 1.7.0
++PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/b5/7e/ddfbd640ac9a82e60718558a3de7d5988a7d4648385cf00318f60a8b073a
+ PYTHON_DISTRO_SOURCE = distro-$(PYTHON_DISTRO_VERSION).tar.gz
+ PYTHON_DISTRO_LICENSE = Apache-2.0
+ PYTHON_DISTRO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
