@@ -1,61 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A69BDC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 20:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D73C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 20:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5879D4048C;
-	Sat, 12 Mar 2022 20:17:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AD8E410B4;
+	Sat, 12 Mar 2022 20:17:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QyEIq37tJ7T1; Sat, 12 Mar 2022 20:17:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rgM8aREeeLUx; Sat, 12 Mar 2022 20:17:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DF3640488;
-	Sat, 12 Mar 2022 20:17:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C3D3F1BF3DD
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:16:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0659410AF;
+	Sat, 12 Mar 2022 20:17:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CFFF1BF3DD
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B133240488
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:16:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A111410AF
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:17:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GfFAQ-IO5zlO for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 20:16:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABC3140486
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 20:16:54 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net (unknown
- [IPv6:2a01:e0a:43e:e970:8763:f5a3:4adf:bb86])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9CEE5B0051E;
- Sat, 12 Mar 2022 21:16:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647116212;
- bh=Epgosy90UXStMt+//kGS3Alw+oRsXKk+D0Ge2FdYp3Q=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=NgfkQOFgVhQrzDWESCFzrSukFHvpFCfaMLBnyEBdeOJHJx4jA9Hhiv2FrTUOukq++
- AgoHaXVQ2vvPgbiLYpx8NzvSDgWQnPB+/AJphDpucDpOx9j8whN+7iZ9JoNB9cEOF7
- eDeZ06nV1JKv/nD56byDMZUqIUat7bZijcSCOHp8OTVw3GpOfYofhmFEIE80vC7//7
- t7BFkVVCcDZ3Ngrb2spn/6GG73K7eXztlOoJ9vufFSTUscnfN4MiH2QgPC4WGH8++a
- eZ9/avCnXRfHBVILDlAdKCcsGUkGpHeq5lVOBRq8HUeaj+zBl1NBdPyDgCBTg5xCMz
- a5ttajOjYqHYw==
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 12 Mar 2022 21:16:25 +0100
-Message-Id: <20220312201627.690544-2-ju.o@free.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220312201627.690544-1-ju.o@free.fr>
-References: <20220312201627.690544-1-ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x6_MvK5dyAng for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 20:17:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8866F410AE
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 20:17:01 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id g3so14948782edu.1
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 12:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=O5F4QAWbxF1yJz11XHQwn32hZ32hJOpLF0MpgqFmT2k=;
+ b=fbRBVnb1cS9BRv058XxtCU0XSGkoF0dNqgELxnVkrSQ+NnWlxWHo9DqfFAn3xJsqCN
+ KOERFyuiyb6xdX51QEodpfltPHEO24kLeywVFw0GyO0Ff/lwGdImjWKYbQvPy+/X6+vN
+ OQFuXTiBu8uMk/vvr5qFyhjgC7W8WDeiV7aFaGDRC3pSacs3CRpLZDbk/3kLBiyqpF91
+ 97w5eMbFd+46lLRKTg/DjWeqoOAqy/xp4wwdufOkQ4a4mW2HjERW9yOD3HQyvpM8dvlZ
+ q4TpzuXu2tbnt9y8oacJYUwelAb9vfJ33Axu5464y9Y69OIr7H/rq3NXFgx7y1jETBcM
+ igKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=O5F4QAWbxF1yJz11XHQwn32hZ32hJOpLF0MpgqFmT2k=;
+ b=KjqQX3aJj9Qo3t23C/L45aEjtauaxReaCRdS996UdgEYbGx/qCS8YH3q7ToWo6wiSr
+ LUI9662bRjkSuhtoidf2D6X67sMDBVc5ocEMgVfjDIxHf+iYP3d3NefsDR94XZJaUYWz
+ rF/PBIoPzDxHyUy82n8Yc/T48+5HB/Rb9sHdtXIXV6zl8S5qviAF/KnJH423hPndn5Do
+ iKK14xzvXZUpEr5vwcAa0wvtKTiHHftmwX+ZBYiEpQoWvPypdvKrkQQKG8C0cDsyqsCE
+ h/NKJOKsfh56DJdpa7LXFqFOWiF7ptyiw8YQWfcPCzx+nbUM9eUp8szQNr6318OrLn+s
+ fOHQ==
+X-Gm-Message-State: AOAM5329z2uhIf3SBeaEWCPJAFuLqoMsc+F5MY/2Mtu8Dqh6w98ocOcq
+ 41pEdaqw4GqDAc354LcstPeR0g==
+X-Google-Smtp-Source: ABdhPJyRIoBisU3R9NhxNq3NCGTwZyufmfX7+5K6YsdlIVWe9zxjxs8xvlNX8HjruMEKK68djXXAhg==
+X-Received: by 2002:aa7:d390:0:b0:416:16ad:2483 with SMTP id
+ x16-20020aa7d390000000b0041616ad2483mr14403667edq.122.1647116219795; 
+ Sat, 12 Mar 2022 12:16:59 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ n3-20020a1709061d0300b006da94efcc7esm4618621ejh.204.2022.03.12.12.16.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 12 Mar 2022 12:16:59 -0800 (PST)
+Message-ID: <b9ca6ee6-51bb-7aef-0b88-ccd1c9373ac7@mind.be>
+Date: Sat, 12 Mar 2022 21:16:58 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/4] package/poco: use poco component names in
- kconfig variables
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20220224152339.442421-1-giulio.benetti@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220224152339.442421-1-giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH] package/erlang-jiffy: bump version to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,113 +94,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For clarity, use the same names used in documentation, and component
-selection in configure. Valid poco component names are defined in:
-https://github.com/pocoproject/poco/blob/poco-1.11.1-release/components
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/poco/Config.in | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index df3d3cbc66..79ffac741d 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -29,10 +29,10 @@ if BR2_PACKAGE_POCO
- comment "poco components"
- 
- config BR2_PACKAGE_POCO_CPP_PARSER
--	bool "cpp_parser"
-+	bool "CppParser"
- 
- config BR2_PACKAGE_POCO_CRYPTO
--	bool "crypto"
-+	bool "Crypto"
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_OPENSSL
- 
-@@ -40,58 +40,58 @@ config BR2_PACKAGE_POCO_DATA
- 	bool
- 
- config BR2_PACKAGE_POCO_DATA_MYSQL
--	bool "mysql"
-+	bool "Data/MySQL"
- 	depends on BR2_USE_MMU # mysql
- 	select BR2_PACKAGE_MYSQL
- 	select BR2_PACKAGE_POCO_DATA
- 
- config BR2_PACKAGE_POCO_DATA_SQLITE
--	bool "sqlite"
-+	bool "Data/SQLite"
- 	select BR2_PACKAGE_POCO_DATA
- 	select BR2_PACKAGE_SQLITE
- 
- config BR2_PACKAGE_POCO_JSON
--	bool "json"
-+	bool "JSON"
- 
- config BR2_PACKAGE_POCO_JWT
--	bool "jwt"
-+	bool "JWT"
- 	select BR2_PACKAGE_POCO_CRYPTO
- 	select BR2_PACKAGE_POCO_JSON
- 
- config BR2_PACKAGE_POCO_MONGODB
--	bool "mongodb"
-+	bool "MongoDB"
- 	select BR2_PACKAGE_POCO_NET
- 
- config BR2_PACKAGE_POCO_NET
--	bool "net"
-+	bool "Net"
- 
- config BR2_PACKAGE_POCO_NETSSL_OPENSSL
--	bool "netssl_openssl"
-+	bool "NetSSL_OpenSSL"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_POCO_CRYPTO
- 	select BR2_PACKAGE_POCO_NET
- 	select BR2_PACKAGE_POCO_UTIL
- 
- config BR2_PACKAGE_POCO_PDF
--	bool "pdf"
-+	bool "PDF"
- 	select BR2_PACKAGE_POCO_JSON
- 	select BR2_PACKAGE_POCO_UTIL
- 	select BR2_PACKAGE_POCO_XML
- 
- config BR2_PACKAGE_POCO_REDIS
--	bool "redis"
-+	bool "Redis"
- 	select BR2_PACKAGE_POCO_NET
- 
- config BR2_PACKAGE_POCO_UTIL
--	bool "util"
-+	bool "Util"
- 	select BR2_PACKAGE_POCO_XML
- 
- config BR2_PACKAGE_POCO_XML
--	bool "xml"
-+	bool "XML"
- 	select BR2_PACKAGE_EXPAT
- 
- config BR2_PACKAGE_POCO_ZIP
--	bool "zip"
-+	bool "Zip"
- 	select BR2_PACKAGE_POCO_NET
- 	select BR2_PACKAGE_POCO_UTIL
- 	select BR2_PACKAGE_POCO_XML
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Ck9uIDI0LzAyLzIwMjIgMTY6MjMsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IFNpZ25lZC1vZmYt
+Ynk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29t
+PgoKIMKgQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCiDCoFJlZ2FyZHMsCiDCoEFybm91dAoK
+PiAtLS0KPiAgIHBhY2thZ2UvZXJsYW5nLWppZmZ5L2VybGFuZy1qaWZmeS5oYXNoIHwgMiArLQo+
+ICAgcGFja2FnZS9lcmxhbmctamlmZnkvZXJsYW5nLWppZmZ5Lm1rICAgfCAyICstCj4gICAyIGZp
+bGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL2VybGFuZy1qaWZmeS9lcmxhbmctamlmZnkuaGFzaCBiL3BhY2thZ2UvZXJs
+YW5nLWppZmZ5L2VybGFuZy1qaWZmeS5oYXNoCj4gaW5kZXggOTNjNWUxZjhjOC4uZjE3MmQxNDc2
+ZSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2VybGFuZy1qaWZmeS9lcmxhbmctamlmZnkuaGFzaAo+
+ICsrKyBiL3BhY2thZ2UvZXJsYW5nLWppZmZ5L2VybGFuZy1qaWZmeS5oYXNoCj4gQEAgLTEsMyAr
+MSwzIEBACj4gICAjIExvY2FsbHkgY29tcHV0ZWQKPiAtc2hhMjU2ICA0NWMyMjRhZmUwZWEyZDNl
+Y2UzOWUyMjdmMDFmNTU4NWFkNTNiOGI5MWQyZDY5MjRmOWY1MDU0ODg3NGFlODc5ICBlcmxhbmct
+amlmZnktMS4wLjkudGFyLmd6Cj4gK3NoYTI1NiAgYTk5OTM1MWQ5NTZkM2VkMTBjMzNhNmRkN2U5
+NDM1ZTY3NGU1MTliNWI4MmE0NmQ2MDM2MWFmZGI4MzA2MmZkOCAgZXJsYW5nLWppZmZ5LTEuMS4x
+LnRhci5nego+ICAgc2hhMjU2ICAwZmE4YWZhZDJmMDJjMDg4NTBhMTZlMzZmZTU1Mzc2ZWUxOTcz
+MmIzYTExNmEwMjA3ZjJhNzNjODU3Nzc3YTQ5ICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvZXJsYW5nLWppZmZ5L2VybGFuZy1qaWZmeS5tayBiL3BhY2thZ2UvZXJsYW5nLWppZmZ5L2Vy
+bGFuZy1qaWZmeS5tawo+IGluZGV4IGNkOTQ2MzI5NjIuLmRlMmU0NzQ5ZmIgMTAwNjQ0Cj4gLS0t
+IGEvcGFja2FnZS9lcmxhbmctamlmZnkvZXJsYW5nLWppZmZ5Lm1rCj4gKysrIGIvcGFja2FnZS9l
+cmxhbmctamlmZnkvZXJsYW5nLWppZmZ5Lm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICAjCj4gICAj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAgCj4gLUVSTEFOR19KSUZGWV9WRVJTSU9OID0gMS4w
+LjkKPiArRVJMQU5HX0pJRkZZX1ZFUlNJT04gPSAxLjEuMQo+ICAgRVJMQU5HX0pJRkZZX1NJVEUg
+PSAkKGNhbGwgZ2l0aHViLGRhdmlzcCxqaWZmeSwkKEVSTEFOR19KSUZGWV9WRVJTSU9OKSkKPiAg
+IEVSTEFOR19KSUZGWV9MSUNFTlNFID0gTUlUIChjb3JlKSwgXAo+ICAgCUJTRC0zLUNsYXVzZSAo
+R29vZ2xlIGRvdWJsZSBjb252ZXJzaW9uIGxpYnJhcnkpLCBcCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
