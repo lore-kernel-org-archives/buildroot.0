@@ -1,89 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E10C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 20:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF9D4C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 20:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3429240183;
-	Sat, 12 Mar 2022 20:34:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 785BD8261C;
+	Sat, 12 Mar 2022 20:36:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZMOLpvuqiBzF; Sat, 12 Mar 2022 20:34:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r1_E5gK8XqAG; Sat, 12 Mar 2022 20:36:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9CF6404B2;
-	Sat, 12 Mar 2022 20:34:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C107813ED;
+	Sat, 12 Mar 2022 20:36:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E73B1BF3DD
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:34:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 59DB71BF3DD
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 79C7A40490
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:34:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46AD140486
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 20:36:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NmlzjjUEwkAZ for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 20:34:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D988240486
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 20:34:12 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id c20so14914367edr.8
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 12:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Uepfj3Bd4ld7Oi7YLa6cWyePZYtFmWXOU2M7ak/Ew3I=;
- b=fUyhpJb0myXq+qixQhJNjIe99DL31nOGhlVdnD0FFxHel2+QHuWOaC2gHR1bEicN22
- AExOaiZoPORbGK0R60OJgxiy2ZS9oZnqu0lFoNEqeWRZ8sSbfhms4N0/FNwYgxreGl3H
- HF0QBCbOiEh3jMAKgMhZCOqgxiw3rIMsehQhdb7mVFrYhKOb3BvLCqQn5mnPjdgKiWhy
- ZgoRKetw8XIRw9luzSTR9jeRulMTBCxWxsUU1ezw5cbhK4MgvTOP8iAkg1oR/x9DE52o
- mBVER4nwAVumAyT7539VlNOklv5HDMNV782juKgBC2zSK9OlVFbEY2YbCInaijl4UB70
- az2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Uepfj3Bd4ld7Oi7YLa6cWyePZYtFmWXOU2M7ak/Ew3I=;
- b=30T9o66qLReSxDMl56GKiAzT3KfPUJcEkKXfqrqTFknsidvU3Lm+yfsYda0tet2FtW
- 1dLl3PXhX5ivFvszn5C2aR1astTdVfxBtzltA7jPR29kAFS/G4FXGTPNsFFYOScasdWH
- ddqbXn55mRIXd4hf6bvtrGkcHCexlyLxQN1Na4xGc2O24EKzzPo1mOeMQ/kn34WW34t3
- 3MfET4qj8N2AogvXW5Hy2LdBY7VG5cpaeOgMhZo6Ol+IXoE96kVjohDFwcm6rRmeR9/6
- JEgsZ5bHq4NzeZvB/ZEmJ55ckt0hLE03GSPqOPs/ojC3OxwCt/bL0B2RRvXw647Wtp7h
- apqQ==
-X-Gm-Message-State: AOAM532U6ZLS8Clw744junCMT6OwBzTfadizPhBw7QPHO/yrn0UZMyEn
- SC1tu0JhYFwYlGOQ2ezeGuNEkA==
-X-Google-Smtp-Source: ABdhPJw4WdBt6JwP1xq8OwW+FrxL6ewsMFbYokUK2QnYyFH9tz5Mw+rAJbUn/D1B2KKwPbXigtUjNQ==
-X-Received: by 2002:a05:6402:27cb:b0:416:c67f:c03d with SMTP id
- c11-20020a05640227cb00b00416c67fc03dmr10501210ede.316.1647117250839; 
- Sat, 12 Mar 2022 12:34:10 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- a21-20020a1709062b1500b006da814b08c6sm4591974ejg.94.2022.03.12.12.34.10
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Mar 2022 12:34:10 -0800 (PST)
-Message-ID: <08edbbcf-8be3-4554-0d54-0dd349caa2ff@mind.be>
-Date: Sat, 12 Mar 2022 21:34:09 +0100
+ with ESMTP id lejfcOzuq9hs for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 20:36:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2379840183
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 20:36:33 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:91a3:d0c0:1a06:f60f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id AECEE7802D1;
+ Sat, 12 Mar 2022 21:36:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1647117392;
+ bh=r44I7JL6Ua4t4KeALHsj2UtsauN5qX3vQq3pmgmNZDE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=eWIHgi+Y4seef3pJp/XTiofMRZgwzfQFppzNU0GBchTz20udOEY/yE2TXEqNGDT1i
+ 3zT6afzccO7B8awIevOHR2V+t9ofTd2v6gMd16B+meiKRS/dCxd+4TChVDnA1Jq1FR
+ 8jjJg7S1SkRX/aEEZtwkPBow+Zwn3NVRxjKoQCpZxyI6oySnj/b8Ee2iBpYW+848ys
+ 8D5i2Pgi8d+l0E1MZh4A89TYrQvymwSNxQp1BuUSl4MSzX7l0sTcL8wT5JmmcEBWJA
+ hvfwHDmM1LSDXfMZJDdT2m7hJkF94JV4I0O3Mm6uhi8y8sOR1/qksh8yVinHtdTG3L
+ 7fsCNKhTlSZBQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 12 Mar 2022 21:36:27 +0100
+Date: Sat, 12 Mar 2022 21:36:27 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Message-ID: <20220312203627.GM283544@scaer>
+References: <20220311123636.13415-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-GB
-To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-References: <20220224154513.220976-1-romain.naour@gmail.com>
- <20220224154513.220976-2-romain.naour@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220224154513.220976-2-romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCHv2 2/2] package/rust: install rustc and
- rust-std built by Buildroot
+Content-Disposition: inline
+In-Reply-To: <20220311123636.13415-1-clement.leger@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 0/7] boot/optee-os: support new optee-os
+ 3.16.0 build dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,125 +72,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Etienne Carriere <etienne.carriere@linaro.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 24/02/2022 16:45, Romain Naour wrote:
-> The test TestRust is currently broken with ripgrep package with
-> the following error:
-> 
-> error[E0514]: found crate `core` compiled by an incompatible version of rustc
->    |
->    = help: please recompile that crate using this compiler (rustc 1.58.1) (consider running `cargo clean` first)
->    = note: the following crate versions were found:
->            crate `core` compiled by rustc 1.58.1 (db9d1b20b 2022-01-20): TestRust/host/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-6cfcec236d576603.rlib
-> 
-> error[E0514]: found crate `std` compiled by an incompatible version of rustc
-> 
-> The problem is not really a cross-compilation issue (we are building
-> for an armv7 target on x86_64 host) but a problem with rust-std libraries
-> (rlib).
-> 
-> We can notice that "rustc 1.58.1 (db9d1b20b 2022-01-20)" is the same
-> version as the prebuilt rustc used to bootstrap the build:
-> 
-> TestRust/host/bin/rustc --version
-> rustc 1.58.1
-> 
-> TestRustBin/host/bin/rustc --version
-> rustc 1.58.1 (db9d1b20b 2022-01-20)
-> 
-> Indeed we are using host-rust-bin to bootstrap the host-rust compiler
-> package built by Buildroot. The problem is that the
-> libcore-6cfcec236d576603.rlib file come from host-rust-bin (rust-std)
-> and is not removed before installing host-rust built by Buildroot.
-> 
-> We actually spent a lot of time to build host-rust with rust-std
-> and forget to install this important library HOST_DIR.
-> 
-> Looking at the host-rust build directory we can notice two installer
-> script "install.sh" (the same scripts used to install host-rust-bin):
-> 
-> TestRust/build/host-rust-1.58.1/build/tmp/tarball/rust/x86_64-unknown-linux-gnu/rust-1.58.1-x86_64-unknown-linux-gnu/install.sh
-> TestRust/build/host-rust-1.58.1/build/tmp/tarball/rust-std/armv7-unknown-linux-gnueabihf/rust-std-1.58.1-armv7-unknown-linux-gnueabihf/install.sh
-> 
-> The "tarball" directory is generated by the "python x.py dist" during
-> the install step, we have to keep it.
-> 
-> Replace "python x.py install" by theses two install scripts.
-> Installing rust-std with the install.sh script replace the rust-std
-> libraries installed by host-rust-bin.
-
-  Excellent description, thanks. It's almost Yann-level :-)
-
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/2116202544
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->   package/rust/rust.mk | 23 ++++++++++++++++++++++-
->   1 file changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> index 46487fe4b7..4a6b04dc8c 100644
-> --- a/package/rust/rust.mk
-> +++ b/package/rust/rust.mk
-> @@ -67,9 +67,30 @@ define HOST_RUST_BUILD_CMDS
->   	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py build
->   endef
->   
-> +HOST_RUST_INSTALL_COMMON_OPTS = \
-> +	--prefix=$(HOST_DIR) \
-> +	--disable-ldconfig
-> +
-> +HOST_RUST_INSTALL_OPTS = \
-
-  This variable is used only once, which makes it not very useful. I instead 
-added the --components directly in HOST_RUST_INSTALL_RUSTC. I also renamend the 
-INSTALL_COMMON_OPTS to INSTALL_OPTS since there's only one variable now.
-
-> +	$(HOST_RUST_INSTALL_COMMON_OPTS) \
-> +	--components=rustc,cargo,rust-std-$(RUSTC_HOST_NAME)
-> +
-> +define HOST_RUST_INSTALL_RUSTC
-> +	(cd $(@D)/build/tmp/tarball/rust/$(RUSTC_HOST_NAME)/rust-$(RUST_VERSION)-$(RUSTC_HOST_NAME); \
-
-  The parenthesis are not necessary - make already starts a sub-shell for every 
-line, there's no need to add another shell level. We still have them in a lot of 
-.mk files, but we try to avoid adding them.
-
-
-  Applied to master with those two changes, thanks.
-
-  Regards,
-  Arnout
-
-> +		./install.sh $(HOST_RUST_INSTALL_OPTS))
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
-> +define HOST_RUST_INSTALL_LIBSTD_TARGET
-> +	(cd $(@D)/build/tmp/tarball/rust-std/$(RUSTC_TARGET_NAME)/rust-std-$(RUST_VERSION)-$(RUSTC_TARGET_NAME); \
-> +		./install.sh $(HOST_RUST_INSTALL_COMMON_OPTS))
-> +endef
-> +endif
-> +
->   define HOST_RUST_INSTALL_CMDS
->   	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py dist
-> -	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py install
-> +	$(HOST_RUST_INSTALL_RUSTC)
-> +	$(HOST_RUST_INSTALL_LIBSTD_TARGET)
->   endef
->   
->   $(eval $(host-generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q2zDqW1lbnQsIEFsbCwKCk9uIDIwMjItMDMtMTEgMTM6MzYgKzAxMDAsIENsw6ltZW50IEzDqWdl
+ciB2aWEgYnVpbGRyb290IHNwYWtlIHRodXNseToKPiBOZXdlciB2ZXJzaW9ucyBvZiBvcHRlZS1v
+cyAoPj0gMy4xNi4wKSB1c2VzIHB5dGhvbi1jcnlwdG9ncmFwaHkgaW5zdGVhZAo+IG9mIHB5dGhv
+bi1weWNyeXB0b2RvbWV4IHRvIGJ1aWxkLiBUaGlzIHNlcmllcyBhZGRzIHN1cHBvcnQgdG8gYnVp
+bGQKPiBob3N0LXB5dGhvbi1jcnlwdG9ncmFwaHkgYW5kIHVzZXMgaXQgaW4gb3B0ZWUtb3MgcGFj
+a2FnZSB0byBidWlsZCB0aGUKPiAzLjE2LjAgdmVyc2lvbi4gQWxzbyBidW1wIG9wdGVlLWNsaWVu
+dCwgb3B0ZWUtYmVuY2htYXJrLCBvcHRlZS1leGFtcGxlcwo+IGFuZCBvcHRlZS10ZXN0IHdoaWNo
+IG5lZWRzIHRvIGJlIGFsaWduZWQgd2l0aCBvcHRlZS1vcyB2ZXJzaW9uLgoKRm9sbG93aW5nIHRo
+ZSBpbXBvcnRhbnQgcmV2aWV3IGZyb20gVGhvbWFzIG9uIHBhdGNoIDEsIEkndmUgbWFya2VkIHRo
+aXMKc2VyaWVzIGFzIGNoYW5nZXMgcmVxdWVzdGVkIGluIFBhdGNod29yay4KClBsZWFzZSwgY2Fu
+IHlvdSBhZGQgbWUgaW4gQ2Mgb2YgcGF0Y2ggMSBpbiBhIGZ1dHVyZSByZXNwaW4gKEkgdG9vIG1h
+eQpoYXZlIHRvIGRlYWwgd2l0aCBweXRob24tY3J5cHRvZ3JhcGh5IG9uIHRoZSBob3N0IGluIHNo
+b3J0IG9yZGVyKS4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLS0KPiBDaGFuZ2VzIGlu
+IHYzOgo+IC0gRml4IGF1dGhvcnNoaXAgZm9yIGNvbW1pdHMgdGhhdCB3ZXJlIGNvcGllZCBmcm9t
+IEV0aWVubmUgb25lcy4KPiAtIEZpeCBwYWNrYWdlIFVSTCBmb3Igb3B0ZWUtb3MKPiAtIEFkZGVk
+IEFja2VkLWJ5IEV0aWVubmUgQ2FycmllcmUKPiAKPiBDaGFuZ2VzIGluIHYyOgo+IC0gQnVtcCBv
+cHRlZS1jbGllbnQsIG9wdGVlLWJlbmNobWFyaywgb3B0ZWUtZXhhbXBsZXMgYW5kIG9wdGVlLXRl
+c3QKPiAKPiBDbMOpbWVudCBMw6lnZXIgKDcpOgo+ICAgcGFja2FnZS9weXRob24tY3J5cHRvZ3Jh
+cGh5OiBlbmFibGUgaG9zdCBwYWNrYWdlCj4gICBib290L29wdGVlLW9zOiBhZGQgc3VwcG9ydCB0
+byBidWlsZCB3aXRoIHB5dGhvbi1jcnlwdG9ncmFwaHkKPiAgIGJvb3Qvb3B0ZWUtb3M6IGJ1bXAg
+dG8gdmVyc2lvbiAzLjE2LjAKPiAgIHBhY2thZ2Uvb3B0ZWUtdGVzdDogYnVtcCB0byB2ZXJzaW9u
+IDMuMTYuMAo+ICAgcGFja2FnZS9vcHRlZS1leGFtcGxlczogYnVtcCB0byB2ZXJzaW9uIDMuMTYu
+MAo+ICAgcGFja2FnZS9vcHRlZS1jbGllbnQ6IGJ1bXAgdG8gdmVyc2lvbiAzLjE2LjAKPiAgIHBh
+Y2thZ2Uvb3B0ZWUtYmVuY2htYXJrOiBidW1wIHRvIHZlcnNpb24gMy4xNi4wCj4gCj4gIGJvb3Qv
+b3B0ZWUtb3MvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTMgKysrKysr
+KysrKystLQo+ICBib290L29wdGVlLW9zL29wdGVlLW9zLmhhc2ggICAgICAgICAgICAgICAgICAg
+ICAgICB8ICA0ICsrLS0KPiAgYm9vdC9vcHRlZS1vcy9vcHRlZS1vcy5tayAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgNyArKysrKystCj4gIHBhY2thZ2Uvb3B0ZWUtYmVuY2htYXJrL29wdGVl
+LWJlbmNobWFyay5oYXNoICAgICAgIHwgIDQgKystLQo+ICBwYWNrYWdlL29wdGVlLWJlbmNobWFy
+ay9vcHRlZS1iZW5jaG1hcmsubWsgICAgICAgICB8ICAyICstCj4gIHBhY2thZ2Uvb3B0ZWUtY2xp
+ZW50L29wdGVlLWNsaWVudC5oYXNoICAgICAgICAgICAgIHwgIDQgKystLQo+ICBwYWNrYWdlL29w
+dGVlLWNsaWVudC9vcHRlZS1jbGllbnQubWsgICAgICAgICAgICAgICB8ICAyICstCj4gIHBhY2th
+Z2Uvb3B0ZWUtZXhhbXBsZXMvb3B0ZWUtZXhhbXBsZXMuaGFzaCAgICAgICAgIHwgIDQgKystLQo+
+ICBwYWNrYWdlL29wdGVlLWV4YW1wbGVzL29wdGVlLWV4YW1wbGVzLm1rICAgICAgICAgICB8ICAy
+ICstCj4gIHBhY2thZ2Uvb3B0ZWUtdGVzdC9vcHRlZS10ZXN0Lmhhc2ggICAgICAgICAgICAgICAg
+IHwgIDQgKystLQo+ICBwYWNrYWdlL29wdGVlLXRlc3Qvb3B0ZWUtdGVzdC5tayAgICAgICAgICAg
+ICAgICAgICB8ICAyICstCj4gIHBhY2thZ2UvcHl0aG9uLWNyeXB0b2dyYXBoeS9weXRob24tY3J5
+cHRvZ3JhcGh5Lm1rIHwgIDcgKysrKysrKwo+ICAxMiBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRp
+b25zKCspLCAxNyBkZWxldGlvbnMoLSkKPiAKPiAtLSAKPiAyLjM0LjEKPiAKPiBfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4t
+LS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
+LS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJ
+QkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUg
+IERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMz
+IDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBc
+ZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxf
+IHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0t
+LS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
