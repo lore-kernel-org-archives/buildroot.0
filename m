@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B637C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 16:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA6CEC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 16:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DD43410E1;
-	Sat, 12 Mar 2022 16:59:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC648410D0;
+	Sat, 12 Mar 2022 16:59:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B1ocbolJ88Hn; Sat, 12 Mar 2022 16:59:17 +0000 (UTC)
+	with ESMTP id wauS_dWfUU8P; Sat, 12 Mar 2022 16:59:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3420040886;
-	Sat, 12 Mar 2022 16:59:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 672091BF279
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:59:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5B07410D4;
+	Sat, 12 Mar 2022 16:59:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 04ED81BF279
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56AF540886
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:59:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01A8160E52
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:59:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KH5UFPAqWztF for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 16:59:13 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GHyssn_jPAYN for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 16:59:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
  [IPv6:2a00:1450:4864:20::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 89D9440876
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 16:59:13 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id yy13so25415586ejb.2
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 08:59:13 -0800 (PST)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 489BC60899
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 16:59:32 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id qt6so25330029ejb.11
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 08:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/1jQp7joVl5k2jlKwjha7+tF6lvTrbVxtIlIG3RA9WY=;
- b=HzVJrIG57wlXS9yGmv9K5Dj0SmofekftcYnRVUjYVBUiIKwE9+ofLW6j/XSqKQuEqb
- OL6OJkTPMZxLk4cnWwo5x84Z+z8dOny5UbZn0JNfLugiEokIF8fRalW4UsfxMc89QRiG
- tIxgOg3hunIdzADPfqzP+3IQo4LAR62bIgFpHJo2c7O7h18jH2ExhBLYTVpSZqvR7sPR
- MVg98s+SovqS+4CdHcLz3HbW7OQWK0VSxOfrI6TS0DrQh3ZUyfoI0djy1hrag9iK7aQX
- Sd2v5vTKg3C+fRfrJeQG6GVljHA+/m80Z0Pf8X8R1ItAPQzjNhND3H4j61FNJ8Mmu2iX
- 1zKw==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=X2gYQNiCgiDv3GB39guurabt9Dq/5qH3mg1lX+1NAWQ=;
+ b=ZLDLCyFsyOpxckY3bNF3zXrW6zxn5XNHWUrC/KOIX4RxCF+TiiV7RLKrJYzJiBO67S
+ /lX9piwcwNiTNuIf6S90LjzsuxLyxpLZHXZ7UJpl0gmSgtME7WKpZMaPPky5JQqCISJq
+ TcYbgUuXBcaDmRjZPf9oin1/GfzgsI+2yAP3vbh+/J9h8vg9ow41+JlS8lGFTJKN3LGU
+ qOwOt7YALLkInTLK8GZZVw4LNW0Iqu/fszA93zXywvo+ltiHvX0e/7z6skfYxsmz58Bz
+ jzjmYO7wNzc83hRiDB0vnUzTUvOp0EvaGi9vMDKp83hr7MqB32j5fbGvNnMXf56oh1vo
+ Vv8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/1jQp7joVl5k2jlKwjha7+tF6lvTrbVxtIlIG3RA9WY=;
- b=JpyFRooY++DFKwHPW/c6NYyARLiahlNwtU+Gdx92LkW3wMaMmWRuk+tvLndrHOmzYU
- gaCdwJYxpYmsFj6QRHRwDav1sX+Myd+ldVcDjBFVTuLvDfs1hykgfdDwZDcEZ38g1LVd
- CM5FOT7w7ojMxJJwf8FmrNy1u8be9TngUDz9qQwMcDayxmfDXqjvtavqpJT4KIOiRI/b
- fhvV3qkkv5mw35bTCvmATFLEFIm3x7vYtWaFJ6ScgA42KnBp9YHAuyR68xtnBypYXyqE
- kkrliWgzPmXJYoc7ZTNktasDPV2tb7xdbI0k2ZFawxOvmmkQx+KW9z6TNIthAFBE9X17
- /v7A==
-X-Gm-Message-State: AOAM533aGnu7yL4XQ56N9f4z7VZmM/njz0Kf5CAwZSH5wOKa3DijpWJP
- PkykGCWcBTXdQYYoy83Mb+HvYw==
-X-Google-Smtp-Source: ABdhPJzw66Ra6H6Inu5e5E3PlTjt7o7WXF5KSKlUuuLrMDsJ7GXm+1j+FSmi7PXZd01YvEiCrmEy/A==
-X-Received: by 2002:a17:906:9b94:b0:6db:67b:a6d6 with SMTP id
- dd20-20020a1709069b9400b006db067ba6d6mr12520515ejc.367.1647104351813; 
- Sat, 12 Mar 2022 08:59:11 -0800 (PST)
+ bh=X2gYQNiCgiDv3GB39guurabt9Dq/5qH3mg1lX+1NAWQ=;
+ b=iefPh8ODjDeHLLdooejoPU8zw9fROvyaDFp9gf8z2Znj5kW2zhoxm/4e8B6BYPJClS
+ edApJ7+uLUjn6stCekZwITtc3IaIqQ1fmr0p7FTBxlGZo8DE0DP3Frs1ceO9DSa0L/O9
+ xWLdpXGla8riT8buA3InbNoJ2EzPM/gGk+iYaa1yScHpR+esxGO72IZnJv8HsREkze+9
+ xpuU6HAxDrp2v6XXSnkmyRKVl7/Sbth1L39AxaeIIDYm4fKcp9LWK/SMLspyf3ETSXUH
+ dLqX37cJyKmlIq6Merc+Hw+BPWQQyEVJ5ha+9sHEwl7I7Q/TQIF5+bHduRRBf46F9D2m
+ Xjrg==
+X-Gm-Message-State: AOAM5317s53043M47bauYrNOHUm2xS4b0V7JfXTWim4OIg+NQKl1RtOB
+ qbuh2pBA+Vxjv6Q2uIIouvBwX+SinF0zZQ==
+X-Google-Smtp-Source: ABdhPJx7Jjqi1rKPheiMNNi8kn7NR+F4Qw8RQlnpXsqZXxUYP/vUHoYwQ8x/EW3WN91vYHGKfYlR8w==
+X-Received: by 2002:a17:906:53c3:b0:6cf:742d:84de with SMTP id
+ p3-20020a17090653c300b006cf742d84demr12533896ejo.576.1647104370497; 
+ Sat, 12 Mar 2022 08:59:30 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- u10-20020a50d94a000000b004131aa2525esm5112154edj.49.2022.03.12.08.59.11
+ t7-20020a1709063e4700b006da6357b1c0sm4512178eji.196.2022.03.12.08.59.29
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Mar 2022 08:59:11 -0800 (PST)
-Message-ID: <9d00d702-8cb5-7738-364a-c4c4e967e88a@mind.be>
-Date: Sat, 12 Mar 2022 17:59:10 +0100
+ Sat, 12 Mar 2022 08:59:30 -0800 (PST)
+Message-ID: <94f4ba32-a06a-671e-1bb5-a59a8b5587c6@mind.be>
+Date: Sat, 12 Mar 2022 17:59:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20220218173613.315794-1-giulio.benetti@benettiengineering.com>
- <20220218173613.315794-2-giulio.benetti@benettiengineering.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220218190403.475643-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220218173613.315794-2-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] package/trace-cmd: bump to version 2.9.7
+In-Reply-To: <20220218190403.475643-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-zattoo: bump
+ version to 19.7.11-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre Floury <pierre.floury@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,8 +102,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 18/02/2022 18:36, Giulio Benetti wrote:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On 18/02/2022 20:04, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
 
@@ -112,34 +111,32 @@ On 18/02/2022 18:36, Giulio Benetti wrote:
   Arnout
 
 > ---
->   package/trace-cmd/trace-cmd.hash | 2 +-
->   package/trace-cmd/trace-cmd.mk   | 2 +-
+>   package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+>   package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
 >   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-> index 00cecc7828..4d39e4d5ea 100644
-> --- a/package/trace-cmd/trace-cmd.hash
-> +++ b/package/trace-cmd/trace-cmd.hash
-> @@ -1,5 +1,5 @@
+> diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> index ac4960df92..0b88d5c747 100644
+> --- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> +++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> @@ -1,3 +1,3 @@
 >   # Locally computed
-> -sha256  45924a763376a700221f64b4034f87263e4038ec88b120a0abfb5743d051d068  trace-cmd-v2.9.6.tar.gz
-> +sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
->   sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
->   sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
->   sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-> diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-> index fe0cd71ec4..52bb99036c 100644
-> --- a/package/trace-cmd/trace-cmd.mk
-> +++ b/package/trace-cmd/trace-cmd.mk
+> -sha256  8cc02c4627b5108e39bb7b6a6f56f7ba5debbb1adf982c4f23395944aa7d2c8e  kodi-pvr-zattoo-19.7.10-Matrix.tar.gz
+> +sha256  07d96b1b0c3b464c0bf02279fa8cab9ccdf675344129f3a970b14bafce225fb4  kodi-pvr-zattoo-19.7.11-Matrix.tar.gz
+>   sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+> diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> index 7a3b230e8b..95c5de0925 100644
+> --- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> +++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -TRACE_CMD_VERSION = 2.9.6
-> +TRACE_CMD_VERSION = 2.9.7
->   TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
->   TRACE_CMD_SITE = \
->   	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+> -KODI_PVR_ZATTOO_VERSION = 19.7.10-Matrix
+> +KODI_PVR_ZATTOO_VERSION = 19.7.11-Matrix
+>   KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+>   KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+>   KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
