@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1BD0C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 19:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 677BDC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 19:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA6CC60E6A;
-	Sat, 12 Mar 2022 19:43:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16BA4403ED;
+	Sat, 12 Mar 2022 19:43:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wDgJgI38Eqz6; Sat, 12 Mar 2022 19:42:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hR-jnEJuh4kw; Sat, 12 Mar 2022 19:43:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAB8E60E60;
-	Sat, 12 Mar 2022 19:42:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C63D1BF3E8
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 19:42:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CF6040363;
+	Sat, 12 Mar 2022 19:43:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A7ED21BF3E8
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 19:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37FBC40486
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 19:42:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9775B40321
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 19:43:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Azdgs2tgIu-F for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 19:42:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pbZZm13nNZNU for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 19:43:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 199DB4000B
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 19:42:55 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id bi12so25973226ejb.3
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 11:42:55 -0800 (PST)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE385402F3
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 19:43:09 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id y8so9765911edl.9
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 11:43:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=8pyc3PkHR4ydd4GmDWYPXI+qU8cEd5j9Soa63kqsApc=;
- b=MOPNOuDXui8RS/NrZKVoRngo0vMxsZlbbxd0Is+mhuLY2BvcA253SfpfVt4oWyNcVQ
- SRP+99EE3cOFC9bbLetUR8vnKXIheJFtIjmnJfMi62vg7cRsdEq2pdYJFKZqg0IMG1Zh
- R8rIlYzx6QcKBaEKwZvl0C375zfxQuKXUvIuO1gDXAKuVFIv8Lw/iM5uEGeYB3Rvnqgb
- 9dLNsqmrDgUhR6rguM8FZAVHXIHyDdZr7xpYxcBwLMw5DZ5pBPEk4c4bhoWfxfbiAYEX
- sEvhg6U3i8IeujiIK5M4caKulRUPvKwTB+xYFXlYa8/rDZ7M1UbEC+8ccws4HUxogsEr
- uaVQ==
+ bh=EzwBNbbSVj1spui+D7SoL58v2pKLtADNElE/ab5ZAJQ=;
+ b=P73ekXJyYJAxVksYepm48J+v19iRIs98Sra2eRdqLKa3qm4BekpBqwXDjFFk06RtEU
+ v1CvzyA9z7USctwNviSxSOqkRwYhTZV6WtOnuvkKXYIySxzjHCwy7a6nqqz+5yyJVP3T
+ RD2aVgcEa1nwG62VUjEJX+LFtmils3oAcQoD1gfem+8sQjK3k5ja/OHeAQob5AneDw9m
+ 9msk9e1YX3zGoKmUUo+1H2X7lVZ6XcplG21PbNptZYChIDTHkDwjusP76IOawf2HKpfq
+ 8oJMZ3GRnX00F8LQbn9cfmZUNr/lysF4G4kIf8Lp2XQlnK/je3sumHKpXAgiy6GLWBZn
+ vzCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=8pyc3PkHR4ydd4GmDWYPXI+qU8cEd5j9Soa63kqsApc=;
- b=jiWp//kg2qTi04PmTShEr8dhw7lg8ktrBLTVDPrAWfjCN2jycoNwMKZlEFJBvQweta
- 8/hyfGEH3bY+yq2DdZzN62LboTPBW2rAb1PPz4E/Jt5neYoBnMZQHvPJNzgE5ZZ+vO+f
- 6sMJ+T6y3SiIx8AyN+0LcZm+ie78OO6jrluk0vL8KtWgFYxPHq1dtebcc1No3o1ORkFu
- U41ur4RQv1REDLwAE5n9ZknqgrYmEjMtLrI1lGVNffF4nBCjwUy12EqWKCxuSXz4PxwX
- NelxQu5YBQf/l0vjWOafGh+BIGEntvlBAezdyeHPSEg2KMb1W8apdPke5KXVJih+OlSW
- Nmdw==
-X-Gm-Message-State: AOAM532NQce8fu3cXRJK/lHd3HP4rX2KK4YgdkdogMKQG4KjM7w3QmXw
- hktwKdRd1nbsNYaEyIRTl0/jjw==
-X-Google-Smtp-Source: ABdhPJwD+WFbu5tMxSxsjM7wRBC2gKZC570KvIqd6ykDBLJ1GoO7z3nW9u6QmOufX8bl38qZt+xJxA==
-X-Received: by 2002:a17:907:6d1d:b0:6d8:9fc8:b1e1 with SMTP id
- sa29-20020a1709076d1d00b006d89fc8b1e1mr12974306ejc.466.1647114174166; 
- Sat, 12 Mar 2022 11:42:54 -0800 (PST)
+ bh=EzwBNbbSVj1spui+D7SoL58v2pKLtADNElE/ab5ZAJQ=;
+ b=O7rSd7sVwpfiltlT1RiTmcHococlGPDRQlfnaJ11dqxI3MUXqYbzpWYgux+qRU/POj
+ IXE/9CLrMEiSqpnHlaiVbKxqiREn/hbAAUykoqnx0OdhXDg92qbYqK+JWbrYuEvFJsuo
+ LaCxg1LEUbEXjCI2aF28EG7AYyKuBKbFjiFbhWQIdjUyi0s4h0hSsoOat5+0qt9qnGF7
+ I3TUbCdcW+v1F6+CDoMA1I9wf+B+ghOGGMnkDbC8qIbLCiYtVgQPijOruG34rNhFvv/L
+ v6TovZpHA1xopCRJ+dP7pyHSeRsnDh9SbiilRQ0m4+ubzO2zVOb1qY8cd03QC8l9911S
+ 2h0Q==
+X-Gm-Message-State: AOAM533i/WlBXQdSI5csKhkyhNMe0afKIRputQhNmXQHKXTLvXZIEsuI
+ eN1P7tmb9p4uOsHlXv76bQ53feoEgGfCeQ==
+X-Google-Smtp-Source: ABdhPJxYQdJm0lURrmsZH82zYNPHpERtHmcaNKs3UIwViWwJFpt5Btl6fMSI8TEew1zdkfQSW/N7LQ==
+X-Received: by 2002:a05:6402:c0a:b0:416:4f23:ebdf with SMTP id
+ co10-20020a0564020c0a00b004164f23ebdfmr13820026edb.245.1647114187886; 
+ Sat, 12 Mar 2022 11:43:07 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- r14-20020a1709067fce00b006db0edb8a80sm4675177ejs.225.2022.03.12.11.42.53
+ p24-20020a1709061b5800b006da6435cedcsm4604260ejg.132.2022.03.12.11.43.07
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Mar 2022 11:42:53 -0800 (PST)
-Message-ID: <3c8878cb-cd8e-d09f-ca63-383b4a96c244@mind.be>
-Date: Sat, 12 Mar 2022 20:42:53 +0100
+ Sat, 12 Mar 2022 11:43:07 -0800 (PST)
+Message-ID: <40127387-dd75-3cd9-b0ea-00944c4b2f6e@mind.be>
+Date: Sat, 12 Mar 2022 20:43:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220222214931.447344-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220222214247.3163690-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220222214931.447344-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH/next 1/1] Revert "heimdal: disable parallel
- make"
+In-Reply-To: <20220222214247.3163690-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/duktape: bump to version
+ 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,32 +93,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ck9uIDIyLzAyLzIwMjIgMjI6NDksIEJlcm5kIEt1aGxzIHdyb3RlOgo+IFRoaXMgcmV2ZXJ0cyBj
-b21taXQgZjY5ODAxMjZmMjZjNjM0MjFkMDRhMzJiNjcxMGQ5ZTNhMzgwNDc2YS4KPgo+IFBhcmFs
-bGVsIG1ha2Ugd2FzIGRpc2FibGVkIGJhY2sgaW4gMjAxNzoKPiBodHRwczovL2dpdC5idWlsZHJv
-b3QubmV0L2J1aWxkcm9vdC9jb21taXQvP2lkPWY2OTgwMTI2ZjI2YzYzNDIxZDA0YTMyYjY3MTBk
-OWUzYTM4MDQ3NmEKPgo+IEJ1aWxkLXRlc3Qgd2l0aCAtajk5IHdhcyBzdWNjZXNzZnVsLgo+Cj4g
-U2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgoKIMKg
-QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCiDCoEl0J3MgdW5mb3J0dW5hdGUgdGhhdCB3ZSBj
-b3VsZG4ndCBpZGVudGlmeSB3aHkgaXQgd2FzIGZpeGVkLCBidXQgdGhlIAphdXRvYnVpbGRlcnMg
-d2lsbCBjb21wbGFpbiBpZiBpdCBpc24ndC4KCgogwqBSZWdhcmRzLAogwqBBcm5vdXQKCj4gLS0t
-Cj4gICBwYWNrYWdlL2hlaW1kYWwvaGVpbWRhbC5tayB8IDEgLQo+ICAgMSBmaWxlIGNoYW5nZWQs
-IDEgZGVsZXRpb24oLSkKPgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2hlaW1kYWwvaGVpbWRhbC5t
-ayBiL3BhY2thZ2UvaGVpbWRhbC9oZWltZGFsLm1rCj4gaW5kZXggY2U1MDljN2FmYS4uYThkODc1
-MzFlYyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2hlaW1kYWwvaGVpbWRhbC5tawo+ICsrKyBiL3Bh
-Y2thZ2UvaGVpbWRhbC9oZWltZGFsLm1rCj4gQEAgLTgsNyArOCw2IEBAIEhFSU1EQUxfVkVSU0lP
-TiA9IDcuNy4wCj4gICBIRUlNREFMX1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20vaGVpbWRhbC9o
-ZWltZGFsL3JlbGVhc2VzL2Rvd25sb2FkL2hlaW1kYWwtJChIRUlNREFMX1ZFUlNJT04pCj4gICBI
-T1NUX0hFSU1EQUxfREVQRU5ERU5DSUVTID0gaG9zdC1lMmZzcHJvZ3MgaG9zdC1uY3Vyc2VzIGhv
-c3QtcGtnY29uZgo+ICAgSEVJTURBTF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAtSEVJTURBTF9N
-QUtFID0gJChNQUtFMSkKPiAgICMgc3RhdGljIGJlY2F1c2Ugb2YgLWZQSUMgaXNzdWVzIHdpdGgg
-ZTJmc3Byb2dzIG9uIHg4Nl82NCBob3N0Cj4gICBIT1NUX0hFSU1EQUxfQ09ORl9PUFRTID0gXAo+
-ICAgCS0tZGlzYWJsZS1zaGFyZWQgXApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+
+
+On 22/02/2022 22:42, Fabrice Fontaine wrote:
+> Update hash of license file (update in year:
+> https://github.com/svaarala/duktape/commit/03d4d728f8365021de6955c649e6dcd05dcca99f)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/duktape/duktape.hash | 4 ++--
+>   package/duktape/duktape.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
+> index 4c55e39888..ef6f55aa9d 100644
+> --- a/package/duktape/duktape.hash
+> +++ b/package/duktape/duktape.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  96f4a05a6c84590e53b18c59bb776aaba80a205afbbd92b82be609ba7fe75fa7  duktape-2.6.0.tar.xz
+> -sha256  5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8  LICENSE.txt
+> +sha256  90f8d2fa8b5567c6899830ddef2c03f3c27960b11aca222fa17aa7ac613c2890  duktape-2.7.0.tar.xz
+> +sha256  c6b6659630ca6cb837afe982ecc79511bfca878b56296d628b02eb6f18789c29  LICENSE.txt
+> diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+> index 89a6e451f5..674c5e9323 100644
+> --- a/package/duktape/duktape.mk
+> +++ b/package/duktape/duktape.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -DUKTAPE_VERSION = 2.6.0
+> +DUKTAPE_VERSION = 2.7.0
+>   DUKTAPE_SOURCE = duktape-$(DUKTAPE_VERSION).tar.xz
+>   DUKTAPE_SITE = \
+>   	https://github.com/svaarala/duktape/releases/download/v$(DUKTAPE_VERSION)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
