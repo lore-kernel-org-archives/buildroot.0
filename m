@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6F8C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 16:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFBB5C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 16:07:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F4FA8175B;
-	Sat, 12 Mar 2022 16:03:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6269E60E52;
+	Sat, 12 Mar 2022 16:07:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1TzTxQvipryW; Sat, 12 Mar 2022 16:03:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7-tpW_xS5boV; Sat, 12 Mar 2022 16:07:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A698C8149E;
-	Sat, 12 Mar 2022 16:03:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 211ED1BF41A
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:03:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 764F360E4C;
+	Sat, 12 Mar 2022 16:07:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A82A71BF3FF
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 107948148D
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:03:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 910AB4092D
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:07:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CN38I73tn3rS for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 16:03:50 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gx_w2jPgTlmK for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 16:07:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B82C781470
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 16:03:50 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id p15so25187284ejc.7
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 08:03:50 -0800 (PST)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E15840928
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 16:07:00 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id qt6so25153164ejb.11
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 08:07:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=HLqaOK/MZv0gE/1AGC1QSyGTeAgnliEqQRB+osMeoaQ=;
- b=ZOGew7FnLsLt0iW5Lh61pw/E3t1c5FLpb1gKxtlB0HAElm+0XH48xWObCTDGr6Wxjn
- JD8zfC6itwAh/PpFoDcPYoG74OF8yhw0Q9Jf0Wj+YW3bzkIYCmME34ODk68Oe3MgDNK3
- J8RoJu/FH/rZGp2nh4XT2uNzKqxVd3EQbXt7tX5alZexskCB+adxH+Jd/D085e6YyIAS
- dIlWMnPH4F6KMToCjkhCA8nYEey3HGn253hgbm7TxaCkwCa21BAEZtjfcm+b0+V3HS47
- tGhqlTNgZ3Zyp4tq2Cilol4NdXABByRCsJuMDx/woW5kFfFLPU2U4szs0mZQiI3Dbxpg
- 2hMg==
+ bh=IQi6V2CdNPIa9+d6/YsIb510Rklup1/hmDr54TM6SAY=;
+ b=FsTXqBd5m63Lhz91u5R8Dz7eQfbsJCgokk9mQrHru16cze8IK93y7yby81TIoyE1Sj
+ Ep20quXdfc9I4CYskZvkwFHRh5k/wzLYb2OIqXikZw6NvYw9ejNeE0TRaPSAIrvOZDVX
+ PsoDAXKTwjeu6jKOmhbHCzQg2EXJs0Mwi7xR/RaSsdHQtyNbPPlwsM6twTc/3NZNa5rl
+ s6pRK+eaLFOikhLkGCVTN5DrwjjNqRtgwrJEBZ+Ix+hA1UxsSbe9IZvgohCDSvhmL9Wm
+ dcxBd/07zY8fEOwZPpuwPLRyFnbLNNH8KHsN2YuKoZMKM294tX4lD5TqpLj5UiHGDTws
+ dhUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=HLqaOK/MZv0gE/1AGC1QSyGTeAgnliEqQRB+osMeoaQ=;
- b=cREFm1S3U9q3jytfzJ5eH9RjFTb9EUf8Xlq5qkNO/qRjSN+iGr1FlicZGb/vhNAFQ2
- Q89/gIN0IeI2MmtwOv7G46uaUNIufJSWZte0Spc+rLmXYg2AhF3CQi5zkeuIFf7yU3Zb
- dKUkw6kY2D/3vPddoNYYsHoweLHAIiEyz2u4JJAjsSaZkS3jHUvMSByGKud7BPD3QTgo
- CS4hIt4kUz3dQaGNYYPQ7b8r++LzQ0a87uJoPgVjErtIdiPbvbBYrS5kgCpQCPonMg8l
- SIyqROMFxdOc1ppwUBhdVVwekdz+qYQ3yICkywEca4Wr3T3PAugBMGtW5sx0vikuyrUF
- 52HQ==
-X-Gm-Message-State: AOAM533dRzZ5bdyXwlM7BRvpDDlM5W45HUYFr+QXrWtQ67d+hmSYrhS5
- Aa4kBkNGqTS8Lg00ZEca/n+/aDKZ0uv/QA==
-X-Google-Smtp-Source: ABdhPJzcYorCjyHzIZDj/SXXJCzcc+qagR1T44/tKwt83MVwsmuonqrvjvPPKkde8J+81x2l3oa5VA==
-X-Received: by 2002:a17:906:dc10:b0:6da:f383:86ed with SMTP id
- yy16-20020a170906dc1000b006daf38386edmr12579824ejb.391.1647101028854; 
- Sat, 12 Mar 2022 08:03:48 -0800 (PST)
+ bh=IQi6V2CdNPIa9+d6/YsIb510Rklup1/hmDr54TM6SAY=;
+ b=vhbUdYxFeuWeLei45Yu1g4DZDv54cUg2y4w2WvKtww2i6l+KMskzJE5A5szDVYvab1
+ j70bniknz/0fNM2EeP8GxpMB5qXVUQvbMmYF2HzQSdNhI6gCSLY90uGz95dJUFXcNrjz
+ akD2MnDWnYWkiUzisy8w5znEdakghQjNZyadJTg+hmxWGREOCPgGuQDPz5cWRtK1Eygk
+ a0jf9d9zrvKBjEWfuLJwvMOsOCCfWUp19DY5iNjXgSyDoR3T/2GSe8ZFw3iwDWkVhT8h
+ 2i6IcMCBItvsPom+zThqDj/ggCppV8nAH09zuPrwarouOeNIEJATRI7huQS/bA2VJZWP
+ 7U2A==
+X-Gm-Message-State: AOAM5304uPaxu01MGXXmyPoukITlOy+iuClhDlOZxkH2xQL33k/qE5Gw
+ J5lZDgNLnUBEc4Mf5U8tMj0+3Ko9jJ3VMA==
+X-Google-Smtp-Source: ABdhPJyNG/xfa9BA5THhUVYAbivoJLLrKC4E0zspGG3+WQ4ZAPY4eTd9eb859DoXS9S75IfgWEwBsg==
+X-Received: by 2002:a17:907:60d1:b0:6db:ab80:78f7 with SMTP id
+ hv17-20020a17090760d100b006dbab8078f7mr6367764ejc.755.1647101218437; 
+ Sat, 12 Mar 2022 08:06:58 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- z92-20020a509e65000000b00416466dc220sm4952148ede.87.2022.03.12.08.03.48
+ si13-20020a170906cecd00b006cded0c5ee2sm4613955ejb.61.2022.03.12.08.06.57
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Mar 2022 08:03:48 -0800 (PST)
-Message-ID: <a1117827-b5d2-d2c8-0a1b-e55cd3e83c7e@mind.be>
-Date: Sat, 12 Mar 2022 17:03:47 +0100
+ Sat, 12 Mar 2022 08:06:58 -0800 (PST)
+Message-ID: <105a4a50-cc20-9286-4121-96847904e5e6@mind.be>
+Date: Sat, 12 Mar 2022 17:06:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Ben Dooks <ben@fluff.org>, buildroot@buildroot.org
-References: <20220311171325.jwcww5qb7ao5vnpy@hetzy.fluff.org>
+To: Christian Stewart <christian@paral.in>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+References: <CA+h8R2rU1EhsLTx38qHG0Q5BrNjBDi43D6rw+Rq3KA7dQAremg@mail.gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220311171325.jwcww5qb7ao5vnpy@hetzy.fluff.org>
-Subject: Re: [Buildroot] error during cpio build failing to rm
+In-Reply-To: <CA+h8R2rU1EhsLTx38qHG0Q5BrNjBDi43D6rw+Rq3KA7dQAremg@mail.gmail.com>
+Subject: Re: [Buildroot] sshd: fails with seccomp issue on arm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,47 +104,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/03/2022 18:13, Ben Dooks wrote:
-> I'm getting the following error with upstream buildroot:
+On 12/03/2022 05:55, Christian Stewart via buildroot wrote:
+> Hi all,
 > 
-> rm: refusing to remove '.' or '..' directory: skipping '/home/ben/project/buildrot/output/build/buildroot-fs/cpio/target/run/..'
-> rm: refusing to remove '.' or '..' directory: skipping '/home/ben/project/buildrot/output/build/buildroot-fs/cpio/target/tmp/..'
-> make: *** [fs/cpio/cpio.mk:74: /home/ben/project/buildroot/output/images/rootfs.c
+> Running sshd on an odroid xu4 (armv7) w/ Buildroot 2022.02:
 > 
-> I've temprarily fixed this with:
+> connections fail with seccomp errors:
 > 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 45beb5ae7b..6bb993663f 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -186,7 +186,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+> SECCOMP auid=4294967295 uid=103 gid=105 ses=4294967295 pid=1041
+> comm="sshd" exe="/usr/sbin/sshd" sig=31 arch=40000028 syscall=414
+> compat=0 ip=0xb6bf41b0 code=0x0
 > 
->          $$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+> I found this relevant issue & patch added to gentoo to fix this:
 > 
-> 	                $$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
-> 			-       echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[^.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[^.]*" >> $$(FAKEROOT_SCRIPT)
-> 			+       echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/tmp/*" >> $$(FAKEROOT_SCRIPT)
-> 			        $$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
-> 				        $$(call PRINTF,$$(ROOTFS_SELINUX)) >> $$(FAKEROOT_SCRIPT)
-> 					        $$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+> https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1844602.html
 > 
-> It looks like this was introduced in 5e78e7e97d772124f0d31653aca33731abe5b4db
+> https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=9cbbc55aee6b2534bbc8d8fe12128c1083ee6850
 > 
-> Author: Norbert Lange <nolange79@gmail.com>
-> Date:   Sat Jun 6 00:48:57 2020 +0200
-> 
->      fs: clean the volatile /run and /tmp directories
->      
-> 
-> Any ideas on how to fix properly?
+> Shall we include this patch in Buildroot as well?
 
-  There's already a patch submitted [1].
+  You mean [1] ?
+
+> 
+> https://github.com/gentoo/gentoo/blob/9cbbc55/net-misc/openssh/files/openssh-8.9_p1-allow-ppoll_time64.patch
+> 
+> I also ran into a build error with fzero-call-regs, there is a patch
+> to fix that too:
+> 
+> https://github.com/gentoo/gentoo/blob/9cbbc55/net-misc/openssh/files/openssh-8.9_p1-fzero-call-used-regs.patch
+
+  As in [2] ?
 
   Regards,
   Arnout
 
 [1] 
-https://patchwork.ozlabs.org/project/buildroot/patch/20220310120256.GA11974@parad0x.org/
+https://git.buildroot.net/buildroot/commit/?id=10c1d887d6082d8806b38b86097c212c4c3ec8f9
+[2] 
+https://patchwork.ozlabs.org/project/buildroot/patch/20220311065511.14015-1-ps.report@gmx.net/
 
 
 _______________________________________________
