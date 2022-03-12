@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 547A7C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1CCAC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13703824E3;
-	Sat, 12 Mar 2022 17:14:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D6C1410E9;
+	Sat, 12 Mar 2022 17:14:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G70LtnX0Z0D1; Sat, 12 Mar 2022 17:14:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Rg07hQ1i1v6g; Sat, 12 Mar 2022 17:14:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42D43817E4;
-	Sat, 12 Mar 2022 17:14:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B516F4146F;
+	Sat, 12 Mar 2022 17:14:43 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 044C11BF5F8
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:10:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 090AB1BF5F8
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACD4760864
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 151B760BA0
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gLhA8SInBFvd for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
+ with ESMTP id u3beN6MPy1_h for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A259F60BA0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09A7760E58
  for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id ECAE37FF6F; Sat, 12 Mar 2022 17:01:17 +0000 (UTC)
+ id 51BBA82AA4; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 12 Mar 2022 18:08:54 +0100
+Date: Sat, 12 Mar 2022 18:08:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 37fe946d9d9c917f87544660aaf056066d71cb9c
-X-Git-Newrev: df103584508586117b85f11d7fccb6b64c4b1492
+X-Git-Oldrev: 4c17e3e4b9af68a84adebd26c94700274a030a79
+X-Git-Newrev: 9cddb7bd56b8e430f6b798426b5c111c7b7d8fdd
 X-Patchwork-Hint: ignore
-Message-Id: <20220312170117.ECAE37FF6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/trace-cmd: bump to version 2.9.7
+Message-Id: <20220312170118.51BBA82AA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +58,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df103584508586117b85f11d7fccb6b64c4b1492
+commit: https://git.buildroot.net/buildroot/commit/?id=9cddb7bd56b8e430f6b798426b5c111c7b7d8fdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+- change site URL to new gitlab.freedesktop.org location
+- change hash from upstream provided to locally computed (and drop sha512)
+
+For details see [1] and [2].
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2022-February/042111.html
+[2] https://gitlab.freedesktop.org/libinput/libinput/-/releases/1.20.0
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/trace-cmd/trace-cmd.hash | 2 +-
- package/trace-cmd/trace-cmd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 5 ++---
+ package/libinput/libinput.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index 00cecc7828..4d39e4d5ea 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  45924a763376a700221f64b4034f87263e4038ec88b120a0abfb5743d051d068  trace-cmd-v2.9.6.tar.gz
-+sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
- sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
- sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index fe0cd71ec4..52bb99036c 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f18a727810..d1c7cfb104 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-December/042068.html
+-sha256  3cae78ccde19d7d0f387e58bc734d4d17ab5f6426f54a9e8b728c90b17baa068  libinput-1.19.3.tar.xz
+-sha512  f4b776d0da78c687ba21b430a04941ac6b43f68970c82ec9f7360358fdea5ed6a873948ce66a25bcdd64d4b95fa4bf705cc24dbc25c7c0f5fd2d0efbd763f298  libinput-1.19.3.tar.xz
++# Locally computed
++sha256  6c1f97892a7d599f97349e5e7c1239901fe00edcd4f6289f410034d5dc06cc85  libinput-1.20.0.tar.bz2
+ 
+ # License files
+ sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 2f9c639c22..b814e3416d 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TRACE_CMD_VERSION = 2.9.6
-+TRACE_CMD_VERSION = 2.9.7
- TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
- TRACE_CMD_SITE = \
- 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+-LIBINPUT_VERSION = 1.19.3
+-LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+-LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
++LIBINPUT_VERSION = 1.20.0
++LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
++LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+ LIBINPUT_INSTALL_STAGING = YES
+ LIBINPUT_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
