@@ -4,63 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35ED8C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 16:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15124C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 16:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF16140498;
-	Sat, 12 Mar 2022 16:19:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 593B840488;
+	Sat, 12 Mar 2022 16:24:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9-APAP85nI5o; Sat, 12 Mar 2022 16:19:22 +0000 (UTC)
+	with ESMTP id MJlJZQFUZ66P; Sat, 12 Mar 2022 16:24:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CACF403E9;
-	Sat, 12 Mar 2022 16:19:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3EB401BF3FF
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:19:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2375B403E9;
+	Sat, 12 Mar 2022 16:24:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B041F1BF3FF
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 281798239A
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:19:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CE40403E9
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 16:24:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DZWpyoYnuI9y for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 16:19:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J8wqIRk0zk84 for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 16:24:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D4B381D5A
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 16:19:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81A5F40004
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 16:24:07 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:9481:d19c:460:d0b4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 98CF419F5A3;
- Sat, 12 Mar 2022 17:19:12 +0100 (CET)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 88A6619F58C;
+ Sat, 12 Mar 2022 17:24:01 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647101954;
- bh=D4lFF+V3LrXl6pwEqV/qExBcDRrWqqjqAIlcbxmUPHU=;
+ s=smtp-20201208; t=1647102245;
+ bh=pfOzZrR0YVlykc+nVsclmOnrsXXJNh99NvhRJWBcYqo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=e9iBGB9BjXMO6maNv/w6a5LQzaDB1PW0pBHyTQAqfpj2w9ZJyDBSGoeO5g+DD9HaK
- UUqbvt0smcn0URshWXbtdL+KvzJ8o8xso8aTMK9Ibd6k+DtTedaRanMaGNrZdHQzrP
- DWRXp66lsLlZrUMIgMNzCrxGNtydloD58sk4yS9RUUelB+8JP+D7C2Wrr5RnSoQa6p
- h3zDntgE0LyO6LJHTP2CTkMVEreZnnyrhXLRFP+dqmsaaFelby4rf8R8HzVF3faN0Q
- zJCo7Ohr1yHHM7ye79PuGUbrTDyWUxTfXBtA9hYQTg9KWxfs6ZVZj437NHZxVOIK0r
- Td8XqZkqBbb/g==
+ b=HszkakoPDgZk/XPlPb3jRedtwm12zCA6BiXSaQkijw05U2DB5d3Jnav8jyxuBD7WG
+ F5e99dG/QBgLV0M27Lrhkr8Ma+kcR3nk4tsUf2VBEeodB28MD30+XCWltS8PQIqsIp
+ mMQsPOysiAxUDF0vc5W4ZfYI//lhbLkUzukpfYI+F3lNjU6KvpxlQFOduUwN+S2gj8
+ rZs84ywJ4H6O87Y/JFnCdJob5OszrK3u1NmFZEHOYpZqJVNfjFwpgvg1YSGiUTXnA2
+ vQ7nL6zCsRvGwXZfmvhvRF006op31K8cYn3A0zNUxlx1dDPjJQTeEUkjAk8iBlK7FH
+ XRBWHnuFuEtNA==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 12 Mar 2022 17:19:12 +0100
-Date: Sat, 12 Mar 2022 17:19:12 +0100
+ Sat, 12 Mar 2022 17:24:01 +0100
+Date: Sat, 12 Mar 2022 17:24:01 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Mathieu Mirmont <mat@parad0x.org>
-Message-ID: <20220312161912.GF283544@scaer>
-References: <20220310101826.GA2353@parad0x.org>
- <20220310120256.GA11974@parad0x.org>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220312162401.GG283544@scaer>
+References: <20220310140350.1955655-1-john@metanate.com>
+ <20220310213840.32655ec7@gmx.net>
+ <c5548e2e-8cd5-141e-3f8a-060127e43540@mind.be>
+ <20220311082413.4bfe7465@gmx.net>
+ <3ce1b58b-7721-a63a-4503-11e89fd55f22@mind.be>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220310120256.GA11974@parad0x.org>
+In-Reply-To: <3ce1b58b-7721-a63a-4503-11e89fd55f22@mind.be>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2] fs/common.mk: fix the globing pattern
+Subject: Re: [Buildroot] [PATCH] package/openssh: backport upstream fix for
+ 32-bit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,72 +74,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Peter Seiderer <ps.report@gmx.net>, John Keeping <john@metanate.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Mathieu, All,
+Arnout, Peter, All,
 
-On 2022-03-10 13:02 +0100, Mathieu Mirmont via buildroot spake thusly:
-> The FAKEROOT script uses [^x] wildcard patterns which, while supported
-> by many shells and interpreted like a regex, are undefined according
-> to POSIX.
-> 
-> The dash shell (/bin/sh) on Debian testing switched to a different
-> fnmatch/glob implementation that does not support [^x]. Instead it
-> treats [^x] as either "^" or "x", and as a result buildroot fails to
-> build on this distro:
-> 
-> rm: refusing to remove '.' or '..' directory: skipping '/build/buildroot-fs/cpio/target/run/..'
-> rm: refusing to remove '.' or '..' directory: skipping '/build/buildroot-fs/cpio/target/tmp/..'
-> 
-> The correct form should be [!x] rather than [^x].
-> 
-> Signed-off-by: Mathieu Mirmont <mat@parad0x.org>
-> ---
->  fs/common.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 45beb5ae7b..64a94d9ad8 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -186,7 +186,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
->  
->  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
->  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
-> -	echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[^.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[^.]*" >> $$(FAKEROOT_SCRIPT)
-> +	echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[!.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[!.]*" >> $$(FAKEROOT_SCRIPT)
+On 2022-03-12 17:00 +0100, Arnout Vandecappelle spake thusly:
+> On 11/03/2022 08:24, Peter Seiderer wrote:
+> >But the sha1 alone does not tell to which git repo it belongs to, but the explicit
+> >upstream link does (and has the nice effect to gain a one-click link to the
+> >corresponding patch/merge-request etc.) and is a prominent remainder in case
+> >of package version bump where the patch comes from...
+>  I don't know about you, but the normal way that I generate patches is to
+> clone the repo and do 'git format-patch -1 <sha1>', and then add my SoB. And
+> if it doesn't apply cleanly, I first do 'git cherry-pick -x -s'.
 
-I think I preferred your find-based solution, because, as far as I
-understand, this is still broken, as it won't match files named, for
-example "..foo"
+Exactly what I do too, with an additional tag just before my SoB:
+    [yann.morin.1998@free.fr: backport from upstream]
+    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-The find-based solution, though, should work for everything and does not
-risk any issue with badly interpreted blobs in varios shells and various
-shell versions.
+>  Obviously it's helpful to have a link there. However, requiring
+> contributors to go and find the upstream web frontend and construct a URL is
+> IMHO asking a lot, especially since chances are that no one is ever going to
+> actually look at that link. There's already plenty of steps a contributor
+> has to go through, I don't want to increase the threshold even more.
+
+I fully subscribe to Arnout's position.
+
+I only add an URL to the original patch if it was grabbed fro; a pending
+PR/MR/BZ/.. or a third-party tree.
 
 Regards,
 Yann E. MORIN.
-
->  	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
->  	$$(call PRINTF,$$(ROOTFS_SELINUX)) >> $$(FAKEROOT_SCRIPT)
->  	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-> -- 
-> 2.35.1
-> Changes v1 -> v2:
->   - Fix the regex rather than use find|xargs (suggested by Edgar Bonet & David Laight)
-> 
-
-
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
