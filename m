@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1CCAC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CEC0C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D6C1410E9;
-	Sat, 12 Mar 2022 17:14:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F0AA404DF;
+	Sat, 12 Mar 2022 17:14:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rg07hQ1i1v6g; Sat, 12 Mar 2022 17:14:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IoiCKB5ABCjX; Sat, 12 Mar 2022 17:14:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B516F4146F;
-	Sat, 12 Mar 2022 17:14:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B48D403AA;
+	Sat, 12 Mar 2022 17:14:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 090AB1BF5F8
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:10:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C9111BF5F8
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 151B760BA0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 759C960BD5
  for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u3beN6MPy1_h for <buildroot@lists.busybox.net>;
+ with ESMTP id qO5xIw8Q-lNp for <buildroot@lists.busybox.net>;
  Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09A7760E58
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1426D60E59
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 51BBA82AA4; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
+ id 6CD1782AA4; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 12 Mar 2022 18:08:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c17e3e4b9af68a84adebd26c94700274a030a79
-X-Git-Newrev: 9cddb7bd56b8e430f6b798426b5c111c7b7d8fdd
+X-Git-Oldrev: 15d7ac9499d7cad063fa43c602fd73419f971c50
+X-Git-Newrev: 90a3e71cd2b10ec254ff7e5c9a01342c9d53730d
 X-Patchwork-Hint: ignore
-Message-Id: <20220312170118.51BBA82AA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.20.0
+Message-Id: <20220312170118.6CD1782AA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-can: bump to version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cddb7bd56b8e430f6b798426b5c111c7b7d8fdd
+commit: https://git.buildroot.net/buildroot/commit/?id=90a3e71cd2b10ec254ff7e5c9a01342c9d53730d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- change site URL to new gitlab.freedesktop.org location
-- change hash from upstream provided to locally computed (and drop sha512)
-
-For details see [1] and [2].
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2022-February/042111.html
-[2] https://gitlab.freedesktop.org/libinput/libinput/-/releases/1.20.0
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libinput/libinput.hash | 5 ++---
- package/libinput/libinput.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-can/python-can.hash | 4 ++--
+ package/python-can/python-can.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index f18a727810..d1c7cfb104 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-December/042068.html
--sha256  3cae78ccde19d7d0f387e58bc734d4d17ab5f6426f54a9e8b728c90b17baa068  libinput-1.19.3.tar.xz
--sha512  f4b776d0da78c687ba21b430a04941ac6b43f68970c82ec9f7360358fdea5ed6a873948ce66a25bcdd64d4b95fa4bf705cc24dbc25c7c0f5fd2d0efbd763f298  libinput-1.19.3.tar.xz
-+# Locally computed
-+sha256  6c1f97892a7d599f97349e5e7c1239901fe00edcd4f6289f410034d5dc06cc85  libinput-1.20.0.tar.bz2
- 
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 2f9c639c22..b814e3416d 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+index 5330e5899c..dd8a9b107d 100644
+--- a/package/python-can/python-can.hash
++++ b/package/python-can/python-can.hash
+@@ -1,4 +1,4 @@
+ # sha256 from https://pypi.org/pypi/python-can
+-sha256	2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449  python-can-3.3.4.tar.gz
++sha256  59d92846ffb981e634e9e0f2d14a6b4967a875e3869bd2ba168c92c4db6b8b5d  python-can-4.0.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index 1ab813e2c9..9284a9cf99 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.19.3
--LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
--LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
-+LIBINPUT_VERSION = 1.20.0
-+LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
-+LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
- LIBINPUT_INSTALL_STAGING = YES
- LIBINPUT_LICENSE = MIT
+-PYTHON_CAN_VERSION = 3.3.4
+-PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/97/dd/5e5ae96db41ba57dde127e0600c3d324239ed692e167296c5fdb992cbf41
++PYTHON_CAN_VERSION = 4.0.0
++PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/1f/f7/a643cba269d59e108fe4c1854a8e71d5cdadadd4de1b9c8862b190171122
+ PYTHON_CAN_SETUP_TYPE = setuptools
+ PYTHON_CAN_LICENSE = LGPL-3.0
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
