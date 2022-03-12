@@ -4,77 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 916C9C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 18:14:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E02A4C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 19:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B68660ADD;
-	Sat, 12 Mar 2022 18:14:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F42360E63;
+	Sat, 12 Mar 2022 19:42:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JkTm3wvO-iVm; Sat, 12 Mar 2022 18:14:26 +0000 (UTC)
+	with ESMTP id r3z5CWtayVc1; Sat, 12 Mar 2022 19:42:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E8A260899;
-	Sat, 12 Mar 2022 18:14:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 20B101BF5F6
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 18:14:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CF6460E56;
+	Sat, 12 Mar 2022 19:42:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E3C0B1BF3E8
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 19:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 07CFA60899
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 18:14:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE86F40486
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 19:42:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T9m94jjTT4e5 for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 18:14:23 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NKm7ylQ8ifSk for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 19:42:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F371560803
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 18:14:22 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id u10so17658384wra.9
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 10:14:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=WBe3GElyNmHLTpGWOf1Zq6LgmQEt93tzL2xuoIyGBlg=;
- b=XsTuOXk2P5vRBICkNqQg5GnUT7WZKMUOGdVDKIGGmabpzFmzDr/kwU6pmjES4GSrn0
- KtOhrBtrsdUjP5F54BVx6Ekd/9UDtaTeanvXelfD2ouSgpvSVN9+drtGrStjlX0DMkw2
- tAZq1Qb1HiK89jDj0eWdJkQidOdELDK5a5xwXfPPA9leNhOCD/2TQBnjQRhBndu2MGCS
- TtZ00ZLYg5Gr0YQiLujb0LH8Ydmr9djzwyT5ohAbcJU/xaDKTlKOBQZdYslvc4cQqAqE
- K7Px3HyRaJqC+WbvHQCL849hxvOLwxnOJwCok8NRxeI7h+obgn08wwvukOP3tSmIGboj
- vDDQ==
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A30304000B
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 19:42:19 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id g3so14880835edu.1
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 11:42:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=2IX/oa/HXMm4Fy8g0gaoxAyqHMuPDNif4Pt87gAnuCU=;
+ b=brBiq3t+37XPi8+VAbyhWQiV4busxKYbSuXHodzF3TopCrQ7EvM7PQ6eT9XaEEiV/I
+ QCB9keeOwRBZ5jriQmgFO0vvPuDrjstS19GXtB0pCgLVx9EZZq14NAnJeyGaYosVD4f2
+ hXCEnaY4RHsfs+Ha10EI7KNNOqd1j3OFB402/CO7wdcckWDUqS2W75SHeOLphaRQJSW/
+ MaYcRoXNGURc+8xYtdUsZ1+MGAXYqXPJqBho14VvThqbZYxev4fxEiPOx7SL0y3qlfcP
+ IdC8O/12Z7W90oTDWCyXwZDarnsVOzTw50sg70llb8yDS/akZn086mbZioPtqHs7WTCj
+ s4sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=WBe3GElyNmHLTpGWOf1Zq6LgmQEt93tzL2xuoIyGBlg=;
- b=M/2GHPIRHmVHBdgf/yNYu/T3xECFMkJnLuzoMa1lY6sk/qaz5fsdPic1dxM/epLjq0
- nyEbha0eCwPduh3Oyz0RtPrsvyxYCwdFFplnVYLwO0uHSYWtyug3Shozf7f13dzCUjW7
- +ch5Gf9jIYzQaL/QdB7UHgHW8EsS1ai6NyxXJ1DDj2pAm9GI5laucbsvOYfXPrhoiZIU
- KXM9rOLHBmEX7S7EqdNSMPOcynOm+cPNhjNewzqYxueGvpOSRj04pN7L8a3x6fRISqeT
- /LUokU/w/9k/WHNX0LNdcAbYDp0dOLhnsQXTQBaFwlIngKMP43Gnm9ABATVhzeddNrfM
- sCGw==
-X-Gm-Message-State: AOAM532uCWQ3kc0CZ8w0ZGEnqC4z+gidpEdLPBFquU0SkZr0McsUG6LK
- 4vpnW4IcnzpHRsnz9GbNAPkJTRUD2rY=
-X-Google-Smtp-Source: ABdhPJzNX2DNQdkvd78eH4GCrn6s3Cg2kduNvPqGo0oPiPmwdsiWcwb0tlHWXq0GNXhRqbbhxzWWFw==
-X-Received: by 2002:a5d:59a9:0:b0:203:79cc:20dc with SMTP id
- p9-20020a5d59a9000000b0020379cc20dcmr10749770wrr.17.1647108860784; 
- Sat, 12 Mar 2022 10:14:20 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=2IX/oa/HXMm4Fy8g0gaoxAyqHMuPDNif4Pt87gAnuCU=;
+ b=zmP7FWSWtCEgJyQgp2RWg6PrwTsG6c+nxii3AFDBoU5hTCudhgE5Qo4fwbqvoCx6oK
+ YTWVL1feLYBKpHWHWGwLur0qyN+PUKEyiCBsxItayQG/3q/XO5oPaPRqfN2Bxl8d7Qid
+ 8e2xcEUc4E6PB+DgahoFke07vaFcvJ0C4OMeonu+5H9E2wHw2hEE02HPm4zkYJZhNXwq
+ nomZCvs4szuyo3B3R8h5bz9DdgywwHFqeOOhKCkixQ0T0RrHJ6UT5VQIg3TpdsA28LHB
+ uKAKEob3SuP2/Prg0gtoX7gU2dB12/DLyBVKQerDp+vLQK57A/HH4WUs11nVN0r5O5Cp
+ iPGw==
+X-Gm-Message-State: AOAM530CL26cuZ+7jL/frkCf3kCG3yC26+PlTb9UF/QwvHv/pIlWfdL+
+ PqeuUaRJh0Cuar2dQpsYsV1QT1J3OpD2KQ==
+X-Google-Smtp-Source: ABdhPJw30IIyv7SRGBBqPPT/8sNSJoeGtiP5/VLcaXijXxz166IDogcQ+6tVdl3d1dBVil72juwiQQ==
+X-Received: by 2002:a05:6402:11c6:b0:416:3751:d700 with SMTP id
+ j6-20020a05640211c600b004163751d700mr14376124edw.97.1647114137582; 
+ Sat, 12 Mar 2022 11:42:17 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- j42-20020a05600c1c2a00b00389d2ca24c9sm10351055wms.30.2022.03.12.10.14.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 12 Mar 2022 10:14:20 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 12 Mar 2022 19:12:49 +0100
-Message-Id: <20220312181249.7288-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ r23-20020aa7da17000000b00415a1431488sm5264106eds.4.2022.03.12.11.42.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 12 Mar 2022 11:42:16 -0800 (PST)
+Message-ID: <d358224c-ec31-1a9a-5f04-30e183178a40@mind.be>
+Date: Sat, 12 Mar 2022 20:42:15 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libsrtp: drop shared library
- dependency from openssl
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
+References: <20220223075322.3044754-1-angelo@amarulasolutions.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220223075322.3044754-1-angelo@amarulasolutions.com>
+Subject: Re: [Buildroot] [PATCH] package/mono: bump to version 6.12.0.122
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,55 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-openssl handling needs shared library support since commit
-67cebbdf5f349cc176037fa15c281a9462dae591 however this is not needed
-since version 2 and
-https://github.com/cisco/libsrtp/commit/333fa84e8ed1395753fd1c0c4eb5534208510f26
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/asterisk/asterisk.mk | 2 +-
- package/libsrtp/libsrtp.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 0a26fb38ea..2b7854b982 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -247,7 +247,7 @@ ASTERISK_CONF_OPTS += --without-speex --without-speexdsp
- endif
- 
- # asterisk needs an openssl-enabled libsrtp
--ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
-+ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL),yy)
- ASTERISK_DEPENDENCIES += libsrtp
- ASTERISK_CONF_OPTS += --with-srtp
- else
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index f2ba600dd6..e7a771c6b2 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -21,8 +21,7 @@ endif
- 
- LIBSRTP_DEPENDENCIES = host-pkgconf
- 
--# openssl handling needs libdl support
--ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBSRTP_DEPENDENCIES += openssl
- LIBSRTP_CONF_OPTS += --disable-nss --enable-openssl
- else ifeq ($(BR2_PACKAGE_LIBNSS),y)
--- 
-2.34.1
+On 23/02/2022 08:53, Angelo Compagnucci wrote:
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
+  Applied to master, thanks.
+
+  I also updated the hash file with 2 spaces.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/mono/mono.hash | 2 +-
+>   package/mono/mono.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+> index 2477e9231c..ad070bf102 100644
+> --- a/package/mono/mono.hash
+> +++ b/package/mono/mono.hash
+> @@ -1,5 +1,5 @@
+>   # sha256 locally computed
+> -sha256 51de5c02ad511333f93ff585bca54c8784de35af4ff27b759d16b46c4402cdac  mono-6.12.0.90.tar.xz
+> +sha256 29c277660fc5e7513107aee1cbf8c5057c9370a4cdfeda2fc781be6986d89d23  mono-6.12.0.122.tar.xz
+>   sha256 923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
+>   sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
+>   sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index 27f7886224..219effc5d3 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -MONO_VERSION = 6.12.0.90
+> +MONO_VERSION = 6.12.0.122
+>   MONO_SITE = http://download.mono-project.com/sources/mono
+>   MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
+>   MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
