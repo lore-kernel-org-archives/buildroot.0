@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 450B3C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBA3AC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:10:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF72082486;
-	Sat, 12 Mar 2022 17:10:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 906E260E52;
+	Sat, 12 Mar 2022 17:10:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FqvMe4_7GOsH; Sat, 12 Mar 2022 17:10:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ez-MT533E-YJ; Sat, 12 Mar 2022 17:10:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4521082457;
-	Sat, 12 Mar 2022 17:10:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11EE91BF966
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEBEF60BA0;
+	Sat, 12 Mar 2022 17:10:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 200DC1BF5F8
  for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3D40401D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5062260E5B
  for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mEk6ct6X_cOa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YnDybV32frbB for <buildroot@lists.busybox.net>;
  Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1BFB4023D
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2DF260BD5
  for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 35D1C82AA4; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
+ id 0705782AD0; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 12 Mar 2022 18:08:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8e27390f85467f04e62a55748fd60fb304803f6a
-X-Git-Newrev: 16ffc6549465cb5d68b751f10603e8b0363bf9b0
+X-Git-Oldrev: df103584508586117b85f11d7fccb6b64c4b1492
+X-Git-Newrev: e36884420d1709fabc5a8b081f5a6cbd1e59e297
 X-Patchwork-Hint: ignore
-Message-Id: <20220312170118.35D1C82AA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5: enable for ARC
+Message-Id: <20220312170118.0705782AD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 19.7.11-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16ffc6549465cb5d68b751f10603e8b0363bf9b0
+commit: https://git.buildroot.net/buildroot/commit/?id=e36884420d1709fabc5a8b081f5a6cbd1e59e297
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Double-conversion got pulled-in Qt's sources from the upstream project
-quite some time ago [1], so now Qt5 is buildable for ARC perfectly fine.
-
-This reverts the last part of [2],
-commit e453fb9e3280 (qt5: disable qt-5.8.0 support for arc, nios2 and xtensa).
-
-[1] https://invent.kde.org/qt/qt/qtbase/-/commit/425df43d7fed19866fc7ceb3d26b6cc4190523f5
-[2] https://git.buildroot.net/buildroot/commit/?id=e453fb9e3280a1a1ce6180e165aab9c4f1642555
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qt5/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 5751d6cb70..f2b1ff4a19 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -13,7 +13,6 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index ac4960df92..0b88d5c747 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8cc02c4627b5108e39bb7b6a6f56f7ba5debbb1adf982c4f23395944aa7d2c8e  kodi-pvr-zattoo-19.7.10-Matrix.tar.gz
++sha256  07d96b1b0c3b464c0bf02279fa8cab9ccdf675344129f3a970b14bafce225fb4  kodi-pvr-zattoo-19.7.11-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 7a3b230e8b..95c5de0925 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Qt5 needs host g++ >= 5.0, and a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
- 	depends on !BR2_ARM_CPU_ARMV4
--	depends on !BR2_arc
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
- 		!BR2_HOST_GCC_AT_LEAST_5 || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-@@ -26,8 +25,6 @@ menuconfig BR2_PACKAGE_QT5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # Full C++11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11, GCC_BUG_57694
- 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
--	# no built-in double-conversion support
--	depends on !BR2_arc
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_QT5BASE
- 	help
+-KODI_PVR_ZATTOO_VERSION = 19.7.10-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.11-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
