@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10320C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE7F8C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6C9D81A3E;
-	Sat, 12 Mar 2022 17:02:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 973E04048A;
+	Sat, 12 Mar 2022 17:02:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qmeF03FzbeLy; Sat, 12 Mar 2022 17:02:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3907681DAB;
-	Sat, 12 Mar 2022 17:02:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6AA8A1BF3FF
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:02:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57F5C4023D
- for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:02:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YbMgQEttUVq7 for <buildroot@lists.busybox.net>;
- Sat, 12 Mar 2022 17:02:27 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 50aflBO1q0oM; Sat, 12 Mar 2022 17:02:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 253CA403AA;
+	Sat, 12 Mar 2022 17:02:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 628D81BF3FF
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:02:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EB944148B
+ for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:02:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8TZWzvhFNZTt for <buildroot@lists.busybox.net>;
+ Sat, 12 Mar 2022 17:02:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A940D4048A
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:02:27 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id dr20so25145215ejc.6
- for <buildroot@buildroot.org>; Sat, 12 Mar 2022 09:02:27 -0800 (PST)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0B6714148A
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:02:42 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id yy13so25429108ejb.2
+ for <buildroot@buildroot.org>; Sat, 12 Mar 2022 09:02:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=tS+ERDtTptL7Mb9m9xWNN0A1ZUwSRA4wdB+JBD1bMQA=;
- b=LDwQ4JhFEFEWEdp6J6JY90efT1rcBT33l8PipmM6JS+y5dwFiI2pADem8aUahBMup7
- kC0Csgqz0lxZGcjaNyVysRPXqE1zFxys6tAQWKWA8QIVHyrHMwDR5hlHeka1vKuNUrdU
- sDYuQSEJdOi5OFwbEH3u8iNdL9sH838gawDnh5n+lNmIdpkGbLKDiLg0YfMNzDUQDhFW
- Tf2/PikdzMJZ5j9MKSPli3hp5KqE0Z1n+WsGPCqasMv0ljgX5YJulLJ5QNJ2QHdW1Lfl
- 65/v+w/2F6fCqNGn9xk0hRMGyoZR1fyX4LbGA2guo9OPRfyy/cP/76JGdC7CFC8rvySh
- ljMg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=UeJhw+c5yeeAYrhxQU7+3HvxtxIHJbNWM8JkPpoK0R0=;
+ b=BQTYjUsBkT2chen5dDTnPfCXnEMUgVHKqppHKhzVjuu+ivnHOEF5bwm3waH3KVVMXc
+ V7tqVULf2rSkiKGbwNgQfML8oQnm56KykE7wV11jkscChV6DRbXCIX3/wYauYAmNLoHj
+ ho0ZCcGgl0IYyiKonxoS/p2PvOcDhXoOnXMFQbGKSK7s91wma+Hnph5dhkImRKbph19m
+ j6VX0gJt2wS6caUI8MUOSx9ThkhZI6h49Hywkr2alpkFGa0oHWlDK6ujWRRZOA29/CS5
+ sisBiQF+8/fqDCpbKs6kHmDJvwbyg+Tbab4nE1B4ioukJcNU/GaCj/+jtE2YCuGEL/7O
+ mPig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=tS+ERDtTptL7Mb9m9xWNN0A1ZUwSRA4wdB+JBD1bMQA=;
- b=rSBbCwGZy7PkLeTvDdh464llVjPekrxptNL8zJvClHr87MNNKE/4Efwv9e9LEpLVLt
- Xb0PyNUb5/SPd8wSBt5ZBHi4wGUOpw3RoZIgvs5llLL4I1Wpsrwh+igdAJjyP9su8RUi
- ulwHvhXucI5xBl22KP47yh5hoFBiloVHh1aSj0QuDo8+Njh4Tf94P7RkVhibVzj3yjsa
- aRB/7HqeAEoT6ifQTdmG0Yjo7EZuRLm7iUQG1+sMueWZDimmPJZ1KwDzBsbGQ4kHfZ65
- 3kYMo7dx7Q+gUUf5axc7S+zf6JpNoEyCn8yacXroh+rSQz3mSe/ivu185sZ7fEXY7JlC
- OFsw==
-X-Gm-Message-State: AOAM531oBBjDK8SLK22EPpMV+TdKXPeZ23DdHlP9PfSxc8J9M0rz0Gw0
- wKK6pnXolVwhTqE6Hwlda71Fcg==
-X-Google-Smtp-Source: ABdhPJys1CELzrDPR9zpMFJ7OzXuiOidwEFDrWrikcx9KH8+ZOZZqKMds2frHCBAKgI0YZNvnpdkaw==
-X-Received: by 2002:a17:906:52c7:b0:6ce:a880:50a3 with SMTP id
- w7-20020a17090652c700b006cea88050a3mr12649756ejn.437.1647104545573; 
- Sat, 12 Mar 2022 09:02:25 -0800 (PST)
+ bh=UeJhw+c5yeeAYrhxQU7+3HvxtxIHJbNWM8JkPpoK0R0=;
+ b=sJFdTOHNFss+4+hQgcVe1V9UtY666oMTTOppIynQ7g3c1UexSbwAuPRSiUwcLxlrOe
+ HhfrDR+OcK7CVOw2rDPuNacajt7BV4wIP7gRRHYFxhMCzRmRBNh7LMbFKf2qaI4ilRnj
+ dU5R0KtRzaJbFCk2G/Xk6abUo4EK8WJNm04lqvSW891IclcWd9rUbGamw7/HOw6Vi55n
+ D2s/rjU6aSroOrsU87WkPokmkszDsTP1sU8nFWcQ0UsuRkw/qW4Ie7Qsr7t8vj4E4mKW
+ lP2iBejdngY6lhYcKQoBckgeqXTdPh9I/lMHeIfic9WgQqTfKQg/GeO8CtdHNUL0pBNv
+ mBZA==
+X-Gm-Message-State: AOAM533wzn8e+nAZdBAeLI1EtL18SVHbKFi03it9n7dPfX64ll2zosa+
+ 8Csnog2y1Fkt+FtC/QP5/vM07kuVIcR4lQ==
+X-Google-Smtp-Source: ABdhPJxVXe2QdusyV0uFRcsoiJQAhYS24L+tqQ3G5HPlJ4e6bO+16CmNO6aGiQPXp4YyDo+dZLHyNw==
+X-Received: by 2002:a17:906:3ad1:b0:6ce:a880:7745 with SMTP id
+ z17-20020a1709063ad100b006cea8807745mr12963708ejd.46.1647104561205; 
+ Sat, 12 Mar 2022 09:02:41 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- si13-20020a170906cecd00b006cded0c5ee2sm4662888ejb.61.2022.03.12.09.02.24
+ d2-20020a50cf42000000b004135b6eef60sm5076775edk.94.2022.03.12.09.02.40
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Mar 2022 09:02:25 -0800 (PST)
-Message-ID: <dce43b44-0b9e-f11d-39bd-b12edbabee79@mind.be>
-Date: Sat, 12 Mar 2022 18:02:24 +0100
+ Sat, 12 Mar 2022 09:02:40 -0800 (PST)
+Message-ID: <f1e161ed-f7fc-0b82-8eaa-9c9a05492028@mind.be>
+Date: Sat, 12 Mar 2022 18:02:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
-References: <20220221153151.1780107-1-angelo@amarulasolutions.com>
+To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
+References: <20220221192126.30231-1-petr.vorel@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220221153151.1780107-1-angelo@amarulasolutions.com>
-Subject: Re: [Buildroot] [PATCH] package/apparmor: bump to version 3.0.4
+In-Reply-To: <20220221192126.30231-1-petr.vorel@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.30.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,6 +95,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,11 +104,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/02/2022 16:31, Angelo Compagnucci wrote:
-> Updating also the companion libapparmor library and removing upstreamed
-> patch.
+On 21/02/2022 20:21, Petr Vorel wrote:
+> Remove 0001-build-add-an-option-to-not-build-man-pages.patch
+> as release contains very similar commit which does autodetection:
+> 1a474db ("build: add an option to not build man pages")
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
   Applied to master, thanks.
 
@@ -113,312 +117,162 @@ On 21/02/2022 16:31, Angelo Compagnucci wrote:
   Arnout
 
 > ---
->   package/apparmor/apparmor.hash                |   2 +-
->   package/apparmor/apparmor.mk                  |   2 +-
->   ...deprecated-distutils-with-setuptools.patch | 244 ------------------
->   package/libapparmor/libapparmor.hash          |   2 +-
->   package/libapparmor/libapparmor.mk            |   2 +-
->   5 files changed, 4 insertions(+), 248 deletions(-)
->   delete mode 100644 package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch
+> Tested:
 > 
-> diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
-> index 88280cbfcf..497491b6c9 100644
-> --- a/package/apparmor/apparmor.hash
-> +++ b/package/apparmor/apparmor.hash
-> @@ -1,5 +1,5 @@
->   # From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
-> -sha256  153db05d8f491e0596022663c19fb1166806cb473b3c6f0a7279feda2ec25a59  apparmor-3.0.3.tar.gz
-> +sha256  09bf48d7a171f9790c39a1404bad105a788934cfe77b7490c7f5c63c2576b725  apparmor-3.0.4.tar.gz
->   
->   # locally computed
->   sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-> diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-> index 43bfa05308..76c9f2cafe 100644
-> --- a/package/apparmor/apparmor.mk
-> +++ b/package/apparmor/apparmor.mk
-> @@ -6,7 +6,7 @@
->   
->   # When updating the version here, please also update the libapparmor package
->   APPARMOR_VERSION_MAJOR = 3.0
-> -APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).3
-> +APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).4
->   APPARMOR_SITE = https://launchpad.net/apparmor/$(APPARMOR_VERSION_MAJOR)/$(APPARMOR_VERSION)/+download
->   APPARMOR_DL_SUBDIR = libapparmor
->   APPARMOR_LICENSE = GPL-2.0
-> diff --git a/package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch b/package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch
+> 
+>                      bootlin-armv5-uclibc [1/6]: OK
+>                       bootlin-armv7-glibc [2/6]: OK
+>                     bootlin-armv7m-uclibc [3/6]: SKIPPED
+>                       bootlin-x86-64-musl [4/6]: OK
+>                        br-arm-full-static [5/6]: OK
+>                              sourcery-arm [6/6]: OK
+> 
+>                               andes-nds32 [ 1/45]: FAILED (not related to this change)
+>                               arm-aarch64 [ 2/45]: OK
+>                     bootlin-aarch64-glibc [ 3/45]: OK
+>                 bootlin-arcle-hs38-uclibc [ 4/45]: OK
+>                      bootlin-armv5-uclibc [ 5/45]: OK
+>                       bootlin-armv7-glibc [ 6/45]: OK
+>                     bootlin-armv7m-uclibc [ 7/45]: SKIPPED
+>                        bootlin-armv7-musl [ 8/45]: OK
+>               bootlin-microblazeel-uclibc [ 9/45]: OK
+>                     bootlin-mipsel-uclibc [10/45]: OK
+>                  bootlin-mipsel32r6-glibc [11/45]: OK
+>                  bootlin-m68k-5208-uclibc [12/45]: SKIPPED
+>                 bootlin-m68k-68040-uclibc [13/45]: OK
+>                       bootlin-nios2-glibc [14/45]: OK
+>                   bootlin-openrisc-uclibc [15/45]: OK
+>             bootlin-powerpc-e500mc-uclibc [16/45]: OK
+>          bootlin-powerpc64le-power8-glibc [17/45]: OK
+>                     bootlin-riscv32-glibc [18/45]: OK
+>                     bootlin-riscv64-glibc [19/45]: OK
+>                      bootlin-riscv64-musl [20/45]: OK
+>                        bootlin-sh4-uclibc [21/45]: OK
+>                      bootlin-sparc-uclibc [22/45]: OK
+>                     bootlin-sparc64-glibc [23/45]: OK
+>                     bootlin-xtensa-uclibc [24/45]: OK
+>                      bootlin-x86-64-glibc [25/45]: OK
+>                       bootlin-x86-64-musl [26/45]: OK
+>                     bootlin-x86-64-uclibc [27/45]: OK
+>                              br-arm-basic [28/45]: SKIPPED
+>                      br-arm-full-nothread [29/45]: SKIPPED
+>                        br-arm-full-static [30/45]: OK
+>                  br-i386-pentium-mmx-musl [31/45]: OK
+>                     br-i386-pentium4-full [32/45]: OK
+>                        br-mips64-n64-full [33/45]: OK
+>                   br-mips64r6-el-hf-glibc [34/45]: OK
+>                 br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+>                 br-powerpc64-power7-glibc [36/45]: OK
+>                         linaro-aarch64-be [37/45]: OK
+>                            linaro-aarch64 [38/45]: OK
+>                                linaro-arm [39/45]: OK
+>                       sourcery-arm-armv4t [40/45]: OK
+>                              sourcery-arm [41/45]: OK
+>                       sourcery-arm-thumb2 [42/45]: OK
+>                             sourcery-mips [43/45]: OK
+>                           sourcery-mips64 [44/45]: OK
+>                            sourcery-nios2 [45/45]: OK
+> 
+>   ...add-an-option-to-not-build-man-pages.patch | 65 -------------------
+>   package/libqmi/libqmi.hash                    |  2 +-
+>   package/libqmi/libqmi.mk                      |  2 +-
+>   3 files changed, 2 insertions(+), 67 deletions(-)
+>   delete mode 100644 package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch
+> 
+> diff --git a/package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch b/package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch
 > deleted file mode 100644
-> index 5aed31d0b5..0000000000
-> --- a/package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch
+> index d9053de537..0000000000
+> --- a/package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch
 > +++ /dev/null
-> @@ -1,244 +0,0 @@
-> -From 21e5a721ab2abe26bb12b9da7accc39d4fff9804 Mon Sep 17 00:00:00 2001
-> -From: Georgia Garcia <georgia.garcia@canonical.com>
-> -Date: Wed, 10 Nov 2021 19:50:35 +0000
-> -Subject: [PATCH] replace deprecated distutils with setuptools
+> @@ -1,65 +0,0 @@
+> -From 295b75e9c8dc895e281e36b1e8121d09fd556af0 Mon Sep 17 00:00:00 2001
+> -From: Aleksander Morgado <aleksander@aleksander.es>
+> -Date: Wed, 3 Nov 2021 10:57:51 +0100
+> -Subject: [PATCH] build: add an option to not build man pages
 > -
-> -Adds python3 setuptools as a build dependency for libapparmor
+> -When cross-compiling, the compiled binaries cannot be run on the build
+> -machine, unless one defines a helper (e.g. qemu) in the meson
+> -configuration, which is most of the time undesirable.
 > -
-> -Fixes: https://gitlab.com/apparmor/apparmor/-/issues/202
-> -MR: https://gitlab.com/apparmor/apparmor/-/merge_requests/813
-> -Signed-off-by: Georgia Garcia <georgia.garcia@canonical.com>
-> -Acked-by: Christian Boltz <apparmor@cboltz.de>
+> -If help2man is installed on the build machine, then the build would fail
+> -because of this, so add an option to disable generating the man pages.
 > -
-> -[Retrieved (and updated to remove changes on .gitlab-ci.yml and
-> -README.md) from:
-> -https://gitlab.com/apparmor/apparmor/-/commit/21e5a721ab2abe26bb12b9da7accc39d4fff9804]
+> -With later versions of meson, it will be possible to automatically
+> -detect this condition.
+> -
+> -Based on the same fix done in libmbim by Nicolas Cavallari, see
+> -https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/792af73ea90e9689703ab526dd444fdb1c2f8e40
+> -
+> -Fixes https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/issues/75
+> -
+> -[Retrieved (and backported) from:
+> -https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/commit/295b75e9c8dc895e281e36b1e8121d09fd556af0]
 > -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ----
-> - .gitignore                                    |  3 ++
-> - .gitlab-ci.yml                                |  2 +-
-> - libraries/libapparmor/m4/ac_python_devel.m4   | 36 +++++++++----------
-> - libraries/libapparmor/swig/python/Makefile.am |  2 +-
-> - libraries/libapparmor/swig/python/setup.py.in |  2 +-
-> - .../libapparmor/swig/python/test/Makefile.am  |  2 +-
-> - profiles/Makefile                             |  2 +-
-> - utils/Makefile                                |  1 +
-> - utils/python-tools-setup.py                   |  6 ++--
-> - utils/test/Makefile                           |  2 +-
-> - utils/test/README.md                          |  2 +-
-> - 11 files changed, 32 insertions(+), 28 deletions(-)
+> - meson.build       | 8 +++++++-
+> - meson_options.txt | 1 +
+> - 2 files changed, 8 insertions(+), 1 deletion(-)
 > -
-> -diff --git a/.gitignore b/.gitignore
-> -index 78a06fdf9..4782a351a 100644
-> ---- a/.gitignore
-> -+++ b/.gitignore
-> -@@ -160,6 +160,7 @@ libraries/libapparmor/swig/perl/libapparmor_wrap.c
-> - libraries/libapparmor/swig/perl/libapparmor_wrap.o
-> - libraries/libapparmor/swig/perl/pm_to_blib
-> - libraries/libapparmor/swig/python/LibAppArmor.py
-> -+libraries/libapparmor/swig/python/LibAppArmor.egg-info/
-> - libraries/libapparmor/swig/python/build/
-> - libraries/libapparmor/swig/python/libapparmor_wrap.c
-> - libraries/libapparmor/swig/python/Makefile
-> -@@ -204,6 +205,8 @@ utils/*.tmp
-> - utils/po/*.mo
-> - utils/apparmor/*.pyc
-> - utils/apparmor/rule/*.pyc
-> -+utils/apparmor.egg-info/
-> -+utils/build/
-> - utils/htmlcov/
-> - utils/test/common_test.pyc
-> - utils/test/.coverage
-> -diff --git a/libraries/libapparmor/m4/ac_python_devel.m4 b/libraries/libapparmor/m4/ac_python_devel.m4
-> -index 1da29d873..f21f70ce7 100644
-> ---- a/libraries/libapparmor/m4/ac_python_devel.m4
-> -+++ b/libraries/libapparmor/m4/ac_python_devel.m4
-> -@@ -66,17 +66,17 @@ variable to configure. See ``configure --help'' for reference.
-> -         fi
-> -
-> -         #
-> --        # Check if you have distutils, else fail
-> -+        # Check if you have setuptools, else fail
-> -         #
-> --        AC_MSG_CHECKING([for the distutils Python package])
-> --        ac_distutils_result=`$PYTHON -c "import distutils" 2>&1`
-> --        if test -z "$ac_distutils_result"; then
-> -+        AC_MSG_CHECKING([for the setuptools Python package])
-> -+        ac_setuptools_result=`$PYTHON -c "import setuptools" 2>&1`
-> -+        if test -z "$ac_setuptools_result"; then
-> -                 AC_MSG_RESULT([yes])
-> -         else
-> -                 AC_MSG_RESULT([no])
-> --                AC_MSG_ERROR([cannot import Python module "distutils".
-> -+                AC_MSG_ERROR([cannot import Python module "setuptools".
-> - Please check your Python installation. The error was:
-> --$ac_distutils_result])
-> -+$ac_setuptools_result])
-> -                 PYTHON_VERSION=""
-> -         fi
-> -
-> -@@ -88,8 +88,8 @@ $ac_distutils_result])
-> -                 PYTHON_CPPFLAGS=`$PYTHON_CONFIG --includes`
-> -         fi
-> -         if test -z "$PYTHON_CPPFLAGS"; then
-> --                python_path=`$PYTHON -c "import sys; import distutils.sysconfig;\
-> --sys.stdout.write('%s\n' % distutils.sysconfig.get_python_inc());"`
-> -+                python_path=`$PYTHON -c "import sys; import sysconfig;\
-> -+sys.stdout.write('%s\n' % sysconfig.get_path('include'));"`
-> -                 if test -n "${python_path}"; then
-> -                         python_path="-I$python_path"
-> -                 fi
-> -@@ -108,8 +108,8 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_inc());"`
-> -         if test -z "$PYTHON_LDFLAGS"; then
-> -                 # (makes two attempts to ensure we've got a version number
-> -                 # from the interpreter)
-> --                py_version=`$PYTHON -c "import sys; from distutils.sysconfig import *; \
-> --sys.stdout.write('%s\n' % ''.join(get_config_vars('VERSION')))"`
-> -+                py_version=`$PYTHON -c "import sys; import sysconfig; \
-> -+sys.stdout.write('%s\n' % ''.join(sysconfig.get_config_vars('VERSION')))"`
-> -                 if test "$py_version" == "[None]"; then
-> -                         if test -n "$PYTHON_VERSION"; then
-> -                                 py_version=$PYTHON_VERSION
-> -@@ -119,8 +119,8 @@ sys.stdout.write("%s\n" % sys.version[[:3]])"`
-> -                         fi
-> -                 fi
-> -
-> --                PYTHON_LDFLAGS=`$PYTHON -c "import sys; from distutils.sysconfig import *; \
-> --sys.stdout.write('-L' + get_python_lib(0,1) + ' -lpython\n')"`$py_version`$PYTHON -c \
-> -+                PYTHON_LDFLAGS=`$PYTHON -c "import sys; import sysconfig; \
-> -+sys.stdout.write('-L' + sysconfig.get_path('stdlib') + ' -lpython\n')"`$py_version`$PYTHON -c \
-> - "import sys; sys.stdout.write('%s' % getattr(sys,'abiflags',''))"`
-> -         fi
-> -         AC_MSG_RESULT([$PYTHON_LDFLAGS])
-> -@@ -131,8 +131,8 @@ sys.stdout.write('-L' + get_python_lib(0,1) + ' -lpython\n')"`$py_version`$PYTHO
-> -         #
-> -         AC_MSG_CHECKING([for Python site-packages path])
-> -         if test -z "$PYTHON_SITE_PKG"; then
-> --                PYTHON_SITE_PKG=`$PYTHON -c "import sys; import distutils.sysconfig; \
-> --sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-> -+                PYTHON_SITE_PKG=`$PYTHON -c "import sys; import sysconfig; \
-> -+sys.stdout.write('%s\n' % sysconfig.get_path('purelib'));"`
-> -         fi
-> -         AC_MSG_RESULT([$PYTHON_SITE_PKG])
-> -         AC_SUBST([PYTHON_SITE_PKG])
-> -@@ -146,8 +146,8 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-> -                         PYTHON_EXTRA_LIBS=''
-> -         fi
-> -         if test -z "$PYTHON_EXTRA_LIBS"; then
-> --           PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-> --conf = distutils.sysconfig.get_config_var; \
-> -+           PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import sysconfig; \
-> -+conf = sysconfig.get_config_var; \
-> - sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf('LIBS')))"`
-> -         fi
-> -         AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
-> -@@ -162,8 +162,8 @@ sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf(
-> -                         PYTHON_EXTRA_LDFLAGS=''
-> -         fi
-> -         if test -z "$PYTHON_EXTRA_LDFLAGS"; then
-> --                PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-> --conf = distutils.sysconfig.get_config_var; \
-> -+                PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import sys; import sysconfig; \
-> -+conf = sysconfig.get_config_var; \
-> - sys.stdout.write('%s\n' % conf('LINKFORSHARED'))"`
-> -         fi
-> -         AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
-> -diff --git a/libraries/libapparmor/swig/python/Makefile.am b/libraries/libapparmor/swig/python/Makefile.am
-> -index 04edff003..bf05fe0fc 100644
-> ---- a/libraries/libapparmor/swig/python/Makefile.am
-> -+++ b/libraries/libapparmor/swig/python/Makefile.am
-> -@@ -21,7 +21,7 @@ install-exec-local:
-> -
-> - clean-local:
-> - 	if test -x "$(PYTHON)"; then $(PYTHON) setup.py clean; fi
-> --	rm -rf build
-> -+	rm -rf build LibAppArmor.egg-info
-> - 	if test $(top_srcdir) != $(top_builddir) ; then rm -f libapparmor_wrap.c ; fi
-> -
+> -diff --git a/meson.build b/meson.build
+> -index e88b43a1..c7312146 100644
+> ---- a/meson.build
+> -+++ b/meson.build
+> -@@ -223,8 +223,8 @@ if enable_gtk_doc
+> -   subdir('docs/reference/libqmi-glib')
 > - endif
-> -diff --git a/libraries/libapparmor/swig/python/setup.py.in b/libraries/libapparmor/swig/python/setup.py.in
-> -index 32abd46b2..b23e40746 100644
-> ---- a/libraries/libapparmor/swig/python/setup.py.in
-> -+++ b/libraries/libapparmor/swig/python/setup.py.in
-> -@@ -1,4 +1,4 @@
-> --from distutils.core import setup, Extension
-> -+from setuptools import setup, Extension
-> - import string
 > -
-> - setup(name          = 'LibAppArmor',
-> -diff --git a/libraries/libapparmor/swig/python/test/Makefile.am b/libraries/libapparmor/swig/python/test/Makefile.am
-> -index 7287819c9..9dccfdef6 100644
-> ---- a/libraries/libapparmor/swig/python/test/Makefile.am
-> -+++ b/libraries/libapparmor/swig/python/test/Makefile.am
-> -@@ -11,7 +11,7 @@ test_python.py: test_python.py.in $(top_builddir)/config.status
-> - CLEANFILES = test_python.py
+> --help2man = find_program('help2man', required: false)
+> --if help2man.found()
+> -+enable_man = get_option('man')
+> -+if enable_man
+> -   subdir('docs/man')
+> - endif
 > -
-> - # bah, how brittle is this?
-> --PYTHON_DIST_BUILD_PATH = '$(builddir)/../build/$$($(PYTHON) -c "import distutils.util; import platform; print(\"lib.%s-%s\" %(distutils.util.get_platform(), platform.python_version()[:3]))")'
-> -+PYTHON_DIST_BUILD_PATH = '$(builddir)/../build/$$($(PYTHON) -c "import sysconfig; print(\"lib.%s-%s\" %(sysconfig.get_platform(), sysconfig.get_python_version()))")'
+> -@@ -237,6 +242,7 @@ summary({
+> - output += '    Documentation:         ' + enable_gtk_doc.to_string() + '\n'
+> - output += '    bash completion:       ' + enable_bash_completion.to_string() + '\n'
+> - output += '    gobject introspection: ' + enable_gir.to_string() + '\n\n'
+> -+output += '    man pages:             ' + enable_man.to_string() + '\n\n'
+> - output += '  System paths\n'
+> - output += '    prefix:                ' + qmi_prefix + '\n'
+> - output += '    udev base directory:   ' + qmi_username + '\n\n'
+> -diff --git a/meson_options.txt b/meson_options.txt
+> -index 4d4f913d..bee5daac 100644
+> ---- a/meson_options.txt
+> -+++ b/meson_options.txt
+> -@@ -16,5 +16,6 @@ option('udevdir', type: 'string', value: '', description: 'where udev base direc
 > -
-> - TESTS	= test_python.py
-> - TESTS_ENVIRONMENT = \
-> -diff --git a/profiles/Makefile b/profiles/Makefile
-> -index c471e58e8..0b7f2655d 100644
-> ---- a/profiles/Makefile
-> -+++ b/profiles/Makefile
-> -@@ -41,7 +41,7 @@ ifdef USE_SYSTEM
-> -     LOGPROF?=aa-logprof
-> - else
-> -     # PYTHON_DIST_BUILD_PATH based on libapparmor/swig/python/test/Makefile.am
-> --    PYTHON_DIST_BUILD_PATH = ../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import distutils.util; import platform; print(\"lib.%s-%s\" %(distutils.util.get_platform(), platform.python_version()[:3]))")
-> -+    PYTHON_DIST_BUILD_PATH = ../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import sysconfig; print(\"lib.%s-%s\" %(sysconfig.get_platform(), sysconfig.get_python_version()))")
-> -     LIBAPPARMOR_PATH=../libraries/libapparmor/src/.libs/
-> -     LD_LIBRARY_PATH=$(LIBAPPARMOR_PATH):$(PYTHON_DIST_BUILD_PATH)
-> -     PYTHONPATH=../utils/:$(PYTHON_DIST_BUILD_PATH)
-> -diff --git a/utils/Makefile b/utils/Makefile
-> -index 1f08f259a..91a15107b 100644
-> ---- a/utils/Makefile
-> -+++ b/utils/Makefile
-> -@@ -72,6 +72,7 @@ clean: pod_clean
-> - 	rm -rf staging/ build/
-> - 	rm -f apparmor/*.pyc apparmor/rule/*.pyc
-> - 	rm -rf apparmor/__pycache__/ apparmor/rule/__pycache__/
-> -+	rm -rf apparmor.egg-info/
+> - option('introspection', type: 'boolean', value: 'auto', description: 'build introspection support')
+> - option('gtk_doc', type: 'boolean', value: false, description: 'use gtk-doc to build documentation')
+> -+option('man', type: 'boolean', value: 'true', description: 'build man pages using help2man')
 > -
-> - # ${CAPABILITIES} is defined in common/Make.rules
-> - .PHONY: check_severity_db
-> -diff --git a/utils/python-tools-setup.py b/utils/python-tools-setup.py
-> -index 30ce0cb05..2cbde8fc1 100644
-> ---- a/utils/python-tools-setup.py
-> -+++ b/utils/python-tools-setup.py
-> -@@ -20,14 +20,14 @@
-> - # Note: --version=... must be the last argument to this script
-> - #
-> -
-> --from distutils.command.install import install as _install
-> --from distutils.core import setup
-> -+from setuptools.command.install import install as _install
-> -+from setuptools import setup
-> - import os
-> - import shutil
-> - import sys
-> -
-> - class Install(_install, object):
-> --    '''Override distutils to install the files where we want them.'''
-> -+    '''Override setuptools to install the files where we want them.'''
-> -     def run(self):
-> -         # Now byte-compile everything
-> -         super(Install, self).run()
-> -diff --git a/utils/test/Makefile b/utils/test/Makefile
-> -index 90354aa50..9126bdd71 100644
-> ---- a/utils/test/Makefile
-> -+++ b/utils/test/Makefile
-> -@@ -32,7 +32,7 @@ ifdef USE_SYSTEM
-> -     PARSER=
-> - else
-> -     # PYTHON_DIST_BUILD_PATH based on libapparmor/swig/python/test/Makefile.am
-> --    PYTHON_DIST_BUILD_PATH = ../../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import distutils.util; import platform; print(\"lib.%s-%s\" %(distutils.util.get_platform(), platform.python_version()[:3]))")
-> -+    PYTHON_DIST_BUILD_PATH = ../../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import sysconfig; print(\"lib.%s-%s\" %(sysconfig.get_platform(), sysconfig.get_python_version()))")
-> -     LIBAPPARMOR_PATH=../../libraries/libapparmor/src/.libs/
-> -     LD_LIBRARY_PATH=$(LIBAPPARMOR_PATH):$(PYTHON_DIST_BUILD_PATH)
-> -     PYTHONPATH=..:$(PYTHON_DIST_BUILD_PATH)
+> - option('bash_completion', type: 'boolean', value: true, description: 'install bash completion files')
 > ---
 > -GitLab
 > -
-> diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
-> index 6a19aef77a..9fbfe3b92e 100644
-> --- a/package/libapparmor/libapparmor.hash
-> +++ b/package/libapparmor/libapparmor.hash
-> @@ -1,5 +1,5 @@
->   # From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
-> -sha256  153db05d8f491e0596022663c19fb1166806cb473b3c6f0a7279feda2ec25a59  apparmor-3.0.3.tar.gz
-> +sha256  09bf48d7a171f9790c39a1404bad105a788934cfe77b7490c7f5c63c2576b725  apparmor-3.0.4.tar.gz
+> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+> index 1f2da45ac0..ef2da77a2a 100644
+> --- a/package/libqmi/libqmi.hash
+> +++ b/package/libqmi/libqmi.hash
+> @@ -1,4 +1,4 @@
+>   # Locally computed:
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> -sha256  2eb7c7971b91a64ad830643b0170cff692a69bf0f093ca61d72d3f466a0272d4  libqmi-1.30.2.tar.gz
+> +sha256  82ddd3f77c602b1e0c11d3e41d0563ede11f95036ebfcf929bc89157b13928e6  libqmi-1.30.4.tar.gz
+> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+> index a4839f1efb..b33e2fdc47 100644
+> --- a/package/libqmi/libqmi.mk
+> +++ b/package/libqmi/libqmi.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   # locally computed
->   sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-> diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-> index 7bb849ab94..fcd3a4389b 100644
-> --- a/package/libapparmor/libapparmor.mk
-> +++ b/package/libapparmor/libapparmor.mk
-> @@ -6,7 +6,7 @@
->   
->   # When updating the version here, please also update the apparmor package
->   LIBAPPARMOR_VERSION_MAJOR = 3.0
-> -LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).3
-> +LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).4
->   LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_VERSION).tar.gz
->   LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_VERSION_MAJOR)/$(LIBAPPARMOR_VERSION)/+download
->   LIBAPPARMOR_LICENSE = LGPL-2.1
+> -LIBQMI_VERSION = 1.30.2
+> +LIBQMI_VERSION = 1.30.4
+>   LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
+>   LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+>   LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
