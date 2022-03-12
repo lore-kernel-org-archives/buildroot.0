@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBA3AC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4850DC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 12 Mar 2022 17:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 906E260E52;
-	Sat, 12 Mar 2022 17:10:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 058E8408EE;
+	Sat, 12 Mar 2022 17:11:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ez-MT533E-YJ; Sat, 12 Mar 2022 17:10:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6r_dZ_jI-Wnc; Sat, 12 Mar 2022 17:11:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEBEF60BA0;
-	Sat, 12 Mar 2022 17:10:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 200DC1BF5F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23ABB408CB;
+	Sat, 12 Mar 2022 17:11:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 224CE1BF969
  for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5062260E5B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 708A1408D6
  for <buildroot@lists.busybox.net>; Sat, 12 Mar 2022 17:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YnDybV32frbB for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W0FisjymuHfy for <buildroot@lists.busybox.net>;
  Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2DF260BD5
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBC52408C4
  for <buildroot@buildroot.org>; Sat, 12 Mar 2022 17:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0705782AD0; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
+ id 0FE6C82AA4; Sat, 12 Mar 2022 17:01:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 12 Mar 2022 18:08:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df103584508586117b85f11d7fccb6b64c4b1492
-X-Git-Newrev: e36884420d1709fabc5a8b081f5a6cbd1e59e297
+X-Git-Oldrev: e36884420d1709fabc5a8b081f5a6cbd1e59e297
+X-Git-Newrev: ff4e3baa40a7fc3f86efbe14cc228c8b34c8bfb4
 X-Patchwork-Hint: ignore
-Message-Id: <20220312170118.0705782AD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
- 19.7.11-Matrix
+Message-Id: <20220312170118.0FE6C82AA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/s390-tools: bump to version 2.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e36884420d1709fabc5a8b081f5a6cbd1e59e297
+commit: https://git.buildroot.net/buildroot/commit/?id=ff4e3baa40a7fc3f86efbe14cc228c8b34c8bfb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+- https://release-monitoring.org/project/10714/
+
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ package/s390-tools/s390-tools.hash | 2 +-
+ package/s390-tools/s390-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index ac4960df92..0b88d5c747 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+index 13c68fbf52..6ea8f7ea20 100644
+--- a/package/s390-tools/s390-tools.hash
++++ b/package/s390-tools/s390-tools.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  8cc02c4627b5108e39bb7b6a6f56f7ba5debbb1adf982c4f23395944aa7d2c8e  kodi-pvr-zattoo-19.7.10-Matrix.tar.gz
-+sha256  07d96b1b0c3b464c0bf02279fa8cab9ccdf675344129f3a970b14bafce225fb4  kodi-pvr-zattoo-19.7.11-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 7a3b230e8b..95c5de0925 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+ # Locally computed:
+-sha256  17dc163e6a1e940f895c64955c130058600e1df834e1ab134410be7266ef724a  s390-tools-2.19.0.tar.gz
++sha256  6fa6add92e896541c0ef74885a4084474fc0d77049e8ac7372872a70a46ddd74  s390-tools-2.20.0.tar.gz
+ sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index 328986bcb3..3c386af6fd 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_ZATTOO_VERSION = 19.7.10-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.11-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+-S390_TOOLS_VERSION = 2.19.0
++S390_TOOLS_VERSION = 2.20.0
+ S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
+ S390_TOOLS_LICENSE = MIT
+ S390_TOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
