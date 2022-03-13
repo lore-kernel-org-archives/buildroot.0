@@ -1,64 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13E4DC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 16:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61151C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 16:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D92F812A9;
-	Sun, 13 Mar 2022 16:21:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1F64408C2;
+	Sun, 13 Mar 2022 16:31:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o_lTYo5oLn7z; Sun, 13 Mar 2022 16:21:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DWIC__UERfqr; Sun, 13 Mar 2022 16:31:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B0AA81801;
-	Sun, 13 Mar 2022 16:21:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8893E1BF300
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 16:21:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB0954089B;
+	Sun, 13 Mar 2022 16:31:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 204D31BF300
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 16:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8476B81801
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 16:21:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1533560B1E
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 16:31:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c53Jk1dcehI8 for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 16:21:40 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5eCtSaJu8fe6 for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 16:31:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D5851817F2
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 16:21:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EFD9C60AC3
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 16:31:54 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:91a3:d0c0:1a06:f60f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id D01D6780310;
- Sun, 13 Mar 2022 17:21:32 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 671497802BE;
+ Sun, 13 Mar 2022 17:31:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647188497;
- bh=yVCefUSWeOj4qB9hUvIQ/LeuTmim0Y10PXnXHDR0egg=;
+ s=smtp-20201208; t=1647189113;
+ bh=kE7RfF2NvKunE6hyPl+gwFCBVijEXHjvP5jtVHDs36s=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=QHs+2VSYY9Wto4vuev2qxotPodJxeWG3hXKeHCDbNokTWWj/d+vhHSBzq0v5TbzXX
- yvOe8Y5rJD5m8xjbIbKIitgNoLQlNUC6n9sLr5ZHzEYIY04IwsM7mltW0ujYK9CGAM
- 8lazEXQYRmh6gu7VmmIISi61//9HK3uWGO4WrpLpce2Bqm+fb3xoU5QM7kHi3HxWOm
- 51TG6Rh+AGyl2Zj7mzDDWrEL4KJ9AEhSCWjWwjxMPbM3Cm8DfBEwSp5UZI3xhbOaxC
- XiOcvU/3ORUwH5EwMuNmkEVYycItd4bEQeGurDiaU2ih7mbj6S/+u891z58BFf9AIQ
- X4HRvnASQYF8g==
+ b=F+qHUn7ngu9061om3l4Fgdm47c2DHH5puXoaRN/xqyC+lpZ51VZSL/1mumK+JXHOR
+ VApcmFveSpeVrQ5Ft+XsRT9Ss6qOKWWpuzye+zKeozA1msVpKjP76umCiMEAqyLxoo
+ 3pwr/t6Zph3SPmqJ+kqyKI1PGGLTczUJDqfy9kvBB1/pYpR3VoWvmVCowIX1cbPHKc
+ MWZ648AaDx+ublR77pU9DXGudty/dcpPNMRJ87Uhlqd6ngBf/slVoCU6YM11QjQOjG
+ WVXmbrK7D8+imAiFSSReeEaM5FZSVMuQgnzTulo9t22ZAEiCNqCok1Jdk7gvRTxdPy
+ tp04vOx8zc+Hg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 13 Mar 2022 17:21:32 +0100
-Date: Sun, 13 Mar 2022 17:21:32 +0100
+ Sun, 13 Mar 2022 17:31:51 +0100
+Date: Sun, 13 Mar 2022 17:31:51 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220313162132.GT283544@scaer>
-References: <20220313122112.261290-1-james.hilliard1@gmail.com>
+Message-ID: <20220313163151.GU283544@scaer>
+References: <20220313143726.267306-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220313122112.261290-1-james.hilliard1@gmail.com>
+In-Reply-To: <20220313143726.267306-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-python: migrate flit to new
- bootstrapping sequence
+Subject: Re: [Buildroot] [PATCH 1/1] utils/scanpypi: add flit package support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,8 +71,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -79,185 +79,205 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2022-03-13 06:21 -0600, James Hilliard spake thusly:
-> There are a number of flit toolchain dependencies currently in the
-> process of deprecating distutils based fallbacks.
-> 
-> This will be needed in order to update tomli.
-> 
-> We need to migrate these to use a new bootstrap based build+install
-> sequence which relies on flit's bootstrap wheel build+install
-> features to build and install host-python-pypa-build and
-> host-python-installer which gives us a full pep517 toolchain.
+On 2022-03-13 08:37 -0600, James Hilliard spake thusly:
+> These packages don't have a setup.py so we instead need to parse their
+> pyproject.toml file.
 
-Would it be possible to split this change into separate patches:
+Please, split this into at least two patches;
 
-  - introduce the new support,
-  - migrate patches one by one
-  - drop the leftovers of no longer needed stuff
+  - offload the loading to a separate function (i.e. load_pyproject())
+  - introduce support for flit packages
 
-Also, see below...
+Also, even though I did not look at the code too closely, it looks like
+the handling of the homepage is not strictly tied to the flit support,
+so perhaps it should be also separated (unless it is tied to the
+introduction of load_pyproject()?)
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index 52ce402281..6dee8aa7d1 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-[--SNIP--]
-> @@ -212,7 +215,16 @@ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/*
->  else
->  $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
->  $(2)_BASE_BUILD_CMD = -m build -n -w
+Anyway, separate patches into semantically contained minimalist patches,
+please.
 
-So this assignment to $(2)_BASE_BUILD_CMD...
-
-> -$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
-> +$(2)_BASE_BUILD_CMD = $$(if $$(filter \
-
-... is completely overriden here...
-
-> +	host-python-flit-core \
-> +	host-python-installer \
-> +	host-python-pep517 \
-> +	host-python-tomli,$(1)),\
-> +	-m flit_core.wheel,\
-> +	-m build -n -w)
-> +$(2)_BASE_INSTALL_CMD = $$(if $$(filter host-python-flit-core,$(1)),\
-> +	-m bootstrap_install dist/* $$(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS),\
-> +	$(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS))
->  endif
->  else
->  $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
-> @@ -235,9 +247,19 @@ endif # ($(4),target)
->  ifeq ($$($(2)_SETUP_TYPE),setuptools)
->  $(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
->  else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
-> -$(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
-> +$(2)_DEPENDENCIES += $$(if $$(filter \
-> +	host-python-flit-core \
-> +	host-python-installer \
-> +	host-python-pep517 \
-> +	host-python-pypa-build \
-> +	host-python-tomli,$(1)),,\
-> +	host-python-pypa-build)
-
-This is totally unreadable. One can't easily spot what is filtered from
-what...
-
-    $(2)_DEPENDENCIES += $$(if \
-        $$(filter \
-            host-python-flit-core host-python-installer host-python-pep517 host-python-pypa-build host-python-tomli, \
-            $(1)) \
-        , \
-        host-python-pypa-build
-    )
-
-So, what this is saying, as I can understand, is that if the current
-package is one of the list;
-    host-python-flit-core host-python-installer host-python-pep517
-    host-python-pypa-build host-python-tomli
-
-then we want to add host-python-pypa-build to their dependency.
-
-However, from what I understand, all those packages really are packages
-that implement the 'flit' and pep517 now?) infrastructure, and thus the
-dependency should be explicitly listed in those packages, rather than
-implcitly added by the infra.
-
-> +$(2)_DEPENDENCIES += $$(if $$(filter \
-
-Why use an other assignment to the same variable? It could be a single
-assignment...
-
-> +	host-python-flit-core \
-> +	host-python-installer,$(1)),,\
-> +	host-python-installer)
-
-Ditto, this should be explictly added to the packages.
-
->  ifeq ($$($(2)_SETUP_TYPE),flit)
-> -$(2)_DEPENDENCIES += host-python-flit-core
-> +$(2)_DEPENDENCIES += $$(if $$(filter host-python-flit-core,$(1)),,host-python-flit-core)
-
-I don't understand how this is going to work. The dependency exclusion
-here is correct, indeed, I am not questionning that.
-
-However, I don't understand how host-python-flit-core can use the flit
-type at build time, when it is not already installed, especially since
-host-python-flit-core does not define any custom configure/build/install
-commands...
-
-You will have to add a blurb in the commit log to explain how it
-works...
-
->  endif
->  endif # SETUP_TYPE
->  
-> diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
-> index 0e058a1f17..d206a72f82 100644
-> --- a/package/python-flit-core/python-flit-core.mk
-> +++ b/package/python-flit-core/python-flit-core.mk
-> @@ -8,6 +8,6 @@ PYTHON_FLIT_CORE_VERSION = 3.7.1
->  PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
->  PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/15/d1/d8798b83e953fd6f86ca9b50f93eec464a9305b0661469c8234e61095481
->  PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
-> -PYTHON_FLIT_CORE_SETUP_TYPE = pep517
-> +PYTHON_FLIT_CORE_SETUP_TYPE = flit
-
-Yup, see my comment above, about the corresponding change in the infra.
-
->  $(eval $(host-python-package))
-> diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
-> index 862a251415..97a158b738 100644
-> --- a/package/python-installer/python-installer.mk
-> +++ b/package/python-installer/python-installer.mk
-> @@ -9,6 +9,7 @@ PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
->  PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/74/b7/9187323cd732840f1cddd6a9f05961406636b50c799eef37c920b63110c0
->  PYTHON_INSTALLER_LICENSE = MIT
->  PYTHON_INSTALLER_LICENSE_FILES = LICENSE
-> -PYTHON_INSTALLER_SETUP_TYPE = distutils
-> +PYTHON_INSTALLER_SETUP_TYPE = flit
-> +HOST_PYTHON_INSTALLER_ENV = PYTHONPATH=$(@D)/src
-
-Why do we need to provide this here? Can't that be made generic be using
-something like HOST_PYTHON_INSTALLER_SUBDIR=src ?
-
-python-package already uses $(2)_BUILDDIR, which by default is the same
-as $(2)_SRCDIR, which by default is (basically) $(@D)/$(2)_SUBDIR, so it
-should jsut work automatically, no?
+Alos, please try to provide more detailed explanations in your commit
+logs. Consider that reviewers are dumb in your area of expertise (I
+certainly am!), and consider what information we will need to understand
+the change, and also what we will need in two weeks, two months, two
+years when we have an issue and we want to understand how the code came
+to be...
 
 Regards,
 Yann E. MORIN.
 
->  $(eval $(host-python-package))
-> diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
-> index 99aa62d51d..1ca1bc4e35 100644
-> --- a/package/python-pep517/python-pep517.mk
-> +++ b/package/python-pep517/python-pep517.mk
-> @@ -9,7 +9,7 @@ PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
->  PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
->  PYTHON_PEP517_LICENSE = MIT
->  PYTHON_PEP517_LICENSE_FILES = LICENSE
-> -PYTHON_PEP517_SETUP_TYPE = distutils
-> +PYTHON_PEP517_SETUP_TYPE = flit
->  HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  utils/scanpypi | 126 ++++++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 105 insertions(+), 21 deletions(-)
+> 
+> diff --git a/utils/scanpypi b/utils/scanpypi
+> index 17d8a0017a..98426820c6 100755
+> --- a/utils/scanpypi
+> +++ b/utils/scanpypi
+> @@ -42,6 +42,48 @@ except ImportError:
+>            'pip install spdx_lookup')
+>      liclookup = None
 >  
->  $(eval $(host-python-package))
-> diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
-> index b8c20ca736..3539a505be 100644
-> --- a/package/python-tomli/python-tomli.mk
-> +++ b/package/python-tomli/python-tomli.mk
-> @@ -7,7 +7,7 @@
->  PYTHON_TOMLI_VERSION = 1.2.0
->  PYTHON_TOMLI_SOURCE = tomli-$(PYTHON_TOMLI_VERSION).tar.gz
->  PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/ec/38/8eccdc662c61aed187d5f5b168c18b1d2de3827976c3691e4da8be7375aa
-> -PYTHON_TOMLI_SETUP_TYPE = distutils
-> +PYTHON_TOMLI_SETUP_TYPE = flit
->  PYTHON_TOMLI_LICENSE = MIT
->  PYTHON_TOMLI_LICENSE_FILES = LICENSE
+> +def toml_load(f):
+> +    with open(f, 'rb') as fh:
+> +        ex = None
+> +
+> +        # Try regular tomli first
+> +        try:
+> +            from tomli import load
+> +            return load(fh)
+> +        except ImportError as e:
+> +            ex = e
+> +
+> +        # Try pip's vendored tomli
+> +        try:
+> +            from pip._vendor.tomli import load
+> +            try:
+> +                return load(fh)
+> +            except TypeError:
+> +                # Fallback to handle older version
+> +                try:
+> +                    fh.seek(0)
+> +                    w = io.TextIOWrapper(fh, encoding="utf8", newline="")
+> +                    return load(w)
+> +                finally:
+> +                    w.detach()
+> +        except ImportError as e:
+> +            pass
+> +
+> +        # Try regular toml last
+> +        try:
+> +            from toml import load
+> +            fh.seek(0)
+> +            w = io.TextIOWrapper(fh, encoding="utf8", newline="")
+> +            try:
+> +                return load(w)
+> +            finally:
+> +                w.detach()
+> +        except ImportError:
+> +            pass
+> +
+> +        print('This package needs tomli')
+> +        raise ex
+> +
 >  
+>  def setup_decorator(func, method):
+>      """
+> @@ -296,20 +338,52 @@ class BuildrootPackage():
+>          current_dir = os.getcwd()
+>          os.chdir(self.tmp_extract)
+>          sys.path.insert(0, self.tmp_extract)
+> -        s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+> -        imp.load_module('__main__', s_file, s_path, s_desc)
+> -        if self.metadata_name in self.setup_args:
+> -            pass
+> -        elif self.metadata_name.replace('_', '-') in self.setup_args:
+> -            self.metadata_name = self.metadata_name.replace('_', '-')
+> -        elif self.metadata_name.replace('-', '_') in self.setup_args:
+> -            self.metadata_name = self.metadata_name.replace('-', '_')
+>          try:
+> -            self.setup_metadata = self.setup_args[self.metadata_name]
+> -        except KeyError:
+> -            # This means setup was not called
+> -            print('ERROR: Could not determine package metadata for {pkg}.\n'
+> -                  .format(pkg=self.real_name))
+> +            s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+> +            imp.load_module('__main__', s_file, s_path, s_desc)
+> +            if self.metadata_name in self.setup_args:
+> +                pass
+> +            elif self.metadata_name.replace('_', '-') in self.setup_args:
+> +                self.metadata_name = self.metadata_name.replace('_', '-')
+> +            elif self.metadata_name.replace('-', '_') in self.setup_args:
+> +                self.metadata_name = self.metadata_name.replace('-', '_')
+> +            try:
+> +                self.setup_metadata = self.setup_args[self.metadata_name]
+> +            except KeyError:
+> +                # This means setup was not called
+> +                print('ERROR: Could not determine package metadata for {pkg}.\n'
+> +                      .format(pkg=self.real_name))
+> +                raise
+> +        finally:
+> +            os.chdir(current_dir)
+> +            sys.path.remove(self.tmp_extract)
+> +
+> +    def load_pyproject(self):
+> +        """
+> +        Loads the corresponding pyproject.toml and store its metadata
+> +        """
+> +        current_dir = os.getcwd()
+> +        os.chdir(self.tmp_extract)
+> +        sys.path.insert(0, self.tmp_extract)
+> +        try:
+> +            pyproject_data = toml_load('pyproject.toml')
+> +            try:
+> +                self.setup_metadata = pyproject_data.get('project', {})
+> +                self.metadata_name = self.setup_metadata.get('name', self.real_name)
+> +                build_system = pyproject_data.get('build-system', {})
+> +                build_backend = build_system.get('build-backend', None)
+> +                if build_backend is not None and build_backend == 'flit_core.buildapi':
+> +                    self.setup_metadata['method'] = 'flit'
+> +                elif build_system.get('backend-path', None) is not None:
+> +                    self.setup_metadata['method'] = 'pep517'
+> +                else:
+> +                    self.setup_metadata['method'] = 'unknown'
+> +            except KeyError:
+> +                # This means setup was not called
+> +                print('ERROR: Could not determine package metadata for {pkg}.\n'
+> +                      .format(pkg=self.real_name))
+> +                raise
+> +        except FileNotFoundError:
+>              raise
+>          os.chdir(current_dir)
+>          sys.path.remove(self.tmp_extract)
+> @@ -609,7 +683,8 @@ class BuildrootPackage():
+>  
+>          lines.append('\thelp\n')
+>  
+> -        help_lines = textwrap.wrap(self.metadata['info']['summary'], 62,
+> +        md_info = self.metadata['info']
+> +        help_lines = textwrap.wrap(md_info['summary'], 62,
+>                                     initial_indent='\t  ',
+>                                     subsequent_indent='\t  ')
+>  
+> @@ -617,11 +692,17 @@ class BuildrootPackage():
+>          if help_lines[-1][-1] != '.':
+>              help_lines[-1] += '.'
+>  
+> -        # \t + two spaces is 3 char long
+> -        help_lines.append('')
+> -        help_lines.append('\t  ' + self.metadata['info']['home_page'])
+> -        help_lines = [x + '\n' for x in help_lines]
+> -        lines += help_lines
+> +        home_page = md_info.get('home_page', None)
+> +        if home_page is None or len(home_page) == 0:
+> +            project_urls = md_info.get('project_urls', {})
+> +            home_page = project_urls.get('Homepage', None)
+> +
+> +        if home_page is not None and len(home_page) != 0:
+> +            # \t + two spaces is 3 char long
+> +            help_lines.append('')
+> +            help_lines.append('\t  ' + home_page)
+> +            help_lines = [x + '\n' for x in help_lines]
+> +            lines += help_lines
+>  
+>          with open(path_to_config, 'w') as config_file:
+>              config_file.writelines(lines)
+> @@ -692,9 +773,12 @@ def main():
+>              except ImportError as err:
+>                  if 'buildutils' in str(err):
+>                      print('This package needs buildutils')
+> +                    continue
+>                  else:
+> -                    raise
+> -                continue
+> +                    try:
+> +                        package.load_pyproject()
+> +                    except Exception as e:
+> +                        raise
+>              except (AttributeError, KeyError) as error:
+>                  print('Error: Could not install package {pkg}: {error}'.format(
+>                      pkg=package.real_name, error=error))
 > -- 
 > 2.25.1
 > 
