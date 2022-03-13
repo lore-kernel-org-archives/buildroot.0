@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E162C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 21:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F142C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 21:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48AC660C07;
-	Sun, 13 Mar 2022 21:27:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0429260E1B;
+	Sun, 13 Mar 2022 21:27:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kj-iRIfxfmi5; Sun, 13 Mar 2022 21:27:37 +0000 (UTC)
+	with ESMTP id uG5Md4MK0gJT; Sun, 13 Mar 2022 21:27:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 549B860B1B;
-	Sun, 13 Mar 2022 21:27:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD14C1BF982
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:26:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC7ED60C00;
+	Sun, 13 Mar 2022 21:27:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D7C6A1BF309
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:26:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C780781D70
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF69C60B1B
  for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:26:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Z6NEHKfMfYu for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 21:26:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P4fQ9eEzMwt8 for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 21:26:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D37DB81DB2
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 21:26:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0499B60B48
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 21:26:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8320683CFD; Sun, 13 Mar 2022 21:17:54 +0000 (UTC)
+ id 97E0083CFD; Sun, 13 Mar 2022 21:17:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Mar 2022 22:17:22 +0100
+Date: Sun, 13 Mar 2022 22:25:03 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: e838466c74dd7088074156e722a2c28797eb4f2e
-X-Git-Newrev: d578d93e0e1dce841d8d9fe75f12d37a6c1f1661
+X-Git-Oldrev: a8bec43ffc3ff0077a9df6327a156f1da671e2f5
+X-Git-Newrev: 1ef50335dd5c0735e90bf042edc876f2fe154dbf
 X-Patchwork-Hint: ignore
-Message-Id: <20220313211754.8320683CFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libxml2: security
- bump to version 2.9.13
+Message-Id: <20220313211754.97E0083CFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mariadb: security
+ bump to version 10.3.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +59,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d578d93e0e1dce841d8d9fe75f12d37a6c1f1661
+commit: https://git.buildroot.net/buildroot/commit/?id=1ef50335dd5c0735e90bf042edc876f2fe154dbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following security issues:
-- [CVE-2022-23308] Use-after-free of ID and IDREF attributes
-- Use-after-free in xmlXIncludeCopyRange
-- Fix Null-deref-in-xmlSchemaGetComponentTargetNs
-- Fix memory leak in xmlXPathCompNodeTest
-- Fix null pointer deref in xmlStringGetNodeList
-- Fix several memory leaks found by Coverity
+Fix CVE-2021-46665, CVE-2021-46664, CVE-2021-46661, CVE-2021-46668,
+CVE-2021-46663, CVE-2022-24052, CVE-2022-24051, CVE-2022-24050,
+CVE-2022-24048, CVE-2021-46659, CVE-2021-35604, CVE-2021-46667,
+CVE-2021-46662, CVE-2021-2372, CVE-2021-2389 and CVE-2021-46658
 
-https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.9.13
+Update hash of README.md (changes not related to license:
+https://github.com/MariaDB/server/commit/773a07b65517327add6348c045cee14bdf489fe0)
+
+https://mariadb.com/kb/en/mariadb-10334-release-notes/
+https://mariadb.com/kb/en/mariadb-10333-release-notes/
+https://mariadb.com/kb/en/mariadb-10332-release-notes/
+https://mariadb.com/kb/en/mariadb-10331-release-notes/
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4b6703847376838d0b091acd9b0e0193b6439657)
+(cherry picked from commit e7a9a1bce4b081a721799ff62ee5fff8456203ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 7 +++++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/mariadb/mariadb.hash | 7 +++----
+ package/mariadb/mariadb.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index ce6c3c4825..81ac3e3f31 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature
--sha256  c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92  libxml2-2.9.12.tar.gz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.9/libxml2-2.9.13.sha256sum
-+sha256  276130602d12fe484ecc03447ee5e759d0465558fbc9d6bd144e3745306ebf0e  libxml2-2.9.13.tar.xz
- # License files, locally calculated
- sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 5d688acae5..f13eaff1ad 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,8 +4,11 @@
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 4025be317f..4da26bdf94 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,7 +1,6 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.30
+-sha256  bd8735c65bdb7ebcd5d779fb9d3de3f2fcd319ad6482278d73dfe7301ad4ae1b  mariadb-10.3.30.tar.gz
+-sha512  742c30b3ebc0b6d36b98d4e7a7fb511098142e72d8f42cbfa73a0bdea2059be17e790fbda4732329bbd99e4b50b13cf18e8122964a473e0b62170ab869eca8fc  mariadb-10.3.30.tar.gz
++# From https://dlm.mariadb.com/2117287/MariaDB/mariadb-10.3.34/source/sha512sums.txt
++sha512  46d4575ec1afb68510652a4bb31ca5ce83a2f5f61048a6e9c1487b0ba58f079465a8b72518d44043cd42c631b19ff50b5498584676ac6473705b138fe3300741  mariadb-10.3.34.tar.gz
+ 
+ # Hash for license files
+-sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
++sha256  084aa0007efac6dda6aafffb3f3ef8b66b105862dad7ee23f6a4b52813f84464  README.md
+ sha256  240a15a1d0f34d3abca462cdb7e5fb89470967563f16b0e71169e51c1e74cf2b  COPYING
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 374b3dc352..3fad22c8c1 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBXML2_VERSION = 2.9.12
--LIBXML2_SITE = http://xmlsoft.org/sources
-+LIBXML2_VERSION_MAJOR = 2.9
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).13
-+LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
-+LIBXML2_SITE = \
-+	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
- LIBXML2_LICENSE_FILES = COPYING
+-MARIADB_VERSION = 10.3.30
+-MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
++MARIADB_VERSION = 10.3.34
++MARIADB_SITE = https://dlm.mariadb.com/2117285/MariaDB/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
+ # https://jira.mariadb.org/browse/MDEV-12297
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
