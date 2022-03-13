@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6F0FC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 21:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D72F1C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 21:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D0BD4091C;
-	Sun, 13 Mar 2022 21:04:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D4B181DB2;
+	Sun, 13 Mar 2022 21:06:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MfTHZE8PbyrB; Sun, 13 Mar 2022 21:04:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mk63P5uvTlpL; Sun, 13 Mar 2022 21:06:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51C2140910;
-	Sun, 13 Mar 2022 21:04:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 797EC1BF309
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:04:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B434A81D70;
+	Sun, 13 Mar 2022 21:06:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DD031BF309
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6571F40910
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:04:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CD9981D70
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 21:06:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jqfrt4UASXbg for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 21:04:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jm0BPiMwZqQT for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 21:05:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EBEA0408C9
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 21:04:31 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2534881D65
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 21:05:58 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 695C6C0003;
- Sun, 13 Mar 2022 21:04:28 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 87E4560004;
+ Sun, 13 Mar 2022 21:05:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nTVO7-005JXn-8Z; Sun, 13 Mar 2022 22:04:27 +0100
+ id 1nTVPW-005Jcq-FF; Sun, 13 Mar 2022 22:05:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220226181045.2922875-1-fontaine.fabrice@gmail.com>
-Date: Sun, 13 Mar 2022 22:04:27 +0100
-In-Reply-To: <20220226181045.2922875-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 26 Feb 2022 19:10:45 +0100")
-Message-ID: <87wngxwomc.fsf@dell.be.48ers.dk>
+References: <20220226181508.3011361-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Mar 2022 22:05:54 +0100
+In-Reply-To: <20220226181508.3011361-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 26 Feb 2022 19:15:08 +0100")
+Message-ID: <87sfrlwojx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
- version 3.4.12
+Subject: Re: [Buildroot] [PATCH 1/1] package/xterm: security bump to version
+ 371
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,15 +68,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2021-4190, CVE-2022-0581, CVE-2022-0582, CVE-2022-0583,
- > CVE-2022-0585 and CVE-2022-0586
+ > Fix CVE-2022-24130: xterm through Patch 370, when Sixel support is
+ > enabled, allows attackers to trigger a buffer overflow in set_sixel in
+ > graphics_sixel.c via crafted text.
 
- > https://www.wireshark.org/security/wnpa-sec-2021-22.html
- > https://www.wireshark.org/security/wnpa-sec-2022-01.html
- > https://www.wireshark.org/security/wnpa-sec-2022-02.html
- > https://www.wireshark.org/security/wnpa-sec-2022-03.html
- > https://www.wireshark.org/security/wnpa-sec-2022-04.html
- > https://www.wireshark.org/security/wnpa-sec-2022-05.html
+ > Update hash of COPYING (update in year)
+
+ > https://invisible-island.net/xterm/xterm.log.html#xterm_371
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
