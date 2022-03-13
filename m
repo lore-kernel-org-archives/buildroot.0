@@ -4,62 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 458BCC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 08:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C38BBC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 09:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFC8660E26;
-	Sun, 13 Mar 2022 08:45:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A409605E9;
+	Sun, 13 Mar 2022 09:04:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TGOQs-_Y_eeG; Sun, 13 Mar 2022 08:45:59 +0000 (UTC)
+	with ESMTP id 1uXnQYmbRd7C; Sun, 13 Mar 2022 09:04:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E690660BAF;
-	Sun, 13 Mar 2022 08:45:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 758091BF360
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 08:45:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 706D560E8F;
+	Sun, 13 Mar 2022 09:04:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C87E21BF2A6
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 09:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D6CC403AE
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 08:45:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B50D360E8F
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 09:04:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w4VJdbQp2xAG for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 08:45:55 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F1AFC401E1
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 08:45:54 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:91a3:d0c0:1a06:f60f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 0CF9E780333;
- Sun, 13 Mar 2022 09:45:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647161152;
- bh=HDcjl3S8crxT2TWMmsbvh6//EZDZAG2r0BcgSK35nNY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qZJpjE+R75YqSa0rCFOJWXElr4VNYP51lz9PZyuT4/p2XZOnz3MKft3b96pEHEajB
- B1Kfm4sDYuBfybvOZWp54OL8sQi4U8erJr6zj+D5tq9bSyGV4f5vY4nsYRbMPoxxZv
- a0SUX+OLreuqEQuB5HXMLwgcuq9wRfVmJ5K2RFLsYX6KXuyx76TMT28L145IyRqKlq
- ymz5uE3V/aGunynTwBxdOGzKVDCBEnTYGT9RrnhZU1jzTehd5VLni628vr/gCH8JMK
- 0aY+6LyhVYK3nWFN9z4tGbzYzEqAsjoe9L67+29Zvcsd2tOe0Ysl5cIzIlhcJ1Eudv
- vy0SURVcdEG8w==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 13 Mar 2022 09:45:48 +0100
-Date: Sun, 13 Mar 2022 09:45:48 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220313084548.GQ283544@scaer>
-References: <20220308180056.1558155-1-fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V_GPUwjHZIR8 for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 09:04:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 91011605E9
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 09:04:38 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id i8so19379849wrr.8
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 01:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=OrG2xgUZF2GEXRwvOFEUMoXcI2DbGwdE2OwGZIqJoZA=;
+ b=eyVqCI+AqLQ4yzIouf0q0MZLB4QMEoSUFlKl2wWgzsNvtlaGocuOp6vo6VEmkGSCYj
+ wuXxzc/1SEj9BgpRZFdo/A6KGJFFi2Xm+LPSQGBjAgmHFzQVRRZVuQIxlWeRboorjHPc
+ uG32x+ligGmnXSlOvRd6sHAE7Daa7d7S24sk8t5jCvDJserIHBfTLV2pNV90yEmhXTBe
+ PXQBuxfGquEpIdBdfYDHrQO077idxYINtDslCcqy6/2jGHrYkvBn5Q6ImOcwPBqgfvpS
+ 8dQokiZgd4QbQq9i6lF9KFh1hqm0COQhwLXNzZYbqyyWvnS3hko4aXkfZYpu8U072UdG
+ 6MCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=OrG2xgUZF2GEXRwvOFEUMoXcI2DbGwdE2OwGZIqJoZA=;
+ b=6sya+IVCK4iOUXbamnnC1fHTTUvBeeHxgox0NBv/nV2bsswfjJ5AOMz5+shTK7I9M3
+ gHpptKX9cj/Bm2V8L2rU0NSMoju5Vrx9nstoqHDyPjUFI8R9GlC8pvMEDVXPG0TS+e/U
+ 7S05Sh84cTJ0MgG4WzPAR29vDGPRKT0nP/c51N2L574B+JiWaf+MCda8MLvyhcUhApM3
+ XuzN9IJunn7UbDe4OzoY9SAl5k2/yjO7MRSmtsrkNzdnuXLY8+SdlF4KWYOJQ+DzarDm
+ 0EN8zqMEZzrgsPSUSW0Bn6CZ2xtxlNVNlWSxpkQOuQjsoeRHjTjnw3tKDGK2XbiONSyf
+ Nasg==
+X-Gm-Message-State: AOAM5323c8hUAbcH7uV7ZHN+3woxfvugzLSz1UjAw/f2peghpYHpakSh
+ udgaPA4ER05k+XUOJZwvEsyFFni6juI=
+X-Google-Smtp-Source: ABdhPJyPxpLC/xo5CXZhyyTb91+kXt/07Bd+SA7QtlX9lUiNqOAIC+dI01KA0iLFXOjDtMUzfkRByg==
+X-Received: by 2002:a5d:6852:0:b0:1f0:98e7:a963 with SMTP id
+ o18-20020a5d6852000000b001f098e7a963mr12784559wrw.646.1647162276078; 
+ Sun, 13 Mar 2022 01:04:36 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ h13-20020adff18d000000b001f1de9f930esm17486971wro.81.2022.03.13.01.04.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 13 Mar 2022 01:04:35 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 13 Mar 2022 10:02:09 +0100
+Message-Id: <20220313090209.161433-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220308180056.1558155-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libsrtp: bump to version 2.4.2
+Subject: [Buildroot] [PATCH 1/1] package/libnetfilter_conntrack: fix musl
+ build with headers >= 5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,69 +86,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Fix the following build failure with musl and headers >= 5.15 raised
+since bump to version 1.0.9 in commit
+9af9dfa543907c46091c706b0f3a0eb89445ae74:
 
-On 2022-03-08 19:00 +0100, Fabrice Fontaine spake thusly:
-> This is a patch release for version 2 & 2.4, fixing a regression
-> introduced in 2.4.1.
-> 
-> https://github.com/cisco/libsrtp/releases/tag/v2.4.2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In file included from /home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-musleabihf/sysroot/usr/include/arpa/inet.h:9,
+                 from ../../include/internal/internal.h:14,
+                 from proto.c:2:
+/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-musleabihf/sysroot/usr/include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
+   23 | struct in6_addr {
+      |        ^~~~~~~~
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/19931aba8bee8867a53130ca4a53cfadbc4c5bfd
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-fix-build-with-kernel-5-15-and-musl.patch | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch
 
-> ---
->  package/libsrtp/libsrtp.hash | 2 +-
->  package/libsrtp/libsrtp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-> index 3de0130f4c..8e51e68ac2 100644
-> --- a/package/libsrtp/libsrtp.hash
-> +++ b/package/libsrtp/libsrtp.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  3cb580928fcd502426809c68406d04aaa5ef1af7ebb0a3a41a52a13576f2fc07  libsrtp-2.4.1.tar.gz
-> +sha256  3b1bcb14ebda572b04b9bdf07574a449c84cb924905414e4d94e62837d22b628  libsrtp-2.4.2.tar.gz
->  sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
-> diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-> index 885f05a33c..f2ba600dd6 100644
-> --- a/package/libsrtp/libsrtp.mk
-> +++ b/package/libsrtp/libsrtp.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBSRTP_VERSION = 2.4.1
-> +LIBSRTP_VERSION = 2.4.2
->  LIBSRTP_SITE = $(call github,cisco,libsrtp,v$(LIBSRTP_VERSION))
->  LIBSRTP_INSTALL_STAGING = YES
->  LIBSRTP_LICENSE = BSD-3-Clause
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch b/package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch
+new file mode 100644
+index 0000000000..9e96594120
+--- /dev/null
++++ b/package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch
+@@ -0,0 +1,60 @@
++From 21ee35dde73aec5eba35290587d479218c6dd824 Mon Sep 17 00:00:00 2001
++From: Robert Marko <robimarko@gmail.com>
++Date: Thu, 24 Feb 2022 15:01:11 +0100
++Subject: conntrack: fix build with kernel 5.15 and musl
++
++Currently, with kernel 5.15 headers and musl building is failing with
++redefinition errors due to a conflict between the kernel and musl headers.
++
++Musl is able to suppres the conflicting kernel header definitions if they
++are included after the standard libc ones, however since ICMP definitions
++were moved into a separate internal header to avoid duplication this has
++stopped working and is breaking the builds.
++
++It seems that the issue is that <netinet/in.h> which contains the UAPI
++suppression defines is included in the internal.h header and not in the
++proto.h which actually includes the kernel ICMP headers and thus UAPI
++supression defines are not present.
++
++Solve this by moving the <netinet/in.h> include before the ICMP kernel
++includes in the proto.h
++
++Fixes: bc1cb4b11403 ("conntrack: Move icmp request>reply type mapping to common file")
++Signed-off-by: Robert Marko <robimarko@gmail.com>
++Signed-off-by: Florian Westphal <fw@strlen.de>
++
++[Retrieved from:
++https://git.netfilter.org/libnetfilter_conntrack/commit/?id=21ee35dde73aec5eba35290587d479218c6dd824]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/internal/internal.h | 1 -
++ include/internal/proto.h    | 1 +
++ 2 files changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/internal/internal.h b/include/internal/internal.h
++index 2ef8a90..7cd7c44 100644
++--- a/include/internal/internal.h
+++++ b/include/internal/internal.h
++@@ -14,7 +14,6 @@
++ #include <arpa/inet.h>
++ #include <time.h>
++ #include <errno.h>
++-#include <netinet/in.h>
++ 
++ #include <libnfnetlink/libnfnetlink.h>
++ #include <libnetfilter_conntrack/libnetfilter_conntrack.h>
++diff --git a/include/internal/proto.h b/include/internal/proto.h
++index 40e7bfe..60a5f4e 100644
++--- a/include/internal/proto.h
+++++ b/include/internal/proto.h
++@@ -2,6 +2,7 @@
++ #define _NFCT_PROTO_H_
++ 
++ #include <stdint.h>
+++#include <netinet/in.h>
++ #include <linux/icmp.h>
++ #include <linux/icmpv6.h>
++ 
++-- 
++cgit v1.2.3
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
