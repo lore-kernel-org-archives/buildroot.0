@@ -1,81 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCA53C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 17:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5F2C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 18:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5556040120;
-	Sun, 13 Mar 2022 17:56:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D459D60BB5;
+	Sun, 13 Mar 2022 18:12:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TldBfKTulVyI; Sun, 13 Mar 2022 17:56:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z7s2pWojMdBz; Sun, 13 Mar 2022 18:12:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E123840235;
-	Sun, 13 Mar 2022 17:56:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3AF460B1F;
+	Sun, 13 Mar 2022 18:12:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8FDC61BF41D
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 17:56:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C0D91BF41C
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 18:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B6D4408C9
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 17:56:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19AFB408D9
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 18:12:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=tkos.co.il
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yizsh9ZZKAfQ for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 17:56:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 807C44051E
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 17:56:37 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id r2so4544829ilh.0
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 10:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OBoBZOvCYEdaYGI+ffSHOkULfcW8cIxZ4FXf0eFs0vE=;
- b=noigDj05LLw1oWg/Kvt6U4ytvoa/aehSRUHDoBF66s4jxj+QmsQ1BgYmZjnfhbKfI3
- 6BEYwQRDUv2iZolFTIb8pUIughLqWih5Z1req8wX4PnCGfxOP+zA906Lwxhv2Jvnev6o
- M94tCzCkYQaWeg5EdYzG7kxwMbxElRXh2tbJ7uLSo+SOGxoZ7Zz1KNQJ/HSjQfm+oIX6
- T7vhMZFewffhJHd7P/KrFjZf5/E3YYuU+ZMBg5qjJaAXdR/y+zn6awjItzifUAUDUZEY
- 29O8dRPU1nhrvfNZKzhCHX5CQwqaizf72DROuKREfehNuTFhNJYbpxFzpG5yY7CcUmuF
- II2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OBoBZOvCYEdaYGI+ffSHOkULfcW8cIxZ4FXf0eFs0vE=;
- b=UKEuZltIn8lw1J46rI5B1nctMqkmnK+r8Q0pByJ5CFK7F2of7kPCRdr6ecIyirDGzR
- APwpX0kvMlJ81xjorH6lORGp2SpW1nvOOvaKl0WaojyCG3Xc3b0JlfgBRGX0S/IxCPv7
- Paah2sqoIfmNxusM5THoD63wOq2JqPV8iFKvsJdKMQIvGd/ZwJoLuh4WtUechTZj2rTQ
- qqm3CxZlVEeho6Kb4huUm8fi9puWQhFvcJquKR9EKtbDRXfKeFOPFxg/HY7b6yd9AaTe
- LUM74tId3C54r2f7dmHkiuR7HMoUH1O4lC13/R1oikDcKNpMwSXCOMIYpUWLSOPpR96I
- almQ==
-X-Gm-Message-State: AOAM532la3/FI0nUHdwBpHZbi3IDSTVugfY74A1KmvDLxjabhgRt24IR
- qe87IEEkT54nP6nZB4qLVx+w7JioCdM=
-X-Google-Smtp-Source: ABdhPJyHLoj+5JKJhpMgdkvHHrPp2deRN0o3NtdUaM7oxVUHNKi7MMuQ27WfFqH6wcDZMmnJa5Z5bA==
-X-Received: by 2002:a05:6e02:1584:b0:2b9:7a3d:8937 with SMTP id
- m4-20020a056e02158400b002b97a3d8937mr16576783ilu.192.1647194196302; 
- Sun, 13 Mar 2022 10:56:36 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-243-247.hlrn.qwest.net.
- [97.118.243.247]) by smtp.gmail.com with ESMTPSA id
- g4-20020a92cda4000000b002c24724f23csm8107651ild.13.2022.03.13.10.56.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Mar 2022 10:56:36 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 13 Mar 2022 11:56:14 -0600
-Message-Id: <20220313175615.406390-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id zpIILC_f6fsO for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 18:12:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4980F408D3
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 18:12:13 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 50C82440FA1;
+ Sun, 13 Mar 2022 20:12:03 +0200 (IST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1647195123;
+ bh=j9ofwS5bs+A4+mElNKYNflA/if3IZ5NTnSFVPg2M8s8=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=oDScfnZ+1SECCTzt3Gmi5Hu8rmrSLbjbS+fLWqoLxDZ8dztcr/WD7LYI58tZ+Wcv+
+ 6fVdmWZo9/EszXoKpY8TZarfCgJUhc3jpMgpF0x3ogpUiQQAuNY5kg+ggz6IIieJRE
+ ByAj+8Sup5vGlwjZrmKWQh0Idw74Go2aKut1+vITHskTxGPB8dqN2fZo0lu+Zx3P9b
+ 5ZmoLyTeJCPAyqrFmXTXf6c7p7F0RpaIiy1IeYZ7jkcQTVcvnrF2FVwKV7stOR5LuY
+ 0b6pH7ofu4aBUjb570PKABHhN/vGzig7HtwwcYyvIVyNZj3CH3YjeiWXjFL+v9Pmdy
+ FTwn2zHFTrY9Q==
+References: <20220313130424.3046857-1-bernd.kuhls@t-online.de>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 13 Mar 2022 20:05:45 +0200
+In-reply-to: <20220313130424.3046857-1-bernd.kuhls@t-online.de>
+Message-ID: <877d8xd8nb.fsf@tarshish>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/pkg-python: migrate flit to new
- bootstrapping sequence
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 7.82.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,170 +67,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are a number of flit toolchain dependencies currently in the
-process of deprecating distutils based fallbacks.
+Hi Bernd,
 
-This will be needed in order to update tomli.
+On Sun, Mar 13 2022, Bernd Kuhls wrote:
+> Changelog: https://curl.se/changes.html
+>
+> Updated license hash due to copyright year bump:
+> https://github.com/curl/curl/commit/0409192b1fde6b7a4f09667e80ca5dc555eab3f1
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-We need to migrate these to use a new bootstrap based build+install
-sequence which relies on flit's bootstrap wheel build+install
-features to build and install host-python-pypa-build and
-host-python-installer which gives us a full pep517 toolchain.
+Thanks for the bump.
 
-Note that one can run host-python-flit-core commands for building
-and installing itself since the package build directory is the cwd.
+It looks like NSS crypto back-end support requires --with-nss-deprecated
+now. Maybe just drop deprecated NSS support?
 
-For host-python-installer to do this we need to add the package src
-directory to PYTHONPATH as we need to run it from the source directory
-for installing itself. This is due to a directory structure that does
-not let us run directly from the top level.
+baruch
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - formatting/cleanup
-  - add comments
----
- package/pkg-python.mk                        | 45 ++++++++++++++++++--
- package/python-flit-core/python-flit-core.mk |  2 +-
- package/python-installer/python-installer.mk |  3 +-
- package/python-pep517/python-pep517.mk       |  2 +-
- package/python-tomli/python-tomli.mk         |  2 +-
- 5 files changed, 46 insertions(+), 8 deletions(-)
+> ---
+>  package/libcurl/libcurl.hash | 6 +++---
+>  package/libcurl/libcurl.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index 63d6ba306c..4be245041c 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -# https://curl.se/download/curl-7.81.0.tar.xz.asc
+> +# https://curl.se/download/curl-7.82.0.tar.xz.asc
+>  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+> -sha256  a067b688d1645183febc31309ec1f3cdce9213d02136b6a6de3d50f69c95a7d3  curl-7.81.0.tar.xz
+> -sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+> +sha256  0aaa12d7bd04b0966254f2703ce80dd5c38dbbd76af0297d3d690cdce58a583c  curl-7.82.0.tar.xz
+> +sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 20ebb4f271..863cc268b4 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBCURL_VERSION = 7.81.0
+> +LIBCURL_VERSION = 7.82.0
+>  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>  LIBCURL_SITE = https://curl.se/download
+>  LIBCURL_DEPENDENCIES = host-pkgconf \
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 52ce402281..f08d8ce04c 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -154,6 +154,9 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
- 	--scripts=$(HOST_DIR)/usr/bin \
- 	--data=$(HOST_DIR)/usr
- 
-+HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
-+	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
- # and installation of a Python package should be done, implements a
-@@ -211,8 +214,25 @@ $(2)_BASE_INSTALL_TARGET_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $
- $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
--$(2)_BASE_BUILD_CMD = -m build -n -w
--$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
-+# Use flit built in wheel builder for packages that are host-python-pypa-build dependencies.
-+# This is needed to avoid a circular with host-python-pypa-build and those dependencies.
-+#
-+$(2)_BASE_BUILD_CMD = $$(if \
-+		$$(filter \
-+			host-python-flit-core host-python-installer host-python-pep517 host-python-tomli, \
-+			$(1)) \
-+		, \
-+		-m flit_core.wheel, \
-+		-m build -n -w \
-+	)
-+# Use flit built in bootstrap_install for installing host-python-flit-core.
-+# This is due to host-python-installer depending on host-python-flit-core.
-+#
-+$(2)_BASE_INSTALL_CMD = $$(if \
-+		$$(filter host-python-flit-core,$(1)), \
-+		-m bootstrap_install dist/* $$(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS), \
-+		$(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS) \
-+	)
- endif
- else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
-@@ -235,9 +255,26 @@ endif # ($(4),target)
- ifeq ($$($(2)_SETUP_TYPE),setuptools)
- $(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
- else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
--$(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
-+# Filter out host-python-pypa-build and any of its dependencies that need a flit based build.
-+#
-+$(2)_DEPENDENCIES += $$(if \
-+		$$(filter \
-+			host-python-flit-core host-python-installer host-python-pep517 host-python-pypa-build host-python-tomli, \
-+			$(1)) \
-+		,, \
-+		host-python-pypa-build \
-+	)
-+# Filter out host-python-installer and any of its dependencies that need a flit based build.
-+#
-+$(2)_DEPENDENCIES += $$(if \
-+		$$(filter \
-+			host-python-flit-core host-python-installer, \
-+			$(1)) \
-+		,, \
-+		host-python-installer \
-+	)
- ifeq ($$($(2)_SETUP_TYPE),flit)
--$(2)_DEPENDENCIES += host-python-flit-core
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python-flit-core,$(1)),,host-python-flit-core)
- endif
- endif # SETUP_TYPE
- 
-diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
-index 0e058a1f17..d206a72f82 100644
---- a/package/python-flit-core/python-flit-core.mk
-+++ b/package/python-flit-core/python-flit-core.mk
-@@ -8,6 +8,6 @@ PYTHON_FLIT_CORE_VERSION = 3.7.1
- PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
- PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/15/d1/d8798b83e953fd6f86ca9b50f93eec464a9305b0661469c8234e61095481
- PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
--PYTHON_FLIT_CORE_SETUP_TYPE = pep517
-+PYTHON_FLIT_CORE_SETUP_TYPE = flit
- 
- $(eval $(host-python-package))
-diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
-index 862a251415..97a158b738 100644
---- a/package/python-installer/python-installer.mk
-+++ b/package/python-installer/python-installer.mk
-@@ -9,6 +9,7 @@ PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
- PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/74/b7/9187323cd732840f1cddd6a9f05961406636b50c799eef37c920b63110c0
- PYTHON_INSTALLER_LICENSE = MIT
- PYTHON_INSTALLER_LICENSE_FILES = LICENSE
--PYTHON_INSTALLER_SETUP_TYPE = distutils
-+PYTHON_INSTALLER_SETUP_TYPE = flit
-+HOST_PYTHON_INSTALLER_ENV = PYTHONPATH=$(@D)/src
- 
- $(eval $(host-python-package))
-diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
-index 99aa62d51d..1ca1bc4e35 100644
---- a/package/python-pep517/python-pep517.mk
-+++ b/package/python-pep517/python-pep517.mk
-@@ -9,7 +9,7 @@ PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
- PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
- PYTHON_PEP517_LICENSE = MIT
- PYTHON_PEP517_LICENSE_FILES = LICENSE
--PYTHON_PEP517_SETUP_TYPE = distutils
-+PYTHON_PEP517_SETUP_TYPE = flit
- HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
- 
- $(eval $(host-python-package))
-diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
-index b8c20ca736..3539a505be 100644
---- a/package/python-tomli/python-tomli.mk
-+++ b/package/python-tomli/python-tomli.mk
-@@ -7,7 +7,7 @@
- PYTHON_TOMLI_VERSION = 1.2.0
- PYTHON_TOMLI_SOURCE = tomli-$(PYTHON_TOMLI_VERSION).tar.gz
- PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/ec/38/8eccdc662c61aed187d5f5b168c18b1d2de3827976c3691e4da8be7375aa
--PYTHON_TOMLI_SETUP_TYPE = distutils
-+PYTHON_TOMLI_SETUP_TYPE = flit
- PYTHON_TOMLI_LICENSE = MIT
- PYTHON_TOMLI_LICENSE_FILES = LICENSE
- 
+
 -- 
-2.25.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
