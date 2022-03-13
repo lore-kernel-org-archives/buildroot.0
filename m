@@ -4,78 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6552C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 11:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF3C4C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 11:34:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67DA6408F7;
-	Sun, 13 Mar 2022 11:27:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C8CC408ED;
+	Sun, 13 Mar 2022 11:34:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kNzwmbAaMXiF; Sun, 13 Mar 2022 11:27:30 +0000 (UTC)
+	with ESMTP id pT6w2HJG2nk6; Sun, 13 Mar 2022 11:34:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7187D408EE;
-	Sun, 13 Mar 2022 11:27:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 936A81BF47E
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 11:27:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85E724040B;
+	Sun, 13 Mar 2022 11:34:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4ED4E1BF47E
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 11:34:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73E4281BBD
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 11:27:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 446C540278
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 11:34:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id esWXnLsXtsrO for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 11:27:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SgIMzp1a7mc5 for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 11:34:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5AB9181BB2
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 11:27:26 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id e24so19623452wrc.10
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 04:27:26 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D6BAA40273
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 11:34:26 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id r6so19272838wrr.2
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 04:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=AkzH7GyfsDOicyiFrKxTxuR29RENP4kB6J0sZDsHtRI=;
- b=CN6apjroB5pzjof92OSc+7sAZ4WV6ei84jDfHpjO4ephrI7XpVko+xscHAr22kF4HI
- MDY0BbiICCztOjmzqJHdLcWFWTA+keuiiELE6iXh7r2cJvAGRt/BgjY8u3+O1tyUF/2u
- SrZLZQA79rgG7A5xaQe0eYLLvnGHAKNR6GMVMHJqR5d8y33/cTou3zvwp+I2XeDKyIfe
- 7usrc3CjjQRBs9GdXkYjG6RCaHIJVOqKkSgyjopq4oVhje/dUthXysVLsz+XG9XYHWuF
- Lw2kJIjNiejU8U4d4FG7TWvr9C/dxi+ndJEYXb2s+jZlfftlCH6KZFC0n+ihyDWJDwyY
- oc4w==
+ bh=Oer5qU+IjrDCwSKJ5buNF1oIJ6Unm9Y5dwG0vaDgkUc=;
+ b=nQG/iVBWWmLe37FlxCllzZr93w6ZES3ugxFBbJNPoHu5FDe+/aoM4Dc5FHaImSyUo8
+ umR/an8pqeLNG1GLekvHHcChuW14/2WyEmjNz/P68CrRk44woJzODUR7x+P0fHyFOOps
+ fw8wbxuy22kPAxG3xn18Ic2veVYeG0bC1rhsr6x3tiO2jCmeRGyr2xgHnY2XeyA7Ig9p
+ eBawrQmTsrUA6Wb+9Gi8TLNSFep68onsvpMXW1buwiV61pIWNJfFuNSsESbAR3c0gUky
+ 6valyTgoASmHFumpLCi5I58j4W3ITYZoXGkCMgyvclOFqqCDKNN7sGa0FW63rJS365TJ
+ ynQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=AkzH7GyfsDOicyiFrKxTxuR29RENP4kB6J0sZDsHtRI=;
- b=gP7oqXsqi36opmSJ6LYyot0TM1ohthrOWNYVDNfW/o/W948hcXIqC6afMZUJCfsqSE
- AcAm0nqKmdNvadJqDWg0K/35FzuTNan23dY9FwFrOf9VOZZH2pYte53Mfvyid3rHcLJh
- zCNuJ5709wbiFkIiH5ZDX46IBxis2w/RIDhK169tngdGn52KVV3U1lNeJW1J+U5QMgLo
- BFnafNM2VyaCY+vCxgPnVS9A1+OUz1ixCwbEnray4e05MpNUkuj5nF675KMA7+eBgJ+/
- errNwiZ5J0VWo2lamaD5wFMdi+92cPyi8gnvHrErZF1IsJ0wKm5elVn6twA49P+IMWie
- 0Oiw==
-X-Gm-Message-State: AOAM530sAOfBgsy2zeYAHaquzUgnMgvKqfIaVtFgZt6W3NZ23Y99AdKW
- JMXdMFl8tDVk3Pg3dceNXJYc1/tJBfY=
-X-Google-Smtp-Source: ABdhPJyRFtN9q2tNx8GY3uE96sFSxyUSyNuguW7gn6d2YXRPCFGAQLg6g+XvnteI7DDCsMWk54fSuA==
-X-Received: by 2002:a5d:5746:0:b0:1ea:9643:92ac with SMTP id
- q6-20020a5d5746000000b001ea964392acmr13156889wrw.597.1647170844457; 
- Sun, 13 Mar 2022 04:27:24 -0700 (PDT)
+ bh=Oer5qU+IjrDCwSKJ5buNF1oIJ6Unm9Y5dwG0vaDgkUc=;
+ b=7SCYGHgUDWxK+mCR1rSU6xFb2KGAg15Po7TQDKRhzQ6BMtqIQ/2qMXaL2KqHxaWKM8
+ Mg3hzt7dq/Bko9au3bxfCkx0BCDQce/QLM7Q29Tok53LQRq/YVE9bjoTSICSkFu9H5eW
+ Xyb3R2WP+BPmq5z3SXKvYIAH8G2Y9dm2Pn/13Z+JPD7b7tsdJZgSqfrVWD/qcQibUC+B
+ m/weT8Fvw+rqZCz+nynOunvyZELe2M+vr+XQ9OZn31zIjF5j8rBV2qK9+PlQsKohSPh8
+ evTyhzIISPvMzdspPKZwjTZWRtuwP3GinRg0kLis9N4vHI3c9V+3J3LOEWS+Y8Idae9N
+ hwqQ==
+X-Gm-Message-State: AOAM533PrxydwrFIYVRCxmOZo74hAsGpi+83wyO9GSHRf18SaxjcRTnB
+ vQ0gWGkIJvMIfPBh5AunTrDxUWyE85c=
+X-Google-Smtp-Source: ABdhPJw5gjk+6HWTKHY+lFewUxQASIi/ZzrqzQlvw86MUkqgrS08rOIK7P4ZszQ7NMjCG584dPVn1A==
+X-Received: by 2002:adf:f945:0:b0:203:9078:4803 with SMTP id
+ q5-20020adff945000000b0020390784803mr10476245wrr.217.1647171264571; 
+ Sun, 13 Mar 2022 04:34:24 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- 4-20020a056000154400b00203812ca383sm10606106wry.78.2022.03.13.04.27.23
+ r13-20020a05600c35cd00b00389e8aaad51sm9349685wmq.12.2022.03.13.04.34.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Mar 2022 04:27:24 -0700 (PDT)
+ Sun, 13 Mar 2022 04:34:24 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Mar 2022 12:26:33 +0100
-Message-Id: <20220313112633.1125643-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Mar 2022 12:33:33 +0100
+Message-Id: <20220313113333.1125977-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix build on sparc v8
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/nbd: security bump to version 3.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,83 +88,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure on sparc v8 raised since commit
-5770a645a3a49a3f0f02972131a4ff5283b4c11e:
+Fix CVE-2022-26495: In nbd-server in nbd before 3.24, there is an
+integer overflow with a resultant heap-based buffer overflow. A value of
+0xffffffff in the name length field will cause a zero-sized buffer to be
+allocated for the name, resulting in a write to a dangling pointer. This
+issue exists for the NBD_OPT_INFO, NBD_OPT_GO, and NBD_OPT_EXPORT_NAME
+messages.
 
-ERROR: detected a std::atomic implementation that fails for function pointers.
-Please apply the patch corresponding to your Standard Library vendor, found in
-  qtbase/config.tests/atomicfptr
+Fix CVE-2022-26496: In nbd-server in nbd before 3.24, there is a
+stack-based buffer overflow. An attacker can cause a buffer overflow in
+the parsing of the name field by sending a crafted NBD_OPT_INFO or
+NBD_OPT_GO message with an large value as the length of the name.
 
-Fixes:
- - http://autobuild.buildroot.org/results/5a2/5a20e984a5536165056b3fbd93b8712e8ddbeed4/build-end.log
+https://github.com/NetworkBlockDevice/nbd/compare/nbd-3.21...nbd-3.24
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...figure.json-fix-atomicfptr-detection.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/qt5/qt5base/0008-src-corelib-configure.json-fix-atomicfptr-detection.patch
+Changes v1 -> v2:
+ - Tag as a security bump and add CVEs
 
-diff --git a/package/qt5/qt5base/0008-src-corelib-configure.json-fix-atomicfptr-detection.patch b/package/qt5/qt5base/0008-src-corelib-configure.json-fix-atomicfptr-detection.patch
-new file mode 100644
-index 0000000000..5f0f81a4bd
---- /dev/null
-+++ b/package/qt5/qt5base/0008-src-corelib-configure.json-fix-atomicfptr-detection.patch
-@@ -0,0 +1,48 @@
-+From e9d1f80dffb4e29e44fc0b0627704af15cdd281a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 13 Mar 2022 12:05:04 +0100
-+Subject: [PATCH] src/corelib/configure.json: fix atomicfptr detection
-+
-+Fix atomicfptr detection on sparc v8 by linking with libatomic if needed
-+to avoid the following build failure:
-+
-+/sysroot -std=gnu++11 -w -fPIC  -I. -I/home/peko/autobuild/instance-0/output-1/build/qt5base-d16bf02a11953dcac01dca73e6f3778f293adefe/mkspecs/devices/linux-buildroot-g++ -o main.o main.cpp
-+> /home/peko/autobuild/instance-0/output-1/host/bin/sparc-linux-g++ --sysroot=/home/peko/autobuild/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot --sysroot=/home/peko/autobuild/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot -Wl,-O1 -o atomicfptr main.o   -lexecinfo  -lrt -lpthread -ldl
-+> /home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: main.o: in function `test(std::atomic<void (*)(int)> volatile&)':
-+> main.cpp:(.text+0x40): undefined reference to `__atomic_compare_exchange_4'
-+> collect2: error: ld returned 1 exit status
-+> make[1]: *** [Makefile:69: atomicfptr] Error 1
-+
-+[...]
-+
-+ERROR: detected a std::atomic implementation that fails for function pointers.
-+Please apply the patch corresponding to your Standard Library vendor, found in
-+  qtbase/config.tests/atomicfptr
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/5a20e984a5536165056b3fbd93b8712e8ddbeed4
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://invent.kde.org/qt/qt/qtbase/-/merge_requests/138]
-+---
-+ src/corelib/configure.json | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/corelib/configure.json b/src/corelib/configure.json
-+index 9b5d19d41b..ac88f5856c 100644
-+--- a/src/corelib/configure.json
-++++ b/src/corelib/configure.json
-+@@ -309,7 +309,8 @@
-+                     "test(fptr);"
-+                 ],
-+                 "qmake": "CONFIG += c++11"
-+-            }
-++            },
-++            "use": "libatomic"
-+         },
-+         "clock-monotonic": {
-+             "label": "POSIX monotonic clock",
-+-- 
-+2.34.1
-+
+ package/nbd/nbd.hash | 8 ++++----
+ package/nbd/nbd.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
+index f0df35bc27..f58a89bf9a 100644
+--- a/package/nbd/nbd.hash
++++ b/package/nbd/nbd.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/nbd/files/nbd/3.21/
+-md5  c51c4c500fe1ed84c3d5d5dd2ca71d23  nbd-3.21.tar.xz
+-sha1  88c3296d43d20d7bda97e0f1bab0243a4f6fa880  nbd-3.21.tar.xz
++# From http://sourceforge.net/projects/nbd/files/nbd/3.24/
++md5  a6d9e7bbc311a2ed07ef84a58b82b5dd  nbd-3.24.tar.xz
++sha1  72c59ef5186ae355de6f539a1b348e18cbb8314e  nbd-3.24.tar.xz
+ 
+ # Locally calculated
+-sha256  e7688af39d91733bbcd2db08062c44fe503d004e51528740139c44aff6a6bef9  nbd-3.21.tar.xz
++sha256  6877156d23a7b33f75eee89d2f5c2c91c542afc3cdcb636dea5a88539a58d10c  nbd-3.24.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 0a7f08b2cf..f0fb23910e 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NBD_VERSION = 3.21
++NBD_VERSION = 3.24
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
 -- 
 2.34.1
 
