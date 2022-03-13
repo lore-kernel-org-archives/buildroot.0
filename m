@@ -1,82 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92223C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 11:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4804FC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 12:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3351940895;
-	Sun, 13 Mar 2022 11:48:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D026440144;
+	Sun, 13 Mar 2022 12:21:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UjmnwyqSGxrN; Sun, 13 Mar 2022 11:48:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aL6y-Rfz1jue; Sun, 13 Mar 2022 12:21:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CCE340883;
-	Sun, 13 Mar 2022 11:48:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E37331BF47E
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 11:48:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44D92400E2;
+	Sun, 13 Mar 2022 12:21:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 948191BF45A
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 12:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFF65606AA
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 11:48:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DD9C8190B
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 12:21:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vNbzNYEF0gQT for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 11:48:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OLvGa7GNSXP9 for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 12:21:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 02F3860692
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 11:48:36 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id k24so19717198wrd.7
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 04:48:36 -0700 (PDT)
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 58C37818C0
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 12:21:20 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id x9so2546895ilc.3
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 05:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=kcgzRjcB8JKTkY0Q0SEGt/7T6EZ2Jx2I5gMQrPgKCVk=;
- b=Z/tQ2QnIZFblILNj4ZSecoLBjHgeBwblLpGRjgYHz1fnZL9aSeW26njVxMpctbW5hM
- s0Stjn7vX5BGQSlVyBu8sNoxRu1cD/I1D/Lj6Hzeabz6XRbk2pNqJOkQ6Fz+aK6I9GdO
- /JE2YxhYN4qj8Yo6wGEc/c7f8CRRotzHgZA/D54aYNqUT6/5TsmkACZ1dUtgF9XbH1Vf
- wgvwa5dI+nEyclt62CrU/+J5/nj4aXQfhYT3tPacGgmSFAf42Z69z1bBObP/D0/0VUGM
- hwmIA5uBq3+hdqZdgMAid68oywuUf7nW5MhA70CqGpZ6VCHi/7A99VvYZFAaD+4rMikq
- mV3w==
+ bh=PI/pso/UjiLBzdbq0BiEgSGxE0BaUgU5P6jugTIAxuc=;
+ b=keo/B+r3q7j1NBUvwudBB0kfXFZU3votiKREwb111Kv0ZG+Lg9JSZC1wHwTnCGyj9e
+ Zi7kztWolUzjZhBQyimpN2uMOMyMbBgAZhJlpN2HytRTvKzHpOfNDNMlVzpzcBOWoCYT
+ tzxdcGoIE6+HgRJrfpYlex157rFKt6M2m3UhdOLXLaNjjnWsCX/hlIPN4V8GzL8K7VCo
+ TodAIZ/Zx1dvoBw3vOHXaFVFccZXEr2rkBlbAstoxdVF7lDffvNKmiGobD7xJmX/PdIH
+ YUT0yLw6+wv9Qq1cp7N+ajH4RjpoE7Khi9iM60QU5punL7jsPGpuI8PwH/bkCmZo5DYI
+ kONw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=kcgzRjcB8JKTkY0Q0SEGt/7T6EZ2Jx2I5gMQrPgKCVk=;
- b=ffqXDtuPJqef+ETW0CRkXH2OVV0MWvyuVVd9KDO6uJx9szBi1m7afSbOTdWCLsnI8i
- rEtN/923CuItFtGmj+KkoYQ8p5eOCaLNNQC6dvGQvMo+r4r9qMYDPOA/gsuuWq22Vuie
- Ac+TXpfaf/kfcc5n95+SnvAOZTheLsykG/HThtLo0MFVpn2FXs7Bp7jpy76NrBaevimW
- UblVlwgRT+PpiVwxXsOCjBIUCUcl05L4n/QBiT0NqTuy3OoZlc8hGtm2dZaI1TPKYD+x
- 4z2Pwn1aRPJdgQ/mFPKwh8ju0/q/wOorwrGl9heIiB8+Kj/kQWcXT90qjdZuibYWnQZr
- ru5g==
-X-Gm-Message-State: AOAM5310MtEcSlNgp5gwadF8/BGn5z7bLz5qKzmqhNnzImAYZdEEUBWF
- kM7wuG2jfJmk8DOLDC61sS1cYlddQCo=
-X-Google-Smtp-Source: ABdhPJxELznNJxfbgNL4GVJBSeQ5TAF5gbNFsvf4PIOpsb2IP+cY9Q4lGm0eT7qIoRGHivj046xDTg==
-X-Received: by 2002:a5d:6a8f:0:b0:1f0:1821:dce9 with SMTP id
- s15-20020a5d6a8f000000b001f01821dce9mr13749389wru.565.1647172115079; 
- Sun, 13 Mar 2022 04:48:35 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- u18-20020adfdd52000000b001f04e9f215fsm10904075wrm.53.2022.03.13.04.48.34
+ bh=PI/pso/UjiLBzdbq0BiEgSGxE0BaUgU5P6jugTIAxuc=;
+ b=VenGEKfPlVhdq8TepmTH0+AfydlRVwStURFg/o8sh2sSlpI7u97C72TAffYvIoS5dV
+ xceUMFmtpfEKFtCMl2jpU9PTh12co0AyoZhY1qAp+JCZIUcgzgBocKNf7foU0yO7smNF
+ 57o1IGhM0fbjKRCAV4o3eryRN1QcH2kKSdD7GsN6KdxGyyTMdcCX00qEqILMHhlCbYAN
+ HIgMJ8MUyp5oKWEOg9VJtxOkoGlrwsI7a/oodCZktOi4g3TxhTuIzInGiuhRoilDEM81
+ Zvy+ccarVOnVKDwzECdDwAyK+OjfTF9kozPonXrD4J5/3+8KXrJuzZpuwxnsKiakJ/XR
+ 4lYw==
+X-Gm-Message-State: AOAM5309dAD7btdqClsX1j8z7mllsd1bSIUAF7tTa2ftYDcaPXVS92mx
+ WqNS2PpBUREdV7xXoXvTVzqergT5HxM=
+X-Google-Smtp-Source: ABdhPJyo9AVOMQYuv4kM/jXri4kMIA5Vh7UXy48yLts3ERc/BnQsLdDYDinbI5wWf8jmmOgp9dGRiQ==
+X-Received: by 2002:a92:cbc3:0:b0:2c6:78fa:41e9 with SMTP id
+ s3-20020a92cbc3000000b002c678fa41e9mr15637771ilq.112.1647174079116; 
+ Sun, 13 Mar 2022 05:21:19 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-243-247.hlrn.qwest.net.
+ [97.118.243.247]) by smtp.gmail.com with ESMTPSA id
+ g7-20020a056e02198700b002c7887c006fsm2828964ilf.21.2022.03.13.05.21.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Mar 2022 04:48:34 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sun, 13 Mar 2022 05:21:18 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Mar 2022 12:47:41 +0100
-Message-Id: <20220313114741.1127825-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 13 Mar 2022 06:21:11 -0600
+Message-Id: <20220313122112.261290-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-twisted: security bump to
- version 22.2.0
+Subject: [Buildroot] [PATCH 1/2] package/pkg-python: migrate flit to new
+ bootstrapping sequence
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,59 +87,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-21716: Twisted is an event-based framework for internet
-applications, supporting Python 3.6+. Prior to 22.2.0, Twisted SSH
-client and server implement is able to accept an infinite amount of data
-for the peer's SSH version identifier. This ends up with a buffer using
-all the available memory. The attach is a simple as `nc -rv localhost 22
-< /dev/zero`. A patch is available in version 22.2.0. There are
-currently no known workarounds.
+There are a number of flit toolchain dependencies currently in the
+process of deprecating distutils based fallbacks.
 
-https://github.com/twisted/twisted/releases/tag/twisted-22.2.0
+This will be needed in order to update tomli.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We need to migrate these to use a new bootstrap based build+install
+sequence which relies on flit's bootstrap wheel build+install
+features to build and install host-python-pypa-build and
+host-python-installer which gives us a full pep517 toolchain.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-twisted/python-twisted.hash | 4 ++--
- package/python-twisted/python-twisted.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/pkg-python.mk                        | 28 +++++++++++++++++---
+ package/python-flit-core/python-flit-core.mk |  2 +-
+ package/python-installer/python-installer.mk |  3 ++-
+ package/python-pep517/python-pep517.mk       |  2 +-
+ package/python-tomli/python-tomli.mk         |  2 +-
+ 5 files changed, 30 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 8f0935e4f0..63da0125b8 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5  c818cb1ab241dc249517442e5a0e0412  Twisted-22.1.0.tar.gz
--sha256  b7971ec9805b0f80e1dcb1a3721d7bfad636d5f909de687430ce373979d67b61  Twisted-22.1.0.tar.gz
-+md5  fd252d0b895ca2ab81b5b1454073d890  Twisted-22.2.0.tar.gz
-+sha256  57f32b1f6838facb8c004c89467840367ad38e9e535f8252091345dba500b4f2  Twisted-22.2.0.tar.gz
- # Locally computed sha256
- sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 8e867cfb58..e5d643ec05 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 52ce402281..6dee8aa7d1 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -154,6 +154,9 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--scripts=$(HOST_DIR)/usr/bin \
+ 	--data=$(HOST_DIR)/usr
  
--PYTHON_TWISTED_VERSION = 22.1.0
-+PYTHON_TWISTED_VERSION = 22.2.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/77/b8/8108806ebf2b33654989fd1511281dc94a49fa7e03326d84fe5498ecfae4
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/40/8b/56e8870d412c550b3ff2d6714ee212c7e80a6634f4e720c3a26a983e7b46
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
++HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
++	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
+ # and installation of a Python package should be done, implements a
+@@ -212,7 +215,16 @@ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/*
+ else
+ $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
+ $(2)_BASE_BUILD_CMD = -m build -n -w
+-$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
++$(2)_BASE_BUILD_CMD = $$(if $$(filter \
++	host-python-flit-core \
++	host-python-installer \
++	host-python-pep517 \
++	host-python-tomli,$(1)),\
++	-m flit_core.wheel,\
++	-m build -n -w)
++$(2)_BASE_INSTALL_CMD = $$(if $$(filter host-python-flit-core,$(1)),\
++	-m bootstrap_install dist/* $$(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS),\
++	$(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS))
+ endif
+ else
+ $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
+@@ -235,9 +247,19 @@ endif # ($(4),target)
+ ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ $(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
+ else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
+-$(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
++$(2)_DEPENDENCIES += $$(if $$(filter \
++	host-python-flit-core \
++	host-python-installer \
++	host-python-pep517 \
++	host-python-pypa-build \
++	host-python-tomli,$(1)),,\
++	host-python-pypa-build)
++$(2)_DEPENDENCIES += $$(if $$(filter \
++	host-python-flit-core \
++	host-python-installer,$(1)),,\
++	host-python-installer)
+ ifeq ($$($(2)_SETUP_TYPE),flit)
+-$(2)_DEPENDENCIES += host-python-flit-core
++$(2)_DEPENDENCIES += $$(if $$(filter host-python-flit-core,$(1)),,host-python-flit-core)
+ endif
+ endif # SETUP_TYPE
+ 
+diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
+index 0e058a1f17..d206a72f82 100644
+--- a/package/python-flit-core/python-flit-core.mk
++++ b/package/python-flit-core/python-flit-core.mk
+@@ -8,6 +8,6 @@ PYTHON_FLIT_CORE_VERSION = 3.7.1
+ PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
+ PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/15/d1/d8798b83e953fd6f86ca9b50f93eec464a9305b0661469c8234e61095481
+ PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
+-PYTHON_FLIT_CORE_SETUP_TYPE = pep517
++PYTHON_FLIT_CORE_SETUP_TYPE = flit
+ 
+ $(eval $(host-python-package))
+diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
+index 862a251415..97a158b738 100644
+--- a/package/python-installer/python-installer.mk
++++ b/package/python-installer/python-installer.mk
+@@ -9,6 +9,7 @@ PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
+ PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/74/b7/9187323cd732840f1cddd6a9f05961406636b50c799eef37c920b63110c0
+ PYTHON_INSTALLER_LICENSE = MIT
+ PYTHON_INSTALLER_LICENSE_FILES = LICENSE
+-PYTHON_INSTALLER_SETUP_TYPE = distutils
++PYTHON_INSTALLER_SETUP_TYPE = flit
++HOST_PYTHON_INSTALLER_ENV = PYTHONPATH=$(@D)/src
+ 
+ $(eval $(host-python-package))
+diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
+index 99aa62d51d..1ca1bc4e35 100644
+--- a/package/python-pep517/python-pep517.mk
++++ b/package/python-pep517/python-pep517.mk
+@@ -9,7 +9,7 @@ PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
+ PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
+ PYTHON_PEP517_LICENSE = MIT
+ PYTHON_PEP517_LICENSE_FILES = LICENSE
+-PYTHON_PEP517_SETUP_TYPE = distutils
++PYTHON_PEP517_SETUP_TYPE = flit
+ HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
+ 
+ $(eval $(host-python-package))
+diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
+index b8c20ca736..3539a505be 100644
+--- a/package/python-tomli/python-tomli.mk
++++ b/package/python-tomli/python-tomli.mk
+@@ -7,7 +7,7 @@
+ PYTHON_TOMLI_VERSION = 1.2.0
+ PYTHON_TOMLI_SOURCE = tomli-$(PYTHON_TOMLI_VERSION).tar.gz
+ PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/ec/38/8eccdc662c61aed187d5f5b168c18b1d2de3827976c3691e4da8be7375aa
+-PYTHON_TOMLI_SETUP_TYPE = distutils
++PYTHON_TOMLI_SETUP_TYPE = flit
+ PYTHON_TOMLI_LICENSE = MIT
+ PYTHON_TOMLI_LICENSE_FILES = LICENSE
+ 
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
