@@ -4,77 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C38BBC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 09:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B7BCC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 13 Mar 2022 09:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A409605E9;
-	Sun, 13 Mar 2022 09:04:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A340960E95;
+	Sun, 13 Mar 2022 09:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1uXnQYmbRd7C; Sun, 13 Mar 2022 09:04:42 +0000 (UTC)
+	with ESMTP id lmZzb8bzBqLU; Sun, 13 Mar 2022 09:09:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 706D560E8F;
-	Sun, 13 Mar 2022 09:04:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 933FB60E8F;
+	Sun, 13 Mar 2022 09:09:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C87E21BF2A6
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 09:04:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 44FA91BF2A6
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 09:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B50D360E8F
- for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 09:04:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F55D60E8F
+ for <buildroot@lists.busybox.net>; Sun, 13 Mar 2022 09:09:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V_GPUwjHZIR8 for <buildroot@lists.busybox.net>;
- Sun, 13 Mar 2022 09:04:38 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 91011605E9
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 09:04:38 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id i8so19379849wrr.8
- for <buildroot@buildroot.org>; Sun, 13 Mar 2022 01:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OrG2xgUZF2GEXRwvOFEUMoXcI2DbGwdE2OwGZIqJoZA=;
- b=eyVqCI+AqLQ4yzIouf0q0MZLB4QMEoSUFlKl2wWgzsNvtlaGocuOp6vo6VEmkGSCYj
- wuXxzc/1SEj9BgpRZFdo/A6KGJFFi2Xm+LPSQGBjAgmHFzQVRRZVuQIxlWeRboorjHPc
- uG32x+ligGmnXSlOvRd6sHAE7Daa7d7S24sk8t5jCvDJserIHBfTLV2pNV90yEmhXTBe
- PXQBuxfGquEpIdBdfYDHrQO077idxYINtDslCcqy6/2jGHrYkvBn5Q6ImOcwPBqgfvpS
- 8dQokiZgd4QbQq9i6lF9KFh1hqm0COQhwLXNzZYbqyyWvnS3hko4aXkfZYpu8U072UdG
- 6MCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OrG2xgUZF2GEXRwvOFEUMoXcI2DbGwdE2OwGZIqJoZA=;
- b=6sya+IVCK4iOUXbamnnC1fHTTUvBeeHxgox0NBv/nV2bsswfjJ5AOMz5+shTK7I9M3
- gHpptKX9cj/Bm2V8L2rU0NSMoju5Vrx9nstoqHDyPjUFI8R9GlC8pvMEDVXPG0TS+e/U
- 7S05Sh84cTJ0MgG4WzPAR29vDGPRKT0nP/c51N2L574B+JiWaf+MCda8MLvyhcUhApM3
- XuzN9IJunn7UbDe4OzoY9SAl5k2/yjO7MRSmtsrkNzdnuXLY8+SdlF4KWYOJQ+DzarDm
- 0EN8zqMEZzrgsPSUSW0Bn6CZ2xtxlNVNlWSxpkQOuQjsoeRHjTjnw3tKDGK2XbiONSyf
- Nasg==
-X-Gm-Message-State: AOAM5323c8hUAbcH7uV7ZHN+3woxfvugzLSz1UjAw/f2peghpYHpakSh
- udgaPA4ER05k+XUOJZwvEsyFFni6juI=
-X-Google-Smtp-Source: ABdhPJyPxpLC/xo5CXZhyyTb91+kXt/07Bd+SA7QtlX9lUiNqOAIC+dI01KA0iLFXOjDtMUzfkRByg==
-X-Received: by 2002:a5d:6852:0:b0:1f0:98e7:a963 with SMTP id
- o18-20020a5d6852000000b001f098e7a963mr12784559wrw.646.1647162276078; 
- Sun, 13 Mar 2022 01:04:36 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- h13-20020adff18d000000b001f1de9f930esm17486971wro.81.2022.03.13.01.04.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Mar 2022 01:04:35 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 13 Mar 2022 10:02:09 +0100
-Message-Id: <20220313090209.161433-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id pbUdwT9Ob_-J for <buildroot@lists.busybox.net>;
+ Sun, 13 Mar 2022 09:09:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59214606E6
+ for <buildroot@buildroot.org>; Sun, 13 Mar 2022 09:09:48 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:91a3:d0c0:1a06:f60f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9045D780374;
+ Sun, 13 Mar 2022 10:09:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1647162585;
+ bh=w/PxjAcXvUAMk2j1XiZiuuXhmfKt0SYBnrXlOOKgyes=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=m5f8iAnfWvQ4b2wu73j3SksPsN15P9EXvDsd57PjEPoOrbHkYdCOvZ1H4ratn0xjm
+ iF6csFKaaTZaB4xMMPkoZmuuFJMAkJxk2ZNjczpiRFmmbr746MaspZnC5eWqN0eqBF
+ kRMYyEwMTO2g1gwd5wJ8ZzOTT03sYgfbouokxoJsjAE4/7l42SlZJbUU3JQAB9tybC
+ vkLgl+V12d6ys5oKL9WASbVr9SNOUI9exs0Q6CoDZ3o6kHnGCvLweBH7InXmgBF2WA
+ 45QRFyg302IGl7MCGCtTgM7xy6KJUbQLfrIy1frlHMKZtc7uJyxhNa81/syfLcruXj
+ eKmAa1y7ViEmw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 13 Mar 2022 10:09:42 +0100
+Date: Sun, 13 Mar 2022 10:09:42 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220313090942.GR283544@scaer>
+References: <20220311191717.3878852-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libnetfilter_conntrack: fix musl
- build with headers >= 5.15
+Content-Disposition: inline
+In-Reply-To: <20220311191717.3878852-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-weasyprint: bump to
+ version 54.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,101 +70,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with musl and headers >= 5.15 raised
-since bump to version 1.0.9 in commit
-9af9dfa543907c46091c706b0f3a0eb89445ae74:
+Kames, All,
 
-In file included from /home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-musleabihf/sysroot/usr/include/arpa/inet.h:9,
-                 from ../../include/internal/internal.h:14,
-                 from proto.c:2:
-/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-musleabihf/sysroot/usr/include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
-   23 | struct in6_addr {
-      |        ^~~~~~~~
+On 2022-03-11 12:17 -0700, James Hilliard spake thusly:
+> Migrate from distutils to flit package infrastructure.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/19931aba8bee8867a53130ca4a53cfadbc4c5bfd
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-fix-build-with-kernel-5-15-and-musl.patch | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch
+But see below, please...
 
-diff --git a/package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch b/package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch
-new file mode 100644
-index 0000000000..9e96594120
---- /dev/null
-+++ b/package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch
-@@ -0,0 +1,60 @@
-+From 21ee35dde73aec5eba35290587d479218c6dd824 Mon Sep 17 00:00:00 2001
-+From: Robert Marko <robimarko@gmail.com>
-+Date: Thu, 24 Feb 2022 15:01:11 +0100
-+Subject: conntrack: fix build with kernel 5.15 and musl
-+
-+Currently, with kernel 5.15 headers and musl building is failing with
-+redefinition errors due to a conflict between the kernel and musl headers.
-+
-+Musl is able to suppres the conflicting kernel header definitions if they
-+are included after the standard libc ones, however since ICMP definitions
-+were moved into a separate internal header to avoid duplication this has
-+stopped working and is breaking the builds.
-+
-+It seems that the issue is that <netinet/in.h> which contains the UAPI
-+suppression defines is included in the internal.h header and not in the
-+proto.h which actually includes the kernel ICMP headers and thus UAPI
-+supression defines are not present.
-+
-+Solve this by moving the <netinet/in.h> include before the ICMP kernel
-+includes in the proto.h
-+
-+Fixes: bc1cb4b11403 ("conntrack: Move icmp request>reply type mapping to common file")
-+Signed-off-by: Robert Marko <robimarko@gmail.com>
-+Signed-off-by: Florian Westphal <fw@strlen.de>
-+
-+[Retrieved from:
-+https://git.netfilter.org/libnetfilter_conntrack/commit/?id=21ee35dde73aec5eba35290587d479218c6dd824]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/internal/internal.h | 1 -
-+ include/internal/proto.h    | 1 +
-+ 2 files changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/internal/internal.h b/include/internal/internal.h
-+index 2ef8a90..7cd7c44 100644
-+--- a/include/internal/internal.h
-++++ b/include/internal/internal.h
-+@@ -14,7 +14,6 @@
-+ #include <arpa/inet.h>
-+ #include <time.h>
-+ #include <errno.h>
-+-#include <netinet/in.h>
-+ 
-+ #include <libnfnetlink/libnfnetlink.h>
-+ #include <libnetfilter_conntrack/libnetfilter_conntrack.h>
-+diff --git a/include/internal/proto.h b/include/internal/proto.h
-+index 40e7bfe..60a5f4e 100644
-+--- a/include/internal/proto.h
-++++ b/include/internal/proto.h
-+@@ -2,6 +2,7 @@
-+ #define _NFCT_PROTO_H_
-+ 
-+ #include <stdint.h>
-++#include <netinet/in.h>
-+ #include <linux/icmp.h>
-+ #include <linux/icmpv6.h>
-+ 
-+-- 
-+cgit v1.2.3
-+
+[--SNIP--]
+> diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
+> index 0a944825bb..925de855bc 100644
+> --- a/package/python-weasyprint/python-weasyprint.mk
+> +++ b/package/python-weasyprint/python-weasyprint.mk
+> @@ -4,10 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_WEASYPRINT_VERSION = 53.4
+> +PYTHON_WEASYPRINT_VERSION = 54.2
+>  PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
+> -PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/72/25/336e274fde0e48cf9979d44667411fbcfa55d323fd7672068807b6de2f89
+> -PYTHON_WEASYPRINT_SETUP_TYPE = distutils
+> +PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/f3/dc/d3d6f1d87a0a0b09637a1f5076790e229cc803c3584ed4edb76553844001
+> +PYTHON_WEASYPRINT_SETUP_TYPE = flit
+
+'flit', as well as 'pep5127', are not documented in the manual:
+    https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_python_packages
+
+Can you please send updates to fix that, now? ;-)
+
+Regards,
+Yann E. MORIN.
+
+>  PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
+>  PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
