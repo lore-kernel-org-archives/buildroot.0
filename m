@@ -4,50 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA9CC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 13:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD06C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 13:21:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE40740930;
-	Mon, 14 Mar 2022 13:20:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D378410B8;
+	Mon, 14 Mar 2022 13:21:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xj_SkLAWko1c; Mon, 14 Mar 2022 13:20:59 +0000 (UTC)
+	with ESMTP id r7WP-9NUJGVb; Mon, 14 Mar 2022 13:21:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3557E4098A;
-	Mon, 14 Mar 2022 13:20:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B9EF81BF354
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:20:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DDF04098A;
+	Mon, 14 Mar 2022 13:21:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DD3F81BF354
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8292605E8
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:20:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBD1B8410C
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:20:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B4UCzwtjFbJL for <buildroot@lists.busybox.net>;
- Mon, 14 Mar 2022 13:20:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E907600D1
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 13:20:40 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 92DD224000C;
- Mon, 14 Mar 2022 13:20:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nTkcm-006zRg-CL; Mon, 14 Mar 2022 14:20:36 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s4LLvf1z5Sjd for <buildroot@lists.busybox.net>;
+ Mon, 14 Mar 2022 13:20:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E02CC8410B
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 13:20:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id F380D83E4D; Mon, 14 Mar 2022 13:12:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220226181747.3033483-1-fontaine.fabrice@gmail.com>
-Date: Mon, 14 Mar 2022 14:20:36 +0100
-In-Reply-To: <20220226181747.3033483-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 26 Feb 2022 19:17:47 +0100")
-Message-ID: <87h780vfff.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/dbus: bump to version 1.12.22
+To: buildroot@buildroot.org
+Date: Mon, 14 Mar 2022 14:19:22 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: d8fec0fb6cac22b276700ad8f75ef987fd290fea
+X-Git-Newrev: 08854c455d93067625d6737424eb68845686f1ef
+X-Patchwork-Hint: ignore
+Message-Id: <20220314131209.F380D83E4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/dbus: bump to
+ version 1.12.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,21 +53,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=08854c455d93067625d6737424eb68845686f1ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-1.12.22/NEWS
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-1.12.22/NEWS
 
-Committed to 2021.02.x and 2021.11.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7af7acabe051c1b394f53fd02084be7b97d8a8d8)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 06512e5656..176396fe2f 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.20.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.22.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  f77620140ecb4cdc67f37fb444f8a6bea70b5b6461f12f1cbe2cec60fa7de5fe  dbus-1.12.20.tar.gz
++sha256  8d25785c798ec4f892e6f9d177fb0ceeb8b29867b119798f9d5228561d3ad474  dbus-1.12.22.tar.gz
+ 
+ # Locally calculated
+ sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index d78e102427..de447d8680 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.20
++DBUS_VERSION = 1.12.22
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
