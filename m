@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD06C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 13:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD45EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 13:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D378410B8;
-	Mon, 14 Mar 2022 13:21:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EEDD40503;
+	Mon, 14 Mar 2022 13:21:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r7WP-9NUJGVb; Mon, 14 Mar 2022 13:21:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PaLIqLeigckC; Mon, 14 Mar 2022 13:21:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DDF04098A;
-	Mon, 14 Mar 2022 13:21:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B0A1401A0;
+	Mon, 14 Mar 2022 13:21:23 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD3F81BF354
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:20:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D1021BF354
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBD1B8410C
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:20:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C6888410B
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:21:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s4LLvf1z5Sjd for <buildroot@lists.busybox.net>;
- Mon, 14 Mar 2022 13:20:48 +0000 (UTC)
+ with ESMTP id R3r1CQd9aDqp for <buildroot@lists.busybox.net>;
+ Mon, 14 Mar 2022 13:21:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E02CC8410B
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 13:20:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0E6C83F25
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 13:21:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F380D83E4D; Mon, 14 Mar 2022 13:12:09 +0000 (UTC)
+ id BA30383E5E; Mon, 14 Mar 2022 13:12:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Mar 2022 14:19:22 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d8fec0fb6cac22b276700ad8f75ef987fd290fea
-X-Git-Newrev: 08854c455d93067625d6737424eb68845686f1ef
+Date: Mon, 14 Mar 2022 14:19:26 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: cbb6baf8ba33ea0cacf80fcac726c83ca26a804c
+X-Git-Newrev: 845c2d2669a9af79b56b7bb538819d96c70bbeed
 X-Patchwork-Hint: ignore
-Message-Id: <20220314131209.F380D83E4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/dbus: bump to
+Message-Id: <20220314131235.BA30383E5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/dbus: bump to
  version 1.12.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08854c455d93067625d6737424eb68845686f1ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=845c2d2669a9af79b56b7bb538819d96c70bbeed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-1.12.22/NEWS
 
