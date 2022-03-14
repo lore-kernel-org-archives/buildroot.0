@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD45EC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 13:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26152C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 13:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6EEDD40503;
-	Mon, 14 Mar 2022 13:21:25 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PaLIqLeigckC; Mon, 14 Mar 2022 13:21:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B0A1401A0;
-	Mon, 14 Mar 2022 13:21:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D1021BF354
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:21:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C6888410B
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:21:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD1318410C;
+	Mon, 14 Mar 2022 13:21:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R3r1CQd9aDqp for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fuq70lDZ1lKc; Mon, 14 Mar 2022 13:21:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9C5D83F25;
+	Mon, 14 Mar 2022 13:21:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DB321BF989
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:21:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88B5F402C3
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 13:21:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v0GMdR2_GK3G for <buildroot@lists.busybox.net>;
  Mon, 14 Mar 2022 13:21:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0E6C83F25
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB9C340169
  for <buildroot@buildroot.org>; Mon, 14 Mar 2022 13:21:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BA30383E5E; Mon, 14 Mar 2022 13:12:35 +0000 (UTC)
+ id C302183E68; Mon, 14 Mar 2022 13:12:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Mar 2022 14:19:26 +0100
+Date: Mon, 14 Mar 2022 14:19:41 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: cbb6baf8ba33ea0cacf80fcac726c83ca26a804c
-X-Git-Newrev: 845c2d2669a9af79b56b7bb538819d96c70bbeed
+X-Git-Oldrev: 845c2d2669a9af79b56b7bb538819d96c70bbeed
+X-Git-Newrev: 6e5536ce361ffbb7b76b843eb3eaec2e78af84dd
 X-Patchwork-Hint: ignore
-Message-Id: <20220314131235.BA30383E5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/dbus: bump to
- version 1.12.22
+Message-Id: <20220314131235.C302183E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/seatd: security
+ bump to version 0.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=845c2d2669a9af79b56b7bb538819d96c70bbeed
+commit: https://git.buildroot.net/buildroot/commit/?id=6e5536ce361ffbb7b76b843eb3eaec2e78af84dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-1.12.22/NEWS
+This release contains a security fix in seatd-launch which prevents
+removal of files that the calling user did not have privileges to
+remove. Release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.4
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7af7acabe051c1b394f53fd02084be7b97d8a8d8)
+(cherry picked from commit 41139cb0997af800c7d89213c5d89652b65ec6cb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/seatd/seatd.hash | 2 +-
+ package/seatd/seatd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 06512e5656..176396fe2f 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.20.tar.gz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.22.tar.gz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  f77620140ecb4cdc67f37fb444f8a6bea70b5b6461f12f1cbe2cec60fa7de5fe  dbus-1.12.20.tar.gz
-+sha256  8d25785c798ec4f892e6f9d177fb0ceeb8b29867b119798f9d5228561d3ad474  dbus-1.12.22.tar.gz
+diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
+index 18f65d3aeb..88793b6dd5 100644
+--- a/package/seatd/seatd.hash
++++ b/package/seatd/seatd.hash
+@@ -1,5 +1,5 @@
+ # Calculated locally
+-sha256  5226850c163b485aebe71da0d3f4941761637e146a5c9393cb40c52617ad84a8  0.6.3.tar.gz
++sha256  3d4ac288114219ba7721239cafee7bfbeb7cf8e1e7fd653602a369e4ad050bd8  0.6.4.tar.gz
  
- # Locally calculated
- sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d78e102427..de447d8680 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
+ # License files
+ sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
+diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+index 27d3155b2b..5382cad39b 100644
+--- a/package/seatd/seatd.mk
++++ b/package/seatd/seatd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DBUS_VERSION = 1.12.20
-+DBUS_VERSION = 1.12.22
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+-SEATD_VERSION = 0.6.3
++SEATD_VERSION = 0.6.4
+ SEATD_SOURCE = $(SEATD_VERSION).tar.gz
+ SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
+ SEATD_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
