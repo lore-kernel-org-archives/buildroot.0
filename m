@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B0E5C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 18:30:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B019C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 18:32:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF12E81826;
-	Mon, 14 Mar 2022 18:30:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08BF94055F;
+	Mon, 14 Mar 2022 18:32:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UHrtZce5hi-J; Mon, 14 Mar 2022 18:30:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05336817A7;
-	Mon, 14 Mar 2022 18:30:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D91191BF31B
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 18:30:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2B7640157
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 18:30:18 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3gkLqTVTFOX8 for <buildroot@lists.busybox.net>;
- Mon, 14 Mar 2022 18:30:17 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U561b3ZHsaqw; Mon, 14 Mar 2022 18:32:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA462402F3;
+	Mon, 14 Mar 2022 18:32:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F8441BF31B
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 18:32:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B80760AB2
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 18:32:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9GC0idpWHurR for <buildroot@lists.busybox.net>;
+ Mon, 14 Mar 2022 18:32:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD3CB400F2
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 18:30:17 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id e22so19361808ioe.11
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 11:30:17 -0700 (PDT)
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 961F260AAE
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 18:32:38 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id r11so19348683ioh.10
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 11:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=6Ki+wA67SZCJbioGr7l8JSmNR3iNyiX9EK6rJWY50+E=;
- b=HJlb8CAfa3JzWHrVqD1Xk+UlMu7GklJs1JxhcoWthSsDQBLd8rOPyd0o9tJy42IYIS
- 2cXBAyd7xChwtUCVh66kjiAEkn3A8YJz0LedaYUOJQPq8vT7HPBmh3gJRAuAIrAVJFNd
- 2wbEQxEAnxLPGKRhK1q1tGpc890htrOAbE6oohUfj1lNzBbeiyrLZv8Ei7EWSFVHKR6H
- cEuH36COjTT06S5KTZoGALtNfVi7phlwVkKFH1p1qhb85NmbCiYUKeSEjmiFItRTZv6z
- NoQ6LSHrkzKMXFDD9U+H2rJYR8ZpWw3NDCefSAKqa2+ivc3fng9aZdcIhQFfzbDE2ilH
- v2AQ==
+ bh=jv8iPxPaQu17QEFKY5kItQy0u+4kbQgs08xauIzlx3I=;
+ b=I8s5EP8HGSyBVsXnEEPi0hqoVMiwe3Wc9PediPlxJ54Dcl34z0YXsfyz52YpRO7i38
+ TeiJ1d6SrVMHRXIYJBjbH317gJy8hVU/vouz0zGMvItjbpRHcQaBVW/ypuGPoqaRLvod
+ jzWgohQ8g5BEYP2+HucYqTP3zdrq3WQxL94nrp8/8HJuo/vMCcvTFU+0JctqohaiPjr4
+ k0RlbLtOyJ8TQ8Lupzx2cv8etZd9fkT+Z1LDr3jpiiF7b6SEmClnjmGUbsfJwIdQufTq
+ 0eroDWh200oukQWRYBAg1urkMzLbsFhkKWfmOZOJp+Dtapyvmk+aJgNN91F8lQo9AFyQ
+ qWww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=6Ki+wA67SZCJbioGr7l8JSmNR3iNyiX9EK6rJWY50+E=;
- b=H8RBXtKJyErbNwqJLbQbq8KQ5F1TSdUjX/FKBoQTvmWcRcPnY16iIwBhloi5kQuyi0
- a+xf0/kJYkukJ8RLO0iwRElEwiN23Wg5fFp6PCfR+ddxcPyvNHZe4WVf+F5YqnJaGUmu
- ctJh6kpGj2M2ig7EJ3FBQFqI13yjc4WKNpVOEzgA9/J/DfMhRh9fkD8HY0tNe8yLflMG
- mCTffDT8UT7g16aV6cMbeRJF4Vv2TB65SAr1gyy6SMiqxkkFyBStR/oZ8BZ/jbli/CXz
- aF19/Nr4bPgYCKQGLKPmwKqYMS8SEr6gUSo5lRtAsQJrSuiXhBd6zcBp5Vv89LcybgkI
- fpXQ==
-X-Gm-Message-State: AOAM530tHAPdhtMcBTIpwAiulczzY6qx2n7LsTKZg4ie0q2TZ3bZAttn
- l4M53y4m2xjJ/lYBm+gfZyOVSXo5qBs=
-X-Google-Smtp-Source: ABdhPJzsHQRn84N1sVPaFChzlJALbAYH/JTOgAxmhtuLdf5oRarwllcASuJQi25ZPitUhWHSjq5alg==
-X-Received: by 2002:a02:cadb:0:b0:317:b785:8ab2 with SMTP id
- f27-20020a02cadb000000b00317b7858ab2mr21994146jap.108.1647282616629; 
- Mon, 14 Mar 2022 11:30:16 -0700 (PDT)
+ bh=jv8iPxPaQu17QEFKY5kItQy0u+4kbQgs08xauIzlx3I=;
+ b=S79t4HQ+5hXGYrc73Y+jTGGNLofrW8Xks0LR4PEekFI8tLg2xxsnNMycyb9XJJZSiy
+ vw4BPtwet3x/Zr+Js2t8am4KA1TjZCbwbVoKsQNGUafCK7+UeoguIGG7h1HJ3tJ3BnPz
+ y6tr+bxVTQj9k0kbAcV+sdwsF1cJL0UGb+DaeAy86n2U6A5sYIEdcvAEajxAXz/VQUAu
+ 8Iy/cRauEAjiXS6eJhIwZjkTQdV7SgtmYMgMZz3053AWHAuxvtCvrjvGYenqIGKsC+Qu
+ d0dWiLNNv4rawrPgK7cMySARjgaWqD8JVd46nABi/Z2PTPG9h7teB1AgnGODFBs1cqkY
+ SS/A==
+X-Gm-Message-State: AOAM530bR2/F8sJyHHF4/DtW9TXPsC35UhJXEyb1dxp1IRKOMV8RnmMi
+ wptDswzYw3Z33cG6cY5+NORlh6w4aAQ=
+X-Google-Smtp-Source: ABdhPJylrcJSebCShjhVQzCEBincZGzEE8wa8ZhXuzU8G31GIxYVR0df221b6Bjxc5ojeSHdn2ekSg==
+X-Received: by 2002:a05:6602:2cc2:b0:648:cadb:b26b with SMTP id
+ j2-20020a0566022cc200b00648cadbb26bmr13903853iow.201.1647282757447; 
+ Mon, 14 Mar 2022 11:32:37 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
  [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- q9-20020a5edb09000000b00645c7a00cbbsm8782534iop.20.2022.03.14.11.30.15
+ p22-20020a6bce16000000b00640922b3699sm8647082iob.15.2022.03.14.11.32.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Mar 2022 11:30:15 -0700 (PDT)
+ Mon, 14 Mar 2022 11:32:36 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Mar 2022 12:30:14 -0600
-Message-Id: <20220314183014.2173419-1-james.hilliard1@gmail.com>
+Date: Mon, 14 Mar 2022 12:32:34 -0600
+Message-Id: <20220314183234.2174325-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.61.3
+Subject: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to version
+ 0.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,8 +87,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -95,34 +95,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-aioconsole/python-aioconsole.hash | 4 ++--
+ package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index c2d53519d4..d909709b24 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.61.1/meson-0.61.1.tar.gz.asc
--sha256  feb2cefb325b437dbf36146df7c6b87688ddff0b0205caa31dc64055c6da410c  meson-0.61.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.61.3/meson-0.61.3.tar.gz.asc
-+sha256  9c884434469471f3fe0cbbceb9b9ea0c8047f19e792940e1df6595741aae251b  meson-0.61.3.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 125488dd46..4615e839fe 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index 39ce16f8b2..af8b5c4de9 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5  56a1e6542ea3627bdbc67f24abcaa341  aioconsole-0.4.0.tar.gz
+-sha256  a30ad5276b85dd20a48d235111d0bd26c6bedf7b56d605ffc10ae27124b4b0b4  aioconsole-0.4.0.tar.gz
++md5  105adca78033ef1f0b62d8e81d3efcac  aioconsole-0.4.1.tar.gz
++sha256  0c0acb66b4e72d6606c9fa14ac9eb001a222c37c885b8fbdf65f41824cfa855f  aioconsole-0.4.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index 44857054d4..a58fd33a61 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.61.1
-+MESON_VERSION = 0.61.3
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-PYTHON_AIOCONSOLE_VERSION = 0.4.0
++PYTHON_AIOCONSOLE_VERSION = 0.4.1
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/f2/7a/7628ec23f140ffca532c7f630e179503727b755849b5eab15576bbf7d3df
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/c5/16/a9de89d859eeaa0f9fdf5675a97ea1416265e1ebc039c7b9ea2c9e5433ac
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+ PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
