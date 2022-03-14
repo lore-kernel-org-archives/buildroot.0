@@ -1,71 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9C23C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 19:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0400DC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 20:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 599DF405B0;
-	Mon, 14 Mar 2022 19:57:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FFA881364;
+	Mon, 14 Mar 2022 20:23:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mRUyQ5fcVbvD; Mon, 14 Mar 2022 19:57:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DLgZLdmFIYc7; Mon, 14 Mar 2022 20:23:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E66D401B1;
-	Mon, 14 Mar 2022 19:57:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 21E2A1BF318
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 19:57:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE799812FE;
+	Mon, 14 Mar 2022 20:23:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CA1F1BF30F
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 20:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19BB360C21
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 19:57:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B052812FB
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 20:23:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jR785uJTW7mo for <buildroot@lists.busybox.net>;
- Mon, 14 Mar 2022 19:57:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com
- [209.85.218.50])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DCA8660C03
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 19:57:13 +0000 (UTC)
-Received: by mail-ej1-f50.google.com with SMTP id kt27so36647081ejb.0
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 12:57:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=LG/sbvoRnPEgCflDWjiTb9e/jAQb5pnKS5ezzk1wml8=;
- b=Mxgn8AJmcZkpSUJKuDpYwLSxzGC60tvr9vWOCyVc6YxKSDNDuqM9KHV0r2A87qM9MO
- 16GGVwQThlm4QrEtSJE6oGYskHpXTdHI0bWFgwkSqPNSZH7OIPk5nvau6/OhN3le5RYs
- +l9hyneCQL6ES0ZKtdZMXNuD3nFOzD43aGcJFPmK+sqqroWn8ltQtFAzNPhJD2oPDgUW
- icH19jxFoBi3OXycvs5FNazI7iBygyPO6tEqoLcHTMi/SCoEVYSnwgyqEFZHYqoJecGv
- qnz7xBnHvjBdQ8QTajDEsC0CBY66/Wyptl+46kx7UdKK6zQtRVBuhQJqjwz9VeOh68cQ
- /Ztw==
-X-Gm-Message-State: AOAM532BNbSlaosRp3yVYTZD/dIStzv69Uw/v2Y5R6+VWcrUxhp3agNi
- oSzBRpst63joMVKpGhNKbJQ=
-X-Google-Smtp-Source: ABdhPJz8+hOTeeDk8Li4S+osAJBCjbxdnOlQh8IFvvpJUhn+azXT0GiCPR8LnKZQcPKcIf1bSUBXBA==
-X-Received: by 2002:a17:906:be1:b0:6ce:c3c8:b4b6 with SMTP id
- z1-20020a1709060be100b006cec3c8b4b6mr19776987ejg.617.1647287832068; 
- Mon, 14 Mar 2022 12:57:12 -0700 (PDT)
-Received: from localhost (tmo-098-218.customers.d1-online.com. [80.187.98.218])
- by smtp.gmail.com with ESMTPSA id
- f5-20020a1709067f8500b006da68bfdfc7sm7310281ejr.12.2022.03.14.12.57.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Mar 2022 12:57:11 -0700 (PDT)
-Date: Mon, 14 Mar 2022 20:57:09 +0100
-From: Thomas Huth <huth@tuxfamily.org>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Message-ID: <20220314205709.0024bd95@tuxfamily.org>
-In-Reply-To: <20220310221908.30588-1-fontaine.fabrice@gmail.com>
-References: <20220310221908.30588-1-fontaine.fabrice@gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y8Y_62bfslVF for <buildroot@lists.busybox.net>;
+ Mon, 14 Mar 2022 20:23:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B4C41812C9
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 20:23:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0E00560002;
+ Mon, 14 Mar 2022 20:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1647289423;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1ly/x4GNOlYKMgkZFzeMosM3W/xZwMx4m7kZb/PYZ20=;
+ b=YXf1+WrNWfB6ymstov2W94KKngl0zcnPCQUFi2WBKMMcF3Q65+2ufqonNfT9MECKg6TDbh
+ wHp+XEPpKJ9Z5FSTiIYP/d8/ftLawcFu3r8Sp6RpXNsIxdIPIMUhAf4egENTSivarvJjff
+ 2uTLFlvezcjRchWeQwEMVw7F2puqBG/Pwi5zFv0t0aEcm9znxvImYZkARLkZvuDhPYY25Y
+ ffHIxJEtiqoX8GbOxaHgpztCZFwl9t1TCqOUXHcFRu2iZcNnBbEYqBilsllb2BojaBS8TA
+ 2UEM8fxK6EFgJFCMuLXy3rCRfAnbOMlnb1kcA8P4hte6Ccfrhnal4L0UYwIWpQ==
+Date: Mon, 14 Mar 2022 21:23:39 +0100
+To: Etienne Carriere <etienne.carriere@linaro.org>
+Message-ID: <20220314212339.45d1da77@windsurf>
+In-Reply-To: <CAN5uoS9XLeiApqZUzs_UxPqg5UOKU5oDp-2H03+bq9miYM0iew@mail.gmail.com>
+References: <20220314153111.1390512-1-clement.leger@bootlin.com>
+ <20220314153111.1390512-4-clement.leger@bootlin.com>
+ <CAN5uoS9XLeiApqZUzs_UxPqg5UOKU5oDp-2H03+bq9miYM0iew@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/kvm-unit-tests: bump to version 2022-03-08
+Subject: Re: [Buildroot] [PATCH v4 3/8] boot/optee-os: add support to build
+ with python-cryptography
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,47 +70,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Cyril Bur <cyrilbur@gmail.com>, Matt Weber <matthew.weber@collins.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Thu, 10 Mar 2022 23:19:08 +0100
-schrieb Fabrice Fontaine <fontaine.fabrice@gmail.com>:
+Hello Etienne,
 
-> - Switch site:
->   https://git.kernel.org/pub/scm/virt/kvm/kvm-unit-tests.git/commit/?id=f271e1b630a1b8b5f4eae2331654fc1e70abfd66
-> - Update first patch
-> - Drop second patch (binutils < 2.23 is not supported by buildroot
->   anymore)
-> - Drop third and fourth patches (already in version)
-> - This bump will fix the following build failure with powerpc and gcc 11
->   thanks to
->   https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/commit/0c111b370ad3c5a89e11caee79bc93a66fd004f2
-> 
-> /tmp/ccSlivNE.s:348: Error: `lswx' invalid when little-endian
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/746e87892ac545e8fb97c17d4bfd7bd7bbc9d8be
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Huth):
->  - Drop second patch
-> 
->  ...emove-Werror-to-avoid-build-failures.patch |  17 +--
->  ...vm-unit-tests-test-for-rdseed-rdrand.patch | 110 ------------------
->  ...3-Makefile-fix-stack-protector-tests.patch |  36 ------
->  ...issue-with-the-linker-from-Fedora-32.patch |  61 ----------
->  package/kvm-unit-tests/kvm-unit-tests.hash    |   2 +-
->  package/kvm-unit-tests/kvm-unit-tests.mk      |   6 +-
->  6 files changed, 14 insertions(+), 218 deletions(-)
->  delete mode 100644 package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
->  delete mode 100644 package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
->  delete mode 100644 package/kvm-unit-tests/0004-Fix-powerpc-issue-with-the-linker-from-Fedora-32.patch
+On Mon, 14 Mar 2022 18:20:47 +0100
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+> Once bumped to 3.16.0, optee-os won't revert to pycryptodomex.
+> Why not using a single change to upgrade optee_os to 3.16.0 and update
+> dependencies?
+> This would get rid of BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY.
+
+OP-TEE is one of those Buildroot packages for which we offer a version
+selection (because it is heavily tied to the hardware, like a
+bootloader or the Linux kernel). So you can't assume that everybody
+will be building 3.16.x or newer. Some people will probably still be
+using older versions for quite some time, which we still have to
+support.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
