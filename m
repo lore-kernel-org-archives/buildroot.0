@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40F0C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 12:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA439C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 12:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60AD240621;
-	Mon, 14 Mar 2022 12:23:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EB5740895;
+	Mon, 14 Mar 2022 12:23:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s7VQpWUA7XZi; Mon, 14 Mar 2022 12:23:21 +0000 (UTC)
+	with ESMTP id Y-AZniYFY46o; Mon, 14 Mar 2022 12:23:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A1D94060E;
-	Mon, 14 Mar 2022 12:23:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECD32408A5;
+	Mon, 14 Mar 2022 12:23:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E9CF81BF3A9
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 12:20:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 375E31BF3A9
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 12:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6540C826EA
+ by smtp1.osuosl.org (Postfix) with ESMTP id A10C283E83
  for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 12:20:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iaC789FiqwML for <buildroot@lists.busybox.net>;
+ with ESMTP id W0dHFHLsaqrw for <buildroot@lists.busybox.net>;
  Mon, 14 Mar 2022 12:20:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5B4A83E94
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7D8683E05
  for <buildroot@buildroot.org>; Mon, 14 Mar 2022 12:20:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 20B6783E3D; Mon, 14 Mar 2022 12:11:53 +0000 (UTC)
+ id 039C583E42; Mon, 14 Mar 2022 12:11:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 14 Mar 2022 13:17:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7229db872acd6db83ccb7e4bb22cb4cfd06be75
-X-Git-Newrev: 70ad44ffd00786cf25145445afa374cbb295f722
+X-Git-Oldrev: e4eaddce8db60f6840d5d3a159b7d2320f8b96f6
+X-Git-Newrev: f0d1f211950fe7cdf1bbb52397cdb86519d4a404
 X-Patchwork-Hint: ignore
-Message-Id: <20220314121153.20B6783E3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/efl: handle input option
+Message-Id: <20220314121153.039C583E42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestRust{Bin} use ripgrep
+ package for testing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,108 +59,125 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70ad44ffd00786cf25145445afa374cbb295f722
+commit: https://git.buildroot.net/buildroot/commit/?id=f0d1f211950fe7cdf1bbb52397cdb86519d4a404
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 2d7a3e48c574c05346b66f79cdb75ecdfa7f074e forgot to manage input
-option on target which was added (and enabled by default) by
-https://git.enlightenment.org/core/efl.git/commit/?id=0c2cf7e1bf7ca547655d25aaea30d081101b42be
-resulting in the following build failure when eeze is disabled:
+TestRust and TestRustBin has been introduced at the time when there was
+no cargo package infrastructure or any package using rust compiler
+(Buildroot 2018.02).
 
-../output-1/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable "eeze".
+Since then the ripgrep package has been introduced, initially using
+the generic package infrastructure and converted later to the cargo
+package infrastructure.
 
-Fixes:
- - http://autobuild.buildroot.org/results/4a840c54bad9748b5748738378a0352d02de1f7e
+Due a recent change in rust/cargo removing the cargo config file [1]
+the test TestRust and TestRustBin now fail to compile since they build
+an hello-world crate outside of the cargo package infrastructure
+without the correct environment for cross-compiling.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Romain:
-  Rename BR2_PACKAGE_EFL_LIBINPUT to BR2_PACKAGE_EFL_ELPUT to match the
-  upstream name.
-  use BR2_PACKAGE_EFL_ELPUT for BR2_PACKAGE_EFL_DRM
-  remove duplicate libxkbcommon in EFL_DEPENDENCIES]
+Replace the 'hello-world' crate by ripgrep package and check if it
+can run properly in Qemu.
+
+Fixes tests.package.test_rust.TestRustBin:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2116202545
+
+But doesn't fixes tests.package.test_rust.TestRust due another bug:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2116202544
+
+[1] b6378631c2609742382984f6f7b93c1d9d2cdb78
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/efl/Config.in | 19 +++++++++++++++----
- package/efl/efl.mk    | 11 ++++++++---
- 2 files changed, 23 insertions(+), 7 deletions(-)
+ support/testing/tests/package/test_rust.py | 48 +++---------------------------
+ 1 file changed, 4 insertions(+), 44 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 4c78bef7c8..c4f82b92e3 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -85,6 +85,19 @@ config BR2_PACKAGE_EFL_LIBFRIBIDI
- 	  so you may also trigger code paths with bugs that are never
- 	  normally used.
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index 884b40a4a3..a1abd20c09 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -8,9 +8,6 @@ import infra.basetest
  
-+config BR2_PACKAGE_EFL_ELPUT
-+	bool "Enable elput support (recommended)"
-+	default y
-+	depends on BR2_PACKAGE_HAS_UDEV # libinput, efl-eeze
-+	select BR2_PACKAGE_EFL_EEZE
-+	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	help
-+	  Eplut is used to support gesture recognition.
-+
-+comment "elput needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
- config BR2_PACKAGE_EFL_LIBSNDFILE
- 	bool "Enable libsndfile support (recommended)"
- 	default y
-@@ -216,13 +229,11 @@ endchoice # OpenGL support
+ class TestRustBase(infra.basetest.BRTest):
  
- config BR2_PACKAGE_EFL_DRM
- 	bool "Evas DRM Engine"
--	depends on BR2_PACKAGE_HAS_UDEV # efl-eeze
-+	depends on BR2_PACKAGE_HAS_UDEV # efl-elput, efl-eeze
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
--	select BR2_PACKAGE_EFL_EEZE
-+	select BR2_PACKAGE_EFL_ELPUT
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_LIBINPUT # For elput
--	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
- 	  This option enable building support for the Evas DRM Engine.
- 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 43a2dc4fcb..d4a16475e5 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -67,6 +67,13 @@ else
- EFL_CONF_OPTS += -Deeze=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_EFL_ELPUT),y)
-+EFL_DEPENDENCIES += libinput libxkbcommon
-+EFL_CONF_OPTS += -Dinput=true
-+else
-+EFL_CONF_OPTS += -Dinput=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
- EFL_DEPENDENCIES += util-linux
- EFL_CONF_OPTS += -Dlibmount=true
-@@ -192,7 +199,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_EFL_DRM),y)
- EFL_CONF_OPTS += -Ddrm=true
--EFL_DEPENDENCIES += libdrm libegl libinput mesa3d
-+EFL_DEPENDENCIES += libdrm libegl mesa3d
- else
- EFL_CONF_OPTS += -Ddrm=false
- endif
-@@ -204,8 +211,6 @@ else
- EFL_CONF_OPTS += -Dwl=false
- endif
- 
--EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
+-    target = 'armv7-unknown-linux-gnueabihf'
+-    crate = 'hello-world'
 -
- # json evas loader is disabled by default by upstream.
- # Disable libspectre (ps).
- # Keep all other evas loader enabled or handled below.
+     def login(self):
+         img = os.path.join(self.builddir, "images", "rootfs.cpio")
+         self.emulator.boot(arch="armv7",
+@@ -18,43 +15,6 @@ class TestRustBase(infra.basetest.BRTest):
+                            options=["-initrd", img])
+         self.emulator.login()
+ 
+-    def build_test_prog(self):
+-        hostdir = os.path.join(self.builddir, 'host')
+-        env = os.environ.copy()
+-        env["USER"] = "br-user"
+-        env["PATH"] = "{}:".format(os.path.join(hostdir, 'bin')) + env["PATH"]
+-        env["CARGO_HOME"] = os.path.join(hostdir, 'usr', 'share', 'cargo')
+-        env["RUST_TARGET_PATH"] = os.path.join(hostdir, 'etc', 'rustc')
+-        cargo = os.path.join(hostdir, 'bin', 'cargo')
+-        workdir = os.path.join(tempfile.mkdtemp(suffix='-br2-testing-rust'),
+-                               self.crate)
+-        manifest = os.path.join(workdir, 'Cargo.toml')
+-        prog = os.path.join(workdir, 'target', self.target, 'debug', self.crate)
+-
+-        cmd = [cargo, 'init', '--bin', '--vcs', 'none', '-vv', workdir]
+-        ret = subprocess.call(cmd,
+-                              stdout=self.b.logfile,
+-                              stderr=self.b.logfile,
+-                              env=env)
+-        if ret != 0:
+-            raise SystemError("Cargo init failed")
+-
+-        cmd = [
+-            cargo, 'build', '-vv', '--target', self.target,
+-            '--manifest-path', manifest
+-        ]
+-        ret = subprocess.call(cmd,
+-                              stdout=self.b.logfile,
+-                              stderr=self.b.logfile,
+-                              env=env)
+-        if ret != 0:
+-            raise SystemError("Cargo build failed")
+-
+-        shutil.copy(prog, os.path.join(self.builddir, 'target', 'usr', 'bin'))
+-        self.b.build()
+-        shutil.rmtree(workdir)
+-
+-
+ class TestRustBin(TestRustBase):
+     config = \
+         """
+@@ -68,12 +28,12 @@ class TestRustBin(TestRustBase):
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         BR2_PACKAGE_HOST_RUSTC=y
++        BR2_PACKAGE_RIPGREP=y
+         """
+ 
+     def test_run(self):
+-        self.build_test_prog()
+         self.login()
+-        self.assertRunOk(self.crate)
++        self.assertRunOk("rg Buildroot /etc/issue")
+ 
+ 
+ class TestRust(TestRustBase):
+@@ -90,9 +50,9 @@ class TestRust(TestRustBase):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         BR2_PACKAGE_HOST_RUSTC=y
+         BR2_PACKAGE_HOST_RUST=y
++        BR2_PACKAGE_RIPGREP=y
+         """
+ 
+     def test_run(self):
+-        self.build_test_prog()
+         self.login()
+-        self.assertRunOk(self.crate)
++        self.assertRunOk("rg Buildroot /etc/issue")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
