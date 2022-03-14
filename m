@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50EA5C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 09:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88854C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 09:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2DB3405EE;
-	Mon, 14 Mar 2022 09:20:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C06E833D3;
+	Mon, 14 Mar 2022 09:20:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GoADIsTsWTvv; Mon, 14 Mar 2022 09:20:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 579C783381;
+	Mon, 14 Mar 2022 09:20:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B42A1BF3CA
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 09:20:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8689A405EE
+ for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 09:20:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G4Xh8PogNzD7; Mon, 14 Mar 2022 09:20:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C1FC640182;
-	Mon, 14 Mar 2022 09:20:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9BEF61BF3CA
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 09:20:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9975C4148A
- for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 09:20:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xZyEc75qKU74 for <buildroot@lists.busybox.net>;
- Mon, 14 Mar 2022 09:20:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD0A841487
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 09:20:30 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 803D6FF808;
- Mon, 14 Mar 2022 09:20:28 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nTgsN-006sjU-CG; Mon, 14 Mar 2022 10:20:27 +0100
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id grGnCDw9Rto0 for <buildroot@lists.busybox.net>;
+ Mon, 14 Mar 2022 09:20:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5A9940147
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 09:20:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 251AA83D5F; Mon, 14 Mar 2022 09:11:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220222224302.3185944-1-fontaine.fabrice@gmail.com>
-Date: Mon, 14 Mar 2022 10:20:27 +0100
-In-Reply-To: <20220222224302.3185944-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 22 Feb 2022 23:43:02 +0100")
-Message-ID: <87pmmovqjo.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 8.2.4450
+To: buildroot@buildroot.org
+Date: Mon, 14 Mar 2022 10:16:08 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: e89b9c12d56eef237e93c4b5e5735da60e9315df
+X-Git-Newrev: a717432b35e304d345df2cedd36da67d5f6514ad
+X-Patchwork-Hint: ignore
+Message-Id: <20220314091155.251AA83D5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/vim: security
+ bump to version 8.2.4450
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,23 +53,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a717432b35e304d345df2cedd36da67d5f6514ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Fix CVE-2022-0554: Use of Out-of-range Pointer Offset in GitHub
- > repository vim/vim prior to 8.2.
+Fix CVE-2022-0554: Use of Out-of-range Pointer Offset in GitHub
+repository vim/vim prior to 8.2.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 28c9cb5ff34aa98bf2d0db63f593745db006c910)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index fa3ca53cc8..8b60b7461f 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  b40b4e341de6b65cdeacd4c816dea8fe5e3b385ee5e17af73fc69c00bd7c440b  vim-8.2.4301.tar.gz
++sha256  b0a5acbe83bbdd4b1412abd9dc2ae2e3593c6cff8ff11c551fda3e6e2a87ec81  vim-8.2.4450.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 98a5f153a8..28fd33c8ef 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 8.2.4301
++VIM_VERSION = 8.2.4450
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
