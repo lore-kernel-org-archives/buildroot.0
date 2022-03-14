@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A409C47087
-	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 12:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07E86C3527A
+	for <buildroot@archiver.kernel.org>; Mon, 14 Mar 2022 12:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBC4284116;
-	Mon, 14 Mar 2022 12:22:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 979A9405F4;
+	Mon, 14 Mar 2022 12:22:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7uL3GSBU8jst; Mon, 14 Mar 2022 12:22:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EWbBzfXDrHPi; Mon, 14 Mar 2022 12:22:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB437840AC;
-	Mon, 14 Mar 2022 12:22:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4937D1BF3A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 477BD4060C;
+	Mon, 14 Mar 2022 12:22:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A49211BF3A9
  for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 12:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2403841550
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18D5483EDD
  for <buildroot@lists.busybox.net>; Mon, 14 Mar 2022 12:20:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o4hBopDChJdE for <buildroot@lists.busybox.net>;
- Mon, 14 Mar 2022 12:20:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oXLOEDShfNvD for <buildroot@lists.busybox.net>;
+ Mon, 14 Mar 2022 12:20:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05F5A4154F
- for <buildroot@buildroot.org>; Mon, 14 Mar 2022 12:20:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0C1183E83
+ for <buildroot@buildroot.org>; Mon, 14 Mar 2022 12:20:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 36A5283E3E; Mon, 14 Mar 2022 12:11:53 +0000 (UTC)
+ id 0D83583E3D; Mon, 14 Mar 2022 12:11:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 14 Mar 2022 13:17:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 96ebed1eed6dcd55d8024cbc6fe8bec646d739c6
-X-Git-Newrev: c750dd4e5d03430148841d2d897e90dbe19ce172
+X-Git-Oldrev: f0d1f211950fe7cdf1bbb52397cdb86519d4a404
+X-Git-Newrev: 15682493918ead960d326bf24763e9b5d8d331d9
 X-Patchwork-Hint: ignore
-Message-Id: <20220314121153.36A5283E3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftool: add
- BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
+Message-Id: <20220314121153.0D83583E3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rust: install rustc and rust-std
+ built by Buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +59,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c750dd4e5d03430148841d2d897e90dbe19ce172
+commit: https://git.buildroot.net/buildroot/commit/?id=15682493918ead960d326bf24763e9b5d8d331d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bpftool uses its own local copy of libbpf so add
-BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS to avoid the following build failure
-on ARM:
+The test TestRust is currently broken with ripgrep package with
+the following error:
 
-btf.c: In function 'btf_type_by_id':
-btf.c:461:14: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-  if (type_id < btf->start_id)
-              ^
-bpf.c:62:4: error: #error __NR_bpf not defined. libbpf does not support your arch.
- #  error __NR_bpf not defined. libbpf does not support your arch.
-    ^
+error[E0514]: found crate `core` compiled by an incompatible version of rustc
+  |
+  = help: please recompile that crate using this compiler (rustc 1.58.1) (consider running `cargo clean` first)
+  = note: the following crate versions were found:
+          crate `core` compiled by rustc 1.58.1 (db9d1b20b 2022-01-20): TestRust/host/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-6cfcec236d576603.rlib
+
+error[E0514]: found crate `std` compiled by an incompatible version of rustc
+
+The problem is not really a cross-compilation issue (we are building
+for an armv7 target on x86_64 host) but a problem with rust-std libraries
+(rlib).
+
+We can notice that "rustc 1.58.1 (db9d1b20b 2022-01-20)" is the same
+version as the prebuilt rustc used to bootstrap the build:
+
+TestRust/host/bin/rustc --version
+rustc 1.58.1
+
+TestRustBin/host/bin/rustc --version
+rustc 1.58.1 (db9d1b20b 2022-01-20)
+
+Indeed we are using host-rust-bin to bootstrap the host-rust compiler
+package built by Buildroot. The problem is that the
+libcore-6cfcec236d576603.rlib file come from host-rust-bin (rust-std)
+and is not removed before installing host-rust built by Buildroot.
+
+We actually spent a lot of time to build host-rust with rust-std
+and forget to install this important library HOST_DIR.
+
+Looking at the host-rust build directory we can notice two installer
+script "install.sh" (the same scripts used to install host-rust-bin):
+
+TestRust/build/host-rust-1.58.1/build/tmp/tarball/rust/x86_64-unknown-linux-gnu/rust-1.58.1-x86_64-unknown-linux-gnu/install.sh
+TestRust/build/host-rust-1.58.1/build/tmp/tarball/rust-std/armv7-unknown-linux-gnueabihf/rust-std-1.58.1-armv7-unknown-linux-gnueabihf/install.sh
+
+The "tarball" directory is generated by the "python x.py dist" during
+the install step, we have to keep it.
+
+Replace "python x.py install" by theses two install scripts.
+Installing rust-std with the install.sh script replace the rust-std
+libraries installed by host-rust-bin.
 
 Fixes:
- - http://autobuild.buildroot.org/results/aae772f1cfb16516a57f310c4f022e80a2a8d65e
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2116202544
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[Arnout: remove redundant parenthesis; only use a variable for the
+common install opts]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/bpftool/Config.in | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/rust/rust.mk | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/package/bpftool/Config.in b/package/bpftool/Config.in
-index e81d874343..a1ef3843e6 100644
---- a/package/bpftool/Config.in
-+++ b/package/bpftool/Config.in
-@@ -1,5 +1,15 @@
-+config BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
-+	bool
-+	# see libbpf/src/bpf.c
-+	default y if BR2_arc
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_sparc || BR2_sparc64
-+	default y if BR2_s390x
-+
- config BR2_PACKAGE_BPFTOOL
- 	bool "bpftool"
-+	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
- 	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils, elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
-@@ -13,6 +23,7 @@ config BR2_PACKAGE_BPFTOOL
- 	  of eBPF programs and maps.
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 46487fe4b7..3c560882ca 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -67,9 +67,26 @@ define HOST_RUST_BUILD_CMDS
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py build
+ endef
  
- comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.12"
-+	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
- 	depends on !BR2_nios2
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
++HOST_RUST_INSTALL_OPTS = \
++	--prefix=$(HOST_DIR) \
++	--disable-ldconfig
++
++define HOST_RUST_INSTALL_RUSTC
++	cd $(@D)/build/tmp/tarball/rust/$(RUSTC_HOST_NAME)/rust-$(RUST_VERSION)-$(RUSTC_HOST_NAME); \
++		./install.sh $(HOST_RUST_INSTALL_OPTS) --components=rustc,cargo,rust-std-$(RUSTC_HOST_NAME)
++endef
++
++ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
++define HOST_RUST_INSTALL_LIBSTD_TARGET
++	cd $(@D)/build/tmp/tarball/rust-std/$(RUSTC_TARGET_NAME)/rust-std-$(RUST_VERSION)-$(RUSTC_TARGET_NAME); \
++		./install.sh $(HOST_RUST_INSTALL_OPTS)
++endef
++endif
++
+ define HOST_RUST_INSTALL_CMDS
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py dist
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py install
++	$(HOST_RUST_INSTALL_RUSTC)
++	$(HOST_RUST_INSTALL_LIBSTD_TARGET)
+ endef
+ 
+ $(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
