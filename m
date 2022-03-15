@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54350C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 20:19:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35447C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 20:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA0284295;
-	Tue, 15 Mar 2022 20:19:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFA158427D;
+	Tue, 15 Mar 2022 20:19:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C7d8zvhBeu-1; Tue, 15 Mar 2022 20:19:38 +0000 (UTC)
+	with ESMTP id ztJLKZxap33l; Tue, 15 Mar 2022 20:19:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2057E8428C;
-	Tue, 15 Mar 2022 20:19:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1679F1BF31E
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4D33842D6;
+	Tue, 15 Mar 2022 20:19:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 179081BF9B6
  for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:18:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 571214026E
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:18:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 072F2813CC
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:18:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YZI5UlbdCO4F for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U9_pWjU_WccH for <buildroot@lists.busybox.net>;
  Tue, 15 Mar 2022 20:18:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A6A3408BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id A172B813D8
  for <buildroot@buildroot.org>; Tue, 15 Mar 2022 20:18:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B196883F83; Tue, 15 Mar 2022 20:10:12 +0000 (UTC)
+ id C9A5483F85; Tue, 15 Mar 2022 20:10:12 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 15 Mar 2022 20:54:26 +0100
+Date: Tue, 15 Mar 2022 20:54:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e28156074d296f02b02b7f01767fda314365b890
-X-Git-Newrev: 2106f02bae984e97bc151fe47de0a792b84919a7
+X-Git-Oldrev: b9391c7dd21dee3eff04e665bf6a92ef6fc5f234
+X-Git-Newrev: 8a5476ef0d4eb417df6787b68125862aa30a6b4e
 X-Patchwork-Hint: ignore
-Message-Id: <20220315201012.B196883F83@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsecret: bump to version 0.20.5
+Message-Id: <20220315201012.C9A5483F85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/valijson: bump to version 0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,95 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2106f02bae984e97bc151fe47de0a792b84919a7
+commit: https://git.buildroot.net/buildroot/commit/?id=8a5476ef0d4eb417df6787b68125862aa30a6b4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to meson-package
-- Add bash-completion and tpm2-tss optional dependencies
-
-https://gitlab.gnome.org/GNOME/libsecret/-/tags/0.20.5
+https://github.com/tristanpenman/valijson/releases/tag/v0.6
+https://github.com/tristanpenman/valijson/releases/tag/v0.5
+https://github.com/tristanpenman/valijson/releases/tag/v0.4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libsecret/libsecret.hash |  4 ++--
- package/libsecret/libsecret.mk   | 36 ++++++++++++++++++++++++------------
- 2 files changed, 26 insertions(+), 14 deletions(-)
+ package/valijson/valijson.hash | 2 +-
+ package/valijson/valijson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
-index 792ec838e3..4eb3d9b95c 100644
---- a/package/libsecret/libsecret.hash
-+++ b/package/libsecret/libsecret.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/libsecret/0.20/libsecret-0.20.4.sha256sum
--sha256  325a4c54db320c406711bf2b55e5cb5b6c29823426aa82596a907595abb39d28  libsecret-0.20.4.tar.xz
-+# From https://download.gnome.org/sources/libsecret/0.20/libsecret-0.20.5.sha256sum
-+sha256  3fb3ce340fcd7db54d87c893e69bfc2b1f6e4d4b279065ffe66dac9f0fd12b4d  libsecret-0.20.5.tar.xz
- 
- # Hash for license file:
- sha256  a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  COPYING
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index 4d14c231d7..82fe38ac1a 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -5,33 +5,45 @@
+diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
+index e184ccb7c0..0aab93dd2a 100644
+--- a/package/valijson/valijson.hash
++++ b/package/valijson/valijson.hash
+@@ -1,3 +1,3 @@
+ # Locally Computed:
+-sha256  2ac881a36f90810b41b66511502dea1e7886137ad31bcfb4e917d929c5028c35  valijson-0.3.tar.gz
++sha256  e06bf78fc1d26d4956fabc182408ebbbc47e3a6699778cda4aa439c2a6110b09  valijson-0.6.tar.gz
+ sha256  1a0f99926a2dbec30eba3db820236d9953fbe3048976923ac24980e655fbe991  LICENSE
+diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+index 71c5b05f2b..4b1f722f77 100644
+--- a/package/valijson/valijson.mk
++++ b/package/valijson/valijson.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSECRET_VERSION_MAJOR = 0.20
--LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).4
-+LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).5
- LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
- LIBSECRET_INSTALL_STAGING = YES
- LIBSECRET_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
--LIBSECRET_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+LIBSECRET_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- LIBSECRET_CONF_OPTS = \
--	--disable-manpages \
--	--disable-strict \
--	--disable-coverage \
--	--enable-vala=no
-+	-Dgtk_doc=false \
-+	-Dmanpage=false \
-+	-Dvapi=false
- LIBSECRET_LICENSE = LGPL-2.1+
- LIBSECRET_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+LIBSECRET_CONF_OPTS += -Dbash_completion=enabled
-+LIBSECRET_DEPENDENCIES += bash-completion
-+else
-+LIBSECRET_CONF_OPTS += -Dbash_completion=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--LIBSECRET_CONF_OPTS += --enable-introspection=yes
-+LIBSECRET_CONF_OPTS += -Dintrospection=true
- LIBSECRET_DEPENDENCIES += gobject-introspection
- else
--LIBSECRET_CONF_OPTS += --enable-introspection=no
-+LIBSECRET_CONF_OPTS += -Dintrospection=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- LIBSECRET_DEPENDENCIES += libgcrypt
--LIBSECRET_CONF_OPTS += --enable-gcrypt \
--	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+LIBSECRET_CONF_OPTS += -Dgcrypt=true
-+else
-+LIBSECRET_CONF_OPTS += -Dgcrypt=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
-+LIBSECRET_CONF_OPTS += -Dtpm2=true
-+LIBSECRET_DEPENDENCIES += tpm2-tss
- else
--LIBSECRET_CONF_OPTS += --disable-gcrypt
-+LIBSECRET_CONF_OPTS += -Dtpm2=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-VALIJSON_VERSION = 0.3
++VALIJSON_VERSION = 0.6
+ VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
+ VALIJSON_LICENSE = BSD-2-Clause
+ VALIJSON_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
