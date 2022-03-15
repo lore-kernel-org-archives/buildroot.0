@@ -1,46 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7487C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 20:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39E20C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 20:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80103842C5;
-	Tue, 15 Mar 2022 20:20:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D04DD60EBD;
+	Tue, 15 Mar 2022 20:33:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cxzz_nEJqPBE; Tue, 15 Mar 2022 20:20:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n7WG5rKCTxq6; Tue, 15 Mar 2022 20:33:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53A9384313;
-	Tue, 15 Mar 2022 20:20:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 58CD71BF31E
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:18:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA9CC60EBB;
+	Tue, 15 Mar 2022 20:33:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A4F331BF31E
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FDFA813D8
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:18:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 902DC60AFB
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:33:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YSqFjJNdATsK for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 20:18:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E6DE813D3
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 20:18:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A55BF83F85; Tue, 15 Mar 2022 20:10:12 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 15 Mar 2022 20:54:23 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 978b6be59f144bc5f7e2f0948cb357415238d56a
-X-Git-Newrev: e28156074d296f02b02b7f01767fda314365b890
-X-Patchwork-Hint: ignore
-Message-Id: <20220315201012.A55BF83F85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/botan: bump to version 2.19.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7hp1T5GSLDFN for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 20:33:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1393560B79
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 20:33:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1647376428;
+ bh=+iybfMD/INR3OV76iL9/cLwvM3Zau6E8apSxnOsIB8s=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=LZUyvhAfS4AFuoAZarStmcJa0Sa0V11mIURKVSf9NR8DRlmJvY9W5sX8tVqa8x0Qr
+ XWUe4dqRHnv9VQC+z2gnCiptgO8QC3kBRt+K3/Hxj59RUCGQ6K7kPcgktvyCMnmgVw
+ rovM8J+UfU+LmNsvv8q6EFU+USIDqwf9atmeWkQ4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.226]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MyKHc-1oJgzQ1RAC-00yiWw; Tue, 15
+ Mar 2022 21:33:48 +0100
+Date: Tue, 15 Mar 2022 21:33:47 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220315213347.09ddc034@gmx.net>
+In-Reply-To: <dc6491aa-fac9-75cb-2a3e-e4b847c496ae@mind.be>
+References: <CADYjeSsCzsQbWw25kghn49m6vZ9XBMi5NQfBHhTh5X6E3z=JFg@mail.gmail.com>
+ <CADYjeStJRry=ed46Km6nsaFk+wtbaxs0bLDfiPmtJ7xwZs2UwA@mail.gmail.com>
+ <Yio9dHRYViMb7+iG@arch-zen.localdomain>
+ <CADYjeSvNBqiYOuQrxdpQF_9t0w+4pf6B4d-Ufs5xAkkgCZGfFA@mail.gmail.com>
+ <dc6491aa-fac9-75cb-2a3e-e4b847c496ae@mind.be>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:dW8jZlSIfHUehX9n9+xJAO+iCX4EF1Gp00tnWxzjuglmg1x4S5k
+ UnVAuM+/GlN4chddn+H1M431pHsHxoiQ1Y3ctYNJQWxvRp8ka2Xyzy5xIrS5QWHXe38N94Z
+ zBsxhP3aWg/4HaPo1XllHgwIm5NPdNNOsNgccRGc4ygi042XkRmMPlyuRKgYjOKqUHFC0Km
+ HCArsoYep8budAfM3ByFw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ka8BaJPr4eE=:0SIudlm3TPPMhUJCVUvlu+
+ s2jiRkB45Tsu+6PNJxjVF6N1Xhk/oxCuTDKPPA53gI//M0/6TcDJmKTokM7VbXjR5pSAt0IuK
+ /5VB8hU16TKWGO3DPmYEli60gNGo9qsDeN5bWKQ4+kgHLpUaW9AMKOngcPQEA0EMOHvF5cA3k
+ Lozs/WWxtzYO+nGpCUW2ygXluiKkiRtNiIdQVLx+2a4uciL4dJQZf4PyMuUdDKw1x4yE34/Wg
+ tUHG0iWWQWnYDLxAH9tE5/NMMv91ZtJtSSRr7Bf3UcJnpH2u2qjKZsgI1YNin/kfLVFDuZWfa
+ 0oICj7DhxAjWXc18n4nryP5vnigIMCRdir1k2qD+kyWtrMFxX3JRYpY0yj1XANxcdUPU2Tfi6
+ 4vpvIVtyjkYYly6Q1DGvexfwRkgJkkii4/qS8BV9tHxLSwM/RAR8dszhgE9soYVZt0n92zYB9
+ gRa9dOnMlC7l+f2FHglP6Y3eMs+uxB6+x1mKzMMbRfdQjrRcPyqXpDSeG7JO7qymkB0MSKCGm
+ CFVHqgBCT7mvpJwBSrk+5Ek6FfFOj9LDUxmKLXiyqnBsQ1HjmKJer1latH7liwW+3nm7a0ACR
+ LiFWVGBUsZ+HEcRgK7p/yt2Leyc+34L+FysQe/LgdoUFSkKzCyOANKHHvb+9hYExQ29SGscPl
+ Pyo5F/pMIYpGTKU/sJUAaaDtnrFMbW4InXXAg1TbEM8yzSWZn8oRbReRbfPMT4pgf1kPeIwgS
+ uJafjPdJXyG8BhVTQuQkFPTDz2f/voVAsqf9TUIajEtr7+5mjPcscisxPqgHSlYLnquT+Odxr
+ Ht1RyBaooPdWMjidVAJdwrRnShcFVBJ+75dEdUHMqt856NHHpd5Elscj6p2s2Pp4/qhvYS39+
+ TUDumNBTfLcjNDkWXyba2Zi+m2cXlAJo0LCDgKO91Myz5gnYWYK6i80c2yc0ufJ0eL6nSoISJ
+ 8YwITvBUt9lAGSQeoNMbVfu2Mhy0XMeVKghHIfgYkTyIM5woDQDrgg6eS8FOdvADbOG8ITfhn
+ QvqEhvSTnm3+YTCjw4r2jGvBf8CSN0/gSCOM5zXhXYFGQFfLfv74aKPrr02HZGlLXX97wMhv6
+ x6hD6mor8njZHU=
+Subject: Re: [Buildroot] How to connect to Wifi on start-up using Buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,205 +87,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org, Jan Havran <havran.jan@email.cz>,
+ Sourabh Hegde <hrsourabh011@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e28156074d296f02b02b7f01767fda314365b890
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Drop patch (not needed since
-  https://github.com/randombit/botan/commit/97483f93bdcfcb2cc86bcb103802be55c24ad633)
-- Update hash of license file (update in year:
-  https://github.com/randombit/botan/commit/ff62a51ac2ed2e265edaf51b532d32eed5864d4b)
-
-https://github.com/randombit/botan/blob/2.19.1/news.rst
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...around-a-miscompilation-issue-in-clang-12.patch | 144 ---------------------
- package/botan/botan.hash                           |   4 +-
- package/botan/botan.mk                             |   2 +-
- 3 files changed, 3 insertions(+), 147 deletions(-)
-
-diff --git a/package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch b/package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch
-deleted file mode 100644
-index b43aeafe13..0000000000
---- a/package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch
-+++ /dev/null
-@@ -1,144 +0,0 @@
--From 372bdf0348fb86d671e73baab19daa34bd0cf73d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 9 Nov 2021 19:01:20 +0100
--Subject: [PATCH] Revert "workaround a miscompilation issue in clang 12
-- (XCode 13)"
--
--This reverts commit 219329f8e777af54d785ae7259f8be32a714b751.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/randombit/botan/issues/2845]
-----
-- src/lib/hash/sha3/sha3.cpp                | 46 ++++++-----------------
-- src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp | 46 ++++++-----------------
-- 2 files changed, 22 insertions(+), 70 deletions(-)
--
--diff --git a/src/lib/hash/sha3/sha3.cpp b/src/lib/hash/sha3/sha3.cpp
--index 289e451ff..690c2b264 100644
----- a/src/lib/hash/sha3/sha3.cpp
--+++ b/src/lib/hash/sha3/sha3.cpp
--@@ -11,47 +11,23 @@
-- #include <botan/exceptn.h>
-- #include <botan/cpuid.h>
-- 
---#include <tuple>
---
-- namespace Botan {
-- 
-- namespace {
-- 
---// This is a workaround for a suspected bug in clang 12 (and XCode 13)
---// that caused a miscompile of the SHA3 implementation for optimization
---// level -O2 and higher.
---//
---// For details, see: https://github.com/randombit/botan/issues/2802
---#if    defined(__clang__) && \
---    (( defined(__apple_build_version__) && __clang_major__ == 13) || \
---     (!defined(__apple_build_version__) && __clang_major__ == 12))
---#define BOTAN_WORKAROUND_MAYBE_INLINE __attribute__((noinline))
---#else
---#define BOTAN_WORKAROUND_MAYBE_INLINE inline
---#endif
---
---BOTAN_WORKAROUND_MAYBE_INLINE std::tuple<uint64_t, uint64_t, uint64_t, uint64_t, uint64_t>
---   xor_CNs(const uint64_t A[25])
---   {
---   return {
---      A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20],
---      A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21],
---      A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22],
---      A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23],
---      A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24]};
---   }
---
---#undef BOTAN_WORKAROUND_MAYBE_INLINE
---
-- inline void SHA3_round(uint64_t T[25], const uint64_t A[25], uint64_t RC)
--    {
---   const auto Cs = xor_CNs(A);
---
---   const uint64_t D0 = rotl<1>(std::get<0>(Cs)) ^ std::get<3>(Cs);
---   const uint64_t D1 = rotl<1>(std::get<1>(Cs)) ^ std::get<4>(Cs);
---   const uint64_t D2 = rotl<1>(std::get<2>(Cs)) ^ std::get<0>(Cs);
---   const uint64_t D3 = rotl<1>(std::get<3>(Cs)) ^ std::get<1>(Cs);
---   const uint64_t D4 = rotl<1>(std::get<4>(Cs)) ^ std::get<2>(Cs);
--+   const uint64_t C0 = A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20];
--+   const uint64_t C1 = A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21];
--+   const uint64_t C2 = A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22];
--+   const uint64_t C3 = A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23];
--+   const uint64_t C4 = A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24];
--+
--+   const uint64_t D0 = rotl<1>(C0) ^ C3;
--+   const uint64_t D1 = rotl<1>(C1) ^ C4;
--+   const uint64_t D2 = rotl<1>(C2) ^ C0;
--+   const uint64_t D3 = rotl<1>(C3) ^ C1;
--+   const uint64_t D4 = rotl<1>(C4) ^ C2;
-- 
--    const uint64_t B00 =          A[ 0] ^ D1;
--    const uint64_t B01 = rotl<44>(A[ 6] ^ D2);
--diff --git a/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp b/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp
--index c7f1914a3..a9650ad9d 100644
----- a/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp
--+++ b/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp
--@@ -8,47 +8,23 @@
-- #include <botan/sha3.h>
-- #include <botan/rotate.h>
-- 
---#include <tuple>
---
-- namespace Botan {
-- 
-- namespace {
-- 
---// This is a workaround for a suspected bug in clang 12 (and XCode 13)
---// that caused a miscompile of the SHA3 implementation for optimization
---// level -O2 and higher.
---//
---// For details, see: https://github.com/randombit/botan/issues/2802
---#if    defined(__clang__) && \
---    (( defined(__apple_build_version__) && __clang_major__ == 13) || \
---     (!defined(__apple_build_version__) && __clang_major__ == 12))
---#define BOTAN_WORKAROUND_MAYBE_INLINE __attribute__((noinline))
---#else
---#define BOTAN_WORKAROUND_MAYBE_INLINE inline
---#endif
---
---BOTAN_WORKAROUND_MAYBE_INLINE std::tuple<uint64_t, uint64_t, uint64_t, uint64_t, uint64_t>
---   xor_CNs(const uint64_t A[25])
---   {
---   return {
---      A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20],
---      A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21],
---      A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22],
---      A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23],
---      A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24]};
---   }
---
---#undef BOTAN_WORKAROUND_MAYBE_INLINE
---
-- inline void SHA3_BMI2_round(uint64_t T[25], const uint64_t A[25], uint64_t RC)
--    {
---   const auto Cs = xor_CNs(A);
---
---   const uint64_t D0 = rotl<1>(std::get<0>(Cs)) ^ std::get<3>(Cs);
---   const uint64_t D1 = rotl<1>(std::get<1>(Cs)) ^ std::get<4>(Cs);
---   const uint64_t D2 = rotl<1>(std::get<2>(Cs)) ^ std::get<0>(Cs);
---   const uint64_t D3 = rotl<1>(std::get<3>(Cs)) ^ std::get<1>(Cs);
---   const uint64_t D4 = rotl<1>(std::get<4>(Cs)) ^ std::get<2>(Cs);
--+   const uint64_t C0 = A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20];
--+   const uint64_t C1 = A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21];
--+   const uint64_t C2 = A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22];
--+   const uint64_t C3 = A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23];
--+   const uint64_t C4 = A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24];
--+
--+   const uint64_t D0 = rotl<1>(C0) ^ C3;
--+   const uint64_t D1 = rotl<1>(C1) ^ C4;
--+   const uint64_t D2 = rotl<1>(C2) ^ C0;
--+   const uint64_t D3 = rotl<1>(C3) ^ C1;
--+   const uint64_t D4 = rotl<1>(C4) ^ C2;
-- 
--    const uint64_t B00 =          A[ 0] ^ D1;
--    const uint64_t B01 = rotl<44>(A[ 6] ^ D2);
---- 
--2.33.0
--
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 91e1bf741a..2729cb493f 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  541a3b13f1b9d30f977c6c1ae4c7bfdfda763cda6e44de807369dce79f42307e  Botan-2.18.2.tar.xz
-+sha256  e26e00cfefda64082afdd540d3c537924f645d6a674afed2cd171005deff5560  Botan-2.19.1.tar.xz
- # Locally computed
--sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
-+sha256  472faf6d2231130382779f96de506be19296473750356449fc426ddc9cb03b50  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index ebff1343b1..f9ebcf8d0a 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOTAN_VERSION = 2.18.2
-+BOTAN_VERSION = 2.19.1
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCAxNSBNYXIgMjAyMiAyMTowMDo1NCArMDEwMCwgQXJub3V0IFZhbmRlY2FwcGVsbGUg
+PGFybm91dEBtaW5kLmJlPiB3cm90ZToKCj4gT24gMTUvMDMvMjAyMiAxNDowNSwgU291cmFiaCBI
+ZWdkZSB3cm90ZToKPiA+IEhlbGxsbyBKYW4sCj4gPiAKPiA+IFRoYW5rcyBmb3IgdGhlIGFuc3dl
+ci4KPiA+IAo+ID4gIEZyb20gQnVpbGRyb290IDIwMjEgcmVsZWFzZSAiY3RybF9pbnRlcmZhY2Ui
+IGlzIGRpc2FibGVkIGFuZCBzbyBJIGhhdmUgICAKPiAKPiAgIEl0J3MgZGlzYWJsZWQgdW5sZXNz
+IEJSMl9QQUNLQUdFX1dQQV9TVVBQTElDQU5UX0NUUkxfSUZBQ0U9eQo+IAo+ID4gY29tbWVudGVk
+IG91dCBiZWxvdyBsaW5lIGluIGV0Yy93cGFfc3VwcGxpY2FudC5jb25mIGZpbGUKPiA+IAo+ID4g
+IyB8Y3RybF9pbnRlcmZhY2U9L3Zhci9ydW4vd3BhX3N1cHBsaWNhbnR8ICAKPiAKPiAgIFRoaXMg
+c2hvdWxkbid0IGJlIG5lZWRlZC4gQUZBSUsgd3BhX3N1cHBsaWNhbnQgaWdub3JlcyB0aGUgb3B0
+aW9uIGlmIAo+IENUUkxfSUZBQ0UgaXMgbm90IGVuYWJsZWQuCj4gCj4gPiB8Cj4gPiB8Cj4gPiB8
+QW5kIGFsc28gaW4gbXkgcm9vdGZzLCB0aGVyZSBpcyBubyAifC92YXIvcnVuL3dwYV9zdXBwbGlj
+YW50fCIgZmlsZS4gIAo+IAo+ICAgVGhlIGZpbGUgKGFjdHVhbGx5LCBuYW1lZCBwaXBlKSBpcyBj
+cmVhdGVkIHdoZW4gd3BhX3N1cHBsaWNhbnRzIHN0YXJ0cyB1cC4gCj4gL3Zhci9ydW4gaXMgYSB0
+bXBmcyBzbyBpdCBjYW4gb25seSBiZSBjcmVhdGVkIGF0IHJ1bnRpbWUuCj4gCj4gPiB8Cj4gPiB8
+Cj4gPiB8Cj4gPiB8SSBoYXZlIHNldCBiZWxvdyBvcHRpb25zIGluIG1lbnVjb25maWd8Cj4gPiB8
+Cj4gPiB8Cj4gPiBtZW51Y29uZmlnLlBORwo+ID4gCj4gPiBUaGVuIGRvaW5nIG1ha2UgY2xlYW4g
+JiBtYWtlIHJlc3VsdHMgaW4gYmVsb3cgZXJyb3JzOgo+ID4gICAKPiA+ICA+Pj4gd3BhX3N1cHBs
+aWNhbnQgMi4xMCBJbnN0YWxsaW5nIHRvIHN0YWdpbmcgZGlyZWN0b3J5ICAKPiA+IC91c3IvYmlu
+L2luc3RhbGwgLW0gMDY0NCAtRCAKPiA+IC9yb290L3Jhc3BjbTQvc291cmNlcy9vdXRwdXQvYnVp
+bGQvd3BhX3N1cHBsaWNhbnQtMi4xMC93cGFfc3VwcGxpY2FudC9saWJ3cGFfY2xpZW50LnNvIAo+
+ID4gL3Jvb3QvcmFzcGNtNC9zb3VyY2VzL291dHB1dC9ob3N0L2FhcmNoNjQtYnVpbGRyb290LWxp
+bnV4LWdudS9zeXNyb290L3Vzci9saWIvbGlid3BhX2NsaWVudC5zbwo+ID4gL3Vzci9iaW4vaW5z
+dGFsbDogY2Fubm90IHN0YXQgCj4gPiAnL3Jvb3QvcmFzcGNtNC9zb3VyY2VzL291dHB1dC9idWls
+ZC93cGFfc3VwcGxpY2FudC0yLjEwL3dwYV9zdXBwbGljYW50L2xpYndwYV9jbGllbnQuc28nOiAK
+PiA+IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKPiA+IG1ha2VbMV06ICoqKiBbcGFja2FnZS9w
+a2ctZ2VuZXJpYy5tazozMzEgPGh0dHA6Ly9wa2ctZ2VuZXJpYy5tazozMzE+OiAKPiA+IC9yb290
+L3Jhc3BjbTQvc291cmNlcy9vdXRwdXQvYnVpbGQvd3BhX3N1cHBsaWNhbnQtMi4xMC8uc3RhbXBf
+c3RhZ2luZ19pbnN0YWxsZWRdIAo+ID4gRXJyb3IgMQo+ID4gbWFrZTogKioqIFtNYWtlZmlsZToy
+MzogX2FsbF0gRXJyb3IgMgo+ID4gCj4gPiBDYW4geW91IHBsZWFzZSBsZXQgbWUga25vdyB3aGF0
+IGNvdWxkIGJlIHRoZSBpc3N1ZSBhbmQgaG93IHRvIHJlc29sdmUgaXQ/ICAKPiAKPiAgIEkndmUg
+dHJpZWQgdG8gYnVpbGQgdGhlIHNhbWUgY29uZmlndXJhdGlvbiAod2l0aCBjdXJyZW50IGdpdCBt
+YXN0ZXIpIGFuZCBpdCAKPiBidWlsZHMgd2l0aG91dCBwcm9ibGVtcy4KClByb2JsZW0gaW50cm9k
+dWNlZCBvbiBidWlsZHJvb3QgZ2l0IG1hc3RlciB3aXRoIHdwYV9zdXBwbGljYW50IHZlcnNpb24g
+YnVtcCBbMV0gYW5kCmZpeGVkIHdpdGggWzJdLi4uCgpSZWdhcmRzLApQZXRlcgoKWzFdIGh0dHBz
+Oi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1pdC9wYWNrYWdlL3dwYV9zdXBwbGlj
+YW50P2lkPTM5MzgxYTQ2N2NkMmNmYzE1Zjc3ZDNmOWFkYmYzMjlkMmY5MmUzMTIKWzJdIGh0dHBz
+Oi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1pdC9wYWNrYWdlL3dwYV9zdXBwbGlj
+YW50P2lkPWM0ZWViZjE5MWM3ODFhM2VhNmI1ZWIxODExY2MxN2FlOTJlYTJmYjIKCj4gCj4gICBQ
+bGVhc2Ugc3VwcGx5IHRoZSBkZWZjb25maWcgYW5kIGFsc28gdGhlIGZ1bGwgYnVpbGQgbG9nIChi
+eSB1cGxvYWRpbmcgdG8gYSAKPiBwYXN0ZWJpbikuCj4gCj4gICBSZWdhcmRzLAo+ICAgQXJub3V0
+Cj4gCj4gCj4gPiAKPiA+IFRoYW5rcyBpbiBhZHZhbmNlCj4gPiB8fAo+ID4gCj4gPiBPbiBUaHUs
+IDEwIE1hciAyMDIyIGF0IDE5OjAzLCBKYW4gSGF2cmFuIDxoYXZyYW4uamFuQGVtYWlsLmN6IAo+
+ID4gPG1haWx0bzpoYXZyYW4uamFuQGVtYWlsLmN6Pj4gd3JvdGU6Cj4gPiAKPiA+ICAgICBIaSBT
+b3VyYWJoLAo+ID4gCj4gPiAgICAgYWZ0ZXIgZW5hYmxpbmcgUlBpIGZpcm13YXJlIHlvdSBtdXN0
+IGxvYWQgdGhlIFdpZmkgZHJpdmVyIC0gc2luY2UgeW91IGFyZSB1c2luZwo+ID4gICAgIHN5c3Rl
+bWQsIGl0IHNob3VsZCBieSBoYW5kbGVkIGJ5IHVkZXYgb24gc3RhcnQgSSB0aGluay4KPiA+IAo+
+ID4gICAgIFNvIHlvdSBwcm9iYWJseSBqdXN0IG5lZWQgdG8gY29uZmlndXJlIC9ldGMvbmV0d29y
+ay9pbnRlcmZhY2VzIHRvIHN0YXJ0Cj4gPiAgICAgd3BhX3N1cHBsaWNhbnQKPiA+ICAgICBvbiB3
+bGFuMCB3aXRoIC9ldGMvd3BhX3N1cHBsaWNhbnQuY29uZiBmaWxlLCB3aGVyZSB5b3UgY2FuIHB1
+dCB5b3VyIGNyZWRlbnRpYWxzLgo+ID4gICAgIE9yIGF0IGxlYXN0IHRoYXQgaXMgd2hhdCBJIGhh
+dmUgZG9uZSwgYnV0IEkgYW0gbm90IHVzaW5nIHN5c3RlbWQuCj4gPiAKPiA+ICAgICBJIGRpZCBz
+b21ldGhpbmcgc2ltaWxhciBzb21lIHRpbWUgYWdvLCB5b3UgY2FuIGNoZWNrIGl0IGhlcmU6Cj4g
+PiAgICAgaHR0cHM6Ly9naXRsYWIuY29tL3NvbmljcHAvZ25zcy1waS8tL2NvbW1pdC9jYWYwMzE3
+YzAyNGU1MWZjN2UzMjJkZWFjZDA5ZWM5MzQ2ZDQ3ZTI2Cj4gPiAgICAgPGh0dHBzOi8vZ2l0bGFi
+LmNvbS9zb25pY3BwL2duc3MtcGkvLS9jb21taXQvY2FmMDMxN2MwMjRlNTFmYzdlMzIyZGVhY2Qw
+OWVjOTM0NmQ0N2UyNj4KPiA+IAo+ID4gICAgIChub3RlIHRoYXQgdG8gbWFrZSAibXkiIGNyZWRl
+bnRpYWxzIHB1YmxpYyBpbiB0aGF0IGNvbW1pdCB3YXMgYW4gaW50ZW50aW9uKS4KPiA+IAo+ID4g
+ICAgIFAuUy46IGlmIHlvdSB3YW50IHRvIGhhdmUgYW55IG1vZGlmaWNhdGlvbnMgdG8gYmUgcGFy
+dCBvZiB5b3VyIGltYWdlIHdpdGgKPiA+ICAgICBmaWxlc3lzdGVtLAo+ID4gICAgIHlvdSBjYW4g
+ZG8gaXQgYnkgdXNpbmcgcm9vdGZzIG92ZXJsYXlzIGZvciBleGFtcGxlOgo+ID4gICAgIGh0dHBz
+Oi8vYnVpbGRyb290Lm9yZy9kb3dubG9hZHMvbWFudWFsL21hbnVhbC5odG1sI3Jvb3Rmcy1jdXN0
+b20KPiA+ICAgICA8aHR0cHM6Ly9idWlsZHJvb3Qub3JnL2Rvd25sb2Fkcy9tYW51YWwvbWFudWFs
+Lmh0bWwjcm9vdGZzLWN1c3RvbT4KPiA+IAo+ID4gICAgIFJlZ2FyZHMsCj4gPiAKPiA+ICAgICBK
+YW4gSGF2cmFuCj4gPiAKPiA+ICAgICBWwqBUaHUsIE1hciAxMCwgMjAyMiBhdCAwNTo0MzoyN1BN
+ICswMTAwLMKgU291cmFiaCBIZWdkZSBuYXBzYWwoYSk6ICAKPiA+ICAgICAgPiBIZWxsbyBBbGws
+Cj4gPiAgICAgID4KPiA+ICAgICAgPiBJIGFtIHRyeWluZyB0byBjb25uZWN0IG15IFJhc3BiZXJy
+eSBQaSBDTTQgdG8gV2lmaSBhdXRvbWF0aWNhbGx5IGFmdGVyCj4gPiAgICAgID4gc3RhcnQtdXAu
+IEkgYW0gdXNpbmcgQnVpbGRyb290IGJhc2VkIExpbnV4IGRpc3RyaWJ1dGlvbi4gSSBoYXZlIHdv
+cmtlZCB3aXRoCj4gPiAgICAgID4gWW9jdG8gYmVmb3JlIGFuZCBpdCBwcm92aWRlcyBzeXN0ZW1k
+LW5ldHdvcmtkIGFuZCB3cGFfc3VwcGxpY2FudCBmZWF0dXJlIHRvCj4gPiAgICAgID4gY29ubmVj
+dCB0byB3aWZpIG9uIGJvb3QuIEkgYW0gbGxva2luZyBzb21ldGhpbmcgc2ltaWxhciBpbiBCdWls
+ZHJvb3QgYnV0Cj4gPiAgICAgID4gY291bGRuJ3QgZmluZCBhbnkgbm90ZXMgb25saW5lLgo+ID4g
+ICAgICA+Cj4gPiAgICAgID4gU28gZmFyLCBJIHRoaW5rIEkgaGF2ZSBlbmFibGVkIHRoZSBuZWNl
+c3NhcnkgY29uZmlnL2RyaXZlciB1c2luZyAibWFrZQo+ID4gICAgICA+IG1lbnVjb25maWciIDoK
+PiA+ICAgICAgPiBbaW1hZ2U6IHdwYV9zdXBwbGljYW50LnBuZ10KPiA+ICAgICAgPiBbaW1hZ2U6
+IGZpcm13YXJlLnBuZ10KPiA+ICAgICAgPgo+ID4gICAgICA+IEJ1dCBub3csIGhvdyBjYW4gSSBz
+ZXQtdXAgd3BhX3N1cHBsaWNhbnQuY29uZj8gQW55IGxpbmsgdG8gbm90ZXMgb3IKPiA+ICAgICAg
+PiBzdWdnZXN0aW9uIHdvdWxkIGJlIGhlbHBmdWwuCj4gPiAgICAgID4KPiA+ICAgICAgPiBDYW4g
+YW55b25lIHBsZWFzZSBsZXQgbWUga25vdyBob3cgdG8gcHJvY2VlZCBmdXJ0aGVyIHdpdGggaXQ/
+Cj4gPiAgICAgID4KPiA+ICAgICAgPiBZb3VyIGhlbHAgd2lsbCBiZSBtdWNoIGFwcHJlY2lhdGVk
+Lgo+ID4gICAgICA+Cj4gPiAgICAgID4gVGhhbmtzIGluIGFkdmFuY2UuCj4gPiAgICAgID4KPiA+
+ICAgICAgPiBQLlM6IEkgYW0gdXNpbmcgQnVpbGRyb290IDIwMjIuMDIgcmVsZWFzZSBhbmQgYWxz
+byB1c2luZyBzeXN0ZW1kIGZlYXR1cmUKPiA+ICAgICAgPiBhbmQgbGV0IG1lIGtub3cgaWYgYW55
+IGluZm8gaXMgbWlzc2luZyBoZXJlLgo+ID4gICAgICA+Cj4gPiAgICAgID4gUmVnYXJkcywKPiA+
+ICAgICAgPgo+ID4gICAgICA+IFNvdXJhYmggIAo+ID4gCj4gPiAKPiA+IAo+ID4gICAKPiA+ICAg
+ICAgPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4g
+ICAgICA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiA+ICAgICAgPiBidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZyA8bWFpbHRvOmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPgo+ID4gICAgICA+IGh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdCAgCj4gPiAg
+ICAgPGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dD4KPiA+IAo+ID4gCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdCAgCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
