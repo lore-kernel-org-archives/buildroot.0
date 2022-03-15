@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54976C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:23:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F06C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A59B80A4B;
-	Tue, 15 Mar 2022 21:23:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C691081551;
+	Tue, 15 Mar 2022 21:23:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rDvNxADNiDCD; Tue, 15 Mar 2022 21:23:28 +0000 (UTC)
+	with ESMTP id YCxZaKyzLWoc; Tue, 15 Mar 2022 21:23:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 483A4813CE;
-	Tue, 15 Mar 2022 21:23:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCB0181390;
+	Tue, 15 Mar 2022 21:23:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BDFD1BF9B6
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B4ED1BF284
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 42F48405A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5950E4056D
  for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j2ggr242svBT for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 21:21:05 +0000 (UTC)
+ with ESMTP id NFzlp7Kx7Rhk for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 21:21:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E171C40580
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF06240571
  for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:21:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id EF4F88408B; Tue, 15 Mar 2022 21:12:22 +0000 (UTC)
+ id DE6128408B; Tue, 15 Mar 2022 21:12:22 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Tue, 15 Mar 2022 22:10:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5783a418f4b30931068b81f850fc06cd8d3d9732
-X-Git-Newrev: a9c7e517e4b2e17d4a244da9268b4b0071bddc4a
+X-Git-Oldrev: 2bc66b940cb8655cb0694e0c6a1c74f1eb9c007c
+X-Git-Newrev: 56b49691abf4625d3d5915f3956b02f0fbd2ed4b
 X-Patchwork-Hint: ignore
-Message-Id: <20220315211222.EF4F88408B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libss7: bump to version 2.0.1
+Message-Id: <20220315211222.DE6128408B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{gnupg,
+ gnupg2}: use gnupg2 by default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +59,118 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c7e517e4b2e17d4a244da9268b4b0071bddc4a
+commit: https://git.buildroot.net/buildroot/commit/?id=56b49691abf4625d3d5915f3956b02f0fbd2ed4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://downloads.asterisk.org/pub/telephony/libss7/releases/libss7-2.0.1-summary.html
+This patch reverses the logic to select gnupg2 by default, while still
+allowing to select gnupg (v1).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Quoting: https://gnupg.org/download/index.html
+"""
+GnuPG 1.4 is the old, single binary version which still support the
+unsafe PGP-2 keys. This branch has no dependencies on the above listed
+libraries or the Pinentry. However, it lacks many modern features and
+will receive only important updates.
+"""
+
+gnupg 1.4 is kept in Buildroot for now, as the package is still
+maintained upstream. It might still be useful is some specific cases:
+- it has a smaller footprint (compared to v2),
+- it has less dependencies (only zlib),
+- it has less build dependencies (can build static, no need for
+MMU/threads, ...)
+
+Most Linux distributions are now shipping gnupg2 by default. gnupg v1
+is now more for legacy/compatibility/specific cases.
+
+There is currently only two packages selecting gnupg in Buildroot:
+gpgme and python-gnupg
+This commit also reverses the logic for those packages. However, this
+means we also need to propagate the dependencies of gnupg2, and still
+select gnupg if those dependencies are not met. To simplify this, add a
+blind option BR2_PACKAGE_GNUPG2_DEPENDS. Note that due to the
+intricacies of Kconfig dependencies, "depends on !BR2_PACKAGE_GNUPG"
+must *not* be part of BR2_PACKAGE_GNUPG2_DEPENDS.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+[Arnout: rework dependency handling to make sure gnupg2 dependencies are
+properly propagated]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libss7/libss7.hash | 4 ++--
- package/libss7/libss7.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnupg/Config.in        |  1 -
+ package/gnupg2/Config.in       | 14 ++++++++++++--
+ package/libgpgme/Config.in     |  4 ++--
+ package/python-gnupg/Config.in |  3 ++-
+ 4 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/package/libss7/libss7.hash b/package/libss7/libss7.hash
-index 8e1d6635db..442422fcd9 100644
---- a/package/libss7/libss7.hash
-+++ b/package/libss7/libss7.hash
-@@ -1,6 +1,6 @@
- # Hashes from http://downloads.asterisk.org/pub/telephony/libss7/releases/
--sha1    7112a0717293fc273d5d488e1387ad28abe4e9b3  libss7-2.0.0.tar.gz
--sha256  5af00853cfb2bc6bcf050947804db132ae6872db0cd2ab24b5378828f78eda52  libss7-2.0.0.tar.gz
-+sha1  301fd3eff4387db6407cbc72c3fec9aed5bc3860  libss7-2.0.1.tar.gz
-+sha256  091f1c14dcf13a094021334218cde363041816fa5b5037caee38719e4e6891c7  libss7-2.0.1.tar.gz
+diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+index 2db46318f1..e92fca709d 100644
+--- a/package/gnupg/Config.in
++++ b/package/gnupg/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_GNUPG
+ 	bool "gnupg"
+-	depends on !BR2_PACKAGE_GNUPG2
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  GnuPG is the GNU project's complete and free implementation
+diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
+index ef1817ef02..043d53554c 100644
+--- a/package/gnupg2/Config.in
++++ b/package/gnupg2/Config.in
+@@ -2,12 +2,22 @@ comment "gnupg2 needs a toolchain w/ threads and dynamic library support"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
  
- # License file, locally calculated
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
-diff --git a/package/libss7/libss7.mk b/package/libss7/libss7.mk
-index 151b6a61b5..faa147c78e 100644
---- a/package/libss7/libss7.mk
-+++ b/package/libss7/libss7.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-config BR2_PACKAGE_GNUPG2
+-	bool "gnupg2"
++# helper to make it easier to select gnupg2 or gnupg; usage:
++# select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG
++# select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS
++
++config BR2_PACKAGE_GNUPG2_DEPENDS
++	bool
++	default y
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpth
+ 	depends on BR2_USE_MMU # libassuan, libnpth
+ 	depends on !BR2_STATIC_LIBS
++
++config BR2_PACKAGE_GNUPG2
++	bool "gnupg2"
++	depends on BR2_PACKAGE_GNUPG2_DEPENDS
++	depends on !BR2_PACKAGE_GNUPG
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+ 	select BR2_PACKAGE_LIBGCRYPT
+diff --git a/package/libgpgme/Config.in b/package/libgpgme/Config.in
+index 4aabd06367..16ce27d0ef 100644
+--- a/package/libgpgme/Config.in
++++ b/package/libgpgme/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_LIBGPGME
+ 	bool "libgpgme"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+ 	depends on BR2_USE_MMU # libassuan
+-	#gnupg is not needed to build, but at runtime.
+-	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2
++	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
++	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+ 	select BR2_PACKAGE_LIBASSUAN
+ 	help
+diff --git a/package/python-gnupg/Config.in b/package/python-gnupg/Config.in
+index 038a940778..234792977a 100644
+--- a/package/python-gnupg/Config.in
++++ b/package/python-gnupg/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_GNUPG
+ 	bool "python-gnupg"
+-	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2 # runtime
++	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
++	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
+ 	help
+ 	  A wrapper for the Gnu Privacy Guard (GPG or GnuPG).
  
--LIBSS7_VERSION = 2.0.0
-+LIBSS7_VERSION = 2.0.1
- LIBSS7_SITE = http://downloads.asterisk.org/pub/telephony/libss7/releases
- 
- LIBSS7_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
