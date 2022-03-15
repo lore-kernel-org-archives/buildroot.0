@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EFA7C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:52:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6904AC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 013FC40578;
-	Tue, 15 Mar 2022 21:52:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EA0484316;
+	Tue, 15 Mar 2022 21:52:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L1pL_X-01Xjw; Tue, 15 Mar 2022 21:52:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zSiHCmnEn_T8; Tue, 15 Mar 2022 21:52:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D99EB40154;
-	Tue, 15 Mar 2022 21:52:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B38E842F8;
+	Tue, 15 Mar 2022 21:52:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 27D4E1BF284
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:50:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3A05D1BF284
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1A1240571
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:50:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D63740154
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:50:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Onq1ioJyPnpD for <buildroot@lists.busybox.net>;
+ with ESMTP id PSDTSOEu7JcD for <buildroot@lists.busybox.net>;
  Tue, 15 Mar 2022 21:50:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD2734056D
+ by smtp2.osuosl.org (Postfix) with ESMTP id A30FE4053E
  for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:50:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C0E5C8412D; Tue, 15 Mar 2022 21:41:47 +0000 (UTC)
+ id B74BF8412D; Tue, 15 Mar 2022 21:41:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 15 Mar 2022 22:28:06 +0100
+Date: Tue, 15 Mar 2022 22:28:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06bb3640c13191f7515f2140c2207f5b7a2cb7ab
-X-Git-Newrev: d96b9ed0738bae270c479bdaf21eebd4c1f9930d
+X-Git-Oldrev: db2b8a1ce22e9ee458532d2900d4c8cbe96d9ba0
+X-Git-Newrev: 06bb3640c13191f7515f2140c2207f5b7a2cb7ab
 X-Patchwork-Hint: ignore
-Message-Id: <20220315214147.C0E5C8412D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgcrypt: bump to version 1.10.0
+Message-Id: <20220315214147.B74BF8412D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: bump to version
+ LTS_01_2022_Ref01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +59,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d96b9ed0738bae270c479bdaf21eebd4c1f9930d
+commit: https://git.buildroot.net/buildroot/commit/?id=06bb3640c13191f7515f2140c2207f5b7a2cb7ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Drop patch (already in version)
+
+https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_01_2022_Ref01
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-configure.ac-add-an-option-to-disable-tests.patch          | 2 +-
- package/libgcrypt/libgcrypt.hash                                    | 6 ++----
- package/libgcrypt/libgcrypt.mk                                      | 2 +-
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ ...hmac-c-fix-mismatching-function-prototype.patch | 35 ----------------------
+ package/azure-iot-sdk-c/azure-iot-sdk-c.hash       |  2 +-
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk         |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
 
-diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-index 4ef02fba65..e32f938634 100644
---- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-+++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-@@ -44,7 +44,7 @@ diff --git a/configure.ac b/configure.ac
- index e8c8cd39..1a6b61e5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3198,6 +3198,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-+@@ -3230,6 +3230,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-  AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
-  
-  
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 23562d0ed3..2ea4d74c2e 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,5 @@
--# From https://www.gnupg.org/download/integrity_check.html
--sha1  1bccc8393482fa1953323ff429c6b5ba5676eb1a  libgcrypt-1.9.4.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.0.tar.bz2.sig
- # using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7  libgcrypt-1.9.4.tar.bz2
-+sha256  6a00f5c05caa4c4acc120c46b63857da0d4ff61dc4b4b03933fa8d46013fae81  libgcrypt-1.10.0.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index e5fdfcfc8e..c6c88f6076 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+diff --git a/package/azure-iot-sdk-c/0001-hmac-c-fix-mismatching-function-prototype.patch b/package/azure-iot-sdk-c/0001-hmac-c-fix-mismatching-function-prototype.patch
+deleted file mode 100644
+index 0c262e6c46..0000000000
+--- a/package/azure-iot-sdk-c/0001-hmac-c-fix-mismatching-function-prototype.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 3a7997af72e7a4f70109d1639e6725b39046443e Mon Sep 17 00:00:00 2001
+-From: Francesco Giancane <30423178+fgiancane8@users.noreply.github.com>
+-Date: Fri, 2 Jul 2021 20:47:38 +0200
+-Subject: [PATCH] hmac.c: fix mismatching function prototype (#537)
+-
+-The reported function raises a warning when compilers assert the flag
+-`-Warray-parameter=`, signaling that an array-type argument was promoted
+-to a pointer-type argument.
+-
+-While in practice in most C implementations this is correct, fixing the
+-warning (and, in this case, indicating the maximum size for the array)
+-would represent a best-practice for finding out-of-bound accesses or
+-identifying wrongly-sized arrays passed in the function.
+-
+-Signed-off-by: Francesco Giancane <francesco.giancane@accenture.com>
+-[Retrieved from:
+-https://github.com/Azure/azure-c-shared-utility/commit/3a7997af72e7a4f70109d1639e6725b39046443e]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/hmac.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/hmac.c b/src/hmac.c
+-index 53f2411f8..160af9d2f 100644
+---- a/c-utility/src/hmac.c
+-+++ b/c-utility/src/hmac.c
+-@@ -208,7 +208,7 @@ int hmacFinalBits(HMACContext *ctx,
+- *   sha Error Code.
+- *
+- */
+--int hmacResult(HMACContext *ctx, uint8_t *digest)
+-+int hmacResult(HMACContext *ctx, uint8_t digest[USHAMaxHashSize])
+- {
+-     if (!ctx) return shaNull;
+- 
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+index 72fa99c44d..5dbb530954 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  987b469aa76d6c81e5dbcd62e81f4ece0620770930cf65722754c76aedd6049f  azure-iot-sdk-c-LTS_01_2021_Ref01-br1.tar.gz
++sha256  082e41f7cdf06fec036b8cfa1793f03e81ba527b55ea13c66be0e4cf9f20ff7b  azure-iot-sdk-c-LTS_01_2022_Ref01-br1.tar.gz
+ 
+ # Hash for license files:
+ sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index e6de8c851b..874646c445 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.9.4
-+LIBGCRYPT_VERSION = 1.10.0
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-AZURE_IOT_SDK_C_VERSION = LTS_01_2021_Ref01
++AZURE_IOT_SDK_C_VERSION = LTS_01_2022_Ref01
+ AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
+ AZURE_IOT_SDK_C_SITE_METHOD = git
+ AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
