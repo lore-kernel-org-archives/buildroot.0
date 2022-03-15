@@ -1,46 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797E3C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 386D2C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:42:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EAAF60B6B;
-	Tue, 15 Mar 2022 21:23:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9D6184179;
+	Tue, 15 Mar 2022 21:42:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uygse4J7fyhD; Tue, 15 Mar 2022 21:23:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v46l54-R7-4E; Tue, 15 Mar 2022 21:42:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E76460AB1;
-	Tue, 15 Mar 2022 21:23:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B5F51BF9AA
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11D6384128;
+	Tue, 15 Mar 2022 21:42:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 721D11BF284
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD0D860B02
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F53340154
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:42:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 91cSMfjan0mc for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 21:21:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4C2860C25
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:21:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0E6B18408A; Tue, 15 Mar 2022 21:12:23 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zB5DKKRVvA36 for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 21:42:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EA83940103
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:42:16 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ v2-20020a7bcb42000000b0037b9d960079so2209531wmj.0
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 14:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=utiNiNcGxov+ryICH3zTVvyQJdDN+09+hFUma7KRWrc=;
+ b=ZuSLluMGyp6jy1RvNSA3kyHrum23CYOD8Ck6IbxZiFRMWS7fRW7orBgBbgrwfFtM1D
+ YBFdbzg+w0GOeJZJ2Pv4vchLytrTeHa7d5ngkDuX24Al+6QDpnTHx3eJpb/ebvioUdKV
+ +Ij0f4nuxq0BhaCF0gu+BFDhXchVHozvS1GbHwUL0d2kWs5PltrJz28RGIoF9WQjzdQ5
+ jX3CEBKdciz+fPpNdC7+bF1ZgUxcALej0mL+SygkKkSjOG/gg1fWfs0DZqvNmBgp1ajf
+ mh98qXhEVRifwQUVKCOfR/eMPN1+knuwt3j/mOfSlcGt1EezpiICDSMeBo8/ixpNa55i
+ ZNfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=utiNiNcGxov+ryICH3zTVvyQJdDN+09+hFUma7KRWrc=;
+ b=YWFV8PkqEwJ/aY+3UkoGSoVPWoQn4boKHeAsy9T6PSlJmQnQcFVlXsWPoHdO0+aksX
+ lyAjP8KQkt4cpd2kjAu5EK5jgOM1n9qFRsdzAMRpEQz7LIQi8fBHE2e1zL0v2P8x/FxG
+ wLCcOmxhY4Rz0xPWcSuWQbe82v3DElopPuxV64C25k85GT7EM2FO2RL5wwYgT/FEo6yY
+ YQyRk4TCBVKMCXMV1KavZQlFrKUVZVDv4K8kc2cpetxVH+j0zBR9waVVxv0f9ZFPtIPR
+ o5qXzNiOwDHeVGuNO618lRY5N8skB4ktFeYFcv0pE1yF8RIYbDwhiyTTJmYXPJlqr40T
+ OaZA==
+X-Gm-Message-State: AOAM532rvrvxMjoSkSZVJk2thBA7FveLfaDEC7EzHLthgctEuUkpxjet
+ nVhNVhhafWlzaiE9oq24jkfLrRBE3TU=
+X-Google-Smtp-Source: ABdhPJzOj/fedMTI0SlInJ8wuFLeMSMAMKlEcjS2g4IPJhr3DmGoF2eq0fxRVSetneWVfzSvcq70nw==
+X-Received: by 2002:a7b:c40f:0:b0:389:f3ad:5166 with SMTP id
+ k15-20020a7bc40f000000b00389f3ad5166mr2708071wmi.63.1647380534844; 
+ Tue, 15 Mar 2022 14:42:14 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ l18-20020adfe592000000b001f064ae9830sm110301wrm.37.2022.03.15.14.42.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Mar 2022 14:42:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Mar 2022 22:10:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a0fb798be7432fb88047eb3a7d6a0915879b7ba
-X-Git-Newrev: 4e1e941b67035187d153eeb4ececb69fde104311
-X-Patchwork-Hint: ignore
-Message-Id: <20220315211223.0E6B18408A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnss: bump to version 3.76
+Date: Tue, 15 Mar 2022 22:41:13 +0100
+Message-Id: <20220315214113.2322315-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/libbdplus: bump to version 0.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,46 +88,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e1e941b67035187d153eeb4ececb69fde104311
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Update indentation in hash file (two spaces)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+https://code.videolan.org/videolan/libbdplus/-/blob/0.2.0/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libbdplus/libbdplus.hash | 6 +++---
+ package/libbdplus/libbdplus.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 07fb340c33..b4b8be11f6 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_75_RTM/src/SHA256SUMS
--sha256  fd571507827284644f4dd522a032acda2286835f6683ed22a1c2d3878cc58582  nss-3.75.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_76_RTM/src/SHA256SUMS
-+sha256  1b8e0310add364d2ade40620cde0f1c37f4f00a6999b2d3e7ea8dacda4aa1630  nss-3.76.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index a9549e48dd..2f7a265136 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/libbdplus/libbdplus.hash b/package/libbdplus/libbdplus.hash
+index 6abc0e4970..2445af6e82 100644
+--- a/package/libbdplus/libbdplus.hash
++++ b/package/libbdplus/libbdplus.hash
+@@ -1,5 +1,5 @@
+-# From http://download.videolan.org/pub/videolan/libbdplus/0.1.2/libbdplus-0.1.2.tar.bz2.sha512
+-sha512	e00e7bc9f52b9275646593b753ba646b052255be94a7241965f4dbe4734f8f6a072973ed4b9997957f939236b0633897c295749f79e232188430795be5b5087b	libbdplus-0.1.2.tar.bz2
++# From http://download.videolan.org/pub/videolan/libbdplus/0.2.0/libbdplus-0.2.0.tar.bz2.sha512
++sha512  172e4932fb5540fbdb5b86e1d42cfaddf60b81416d2de50c8add83fb7f1bd7c296c975fd84a6ec42566977086dccfe07db5ce696038862bc75c6494c647998d6  libbdplus-0.2.0.tar.bz2
+ 
+ # Hash for license file:
+-sha256	592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c	COPYING
++sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
+diff --git a/package/libbdplus/libbdplus.mk b/package/libbdplus/libbdplus.mk
+index b0e8b1488d..600cb6b545 100644
+--- a/package/libbdplus/libbdplus.mk
++++ b/package/libbdplus/libbdplus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.75
-+LIBNSS_VERSION = 3.76
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBBDPLUS_VERSION = 0.1.2
++LIBBDPLUS_VERSION = 0.2.0
+ LIBBDPLUS_SITE = http://download.videolan.org/pub/videolan/libbdplus/$(LIBBDPLUS_VERSION)
+ LIBBDPLUS_SOURCE = libbdplus-$(LIBBDPLUS_VERSION).tar.bz2
+ LIBBDPLUS_LICENSE = LGPL-2.1+
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
