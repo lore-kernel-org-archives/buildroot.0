@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29311C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 20:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91A69C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:03:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8E8160B83;
-	Tue, 15 Mar 2022 20:59:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CAA84053E;
+	Tue, 15 Mar 2022 21:03:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CHMWC6qmRTjn; Tue, 15 Mar 2022 20:59:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oi6th9yCuqNN; Tue, 15 Mar 2022 21:03:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C77E76068F;
-	Tue, 15 Mar 2022 20:59:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2600404EB;
+	Tue, 15 Mar 2022 21:03:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 985681BF263
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:59:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26A2F1BF263
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84853404EB
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 20:59:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14B6F404EB
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:03:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P3LUPzEXlRok for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 20:59:11 +0000 (UTC)
+ with ESMTP id z1WwOfesiLjf for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 21:03:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9AD4E404F0
- for <buildroot@uclibc.org>; Tue, 15 Mar 2022 20:59:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64DC64018E
+ for <buildroot@uclibc.org>; Tue, 15 Mar 2022 21:03:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B18EB83F8B; Tue, 15 Mar 2022 20:50:29 +0000 (UTC)
+ id 79050838D4; Tue, 15 Mar 2022 20:54:41 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 15 Mar 2022 20:59:11 +0000
+Date: Tue, 15 Mar 2022 21:03:23 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -51,7 +51,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-13971-163-IBtfrhunrg@https.bugs.busybox.net/>
+Message-ID: <bug-13971-163-Ucwth5xFYW@https.bugs.busybox.net/>
 In-Reply-To: <bug-13971-163@https.bugs.busybox.net/>
 References: <bug-13971-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -77,31 +77,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=13971
 
---- Comment #9 from Peter Seiderer <ps.report@gmx.net> ---
-Re-add bug description from one of the duplicates:
+--- Comment #10 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Peter Seiderer from comment #9)
 
-> From mbuil@suse.com 2021-07-08 15:27:37 UTC
->
-> Since 1.6, iptables supports the MASQUERADE target options:
->
-> MASQUERADE target options:
->  --to-ports <port>[-<port>]
->                               Port (range) to map to.
->  --random
->                               Randomize source port.
->  --random-fully
->                               Fully randomize source port.
->
-> When building iptables-nft, the MASQUERADE target options are included in the iptables-nft binary, however, they are not in the ip6tables-nft:
->
-> $> sudo ./output/target/usr/sbin/iptables-nft -A POSTROUTING -s 10.244.0.0/16 ! -d 224.0.0.0/4 -j MASQUERADE --help | grep random
->  --random
->  --random-fully
->                               Fully randomize source port.
-> $> sudo ./output/target/usr/sbin/ip6tables-nft -A POSTROUTING -s 10.244.0.0/16 ! -d 224.0.0.0/4 -j MASQUERADE --help | grep random
-> $>
->
-> Those targets come from the files libipt_MASQUERADE.c and libip6t_MASQUERADE.c in https://git.netfilter.org/iptables/tree/extensions but for some reason the ip6 one does not get included in the binary
+Not reproducible here (raspberrypi0w_defconfig with glibc, gcc-11.x, eudev):
+
+$ ip6tables-nft  -A POSTROUTING -s 10.244.0.0/16 ! -d 224.0.0.0/4 -j MASQUERADE 
+--help
+ip6tables v1.8.7
+[...]
+MASQUERADE target options:
+ --to-ports <port>[-<port>]
+                                Port (range) to map to.
+ --random
+                                Randomize source port.
+ --random-fully
+                                Fully randomize source port.
 
 -- 
 You are receiving this mail because:
