@@ -4,61 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0B68C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 08:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0A3DC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 09:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12D94409D9;
-	Tue, 15 Mar 2022 08:10:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AFA8405FC;
+	Tue, 15 Mar 2022 09:02:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EeHBUchEXTpe; Tue, 15 Mar 2022 08:10:51 +0000 (UTC)
+	with ESMTP id nOAeUHSapBrz; Tue, 15 Mar 2022 09:02:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D77040949;
-	Tue, 15 Mar 2022 08:10:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 35B871BF2A0
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 08:10:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA02140201;
+	Tue, 15 Mar 2022 09:02:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 066B31BF2A0
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 09:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F13740949
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 08:10:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6A3E408E1
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 09:02:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mwtgv-lSidTi for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 08:10:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6CF5F40525
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 08:10:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 72243100006;
- Tue, 15 Mar 2022 08:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647331843;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tHwPOq1HCVH8bfkoHojShP7uQ5U2PFQCawOwlHmyNyY=;
- b=R5JdO5iGBAgebbi4BFqb4d2ZmHXWUjbai23Fj0XUw19R+QgXQN+kIzBmyCpB+lWgHVFxwQ
- wmxNJty5Lub3BhBdN/6xXlkTd4F4xAhLN+oRgF8zXExS8lU1ZdDwpeaW1dUiVspEa5jfE0
- OCm6725LAsmctKGy/ZO9i3upmUHDEp2vuejf0PM4jWV6xZeESaAmhttjst4eS0qOHllAaA
- dL5M3iU9DfZZ8jDinE3GeUyGFyJWZ8hyv1uZV225XxdMlBEI1FEH43WP2avjOLCZbXosyo
- HR+nO3XLj9t63a7yWCNnTPzYZUr0k1pTRa2tEur4lgWvcgvD1/bJLHD6n+D14Q==
-Date: Tue, 15 Mar 2022 09:10:41 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220315091041.015209a9@windsurf>
-In-Reply-To: <20220314203149.GW283544@scaer>
-References: <20220314153111.1390512-1-clement.leger@bootlin.com>
- <20220314153111.1390512-3-clement.leger@bootlin.com>
- <20220314203149.GW283544@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4vAQNR84abGD for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 09:02:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C1CC408C0
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 09:02:14 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id a8so39655766ejc.8
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 02:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=98o4wkNZZ7Eyk67YwXeUVnw8VNketveMIfv9ubri45U=;
+ b=D9QSThBoq0nq7yk+paFvPHm8suByYpHpLIQ5KM+/0fzRwbYGPjeCTfnJ1cW6GQ9t1D
+ Uz7BFKG7sp9XyILqQizIF49eDBBREFhSFw/js+mQXVc6dX3N+9/yEDm5XtjTDUyN4xPP
+ 0H+wozD+A/+IVhdq00UcCCViDyu+0+9zuS2s8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=98o4wkNZZ7Eyk67YwXeUVnw8VNketveMIfv9ubri45U=;
+ b=f3R8f1Gvp0jzHdS5i5H1ov1xNyhGB0ifveDofJgHj27ZBr6J05lDa31AsfTNkCh928
+ vBTwvO8XpqUmUUhTUENt0VYB0e4cKecXqmD3V6UxzwvYPjksCzHSqjQhNlOVeka4yWUP
+ yoFPyKkmdyNf/Be/Ol/K3/veGejW/QChvELDZUJ0+4TpXh/LS33DbLCVjLS8e4HpjiJL
+ TC2i1D4Vi72wWetRZ/VtRSsYT8YoJShNIz2dWyjYu5KxOzLlAy8PNTNzc8wyeWH4KrMs
+ fxZKifiXVY9OKVeitePo8yE/7Y7pGtedATCZ1URqC5/pc5B3xjJbnx/SGKhjNK9zyUn8
+ kdWw==
+X-Gm-Message-State: AOAM530LOi88cm/EwmATe+RoRwTvKs+Ru4YAAdBX4e1ExM64gcSlSWHS
+ jh5MLgoFQ/w4IwcPyFL5hG0UWpDI8bmgLg==
+X-Google-Smtp-Source: ABdhPJyFwVTr+Q0lJPZoERkgRPk4vuyCrnkmyLRiADoSNRzknqHD55YhmIKsWlC/HdzwHKqYnbV/pA==
+X-Received: by 2002:a17:907:761c:b0:6d6:e553:7bd1 with SMTP id
+ jx28-20020a170907761c00b006d6e5537bd1mr21487764ejc.5.1647334932997; 
+ Tue, 15 Mar 2022 02:02:12 -0700 (PDT)
+Received: from angeloc.pdxnet.pdxeng.ch ([31.24.139.5])
+ by smtp.gmail.com with ESMTPSA id
+ s11-20020a056402520b00b00416c0baee96sm7877961edd.6.2022.03.15.02.02.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Mar 2022 02:02:12 -0700 (PDT)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Tue, 15 Mar 2022 10:02:09 +0100
+Message-Id: <20220315090209.206025-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v4 2/8] package/python-cryptography: enable
- host package
+Subject: [Buildroot] [PATCH] linux: bump CIP kernel to version 5.10.104-cip3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +84,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>,
- =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCAxNCBNYXIgMjAyMiAyMTozMTo0OSArMDEwMAoiWWFubiBFLiBNT1JJTiIgPHlhbm4u
-bW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKCj4gSSB0aGluayB0aGUgaG9zdCB2YXJpYW50IHNo
-b3VsZCBhdXRvbWF0aWNhbGx5IGluaGVyaXQgdGhhdCBzZXR0aW5nIGZyb20KPiB0aGUgdGFyZ2V0
-IHZhcmlhbnQuCj4gCj4gQWZ0ZXJhbGwsIGl0IHNlZW1zIHJlYXNvbmFibGUgdG8gZXhwZWN0IHRo
-YXQgdGhlIGRvd25sb2FkIG9mIHRoZSBob3N0Cj4gYW5kIHRhcmdldCB2YXJpYW50cyBzaG91bGQg
-dXN1YWxseSBiZSBleGFjdGx5IHRoZSBzYW1lLgoKSSBhZ3JlZSwgYnV0IEkgdGhvdWdodCB0aGlz
-IHdhcyByZWFsbHkgdG9vIG11Y2ggb3V0c2lkZSBvZiB3aGF0IENsw6ltZW50CmlzIHRyeWluZyB0
-byBhY2hpZXZlIGluIHRoaXMgcGF0Y2ggc2VyaWVzIChJIGhlbHBlZCBDbMOpbWVudCBpbnRlcm5h
-bGx5CmJ5IHJldmlld2luZy9kaXNjdXNzaW5nIHRoaXMgcGF0Y2ggc2VyaWVzLCBhbmQgaW5kZWVk
-IGlkZW50aWZpZWQgdGhlCmZhY3QgdGhhdCB0aG9zZSB2YXJpYWJsZXMgc2hvdWxkIGJlIGluaGVy
-aXRlZCBiZXR3ZWVuIHRhcmdldC9ob3N0KS4KCkJ1dCBvZiBjb3Vyc2UgaWYgYXMgYSBtYWludGFp
-bmVyIHlvdSB0aGluayB0aGlzIGlzIHNvbWV0aGluZyB0aGF0IGlzCnJlYWxseSBuZWVkZWQgYXMg
-YSBwcmUtcmVxdWlzaXRlIHRvIG1lcmdlIHRob3NlIHBhdGNoZXMsIHdlIGNhbiBhc2sKQ2zDqW1l
-bnQgdG8gd29yayBvbiB0aGlzIDotKQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1v
-d25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJp
-bmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ linux/Config.in  | 4 ++--
+ linux/linux.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 36744c5337..3678ee061f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.15)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (5.10.100-cip2)"
++	bool "Latest CIP SLTS version (5.10.104-cip3)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -126,7 +126,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.15.26" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "5.10.100-cip2" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "5.10.104-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.100-cip2-rt2" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 758fdbf856..18480a87bf 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -9,7 +9,7 @@ sha256  295e4bb3ba3244a9f4c48139ad13f78145f3e6402e11aa25b20aadb9ae9f2b25  linux-
+ sha256  03a65f405c3acae4dd8cd952444b7cd931f972c01a42e20a471319a2f6c018d2  linux-4.14.269.tar.xz
+ sha256  4fcfe814780d63dc56e907bf41596ff162e9601978bdc1a60eab64cc3903a22c  linux-4.19.232.tar.xz
+ # Locally computed
+-sha256  e90e8100bf44cdd6714bca3b9b1f78694c99bfa9bdff761de06b192dfb230831  linux-cip-5.10.100-cip2.tar.gz
++sha256  63e6df81c4a747c60eed535ffc2f6f1ddb0c17ec349e860316d9a700c69ab38e  linux-cip-5.10.104-cip3.tar.gz
+ sha256  945b63f280c5bd9aad66016ef6fbed57612864192bc0f54f6800562f56cfd518  linux-cip-5.10.100-cip2-rt2.tar.gz
+ 
+ # Licenses hashes
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
