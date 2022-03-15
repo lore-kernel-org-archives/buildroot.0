@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F06C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797E3C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C691081551;
-	Tue, 15 Mar 2022 21:23:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EAAF60B6B;
+	Tue, 15 Mar 2022 21:23:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YCxZaKyzLWoc; Tue, 15 Mar 2022 21:23:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uygse4J7fyhD; Tue, 15 Mar 2022 21:23:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCB0181390;
-	Tue, 15 Mar 2022 21:23:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B4ED1BF284
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E76460AB1;
+	Tue, 15 Mar 2022 21:23:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B5F51BF9AA
  for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5950E4056D
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD0D860B02
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:21:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NFzlp7Kx7Rhk for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 91cSMfjan0mc for <buildroot@lists.busybox.net>;
  Tue, 15 Mar 2022 21:21:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF06240571
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4C2860C25
  for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:21:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DE6128408B; Tue, 15 Mar 2022 21:12:22 +0000 (UTC)
+ id 0E6B18408A; Tue, 15 Mar 2022 21:12:23 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 15 Mar 2022 22:10:00 +0100
+Date: Tue, 15 Mar 2022 22:10:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2bc66b940cb8655cb0694e0c6a1c74f1eb9c007c
-X-Git-Newrev: 56b49691abf4625d3d5915f3956b02f0fbd2ed4b
+X-Git-Oldrev: 4a0fb798be7432fb88047eb3a7d6a0915879b7ba
+X-Git-Newrev: 4e1e941b67035187d153eeb4ececb69fde104311
 X-Patchwork-Hint: ignore
-Message-Id: <20220315211222.DE6128408B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{gnupg,
- gnupg2}: use gnupg2 by default
+Message-Id: <20220315211223.0E6B18408A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump to version 3.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,118 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56b49691abf4625d3d5915f3956b02f0fbd2ed4b
+commit: https://git.buildroot.net/buildroot/commit/?id=4e1e941b67035187d153eeb4ececb69fde104311
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch reverses the logic to select gnupg2 by default, while still
-allowing to select gnupg (v1).
-
-Quoting: https://gnupg.org/download/index.html
-"""
-GnuPG 1.4 is the old, single binary version which still support the
-unsafe PGP-2 keys. This branch has no dependencies on the above listed
-libraries or the Pinentry. However, it lacks many modern features and
-will receive only important updates.
-"""
-
-gnupg 1.4 is kept in Buildroot for now, as the package is still
-maintained upstream. It might still be useful is some specific cases:
-- it has a smaller footprint (compared to v2),
-- it has less dependencies (only zlib),
-- it has less build dependencies (can build static, no need for
-MMU/threads, ...)
-
-Most Linux distributions are now shipping gnupg2 by default. gnupg v1
-is now more for legacy/compatibility/specific cases.
-
-There is currently only two packages selecting gnupg in Buildroot:
-gpgme and python-gnupg
-This commit also reverses the logic for those packages. However, this
-means we also need to propagate the dependencies of gnupg2, and still
-select gnupg if those dependencies are not met. To simplify this, add a
-blind option BR2_PACKAGE_GNUPG2_DEPENDS. Note that due to the
-intricacies of Kconfig dependencies, "depends on !BR2_PACKAGE_GNUPG"
-must *not* be part of BR2_PACKAGE_GNUPG2_DEPENDS.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-[Arnout: rework dependency handling to make sure gnupg2 dependencies are
-properly propagated]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gnupg/Config.in        |  1 -
- package/gnupg2/Config.in       | 14 ++++++++++++--
- package/libgpgme/Config.in     |  4 ++--
- package/python-gnupg/Config.in |  3 ++-
- 4 files changed, 16 insertions(+), 6 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
-index 2db46318f1..e92fca709d 100644
---- a/package/gnupg/Config.in
-+++ b/package/gnupg/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_GNUPG
- 	bool "gnupg"
--	depends on !BR2_PACKAGE_GNUPG2
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  GnuPG is the GNU project's complete and free implementation
-diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
-index ef1817ef02..043d53554c 100644
---- a/package/gnupg2/Config.in
-+++ b/package/gnupg2/Config.in
-@@ -2,12 +2,22 @@ comment "gnupg2 needs a toolchain w/ threads and dynamic library support"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 07fb340c33..b4b8be11f6 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_75_RTM/src/SHA256SUMS
+-sha256  fd571507827284644f4dd522a032acda2286835f6683ed22a1c2d3878cc58582  nss-3.75.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_76_RTM/src/SHA256SUMS
++sha256  1b8e0310add364d2ade40620cde0f1c37f4f00a6999b2d3e7ea8dacda4aa1630  nss-3.76.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index a9549e48dd..2f7a265136 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--config BR2_PACKAGE_GNUPG2
--	bool "gnupg2"
-+# helper to make it easier to select gnupg2 or gnupg; usage:
-+# select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG
-+# select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS
-+
-+config BR2_PACKAGE_GNUPG2_DEPENDS
-+	bool
-+	default y
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpth
- 	depends on BR2_USE_MMU # libassuan, libnpth
- 	depends on !BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_GNUPG2
-+	bool "gnupg2"
-+	depends on BR2_PACKAGE_GNUPG2_DEPENDS
-+	depends on !BR2_PACKAGE_GNUPG
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_LIBGCRYPT
-diff --git a/package/libgpgme/Config.in b/package/libgpgme/Config.in
-index 4aabd06367..16ce27d0ef 100644
---- a/package/libgpgme/Config.in
-+++ b/package/libgpgme/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_LIBGPGME
- 	bool "libgpgme"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
- 	depends on BR2_USE_MMU # libassuan
--	#gnupg is not needed to build, but at runtime.
--	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2
-+	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
-+	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_LIBASSUAN
- 	help
-diff --git a/package/python-gnupg/Config.in b/package/python-gnupg/Config.in
-index 038a940778..234792977a 100644
---- a/package/python-gnupg/Config.in
-+++ b/package/python-gnupg/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_GNUPG
- 	bool "python-gnupg"
--	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2 # runtime
-+	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
-+	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
- 	help
- 	  A wrapper for the Gnu Privacy Guard (GPG or GnuPG).
- 
+-LIBNSS_VERSION = 3.75
++LIBNSS_VERSION = 3.76
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
