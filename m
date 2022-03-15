@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F07C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D962C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7DC160B6B;
-	Tue, 15 Mar 2022 21:19:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1DE160B02;
+	Tue, 15 Mar 2022 21:20:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b1ujDKqsCCdx; Tue, 15 Mar 2022 21:19:49 +0000 (UTC)
+	with ESMTP id 7Mda3XEiu9Wy; Tue, 15 Mar 2022 21:20:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3558860AB1;
-	Tue, 15 Mar 2022 21:19:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B41360AFB;
+	Tue, 15 Mar 2022 21:20:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21A511BF284
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:19:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63FF71BF284
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:20:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E91440877
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:19:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 617B3416F5
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:20:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vwVuYuw3iBSs for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 21:19:46 +0000 (UTC)
+ with ESMTP id tJnZj5Vo2Bpa for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 21:20:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 256E44086A
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:19:46 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id dr20so298487ejc.6
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 14:19:46 -0700 (PDT)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 58B8241607
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:20:06 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id b15so448619edn.4
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 14:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=EbbZaTkjUzUuHktiErek4rVhYPscs7EAz8XPyluk1fo=;
- b=Sb4RGzjAmK3KFpRYw3zC0lGMeryk9WBDAAeDOQ+vVjytASFKu68YHHvDYAdH3iyaCa
- 5T56lVHcK2FJXJ0Y1kul7lRrrQHTEqz0McwK+UQ7LMtQv1u/tV5mHQCI+pUzeINboGiY
- U5MdybjMMZShH/vl75amAfXOWTF6Im3lSYqV3SlR0q8fqRYMeEOt9ao4464TBShF0pj8
- ypgdLW8eVdUaw5qKMkPBkOQMdn1LFz5DAA+sm300+XRlkGsdnOqzEQo1NceUQgoIL1Sh
- xMozUTRixKHhC4NGI6iFpEOEDYafFQ49A+6it5H5PSj1cPXBNhdevj0jeHT2jv5686k/
- 0R0w==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=ZS0JdiRtfeHGCwrx4BZ1f6asbUN/uNcnEa1MMUYXqKM=;
+ b=FUhyCQ8Ua6daNxqK4BJKjx4b8prTaP/0A2zSaGBP4Mys2T4KTCye28ka1A3GiGOMsM
+ dXevLYhP+dIP2BuYzVVSFYMf+dLcbBW2dGOSeOVaScAJZDeAa0b/8WUSpZwXgtwXOHtk
+ 6burrGELDoU991yT1N0Vbr1BANkgzslzNMCUKHM3AHMFHL4Y2J/NkzKq3odRdhWu3u6i
+ F/87Sopnu6fG/CKDgvbm1X65N8mAtzZ4MSgBRK68iGfu/GQSRRhgPto6jW74hMDm3hZx
+ 7SxAE9uaB/+36FjeA1Zlg0HBoZeijgLVQM52JbC36NvcYmQ5jVUcfnUHDzkek2vNxymp
+ Crgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=EbbZaTkjUzUuHktiErek4rVhYPscs7EAz8XPyluk1fo=;
- b=yT3IWn1D9gDdaqtoei/4X1ZUL+dF8+h6vnqyCL/viaFrP/clauZgGfalMmim9xVFnB
- luEE1ahexXHJfseoRffJWadcLOHasL3JpPkyerBnTeh7GcnM5DEzS7qJ0Kx8+c99wJ0o
- V9yb6SLsHd4GiwUcN9CL6CMX1nW0ZQhJJ5y54/RTv1NahRpk3/zqAh7gqepznRGI56zu
- i+BlTr4w1URywv2zCwIJK5k/N7ws5DaMuo/vieEQAEjqHEeeCKtOKROG/TdaIznAY0Cs
- byKYIXP2QYR0v1/xL4gSznBM2m84BzcTdYOMXcdmoSTsrsrhj+wDlEMQEsqQYBCd9peF
- KlJQ==
-X-Gm-Message-State: AOAM531WqwxfjnlHcSDiWqPV4R5PMrIJwhX3QjaMPGLoCwPcZyZNyWNk
- g9LlVrDU+zKGWGmpi9aZv2/ULw==
-X-Google-Smtp-Source: ABdhPJwPCyF7Msda/ipZjhfhQ0ivihsz5wfaUTfo0DS2iEWlvJaaZX0rF6F09pCq+fEME1tO+2S6ZA==
-X-Received: by 2002:a17:906:3a84:b0:6cd:e829:ca37 with SMTP id
- y4-20020a1709063a8400b006cde829ca37mr24618150ejd.83.1647379184427; 
- Tue, 15 Mar 2022 14:19:44 -0700 (PDT)
+ bh=ZS0JdiRtfeHGCwrx4BZ1f6asbUN/uNcnEa1MMUYXqKM=;
+ b=HOLsclzF1+15VXuA4YtYasLNauYfvRRbsA1Q5vC6iJY7AoaSjmOuG9utXmvvQVzNnv
+ LnYr2S5SmvXTjTtdkqQH6sPQMSrBSJPsLh94uGWE4gGVVtNGYr8N65WtxUMWWMNrcSas
+ DIBG7qV0gNQywlCorkOvoljUg+EP5hU6w7xAq/YxkOP2SUGSmca3cnVn89Onc/FfnH2N
+ 3MibhJWVywKlYMFA8qPV4fUxrBDeA1NIn1gHW5s4gpqx9kvncNQqdop9BjVDfi4aSTKh
+ K4cfD59EQE6FO4jwWrHFDPvovhP5pD24B1UYL68+gA/r2XOZN1YDAwPQBre5cR+4ITna
+ 6BtA==
+X-Gm-Message-State: AOAM533GjPbEOXFRJpVlC15rew6ua4t+U/ewvR6Q2qBdCchvpZJZx6g4
+ i8O/0LZl0UktRaDzfhDVWz6NJOvYr8dxcA==
+X-Google-Smtp-Source: ABdhPJyxXupzeKe2DX+/m9f/Z1RCVkCk6s9PhaGTmEnwFM9y2/Mw+8C/feG9waNP1Y4D09f3edMGjg==
+X-Received: by 2002:a05:6402:150f:b0:416:175d:3f5d with SMTP id
+ f15-20020a056402150f00b00416175d3f5dmr27110625edw.184.1647379204504; 
+ Tue, 15 Mar 2022 14:20:04 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- g9-20020aa7c849000000b00412fc6bf26dsm47362edt.80.2022.03.15.14.19.43
+ j7-20020a1709062a0700b006bc28a6b8f1sm55358eje.222.2022.03.15.14.20.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 15 Mar 2022 14:19:43 -0700 (PDT)
-Message-ID: <650ae221-efed-6e35-a653-ff2170f915a1@mind.be>
-Date: Tue, 15 Mar 2022 22:19:42 +0100
+ Tue, 15 Mar 2022 14:20:04 -0700 (PDT)
+Message-ID: <2a12dfa3-9ca9-193f-bdd8-690e489df42e@mind.be>
+Date: Tue, 15 Mar 2022 22:20:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220302212621.2357671-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220303174121.55867-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220302212621.2357671-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/libss7: bump to version
- 2.0.1
+In-Reply-To: <20220303174121.55867-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH/next v3 1/1] package/kodi: bump version to
+ 19.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,10 +102,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 02/03/2022 22:26, Fabrice Fontaine wrote:
-> http://downloads.asterisk.org/pub/telephony/libss7/releases/libss7-2.0.1-summary.html
+On 03/03/2022 18:41, Bernd Kuhls wrote:
+> Add dependencies to giflib, libjpeg and libpng due to
+> https://github.com/xbmc/xbmc/pull/20462
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
 
@@ -115,36 +114,111 @@ On 02/03/2022 22:26, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/libss7/libss7.hash | 4 ++--
->   package/libss7/libss7.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+> v3: removed remnants from internal patch, sorry for the noise
+> v2: added dependencies to giflib, libjpeg and libpng
 > 
-> diff --git a/package/libss7/libss7.hash b/package/libss7/libss7.hash
-> index 8e1d6635db..442422fcd9 100644
-> --- a/package/libss7/libss7.hash
-> +++ b/package/libss7/libss7.hash
-> @@ -1,6 +1,6 @@
->   # Hashes from http://downloads.asterisk.org/pub/telephony/libss7/releases/
-> -sha1    7112a0717293fc273d5d488e1387ad28abe4e9b3  libss7-2.0.0.tar.gz
-> -sha256  5af00853cfb2bc6bcf050947804db132ae6872db0cd2ab24b5378828f78eda52  libss7-2.0.0.tar.gz
-> +sha1  301fd3eff4387db6407cbc72c3fec9aed5bc3860  libss7-2.0.1.tar.gz
-> +sha256  091f1c14dcf13a094021334218cde363041816fa5b5037caee38719e4e6891c7  libss7-2.0.1.tar.gz
+>   package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+>   package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+>   package/kodi/Config.in                                   | 3 +++
+>   package/kodi/kodi.hash                                   | 2 +-
+>   package/kodi/kodi.mk                                     | 5 ++++-
+>   5 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+> index 81fc2bb9f1..8cc2297bdb 100644
+> --- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+> +++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+> @@ -6,7 +6,7 @@
 >   
->   # License file, locally calculated
->   sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
-> diff --git a/package/libss7/libss7.mk b/package/libss7/libss7.mk
-> index 151b6a61b5..faa147c78e 100644
-> --- a/package/libss7/libss7.mk
-> +++ b/package/libss7/libss7.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+>   # Not possible to directly refer to kodi variables, because of
+>   # first/second expansion trickery...
+> -KODI_JSONSCHEMABUILDER_VERSION = 19.3-Matrix
+> +KODI_JSONSCHEMABUILDER_VERSION = 19.4-Matrix
+>   KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+>   KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+>   KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+> diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+> index 2ebcd7d8de..4733399edc 100644
+> --- a/package/kodi-texturepacker/kodi-texturepacker.mk
+> +++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+> @@ -6,7 +6,7 @@
 >   
-> -LIBSS7_VERSION = 2.0.0
-> +LIBSS7_VERSION = 2.0.1
->   LIBSS7_SITE = http://downloads.asterisk.org/pub/telephony/libss7/releases
+>   # Not possible to directly refer to kodi variables, because of
+>   # first/second expansion trickery...
+> -KODI_TEXTUREPACKER_VERSION = 19.3-Matrix
+> +KODI_TEXTUREPACKER_VERSION = 19.4-Matrix
+>   KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+>   KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+>   KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index f31bf19b99..ebc95343a9 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -72,6 +72,8 @@ menuconfig BR2_PACKAGE_KODI
+>   	select BR2_PACKAGE_FONTCONFIG # needed for libass
+>   	select BR2_PACKAGE_FREETYPE
+>   	select BR2_PACKAGE_FSTRCMP
+> +	select BR2_PACKAGE_GIFLIB
+> +	select BR2_PACKAGE_JPEG
+>   	select BR2_PACKAGE_LIBASS
+>   	select BR2_PACKAGE_LIBCDIO
+>   	select BR2_PACKAGE_LIBCROSSGUID
+> @@ -81,6 +83,7 @@ menuconfig BR2_PACKAGE_KODI
+>   	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>   	select BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS if !BR2_ENABLE_LOCALE
+>   	select BR2_PACKAGE_LIBPLIST
+> +	select BR2_PACKAGE_LIBPNG
+>   	select BR2_PACKAGE_LZO
+>   	select BR2_PACKAGE_OPENSSL
+>   	select BR2_PACKAGE_PCRE
+> diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+> index 7f96af385a..a17e0fb29f 100644
+> --- a/package/kodi/kodi.hash
+> +++ b/package/kodi/kodi.hash
+> @@ -1,5 +1,5 @@
+>   # Locally computed
+> -sha256  440f47e475dd8a48e0a6d41349e83b74890f3fbe8275d3e401d3c50f5b9ea09b  kodi-19.3-Matrix.tar.gz
+> +sha256  cc026f59fd6e37ae90f3449df50810f1cefa37da9444e1188302d910518710da  kodi-19.4-Matrix.tar.gz
+>   sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+>   sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+>   sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 56e901fa17..7326cd536d 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -6,7 +6,7 @@
 >   
->   LIBSS7_LICENSE = GPL-2.0
+>   # When updating the version, please also update kodi-jsonschemabuilder
+>   # and kodi-texturepacker
+> -KODI_VERSION_MAJOR = 19.3
+> +KODI_VERSION_MAJOR = 19.4
+>   KODI_VERSION_NAME = Matrix
+>   KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+>   KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+> @@ -25,6 +25,7 @@ KODI_DEPENDENCIES = \
+>   	fontconfig \
+>   	freetype \
+>   	fstrcmp \
+> +	giflib \
+>   	host-flatbuffers \
+>   	host-gawk \
+>   	host-gettext \
+> @@ -34,6 +35,7 @@ KODI_DEPENDENCIES = \
+>   	host-nasm \
+>   	host-swig \
+>   	host-xmlstarlet \
+> +	jpeg \
+>   	libass \
+>   	libcdio \
+>   	libcrossguid \
+> @@ -42,6 +44,7 @@ KODI_DEPENDENCIES = \
+>   	libegl \
+>   	libfribidi \
+>   	libplist \
+> +	libpng \
+>   	lzo \
+>   	openssl \
+>   	pcre \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
