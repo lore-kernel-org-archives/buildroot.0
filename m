@@ -4,57 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7584C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:05:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E199C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68117416FA;
-	Tue, 15 Mar 2022 21:05:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2213B416FA;
+	Tue, 15 Mar 2022 21:06:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jxElHCm_aEX5; Tue, 15 Mar 2022 21:05:39 +0000 (UTC)
+	with ESMTP id VIyqrwOwWafJ; Tue, 15 Mar 2022 21:06:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CBD7416F5;
-	Tue, 15 Mar 2022 21:05:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59B5140343;
+	Tue, 15 Mar 2022 21:06:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B2C8E1BF284
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:05:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 99F451BF284
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A14814019F
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:05:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 896EC416F7
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:06:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KrjW-6hM5KNF for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 21:05:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7CFDF416F5
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:05:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 50CCE200003;
- Tue, 15 Mar 2022 21:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647378332;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=K+5ymYw3dNPZxFEDzau7//vnnNs7qUDOQr+0nQTeCxI=;
- b=Y2iN8DzPz28fBun7VOzJhvnN99X9MX0j01TwFrkROCgDRg17YsQvCOQnFfdAOuBh5Sw2zd
- z30SOIiFBvY0IYmdn50E9Rk6How4jS4Y/G2pflIjzo6Q+Vy4FAcj2am6nyoOkq+tv1Kug6
- +iRmJTvka6U/LGegX+6SczshQ5an9tmcEzAZ/Ih3iqgFhACBmtpGlea0OXWFKiTt++LGOA
- gQeR+K/Diwh4YfycVjbPF9zfKLJzrvnX/InhSq62jGw6Qvqu7XrzZR4hF93QRgy25Ye6V3
- jtKVKYOm1YGeS8MlqYksdnjGyAotUSH4eqZ3x3Q5tb6oD/dn+uRPGGlSxXkGMg==
-Date: Tue, 15 Mar 2022 22:05:31 +0100
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20220315220531.2bac9c2d@windsurf>
-In-Reply-To: <20220311065042.8687-1-ps.report@gmx.net>
-References: <20220311065042.8687-1-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/wget: bump version to 1.21.3
+ with ESMTP id Eql4PI5DoQEC for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 21:06:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA62E4019F
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:06:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id DC9C983F9C; Tue, 15 Mar 2022 20:57:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 15 Mar 2022 22:06:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 88de5d08226b490ea2784fbfd0580dd3430b5699
+X-Git-Newrev: 503948f452d0cb46cbc7990ecaeabd60f2b3dfd7
+X-Patchwork-Hint: ignore
+Message-Id: <20220315205750.DC9C983F9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ts4900-fpga: bump version to
+ 20170510
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,93 +54,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=503948f452d0cb46cbc7990ecaeabd60f2b3dfd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Mar 2022 07:50:42 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+Fixes TXEN on CPU UARTs not correctly asserting in some multi-byte
+transmits.
 
-> - explicit set some default options (--without-metalink, --enable-opie,
->   --enable-digest, --enable-ntlm, --disable-debug, --disable-valgrind-tests,
->   --disable-assert)
-> 
-> - add optional libpsl dependency
-> 
-> - remove legacy --with-libidn option (see [1]), replace with
->   new --enable-iri option in case libiconv and libidn2 are available
-> 
-> - use explicit --with-libuuid option
-> 
-> - add optional c-ares dependency
-> 
-> For details see [2].
-> 
-> [1] https://git.savannah.gnu.org/cgit/wget.git/commit/configure.ac?id=a24e67e239ef949cc77a4c4e5a0beb703026a296
-> [2] https://lists.gnu.org/archive/html/info-gnu/2022-02/msg00017.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ts4900-fpga/ts4900-fpga.hash | 6 +++---
+ package/ts4900-fpga/ts4900-fpga.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-You're mixing up a minor version bump with a significant rework of the
-package, which is unrelated to the version bump. This really needs
-separate commit. Also, see below.
-
-
-> +WGET_CONF_OPTS = \
-> +	--without-metalink \
-> +	--enable-opie \
-> +	--enable-digest \
-> +	--enable-ntlm \
-
-So opie, digest and ntlm enabled is the default?
-
-> +	--disable-debug \
-> +	--disable-valgrind-tests \
-> +	--disable-assert
-> +
-> +ifeq ($(BR2_PACKAGE_LIBPSL),y)
-> +WGET_CONF_OPTS += --with-libpsl
-> +WGET_DEPENDENCIES += libpsl
-> +else
-> +WGET_CONF_OPTS += --without-libpsl
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GNUTLS),y)
->  WGET_CONF_OPTS += --with-ssl=gnutls
->  WGET_DEPENDENCIES += gnutls
-> @@ -22,19 +38,18 @@ else
->  WGET_CONF_OPTS += --without-ssl
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> -WGET_DEPENDENCIES += libiconv
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-> -WGET_CONF_OPTS += --with-libidn
-> -WGET_DEPENDENCIES += libidn2
-> +ifeq ($(BR2_PACKAGE_LIBICONV)$(BR2_PACKAGE_LIBIDN2),yy)
-
-This is very likely wrong. Indeed BR2_PACKAGE_LIBICONV=y is only
-possible when the toolchain does *not* have locale support. When the
-toolchain has locale support, iconv support is provided by the
-toolchain itself.
-
-Could you revisit this, and also clarify the interaction between
---enable-iri/--disable-iri on one side and
---with-libidn/--without-libidn on the other side?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/ts4900-fpga/ts4900-fpga.hash b/package/ts4900-fpga/ts4900-fpga.hash
+index 9ffff643af..1d3c62bfd1 100644
+--- a/package/ts4900-fpga/ts4900-fpga.hash
++++ b/package/ts4900-fpga/ts4900-fpga.hash
+@@ -1,5 +1,5 @@
+-# From https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga//ts4900-fpga-20150930.bin.md5
+-md5  bf93c03ef914cf008287c8cd60781cc8  ts4900-fpga-20150930.bin
++# From https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga//ts4900-fpga-20170510.bin.md5
++md5  86c7c3d7fb9c607af1ef55e1222b4416  ts4900-fpga-20170510.bin
+ 
+ # Locally calculated
+-sha256  242ac6a90bea9a95c937ea8952cdc9b02f543cea24a0359bed66a408a6dd8bf9  ts4900-fpga-20150930.bin
++sha256  f15edd6813ee5e93e7f380d85df2dc31e764ebca465093fb9006d56ee15b476b  ts4900-fpga-20170510.bin
+diff --git a/package/ts4900-fpga/ts4900-fpga.mk b/package/ts4900-fpga/ts4900-fpga.mk
+index a3e42c0812..73e7a28e31 100644
+--- a/package/ts4900-fpga/ts4900-fpga.mk
++++ b/package/ts4900-fpga/ts4900-fpga.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TS4900_FPGA_VERSION = 20150930
++TS4900_FPGA_VERSION = 20170510
+ TS4900_FPGA_SOURCE = ts4900-fpga-$(TS4900_FPGA_VERSION).bin
+ TS4900_FPGA_SITE = https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga
+ # No license file provided, Yocto recipe from the vendor claims MIT.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
