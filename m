@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 989B3C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 22:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DB36C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 22:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4EB9C4057A;
-	Tue, 15 Mar 2022 22:19:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 362A24098E;
+	Tue, 15 Mar 2022 22:19:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cxMSjeq3sz_l; Tue, 15 Mar 2022 22:19:34 +0000 (UTC)
+	with ESMTP id uaHb6KepzvNF; Tue, 15 Mar 2022 22:19:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 227EE4056D;
-	Tue, 15 Mar 2022 22:19:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 37CF11BF422
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 22:18:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B241A408DE;
+	Tue, 15 Mar 2022 22:19:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 279901BF422
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 22:18:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0D0840103
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 22:18:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15A7A81302
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 22:18:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cjeRmB_D59-m for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 22:18:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oQEo02VIAxCU for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 22:18:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B3C2240124
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 22:18:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4ECF481354
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 22:18:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ADCED84157; Tue, 15 Mar 2022 22:09:52 +0000 (UTC)
+ id 4946084159; Tue, 15 Mar 2022 22:10:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Mar 2022 22:53:12 +0100
+Date: Tue, 15 Mar 2022 23:18:45 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 5b71eb2b09041647a0fba2007c6b967535269c33
-X-Git-Newrev: 7a1463d88f3c38d35d58c60c52d0627d9d45f94f
+X-Git-Oldrev: 7a1463d88f3c38d35d58c60c52d0627d9d45f94f
+X-Git-Newrev: ab6016db98ca869b23cab1d8f5b3f0a2a05ee1db
 X-Patchwork-Hint: ignore
-Message-Id: <20220315220952.ADCED84157@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/xscreensaver: add
- gdk-pixbuf-xlib dependency
+Message-Id: <20220315221007.4946084159@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/go: security bump
+ to 1.17.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a1463d88f3c38d35d58c60c52d0627d9d45f94f
+commit: https://git.buildroot.net/buildroot/commit/?id=ab6016db98ca869b23cab1d8f5b3f0a2a05ee1db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-gdk-pixbuf-xlib dependency is needed since bump of gdk-pixbuf to version
-2.42.2 in commit a7b51ed3013c919b293deb95299e33363fb9df70 to avoid the
-following "hidden" warnings:
+go1.17.8 includes a security fix to the regexp/syntax package, as well as bug
+fixes to the compiler, runtime, the go command, and the crypto/x509, and net
+packages.
 
-   Warning: GTK version 2.24.33 was found, but at least one supporting
-            library (gdk-pixbuf-xlib-2.0) was not, so GTK can't be used.
-            Perhaps some of the development packages are not installed?
+https://go.dev/doc/devel/release#go1.17.minor
 
-   Warning: The GTK libraries do not seem to be available; the
-            `xscreensaver-demo' program requires them.
-
-   Warning: The GDK-Pixbuf library was not found.
-
-            The PNG library is being used instead.
-
-            Some of the demos will not use images as much as they could.
-            You should consider installing GDK-Pixbuf and re-running
-            configure.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 35f02050be12b86cdd2220e09c72fd2586346068)
+(cherry picked from commit 1cd8faa8d3b525fc01c21bc03ddd617062516699)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xscreensaver/Config.in       | 1 +
- package/xscreensaver/xscreensaver.mk | 1 +
- 2 files changed, 2 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index d773c69913..c18f7cc7fd 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_XSCREENSAVER
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
- 	select BR2_PACKAGE_GDK_PIXBUF
-+	select BR2_PACKAGE_GDK_PIXBUF_XLIB
- 	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBGTK2
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index f73a75bf14..46dedc3211 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -15,6 +15,7 @@ XSCREENSAVER_SELINUX_MODULES = xdg xscreensaver xserver
+diff --git a/package/go/go.hash b/package/go/go.hash
+index fdf342e602..85e6adfb8c 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  c108cd33b73b1911a02b697741df3dea43e01a5c4e08e409e8b3a0e3745d2b4d  go1.17.7.src.tar.gz
++sha256  2effcd898140da79a061f3784ca4f8d8b13d811fb2abe9dad2404442dabbdf7a  go1.17.8.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 56a21dfe55..3df16c9a68 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- XSCREENSAVER_DEPENDENCIES = \
- 	gdk-pixbuf \
-+	gdk-pixbuf-xlib \
- 	jpeg \
- 	libgtk2 \
- 	libxml2 \
+-GO_VERSION = 1.17.7
++GO_VERSION = 1.17.8
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
