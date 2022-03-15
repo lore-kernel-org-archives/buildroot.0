@@ -4,87 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD759C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64E49C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Mar 2022 21:18:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B41760B79;
-	Tue, 15 Mar 2022 21:15:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1787160B79;
+	Tue, 15 Mar 2022 21:18:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LOHYRKzNlpyZ; Tue, 15 Mar 2022 21:15:36 +0000 (UTC)
+	with ESMTP id vpwqyLaqRwA5; Tue, 15 Mar 2022 21:18:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BEB860AFB;
-	Tue, 15 Mar 2022 21:15:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4EAF1BF284
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:15:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38D8260AFB;
+	Tue, 15 Mar 2022 21:18:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D02BB1BF284
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3FBB81462
- for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:15:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCCC9401A6
+ for <buildroot@lists.busybox.net>; Tue, 15 Mar 2022 21:18:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ERKuqOc61kwJ for <buildroot@lists.busybox.net>;
- Tue, 15 Mar 2022 21:15:33 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lPTGCNnuUgbV for <buildroot@lists.busybox.net>;
+ Tue, 15 Mar 2022 21:18:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B3453813CE
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:15:33 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id bi12so308100ejb.3
- for <buildroot@buildroot.org>; Tue, 15 Mar 2022 14:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2BBB04018A
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 21:18:03 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id j17so410003wrc.0
+ for <buildroot@buildroot.org>; Tue, 15 Mar 2022 14:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=sS80wJe6WB4ElPZg59D32erj3lP5PRXcT6Dy8hjH/ak=;
- b=Qbx68mcjbQWqsN2BTKn1fGgvVfkVQJeR42vaXXlLX9wG3K9mWg1tW7IOd4PLa4IIRP
- IUc2S+u3DddJH5C6G1aUim6bzgwQuLm64lxlkADQYtajOgEAMiElaWg1HRyj6mTpopVB
- fN1BAN6GPKsY+GgfeITkaaYWhGzaYoHZPO1NM9PdSmWfv//UjMuLQrMglEvLOmCCh9h7
- q9Crv+sBy6jhKP1qYorcFowIt3U1aYeWAZNupemVWeMqiaHXYfbHcfdM5uf4htv+J4Ai
- yTlT06hUqyVksWh/3PyseuAYMOrqu9bM9YORbZagcyY45DNsUkr0gS/a0Y8YiBRHxqDt
- PSHQ==
+ bh=cGFfCdidYrrEasPiMjCRGXxv6OZghMwe02YSPsJOJds=;
+ b=jjYK6u0fCMcNRed9ZjXni61U3QokZS54tEnCha+O4w37JpYd9yHGcLevUr3tOFv3aI
+ /C5HRj2ghooWzLmZvBy0Iz5jg/yQMIo4Sewtf7Gutynj0awyVAtVj/k25BiOFwrSSrEL
+ aWXgrrF1a7e6dm4kX6lZ5xJ2yJUADm97vrn/Vc28sWR1P1jV7AZWvmvCk9SQFqqB2skp
+ gqtoOrV7UI0vn+SYF1r2ohX1A1vAUD768GITuQ+4GPAvoefU/EHyZ6oyWveTPKhZ3eg8
+ DbLFKqWKuJV/woqrWycr9IczUcF7pdUfHt6fbq/YjyqcZYFwM/OsIngobYMwXuY0RIMW
+ zsHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=sS80wJe6WB4ElPZg59D32erj3lP5PRXcT6Dy8hjH/ak=;
- b=q36W9Fb8m/NUtRdY/lLG32wkPLlXQYF42v1jif8B2dF39yBdHgamkJk0UwTntK9tuf
- L5HaFCfn8O0VQMxmCNoikR+2ih9aTyaggDGv5wXGMIh3YMzVEN9LmysRC12OEJQSP2kR
- bwxFHqdeIVI02/JbklX0sDY/lwFzcZoPHiBU/0c0CICJZLeTZFmf4IKmfb6RexDC332L
- PmlmNcYZPAHXeUgLu4TIdt1I3OktO4lIo7MC8Qi6RqmWOWGYdbCWW09tGZ3gPoizE2Zh
- psJzIgFCjIBesHzwBB0sGSD7d9MtDLv7h0mPYAQ4VER2ZRRhQZqDIoG/rAm5AwFKEhMx
- 6sMg==
-X-Gm-Message-State: AOAM531wwgWaE1WWRC2Kr4/y/hIWj/z1YLFAp7KTHbWtndi07ecXo1pJ
- MgU0k/4yztBD9cfCH5zZiEHWsQ==
-X-Google-Smtp-Source: ABdhPJywfnEl4Xlp/bH1G02A+Au9WE4BLfj+nCKaTbS0FdxEPh2P1rj0ehnKpkrT7O0AxI9jDhKeWQ==
-X-Received: by 2002:a17:907:608b:b0:6da:8fa8:27e8 with SMTP id
- ht11-20020a170907608b00b006da8fa827e8mr24548233ejc.168.1647378931938; 
- Tue, 15 Mar 2022 14:15:31 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ bh=cGFfCdidYrrEasPiMjCRGXxv6OZghMwe02YSPsJOJds=;
+ b=K6d2FfRzVpk3Mq1Dsst0Uy5H6jiMQPmeM91JngFDPUSQmM0gUprAXVlpXZUdT3ekya
+ exLwkg2DBcBSKjfbKgP4Z7y/4OdEsGAsEH2r/BNw06MdzxADYz+O8gaobzvXEVSMKiEt
+ 5I1cJBWJu8hR8zt2IpfOWK6Hfqi8LuacSPwu5EnDvX8f5Ktcv1exj7GCCD5OhrFmcI3C
+ ZTt/Sbz+HD5/4vOzSpUgqvM1z7FbbaMwW3o6GSkabanZv3GScMtZoBt32sLwl+XPebiV
+ GQaTxA9SQu5vv9u58sqTf9E3nBg/EY9v/ydJmbtw9QDfbCZi3neJ3pxiwq47hB9i6rNo
+ zi4Q==
+X-Gm-Message-State: AOAM5330FgSwWmcaSoV1WGHFbM888sMF9ZPqOvXqo+PVtHsTovXiufqz
+ 8TeHQb83ZbBnYOPsD04qHgWy4u0kyPA=
+X-Google-Smtp-Source: ABdhPJybUgXtG15Zzb+akJaEv/4j9lvWHdapgJeCs0pyCxShMNMEFu2nls0ZZQ/kmGfpbfpaf3K9uQ==
+X-Received: by 2002:adf:eb81:0:b0:1e3:2bf5:132 with SMTP id
+ t1-20020adfeb81000000b001e32bf50132mr21898176wrn.246.1647379081133; 
+ Tue, 15 Mar 2022 14:18:01 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- ne42-20020a1709077baa00b006d76251f4e7sm60926ejc.109.2022.03.15.14.15.31
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 15 Mar 2022 14:15:31 -0700 (PDT)
-Message-ID: <79c9a68c-4b86-3201-8efb-a6e3eae29bf9@mind.be>
-Date: Tue, 15 Mar 2022 22:15:30 +0100
+ p12-20020a5d48cc000000b001e6114938a8sm74393wrs.56.2022.03.15.14.18.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Mar 2022 14:18:00 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 15 Mar 2022 22:16:52 +0100
+Message-Id: <20220315211653.2297582-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220302173433.28939-1-bernd.kuhls@t-online.de>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220302173433.28939-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.3.7
+Subject: [Buildroot] [PATCH 1/2] package/python-avro: renumber patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,72 +87,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Commit 77704462c9e2422b6f9a07d35d88918e790e6940 forgot to renumber
+patch
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...h => 0001-drop-install-time-linting-and-imports-sorting.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/python-avro/{0002-drop-install-time-linting-and-imports-sorting.patch => 0001-drop-install-time-linting-and-imports-sorting.patch} (100%)
 
-On 02/03/2022 18:34, Bernd Kuhls wrote:
-> Release notes:
-> https://lists.freedesktop.org/archives/mesa-announce/2022-February/000664.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff --git a/package/python-avro/0002-drop-install-time-linting-and-imports-sorting.patch b/package/python-avro/0001-drop-install-time-linting-and-imports-sorting.patch
+similarity index 100%
+rename from package/python-avro/0002-drop-install-time-linting-and-imports-sorting.patch
+rename to package/python-avro/0001-drop-install-time-linting-and-imports-sorting.patch
+-- 
+2.35.1
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->   package/mesa3d/mesa3d.hash               | 6 +++---
->   package/mesa3d/mesa3d.mk                 | 2 +-
->   3 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index c8573fafad..736dedc25e 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -12,7 +12,7 @@ endif
->   
->   # Not possible to directly refer to mesa3d variables, because of
->   # first/second expansion trickery...
-> -MESA3D_HEADERS_VERSION = 21.3.6
-> +MESA3D_HEADERS_VERSION = 21.3.7
->   MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->   MESA3D_HEADERS_SITE = https://archive.mesa3d.org
->   MESA3D_HEADERS_DL_SUBDIR = mesa3d
-> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-> index d64b833100..b680411051 100644
-> --- a/package/mesa3d/mesa3d.hash
-> +++ b/package/mesa3d/mesa3d.hash
-> @@ -1,6 +1,6 @@
-> -# From https://lists.freedesktop.org/archives/mesa-announce/2022-February/000663.html
-> -sha256  96bb761fd546e9aa41d025fcc025225c5668443839dae21e3731959beb096736  mesa-21.3.6.tar.xz
-> -sha512  8c930e04eade29f689384ee7d6e2f178acbbf30fa6c9fdf132281279658c3c221ec7f9b1318e3c0a654c6136f925a5c0a35eaf849b65db7674641127c71e8a4f  mesa-21.3.6.tar.xz
-> +# From https://lists.freedesktop.org/archives/mesa-announce/2022-February/000664.html
-> +sha256  b4fa9db7aa61bf209ef0b40bef83080999d86ad98df8b8b4fada7c128a1efc3d  mesa-21.3.7.tar.xz
-> +sha512  0991543e9435457fa4d077517408b3f197be32ed61a6c7ca34ddb3906eed208791f1a57227f74115f99df18e612efab1d2c6809b7cf426d273633b53d4aefc88  mesa-21.3.7.tar.xz
->   
->   # License
->   sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 95618b2072..d0b12932c4 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -5,7 +5,7 @@
->   ################################################################################
->   
->   # When updating the version, please also update mesa3d-headers
-> -MESA3D_VERSION = 21.3.6
-> +MESA3D_VERSION = 21.3.7
->   MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->   MESA3D_SITE = https://archive.mesa3d.org
->   MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
