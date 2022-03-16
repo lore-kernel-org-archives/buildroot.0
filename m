@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80C15C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 20:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9958DC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 21:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 333074041C;
-	Wed, 16 Mar 2022 20:45:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 170AB40905;
+	Wed, 16 Mar 2022 21:23:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1Da-9hcDMZUS; Wed, 16 Mar 2022 20:45:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s1kZMp6SD1Kc; Wed, 16 Mar 2022 21:23:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E21F240126;
-	Wed, 16 Mar 2022 20:45:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4ACFF4087C;
+	Wed, 16 Mar 2022 21:23:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F009E1BF38A
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 20:45:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A1D901BF2C2
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDE5F60BFF
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 20:45:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E977606E6
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TJh9gXrl7eY7 for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 20:45:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BE3F460BC6
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 20:45:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1647463542;
- bh=na1HPU1VOLtjmqWYds2OnkSbUSbmGphF+Va+95jhJ2k=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=i7HUGCfWZW8UwarlT2vsle13gfGeEOgfEz4zMlBSFQxgmW9Plk8tifxvXcnV2yPjJ
- b3o7tSqetupbMwYub85HS/XHVLd37wQJmqMYImQ52OKfmbpTeKI0BEVXEGSrYBdHrd
- YcnEnTzdaDwh+dEqBQsMkqdptVNrfRFpkWQc5JaE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.226]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUXpK-1ndLvx3YSe-00QPiD; Wed, 16
- Mar 2022 21:45:41 +0100
-Date: Wed, 16 Mar 2022 21:45:38 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: "Sassen, Rutger" <rsassen@comecer.com>
-Message-ID: <20220316214538.1d7ff89f@gmx.net>
-In-Reply-To: <YQXPR01MB61218BB731C52E212FC43327AE119@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
-References: <YQXPR01MB61218BB731C52E212FC43327AE119@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
+ with ESMTP id FojgwhiJz2D2 for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 21:23:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ECD7960634
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 21:23:41 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id p9so4702128wra.12
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 14:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DjRxYwZdfjUcp/sDzxY70uZ+Ayxl6oS+YkhKoTOZtj4=;
+ b=XYHRtP+vw9wg6+9AevOVOSHIa6h1D5Wl8CIHgzJE34cthuXtxnT8K7Uh024CefYYk5
+ uQIz4rs62cXCOK/EpbemYJIvcSlYIIoELpY8N/Vxi3hW9LhGJwIPDvB/OTvPfF2Ym+Bb
+ ljaJprHsdYcoUaZw/kfmAs9s9ur9Up2RAywIGRDkMSYMuySDYvYXHfqRzyTW5t8ZGUIC
+ sNEyx40WbuJrI0DTdIktOFDFnHWYMX0uAICazmc6ZrdGGdSzfpx6LKqLo49HvgRe+QtS
+ 3DUGKfstxgwpvOP65Frp+ntjE5mJKG3GGMvuDFJoS+Dfr1eE6av6h0oMNqlrlDn0oDce
+ XkTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DjRxYwZdfjUcp/sDzxY70uZ+Ayxl6oS+YkhKoTOZtj4=;
+ b=CvOgth9LmKk3VwXqdFJphR5cyKC+U6HMWmWGJHL0rUs488S9Do9ImuwnsxGXsytR0g
+ J9nGLKFKtXDP3wjDGes+nYRLUnCD8oyGVwT9tm2pQh7pcmRkdK4X8rDgoPTR2Q4KkzLE
+ 5pemC5GgrmQmLyxqw/oThnOY1KtxYOHez0JWMA6CfDTEcj2P9vP7j6a9yQynTbpY8BE7
+ XQYR7DqvuX1xvztZCr45UjycjLmKZ6d2aisbHGsqQeKQVjxMzkuykEhKu8L0US76YeRW
+ ZwZH7u1ENeTJJMen/ME5jOrL4Qn8gtdhnwf5YocUkzYBNdSDyJSxGpAhHi5x/YmBZtHz
+ YSAA==
+X-Gm-Message-State: AOAM530jIsKC42/3+E5arr0eQBmFrgoFFwnPsfOWZ/fLoEbfMUm9jq95
+ eQxDeU7+heJP1MOzeZlVW9SqUpkshPY=
+X-Google-Smtp-Source: ABdhPJwSvK9/OAqsVPTvhlMiXSccAYITFWjcer8pNB1oAmp5UCVygnPz0Ojr9PBXhuLCFo/fp+6I6g==
+X-Received: by 2002:a5d:648d:0:b0:203:d7aa:83d2 with SMTP id
+ o13-20020a5d648d000000b00203d7aa83d2mr1451706wri.422.1647465820005; 
+ Wed, 16 Mar 2022 14:23:40 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ p6-20020a5d4586000000b001f0436cb325sm2440959wrq.52.2022.03.16.14.23.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 16 Mar 2022 14:23:39 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 16 Mar 2022 22:22:15 +0100
+Message-Id: <20220316212220.3437314-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:BX9ju9LsPpROyFivrR2DpOgxbn3vaVSOFWOy3P/Da7MAYOjDM/h
- pic9aPWO2Jvu+bCzW7jtna/alGjIkQl9qU+FQvA4fWr/aqjPXOWllCas4367xwzHiNkTJLc
- 4YQz6tVW2hjuGRNCqJvx8f06pTJMQT5T0O5WGOfnDP9yepHzOxL24LWIbix/QNH4B7Wqejb
- vh3Bu6ncX/XrTypkc4rTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vqOlDczqMZU=:Tv63k74R52qZqFcuUrpOOb
- w/0F+0GGKaiEmSvBLvWqLX04ntASA/ttHo0LJmOHtrSS0UPbP+DNjRsaVGqFztOJIY/delvoy
- 2w1VImEKme59IRN29M4U1463VDL6I1tFzPwi3awGqmyBrfCue64ErjSCoYYLofTMeQg3C4jGU
- HMBFvwvpCQOzLuXFL9jf3G/tO/NVE6AdBahZ+zKsXYp+gBaJE3NrUuUQEM68I33s6eAoDy2g2
- NGoajQ09etbIw4ubbRIgEwRsPDYDoYVZ+cRtJD301NkonsYrBMu85jPurwlxJNXQJvfgjHURX
- /mwYcxkrKLmRCG5HArUBThYNWyLx1xw/e30m1CoRIHyEwtsQVmnn89h8Mc1rMmKWazNCbu0st
- 46l81Y8cFQx2S+gc/1LdG5u2ARE3RIIFhMyq78xeoxW0E3OHaw3nZ9Wqm4/2a+b6/zorN8018
- laitXMLuvolRHSMXkuynQJ6urNZBVMIABjMt2fGhEjbHv2N3Z4So+BnUDr4sk8FHpvCWAYic5
- lf0J8bYWhPIQMKqnPzlvLLdahc6fdQrIFoXJx90xnipmyIw5KuU5a36PHaidsvf3wDz7PZRML
- w/utfhERaNfQyIu3eC4bgNoctO5qWuAQEP0CCW1sDFwxmn3WMSQa8YDH6Hy4jSSUCLs+X678O
- 912mHm18bW/u5aGQvFy5m0yTxucLzjWp4OFCA6k0cPiD5EbM1KzALNR7RGoAJ0EPaUvm6Gz2R
- QL6Btwky2S9WldguYMdZjYy2pirUBan54yXpzCt1KQAsM86gbvAx5lBrQqqipj8cilT+YswOD
- ff8sPQCk5iEyyQUZpCzeYbHYwqoOyw9Eqw7i8F8+HhRmEHcj9f1Rj1doWVkp5C79gCpy7jsyF
- jUUCwtyWUDB3/JAMqyu1at1aS0VhW6Sf8BQ0R0ZclgY5T/vStX01VpFUH3FH1OLJ+HRoqoIKb
- qRFwwNWTSuAqveRebENqTWAAp1Xu2FGS8Y600YsLxbTpJ3DgiDVOIUBpaG9Nm3QQ7obEd/BUv
- K0thvswv+Fj1K52oZLlYrbjDW5PJ5MviX6nhlqYX41fitiSosJet/4XUMKO2fMLz01gJhpcu5
- 0yG2XxWvmjAV20=
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/rpi-firmware: fix missing
- files in overlays
+Subject: [Buildroot] [PATCH 1/6] package/zynaddsubfx: fix PluginEnable option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,102 +87,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Rutger,
+Replace False by OFF when setting PluginEnable option
 
-On Wed, 16 Mar 2022 10:08:40 +0000, "Sassen, Rutger" <rsassen@comecer.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/zynaddsubfx/zynaddsubfx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> When supporting multiple hardware targets, overlay_map.dtb might
-> be needed to map overlay names to one of several implementations.
->
-> Signed-off-by: Rutger Sassen <rsassen@comecer.com>
-> ---
-> Changes v1 -> v2:
->   - instead of always copying overlay_map.dtb, make it configurable
->     (suggested by Peter Seiderer)
->   - do not copy README since it a special case, only needed when
->     installing overlays to a non-standard location (suggested by Peter
->     Seiderer)
->
->  package/rpi-firmware/Config.in       | 9 +++++++++
->  package/rpi-firmware/rpi-firmware.mk | 7 +++++++
->  2 files changed, 16 insertions(+)
->
-> diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-> index 8070dc3019..13efa3dc87 100644
-> --- a/package/rpi-firmware/Config.in
-> +++ b/package/rpi-firmware/Config.in
-> @@ -93,6 +93,15 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
->  	  overlays, to support HATs (Hardware Attached on Top, add-on
->  	  modules).
-
-Would have expected
-
-+if BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
-+
-
->
-> +config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP
-> +	bool "Install DTB overlay map"
-> +	default n
-
-instead of this 'depends' line
-
-> +	depends on BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
-> +	help
-> +	  Say 'y' here if you need to support multiple hardware targets
-> +	  and you need target dependent mapping of overlay names to one
-> +	  of several overlay implementations.
-> +
-
-And the endif here
-
-+
-+endif
-
-Maybe good to mention 'overlay_map.dtb' explicit in the help text like?
-
-+         of several overlay implementations via overlay_map.dtb file.
-
-Regards,
-Peter
-
-
->  config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
->  	bool "vcdbg"
->  	depends on BR2_arm # prebuilt arm binary, rpi-userland
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index b46a7f5270..800b560070 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -57,6 +57,12 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
->  endef
->  endif
->
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP),y)
-> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
-> +endef
-> +endif
-> +
->  # Install prebuilt libraries if RPI_USERLAND not enabled
->  ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)
->  define RPI_FIRMWARE_INSTALL_TARGET_LIB
-> @@ -83,6 +89,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
->  	$(RPI_FIRMWARE_INSTALL_CONFIG)
->  	$(RPI_FIRMWARE_INSTALL_DTB)
->  	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
-> +	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP)
->  endef
->
->  $(eval $(generic-package))
+diff --git a/package/zynaddsubfx/zynaddsubfx.mk b/package/zynaddsubfx/zynaddsubfx.mk
+index 158b5b4ede..c8d64f5ce8 100644
+--- a/package/zynaddsubfx/zynaddsubfx.mk
++++ b/package/zynaddsubfx/zynaddsubfx.mk
+@@ -11,7 +11,7 @@ ZYNADDSUBFX_LICENSE = GPL-2.0+
+ ZYNADDSUBFX_LICENSE_FILES = COPYING
+ 
+ # There is no package in buildroot using LV2 plugins: disabling
+-ZYNADDSUBFX_CONF_OPTS = -DPluginEnable=False
++ZYNADDSUBFX_CONF_OPTS = -DPluginEnable=OFF
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ ZYNADDSUBFX_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
