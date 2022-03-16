@@ -1,57 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 929DCC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 10:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E96FBC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 10:58:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37243842EA;
-	Wed, 16 Mar 2022 10:20:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FAC4402A1;
+	Wed, 16 Mar 2022 10:58:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zzRuzoA40VjH; Wed, 16 Mar 2022 10:20:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dnnOhOWZUwOJ; Wed, 16 Mar 2022 10:58:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F8C7842E3;
-	Wed, 16 Mar 2022 10:20:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A66EB40271;
+	Wed, 16 Mar 2022 10:58:14 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7F97D1BF3F0
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 10:20:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 71D131BF3F0
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 10:58:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CFBF842E3
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 10:20:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F6CC8433F
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 10:58:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xThtL_Oe_iMX for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 10:20:40 +0000 (UTC)
-X-Greylist: delayed 00:07:59 by SQLgrey-1.8.0
-Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A39F0842D2
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 10:20:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.bitwise.fi (Postfix) with ESMTP id E8946460028;
- Wed, 16 Mar 2022 12:12:38 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mail.bitwise.fi ([127.0.0.1])
- by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fx1RXcCuNyZR; Wed, 16 Mar 2022 12:12:36 +0200 (EET)
-Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested) (Authenticated sender: anssiha)
- by mail.bitwise.fi (Postfix) with ESMTPSA id E437346000A;
- Wed, 16 Mar 2022 12:12:36 +0200 (EET)
-From: Anssi Hannula <anssi.hannula@bitwise.fi>
-To: buildroot@buildroot.org
-Date: Wed, 16 Mar 2022 12:12:23 +0200
-Message-Id: <20220316101223.3704745-1-anssi.hannula@bitwise.fi>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id tyEhhz4alGBf for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 10:58:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6811484331
+ for <buildroot@busybox.net>; Wed, 16 Mar 2022 10:58:12 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id b19so2352954wrh.11
+ for <buildroot@busybox.net>; Wed, 16 Mar 2022 03:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=fxztkeegCf9uGT6aFKMG3Oy1yGLBbeDLTQUCvPMEw60=;
+ b=WZEGH1lAHC7HyrFABK9AVsRlz7OLHTEU5UhGICkM5nq6KMClHj+59F01w+2n5d3Vpk
+ ctwWETYutILtISnKTjqBC0Lvy+fK5a1RVv7kn2wkT95Ipe5keLAsGQqItA/Gxmgqj5C4
+ KPFZPtpPzrKAj3+kanwIHWx14jF6/FcxSVmjNqmXcKaotA3OagrYMng5gvXbN5rP3NZG
+ En0k0bszU4mABStnLbLlBHGQ/joz+BTgg0gipsDq/UiCY/AtPJ+289mF1T22Ao9sf4h5
+ XLcMaAFqKZ4oKWi+blSdqupBRTIQyqswWBvsbqFjTcU/RSeWf+ul1qnRyHofRe5PK3yd
+ iX/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=fxztkeegCf9uGT6aFKMG3Oy1yGLBbeDLTQUCvPMEw60=;
+ b=f0lVC4glsMto10wVPNLKUuawEGsZ8nrkfqwD6e9mqMbYf5ieFB6pmyZC2/oOYhiv1+
+ /JDaJUJgwcf35IV09V5Crh75l9X4w+k21HZJ9ZlLHWeYW6e2mw1dU6VxYklXM7zGVdMR
+ iPBt1Ul1cxPjPF3DlpXe7HARspPPyuutE+T0WnzY686sqEDRpUJu2RQbOOBFAAIn7zVU
+ BhpIJzePFIJbVfUYF8DAd2Uw8HwU9s8XQUC0cU/1uHB4zALIe9sMYN3HVaaSK4sA0Vqp
+ LifT2/jYeHiO8hYoDsKdsu+HKGhgVKC0VhU0W5OtEEffN89kY2ZLUtNPW7Y3BXJO7vCR
+ f8RA==
+X-Gm-Message-State: AOAM533FDHP+uvJiaigQoqvgkh9FlwLsZ+y463D3gpoqcfFwa57Ek8pe
+ WbmxdBiMzLMDJdBrLJjdPNkQDuqw8SI=
+X-Google-Smtp-Source: ABdhPJwYWJEYsvMgkXwG90vQhF9QLV86AiX7GuvuDhcd/0kNf3ScxnMtg3PWtE59RhjCjWqKTAFw3g==
+X-Received: by 2002:a05:6000:18a2:b0:203:d2fa:95c9 with SMTP id
+ b2-20020a05600018a200b00203d2fa95c9mr5878913wri.554.1647428290412; 
+ Wed, 16 Mar 2022 03:58:10 -0700 (PDT)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ 2-20020a1c1902000000b00380d3873d6asm1417620wmz.43.2022.03.16.03.58.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 16 Mar 2022 03:58:10 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Wed, 16 Mar 2022 11:57:53 +0100
+Message-Id: <20220316105753.1134088-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] pkg-generic: fix rdepends and phony targets of
- virtual packages
+Subject: [Buildroot] [PATCH] package/libressl: security bump to 3.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,130 +87,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Virtual packages are not added to the _RDEPENDENCIES list of packages
-that they depend on (i.e. their provider).
+see https://marc.info/?l=openbsd-announce&m=164736531714549&w=2
 
-This causes <provider>-show-rdepends to not show the virtual package
-and <provider>-show-recursive-rdepends to miss all the packages that
-transitively depend on <provider> via the virtual package.
-
-The virtual make targets (e.g. <pkg>-show-info) are also not marked as
-phony for virtual packages.
-
-To fix those issues, remove most of the special handling of virtual
-packages in pkg-generic by making $($($(1)_KCONFIG_VAR))=y for them as
-well.
-
-This also allows removal of some duplicated code in pkg-generic.mk and a
-now unneeded special condition in CHECK_ONE_DEPENDENCY.
-
-Still keep the virtual package out of PACKAGES since there is e.g. no
-need to rsync per-package target dir to global target dir. I am not
-aware of any showstoppers preventing addition to PACKAGES as well,
-though, so it is probably just an optimization.
-
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I encountered this while using <pkg>-show-recursive-rdepends to
-determine which packages to dirclean after modification of a
-(non-virtual) <pkg> in per-package mode.
-
-The current virtual vs. real distinction didn't seem worth the risk of
-unintentional differences so I dropped it, but I'm not too familiar with
-the code so I could have missed something.
-In case I did and this is not a good idea, one less intrusive option
-would be to split the common-to-virtual-and-real-packages code to be
-under a new separate conditional block.
-
-
- Makefile               |  2 --
- package/pkg-generic.mk | 24 +++++-------------------
- 2 files changed, 5 insertions(+), 21 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 4f693d40a9..9e875dd8d8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -565,14 +565,12 @@ ifeq ($(BR_FORCE_CHECK_DEPENDENCIES),YES)
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 990ec8bda..e92399871 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  cb82ca7d547336917352fbd23db2fc483c6c44d35157b32780214ec74197b3ce  libressl-3.4.2.tar.gz
++sha256  ff88bffe354818b3ccf545e3cafe454c5031c7a77217074f533271d63c37f08d  libressl-3.4.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 6eee86dda..0bb468ced 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define CHECK_ONE_DEPENDENCY
- ifeq ($$($(2)_TYPE),target)
--ifeq ($$($(2)_IS_VIRTUAL),)
- ifneq ($$($$($(2)_KCONFIG_VAR)),y)
- $$(error $$($(2)_NAME) is in the dependency chain of $$($(1)_NAME) that \
- has added it to its _DEPENDENCIES variable without selecting it or \
- depending on it from Config.in)
- endif
- endif
--endif
- endef
- 
- $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b3a7e1d60e..a0d6198edc 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1064,15 +1064,15 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
- $$($(2)_TARGET_DIRCLEAN):		NAME=$(1)
- 
- # Compute the name of the Kconfig option that correspond to the
--# package being enabled. We handle three cases: the special Linux
--# kernel case, the bootloaders case, and the normal packages case.
--# Virtual packages are handled separately (see below).
-+# package being enabled.
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
- else ifneq ($$(filter boot/% $$(foreach dir,$$(BR2_EXTERNAL_DIRS),$$(dir)/boot/%),$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
- else ifneq ($$(filter toolchain/% $$(foreach dir,$$(BR2_EXTERNAL_DIRS),$$(dir)/toolchain/%),$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_$(2)
-+else ifeq ($$($(2)_IS_VIRTUAL),YES)
-+$(2)_KCONFIG_VAR = BR2_PACKAGE_HAS_$(2)
- else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
- endif
-@@ -1178,7 +1178,9 @@ $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
- 
-+ifneq ($$($(2)_IS_VIRTUAL),YES)
- PACKAGES += $(1)
-+endif
- 
- ifneq ($$($(2)_PERMISSIONS),)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
-@@ -1268,22 +1270,6 @@ ifneq ($$($(2)_HELP_CMDS),)
- HELP_PACKAGES += $(2)
- endif
- 
--# Virtual packages are not built but it's useful to allow them to have
--# permission/device/user tables and target-finalize/rootfs-pre-cmd hooks.
--else ifeq ($$(BR2_PACKAGE_HAS_$(2)),y) # $(2)_KCONFIG_VAR
--
--ifneq ($$($(2)_PERMISSIONS),)
--PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
--endif
--ifneq ($$($(2)_DEVICES),)
--PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
--endif
--ifneq ($$($(2)_USERS),)
--PACKAGES_USERS += $$($(2)_USERS)$$(sep)
--endif
--TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
--ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
--
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
- 
+-LIBRESSL_VERSION = 3.4.2
++LIBRESSL_VERSION = 3.4.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 -- 
-2.34.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
