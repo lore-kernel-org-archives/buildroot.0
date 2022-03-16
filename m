@@ -4,51 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20D07C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 21:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1BAEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 21:48:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B050140204;
-	Wed, 16 Mar 2022 21:47:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86B4F40AA7;
+	Wed, 16 Mar 2022 21:48:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KSRM_fVw14vh; Wed, 16 Mar 2022 21:47:30 +0000 (UTC)
+	with ESMTP id TZeb_QMWcAJO; Wed, 16 Mar 2022 21:48:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A70F240179;
-	Wed, 16 Mar 2022 21:47:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BAED1BF2C2
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:47:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49E3F4041C;
+	Wed, 16 Mar 2022 21:48:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B7C0A1BF2C2
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26F9360F6F
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:47:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4BA040262
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:48:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mvb657ceSq8b for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 21:47:27 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sWjPOW2UaZWh for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 21:48:52 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ED09760AB1
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 21:47:26 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 440BC200006;
- Wed, 16 Mar 2022 21:47:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nUbUH-00CX3z-Su; Wed, 16 Mar 2022 22:47:21 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220315205405.9291-1-ps.report@gmx.net>
- <20220316213626.GZ283544@scaer>
-Date: Wed, 16 Mar 2022 22:47:21 +0100
-In-Reply-To: <20220316213626.GZ283544@scaer> (Yann E. MORIN's message of "Wed, 
- 16 Mar 2022 22:36:26 +0100")
-Message-ID: <87cziltvrq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9CBFC40A00
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 21:48:52 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 833DCFF805;
+ Wed, 16 Mar 2022 21:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1647467329;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=otDK47Pw/aUCRoGIhpg6CSAuDYJXijGO5ryw9o1vfjQ=;
+ b=Pa1a9mY8TzHZ3Zph8o7KfRjNsk7J1VKIJGrXxvr3QvFs2cZNN/Q12DvMCDloGi5k2bQkeU
+ CxHEHKj4u98UTPBC/YyW7quctzDhyl/8+W82gIi+JDxsSr/PnjFWoCkCkMZvambksrJr+0
+ kGaKoUPjP3TEjvyWQDbEFgG78cY9mIN/ldT4ngFWOhHISqsy8p/ctZNLUR7UrNP8bxICdC
+ Mj8VMa8BDeb57LmwKjWahc7LVEF3PB/nRkfsC3p3HL4fCDYkhJPmavaU4RnUHo4/opGg+/
+ jKwIeWVdJY/w4IRJXdPXCD8bD9SuZ1/Moj2Mw9X/3qMq/UnIu1/8ExDx3U7sBA==
+To: Buildroot List <buildroot@buildroot.org>
+Date: Wed, 16 Mar 2022 22:48:46 +0100
+Message-Id: <20220316214848.448925-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/libopenssl: bump version to
- 1.1.1n
+Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: strengthen version
+ check in check_package_get_latest_version_by_distro()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,23 +66,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Matt Weber <matthew.weber@collins.com>,
- buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+The check_package_get_latest_version_by_distro() function analyzes the
+data returned by release-monitoring.org. For two of our
+packages (bento4 and qextserialport), release-monitoring.org returns
+something that is a bit odd: it returns an entry with a
+"stable_versions" field that contains an empty array. Our code was
+ready to have or not have a "stable_versions" entry, but when it is
+present, we assumed it was not an empty array. These two packages, for
+some reason, break this assumption.
 
- > Peter, All,
- > +Peter K.: candidate to be backported, that's a security fix.
+In order to solve this problem, this commit is more careful, and uses
+the stable_versions field only if it exists and it has at least one
+entry. The code is also reworked as a sequence of "if...elif...else"
+to be more readable.
 
-Indeed. Why it is not marked as such ("security bump to version
-1.1.1n")?
+This fixes the following exception when running pkg-stats on the full
+package set:
 
+Task exception was never retrieved
+future: <Task finished name='Task-10772' coro=<check_package_latest_version_get() done, defined at ./support/scripts/pkg-stats:532> exception=IndexError('list index out of range')>
+Traceback (most recent call last):
+  File "./support/scripts/pkg-stats", line 535, in check_package_latest_version_get
+    if await check_package_get_latest_version_by_distro(session, pkg):
+  File "./support/scripts/pkg-stats", line 489, in check_package_get_latest_version_by_distro
+    version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
+IndexError: list index out of range
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/pkg-stats | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index c235d99407..f57041cee4 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -486,7 +486,12 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+                 return False
+ 
+             data = await resp.json()
+-            version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
++            if 'stable_versions' in data and len(data['stable_versions']) > 0:
++                version = data['stable_versions'][0]
++            elif 'version' in data:
++                version = data['version']
++            else:
++                version = None
+             check_package_latest_version_set_status(pkg,
+                                                     RM_API_STATUS_FOUND_BY_DISTRO,
+                                                     version,
 -- 
-Bye, Peter Korsgaard
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
