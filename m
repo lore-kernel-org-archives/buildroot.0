@@ -1,81 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF136C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 19:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D715C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 19:52:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67FEC60F6A;
-	Wed, 16 Mar 2022 19:49:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1959740018;
+	Wed, 16 Mar 2022 19:52:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZKjv1DdcAUWU; Wed, 16 Mar 2022 19:49:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nlT3mIx7Crar; Wed, 16 Mar 2022 19:52:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64ECE60B18;
-	Wed, 16 Mar 2022 19:49:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 515B640204;
+	Wed, 16 Mar 2022 19:52:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BF7661BF4E5
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:49:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A213D1BF4E5
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADE688413E
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:49:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9663684147
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:52:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gu5oCds30Sdv for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 19:49:26 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2B10784133
- for <buildroot@busybox.net>; Wed, 16 Mar 2022 19:49:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1647460163;
- bh=o0ieNUsEI75b0gE/5vp6uiG/4dtbm54KzB3IwYrTAI4=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=Rmd1+qYeBpVPH8Xvwv4smFAY1RJ+bdXEH9oJFFWroF6aXk+GwhnQxy4CnAl+xouNK
- S3/0sfWpGbHn8mWEvMJP2w1Cqx/Ad+r2/9vgZR6EOB1ttiX96d3zDqIeJQHNagJcZw
- J7oIuF+FJf/3F5epDUWXbi0SRA05idgpxLSzPRKI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.226]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MJE6F-1no9dI2UvL-00Kh2a; Wed, 16
- Mar 2022 20:49:23 +0100
-Date: Wed, 16 Mar 2022 20:49:22 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Avijit Das <avijitnsec@gmail.com>
-Message-ID: <20220316204922.47f51090@gmx.net>
-In-Reply-To: <CAHYcJGqRkrG9mCSMydrOojaz8Cp8GSZW557DZNK8Rgscn=nj7A@mail.gmail.com>
+ with ESMTP id yJpZNVsffhRZ for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 19:52:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 418C684145
+ for <buildroot@busybox.net>; Wed, 16 Mar 2022 19:52:01 +0000 (UTC)
+Received: by mail-lj1-x22f.google.com with SMTP id q5so4503980ljb.11
+ for <buildroot@busybox.net>; Wed, 16 Mar 2022 12:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=WJDeSXmZZeXKjEWpzOzLnu1zcpQJk1muw18DfLyGemI=;
+ b=iF2FwPGyOPFBicQeagcANVkmcPCiCtt+aubmT8ewRqYOeoM+RZy1UutcwIUisx/+Ki
+ EyBqobszcZTQaMDVJS7j7mg4VmNhnnluioLYur4JMpTgkX7IVUAL/9FbPIZBpODc+QUE
+ +69YN2XtAto/L5xD0yoHKiRm+tnrpQSOwPhwjnqXDc5dk0q/miCVDQtFjcNJec+yjOoe
+ 63TvvvC99IAUUUCwuFSj5/IMOyokf1IU/rxYE9+67JEYPKArAROM3sOKKVMhNckJaQX0
+ SwIr8TT+IntI4RZICD1o3PXsIrQhwJBXTDvoZxW7hrTDd6hXZNNk1y2+wFE0Lj8BCDpe
+ BhoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=WJDeSXmZZeXKjEWpzOzLnu1zcpQJk1muw18DfLyGemI=;
+ b=WR3Hi8e37O38W5y36+T9K1zfsE+8sqO4lMNAJBsN26cnQ2wrWp0gUJxS7dUup2Frfq
+ uPSHK1yPdvt5KFCAqhlQPS9TmeM8tceE2610wU4IAm5IEU/QAWcRWy1W1PkwdsN2fhoD
+ NRdyI8Z40hYHmR9GoZ4Hb+hfv1yabjw5Jc2hQJxxDzvsrccpbR2yLGkaaXtEkhYPpE5W
+ UxlIXkT8sm7jLgUGp+Sf4Vj7uj8DqfCS5HynDbJ6QSMi3k6jOAoLvfXX8Y5wg4Jb+cCK
+ udQUaOBiSBqmzlzMdUU6M1H9bPKyINulOolEx2tLe15a244fwQeKh3qqB4MGLAMl8pqM
+ R76w==
+X-Gm-Message-State: AOAM533u9Fq3uru1IORTOiHPJKatOW5oNrTrLW2dBaowdhG9SNuVFK78
+ 9vibAvy3RVlJU6NoMTnH1IwrEPCi+TVMHLHvFkE=
+X-Google-Smtp-Source: ABdhPJwbk0RMBw3a6QQquw3yAZXO92fTqW3k5Hg8sv9K/g3XqkEnqgKlsJLSaraHMKJLw/v8iE4MsIdUjjOFMNWMyoo=
+X-Received: by 2002:a05:651c:2dc:b0:247:e451:48ae with SMTP id
+ f28-20020a05651c02dc00b00247e45148aemr765038ljo.248.1647460318917; Wed, 16
+ Mar 2022 12:51:58 -0700 (PDT)
+MIME-Version: 1.0
 References: <CAHYcJGqtHhDF7zKDak-+V2w_=PmbL5T7iB7P7ZV-paMbkWBBVA@mail.gmail.com>
  <CAHYcJGq5iFY-nLz5YYvcGZPgJ1HoYRVF-xdM8OHcrnWvu__u7g@mail.gmail.com>
  <20220316193558.11caac5b@gmx.net>
  <CAHYcJGqRkrG9mCSMydrOojaz8Cp8GSZW557DZNK8Rgscn=nj7A@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:IekrvMHvvj5zcBXXzVmZVvrso5y/cHD3jzVhALU2wdRw3Nxd6Qz
- 9790dtpBbuIO/uIjvql9NdGtd1LEQBOHmXHHAPGIhtqwR0hTPt2Nq+SWZOVeIFVdOdUQSpe
- pKcEr/SewifM3+2FUstyt9VDHXcDqLExzj8SBZSGJsEp7BH/OdlSWRNU+pLeoZ/009dkG6p
- 6IhXibnmYXYQ9RRbZffpQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LnhNW4I7ZFE=:1iFUI1etI9CceN7FP5qmol
- CrL479SrWTPlZ29+GERs5yz9vQIRY/Es/oxcwa0zhgUniXMXBDLmubkDrMb5mjvE/VKj3ObWK
- vdORN7I5RiN4+cQpGzrvOc5EH2qh1aDBnP44zdOnGcnfGClWralp/IiylmMI9TPoUeSGiIiSP
- t1I5lU3xlt+96CGaSrkepJRDO6N2YRIXzU6MPgU1zkubsiIOZCTfUXolzcal0u0viflqJJ1RR
- 1vFifcoqihR+DBUgZ9a+ab+0rDxT+4RSwxgx/HAf54V+dj5aBPLaJpYsu275bDM//fxpeNoid
- jILxXBHuQbH86cwWMtcyZUe2TgQzr0oq7Y1k2RXZnKky0aPaBSABjj1xQzgG9bZ/V3dXmNbqD
- PuNdR+82mANi3VNiPIeu1X4zlodxQRQ3cdmoEc4VCDlAkoR/TIUZrLJytEW3RGf05xUt7xlMR
- rHeI0jqgrn8fmxTLOWwOw+1AI4XgqEqMQQe9QC5JzvSUMlAyETajlXhibrR5W7A8+omYRWEhx
- TLPsIrLT1D2ccnH5LIZRIrzXw001rpWf2UFbNZ/xa7opvfGeSWxBoz00zFAa64d+EnkXLu84E
- al2D7Rhl+kgc/YIw/l4gI7SzH0/9TjqLFDLIwoto3FTbNeSFaENTbanLRbJ1kalGIsBcbXQ3c
- KvGqwbhPghTBQ+MsmGV23tQnBQxnyoahiDT0++9w2R/lnhsNtfTN9b4yRZbUocMJu/ikZibZS
- 3KRS0tdke9xu4Z3NFNZRGRNmhx/oPRQk8skCJZbhcAckKhk33o4YibRLd7bc93G3PaJir14uK
- CaWtthDB1KBJXClTKSh0kNCi27UgoxgUX1atVUm+Bp3m01JCBiQ/MQFZ/kezGlFCnsjxda7CX
- yTAlAJwui24PiEEg18MITUZVlLJTRbKulm43ccAGi29+5qHL1Iu1Uy2nqJ7i/uZDTS5nUdZ5O
- jRqle61KmFur/blB+Foz7DRpJ2cMXDKuW4qX/bgS9nyYVRRChzob25cV3LWJL/q9XgHsnjQDL
- d1emkiJR2ND18xxGByEiWyNH8VwCJj+mVfidYEUgEn0aTiaI8MCdLGmxLHpvyLpoz1jwIEmVk
- XcuyG3+z0ohfFY=
+ <20220316204922.47f51090@gmx.net>
+In-Reply-To: <20220316204922.47f51090@gmx.net>
+From: Avijit Das <avijitnsec@gmail.com>
+Date: Wed, 16 Mar 2022 13:51:48 -0600
+Message-ID: <CAHYcJGoF5x7HQV1NRsyi0EDnD0khi9CMzLkZz0oR=ofcyBr-9w@mail.gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
 Subject: Re: [Buildroot] Not able to enable GUI library on Buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -89,113 +86,446 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3131827650369938683=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQXZpaml0LAoKcGxlYXNlIGtlZXAgYnVpbGRyb290QGJ1c3lib3gubmV0IGluIENDCgpP
-biBXZWQsIDE2IE1hciAyMDIyIDEyOjM5OjA0IC0wNjAwLCBBdmlqaXQgRGFzIDxhdmlqaXRuc2Vj
-QGdtYWlsLmNvbT4gd3JvdGU6Cgo+IEhpIFBldGVyLAo+IAo+IEkgaGF2ZSBjb21waWxlZCB0aGUg
-WDExIGxpYnJhcnkgd2hlbiBJIGdvdCB0aGlzIGVycm9yLgo+IAo+IG1ha2UgeGxpYl9saWJYMTEg
-JiYgbWFrZQoKU28gdGhlIGd0azMgY29tcGlsZS90ZXN0IHdhcyBmcm9tIGFub3RoZXIgZGVmY29u
-ZmlnPwoKRGlkIHlvdSBzdGFydCB0aGUgWDExIHNlcnZlciBiZWZvcmUgcnVubmluZyB0aGUgZ3Rr
-My1kZW1vPwoKQnV0IG5vdCBtdWNoIHJ1bi10aW1lIGhlbHAvYWR2aWNlIGZyb20gbXkgc2lkZSBh
-cyBJIGhhdmUgbm8gc3VpdGFibGUgaGFyZHdhcmUKZm9yIHRlc3RpbmcgbXlzZWxmLi4uCgpSZWdh
-cmRzLApQZXRlcgoKCj4gCj4gVGhhbmtzLAo+IEF2aWppdAo+IAo+IE9uIFdlZCwgTWFyIDE2LCAy
-MDIyIGF0IDEyOjM2IFBNIFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4gd3JvdGU6
-Cj4gCj4gPiBIZWxsbyBBdmlqaXQsCj4gPgo+ID4gT24gVHVlLCAxNSBNYXIgMjAyMiAxOTowNDow
-MiAtMDYwMCwgQXZpaml0IERhcyA8YXZpaml0bnNlY0BnbWFpbC5jb20+Cj4gPiB3cm90ZToKPiA+
-ICAKPiA+ID4gSGksCj4gPiA+Cj4gPiA+IEkgYW0gYnVpbGRpbmcgQnVpbGRyb290IGZvciBhbiBp
-bXg4bW0gYm9hcmQuIFRoZSBIRE1JIGRpc3BsYXkgaXMgdXAuIEkKPiA+ID4gdmFsaWRhdGVkIHRo
-ZSBkaXNwbGF5IHVzaW5nIHRoZSBmYi10ZXN0LiBJIGFtIHRyeWluZyB0byBlbmFibGUgYSBncmFw
-aGljcwo+ID4gPiBsaWJyYXJ5LCBlaXRoZXIgZ3RrMyBvciBxdDUuCj4gPiA+Cj4gPiA+ICpndGsz
-ICoKPiA+ID4gV2hlbiBJIGFtIGVuYWJsaW5nIHRoZSBndGszIGxpYnJhcnksIGlmIEkgcnVuIHRo
-ZSBkZW1vIGFwcGxpY2F0aW9uLCBJIGFtCj4gPiA+IGdldHRpbmcgdGhlIGZvbGxvd2luZyBlcnJv
-ci4KPiA+ID4KPiA+ID4gIyAvdXNyL2Jpbi9ndGszLWRlbW8KPiA+ID4KPiA+ID4gKGd0azMtZGVt
-bzozNTApOiBHdGstV0FSTklORyAqKjogMDE6MjE6MDMuNTE4OiBjYW5ub3Qgb3BlbiBkaXNwbGF5
-Ogo+ID4gPiAjCj4gPiA+Cj4gPiA+IEkgaGF2ZSB0cmllZCBzZXR0aW5nIHRoZSBkaXNwbGF5IHRv
-IGxvY2FsaG9zdDowLjAsIGRpZCBub3Qgd29yay4KPiA+ID4KPiA+ID4gKlFUNSoKPiA+ID4gVGhl
-IHdpZGdldCBsaWJyYXJ5IGlzIG5vdCBidWlsZGluZy4gVGhlcmUgaXMgYSBjb21waWxhdGlvbiBl
-cnJvcjoKPiA+ID4KPiA+ID4gcWtleWV2ZW50dHJhbnNpdGlvbi5vIC5vYmovcW1vdXNlZXZlbnR0
-cmFuc2l0aW9uLm8KPiA+ID4gLm9iai9xYmFzaWNrZXlldmVudHRyYW5zaXRpb24ubyAub2JqL3Fi
-YXNpY21vdXNlZXZlbnR0cmFuc2l0aW9uLm8KPiA+ID4gLm9iai9xZ3JhcGhpY3NlZmZlY3QubyAu
-b2JqL3FwaXhtYXBmaWx0ZXIubyAub2JqL3FyY19xc3R5bGUubwo+ID4gPiAub2JqL3FyY19xbWVz
-c2FnZWJveC5vIC5vYmovbW9jX3F3aWRnZXRyZXBhaW50bWFuYWdlcl9wLm8KPiA+ID4gLm9iai9t
-b2NfcXdpZGdldF9wLm8gLm9iai9tb2NfcXBpeG1hcHN0eWxlX3AubyAgLWxhdG9taWMKPiA+ID4g
-IAo+ID4gL2hvbWUvYXZpaml0L2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvcXQ1YmFzZS1kMTZiZjAy
-YTExOTUzZGNhYzAxZGNhNzNlNmYzNzc4ZjI5M2FkZWZlL2xpYi9saWJRdDVHdWkuc28gIAo+ID4g
-PiAgCj4gPiAvaG9tZS9hdmlqaXQvYnVpbGRyb290L291dHB1dC9idWlsZC9xdDViYXNlLWQxNmJm
-MDJhMTE5NTNkY2FjMDFkY2E3M2U2ZjM3NzhmMjkzYWRlZmUvbGliL2xpYlF0NUNvcmUuc28gIAo+
-ID4gPiAtbHB0aHJlYWQgIC1scnQgLWxwdGhyZWFkIC1sZGwKPiA+ID4gbG4gLXMgbGliUXQ1V2lk
-Z2V0cy5zby41LjE1LjggbGliUXQ1V2lkZ2V0cy5zbwo+ID4gPiBsbiAtcyBsaWJRdDVXaWRnZXRz
-LnNvLjUuMTUuOCBsaWJRdDVXaWRnZXRzLnNvLjUKPiA+ID4gbG4gLXMgbGliUXQ1V2lkZ2V0cy5z
-by41LjE1LjggbGliUXQ1V2lkZ2V0cy5zby41LjE1Cj4gPiA+IHJtIC1mIC4uLy4uL2xpYi9saWJR
-dDVXaWRnZXRzLnNvLjUuMTUuOAo+ID4gPiBtdiAtZiBsaWJRdDVXaWRnZXRzLnNvLjUuMTUuOCAu
-Li8uLi9saWIvbGliUXQ1V2lkZ2V0cy5zby41LjE1LjgKPiA+ID4gcm0gLWYgLi4vLi4vbGliL2xp
-YlF0NVdpZGdldHMuc28KPiA+ID4gcm0gLWYgLi4vLi4vbGliL2xpYlF0NVdpZGdldHMuc28uNQo+
-ID4gPiBybSAtZiAuLi8uLi9saWIvbGliUXQ1V2lkZ2V0cy5zby41LjE1Cj4gPiA+IG12IC1mIGxp
-YlF0NVdpZGdldHMuc28gLi4vLi4vbGliL2xpYlF0NVdpZGdldHMuc28KPiA+ID4gbXYgLWYgbGli
-UXQ1V2lkZ2V0cy5zby41IC4uLy4uL2xpYi9saWJRdDVXaWRnZXRzLnNvLjUKPiA+ID4gbXYgLWYg
-bGliUXQ1V2lkZ2V0cy5zby41LjE1IC4uLy4uL2xpYi9saWJRdDVXaWRnZXRzLnNvLjUuMTUKPiA+
-ID4gbWFrZVsyXTogKioqIFtNYWtlZmlsZTo1MTogc3ViLXNyYy1tYWtlX2ZpcnN0XSBFcnJvciAy
-Cj4gPiA+IG1ha2VbMV06ICoqKiBbcGFja2FnZS9wa2ctZ2VuZXJpYy5tazoyOTI6Cj4gPiA+ICAK
-PiA+IC9ob21lL2F2aWppdC9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3F0NWJhc2UtZDE2YmYwMmEx
-MTk1M2RjYWMwMWRjYTczZTZmMzc3OGYyOTNhZGVmZS8uc3RhbXBfYnVpbHRdICAKPiA+ID4gRXJy
-b3IgMgo+ID4gPiBtYWtlOiAqKiogW01ha2VmaWxlOjg0OiBfYWxsXSBFcnJvciAyCj4gPiA+Cj4g
-PiA+IEkgaGF2ZSBhdHRhY2hlZCB0aGUgY29uZmlnIGZpbGUuIENhbiB5b3UgcGxlYXNlIHN1Z2dl
-c3Q/ICAKPiA+Cj4gPiBXaXRoIHlvdXIgZGVmY29uZmlnIEkgZ2V0IHRoZSBmb2xsb3dpbmcgZXJy
-b3IgKGEgbG90IG9mIGxpbmVzIGFib3ZlIGluIHRoZQo+ID4gbG9nKToKPiA+Cj4gPiAgIHFlZ2xj
-b252ZW5pZW5jZS5jcHA6IEluIGZ1bmN0aW9uIOKAmGJvb2wgcV9oYXNFZ2xFeHRlbnNpb24oRUdM
-RGlzcGxheSwKPiA+IGNvbnN0IGNoYXIqKeKAmToKPiA+ICAgcWVnbGNvbnZlbmllbmNlLmNwcDo0
-MTg6MjM6IGVycm9yOiB2YXJpYWJsZSDigJhRTGlzdDxRQnl0ZUFycmF5Pgo+ID4gZXh0ZW5zaW9u
-c+KAmSBoYXMgaW5pdGlhbGl6ZXIgYnV0IGluY29tcGxldGUgdHlwZQo+ID4gICAgIDQxOCB8ICAg
-ICBRTGlzdDxRQnl0ZUFycmF5PiBleHRlbnNpb25zID0KPiA+ICAgICAgICAgfCAgICAgICAgICAg
-ICAgICAgICAgICAgXn5+fn5+fn5+fgo+ID4gICBxZWdsY29udmVuaWVuY2UuY3BwOjQyMDo2NTog
-ZXJyb3I6IGludmFsaWQgdXNlIG9mIGluY29tcGxldGUgdHlwZSDigJhjbGFzcwo+ID4gUUxpc3Q8
-UUJ5dGVBcnJheT7igJkKPiA+ICAgICA0MjAgfCAgICAgICAgICAgICAoZWdsUXVlcnlTdHJpbmco
-ZGlzcGxheSwgRUdMX0VYVEVOU0lPTlMpKSkuc3BsaXQoJwo+ID4gJyk7Cj4gPiAgICAgICAgIHwK
-PiA+Cj4gPgo+ID4gVGhpcyBjYW4gYmUgKGNvbXBpbGUpIGZpeGVkIGJ5IHRoaXMgKGJ1aWxkcm9v
-dCkgcGF0Y2g6Cj4gPgo+ID4KPiA+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVj
-dC9idWlsZHJvb3QvcGF0Y2gvMjAyMjAzMTYxODI0NDAuMTczOTMtMS1wcy5yZXBvcnRAZ214Lm5l
-dC8KPiA+Cj4gPgo+ID4gRGVzcGl0ZSBvZiB0aGlzIGVycm9yIEkgZ2V0ICh3aXRoIHlvdXIgcHJv
-dmlkZWQgZGVmY29uZmlnKToKPiA+Cj4gPiAgIFs0LzVdIENvbXBpbGluZyBDIG9iamVjdCBzcmMv
-bGliZXBveHkuc28uMC4wLjAucC9kaXNwYXRjaF9jb21tb24uYy5vCj4gPiAgIEZBSUxFRDogc3Jj
-L2xpYmVwb3h5LnNvLjAuMC4wLnAvZGlzcGF0Y2hfY29tbW9uLmMubwo+ID4gICAuLi4vaG9zdC9i
-aW4vYWFyY2g2NC1idWlsZHJvb3QtbGludXgtZ251LWdjYyAtSXNyYy9saWJlcG94eS5zby4wLjAu
-MC5wCj4gPiAtSXNyYyAtSS4uL3NyYyAtSWluY2x1ZGUgLUkuLi9pbmNsdWRlIC1JaW5jbHVkZS9l
-cG94eQo+ID4gLWZkaWFnbm9zdGljcy1jb2xvcj1hbHdheXMgLVdhbGwgLVdpbnZhbGlkLXBjaCAt
-c3RkPWdudTk5IC1PMwo+ID4gLURfTEFSR0VGSUxFX1NPVVJDRSAtRF9MQVJHRUZJTEU2NF9TT1VS
-Q0UgLURfRklMRV9PRkZTRVRfQklUUz02NCAtT3MgLWcwCj4gPiAtZlBJQyAtV3BvaW50ZXItYXJp
-dGggLVdtaXNzaW5nLWRlY2xhcmF0aW9ucyAtV2Zvcm1hdD0yIC1Xc3RyaWN0LXByb3RvdHlwZXMK
-PiA+IC1XbWlzc2luZy1wcm90b3R5cGVzIC1XbmVzdGVkLWV4dGVybnMgLVdiYWQtZnVuY3Rpb24t
-Y2FzdAo+ID4gLVdvbGQtc3R5bGUtZGVmaW5pdGlvbiAtV2RlY2xhcmF0aW9uLWFmdGVyLXN0YXRl
-bWVudCAtV3VudXNlZAo+ID4gLVd1bmluaXRpYWxpemVkIC1Xc2hhZG93IC1XbWlzc2luZy1ub3Jl
-dHVybiAtV21pc3NpbmctZm9ybWF0LWF0dHJpYnV0ZQo+ID4gLVdyZWR1bmRhbnQtZGVjbHMgLVds
-b2dpY2FsLW9wIC1XZXJyb3I9aW1wbGljaXQgLVdlcnJvcj1ub25udWxsCj4gPiAtV2Vycm9yPWlu
-aXQtc2VsZiAtV2Vycm9yPW1haW4gLVdlcnJvcj1taXNzaW5nLWJyYWNlcwo+ID4gLVdlcnJvcj1z
-ZXF1ZW5jZS1wb2ludCAtV2Vycm9yPXJldHVybi10eXBlIC1XZXJyb3I9dHJpZ3JhcGhzCj4gPiAt
-V2Vycm9yPWFycmF5LWJvdW5kcyAtV2Vycm9yPXdyaXRlLXN0cmluZ3MgLVdlcnJvcj1hZGRyZXNz
-Cj4gPiAtV2Vycm9yPWludC10by1wb2ludGVyLWNhc3QgLVdlcnJvcj1wb2ludGVyLXRvLWludC1j
-YXN0Cj4gPiAtZm5vLXN0cmljdC1hbGlhc2luZyAtV25vLWludC1jb252ZXJzaW9uIC1mdmlzaWJp
-bGl0eT1oaWRkZW4gLU1EIC1NUQo+ID4gc3JjL2xpYmVwb3h5LnNvLjAuMC4wLnAvZGlzcGF0Y2hf
-Y29tbW9uLmMubyAtTUYKPiA+IHNyYy9saWJlcG94eS5zby4wLjAuMC5wL2Rpc3BhdGNoX2NvbW1v
-bi5jLm8uZCAtbwo+ID4gc3JjL2xpYmVwb3h5LnNvLjAuMC4wLnAvZGlzcGF0Y2hfY29tbW9uLmMu
-byAtYyAuLi9zcmMvZGlzcGF0Y2hfY29tbW9uLmMKPiA+ICAgSW4gZmlsZSBpbmNsdWRlZCBmcm9t
-IGluY2x1ZGUvZXBveHkvZWdsX2dlbmVyYXRlZC5oOjExLAo+ID4gICAgICAgICAgICAgICAgICAg
-IGZyb20gLi4vaW5jbHVkZS9lcG94eS9lZ2wuaDo0NiwKPiA+ICAgICAgICAgICAgICAgICAgICBm
-cm9tIC4uL3NyYy9kaXNwYXRjaF9jb21tb24uaDo1OSwKPiA+ICAgICAgICAgICAgICAgICAgICBm
-cm9tIC4uL3NyYy9kaXNwYXRjaF9jb21tb24uYzoxNzQ6Cj4gPgo+ID4gLi4uL2hvc3QvYWFyY2g2
-NC1idWlsZHJvb3QtbGludXgtZ251L3N5c3Jvb3QvdXNyL2luY2x1ZGUvRUdML2VnbHBsYXRmb3Jt
-Lmg6MTQ1OjEwOgo+ID4gZmF0YWwgZXJyb3I6IFgxMS9YbGliLmg6IE5vIHN1Y2ggZmlsZSBvciBk
-aXJlY3RvcnkKPiA+ICAgICAxNDUgfCAjaW5jbHVkZSA8WDExL1hsaWIuaD4KPiA+ICAgICAgICAg
-fCAgICAgICAgICBefn5+fn5+fn5+fn4KPiA+ICAgY29tcGlsYXRpb24gdGVybWluYXRlZC4KPiA+
-ICAgbmluamE6IGJ1aWxkIHN0b3BwZWQ6IHN1YmNvbW1hbmQgZmFpbGVkLgo+ID4gICBtYWtlWzFd
-OiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjkyOgo+ID4gL2hvbWUvc2VpZGVyZXIvV29y
-ay9CdWlsZHJvb3QvYnVpbGRfaW14OG1tZXZrX3F0NV8wMDEvYnVpbGQvbGliZXBveHktMS41Ljkv
-LnN0YW1wX2J1aWx0XQo+ID4gRXJyb3IgMQo+ID4gICBtYWtlOiAqKiogW01ha2VmaWxlOjIzOiBf
-YWxsXSBFcnJvciAyCj4gPgo+ID4gUmVnYXJkcywKPiA+IFBldGVyCj4gPiAgCj4gPiA+Cj4gPiA+
-IFRoYW5rcywKPiA+ID4gQXZpaml0ICAKPiA+Cj4gPiAgCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+--===============3131827650369938683==
+Content-Type: multipart/alternative; boundary="0000000000001737bd05da5b3f93"
+
+--0000000000001737bd05da5b3f93
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Peter,
+
+Yes, I have tried X11 and Wayland both. Thanks for trying out. I'll keep
+trying. Will keep you posted.
+
+Thanks,
+Avijit
+
+On Wed, Mar 16, 2022 at 1:49 PM Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Avijit,
+>
+> please keep buildroot@busybox.net in CC
+>
+> On Wed, 16 Mar 2022 12:39:04 -0600, Avijit Das <avijitnsec@gmail.com>
+> wrote:
+>
+> > Hi Peter,
+> >
+> > I have compiled the X11 library when I got this error.
+> >
+> > make xlib_libX11 && make
+>
+> So the gtk3 compile/test was from another defconfig?
+>
+> Did you start the X11 server before running the gtk3-demo?
+>
+> But not much run-time help/advice from my side as I have no suitable
+> hardware
+> for testing myself...
+>
+> Regards,
+> Peter
+>
+>
+> >
+> > Thanks,
+> > Avijit
+> >
+> > On Wed, Mar 16, 2022 at 12:36 PM Peter Seiderer <ps.report@gmx.net>
+> wrote:
+> >
+> > > Hello Avijit,
+> > >
+> > > On Tue, 15 Mar 2022 19:04:02 -0600, Avijit Das <avijitnsec@gmail.com>
+> > > wrote:
+> > >
+> > > > Hi,
+> > > >
+> > > > I am building Buildroot for an imx8mm board. The HDMI display is up=
+.
+> I
+> > > > validated the display using the fb-test. I am trying to enable a
+> graphics
+> > > > library, either gtk3 or qt5.
+> > > >
+> > > > *gtk3 *
+> > > > When I am enabling the gtk3 library, if I run the demo application,
+> I am
+> > > > getting the following error.
+> > > >
+> > > > # /usr/bin/gtk3-demo
+> > > >
+> > > > (gtk3-demo:350): Gtk-WARNING **: 01:21:03.518: cannot open display:
+> > > > #
+> > > >
+> > > > I have tried setting the display to localhost:0.0, did not work.
+> > > >
+> > > > *QT5*
+> > > > The widget library is not building. There is a compilation error:
+> > > >
+> > > > qkeyeventtransition.o .obj/qmouseeventtransition.o
+> > > > .obj/qbasickeyeventtransition.o .obj/qbasicmouseeventtransition.o
+> > > > .obj/qgraphicseffect.o .obj/qpixmapfilter.o .obj/qrc_qstyle.o
+> > > > .obj/qrc_qmessagebox.o .obj/moc_qwidgetrepaintmanager_p.o
+> > > > .obj/moc_qwidget_p.o .obj/moc_qpixmapstyle_p.o  -latomic
+> > > >
+> > >
+> /home/avijit/buildroot/output/build/qt5base-d16bf02a11953dcac01dca73e6f37=
+78f293adefe/lib/libQt5Gui.so
+>
+> > > >
+> > >
+> /home/avijit/buildroot/output/build/qt5base-d16bf02a11953dcac01dca73e6f37=
+78f293adefe/lib/libQt5Core.so
+>
+> > > > -lpthread  -lrt -lpthread -ldl
+> > > > ln -s libQt5Widgets.so.5.15.8 libQt5Widgets.so
+> > > > ln -s libQt5Widgets.so.5.15.8 libQt5Widgets.so.5
+> > > > ln -s libQt5Widgets.so.5.15.8 libQt5Widgets.so.5.15
+> > > > rm -f ../../lib/libQt5Widgets.so.5.15.8
+> > > > mv -f libQt5Widgets.so.5.15.8 ../../lib/libQt5Widgets.so.5.15.8
+> > > > rm -f ../../lib/libQt5Widgets.so
+> > > > rm -f ../../lib/libQt5Widgets.so.5
+> > > > rm -f ../../lib/libQt5Widgets.so.5.15
+> > > > mv -f libQt5Widgets.so ../../lib/libQt5Widgets.so
+> > > > mv -f libQt5Widgets.so.5 ../../lib/libQt5Widgets.so.5
+> > > > mv -f libQt5Widgets.so.5.15 ../../lib/libQt5Widgets.so.5.15
+> > > > make[2]: *** [Makefile:51: sub-src-make_first] Error 2
+> > > > make[1]: *** [package/pkg-generic.mk:292:
+> > > >
+> > >
+> /home/avijit/buildroot/output/build/qt5base-d16bf02a11953dcac01dca73e6f37=
+78f293adefe/.stamp_built]
+>
+> > > > Error 2
+> > > > make: *** [Makefile:84: _all] Error 2
+> > > >
+> > > > I have attached the config file. Can you please suggest?
+> > >
+> > > With your defconfig I get the following error (a lot of lines above i=
+n
+> the
+> > > log):
+> > >
+> > >   qeglconvenience.cpp: In function =E2=80=98bool q_hasEglExtension(EG=
+LDisplay,
+> > > const char*)=E2=80=99:
+> > >   qeglconvenience.cpp:418:23: error: variable =E2=80=98QList<QByteArr=
+ay>
+> > > extensions=E2=80=99 has initializer but incomplete type
+> > >     418 |     QList<QByteArray> extensions =3D
+> > >         |                       ^~~~~~~~~~
+> > >   qeglconvenience.cpp:420:65: error: invalid use of incomplete type
+> =E2=80=98class
+> > > QList<QByteArray>=E2=80=99
+> > >     420 |             (eglQueryString(display,
+> EGL_EXTENSIONS))).split('
+> > > ');
+> > >         |
+> > >
+> > >
+> > > This can be (compile) fixed by this (buildroot) patch:
+> > >
+> > >
+> > >
+> https://patchwork.ozlabs.org/project/buildroot/patch/20220316182440.17393=
+-1-ps.report@gmx.net/
+> > >
+> > >
+> > > Despite of this error I get (with your provided defconfig):
+> > >
+> > >   [4/5] Compiling C object src/libepoxy.so.0.0.0.p/dispatch_common.c.=
+o
+> > >   FAILED: src/libepoxy.so.0.0.0.p/dispatch_common.c.o
+> > >   .../host/bin/aarch64-buildroot-linux-gnu-gcc
+> -Isrc/libepoxy.so.0.0.0.p
+> > > -Isrc -I../src -Iinclude -I../include -Iinclude/epoxy
+> > > -fdiagnostics-color=3Dalways -Wall -Winvalid-pch -std=3Dgnu99 -O3
+> > > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64 -O=
+s
+> -g0
+> > > -fPIC -Wpointer-arith -Wmissing-declarations -Wformat=3D2
+> -Wstrict-prototypes
+> > > -Wmissing-prototypes -Wnested-externs -Wbad-function-cast
+> > > -Wold-style-definition -Wdeclaration-after-statement -Wunused
+> > > -Wuninitialized -Wshadow -Wmissing-noreturn -Wmissing-format-attribut=
+e
+> > > -Wredundant-decls -Wlogical-op -Werror=3Dimplicit -Werror=3Dnonnull
+> > > -Werror=3Dinit-self -Werror=3Dmain -Werror=3Dmissing-braces
+> > > -Werror=3Dsequence-point -Werror=3Dreturn-type -Werror=3Dtrigraphs
+> > > -Werror=3Darray-bounds -Werror=3Dwrite-strings -Werror=3Daddress
+> > > -Werror=3Dint-to-pointer-cast -Werror=3Dpointer-to-int-cast
+> > > -fno-strict-aliasing -Wno-int-conversion -fvisibility=3Dhidden -MD -M=
+Q
+> > > src/libepoxy.so.0.0.0.p/dispatch_common.c.o -MF
+> > > src/libepoxy.so.0.0.0.p/dispatch_common.c.o.d -o
+> > > src/libepoxy.so.0.0.0.p/dispatch_common.c.o -c ../src/dispatch_common=
+.c
+> > >   In file included from include/epoxy/egl_generated.h:11,
+> > >                    from ../include/epoxy/egl.h:46,
+> > >                    from ../src/dispatch_common.h:59,
+> > >                    from ../src/dispatch_common.c:174:
+> > >
+> > >
+> .../host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.=
+h:145:10:
+> > > fatal error: X11/Xlib.h: No such file or directory
+> > >     145 | #include <X11/Xlib.h>
+> > >         |          ^~~~~~~~~~~~
+> > >   compilation terminated.
+> > >   ninja: build stopped: subcommand failed.
+> > >   make[1]: *** [package/pkg-generic.mk:292:
+> > >
+> /home/seiderer/Work/Buildroot/build_imx8mmevk_qt5_001/build/libepoxy-1.5.=
+9/.stamp_built]
+> > > Error 1
+> > >   make: *** [Makefile:23: _all] Error 2
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > > >
+> > > > Thanks,
+> > > > Avijit
+> > >
+> > >
+>
+>
+
+--0000000000001737bd05da5b3f93
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hello=C2=A0Peter,</div><div><br></div>Yes, I have tri=
+ed X11 and Wayland both. Thanks for trying out. I&#39;ll keep trying. Will =
+keep you posted.<div><br></div><div>Thanks,</div><div>Avijit</div></div><br=
+><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Wed, M=
+ar 16, 2022 at 1:49 PM Peter Seiderer &lt;<a href=3D"mailto:ps.report@gmx.n=
+et">ps.report@gmx.net</a>&gt; wrote:<br></div><blockquote class=3D"gmail_qu=
+ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
+4);padding-left:1ex">Hello Avijit,<br>
+<br>
+please keep <a href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buil=
+droot@busybox.net</a> in CC<br>
+<br>
+On Wed, 16 Mar 2022 12:39:04 -0600, Avijit Das &lt;<a href=3D"mailto:avijit=
+nsec@gmail.com" target=3D"_blank">avijitnsec@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; Hi Peter,<br>
+&gt; <br>
+&gt; I have compiled the X11 library when I got this error.<br>
+&gt; <br>
+&gt; make xlib_libX11 &amp;&amp; make<br>
+<br>
+So the gtk3 compile/test was from another defconfig?<br>
+<br>
+Did you start the X11 server before running the gtk3-demo?<br>
+<br>
+But not much run-time help/advice from my side as I have no suitable hardwa=
+re<br>
+for testing myself...<br>
+<br>
+Regards,<br>
+Peter<br>
+<br>
+<br>
+&gt; <br>
+&gt; Thanks,<br>
+&gt; Avijit<br>
+&gt; <br>
+&gt; On Wed, Mar 16, 2022 at 12:36 PM Peter Seiderer &lt;<a href=3D"mailto:=
+ps.report@gmx.net" target=3D"_blank">ps.report@gmx.net</a>&gt; wrote:<br>
+&gt; <br>
+&gt; &gt; Hello Avijit,<br>
+&gt; &gt;<br>
+&gt; &gt; On Tue, 15 Mar 2022 19:04:02 -0600, Avijit Das &lt;<a href=3D"mai=
+lto:avijitnsec@gmail.com" target=3D"_blank">avijitnsec@gmail.com</a>&gt;<br=
+>
+&gt; &gt; wrote:<br>
+&gt; &gt;=C2=A0 <br>
+&gt; &gt; &gt; Hi,<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; I am building Buildroot for an imx8mm board. The HDMI displa=
+y is up. I<br>
+&gt; &gt; &gt; validated the display using the fb-test. I am trying to enab=
+le a graphics<br>
+&gt; &gt; &gt; library, either gtk3 or qt5.<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; *gtk3 *<br>
+&gt; &gt; &gt; When I am enabling the gtk3 library, if I run the demo appli=
+cation, I am<br>
+&gt; &gt; &gt; getting the following error.<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; # /usr/bin/gtk3-demo<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; (gtk3-demo:350): Gtk-WARNING **: 01:21:03.518: cannot open d=
+isplay:<br>
+&gt; &gt; &gt; #<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; I have tried setting the display to localhost:0.0, did not w=
+ork.<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; *QT5*<br>
+&gt; &gt; &gt; The widget library is not building. There is a compilation e=
+rror:<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; qkeyeventtransition.o .obj/qmouseeventtransition.o<br>
+&gt; &gt; &gt; .obj/qbasickeyeventtransition.o .obj/qbasicmouseeventtransit=
+ion.o<br>
+&gt; &gt; &gt; .obj/qgraphicseffect.o .obj/qpixmapfilter.o .obj/qrc_qstyle.=
+o<br>
+&gt; &gt; &gt; .obj/qrc_qmessagebox.o .obj/moc_qwidgetrepaintmanager_p.o<br=
+>
+&gt; &gt; &gt; .obj/moc_qwidget_p.o .obj/moc_qpixmapstyle_p.o=C2=A0 -latomi=
+c<br>
+&gt; &gt; &gt;=C2=A0 <br>
+&gt; &gt; /home/avijit/buildroot/output/build/qt5base-d16bf02a11953dcac01dc=
+a73e6f3778f293adefe/lib/libQt5Gui.so=C2=A0 <br>
+&gt; &gt; &gt;=C2=A0 <br>
+&gt; &gt; /home/avijit/buildroot/output/build/qt5base-d16bf02a11953dcac01dc=
+a73e6f3778f293adefe/lib/libQt5Core.so=C2=A0 <br>
+&gt; &gt; &gt; -lpthread=C2=A0 -lrt -lpthread -ldl<br>
+&gt; &gt; &gt; ln -s libQt5Widgets.so.5.15.8 libQt5Widgets.so<br>
+&gt; &gt; &gt; ln -s libQt5Widgets.so.5.15.8 libQt5Widgets.so.5<br>
+&gt; &gt; &gt; ln -s libQt5Widgets.so.5.15.8 libQt5Widgets.so.5.15<br>
+&gt; &gt; &gt; rm -f ../../lib/libQt5Widgets.so.5.15.8<br>
+&gt; &gt; &gt; mv -f libQt5Widgets.so.5.15.8 ../../lib/libQt5Widgets.so.5.1=
+5.8<br>
+&gt; &gt; &gt; rm -f ../../lib/libQt5Widgets.so<br>
+&gt; &gt; &gt; rm -f ../../lib/libQt5Widgets.so.5<br>
+&gt; &gt; &gt; rm -f ../../lib/libQt5Widgets.so.5.15<br>
+&gt; &gt; &gt; mv -f libQt5Widgets.so ../../lib/libQt5Widgets.so<br>
+&gt; &gt; &gt; mv -f libQt5Widgets.so.5 ../../lib/libQt5Widgets.so.5<br>
+&gt; &gt; &gt; mv -f libQt5Widgets.so.5.15 ../../lib/libQt5Widgets.so.5.15<=
+br>
+&gt; &gt; &gt; make[2]: *** [Makefile:51: sub-src-make_first] Error 2<br>
+&gt; &gt; &gt; make[1]: *** [package/<a href=3D"http://pkg-generic.mk:292" =
+rel=3D"noreferrer" target=3D"_blank">pkg-generic.mk:292</a>:<br>
+&gt; &gt; &gt;=C2=A0 <br>
+&gt; &gt; /home/avijit/buildroot/output/build/qt5base-d16bf02a11953dcac01dc=
+a73e6f3778f293adefe/.stamp_built]=C2=A0 <br>
+&gt; &gt; &gt; Error 2<br>
+&gt; &gt; &gt; make: *** [Makefile:84: _all] Error 2<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; I have attached the config file. Can you please suggest?=C2=
+=A0 <br>
+&gt; &gt;<br>
+&gt; &gt; With your defconfig I get the following error (a lot of lines abo=
+ve in the<br>
+&gt; &gt; log):<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 =C2=A0qeglconvenience.cpp: In function =E2=80=98bool q_hasE=
+glExtension(EGLDisplay,<br>
+&gt; &gt; const char*)=E2=80=99:<br>
+&gt; &gt;=C2=A0 =C2=A0qeglconvenience.cpp:418:23: error: variable =E2=80=98=
+QList&lt;QByteArray&gt;<br>
+&gt; &gt; extensions=E2=80=99 has initializer but incomplete type<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0418 |=C2=A0 =C2=A0 =C2=A0QList&lt;QByteArray&g=
+t; extensions =3D<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^~~~~~~~~~<br>
+&gt; &gt;=C2=A0 =C2=A0qeglconvenience.cpp:420:65: error: invalid use of inc=
+omplete type =E2=80=98class<br>
+&gt; &gt; QList&lt;QByteArray&gt;=E2=80=99<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0420 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0(eglQueryString(display, EGL_EXTENSIONS))).split(&#39;<br>
+&gt; &gt; &#39;);<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
+&gt; &gt;<br>
+&gt; &gt;<br>
+&gt; &gt; This can be (compile) fixed by this (buildroot) patch:<br>
+&gt; &gt;<br>
+&gt; &gt;<br>
+&gt; &gt; <a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/2=
+0220316182440.17393-1-ps.report@gmx.net/" rel=3D"noreferrer" target=3D"_bla=
+nk">https://patchwork.ozlabs.org/project/buildroot/patch/20220316182440.173=
+93-1-ps.report@gmx.net/</a><br>
+&gt; &gt;<br>
+&gt; &gt;<br>
+&gt; &gt; Despite of this error I get (with your provided defconfig):<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 =C2=A0[4/5] Compiling C object src/libepoxy.so.0.0.0.p/disp=
+atch_common.c.o<br>
+&gt; &gt;=C2=A0 =C2=A0FAILED: src/libepoxy.so.0.0.0.p/dispatch_common.c.o<b=
+r>
+&gt; &gt;=C2=A0 =C2=A0.../host/bin/aarch64-buildroot-linux-gnu-gcc -Isrc/li=
+bepoxy.so.0.0.0.p<br>
+&gt; &gt; -Isrc -I../src -Iinclude -I../include -Iinclude/epoxy<br>
+&gt; &gt; -fdiagnostics-color=3Dalways -Wall -Winvalid-pch -std=3Dgnu99 -O3=
+<br>
+&gt; &gt; -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D6=
+4 -Os -g0<br>
+&gt; &gt; -fPIC -Wpointer-arith -Wmissing-declarations -Wformat=3D2 -Wstric=
+t-prototypes<br>
+&gt; &gt; -Wmissing-prototypes -Wnested-externs -Wbad-function-cast<br>
+&gt; &gt; -Wold-style-definition -Wdeclaration-after-statement -Wunused<br>
+&gt; &gt; -Wuninitialized -Wshadow -Wmissing-noreturn -Wmissing-format-attr=
+ibute<br>
+&gt; &gt; -Wredundant-decls -Wlogical-op -Werror=3Dimplicit -Werror=3Dnonnu=
+ll<br>
+&gt; &gt; -Werror=3Dinit-self -Werror=3Dmain -Werror=3Dmissing-braces<br>
+&gt; &gt; -Werror=3Dsequence-point -Werror=3Dreturn-type -Werror=3Dtrigraph=
+s<br>
+&gt; &gt; -Werror=3Darray-bounds -Werror=3Dwrite-strings -Werror=3Daddress<=
+br>
+&gt; &gt; -Werror=3Dint-to-pointer-cast -Werror=3Dpointer-to-int-cast<br>
+&gt; &gt; -fno-strict-aliasing -Wno-int-conversion -fvisibility=3Dhidden -M=
+D -MQ<br>
+&gt; &gt; src/libepoxy.so.0.0.0.p/dispatch_common.c.o -MF<br>
+&gt; &gt; src/libepoxy.so.0.0.0.p/dispatch_common.c.o.d -o<br>
+&gt; &gt; src/libepoxy.so.0.0.0.p/dispatch_common.c.o -c ../src/dispatch_co=
+mmon.c<br>
+&gt; &gt;=C2=A0 =C2=A0In file included from include/epoxy/egl_generated.h:1=
+1,<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 from ../include/epoxy/egl.h:46,<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 from ../src/dispatch_common.h:59,<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 from ../src/dispatch_common.c:174:<br>
+&gt; &gt;<br>
+&gt; &gt; .../host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglp=
+latform.h:145:10:<br>
+&gt; &gt; fatal error: X11/Xlib.h: No such file or directory<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0145 | #include &lt;X11/Xlib.h&gt;<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 ^~~~~~~~~~~~<br>
+&gt; &gt;=C2=A0 =C2=A0compilation terminated.<br>
+&gt; &gt;=C2=A0 =C2=A0ninja: build stopped: subcommand failed.<br>
+&gt; &gt;=C2=A0 =C2=A0make[1]: *** [package/<a href=3D"http://pkg-generic.m=
+k:292" rel=3D"noreferrer" target=3D"_blank">pkg-generic.mk:292</a>:<br>
+&gt; &gt; /home/seiderer/Work/Buildroot/build_imx8mmevk_qt5_001/build/libep=
+oxy-1.5.9/.stamp_built]<br>
+&gt; &gt; Error 1<br>
+&gt; &gt;=C2=A0 =C2=A0make: *** [Makefile:23: _all] Error 2<br>
+&gt; &gt;<br>
+&gt; &gt; Regards,<br>
+&gt; &gt; Peter<br>
+&gt; &gt;=C2=A0 <br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; Thanks,<br>
+&gt; &gt; &gt; Avijit=C2=A0 <br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 <br>
+<br>
+</blockquote></div>
+
+--0000000000001737bd05da5b3f93--
+
+--===============3131827650369938683==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3131827650369938683==--
