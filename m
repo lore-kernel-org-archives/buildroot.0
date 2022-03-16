@@ -4,74 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1E77C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 19:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E2E3C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 19:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DB7081291;
-	Wed, 16 Mar 2022 19:43:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF2A5812FF;
+	Wed, 16 Mar 2022 19:44:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9k6t09eamsdY; Wed, 16 Mar 2022 19:43:42 +0000 (UTC)
+	with ESMTP id f7QW-Vz_tdPx; Wed, 16 Mar 2022 19:44:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BCF081268;
-	Wed, 16 Mar 2022 19:43:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A8CEB1BF4E5
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:43:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6F2E812D5;
+	Wed, 16 Mar 2022 19:44:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D3D11BF4E5
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 81DEF80D5E
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:43:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 299F660A94
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 19:44:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U35i_YEOtOlM for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 19:43:37 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1lS7yU7v8wLP for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 19:44:51 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 006EC80DB9
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 19:43:36 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8DC43607A1
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 19:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1647459814;
- bh=kx9LNNP4lb7k8cg1gWtjXMfJzn/Z/o0Utwrrr+A50v0=;
+ s=badeba3b8450; t=1647459887;
+ bh=JruqspdSYIrxzKx4UWPZKL914p6/G3LGBQjfCHpLcL8=;
  h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=dbYYTF8LnjyRL+QwOIUtR3ctY18/Tv3X34WunQKPOlU9/iU90WLImNkb/U4ihU5tb
- qRxGWp0WpgOsZgt6yDkazWHABdArgA+7PJ3I3xPGytaQFhOTUOpsGp5l2vrsGTjCgs
- DVagPfPxnnT/NK/kOg//ASpxT9vAOeec7AZHpBGE=
+ b=c3gGS8sMtA3xUN0nZOLrLX+vTUlHrYzO0FjO9Oogs9Ym+QCIaoMlZ+4GTwlupFW5D
+ hYGAVirJwWegNHM9ZKrhcXsm4kD8tsLjQMR3HtMXWN5kOc3dk14Pl6Lds7PTq1utZb
+ 2R5BOe9YDTGYUJUejPQpj3hbMNAAuC9wrNCPja4s=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.226]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxDou-1oJLhN3mPY-00xbve; Wed, 16
- Mar 2022 20:43:34 +0100
-Date: Wed, 16 Mar 2022 20:43:32 +0100
+Received: from localhost ([62.216.209.226]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxDkm-1oJLoV1PpY-00xcad; Wed, 16
+ Mar 2022 20:44:47 +0100
+Date: Wed, 16 Mar 2022 20:44:46 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220316204332.4cabeba1@gmx.net>
-In-Reply-To: <20220316190545.3618918-1-james.hilliard1@gmail.com>
+Message-ID: <20220316204446.7d203db4@gmx.net>
+In-Reply-To: <20220316190545.3618918-2-james.hilliard1@gmail.com>
 References: <20220316190545.3618918-1-james.hilliard1@gmail.com>
+ <20220316190545.3618918-2-james.hilliard1@gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:pZyh4Og0NYL7Omnqvd1YurIJFvcckmmjCgr2hO1F52L1NPmg24X
- TIbafnTzDjUKlAxk99EGB3xUUBZz2mQlMvjW3cAiHm67kj9Ht2J9SKNC7BEes7z6UW6Mw8b
- RLxer2OLRpr+LZk9Ca3dmRypDFEoht2asWL0GGQ+kl16cRJqsXTv8qTSnAmumvrA5pdMh0L
- 5mEKeyo5/lNWnEmO6HmMw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0Lz4J4rRwDQ=:V+qUf99d6SlZzG5Z2fhiuY
- aScEc9WCv/0zKuKtRFEiXpuKl4n3t9guX2mon2QiOp9yPb5Fy5bZXiZR9hfOMCngveS9pYNey
- W/np3zzzHD3Vni2eqLAvRPE1kCLHmuOauik2sUasmptbYhSOr+eHMWCImjO7ImPv7YenIWI82
- 6RaA+u/U+CFzf85oHtaDS1tv6E6o1Wjdsr1G2y6VWnfT7MTw8i6r/NvS7lW5wlWvynNWxqpOD
- 7LFJUKRiBBvY+oGKi05raTPvJm4jA8/bH6o5nGZWmXvBMR/K5kAwxh88ufGKCA2Z4D5D2yrhc
- Q5NtPLxxPfRgGSAQlN1DWaUfT0QfQbHxU1VrZjxDuSL+fSjElGgueZQWZQpXVyxfWR1CBRaea
- MBmwgr34dsHlCg8sppvi48KQQ7QTBh+IBqM4L165Ji+wYExkKXLF64Pe+pDVlxRpVgc3WHVgi
- zTe4SuGq7jdQCx0/c6egzGy8bAJ5BYEW7HP8vW3BXNihO36EncleRHsyw6OGWnYaiFVt4FWY9
- e6Q6VwLlyxjiTaNZXU15JJQ8TSnzTqDg5kpzmh1gPTJNcV3FSIjVIMFIbZfcCzHj0w5h01JTn
- g5pdVzVO3F8pb6euhG11qugJwJmFgqIBASW4JUVFKDTyqgMaFZYHv/FDPkBWUGQIzf/oteRAk
- DM5zJ8tr/Q5rYQEeGQORX5Uv9xV7Vc0MYpTmEQkVwAtzjnuIESOFmnQKbcm2+JvtcMD3WLonN
- dKtR8Nr0LqM+UmmjU2N83ReG+s67MQqBL7/huP+8pw0stqIBQsMuRbnTezvGevwUVSMRypP3o
- pqVpakM0y+fPC7Xhmz0ejpYrkfx6hXeDgk90lJR6sYqJmEgP0ipFtLn/AsTDLtcMBlQA8wC3G
- rl1ydEadbpi5W27+3MKRyXy44lRufXVHkDHqnSOgktHGX6tTCNz+7hJFikfRnzonuHJgG+kZ8
- yaeGFo94TsspdeOmxuZrqC+XICxqEI1XlVNsb9VH5MvgBRZSMsPGSuEqJH1+Pewhsg1vS2tM3
- 8QtTLUcU/8f7+VNhRGfpyC+ke9VJkk7OyXb9W705dBeSjIxsQxvHwZ0sDZTKu4CLIKAL+nOsq
- N1mb7vxrW44JKA=
-Subject: Re: [Buildroot] [PATCH 1/2] package/ell: bump to version 0.49
+X-Provags-ID: V03:K1:XP0PWJTAYGP7kkg4+TNz+UL8ZLqN5megKEPBXHbEH5lX8tHMC5q
+ aKDRpzQZ6v5rDLtyGzDPsa3Fr1hEYUX9BYM6AYzg0/bhmdry408afrwqp4W6oBpc+iVE64Q
+ ZFRAj0gMdGPKkT0O2997kA9cMBTAk8zeFasP0CrE+LL/0XubPT3PFI7E7/kHj9v89ptOSYu
+ D73jvgSZRaHqhmopIcXlA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2lE5BKdG6yo=:ai9y2/MaLVVsxiBgIu6Xrb
+ Pyd3vuGee0LwQICaOUB3AErb9NGanrCVtn3qyZ+xQu9dlgIu2rZUDVfVDZ3QoYelrL8sQUwTb
+ 1EsjZ4xbo6JamzLs2FplScxiPyCkBiMW+QJhdVVt8sjw9pqa7mUBjJKOgNzJUrK0wJq0TJeEU
+ +97THm2A83zDooflNtuuEeXn+gNdP5WjaET4NvBHDw3O/Da78gpKNAdvupwUKSPamNHDRrQ1b
+ a2vR9e5uYIc+hsVrBCfuUAh3xiR4TtWUARYx9a714rarb7ZoemFa7L3FYLT1m3wdsZqtL5gir
+ lHqY+UehqwVee6VEofffC5WoAsv2WmKy1lW7KYB+GYSVnpAIGWyF9bx3fe5gmOeQLp6OrCOLB
+ JCovIQA+b89P2CIJbbAMTvpgqWF1JS/6qa1qk0ImucB+0QET+X6jHupk8B9UUBujY78QA4BlN
+ 3yjcAf/VBRgLDszXnsgMulgEn2FEPPzLc/va42rfA3O67cE892urHRCJrwg6JZcpLepKnBAR+
+ nUj2SUbXnROd2uYOxZI3fTUwJFgHFYzjGSZ7EILjApf5i9ViF5omX2ZBgo5OGw3MpV0LS6j89
+ 7ue/wHSbLjiZrGBMB+DfXZE/2/AvJ8T9DvdBZEbgzFYsxSqPiAEU9vUzO6h3yaNUgsq5vvnit
+ rIQ8h8nJ/2Fhv+Rrv984kjBDUfXw0eFLq/oPy5T6kpjohG3IarqdO4GYso1iaXMl/4pskVcM0
+ n8pM3JAkBXoZ+/Wc7Jt0b+XU9V0cNdP4ddeqA5YXmYp5qh6NPeiiNHl8al+RTCOT8rZWFY1N1
+ +6S6EE4Lrgo05lhzVAH1T3hhaC4VQjcFtqCNbx+LWODxVqpyL1MfOK5FYPmaaEEvtp9VOLJ27
+ 8oWsdREShZv9tBkQx5s3nOAUw/IpPT1TnUB08/A6tCTUp62Kr0bdzSrxEN/mSL04tnsSKi7rY
+ l29VwTHAlbouIbE7IcyvpUl0wCKT41Ys51P2ledcWasfAzoI3NcKXS1TlGJKO0aBqPCmQjyqQ
+ PtOAyb1wrZbtU9iS09KnKh0nH23FYs4bvOaqIBxJyVoTUcZhahFzXz1qmhcSBE91jviKxGOzA
+ M+q5O0/GLxL1o8=
+Subject: Re: [Buildroot] [PATCH 2/2] package/iwd: bump to version 1.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,7 +94,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello James,
 
-On Wed, 16 Mar 2022 13:05:44 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
+On Wed, 16 Mar 2022 13:05:45 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
@@ -102,37 +105,38 @@ An (upstream) change log entry would be nice, see [1] for an example...
 Regards,
 Peter
 
-[1] https://git.buildroot.net/buildroot/commit/package/ell?id=c01a8397d9923c38b14a0d083ba1cf3ee3a3049a
+[1] https://git.buildroot.net/buildroot/commit/package/iw?id=ad0515252a25e94b85184102a66e93a17ad3c65e
+
 
 > ---
->  package/ell/ell.hash | 2 +-
->  package/ell/ell.mk   | 2 +-
+>  package/iwd/iwd.hash | 2 +-
+>  package/iwd/iwd.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-> index 4bde1ab677..9affa390b8 100644
-> --- a/package/ell/ell.hash
-> +++ b/package/ell/ell.hash
+> diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+> index 1a58ec88e8..1c34aa0a90 100644
+> --- a/package/iwd/iwd.hash
+> +++ b/package/iwd/iwd.hash
 > @@ -1,5 +1,5 @@
->  # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
-> -sha256  9894943042a5d6165d3e5cc354f92274fb1304004d02b4bee682ab6067cdbbd5  ell-0.48.tar.xz
-> +sha256  a7ff8ecbc76b187d942dd22b61cb489711400897c790319ffb7e944791687c3f  ell-0.49.tar.xz
+>  # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+> -sha256  61b5e48380cd3a6d0529f725eb6974157f1410af165f5d266b87add0bf395224  iwd-1.24.tar.xz
+> +sha256  3f138e03301beb2afc7b385a62f56db17059137857ab579f269c4e441783e760  iwd-1.25.tar.xz
 >
 >  # License files
 >  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-> diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-> index 267b44e5f0..9735865eae 100644
-> --- a/package/ell/ell.mk
-> +++ b/package/ell/ell.mk
+> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+> index 548b508edb..fc10c5f1d4 100644
+> --- a/package/iwd/iwd.mk
+> +++ b/package/iwd/iwd.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >
-> -ELL_VERSION = 0.48
-> +ELL_VERSION = 0.49
->  ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
->  ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
->  ELL_LICENSE = LGPL-2.1+
+> -IWD_VERSION = 1.24
+> +IWD_VERSION = 1.25
+>  IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+>  IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+>  IWD_LICENSE = LGPL-2.1+
 
 _______________________________________________
 buildroot mailing list
