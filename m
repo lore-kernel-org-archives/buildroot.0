@@ -1,47 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42682C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 07:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72981C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 08:17:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06E3F60F77;
-	Wed, 16 Mar 2022 07:31:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 110C541722;
+	Wed, 16 Mar 2022 08:17:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vo_zlH_UoLNG; Wed, 16 Mar 2022 07:31:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MhyUXNaLBLya; Wed, 16 Mar 2022 08:17:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA2AA60F4D;
-	Wed, 16 Mar 2022 07:31:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4AAB71BF409
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 07:30:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44A764170D;
+	Wed, 16 Mar 2022 08:17:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C6ED31BF909
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 08:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A1C560F45
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 07:30:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE74B8425E
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 08:17:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jTKoCDjIc-c3 for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 07:30:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 299E160F4D
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 07:30:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 518C1841CF; Wed, 16 Mar 2022 07:21:23 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 16 Mar 2022 08:28:44 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 50e83f59bd187c69e182b8034a34d11909f3c526
-X-Git-Newrev: 494611a172aeb503d53592f6b6cd61e6cf174938
-X-Patchwork-Hint: ignore
-Message-Id: <20220316072123.518C1841CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/libxslt: security
- bump to version 1.1.35
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=igalia.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vLIVIzqgd3RQ for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 08:17:04 +0000 (UTC)
+X-Greylist: delayed 00:34:04 by SQLgrey-1.8.0
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2AC49842CF
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 08:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=8fjgwPWQOWl7S6Fj8s01jHv6ff5KuecCHfYuMiSD4VI=; b=isDfEktFk5dPcrToaa0JOKwPIz
+ xbbSis1STBl+HwjPnqn+JmaG4DT444TSG4SXsuCRDiXLosQst2Fx5bbCpiwdYavXLQWuE3GmUw2TG
+ elZjJSY1S30SwISOhrj0a06eFcWsX+ceaZnnR20Si37v++1cJy6ttUhPTKjyqPq0onqCwHD+cm5oe
+ DaqRqxNvzLYIR4S5gYFsoEuWmepjdLWOQKBy+7xaIbG3tAtcPWwK7WwabUEkdVB2LherNP7cLy7lY
+ D7W8crJV1Ca3H2/RRKr134mAqKjKd3RY7HN+EkxGZRqF6ogZDMWtrC7ZaS7ZW5yGmuQ8Ah9xbnXMa
+ ZCMnYMZg==;
+Received: from 91-153-34-241.elisa-laajakaista.fi ([91.153.34.241] helo=momiji)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1nUOJ5-0009rJ-Cy; Wed, 16 Mar 2022 08:42:55 +0100
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id c88369be;
+ Wed, 16 Mar 2022 07:42:43 +0000 (UTC)
+Date: Wed, 16 Mar 2022 09:42:38 +0200
+Message-ID: <20220316094238.GC1064341@momiji>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <0fc0da93-ce87-7965-be20-f197d0825cbe@mind.be>
+References: <20220309132835.7251-1-abrodkin@synopsys.com>
+ <0fc0da93-ce87-7965-be20-f197d0825cbe@mind.be>
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] qt5: enable JS and WebKit for ARC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,118 +73,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8966653483147682753=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=494611a172aeb503d53592f6b6cd61e6cf174938
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-- fix CVE-2021-30560
-- remove merged patch, drop autoreconf
-- moved from xmlsoft.org to gnome.org
-- spaces in hash file
+--===============8966653483147682753==
+Content-Type: multipart/signed; boundary="QAfyvqSzsv6Jp3y+"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998@free.fr:
-  - drop autoreconf as no longer patching
-  - also switch home in Config.in
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit acf5b437cc329a392f26e5367de1f64b3601b605)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...Fix-xml2-config-check-in-configure-script.patch | 31 ----------------------
- package/libxslt/Config.in                          |  2 +-
- package/libxslt/libxslt.hash                       |  6 ++---
- package/libxslt/libxslt.mk                         |  7 +++--
- 4 files changed, 7 insertions(+), 39 deletions(-)
 
-diff --git a/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
-deleted file mode 100644
-index 3848dcb235..0000000000
---- a/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc Mon Sep 17 00:00:00 2001
--From: Nick Wellnhofer <wellnhofer@aevum.de>
--Date: Fri, 15 Nov 2019 11:53:11 +0100
--Subject: [PATCH] Fix xml2-config check in configure script
--
--A 'print' option has never been supported. After a recent change to
--libxml2, invalid options cause xml2-config to fail.
--
--[Retrieved from:
--https://gitlab.gnome.org/GNOME/libxslt/-/commit/90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 3da57b18..585b9d7c 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -548,7 +548,7 @@ dnl make sure xml2-config is executable,
-- dnl test version and init our variables
-- dnl
-- 
---if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs print > /dev/null 2>&1
--+if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs > /dev/null 2>&1
-- then
--     AC_MSG_CHECKING(for libxml libraries >= $LIBXML_REQUIRED_VERSION)
--     XMLVERS=`$XML_CONFIG --version`
---- 
--GitLab
--
-diff --git a/package/libxslt/Config.in b/package/libxslt/Config.in
-index dfe5b99f04..643bce2a61 100644
---- a/package/libxslt/Config.in
-+++ b/package/libxslt/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_LIBXSLT
- 	  to describe how the document is transformed into another
- 	  XML document that uses the formatting vocabulary.
- 
--	  http://xmlsoft.org/xslt/
-+	  https://gitlab.gnome.org/GNOME/libxslt/-/wikis/home
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 25aa30839e..39523a6953 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking pgp signature
--sha256	98b1bd46d6792925ad2dfe9a87452ea2adebf69dcb9919ffd55bf926a7f93f7f	libxslt-1.1.34.tar.gz
-+# from https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.35.sha256sum
-+sha256  8247f33e9a872c6ac859aa45018bc4c4d00b97e2feac9eebc10c93ce1f34dd79  libxslt-1.1.35.tar.xz
- 
- # Hash for license file:
--sha256	7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819	COPYING
-+sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  COPYING
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index d0f79d2521..df0286e986 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,14 +4,13 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.34
--LIBXSLT_SITE = http://xmlsoft.org/sources
-+LIBXSLT_VERSION = 1.1.35
-+LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
-+LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
- LIBXSLT_LICENSE_FILES = COPYING
- LIBXSLT_CPE_ID_VENDOR = xmlsoft
--# We're patching configure.ac
--LIBXSLT_AUTORECONF = YES
- 
- LIBXSLT_CONF_OPTS = \
- 	--with-gnu-ld \
+--QAfyvqSzsv6Jp3y+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGkgQWxleGV5LCBBcm5vdXQsCgpPbiBUdWUsIDE1IE1hciAyMDIyIDIyOjQ3OjEwICswMTAwIEFy
+bm91dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4gd3JvdGU6Cj4gCj4gCj4gT24gMDkv
+MDMvMjAyMiAxNDoyOCwgQWxleGV5IEJyb2RraW4gdmlhIGJ1aWxkcm9vdCB3cm90ZToKPiA+IFRo
+aXMgcGF0Y2ggYWRkcyBzdXBwb3J0IG9mIEFSQyBhcmNoaXRlY3R1cmUgaW4gUXQncyBKUyBjb3Jl
+IGFuZCBXZWJraXQuCj4gPiBUaGUgY2hhbmdlIGl0c2VsZiBpcyBxdWl0ZSBzdHJhaWdodC1mb3J3
+YXJkOgo+ID4gCj4gPiAgIDEuIEVuYWJsZSBKUyBjb3JlIGZvciBBUkMKPiA+ICAgMi4gTWFrZSBz
+dXJlIHNvLWNhbGxlZCAibGFyZ2UgbWVtb3J5IG1vZGVsIiBpcyB1c2VkLAo+ID4gICAgICBpLmUu
+IHJlbG9jYXRpb25zIHdpdGggbG9uZyBqdW1wcyBhcmUgYmVpbmcgZ2VuZXJhdGVkIGZvciBnbG9i
+YWwKPiA+ICAgICAgc3ltYm9scywgYXMgb3RoZXJ3aXNlIGluc2FuZWx5IGh1Z2UgbGlicXQ1d2Vi
+a2l0LnNvIGZhaWxzIHRvIGxpbmsKPiA+ICAgICAgYmVjYXVzZSBzb21lIHN5bWJvbHMgbWlnaHQg
+YmUgbW9yZSB0aGFuIDMyIE1pQiBhd2F5IGZyb20gZWFjaCBvdGhlci4KPiA+ICAgMy4gTWFrZSB0
+aGUgb3JpZ2luYWwgV2ViS2l0IGJ1aWxkIHN5c3RlbSBhd2FyZSBvZiB5ZXQgYW5vdGhlciBDUFUK
+PiA+ICAgICAgYXJjaGl0ZWN0dXJlIHdpdGggZXhwbGljaXRseSBkaXNhYmxlZCBKSVQgaW4gSlMg
+Y29yZSBmb3IgQVJDLgo+ID4gCj4gPiBPYnZpb3VzbHksIHRoaXMgb25lIGRlcGVuZHMgb24gWzFd
+Lgo+ID4gCj4gPiBbMV0gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxk
+cm9vdC9wYXRjaC8yMDIyMDIyMTE0MDYyOC4yMjk1LTEtYWJyb2RraW5Ac3lub3BzeXMuY29tLwo+
+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBBbGV4ZXkgQnJvZGtpbiA8YWJyb2RraW5Ac3lub3BzeXMu
+Y29tPgo+ID4gQ2M6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5j
+b20+Cj4gPiBDYzogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pgo+ID4gLS0tCj4g
+PiAgIHBhY2thZ2UvcXQ1L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICst
+Cj4gPiAgIHBhY2thZ2UvcXQ1L3F0NWJhc2UvcXQ1YmFzZS5tayAgICAgICAgICAgICAgICB8IDEz
+ICsrKwo+ID4gICAuLi4vMDAwNS1BZGQtc3VwcG9ydC1mb3ItQVJDLXByb2Nlc3NvcnMucGF0Y2gg
+fCA5MyArKysrKysrKysrKysrKysrKysrCj4gPiAgIDMgZmlsZXMgY2hhbmdlZCwgMTA3IGluc2Vy
+dGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
+cXQ1L3F0NXdlYmtpdC8wMDA1LUFkZC1zdXBwb3J0LWZvci1BUkMtcHJvY2Vzc29ycy5wYXRjaAo+
+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDUvQ29uZmlnLmluIGIvcGFja2FnZS9xdDUv
+Q29uZmlnLmluCj4gPiBpbmRleCBmMmIxZmY0YTE5Li5jYmIyZTA2YTIxIDEwMDY0NAo+ID4gLS0t
+IGEvcGFja2FnZS9xdDUvQ29uZmlnLmluCj4gPiArKysgYi9wYWNrYWdlL3F0NS9Db25maWcuaW4K
+PiA+IEBAIC03LDcgKzcsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUVQ1X0pTQ09SRV9BVkFJTEFC
+TEUKPiA+ICAgCWJvb2wKPiA+ICAgCWRlZmF1bHQgeQo+ID4gICAJIyBKYXZhc2NyaXB0IGVuZ2lu
+ZSBpcyBvbmx5IGF2YWlsYWJsZSBvbiBjZXJ0YWluIGFyY2hpdGVjdHVyZXMKPiA+IC0JZGVwZW5k
+cyBvbiBCUjJfYXJtIHx8IEJSMl9hYXJjaDY0IHx8IEJSMl9pMzg2IHx8IEJSMl94ODZfNjQgfHwg
+QlIyX21pcHNlbAo+ID4gKwlkZXBlbmRzIG9uIEJSMl9hcm0gfHwgQlIyX2FhcmNoNjQgfHwgQlIy
+X2kzODYgfHwgQlIyX3g4Nl82NCB8fCBCUjJfbWlwc2VsIHx8IEJSMl9hcmMKPiA+ICAgCSMgQVJN
+IG5lZWRzIEJMWCwgc28gdjV0Kwo+ID4gICAJZGVwZW5kcyBvbiAhQlIyX0FSTV9DUFVfQVJNVjQK
+PiA+ICAgCj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDUvcXQ1YmFzZS9xdDViYXNlLm1rIGIv
+cGFja2FnZS9xdDUvcXQ1YmFzZS9xdDViYXNlLm1rCj4gPiBpbmRleCBlZjM4ZDAzMjUzLi5iMjVl
+MGY0NGI2IDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS9xdDUvcXQ1YmFzZS9xdDViYXNlLm1rCj4g
+PiArKysgYi9wYWNrYWdlL3F0NS9xdDViYXNlL3F0NWJhc2UubWsKPiA+IEBAIC0yMDEsNiArMjAx
+LDE5IEBAIGVuZGlmCj4gPiAgIFFUNUJBU0VfREVGQVVMVF9RUEEgPSAkKGNhbGwgcXN0cmlwLCQo
+QlIyX1BBQ0tBR0VfUVQ1QkFTRV9ERUZBVUxUX1FQQSkpCj4gPiAgIFFUNUJBU0VfQ09ORklHVVJF
+X09QVFMgKz0gJChpZiAkKFFUNUJBU0VfREVGQVVMVF9RUEEpLC1xcGEgJChRVDVCQVNFX0RFRkFV
+TFRfUVBBKSkKPiA+ICAgCj4gPiAraWZlcSAoJChCUjJfYXJjKSx5KQo+ID4gKyMgSW4gY2FzZSBv
+ZiAtT3MgKHdoaWNoIGlzIGRlZmF1bHQgaW4gQlIpIGdjYyB3aWxsIHVzZSBtaWxsaWNvZGUgaW1w
+bGVtZW50YXRpb24KPiA+ICsjIGZyb20gbGliZ2NjLiBUaGF0IGFsb25nIHdpdGggcGVyZm9ybWFu
+Y2UgZGVncmFkYXRpb24gbWF5IGxlYWQgdG8gaXNzdWVzIGR1cmluZwo+ID4gKyMgbGlua2FnZSBz
+dGFnZS4gSW4gY2FzZSBvZiBRdFdlYmtpdCBleGFjdGx5IHRoYXQgaGFwcGVucyAtIG1pbGxpY29k
+ZSBmdW5jdGlvbnMKPiA+ICsjIGdldCBwdXQgd2F5IHRvbyBmYXIgZnJvbSBjYWxsZXIgZnVuY3Rp
+b25zIGFuZCBzbyBsaW5rZXIgZmFpbHMuCj4gPiArIyBUbyBzb2x2ZSB0aGF0IHByb2JsZW0gd2Ug
+ZXhwbGljaXRseSBkaXNhYmxlIG1pbGxpY29kZSBjYWxsIGdlbmVyYXRpb24gZm9yIFF0Lgo+ID4g
+KyMgQWxzbyBkdWUgdG8gc29tZSBRdDUgbGlicyBiZWluZyByZWFsbHkgaHVnZSAodGhlIGJlc3Qg
+ZXhhbXBsZSBpcyBRdFdlYktpdCkKPiA+ICsjIGl0J3MgZ29vZCB0byBmaXJjZSBjb21waWxlciB0
+byBub3QgYXNzdW1lIHNob3J0IG9yIGV2ZW4gbWVkaXVtLWxlbmd0aCBjYWxscwo+ID4gKyMgY291
+bGQgYmUgdXNlZC4gSS5lLiBhbHdheXMgdXNlIGxvbmcganVtcCBpbnN0YXJ1Y3Rpb25zLgo+ID4g
+KyMgT3RoZXJ3aXNlIHRoZXJlJ3MgYSBoaWdoIHJpc2sgb2YgaGl0dGluZyBsaW5rLXRpbWUgZmFp
+bHVyZXMuCj4gPiArUVQ1QkFTRV9DRkxBR1MgKz0gLW1uby1taWxsaWNvZGUgLW1sb25nLWNhbGxz
+Cj4gPiArZW5kaWYKPiA+ICsKPiA+ICAgaWZlcSAoJChCUjJfUEFDS0FHRV9RVDVCQVNFX0VHTEZT
+KSx5KQo+ID4gICBRVDVCQVNFX0NPTkZJR1VSRV9PUFRTICs9IC1lZ2xmcwo+ID4gICBRVDVCQVNF
+X0RFUEVOREVOQ0lFUyAgICs9IGxpYmVnbAo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0
+NXdlYmtpdC8wMDA1LUFkZC1zdXBwb3J0LWZvci1BUkMtcHJvY2Vzc29ycy5wYXRjaCBiL3BhY2th
+Z2UvcXQ1L3F0NXdlYmtpdC8wMDA1LUFkZC1zdXBwb3J0LWZvci1BUkMtcHJvY2Vzc29ycy5wYXRj
+aAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAuLjkyZjAyM2Vh
+YjYKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3BhY2thZ2UvcXQ1L3F0NXdlYmtpdC8wMDA1
+LUFkZC1zdXBwb3J0LWZvci1BUkMtcHJvY2Vzc29ycy5wYXRjaAo+ID4gQEAgLTAsMCArMSw5MyBA
+QAo+ID4gK0Zyb20gOGRhNTc0Y2Y4ZjMwZjY5ZTQ3Zjc2NzA1YWEyZWIwNzAwMDU0MGFlYiBNb24g
+U2VwIDE3IDAwOjAwOjAwIDIwMDEKPiA+ICtGcm9tOiBBbGV4ZXkgQnJvZGtpbiA8YWJyb2RraW5A
+c3lub3BzeXMuY29tPgo+ID4gK0RhdGU6IE1vbiwgMjEgRmViIDIwMjIgMTg6Mjg6MDAgKzAzMDAK
+PiA+ICtTdWJqZWN0OiBbUEFUQ0hdIEFkZCBzdXBwb3J0IGZvciBBUkMgcHJvY2Vzc29ycwo+ID4g
+Kwo+ID4gK1NpZ25lZC1vZmYtYnk6IEFsZXhleSBCcm9ka2luIDxhYnJvZGtpbkBzeW5vcHN5cy5j
+b20+Cj4gCj4gICBVcHN0cmVhbSBzdGF0dXMgb2YgdGhpcyBwYXRjaD8KCkkgbWF5IGhhdmUgbWlz
+c2VkIGl0LCBidXQgYXMgZmFyIGFzIEkga25vdyB0aGVyZSBoYXMgbm90IGJlZW4gYW55IGFjdGl2
+aXR5IGluCldlYktpdCdzIEJ1Z3ppbGxhIHJlZ2FyZGluZyBBUkMgc3VwcG9ydC4gV2hpbGUgSSBh
+bSBkbyBub3cgbXVjaCBhYm91dCBBUkMsIHRoZQpjaGFuZ2VzIGRvIG5vdCBsb29rIHBhcnRpY3Vs
+YXJseSBsb3ctbGV2ZWwsIHNvIGZlZWwgZnJlZSB0byBhZGQgbWUgaW4gQ0MgaW4KdGhlIHJlbGV2
+YW50IEJ1Z3ppbGxhIGlzc3VlcyBhbmQgSSBjYW4gdHJ5IHRvIGhlbHAgZ2V0IHRoZW0gcmV2aWV3
+ZWQgLS0gbWFrZQpzdXJlIHRvIHRha2UgYSBsb29rIGF0IHRoZSBjb250cmlidXRpb24gZ3VpZGUg
+aWYgeW91IGhhdmVuJ3QgYWxyZWFkeToKCiAgaHR0cHM6Ly93ZWJraXQub3JnL2NvbnRyaWJ1dGlu
+Zy1jb2RlLwoKQ2hlZXJzLAotQWRyaWFuCgoKPiA+ICstLS0KPiA+ICsgQ01ha2VMaXN0cy50eHQg
+ICAgICAgICAgICAgICAgICAgICAgIHwgNCArKystCj4gPiArIFNvdXJjZS9KYXZhU2NyaXB0Q29y
+ZS9DTWFrZUxpc3RzLnR4dCB8IDMgKystCj4gPiArIFNvdXJjZS9XVEYvd3RmL1BsYXRmb3JtLmgg
+ICAgICAgICAgICB8IDggKysrKysrKysKPiA+ICsgU291cmNlL1dURi93dGYvZHRvYS91dGlscy5o
+ICAgICAgICAgIHwgMiArLQo+ID4gKyBTb3VyY2UvY21ha2UvT3B0aW9uc1F0LmNtYWtlICAgICAg
+ICAgfCA0ICsrKysKPiA+ICsgNSBmaWxlcyBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAzIGRl
+bGV0aW9ucygtKQo+ID4gKwo+ID4gK2RpZmYgLS1naXQgYS9DTWFrZUxpc3RzLnR4dCBiL0NNYWtl
+TGlzdHMudHh0Cj4gPiAraW5kZXggMzFhMmVhMWZkLi5mMGRmYmRhNWIgMTAwNjQ0Cj4gPiArLS0t
+IGEvQ01ha2VMaXN0cy50eHQKPiA+ICsrKysgYi9DTWFrZUxpc3RzLnR4dAo+ID4gK0BAIC01Nyw3
+ICs1Nyw5IEBAIGlmIChNU1ZDX0NYWF9BUkNISVRFQ1RVUkVfSUQpCj4gPiArIGVsc2UgKCkKPiA+
+ICsgICAgIHN0cmluZyhUT0xPV0VSICR7Q01BS0VfU1lTVEVNX1BST0NFU1NPUn0gTE9XRVJDQVNF
+X0NNQUtFX1NZU1RFTV9QUk9DRVNTT1IpCj4gPiArIGVuZGlmICgpCj4gPiArLWlmIChMT1dFUkNB
+U0VfQ01BS0VfU1lTVEVNX1BST0NFU1NPUiBNQVRDSEVTICJeYXJtIikKPiA+ICsraWYgKExPV0VS
+Q0FTRV9DTUFLRV9TWVNURU1fUFJPQ0VTU09SIE1BVENIRVMgIl5hcmMiKQo+ID4gKysgICAgc2V0
+KFdURl9DUFVfQVJDIDEpCj4gPiArK2Vsc2VpZiAoTE9XRVJDQVNFX0NNQUtFX1NZU1RFTV9QUk9D
+RVNTT1IgTUFUQ0hFUyAiXmFybSIpCj4gPiArICAgICBzZXQoV1RGX0NQVV9BUk0gMSkKPiA+ICsg
+ZWxzZWlmIChMT1dFUkNBU0VfQ01BS0VfU1lTVEVNX1BST0NFU1NPUiBNQVRDSEVTICJeYWFyY2g2
+NCIpCj4gPiArICAgICBzZXQoV1RGX0NQVV9BUk02NCAxKQo+ID4gK2RpZmYgLS1naXQgYS9Tb3Vy
+Y2UvSmF2YVNjcmlwdENvcmUvQ01ha2VMaXN0cy50eHQgYi9Tb3VyY2UvSmF2YVNjcmlwdENvcmUv
+Q01ha2VMaXN0cy50eHQKPiA+ICtpbmRleCA5MzdiM2VkMDAuLjIwNWRkZTI4OCAxMDA2NDQKPiA+
+ICstLS0gYS9Tb3VyY2UvSmF2YVNjcmlwdENvcmUvQ01ha2VMaXN0cy50eHQKPiA+ICsrKysgYi9T
+b3VyY2UvSmF2YVNjcmlwdENvcmUvQ01ha2VMaXN0cy50eHQKPiA+ICtAQCAtMTI3NSw3ICsxMjc1
+LDggQEAgaWYgKEVOQUJMRV9XRUJfUkVQTEFZKQo+ID4gKyAgICAgbGlzdChBUFBFTkQgSmF2YVNj
+cmlwdENvcmVfSEVBREVSUyAke0RFUklWRURfU09VUkNFU19KQVZBU0NSSVBUQ09SRV9ESVJ9L0pT
+UmVwbGF5SW5wdXRzLmgpCj4gPiArIGVuZGlmICgpCj4gPiArCj4gPiArLWlmIChXVEZfQ1BVX0FS
+TSkKPiA+ICsraWYgKFdURl9DUFVfQVJDKQo+ID4gKytlbHNlaWYgKFdURl9DUFVfQVJNKQo+ID4g
+KyBlbHNlaWYgKFdURl9DUFVfQVJNNjQpCj4gPiArIGVsc2VpZiAoV1RGX0NQVV9BTFBIQSkKPiA+
+ICsgZWxzZWlmIChXVEZfQ1BVX0hQUEEpCj4gPiArZGlmZiAtLWdpdCBhL1NvdXJjZS9XVEYvd3Rm
+L1BsYXRmb3JtLmggYi9Tb3VyY2UvV1RGL3d0Zi9QbGF0Zm9ybS5oCj4gPiAraW5kZXggNTcxN2Yz
+ZWExLi5iMzI3ZWQ2OTMgMTAwNjQ0Cj4gPiArLS0tIGEvU291cmNlL1dURi93dGYvUGxhdGZvcm0u
+aAo+ID4gKysrKyBiL1NvdXJjZS9XVEYvd3RmL1BsYXRmb3JtLmgKPiA+ICtAQCAtMzQ5LDYgKzM0
+OSwxNCBAQAo+ID4gKwo+ID4gKyAjZW5kaWYgLyogQVJNICovCj4gPiArCj4gPiArKy8qIENQVShB
+UkMpIC0gQVJDICovCj4gPiArKyNpZiBkZWZpbmVkKF9fYXJjX18pCj4gPiArKyNkZWZpbmUgV1RG
+X0NQVV9BUkMgMQo+ID4gKysjaWYgZGVmaW5lZChfX0JJR19FTkRJQU5fXykKPiA+ICsrI2RlZmlu
+ZSBXVEZfQ1BVX0JJR19FTkRJQU4gMQo+ID4gKysjZW5kaWYKPiA+ICsrI2VuZGlmCj4gPiArKwo+
+ID4gKyAjaWYgQ1BVKEFSTSkgfHwgQ1BVKE1JUFMpIHx8IENQVShTSDQpIHx8IENQVShBTFBIQSkg
+fHwgQ1BVKEhQUEEpCj4gPiArICNkZWZpbmUgV1RGX0NQVV9ORUVEU19BTElHTkVEX0FDQ0VTUyAx
+Cj4gPiArICNlbmRpZgo+ID4gK2RpZmYgLS1naXQgYS9Tb3VyY2UvV1RGL3d0Zi9kdG9hL3V0aWxz
+LmggYi9Tb3VyY2UvV1RGL3d0Zi9kdG9hL3V0aWxzLmgKPiA+ICtpbmRleCA4ODk2NDJjZWUuLjhm
+MWU5OTMzZSAxMDA2NDQKPiA+ICstLS0gYS9Tb3VyY2UvV1RGL3d0Zi9kdG9hL3V0aWxzLmgKPiA+
+ICsrKysgYi9Tb3VyY2UvV1RGL3d0Zi9kdG9hL3V0aWxzLmgKPiA+ICtAQCAtNDksNyArNDksNyBA
+QAo+ID4gKyBkZWZpbmVkKF9fQVJNRUxfXykgfHwgXAo+ID4gKyBkZWZpbmVkKF9NSVBTX0FSQ0hf
+TUlQUzMyUjIpCj4gPiArICNkZWZpbmUgRE9VQkxFX0NPTlZFUlNJT05fQ09SUkVDVF9ET1VCTEVf
+T1BFUkFUSU9OUyAxCj4gPiArLSNlbGlmIENQVShNSVBTKSB8fCBDUFUoTUlQUzY0KSB8fCBDUFUo
+UFBDKSB8fCBDUFUoUFBDNjQpIHx8IENQVShQUEM2NExFKSB8fCBDUFUoU0g0KSB8fCBDUFUoUzM5
+MCkgfHwgQ1BVKFMzOTBYKSB8fCBDUFUoSUE2NCkgfHwgQ1BVKEFMUEhBKSB8fCBDUFUoQVJNNjQp
+IHx8IENQVShIUFBBKQo+ID4gKysjZWxpZiBDUFUoTUlQUykgfHwgQ1BVKE1JUFM2NCkgfHwgQ1BV
+KFBQQykgfHwgQ1BVKFBQQzY0KSB8fCBDUFUoUFBDNjRMRSkgfHwgQ1BVKFNINCkgfHwgQ1BVKFMz
+OTApIHx8IENQVShTMzkwWCkgfHwgQ1BVKElBNjQpIHx8IENQVShBTFBIQSkgfHwgQ1BVKEFSTTY0
+KSB8fCBDUFUoSFBQQSkgfHwgQ1BVKEFSQykKPiA+ICsgI2RlZmluZSBET1VCTEVfQ09OVkVSU0lP
+Tl9DT1JSRUNUX0RPVUJMRV9PUEVSQVRJT05TIDEKPiA+ICsgI2VsaWYgZGVmaW5lZChfTV9JWDg2
+KSB8fCBkZWZpbmVkKF9faTM4Nl9fKQo+ID4gKyAjaWYgZGVmaW5lZChfV0lOMzIpCj4gPiArZGlm
+ZiAtLWdpdCBhL1NvdXJjZS9jbWFrZS9PcHRpb25zUXQuY21ha2UgYi9Tb3VyY2UvY21ha2UvT3B0
+aW9uc1F0LmNtYWtlCj4gPiAraW5kZXggZWM2MDgxZGUwLi5lMWE1ZWZjMWUgMTAwNjQ0Cj4gPiAr
+LS0tIGEvU291cmNlL2NtYWtlL09wdGlvbnNRdC5jbWFrZQo+ID4gKysrKyBiL1NvdXJjZS9jbWFr
+ZS9PcHRpb25zUXQuY21ha2UKPiA+ICtAQCAtMzY1LDYgKzM2NSwxMCBAQCBpZiAoTUlOR1cgQU5E
+IENNQUtFX1NJWkVPRl9WT0lEX1AgRVFVQUwgOCkKPiA+ICsgICAgIFdFQktJVF9PUFRJT05fREVG
+QVVMVF9QT1JUX1ZBTFVFKEVOQUJMRV9KSVQgUFJJVkFURSBPRkYpCj4gPiArIGVuZGlmICgpCj4g
+PiArCj4gPiArK2lmIChXVEZfQ1BVX0FSQykKPiA+ICsrICAgIFdFQktJVF9PUFRJT05fREVGQVVM
+VF9QT1JUX1ZBTFVFKEVOQUJMRV9KSVQgUFJJVkFURSBPRkYpCj4gPiArK2VuZGlmICgpCj4gPiAr
+Kwo+ID4gKyBXRUJLSVRfT1BUSU9OX0NPTkZMSUNUKFVTRV9HU1RSRUFNRVIgVVNFX1FUX01VTFRJ
+TUVESUEpCj4gPiArIFdFQktJVF9PUFRJT05fQ09ORkxJQ1QoVVNFX0dTVFJFQU1FUiBVU0VfTUVE
+SUFfRk9VTkRBVElPTikKPiA+ICsgV0VCS0lUX09QVElPTl9DT05GTElDVChVU0VfUVRfTVVMVElN
+RURJQSBVU0VfTUVESUFfRk9VTkRBVElPTikKPiA+ICstLQo+ID4gKzIuMjUuMQo+ID4gKwo=
+
+--QAfyvqSzsv6Jp3y+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYjGU7gAKCRCRxVnb5MkS
+Owe2AJ0RBXbDiM7bJg/oCkxz/yCWGb8S8QCfeopaYERLdpmKBSw+jCbWuDszTiY=
+=fbvR
+-----END PGP SIGNATURE-----
+
+--QAfyvqSzsv6Jp3y+--
+
+--===============8966653483147682753==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8966653483147682753==--
