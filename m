@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60A95C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 21:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C04EFC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 21:45:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E53660F6F;
-	Wed, 16 Mar 2022 21:45:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XKBZmhFY3JIx; Wed, 16 Mar 2022 21:45:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 208F160F70;
-	Wed, 16 Mar 2022 21:45:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A72021BF2C2
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:44:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0940984187
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:44:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 732B784200;
+	Wed, 16 Mar 2022 21:45:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VIJTgBqv4orV for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QGtvArUpMl2u; Wed, 16 Mar 2022 21:45:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD345841D8;
+	Wed, 16 Mar 2022 21:45:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E96601BF2C2
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:44:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1BB14071E
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 21:44:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XO-Qc9JKhwFP for <buildroot@lists.busybox.net>;
  Wed, 16 Mar 2022 21:44:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6520D84193
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90B8840882
  for <buildroot@buildroot.org>; Wed, 16 Mar 2022 21:44:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 3F6568424A; Wed, 16 Mar 2022 21:35:25 +0000 (UTC)
+ id 5D8128424A; Wed, 16 Mar 2022 21:35:25 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 16 Mar 2022 22:41:12 +0100
+Date: Wed, 16 Mar 2022 22:43:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba7319a06e1b98524fde1384dc570a7f34870881
-X-Git-Newrev: 2fc2191845799ae2358b752fa29839817d33ad82
+X-Git-Oldrev: 3bcedaa732b539e4ad32776e867ef9626ffca5b7
+X-Git-Newrev: e820feba362a29a310ed3a93c8ad5546ceb8a2ee
 X-Patchwork-Hint: ignore
-Message-Id: <20220316213525.3F6568424A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zynaddsubfx: fix alsa-lib handling
+Message-Id: <20220316213525.5D8128424A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zynaddsubfx: add portaudio
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +59,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fc2191845799ae2358b752fa29839817d33ad82
+commit: https://git.buildroot.net/buildroot/commit/?id=e820feba362a29a310ed3a93c8ad5546ceb8a2ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-alsa-lib is optional, not mandatory, since the addition of the package
-in commit 18a863063735e2c658fa6947a4e540e9dda6c431
-
-Moreover, alsa support depends on BR2_PACKAGE_ALSA_LIB_SEQ (otherwise,
-it is silently disabled)
+portaudio is an optional dependency (enabled by default) since the
+addition of the package in commit
+18a863063735e2c658fa6947a4e540e9dda6c431
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/zynaddsubfx/Config.in      | 3 +--
- package/zynaddsubfx/zynaddsubfx.mk | 8 +++++++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/zynaddsubfx/zynaddsubfx.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/zynaddsubfx/Config.in b/package/zynaddsubfx/Config.in
-index 837a469e7c..f181a23944 100644
---- a/package/zynaddsubfx/Config.in
-+++ b/package/zynaddsubfx/Config.in
-@@ -2,8 +2,7 @@ config BR2_PACKAGE_ZYNADDSUBFX
- 	bool "zynaddsubfx"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
--	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib, liblo
--	select BR2_PACKAGE_ALSA_LIB
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # liblo
- 	select BR2_PACKAGE_FFTW
- 	select BR2_PACKAGE_FFTW_SINGLE
- 	select BR2_PACKAGE_LIBLO
 diff --git a/package/zynaddsubfx/zynaddsubfx.mk b/package/zynaddsubfx/zynaddsubfx.mk
-index db0459ce62..aeeb0b6405 100644
+index 461146aae8..aff9ac4bf4 100644
 --- a/package/zynaddsubfx/zynaddsubfx.mk
 +++ b/package/zynaddsubfx/zynaddsubfx.mk
-@@ -18,10 +18,16 @@ ZYNADDSUBFX_CONF_OPTS += -DOS_LIBRARIES=-latomic
+@@ -37,4 +37,11 @@ else
+ ZYNADDSUBFX_CONF_OPTS += -DJackEnable=OFF
  endif
  
- ZYNADDSUBFX_DEPENDENCIES = \
--	alsa-lib \
- 	fftw-single \
- 	liblo \
- 	mxml \
- 	zlib
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB_SEQ),y)
-+ZYNADDSUBFX_DEPENDENCIES += alsa-lib
-+ZYNADDSUBFX_CONF_OPTS += -DAlsaEnable=ON
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++ZYNADDSUBFX_DEPENDENCIES += portaudio
++ZYNADDSUBFX_CONF_OPTS += -DPaEnable=ON
 +else
-+ZYNADDSUBFX_CONF_OPTS += -DAlsaEnable=OFF
++ZYNADDSUBFX_CONF_OPTS += -DPaEnable=OFF
 +endif
 +
  $(eval $(cmake-package))
