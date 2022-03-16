@@ -1,64 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2566C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 22:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D05C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 22:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1641401DF;
-	Wed, 16 Mar 2022 22:07:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72C6E60F70;
+	Wed, 16 Mar 2022 22:10:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TiEYNoBR6KSW; Wed, 16 Mar 2022 22:07:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kMtIB_Y5A12a; Wed, 16 Mar 2022 22:10:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6BC5D401B7;
-	Wed, 16 Mar 2022 22:07:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1284C1BF3DB
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 22:07:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F5E860AD0;
+	Wed, 16 Mar 2022 22:10:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 22D5F1BF3DB
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 22:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F11E940179
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 22:07:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FF1440286
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 22:10:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T_w8p87nxv5M for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 22:07:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C0F6840018
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 22:07:02 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fP8PTDN02vD8 for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 22:10:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DD56040214
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 22:10:51 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:6da3:2756:3f87:4127])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2F35C13F854;
- Wed, 16 Mar 2022 23:06:58 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8A86F13F854;
+ Wed, 16 Mar 2022 23:10:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647468420;
- bh=HZaxtpXH6WnoAN8uNxvOYKpAqy/DvXBcIgRl6iMG7qE=;
+ s=smtp-20201208; t=1647468648;
+ bh=zzhiXVEM7afiMfq5R8xe3saYyXElgKclKS8eNWwBoPM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=HbAoY9XtiAMdQen7jeOW5e1e46ae+PCLOMXcL20gkr/F+lD2DgF8JGZ907Gl4TOQC
- 9wX2ZvC2JZLAxC+5RdcjdxkYbSOXpl/cKsMEMsuFmcFA/mgYB62bGIXj3INyxC1jwr
- xgik/KDQ6r/8ht+YIsFi65XnJ1O74EK0YVO4VukVDmzivhNqYoy8dyOrLxmC8EoaC4
- DqGrwMiHkYOr6+Nt8/Ze3p7DkfUcTSoNH0mKif/CxD185U8Wrv276hoZyVFfblN8EK
- w9sdKF+e1TBE9rBDcUexwF1fSv+gszaxu/xD4CkrZjGVZhkHg/r0w1GSBXO0rMw7eq
- FqVaMR8etLpzA==
+ b=BPKVqJb67Ow32DTNCMRiwe8Eq4+T83oVSWcsNX2L2LD1AvK1+lh3MAhi46Pu+n7S0
+ lloW18XRY33sVHiPahW0Qy/l4LqvD++t7m7CLFloSQgB1IE3DZk6g2IfvPDwyYkebl
+ Dpalf17XMRVO39aVNv/NRTTFggyxH2V5ThXN/Ykhx3y/bElN+FJyhT3LpZUfnhkIpN
+ RljGaGkJoFD1eFIGVlCy+sv6/Li/5glrtRXsPyDM+ZIPr0S4hlfxdmaxskjiehHUim
+ RYGDzjuRDiecgm+27abnj/HsVS1tjxQEkQvuoEZwdPrW1gPlJttu6euY3nPIaemeW5
+ gv9SPnEhNyuUg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 16 Mar 2022 23:06:57 +0100
-Date: Wed, 16 Mar 2022 23:06:57 +0100
+ Wed, 16 Mar 2022 23:10:46 +0100
+Date: Wed, 16 Mar 2022 23:10:46 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220316220657.GC283544@scaer>
-References: <20220316214848.448925-1-thomas.petazzoni@bootlin.com>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20220316221046.GD283544@scaer>
+References: <20220316213614.16878-1-ps.report@gmx.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220316214848.448925-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220316213614.16878-1-ps.report@gmx.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] support/scripts/pkg-stats: strengthen
- version check in check_package_get_latest_version_by_distro()
+Subject: Re: [Buildroot] [PATCH v1 00/12] package/gstreamer1/*: bump version
+ to 1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,76 +72,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot List <buildroot@buildroot.org>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Peter, All,
 
-On 2022-03-16 22:48 +0100, Thomas Petazzoni spake thusly:
-> The check_package_get_latest_version_by_distro() function analyzes the
-> data returned by release-monitoring.org. For two of our
-> packages (bento4 and qextserialport), release-monitoring.org returns
-> something that is a bit odd: it returns an entry with a
-> "stable_versions" field that contains an empty array. Our code was
-> ready to have or not have a "stable_versions" entry, but when it is
-> present, we assumed it was not an empty array. These two packages, for
-> some reason, break this assumption.
+On 2022-03-16 22:36 +0100, Peter Seiderer spake thusly:
+> For details see [1] and [2].
 > 
-> In order to solve this problem, this commit is more careful, and uses
-> the stable_versions field only if it exists and it has at least one
-> entry. The code is also reworked as a sequence of "if...elif...else"
-> to be more readable.
+> [1] https://lists.freedesktop.org/archives/gstreamer-devel/2022-March/079724.html
+> [2] https://gstreamer.freedesktop.org/releases/1.20/#1.20.1
 > 
-> This fixes the following exception when running pkg-stats on the full
-> package set:
-> 
-> Task exception was never retrieved
-> future: <Task finished name='Task-10772' coro=<check_package_latest_version_get() done, defined at ./support/scripts/pkg-stats:532> exception=IndexError('list index out of range')>
-> Traceback (most recent call last):
->   File "./support/scripts/pkg-stats", line 535, in check_package_latest_version_get
->     if await check_package_get_latest_version_by_distro(session, pkg):
->   File "./support/scripts/pkg-stats", line 489, in check_package_get_latest_version_by_distro
->     version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
-> IndexError: list index out of range
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/scripts/pkg-stats | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index c235d99407..f57041cee4 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -486,7 +486,12 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
->                  return False
->  
->              data = await resp.json()
-> -            version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
-> +            if 'stable_versions' in data and len(data['stable_versions']) > 0:
+> Peter Seiderer (12):
+>   package/gstreamer1: bump version to 1.20.1
+>   package/gst1-plugins-base: bump version to 1.20.1
+>   package/gst1-plugins-good: bump version to 1.20.1
+>   package/gst1-plugins-bad: bump version to 1.20.1
+>   package/gst1-plugins-ugly: bump version to 1.20.1
+>   package/gst1-devtools: bump version to 1.20.1
+>   package/gst1-libav: bump version to 1.20.1
+>   package/gst1-vaapi: bump version to 1.20.1
+>   package/gst1-rtsp-server: bump version to 1.20.1
+>   package/gstreamer1-editing-services: bump version to 1.20.1
+>   package/gst-omx: bump version to 1.20.1
+>   package/gst1-python: bump version to 1.20.1
 
-PEP8 says that we can just test the sequence to test for emptyness:
-    https://pep8.org/#programming-recommendations  (toward the end).
-
-Applied to master with that fixed, thanks.
+Whole series applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> +                version = data['stable_versions'][0]
-> +            elif 'version' in data:
-> +                version = data['version']
-> +            else:
-> +                version = None
->              check_package_latest_version_set_status(pkg,
->                                                      RM_API_STATUS_FOUND_BY_DISTRO,
->                                                      version,
+>  package/gstreamer1/gst-omx/gst-omx.hash                       | 4 ++--
+>  package/gstreamer1/gst-omx/gst-omx.mk                         | 2 +-
+>  package/gstreamer1/gst1-devtools/gst1-devtools.hash           | 4 ++--
+>  package/gstreamer1/gst1-devtools/gst1-devtools.mk             | 2 +-
+>  package/gstreamer1/gst1-libav/gst1-libav.hash                 | 4 ++--
+>  package/gstreamer1/gst1-libav/gst1-libav.mk                   | 2 +-
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash     | 4 ++--
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk       | 2 +-
+>  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash   | 4 ++--
+>  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk     | 2 +-
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash   | 4 ++--
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk     | 2 +-
+>  package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash   | 4 ++--
+>  package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk     | 2 +-
+>  package/gstreamer1/gst1-python/gst1-python.hash               | 4 ++--
+>  package/gstreamer1/gst1-python/gst1-python.mk                 | 2 +-
+>  package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash     | 4 ++--
+>  package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk       | 2 +-
+>  package/gstreamer1/gst1-vaapi/gst1-vaapi.hash                 | 4 ++--
+>  package/gstreamer1/gst1-vaapi/gst1-vaapi.mk                   | 2 +-
+>  .../gstreamer1-editing-services.hash                          | 4 ++--
+>  .../gstreamer1-editing-services.mk                            | 2 +-
+>  package/gstreamer1/gstreamer1/gstreamer1.hash                 | 4 ++--
+>  package/gstreamer1/gstreamer1/gstreamer1.mk                   | 2 +-
+>  24 files changed, 36 insertions(+), 36 deletions(-)
+> 
 > -- 
 > 2.35.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
