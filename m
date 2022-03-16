@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 323EFC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 20:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7512C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 16 Mar 2022 20:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF46460BC6;
-	Wed, 16 Mar 2022 20:39:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B452841F5;
+	Wed, 16 Mar 2022 20:39:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XP0pZ6DusNQc; Wed, 16 Mar 2022 20:39:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J85Zhi37t5u2; Wed, 16 Mar 2022 20:39:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C96FD6124F;
-	Wed, 16 Mar 2022 20:39:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA3861BF38A
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 20:39:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52F6F841BF;
+	Wed, 16 Mar 2022 20:39:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B8DAF1BF38A
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 20:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C70A460ACA
- for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 20:39:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3AF640ADF
+ for <buildroot@lists.busybox.net>; Wed, 16 Mar 2022 20:39:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eBTM7phnNx8P for <buildroot@lists.busybox.net>;
- Wed, 16 Mar 2022 20:39:07 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A9A8C61241
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 20:39:06 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- k8-20020a05600c1c8800b003899c7ac55dso2748971wms.1
- for <buildroot@buildroot.org>; Wed, 16 Mar 2022 13:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aWEl9KlZDY7wewf/AhyJRdE+0E/0lTMhZiUoYdWwcGU=;
- b=nI+yRTbRNb5Kpv/uRaw+wnxoZFRWqRxU4rDkoCoKsSTpp4Jcjm5aVg9ZcDOsfWJr/X
- Lsbbj8jnoe9O5PEG9jEgzKhDwgB98I8iJhN6wb+hnd717fGAYwtQv6mY4tvste5nrEaf
- LrsdIyiIysY42O6wHRCXyK1PaQgvswd3Hdi2FNwZy8/JHO2WzUWit0fROy+2iD4rHppW
- RjUSvEQOQLirB2p3O0bOQ0tg6qNixmd3R+flwOoXYPl+XakFYrJ+IyJeoB4tQTYiZak4
- AiOsOQCwKZ4ssUWXl3zLX5sJfRQfkaap6ngDdP+D2BtF4+lu6qnipJAGmfzg2OhBqDpg
- 79qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aWEl9KlZDY7wewf/AhyJRdE+0E/0lTMhZiUoYdWwcGU=;
- b=JcReuq5HfA0cnjLtOEW9eaw6GwDU1UF308ZfcwSsSFGIZ6g/9/jleF004Tt4AOyiGH
- WpDeclloZ/u5Ib4/9S+XSX7wJO7Oxq3bd1r0XA+S1EAFagFEGt9pj6zSkSU0BAc7LhbX
- Is/Z/2hfPkryJCEvNI7uSIUnhHTOfbhwgHOa1BlF9C3XVnH+IHr2jFIuhKFCwB3NRHv+
- hNnScewO3OnwNx3oAQkktv/S+ocaQz9LjQhCfPE2mE0KM1GgyJ9FyvsZzWwSb5hjCa89
- l2wL2u+KvVfAUXXkg3FaaZCGdBv3Udi9T3+zTbgwy5+aaLNfK1tawYLVKVyCRX0/StMS
- gaLQ==
-X-Gm-Message-State: AOAM5334hd0uTdrnJ4RzJ1t2fqP642ya9V6TkXBbP0QemQE2JAp6vDkB
- S1uJfd/uGW+PICcEO77AYLc5pQhUHCo=
-X-Google-Smtp-Source: ABdhPJzVVqliHu4HGkXLkrWSkusNqWV4WeybX7oznRrvR5Y/ZVJCohjijaGG73tEoqqgpn7Bi349Xg==
-X-Received: by 2002:a7b:c1cf:0:b0:38c:75c7:b0db with SMTP id
- a15-20020a7bc1cf000000b0038c75c7b0dbmr1129035wmj.134.1647463144319; 
- Wed, 16 Mar 2022 13:39:04 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- n2-20020a056000170200b001f1e16f3c53sm2450642wrc.51.2022.03.16.13.39.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 16 Mar 2022 13:39:03 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 16 Mar 2022 21:37:34 +0100
-Message-Id: <20220316203734.3081600-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fJFjvO1SVwyT for <buildroot@lists.busybox.net>;
+ Wed, 16 Mar 2022 20:39:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A65C540018
+ for <buildroot@buildroot.org>; Wed, 16 Mar 2022 20:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1647463159;
+ bh=FwgfIPEFwg0wyol3b67ap7T1imQVQ86N6qA+3x0MqLI=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=i7nnsSsfH0EK4jzU+Dbwbd27/fk4MYmd7TVwsLVUiGiL+D9MgKDcfI/Do93fjSXzn
+ JCs6HEJYs2kXYZggLIYIXE7qjHfk7xEFRKJSNMrGwBP/EPughMJ5SPLSLdz/Bef4jw
+ jmVEny3eoTyjwN03lLgGVPv7MhILbHkw47r6o1Iw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.226]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWAOW-1nabk52OXi-00XYgz; Wed, 16
+ Mar 2022 21:39:19 +0100
+Date: Wed, 16 Mar 2022 21:39:18 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220316213918.67ea4d94@gmx.net>
+In-Reply-To: <20220315220531.2bac9c2d@windsurf>
+References: <20220311065042.8687-1-ps.report@gmx.net>
+ <20220315220531.2bac9c2d@windsurf>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: fix musl build
+X-Provags-ID: V03:K1:sI5ganzjYSoY4/HuP2bda4dEj8aN5b+hmXrex1mXdrOT1vVJWH5
+ eg7YJF/PiD9dexm8EDWxc9xbp1fzCcEpaEU6VeZGRjVZS+qoawtUXKxEiovM/3F0HMYwjOM
+ Iqcm9v/Fg75vSZKuH7RrJLn01X+lBnIM7Tvjihnf590X8TNP/MD1UeSVx308nr0SMf0GL9b
+ kND/zGYASwc8JGDA+owZg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:N9Riy0oPAFA=:5jq6NY7iNZ2okiAz6npK//
+ weVNYDlegZ91WJvHQtPWk9KFSJmWTDyCqOBDU9qevAsbhqZ2Ua+6FhWPSYVATUeUKPAHYt5gq
+ /1mCMmPJVtYA2OYZOGYoYRhdtGGCK3rwFlBFX4lFT/fVeWAVqDmoU4TTk1xBuw1bvPd2o4KXw
+ ckplhXpeb1Jot7Wz748mqToXIzgv6ySXaE4hR0W48Bc+xHyKH54XEf7j0NR3c6dEZ1TTd9lhz
+ Cj7Nsvvo3x6dNtuf0gWRiHi8ECqqC3q4jng5NWth8vGlmesrazGd41ZZ9Zg1biRlst7wrRdkC
+ r1KXf98+d4VcqkBNnus2R/i5RZ8uOKm3gskh06zzuSiD2LQdWHqUhqpo6tdFrBkWjZl9mzg1D
+ MdCWZJl7Otir/U/iI8SRIoWVXCUEhftG9GoHpwNuz/dRreSZDv4XCDk8XKmuyGfcb6CvpTY2i
+ V2kaONi/NZ07hfcXkUH3E/6HczhFU6r1/a4ehjbPm3EdpEyyD+xfcQYeglNfNqxqBoYi3HnZJ
+ 7ANgoljqtbbEHrMXjTlLBjFcxI7G7JsdUcLvsj/wGmtIlM04Xtsfe0YMo13hRavfcuEVLqah8
+ k9qR0+ZCqC6FziAgCKhUjjs52Qb1U1cjGoLXp0QtTnYW/9Jf2ihw4nNEVI9IklBaRQJbl8Owc
+ m4B1PC3DkJ+jj/HYXlvvMsWQQlpKw7pFAB8aRcL1+2GqQBg++lgjYC0SCdCV309O1MWVaMwdu
+ LmKkBk7BLX4qhPXrOkE7m80RQTUj55SO/bQpjlMGoW7y/VyZ5FC0Z1KgPnuuEfyr1uYPoqfNJ
+ 4v3SKYBm6jGgRKDpKBXA/WdHW902VMh//pmIgFteAzrEml77Wn2C9WUJmNr/COHPT2xoUqxbn
+ AYr+QG1bIfsONQEwgR+0vq0Ut2aUf6XFjfojwlXm3KG7QYvRmpMBMT10pihWyejWet09d/Noz
+ N+P8rBHmJQRqY+r/SKJf5zcTuN2smZRL9AzXoVTFEEUthOwiHnDtkoPz0E9UN42Y+T2LBEW+6
+ cJYG4ioxBq1hjwL7rv1ug2eZqy9v29djkth5nGyIGtKEYmD5V1flMs7szvquokNTDma325JML
+ lEUEelGkeNyE+Y=
+Subject: Re: [Buildroot] [PATCH v1] package/wget: bump version to 1.21.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,82 +86,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure raised since bump to version 1.10.0
-in commit d96b9ed0738bae270c479bdaf21eebd4c1f9930d:
+Hello Thomas,
 
-In file included from ./jitterentropy.h:98,
-                 from ./jitterentropy-base.c:32,
-                 from ./rndjent.c:88:
-./jitterentropy-base-user.h: In function 'jent_get_cachesize':
-./jitterentropy-base-user.h:191:8: warning: implicit declaration of function 'open'; did you mean 'popen'? [-Wimplicit-function-declaration]
-  191 |   fd = open(file, O_RDONLY);
-      |        ^~~~
-      |        popen
-./jitterentropy-base-user.h:191:19: error: 'O_RDONLY' undeclared (first use in this function)
-  191 |   fd = open(file, O_RDONLY);
-      |                   ^~~~~~~~
+On Tue, 15 Mar 2022 22:05:31 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/f6182fca6a4e2ba29a89f770f17df691d7861f8d
+> Hello Peter,
+>
+> On Fri, 11 Mar 2022 07:50:42 +0100
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > - explicit set some default options (--without-metalink, --enable-opie,
+> >   --enable-digest, --enable-ntlm, --disable-debug, --disable-valgrind-tests,
+> >   --disable-assert)
+> >
+> > - add optional libpsl dependency
+> >
+> > - remove legacy --with-libidn option (see [1]), replace with
+> >   new --enable-iri option in case libiconv and libidn2 are available
+> >
+> > - use explicit --with-libuuid option
+> >
+> > - add optional c-ares dependency
+> >
+> > For details see [2].
+> >
+> > [1] https://git.savannah.gnu.org/cgit/wget.git/commit/configure.ac?id=a24e67e239ef949cc77a4c4e5a0beb703026a296
+> > [2] https://lists.gnu.org/archive/html/info-gnu/2022-02/msg00017.html
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> You're mixing up a minor version bump with a significant rework of the
+> package, which is unrelated to the version bump. This really needs
+> separate commit. Also, see below.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...entropy-Include-fcntl-h-and-limits-h.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/libgcrypt/0002-jitterentropy-Include-fcntl-h-and-limits-h.patch
+Started as a minor/patch-level version bump....and did take a look at the
+configure.ac changes ;-), will split up the patch on next iteration...
+>
+>
+> > +WGET_CONF_OPTS = \
+> > +	--without-metalink \
+> > +	--enable-opie \
+> > +	--enable-digest \
+> > +	--enable-ntlm \
+>
+> So opie, digest and ntlm enabled is the default?
 
-diff --git a/package/libgcrypt/0002-jitterentropy-Include-fcntl-h-and-limits-h.patch b/package/libgcrypt/0002-jitterentropy-Include-fcntl-h-and-limits-h.patch
-new file mode 100644
-index 0000000000..8f76f24c64
---- /dev/null
-+++ b/package/libgcrypt/0002-jitterentropy-Include-fcntl-h-and-limits-h.patch
-@@ -0,0 +1,38 @@
-+From ffaef0be613121d3ee37867d82932a7a30c2bc6d Mon Sep 17 00:00:00 2001
-+From: Heiko Becker <heirecka@exherbo.org>
-+Date: Thu, 3 Feb 2022 22:46:41 +0000
-+Subject: [PATCH] jitterentropy: Include <fcntl.h> and <limits.h>
-+
-+* random/jitterentropy-base-user.h: Include <fcntl.h> for O_RDONLY
-+* random/jitterentropy-base-user.h: Include <limits.h> for LONG_MAX
-+
-+--
-+
-+Fixes the build with musl libc.
-+
-+Signed-off-by: Heiko Becker <heirecka@exherbo.org>
-+
-+[Retrieved from:
-+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=commit;h=ffaef0be613121d3ee37867d82932a7a30c2bc6d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ random/jitterentropy-base-user.h | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/random/jitterentropy-base-user.h b/random/jitterentropy-base-user.h
-+index 326dfbed..389106ff 100644
-+--- a/random/jitterentropy-base-user.h
-++++ b/random/jitterentropy-base-user.h
-+@@ -39,6 +39,9 @@
-+  * DAMAGE.
-+  */
-+ 
-++#include <fcntl.h>
-++#include <limits.h>
-++
-+ #ifndef GCRYPT_JITTERENTROPY_BASE_USER_H
-+ #define GCRYPT_JITTERENTROPY_BASE_USER_H
-+ 
-+-- 
-+2.11.0
-+
--- 
-2.35.1
+Yes (this is what I wanted to express in the commit log by 'explicit set some
+default options')...
+
+>
+> > +	--disable-debug \
+> > +	--disable-valgrind-tests \
+> > +	--disable-assert
+
+Same here...
+
+> > +
+> > +ifeq ($(BR2_PACKAGE_LIBPSL),y)
+> > +WGET_CONF_OPTS += --with-libpsl
+> > +WGET_DEPENDENCIES += libpsl
+> > +else
+> > +WGET_CONF_OPTS += --without-libpsl
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> >  WGET_CONF_OPTS += --with-ssl=gnutls
+> >  WGET_DEPENDENCIES += gnutls
+> > @@ -22,19 +38,18 @@ else
+> >  WGET_CONF_OPTS += --without-ssl
+> >  endif
+> >
+> > -ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> > -WGET_DEPENDENCIES += libiconv
+> > -endif
+> > -
+> > -ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+> > -WGET_CONF_OPTS += --with-libidn
+> > -WGET_DEPENDENCIES += libidn2
+> > +ifeq ($(BR2_PACKAGE_LIBICONV)$(BR2_PACKAGE_LIBIDN2),yy)
+>
+> This is very likely wrong. Indeed BR2_PACKAGE_LIBICONV=y is only
+> possible when the toolchain does *not* have locale support. When the
+> toolchain has locale support, iconv support is provided by the
+> toolchain itself.
+
+Ups, did misread the following configure.ac part:
+
+ 780 AS_IF([test "X$iri" != "Xno"],[
+ 781   if test "X$am_cv_func_iconv" != "Xyes"; then
+ 782     iri=no
+ 783     if test "X$force_iri" = "Xyes"; then
+ 784       AC_MSG_ERROR([Libiconv is required for IRIs support])
+ 785     else
+ 786       AC_MSG_NOTICE([disabling IRIs because libiconv wasn't found])
+ 787     fi
+ 788   fi
+ 789 ])
+
+>
+> Could you revisit this, and also clarify the interaction between
+> --enable-iri/--disable-iri on one side and
+> --with-libidn/--without-libidn on the other side?
+
+The old 'with-libidn/without-libidn' option is gone, libidn2 is checked via
+pkg-config, the new option is 'enable-iri/disable-iri' (or auto-detect)...
+
+Will update the patch (soon)...., thanks for review!
+
+Regards,
+Peter
+
+>
+> Thanks!
+>
+> Thomas
 
 _______________________________________________
 buildroot mailing list
