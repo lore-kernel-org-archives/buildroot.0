@@ -4,76 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CF8AC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 16:26:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F627C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 16:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C75E78481B;
-	Thu, 17 Mar 2022 16:26:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AE7281431;
+	Thu, 17 Mar 2022 16:38:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6tUnYKp2nZza; Thu, 17 Mar 2022 16:26:27 +0000 (UTC)
+	with ESMTP id NZY4oAdxb0dW; Thu, 17 Mar 2022 16:38:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 050F2847D5;
-	Thu, 17 Mar 2022 16:26:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 303B48131B;
+	Thu, 17 Mar 2022 16:38:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 64D261BF27C
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 16:26:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 117481BF27C
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 16:38:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5374D417C1
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 16:26:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0099241870
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 16:38:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=balena.io
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tuy6tG5N9nmH for <buildroot@lists.busybox.net>;
- Thu, 17 Mar 2022 16:26:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com
- [IPv6:2607:f8b0:4864:20::736])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4DA18417AB
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 16:26:23 +0000 (UTC)
-Received: by mail-qk1-x736.google.com with SMTP id h196so4717595qke.12
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 09:26:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=balena.io; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5gOM8dG6o1XznrYajaqyo0tjgLxWj7npZwNqlA0zMbk=;
- b=BYhkdj8qDxsGqjO0+sLDroBduk+AVtag0EDUTrG16rbPwMWLtYNDc0moNb8LmMViSY
- cqknoTBurAjUbsk4Qc3CYgSxWMLmEdwKJBL0xcuyi+yhxxnnuKWzVA9KfjJd910P/9mu
- 8qr5dawzRSq213e/F+zZuOBJ/NS8FVntBTOzpBU8HC2J+LUGz1Xss86EGBiskAg2qCj9
- tIaWUjvE5W7+YKwdrZKjto19T6uB3wH/5zIYG47I3mDlax8uluF5uOCHNf/U2pHGgDbw
- oCe/0TgdGVpIzsUnobtXSOgoEq1x6b6LnshhpOZrsCEIoHomS/ohWU6PD+STzYUuO97Y
- 1BhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5gOM8dG6o1XznrYajaqyo0tjgLxWj7npZwNqlA0zMbk=;
- b=IlQqWI+a0atVY/aNbG16axY/clWLfmDFo4qcTUMT9eMwCq+u/TaI8zt9OJ6dzK6lHt
- fpzzQnFfDgOpyklqi20aPkTklWoFy/26xEwOxmLfEtV5/eOS1tFochtPSTuCaM3HvlNt
- ViKAD3i8pnE/ShQhr13h+QxT8VJhWOA3VF2IKZYl6qCziiqm/6PnRPjERfBjdBkqptqM
- o6M5hYrzOcC/6pbF83odHDDtvxXnpyoesOF5dmh4UoLBXD2xghXDGMmnws7figUjY/y0
- gs+eTwbmHhk8LAwd69Y7nhoFu4iWNFOGvCoFcNavCN55JUDk3PkYEt3aHbyggEs9/vky
- 6jbQ==
-X-Gm-Message-State: AOAM532XeiMxefTfuM05h+JwzU5ciWad9sW/36T+HpuIMnGDCp7yg2vw
- ry6SV7w5G18QnnlaeQU6VvnBClFwb/dD4M6Y
-X-Google-Smtp-Source: ABdhPJwN4bxeNmLfgqN4fQGIoXa6a8JYEFCZf5X1R2BpLlgi6g/DFFAm0fZbE0UUFavDWD8YunOBGg==
-X-Received: by 2002:a37:acb:0:b0:67b:15f9:55b8 with SMTP id
- 194-20020a370acb000000b0067b15f955b8mr3395542qkk.694.1647534381558; 
- Thu, 17 Mar 2022 09:26:21 -0700 (PDT)
-Received: from system76.lan (198-48-234-199.cpe.pppoe.ca. [198.48.234.199])
- by smtp.gmail.com with ESMTPSA id
- i17-20020ac85e51000000b002e1cf062ef4sm3950552qtx.45.2022.03.17.09.26.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Mar 2022 09:26:21 -0700 (PDT)
+ with ESMTP id sSv0NLn_CdNi for <buildroot@lists.busybox.net>;
+ Thu, 17 Mar 2022 16:38:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA50F41860
+ for <buildroot@buildroot.org>; Thu, 17 Mar 2022 16:38:46 +0000 (UTC)
+Received: (Authenticated sender: foss@0leil.net)
+ by mail.gandi.net (Postfix) with ESMTPSA id B7229240003;
+ Thu, 17 Mar 2022 16:38:42 +0000 (UTC)
+From: Quentin Schulz <foss+buildroot@0leil.net>
 To: buildroot@buildroot.org
-Date: Thu, 17 Mar 2022 12:25:30 -0400
-Message-Id: <20220317162530.427876-1-kyle@balena.io>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 17 Mar 2022 17:38:21 +0100
+Message-Id: <20220317163823.2913753-1-foss+buildroot@0leil.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/unbound: use system libevent
+Subject: [Buildroot] [PATCH 1/3] package/qt5/qt5base: security bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,38 +52,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kyle Harding via buildroot <buildroot@buildroot.org>
-Reply-To: Kyle Harding <kyle@balena.io>
-Cc: Kyle Harding <kyle@balena.io>, Stefan Ott <stefan@ott.net>
+Cc: Quentin Schulz <foss+buildroot@0leil.net>,
+ Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The file descriptor limit when using the builtin mini-event
-cannot handle more than 1024 file descriptors.
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-https://unbound.docs.nlnetlabs.nl/en/latest/topics/performance.html?highlight=libevent#using-libevent
+This fixes CVE-2022-25255 and CVE-2022-25634.
 
-Signed-off-by: Kyle Harding <kyle@balena.io>
+Cc: Quentin Schulz <foss+buildroot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- package/unbound/unbound.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/qt5/qt5base/qt5base.hash | 2 +-
+ package/qt5/qt5base/qt5base.mk   | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index 1e6e0d99d7..782ed2b049 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -17,6 +17,7 @@ UNBOUND_CONF_OPTS = \
- 	--with-pidfile=/var/run/unbound.pid \
- 	--with-rootkey-file=/etc/unbound/root.key \
- 	--enable-tfo-server \
-+	--with-libevent=$(STAGING_DIR)/usr \
- 	--with-libexpat=$(STAGING_DIR)/usr \
- 	--with-ssl=$(STAGING_DIR)/usr
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index 1b9ff43ab2..c031f71c77 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  96b1c96041ae7b5186c94f231979217bd50e3c0a4caeba32982faa8054a6d113  qtbase-d16bf02a11953dcac01dca73e6f3778f293adefe.tar.bz2
++sha256  18c17d441fbefa9dd13d1d6bfb5f542c986ba86cc37930247f9e4d782df2244b  qtbase-f31e001a9399e4e620847ea2c3e90749350140ae.tar.bz2
  
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ef02edfc1d..8fd5800822 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5BASE_VERSION = d16bf02a11953dcac01dca73e6f3778f293adefe
++QT5BASE_VERSION = f31e001a9399e4e620847ea2c3e90749350140ae
+ QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
+ QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
+ 
+@@ -15,6 +15,10 @@ QT5BASE_SYNC_QT_HEADERS = YES
+ # 0010-Avoid-processing-intensive-painting-of-high-number-o.patch
+ # 0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
+ QT5BASE_IGNORE_CVES += CVE-2021-38593
++# From commit 2766b2cba6ca4b1c430304df5437e2a6c874b107 "QProcess/Unix: ensure we don't accidentally execute something from CWD"
++QT5BASE_IGNORE_CVES += CVE-2022-25255
++# From commit e68ca8e51375d963b2391715f70b42707992dbd8 "Windows: use QSystemLibrary instead of LoadLibrary directly"
++QT5BASE_IGNORE_CVES += CVE-2022-25634
+ 
+ # A few comments:
+ #  * -no-pch to workaround the issue described at
 -- 
-2.30.2
+2.35.1
 
 _______________________________________________
 buildroot mailing list
