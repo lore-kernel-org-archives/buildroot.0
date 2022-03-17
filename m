@@ -1,57 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42222C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 17:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F0FBC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 18:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0D4481258;
-	Thu, 17 Mar 2022 17:03:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE5D0401FE;
+	Thu, 17 Mar 2022 18:03:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pDfr01yBo5d7; Thu, 17 Mar 2022 17:03:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kw4kd0kqqqcI; Thu, 17 Mar 2022 18:03:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D48980B6F;
-	Thu, 17 Mar 2022 17:03:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 638911BF350
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 17:03:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9B9D401D8;
+	Thu, 17 Mar 2022 18:03:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CF98D1BF25F
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 18:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5112F847DF
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 17:03:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC3EA4023D
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 18:03:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OrwdPWkrTipd for <buildroot@lists.busybox.net>;
- Thu, 17 Mar 2022 17:03:27 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dgi3227KIkYc for <buildroot@lists.busybox.net>;
+ Thu, 17 Mar 2022 18:03:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8AD684732
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 17:03:26 +0000 (UTC)
-Received: (Authenticated sender: theo.lebrun@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D8FBE1C0006;
- Thu, 17 Mar 2022 17:03:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647536603;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=3Um5viIWxBf6fB8egt+xf8U7o+E0xwdQ55r3IdSD01c=;
- b=aypDEyMz9Lm+D/AyCTV5QQlrcnWlTb5vd6rqZcF8fRkSlhLCDPx2Pi4+pxrdam/BIMllfX
- k2hJJCjTKPl1X/uUPje3cttfg2k6WnEZiyCR6y44UfAeskCudk/O5x9mTv6XroC3MZID3s
- g4diy60UGAn4CRps5xqci4kQkP+BgSIZKRmJP4LQLp1h6rmHitxwrKgditegNx4XaBjgTn
- cTjcn04NG+fZTMg6cqeNKViYV22+bf0dhi+7Q8c5ZnhtqsIn+WYk3Evw0W9dPmMNSauZCM
- UyUZlbdd630tYnCOCcTNSTAHwQ44iTiqtsRrugacCka/zXApTAZLyeP5jBUWYw==
-To: buildroot@buildroot.org
-Date: Thu, 17 Mar 2022 18:03:17 +0100
-Message-Id: <20220317170317.308827-1-theo.lebrun@bootlin.com>
-X-Mailer: git-send-email 2.35.1
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0FE4E40004
+ for <buildroot@buildroot.org>; Thu, 17 Mar 2022 18:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1647540188;
+ bh=oYSPH449TDQLfPqCcvLXOeqHvZt9IlWB1q5dLovGrKs=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=Ji43e9R18+jXkiA2MzwlnYMqPk3D0mEeDgO/X4YyBmhYM7KEMuXC7+OS/FfE0QRZr
+ 54iqiPeLFUPi/dp+f7IyDV/QaW1r1xgVZ9gSyxKLbCYr2a77aZ/Aq2uSaRZWMoMmaE
+ /4snbza+pcaun+MHeELwAEHBlU94J+HHZ6nbWVeU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.203]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmlXK-1nvxE20PLi-00jpzi; Thu, 17
+ Mar 2022 19:03:08 +0100
+Date: Thu, 17 Mar 2022 19:03:06 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: "Sassen, Rutger" <rsassen@comecer.com>
+Message-ID: <20220317190306.1e427303@gmx.net>
+In-Reply-To: <YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
+References: <YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/signal-estimator: add new package
+X-Provags-ID: V03:K1:7pZmUTRhcr8rN/wup7GlLLHRclPNZ3qRUF/D4IVQS/cgpqfh1Jq
+ BIkuPD9vZExFIQbOukrt+rwhooVdn8OfPM78M3EHqZawaNYW83O2FB2oGsZE9uWA0ZHYs7A
+ JtdNggItUzq0VU2vJx2gtYu8PBWZHC0iSHNYpJ3QKYuAH7IcZUNEaKkZeR28bHwYrZXogOx
+ 2RIJehplk1MQSyoUQKq/g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FInnU3fVQVo=:AzV9toaN90uh/szHXNgOXy
+ w1u7W0EJ6II8eh4B1YOUmWD0uZGSPuJrekIrijzOrvMqbtDLQfXdVKGFVnnP6Eaoc9bsiFntE
+ hlw3CVXnd5ABWlf1py6Dvke3f+K6wA88AtfcyHqIF20im197gpJAslmH6iWwb5Ti8PlIoIqYU
+ vu7r9J5En/0HcgXeMxgd2GFcclB5zQFIp/dsqd8okVCnFmCLLl0ajz9YCOQx8ecGGONmIEdDk
+ v2b89S68b43yoSrvaAkRGpVZf1xox5++7zt2IeFqfLUU4ttoQTGxdzreeeTDfvy4G/WSF6qQZ
+ 1Cwk9XftaE0bGLkjFy52xPNgjXSg9Po41c73bdcgTufRJJwCbBFVx4wqV7cFgYzYHtV5bKJl8
+ S1zvHqnC0VAIyg9IZQ1cKD3xzMxsVYnSo31rkV5/pqMb2prmw0Qg4/qi65oBKDG2lMrlw5f7d
+ 14k2JAr07E96LwUSFuCEbt3IpXoPfhRE4ulZE7VrGlwfoedNE3GPY38KBc3Dt7NHJpr8dvhN8
+ D5S4zbFe54qCx9gDB/GsLisPbTF1zA/ft68hPRRSfzComi8PQiw+acCM3bLqo48bxlWWSYH/n
+ DM4OstIA+BI0MzzpfwFw0UOF+8itlP6XeZvKv/h3bv6vySqlmJIgPgNrFxV9Z5BXQK5CnAgfD
+ 54f8a141YN8U2OnjKaC1HvtLoqPfFFJXP4vrdTUXAbTXJ7sSGkxa+rTZ2CHv9rvobx3xprAp5
+ 3TFRmhm/urAQy9rWTkMh38oGk6sJTbh2LtNNgYjpvBceCmuhXLBVJpAX3X9eK6KDkjrpv7a7c
+ GmCR9oMMC1ju0qpFBXtew2zWOYSRziKoDQBZ5tg+RKmL7RbxErIHLl3Wt6+2PwwAvKJw3DhQ3
+ rNroJ4rwkHy/NkisaHj9nXyb6Oz1E1wLG67VzBrF5YlyBy8YlxUbVk95MSqXF32QACtobyK8g
+ 9yI9Vzt576hdIDc+MKAVKoBleM2v4lpEUHebAej1qVXmGK6iD74+xCsG0VE6rfa+Ef+0AT/dj
+ TPBqs5nWfkRwY8YGp9QPB1szDYDAnRXUb8HlFs0hl6/LNIR+MIwnztseCAUIZVttzIXoO/rde
+ PtgrHq3pc/FlQU=
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/rpi-firmware: fix missing
+ files in overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,96 +86,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Th=C3=A9o_Lebrun_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TWVhc3VyZSBjaGFyYWN0ZXJpc3RpY3Mgb2YgYSBsb29wZWQgYmFjayBzaWduYWwuCmh0dHBzOi8v
-Z2l0aHViLmNvbS9nYXZ2L3NpZ25hbC1lc3RpbWF0b3IKClNpZ25lZC1vZmYtYnk6IFRow6lvIExl
-YnJ1biA8dGhlby5sZWJydW5AYm9vdGxpbi5jb20+Ci0tLQogcGFja2FnZS9Db25maWcuaW4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwogLi4uLzAwMDEtZml4LW5hbm9zZWNvbmQt
-dHlwZS1zaXplLnBhdGNoICAgICAgIHwgMzMgKysrKysrKysrKysrKysrKysrKwogcGFja2FnZS9z
-aWduYWwtZXN0aW1hdG9yL0NvbmZpZy5pbiAgICAgICAgICAgIHwgMTQgKysrKysrKysKIC4uLi9z
-aWduYWwtZXN0aW1hdG9yL3NpZ25hbC1lc3RpbWF0b3IuaGFzaCAgICB8ICAzICsrCiBwYWNrYWdl
-L3NpZ25hbC1lc3RpbWF0b3Ivc2lnbmFsLWVzdGltYXRvci5tayAgfCAxOSArKysrKysrKysrKwog
-NSBmaWxlcyBjaGFuZ2VkLCA3MCBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFj
-a2FnZS9zaWduYWwtZXN0aW1hdG9yLzAwMDEtZml4LW5hbm9zZWNvbmQtdHlwZS1zaXplLnBhdGNo
-CiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zaWduYWwtZXN0aW1hdG9yL0NvbmZpZy5pbgog
-Y3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvc2lnbmFsLWVzdGltYXRvci9zaWduYWwtZXN0aW1h
-dG9yLmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3NpZ25hbC1lc3RpbWF0b3Ivc2ln
-bmFsLWVzdGltYXRvci5tawoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2Fn
-ZS9Db25maWcuaW4KaW5kZXggN2VkMDc1YWUxOS4uOTcxYjIzODgzMSAxMDA2NDQKLS0tIGEvcGFj
-a2FnZS9Db25maWcuaW4KKysrIGIvcGFja2FnZS9Db25maWcuaW4KQEAgLTEzOSw2ICsxMzksNyBA
-QCBtZW51ICJEZWJ1Z2dpbmcsIHByb2ZpbGluZyBhbmQgYmVuY2htYXJrIgogCXNvdXJjZSAicGFj
-a2FnZS9ydC10ZXN0cy9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3J3bWVtL0NvbmZpZy5p
-biIKIAlzb3VyY2UgInBhY2thZ2Uvc2VudHJ5LW5hdGl2ZS9Db25maWcuaW4iCisJc291cmNlICJw
-YWNrYWdlL3NpZ25hbC1lc3RpbWF0b3IvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9zcGlk
-ZXZfdGVzdC9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3N0cmFjZS9Db25maWcuaW4iCiAJ
-c291cmNlICJwYWNrYWdlL3N0cmVzcy9Db25maWcuaW4iCmRpZmYgLS1naXQgYS9wYWNrYWdlL3Np
-Z25hbC1lc3RpbWF0b3IvMDAwMS1maXgtbmFub3NlY29uZC10eXBlLXNpemUucGF0Y2ggYi9wYWNr
-YWdlL3NpZ25hbC1lc3RpbWF0b3IvMDAwMS1maXgtbmFub3NlY29uZC10eXBlLXNpemUucGF0Y2gK
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uNjgwN2ZjMjk2YgotLS0gL2Rl
-di9udWxsCisrKyBiL3BhY2thZ2Uvc2lnbmFsLWVzdGltYXRvci8wMDAxLWZpeC1uYW5vc2Vjb25k
-LXR5cGUtc2l6ZS5wYXRjaApAQCAtMCwwICsxLDMzIEBACitGcm9tIGJlODQ0M2RiNzZjNjkxZWIx
-YThlZTA3NzYwYTgwMWE1MzA3NTJkMGEgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiA9
-P1VURi04P3E/VGg9QzM9QTlvPTIwTGVicnVuPz0gPHRoZW8ubGVicnVuQGJvb3RsaW4uY29tPgor
-RGF0ZTogVGh1LCAxNyBNYXIgMjAyMiAxMTo0MjoyNCArMDEwMAorU3ViamVjdDogW1BBVENIXSBm
-aXggbmFub3NlY29uZCB0eXBlIHNpemUKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6
-IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhi
-aXQKKworVGhlIHByZXZpb3VzIHR5cGUgd2FzIGxvbmcsIGl0IGdvdCByZXBsYWNlZCBieSBsb25n
-IGxvbmcgdG8gZW5zdXJlIGJlaW5nCitjYXBhYmxlIG9mIHN0b3JpbmcgYmlnIGVub3VnaCBkdXJh
-dGlvbnMvdGltZXMuIDIqKjMxLTEgY291bGQgb25seQorcmVwcmVzZW50IGFib3V0IH4yLjE1cyB3
-aGljaCB3YXMgY29uZmxpY3Rpbmcgd2l0aCB0aGUgbWludXRlIGNvbnN0YW50LgorCitTaWduZWQt
-b2ZmLWJ5OiBUaMOpbyBMZWJydW4gPHRoZW8ubGVicnVuQGJvb3RsaW4uY29tPgorLS0tCisgc3Jj
-L2NsaS9UaW1lLmhwcCB8IDIgKy0KKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL3NyYy9jbGkvVGltZS5ocHAgYi9zcmMvY2xpL1Rp
-bWUuaHBwCitpbmRleCBiZWZkNTIxLi42Mzg0MTNlIDEwMDY0NAorLS0tIGEvc3JjL2NsaS9UaW1l
-LmhwcAorKysrIGIvc3JjL2NsaS9UaW1lLmhwcAorQEAgLTgsNyArOCw3IEBACisgbmFtZXNwYWNl
-IHNpZ25hbF9lc3RpbWF0b3IgeworIAorIC8vISBOYW5vc2Vjb25kcyB0eXBlLgorLXVzaW5nIG5h
-bm9zZWNvbmRzX3QgPSBsb25nOworK3VzaW5nIG5hbm9zZWNvbmRzX3QgPSBsb25nIGxvbmc7Cisg
-CisgLy8hIE9uZSBuYW5vc2Vjb25kIHJlcHJlc2VudGVkIGluIG5hbm9zZWNvbmRzLgorIGlubGlu
-ZSBjb25zdGV4cHIgbmFub3NlY29uZHNfdCBOYW5vc2Vjb25kID0gMTsKKy0tIAorMi4zNS4xCisK
-ZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2lnbmFsLWVzdGltYXRvci9Db25maWcuaW4gYi9wYWNrYWdl
-L3NpZ25hbC1lc3RpbWF0b3IvQ29uZmlnLmluCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAw
-MDAwMDAwMDAuLjlhNDBiNjY2MTIKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3NpZ25hbC1l
-c3RpbWF0b3IvQ29uZmlnLmluCkBAIC0wLDAgKzEsMTQgQEAKK2NvbW1lbnQgInNpZ25hbC1lc3Rp
-bWF0b3IgbmVlZHMgYSB0b29jaGFpbiB3LyBDKyssIHRocmVhZHMsIGdjYyA+PSA3IgorCWRlcGVu
-ZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
-UyB8fCBcCisJCQkhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNworCitjb25maWcgQlIyX1BB
-Q0tBR0VfU0lHTkFMX0VTVElNQVRPUgorCWJvb2wgInNpZ25hbC1lc3RpbWF0b3IiCisJZGVwZW5k
-cyBvbiBCUjJfSU5TVEFMTF9MSUJTVERDUFAKKwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fR0ND
-X0FUX0xFQVNUXzcgIyBDKysxNworCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
-UyAjIGFsc2EtbGliCisJc2VsZWN0IEJSMl9QQUNLQUdFX0FMU0FfTElCCisJaGVscAorCSAgTWVh
-c3VyZSBjaGFyYWN0ZXJpc3RpY3Mgb2YgYSBsb29wZWQgYmFjayBzaWduYWwuCisKKwkgIGh0dHBz
-Oi8vZ2l0aHViLmNvbS9nYXZ2L3NpZ25hbC1lc3RpbWF0b3IKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-c2lnbmFsLWVzdGltYXRvci9zaWduYWwtZXN0aW1hdG9yLmhhc2ggYi9wYWNrYWdlL3NpZ25hbC1l
-c3RpbWF0b3Ivc2lnbmFsLWVzdGltYXRvci5oYXNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IDAwMDAwMDAwMDAuLjQ0NGY3MzA5OWUKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3NpZ25h
-bC1lc3RpbWF0b3Ivc2lnbmFsLWVzdGltYXRvci5oYXNoCkBAIC0wLDAgKzEsMyBAQAorIyBMb2Nh
-bGx5IGNvbXB1dGVkCitzaGEyNTYgIGJlYWQ4YjVlYWM1YTdkNDE3MmE5MjcyY2MwYjYxODI1MmE3
-NDc2ODVlZTZkZTIzNDljYjJjMjM1YzE4NjI3ZjcgIHNpZ25hbC1lc3RpbWF0b3ItdjAuMC4zLWJy
-MS50YXIuZ3oKK3NoYTI1NiAgODI1ZjU3MmE2YTdjYTczODllNWJkZGJlYmU0NWM4MzllMjNhNmNm
-MGI2M2ZhYjZjOWUwYzZlZDAxODA1NjIwNCAgTElDRU5TRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9z
-aWduYWwtZXN0aW1hdG9yL3NpZ25hbC1lc3RpbWF0b3IubWsgYi9wYWNrYWdlL3NpZ25hbC1lc3Rp
-bWF0b3Ivc2lnbmFsLWVzdGltYXRvci5tawpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAw
-MDAwMDAwLi4yNDEyMGIzNmRhCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9zaWduYWwtZXN0
-aW1hdG9yL3NpZ25hbC1lc3RpbWF0b3IubWsKQEAgLTAsMCArMSwxOSBAQAorIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKKyMKKyMgc2lnbmFsLWVzdGltYXRvcgorIworIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMKKworU0lHTkFMX0VTVElNQVRPUl9WRVJTSU9OID0gdjAuMC4zCisjIFVzaW5nIEdpdCBh
-cyB0aGUgcGFja2FnZSBkZXBlbmRzIG9uIGEgc3VibW9kdWxlIChhbiBvbGQgdmVyc2lvbiBvZiBj
-eHhvcHQpLgorU0lHTkFMX0VTVElNQVRPUl9TSVRFX01FVEhPRCA9IGdpdAorU0lHTkFMX0VTVElN
-QVRPUl9TSVRFID0gaHR0cHM6Ly9naXRodWIuY29tL2dhdnYvc2lnbmFsLWVzdGltYXRvcgorU0lH
-TkFMX0VTVElNQVRPUl9HSVRfU1VCTU9EVUxFUyA9IFlFUworU0lHTkFMX0VTVElNQVRPUl9MSUNF
-TlNFID0gTUlUCitTSUdOQUxfRVNUSU1BVE9SX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCisKK1NJ
-R05BTF9FU1RJTUFUT1JfREVQRU5ERU5DSUVTID0gYWxzYS1saWIKKworU0lHTkFMX0VTVElNQVRP
-Ul9DT05GX09QVFMgKz0gLURCVUlMRF9HVUk9T0ZGCisKKyQoZXZhbCAkKGNtYWtlLXBhY2thZ2Up
-KQotLSAKMi4zNS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello Rutger,
+
+On Thu, 17 Mar 2022 11:06:22 +0000, "Sassen, Rutger" <rsassen@comecer.com> wrote:
+
+> When supporting multiple hardware targets, overlay_map.dtb might
+> be needed to map overlay names to one of several implementations.
+>
+> Signed-off-by: Rutger Sassen <rsassen@comecer.com>
+
+Thanks for new patch iteration...
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+
+> ---
+> Changes v2 -> v3:
+>  - in Config.in use if statement instead of depends (suggested by Peter
+>    Seiderer)
+>  - mention the filename overlay_map.dtb in the help text (suggested by
+>    Peter Seiderer)
+>
+> Changes v1 -> v2:
+>   - instead of always copying overlay_map.dtb, make it configurable
+>     (suggested by Peter Seiderer)
+>   - do not copy README since it a special case, only needed when
+>     installing overlays to a non-standard location (suggested by Peter
+>     Seiderer)
+>
+> When supporting multiple hardware targets, overlay_map.dtb might
+> be needed to map overlay names to one of several implementations.
+>
+> Signed-off-by: Rutger Sassen <rsassen@comecer.com>
+> ---
+>  package/rpi-firmware/Config.in       | 12 ++++++++++++
+>  package/rpi-firmware/rpi-firmware.mk |  7 +++++++
+>  2 files changed, 19 insertions(+)
+>
+> diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+> index 8070dc3019..36054353f8 100644
+> --- a/package/rpi-firmware/Config.in
+> +++ b/package/rpi-firmware/Config.in
+> @@ -93,6 +93,18 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+>  	  overlays, to support HATs (Hardware Attached on Top, add-on
+>  	  modules).
+>
+> +if BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> +
+> +config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP
+> +	bool "Install DTB overlay map"
+> +	default n
+> +	help
+> +	  Say 'y' here if you need to support multiple hardware targets
+> +	  and you need overlay_map.dtb for target dependent mapping of
+> +	  overlay names to one of several overlay implementations.
+> +
+> +endif # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> +
+>  config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+>  	bool "vcdbg"
+>  	depends on BR2_arm # prebuilt arm binary, rpi-userland
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index b46a7f5270..800b560070 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -57,6 +57,12 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+>  endef
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP),y)
+> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
+> +endef
+> +endif
+> +
+>  # Install prebuilt libraries if RPI_USERLAND not enabled
+>  ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>  define RPI_FIRMWARE_INSTALL_TARGET_LIB
+> @@ -83,6 +89,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+>  	$(RPI_FIRMWARE_INSTALL_CONFIG)
+>  	$(RPI_FIRMWARE_INSTALL_DTB)
+>  	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+> +	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP)
+>  endef
+>
+>  $(eval $(generic-package))
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
