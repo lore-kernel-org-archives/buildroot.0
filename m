@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98AD7C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 21:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEAC6C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 21:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4988440194;
-	Thu, 17 Mar 2022 21:02:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 954118482C;
+	Thu, 17 Mar 2022 21:02:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sdowTO8QTQPF; Thu, 17 Mar 2022 21:02:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2uBaroTrD45X; Thu, 17 Mar 2022 21:02:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1891140412;
-	Thu, 17 Mar 2022 21:02:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B9C131C1135
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAACF84824;
+	Thu, 17 Mar 2022 21:02:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C7CEB1C113E
  for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 21:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6FA160B0E
+ by smtp4.osuosl.org (Postfix) with ESMTP id B65EE41907
  for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 21:02:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0qKSQu7Fssp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rp4WKwYcXMyQ for <buildroot@lists.busybox.net>;
  Thu, 17 Mar 2022 21:02:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B57060A7B
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 21:02:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0104F41905
+ for <buildroot@buildroot.org>; Thu, 17 Mar 2022 21:02:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9F6C1843B2; Thu, 17 Mar 2022 20:53:38 +0000 (UTC)
+ id 93A88843AF; Thu, 17 Mar 2022 20:53:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Thu, 17 Mar 2022 22:01:41 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: b6a980e372cf406e4e3a7c388a1c60a1d63dd345
-X-Git-Newrev: c2e163ad4e83e565d683ccc05cef101c864b99f2
+X-Git-Oldrev: 5fa2a8d554e6cb0c3db2d86eda57ec4bfd321415
+X-Git-Newrev: b6a980e372cf406e4e3a7c388a1c60a1d63dd345
 X-Patchwork-Hint: ignore
-Message-Id: <20220317205338.9F6C1843B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/libsrtp: bump to
- version 2.4.2
+Message-Id: <20220317205338.93A88843AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/oprofile: drop
+ custom install rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2e163ad4e83e565d683ccc05cef101c864b99f2
+commit: https://git.buildroot.net/buildroot/commit/?id=b6a980e372cf406e4e3a7c388a1c60a1d63dd345
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-This is a patch release for version 2 & 2.4, fixing a regression
-introduced in 2.4.1.
+Drop custom install rules which were added since commit
+676797d57f33fbe9d5adc81932847154ebd1ce93. Indeed, they result in a
+broken installation. Especially, they are trying to "guess" what must
+be installed based on BR2_ARCH but oprofile has its own logic. For
+example, goldmont microarchitecture files must be installed in i386
+directory even if this architecture is 64 bits:
+https://sourceforge.net/p/oprofile/oprofile/ci/0ad5a9e6af86a88e1dd41180f45bc48b646eba6a
 
-https://github.com/cisco/libsrtp/releases/tag/v2.4.2
+This will result in the following runtime failure:
+
+oprofile: could not open unit mask description file /usr/share/oprofile//i386/goldmont/unit_masks
+Unable to find info for event cpu_clk_unhalted
+
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=14641
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 232868ffd3ef76f060711adf5ea1e5001e21ef9d)
+(cherry picked from commit 5259807318699646a7bb9cbc24fb137983bc5270)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsrtp/libsrtp.hash | 2 +-
- package/libsrtp/libsrtp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/oprofile/oprofile.mk | 41 -----------------------------------------
+ 1 file changed, 41 deletions(-)
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-index 3de0130f4c..8e51e68ac2 100644
---- a/package/libsrtp/libsrtp.hash
-+++ b/package/libsrtp/libsrtp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3cb580928fcd502426809c68406d04aaa5ef1af7ebb0a3a41a52a13576f2fc07  libsrtp-2.4.1.tar.gz
-+sha256  3b1bcb14ebda572b04b9bdf07574a449c84cb924905414e4d94e62837d22b628  libsrtp-2.4.2.tar.gz
- sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index 885f05a33c..f2ba600dd6 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 85bc4efa9b..265d6ebd18 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -14,51 +14,10 @@ OPROFILE_CONF_OPTS = \
+ 	--enable-gui=no \
+ 	--with-kernel=$(STAGING_DIR)/usr
  
--LIBSRTP_VERSION = 2.4.1
-+LIBSRTP_VERSION = 2.4.2
- LIBSRTP_SITE = $(call github,cisco,libsrtp,v$(LIBSRTP_VERSION))
- LIBSRTP_INSTALL_STAGING = YES
- LIBSRTP_LICENSE = BSD-3-Clause
+-OPROFILE_BINARIES = \
+-	utils/ophelp pp/opannotate pp/oparchive pp/opgprof \
+-	pp/opreport opjitconv/opjitconv \
+-	utils/op-check-perfevents libabi/opimport \
+-	pe_counting/ocount pe_profiling/operf
+-
+-ifeq ($(BR2_i386),y)
+-OPROFILE_ARCH = i386
+-endif
+-ifeq ($(BR2_mipsel),y)
+-OPROFILE_ARCH = mips
+-endif
+-ifeq ($(BR2_powerpc),y)
+-OPROFILE_ARCH = ppc
+-endif
+-ifeq ($(BR2_x86_64),y)
+-OPROFILE_ARCH = x86-64
+-endif
+-ifeq ($(OPROFILE_ARCH),)
+-OPROFILE_ARCH = $(BR2_ARCH)
+-endif
+-
+ OPROFILE_DEPENDENCIES = popt binutils host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
+ OPROFILE_DEPENDENCIES += libpfm4
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),)
+-define OPROFILE_INSTALL_SHARED_LIBRARY
+-	$(INSTALL) -m 755 $(@D)/libopagent/.libs/*.so* $(TARGET_DIR)/usr/lib/oprofile
+-endef
+-endif
+-
+-define OPROFILE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
+-	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
+-	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/oprofile
+-	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
+-		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
+-			$(TARGET_DIR)/usr/share/oprofile; \
+-	fi
+-	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
+-	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
+-	$(OPROFILE_INSTALL_SHARED_LIBRARY)
+-endef
+-
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
