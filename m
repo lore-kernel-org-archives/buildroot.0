@@ -4,78 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF05AC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 19:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14F14C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 19:03:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B078F418DF;
-	Thu, 17 Mar 2022 19:01:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A810241837;
+	Thu, 17 Mar 2022 19:03:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TR1ENU3cjBM7; Thu, 17 Mar 2022 19:01:39 +0000 (UTC)
+	with ESMTP id sNDERbk9ZL7u; Thu, 17 Mar 2022 19:03:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7A2C418C5;
-	Thu, 17 Mar 2022 19:01:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 014E41BF349
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 19:01:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C9894013A;
+	Thu, 17 Mar 2022 19:02:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ADC271BF349
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 19:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2E3640497
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 19:01:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99880841F8
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 19:02:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v0L_9OdSvpNj for <buildroot@lists.busybox.net>;
- Thu, 17 Mar 2022 19:01:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9B31C402A8
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 19:01:35 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id j17so8739423wrc.0
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 12:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=tpdyIfTKNSGmia8VTIyuyfx/V9Yp2nRXHMjHMdgOc0Q=;
- b=HevXWqDrcsM9X7urt0YeU54pnX9WEPjjQx7fmFAI3jIMI3a/iXwgC2tmZ3m/ZdvyRA
- 4zEtLWO1GIOv7o9Hyx8MGUSmsz5IThyA5gNn6VVmmxyUyWL8rGFUjrIGpi5Xu8YsD72i
- JOI74hyQCODW3H3S1//dQsviGRAGZvNAs2hJMYKKUX0ihy20IS6qxo1orkPrVWdWVlKv
- d7nRbcJ0l0TMyZqdft6hYCXeHPxxq20vPJsw1etfATxvb7SZ+rZaY3Zj4ge2XHKXZD9o
- +5/QFX6Dba+Ty5aIVLmZixAk9eYnz2w6bj/9bx6tNFsfoVVI45zvNO/gl0hTuTmunBjz
- 2neg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=tpdyIfTKNSGmia8VTIyuyfx/V9Yp2nRXHMjHMdgOc0Q=;
- b=HsZvBYu1a4WsgAkePxVTF6xlhiKshw3yGF/6cUB9xIrh4+N8hY+h4ZwgQEPEOEeImx
- lC6An1A8qmalntCkEjY2sb6uaZm67DXiAUOKXY2sWpWfdWHEyCNXxLdySIF33DlsqtxU
- 0FaukPaU82nZA0e+VcPJweMAgjJ129e+d06Q0K3GOZgsPSpbBeTw5zUZc2jfk9Xw9buh
- 01lr98+6Hw4r+L0pBrH2RFupBYspw9UTWWjjD4fDAWI4YIlxkjf7kKBkLPdxRYk1PwF7
- 5ed6d4txBefjAMbC6dlAz0RwZswZ2OyTzadDVcK0IMMDf5JiseMeDysY8neipfZUbSG7
- +LYA==
-X-Gm-Message-State: AOAM533wtI+OycjkhcmvVMN2bs9Fujkg7SCSm5UtH5wJ1+w0Nxv31gkN
- K8ccshBvFq95MMeEP8Bf+Hlr0NXCqMk=
-X-Google-Smtp-Source: ABdhPJw/xVaQMkPOkBrN6M8isytvqd/1J8y99bq0hLUwEy2Tcsiv8WE6hSQsJI5rTLxpGipLjOKF8g==
-X-Received: by 2002:a05:6000:100a:b0:203:d9e5:3ba7 with SMTP id
- a10-20020a056000100a00b00203d9e53ba7mr5190281wrx.447.1647543693466; 
- Thu, 17 Mar 2022 12:01:33 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- f8-20020adfb608000000b0020229d72a4esm4482547wre.38.2022.03.17.12.01.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Mar 2022 12:01:33 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 17 Mar 2022 20:00:27 +0100
-Message-Id: <20220317190027.183976-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0CdqJcPMT2WH for <buildroot@lists.busybox.net>;
+ Thu, 17 Mar 2022 19:02:57 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 531D5841B5
+ for <buildroot@buildroot.org>; Thu, 17 Mar 2022 19:02:57 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (28)
+Received: from [192.168.10.50] (dynamic-78-10-107-45.ssp.dialog.net.pl
+ [78.10.107.45])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 956B01BD099;
+ Thu, 17 Mar 2022 20:02:54 +0100 (CET)
+Message-ID: <f0164dfa-4236-0087-cc8d-f50aa77ac2e7@grinn-global.com>
+Date: Thu, 17 Mar 2022 20:02:54 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libgee: needs gcc >= 4.9
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To: "Sassen, Rutger" <rsassen@comecer.com>
+References: <YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+In-Reply-To: <YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/rpi-firmware: fix missing
+ files in overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,78 +59,269 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Content-Type: multipart/mixed; boundary="===============6433884518933589291=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump to version 0.20.5
-in commit 10780e8d6df83d7a92b6dd3282e91fdc0ba369af and
-https://gitlab.gnome.org/GNOME/libgee/-/commit/f0ccfe94ff731929e93601a38f931a12d52e5c2e:
+This is a multi-part message in MIME format.
+--===============6433884518933589291==
+Content-Type: multipart/alternative;
+ boundary="------------aTeM9SLAo9a0nnfXA5eX08pW"
+Content-Language: en-US
 
-task.c:59:1: error: initializer element is not constant
- static GOnce gee_task_data_async_pool = (GOnce) G_ONCE_INIT;
- ^
+This is a multi-part message in MIME format.
+--------------aTeM9SLAo9a0nnfXA5eX08pW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Fixes:
- - http://autobuild.buildroot.org/results/8354ea4192bcf2eb9c3be74d93b640db52ced10a
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/granite/Config.in | 6 ++++--
- package/libgee/Config.in  | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+On 17.03.2022 12:06, Sassen, Rutger wrote:
+> When supporting multiple hardware targets, overlay_map.dtb might
+> be needed to map overlay names to one of several implementations.
+>
+> Signed-off-by: Rutger Sassen <rsassen@comecer.com>
+> ---
+> Changes v2 -> v3:
+> - in Config.in use if statement instead of depends (suggested by Peter
+> Seiderer)
+> - mention the filename overlay_map.dtb in the help text (suggested by
+> Peter Seiderer)
+>
+> Changes v1 -> v2:
+> - instead of always copying overlay_map.dtb, make it configurable
+> (suggested by Peter Seiderer)
+> - do not copy README since it a special case, only needed when
+> installing overlays to a non-standard location (suggested by Peter
+> Seiderer)
+>
+> When supporting multiple hardware targets, overlay_map.dtb might
+> be needed to map overlay names to one of several implementations.
+>
+> Signed-off-by: Rutger Sassen <rsassen@comecer.com>
+> ---
+> package/rpi-firmware/Config.in | 12 ++++++++++++
+> package/rpi-firmware/rpi-firmware.mk | 7 +++++++
+> 2 files changed, 19 insertions(+)
+>
+> diff --git a/package/rpi-firmware/Config.in 
+> b/package/rpi-firmware/Config.in
+> index 8070dc3019..36054353f8 100644
+> --- a/package/rpi-firmware/Config.in
+> +++ b/package/rpi-firmware/Config.in
+> @@ -93,6 +93,18 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> overlays, to support HATs (Hardware Attached on Top, add-on
+> modules).
+>
+> +if BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> +
+> +config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP
+> + bool "Install DTB overlay map"
+> + default n
 
-diff --git a/package/granite/Config.in b/package/granite/Config.in
-index 726bde1b2d..9519e16d45 100644
---- a/package/granite/Config.in
-+++ b/package/granite/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GRANITE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgee
- 	depends on BR2_PACKAGE_LIBGTK3
- 	select BR2_PACKAGE_LIBGEE
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -12,7 +13,8 @@ config BR2_PACKAGE_GRANITE
- 
- 	  https://github.com/elementary/granite
- 
--comment "granite needs libgtk3 and a toolchain w/ wchar, threads"
-+comment "granite needs libgtk3 and a toolchain w/ wchar, threads, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libgee/Config.in b/package/libgee/Config.in
-index 07c387c985..cb33ec9ec2 100644
---- a/package/libgee/Config.in
-+++ b/package/libgee/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  Libgee is an utility library providing GObject-based
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_LIBGEE
- 
- 	  https://wiki.gnome.org/Projects/Libgee
- 
--comment "libgee needs a toolchain w/ wchar, threads"
-+comment "libgee needs a toolchain w/ wchar, threads, gcc >= 4.9"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--- 
-2.35.1
+bool symbols implicitly default to n.
+
+Best
+Bartek
+> + help
+> + Say 'y' here if you need to support multiple hardware targets
+> + and you need overlay_map.dtb for target dependent mapping of
+> + overlay names to one of several overlay implementations.
+> +
+> +endif # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> +
+> config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+> bool "vcdbg"
+> depends on BR2_arm # prebuilt arm binary, rpi-userland
+> diff --git a/package/rpi-firmware/rpi-firmware.mk 
+> b/package/rpi-firmware/rpi-firmware.mk
+> index b46a7f5270..800b560070 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -57,6 +57,12 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> endef
+> endif
+>
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP),y)
+> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP
+> + $(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb 
+> $(BINARIES_DIR)/rpi-firmware/overlays/
+> +endef
+> +endif
+> +
+> # Install prebuilt libraries if RPI_USERLAND not enabled
+> ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> define RPI_FIRMWARE_INSTALL_TARGET_LIB
+> @@ -83,6 +89,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+> $(RPI_FIRMWARE_INSTALL_CONFIG)
+> $(RPI_FIRMWARE_INSTALL_DTB)
+> $(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+> + $(RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP)
+> endef
+>
+> $(eval $(generic-package))
+> -- 
+> 2.20.1
+>
+>
+> *Disclaimer*
+>
+> This email communication is CONFIDENTIAL. If you are not the intended 
+> recipient, you may not use, copy or disclose to anyone the message or 
+> any information contained in the message and I ask that you please 
+> notify me by return email and delete this communication immediately. 
+> Thank you.
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+--------------aTeM9SLAo9a0nnfXA5eX08pW
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>Hello,<br>
+    </p>
+    <div class="moz-cite-prefix">On 17.03.2022 12:06, Sassen, Rutger
+      wrote:<br>
+    </div>
+    <blockquote type="cite"
+cite="mid:YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <style type="text/css">.style1 {font-family: "Times New Roman";}</style>When
+      supporting multiple hardware targets, overlay_map.dtb might<br>
+      be needed to map overlay names to one of several implementations.<br>
+      <br>
+      Signed-off-by: Rutger Sassen <a class="moz-txt-link-rfc2396E" href="mailto:rsassen@comecer.com">&lt;rsassen@comecer.com&gt;</a><br>
+      ---<br>
+      Changes v2 -&gt; v3:<br>
+      - in Config.in use if statement instead of depends (suggested by
+      Peter<br>
+      Seiderer)<br>
+      - mention the filename overlay_map.dtb in the help text (suggested
+      by<br>
+      Peter Seiderer)<br>
+      <br>
+      Changes v1 -&gt; v2:<br>
+      - instead of always copying overlay_map.dtb, make it configurable<br>
+      (suggested by Peter Seiderer)<br>
+      - do not copy README since it a special case, only needed when<br>
+      installing overlays to a non-standard location (suggested by Peter<br>
+      Seiderer)<br>
+      <br>
+      When supporting multiple hardware targets, overlay_map.dtb might<br>
+      be needed to map overlay names to one of several implementations.<br>
+      <br>
+      Signed-off-by: Rutger Sassen <a class="moz-txt-link-rfc2396E" href="mailto:rsassen@comecer.com">&lt;rsassen@comecer.com&gt;</a><br>
+      ---<br>
+      package/rpi-firmware/Config.in | 12 ++++++++++++<br>
+      package/rpi-firmware/rpi-firmware.mk | 7 +++++++<br>
+      2 files changed, 19 insertions(+)<br>
+      <br>
+      diff --git a/package/rpi-firmware/Config.in
+      b/package/rpi-firmware/Config.in<br>
+      index 8070dc3019..36054353f8 100644<br>
+      --- a/package/rpi-firmware/Config.in<br>
+      +++ b/package/rpi-firmware/Config.in<br>
+      @@ -93,6 +93,18 @@ config
+      BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS<br>
+      overlays, to support HATs (Hardware Attached on Top, add-on<br>
+      modules).<br>
+      <br>
+      +if BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS<br>
+      +<br>
+      +config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP<br>
+      + bool "Install DTB overlay map"<br>
+      + default n<br>
+    </blockquote>
+    <div class="comment-body markdown-body js-comment-body soft-wrap
+      user-select-contain d-block">
+      <p dir="auto">bool symbols implicitly default to n.</p>
+      Best<br>
+      Bartek<br>
+    </div>
+    <blockquote type="cite"
+cite="mid:YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM">+
+      help<br>
+      + Say 'y' here if you need to support multiple hardware targets<br>
+      + and you need overlay_map.dtb for target dependent mapping of<br>
+      + overlay names to one of several overlay implementations.<br>
+      +<br>
+      +endif # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS<br>
+      +<br>
+      config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG<br>
+      bool "vcdbg"<br>
+      depends on BR2_arm # prebuilt arm binary, rpi-userland<br>
+      diff --git a/package/rpi-firmware/rpi-firmware.mk
+      b/package/rpi-firmware/rpi-firmware.mk<br>
+      index b46a7f5270..800b560070 100644<br>
+      --- a/package/rpi-firmware/rpi-firmware.mk<br>
+      +++ b/package/rpi-firmware/rpi-firmware.mk<br>
+      @@ -57,6 +57,12 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS<br>
+      endef<br>
+      endif<br>
+      <br>
+      +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP),y)<br>
+      +define RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP<br>
+      + $(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb
+      $(BINARIES_DIR)/rpi-firmware/overlays/<br>
+      +endef<br>
+      +endif<br>
+      +<br>
+      # Install prebuilt libraries if RPI_USERLAND not enabled<br>
+      ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)<br>
+      define RPI_FIRMWARE_INSTALL_TARGET_LIB<br>
+      @@ -83,6 +89,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS<br>
+      $(RPI_FIRMWARE_INSTALL_CONFIG)<br>
+      $(RPI_FIRMWARE_INSTALL_DTB)<br>
+      $(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)<br>
+      + $(RPI_FIRMWARE_INSTALL_DTB_OVERLAY_MAP)<br>
+      endef<br>
+      <br>
+      $(eval $(generic-package))<br>
+      -- <br>
+      2.20.1<br>
+      <br>
+      <br>
+      <p style="font-family: Verdana; font-size:10pt; color:#666666;"><b>Disclaimer</b></p>
+      <p style="font-family: Verdana; font-size:8pt; color:#666666;">This
+        email communication is CONFIDENTIAL. If you are not the intended
+        recipient, you may not use, copy or disclose to anyone the
+        message or any information contained in the message and I ask
+        that you please notify me by return email and delete this
+        communication immediately. Thank you.</p>
+      <br>
+      <fieldset class="moz-mime-attachment-header"></fieldset>
+      <pre class="moz-quote-pre" wrap="">_______________________________________________
+buildroot mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:buildroot@buildroot.org">buildroot@buildroot.org</a>
+<a class="moz-txt-link-freetext" href="https://lists.buildroot.org/mailman/listinfo/buildroot">https://lists.buildroot.org/mailman/listinfo/buildroot</a>
+</pre>
+    </blockquote>
+  </body>
+</html>
+
+--------------aTeM9SLAo9a0nnfXA5eX08pW--
+
+--===============6433884518933589291==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6433884518933589291==--
