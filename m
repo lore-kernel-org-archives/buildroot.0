@@ -1,81 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86045C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 19:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 850E5C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 08:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AEE641A0B;
-	Fri, 18 Mar 2022 19:42:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2535A612A9;
+	Thu, 17 Mar 2022 08:08:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M-BqH91NXpOi; Fri, 18 Mar 2022 19:42:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kG9DhPB8nL6P; Thu, 17 Mar 2022 08:08:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3715D419F4;
-	Fri, 18 Mar 2022 19:42:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1A4BF1BF377
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 19:42:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A5FC612A4;
+	Thu, 17 Mar 2022 08:08:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 46D361BF387
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 08:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07BD08415F
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 19:42:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43200612A4
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 08:08:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HvcSh5NXz4oD for <buildroot@lists.busybox.net>;
- Fri, 18 Mar 2022 19:42:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C0058412E
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 19:42:05 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id 185so537342wmc.3
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 12:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=uKH1ev8ld6tQvKq84akX+nfCTTNdCdsr3i4hyqVtuc4=;
- b=Wd6Y4j+BlJcbGLOQek8umDH5RFebwdhaF0iMonzOR0ZQ1E2bao83Fuqjkpk0lqKZWz
- EUjchDjN6e/t5adkr3u7CpXJcThV/eQlrZvePlKiboYOkD5LQ2TKHUUeObCnCmYLLwrC
- TfG17AWT0IWLeCe8xqZ23cw7AZBcrj6YzbW5EgEHep/3ZekXcGQdIbTqS0p6eAWALnuv
- +UJGjP2J0/b9Q73fiKQubfe44dqzDwTHo8zE31mmVl1cngebnIKtxBPsg8wHy0BWqi6q
- /7axdc/Hvoqec7wKfTmsgTdZBj16XYFHyXwFvp2JxNBds9fGoW9o8sieqLCIF217Jqfm
- QvcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=uKH1ev8ld6tQvKq84akX+nfCTTNdCdsr3i4hyqVtuc4=;
- b=WwLG9Q1bZFviBpjDpWqaJ0Yup4DYXCQW06GQbtKWC+qV/zD1G7n4EAaM01U0mdRnFH
- NCTsiynjoqrbH8S3saQjowPXGAmA5/E8Ne/M0/iHhPf2ArZBi0hxhu4NUJosDanJ2quC
- +DB3re5ET2Cy8kuh+MVLYOMwDihraDRMhTb7MU0N3FQjkUc4Doy2xOYDB/T3nwdIsaIP
- jk9IQp+RUNYL82r0Wx4Ejte9vI6Lf4pEXypU0p6g6OAvvv4HEoBnW3swowf4XNAZhJ2q
- 2LhGXRKzZ7b1csbZLOpv9RJc7yOCdGL2XbCdVcmrQSnDq3ncneF1g+zwNGOAooM0MxX+
- 3ZBQ==
-X-Gm-Message-State: AOAM5310X830fG7/FwHpZDpQcT/fIcHeyI5KDTbazcFH0Sl8o8ekPNUp
- oh9+Zpbc9UyVV4Tpl0omeqSbXfib8Dw=
-X-Google-Smtp-Source: ABdhPJylYsfZOrQ6K/I8d/vWfOKESnGjjAX0AFtWvJHzthWbful2V9kxGIkxRKKuiX3+vSsHU45o2A==
-X-Received: by 2002:a05:600c:3846:b0:38c:7e65:c9e1 with SMTP id
- s6-20020a05600c384600b0038c7e65c9e1mr7139071wmr.157.1647632523292; 
- Fri, 18 Mar 2022 12:42:03 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- n23-20020a05600c3b9700b0038b7c4c0803sm10392397wms.30.2022.03.18.12.42.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 18 Mar 2022 12:42:02 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 18 Mar 2022 20:40:58 +0100
-Message-Id: <20220318194058.760799-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GO-W0eNVa4YB for <buildroot@lists.busybox.net>;
+ Thu, 17 Mar 2022 08:08:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0E4061286
+ for <buildroot@uclibc.org>; Thu, 17 Mar 2022 08:08:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 7147F82466; Thu, 17 Mar 2022 08:00:00 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Thu, 17 Mar 2022 08:08:45 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2021.02.3
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mbuil@suse.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-13971-163-swB0EW3R3U@https.bugs.busybox.net/>
+In-Reply-To: <bug-13971-163@https.bugs.busybox.net/>
+References: <bug-13971-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: fix CVE-2021-44269
+Subject: [Buildroot] [Bug 13971] ip6tables-nft build does not include
+ MASQUERADE target options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,89 +70,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-An out of bounds read was found in Wavpack 5.4.0 in processing *.WAV
-files. This issue triggered in function WavpackPackSamples of file
-src/pack_utils.c, tainted variable cnt is too large, that makes pointer
-sptr read beyond heap bound.
+https://bugs.busybox.net/show_bug.cgi?id=13971
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...e-DSD-file-types-for-invalid-lengths.patch | 42 +++++++++++++++++++
- package/wavpack/wavpack.mk                    |  3 ++
- 2 files changed, 45 insertions(+)
- create mode 100644 package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
+mbuil@suse.com changed:
 
-diff --git a/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch b/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
-new file mode 100644
-index 0000000000..76c1e81674
---- /dev/null
-+++ b/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
-@@ -0,0 +1,42 @@
-+From 773f9d0803c6888ae7d5391878d7337f24216f4a Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Tue, 23 Nov 2021 13:14:35 -0800
-+Subject: [PATCH] issue #110: sanitize DSD file types for invalid lengths
-+
-+[Retrieved from:
-+https://github.com/dbry/WavPack/commit/773f9d0803c6888ae7d5391878d7337f24216f4a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ cli/dsdiff.c | 6 ++++++
-+ cli/dsf.c    | 1 +
-+ 2 files changed, 7 insertions(+)
-+
-+diff --git a/cli/dsdiff.c b/cli/dsdiff.c
-+index d7adb6a..5bdcae3 100644
-+--- a/cli/dsdiff.c
-++++ b/cli/dsdiff.c
-+@@ -278,6 +278,12 @@ int ParseDsdiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
-+             }
-+ 
-+             total_samples = dff_chunk_header.ckDataSize / config->num_channels;
-++
-++            if (total_samples <= 0 || total_samples > MAX_WAVPACK_SAMPLES) {
-++                error_line ("%s is not a valid .DFF file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-+             break;
-+         }
-+         else {          // just copy unknown chunks to output file
-+diff --git a/cli/dsf.c b/cli/dsf.c
-+index e1d7973..dddd488 100644
-+--- a/cli/dsf.c
-++++ b/cli/dsf.c
-+@@ -113,6 +113,7 @@ int ParseDsfHeaderConfig (FILE *infile, char *infilename, char *fourcc, WavpackC
-+ 
-+     if (format_chunk.ckSize != sizeof (DSFFormatChunk) || format_chunk.formatVersion != 1 ||
-+         format_chunk.formatID != 0 || format_chunk.blockSize != DSF_BLOCKSIZE || format_chunk.reserved ||
-++        format_chunk.sampleCount <= 0 || format_chunk.sampleCount > MAX_WAVPACK_SAMPLES * 8 ||
-+         (format_chunk.bitsPerSample != 1 && format_chunk.bitsPerSample != 8) ||
-+         format_chunk.numChannels < 1 || format_chunk.numChannels > 6 ||
-+         format_chunk.chanType < 1 || format_chunk.chanType > NUM_CHAN_TYPES) {
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index 485ab9b2ae..2e0438ac80 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
-@@ -14,6 +14,9 @@ WAVPACK_LICENSE = BSD-3-Clause
- WAVPACK_LICENSE_FILES = COPYING
- WAVPACK_CPE_ID_VENDOR = wavpack
- 
-+# 0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
-+WAVPACK_IGNORE_CVES += CVE-2021-44269
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- WAVPACK_CONF_OPTS += LIBS=-liconv
- endif
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+
+--- Comment #11 from mbuil@suse.com ---
+Hey, thanks! A colleague of mine fixed this some months ago.
+
 -- 
-2.35.1
-
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
