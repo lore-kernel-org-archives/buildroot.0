@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39AA3C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 12:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF8C6C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 12:19:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAB2A417A6;
-	Thu, 17 Mar 2022 12:19:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82DED41745;
+	Thu, 17 Mar 2022 12:19:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oM1n6QFCLGlM; Thu, 17 Mar 2022 12:19:30 +0000 (UTC)
+	with ESMTP id ZJedaXDi-0Ta; Thu, 17 Mar 2022 12:19:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D82C6416B4;
-	Thu, 17 Mar 2022 12:19:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0A061BF36E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 963E1418C1;
+	Thu, 17 Mar 2022 12:19:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E93971C1135
  for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 12:19:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE2E9416B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id D849F60F7B
  for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 12:19:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DLRu6Yd2-eOX for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kOY8AvXzrtoX for <buildroot@lists.busybox.net>;
  Thu, 17 Mar 2022 12:19:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CF0F40308
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CEF160A75
  for <buildroot@buildroot.org>; Thu, 17 Mar 2022 12:19:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7F3CE84387; Thu, 17 Mar 2022 12:10:41 +0000 (UTC)
+ id 93F458438C; Thu, 17 Mar 2022 12:10:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Mar 2022 13:11:17 +0100
+Date: Thu, 17 Mar 2022 13:13:31 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: cdfaeebab3b89ca22352ec1706c44c35adf85ff9
-X-Git-Newrev: 926a6bec3d95f570217f012aeb49d876015a2cdd
+X-Git-Oldrev: 812e7952b4e117bd7b160d1969bda19d30059d99
+X-Git-Newrev: 1da4b588b8cf6db6b2ecc64213131e855e3bb6ff
 X-Patchwork-Hint: ignore
-Message-Id: <20220317121041.7F3CE84387@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/directfb: change
- upstream site
+Message-Id: <20220317121041.93F458438C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] docs/manual: Document
+ Kconfig requirements for uboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,66 +59,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=926a6bec3d95f570217f012aeb49d876015a2cdd
+commit: https://git.buildroot.net/buildroot/commit/?id=1da4b588b8cf6db6b2ecc64213131e855e3bb6ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-The http://www.directfb.org/ has been down since 2015.
-Use the Buildroot backup download site.
+When using uboot's legacy build system, the 'make uboot-menuconfig'
+and 'make uboot-savedefconfig' targets are not available as they
+are created by 'kconfig-package'.
 
-Fixes:
-   - https://bugs.busybox.net/show_bug.cgi?id=13126
-
-Signed-off-by: Andrei Gherghescu <andrei.gherghescu@protonmail.com>
+Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 89ab2a5a3f4588891ab1e9e76feb8c3f69402d5c)
+(cherry picked from commit ca9e55ad11271cb26b0bffba336cf5a0d74ba378)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/directfb-examples/Config.in            | 6 ++++--
- package/directfb-examples/directfb-examples.mk | 2 +-
- package/directfb/directfb.mk                   | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ docs/manual/make-tips.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/directfb-examples/Config.in b/package/directfb-examples/Config.in
-index 216e036577..4d5de03068 100644
---- a/package/directfb-examples/Config.in
-+++ b/package/directfb-examples/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The DirectFB-examples package contains a set of simple
- 	  DirectFB applications that can be used to test and demonstrate
--	  various DirectFB features.
-+	  various DirectFB features. As of 4 October 2015, DirectFB's
-+	  website http://www.directfb.org/ is down. See alternative site
-+	  listed below.
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 869b6807dd..df3b888c25 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -35,7 +35,8 @@ some settings in the +.config+ file may hide some targets:
+ * +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
+   +barebox+ bootloader is enabled.
+ * +uboot-menuconfig+ and +uboot-savedefconfig+ only work when the
+-  +U-Boot+ bootloader is enabled.
++  +U-Boot+ bootloader is enabled and the +uboot+ build system is set
++  to +Kconfig+.
  
--	  http://directfb.org/downloads/Extras/README.DirectFB-examples
-+	  http://elinux.org/DirectFB
-diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
-index 46263da733..c8d09b3e33 100644
---- a/package/directfb-examples/directfb-examples.mk
-+++ b/package/directfb-examples/directfb-examples.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ .Cleaning:
  
- DIRECTFB_EXAMPLES_VERSION = 1.7.0
--DIRECTFB_EXAMPLES_SITE = http://www.directfb.org/downloads/Extras
-+DIRECTFB_EXAMPLES_SITE = http://sources.buildroot.net/directfb-examples
- DIRECTFB_EXAMPLES_SOURCE = DirectFB-examples-$(DIRECTFB_EXAMPLES_VERSION).tar.gz
- DIRECTFB_EXAMPLES_LICENSE = MIT
- DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 0b32162d8f..56a396ab99 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -6,7 +6,7 @@
- 
- DIRECTFB_VERSION_MAJOR = 1.7
- DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
--DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
-+DIRECTFB_SITE = http://sources.buildroot.net/directfb
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_LICENSE = LGPL-2.1+
- DIRECTFB_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
