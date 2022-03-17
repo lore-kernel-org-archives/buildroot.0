@@ -4,51 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32498C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 07:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F7BC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 17 Mar 2022 07:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9DF281762;
-	Thu, 17 Mar 2022 07:48:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8106784741;
+	Thu, 17 Mar 2022 07:48:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jZ55usk9fuBb; Thu, 17 Mar 2022 07:48:46 +0000 (UTC)
+	with ESMTP id vkTMPR-MCu0v; Thu, 17 Mar 2022 07:48:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0307A81435;
-	Thu, 17 Mar 2022 07:48:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78BE784771;
+	Thu, 17 Mar 2022 07:48:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B8F771BF3B0
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 07:48:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D905C1BF3B0
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 07:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5C7381466
- for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 07:48:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D412D817C3
+ for <buildroot@lists.busybox.net>; Thu, 17 Mar 2022 07:48:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A49zf6YaF525 for <buildroot@lists.busybox.net>;
- Thu, 17 Mar 2022 07:48:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 565B081406
- for <buildroot@buildroot.org>; Thu, 17 Mar 2022 07:48:42 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 02FD520007;
- Thu, 17 Mar 2022 07:48:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nUks8-00CoX9-RS; Thu, 17 Mar 2022 08:48:36 +0100
+ with ESMTP id tHFMjAAvDMCH for <buildroot@lists.busybox.net>;
+ Thu, 17 Mar 2022 07:48:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B97181766
+ for <buildroot@buildroot.org>; Thu, 17 Mar 2022 07:48:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E83F483EAE; Thu, 17 Mar 2022 07:40:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Th=C3=A9o?= Lebrun via buildroot <buildroot@buildroot.org>
-References: <20220228163238.405627-1-theo.lebrun@bootlin.com>
-Date: Thu, 17 Mar 2022 08:48:36 +0100
-In-Reply-To: <20220228163238.405627-1-theo.lebrun@bootlin.com>
- (=?utf-8?Q?=22Th=C3=A9o?= Lebrun
- via buildroot"'s message of "Mon, 28 Feb 2022 17:32:38 +0100")
-Message-ID: <87v8wdrpd7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] docs: fix links to AsciiDoc
+To: buildroot@buildroot.org
+Date: Thu, 17 Mar 2022 08:46:23 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 0bcc9f2bca146dc2668d22f1833bfb8775a0312c
+X-Git-Newrev: 26c678a3c60c012a0c09deadea5a58b37f563a00
+X-Patchwork-Hint: ignore
+Message-Id: <20220317074006.E83F483EAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/expat: bump to
+ version 2.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,31 +53,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlRow6lvIiA9PSBUaMOpbyBMZWJydW4gdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmc+IHdyaXRlczoKCiA+IExpbmtzIHdlcmUgYWltZWQgYXQgdGhlIG1ldGhvZHMu
-Y28ubnogZG9tYWluLCB3aGljaCBpcyBub3cgcmV0dXJuaW5nCiA+IDQwNHMuIFRoZSBjdXJyZW50
-IHNpdHVhdGlvbiBvZiBBc2NpaURvYyBpcyB1bmNsZWFyIHRvIG1lOiB0aGUgRmVkb3JhCiA+IHBh
-Y2thZ2UgcG9pbnRzIHRvIHRoaXMgd2Vic2l0ZSwgdGhleSBvd24gYXNjaWlkb2Mub3JnLCBXaWtp
-cGVkaWEgcG9pbnRzCiA+IHRvIHRoaXMgcHJvamVjdCBhcyB3ZWxsIGJ1dCB0aGVpciBHaXQgcmVw
-bydzIFJFQURNRSBpbmNsdWRlcyB0aGUKID4gZm9sbG93aW5nIHBhcmFncmFwaDoKCiA+PiBBc2Np
-aURvYy5weSBpcyBhIGxlZ2FjeSBwcm9jZXNzb3IgZm9yIHRoaXMgc3ludGF4LCBoYW5kbGluZyBh
-biBvbGRlcgogPj4gcmVuZGl0aW9uIG9mIEFzY2lpRG9jLiBBcyBzdWNoLCB0aGlzIHdpbGwgbm90
-IHByb3Blcmx5IGhhbmRsZSB0aGUKID4+IGN1cnJlbnQgQXNjaWlEb2Mgc3BlY2lmaWNhdGlvbi4g
-SXQgaXMgc3VnZ2VzdGVkIHRoYXQgdW5sZXNzIHlvdQogPj4gc3BlY2lmaWNhbGx5IHJlcXVpcmUg
-dGhlIEFzY2lpRG9jLnB5IHRvb2xjaGFpbiwgeW91IHNob3VsZCBmaW5kIGEKID4+IHByb2Nlc3Nv
-ciB0aGF0IGhhbmRsZXMgdGhlIG1vZGVybiBBc2NpaURvYyBzeW50YXguCiA+IC0tLSBodHRwczov
-L2dpdGh1Yi5jb20vYXNjaWlkb2MtcHkvYXNjaWlkb2MtcHkvYmxvYi8xMC4xLjMvUkVBRE1FLm1k
-CgogPiAiQXNjaWlEb2Mgc3BlY2lmaWNhdGlvbiIgcG9pbnRpbmcgdG93YXJkczoKID4gaHR0cHM6
-Ly9wcm9qZWN0cy5lY2xpcHNlLm9yZy9wcm9qZWN0cy9hc2NpaWRvYy5hc2NpaWRvYy1sYW5nCgog
-PiBTaWduZWQtb2ZmLWJ5OiBUaMOpbyBMZWJydW4gPHRoZW8ubGVicnVuQGJvb3RsaW4uY29tPgoK
-Q29tbWl0dGVkIHRvIDIwMjEuMDIueCBhbmQgMjAyMS4xMS54LCB0aGFua3MuCgotLSAKQnllLCBQ
-ZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=26c678a3c60c012a0c09deadea5a58b37f563a00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+
+This release relaxes the fix to CVE-2022-25236 (introduced with release
+2.4.5) which some of you have been waiting for, due to related
+incompatibilities.
+
+https://blog.hartwork.org/posts/expat-2-4-7-released
+https://github.com/libexpat/libexpat/blob/R_2_4_7/expat/Changes
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 402d85ef4e3d5161869d5da918ec679a9571c417)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 0d9f60931f..26f1098b7a 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.4.6/
+-md5  22a30c888752fdda9f8dd1b7281c54b0  expat-2.4.6.tar.xz
+-sha1  26e223c4795c242814b0e3299a5027c22b9dc733  expat-2.4.6.tar.xz
++# From https://sourceforge.net/projects/expat/files/expat/2.4.7/
++md5  75a1f475e30281a00cb6f083ea481159  expat-2.4.7.tar.xz
++sha1  032ceaa11cd791d4bc622bbf0d835b8766207796  expat-2.4.7.tar.xz
+ 
+ # Locally calculated
+-sha256  de55794b7a9bc214852fdc075beaaecd854efe1361597e6268ee87946951289b  expat-2.4.6.tar.xz
++sha256  9875621085300591f1e64c18fd3da3a0eeca4a74f884b9abac2758ad1bd07a7d  expat-2.4.7.tar.xz
+ sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index c481b5c225..b29b0e1d26 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.4.6
++EXPAT_VERSION = 2.4.7
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
