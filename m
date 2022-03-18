@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13346C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 22:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A033C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 22:41:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9224560D94;
-	Fri, 18 Mar 2022 22:40:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01FB4418C2;
+	Fri, 18 Mar 2022 22:41:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WAdJCWLFvfk0; Fri, 18 Mar 2022 22:40:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vc0YKbp8C38b; Fri, 18 Mar 2022 22:41:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D2A960D69;
-	Fri, 18 Mar 2022 22:40:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 87F991BF853
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22CAB418A5;
+	Fri, 18 Mar 2022 22:41:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BAE91C1148
  for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 22:40:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76A7F8431C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 889AD418A5
  for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 22:40:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0FdQjMxCmq-X for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ShKUu4rMNZvf for <buildroot@lists.busybox.net>;
  Fri, 18 Mar 2022 22:40:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8A6882919
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF9E241706
  for <buildroot@buildroot.org>; Fri, 18 Mar 2022 22:40:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 059C983944; Fri, 18 Mar 2022 22:31:59 +0000 (UTC)
+ id 0E69A83A69; Fri, 18 Mar 2022 22:31:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 18 Mar 2022 23:21:44 +0100
+Date: Fri, 18 Mar 2022 23:22:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7520b7ea1d4276fa762fa3be971155fcf2b2d01
-X-Git-Newrev: efa7712b092950c92f994e2ee30c120a64e5451b
+X-Git-Oldrev: efa7712b092950c92f994e2ee30c120a64e5451b
+X-Git-Newrev: c1b25c32a2b46fb74bec3818248379513b7d788b
 X-Patchwork-Hint: ignore
-Message-Id: <20220318223159.059C983944@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-generic: host variant inherits
- target download settings
+Message-Id: <20220318223159.0E69A83A69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cryptography: enable host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,67 +54,59 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8608392110016223343=="
+Content-Type: multipart/mixed; boundary="===============5469497594537253741=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8608392110016223343==
+--===============5469497594537253741==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efa7712b092950c92f994e2ee30c120a64e5451b
+commit: https://git.buildroot.net/buildroot/commit/?id=c1b25c32a2b46fb74bec3818248379513b7d788b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It seems reasonable to expect that the download of the host and target
-variants should usually be exactly the same and thus reuse the target
-package values for the host package. This commits add support to
-inherit host _DL_SUBDIR, _DOWNLOAD_DEPENDENCIES, _DL_ENV and
-_DOwNLOAD_POST_PROCESS variables from target ones. These variables can
-still be overriden if necessary for the host package.
+Enable host package and add needed variables. Host POST_PROCESS and
+DOWNLOAD_DEPENDENCIES variables are inherited from target ones.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ package/python-cryptography/python-cryptography.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b3a7e1d60e..79fcf603d3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -540,6 +540,30 @@ ifndef $(2)_SUBDIR
-  endif
- endif
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index a524f729c8..872ede9b89 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -17,14 +17,26 @@ PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
+ 	host-python-cffi \
+ 	host-rustc \
+ 	openssl
++HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
++	host-python-setuptools-rust \
++	host-python-cffi \
++	host-rustc \
++	host-openssl
+ PYTHON_CRYPTOGRAPHY_ENV = \
+ 	$(PKG_CARGO_ENV) \
+ 	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
++HOST_PYTHON_CRYPTOGRAPHY_ENV = \
++	$(HOST_PKG_CARGO_ENV) \
++	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+ # We need to vendor the Cargo crates at download time
+ PYTHON_CRYPTOGRAPHY_DOWNLOAD_POST_PROCESS = cargo
+ PYTHON_CRYPTOGRAPHY_DOWNLOAD_DEPENDENCIES = host-rustc
+ PYTHON_CRYPTOGRAPHY_DL_ENV = \
+ 	$(PKG_CARGO_ENV) \
+ 	BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
++HOST_PYTHON_CRYPTOGRAPHY_DL_ENV = \
++	$(HOST_PKG_CARGO_ENV) \
++	BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
  
-+ifndef $(2)_DL_SUBDIR
-+ ifdef $(3)_DL_SUBDIR
-+  $(2)_DL_SUBDIR = $$($(3)_DL_SUBDIR)
-+ endif
-+endif
-+
-+ifndef $(2)_DOWNLOAD_DEPENDENCIES
-+ ifdef $(3)_DOWNLOAD_DEPENDENCIES
-+  $(2)_DOWNLOAD_DEPENDENCIES = $$(filter-out $(1),$$($(3)_DOWNLOAD_DEPENDENCIES))
-+ endif
-+endif
-+
-+ifndef $(2)_DL_ENV
-+ ifdef $(3)_DL_ENV
-+  $(2)_DL_ENV = $$($(3)_DL_ENV)
-+ endif
-+endif
-+
-+ifndef $(2)_DOWNLOAD_POST_PROCESS
-+ ifdef $(3)_DOWNLOAD_POST_PROCESS
-+  $(2)_DOWNLOAD_POST_PROCESS = $$($(3)_DOWNLOAD_POST_PROCESS)
-+ endif
-+endif
-+
- ifndef $(2)_STRIP_COMPONENTS
-  ifdef $(3)_STRIP_COMPONENTS
-   $(2)_STRIP_COMPONENTS = $$($(3)_STRIP_COMPONENTS)
+ $(eval $(python-package))
++$(eval $(host-python-package))
 
---===============8608392110016223343==
+--===============5469497594537253741==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -125,4 +117,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8608392110016223343==--
+--===============5469497594537253741==--
