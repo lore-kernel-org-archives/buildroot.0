@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E792C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 08:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84FACC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 08:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 143C040BED;
-	Fri, 18 Mar 2022 08:47:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08A97419AB;
+	Fri, 18 Mar 2022 08:52:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tO7y0LNtDAzA; Fri, 18 Mar 2022 08:47:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ypyLBk6AoU8l; Fri, 18 Mar 2022 08:52:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB20640462;
-	Fri, 18 Mar 2022 08:47:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 235BE41879;
+	Fri, 18 Mar 2022 08:52:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9F8C81BF215
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 08:46:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B26C71BF215
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 08:52:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D8C360BEF
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 08:46:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0C5A60BEB
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 08:52:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SUNH8lcLUjy4 for <buildroot@lists.busybox.net>;
- Fri, 18 Mar 2022 08:46:47 +0000 (UTC)
+ with ESMTP id mJcb5aExMTPe for <buildroot@lists.busybox.net>;
+ Fri, 18 Mar 2022 08:52:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E34860E41
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 08:46:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED9DE60BCD
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 08:52:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4B7C08448C; Fri, 18 Mar 2022 08:37:59 +0000 (UTC)
+ id 71C138449F; Fri, 18 Mar 2022 08:43:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Mar 2022 09:30:26 +0100
+Date: Fri, 18 Mar 2022 09:51:43 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ba6b4cd392cb3834b04979a2e4dc6d5f5a067d6e
-X-Git-Newrev: bfd2b118706876a7a0faf9c364b464f64bbf1544
+X-Git-Oldrev: 316abbf862a41d12986632ca6144945774e517f8
+X-Git-Newrev: 9eb41375c2fcb7b56cce1b186b72c3eb4fd33833
 X-Patchwork-Hint: ignore
-Message-Id: <20220318083759.4B7C08448C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gnutls: fix build
- without threads
+Message-Id: <20220318084334.71C138449F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ell: bump version
+ to 0.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,214 +59,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfd2b118706876a7a0faf9c364b464f64bbf1544
+commit: https://git.buildroot.net/buildroot/commit/?id=9eb41375c2fcb7b56cce1b186b72c3eb4fd33833
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure without threads raised since bump to
-version 3.7.3 in commit 212b020bb43f13121d6cde464f871d5d1cf6cfbe:
+- Changelog (since 0.47, from [1]):
 
-kx.c: In function '_gnutls_nss_keylog_write':
-kx.c:164:33: error: 'keylog_mutex' undeclared (first use in this function); did you mean 'keylog_once'?
-  164 |   if (gnutls_static_mutex_lock(&keylog_mutex) < 0) {
-      |                                 ^~~~~~~~~~~~
-      |                                 keylog_once
+  ver 0.48:
+    Fix issue with memory leaking from ICMPv6 RA.
 
-Fixes:
- - http://autobuild.buildroot.org/results/e092bc11ce4b5908cb6285aa77a3594b8626eeec
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2f4f57b62b371252425bde4440cedcac45fcaebd)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c01a8397d9923c38b14a0d083ba1cf3ee3a3049a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-locks-define-lock-functions-as-a-macro.patch | 179 +++++++++++++++++++++
- 1 file changed, 179 insertions(+)
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
-new file mode 100644
-index 0000000000..52965c051d
---- /dev/null
-+++ b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
-@@ -0,0 +1,179 @@
-+From 5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd Mon Sep 17 00:00:00 2001
-+From: Daiki Ueno <ueno@gnu.org>
-+Date: Wed, 9 Mar 2022 08:07:58 +0100
-+Subject: [PATCH] locks: define lock functions as a macro
-+
-+When threads are not supported, glthread_* functions are defined as
-+no-op and thus dereferencing lock variables in inline functions will
-+cause compilation error.  This change fixes it by redefining our lock
-+functions as a macro so it will also be compiled out.
-+
-+Reported by Fabrice Fontaine in:
-+https://gitlab.com/gnutls/gnutls/-/issues/1330
-+
-+Signed-off-by: Daiki Ueno <ueno@gnu.org>
-+
-+[Retrieved from:
-+https://gitlab.com/gnutls/gnutls/-/commit/5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/locks.c       | 54 -----------------------------------------------
-+ lib/locks.h       | 28 ++++++++++++++++++------
-+ lib/pkcs11.c      |  2 +-
-+ lib/priority.c    |  2 +-
-+ lib/verify-tofu.c |  2 +-
-+ 5 files changed, 25 insertions(+), 63 deletions(-)
-+
-+diff --git a/lib/locks.c b/lib/locks.c
-+index d61504e077..8888ed6b12 100644
-+--- a/lib/locks.c
-++++ b/lib/locks.c
-+@@ -63,57 +63,3 @@ gnutls_global_set_mutex(mutex_init_func init, mutex_deinit_func deinit,
-+ 	gnutls_mutex_lock = lock;
-+ 	gnutls_mutex_unlock = unlock;
-+ }
-+-
-+-int
-+-gnutls_static_mutex_lock(gnutls_static_mutex_t lock)
-+-{
-+-	if (unlikely(glthread_lock_lock(lock))) {
-+-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-+-	}
-+-	return 0;
-+-}
-+-
-+-int
-+-gnutls_static_mutex_unlock(gnutls_static_mutex_t lock)
-+-{
-+-	if (unlikely(glthread_lock_unlock(lock))) {
-+-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-+-	}
-+-	return 0;
-+-}
-+-
-+-int
-+-gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock)
-+-{
-+-	if (unlikely(glthread_rwlock_rdlock(rwlock))) {
-+-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-+-	}
-+-	return 0;
-+-}
-+-
-+-int
-+-gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock)
-+-{
-+-	if (unlikely(glthread_rwlock_wrlock(rwlock))) {
-+-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-+-	}
-+-	return 0;
-+-}
-+-
-+-int
-+-gnutls_rwlock_unlock(gnutls_rwlock_t rwlock)
-+-{
-+-	if (unlikely(glthread_rwlock_unlock(rwlock))) {
-+-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-+-	}
-+-	return 0;
-+-}
-+-
-+-int
-+-gnutls_once(gnutls_once_t once, void (*init_func) (void))
-+-{
-+-	if (unlikely(glthread_once(once, init_func))) {
-+-		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
-+-	}
-+-	return 0;
-+-}
-+diff --git a/lib/locks.h b/lib/locks.h
-+index a1ff0fa9d7..907adfc134 100644
-+--- a/lib/locks.h
-++++ b/lib/locks.h
-+@@ -40,8 +40,14 @@ extern mutex_unlock_func gnutls_mutex_unlock;
-+  */
-+ #define GNUTLS_STATIC_MUTEX(lock) gl_lock_define_initialized(static, lock)
-+ typedef gl_lock_t *gnutls_static_mutex_t;
-+-int gnutls_static_mutex_lock(gnutls_static_mutex_t lock);
-+-int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
-++
-++#define gnutls_static_mutex_lock(LOCK)			\
-++	(unlikely(glthread_lock_lock(LOCK)) ?		\
-++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-++
-++#define gnutls_static_mutex_unlock(LOCK)		\
-++	(unlikely(glthread_lock_unlock(LOCK)) ?		\
-++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-+ 
-+ /* Unlike static mutexes, static rwlocks can be locked/unlocked with
-+  * the functions defined below, because there is no way to replace
-+@@ -50,13 +56,23 @@ int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
-+ #define GNUTLS_RWLOCK(rwlock) gl_rwlock_define_initialized(static, rwlock)
-+ typedef gl_rwlock_t *gnutls_rwlock_t;
-+ 
-+-int gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock);
-+-int gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock);
-+-int gnutls_rwlock_unlock(gnutls_rwlock_t rwlock);
-++#define gnutls_rwlock_rdlock(RWLOCK)			\
-++	(unlikely(glthread_rwlock_rdlock(RWLOCK)) ?	\
-++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-++
-++#define gnutls_rwlock_wrlock(RWLOCK)			\
-++	(unlikely(glthread_rwlock_wrlock(RWLOCK)) ?	\
-++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-++
-++#define gnutls_rwlock_unlock(RWLOCK)			\
-++	(unlikely(glthread_rwlock_unlock(RWLOCK)) ?	\
-++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-+ 
-+ #define GNUTLS_ONCE(once) gl_once_define(static, once)
-+ typedef gl_once_t *gnutls_once_t;
-+ 
-+-int gnutls_once(gnutls_once_t once, void (*init_func) (void));
-++#define gnutls_once(ONCE, INIT_FUNC)			\
-++	(unlikely(glthread_once(ONCE, INIT_FUNC)) ?	\
-++	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
-+ 
-+ #endif /* GNUTLS_LIB_LOCKS_H */
-+diff --git a/lib/pkcs11.c b/lib/pkcs11.c
-+index 8dda0f07c9..ba8ac0c375 100644
-+--- a/lib/pkcs11.c
-++++ b/lib/pkcs11.c
-+@@ -351,7 +351,7 @@ int _gnutls_pkcs11_check_init(init_level_t req_level, void *priv, pkcs11_reinit_
-+ 	ret = sret;
-+ 
-+  cleanup:
-+-	gnutls_static_mutex_unlock(&pkcs11_mutex);
-++	(void)gnutls_static_mutex_unlock(&pkcs11_mutex);
-+ 
-+ 	return ret;
-+ }
-+diff --git a/lib/priority.c b/lib/priority.c
-+index d17a923318..55ae185c1f 100644
-+--- a/lib/priority.c
-++++ b/lib/priority.c
-+@@ -2505,7 +2505,7 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
-+ 	}
-+ 
-+  out:
-+-	gnutls_rwlock_unlock(&system_wide_config_rwlock);
-++	(void)gnutls_rwlock_unlock(&system_wide_config_rwlock);
-+ 	return ret;
-+ }
-+ 
-+diff --git a/lib/verify-tofu.c b/lib/verify-tofu.c
-+index 40b7acdc8a..97f47385e6 100644
-+--- a/lib/verify-tofu.c
-++++ b/lib/verify-tofu.c
-+@@ -434,7 +434,7 @@ int store_pubkey(const char *db_name, const char *host,
-+ 	if (fp != NULL)
-+ 		fclose(fp);
-+ 
-+-	gnutls_static_mutex_unlock(&file_mutex);
-++	(void)gnutls_static_mutex_unlock(&file_mutex);
-+ 	gnutls_free(b64key.data);
-+ 
-+ 	return ret;
-+-- 
-+GitLab
-+
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index cd724eae2d..4bde1ab677 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  4901a0baac4eb24163ceafb44fd448430361d25d8f17d89ff29f8b0b162b3eb9  ell-0.47.tar.xz
++sha256  9894943042a5d6165d3e5cc354f92274fb1304004d02b4bee682ab6067cdbbd5  ell-0.48.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 3ce64b6f2f..267b44e5f0 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELL_VERSION = 0.47
++ELL_VERSION = 0.48
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
