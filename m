@@ -1,70 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B22BC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 17:34:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ED34C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 17:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EACA260A79;
-	Fri, 18 Mar 2022 17:34:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFBF984837;
+	Fri, 18 Mar 2022 17:37:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xgrJCBZg8Kfn; Fri, 18 Mar 2022 17:34:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PiyYfJOsgCAE; Fri, 18 Mar 2022 17:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B31760A7B;
-	Fri, 18 Mar 2022 17:34:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28520847B9;
+	Fri, 18 Mar 2022 17:37:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4822E1BF34E
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 17:34:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 542271BF34E
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 17:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35F5F401D5
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 17:34:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F6504016D
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 17:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new); dkim=neutral
- reason="invalid (public key: not available)" header.d=embedded.rocks
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6mfjMchVQODp for <buildroot@lists.busybox.net>;
- Fri, 18 Mar 2022 17:34:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.142])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35A0340117
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 17:34:33 +0000 (UTC)
-Received: from submission (posteo.de [185.67.36.169]) 
- by mout02.posteo.de (Postfix) with ESMTPS id 959C9240101
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 18:34:30 +0100 (CET)
-Received: from customer (localhost [127.0.0.1])
- by submission (posteo.de) with ESMTPSA id 4KKrjf0wslz6tmG
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 18:34:29 +0100 (CET)
-Authentication-Results: mail.embedded.rocks (amavisd-new); dkim=pass
- reason="pass (just generated, assumed good)" header.d=embedded.rocks
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=embedded.rocks;
- h=content-transfer-encoding:content-type:content-type
- :mime-version:x-mailer:message-id:date:date:subject:subject:from
- :from:received:received; s=default; t=1647624869; x=1648229670;
- bh=STXze88hqfUV9wgavRsmc1svZd8d0EVm67ED3bHYAkA=; b=cz5c4QiUpfmZ
- vvJnoT2Wd7lFW/OZtu4ojGchJDiwmzJkO4v+oDCBnLQopWTobjUPHZZeBS7xkTDz
- d3pNKXZ+ljeqVLEzev8HpVP3H68ZUTz7T8wuRuhHOWiGLhHmiqNS5uLFlWyUwsUK
- tmKeLngSt5L/JGUxpxXXU/F3ZSZMhV5s05YgYZ6ydJazvpYs02SGR6FFD/hNx5s1
- FT1fp9Bao+xBVUJk5ZdR3EpjEOt5KyTrQQXQQoEQxWt9vBXeJNeHivXQvqQfOBzf
- eB0bNToQeYIj7BRjFaUGe9xh91Fhj+YM415pvF7CfYvy6Fb7k0iB6Chcp21RbZfS
- w+rHJmIkgA==
-Received: from mail.embedded.rocks ([127.0.0.1])
- by localhost (mail.embedded.rocks [127.0.0.1]) (amavisd-new, port 10025)
- with ESMTP id b1qS9m5Nn1xs; Fri, 18 Mar 2022 18:34:29 +0100 (CET)
-Received: from nzxt.fritz.box (port-92-193-142-156.dynamic.as20676.net
- [92.193.142.156]) (Authenticated sender: joerg.krause@embedded.rocks)
- by mail.embedded.rocks (Postfix) with ESMTPSA;
- Fri, 18 Mar 2022 18:34:29 +0100 (CET)
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+ with ESMTP id RzdFqokX0Mqw for <buildroot@lists.busybox.net>;
+ Fri, 18 Mar 2022 17:37:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C86B840117
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 17:37:33 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id h23so12037905wrb.8
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 10:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=nw9IpBiGPIhh892/HEnK4UaFa+6becqFngBgbJuAJYA=;
+ b=JNbr5cb+q9l0PYjB38cu0deu1WLwp2xa/n+g+PjwXMjf4+3vlg3cf2rPwJbHFvlH0J
+ xrfBsrqBdSVClFJO3qnaDs5zF5HJtPYljmRmngEIFOGyjvLKB0jMB3eyCdmHn9vgiSDV
+ M47tSBaqAm+IjRZ1qcDqmHJq65wNywqzYJh2i9P0dcVfk0J3HvrZgxUC+5Ylkju7QWdk
+ sDwB6kDF8ZxVpAOEgCmfoCQf3WvKDmesPi3C3BhSguBYvAH5SDkbNKxaSRDqW8fQnYTG
+ WA329mu+cXP4bZLRj4lxBL5SMHc7cXFbtikhzahOC1tGpo1eHr7YML1M+faV0Nd/hYg8
+ s2Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=nw9IpBiGPIhh892/HEnK4UaFa+6becqFngBgbJuAJYA=;
+ b=QdgQggMXDzrB7B/mhpSfp2jjST/fHtx8WcDVP9ywV/Cv+ZEVYCcyuzfsuUGptredsp
+ Ju/YbcmsjHWQ1n3e7RvMfzzox91GeJYeSPphaKAulc2DkgHgoenuG/huAXQX/VEb4k9S
+ XDpc/enz/wDy1le3FCjxVNpFckFz0Ws2jTt37Imoj6ND0FxqF9fzPUlZdq5P5JqLez9p
+ hLPxeljn8YVhgS3aZBcxvQSYqPc6HN4yhbn8g3rCVMVFzdJ0MAxLBms/z4U5tcpDd88Z
+ FfJ6qQ6kYPVmW4ew32nDOg3SjwU8Pj+n42V4u3iAWItG5Ozboj/HrOhafCNkPpt1KczC
+ tR8Q==
+X-Gm-Message-State: AOAM531yNNjqHvTLKu9GWrCneU7y/cE5vEtbUOaFRblzvcL4sB/U0bVJ
+ QNN6qPtzcNcJ1bo4KEaGgeq+Of7cybM=
+X-Google-Smtp-Source: ABdhPJwL1EEPhiEGYlRq+/n1e/XCXbnIl4wzaxoLB/GXLAsp1/+h7tRQde+OfprZTZD9tmnCmtFX0Q==
+X-Received: by 2002:adf:eb81:0:b0:1e3:2bf5:132 with SMTP id
+ t1-20020adfeb81000000b001e32bf50132mr8944061wrn.246.1647625051562; 
+ Fri, 18 Mar 2022 10:37:31 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ c12-20020a05600c0a4c00b00381141f4967sm9117275wmq.35.2022.03.18.10.37.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 18 Mar 2022 10:37:31 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Mar 2022 17:34:27 +0000
-Message-Id: <20220318173427.68776-1-joerg.krause@embedded.rocks>
+Date: Fri, 18 Mar 2022 18:35:07 +0100
+Message-Id: <20220318173507.10160-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/luvi: bump to version 2.13.0
+Subject: [Buildroot] [PATCH 1/1] package/libscrypt: fix CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,32 +87,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogSsO2cmcgS3JhdXNlIDxqb2VyZy5rcmF1c2VAZW1iZWRkZWQucm9ja3M+
-Ci0tLQogcGFja2FnZS9sdXZpL2x1dmkuaGFzaCB8IDIgKy0KIHBhY2thZ2UvbHV2aS9sdXZpLm1r
-ICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMo
-LSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2x1dmkvbHV2aS5oYXNoIGIvcGFja2FnZS9sdXZpL2x1
-dmkuaGFzaAppbmRleCBmY2M4MTQzMGRiLi45NjIxZWY0ZDAzIDEwMDY0NAotLS0gYS9wYWNrYWdl
-L2x1dmkvbHV2aS5oYXNoCisrKyBiL3BhY2thZ2UvbHV2aS9sdXZpLmhhc2gKQEAgLTEsMyArMSwz
-IEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICA0MTQ5Yzg3NjQ2ZjQ4N2Y5MDc2YzI5
-ZTk4NjFmNjQ0Njg2MzdiMWQxMzYxYjc3N2IwOTNlNjIwNGE4M2UxZWQ5ICBsdXZpLXNyYy12Mi4x
-Mi4wLnRhci5negorc2hhMjU2ICBkYTI1Yzc0YTMwYTNmZTJmYzc1ZTk3OTdhNmZhMDcxN2ViYjA1
-Y2ViN2U2Y2NiNjEzMDFmODBjN2RkNDM2YjczICBsdXZpLXNyYy12Mi4xMy4wLnRhci5negogc2hh
-MjU2ICBjZmM3NzQ5Yjk2ZjYzYmQzMWMzYzQyYjVjNDcxYmY3NTY4MTQwNTNlODQ3YzEwZjNlYjAw
-MzQxN2JjNTIzZDMwICBMSUNFTlNFLnR4dApkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdXZpL2x1dmku
-bWsgYi9wYWNrYWdlL2x1dmkvbHV2aS5tawppbmRleCA1ZGFhM2MxNzkzLi41MjY2MjgxZmZjIDEw
-MDY0NAotLS0gYS9wYWNrYWdlL2x1dmkvbHV2aS5taworKysgYi9wYWNrYWdlL2x1dmkvbHV2aS5t
-awpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUxVVklfVkVS
-U0lPTiA9IDIuMTIuMAorTFVWSV9WRVJTSU9OID0gMi4xMy4wCiBMVVZJX1NPVVJDRSA9IGx1dmkt
-c3JjLXYkKExVVklfVkVSU0lPTikudGFyLmd6CiBMVVZJX1NJVEUgPSBodHRwczovL2dpdGh1Yi5j
-b20vbHV2aXQvbHV2aS9yZWxlYXNlcy9kb3dubG9hZC92JChMVVZJX1ZFUlNJT04pCiBMVVZJX0xJ
-Q0VOU0UgPSBBcGFjaGUtMi4wCi0tIAoyLjM1LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Don't pass TARGET_CONFIGURE_OPTS in LIBSCRYPT_MAKE_OPTS to avoid
+overriding CFLAGS (and so loossing -fPIC). This will fix the following
+build failure raised since bump to version 1.22 in commit
+4542c6714d3951070c31739d24e4bd42b446fbae:
+
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/10.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.36.1 assertion fail elf32-microblaze.c:1534
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/10.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: sha256.o: probably compiled without -fPIC?
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/10.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ba4234ad305badb5ce815080ddcad6727e8d51c4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libscrypt/libscrypt.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libscrypt/libscrypt.mk b/package/libscrypt/libscrypt.mk
+index d28bd4e900..193c963f76 100644
+--- a/package/libscrypt/libscrypt.mk
++++ b/package/libscrypt/libscrypt.mk
+@@ -11,7 +11,7 @@ LIBSCRYPT_LICENSE_FILES = LICENSE
+ LIBSCRYPT_INSTALL_STAGING = YES
+ 
+ LIBSCRYPT_MAKE_OPTS = \
+-	$(TARGET_CONFIGURE_OPTS) \
++	CC=$(TARGET_CC) \
+ 	CFLAGS_EXTRA="$(TARGET_CFLAGS)" \
+ 	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
+ 	PREFIX=/usr
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
