@@ -1,70 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDE4DC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 17:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58AD9C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 18:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 899E941A37;
-	Fri, 18 Mar 2022 17:52:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA9A0404A6;
+	Fri, 18 Mar 2022 18:08:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wwx5Iq7Zo3Mk; Fri, 18 Mar 2022 17:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2D7tXBQ3OPsi; Fri, 18 Mar 2022 18:08:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5CCC41A2B;
-	Fri, 18 Mar 2022 17:52:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 098711BF34E
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 17:52:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9499E401D5;
+	Fri, 18 Mar 2022 18:08:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 737531BF3F7
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 18:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECCB984312
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 17:52:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 617C8408C5
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 18:08:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new); dkim=neutral
- reason="invalid (public key: not available)" header.d=embedded.rocks
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HLL8Mm6nLeKw for <buildroot@lists.busybox.net>;
- Fri, 18 Mar 2022 17:52:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.141])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C985581314
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 17:52:06 +0000 (UTC)
-Received: from submission (posteo.de [185.67.36.169]) 
- by mout01.posteo.de (Postfix) with ESMTPS id 0AF53240031
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 18:52:05 +0100 (CET)
-Received: from customer (localhost [127.0.0.1])
- by submission (posteo.de) with ESMTPSA id 4KKs5t2p9yz9rxG
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 18:52:02 +0100 (CET)
-Authentication-Results: mail.embedded.rocks (amavisd-new); dkim=pass
- reason="pass (just generated, assumed good)" header.d=embedded.rocks
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=embedded.rocks;
- h=content-transfer-encoding:content-type:content-type
- :mime-version:x-mailer:message-id:date:date:subject:subject:from
- :from:received:received; s=default; t=1647625920; x=1648230721;
- bh=hnY2u02BgutZZE47vVEmXqVxPZOE2t2u2Un3WgqFz60=; b=zLUBybDlgwb6
- 13mLSZhJ1vUjS+krdrLKkXdLLoJbt+ceuSm17P0hj5t5e4bQhHQDdzbXF5pdkNfy
- AXlP6enmP8iitIlYVojmFbEZORDFzKkVhxGgS/X8DuSrbq/DlWgzjwY3FkVjt3mq
- AQot/eW69xR/p5BapdB8OjB8cogIzfvrBvLaJvfBb9j9IFDqH8VlmOkMCxtjqHDy
- /w5b2k6xJrY2LRujXzvK5g92RToTwKFrJc552bdtS5z+mQTzaoY5qoodRLfwfDc3
- YUx8nh6DmxZC3k9IEO7PPx2uOghGKqertTWY4Yl9scYvEe8N5dNp7gD4XIuD9l9b
- tgxUgPplsw==
-Received: from mail.embedded.rocks ([127.0.0.1])
- by localhost (mail.embedded.rocks [127.0.0.1]) (amavisd-new, port 10025)
- with ESMTP id kVMzCHau3pJx; Fri, 18 Mar 2022 18:52:00 +0100 (CET)
-Received: from nzxt.fritz.box (port-92-193-142-156.dynamic.as20676.net
- [92.193.142.156]) (Authenticated sender: joerg.krause@embedded.rocks)
- by mail.embedded.rocks (Postfix) with ESMTPSA;
- Fri, 18 Mar 2022 18:51:59 +0100 (CET)
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EBRu8FdBOqk3 for <buildroot@lists.busybox.net>;
+ Fri, 18 Mar 2022 18:08:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 697F44089B
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 18:08:26 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id r10so12768198wrp.3
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 11:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=i/QE5STdYBzuNTSoH48detbp9NFqllk8X9SFoqhRqI0=;
+ b=YccdtSJT5+1R8eatr8JCc2w2n/LMwojFeBFovA+sjeQx2iVq16mEcVAGiFBxW/38c6
+ DD+Fho7cxxXd31ho0UMTkDYlgtHhOXbWtScIqMIENZIs9Iqd6QOZFOATUeiVP2RsbHco
+ p2xcQJRYPy2JOoXs5IFDgiOyEofDp2uK3lUclSktipS66qCjnSmuO36uoRpEm8SToPjC
+ JBurb1udThEJNywk6MwHJyVIHFhs5jBiPM8811Xa3VS02w1TQAA0VmLSx+A636f9+BP1
+ ZFlQqJXkAAgSxpFPbuu3K94v7r8ekv8tyEMByt6FQQIpSmeSYKNOfJLCO+HmARa4xR0Y
+ 7Sfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=i/QE5STdYBzuNTSoH48detbp9NFqllk8X9SFoqhRqI0=;
+ b=3xYM+WjgfmtGCuo0sn/OgXXgoVXpiuS/N/3dO76xGzysgeXrqMggq03UflFVPdzCpk
+ Fh0SXz1MH7QMuEaInsW5J3aLEqr0y5bZpBgPdk5PQDY0uuL1Rvt9WYRkaPH+/oc6QadY
+ b+rUC8BtoDO7dg1nKg2Rr7RS1VPBqe4ipb0M7AEG/Ly4AKlfH9/q/aCaiK49aUjetewq
+ K5cMX4eFd00gY/MG0k3Au7iAfQMYaiX5hGyFp5YoFRXsQvaqXbnCOBuF2426imKZH6ma
+ yZir1721uukCAguGl1koQtU3rSDWEtsy0P9EznULxoOTEH4RgftLwPQANqT5+7rtGslz
+ zTEg==
+X-Gm-Message-State: AOAM532/FXa9R6qef7o877NZG6qR8VzivX1oeEwOlASMkBB8/TABDZJ8
+ avXF/+2jMeTYL/gSt17+eL1OhlrEpaM=
+X-Google-Smtp-Source: ABdhPJyRQMMUZw115hsre2S5ZkfQtnGPC2KFRbj2zs3RAJe11IYIf/P3W0yiwq00zcdncEBeGW+u5Q==
+X-Received: by 2002:a05:6000:18ac:b0:203:ecad:a203 with SMTP id
+ b12-20020a05600018ac00b00203ecada203mr7148966wri.177.1647626904487; 
+ Fri, 18 Mar 2022 11:08:24 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ m64-20020a1c2643000000b0038c85aade4csm2949282wmm.11.2022.03.18.11.08.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 18 Mar 2022 11:08:24 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Mar 2022 17:51:56 +0000
-Message-Id: <20220318175156.186854-1-joerg.krause@embedded.rocks>
+Date: Fri, 18 Mar 2022 19:07:13 +0100
+Message-Id: <20220318180713.19051-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.12.1
+Subject: [Buildroot] [PATCH 1/1] package/pango: drop -Werror=empty-body
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,36 +87,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIGxpY2Vuc2UgZmlsZSBoYXMgdXBkYXRlZCB0aGUgY29weXJpZ2h0IHllYXIgdG8gMjAyMiwg
-dGhlcmVmb3JlCnVwZGF0ZSB0aGUgaGFzaCBvZiB0aGUgbGljZW5zZSBmaWxlIGFzIHdlbGwuCgpT
-aWduZWQtb2ZmLWJ5OiBKw7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRlZC5yb2Nrcz4K
-LS0tCiBwYWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5oYXNoIHwgNCArKy0tCiBwYWNrYWdlL3B1Z2l4
-bWwvcHVnaXhtbC5tayAgIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyks
-IDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wdWdpeG1sL3B1Z2l4bWwuaGFz
-aCBiL3BhY2thZ2UvcHVnaXhtbC9wdWdpeG1sLmhhc2gKaW5kZXggNWM2MjlhYzY2Zi4uMTkwZGZi
-NmE2ZSAxMDA2NDQKLS0tIGEvcGFja2FnZS9wdWdpeG1sL3B1Z2l4bWwuaGFzaAorKysgYi9wYWNr
-YWdlL3B1Z2l4bWwvcHVnaXhtbC5oYXNoCkBAIC0xLDMgKzEsMyBAQAogIyBMb2NhbGx5IGNvbXB1
-dGVkOgotc2hhMjU2ICA4ZGRmNTdiNjVmYjg2MDQxNjk3OWEzZjA2NDBjMmFkNDVkZGRkYmJhZmE4
-MjUwOGVmMGEwYWYzY2U3MDYxNzE2ICBwdWdpeG1sLTEuMTEuNC50YXIuZ3oKLXNoYTI1NiAgZWU0
-OTVmMzRhZWZmMGM1NzhhOTlmMzM1MGEyMDUwZDRlNTg2MGQyN2IyMDA0YzAzYzM4NGE1OTRmYTJi
-MGE3YSAgTElDRU5TRS5tZAorc2hhMjU2ICBkY2Y2NzFhOTE5Y2M0MDUxMjEwZjA4ZmZkM2VkZjll
-NDI0N2Y3OWFkNTgzYzYxNTc3YTEzZWU5M2FmMzNhZmM3ICBwdWdpeG1sLTEuMTIuMS50YXIuZ3oK
-K3NoYTI1NiAgMjA2ZjY3MWI2ZDM0MjU1N2FkY2M5NzMwODhjMmM2MzhkZjBlYzBiMWRhYmJjZDI0
-ZTY1YWFkZDIxOTE3NzhkMiAgTElDRU5TRS5tZApkaWZmIC0tZ2l0IGEvcGFja2FnZS9wdWdpeG1s
-L3B1Z2l4bWwubWsgYi9wYWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5tawppbmRleCBiYzAxODE4MGVm
-Li45MTM3ZjA0NjMwIDEwMDY0NAotLS0gYS9wYWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5taworKysg
-Yi9wYWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjCiAKLVBVR0lYTUxfVkVSU0lPTiA9IDEuMTEuNAorUFVHSVhNTF9WRVJT
-SU9OID0gMS4xMi4xCiBQVUdJWE1MX1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20vemV1eC9wdWdp
-eG1sL3JlbGVhc2VzL2Rvd25sb2FkL3YkKFBVR0lYTUxfVkVSU0lPTikKIFBVR0lYTUxfTElDRU5T
-RSA9IE1JVAogUFVHSVhNTF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS5tZAotLSAKMi4zNS4xCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Fix the following build failure raised since bump to version 1.50.5 in
+commit 68b0efbae49a42d0e14d6040e5e7e573d382ff75:
+
+../utils/viewer-cairo.c: In function 'cairo_vector_view_create':
+../utils/viewer-cairo.c:228:5: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+     ;
+     ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/dee/dee3d631474f83b345f22eb26c59a305c32258f8/build-end.log
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...1-meson.build-drop-Werror-empty-body.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/pango/0001-meson.build-drop-Werror-empty-body.patch
+
+diff --git a/package/pango/0001-meson.build-drop-Werror-empty-body.patch b/package/pango/0001-meson.build-drop-Werror-empty-body.patch
+new file mode 100644
+index 0000000000..98b6828a63
+--- /dev/null
++++ b/package/pango/0001-meson.build-drop-Werror-empty-body.patch
+@@ -0,0 +1,47 @@
++From 1d0f3a8abcb2bb8931d02c136ae957ee2d60094e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 18 Mar 2022 18:55:56 +0100
++Subject: [PATCH] meson.build: drop -Werror=empty-body
++
++Drop -Werror=empty-body to avoid the following build failure raised
++since version 1.50.5 and
++https://gitlab.gnome.org/GNOME/pango/-/commit/cd08fb7402498e6ea542b4628447547477ac212e:
++
++../utils/viewer-cairo.c: In function 'cairo_vector_view_create':
++../utils/viewer-cairo.c:228:5: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
++     ;
++     ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/dee3d631474f83b345f22eb26c59a305c32258f8
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/pango/-/merge_requests/604]
++---
++ meson.build | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 0f79bff7..c48fe01f 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -89,7 +89,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     '-Wunused',
++     '-Werror=address',
++     '-Werror=array-bounds',
++-    '-Werror=empty-body',
++     '-Werror=implicit',
++     '-Werror=implicit-fallthrough',
++     '-Werror=init-self',
++@@ -135,7 +134,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     '-Werror=write-strings',
++     '-Werror=address',
++     '-Werror=int-to-pointer-cast',
++-    '-Werror=empty-body',
++     '-Werror=write-strings',
++     '-Werror=unused-but-set-variable',
++     '-Wundef', # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=792481
++-- 
++2.35.1
++
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
