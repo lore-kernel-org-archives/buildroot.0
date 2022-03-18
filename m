@@ -1,68 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25061C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 22:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99FAEC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 22:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1F1060D72;
-	Fri, 18 Mar 2022 22:12:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B9ED41524;
+	Fri, 18 Mar 2022 22:13:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nI3zCL001y3q; Fri, 18 Mar 2022 22:12:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zsNs0q7i_uhr; Fri, 18 Mar 2022 22:13:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF35A60C26;
-	Fri, 18 Mar 2022 22:12:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63F54408E2;
+	Fri, 18 Mar 2022 22:13:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 557BB1BF853
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 22:12:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 41F5F1BF853
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 22:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44CBD41722
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 22:12:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31CC5408AF
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 22:13:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7wYJa_Poysf3 for <buildroot@lists.busybox.net>;
- Fri, 18 Mar 2022 22:12:27 +0000 (UTC)
+ with ESMTP id hvmyooxyu_Mn for <buildroot@lists.busybox.net>;
+ Fri, 18 Mar 2022 22:13:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1F8454170A
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 22:12:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2244F405AE
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 22:13:35 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:20af:3c78:ddff:75e1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E641A13F846;
- Fri, 18 Mar 2022 23:12:21 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9822C13F86E;
+ Fri, 18 Mar 2022 23:13:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647641544;
- bh=1I4iez3amv5eMtu78jLXvQLSop5dj0/LhtJg/U6gu9Y=;
+ s=smtp-20201208; t=1647641613;
+ bh=w4zN63uWq9RVJTeDe7sQGPTEocjxjk/p1mxrUkfj9AI=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=kUDsiAGv4j5PG50YAG2kNGzaL+EGOd1M+0C0YQuup+ishbgTDNu+u+uQ76Zqw2uDl
- Emk2Oe8auScwzpf9k+fPztoI39dyVAmoWweOonJYFl5TNQWvj++bzI5C5oVai3cTlx
- s2klcPIdtQnWnrjQxhD3Mfwl/NfzxYfUshxTpchGMTHMqKADJ1HVG5xa2LfXmspvPu
- Qr7KQX9UNHAeKYpyCGZFDrZMrTqq07u4NKKhrCC19Rngwj6lBV0lR66OLYjX9cn+5G
- Cxr14Xsd1HFllXisRXHO91Lq4gsTLh4PM7SlaO/1+czpWsXRgxM5n5cMLAZG/9OTBV
- dwqy0gtZoxC0Q==
+ b=H4msubxXESzSEVK0+RnrfN1+1ByfxCMl6x8j8tFJq2lGk9PqhkTBQsUjV3dyqNyPg
+ oXQeQNEx1mgs4t8cO2eEfnNYz2L2OIvzLr3hsX67fQr3zS+xFVIOqPY7IiiSfy5ohE
+ tL36KfoINdG293ifvM0UkO5Lc1PA1VUXlO1dmPE7Jq+uTnofr6W7qVGhk8kbqRE9Hb
+ Rzzv7JpRfk8ZkbsqgYK7XksLtTHL2Js042EXFeCXzHqQMa56mKBuYjwQM41G+J7W+O
+ l3eMsUhqLV8w8tyTdooeXQ46bMPvtzfwTUX+qJVvcu7tsUKBmTNeuu7zjY1YZJUmiS
+ Ai63MTYBTfrmw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 18 Mar 2022 23:12:21 +0100
-Date: Fri, 18 Mar 2022 23:12:21 +0100
+ Fri, 18 Mar 2022 23:13:31 +0100
+Date: Fri, 18 Mar 2022 23:13:31 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220318221221.GP283544@scaer>
-References: <20220318193310.752282-1-fontaine.fabrice@gmail.com>
- <20220318215025.GN283544@scaer>
- <CAPi7W81HfkqmaLq4ZB7zqfq4p0Gcp411f1AkTeC42FcFVxEkZQ@mail.gmail.com>
+Message-ID: <20220318221331.GQ283544@scaer>
+References: <20220317214203.258736-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CAPi7W81HfkqmaLq4ZB7zqfq4p0Gcp411f1AkTeC42FcFVxEkZQ@mail.gmail.com>
+In-Reply-To: <20220317214203.258736-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireplumber: fix introspection
- build
+Subject: Re: [Buildroot] [PATCH 1/1] package/rtl_433: fix CVE-2022-25051
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,58 +69,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RmFicmljZSwgQWxsLAoKT24gMjAyMi0wMy0xOCAyMjo1OCArMDEwMCwgRmFicmljZSBGb250YWlu
-ZSBzcGFrZSB0aHVzbHk6Cj4gTGUgdmVuLiAxOCBtYXJzIDIwMjIgw6AgMjI6NTAsIFlhbm4gRS4g
-TU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiBhIMOpY3JpdCA6Cj4gPiBPbiAyMDIyLTAz
-LTE4IDIwOjMzICswMTAwLCBGYWJyaWNlIEZvbnRhaW5lIHNwYWtlIHRodXNseToKPiA+ID4gaW50
-cm9zcGVjdGlvbiBuZWVkcyBob3N0LWRveHlnZW4gYW5kIGhvc3QtcHl0aG9uLWx4bWwgc2luY2Ug
-dGhlIGFkZGl0aW9uCj4gPiA+IG9mIHRoZSBwYWNrYWdlIGluIGNvbW1pdCBjOWEzYzEwNDE3YWFk
-Y2U5ZWU0OTIyZTMwMjM1Nzc2NDA5Y2U4ZWIzIGFuZAo+ID4gPiBodHRwczovL2dpdGxhYi5mcmVl
-ZGVza3RvcC5vcmcvcGlwZXdpcmUvd2lyZXBsdW1iZXIvLS9jb21taXQvMmU1YjEzZjk3MGZlM2Rk
-MjhhNGNlNzU4NjhkNDY0MDMwMzRjNjgyMgo+ID4KPiA+IEFzIHBlciB0aGF0IGRpZmYsIGl0IHNl
-ZW1zIGRveHlnZW4gaXMgb25seSBuZWVkZWQgd2hlbiBhY3R1YWxseSBidWlsZGluZwo+ID4gdGhl
-IGRvY3VtZW50YXRpb246Cj4gPgo+ID4gICAgIGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9y
-Zy9waXBld2lyZS93aXJlcGx1bWJlci8tL2NvbW1pdC8yZTViMTNmOTcwZmUzZGQyOGE0Y2U3NTg2
-OGQ0NjQwMzAzNGM2ODIyIzBjYzExMzllMzM0N2Y1NzNhZTFmZWVlNWI3M2RiYzhhOGEyMWZjZmEK
-PiBBcyB3cml0dGVuIGluIHRoZSBjb21taXQgdGl0bGUsIHdpcmVwbHVtYmVyICJidWlsZCBnb2Jq
-ZWN0Cj4gaW50cm9zcGVjdGlvbiBmcm9tIHhtbCBmaWxlcyBnZW5lcmF0ZWQgYnkgRG94eWdlbiIK
-ClllcywgYnV0IHN0aWxsLCBieSBpdHNlbGYsIGl0IGRvZXMgbm90IG1ha2Ugc2Vuc2UgdG8gZG8g
-dGhhdCBpZgpkb2N1bWVudGF0aW9uIGlzIG5vdCBidWlsdC4KCkkuZS46IG5vIGRvYyA9PiBubyBm
-aWxlcyBnZW5lcmF0ZWQgYnkgZG94eWdlbiA9PiBubyBpbnRyb3NwZWN0aW9uIG9uCnRob3NlIGZp
-bGVzLgoKKGJ1dCBzZWUgYmVsb3cpLgoKPiA+ICAgICBkb3h5Z2VuX3AgPSBmaW5kX3Byb2dyYW0o
-J2RveHlnZW4nLCByZXF1aXJlZDogZ2V0X29wdGlvbignZG9jJykpCj4gCj4gSW5kZWVkLCB0aGlz
-IGlzIHdoYXQgaXMgZG9uZSBpbiB0aGlzIGNvbW1pdC4KPiBCdXQgdGhlIG5leHQgb25lIChpLmUu
-Cj4gaHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL3BpcGV3aXJlL3dpcmVwbHVtYmVyLy0v
-Y29tbWl0LzkzYzJlN2Q2ODZiYTY3ODk5MTE4NWU3MTE1MzNjZTI5ODI2YjUzNzQpCj4gYWRkcyB0
-aGUgZm9sbG93aW5nOgo+IAo+IGlmIGdldF9vcHRpb24oJ2RvYycpLmVuYWJsZWQoKSBvciBnZXRf
-b3B0aW9uKCdpbnRyb3NwZWN0aW9uJykuZW5hYmxlZCgpCj4gICBkb3h5Z2VuX3AgPSBmaW5kX3By
-b2dyYW0oJ2RveHlnZW4nLCB2ZXJzaW9uOiAnPj0gMS45LjAnLCByZXF1aXJlZDogdHJ1ZSkKPiBl
-bGlmIGdldF9vcHRpb24oJ2RvYycpLmF1dG8oKSBvciBnZXRfb3B0aW9uKCdpbnRyb3NwZWN0aW9u
-JykuYXV0bygpCj4gICBkb3h5Z2VuX3AgPSBmaW5kX3Byb2dyYW0oJ2RveHlnZW4nLCB2ZXJzaW9u
-OiAnPj0gMS45LjAnLCByZXF1aXJlZDogZmFsc2UpCj4gZWxzZQo+ICAgZG94eWdlbl9wID0gZGlz
-YWJsZXIoKQoKVGhhdCBjb21taXl0IHNob3VsZCBoYXZlIGFsc28gYmVlbiBtZW50aW9uZWQsIG9y
-IGF0IGxlYXN0IHRoZQpmb2xsb3dpbmcuLi4KCj4gPiBCdXQgd2UgYXJlIGFscmVkeSBwYXNzaW5n
-IC1EZG9jPWRpc2FibGVkLCBzbyB3aHkgaXMgaXQgc3RpbGwgdHJ5aW5nIHRvCj4gPiBidWlsZCB0
-aGUgZG9jdW1lbnRhdGlvbj8KPiBJdCdzIG5vdCBidWlsZGluZyB0aGUgImZ1bGwiIGRvY3VtZW50
-YXRpb24gKHdoaWNoIGRlcGVuZHMgb24gc3BoaW54LAo+IGV0Yy4pLCBvbmx5IHRoZSBmaWxlIHRo
-YXQgaXMgbmVlZGVkIGZvciBnb2JqZWN0LWludHJvc3BlY3Rpb24uCgouLi4gaGVyZSBzaGpvdWxk
-IGhhdmUgYmVlbiBtZW50aW9uZWQuCgpBcHBsaWVkIHRvIG1hc3RlciB3aXRoIHRob3NlIGV4cGxh
-bmF0aW9ucyBhZGRlZCwgdGhhbmtzLgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0t
-LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRl
-ZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2
-IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAg
-ICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBB
-R0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1n
-ZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAg
-fAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
-LS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Fabrice, All,
+
+On 2022-03-17 22:42 +0100, Fabrice Fontaine spake thusly:
+> An Off-by-one Error occurs in cmr113_decode of rtl_433 21.12 when
+> decoding a crafted file.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...low-in-Clipsal-CMR113-and-Somfy-IOHC.patch | 58 +++++++++++++++++++
+>  package/rtl_433/rtl_433.mk                    |  3 +
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
+> 
+> diff --git a/package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch b/package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
+> new file mode 100644
+> index 0000000000..e2088b29e7
+> --- /dev/null
+> +++ b/package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
+> @@ -0,0 +1,58 @@
+> +From 2dad7b9fc67a1d0bfbe520fbd821678b8f8cc7a8 Mon Sep 17 00:00:00 2001
+> +From: "Christian W. Zuckschwerdt" <christian@zuckschwerdt.org>
+> +Date: Mon, 24 Jan 2022 15:53:20 +0100
+> +Subject: [PATCH] minor: Fix overflow in Clipsal-CMR113 and Somfy-IOHC reported
+> + by aug5t7
+> +
+> +[Retrieved from:
+> +https://github.com/merbanan/rtl_433/commit/2dad7b9fc67a1d0bfbe520fbd821678b8f8cc7a8]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/devices/cmr113.c     | 4 ++--
+> + src/devices/somfy_iohc.c | 9 +++++----
+> + 2 files changed, 7 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/src/devices/cmr113.c b/src/devices/cmr113.c
+> +index c85dfac56..19ec5d421 100644
+> +--- a/src/devices/cmr113.c
+> ++++ b/src/devices/cmr113.c
+> +@@ -42,8 +42,8 @@ Kudos to Jon Oxer for decoding this stream and putting it here:
+> + 
+> + */
+> + 
+> +-#define COMPARE_BITS 83
+> +-#define COMPARE_BYTES (COMPARE_BITS/8)
+> ++#define COMPARE_BITS  83
+> ++#define COMPARE_BYTES ((COMPARE_BITS + 7) / 8)
+> + 
+> + static int cmr113_decode(r_device *decoder, bitbuffer_t *bitbuffer)
+> + {
+> +diff --git a/src/devices/somfy_iohc.c b/src/devices/somfy_iohc.c
+> +index 906cae53e..2c88067b5 100644
+> +--- a/src/devices/somfy_iohc.c
+> ++++ b/src/devices/somfy_iohc.c
+> +@@ -100,11 +100,12 @@ static int somfy_iohc_decode(r_device *decoder, bitbuffer_t *bitbuffer)
+> +     if (bitbuffer->num_rows != 1)
+> +         return DECODE_ABORT_EARLY;
+> + 
+> +-    int offset = bitbuffer_search(bitbuffer, 0, 0, preamble_pattern, 24) + 24;
+> +-    if (offset >= bitbuffer->bits_per_row[0] - 19 * 10)
+> ++    unsigned offset = bitbuffer_search(bitbuffer, 0, 0, preamble_pattern, 24) + 24;
+> ++    if (offset + 19 * 10 >= bitbuffer->bits_per_row[0])
+> +         return DECODE_ABORT_EARLY;
+> + 
+> +-    int num_bits = bitbuffer->bits_per_row[0] - offset;
+> ++    unsigned num_bits = bitbuffer->bits_per_row[0] - offset;
+> ++    num_bits = MIN(num_bits, sizeof (b) * 8);
+> + 
+> +     int len = extract_bytes_uart(bitbuffer->bb[0], offset, num_bits, b);
+> +     if (len < 19)
+> +@@ -120,7 +121,7 @@ static int somfy_iohc_decode(r_device *decoder, bitbuffer_t *bitbuffer)
+> +     // calculate and verify checksum
+> +     if (crc16lsb(b, len, 0x8408, 0x0000) != 0) // unreflected poly 0x1021
+> +         return DECODE_FAIL_MIC;
+> +-    bitrow_printf(b, len * 8, "%s: offset %d, num_bits %d, len %d, msg_len %d\n", __func__, offset, num_bits, len, msg_len);
+> ++    bitrow_printf(b, len * 8, "%s: offset %u, num_bits %u, len %d, msg_len %d\n", __func__, offset, num_bits, len, msg_len);
+> + 
+> +     int msg_type = (b[0]);
+> +     int dst_id   = ((unsigned)b[4] << 24) | (b[3] << 16) | (b[2] << 8) | (b[1]); // assume Little-Endian
+> diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+> index a5139ddae6..d1c28adbf5 100644
+> --- a/package/rtl_433/rtl_433.mk
+> +++ b/package/rtl_433/rtl_433.mk
+> @@ -17,6 +17,9 @@ RTL_433_CONF_OPTS = \
+>  	-DBUILD_TESTING_ANALYZER=OFF \
+>  	-DENABLE_SOAPYSDR=OFF
+>  
+> +# 0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
+> +RTL_433_IGNORE_CVES += CVE-2022-25051
+> +
+>  ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
+>  RTL_433_DEPENDENCIES += librtlsdr
+>  RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
