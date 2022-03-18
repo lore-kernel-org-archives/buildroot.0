@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08D3CC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 19:34:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86045C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 18 Mar 2022 19:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB1460ABD;
-	Fri, 18 Mar 2022 19:34:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AEE641A0B;
+	Fri, 18 Mar 2022 19:42:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1_gCJ5708Nhi; Fri, 18 Mar 2022 19:34:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M-BqH91NXpOi; Fri, 18 Mar 2022 19:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A68AA60864;
-	Fri, 18 Mar 2022 19:34:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3715D419F4;
+	Fri, 18 Mar 2022 19:42:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 941031BF377
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 19:34:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1A4BF1BF377
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 19:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8239D824E2
- for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 19:34:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07BD08415F
+ for <buildroot@lists.busybox.net>; Fri, 18 Mar 2022 19:42:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w76uSu7cTQVZ for <buildroot@lists.busybox.net>;
- Fri, 18 Mar 2022 19:34:23 +0000 (UTC)
+ with ESMTP id HvcSh5NXz4oD for <buildroot@lists.busybox.net>;
+ Fri, 18 Mar 2022 19:42:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 83ABE82496
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 19:34:23 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id t11so13010403wrm.5
- for <buildroot@buildroot.org>; Fri, 18 Mar 2022 12:34:23 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4C0058412E
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 19:42:05 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id 185so537342wmc.3
+ for <buildroot@buildroot.org>; Fri, 18 Mar 2022 12:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1toEeKo0MReTXZWMNI6Nvpm4753rXg00X6gJlF//0so=;
- b=k7cApI1jUa7BAonop/c5Eq17fkTa3VLWHjjvUwZNYOh+lUz1JMePsGcvWlejlpsoyI
- cU/2SS9dZiE9lW+wtGyn6JMf6fEF6yNQN3JT3XrZ3pN8ziHFBV5EBSYGoCSbvDw5wsoa
- wlODz7XMruCj/D1ZINF1iN7MPcanqQb/54BLrN0umsSLinphgnXOiie4wAgRnpRrMAa1
- a/5eaZ/toAi4Y4t9EhLw3iMk+3qdVIkCbCMtkzIeiBBHK4wYeC2Jxrpg6OTygAzHQSvp
- ulqD3lkwNqwMJC1uwLPV/uN/ubxN8/YjjfWt4NYH7FqicDpxRpPDW/UHthQXyIJYNj0n
- wtww==
+ bh=uKH1ev8ld6tQvKq84akX+nfCTTNdCdsr3i4hyqVtuc4=;
+ b=Wd6Y4j+BlJcbGLOQek8umDH5RFebwdhaF0iMonzOR0ZQ1E2bao83Fuqjkpk0lqKZWz
+ EUjchDjN6e/t5adkr3u7CpXJcThV/eQlrZvePlKiboYOkD5LQ2TKHUUeObCnCmYLLwrC
+ TfG17AWT0IWLeCe8xqZ23cw7AZBcrj6YzbW5EgEHep/3ZekXcGQdIbTqS0p6eAWALnuv
+ +UJGjP2J0/b9Q73fiKQubfe44dqzDwTHo8zE31mmVl1cngebnIKtxBPsg8wHy0BWqi6q
+ /7axdc/Hvoqec7wKfTmsgTdZBj16XYFHyXwFvp2JxNBds9fGoW9o8sieqLCIF217Jqfm
+ QvcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1toEeKo0MReTXZWMNI6Nvpm4753rXg00X6gJlF//0so=;
- b=s+WbmiODdJbISHIQVgQLMhWw34G/KvUcguJdkMieOfzyeHVCvtRvn7L9IcRcN2UVUb
- C5bRE3zARKqm25K1ujzFZhtgQ1gCo73vLyVCCWLR92cTQX93+kQ284WCMRan8Q9jV7QK
- F6L26AMN9+bJLwbIyADkcRw2BUqyaYmWesGFmr7K3YLeWxnWyz4lmfrUUxWKbubWIPPo
- Ipvh31SwdmXxNlyCs+WrBWOGDo3nESFSwtx1HI+CbzxL5dF52Nm4tHM42YrnFTBaUuM9
- fQxxD9gqg3zTS6gdoTk4RL0cExzjvIJUvtZzAgDxSnPMHykftyV+n5U1CSxeuDGuGQqj
- 2dFQ==
-X-Gm-Message-State: AOAM533b+6OZyAMz+zYSchEdeOQ/aipSfP2ZNHTa4tNIVoB74SNKvtgN
- jB4mJNb9E8OoBah1yEi+PpVrg+StegI=
-X-Google-Smtp-Source: ABdhPJyJOqwQ6UMtAEnN+y1YZF6ycPVp6YDyjzwkV+qJwsOKosFto0OOpfvtpCi758EpAwAxMU1ccQ==
-X-Received: by 2002:a5d:6da9:0:b0:202:293e:85ff with SMTP id
- u9-20020a5d6da9000000b00202293e85ffmr9385341wrs.159.1647632061492; 
- Fri, 18 Mar 2022 12:34:21 -0700 (PDT)
+ bh=uKH1ev8ld6tQvKq84akX+nfCTTNdCdsr3i4hyqVtuc4=;
+ b=WwLG9Q1bZFviBpjDpWqaJ0Yup4DYXCQW06GQbtKWC+qV/zD1G7n4EAaM01U0mdRnFH
+ NCTsiynjoqrbH8S3saQjowPXGAmA5/E8Ne/M0/iHhPf2ArZBi0hxhu4NUJosDanJ2quC
+ +DB3re5ET2Cy8kuh+MVLYOMwDihraDRMhTb7MU0N3FQjkUc4Doy2xOYDB/T3nwdIsaIP
+ jk9IQp+RUNYL82r0Wx4Ejte9vI6Lf4pEXypU0p6g6OAvvv4HEoBnW3swowf4XNAZhJ2q
+ 2LhGXRKzZ7b1csbZLOpv9RJc7yOCdGL2XbCdVcmrQSnDq3ncneF1g+zwNGOAooM0MxX+
+ 3ZBQ==
+X-Gm-Message-State: AOAM5310X830fG7/FwHpZDpQcT/fIcHeyI5KDTbazcFH0Sl8o8ekPNUp
+ oh9+Zpbc9UyVV4Tpl0omeqSbXfib8Dw=
+X-Google-Smtp-Source: ABdhPJylYsfZOrQ6K/I8d/vWfOKESnGjjAX0AFtWvJHzthWbful2V9kxGIkxRKKuiX3+vSsHU45o2A==
+X-Received: by 2002:a05:600c:3846:b0:38c:7e65:c9e1 with SMTP id
+ s6-20020a05600c384600b0038c7e65c9e1mr7139071wmr.157.1647632523292; 
+ Fri, 18 Mar 2022 12:42:03 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- r4-20020a1c2b04000000b0038a0e15ee13sm10791711wmr.8.2022.03.18.12.34.20
+ n23-20020a05600c3b9700b0038b7c4c0803sm10392397wms.30.2022.03.18.12.42.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 18 Mar 2022 12:34:21 -0700 (PDT)
+ Fri, 18 Mar 2022 12:42:02 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Mar 2022 20:33:10 +0100
-Message-Id: <20220318193310.752282-1-fontaine.fabrice@gmail.com>
+Date: Fri, 18 Mar 2022 20:40:58 +0100
+Message-Id: <20220318194058.760799-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wireplumber: fix introspection build
+Subject: [Buildroot] [PATCH 1/1] package/wavpack: fix CVE-2021-44269
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,33 +93,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-introspection needs host-doxygen and host-python-lxml since the addition
-of the package in commit c9a3c10417aadce9ee4922e30235776409ce8eb3 and
-https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/2e5b13f970fe3dd28a4ce75868d46403034c6822
-
-../output-1/build/wireplumber-0.4.8/docs/meson.build:14:0: ERROR: python3 is missing modules: lxml
-
-Fixes:
- - http://autobuild.buildroot.org/results/24c524d86a3e2e67305f698644be9b15d4562488
+An out of bounds read was found in Wavpack 5.4.0 in processing *.WAV
+files. This issue triggered in function WavpackPackSamples of file
+src/pack_utils.c, tainted variable cnt is too large, that makes pointer
+sptr read beyond heap bound.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireplumber/wireplumber.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...e-DSD-file-types-for-invalid-lengths.patch | 42 +++++++++++++++++++
+ package/wavpack/wavpack.mk                    |  3 ++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
 
-diff --git a/package/wireplumber/wireplumber.mk b/package/wireplumber/wireplumber.mk
-index 3bf7cece45..327138391d 100644
---- a/package/wireplumber/wireplumber.mk
-+++ b/package/wireplumber/wireplumber.mk
-@@ -17,7 +17,7 @@ WIREPLUMBER_CONF_OPTS = \
- 	-Dsystem-lua-version=
+diff --git a/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch b/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
+new file mode 100644
+index 0000000000..76c1e81674
+--- /dev/null
++++ b/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
+@@ -0,0 +1,42 @@
++From 773f9d0803c6888ae7d5391878d7337f24216f4a Mon Sep 17 00:00:00 2001
++From: David Bryant <david@wavpack.com>
++Date: Tue, 23 Nov 2021 13:14:35 -0800
++Subject: [PATCH] issue #110: sanitize DSD file types for invalid lengths
++
++[Retrieved from:
++https://github.com/dbry/WavPack/commit/773f9d0803c6888ae7d5391878d7337f24216f4a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ cli/dsdiff.c | 6 ++++++
++ cli/dsf.c    | 1 +
++ 2 files changed, 7 insertions(+)
++
++diff --git a/cli/dsdiff.c b/cli/dsdiff.c
++index d7adb6a..5bdcae3 100644
++--- a/cli/dsdiff.c
+++++ b/cli/dsdiff.c
++@@ -278,6 +278,12 @@ int ParseDsdiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
++             }
++ 
++             total_samples = dff_chunk_header.ckDataSize / config->num_channels;
+++
+++            if (total_samples <= 0 || total_samples > MAX_WAVPACK_SAMPLES) {
+++                error_line ("%s is not a valid .DFF file!", infilename);
+++                return WAVPACK_SOFT_ERROR;
+++            }
+++
++             break;
++         }
++         else {          // just copy unknown chunks to output file
++diff --git a/cli/dsf.c b/cli/dsf.c
++index e1d7973..dddd488 100644
++--- a/cli/dsf.c
+++++ b/cli/dsf.c
++@@ -113,6 +113,7 @@ int ParseDsfHeaderConfig (FILE *infile, char *infilename, char *fourcc, WavpackC
++ 
++     if (format_chunk.ckSize != sizeof (DSFFormatChunk) || format_chunk.formatVersion != 1 ||
++         format_chunk.formatID != 0 || format_chunk.blockSize != DSF_BLOCKSIZE || format_chunk.reserved ||
+++        format_chunk.sampleCount <= 0 || format_chunk.sampleCount > MAX_WAVPACK_SAMPLES * 8 ||
++         (format_chunk.bitsPerSample != 1 && format_chunk.bitsPerSample != 8) ||
++         format_chunk.numChannels < 1 || format_chunk.numChannels > 6 ||
++         format_chunk.chanType < 1 || format_chunk.chanType > NUM_CHAN_TYPES) {
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index 485ab9b2ae..2e0438ac80 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
+@@ -14,6 +14,9 @@ WAVPACK_LICENSE = BSD-3-Clause
+ WAVPACK_LICENSE_FILES = COPYING
+ WAVPACK_CPE_ID_VENDOR = wavpack
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--WIREPLUMBER_DEPENDENCIES += gobject-introspection
-+WIREPLUMBER_DEPENDENCIES += host-doxygen host-python-lxml gobject-introspection
- WIREPLUMBER_CONF_OPTS += -Dintrospection=enabled
- else
- WIREPLUMBER_CONF_OPTS += -Dintrospection=disabled
++# 0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
++WAVPACK_IGNORE_CVES += CVE-2021-44269
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WAVPACK_CONF_OPTS += LIBS=-liconv
+ endif
 -- 
 2.35.1
 
