@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DCFCC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 19 Mar 2022 19:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B51FC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 19 Mar 2022 19:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B73A38266D;
-	Sat, 19 Mar 2022 19:14:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32C3A409C6;
+	Sat, 19 Mar 2022 19:15:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rVCNMdwQuuZw; Sat, 19 Mar 2022 19:14:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JM8WHQ3DPz2A; Sat, 19 Mar 2022 19:15:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D048281CFE;
-	Sat, 19 Mar 2022 19:14:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58025409DB;
+	Sat, 19 Mar 2022 19:15:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 14D6D1BF962
- for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 19:14:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F6481BF255
+ for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 19:14:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 03FE660746
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BE19605EA
  for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 19:14:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UIf5iVsIiNaT for <buildroot@lists.busybox.net>;
+ with ESMTP id bKJkFj8bHX_v for <buildroot@lists.busybox.net>;
  Sat, 19 Mar 2022 19:14:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EBC7605EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62E9F60671
  for <buildroot@buildroot.org>; Sat, 19 Mar 2022 19:14:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 975B183CB8; Sat, 19 Mar 2022 19:05:31 +0000 (UTC)
+ id AA66283CB8; Sat, 19 Mar 2022 19:05:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Mar 2022 19:57:25 +0100
+Date: Sat, 19 Mar 2022 20:09:08 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 079e1510bbe534d3ef75cfe7e4f5b01c0f5af166
-X-Git-Newrev: 063ee76d294cf1bdc79f9b90a75ab6f70ed32d9f
+X-Git-Oldrev: 4a8139a361a7aabd4ae2a2e54b46e2c1be677c8d
+X-Git-Newrev: 8c602fcfd2422705fec134281d99f3db8c9dc84e
 X-Patchwork-Hint: ignore
-Message-Id: <20220319190531.975B183CB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] fs/common.mk: use find
- instead of shell glob patterns
+Message-Id: <20220319190531.AA66283CB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/python-pillow:
+ security bump to version 9.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +59,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=063ee76d294cf1bdc79f9b90a75ab6f70ed32d9f
+commit: https://git.buildroot.net/buildroot/commit/?id=8c602fcfd2422705fec134281d99f3db8c9dc84e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Different shells can have different behaviours when it comes to globbing
-patterns. The dash shell (/bin/sh) on Debian testing switched to a
-different fnmatch/glob implementation that results in this new behaviour:
+Fixes the following security issues:
 
-Using bash:
-    $ mkdir /tmp/foo
-    $ echo /tmp/foo/.[^.]*
-    /tmp/foo/.[^.]*
+- CVE-2022-24303: In show_file, use os.remove to remove temporary images
 
-Using dash:
-    $ mkdir /tmp/foo
-    $ echo /tmp/foo/.[^.]*
-    /tmp/foo/..
+- CVE-2022-22817: Restrict builtins within lambdas for ImageMath.eval
 
-The current FAKEROOT script uses this shell glob pattern which now fails
-on recent Debian testing systems:
-
-    rm: refusing to remove '.' or '..' directory: skipping '/build/buildroot-fs/cpio/target/run/..'
-    rm: refusing to remove '.' or '..' directory: skipping '/build/buildroot-fs/cpio/target/tmp/..'
-
-Additionally, the glob will miss files which have at least two leading
-dots, like ..foo ...bar or ......buz  (highly improbable, but still).
-
-It seems safer to use `find | xargs rm` here instead of relying on shell
-globbing patterns.
-
-Signed-off-by: Mathieu Mirmont <mat@parad0x.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 38c4f6b807e9b519922172089915559fb8642046)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 07b070be39f9c51592c85fb76cd7af00539abc19)
+[Peter: mention security fixes]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 45beb5ae7b..37eafac4f7 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -186,7 +186,8 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index f3ca8e6014..88a5d7cada 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  c5af6e413d2fe9247cf16ce25c816b14  Pillow-9.0.0.tar.gz
+-sha256  ee6e2963e92762923956fe5d3479b1fdc3b76c83f290aad131a2f98c3df0593e  Pillow-9.0.0.tar.gz
++md5  8deffccb4f402df154fd2fd504d8487c  Pillow-9.0.1.tar.gz
++sha256  6c8bc8238a7dfdaf7a75f5ec5a663f4173f8c367e5a39f87e720495e1eed75fa  Pillow-9.0.1.tar.gz
  
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
- 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
--	echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[^.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[^.]*" >> $$(FAKEROOT_SCRIPT)
-+	echo "find $$(TARGET_DIR)/run/ -mindepth 1 -prune -print0 | xargs -0r rm -rf --" >> $$(FAKEROOT_SCRIPT)
-+	echo "find $$(TARGET_DIR)/tmp/ -mindepth 1 -prune -print0 | xargs -0r rm -rf --" >> $$(FAKEROOT_SCRIPT)
- 	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
- 	$$(call PRINTF,$$(ROOTFS_SELINUX)) >> $$(FAKEROOT_SCRIPT)
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ # Locally computed sha256 checksums
+ sha256  a6554cb737ba6c9b47d3301f78de03b4ed0d3f08d6cf9400714f3d4c894f6943  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 2f2e817882..901876e0ee 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PILLOW_VERSION = 9.0.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/b0/43/3e286c93b9fa20e233d53532cc419b5aad8a468d91065dbef4c846058834
++PYTHON_PILLOW_VERSION = 9.0.1
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/03/a3/f61a9a7ff7969cdef2a6e0383a346eb327495d20d25a2de5a088dbb543a6
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
