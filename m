@@ -1,48 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCFF7C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 19 Mar 2022 06:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED0D9C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 19 Mar 2022 09:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E7A660B5F;
-	Sat, 19 Mar 2022 06:12:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62F524011A;
+	Sat, 19 Mar 2022 09:18:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zKu2WJaqVg7Z; Sat, 19 Mar 2022 06:12:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ui4tBW_Myenh; Sat, 19 Mar 2022 09:18:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E46EE60AD3;
-	Sat, 19 Mar 2022 06:12:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8574240903;
+	Sat, 19 Mar 2022 09:17:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 923C71BF846
- for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 06:12:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A80A1BF842
+ for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 09:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86E8A40385
- for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 06:12:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6541D400BF
+ for <buildroot@lists.busybox.net>; Sat, 19 Mar 2022 09:17:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Iui2fv2Berv4 for <buildroot@lists.busybox.net>;
- Sat, 19 Mar 2022 06:12:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A7980400CB
- for <buildroot@buildroot.org>; Sat, 19 Mar 2022 06:12:30 +0000 (UTC)
-Received: from iago.. (unknown [151.47.236.3])
- by serv15.avernis.de (Postfix) with ESMTPSA id 24BE0C7085FD;
- Sat, 19 Mar 2022 07:12:26 +0100 (CET)
-From: Andreas Ziegler <br015@umbiko.net>
-To: buildroot@buildroot.org
-Date: Sat, 19 Mar 2022 07:11:15 +0100
-Message-Id: <20220319061115.1641-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id M63Z9vnV5IDN for <buildroot@lists.busybox.net>;
+ Sat, 19 Mar 2022 09:17:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ABAC3400A6
+ for <buildroot@buildroot.org>; Sat, 19 Mar 2022 09:17:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 70D7640002;
+ Sat, 19 Mar 2022 09:17:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1647681472;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=EOjKTrsaMbjRDIER+mgIi2dLya+Ejgn4SXYRY1vZnrc=;
+ b=YFcZvnqSbe2ZZ+Qqyfx9xHrD/BF4ip95V4QlRkYgorE5VQfkAK8UgQHpyEVF6/x2AQVRiS
+ lMFMrB9CkI9V3X1DDRKbGuH0UYDTDzy4vBHbNiD+vwTapaeQqG9W00oMkt7HjdewtjOEw7
+ xf2IEvrXD7JAOAIVO+iBSY6WwT1ezLAjiACpp/XqLjiJm2BsngpR1AaoAINft2aviKFl30
+ Q1Oyx0C3UuEHfWATFSUY/8Ag2f0oRDEPP2nrjIvcBSy4lB1+LbZX3iXDMispF0ILDcnXdo
+ ZjsuCNjKwlkaL6exDECF3y00/db7VZXD0wV6ocYbifSHws07FK4EXdyywDQ5cg==
+Date: Sat, 19 Mar 2022 10:17:49 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220319101749.265ebceb@windsurf>
+In-Reply-To: <20220318223221.GS283544@scaer>
+References: <20220318132427.48737-1-clement.leger@bootlin.com>
+ <20220318132427.48737-4-clement.leger@bootlin.com>
+ <20220318223221.GS283544@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.6
+Subject: Re: [Buildroot] [PATCH v5 3/8] boot/optee-os: add support to build
+ with python-cryptography
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,84 +72,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ziegler <br015@umbiko.net>,
- =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Etienne Carriere <etienne.carriere@linaro.org>,
+ =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove 0002-lib-alsa-Error-add-missing-include.patch, the upstream fix is part 
-of this release
-
-Change log: 
-  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.6/NEWS
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
----
- ...2-lib-alsa-Error-add-missing-include.patch | 25 -------------------
- package/mpd/mpd.hash                          |  2 +-
- package/mpd/mpd.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 27 deletions(-)
- delete mode 100644 package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-
-diff --git a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch b/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-deleted file mode 100644
-index c45a087a54..0000000000
---- a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 3856224df9160c201bc6d224aa927e7c358e3269 Mon Sep 17 00:00:00 2001
--From: aeolio <git@aeolio.de>
--Date: Tue, 14 Dec 2021 09:01:23 +0100
--Subject: [PATCH] lib/alsa/Error: add missing #include
--
--Downloaded from upstream commit:
--https://github.com/MusicPlayerDaemon/MPD/commit/3856224df9160c201bc6d224aa927e7c358e3269
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/lib/alsa/Error.cxx | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/lib/alsa/Error.cxx b/src/lib/alsa/Error.cxx
--index cd351f37d1..8ceb4417ca 100644
----- a/src/lib/alsa/Error.cxx
--+++ b/src/lib/alsa/Error.cxx
--@@ -29,6 +29,7 @@
-- 
-- #include "Error.hxx"
-- 
--+#include <stdarg.h>
-- #include <alsa/error.h>
-- 
-- namespace Alsa {
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 56f88490cf..b09140abf5 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f22c2c25093a05f4566f9cd7207cfbcd8405af67ed29a989bcf8905f80b7a299  mpd-0.23.5.tar.xz
-+sha256  cbc5928ee3ee1ef7ff6a58f6ba4afaee16c07e9eb42d0107bcc098010f4f26ed  mpd-0.23.6.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a55e4adde2..12da36098f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).5
-+MPD_VERSION = $(MPD_VERSION_MAJOR).6
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCAxOCBNYXIgMjAyMiAyMzozMjoyMSArMDEwMAoiWWFubiBFLiBNT1JJTiIgPHlhbm4u
+bW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKCj4gPiBkaWZmIC0tZ2l0IGEvYm9vdC9vcHRlZS1v
+cy9Db25maWcuaW4gYi9ib290L29wdGVlLW9zL0NvbmZpZy5pbgo+ID4gaW5kZXggZWExNjU1MGI3
+Mi4uMDJiNWQ3Yzg2ZiAxMDA2NDQKPiA+IC0tLSBhL2Jvb3Qvb3B0ZWUtb3MvQ29uZmlnLmluCj4g
+PiArKysgYi9ib290L29wdGVlLW9zL0NvbmZpZy5pbgo+ID4gQEAgLTEsNiArMSw3IEBACj4gPiAg
+Y29uZmlnIEJSMl9UQVJHRVRfT1BURUVfT1MKPiA+ICAJYm9vbCAib3B0ZWVfb3MiCj4gPiAgCWRl
+cGVuZHMgb24gQlIyX0FSTV9DUFVfQVJNVjhBIHx8IEJSMl9BUk1fQ1BVX0FSTVY3QQo+ID4gKwlk
+ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfQVJDSF9TVVBQT1JUUyAgCj4gCj4gVGhh
+dCdzIHdyb25nOiAzLjE1LjAgc3RpbGwgZG9lcyBub3QgbmVlZCBob3N0LXB5dGhvbi1jcnlwdG9n
+cmFwaHkuCj4gCj4gRnVydGhlcm1vcmUsIGV2ZW4gYWZ0ZXIgd2UgYnVtcCB0byAzLjE2LjAsIHNp
+bmNlIHdlIGNhbiBjaG9vc2UgYW4KPiBhcmJpdHJhcnkgZ2l0IHRyZWUgYXQgYW4gYXJiaXRyYXJ5
+IGNvbW1pdCwgaXQgaXMgc3RpbGwgcG9zc2libGUgdG8KPiBwb2ludCB0byBhIHZlcnNpb24gb2Yg
+b3B0ZWUtb3MgdGhhdCBkb2VzIG5vdCByZXF1aXJlIGl0IGVpdGhlci4KPiAKPiBTbywgdGhhdCBk
+ZXBlbmRlbmN5IG9ubHkgcmVhbGx5IGJlbG9uZ3MuLi4KPiAKPiA+ICAJaGVscAo+ID4gIAkgIE9Q
+LVRFRSBPUyBwcm92aWRlcyB0aGUgc2VjdXJlIHdvcmxkIGJvb3QgaW1hZ2UgYW5kIHRoZSB0cnVz
+dAo+ID4gIAkgIGFwcGxpY2F0aW9uIGRldmVsb3BtZW50IGtpdCBvZiB0aGUgT1AtVEVFIHByb2pl
+Y3QuIE9QLVRFRSBPUwo+ID4gQEAgLTYxLDYgKzYyLDE0IEBAIGNvbmZpZyBCUjJfVEFSR0VUX09Q
+VEVFX09TX05FRURTX0RUQwo+ID4gIAkgIFNlbGVjdCB0aGlzIG9wdGlvbiBpZiB5b3VyIE9QLVRF
+RSBPUyBwbGF0Zm9ybSBjb25maWd1cmF0aW9uCj4gPiAgCSAgcmVxdWlyZXMgdGhlIERldmljZSBU
+cmVlIGNvbXBpbGVyIHRvIGJlIGF2YWlsYWJsZS4KPiA+ICAKPiA+ICtjb25maWcgQlIyX1RBUkdF
+VF9PUFRFRV9PU19ORUVEU19QWVRIT05fQ1JZUFRPR1JBUEhZCj4gPiArCWJvb2wgIk9QLVRFRSBP
+UyBuZWVkcyBob3N0LXB5dGhvbi1jcnlwdG9ncmFwaHkiICAKPiAKPiAuLi4gaGVyZS4KClllcyBh
+bmQgbm8uIEJlY2F1c2UgYXMgc29vbiBhcyB0aGUgQlIyX1RBUkdFVF9PUFRFRV9PU19MQVRFU1Qg
+Z2V0cwpidW1wZWQgdG8gMy4xNi4wLCB0aGVuIG91ciBkZWZhdWx0IHNlbGVjdGlvbiBmb3IgT1At
+VEVFICh1bmxlc3MgeW91CmNob3NlIGEgY3VzdG9tIEdpdCB2ZXJzaW9uKSB3aWxsIHJlcXVpcmUg
+cHl0aG9uLWNyeXB0b2dyYXBoeS4gU28gdG8Ka2VlcCB0aGluZ3Mgc2ltcGxlLCBJIGFza2VkIENs
+w6ltZW50IHRvIGFkZCB0aGlzIGRlcGVuZGVuY3kgdG8gdGhlCndob2xlIHBhY2thZ2UuCgpUaG9t
+YXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRk
+ZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290
+bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
