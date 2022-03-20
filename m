@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30A19C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B0CC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E59106070A;
-	Sun, 20 Mar 2022 18:48:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B63F440523;
+	Sun, 20 Mar 2022 18:48:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 35BhybQG3WSi; Sun, 20 Mar 2022 18:48:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kONi4QlvLriw; Sun, 20 Mar 2022 18:48:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E7D460AD7;
-	Sun, 20 Mar 2022 18:48:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D2F8400D1;
+	Sun, 20 Mar 2022 18:48:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07ECE1BF4D8
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 115CC1BF4D8
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9C94401AE
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52FE2400D1
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id djfAltwBXozw for <buildroot@lists.busybox.net>;
+ with ESMTP id p35ML570y3GK for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6117440577
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CF8640593
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7921A8461A; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
+ id 84A098461F; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 19:24:01 +0100
+Date: Sun, 20 Mar 2022 19:26:57 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d3c27619bfb917e5b2e893871d2a25f434c8efc3
-X-Git-Newrev: 1feb0309f967fbbed17e96f99ddf555ec0e2054d
+X-Git-Oldrev: 1feb0309f967fbbed17e96f99ddf555ec0e2054d
+X-Git-Newrev: 8a2efbee7a901691e80462b8aba683a68074e4d2
 X-Patchwork-Hint: ignore
-Message-Id: <20220320183734.7921A8461A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/optee-os: add option
- to select DTC dependency
+Message-Id: <20220320183734.84A098461F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/valijson: drop
+ boost dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,74 +54,63 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3438581436300280999=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3438581436300280999==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1feb0309f967fbbed17e96f99ddf555ec0e2054d
+commit: https://git.buildroot.net/buildroot/commit/?id=8a2efbee7a901691e80462b8aba683a68074e4d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Some platforms (stm32, sam) needs DTC to build the platform
-device-trees. Add BR2_TARGET_OPTEE_OS_NEEDS_DTC configuration
-option to select host-dtc package when building.
+boost is not mandatory since the deactivation of tests when bumping to
+version 0.2.0 in commit d8e2876104be3f9f01613b17d3e60120883be1a1 and
+https://github.com/tristanpenman/valijson/commit/1844241d2a2379bca79a0d654f4b007209b10883
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-Acked-by: Etienne Carriere <etienne.carriere@linaro.org>
-[yann.morin.1998@free.fr: move option]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 67be54cd943a466aab6bf53df2aa9e712da43556)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit b9391c7dd21dee3eff04e665bf6a92ef6fc5f234)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/optee-os/Config.in   | 7 +++++++
- boot/optee-os/optee-os.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+ package/valijson/Config.in   | 8 ++------
+ package/valijson/valijson.mk | 1 -
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 0974578484..ea16550b72 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -54,6 +54,13 @@ config BR2_TARGET_OPTEE_OS_VERSION
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+diff --git a/package/valijson/Config.in b/package/valijson/Config.in
+index 10721b3703..07706cd963 100644
+--- a/package/valijson/Config.in
++++ b/package/valijson/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_VALIJSON
+ 	bool "valijson"
+-	depends on BR2_USE_WCHAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_REGEX
+ 	help
+ 	  Valijson is a header-only JSON Schema Validation library for
+ 	  C++. Valijson provides a simple validation API that allows
+@@ -14,5 +10,5 @@ config BR2_PACKAGE_VALIJSON
  
-+config BR2_TARGET_OPTEE_OS_NEEDS_DTC
-+	bool "OP-TEE OS needs dtc"
-+	select BR2_PACKAGE_HOST_DTC
-+	help
-+	  Select this option if your OP-TEE OS platform configuration
-+	  requires the Device Tree compiler to be available.
-+
- config BR2_TARGET_OPTEE_OS_CORE
- 	bool "Build core"
- 	default y
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 166b5e693c..9f76d8450e 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -23,6 +23,10 @@ endif
+ 	  https://github.com/tristanpenman/valijson
  
- OPTEE_OS_DEPENDENCIES = host-openssl host-python3 host-python-pycryptodomex host-python-pyelftools
+-comment "valijson needs a toolchain w/ C++, threads, wchar  support"
+-	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++comment "valijson needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+index e425757d26..71c5b05f2b 100644
+--- a/package/valijson/valijson.mk
++++ b/package/valijson/valijson.mk
+@@ -11,7 +11,6 @@ VALIJSON_LICENSE_FILES = LICENSE
+ VALIJSON_CPE_ID_VENDOR = valijson_project
+ VALIJSON_INSTALL_STAGING = YES
+ VALIJSON_INSTALL_TARGET = NO
+-VALIJSON_DEPENDENCIES = boost
+ VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE -Dvalijson_BUILD_TESTS=FALSE
  
-+ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_DTC),y)
-+OPTEE_OS_DEPENDENCIES += host-dtc
-+endif
-+
- # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
- # can be built in 64bit mode and support 32bit and 64bit
- # trusted applications. Since buildroot currently references
-
---===============3438581436300280999==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3438581436300280999==--
