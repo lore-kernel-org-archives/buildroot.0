@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F807C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D228C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:49:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C21560C22;
-	Sun, 20 Mar 2022 18:48:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB8FF81498;
+	Sun, 20 Mar 2022 18:49:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EQohWMd5nQMY; Sun, 20 Mar 2022 18:48:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q3IIcwMmAHtZ; Sun, 20 Mar 2022 18:49:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38EFC60BEC;
-	Sun, 20 Mar 2022 18:48:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01B578144D;
+	Sun, 20 Mar 2022 18:49:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 08C5D1BF4D8
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2B4F21BF4D8
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDF7140579
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BFD2401AE
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rJJLyaoRfmQP for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
+ with ESMTP id T3bDLlmfmZVz for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 18:46:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93AA6405AA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93A45405A3
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AA1E48461A; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
+ id BBFE68461D; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 19:31:36 +0100
+Date: Sun, 20 Mar 2022 19:42:14 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 5dab7fc53b6df5333ecf7ba170e0507833f24075
-X-Git-Newrev: fcbce93cfce0a84d32de323b6962c9846b58c887
+X-Git-Oldrev: cf0c9830c0eef17116081d04ccc10a1aa0850553
+X-Git-Newrev: ae50728e7665662c17a4bb2a9ad3c98bc463e227
 X-Patchwork-Hint: ignore
-Message-Id: <20220320183734.AA1E48461A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] linux: make Image{,
- .gz} format available for aarch64 BE
+Message-Id: <20220320183734.BBFE68461D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] support/testing:
+ test_rust.py: fix flake8 errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,54 +54,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7212361850455398739=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7212361850455398739==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fcbce93cfce0a84d32de323b6962c9846b58c887
+commit: https://git.buildroot.net/buildroot/commit/?id=ae50728e7665662c17a4bb2a9ad3c98bc463e227
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Just like aarch64, aarch64 BE supports the Image and Image.gz format.
+Fix flake8 errors introduced in commit f0d1f21195
 
-Signed-off-by: Rémi Duraffort <remi.duraffort@linaro.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d1579589e0a7d1870aa0ad587acd78f799f31257)
+Fixes:
+support/testing/tests/package/test_rust.py:2:1: F401 'tempfile' imported but unused
+support/testing/tests/package/test_rust.py:3:1: F401 'subprocess' imported but unused
+support/testing/tests/package/test_rust.py:4:1: F401 'shutil' imported but unused
+support/testing/tests/package/test_rust.py:18:1: E302 expected 2 blank lines, found 1
+
+(cherry picked from commit 12588a667a6e4d3c852a82a9d89c58bcf43eea1e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_rust.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 36744c5337..043e7c6574 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -261,11 +261,11 @@ config BR2_LINUX_KERNEL_SIMPLEIMAGE
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index a1abd20c09..fb9dd2d916 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -1,7 +1,4 @@
+ import os
+-import tempfile
+-import subprocess
+-import shutil
  
- config BR2_LINUX_KERNEL_IMAGE
- 	bool "Image"
--	depends on BR2_aarch64 || BR2_riscv
-+	depends on BR2_aarch64 || BR2_aarch64_be || BR2_riscv
+ import infra.basetest
  
- config BR2_LINUX_KERNEL_IMAGEGZ
- 	bool "Image.gz"
--	depends on BR2_aarch64 || BR2_riscv
-+	depends on BR2_aarch64 || BR2_aarch64_be || BR2_riscv
+@@ -15,6 +12,7 @@ class TestRustBase(infra.basetest.BRTest):
+                            options=["-initrd", img])
+         self.emulator.login()
  
- config BR2_LINUX_KERNEL_LINUX_BIN
- 	bool "linux.bin"
-
---===============7212361850455398739==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++
+ class TestRustBin(TestRustBase):
+     config = \
+         """
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7212361850455398739==--
