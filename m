@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E880C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A93AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1071640291;
-	Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A921840583;
+	Sun, 20 Mar 2022 17:07:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J8DoYpQ6vCRA; Sun, 20 Mar 2022 17:06:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yn7ianxegJkQ; Sun, 20 Mar 2022 17:07:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A7C040267;
-	Sun, 20 Mar 2022 17:06:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B46B31BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F0D6400D9;
+	Sun, 20 Mar 2022 17:07:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DDA41BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F61781308
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E00C4087A
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oplkTXrUJpaj for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:06:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7AE79812A0
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:06:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fWnY5bJIITaZ for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 99D3F40296
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A68B6C0006;
- Sun, 20 Mar 2022 17:06:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id A04D9FF802;
+ Sun, 20 Mar 2022 17:06:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647796003;
+ t=1647796010;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=4nHw3X+wIugigghQnIyFfFHSMDFGGgS7H2swE43JAOs=;
- b=mMMssbbyFhDGTm7bSIS7gSPMGQL0/Bg6O8VO/JUZCd73GxyRVGiclTeosv26j96wYAcNmh
- yeFBjFV4g2QFHuFU/B3Kz7hTx5AZB63J2+CMWHFJTkLznXbn/39a3U/QzwVJnCjTeU1B5C
- yKmuiNxDNLs7fyZEbXN8Z8c5p+MxPby3Gt8zsP1w+fXsBzz2W2kVTegRd1ly8hzLbeLvv0
- EiXFgAGS8MvkA3b5u+B9xuN6XNhgvWzxPPwiDr0dlp+Vjh4jAwmimbnObQGQNKxJC0Gvo6
- bEBLe/kL9vBWh0vz3zCHMr9rLfeZwC7gzoPJdF8N8fZ6DrLwEKB+3o+gG+xykw==
-Date: Sun, 20 Mar 2022 18:06:41 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220320180641.47f18a53@windsurf>
-In-Reply-To: <20220320163930.1566656-1-fontaine.fabrice@gmail.com>
-References: <20220320163930.1566656-1-fontaine.fabrice@gmail.com>
+ bh=lugs+suRUV927laZB022Qu4GPgy2YcU1Y1EqgJU1YDw=;
+ b=gYntndkkcKEbBeEe6MdWZF8PZqsRo/E9BjoMtkMOb0vvMkcaCZnhviE0MrkZN9B3ZNKIDq
+ J6P1dFtuFa+dYiiZHC35Qy6dPgSWvRLaRnvJ/eVADjI4Gwj2W6L6NdwZ9q8L8op46na9FN
+ fsHKanTpVqzOO+RJbCyxgGPxmWC1axbvADgElH6zzjYkwJ45ZYiXb35dYCFHggihdhvT0t
+ k7ELk+qgQSC5vItOUMRxUlA6esA2Zs/J969om9KMz69WvjQ/dV36z2sHc8wDrBVXN9cX7T
+ 7khTU9e7mFr6dFPuaIh/hM+cRgIWZxaf1YXz/iK68/4Jkt1j7mDarbFkvABYbQ==
+Date: Sun, 20 Mar 2022 18:04:01 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20220320180401.7821503b@windsurf>
+In-Reply-To: <20220320124239.655081-1-bernd.kuhls@t-online.de>
+References: <20220320124239.655081-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: security bump to
- version 2.5.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,37 +72,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, "Yann E
+ . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 20 Mar 2022 17:39:30 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 20 Mar 2022 13:42:39 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Fix CVE-2022-24128: Timescale TimescaleDB 1.x and 2.x before 2.5.2 may
-> allow privilege escalation during extension installation. The
-> installation process uses commands such as CREATE x IF NOT EXIST that
-> allow an unprivileged user to precreate objects. These objects will be
-> used by the installer (which executes as Superuser), leading to
-> privilege escalation. In order to be able to take advantage of this, an
-> unprivileged user would need to be able to create objects in a database
-> and then get a Superuser to install TimescaleDB into their database. (In
-> the fixed versions, the installation aborts when it finds that an object
-> already exists.)
+> Release notes:
+> https://lists.freedesktop.org/archives/mesa-announce/2022-March/000666.html
 > 
-> "This release contains bug fixes since the 2.5.1 release.
-> This release is high priority for upgrade. We strongly recommend that
-> you upgrade as soon as possible."
-> 
-> https://github.com/timescale/timescaledb/releases/tag/2.5.2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/timescaledb/timescaledb.hash | 2 +-
->  package/timescaledb/timescaledb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>  package/mesa3d/mesa3d.hash               | 6 +++---
+>  package/mesa3d/mesa3d.mk                 | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
