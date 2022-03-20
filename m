@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE86C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34927C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:48:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8C6D405BF;
-	Sun, 20 Mar 2022 17:48:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yNNK8h6f2Kgt; Sun, 20 Mar 2022 17:48:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CAB5405BC;
-	Sun, 20 Mar 2022 17:48:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D22A1BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:48:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B7168144E
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:48:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E26AB8128C;
+	Sun, 20 Mar 2022 17:48:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VoNIZ61BvxnJ for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rYmRIem6OLNa; Sun, 20 Mar 2022 17:48:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0931581026;
+	Sun, 20 Mar 2022 17:48:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 938F21BF973
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:48:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F533408C1
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Md4RGvjvSLQ2 for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A206B815AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id B732F408C4
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CD590845D7; Sun, 20 Mar 2022 17:39:05 +0000 (UTC)
+ id E363D845D2; Sun, 20 Mar 2022 17:39:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 18:31:24 +0100
+Date: Sun, 20 Mar 2022 18:45:50 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ac1fa68623d89f4a66b8a91d358d755c3dfb6c41
-X-Git-Newrev: 34effd4a4729f87bd5607834dfc3954f08b5e592
+X-Git-Oldrev: 49fcf4beeb212c38046353eaa6bd23965b982fc3
+X-Git-Newrev: 30e5d4ebc19a7a970e17ecc0e12397a13b34e89a
 X-Patchwork-Hint: ignore
-Message-Id: <20220320173905.CD590845D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rust: install
- rustc and rust-std built by Buildroot
+Message-Id: <20220320173905.E363D845D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/efl: handle input
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,100 +59,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34effd4a4729f87bd5607834dfc3954f08b5e592
+commit: https://git.buildroot.net/buildroot/commit/?id=30e5d4ebc19a7a970e17ecc0e12397a13b34e89a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The test TestRust is currently broken with ripgrep package with
-the following error:
+Commit 2d7a3e48c574c05346b66f79cdb75ecdfa7f074e forgot to manage input
+option on target which was added (and enabled by default) by
+https://git.enlightenment.org/core/efl.git/commit/?id=0c2cf7e1bf7ca547655d25aaea30d081101b42be
+resulting in the following build failure when eeze is disabled:
 
-error[E0514]: found crate `core` compiled by an incompatible version of rustc
-  |
-  = help: please recompile that crate using this compiler (rustc 1.58.1) (consider running `cargo clean` first)
-  = note: the following crate versions were found:
-          crate `core` compiled by rustc 1.58.1 (db9d1b20b 2022-01-20): TestRust/host/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-6cfcec236d576603.rlib
-
-error[E0514]: found crate `std` compiled by an incompatible version of rustc
-
-The problem is not really a cross-compilation issue (we are building
-for an armv7 target on x86_64 host) but a problem with rust-std libraries
-(rlib).
-
-We can notice that "rustc 1.58.1 (db9d1b20b 2022-01-20)" is the same
-version as the prebuilt rustc used to bootstrap the build:
-
-TestRust/host/bin/rustc --version
-rustc 1.58.1
-
-TestRustBin/host/bin/rustc --version
-rustc 1.58.1 (db9d1b20b 2022-01-20)
-
-Indeed we are using host-rust-bin to bootstrap the host-rust compiler
-package built by Buildroot. The problem is that the
-libcore-6cfcec236d576603.rlib file come from host-rust-bin (rust-std)
-and is not removed before installing host-rust built by Buildroot.
-
-We actually spent a lot of time to build host-rust with rust-std
-and forget to install this important library HOST_DIR.
-
-Looking at the host-rust build directory we can notice two installer
-script "install.sh" (the same scripts used to install host-rust-bin):
-
-TestRust/build/host-rust-1.58.1/build/tmp/tarball/rust/x86_64-unknown-linux-gnu/rust-1.58.1-x86_64-unknown-linux-gnu/install.sh
-TestRust/build/host-rust-1.58.1/build/tmp/tarball/rust-std/armv7-unknown-linux-gnueabihf/rust-std-1.58.1-armv7-unknown-linux-gnueabihf/install.sh
-
-The "tarball" directory is generated by the "python x.py dist" during
-the install step, we have to keep it.
-
-Replace "python x.py install" by theses two install scripts.
-Installing rust-std with the install.sh script replace the rust-std
-libraries installed by host-rust-bin.
+../output-1/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable "eeze".
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2116202544
+ - http://autobuild.buildroot.org/results/4a840c54bad9748b5748738378a0352d02de1f7e
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Romain:
+  Rename BR2_PACKAGE_EFL_LIBINPUT to BR2_PACKAGE_EFL_ELPUT to match the
+  upstream name.
+  use BR2_PACKAGE_EFL_ELPUT for BR2_PACKAGE_EFL_DRM
+  remove duplicate libxkbcommon in EFL_DEPENDENCIES]
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-[Arnout: remove redundant parenthesis; only use a variable for the
-common install opts]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 15682493918ead960d326bf24763e9b5d8d331d9)
+(cherry picked from commit 70ad44ffd00786cf25145445afa374cbb295f722)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rust/rust.mk | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ package/efl/Config.in | 19 +++++++++++++++----
+ package/efl/efl.mk    | 11 ++++++++---
+ 2 files changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 46487fe4b7..3c560882ca 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -67,9 +67,26 @@ define HOST_RUST_BUILD_CMDS
- 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py build
- endef
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 4c78bef7c8..c4f82b92e3 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -85,6 +85,19 @@ config BR2_PACKAGE_EFL_LIBFRIBIDI
+ 	  so you may also trigger code paths with bugs that are never
+ 	  normally used.
  
-+HOST_RUST_INSTALL_OPTS = \
-+	--prefix=$(HOST_DIR) \
-+	--disable-ldconfig
++config BR2_PACKAGE_EFL_ELPUT
++	bool "Enable elput support (recommended)"
++	default y
++	depends on BR2_PACKAGE_HAS_UDEV # libinput, efl-eeze
++	select BR2_PACKAGE_EFL_EEZE
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  Eplut is used to support gesture recognition.
 +
-+define HOST_RUST_INSTALL_RUSTC
-+	cd $(@D)/build/tmp/tarball/rust/$(RUSTC_HOST_NAME)/rust-$(RUST_VERSION)-$(RUSTC_HOST_NAME); \
-+		./install.sh $(HOST_RUST_INSTALL_OPTS) --components=rustc,cargo,rust-std-$(RUSTC_HOST_NAME)
-+endef
++comment "elput needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
 +
-+ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
-+define HOST_RUST_INSTALL_LIBSTD_TARGET
-+	cd $(@D)/build/tmp/tarball/rust-std/$(RUSTC_TARGET_NAME)/rust-std-$(RUST_VERSION)-$(RUSTC_TARGET_NAME); \
-+		./install.sh $(HOST_RUST_INSTALL_OPTS)
-+endef
+ config BR2_PACKAGE_EFL_LIBSNDFILE
+ 	bool "Enable libsndfile support (recommended)"
+ 	default y
+@@ -216,13 +229,11 @@ endchoice # OpenGL support
+ 
+ config BR2_PACKAGE_EFL_DRM
+ 	bool "Evas DRM Engine"
+-	depends on BR2_PACKAGE_HAS_UDEV # efl-eeze
++	depends on BR2_PACKAGE_HAS_UDEV # efl-elput, efl-eeze
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
+-	select BR2_PACKAGE_EFL_EEZE
++	select BR2_PACKAGE_EFL_ELPUT
+ 	select BR2_PACKAGE_LIBDRM
+-	select BR2_PACKAGE_LIBINPUT # For elput
+-	select BR2_PACKAGE_LIBXKBCOMMON
+ 	help
+ 	  This option enable building support for the Evas DRM Engine.
+ 
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 43a2dc4fcb..d4a16475e5 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -67,6 +67,13 @@ else
+ EFL_CONF_OPTS += -Deeze=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EFL_ELPUT),y)
++EFL_DEPENDENCIES += libinput libxkbcommon
++EFL_CONF_OPTS += -Dinput=true
++else
++EFL_CONF_OPTS += -Dinput=false
 +endif
 +
- define HOST_RUST_INSTALL_CMDS
- 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py dist
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) x.py install
-+	$(HOST_RUST_INSTALL_RUSTC)
-+	$(HOST_RUST_INSTALL_LIBSTD_TARGET)
- endef
+ ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
+ EFL_DEPENDENCIES += util-linux
+ EFL_CONF_OPTS += -Dlibmount=true
+@@ -192,7 +199,7 @@ endif
  
- $(eval $(host-generic-package))
+ ifeq ($(BR2_PACKAGE_EFL_DRM),y)
+ EFL_CONF_OPTS += -Ddrm=true
+-EFL_DEPENDENCIES += libdrm libegl libinput mesa3d
++EFL_DEPENDENCIES += libdrm libegl mesa3d
+ else
+ EFL_CONF_OPTS += -Ddrm=false
+ endif
+@@ -204,8 +211,6 @@ else
+ EFL_CONF_OPTS += -Dwl=false
+ endif
+ 
+-EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
+-
+ # json evas loader is disabled by default by upstream.
+ # Disable libspectre (ps).
+ # Keep all other evas loader enabled or handled below.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
