@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CDCBC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 108F4C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55A6D8176F;
-	Sun, 20 Mar 2022 17:09:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB1E6408AE;
+	Sun, 20 Mar 2022 17:10:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ms9pFbyUApfB; Sun, 20 Mar 2022 17:09:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aukOEyvlgxUq; Sun, 20 Mar 2022 17:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E38A80C26;
-	Sun, 20 Mar 2022 17:09:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7113B1BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:07:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF7C240869;
+	Sun, 20 Mar 2022 17:10:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B4FA1BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5DCAC402F6
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:07:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47D7660AD7
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:10:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lByiztpM9OLr for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:07:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iaqhRlgMbptB for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:10:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C067400D9
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:07:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82CC060670
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:10:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9890284551; Sun, 20 Mar 2022 16:58:13 +0000 (UTC)
+ id B9D98845A5; Sun, 20 Mar 2022 17:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 18:06:37 +0100
+Date: Sun, 20 Mar 2022 18:08:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3398e8e6d4ecb3e06be6e41daf0a7a6542dc5116
-X-Git-Newrev: 6db3b6d48cae3c3a9ad7c3977b373d4a60d6e787
+X-Git-Oldrev: 343d7940a4bbdd89933a29f9470cead6ff481a28
+X-Git-Newrev: 0380696669621b48b4d9c770af3faf2d922ed57f
 X-Patchwork-Hint: ignore
-Message-Id: <20220320165813.9890284551@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/snmppp: bump to version 3.4.9
+Message-Id: <20220320170115.B9D98845A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/octavo_osd32mp1_brk: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6db3b6d48cae3c3a9ad7c3977b373d4a60d6e787
+commit: https://git.buildroot.net/buildroot/commit/?id=0380696669621b48b4d9c770af3faf2d922ed57f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of src/v3.cpp, update in year and "Frank Fock" added:
+This patch adds support to Octavo Systems BRK board. We use the TF-A,
+U-Boot and Linux versions from ST, Device Trees from Octavo as well as
+a U-Boot patch from Octavo.
 
- -  _##  SNMP++ v3.3
- +  _##  SNMP++ v3.4
- -  _##  Copyright (c) 2001-2013 Jochen Katz, Frank Fock
- +  _##  Copyright (c) 2001-2021 Jochen Katz, Frank Fock
- -  _##  Hewlett-Packard and Jochen Katz make no representations about the
- -  _##  suitability of this software for any purpose. It is provided
- +  _##  Hewlett-Packard, Frank Fock, and Jochen Katz make no representations
- +  _##  about the suitability of this software for any purpose. It is provided
+Reference:
 
-https://www.agentpp.com/download/changes_snmp++v3.txt
+    https://octavosystems.com/octavo_products/osd32mp1-brk/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The device tree blobs come from Octavo System:
+
+    https://github.com/octavosystems/OSD32MP1-BRK-device-tree.git
+
+The uboot patches come from Octavo System:
+
+    https://github.com/octavosystems/BRK_Developer_Package_patches/tree/master/u-boot-v2020.01-stm32mp
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/snmppp/snmppp.hash | 4 ++--
- package/snmppp/snmppp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                         |    4 +
+ board/octavo/osd32mp1-brk/genimage.cfg             |   23 +
+ .../linux-dts/stm32mp157c-osd32mp1-brk.dts         | 1167 ++++++++++
+ .../overlay/boot/extlinux/extlinux.conf            |    4 +
+ .../uboot/0001-osd32mp1-BRK-board-added.patch      | 2349 ++++++++++++++++++++
+ board/octavo/osd32mp1-brk/readme.txt               |   35 +
+ .../octavo/osd32mp1-brk/tfa-dts/osd32mp1_ddr.dtsi  |  119 +
+ .../tfa-dts/stm32mp157c-osd32mp1-brk.dts           |  581 +++++
+ configs/octavo_osd32mp1_brk_defconfig              |   60 +
+ 9 files changed, 4342 insertions(+)
 
-diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
-index 2dcf836fc7..db3a4b5f4f 100644
---- a/package/snmppp/snmppp.hash
-+++ b/package/snmppp/snmppp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  a3eb75e2310c315d9b2c2094154c7cd9b46684adb80a4b36b8957dcc09af4041  snmp++-3.4.2.tar.gz
--sha256  f6fd4321c7eb6e51a272f91f964aea7f53039bb2b55f690d5a9d042f3a5d79b9  src/v3.cpp
-+sha256  7c0aaf4ea21db082453f880cc2062a86dcbbf0ee6c8d47c72beb8e0c77c26b6c  snmp++-3.4.9.tar.gz
-+sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 601e28e207..bc05cad583 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNMPPP_VERSION = 3.4.2
-+SNMPPP_VERSION = 3.4.9
- SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com/download
- SNMPPP_DEPENDENCIES = host-pkgconf
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
