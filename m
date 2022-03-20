@@ -1,55 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF268C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6BB0C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:42:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D3014049F;
-	Sun, 20 Mar 2022 21:42:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74D8D8176C;
+	Sun, 20 Mar 2022 21:42:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qNcSYAFadfsk; Sun, 20 Mar 2022 21:42:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YeLrKlXk1q-k; Sun, 20 Mar 2022 21:42:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 30421403BF;
-	Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92C108175A;
+	Sun, 20 Mar 2022 21:42:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B02D51BF3C9
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C80581BF3C9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DC2760ADE
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B66FB60B15
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qk_ojNob20Ij for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 21:42:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B41AB60585
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:42:15 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 54AF3FF804;
- Sun, 20 Mar 2022 21:42:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nW3JT-00FKVN-Ew; Sun, 20 Mar 2022 22:42:11 +0100
+ with ESMTP id qYceLHY9foMu for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 154B460585
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E07E2846A8; Sun, 20 Mar 2022 21:33:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220316212220.3437314-1-fontaine.fabrice@gmail.com>
- <20220316214441.GB283544@scaer>
-Date: Sun, 20 Mar 2022 22:42:11 +0100
-In-Reply-To: <20220316214441.GB283544@scaer> (Yann E. MORIN's message of "Wed, 
- 16 Mar 2022 22:44:41 +0100")
-Message-ID: <87a6dkl2rw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/6] package/zynaddsubfx: fix PluginEnable
- option
+To: buildroot@buildroot.org
+Date: Sun, 20 Mar 2022 22:41:07 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f63050ec64a87da67c0d20c2b800a6b6f5bdcdc0
+X-Git-Newrev: dcfccfddf169c6382ef162066a769dc8b28428d7
+X-Patchwork-Hint: ignore
+Message-Id: <20220320213324.E07E2846A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zynaddsubfx: fix
+ atomic linking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,27 +53,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dcfccfddf169c6382ef162066a769dc8b28428d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fabrice, All,
- > On 2022-03-16 22:22 +0100, Fabrice Fontaine spake thusly:
- >> Replace False by OFF when setting PluginEnable option
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix the following build failure raised since the addition of the package
+in commit 18a863063735e2c658fa6947a4e540e9dda6c431:
 
- > Series of 6 patches applied to master, thanks.
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.3.0/../../../../riscv64-buildroot-linux-musl/bin/ld: libzynaddsubfx_core.a(Master.cpp.o): in function `.L1880':
+Master.cpp:(.text+0x7cc0): undefined reference to `__atomic_exchange_1'
 
-And to 2022.02.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/91b5959ca0eb136c1609462e71d109ff09cca5e5
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ba7319a06e1b98524fde1384dc570a7f34870881)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zynaddsubfx/zynaddsubfx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/zynaddsubfx/zynaddsubfx.mk b/package/zynaddsubfx/zynaddsubfx.mk
+index b2eb1921fa..db0459ce62 100644
+--- a/package/zynaddsubfx/zynaddsubfx.mk
++++ b/package/zynaddsubfx/zynaddsubfx.mk
+@@ -14,7 +14,7 @@ ZYNADDSUBFX_LICENSE_FILES = COPYING
+ ZYNADDSUBFX_CONF_OPTS = -DCompileTests=OFF -DPluginEnable=OFF
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-ZYNADDSUBFX_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++ZYNADDSUBFX_CONF_OPTS += -DOS_LIBRARIES=-latomic
+ endif
+ 
+ ZYNADDSUBFX_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
