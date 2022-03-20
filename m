@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34927C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:48:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83AE8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E26AB8128C;
-	Sun, 20 Mar 2022 17:48:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A62C60BEC;
+	Sun, 20 Mar 2022 17:49:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rYmRIem6OLNa; Sun, 20 Mar 2022 17:48:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id easoIikO4UiC; Sun, 20 Mar 2022 17:49:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0931581026;
-	Sun, 20 Mar 2022 17:48:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 938F21BF973
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:48:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8818C6068B;
+	Sun, 20 Mar 2022 17:49:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CD781BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F533408C1
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A7D76068B
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:49:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Md4RGvjvSLQ2 for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B732F408C4
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E363D845D2; Sun, 20 Mar 2022 17:39:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pPbe6fzIffRu for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:49:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 15EA760687
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:49:49 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D330660005;
+ Sun, 20 Mar 2022 17:49:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nVzgX-00FEay-MP; Sun, 20 Mar 2022 18:49:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 18:45:50 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 49fcf4beeb212c38046353eaa6bd23965b982fc3
-X-Git-Newrev: 30e5d4ebc19a7a970e17ecc0e12397a13b34e89a
-X-Patchwork-Hint: ignore
-Message-Id: <20220320173905.E363D845D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/efl: handle input
- option
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220224175119.487040-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 Mar 2022 18:49:45 +0100
+In-Reply-To: <20220224175119.487040-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 24 Feb 2022 18:51:19 +0100")
+Message-ID: <87o820o6o6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/bpftool: add
+ BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,116 +60,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30e5d4ebc19a7a970e17ecc0e12397a13b34e89a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Commit 2d7a3e48c574c05346b66f79cdb75ecdfa7f074e forgot to manage input
-option on target which was added (and enabled by default) by
-https://git.enlightenment.org/core/efl.git/commit/?id=0c2cf7e1bf7ca547655d25aaea30d081101b42be
-resulting in the following build failure when eeze is disabled:
+ > bpftool uses its own local copy of libbpf so add
+ > BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS to avoid the following build failure
+ > on ARM:
 
-../output-1/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable "eeze".
+ > btf.c: In function 'btf_type_by_id':
+ > btf.c:461:14: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ >   if (type_id < btf->start_id)
+ >               ^
+ > bpf.c:62:4: error: #error __NR_bpf not defined. libbpf does not support your arch.
+ >  #  error __NR_bpf not defined. libbpf does not support your arch.
+ >     ^
 
-Fixes:
- - http://autobuild.buildroot.org/results/4a840c54bad9748b5748738378a0352d02de1f7e
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/aae772f1cfb16516a57f310c4f022e80a2a8d65e
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Romain:
-  Rename BR2_PACKAGE_EFL_LIBINPUT to BR2_PACKAGE_EFL_ELPUT to match the
-  upstream name.
-  use BR2_PACKAGE_EFL_ELPUT for BR2_PACKAGE_EFL_DRM
-  remove duplicate libxkbcommon in EFL_DEPENDENCIES]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 70ad44ffd00786cf25145445afa374cbb295f722)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/efl/Config.in | 19 +++++++++++++++----
- package/efl/efl.mk    | 11 ++++++++---
- 2 files changed, 23 insertions(+), 7 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 4c78bef7c8..c4f82b92e3 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -85,6 +85,19 @@ config BR2_PACKAGE_EFL_LIBFRIBIDI
- 	  so you may also trigger code paths with bugs that are never
- 	  normally used.
- 
-+config BR2_PACKAGE_EFL_ELPUT
-+	bool "Enable elput support (recommended)"
-+	default y
-+	depends on BR2_PACKAGE_HAS_UDEV # libinput, efl-eeze
-+	select BR2_PACKAGE_EFL_EEZE
-+	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	help
-+	  Eplut is used to support gesture recognition.
-+
-+comment "elput needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
- config BR2_PACKAGE_EFL_LIBSNDFILE
- 	bool "Enable libsndfile support (recommended)"
- 	default y
-@@ -216,13 +229,11 @@ endchoice # OpenGL support
- 
- config BR2_PACKAGE_EFL_DRM
- 	bool "Evas DRM Engine"
--	depends on BR2_PACKAGE_HAS_UDEV # efl-eeze
-+	depends on BR2_PACKAGE_HAS_UDEV # efl-elput, efl-eeze
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
--	select BR2_PACKAGE_EFL_EEZE
-+	select BR2_PACKAGE_EFL_ELPUT
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_LIBINPUT # For elput
--	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
- 	  This option enable building support for the Evas DRM Engine.
- 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 43a2dc4fcb..d4a16475e5 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -67,6 +67,13 @@ else
- EFL_CONF_OPTS += -Deeze=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_EFL_ELPUT),y)
-+EFL_DEPENDENCIES += libinput libxkbcommon
-+EFL_CONF_OPTS += -Dinput=true
-+else
-+EFL_CONF_OPTS += -Dinput=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
- EFL_DEPENDENCIES += util-linux
- EFL_CONF_OPTS += -Dlibmount=true
-@@ -192,7 +199,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_EFL_DRM),y)
- EFL_CONF_OPTS += -Ddrm=true
--EFL_DEPENDENCIES += libdrm libegl libinput mesa3d
-+EFL_DEPENDENCIES += libdrm libegl mesa3d
- else
- EFL_CONF_OPTS += -Ddrm=false
- endif
-@@ -204,8 +211,6 @@ else
- EFL_CONF_OPTS += -Dwl=false
- endif
- 
--EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
--
- # json evas loader is disabled by default by upstream.
- # Disable libspectre (ps).
- # Keep all other evas loader enabled or handled below.
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
