@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A1CAC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1984C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E76C404E9;
-	Sun, 20 Mar 2022 21:27:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 747C9402F2;
+	Sun, 20 Mar 2022 21:30:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cbWW-OEQtLLX; Sun, 20 Mar 2022 21:27:09 +0000 (UTC)
+	with ESMTP id PO2f1omhjhd6; Sun, 20 Mar 2022 21:30:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 053D84023F;
-	Sun, 20 Mar 2022 21:27:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C1C51BF3C9
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:26:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45AC74023F;
+	Sun, 20 Mar 2022 21:30:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BBB0F1BF3C9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C45E408DF
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:26:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9F1360ADE
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:29:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pKZTG2VqL9lA for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 21:26:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZCwkL0TasJ91 for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 21:29:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD226408DE
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:26:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA6D460AD2
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:29:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 99F458463E; Sun, 20 Mar 2022 21:17:37 +0000 (UTC)
+ id A095384680; Sun, 20 Mar 2022 21:21:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 22:25:24 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 572e7c73cb1411579d167fb8a20083eac8f8c417
-X-Git-Newrev: 6b85b18887554f37002124108cd890c8dca58f76
+Date: Sun, 20 Mar 2022 22:25:36 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 816861524a079658040d6e059743697affdeafce
+X-Git-Newrev: e4667ddcc8608b363c04433c166e2c38d6416acc
 X-Patchwork-Hint: ignore
-Message-Id: <20220320211737.99F458463E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] docs/manual: Remove link
+Message-Id: <20220320212105.A095384680@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] docs/manual: Remove link
  to emdebian and replace with debian port page
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b85b18887554f37002124108cd890c8dca58f76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e4667ddcc8608b363c04433c166e2c38d6416acc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 In the list of full distribution, the FAQ contains a link to Emdebian.
 This project stopped receiving updates in 2014 and the main web page does not exist anymore.
