@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA525C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB0BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B7CC40338;
-	Sun, 20 Mar 2022 21:38:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CD9781401;
+	Sun, 20 Mar 2022 21:39:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rTCL8bguT1Dj; Sun, 20 Mar 2022 21:38:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id emST_WK_nhTN; Sun, 20 Mar 2022 21:39:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C579402EA;
-	Sun, 20 Mar 2022 21:38:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39E4D813F5;
+	Sun, 20 Mar 2022 21:39:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B97A61BF973
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4246A1BF3C9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B499F4023C
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 327924023C
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vgy9B75YIg3M for <buildroot@lists.busybox.net>;
+ with ESMTP id 5cLz_9_o06Sg for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 21:38:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA3CA40219
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1FAD40213
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:38:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C1B2B8468D; Sun, 20 Mar 2022 21:29:23 +0000 (UTC)
+ id AA6968468D; Sun, 20 Mar 2022 21:29:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 22:36:51 +0100
+Date: Sun, 20 Mar 2022 22:34:43 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 414b4c5d86813393ae7816e918066dff9a98f569
-X-Git-Newrev: e1fe19616196930cb803f52760c55340607c894e
+X-Git-Oldrev: 21278889daf2b899b1b416f259ca6ae839abf060
+X-Git-Newrev: f91778be4df5b0caebfeee2a421eae64af2689f2
 X-Patchwork-Hint: ignore
-Message-Id: <20220320212923.C1B2B8468D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libopenssl:
- security bump version to 1.1.1n
+Message-Id: <20220320212923.AA6968468D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libglib2: bump to
+ version 2.70.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,97 +54,117 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5092354486165884489=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5092354486165884489==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e1fe19616196930cb803f52760c55340607c894e
+commit: https://git.buildroot.net/buildroot/commit/?id=f91778be4df5b0caebfeee2a421eae64af2689f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Changes between 1.1.1m and 1.1.1n [15 Mar 2022]
-
-  *) Fixed a bug in the BN_mod_sqrt() function that can cause it to loop forever
-     for non-prime moduli.
-
-     Internally this function is used when parsing certificates that contain
-     elliptic curve public keys in compressed form or explicit elliptic curve
-     parameters with a base point encoded in compressed form.
-
-     It is possible to trigger the infinite loop by crafting a certificate that
-     has invalid explicit curve parameters.
-
-     Since certificate parsing happens prior to verification of the certificate
-     signature, any process that parses an externally supplied certificate may
-     thus be subject to a denial of service attack. The infinite loop can also
-     be reached when parsing crafted private keys as they can contain explicit
-     elliptic curve parameters.
-
-     Thus vulnerable situations include:
-
-      - TLS clients consuming server certificates
-      - TLS servers consuming client certificates
-      - Hosting providers taking certificates or private keys from customers
-      - Certificate authorities parsing certification requests from subscribers
-      - Anything else which parses ASN.1 elliptic curve parameters
-
-     Also any other applications that use the BN_mod_sqrt() where the attacker
-     can control the parameter values are vulnerable to this DoS issue.
-     (CVE-2022-0778)
-     [Tomáš Mráz]
-
-  *) Add ciphersuites based on DHE_PSK (RFC 4279) and ECDHE_PSK (RFC 5489)
-     to the list of ciphersuites providing Perfect Forward Secrecy as
-     required by SECLEVEL >= 3.
-
-     [Dmitry Belyavskiy, Nicola Tuveri]
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 66868e9fab2806686fd08850a3e56185ef00b127)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 2a8ceb5cb30a9c28447e89c4b5bef67277697935)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libglib2/0002-remove-cpp-requirement.patch                  | 6 +++---
+ .../0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch      | 2 +-
+ .../0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch | 4 ++--
+ package/libglib2/libglib2.hash                                      | 4 ++--
+ package/libglib2/libglib2.mk                                        | 2 +-
+ 5 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index a055cbc270..22bb365bcc 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1m.tar.gz.sha256
--sha256  f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96  openssl-1.1.1m.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1n.tar.gz.sha256
-+sha256  40dceb51a4f6a5275bde0e6bf20ef4b91bfc32ed57c0552e2e8e15463372b17a  openssl-1.1.1n.tar.gz
- 
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index bd8ef6141a..ae6658ed40 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
+index 2f95228932..b5603c92f4 100644
+--- a/package/libglib2/0002-remove-cpp-requirement.patch
++++ b/package/libglib2/0002-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.70.0',
++   version : '2.70.4',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+@@ -46,7 +46,7 @@ index 4bbf4c2..ac59f4e 100644
+  
+  cc_can_run = not meson.is_cross_build() or meson.has_exe_wrapper()
+  
+-@@ -1679,20 +1678,6 @@ if g_have_iso_c_varargs
++@@ -1696,20 +1695,6 @@ if g_have_iso_c_varargs
+  #endif''')
+  endif
+  
+@@ -67,7 +67,7 @@ index 4bbf4c2..ac59f4e 100644
+  g_have_gnuc_varargs = cc.compiles('''
+    void some_func (void) {
+      int a(int p1, int p2, int p3);
+-@@ -2330,7 +2315,6 @@ subdir('gobject')
++@@ -2339,7 +2324,6 @@ subdir('gobject')
+  subdir('gthread')
+  subdir('gmodule')
+  subdir('gio')
+diff --git a/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+index 67aea7982e..e212393011 100644
+--- a/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
++++ b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+@@ -16,7 +16,7 @@ diff --git a/meson.build b/meson.build
+ index 3c615b7..7cae4e8 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -431,6 +431,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++@@ -435,6 +435,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+      # building with -Wbad-function-cast.
+      '-Wno-bad-function-cast',
+      '-Wno-cast-function-type',
+diff --git a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+index a29587bd31..db77a73203 100644
+--- a/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
++++ b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+@@ -23,7 +23,7 @@ diff --git a/gio/meson.build b/gio/meson.build
+ index 29473d26b..112d4ada9 100644
+ --- a/gio/meson.build
+ +++ b/gio/meson.build
+-@@ -831,6 +831,7 @@ pkg.generate(libgio,
++@@ -841,6 +841,7 @@ pkg.generate(libgio,
+    variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
+                 'schemasdir=' + join_paths('${datadir}', schemas_subdir),
+                 'bindir=' + join_paths('${prefix}', get_option('bindir')),
+@@ -35,7 +35,7 @@ diff --git a/glib/meson.build b/glib/meson.build
+ index f78f32969..6c5486699 100644
+ --- a/glib/meson.build
+ +++ b/glib/meson.build
+-@@ -377,6 +377,7 @@ pkg.generate(libglib,
++@@ -384,6 +384,7 @@ pkg.generate(libglib,
+    subdirs : ['glib-2.0'],
+    extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
+    variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 580be3e08e..f0f0cb55ad 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.70/glib-2.70.0.sha256sum
+-sha256  200d7df811c5ba634afbf109f14bb40ba7fde670e89389885da14e27c0840742  glib-2.70.0.tar.xz
++# https://download.gnome.org/sources/glib/2.70/glib-2.70.4.sha256sum
++sha256  ab3d176f3115dcc4e5d02db795984e04e4f4b48d836252e23e8c468e9d423c33  glib-2.70.4.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d3cba1a8bb..18f5b329c7 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.1.1m
-+LIBOPENSSL_VERSION = 1.1.1n
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
-
---===============5092354486165884489==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ LIBGLIB2_VERSION_MAJOR = 2.70
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5092354486165884489==--
