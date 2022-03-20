@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF8F4C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30A19C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B24B408F6;
-	Sun, 20 Mar 2022 18:47:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E59106070A;
+	Sun, 20 Mar 2022 18:48:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4mrSiHO2yRCy; Sun, 20 Mar 2022 18:47:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 35BhybQG3WSi; Sun, 20 Mar 2022 18:48:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7860840896;
-	Sun, 20 Mar 2022 18:47:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6BF131BF4D8
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E7D460AD7;
+	Sun, 20 Mar 2022 18:48:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 07ECE1BF4D8
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 577FD404A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9C94401AE
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dv_DfLklRoax for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id djfAltwBXozw for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99DFD40894
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6117440577
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B36CB8461F; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
+ id 7921A8461A; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 19:38:26 +0100
+Date: Sun, 20 Mar 2022 19:24:01 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fcbce93cfce0a84d32de323b6962c9846b58c887
-X-Git-Newrev: cf0c9830c0eef17116081d04ccc10a1aa0850553
+X-Git-Oldrev: d3c27619bfb917e5b2e893871d2a25f434c8efc3
+X-Git-Newrev: 1feb0309f967fbbed17e96f99ddf555ec0e2054d
 X-Patchwork-Hint: ignore
-Message-Id: <20220320183734.B36CB8461F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gcr: depends on
- !gnupg
+Message-Id: <20220320183734.7921A8461A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/optee-os: add option
+ to select DTC dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,56 +54,74 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3438581436300280999=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf0c9830c0eef17116081d04ccc10a1aa0850553
+--===============3438581436300280999==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1feb0309f967fbbed17e96f99ddf555ec0e2054d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Since gcr selects gnupg2, it's incompatible with gnupg. Add this
-dependency and corresponding comment.
+Some platforms (stm32, sam) needs DTC to build the platform
+device-trees. Add BR2_TARGET_OPTEE_OS_NEEDS_DTC configuration
+option to select host-dtc package when building.
 
-While we're at it, also hide the existing comment when
-!BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5783a418f4b30931068b81f850fc06cd8d3d9732)
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+Acked-by: Etienne Carriere <etienne.carriere@linaro.org>
+[yann.morin.1998@free.fr: move option]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 67be54cd943a466aab6bf53df2aa9e712da43556)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcr/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ boot/optee-os/Config.in   | 7 +++++++
+ boot/optee-os/optee-os.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-index e233fffed0..afbec1a317 100644
---- a/package/gcr/Config.in
-+++ b/package/gcr/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_GCR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on !BR2_STATIC_LIBS # p11-kit
-+	depends on !BR2_PACKAGE_GNUPG # gnupg2
- 	select BR2_PACKAGE_GNUPG2 # runtime
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -15,6 +16,15 @@ config BR2_PACKAGE_GCR
- 	  https://developer.gnome.org/gcr/
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 0974578484..ea16550b72 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -54,6 +54,13 @@ config BR2_TARGET_OPTEE_OS_VERSION
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
  
- comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
++config BR2_TARGET_OPTEE_OS_NEEDS_DTC
++	bool "OP-TEE OS needs dtc"
++	select BR2_PACKAGE_HOST_DTC
++	help
++	  Select this option if your OP-TEE OS platform configuration
++	  requires the Device Tree compiler to be available.
 +
-+comment "gcr is incompatible with gnupg, gnupg2 only"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_GNUPG # gnupg2
+ config BR2_TARGET_OPTEE_OS_CORE
+ 	bool "Build core"
+ 	default y
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 166b5e693c..9f76d8450e 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -23,6 +23,10 @@ endif
+ 
+ OPTEE_OS_DEPENDENCIES = host-openssl host-python3 host-python-pycryptodomex host-python-pyelftools
+ 
++ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_DTC),y)
++OPTEE_OS_DEPENDENCIES += host-dtc
++endif
++
+ # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
+ # can be built in 64bit mode and support 32bit and 64bit
+ # trusted applications. Since buildroot currently references
+
+--===============3438581436300280999==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3438581436300280999==--
