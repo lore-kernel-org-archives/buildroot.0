@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4098C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE12EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB29360B15;
-	Sun, 20 Mar 2022 21:38:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A7FB403F9;
+	Sun, 20 Mar 2022 21:38:43 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tjRoAVHmVUzg; Sun, 20 Mar 2022 21:38:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 534EF4031F;
+	Sun, 20 Mar 2022 21:38:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ACB7C1BF3C9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A9A860ADE
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oaZ8ixspKZY4; Sun, 20 Mar 2022 21:38:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC9F96070A;
-	Sun, 20 Mar 2022 21:38:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 263D21BF3C9
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12A0540213
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:38:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 41y-g8A1fxmb for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 21:38:11 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 26fq6AUURcBb for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 21:38:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4988B401DB
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:38:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD2AF6070A
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:38:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2221F84688; Sun, 20 Mar 2022 21:29:18 +0000 (UTC)
+ id B57F88468E; Sun, 20 Mar 2022 21:29:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 22:37:09 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 6b85b18887554f37002124108cd890c8dca58f76
-X-Git-Newrev: bf9a6bc55c04533849dc33ac625ada5965781e5a
+Date: Sun, 20 Mar 2022 22:35:37 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f91778be4df5b0caebfeee2a421eae64af2689f2
+X-Git-Newrev: 414b4c5d86813393ae7816e918066dff9a98f569
 X-Patchwork-Hint: ignore
-Message-Id: <20220320212918.2221F84688@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/libopenssl:
- security bump version to 1.1.1n
+Message-Id: <20220320212923.B57F88468E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libgtk3: bump to
+ version 3.24.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,97 +54,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3093039069295431898=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3093039069295431898==
-Content-Type: text/plain
+commit: https://git.buildroot.net/buildroot/commit/?id=414b4c5d86813393ae7816e918066dff9a98f569
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf9a6bc55c04533849dc33ac625ada5965781e5a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
-
-Changes between 1.1.1m and 1.1.1n [15 Mar 2022]
-
-  *) Fixed a bug in the BN_mod_sqrt() function that can cause it to loop forever
-     for non-prime moduli.
-
-     Internally this function is used when parsing certificates that contain
-     elliptic curve public keys in compressed form or explicit elliptic curve
-     parameters with a base point encoded in compressed form.
-
-     It is possible to trigger the infinite loop by crafting a certificate that
-     has invalid explicit curve parameters.
-
-     Since certificate parsing happens prior to verification of the certificate
-     signature, any process that parses an externally supplied certificate may
-     thus be subject to a denial of service attack. The infinite loop can also
-     be reached when parsing crafted private keys as they can contain explicit
-     elliptic curve parameters.
-
-     Thus vulnerable situations include:
-
-      - TLS clients consuming server certificates
-      - TLS servers consuming client certificates
-      - Hosting providers taking certificates or private keys from customers
-      - Certificate authorities parsing certification requests from subscribers
-      - Anything else which parses ASN.1 elliptic curve parameters
-
-     Also any other applications that use the BN_mod_sqrt() where the attacker
-     can control the parameter values are vulnerable to this DoS issue.
-     (CVE-2022-0778)
-     [Tomáš Mráz]
-
-  *) Add ciphersuites based on DHE_PSK (RFC 4279) and ECDHE_PSK (RFC 5489)
-     to the list of ciphersuites providing Perfect Forward Secrecy as
-     required by SECLEVEL >= 3.
-
-     [Dmitry Belyavskiy, Nicola Tuveri]
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 66868e9fab2806686fd08850a3e56185ef00b127)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit ed721a0b9b3bbb3fca8487b49117f55bbf791180)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index a055cbc270..22bb365bcc 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index c23abcb518..23ce1f42bb 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
 @@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1m.tar.gz.sha256
--sha256  f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96  openssl-1.1.1m.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1n.tar.gz.sha256
-+sha256  40dceb51a4f6a5275bde0e6bf20ef4b91bfc32ed57c0552e2e8e15463372b17a  openssl-1.1.1n.tar.gz
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.31.sha256sum
+-sha256  423c3e7fdb4c459ee889e35fd4d71fd2623562541c1041b11c07e5ad1ff10bf9  gtk+-3.24.31.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.33.sha256sum
++sha256  588b06522e25d1579e989b6f9d8a1bdbf2fe13cde01a04e904ff346a225e7801  gtk+-3.24.33.tar.xz
  
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index bd8ef6141a..ae6658ed40 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index f298afade6..cd0a75eb23 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.1.1m
-+LIBOPENSSL_VERSION = 1.1.1n
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
-
---===============3093039069295431898==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).31
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).33
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3093039069295431898==--
