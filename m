@@ -1,47 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB8AC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 09:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0E6C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 10:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5253D4026F;
-	Sun, 20 Mar 2022 09:57:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E7B081A9C;
+	Sun, 20 Mar 2022 10:36:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6wxMYf0tkoMr; Sun, 20 Mar 2022 09:57:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FZPL2iTA-LTu; Sun, 20 Mar 2022 10:36:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C78A40219;
-	Sun, 20 Mar 2022 09:57:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C7581BF59E
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 09:56:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68A1381A5C;
+	Sun, 20 Mar 2022 10:36:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EBA5F1BF593
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 10:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BC6740219
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 09:56:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E78EC60BB5
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 10:35:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EuOgZoUkaeLI for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 09:56:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5883540213
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 09:56:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 45C22843FF; Sun, 20 Mar 2022 09:47:52 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 10:48:22 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 23fb7bbc00e22e90cf65997f4aae4a28c1ba4f6d
-X-Git-Newrev: 52bdcde13c736091e7876d4f31fb9b6ed2d3635a
-X-Patchwork-Hint: ignore
-Message-Id: <20220320094752.45C22843FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libsrtp: drop
- shared library dependency from openssl
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C55kZS643-Jx for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 10:35:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 60BDD60B0D
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 10:35:57 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BAF8E200003;
+ Sun, 20 Mar 2022 10:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1647772555;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=W2z9vcK2LKi0BtgBuON/Zq8WaD+wQ8zCLgXqHaWGo3Q=;
+ b=l1AA3uJH53wtd9pyQowDxNEyh/zAPxGFs1UBWkDyWWZA2x6khHO7BoysQJ03D82M7KnhN5
+ aleDdfDhozQ/+SWRqaysrMNdlAVjpIm4FczWp1eLHmXr+FHdRug0GOy9+r5EOvJ7F6qPlF
+ GeA0dbmuNbxDsP4iQdDWWrVVHqlXeFXoFtZipY80Da/3Kqn1cs5xqq5fDHme4av7HvBPI9
+ rKGoHL/2o/9hqm0tlSh3bmRex90GKJswe2Tgi5gLXWbwGPe6K67gCDr7nT5Te2BYzMgeSx
+ ngxZXO79fDggF0AJWa9IG2Va+2eREQflTFrmtdN3FfSVoWYAJWOE61ZLtFTUng==
+Date: Sun, 20 Mar 2022 11:35:53 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Peter Korsgaard
+ <peter@korsgaard.com>
+Message-ID: <20220320113553.43bf3c6f@windsurf>
+In-Reply-To: <20220316215654.8E8188424D@busybox.osuosl.org>
+References: <20220316215654.8E8188424D@busybox.osuosl.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: strengthen
+ version check in check_package_get_latest_version_by_distro()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,56 +70,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52bdcde13c736091e7876d4f31fb9b6ed2d3635a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Hello Peter,
 
-openssl handling needs shared library support since commit
-67cebbdf5f349cc176037fa15c281a9462dae591 however this is not needed
-since version 2 and
-https://github.com/cisco/libsrtp/commit/333fa84e8ed1395753fd1c0c4eb5534208510f26
+Could you cherry-pick this commit into the currently maintained stable
+branches?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 19294eb352feb9cc96bc7eeb8942da27f715ab87)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.mk | 2 +-
- package/libsrtp/libsrtp.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Thanks a lot!
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 0a26fb38ea..2b7854b982 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -247,7 +247,7 @@ ASTERISK_CONF_OPTS += --without-speex --without-speexdsp
- endif
- 
- # asterisk needs an openssl-enabled libsrtp
--ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
-+ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL),yy)
- ASTERISK_DEPENDENCIES += libsrtp
- ASTERISK_CONF_OPTS += --with-srtp
- else
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index f2ba600dd6..e7a771c6b2 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -21,8 +21,7 @@ endif
- 
- LIBSRTP_DEPENDENCIES = host-pkgconf
- 
--# openssl handling needs libdl support
--ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBSRTP_DEPENDENCIES += openssl
- LIBSRTP_CONF_OPTS += --disable-nss --enable-openssl
- else ifeq ($(BR2_PACKAGE_LIBNSS),y)
+Thomas Petazzoni
+
+On Wed, 16 Mar 2022 23:04:46 +0100
+Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+
+> commit: https://git.buildroot.net/buildroot/commit/?id=c72f3f2b43f4607ed94d51a21abe5e3d909efb36
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> The check_package_get_latest_version_by_distro() function analyzes the
+> data returned by release-monitoring.org. For two of our
+> packages (bento4 and qextserialport), release-monitoring.org returns
+> something that is a bit odd: it returns an entry with a
+> "stable_versions" field that contains an empty array. Our code was
+> ready to have or not have a "stable_versions" entry, but when it is
+> present, we assumed it was not an empty array. These two packages, for
+> some reason, break this assumption.
+> 
+> In order to solve this problem, this commit is more careful, and uses
+> the stable_versions field only if it exists and it has at least one
+> entry. The code is also reworked as a sequence of "if...elif...else"
+> to be more readable.
+> 
+> This fixes the following exception when running pkg-stats on the full
+> package set:
+> 
+> Task exception was never retrieved
+> future: <Task finished name='Task-10772' coro=<check_package_latest_version_get() done, defined at ./support/scripts/pkg-stats:532> exception=IndexError('list index out of range')>
+> Traceback (most recent call last):
+>   File "./support/scripts/pkg-stats", line 535, in check_package_latest_version_get
+>     if await check_package_get_latest_version_by_distro(session, pkg):
+>   File "./support/scripts/pkg-stats", line 489, in check_package_get_latest_version_by_distro
+>     version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
+> IndexError: list index out of range
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> [yann.morin.1998@free.fr: non-sequence tests as True]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  support/scripts/pkg-stats | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index c235d99407..8cc64a54d1 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -486,7 +486,12 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+>                  return False
+>  
+>              data = await resp.json()
+> -            version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
+> +            if 'stable_versions' in data and data['stable_versions']:
+> +                version = data['stable_versions'][0]
+> +            elif 'version' in data:
+> +                version = data['version']
+> +            else:
+> +                version = None
+>              check_package_latest_version_set_status(pkg,
+>                                                      RM_API_STATUS_FOUND_BY_DISTRO,
+>                                                      version,
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
