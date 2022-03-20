@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 309C5C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CDCBC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBE9760BF0;
-	Sun, 20 Mar 2022 17:09:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55A6D8176F;
+	Sun, 20 Mar 2022 17:09:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BsD7-Yf-pQOa; Sun, 20 Mar 2022 17:09:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ms9pFbyUApfB; Sun, 20 Mar 2022 17:09:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB59460AD7;
-	Sun, 20 Mar 2022 17:09:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4B4C41BF973
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E38A80C26;
+	Sun, 20 Mar 2022 17:09:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7113B1BF352
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B550408DF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5DCAC402F6
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:07:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8KJnStrl6OLL for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lByiztpM9OLr for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 17:07:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 649304088A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C067400D9
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:07:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A1C4084552; Sun, 20 Mar 2022 16:58:13 +0000 (UTC)
+ id 9890284551; Sun, 20 Mar 2022 16:58:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 18:06:38 +0100
+Date: Sun, 20 Mar 2022 18:06:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6db3b6d48cae3c3a9ad7c3977b373d4a60d6e787
-X-Git-Newrev: 343d7940a4bbdd89933a29f9470cead6ff481a28
+X-Git-Oldrev: 3398e8e6d4ecb3e06be6e41daf0a7a6542dc5116
+X-Git-Newrev: 6db3b6d48cae3c3a9ad7c3977b373d4a60d6e787
 X-Patchwork-Hint: ignore
-Message-Id: <20220320165813.A1C4084552@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/agentpp: bump to version 4.5.3
+Message-Id: <20220320165813.9890284551@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/snmppp: bump to version 3.4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,152 +59,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=343d7940a4bbdd89933a29f9470cead6ff481a28
+commit: https://git.buildroot.net/buildroot/commit/?id=6db3b6d48cae3c3a9ad7c3977b373d4a60d6e787
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (not needed anymore):
-"Fixed: Allow compilation without _SNMPv3 defined."
+Update hash of src/v3.cpp, update in year and "Frank Fock" added:
 
-https://agentpp.com/download/changes_agent++.txt
+ -  _##  SNMP++ v3.3
+ +  _##  SNMP++ v3.4
+ -  _##  Copyright (c) 2001-2013 Jochen Katz, Frank Fock
+ +  _##  Copyright (c) 2001-2021 Jochen Katz, Frank Fock
+ -  _##  Hewlett-Packard and Jochen Katz make no representations about the
+ -  _##  suitability of this software for any purpose. It is provided
+ +  _##  Hewlett-Packard, Frank Fock, and Jochen Katz make no representations
+ +  _##  about the suitability of this software for any purpose. It is provided
+
+https://www.agentpp.com/download/changes_snmp++v3.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Fix-build-when-SNMPv3-is-disabled.patch   | 102 ---------------------
- package/agentpp/agentpp.hash                       |   2 +-
- package/agentpp/agentpp.mk                         |   2 +-
- 3 files changed, 2 insertions(+), 104 deletions(-)
+ package/snmppp/snmppp.hash | 4 ++--
+ package/snmppp/snmppp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch b/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
-deleted file mode 100644
-index f16c2b4b77..0000000000
---- a/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
-+++ /dev/null
-@@ -1,102 +0,0 @@
--From 2a0fe384eec254643ca2176ccfcbbd036a5aad06 Mon Sep 17 00:00:00 2001
--From: Luca Ceresoli <luca@lucaceresoli.net>
--Date: Tue, 14 Jul 2020 10:30:10 +0200
--Subject: [PATCH] Fix build when SNMPv3 is disabled
--
--agentpp has ifdefs to disable v3 code when SNMPv3 is disabled. However it
--is missing one and it has a few ones in excess. Fix them.
--
--Upstream is aware, says "will fix in later version", but thinks to make v3
--mandatory. See discussion at
--https://forum.snmp.app/t/agent-compile-fails-if-snmp-has-disable-snmpv3/326
--
--Upstream status: none, upstream is not welcoming contributions.
--
--Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-----
-- include/agent_pp/notification_log_mib.h    | 4 ++--
-- include/agent_pp/notification_originator.h | 2 ++
-- include/agent_pp/snmp_community_mib.h      | 4 ++--
-- src/notification_originator.cpp            | 2 ++
-- 4 files changed, 8 insertions(+), 4 deletions(-)
--
--diff --git a/include/agent_pp/notification_log_mib.h b/include/agent_pp/notification_log_mib.h
--index ddac05e515d9..8fd8cfec32ca 100644
----- a/include/agent_pp/notification_log_mib.h
--+++ b/include/agent_pp/notification_log_mib.h
--@@ -22,7 +22,7 @@
-- 
-- //--AgentGen BEGIN=_BEGIN
-- #include <agent_pp/agent++.h>
---#ifdef _SNMPv3
--+// #ifdef _SNMPv3 // This file deos not look SNMPv3-specific
-- #include <agent_pp/mib_complex_entry.h>
-- //--AgentGen END
-- 
--@@ -688,6 +688,6 @@ protected:
--  */
-- 
-- 
---#endif
--+// #endif // _SNMPv3
-- 
-- 
--diff --git a/include/agent_pp/notification_originator.h b/include/agent_pp/notification_originator.h
--index 95e8b4e1836d..6f50cd52625b 100644
----- a/include/agent_pp/notification_originator.h
--+++ b/include/agent_pp/notification_originator.h
--@@ -307,7 +307,9 @@ class AGENTPP_DECL NotificationOriginator: public NotificationSender {
--          */
--         virtual nlmLogEntry* get_nlm_log_entry();
--                 
--+#ifdef _SNMPv3
--         virtual v3MP* get_v3mp();
--+#endif
-- 
--  protected:
--      
--diff --git a/include/agent_pp/snmp_community_mib.h b/include/agent_pp/snmp_community_mib.h
--index 7d5c4558f36d..d9eb2b4a87ec 100644
----- a/include/agent_pp/snmp_community_mib.h
--+++ b/include/agent_pp/snmp_community_mib.h
--@@ -49,7 +49,7 @@ namespace Agentpp {
-- #define oidSnmpTrapAddress               "1.3.6.1.6.3.18.1.3.0"
-- #define oidSnmpTrapCommunity             "1.3.6.1.6.3.18.1.4.0"
-- 
---#ifdef _SNMPv3
--+// #ifdef _SNMPv3 // This file deos not look SNMPv3-specific
-- 
-- /**
--  *  snmpCommunityName
--@@ -346,7 +346,7 @@ class AGENTPP_DECL snmp_community_mib: public MibGroup
-- 	static void	       	add_public();
-- 	static void	       	add_public(Mib* mib);
-- };
---#endif
--+// #endif // _SNMPv3
-- 
-- #ifdef AGENTPP_NAMESPACE
-- }
--diff --git a/src/notification_originator.cpp b/src/notification_originator.cpp
--index d7d566869998..39ddbe08cdeb 100644
----- a/src/notification_originator.cpp
--+++ b/src/notification_originator.cpp
--@@ -237,6 +237,7 @@ nlmLogEntry* NotificationOriginator::get_nlm_log_entry() {
--     return nlmLogEntry::instance;
-- }
-- 
--+#ifdef _SNMPv3
-- v3MP* NotificationOriginator::get_v3mp() {
--     if (mib) {
--         return mib->get_request_list()->get_v3mp();
--@@ -244,6 +245,7 @@ v3MP* NotificationOriginator::get_v3mp() {
--         return v3MP::I;
--     }
-- }
--+#endif
-- 
-- 
-- bool NotificationOriginator::check_access(ListCursor<MibTableRow>& cur,
---- 
--2.27.0
--
-diff --git a/package/agentpp/agentpp.hash b/package/agentpp/agentpp.hash
-index 11b23c8ee2..f8399963e5 100644
---- a/package/agentpp/agentpp.hash
-+++ b/package/agentpp/agentpp.hash
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 2dcf836fc7..db3a4b5f4f 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  9b45123df45e803198a1181540b37a4ccd0e63c68df6e826702e2ba49167edac  agent++-4.3.1.tar.gz
-+sha256  bcfc014cc7ce37afdd6eefb71b59f1eabf23984525905546aa363c2a2c498c79  agent++-4.5.3.tar.gz
- sha256  1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6  LICENSE-2_0.txt
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-index 8982d9e564..f30e75ef9c 100644
---- a/package/agentpp/agentpp.mk
-+++ b/package/agentpp/agentpp.mk
+-sha256  a3eb75e2310c315d9b2c2094154c7cd9b46684adb80a4b36b8957dcc09af4041  snmp++-3.4.2.tar.gz
+-sha256  f6fd4321c7eb6e51a272f91f964aea7f53039bb2b55f690d5a9d042f3a5d79b9  src/v3.cpp
++sha256  7c0aaf4ea21db082453f880cc2062a86dcbbf0ee6c8d47c72beb8e0c77c26b6c  snmp++-3.4.9.tar.gz
++sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 601e28e207..bc05cad583 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AGENTPP_VERSION = 4.3.1
-+AGENTPP_VERSION = 4.5.3
- AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
- AGENTPP_SITE = http://www.agentpp.com/download
- AGENTPP_LICENSE = Apache-2.0
+-SNMPPP_VERSION = 3.4.2
++SNMPPP_VERSION = 3.4.9
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
