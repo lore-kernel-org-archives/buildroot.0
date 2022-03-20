@@ -4,61 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0E6C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 10:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47DA8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 11:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E7B081A9C;
-	Sun, 20 Mar 2022 10:36:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD3C2819CC;
+	Sun, 20 Mar 2022 11:42:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FZPL2iTA-LTu; Sun, 20 Mar 2022 10:36:02 +0000 (UTC)
+	with ESMTP id zKzkA-FL-0PP; Sun, 20 Mar 2022 11:41:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68A1381A5C;
-	Sun, 20 Mar 2022 10:36:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EBA5F1BF593
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 10:35:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADA188198A;
+	Sun, 20 Mar 2022 11:41:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D4A8F1BF4D7
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 11:41:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E78EC60BB5
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 10:35:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0CA6408E8
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 11:41:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C55kZS643-Jx for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 10:35:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60BDD60B0D
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 10:35:57 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BAF8E200003;
- Sun, 20 Mar 2022 10:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647772555;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=W2z9vcK2LKi0BtgBuON/Zq8WaD+wQ8zCLgXqHaWGo3Q=;
- b=l1AA3uJH53wtd9pyQowDxNEyh/zAPxGFs1UBWkDyWWZA2x6khHO7BoysQJ03D82M7KnhN5
- aleDdfDhozQ/+SWRqaysrMNdlAVjpIm4FczWp1eLHmXr+FHdRug0GOy9+r5EOvJ7F6qPlF
- GeA0dbmuNbxDsP4iQdDWWrVVHqlXeFXoFtZipY80Da/3Kqn1cs5xqq5fDHme4av7HvBPI9
- rKGoHL/2o/9hqm0tlSh3bmRex90GKJswe2Tgi5gLXWbwGPe6K67gCDr7nT5Te2BYzMgeSx
- ngxZXO79fDggF0AJWa9IG2Va+2eREQflTFrmtdN3FfSVoWYAJWOE61ZLtFTUng==
-Date: Sun, 20 Mar 2022 11:35:53 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Peter Korsgaard
- <peter@korsgaard.com>
-Message-ID: <20220320113553.43bf3c6f@windsurf>
-In-Reply-To: <20220316215654.8E8188424D@busybox.osuosl.org>
-References: <20220316215654.8E8188424D@busybox.osuosl.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CSRcZnW0igXm for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 11:41:53 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EEA74408E2
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 11:41:52 +0000 (UTC)
+Received: from iago.. (unknown [151.37.69.249])
+ by serv15.avernis.de (Postfix) with ESMTPSA id DA4E1C701670;
+ Sun, 20 Mar 2022 12:41:48 +0100 (CET)
+From: Andreas Ziegler <br015@umbiko.net>
+To: buildroot@buildroot.org
+Date: Sun, 20 Mar 2022 12:41:38 +0100
+Message-Id: <20220320114138.433796-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211227074056.13882-1-br015@umbiko.net>
+References: <20211227074056.13882-1-br015@umbiko.net>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: strengthen
- version check in check_package_get_latest_version_by_distro()
+X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: [Buildroot] [PATCH v3 1/1] package/zziplib: fix static build
+ failure with mpd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,91 +57,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
+ Andreas Ziegler <br015@umbiko.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Peter,
+The current released version of zziplib copies static libraries with appended 
+major version, but omits creating the necessary links to the base file names. 
+This prevents the linker to find the libraries via the search path.
 
-Could you cherry-pick this commit into the currently maintained stable
-branches?
+The issue (https://github.com/gdraheim/zziplib/issues/117) has been 
+fixed upstream; this patch extracts the necessary part of commit 0e8d35f92efb680c81f6ec1fca9f11d173dce389, to enable creation of symlinks.
 
-Thanks a lot!
+This resolves the following autobuild issues:
 
-Thomas Petazzoni
+http://autobuild.buildroot.net/results/6c56b645a2b723920f07b98474452824fba5e2c1
+http://autobuild.buildroot.net/results/032aaff121fb114f388c67dbca3ad2b02f670e38
+http://autobuild.buildroot.net/results/ba711034c0abe980f677e26de41739223e2f66e9
 
-On Wed, 16 Mar 2022 23:04:46 +0100
-Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+---
+Changes v1 -> v2:
+ - extract link creation from commit 0e8d35f
+Changes v2 -> v3:
+ - update failure list
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=c72f3f2b43f4607ed94d51a21abe5e3d909efb36
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> The check_package_get_latest_version_by_distro() function analyzes the
-> data returned by release-monitoring.org. For two of our
-> packages (bento4 and qextserialport), release-monitoring.org returns
-> something that is a bit odd: it returns an entry with a
-> "stable_versions" field that contains an empty array. Our code was
-> ready to have or not have a "stable_versions" entry, but when it is
-> present, we assumed it was not an empty array. These two packages, for
-> some reason, break this assumption.
-> 
-> In order to solve this problem, this commit is more careful, and uses
-> the stable_versions field only if it exists and it has at least one
-> entry. The code is also reworked as a sequence of "if...elif...else"
-> to be more readable.
-> 
-> This fixes the following exception when running pkg-stats on the full
-> package set:
-> 
-> Task exception was never retrieved
-> future: <Task finished name='Task-10772' coro=<check_package_latest_version_get() done, defined at ./support/scripts/pkg-stats:532> exception=IndexError('list index out of range')>
-> Traceback (most recent call last):
->   File "./support/scripts/pkg-stats", line 535, in check_package_latest_version_get
->     if await check_package_get_latest_version_by_distro(session, pkg):
->   File "./support/scripts/pkg-stats", line 489, in check_package_get_latest_version_by_distro
->     version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
-> IndexError: list index out of range
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> [yann.morin.1998@free.fr: non-sequence tests as True]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  support/scripts/pkg-stats | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index c235d99407..8cc64a54d1 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -486,7 +486,12 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
->                  return False
->  
->              data = await resp.json()
-> -            version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
-> +            if 'stable_versions' in data and data['stable_versions']:
-> +                version = data['stable_versions'][0]
-> +            elif 'version' in data:
-> +                version = data['version']
-> +            else:
-> +                version = None
->              check_package_latest_version_set_status(pkg,
->                                                      RM_API_STATUS_FOUND_BY_DISTRO,
->                                                      version,
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+ ...-implant-ZZIP_LIBLATEST-for-zzip_lib.patch | 78 +++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+ create mode 100644 package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
 
-
-
+diff --git a/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
+new file mode 100644
+index 0000000000..50380861bc
+--- /dev/null
++++ b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
+@@ -0,0 +1,78 @@
++Extract link creation for versioned libraries from commit
++0e8d35f92efb680c81f6ec1fca9f11d173dce389.
++
++Signed-off-by: Andreas Ziegler <br015@umbiko.net>
++
++---
++From 0e8d35f92efb680c81f6ec1fca9f11d173dce389 Mon Sep 17 00:00:00 2001
++From: Guido Draheim <guidod@gmx.de>
++Date: Sat, 22 May 2021 15:13:28 +0200
++Subject: [PATCH] #117 implant ZZIP_LIBLATEST for zzip.lib
++
++---
++ zzip/CMakeLists.txt | 57 +++++++++++++++++++++++++++++++++++----------
++ 1 file changed, 45 insertions(+), 12 deletions(-)
++
++diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
++index a966d5f..ccd08b6 100644
++--- a/zzip/CMakeLists.txt
+++++ b/zzip/CMakeLists.txt
++@@ -28,6 +28,12 @@ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" OFF)
++ option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" OFF)
++ endif()
++ 
+++if(ZZIP_LIBTOOL OR ZZIP_PKGCONFIG)
+++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" ON)
+++else()
+++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" OFF)
+++endif()
+++
++ # used in zzip/_config.h
++ set(ZZIP_PACKAGE "${PROJECT_NAME}lib")
++ set(ZZIP_VERSION "${PROJECT_VERSION}")
++@@ -346,6 +340,45 @@ if(ZZIP_LIBTOOL)
++   endif(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
++ endif(ZZIP_LIBTOOL)
++ 
+++if(ZZIP_LIBLATEST)
+++  if(BUILD_SHARED_LIBS)
+++    set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
+++    set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
+++  else()
+++    set(lib ${CMAKE_STATIC_LIBRARY_PREFIX})
+++    set(dll ${CMAKE_STATIC_LIBRARY_SUFFIX})
+++  endif()
+++    get_target_property(libname libzzip OUTPUT_NAME)
+++    get_target_property(librelease libzzip RELEASE_POSTFIX)
+++    add_custom_target(libzzip_latest ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${dll}
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++    if(ZZIPFSEEKO)
+++    get_target_property(libname libzzipfseeko OUTPUT_NAME)
+++    get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
+++    add_custom_target(libzzipfseeko_latest ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${dll}
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++    endif(ZZIPFSEEKO)
+++    if(ZZIPMMAPPED)
+++    get_target_property(libname libzzipmmapped OUTPUT_NAME)
+++    get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
+++    add_custom_target(libzzipmmaped_latest ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${dll}
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++    endif(ZZIPMMAPPED)
+++endif(ZZIP_LIBLATEST)
+++
+++
++ ## messages ##############################################
++ 
++ message(STATUS "lib zzipfseeko  to be compiled: ${ZZIPFSEEKO}")
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
