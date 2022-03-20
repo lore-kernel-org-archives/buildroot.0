@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A93AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14EDAC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A921840583;
-	Sun, 20 Mar 2022 17:07:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB43E81451;
+	Sun, 20 Mar 2022 17:07:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yn7ianxegJkQ; Sun, 20 Mar 2022 17:07:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i8eZAPSF4cdX; Sun, 20 Mar 2022 17:07:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F0D6400D9;
-	Sun, 20 Mar 2022 17:07:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9DDA41BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E992381308;
+	Sun, 20 Mar 2022 17:07:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 648101BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E00C4087A
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F652400D9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fWnY5bJIITaZ for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iCpBHHPE_aZd for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:06:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
  [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 99D3F40296
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1E4EC40022
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A04D9FF802;
- Sun, 20 Mar 2022 17:06:50 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 46AEBFF805;
+ Sun, 20 Mar 2022 17:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647796010;
+ t=1647796011;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=lugs+suRUV927laZB022Qu4GPgy2YcU1Y1EqgJU1YDw=;
- b=gYntndkkcKEbBeEe6MdWZF8PZqsRo/E9BjoMtkMOb0vvMkcaCZnhviE0MrkZN9B3ZNKIDq
- J6P1dFtuFa+dYiiZHC35Qy6dPgSWvRLaRnvJ/eVADjI4Gwj2W6L6NdwZ9q8L8op46na9FN
- fsHKanTpVqzOO+RJbCyxgGPxmWC1axbvADgElH6zzjYkwJ45ZYiXb35dYCFHggihdhvT0t
- k7ELk+qgQSC5vItOUMRxUlA6esA2Zs/J969om9KMz69WvjQ/dV36z2sHc8wDrBVXN9cX7T
- 7khTU9e7mFr6dFPuaIh/hM+cRgIWZxaf1YXz/iK68/4Jkt1j7mDarbFkvABYbQ==
-Date: Sun, 20 Mar 2022 18:04:01 +0100
+ bh=6NTB+E2CO/qvWBYSd57bi4U708zEqA/uN8kqW4nQ5Dc=;
+ b=eZU1DjyGw8ribhVGzniMJfLo+hIOsAle9wKyZ5e9Rbi9kIcStVC0r5r/+3SJg3GecIPeJg
+ H73uJN7KI13Q8aU48uPcB1bhhRDOaeLmvR9OumjR6hO0o4PCJXAR152/N/5uPNetir5vrJ
+ oy4oq/PcxcyQat+RYiTmYwu6yv05ByGQnbXLbc+4JVpcNugcDfNUgJEkawQ7Y3eTK4HzuL
+ bSEZiKzpmbGlLW2Smg+Ty9q4VbnlCxslpDlBuu3vraXsUVeV39TPbf5F+gjwC88EBqqCFd
+ +Nwkm0o84mp3txSg8Pe1tefm6qiYh3MQQ1hpT/qiyDBJnIpCGPGhtM43N06zEg==
+Date: Sun, 20 Mar 2022 18:03:40 +0100
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220320180401.7821503b@windsurf>
-In-Reply-To: <20220320124239.655081-1-bernd.kuhls@t-online.de>
-References: <20220320124239.655081-1-bernd.kuhls@t-online.de>
+Message-ID: <20220320180340.24bcdbd3@windsurf>
+In-Reply-To: <20220320115956.3242683-1-bernd.kuhls@t-online.de>
+References: <20220320115956.3242683-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.3.8
+Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: security bump version
+ to 2.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,25 +72,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, "Yann E
- . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 20 Mar 2022 13:42:39 +0100
+On Sun, 20 Mar 2022 12:59:56 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Release notes:
-> https://lists.freedesktop.org/archives/mesa-announce/2022-March/000666.html
+> Switched _SITE to https and _SOURCE to .gz because upstream does not
+> provide a .xz tarball anymore.
+> 
+> Fixes CVE 2022-0547, changelog:
+> https://github.com/OpenVPN/openvpn/blob/release/2.5/Changes.rst
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 6 +++---
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+>  package/openvpn/openvpn.hash | 2 +-
+>  package/openvpn/openvpn.mk   | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
