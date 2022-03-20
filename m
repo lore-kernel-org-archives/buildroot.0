@@ -1,47 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B318C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 23:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E56F6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 23:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A442640571;
-	Sun, 20 Mar 2022 23:14:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87A88606CB;
+	Sun, 20 Mar 2022 23:24:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3WrZsR_UMVd; Sun, 20 Mar 2022 23:14:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AKzUuGbOrpnU; Sun, 20 Mar 2022 23:24:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62AD040124;
-	Sun, 20 Mar 2022 23:14:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A64091BF3BC
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 23:14:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAB6E60634;
+	Sun, 20 Mar 2022 23:24:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B6EF1BF3BC
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 23:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86BC540124
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 23:14:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A10F60634
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 23:24:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pELd8TcDytc0 for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 23:14:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D72140002
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 23:14:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 2F0A6846E4; Sun, 20 Mar 2022 23:05:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 23:52:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 842ba7eceffb97e9795807e890b0557ab6d542aa
-X-Git-Newrev: 5e8b01afd5d8d8af8f4ce334073df9b15497cf36
-X-Patchwork-Hint: ignore
-Message-Id: <20220320230556.2F0A6846E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/graph-build-time: add
- support for timeline graphing
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fVRCx1MmX0Z9 for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 23:24:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6D34E605E3
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 23:24:35 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9da3:2dcb:f988:5999])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8BEF913F85F;
+ Mon, 21 Mar 2022 00:24:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1647818673;
+ bh=tq+63ge/XNAyzNnCifyt3/GnD8GveZp4xrP0PH9umqg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=MUnbgrbR7z8EU4/OU+UhhSLOMz8wfqr8x9H7pFUBZx0adST0NHltsCVkXcO1md/yQ
+ m6ggV734LPIQ9b+GKRK05j/vz6DSaiWhYW0bLEQioeEWSx6/DKnpuFDQf8+Uj1K+2y
+ 1Ffzyxp9j5e5d6J925TbvB7qOtdaunopqsdGCey2CM0slplV/E6Q0tAR+/8qWKtr1I
+ 0PPcLZlaEwARqoyb3fecWkhd49s1DiySW0oINzvoiATqn7EP41WGfywffly4TfPkPH
+ OCDrcHLDNmZPNIZRRxZbCPXm7XESp3Kyuvs9g7T0dOE0st9JesoHdoOqqwKw9WUYEb
+ K//PmXoej9DCw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 21 Mar 2022 00:24:31 +0100
+Date: Mon, 21 Mar 2022 00:24:31 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Pedro Aguilar <paguilar@paguilar.org>
+Message-ID: <20220320232431.GJ1566358@scaer>
+References: <20220320221445.10259-1-paguilar@paguilar.org>
+ <20220320221445.10259-2-paguilar@paguilar.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220320221445.10259-2-paguilar@paguilar.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 2/2] packages/guile: remove patches not
+ needed in 3.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,147 +71,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e8b01afd5d8d8af8f4ce334073df9b15497cf36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Pedro, All,
 
-This commit adds support for a new type of graph, showing the timeline
-of a build. It shows, with one line per package, when each of this
-package steps started/ended, and therefore allows to see the
-sequencing of the package builds.
+On 2022-03-20 23:14 +0100, Pedro Aguilar spake thusly:
+> These patches are already part of Guile's source code in
+> version 3.0.8. Let's remove them to avoid errors while
+> patching the package.
 
-For a fully serialized build like we have today, this is not super
-useful (except to show that everything is serialized), but it becomes
-much more useful in the context of top-level parallel build.
+Then this should have been part of the patch that bumps the version.
 
-We chose to order the graph by the time-of-configure, as it is the
-closest to the actual cascade-style of a true dependency graph, which is
-tiny bit more complex to achieve properly. The actual result still looks
-pretty good.
+No need to resend, as this is a big patch; this can be squashed locally
+when applying.
 
-The graph-build make target is extended to also generate this new
-timeline graph.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr:
-  - sort by start-of-configure time
-  - re-use existing colorsets (default or alternate)
-  - fix python2isms
-  - fix check-package
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Makefile                         |  3 ++
- support/scripts/graph-build-time | 63 +++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 65 insertions(+), 1 deletion(-)
+> 0003-module-system-base-target.scm-support-riscv32.patch
+> 0004-Update-gnulib-to-8f4538a53d64054ae2fc8b86c0f87c418c6176e6.patch
+> 
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> ---
+[--SNIP--]
 
-diff --git a/Makefile b/Makefile
-index 3bbbdfbe01..05b790d770 100644
---- a/Makefile
-+++ b/Makefile
-@@ -871,6 +871,9 @@ graph-build: $(O)/build/build-time.log
- 				   --type=pie-$(t) --input=$(<) \
- 				   --output=$(GRAPHS_DIR)/build.pie-$(t).$(BR_GRAPH_OUT) \
- 				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
-+	./support/scripts/graph-build-time --type=timeline --input=$(<) \
-+		--output=$(GRAPHS_DIR)/build.timeline.$(BR_GRAPH_OUT) \
-+		$(if $(BR2_GRAPH_ALT),--alternate-colors)
- 
- .PHONY: graph-depends-requirements
- graph-depends-requirements:
-diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-index 742c9a7a50..1edc3b3c00 100755
---- a/support/scripts/graph-build-time
-+++ b/support/scripts/graph-build-time
-@@ -241,6 +241,65 @@ def pkg_pie_time_per_step(data, output):
-     plt.savefig(output)
- 
- 
-+def pkg_timeline(data, output):
-+    start = 0
-+    end = 0
-+
-+    # Find the first timestamp and the last timestamp
-+    for p in data:
-+        for k, v in p.steps_start.items():
-+            if start == 0 or v < start:
-+                start = v
-+            if end < v:
-+                end = v
-+
-+    # Readjust all timestamps so that 0 is the start of the build
-+    # instead of being Epoch
-+    for p in data:
-+        for k, v in p.steps_start.items():
-+            p.steps_start[k] = v - start
-+        for k, v in p.steps_end.items():
-+            p.steps_end[k] = v - start
-+
-+    plt.figure()
-+
-+    i = 0
-+    labels_names = []
-+    labels_coords = []
-+    # put last packages that started to configure last; this does not
-+    # give the proper dependency chain, but still provides a good-enough
-+    # cascade graph.
-+    for p in sorted(data, reverse=True, key=lambda x: x.steps_start['configure']):
-+        durations = []
-+        facecolors = []
-+        for step in steps:
-+            if step not in p.steps_start or step not in p.steps_end:
-+                continue
-+            durations.append((p.steps_start[step],
-+                              p.steps_end[step] - p.steps_start[step]))
-+            facecolors.append(colors[steps.index(step)])
-+        plt.broken_barh(durations, (i, 6), facecolors=facecolors)
-+        labels_coords.append(i + 3)
-+        labels_names.append(p.name)
-+        i += 10
-+
-+    axes = plt.gcf().gca()
-+
-+    axes.set_ylim(0, i + 10)
-+    axes.set_xlim(0, end - start)
-+    axes.set_xlabel('seconds since start')
-+    axes.set_yticks(labels_coords)
-+    axes.set_yticklabels(labels_names)
-+    axes.set_axisbelow(True)
-+    axes.grid(True, linewidth=0.2, zorder=-1)
-+
-+    plt.gcf().subplots_adjust(left=0.2)
-+
-+    plt.tick_params(axis='y', which='both', labelsize=6)
-+    plt.title('Timeline')
-+    plt.savefig(output, dpi=300)
-+
-+
- # Parses the csv file passed on standard input and returns a list of
- # Package objects, filed with the duration of each step and the total
- # duration of the package.
-@@ -277,7 +336,7 @@ def read_data(input_file):
- 
- parser = argparse.ArgumentParser(description='Draw build time graphs')
- parser.add_argument("--type", '-t', metavar="GRAPH_TYPE",
--                    help="Type of graph (histogram, pie-packages, pie-steps)")
-+                    help="Type of graph (histogram, pie-packages, pie-steps, timeline)")
- parser.add_argument("--order", '-O', metavar="GRAPH_ORDER",
-                     help="Ordering of packages: build or duration (for histogram only)")
- parser.add_argument("--alternate-colors", '-c', action="store_true",
-@@ -307,6 +366,8 @@ elif args.type == "pie-packages":
-     pkg_pie_time_per_package(d, args.output)
- elif args.type == "pie-steps":
-     pkg_pie_time_per_step(d, args.output)
-+elif args.type == "timeline":
-+    pkg_timeline(d, args.output)
- else:
-     sys.stderr.write("Unknown type: %s\n" % args.type)
-     exit(1)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
