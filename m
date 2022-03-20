@@ -1,62 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D216DC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:08:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D4F1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:08:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D5AE817AA;
-	Sun, 20 Mar 2022 17:08:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE8564049F;
+	Sun, 20 Mar 2022 17:08:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GL3_G90YDE-V; Sun, 20 Mar 2022 17:08:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OeaEvkTMRqA1; Sun, 20 Mar 2022 17:08:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B12D281770;
-	Sun, 20 Mar 2022 17:08:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 157AC1BF983
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B243403C5;
+	Sun, 20 Mar 2022 17:08:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 84C301BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FF9981308
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7140C60670
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:06:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2PtR9P-JZngB for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:06:55 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JmpCSIfR-y1B for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:06:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A4910812A0
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:06:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 862AA60AB0
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:06:56 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 70657FF807;
- Sun, 20 Mar 2022 17:06:52 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id BD029FF802;
+ Sun, 20 Mar 2022 17:06:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1647796012;
+ t=1647796015;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=miWw8Q/XgKJ9eom0DXr+4oBOSvIQlDK5Ip9Yb6VCL2Y=;
- b=gUEoZlr+TKjUgO6fiwdafwZMwkUwcJsIiDKI4wKzu0KJJ1TyPTMpg6nVKBOuDELyCljAxp
- XhFhdb5PGwMDw08jHEC0uLlmo7Ixqi4FUUkeJjT2tqeHek5uDBN95fDxDL4SWpzM9KpSu5
- scItEjkYxXF3J/ctiGhp7S5ZV4AAkbPM9F26xXhKGNHK7UF/cxb0h3LFW6Rom7hIfTu4NU
- 3rkgbQoQ0lYuTAF33TR1F/BaU4EgU4NBLkVnaE3yYlTzr9o99MSXrv0NKDR086ImqiRhjB
- m2G5E+hgtJoolbtJCBfNGEsLzjRpIsVZZGwzhqktbWLD/TWllPrBsS7jXCuWCQ==
-Date: Sun, 20 Mar 2022 18:03:53 +0100
+ bh=vJyFbX760XGRNZxl24BxohvuwdEQ4P++dMc4aFDGs3A=;
+ b=i9BuIcLVefS3dSFmOo9JWLTPAfwgatj82nG7WI1AO+M1sZ9oU0Gy31svMC+dxJeHfL4qbu
+ dGDCTXgC/qDFBSvt4dnZR7IWhIVUOKBYvxhHVM491+VGF7t43tS/FSC/7a0rK+2a2K7VGL
+ zOQxzsFOoI7RJGMvljBVghDVqLSjKpSrhYH3VFaj5RMfYay/WTazbyJKE4pJAUFmdSEOFT
+ FCyWHdIOlrEkwjaoWVPpltI0V9IpLXY3rlcd+8Fd1d+etkaWBC8Y18JkhmmscgiS/q6j5s
+ 7ZQvoEcavLkyvJ/mSj6XX55+ODC32j5njOs01gu2WDE/RPYCp8mXr6NIkBoEbg==
+Date: Sun, 20 Mar 2022 18:03:48 +0100
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220320180353.65a64989@windsurf>
-In-Reply-To: <20220320123354.443457-1-bernd.kuhls@t-online.de>
-References: <20220320123354.443457-1-bernd.kuhls@t-online.de>
+Message-ID: <20220320180348.2e5ae37a@windsurf>
+In-Reply-To: <20220320121836.3682323-1-bernd.kuhls@t-online.de>
+References: <20220320121836.3682323-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to
- 6.4.29
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-waipu: bump version to
+ 19.2.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,17 +78,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 20 Mar 2022 13:33:54 +0100
+On Sun, 20 Mar 2022 13:18:36 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Updated license hash due to OpenBSD-related upstream commit:
-> https://sourceforge.net/p/fetchmail/git/ci/c4419bdd2557321b268f6e105d511923b9a35936/
-> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/fetchmail/fetchmail.hash | 6 +++---
->  package/fetchmail/fetchmail.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+>  package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
