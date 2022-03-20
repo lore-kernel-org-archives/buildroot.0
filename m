@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1948C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 12:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCB5FC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 12:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C3EB408F8;
-	Sun, 20 Mar 2022 12:04:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DD1240918;
+	Sun, 20 Mar 2022 12:17:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RcpFgEACIA1I; Sun, 20 Mar 2022 12:04:38 +0000 (UTC)
+	with ESMTP id kGl1RAJmwzlJ; Sun, 20 Mar 2022 12:17:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ACDC408F7;
-	Sun, 20 Mar 2022 12:04:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 48C8D1BF591
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 12:04:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9095408FB;
+	Sun, 20 Mar 2022 12:17:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A3021BF591
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 12:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35FE44050C
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 12:04:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 167CC60BD7
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 12:17:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WJSNXehm2R9U for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 12:04:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1-lJ6-FWkOaU for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 12:17:14 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1CD76404F6
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 12:04:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2564160BB5
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 12:17:14 +0000 (UTC)
 Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout11.t-online.de (Postfix) with SMTP id ABC5D17792;
- Sun, 20 Mar 2022 13:04:30 +0100 (CET)
+ by mailout11.t-online.de (Postfix) with SMTP id 825E119F79
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 13:17:11 +0100 (CET)
 Received: from fli4l.lan.fli4l ([79.214.197.211]) by fwd85.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nVuIO-4BlAPJ0; Sun, 20 Mar 2022 13:04:28 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56738)
+ esmtp id 1nVuUe-3gfGW90; Sun, 20 Mar 2022 13:17:08 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56740)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nVuIO-0004W8-Ed;
- Sun, 20 Mar 2022 13:04:28 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nVuUe-0006k9-6D
+ for buildroot@buildroot.org; Sun, 20 Mar 2022 13:17:08 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 13:04:28 +0100
-Message-Id: <20220320120428.3294529-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Mar 2022 13:17:08 +0100
+Message-Id: <20220320121708.3679262-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1647777868-00014AB5-5C1F56B4/0/0 CLEAN NORMAL
-X-TOI-MSGID: ffc0341f-0582-42bc-a2a9-de8217c62449
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 14.2
+X-TOI-EXPURGATEID: 150726::1647778628-00014AB5-B331F2D2/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7c5004de-cf76-4394-bae1-86606f3a03c1
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.15.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,49 +61,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://www.postgresql.org/docs/release/14.2/
+Release notes: https://www.samba.org/samba/history/samba-4.15.6.html
 
-Updated license hash due to copyright year bump:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=61c8da50cb39ab41c3a7a0122d6943f72bb0798e
+Added new answer to samba4-cache.txt needed due to upstream commit:
+https://gitlab.com/samba-team/samba/-/commit/f7e31127e7f8beb12294c5187cca9e191589ddcc
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/samba4/samba4-cache.txt | 1 +
+ package/samba4/samba4.hash      | 4 ++--
+ package/samba4/samba4.mk        | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index c2017a1226..2ba3b07563 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v14.1/postgresql-14.1.tar.bz2.sha256
--sha256  4d3c101ea7ae38982f06bdc73758b53727fb6402ecd9382006fa5ecc7c2ca41f  postgresql-14.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v14.2/postgresql-14.2.tar.bz2.sha256
-+sha256  2cf78b2e468912f8101d695db5340cf313c2e9f68a612fb71427524e8c9a977a  postgresql-14.2.tar.bz2
- 
- # License file, Locally calculated
--sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
-+sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 32aef0c68c..c389246f80 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
+index ba849b7c6e..d95776a03e 100644
+--- a/package/samba4/samba4-cache.txt
++++ b/package/samba4/samba4-cache.txt
+@@ -44,3 +44,4 @@ Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
+ Checking value of GNUTLS_MAC_AES_CMAC_128: 203
+ Checking whether fcntl supports flags to send direct I/O availability signals: OK
+ Checking for gnutls fips mode support: NO
++Checking for readlink breakage: NO
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 503ec2ce37..20e5f00b21 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.15.5.tar.asc
+-sha256  69115e33831937ba5151be0247943147765aece658ba743f44741672ad68d17f  samba-4.15.5.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.15.6.tar.asc
++sha256  0575b999a9048445820428dc540ba8a9527ce596fa66af02ea2ba1ea9578bcb4  samba-4.15.6.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 0ad3c2f742..688aaac3eb 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 14.1
-+POSTGRESQL_VERSION = 14.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-SAMBA4_VERSION = 4.15.5
++SAMBA4_VERSION = 4.15.6
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.30.2
 
