@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D6B0C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91526C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E88E140583;
-	Sun, 20 Mar 2022 17:46:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CyQH_XWIdj-X; Sun, 20 Mar 2022 17:46:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3E2F40022;
-	Sun, 20 Mar 2022 17:46:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD7DB1BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:46:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABF64817B0
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:46:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3383C817E4;
+	Sun, 20 Mar 2022 17:47:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sZPyxvzOyhVy for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:46:42 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6sgqninYbe6F; Sun, 20 Mar 2022 17:47:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F8CE817B0;
+	Sun, 20 Mar 2022 17:47:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 66F6C1BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 557736068B
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 84r8gZGteqdK for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:47:29 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
  [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9C371817AB
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:46:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 63F7C60687
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:47:29 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7B4B920004;
- Sun, 20 Mar 2022 17:46:40 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2C02F20003;
+ Sun, 20 Mar 2022 17:47:26 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nVzdX-00FETO-M7; Sun, 20 Mar 2022 18:46:39 +0100
+ id 1nVzeI-00FEUx-9d; Sun, 20 Mar 2022 18:47:26 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@gmail.com>
-References: <20220224162517.222437-1-romain.naour@gmail.com>
- <20220224162517.222437-2-romain.naour@gmail.com>
-Date: Sun, 20 Mar 2022 18:46:39 +0100
-In-Reply-To: <20220224162517.222437-2-romain.naour@gmail.com> (Romain Naour's
- message of "Thu, 24 Feb 2022 17:25:17 +0100")
-Message-ID: <87wngoo6tc.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220224173615.486414-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 Mar 2022 18:47:26 +0100
+In-Reply-To: <20220224173615.486414-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 24 Feb 2022 18:36:15 +0100")
+Message-ID: <87sfrco6s1.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCHv2 2/2] package/efl: handle input option
+Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,32 +59,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Marcin Bis <marcin@bis.org.pl>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Commit 2d7a3e48c574c05346b66f79cdb75ecdfa7f074e forgot to manage input
- > option on target which was added (and enabled by default) by
- > https://git.enlightenment.org/core/efl.git/commit/?id=0c2cf7e1bf7ca547655d25aaea30d081101b42be
- > resulting in the following build failure when eeze is disabled:
+ > Fix the following musl build failure raised since commit
+ > 6fc5c8e92c1d7997e48b207187d2d3c7ad42819:
 
- > ../output-1/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable "eeze".
+ > In file included from src/shared/queue.c:15:
+ > ./src/shared/util.h:106:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
+ >   106 | ssize_t util_getrandom(void *buf, size_t buflen, unsigned int flags);
+ >       | ^~~~~~~
+ >       | size_t
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/4a840c54bad9748b5748738378a0352d02de1f7e
+ >  - http://autobuild.buildroot.org/results/83eaeb3863040645409f5787fdbdde79385c5257
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > [Romain:
- >   Rename BR2_PACKAGE_EFL_LIBINPUT to BR2_PACKAGE_EFL_ELPUT to match the
- >   upstream name.
- >   use BR2_PACKAGE_EFL_ELPUT for BR2_PACKAGE_EFL_DRM
- >   remove duplicate libxkbcommon in EFL_DEPENDENCIES]
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed to 2022.02.x, thanks.
 
