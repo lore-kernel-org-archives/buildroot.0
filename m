@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A28FC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 693DCC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F8CA60BE5;
-	Sun, 20 Mar 2022 17:48:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12F4540583;
+	Sun, 20 Mar 2022 17:48:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MNAUqfgZpGwh; Sun, 20 Mar 2022 17:48:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VOml2pu1O6aL; Sun, 20 Mar 2022 17:48:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C068C6068B;
-	Sun, 20 Mar 2022 17:48:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7EA421BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CFD640022;
+	Sun, 20 Mar 2022 17:48:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8149C1BF973
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A84D6068B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70484408C6
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nsl_utsCSJTT for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fF3Sh4b-ON2G for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF8F960687
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABCE6408C1
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F030A845D7; Sun, 20 Mar 2022 17:39:05 +0000 (UTC)
+ id D79B8845D8; Sun, 20 Mar 2022 17:39:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 18:45:58 +0100
+Date: Sun, 20 Mar 2022 18:45:44 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 30e5d4ebc19a7a970e17ecc0e12397a13b34e89a
-X-Git-Newrev: 25fc940a4ca008f8c51395a0d210c0d8b7828b44
+X-Git-Oldrev: 34effd4a4729f87bd5607834dfc3954f08b5e592
+X-Git-Newrev: 49fcf4beeb212c38046353eaa6bd23965b982fc3
 X-Patchwork-Hint: ignore
-Message-Id: <20220320173905.F030A845D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/bluez5_utils: fix
- musl build
+Message-Id: <20220320173905.D79B8845D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/efl: rework eeze
+ handling in Kconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,74 +59,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25fc940a4ca008f8c51395a0d210c0d8b7828b44
+commit: https://git.buildroot.net/buildroot/commit/?id=49fcf4beeb212c38046353eaa6bd23965b982fc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following musl build failure raised since commit
-6fc5c8e92c1d7997e48b207187d2d3c7ad42819:
+Commit [1] added eeze dependency using "depends on" to several efl
+options (drm, libmount) instead of selecting eeze and propagate the
+udev reverse dependency.
 
-In file included from src/shared/queue.c:15:
-./src/shared/util.h:106:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
-  106 | ssize_t util_getrandom(void *buf, size_t buflen, unsigned int flags);
-      | ^~~~~~~
-      | size_t
+[1] e026c3bdb8f493b3fc21de7c45e3edbc47e03128
 
-Fixes:
- - http://autobuild.buildroot.org/results/83eaeb3863040645409f5787fdbdde79385c5257
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 96ebed1eed6dcd55d8024cbc6fe8bec646d739c6)
+(cherry picked from commit c7229db872acd6db83ccb7e4bb22cb4cfd06be75)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...006-src-shared-util.h-include-sys-types.h.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/efl/Config.in | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/package/bluez5_utils/0006-src-shared-util.h-include-sys-types.h.patch b/package/bluez5_utils/0006-src-shared-util.h-include-sys-types.h.patch
-new file mode 100644
-index 0000000000..8a5bd64d43
---- /dev/null
-+++ b/package/bluez5_utils/0006-src-shared-util.h-include-sys-types.h.patch
-@@ -0,0 +1,39 @@
-+From 1d21878d84f16e28e16c61b36799a62e22732d97 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Feb 2022 18:19:33 +0100
-+Subject: [PATCH] src/shared/util.h: include sys/types.h
-+
-+Include sys/types.h to avoid the following build failure on musl raised
-+since commit fb57ad9b9d107856e5f1c8135da04ffa2f7a11ac:
-+
-+In file included from src/shared/queue.c:15:
-+./src/shared/util.h:106:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
-+  106 | ssize_t util_getrandom(void *buf, size_t buflen, unsigned int flags);
-+      | ^~~~~~~
-+      | size_t
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/83eaeb3863040645409f5787fdbdde79385c5257
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://patchwork.kernel.org/project/bluetooth/patch/20220224173104.479809-1-fontaine.fabrice@gmail.com]
-+---
-+ src/shared/util.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/shared/util.h b/src/shared/util.h
-+index c01eccf8a..554481e1e 100644
-+--- a/src/shared/util.h
-++++ b/src/shared/util.h
-+@@ -14,6 +14,7 @@
-+ #include <alloca.h>
-+ #include <byteswap.h>
-+ #include <string.h>
-++#include <sys/types.h>
-+ 
-+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+ #define BIT(n)  (1 << (n))
-+-- 
-+2.34.1
-+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index eb9c7aebd9..4c78bef7c8 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -115,7 +115,8 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
+ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 	bool "Enable libmount support (recommended)"
+ 	default y
+-	depends on BR2_PACKAGE_EFL_EEZE
++	depends on BR2_PACKAGE_HAS_UDEV # efl-eeze
++	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	# libblkid is part of required tools, see EFL's README.
+@@ -125,8 +126,8 @@ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 	  devices etc... and disabling this will hurt support for
+ 	  Enlightenment and its filemanager.
+ 
+-comment "efl's libmount support needs udev /dev management (eeze)"
+-	depends on !BR2_PACKAGE_EFL_EEZE
++comment "efl's libmount support needs udev /dev management "
++	depends on !BR2_PACKAGE_HAS_UDEV
+ 
+ config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ 	bool
+@@ -173,16 +174,16 @@ config BR2_PACKAGE_EFL_WAYLAND
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # Evas DRM Engine -> libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
+-	depends on BR2_PACKAGE_EFL_EEZE # efl drm
++	depends on BR2_PACKAGE_HAS_UDEV # efl drm, efl-eeze
+ 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
+ 	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
+ 	select BR2_PACKAGE_EFL_DRM
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 
+-comment "Wayland support needs udev /dev management (eeze), OpenGL ES w/ EGL, threads, locales"
++comment "Wayland support needs udev /dev management, OpenGL ES w/ EGL, threads, locales"
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
+-		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE \
++		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_HAS_UDEV \
+ 		|| !BR2_ENABLE_LOCALE
+ 
+ choice
+@@ -215,9 +216,10 @@ endchoice # OpenGL support
+ 
+ config BR2_PACKAGE_EFL_DRM
+ 	bool "Evas DRM Engine"
+-	depends on BR2_PACKAGE_EFL_EEZE
++	depends on BR2_PACKAGE_HAS_UDEV # efl-eeze
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBINPUT # For elput
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+@@ -230,9 +232,9 @@ config BR2_PACKAGE_EFL_DRM
+ 	  etc) to handle interfacing with libinput without having to
+ 	  duplicate the code in each subsystem.
+ 
+-comment "Evas DRM Engine needs udev /dev management (eeze), mesa3d w/ EGL support, threads"
++comment "Evas DRM Engine needs udev /dev management, mesa3d w/ EGL support, threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
+-		|| !BR2_PACKAGE_EFL_EEZE
++		|| !BR2_PACKAGE_HAS_UDEV
+ 
+ comment "libevas loaders"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
