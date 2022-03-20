@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6E41C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F807C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FA5D60C00;
-	Sun, 20 Mar 2022 18:48:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C21560C22;
+	Sun, 20 Mar 2022 18:48:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n_HSBlO7UZFX; Sun, 20 Mar 2022 18:48:40 +0000 (UTC)
+	with ESMTP id EQohWMd5nQMY; Sun, 20 Mar 2022 18:48:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7B0660BDA;
-	Sun, 20 Mar 2022 18:48:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38EFC60BEC;
+	Sun, 20 Mar 2022 18:48:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 06A551BF4D8
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 08C5D1BF4D8
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68FFB40577
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDF7140579
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5X5OuXs3K0ZZ for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 18:46:28 +0000 (UTC)
+ with ESMTP id rJJLyaoRfmQP for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FD2E405B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93AA6405AA
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C509E8461A; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
+ id AA1E48461A; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 19:43:08 +0100
+Date: Sun, 20 Mar 2022 19:31:36 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ae50728e7665662c17a4bb2a9ad3c98bc463e227
-X-Git-Newrev: fb7b9e5a7294fb8a970aaec653b49e6226c4a7a2
+X-Git-Oldrev: 5dab7fc53b6df5333ecf7ba170e0507833f24075
+X-Git-Newrev: fcbce93cfce0a84d32de323b6962c9846b58c887
 X-Patchwork-Hint: ignore
-Message-Id: <20220320183734.C509E8461A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/boinc: disable
- fcgi
+Message-Id: <20220320183734.AA1E48461A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] linux: make Image{,
+ .gz} format available for aarch64 BE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,69 +54,54 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7212361850455398739=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb7b9e5a7294fb8a970aaec653b49e6226c4a7a2
+--===============7212361850455398739==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fcbce93cfce0a84d32de323b6962c9846b58c887
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-libfcgi raises the following build failure with glibc 2.34 and gcc
-11.2.0:
+Just like aarch64, aarch64 BE supports the Image and Image.gz format.
 
-In file included from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/features.h:488,
-                 from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/libc-header-start.h:33,
-                 from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdio.h:27,
-                 from /home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/fcgi_stdio.h:18,
-                 from boinc_fcgi.h:19,
-                 from coproc.cpp:22:
-/home/peko/autobuild/instance-1/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/wchar.h:582:24: error: 'malloc' attribute argument 1 is ambiguous
-  582 |   __attribute_malloc__ __attr_dealloc_fclose;
-      |                        ^~~~~~~~~~~~~~~~~~~~~
-
-RawTherapee has the same kind of issue:
- - https://github.com/Beep6581/RawTherapee/issues/6324
- - https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101747
-
-Fixes:
- - http://autobuild.buildroot.org/results/232dae62570ed7927a10864d83dccaf9b6214500
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Rémi Duraffort <remi.duraffort@linaro.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 54cb3b506de44fb8389832a1612b55d179b2cfd4)
+(cherry picked from commit d1579589e0a7d1870aa0ad587acd78f799f31257)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boinc/boinc.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 7f78c427ea..0d992f136c 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -26,6 +26,7 @@ BOINC_CONF_ENV = \
- BOINC_CONF_OPTS = \
- 	--disable-apps \
- 	--disable-boinczip \
-+	--disable-fcgi \
- 	--disable-manager \
- 	--disable-server \
- 	--enable-client \
-@@ -38,13 +39,6 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- BOINC_DEPENDENCIES += freetype
- endif
+diff --git a/linux/Config.in b/linux/Config.in
+index 36744c5337..043e7c6574 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -261,11 +261,11 @@ config BR2_LINUX_KERNEL_SIMPLEIMAGE
  
--ifeq ($(BR2_PACKAGE_LIBFCGI),y)
--BOINC_DEPENDENCIES += libfcgi
--BOINC_CONF_OPTS += --enable-fcgi
--else
--BOINC_CONF_OPTS += --disable-fcgi
--endif
--
- BOINC_MAKE_OPTS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ config BR2_LINUX_KERNEL_IMAGE
+ 	bool "Image"
+-	depends on BR2_aarch64 || BR2_riscv
++	depends on BR2_aarch64 || BR2_aarch64_be || BR2_riscv
  
- # Remove boinc-client because it is incompatible with buildroot
+ config BR2_LINUX_KERNEL_IMAGEGZ
+ 	bool "Image.gz"
+-	depends on BR2_aarch64 || BR2_riscv
++	depends on BR2_aarch64 || BR2_aarch64_be || BR2_riscv
+ 
+ config BR2_LINUX_KERNEL_LINUX_BIN
+ 	bool "linux.bin"
+
+--===============7212361850455398739==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7212361850455398739==--
