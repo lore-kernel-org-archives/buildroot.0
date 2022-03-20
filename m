@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91526C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A28FC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3383C817E4;
-	Sun, 20 Mar 2022 17:47:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F8CA60BE5;
+	Sun, 20 Mar 2022 17:48:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6sgqninYbe6F; Sun, 20 Mar 2022 17:47:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MNAUqfgZpGwh; Sun, 20 Mar 2022 17:48:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F8CE817B0;
-	Sun, 20 Mar 2022 17:47:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C068C6068B;
+	Sun, 20 Mar 2022 17:48:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 66F6C1BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7EA421BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 557736068B
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A84D6068B
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:47:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 84r8gZGteqdK for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:47:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 63F7C60687
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:47:29 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2C02F20003;
- Sun, 20 Mar 2022 17:47:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nVzeI-00FEUx-9d; Sun, 20 Mar 2022 18:47:26 +0100
+ with ESMTP id nsl_utsCSJTT for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF8F960687
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:47:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id F030A845D7; Sun, 20 Mar 2022 17:39:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220224173615.486414-1-fontaine.fabrice@gmail.com>
-Date: Sun, 20 Mar 2022 18:47:26 +0100
-In-Reply-To: <20220224173615.486414-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 24 Feb 2022 18:36:15 +0100")
-Message-ID: <87sfrco6s1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix musl build
+To: buildroot@buildroot.org
+Date: Sun, 20 Mar 2022 18:45:58 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 30e5d4ebc19a7a970e17ecc0e12397a13b34e89a
+X-Git-Newrev: 25fc940a4ca008f8c51395a0d210c0d8b7828b44
+X-Patchwork-Hint: ignore
+Message-Id: <20220320173905.F030A845D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/bluez5_utils: fix
+ musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,32 +53,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Bis <marcin@bis.org.pl>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=25fc940a4ca008f8c51395a0d210c0d8b7828b44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix the following musl build failure raised since commit
- > 6fc5c8e92c1d7997e48b207187d2d3c7ad42819:
+Fix the following musl build failure raised since commit
+6fc5c8e92c1d7997e48b207187d2d3c7ad42819:
 
- > In file included from src/shared/queue.c:15:
- > ./src/shared/util.h:106:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
- >   106 | ssize_t util_getrandom(void *buf, size_t buflen, unsigned int flags);
- >       | ^~~~~~~
- >       | size_t
+In file included from src/shared/queue.c:15:
+./src/shared/util.h:106:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
+  106 | ssize_t util_getrandom(void *buf, size_t buflen, unsigned int flags);
+      | ^~~~~~~
+      | size_t
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/83eaeb3863040645409f5787fdbdde79385c5257
+Fixes:
+ - http://autobuild.buildroot.org/results/83eaeb3863040645409f5787fdbdde79385c5257
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 96ebed1eed6dcd55d8024cbc6fe8bec646d739c6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...006-src-shared-util.h-include-sys-types.h.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bluez5_utils/0006-src-shared-util.h-include-sys-types.h.patch b/package/bluez5_utils/0006-src-shared-util.h-include-sys-types.h.patch
+new file mode 100644
+index 0000000000..8a5bd64d43
+--- /dev/null
++++ b/package/bluez5_utils/0006-src-shared-util.h-include-sys-types.h.patch
+@@ -0,0 +1,39 @@
++From 1d21878d84f16e28e16c61b36799a62e22732d97 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 24 Feb 2022 18:19:33 +0100
++Subject: [PATCH] src/shared/util.h: include sys/types.h
++
++Include sys/types.h to avoid the following build failure on musl raised
++since commit fb57ad9b9d107856e5f1c8135da04ffa2f7a11ac:
++
++In file included from src/shared/queue.c:15:
++./src/shared/util.h:106:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
++  106 | ssize_t util_getrandom(void *buf, size_t buflen, unsigned int flags);
++      | ^~~~~~~
++      | size_t
++
++Fixes:
++ - http://autobuild.buildroot.org/results/83eaeb3863040645409f5787fdbdde79385c5257
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://patchwork.kernel.org/project/bluetooth/patch/20220224173104.479809-1-fontaine.fabrice@gmail.com]
++---
++ src/shared/util.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/shared/util.h b/src/shared/util.h
++index c01eccf8a..554481e1e 100644
++--- a/src/shared/util.h
+++++ b/src/shared/util.h
++@@ -14,6 +14,7 @@
++ #include <alloca.h>
++ #include <byteswap.h>
++ #include <string.h>
+++#include <sys/types.h>
++ 
++ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++ #define BIT(n)  (1 << (n))
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
