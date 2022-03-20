@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 237CCC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 22:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 579F0C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 22:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BB66812A5;
-	Sun, 20 Mar 2022 22:38:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4B7C405C0;
+	Sun, 20 Mar 2022 22:39:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4zPTC9kfstbZ; Sun, 20 Mar 2022 22:38:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jLypRmWyxz7m; Sun, 20 Mar 2022 22:39:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3101580C2E;
-	Sun, 20 Mar 2022 22:38:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81D78405D1;
+	Sun, 20 Mar 2022 22:39:02 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BAA181BF402
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 22:38:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE7541BF402
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 22:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B55644018F
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 22:38:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBD2D401E1
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 22:38:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pOi1bWBqkrQR for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 22:38:47 +0000 (UTC)
+ with ESMTP id bFSMrxEvuUeH for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 22:38:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C91440170
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 22:38:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D39340170
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 22:38:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4B370846AF; Sun, 20 Mar 2022 22:29:54 +0000 (UTC)
+ id E270B846CB; Sun, 20 Mar 2022 22:29:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 23:38:43 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4750711e879647cb40b0b1af4f0606494748dd4a
-X-Git-Newrev: d17874dfbeff4017b0fb59510dcd51fa895a0ff3
+Date: Sun, 20 Mar 2022 23:38:38 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: bf9a6bc55c04533849dc33ac625ada5965781e5a
+X-Git-Newrev: dbd4355aecf49b329ea7ab71c3a0d1d4466fad02
 X-Patchwork-Hint: ignore
-Message-Id: <20220320222954.4B370846AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
+Message-Id: <20220320222958.E270B846CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x]
  support/scripts/pkg-stats: strengthen version check in
  check_package_get_latest_version_by_distro()
 X-BeenThere: buildroot@buildroot.org
@@ -60,8 +60,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d17874dfbeff4017b0fb59510dcd51fa895a0ff3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dbd4355aecf49b329ea7ab71c3a0d1d4466fad02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 The check_package_get_latest_version_by_distro() function analyzes the
 data returned by release-monitoring.org. For two of our
@@ -99,10 +99,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index f6da090d22..2a3d8a78a8 100755
+index abd36a3dd5..a27d6a269f 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -475,7 +475,12 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+@@ -486,7 +486,12 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
                  return False
  
              data = await resp.json()
