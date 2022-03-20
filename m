@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B207C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2638C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 17:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DADD360BF0;
-	Sun, 20 Mar 2022 17:14:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97DDF4086E;
+	Sun, 20 Mar 2022 17:24:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGf9eE6FCxHP; Sun, 20 Mar 2022 17:14:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JJ-9YHNeUP8k; Sun, 20 Mar 2022 17:24:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B81EF60AD7;
-	Sun, 20 Mar 2022 17:14:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B549405CE;
+	Sun, 20 Mar 2022 17:24:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E6BC61BF352
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:14:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 658891BF352
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2F25400D9
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:14:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13C89400D9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 17:24:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ceQtxmabvPn for <buildroot@lists.busybox.net>;
- Sun, 20 Mar 2022 17:14:08 +0000 (UTC)
+ with ESMTP id Lb__GUPlpbSg for <buildroot@lists.busybox.net>;
+ Sun, 20 Mar 2022 17:24:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 67B0640022
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:14:08 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id p9so17906890wra.12
- for <buildroot@buildroot.org>; Sun, 20 Mar 2022 10:14:08 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C1F3940022
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 17:24:35 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ v2-20020a7bcb42000000b0037b9d960079so9221767wmj.0
+ for <buildroot@buildroot.org>; Sun, 20 Mar 2022 10:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=D/KXYWwRlq64xvCI275SparN/uQ65HqzdnTIcjvbNRQ=;
- b=q5dY6tTa/Cw9EujAKe5kBxHKI2qcbRczshLLmWaEN9fSlhUCKohRNxcsmx9iCh5bqN
- pdNc/HNQHvZcXJ4TnYa4qbtOfNIqVQfLmPYbapblkW/3Qay0t6NwudBAy0t1869SwhkY
- MOucT0Xg2GcZIyDdo0vlWHmBiLPfF24bDZOlHIOxQeJ78ogBlHd8voy3+zlWytnYbQox
- 2Sd2ccM6amxlwQSmqeD1fsIoPZt7uF1Z9JULladNp3Szd1upDRsM3XNnsf0Q5mxUKqi/
- qH+wnRj8ck/T4FFS3g9ZcalljtTzwAiJPsesHRWvcwV38ZnA/Vx0phG6vSoc9lAfUGlj
- WEQQ==
+ bh=V0I09OVtEWsIS+KEijNCIQj2xj72c1tBY/Q30XBBD50=;
+ b=OWns3SjGYm/bvXnf27WX2SUgm2sU+BPdQ1Ay8ewTaeFuSa3mQVDu48YpyAU/YvAUCf
+ 0VeWDO0NN6yo8pQzo9vkM3LHDBgWXNJ2zPbl8Qt0LordZ1Ch/QaRIUi2o5p42oRziAUm
+ vO0Oy813QLxF3ZdHGj9VW8T2K+kp0nTaVUWGkG2hDj8WkoSNlpVVn7ShOHoYmzSmcI+q
+ Vyx4SFv6ARG6tEqS26EnSswFBeDJRns1OLMgLmZ49cfaANz4+nzx4vfbzuXi+zm+T6Ke
+ HhHKEhK25wyJpbZ1k6WJytwYGgbHFNQaSyzpQvM2bjEHnVvIIxlU7PsbVX6EgmOu5PTr
+ SGSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=D/KXYWwRlq64xvCI275SparN/uQ65HqzdnTIcjvbNRQ=;
- b=3B37qDsbVd3xhslC8Y2lclTY+vAt/n7rO4vBpnXda/GGYrF0QLQAztnaydoVG7SY8x
- 38vH8V4JVpPgSkqc1uhM+s/qYqgs0GZm1PYHPKAgWuUhksslcCDAPh1Dom6v5zvkScTq
- C0XlZdW4K5C1ExYHVSS6ytZkMkOAMjfGo8Kl8ziICMex3k9FiyLlKq3IRW39SdNZq7hK
- d9djr2j+CxGVxmwaQrQ4x1kHlO8n7f8ZCKAcP+DKwB5nekEehAXJio1rCLIno6TgJ3pM
- /Y3R8oQPJQutaw2eJDf/HTXEI+EzhGsmgNa9C6YtBK0gkdqpwmhh59H56HXrHsTX/rvi
- 5zLg==
-X-Gm-Message-State: AOAM531w86EpvsQkfoA+6RGYKtXxTfRZhblt1y+4wLBZbdYZhzA4qpj4
- eU2UoEC6Y7FLU8Fy2OJ1LqbNd0b6L1Q=
-X-Google-Smtp-Source: ABdhPJzEMMUChK09rAK69LxnkWkvfpWLHkkRX2OTw8k2vs8zmVYwyJfMZ5nLVNE84yy4XEYAtsaDAg==
-X-Received: by 2002:a5d:64ed:0:b0:203:7b40:de5b with SMTP id
- g13-20020a5d64ed000000b002037b40de5bmr15737248wri.253.1647796446303; 
- Sun, 20 Mar 2022 10:14:06 -0700 (PDT)
+ bh=V0I09OVtEWsIS+KEijNCIQj2xj72c1tBY/Q30XBBD50=;
+ b=0+CuE0gSDpFhgHar1YU/Ft2c37NzNGLHmC70Mc9HPbeWdUMuOyFuQDmmuBNhxdubS/
+ gNIbSiPrwYhp61qlnIGPLyBwM85Huk1KMIAwPMZjluk7LxQ3IJkf71OFgr9BUp4Pcfpx
+ yK+yKLud7OAR+ITQl/2ikIYYvg//VFTaY+AZgOXc3t8psGYk3sb39q4VoNXayCTDibB2
+ 0eBHOY9kXxn93RUl68OjMiluveu87vVkLCseqHD1c4ssBtKB25tj6XEat/tu2GjSXkdR
+ shE7bhAG6kBfCgSstdtl5x4zdXpgIDs9oYs4op/GswlHFR/9L6OzaFR0HlOXQ2+pGCSl
+ bvZg==
+X-Gm-Message-State: AOAM531HrHqXJIPkpxow5uhCua+Y6GSd3wH1mpyw32/ILUNdEe7ShzNW
+ WKXJJXa1ZiWMiL181UvsJvnW6gSxS/o=
+X-Google-Smtp-Source: ABdhPJwNARQWOM1S4w+dkb/xw80Lo5leKvJbYAWvlUQI9mH91kX18ZnGuKFLGdAh6CuR/ZMlhOPiFg==
+X-Received: by 2002:a7b:c925:0:b0:38c:82d7:868d with SMTP id
+ h5-20020a7bc925000000b0038c82d7868dmr13140312wml.100.1647797073810; 
+ Sun, 20 Mar 2022 10:24:33 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- p1-20020a5d59a1000000b00203d83b0ae4sm11520587wrr.109.2022.03.20.10.14.05
+ b15-20020adfc74f000000b001e888b871a0sm11477512wrh.87.2022.03.20.10.24.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 20 Mar 2022 10:14:06 -0700 (PDT)
+ Sun, 20 Mar 2022 10:24:33 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 18:12:59 +0100
-Message-Id: <20220320171259.1591428-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 Mar 2022 18:23:26 +0100
+Message-Id: <20220320172326.1592463-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/json-glib: bump to version 1.6.6
+Subject: [Buildroot] [PATCH 1/1] package/raptor: fix CVE-2020-25713
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,75 +88,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Update introspection option:
-  https://gitlab.gnome.org/GNOME/json-glib/-/commit/461edcc8cd6dc1c4efeb09aaaba02459293546f2
-- Disable docs (enabled by default since
-  https://gitlab.gnome.org/GNOME/json-glib/-/commit/8d6176451f9d7cd4d6660185c679733aee3b57ea)
-- Disable tests (added by:
-  https://gitlab.gnome.org/GNOME/json-glib/-/commit/8e835f8ed2299ad68032432eaf6491b2da8d532b)
-- Update indentation in hash file (two spaces)
-
-https://gitlab.gnome.org/GNOME/json-glib/-/blob/1.6.6/NEWS
+A malformed input file can lead to a segfault due to an out of bounds
+array access in raptor_xml_writer_start_element_common.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/json-glib/json-glib.hash | 6 +++---
- package/json-glib/json-glib.mk   | 9 +++++----
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ ...are-namespace-declarations-correctly.patch | 33 +++++++++++++++++++
+ package/raptor/raptor.mk                      |  3 ++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/raptor/0003-XML-Writer-compare-namespace-declarations-correctly.patch
 
-diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
-index b68794db37..680d404a4b 100644
---- a/package/json-glib/json-glib.hash
-+++ b/package/json-glib/json-glib.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.4/json-glib-1.4.4.sha256sum
--sha256 720c5f4379513dc11fd97dc75336eb0c0d3338c53128044d9fabec4374f4bc47  json-glib-1.4.4.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.6/json-glib-1.6.6.sha256sum
-+sha256  96ec98be7a91f6dde33636720e3da2ff6ecbb90e76ccaa49497f31a6855a490e  json-glib-1.6.6.tar.xz
+diff --git a/package/raptor/0003-XML-Writer-compare-namespace-declarations-correctly.patch b/package/raptor/0003-XML-Writer-compare-namespace-declarations-correctly.patch
+new file mode 100644
+index 0000000000..a48a583cb1
+--- /dev/null
++++ b/package/raptor/0003-XML-Writer-compare-namespace-declarations-correctly.patch
+@@ -0,0 +1,33 @@
++From 4f5dbbffcc1c6cf0398bd03450453289a0979dea Mon Sep 17 00:00:00 2001
++From: Dave Beckett <dave@dajobe.org>
++Date: Sat, 18 Sep 2021 17:40:00 -0700
++Subject: [PATCH] XML Writer : compare namespace declarations correctly
++
++Apply patch from
++0001-CVE-2020-25713-raptor2-malformed-input-file-can-lead.patch.1
++that fixes Issue#0000650 https://bugs.librdf.org/mantis/view.php?id=650
++which overwrote heap during XML writing in parse type literal
++content.  This was detected with clang asan.
++
++Thanks to Michael Stahl / mst2 for the fix.
++
++[Retrieved from:
++https://github.com/dajobe/raptor/commit/4f5dbbffcc1c6cf0398bd03450453289a0979dea]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/raptor_xml_writer.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/raptor_xml_writer.c b/src/raptor_xml_writer.c
++index 56993dc3..4426d38c 100644
++--- a/src/raptor_xml_writer.c
+++++ b/src/raptor_xml_writer.c
++@@ -227,7 +227,7 @@ raptor_xml_writer_start_element_common(raptor_xml_writer* xml_writer,
++           
++           /* check it wasn't an earlier declaration too */
++           for(j = 0; j < nspace_declarations_count; j++)
++-            if(nspace_declarations[j].nspace == element->attributes[j]->nspace) {
+++            if(nspace_declarations[j].nspace == element->attributes[i]->nspace) {
++               declare_me = 0;
++               break;
++             }
+diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+index 6d21fad58e..69ac121300 100644
+--- a/package/raptor/raptor.mk
++++ b/package/raptor/raptor.mk
+@@ -20,6 +20,9 @@ RAPTOR_AUTORECONF = YES
+ # 0002-Calcualte-max-nspace-declarations-correctly-for-XML-.patch
+ RAPTOR_IGNORE_CVES += CVE-2017-18926
  
- # Hash for license file:
--sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index accdb4f888..52ca47e906 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--JSON_GLIB_VERSION_MAJOR = 1.4
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).4
-+JSON_GLIB_VERSION_MAJOR = 1.6
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
- JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPL-2.1+
- JSON_GLIB_LICENSE_FILES = COPYING
- JSON_GLIB_INSTALL_STAGING = YES
-+JSON_GLIB_CONF_OPTS = -Dgtk_doc=disabled -Dtests=false
- 
- JSON_GLIB_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
-@@ -18,10 +19,10 @@ JSON_GLIB_DEPENDENCIES = \
- 	libglib2
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--JSON_GLIB_CONF_OPTS += -Dintrospection=true
-+JSON_GLIB_CONF_OPTS += -Dintrospection=enabled
- JSON_GLIB_DEPENDENCIES += gobject-introspection
- else
--JSON_GLIB_CONF_OPTS += -Dintrospection=false
-+JSON_GLIB_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++# 0003-XML-Writer-compare-namespace-declarations-correctly.patch
++RAPTOR_IGNORE_CVES += CVE-2020-25713
++
+ RAPTOR_CONF_OPTS =\
+ 	--with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
+ 	--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
 -- 
 2.35.1
 
