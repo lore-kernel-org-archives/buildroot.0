@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B0CC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38EA0C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 18:48:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B63F440523;
-	Sun, 20 Mar 2022 18:48:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5F8540533;
+	Sun, 20 Mar 2022 18:48:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kONi4QlvLriw; Sun, 20 Mar 2022 18:48:13 +0000 (UTC)
+	with ESMTP id RunURVWvvhKN; Sun, 20 Mar 2022 18:48:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D2F8400D1;
-	Sun, 20 Mar 2022 18:48:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 115CC1BF4D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00796400CE;
+	Sun, 20 Mar 2022 18:48:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E69B1BF4D8
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52FE2400D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5719540896
  for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 18:46:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p35ML570y3GK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id otaPSD2RT31s for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CF8640593
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C47F40372
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 18:46:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 84A098461F; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
+ id 65AF48461A; Sun, 20 Mar 2022 18:37:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 19:26:57 +0100
+Date: Sun, 20 Mar 2022 19:17:50 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 1feb0309f967fbbed17e96f99ddf555ec0e2054d
-X-Git-Newrev: 8a2efbee7a901691e80462b8aba683a68074e4d2
+X-Git-Oldrev: fd0c2292f2a46bfcc61e73c2d4567f50b547b787
+X-Git-Newrev: 61dfa6a4ef4780e3e74d6a28d67ede17d3f4fd78
 X-Patchwork-Hint: ignore
-Message-Id: <20220320183734.84A098461F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/valijson: drop
- boost dependency
+Message-Id: <20220320183734.65AF48461A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zabbix: fix
+ shared netsnmp build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +59,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a2efbee7a901691e80462b8aba683a68074e4d2
+commit: https://git.buildroot.net/buildroot/commit/?id=61dfa6a4ef4780e3e74d6a28d67ede17d3f4fd78
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-boost is not mandatory since the deactivation of tests when bumping to
-version 0.2.0 in commit d8e2876104be3f9f01613b17d3e60120883be1a1 and
-https://github.com/tristanpenman/valijson/commit/1844241d2a2379bca79a0d654f4b007209b10883
+Fix the following shared build failure with netsnmp raised since the
+addition of the package in commit
+42382a171277ead59e365f5920e757f01c04ac77:
+
+configure: error: "libnetsnmp.a static library was not found in /home/buildroot/autobuild/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib"
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0f541e45d1fa27b3302968683bf64949131ec1c9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit b9391c7dd21dee3eff04e665bf6a92ef6fc5f234)
+(cherry picked from commit 532e5063f54434cce4afec2ad5371fbf02488b67)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/valijson/Config.in   | 8 ++------
- package/valijson/valijson.mk | 1 -
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ ...01-m4-netsnmp.m4-fix-shared-netsnmp-build.patch | 44 ++++++++++++++++++++++
+ package/zabbix/zabbix.mk                           |  2 +
+ 2 files changed, 46 insertions(+)
 
-diff --git a/package/valijson/Config.in b/package/valijson/Config.in
-index 10721b3703..07706cd963 100644
---- a/package/valijson/Config.in
-+++ b/package/valijson/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_VALIJSON
- 	bool "valijson"
--	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_BOOST_REGEX
- 	help
- 	  Valijson is a header-only JSON Schema Validation library for
- 	  C++. Valijson provides a simple validation API that allows
-@@ -14,5 +10,5 @@ config BR2_PACKAGE_VALIJSON
+diff --git a/package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch b/package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch
+new file mode 100644
+index 0000000000..ffb1f54ba2
+--- /dev/null
++++ b/package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch
+@@ -0,0 +1,44 @@
++From 3e810c0804ec40ad6e111a9791cdb2033ecdad71 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 25 Feb 2022 23:30:19 +0100
++Subject: [PATCH] m4/netsnmp.m4: fix shared netsnmp build
++
++Since commit fe391e8689c523d3c7ea6b173d25aa5dba3a6902, the build fails
++with the following error if the user provides the path of
++net-snmp-config through the --with-net-snmp option:
++
++configure: error: "libnetsnmp.a static library was not found in /home/buildroot/autobuild/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib"
++
++However, the assumption that a static library will be provided by the
++system is just plain wrong so replace AC_MSG_ERROR by AC_MSG_WARN
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0f541e45d1fa27b3302968683bf64949131ec1c9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/zabbix/zabbix/pull/61]
++---
++ m4/netsnmp.m4 | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/m4/netsnmp.m4 b/m4/netsnmp.m4
++index 5e84d84303..87e21a67e6 100644
++--- a/m4/netsnmp.m4
+++++ b/m4/netsnmp.m4
++@@ -140,8 +140,11 @@ AC_HELP_STRING([--with-net-snmp@<:@=ARG@:>@],
++ 			test [ "x$static_linking_support" = "xno" -o -z "$static_linking_support" ] -a -z "$_libsnmp_dir_lib" && AC_MSG_ERROR(["Compiler not support statically linked libs from default folders"])
++ 
++ 			if test "x$static_linking_support" = "xno" -o -z "$static_linking_support"; then
++-				test -f $_libsnmp_dir_lib/libnetsnmp.a || AC_MSG_ERROR(["libnetsnmp.a static library was not found in $_libsnmp_dir_lib"])
++-				SNMP_LIBS=`echo "$SNMP_LIBS"|sed "s|-lnetsnmp|$_libsnmp_dir_lib/libnetsnmp.a|g"`
+++				if test -f $_libsnmp_dir_lib/libnetsnmp.a; then
+++					SNMP_LIBS=`echo "$SNMP_LIBS"|sed "s|-lnetsnmp|$_libsnmp_dir_lib/libnetsnmp.a|g"`
+++				else
+++					AC_MSG_WARN(["libnetsnmp.a static library was not found in $_libsnmp_dir_lib"])
+++				fi
++ 			else
++ 				SNMP_LIBS=`echo "$SNMP_LIBS"|sed "s/-lnetsnmp/${static_linking_support}static -lnetsnmp ${static_linking_support}dynamic/g"`
++ 			fi
++-- 
++2.34.1
++
+diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+index e6564e68fd..a8ecbb42db 100644
+--- a/package/zabbix/zabbix.mk
++++ b/package/zabbix/zabbix.mk
+@@ -10,6 +10,8 @@ ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJO
+ ZABBIX_LICENSE = GPL-2.0+
+ ZABBIX_LICENSE_FILES = README COPYING
+ ZABBIX_CPE_ID_VENDOR = zabbix
++# We're patching m4/netsnmp.m4
++ZABBIX_AUTORECONF = YES
  
- 	  https://github.com/tristanpenman/valijson
- 
--comment "valijson needs a toolchain w/ C++, threads, wchar  support"
--	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+comment "valijson needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
-index e425757d26..71c5b05f2b 100644
---- a/package/valijson/valijson.mk
-+++ b/package/valijson/valijson.mk
-@@ -11,7 +11,6 @@ VALIJSON_LICENSE_FILES = LICENSE
- VALIJSON_CPE_ID_VENDOR = valijson_project
- VALIJSON_INSTALL_STAGING = YES
- VALIJSON_INSTALL_TARGET = NO
--VALIJSON_DEPENDENCIES = boost
- VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE -Dvalijson_BUILD_TESTS=FALSE
- 
- $(eval $(cmake-package))
+ ZABBIX_DEPENDENCIES = pcre
+ ZABBIX_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
