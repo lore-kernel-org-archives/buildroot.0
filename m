@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF5CCC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA309C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Mar 2022 21:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93C1160B1B;
-	Sun, 20 Mar 2022 21:43:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E_92bhieAJMB; Sun, 20 Mar 2022 21:43:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCD8460ADE;
-	Sun, 20 Mar 2022 21:43:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EB2E1BF3C9
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29F074032A
- for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EDC9404E9;
+	Sun, 20 Mar 2022 21:43:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mlm_sBv2WYlx for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oSknxDcBC25J; Sun, 20 Mar 2022 21:43:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C7884031F;
+	Sun, 20 Mar 2022 21:43:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A8E8F1BF3C9
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB07860585
+ for <buildroot@lists.busybox.net>; Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QDkfa5KgK-OZ for <buildroot@lists.busybox.net>;
  Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 481574049F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2867A60ADE
  for <buildroot@buildroot.org>; Sun, 20 Mar 2022 21:42:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0960F846A3; Sun, 20 Mar 2022 21:33:25 +0000 (UTC)
+ id F12C1846A2; Sun, 20 Mar 2022 21:33:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Mar 2022 22:41:20 +0100
+Date: Sun, 20 Mar 2022 22:41:11 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 76de77202d01d280a2b0f4c6c98e8b8887e73675
-X-Git-Newrev: af8839589acb2b3399e36a925e37a48d7b170382
+X-Git-Oldrev: dcfccfddf169c6382ef162066a769dc8b28428d7
+X-Git-Newrev: 76de77202d01d280a2b0f4c6c98e8b8887e73675
 X-Patchwork-Hint: ignore
-Message-Id: <20220320213325.0960F846A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/zynaddsubfx: add
- jack{1, 2} optional dependency
+Message-Id: <20220320213324.F12C1846A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zynaddsubfx: fix
+ alsa-lib handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af8839589acb2b3399e36a925e37a48d7b170382
+commit: https://git.buildroot.net/buildroot/commit/?id=76de77202d01d280a2b0f4c6c98e8b8887e73675
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-jack{1,2} is an optional dependency (enabled by default) since the
-addition of the package in commit
-18a863063735e2c658fa6947a4e540e9dda6c431
+alsa-lib is optional, not mandatory, since the addition of the package
+in commit 18a863063735e2c658fa6947a4e540e9dda6c431
+
+Moreover, alsa support depends on BR2_PACKAGE_ALSA_LIB_SEQ (otherwise,
+it is silently disabled)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3bcedaa732b539e4ad32776e867ef9626ffca5b7)
+(cherry picked from commit 2fc2191845799ae2358b752fa29839817d33ad82)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zynaddsubfx/zynaddsubfx.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/zynaddsubfx/Config.in      | 3 +--
+ package/zynaddsubfx/zynaddsubfx.mk | 8 +++++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
+diff --git a/package/zynaddsubfx/Config.in b/package/zynaddsubfx/Config.in
+index 837a469e7c..f181a23944 100644
+--- a/package/zynaddsubfx/Config.in
++++ b/package/zynaddsubfx/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_ZYNADDSUBFX
+ 	bool "zynaddsubfx"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib, liblo
+-	select BR2_PACKAGE_ALSA_LIB
++	depends on BR2_TOOLCHAIN_HAS_THREADS # liblo
+ 	select BR2_PACKAGE_FFTW
+ 	select BR2_PACKAGE_FFTW_SINGLE
+ 	select BR2_PACKAGE_LIBLO
 diff --git a/package/zynaddsubfx/zynaddsubfx.mk b/package/zynaddsubfx/zynaddsubfx.mk
-index aeeb0b6405..461146aae8 100644
+index db0459ce62..aeeb0b6405 100644
 --- a/package/zynaddsubfx/zynaddsubfx.mk
 +++ b/package/zynaddsubfx/zynaddsubfx.mk
-@@ -30,4 +30,11 @@ else
- ZYNADDSUBFX_CONF_OPTS += -DAlsaEnable=OFF
+@@ -18,10 +18,16 @@ ZYNADDSUBFX_CONF_OPTS += -DOS_LIBRARIES=-latomic
  endif
  
-+ifeq ($(BR2_PACKAGE_JACK1)$(BR2_PACKAGE_JACK2),y)
-+ZYNADDSUBFX_DEPENDENCIES += $(if $(BR2_PACKAGE_JACK1),jack1,jack2)
-+ZYNADDSUBFX_CONF_OPTS += -DJackEnable=ON
+ ZYNADDSUBFX_DEPENDENCIES = \
+-	alsa-lib \
+ 	fftw-single \
+ 	liblo \
+ 	mxml \
+ 	zlib
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB_SEQ),y)
++ZYNADDSUBFX_DEPENDENCIES += alsa-lib
++ZYNADDSUBFX_CONF_OPTS += -DAlsaEnable=ON
 +else
-+ZYNADDSUBFX_CONF_OPTS += -DJackEnable=OFF
++ZYNADDSUBFX_CONF_OPTS += -DAlsaEnable=OFF
 +endif
 +
  $(eval $(cmake-package))
