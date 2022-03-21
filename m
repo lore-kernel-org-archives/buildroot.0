@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 610A5C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 13:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62D99C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 13:11:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C1BB60EC2;
-	Mon, 21 Mar 2022 13:10:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WrbRnyxnk_BS; Mon, 21 Mar 2022 13:10:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D82A960EC9;
-	Mon, 21 Mar 2022 13:10:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D27751BF282
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:10:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1D82414D1
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:10:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EEBF41508;
+	Mon, 21 Mar 2022 13:11:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id up-lnIgMYg6T for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 13:10:47 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AKsDi7x3oISL; Mon, 21 Mar 2022 13:11:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6268741477;
+	Mon, 21 Mar 2022 13:11:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B56061BF282
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:10:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A242982896
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:10:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oLhC21iAQZ8m for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 13:10:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0DD6041477
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 13:10:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0AD3282893
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 13:10:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6E66E848C0; Mon, 21 Mar 2022 13:01:52 +0000 (UTC)
+ id 6BF1D848D1; Mon, 21 Mar 2022 13:02:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 14:10:25 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d24d77e3e16fa26b5e729a3bb4c86650d1799de6
-X-Git-Newrev: 548921598db5fad0f517934c78048f0effcc1d35
+Date: Mon, 21 Mar 2022 14:10:53 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 404d4bcc66374c08425f810db3c41add65b2ac87
+X-Git-Newrev: 11374e363a42a8efb0bb87e3bbd01cd6cbfc755b
 X-Patchwork-Hint: ignore
-Message-Id: <20220321130152.6E66E848C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/openblas: add
+Message-Id: <20220321130203.6BF1D848D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/openblas: add
  OPENBLAS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=548921598db5fad0f517934c78048f0effcc1d35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=11374e363a42a8efb0bb87e3bbd01cd6cbfc755b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 cpe:2.3:a:openblas_project:openblas is a valid CPE identifier for this
 package:
