@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17DDEC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 13:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BEF8C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 13:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8509414CE;
-	Mon, 21 Mar 2022 13:09:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB66D4151F;
+	Mon, 21 Mar 2022 13:10:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NN_hojEMUFhM; Mon, 21 Mar 2022 13:09:45 +0000 (UTC)
+	with ESMTP id u73v_jNAt-ce; Mon, 21 Mar 2022 13:10:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE1D14136B;
-	Mon, 21 Mar 2022 13:09:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 57FB01BF282
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:09:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE38141507;
+	Mon, 21 Mar 2022 13:10:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 289B01BF282
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 522D840227
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:09:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 258DA41507
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 13:10:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mvNLOIFxYYbd for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 13:09:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yv0TwbTcYjRK for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 13:10:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FE364018A
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 13:09:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6661F4148D
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 13:10:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9C28B847BB; Mon, 21 Mar 2022 13:00:35 +0000 (UTC)
+ id C76C7847EF; Mon, 21 Mar 2022 13:01:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 13:59:56 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c1c068c11aa05aef561bbcc3b00abb5d5a43bcca
-X-Git-Newrev: 79f90ac0d352001d36053e7ac3e8a1936a9daab9
+Date: Mon, 21 Mar 2022 13:59:14 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 33fe8c54921d2086705c435d418b561e87e7ae63
+X-Git-Newrev: 404d4bcc66374c08425f810db3c41add65b2ac87
 X-Patchwork-Hint: ignore
-Message-Id: <20220321130035.9C28B847BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wavpack: fix
+Message-Id: <20220321130111.C76C7847EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/wavpack: fix
  CVE-2021-44269
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79f90ac0d352001d36053e7ac3e8a1936a9daab9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=404d4bcc66374c08425f810db3c41add65b2ac87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 An out of bounds read was found in Wavpack 5.4.0 in processing *.WAV
 files. This issue triggered in function WavpackPackSamples of file
