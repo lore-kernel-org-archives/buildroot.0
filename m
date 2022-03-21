@@ -1,89 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3398C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 21:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7B79C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 21:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5360F4167C;
-	Mon, 21 Mar 2022 21:01:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AE9340A8F;
+	Mon, 21 Mar 2022 21:09:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1sKf3S-HQNlg; Mon, 21 Mar 2022 21:01:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vHlmZ6ks8tG3; Mon, 21 Mar 2022 21:09:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1FA441673;
-	Mon, 21 Mar 2022 21:01:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B0C71BF373
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:01:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E17CB40A96;
+	Mon, 21 Mar 2022 21:09:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DA01B1BF239
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19E8341673
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:01:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7B5C60FAF
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:09:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JZntdFrkB_CW for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 21:01:44 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uBrGVKpSy-bn for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 21:09:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1281D41638
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 21:01:43 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id a17so18357557edm.9
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 14:01:43 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CF6CD60FB3
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 21:09:09 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id dr20so31980098ejc.6
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 14:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=m28MoGFNfjVfktezVNxf+5/0qO89YWNi9zwGDDEsT4A=;
- b=TYzj04mTIQDT+C8IPJTcjnofAAOIpJmB6X/aPd72O9m3zHW7SSor0ZHb52S7KxfZ9L
- 6QF8Bnlo3/h9cZh09fUwuwB7ipAQbJMYsor2UnFLPgYcqSro7n+JvTYKnBeo82ssLGQQ
- o1yuWbubqGu6cZz28yHOTORZGZrOkQxOMTF5yxanFreAxP9/Aru5+1GhWJIwm1xBmQts
- 2MsEksE2+/nUYctDJvzFNj/VQErAlH/ZBmt92t5rmwN2GAHZBFkqDz4jezw1JhMFp/hE
- BIgY12lbte7xtqK2fKWK2JDM7mArbPyq0VaXclk62ze6DpQyeg7RUg4GlkLNOoYdok1h
- VepA==
+ bh=4Vvbf2CpGG4aRlsj6yWX0TvHNTkkJ+bvQE/iq+lx9z8=;
+ b=ZKvEvWVIqqRJdpalJnhu5GQLZ466B1OG4IFx89YbmprH+SczUPHgbLssYYvEHgWxc6
+ JAdT3KlFCOy0uQm5s5eXdNe8LIMivIFX2YuCISr9/q/l/Z9YvzCa0nNzHVVAtnPUEMe3
+ KpMDz7gawrJcGli1nyAy4vclMS/mSiGMQgZ4oXCdP0Ca2nD3Oqmhf+cNUqF3LgnUdPG7
+ q9i6DeJuGl2Iq7lhgbLkiebgEgstvJ5mpKQ1JGNSqA8T/kK6S17MM9+BqzRYgTiOKF/n
+ 7aEQEAG5Mxd/asa/p+gxqoElGMoptDxFjlcw6IWnNVghzXljUyqWVAz9AQwIh5DcJFPv
+ l0rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=m28MoGFNfjVfktezVNxf+5/0qO89YWNi9zwGDDEsT4A=;
- b=XImeV/iVdZ2VYSbZxZASwgjE3t36musrHaMiZ20ui5bfuYofL35ISb1QW+tAKicEW0
- bpi6m7kCJ2SYUq8oPgYPaiMbiQMRVrAIJV/1rFldASxpsYoyejbxJN8wDSyiDoGS7xhH
- PcYq3pUsiXaxSFJt8YCYq3NlRFqOqDXdNxJYuVpJYd9dLuPA2CPxtse8cb7GQymv9qf0
- NfKGXaexNCFkLkIg37erIgyQwelgcf89Ln9Fsf2h9/KqFg9rUvgvqGG/RSwJHyQTAPpV
- 3nSmP0C82DY91IUYxUo895rGR371iLXOEb5YVpTGiZX0jzQJ2VX8msaV3hum0wOJJwlB
- 3uGQ==
-X-Gm-Message-State: AOAM533hQ+YlPE9M2/uEjiVjsaBEWf1ROb+abbaM+otcWlzN7Q0iSXt0
- QTyu6f/MxrpY5Xu1BDxLpND7eA==
-X-Google-Smtp-Source: ABdhPJxnqitgS7pNSWbTGyp0ckHGAcXXvc7RUDpKaehSr5fhL0RdZKzBZpAsEJTvLuvuNfLkRF2uKg==
-X-Received: by 2002:a05:6402:84b:b0:419:b5:70b2 with SMTP id
- b11-20020a056402084b00b0041900b570b2mr21813036edz.162.1647896502111; 
- Mon, 21 Mar 2022 14:01:42 -0700 (PDT)
+ bh=4Vvbf2CpGG4aRlsj6yWX0TvHNTkkJ+bvQE/iq+lx9z8=;
+ b=VLYH4tljpBpzR/ukFspAkGTD9uO6mKHHiMfhgOsUY9WhWD3G0ACBCTzSOASyF0D6/5
+ exjzvXpCST9+iWTd9Z4iXbHsOUyI2jpLVUK6gsAzvhIi9/Uf1CTftV9eyfFJISjtN9ah
+ V9dK7O9mS3or3pwS9ZEJKjw3Pw87/q7+eJ7o8BgupuW4jFG8Kq/SyBDKZHD+MkNRCIu0
+ 3dR80Gaa93pHBj+eINit30fDX6+zc5kk/9cZ+KpQxvVZQQy5Qg1hjKrmP1E7yu+Zpe+u
+ LZ7MZJyx23Uc2YeeofJaC6bCr9rXjElUQuAb61vuAwb2wpoXqj24WzYqcfBl4KDWAJ7R
+ 8ulQ==
+X-Gm-Message-State: AOAM531IEObrvTjoIlntlMB6mraXxvMeozcLidk0rf4qH7alVNAGkX/F
+ 4m1MGaHVWPxhpEZ+wpBIL/f9uQ==
+X-Google-Smtp-Source: ABdhPJycDkvh1TMcZp5HBXc6abP/A38INuhXTJnCUhm+Wn4ffqm8r4Ryp2EkMwFasIZ29IwD2F7TUQ==
+X-Received: by 2002:a17:907:9801:b0:6db:ab31:96f4 with SMTP id
+ ji1-20020a170907980100b006dbab3196f4mr22452706ejc.571.1647896947872; 
+ Mon, 21 Mar 2022 14:09:07 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- 17-20020a170906059100b006cee1bceddasm7334409ejn.130.2022.03.21.14.01.41
+ a5-20020aa7cf05000000b0041919e52a38sm4343095edy.46.2022.03.21.14.09.07
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 21 Mar 2022 14:01:41 -0700 (PDT)
-Message-ID: <990140a5-a769-2f7b-5786-c08557db4b6b@mind.be>
-Date: Mon, 21 Mar 2022 22:01:40 +0100
+ Mon, 21 Mar 2022 14:09:07 -0700 (PDT)
+Message-ID: <49aefc4a-d973-5ed0-0e8c-c74607de9ff2@mind.be>
+Date: Mon, 21 Mar 2022 22:09:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Kamel Bouhara <kamel.bouhara@bootlin.com>, buildroot@buildroot.org
-References: <20220310095602.2435745-1-kamel.bouhara@bootlin.com>
- <20220310095602.2435745-4-kamel.bouhara@bootlin.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220309220018.786891-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220310095602.2435745-4-kamel.bouhara@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v2 3/4] package/libodb-boost: add host
- variant
+In-Reply-To: <20220309220018.786891-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/3] package/cmake: bump to version 3.18.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,42 +104,53 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/03/2022 10:56, Kamel Bouhara via buildroot wrote:
-> Add host variant of libodb-boost required by the ODB compiler.
-> The libodb-boost headers are needed at compile time, and
-> therefore installed in $(HOST_DIR).
+On 09/03/2022 23:00, Fabrice Fontaine wrote:
+> Update hash of Copyright.txt (year updated and Qt Company Ltd. added:
+> https://gitlab.kitware.com/cmake/cmake/-/commit/1edc4a8a7e759c4047dd1a1b9864b34f6cb4cc50
+> https://gitlab.kitware.com/cmake/cmake/-/commit/f8c505d4b30aa636b013486913591060b2040716)
 > 
-> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> ---
->   package/libodb-boost/libodb-boost.mk | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
-> index bac5f1e78f..39c9f91030 100644
-> --- a/package/libodb-boost/libodb-boost.mk
-> +++ b/package/libodb-boost/libodb-boost.mk
-> @@ -12,6 +12,8 @@ LIBODB_BOOST_INSTALL_STAGING = YES
->   LIBODB_BOOST_LICENSE = GPL-2.0
->   LIBODB_BOOST_LICENSE_FILES = LICENSE
->   LIBODB_BOOST_DEPENDENCIES = boost libodb
-> +HOST_LIBODB_BOOST_DEPENDENCIES = hoost-boost host-libodb
->   LIBODB_BOOST_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  I have not double-checked (since I don't know for which GCC version exactly 
-this -std=c++11 is needed), but I expect that if -std=c++11 is needed for target 
-build, it's also going to be needed for host build. So I added 
-HOST_LIBODB_BOOST_CONF_ENV.
+  Applied to master, thanks.
 
-
-  Series applied to master with that fixed, thanks.
+  This may create some fallout, but the autobuilders will tell us.
 
   Regards,
   Arnout
 
-
+> ---
+>   package/cmake/cmake.hash | 6 +++---
+>   package/cmake/cmake.mk   | 4 ++--
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+> index 97e83a274c..da514a6d6b 100644
+> --- a/package/cmake/cmake.hash
+> +++ b/package/cmake/cmake.hash
+> @@ -1,5 +1,5 @@
+> -# From https://cmake.org/files/v3.16/cmake-3.16.9-SHA-256.txt
+> -sha256  1708361827a5a0de37d55f5c9698004c035abb1de6120a376d5d59a81630191f  cmake-3.16.9.tar.gz
+> +# From https://cmake.org/files/v3.18/cmake-3.18.6-SHA-256.txt
+> +sha256  124f571ab70332da97a173cb794dfa09a5b20ccbb80a08e56570a500f47b6600  cmake-3.18.6.tar.gz
 >   
->   $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+>   # Locally calculated
+> -sha256  dc628fb936a5d229296d42083f9a8218aa32204c016919e784404c9ec58776e9  Copyright.txt
+> +sha256  131b9ff756b64a25b7461c3c1382e70b16c70a5b4833a1577897fa3ea6d88f8d  Copyright.txt
+> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+> index b1b214982e..4177b119ab 100644
+> --- a/package/cmake/cmake.mk
+> +++ b/package/cmake/cmake.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>   
+> -CMAKE_VERSION_MAJOR = 3.16
+> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
+> +CMAKE_VERSION_MAJOR = 3.18
+> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).6
+>   CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+>   CMAKE_LICENSE = BSD-3-Clause
+>   CMAKE_LICENSE_FILES = Copyright.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
