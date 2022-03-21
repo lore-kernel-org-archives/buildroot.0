@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01D25C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF60AC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE4F4812D3;
-	Mon, 21 Mar 2022 07:41:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87020409EE;
+	Mon, 21 Mar 2022 07:41:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mQ2BDEcX5J5e; Mon, 21 Mar 2022 07:41:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SvY_eT1OeYid; Mon, 21 Mar 2022 07:41:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4E9482640;
-	Mon, 21 Mar 2022 07:41:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B65A410A8;
+	Mon, 21 Mar 2022 07:41:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 306771BF316
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:39:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10E8C1BF316
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BA5F403FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D72940603
  for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:39:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GhBn76CNB5M9 for <buildroot@lists.busybox.net>;
+ with ESMTP id 3D0EvD-WCq44 for <buildroot@lists.busybox.net>;
  Mon, 21 Mar 2022 07:39:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44613405FC
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD02040629
  for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:39:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2EE3C8475D; Mon, 21 Mar 2022 07:30:42 +0000 (UTC)
+ id 66DCD84761; Mon, 21 Mar 2022 07:30:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 08:21:01 +0100
+Date: Mon, 21 Mar 2022 08:21:02 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 86e8e12143c02db510f476236e685175cd8f0e5d
-X-Git-Newrev: 5aa78bc78899d48ac0d805fe0bea510d80cf0793
+X-Git-Oldrev: b597419ddd01f18ac9c3b3322f5f50bf2b0c147b
+X-Git-Newrev: 870c1db51b91a0b769f3ca314e4249bdbc7c69f5
 X-Patchwork-Hint: ignore
-Message-Id: <20220321073042.2EE3C8475D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gst1-plugins-bad:
- bump version to 1.20.1
+Message-Id: <20220321073042.66DCD84761@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/gstreamer1-editing-services: bump version to 1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,41 +59,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5aa78bc78899d48ac0d805fe0bea510d80cf0793
+commit: https://git.buildroot.net/buildroot/commit/?id=870c1db51b91a0b769f3ca314e4249bdbc7c69f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3e3971565263385a4d2947bf74e20386838f3094)
+(cherry picked from commit eed6566513fd17950a11b06db15477860e42353e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
+ .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
+ .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index 72c9624b94..2874d955f4 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.20.0.tar.xz.sha256sum
--sha256  015b8d4d9a395ebf444d40876867a2034dd3304b3ad48bc3a0dd0c1ee71dc11d  gst-plugins-bad-1.20.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.20.1.tar.xz.sha256sum
-+sha256  09d3c2cf5911f0bc7da6bf557a55251779243d3de216b6a26cc90c445b423848  gst-plugins-bad-1.20.1.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 24fd9dd312..343a53a3c5 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index 9662e6b8fb..5d77a9bb72 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.20.0.tar.xz.sha256sum
+-sha256  f837adcf4073d19a5908984e879cd039f4192ca368e71d39e8ccd8a56b9feedf  gst-editing-services-1.20.0.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.20.1.tar.xz.sha256sum
++sha256  6ace1b21b58e0110b7dadd469f79b77e2f47d6207604231492531ae9fd4148df  gst-editing-services-1.20.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index 5e03c08ae7..dbdf2abca0 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BAD_VERSION = 1.20.0
-+GST1_PLUGINS_BAD_VERSION = 1.20.1
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+-GSTREAMER1_EDITING_SERVICES_VERSION = 1.20.0
++GSTREAMER1_EDITING_SERVICES_VERSION = 1.20.1
+ GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
+ GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
+ GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
