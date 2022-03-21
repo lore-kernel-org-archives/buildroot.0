@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3822C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15588C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:54:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 990F160E28;
-	Mon, 21 Mar 2022 07:54:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6133410A8;
+	Mon, 21 Mar 2022 07:54:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zoxlsNx3cSAI; Mon, 21 Mar 2022 07:54:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hK5zuwr-9640; Mon, 21 Mar 2022 07:54:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDD3960E15;
-	Mon, 21 Mar 2022 07:54:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F3E3C1BF316
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67E664095F;
+	Mon, 21 Mar 2022 07:54:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 907271BF316
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D682A60E15
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E3DE4095F
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:54:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1U9gTNIGxN3Y for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dRvXInmKdkKr for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 07:54:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CA3260D90
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE86340948
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:54:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0B48784778; Mon, 21 Mar 2022 07:45:28 +0000 (UTC)
+ id AE40584783; Mon, 21 Mar 2022 07:45:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 08:50:46 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: ff5471d6983158cb5ad51e4eab577b72b601e461
-X-Git-Newrev: c1c068c11aa05aef561bbcc3b00abb5d5a43bcca
+Date: Mon, 21 Mar 2022 08:50:41 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: b4b78a0f8a9736ff555bd4accc29361df265dd6f
+X-Git-Newrev: 33fe8c54921d2086705c435d418b561e87e7ae63
 X-Patchwork-Hint: ignore
-Message-Id: <20220321074528.0B48784778@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libminiupnpc:
+Message-Id: <20220321074532.AE40584783@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/libminiupnpc:
  disable sample and tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1c068c11aa05aef561bbcc3b00abb5d5a43bcca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=33fe8c54921d2086705c435d418b561e87e7ae63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Disable sample and tests (which are built by default since version 2.1:
 https://github.com/miniupnp/miniupnp/commit/530b2723500c4a708546815f5593b5c819ab5f76)
