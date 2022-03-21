@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDDB4C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3822C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:54:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DFBA410B0;
-	Mon, 21 Mar 2022 07:50:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 990F160E28;
+	Mon, 21 Mar 2022 07:54:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f0KGtV71bSgv; Mon, 21 Mar 2022 07:50:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zoxlsNx3cSAI; Mon, 21 Mar 2022 07:54:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89BDB4030B;
-	Mon, 21 Mar 2022 07:50:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C9FD1BF316
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:50:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDD3960E15;
+	Mon, 21 Mar 2022 07:54:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F3E3C1BF316
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BE4E4030B
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:50:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D682A60E15
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O7JKXnN-fUW4 for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 07:50:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1U9gTNIGxN3Y for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74D8A401E1
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:50:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CA3260D90
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:54:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 579E484773; Mon, 21 Mar 2022 07:41:38 +0000 (UTC)
+ id 0B48784778; Mon, 21 Mar 2022 07:45:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 08:43:35 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 881575856a742346aecdabea65baef106b9a188e
-X-Git-Newrev: 8ff60335b573f7bd8fa67511450ba542a5d45c8e
+Date: Mon, 21 Mar 2022 08:50:46 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: ff5471d6983158cb5ad51e4eab577b72b601e461
+X-Git-Newrev: c1c068c11aa05aef561bbcc3b00abb5d5a43bcca
 X-Patchwork-Hint: ignore
-Message-Id: <20220321074138.579E484773@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Revert "package/gcr:
- depends on !gnupg"
+Message-Id: <20220321074528.0B48784778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libminiupnpc:
+ disable sample and tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +59,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ff60335b573f7bd8fa67511450ba542a5d45c8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c1c068c11aa05aef561bbcc3b00abb5d5a43bcca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This reverts commit cf0c9830c0eef17116081d04ccc10a1aa0850553.
+Disable sample and tests (which are built by default since version 2.1:
+https://github.com/miniupnp/miniupnp/commit/530b2723500c4a708546815f5593b5c819ab5f76)
 
-This doesn't work with the gnupg v1/v2 handling here:
-
-package/gcr/Config.in:1:error: recursive dependency detected!
-package/gcr/Config.in:1:        symbol BR2_PACKAGE_GCR depends on BR2_PACKAGE_GNUPG
-package/gnupg/Config.in:1:      symbol BR2_PACKAGE_GNUPG is selected by BR2_PACKAGE_GNUPG2
-package/gnupg2/Config.in:5:     symbol BR2_PACKAGE_GNUPG2 is selected by BR2_PACKAGE_GCR
-For a resolution refer to Documentation/kbuild/kconfig-language.txt
-subsection "Kconfig recursive dependency limitations"
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit e1d0ac062cd65794a39e90b5f7abae354aa69be9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcr/Config.in | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/libminiupnpc/libminiupnpc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-index afbec1a317..e233fffed0 100644
---- a/package/gcr/Config.in
-+++ b/package/gcr/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_GCR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on !BR2_STATIC_LIBS # p11-kit
--	depends on !BR2_PACKAGE_GNUPG # gnupg2
- 	select BR2_PACKAGE_GNUPG2 # runtime
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -16,15 +15,6 @@ config BR2_PACKAGE_GCR
- 	  https://developer.gnome.org/gcr/
+diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
+index 551a6767cf..0633ccd234 100644
+--- a/package/libminiupnpc/libminiupnpc.mk
++++ b/package/libminiupnpc/libminiupnpc.mk
+@@ -16,5 +16,6 @@ LIBMINIUPNPC_CPE_ID_VENDOR = miniupnp_project
+ LIBMINIUPNPC_CPE_ID_PRODUCT = miniupnpc
+ LIBMINIUPNPC_CPE_ID_VERSION = $(LIBMINIUPNPC_VERSION_MAJOR)
+ LIBMINIUPNPC_CPE_ID_UPDATE = $(LIBMINIUPNPC_VERSION_MINOR)
++LIBMINIUPNPC_CONF_OPTS = -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_TESTS=OFF
  
- comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
--
--comment "gcr is incompatible with gnupg, gnupg2 only"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
--	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_PACKAGE_GNUPG # gnupg2
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
