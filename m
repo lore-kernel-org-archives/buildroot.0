@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 454B7C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:22:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 133AEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E566960F14;
-	Mon, 21 Mar 2022 16:22:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B32BA40966;
+	Mon, 21 Mar 2022 16:22:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pEHy6Fmh_6-R; Mon, 21 Mar 2022 16:22:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OeRwU41fS-cS; Mon, 21 Mar 2022 16:22:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 216B660AED;
-	Mon, 21 Mar 2022 16:22:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7FD151BF2B1
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7988640905;
+	Mon, 21 Mar 2022 16:22:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CC2341BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C5C3813CF
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7AC140905
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E-fGSTOfeZjg for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 16:22:21 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 91A95813C2
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:22:21 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CA374240003;
- Mon, 21 Mar 2022 16:22:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nWKnR-008K9Q-MH; Mon, 21 Mar 2022 17:22:17 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gmmAvnuL8Ufb for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 16:22:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A89A240283
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:22:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id BD48684987; Mon, 21 Mar 2022 16:13:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220313114118.1127008-1-fontaine.fabrice@gmail.com>
-Date: Mon, 21 Mar 2022 17:22:17 +0100
-In-Reply-To: <20220313114118.1127008-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 13 Mar 2022 12:41:18 +0100")
-Message-ID: <87a6dji8cm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/minidlna: fix CVE-2022-26505
+To: buildroot@buildroot.org
+Date: Mon, 21 Mar 2022 17:21:06 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: a12e8ddad2fada4e26525b1a98901761e887275a
+X-Git-Newrev: bbaac16fcae7bd4030f640e7cbfa2d8ffc001423
+X-Patchwork-Hint: ignore
+Message-Id: <20220321161327.BD48684987@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/minidlna: fix
+ CVE-2022-26505
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,24 +53,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Simon Dawson <spdawson@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bbaac16fcae7bd4030f640e7cbfa2d8ffc001423
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > A DNS rebinding issue in ReadyMedia (formerly MiniDLNA) before 1.3.1
- > allows a remote web server to exfiltrate media files.
+A DNS rebinding issue in ReadyMedia (formerly MiniDLNA) before 1.3.1
+allows a remote web server to exfiltrate media files.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c7520b7ea1d4276fa762fa3be971155fcf2b2d01)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ttp-Protect-against-DNS-rebinding-attacks.patch | 66 ++++++++++++++++++++++
+ package/minidlna/minidlna.mk                       |  3 +
+ 2 files changed, 69 insertions(+)
 
-Committed to 2021.02.x, 2021.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/minidlna/0001-upnphttp-Protect-against-DNS-rebinding-attacks.patch b/package/minidlna/0001-upnphttp-Protect-against-DNS-rebinding-attacks.patch
+new file mode 100644
+index 0000000000..6d601f53b9
+--- /dev/null
++++ b/package/minidlna/0001-upnphttp-Protect-against-DNS-rebinding-attacks.patch
+@@ -0,0 +1,66 @@
++From c21208508dbc131712281ec5340687e5ae89e940 Mon Sep 17 00:00:00 2001
++From: Justin Maggard <jmaggard@arlo.com>
++Date: Wed, 9 Feb 2022 18:32:50 -0800
++Subject: [PATCH] upnphttp: Protect against DNS rebinding attacks
++
++Validate HTTP requests to protect against DNS rebinding.
++
++[Retrieved from:
++https://sourceforge.net/p/minidlna/git/ci/c21208508dbc131712281ec5340687e5ae89e940/]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ upnphttp.c | 17 +++++++++++++++++
++ upnphttp.h |  2 ++
++ 2 files changed, 19 insertions(+)
++
++diff --git a/upnphttp.c b/upnphttp.c
++index c8b5e99..62db89a 100644
++--- a/upnphttp.c
+++++ b/upnphttp.c
++@@ -273,6 +273,11 @@ ParseHttpHeaders(struct upnphttp * h)
++ 				p = colon + 1;
++ 				while(isspace(*p))
++ 					p++;
+++				n = 0;
+++				while(p[n] >= ' ')
+++					n++;
+++				h->req_Host = p;
+++				h->req_HostLen = n;
++ 				for(n = 0; n < n_lan_addr; n++)
++ 				{
++ 					for(i = 0; lan_addr[n].str[i]; i++)
++@@ -909,6 +914,18 @@ ProcessHttpQuery_upnphttp(struct upnphttp * h)
++ 	}
++ 
++ 	DPRINTF(E_DEBUG, L_HTTP, "HTTP REQUEST: %.*s\n", h->req_buflen, h->req_buf);
+++	if(h->req_Host && h->req_HostLen > 0) {
+++		const char *ptr = h->req_Host;
+++		DPRINTF(E_MAXDEBUG, L_HTTP, "Host: %.*s\n", h->req_HostLen, h->req_Host);
+++		for(i = 0; i < h->req_HostLen; i++) {
+++			if(*ptr != ':' && *ptr != '.' && (*ptr > '9' || *ptr < '0')) {
+++				DPRINTF(E_ERROR, L_HTTP, "DNS rebinding attack suspected (Host: %.*s)", h->req_HostLen, h->req_Host);
+++				Send404(h);/* 403 */
+++				return;
+++			}
+++			ptr++;
+++		}
+++	}
++ 	if(strcmp("POST", HttpCommand) == 0)
++ 	{
++ 		h->req_command = EPost;
++diff --git a/upnphttp.h b/upnphttp.h
++index e28a943..57eb2bb 100644
++--- a/upnphttp.h
+++++ b/upnphttp.h
++@@ -89,6 +89,8 @@ struct upnphttp {
++ 	struct client_cache_s * req_client;
++ 	const char * req_soapAction;
++ 	int req_soapActionLen;
+++	const char * req_Host;        /* Host: header */
+++	int req_HostLen;
++ 	const char * req_Callback;	/* For SUBSCRIBE */
++ 	int req_CallbackLen;
++ 	const char * req_NT;
++-- 
++2.34.1
++
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index 86a2bb368d..b302423cae 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -11,6 +11,9 @@ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+ MINIDLNA_CPE_ID_VENDOR = readymedia_project
+ MINIDLNA_CPE_ID_PRODUCT = readymedia
+ 
++# 0001-upnphttp-Protect-against-DNS-rebinding-attacks.patch
++MINIDLNA_IGNORE_CVES += CVE-2022-26505
++
+ MINIDLNA_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	ffmpeg flac libvorbis libogg libid3tag libexif jpeg sqlite \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
