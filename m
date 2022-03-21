@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26587C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F6FBC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9946041521;
-	Mon, 21 Mar 2022 16:54:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29D0C60F27;
+	Mon, 21 Mar 2022 16:55:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dpwlElLP0PLM; Mon, 21 Mar 2022 16:54:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l_N_1NU03WEk; Mon, 21 Mar 2022 16:55:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8BA7408B4;
-	Mon, 21 Mar 2022 16:54:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 956241BF2B1
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:54:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41FB060F32;
+	Mon, 21 Mar 2022 16:55:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 827931BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92B13408B4
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:54:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F3E760F27
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:54:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Zg8_z8JleTD for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 16:54:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7952640899
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:54:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 288286000A;
- Mon, 21 Mar 2022 16:54:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nWLIm-008Sd6-D2; Mon, 21 Mar 2022 17:54:40 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eNauBk-8hxBb for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 16:54:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAD5D60634
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:54:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id D5DEF849D4; Mon, 21 Mar 2022 16:46:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220320163930.1566656-1-fontaine.fabrice@gmail.com>
-Date: Mon, 21 Mar 2022 17:54:40 +0100
-In-Reply-To: <20220320163930.1566656-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 20 Mar 2022 17:39:30 +0100")
-Message-ID: <87k0cngsa7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: security bump to
- version 2.5.2
+To: buildroot@buildroot.org
+Date: Mon, 21 Mar 2022 17:44:41 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 543187098e61189d34444e53aefbad4c80efc227
+X-Git-Newrev: 9bba91f5b6eb3b7a9bed1445bbea43ae0c9f556a
+X-Patchwork-Hint: ignore
+Message-Id: <20220321164603.D5DEF849D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/timescaledb: bump
+ version to 2.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,37 +53,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9bba91f5b6eb3b7a9bed1445bbea43ae0c9f556a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Fix CVE-2022-24128: Timescale TimescaleDB 1.x and 2.x before 2.5.2 may
- > allow privilege escalation during extension installation. The
- > installation process uses commands such as CREATE x IF NOT EXIST that
- > allow an unprivileged user to precreate objects. These objects will be
- > used by the installer (which executes as Superuser), leading to
- > privilege escalation. In order to be able to take advantage of this, an
- > unprivileged user would need to be able to create objects in a database
- > and then get a Superuser to install TimescaleDB into their database. (In
- > the fixed versions, the installation aborts when it finds that an object
- > already exists.)
+Release notes: https://github.com/timescale/timescaledb/releases/tag/2.1.1
 
- > "This release contains bug fixes since the 2.5.1 release.
- > This release is high priority for upgrade. We strongly recommend that
- > you upgrade as soon as possible."
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 990b14768cd36663245b8a583aab0d8d6adac636)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > https://github.com/timescale/timescaledb/releases/tag/2.5.2
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x, 2021.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index f84bd04cc0..98f966ee3d 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6de2af2ecfd7bff9b3634b6c5c29b209b25e147858d460469e8eb88e6d198692  timescaledb-2.1.0.tar.gz
++sha256  e928c939803706d0d5b11d6751d4f0d0514e540ceffc74a46a9732f9a111d313  timescaledb-2.1.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 783017636b..d2a48a0f63 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.1.0
++TIMESCALEDB_VERSION = 2.1.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
