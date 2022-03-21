@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F11C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:40:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98F12C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8550812A4;
-	Mon, 21 Mar 2022 07:40:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 574BD82640;
+	Mon, 21 Mar 2022 07:40:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3m-XwL9IwCBF; Mon, 21 Mar 2022 07:40:32 +0000 (UTC)
+	with ESMTP id 41RWTa7_WJlb; Mon, 21 Mar 2022 07:40:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C71DB825E8;
-	Mon, 21 Mar 2022 07:40:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AD4082538;
+	Mon, 21 Mar 2022 07:40:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13E7B1BF316
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:39:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 17BC61BF316
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E9C6405A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44045405FB
  for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:39:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SGUWrwCRBEur for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 07:39:36 +0000 (UTC)
+ with ESMTP id wlDWJFxidfvG for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 07:39:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B17164062A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DD7940613
  for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:39:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7884E84756; Mon, 21 Mar 2022 07:30:42 +0000 (UTC)
+ id 817B284758; Mon, 21 Mar 2022 07:30:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 08:21:02 +0100
+Date: Mon, 21 Mar 2022 08:23:30 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 88b6bb5129b0ddbefb3eeb98c1221cb68bd7e6b7
-X-Git-Newrev: 05f62c6a080d2d18c6111148c653c083885be0ef
+X-Git-Oldrev: 05f62c6a080d2d18c6111148c653c083885be0ef
+X-Git-Newrev: 881575856a742346aecdabea65baef106b9a188e
 X-Patchwork-Hint: ignore
-Message-Id: <20220321073042.7884E84756@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gst1-python: bump
- version to 1.20.1
+Message-Id: <20220321073042.817B284758@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libressl:
+ security bump to 3.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,41 +59,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05f62c6a080d2d18c6111148c653c083885be0ef
+commit: https://git.buildroot.net/buildroot/commit/?id=881575856a742346aecdabea65baef106b9a188e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+see https://marc.info/?l=openbsd-announce&m=164736531714549&w=2
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fd7ebd2ca426aeacd0e509461d1d94962e65a8bf)
+(cherry picked from commit b92210ce36588038aa728e48f3826f6b32d471c0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
- package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
-index a2f17583fd..fe1e2068b1 100644
---- a/package/gstreamer1/gst1-python/gst1-python.hash
-+++ b/package/gstreamer1/gst1-python/gst1-python.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.20.0.tar.xz.sha256sum
--sha256  8f67bdc5606ba33606c6bc896e89de7dcd8cf4fca459f71389b1b6fe075b5e54  gst-python-1.20.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.20.1.tar.xz.sha256sum
-+sha256  ba6cd59faa3db3981d8c6982351c239d823c0b8e80b1acf58d2997b050289422  gst-python-1.20.1.tar.xz
- sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
-diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
-index a9cc32d1d7..3fd8059bee 100644
---- a/package/gstreamer1/gst1-python/gst1-python.mk
-+++ b/package/gstreamer1/gst1-python/gst1-python.mk
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 990ec8bda8..e923998713 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  cb82ca7d547336917352fbd23db2fc483c6c44d35157b32780214ec74197b3ce  libressl-3.4.2.tar.gz
++sha256  ff88bffe354818b3ccf545e3cafe454c5031c7a77217074f533271d63c37f08d  libressl-3.4.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 6eee86dda9..0bb468cedb 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PYTHON_VERSION = 1.20.0
-+GST1_PYTHON_VERSION = 1.20.1
- GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
- GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
- GST1_PYTHON_INSTALL_STAGING = YES
+-LIBRESSL_VERSION = 3.4.2
++LIBRESSL_VERSION = 3.4.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
