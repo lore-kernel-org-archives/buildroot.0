@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C137EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65971C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 07:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CBF4410A6;
-	Mon, 21 Mar 2022 07:47:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LciUjtrXVvYB; Mon, 21 Mar 2022 07:47:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9656C410AF;
-	Mon, 21 Mar 2022 07:47:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F38431BF316
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:47:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E27178174D
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:47:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EEF48175E;
+	Mon, 21 Mar 2022 07:47:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0RULs2Cbdc7u for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 07:47:00 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 79L6sT_52jVQ; Mon, 21 Mar 2022 07:47:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4992C8174D;
+	Mon, 21 Mar 2022 07:47:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EF731BF316
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:47:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B7EF4059F
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 07:47:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mf8uW_1SMcMC for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 07:47:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C0628144F
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:47:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 513F0402D0
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 07:47:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2106A8475F; Mon, 21 Mar 2022 07:38:05 +0000 (UTC)
+ id 3865F84767; Mon, 21 Mar 2022 07:38:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 08:46:32 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 6eca04a4ecbfe2e545853b17b37b57efb4933f14
-X-Git-Newrev: ff5471d6983158cb5ad51e4eab577b72b601e461
+Date: Mon, 21 Mar 2022 08:45:44 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 1602ff300478aea29f71d86a45b0197ca5a4b522
+X-Git-Newrev: b4b78a0f8a9736ff555bd4accc29361df265dd6f
 X-Patchwork-Hint: ignore
-Message-Id: <20220321073806.2106A8475F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] Revert "package/gcr:
+Message-Id: <20220321073844.3865F84767@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] Revert "package/gcr:
  depends on !gnupg"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,10 +59,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff5471d6983158cb5ad51e4eab577b72b601e461
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b4b78a0f8a9736ff555bd4accc29361df265dd6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-This reverts commit 816861524a079658040d6e059743697affdeafce.
+This reverts commit 5c05744eca4a2453fe4403c97cee3229152f50e2.
 
 This doesn't work with the gnupg v1/v2 handling here:
 
