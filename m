@@ -1,52 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B5F5C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26587C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1619C608A5;
-	Mon, 21 Mar 2022 16:38:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9946041521;
+	Mon, 21 Mar 2022 16:54:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NzCmch1VkyHc; Mon, 21 Mar 2022 16:38:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dpwlElLP0PLM; Mon, 21 Mar 2022 16:54:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61539605A5;
-	Mon, 21 Mar 2022 16:38:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BF301BF2B1
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:38:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8BA7408B4;
+	Mon, 21 Mar 2022 16:54:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 956241BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 078D240930
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:38:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92B13408B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:54:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 13Rvn4-hhoiW for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 16:38:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Zg8_z8JleTD for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 16:54:43 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB50E40919
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:38:30 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7952640899
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:54:43 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 63B5F100004;
- Mon, 21 Mar 2022 16:38:28 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 288286000A;
+ Mon, 21 Mar 2022 16:54:40 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nWL35-008Kn7-Fq; Mon, 21 Mar 2022 17:38:27 +0100
+ id 1nWLIm-008Sd6-D2; Mon, 21 Mar 2022 17:54:40 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220320122800.430173-1-bernd.kuhls@t-online.de>
-Date: Mon, 21 Mar 2022 17:38:27 +0100
-In-Reply-To: <20220320122800.430173-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 20 Mar 2022 13:28:00 +0100")
-Message-ID: <87o81zgt18.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220320163930.1566656-1-fontaine.fabrice@gmail.com>
+Date: Mon, 21 Mar 2022 17:54:40 +0100
+In-Reply-To: <20220320163930.1566656-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 20 Mar 2022 17:39:30 +0100")
+Message-ID: <87k0cngsa7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.0.17
+Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: security bump to
+ version 2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,18 +60,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Changelog: https://www.php.net/ChangeLog-8.php#8.0.17
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fix CVE-2022-24128: Timescale TimescaleDB 1.x and 2.x before 2.5.2 may
+ > allow privilege escalation during extension installation. The
+ > installation process uses commands such as CREATE x IF NOT EXIST that
+ > allow an unprivileged user to precreate objects. These objects will be
+ > used by the installer (which executes as Superuser), leading to
+ > privilege escalation. In order to be able to take advantage of this, an
+ > unprivileged user would need to be able to create objects in a database
+ > and then get a Superuser to install TimescaleDB into their database. (In
+ > the fixed versions, the installation aborts when it finds that an object
+ > already exists.)
 
-Committed to 2022.02.x, thanks.
+ > "This release contains bug fixes since the 2.5.1 release.
+ > This release is high priority for upgrade. We strongly recommend that
+ > you upgrade as soon as possible."
+
+ > https://github.com/timescale/timescaledb/releases/tag/2.5.2
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x, 2021.11.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
