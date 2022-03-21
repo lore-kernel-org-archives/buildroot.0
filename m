@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93AF2C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 21:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB65C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 21:55:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AFF760FD5;
-	Mon, 21 Mar 2022 21:33:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAA9C60FC5;
+	Mon, 21 Mar 2022 21:55:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AQsdissjIgeT; Mon, 21 Mar 2022 21:33:44 +0000 (UTC)
+	with ESMTP id dp_v6YW6FVNm; Mon, 21 Mar 2022 21:55:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BF0D60FD1;
-	Mon, 21 Mar 2022 21:33:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 260E260FBF;
+	Mon, 21 Mar 2022 21:55:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 129361BF239
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:33:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 37CD11BF239
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F928409F4
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:33:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F14E4167F
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 21:55:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uJl9KGGkGBkD for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 21:33:32 +0000 (UTC)
+ with ESMTP id 8mO3iaB7yhmh for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 21:55:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4960740875
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 21:33:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1DFA41678
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 21:55:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DCDBA84EAD; Mon, 21 Mar 2022 21:24:36 +0000 (UTC)
+ id 36DD784F2F; Mon, 21 Mar 2022 21:46:30 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 22:18:32 +0100
+Date: Mon, 21 Mar 2022 22:49:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3476b1dedfbd6892b82e096a48199111032ba72
-X-Git-Newrev: 4b98d8bba7c1358938f8930a0167abe7a3f6c521
+X-Git-Oldrev: 4b98d8bba7c1358938f8930a0167abe7a3f6c521
+X-Git-Newrev: da38cdead909aa133b9c468ddebf3f67c8d198f2
 X-Patchwork-Hint: ignore
-Message-Id: <20220321212436.DCDBA84EAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: fix libgsasl support
+Message-Id: <20220321214630.36DD784F2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-firmware: fix missing files in
+ overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b98d8bba7c1358938f8930a0167abe7a3f6c521
+commit: https://git.buildroot.net/buildroot/commit/?id=da38cdead909aa133b9c468ddebf3f67c8d198f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contrary to the helptext
-https://github.com/curl/curl/blob/master/configure.ac#L152
+When supporting multiple hardware targets, overlay_map.dtb might
+be needed to map overlay names to one of several implementations [1].
+If the correct overlay names are specified in config.txt, the map file
+is not needed, but it also doesn't hurt.
 
-the configure option is called --with-libgsasl:
-https://github.com/curl/curl/blob/master/configure.ac#L1989
+[1] https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/device-tree.adoc#the-overlay-map-file
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Rutger Sassen <rsassen@comecer.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+[Arnout: always install overlay_map.dtb]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libcurl/libcurl.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/rpi-firmware/rpi-firmware.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 20ebb4f271..4b2e52829c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -128,9 +128,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBGSASL),y)
- LIBCURL_DEPENDENCIES += libgsasl
--LIBCURL_CONF_OPTS += --with-gsasl
-+LIBCURL_CONF_OPTS += --with-libgsasl
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index b46a7f5270..d4d1d07b3f 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -48,6 +48,7 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	$(foreach ovldtb,$(wildcard $(@D)/boot/overlays/*.dtbo), \
+ 		$(INSTALL) -D -m 0644 $(ovldtb) $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir $(ovldtb))
+ 	)
++	$(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
+ endef
  else
--LIBCURL_CONF_OPTS += --without-gsasl
-+LIBCURL_CONF_OPTS += --without-libgsasl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
+ # Still create the directory, so a genimage.cfg can include it independently of
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
