@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 133AEC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63ACC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:22:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B32BA40966;
-	Mon, 21 Mar 2022 16:22:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4821640905;
+	Mon, 21 Mar 2022 16:22:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OeRwU41fS-cS; Mon, 21 Mar 2022 16:22:42 +0000 (UTC)
+	with ESMTP id PJCykr9XoNST; Mon, 21 Mar 2022 16:22:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7988640905;
-	Mon, 21 Mar 2022 16:22:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC2341BF2B1
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCAC940992;
+	Mon, 21 Mar 2022 16:22:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 928821BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7AC140905
- for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81E43414A2
+ for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:22:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gmmAvnuL8Ufb for <buildroot@lists.busybox.net>;
- Mon, 21 Mar 2022 16:22:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HInlhuyVDilr for <buildroot@lists.busybox.net>;
+ Mon, 21 Mar 2022 16:22:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A89A240283
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:22:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD7BE410E9
+ for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BD48684987; Mon, 21 Mar 2022 16:13:27 +0000 (UTC)
+ id D5DBE8498E; Mon, 21 Mar 2022 16:13:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 17:21:06 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: a12e8ddad2fada4e26525b1a98901761e887275a
-X-Git-Newrev: bbaac16fcae7bd4030f640e7cbfa2d8ffc001423
+Date: Mon, 21 Mar 2022 17:20:56 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 60a54bc0e88dc534c830996db3642cfd1dd1979f
+X-Git-Newrev: a13ada770aab7132f994cb0ab8791df9e7fa90ae
 X-Patchwork-Hint: ignore
-Message-Id: <20220321161327.BD48684987@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/minidlna: fix
+Message-Id: <20220321161333.D5DBE8498E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/minidlna: fix
  CVE-2022-26505
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbaac16fcae7bd4030f640e7cbfa2d8ffc001423
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a13ada770aab7132f994cb0ab8791df9e7fa90ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 A DNS rebinding issue in ReadyMedia (formerly MiniDLNA) before 1.3.1
 allows a remote web server to exfiltrate media files.
@@ -147,12 +147,12 @@ index 0000000000..6d601f53b9
 +2.34.1
 +
 diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 86a2bb368d..b302423cae 100644
+index adea200f4f..01ee8d0028 100644
 --- a/package/minidlna/minidlna.mk
 +++ b/package/minidlna/minidlna.mk
-@@ -11,6 +11,9 @@ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
- MINIDLNA_CPE_ID_VENDOR = readymedia_project
+@@ -12,6 +12,9 @@ MINIDLNA_CPE_ID_VENDOR = readymedia_project
  MINIDLNA_CPE_ID_PRODUCT = readymedia
+ MINIDLNA_SELINUX_MODULES = minidlna
  
 +# 0001-upnphttp-Protect-against-DNS-rebinding-attacks.patch
 +MINIDLNA_IGNORE_CVES += CVE-2022-26505
