@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F206DC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88375C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Mar 2022 16:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACD1484140;
-	Mon, 21 Mar 2022 16:57:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4ABF841529;
+	Mon, 21 Mar 2022 16:57:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2eqv0ngHuV4V; Mon, 21 Mar 2022 16:57:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PLWfx4pk975L; Mon, 21 Mar 2022 16:57:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE70683E83;
-	Mon, 21 Mar 2022 16:57:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF6421BF9AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 678EA4098D;
+	Mon, 21 Mar 2022 16:57:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E40491BF9AC
  for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:55:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CEC0660F30
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2819408B4
  for <buildroot@lists.busybox.net>; Mon, 21 Mar 2022 16:55:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cS22O0gEiIIQ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k6Nwm7Zpx7SC for <buildroot@lists.busybox.net>;
  Mon, 21 Mar 2022 16:55:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 169FC60EF1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A0FB40899
  for <buildroot@buildroot.org>; Mon, 21 Mar 2022 16:55:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2417A84BCB; Mon, 21 Mar 2022 16:46:13 +0000 (UTC)
+ id 362A784BCB; Mon, 21 Mar 2022 16:46:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Mar 2022 17:34:52 +0100
+Date: Mon, 21 Mar 2022 17:38:11 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: afbdc9e32cc62a20bbb26d49b88e852c3011a35e
-X-Git-Newrev: 943299ecf5671958f62d67914084d911cb5a128f
+X-Git-Oldrev: 5410fa69c67768718fc00d441e260349e80caa0a
+X-Git-Newrev: 2d31474b95c823757b231950369b29121eb272fb
 X-Patchwork-Hint: ignore
-Message-Id: <20220321164613.2417A84BCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/postgresql: bump
- version to 14.2
+Message-Id: <20220321164613.362A784BCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/php: bump version
+ to 8.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=943299ecf5671958f62d67914084d911cb5a128f
+commit: https://git.buildroot.net/buildroot/commit/?id=2d31474b95c823757b231950369b29121eb272fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes: https://www.postgresql.org/docs/release/14.2/
-
-Updated license hash due to copyright year bump:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=61c8da50cb39ab41c3a7a0122d6943f72bb0798e
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.17
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3e8c436902bfac25074677858853f23d40bca8c0)
+(cherry picked from commit ff867be0302b0abbb629a751eabf45c7a7b218fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index c2017a1226..2ba3b07563 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 2753f9a0eb..3d73e60f90 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v14.1/postgresql-14.1.tar.bz2.sha256
--sha256  4d3c101ea7ae38982f06bdc73758b53727fb6402ecd9382006fa5ecc7c2ca41f  postgresql-14.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v14.2/postgresql-14.2.tar.bz2.sha256
-+sha256  2cf78b2e468912f8101d695db5340cf313c2e9f68a612fb71427524e8c9a977a  postgresql-14.2.tar.bz2
+ # From https://www.php.net/downloads.php
+-sha256  f27a2f25259e8c51e42dfd74e24a546ee521438ad7d9f6c6e794aa91f38bab0a  php-8.0.16.tar.xz
++sha256  4e7d94bb3d144412cb8b2adeb599fb1c6c1d7b357b0d0d0478dc5ef53532ebc5  php-8.0.17.tar.xz
  
- # License file, Locally calculated
--sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
-+sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 32aef0c68c..c389246f80 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 5b29692d94..6454d6fe87 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 14.1
-+POSTGRESQL_VERSION = 14.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-PHP_VERSION = 8.0.16
++PHP_VERSION = 8.0.17
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
