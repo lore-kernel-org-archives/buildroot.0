@@ -1,82 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A649C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 23:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91DEAC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 23:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0769415D7;
-	Tue, 22 Mar 2022 23:23:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5688A8426B;
+	Tue, 22 Mar 2022 23:23:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YL5kq_Y7TUlP; Tue, 22 Mar 2022 23:23:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id liRBt2esbcor; Tue, 22 Mar 2022 23:23:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 585F1415D1;
-	Tue, 22 Mar 2022 23:23:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1FFE61BF427
+	by smtp1.osuosl.org (Postfix) with ESMTP id 155C0841D6;
+	Tue, 22 Mar 2022 23:23:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CA361BF427
  for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03C9B40C7D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6621C848E6
  for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xxV9SdgjZE3G for <buildroot@lists.busybox.net>;
- Tue, 22 Mar 2022 23:22:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HvBHC1hvTqSr for <buildroot@lists.busybox.net>;
+ Tue, 22 Mar 2022 23:22:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A4C0C40194
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 23:22:38 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id i1so1235026ila.0
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 16:22:38 -0700 (PDT)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DF6D848EA
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 23:22:39 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id z6so12503435iot.0
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 16:22:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=bE6URk6u2kPpgd7zFMjllAepvCS3KgT86N8GIIWX0oo=;
- b=KvRIaZUThzIxIlYYypuNPvAK3cwpRv/za2B/nv9KgrBNmkkPrsGBozSdqceAfZTHZ5
- U29X8NpvZMmEWT/S1OVr0zBc0Oms9B31bCrh68AxdwaETGWkps4T4CY8axRPSnnIUcjz
- pm8IGqXyx7q+epVBDRmNake61aycRQWiCbzEc+6BWBQwv7hOLEkJ85l9o4IkTDA9wOlX
- ljgZP/0iV8SENiL1CbaWyvC0K7c+DkalXJLn4q4V9WYQh6BsIJpMKIn7NWeRQkRQXe/s
- 9K0gR2PePkc15aK/4NSzYrQe0GhW0x3TGkHt4mveFSWAyLetK/p4LriL8CPY+leWd2AU
- CghQ==
+ bh=mz544N9BM9bt+t71L69W5mBNURc1ZtK1kpKgR2dsntI=;
+ b=kCUl1Du1TxtG6JkAVJUuPKqwt9DAX67rauU//Vt7cpdp3tjdSc+r7g3etiT4PC3i/C
+ 5TYO3LY92KxiBI4m94MV3E+Z+nBXDGnFEo3qvhBDS0UX/OK8YjbGD3bq14l5NsE6+x3R
+ lJDEMHooAKBKekr3PujU+zVG9UpPrqQbp/8v9Cvqg/rL+ZsrEhxPuB+J/hbdguIdagaR
+ pJ+hHH6oxzzxlIe3eyb32beR67G7Hd9rSdaujKDTQbiCPtPKSI4QB/8LWNSoUJADWJdi
+ Z+hjzjLYOi06v+wNdRbYDVNW09H02F+lsQSeKS0sGYkavmTtswm34ImHJI+WP2ZL/3d4
+ q6+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=bE6URk6u2kPpgd7zFMjllAepvCS3KgT86N8GIIWX0oo=;
- b=LQbhInX7Dhn2m+uLq4u7+p1/4jMQYlvqhVSy9Wt8EHiWzvsRckaOuyaf+TX2E93noC
- 0f/aKvGWpzYpDbaKXyRa4wp2Z4qaVOuOgZZ6H5PYI8mt8tDoVgPKDq5vDjBgT/ztgfbb
- kMMIdltR27HP96pRTMRr0r2qbzMhUrYVUtwcVWSkoyTAPx2H3gSrQ+lzK8mKpoAnKuGc
- 5+qBX673XKt34Fz3Az2fkiu8BXdrC3E4x/3sB02zquhJ2TcX34i71IkT3DkOuyDtKfX/
- Fdxonp8iHHgEWuosHdGsF+5DqFXgnNt6sg0+7Ijr4fPHTaFmgq1mu07BmaKqQZ3B1389
- hcJg==
-X-Gm-Message-State: AOAM530sxpDSEUZQ3fpXu5D7y0Tyqh4U8ZQz5b+QUqS4GkGsjDee3FbW
- qENwCKKgwDrS5SPi6hOpSF5SxNCQQiwv2cIr
-X-Google-Smtp-Source: ABdhPJxBkGvZ4q0+CzazjK/ahwm6PW2DWE1ruoESQulpvWaDPQ6BnWTGf4GtCLlTKX6uyIivwea0oA==
-X-Received: by 2002:a05:6e02:12ee:b0:2c8:59cb:c44 with SMTP id
- l14-20020a056e0212ee00b002c859cb0c44mr47455iln.74.1647991357231; 
+ bh=mz544N9BM9bt+t71L69W5mBNURc1ZtK1kpKgR2dsntI=;
+ b=aDw9pnUYihnJVclQLIfs3jBdhShtBvopLiCVKKa4MmsenSMUJWpsuX43IhagpE3X/h
+ DM0YzFEPmOpa3e1wThhQGZZzG57LjVQ2UASCIsZSy7pVkxOEvSnmyos7ZL6FDi/Teiqj
+ nzSkmmuRiuxF8EKAu0cP2W8F97m+cLshXvA3YcPQzc8iC/auz/ocKY5bgylgXg/QUESR
+ NUvmwyb3p3MrJqShBLDDag9tfMAHxvzHNKOiFv1UYjVN0xHfABHtzGWjZE9mJVn2CO2j
+ bumhNRLbnt89tkR3CnfV2go7OV1JNJUizrDA70osAVUqjIvJVVu9CuaE2w0Oqgpbki6b
+ pH5g==
+X-Gm-Message-State: AOAM531IjxhrFF3wdU5kyhItMyUIpJ2Ruu4rtrVMTih8ltu5601eCN9y
+ Iahn+7T062VEzAyx3MwLPNZgfoP4/y7Oz3G2
+X-Google-Smtp-Source: ABdhPJwzeh8tfR+Gbg1K4lj87ZnGIaktXDuJfzPYmmpNA8jtX5Qs04DUfZ/fR1s6B/5LchIEFOsCog==
+X-Received: by 2002:a02:5b85:0:b0:319:ff85:ff5 with SMTP id
+ g127-20020a025b85000000b00319ff850ff5mr15257547jab.250.1647991357986; 
  Tue, 22 Mar 2022 16:22:37 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
  [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- i81-20020a6bb854000000b00649c1b67a6csm2006324iof.28.2022.03.22.16.22.36
+ i81-20020a6bb854000000b00649c1b67a6csm2006324iof.28.2022.03.22.16.22.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Mar 2022 16:22:36 -0700 (PDT)
+ Tue, 22 Mar 2022 16:22:37 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Mar 2022 17:22:19 -0600
-Message-Id: <20220322232224.2842266-6-james.hilliard1@gmail.com>
+Date: Tue, 22 Mar 2022 17:22:20 -0600
+Message-Id: <20220322232224.2842266-7-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220322232224.2842266-1-james.hilliard1@gmail.com>
 References: <20220322232224.2842266-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v12 06/11] package/libclc: bump version to 13.0.1
+Subject: [Buildroot] [PATCH v12 07/11] package/compiler-rt: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,11 +88,14 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Joseph Kogut <joseph.kogut@gmail.com>,
  Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Michael Drake <michael.drake@codethink.co.uk>,
+ Romain Naour <romain.naour@smile.fr>,
  Matt Weber <matthew.weber@rockwellcollins.com>,
  Samuel Martin <s.martin49@gmail.com>,
  James Hilliard <james.hilliard1@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -103,186 +104,239 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-* Converts to the cmake pkg type
- * Updates download site
- * Adds a crosscompile fixups patch
-   * Allow prepare_builtins utility to be directly called
-     (it isn't installed into the path when cross compiling)
-   * Fix file_find() for root search limitation
+This patch adds support for the compiler-rt (CLANG runtime) library.
+It builds a set of static libraries and installs them into the
+CLANG/LLVM toolchain resource folder. These libraries can then be
+used by developers in the SDK for building target applications for
+analysis.
+
+What is fuzzing and why libfuzzer?
+https://www.moritz.systems/blog/an-introduction-to-llvm-libfuzzer/
+
+The compiler-rt fuzzer and address sanitizer tools require additional
+LLVM binary tools installed to allow stack trace decoding actively during
+executable analysis.  This patch conditionally enables these tools.
+https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v11 -> v12:
-  - update to 13.0.1 instead of 11.1.0
-  - pass required host cmake options for C/CXX compilers
----
- .../0001-support-out-of-tree-build.patch      | 71 +++++++++++++++++++
- package/libclc/libclc.hash                    |  2 +-
- package/libclc/libclc.mk                      | 56 +++++++--------
- 3 files changed, 98 insertions(+), 31 deletions(-)
- create mode 100644 package/libclc/0001-support-out-of-tree-build.patch
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+Cc: Michael Drake <michael.drake@codethink.co.uk>
 
-diff --git a/package/libclc/0001-support-out-of-tree-build.patch b/package/libclc/0001-support-out-of-tree-build.patch
+---
+Changes
+v1 -> v2
+[Romain
+ - Removed unnecessary host-cmake dependency
+
+v2 -> v3
+[Romain
+ - Update to use COMPILER_RT_INSTALL_PATH for library install
+[Ricardo
+ - Fixed check-package extra line
+ - Spelling in commit message
+
+v3 -> v4
+[Valentin
+ - Pointed out that non-glibc libraries won't build. Further
+   investigation shows that the lib asan support in compiler-rt
+   doesn't have the libc checks yet to support multiple libraries.
+   (https://patchwork.ozlabs.org/patch/339938/ was the best example
+    I could find and it doesn't look like anything has changed in the
+    recent codebase)
+
+v4 -> v5
+[Thomas P
+ - Revisited staging install step and found a cleaner way to use the
+   default and then a hook to setup the runtime library path
+
+v6
+ - Bumped to 7.0.1 to match current LLVM/Clang version
+
+v7
+ - Rebased on master for 8.0 LLVM/Clang version
+ - Added comment about bumping verions of LLVM/Clang and Compiler-rt
+   together
+[Romain
+ - Disabled test cases (-DCOMPILER_RT_INCLUDE_TESTS=OFF)
+
+v8
+ - Rebased and updated version to 9.x to match llvm/clang
+
+[Romain
+ - Squashed "[v7,1/5]package/llvm: install target binary/debug tools" to
+   be included in this patch
+
+[Michael D
+ - compiler-rt symlink creation to include shared folder such
+   that control flow lists work
+
+v9
+ - Rebased post 2020.05
+
+v10
+ - Switched compiler-rt site to point towards new github project
+ - Updated compiler-rt version to 11.0.0
+ - Tested against master[8640e8ffde3f61c5838] using
+   support/testing/run-tests -o runtest -k \
+      tests.package.test_clang.TestClangCompilerRT
+
+v11
+ - Updated compiler-rt version to 11.1.0
+
+v12
+ - overwrite target llvm-config in staging with host llvm-config
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/compiler-rt/Config.in        | 14 +++++++++++
+ package/compiler-rt/compiler-rt.hash |  3 +++
+ package/compiler-rt/compiler-rt.mk   | 37 ++++++++++++++++++++++++++++
+ package/llvm/llvm.mk                 | 20 ++++++++++++---
+ 6 files changed, 72 insertions(+), 4 deletions(-)
+ create mode 100644 package/compiler-rt/Config.in
+ create mode 100644 package/compiler-rt/compiler-rt.hash
+ create mode 100644 package/compiler-rt/compiler-rt.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 942bb8fe9c..5219626e45 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1886,6 +1886,7 @@ F:	package/bridge-utils/
+ F:	package/checkpolicy/
+ F:	package/checksec/
+ F:	package/cgroupfs-mount/
++F:	package/compiler-rt/
+ F:	package/crda/
+ F:	package/cunit/
+ F:	package/dacapo/
+diff --git a/package/Config.in b/package/Config.in
+index 0d5d763180..e3ef75b0da 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1928,6 +1928,7 @@ menu "Other"
+ 	source "package/cereal/Config.in"
+ 	source "package/clang/Config.in"
+ 	source "package/cmocka/Config.in"
++	source "package/compiler-rt/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
 new file mode 100644
-index 0000000000..de7207bedb
+index 0000000000..9afc0d9d60
 --- /dev/null
-+++ b/package/libclc/0001-support-out-of-tree-build.patch
-@@ -0,0 +1,71 @@
-+From 495491e9d53bfb184c15753b5187e4bb55b19511 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Tue, 9 Mar 2021 15:55:17 -0600
-+Subject: [PATCH] support out of tree build
++++ b/package/compiler-rt/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_COMPILER_RT
++	bool "compiler-rt"
++	depends on BR2_PACKAGE_LLVM
++	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
++	help
++	  A collection of runtime libraries primarily used by clang and
++	  llvm to provide builtins, sanitizer runtimes, and profiling
++	  at runtime.
 +
-+(1) The package has a prepare_builtins tool which is built
-+but not placed in the path for later use in the build. This
-+fix allows the later build steps to use the binary in-place.
++	  https://compiler-rt.llvm.org/
 +
-+(2) With cmake, find_file() when used for non-host builds is
-+limited by CMAKE_FIND_ROOT_PATH* scope.
-+
-+In $(HOST_DIR)/share/buildroot/toolchainfile.cmake we set the
-+following target settings for CMAKE_FIND_ROOT_PATH* which
-+limit the scope.
-+set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/aarch64-buildroot-linux-gnu/sysroot")
-+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-+
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ CMakeLists.txt                          | 2 +-
-+ cmake/CMakeDetermineCLCCompiler.cmake   | 4 ++++
-+ cmake/CMakeDetermineLLAsmCompiler.cmake | 4 ++++
-+ 3 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9472f19..a784519 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -279,7 +279,7 @@ foreach( t ${LIBCLC_TARGETS_TO_BUILD} )
-+ 
-+			# Add prepare target
-+			add_custom_command( OUTPUT "${obj_suffix}"
-+-				            COMMAND prepare_builtins -o
-++				            COMMAND ./prepare_builtins -o
-+					    "${obj_suffix}"
-+					    "builtins.opt.${obj_suffix}"
-+					    DEPENDS "opt.${obj_suffix}"
-+diff --git a/cmake/CMakeDetermineCLCCompiler.cmake b/cmake/CMakeDetermineCLCCompiler.cmake
-+index 94d85d9..5de6a48 100644
-+--- a/cmake/CMakeDetermineCLCCompiler.cmake
-++++ b/cmake/CMakeDetermineCLCCompiler.cmake
-+@@ -12,7 +12,7 @@ mark_as_advanced(CMAKE_CLC_ARCHIVE)
-+ 
-+ set(CMAKE_CLC_COMPILER_ENV_VAR "CLC_COMPILER")
-+ set(CMAKE_CLC_ARCHIVE_ENV_VAR "CLC_LINKER")
-+-find_file(clc_comp_in CMakeCLCCompiler.cmake.in PATHS ${CMAKE_ROOT}/Modules ${CMAKE_MODULE_PATH})
-++set(clc_comp_in "${CMAKE_MODULE_PATH}/CMakeCLCCompiler.cmake.in" )
-+ # configure all variables set in this file
-+ configure_file(${clc_comp_in} ${CMAKE_PLATFORM_INFO_DIR}/CMakeCLCCompiler.cmake @ONLY)
-+ mark_as_advanced(clc_comp_in)
-+diff --git a/cmake/CMakeDetermineLLAsmCompiler.cmake b/cmake/CMakeDetermineLLAsmCompiler.cmake
-+index 1c424c7..dd3bfb6 100644
-+--- a/cmake/CMakeDetermineLLAsmCompiler.cmake
-++++ b/cmake/CMakeDetermineLLAsmCompiler.cmake
-+@@ -18,7 +18,7 @@ mark_as_advanced(CMAKE_LLAsm_ARCHIVE)
-+ set(CMAKE_LLAsm_PREPROCESSOR_ENV_VAR "LL_PREPROCESSOR")
-+ set(CMAKE_LLAsm_COMPILER_ENV_VAR "LL_ASSEMBLER")
-+ set(CMAKE_LLAsm_ARCHIVE_ENV_VAR "LL_LINKER")
-+-find_file(ll_comp_in CMakeLLAsmCompiler.cmake.in PATHS ${CMAKE_ROOT}/Modules ${CMAKE_MODULE_PATH})
-++set(ll_comp_in "${CMAKE_MODULE_PATH}/CMakeLLAsmCompiler.cmake.in" )
-+ # configure all variables set in this file
-+ configure_file(${ll_comp_in} ${CMAKE_PLATFORM_INFO_DIR}/CMakeLLAsmCompiler.cmake @ONLY)
-+ mark_as_advanced(ll_comp_in)
-+-- 
-+2.17.1
-+
-diff --git a/package/libclc/libclc.hash b/package/libclc/libclc.hash
-index 2af64bc8e8..c496291d81 100644
---- a/package/libclc/libclc.hash
-+++ b/package/libclc/libclc.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  54d7ae523aabf68d533011739d6c01546cae0c294442d0f44fd657c046cb707d  libclc-d1cbc92e2ceee59963f5c3a576382e5bba31f060-br1.tar.gz
-+sha256  8f0213e52e2fcaca3dfcc438f05d0e15e9b3c96fd6b0994a802b267dc1047a1d  libclc-13.0.1.src.tar.xz
- sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
-diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
-index 6fe8e10a77..5d246cf4f8 100644
---- a/package/libclc/libclc.mk
-+++ b/package/libclc/libclc.mk
-@@ -4,43 +4,39 @@
- #
- ################################################################################
- 
--# Use the latest commit from release_90 branch.
--LIBCLC_VERSION = d1cbc92e2ceee59963f5c3a576382e5bba31f060
--LIBCLC_SITE = https://github.com/llvm-mirror/libclc
--LIBCLC_SITE_METHOD = git
-+LIBCLC_VERSION = 13.0.1
-+LIBCLC_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LIBCLC_VERSION)
-+LIBCLC_SOURCE = libclc-$(LIBCLC_VERSION).src.tar.xz
- LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
- LIBCLC_LICENSE_FILES = LICENSE.TXT
- 
--LIBCLC_DEPENDENCIES = host-clang host-llvm
-+LIBCLC_DEPENDENCIES = host-clang host-llvm host-spirv-llvm-translator
- LIBCLC_INSTALL_STAGING = YES
- 
--# C++ compiler is used to build a small tool (prepare-builtins) for the host.
--# It must be built with the C++ compiler from the host.
-+# CMAKE_*_COMPILER_FORCED=ON skips testing the tools and assumes
-+# llvm-config provided values
++comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
++	depends on !BR2_PACKAGE_LLVM
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
+new file mode 100644
+index 0000000000..0689ec3d2a
+--- /dev/null
++++ b/package/compiler-rt/compiler-rt.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 def1fc00c764cd3abbba925c712ac38860a756a43b696b291f46fee09e453274  compiler-rt-11.1.0.src.tar.xz
++sha256 1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
+diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
+new file mode 100644
+index 0000000000..57f9c26854
+--- /dev/null
++++ b/package/compiler-rt/compiler-rt.mk
+@@ -0,0 +1,37 @@
++################################################################################
 +#
-+# CMAKE_*_COMPILER has to be set to the host compiler to build a host
-+# 'prepare_builtins' tool used during the build process
- #
- # The headers are installed in /usr/share and not /usr/include,
- # because they are needed at runtime on the target to build the OpenCL
- # kernels.
- LIBCLC_CONF_OPTS = \
--	--with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
--	--prefix=/usr \
--	--includedir=/usr/share \
--	--pkgconfigdir=/usr/lib/pkgconfig \
--	--with-cxx-compiler=$(HOSTCXX_NOCCACHE)
--
--define LIBCLC_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
--endef
--
--define LIBCLC_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define LIBCLC_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
--endef
--
--define LIBCLC_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
--endef
--
--$(eval $(generic-package))
-+	-DCMAKE_SYSROOT="" \
-+	-DCMAKE_C_COMPILER_FORCED=ON \
-+	-DCMAKE_CXX_COMPILER_FORCED=ON \
-+	-DCMAKE_CLC_COMPILER_FORCED=ON \
-+	-DCMAKE_LLAsm_COMPILER_FORCED=ON \
-+	-DCMAKE_INSTALL_DATADIR="share" \
-+	-DCMAKE_FIND_ROOT_PATH="$(HOST_DIR)" \
-+	-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
-+	-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
-+	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_SHARED_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_MODULE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_C_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
-+	-DCMAKE_CXX_COMPILER="$(CMAKE_HOST_CXX_COMPILER)" \
-+	-DLLVM_CONFIG="$(HOST_DIR)/bin/llvm-config"
++# compiler-rt
++#
++################################################################################
++
++# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
++# tied to the version of those tools
++COMPILER_RT_VERSION = 11.1.0
++COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
++COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(COMPILER_RT_VERSION)
++COMPILER_RT_LICENSE = NCSA MIT
++COMPILER_RT_LICENSE_FILES = LICENSE.TXT
++COMPILER_RT_DEPENDENCIES = host-clang llvm
++
++COMPILER_RT_INSTALL_STAGING = YES
++COMPILER_RT_INSTALL_TARGET = NO
++
++COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
++	-DCOMPILER_RT_STANDALONE_BUILD=ON \
++	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
++	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
++
++# The installation of the target runtime libraries defaults to DESTDIR, however
++# host-clang resources directory needs a link so Clang can find the runtime
++# libraries in the same location they would be if built as part of the Clang
++# build. The "resources" directory is loosely documented and seems to be
++# assumed, as compiler-rt is usually build at the same time as Clang and not
++# standalone.
++define COMPILER_RT_SETUP_RUNTIME_LIBS
++	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
++	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
++	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
++endef
++COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
 +
 +$(eval $(cmake-package))
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 825de96392..7c73d5b564 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -214,8 +214,7 @@ HOST_LLVM_CONF_OPTS += \
+ # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
+ # libLLVM.so
+ LLVM_CONF_OPTS += \
+-	-DLLVM_INCLUDE_TOOLS=ON \
+-	-DLLVM_BUILD_TOOLS=OFF
++	-DLLVM_INCLUDE_TOOLS=ON
+ 
+ ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
+ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
+@@ -278,11 +277,24 @@ LLVM_CONF_OPTS += \
+ # directories from STAGING_DIR.
+ # output/staging/usr/bin/llvm-config --includedir
+ # output/staging/usr/include
+-define HOST_LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
++define LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
+ 	$(INSTALL) -D -m 0755 $(HOST_DIR)/bin/llvm-config \
+ 		$(STAGING_DIR)/usr/bin/llvm-config
+ endef
+-HOST_LLVM_POST_INSTALL_HOOKS = HOST_LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
++HOST_LLVM_POST_INSTALL_HOOKS = LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
++
++# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
++# and AddressSanitizer tools for stack traces.
++# If we set -DLLVM_BUILD_TOOLS=ON we need to re-copy host llvm-config to
++# replace the target llvm-config variant in staging that gets installed.
++ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
++LLVM_CONF_OPTS += \
++	-DLLVM_BUILD_TOOLS=ON
++LLVM_POST_INSTALL_STAGING_HOOKS = LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
++else
++LLVM_CONF_OPTS += \
++	-DLLVM_BUILD_TOOLS=OFF
++endif
+ 
+ # By default llvm-tblgen is built and installed on the target but it is
+ # not necessary. Also erase LLVMHello.so from /usr/lib
 -- 
 2.25.1
 
