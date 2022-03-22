@@ -1,73 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 569E1C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 17:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0EF0C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 17:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB05F61263;
-	Tue, 22 Mar 2022 17:08:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82D0B41881;
+	Tue, 22 Mar 2022 17:50:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 89ThldYwgDWz; Tue, 22 Mar 2022 17:08:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 230C7611B3;
-	Tue, 22 Mar 2022 17:08:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F09D1BF5DD
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 17:08:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8885240270
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 17:08:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=redhat.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pEzmaR1aVE1A for <buildroot@lists.busybox.net>;
- Tue, 22 Mar 2022 17:08:10 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from us-smtp-delivery-124.mimecast.com
- (us-smtp-delivery-124.mimecast.com [170.10.129.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A843140246
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 17:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
- s=mimecast20190719; t=1647968889;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=qrppQ8IPZuFVonEaiQ2bQqBj4Pg+h/KX6eJITWxKEFY=;
- b=EN9wAhkG5ITjCO9FfVlKY3keaMCosox9Z0uvJH9S+hvcPTW64RYqRbz2S/cCOQsgXmsnrx
- N7jSv8K1CnGJqER177HhVTSFdb6ZOHJ8uNLxrhpwIhPuDiKbS8hBUP6CzETTbGsHcPX40U
- tRz1LixGMhac7W19cVsY+eqDbk2UbhU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-425-8YsZc4VKP9OR20oRk-ZeRw-1; Tue, 22 Mar 2022 13:08:06 -0400
-X-MC-Unique: 8YsZc4VKP9OR20oRk-ZeRw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com
- [10.11.54.7])
- (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
- (No client certificate requested)
- by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4F4F803524;
- Tue, 22 Mar 2022 17:08:05 +0000 (UTC)
-Received: from gondolin.fritz.box (unknown [10.39.194.187])
- by smtp.corp.redhat.com (Postfix) with ESMTP id CDA0E145B960;
- Tue, 22 Mar 2022 17:08:04 +0000 (UTC)
-From: Cornelia Huck <cohuck@redhat.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z5TrKPa9RrqC; Tue, 22 Mar 2022 17:50:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5B534184E;
+	Tue, 22 Mar 2022 17:49:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C62D11BF5DD
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 17:49:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B499984140
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 17:49:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aB8kZX2Nmz-Z for <buildroot@lists.busybox.net>;
+ Tue, 22 Mar 2022 17:49:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B32F981AD7
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 17:49:57 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id j18so14877461wrd.6
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 10:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iJuvoEFiLRqydnRG0xgwFCWNIn80dWZpidXpZNbAi5o=;
+ b=nI1g/gIx9FhgIOqDbDfp3Df2Kj3XKDCcB0Nip43FX0TBKJFIuPFY87ou8ulwz1vcnX
+ FRAB+TraovIi1DIfK9wLBAxS+qlbv6XWZL90OcWIW7KUoNO0sYdrDiUSG/4C7qYEJGlG
+ 0uAfXFbzmKf1E31okuav/YQLBe2qwhqK40A3MphRCiWhebEl3e0HDqaxAffO4jkP/hWB
+ rgBlcQ+soPDThfk6o7+Y1PsON1rBt0GOcsAm7gRLHervo9rAe3b4XICI/JT6XISju9JB
+ bHetAVfCcx2QPyzyTDAO6EdLeluLZTQFIQr73J9NIkWjGz0nzslMZiYDyOMm+s/iazBp
+ ANLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iJuvoEFiLRqydnRG0xgwFCWNIn80dWZpidXpZNbAi5o=;
+ b=aWMeSQoyKq582vVQ0uB94xwSrnpIAubhY9JPyNVHAIS4KaGjHp/RofVlaKw6w0Uuf9
+ cybiVCv/cDfjx7dPe2PfEApvRkEwiR2VG6fZ2YCrMFFCOCDpLu9MsBep/1BbAP8ql6zO
+ HePmDQUrPiRWHd4N9d6Vmx8I8BoT/nLy6RQfqQslflEKtwA+2RKDDOWLIGIdGXXL+uNN
+ h7MylGdIT9rn/hmTeF7yj7fG7kEgmukhl0veSfDTqxKEPvvUq76+q/hjt40oup8LNkCG
+ RxElt6EGquzWrlpgVqxU0f3uI8gRoTHPaXOwK+SG0FbjjY3Ecp14dKJn9YkfyM9El4yj
+ Y7uw==
+X-Gm-Message-State: AOAM533UzYPad03SuChCtUdDKVs0GUZE1uFSQ3L86/wQUAFmBxXgyED6
+ hzbG7t+kofW+8qRNcatszppv4GMk1Yk=
+X-Google-Smtp-Source: ABdhPJxgYRFeXI+zOKhVgRWLRP4io4P6vu4TzuBj/iUVg2QMmXvnxN+qr0KMXPOqE9DAlm4GPGP88g==
+X-Received: by 2002:adf:e241:0:b0:203:f56e:51e3 with SMTP id
+ bl1-20020adfe241000000b00203f56e51e3mr17502025wrb.473.1647971395665; 
+ Tue, 22 Mar 2022 10:49:55 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ a25-20020a5d4579000000b00203ee633c2asm12503622wrc.1.2022.03.22.10.49.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Mar 2022 10:49:55 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Mar 2022 18:08:00 +0100
-Message-Id: <20220322170800.1872403-1-cohuck@redhat.com>
+Date: Tue, 22 Mar 2022 18:48:38 +0100
+Message-Id: <20220322174839.2189015-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Authentication-Results: relay.mimecast.com;
- auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cohuck@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Subject: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: add more arm support
+Subject: [Buildroot] [PATCH 1/2] package/jack2: fix build with libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,59 +87,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Cornelia Huck <cohuck@redhat.com>, Matt Weber <matthew.weber@collins.com>,
- Cyril Bur <cyrilbur@gmail.com>
+Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add some more cortexes with VHE, and enable aarch64.
+Fix the following build failure raised on uclibc and musl since the
+addition of libexecinfo package in commit
+eea8ba446c10701a273432552108d80fb2224ef4:
 
-Signed-off-by: Cornelia Huck <cohuck@redhat.com>
+/home/peko/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: dbus/sigsegv.c.17.o: in function `signal_segv':
+sigsegv.c:(.text+0x98): undefined reference to `backtrace'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/dca49cb9b3e66fac921601560e9358bcce9acffc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+ package/jack2/jack2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Resent because I was subscribed with a different email address.
-Sorry about the spam.
-
----
- package/kvm-unit-tests/Config.in         | 5 ++++-
- package/kvm-unit-tests/kvm-unit-tests.mk | 4 +++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index e470dd6157f0..b084375e62e9 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -3,7 +3,10 @@ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
- 	# On ARM, it uses virtualization extensions
- 	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
- 		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
--		BR2_cortex_a17 || BR2_cortex_a17_a7
-+		BR2_cortex_a17 || BR2_cortex_a17_a7 || \
-+		BR2_cortex_a55 || BR2_cortex_a75 || \
-+		BR2_cortex_a75_a55 || BR2_cortex_a76 || \
-+		BR2_cortex_a76_a55
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_powerpc64 || BR2_powerpc64le
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 2e55169984..127c99eed1 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -14,6 +14,11 @@ JACK2_INSTALL_STAGING = YES
  
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index d610442e039f..d72eba02bc3b 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -10,7 +10,9 @@ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive
- KVM_UNIT_TESTS_LICENSE = LGPL-2.0
- KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
+ JACK2_CONF_OPTS = --alsa
  
--ifeq ($(BR2_arm),y)
-+ifeq ($(BR2_aarch64),y)
-+KVM_UNIT_TESTS_ARCH = aarch64
-+else ifeq ($(BR2_arm),y)
- KVM_UNIT_TESTS_ARCH = arm
- else ifeq ($(BR2_i386),y)
- KVM_UNIT_TESTS_ARCH = i386
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++JACK2_DEPENDENCIES += libexecinfo
++JACK2_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lexecinfo"
++endif
++
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ JACK2_DEPENDENCIES += opus
+ endif
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
