@@ -4,77 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E26DAC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 23:22:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D98C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 23:23:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83B4F40C86;
-	Tue, 22 Mar 2022 23:22:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6386640C97;
+	Tue, 22 Mar 2022 23:23:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id khMP1uQSqKXJ; Tue, 22 Mar 2022 23:22:51 +0000 (UTC)
+	with ESMTP id 1KOBy8p8z_3V; Tue, 22 Mar 2022 23:23:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CE8F40AFA;
-	Tue, 22 Mar 2022 23:22:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F13D31BF427
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 112E540C95;
+	Tue, 22 Mar 2022 23:23:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AD781BF427
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE3BB40AFA
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79DE1418EB
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z3NcWafnLjtX for <buildroot@lists.busybox.net>;
- Tue, 22 Mar 2022 23:22:35 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EGCP1knbPDLr for <buildroot@lists.busybox.net>;
+ Tue, 22 Mar 2022 23:22:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D614340194
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 23:22:35 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id d62so21989465iog.13
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 16:22:35 -0700 (PDT)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B1F0A418E7
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 23:22:36 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id c23so22051309ioi.4
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 16:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=yrHr32a3mQmwipbg1O4lH47hElIBX1pWtKfBKRYXO/c=;
- b=X0FaZYcqGN7v7xPnSGsFildD0pIgABh9+iS+Gfw+a++MGg0YIhx+ZIkCssHihXC6jy
- jj/TDBkX0eSKfOyLO/0UHS/wn/AcwjmFCHkcXibqHhqr+TGTCVV7/dUeiLZijntU6h9B
- PyH2KVgMVlC7BgTZGxVO2b2CFuOHfsZ25S/IOK5OYszevlPgkEk/L6+5wxPn/njCf0Mi
- iY+paGS2Bi12qyqFF4jYvC670VGwFcctd0AXPZtR0XJ5zvEiv2Ls+cnq+FK+8Ga95lty
- wbs6768km/Eo8+WUZDUbVD2g8TOGWmeKcmXcZhnY0HMacloaEjpxeirtN6kjqaXYwMVF
- OD/g==
+ bh=hTLt9L4jb3m/iBAw3YuekK0+9u1NphsmYcIdO1RDCj8=;
+ b=mRz1pKmVkwj9yUByvcupO+0PRjhzfytjCf8D3SjZzqYDXW1QcXqlW52KAYEjFDiMrS
+ iUuEFejbrAIW+LjGWC3ee+XZJfFIhFLrMN1dmFyvlitJRqILz7dDTG54xqDbqaZ8+pv8
+ YWehRB7kQ/GItefnM/aXqsrKUdckpd3pYRlJFsexkYpt3EDE5lWcjhmyqJuHnG/KpjXZ
+ gG+xHYBdfXu7j7dzB5WYbpLjFEQAOxpAcPBF/Pg7rRhIDbSuHxAg2ksE5Zv+4JdwVTdr
+ Rgs/l/iUrANKqvWOfXu4+/uDkDSU2DChPacCxZyqeZcsRIub0m4o7dyE4qPT6mPKmNx+
+ EeCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=yrHr32a3mQmwipbg1O4lH47hElIBX1pWtKfBKRYXO/c=;
- b=FLna3Yz9wsqXvE4DvaHR8cN409rdEhbXk3N3wqymGJiqH/8971bDtaMdD7hsVtUY62
- HKFz/7bj1HS0Lh4kguy8aYVFFpbjP2tkSgLhrjSMJ6SKYNkgreXdATQ4JugWhO97qoVB
- Tjxi1j7u4rdPSQDvqpfSkNlJCQkZQGQTYotJk/bimNHLgoDOvRgRLxc/w5q4ZHLOjnBl
- oxTvf8mL1hVRCyCckkJlZAdGRMiBbhzeK8BBhaFFfl+Cdsr2wHk/+/cNj7Zpdx7T9lwk
- m96zUxva4ZJytleWFqJjQlnLp72L2x8ebjIilqu4e4NBk2dSLgzCH2SRZCqq5jZoZ3Sb
- DxIw==
-X-Gm-Message-State: AOAM5310q1xBpvIumUzt8rBiKOVYDopmICiNypfsnhK0EqP2gD9Y0YaC
- htqUnAla69Pqdy4AKFASiv0YumEbZOPWV6vU
-X-Google-Smtp-Source: ABdhPJynYZclgCvDPKJvhZFySui5bgUbmDYE4gS19zkKWc3HdeeCQFrKGTpq2O48BJTPz9vkwRu2Jw==
-X-Received: by 2002:a5d:840e:0:b0:649:c671:6594 with SMTP id
- i14-20020a5d840e000000b00649c6716594mr2701901ion.19.1647991354502; 
- Tue, 22 Mar 2022 16:22:34 -0700 (PDT)
+ bh=hTLt9L4jb3m/iBAw3YuekK0+9u1NphsmYcIdO1RDCj8=;
+ b=4PZGBsc+oXND1Z0FFX8Kksdl1yVizAgHLAmxFTIQw9j7Zo5KZgEqwPDJkYyLBkmkb2
+ kJmGRsrIKIg7uCbFU2JYnGCcL1LEkwz3JlT59ha4rGzXt7DgUF/6nuNCK7beH2YR9sBR
+ pvR7MDWA2JxeTqjxuQqkVN1CU/AombCqOPkxEG66xFVT1SYndP9ofw0jJkIT6NuTOhc6
+ U6cz/+jdgNXLECX4lyc0IrjI2RFoRxD5+nLD2824+VZx0KhZCXzTVo6bbrqTJ94qkju/
+ Fchz51mYRdwWlQ2QxybD5Sm7ACqDU1sO4YH7lNhepCbL+2Dmx3oftFTiGiWSJSKAjbHc
+ hl/g==
+X-Gm-Message-State: AOAM533FyO9bigpfzDrXCvPIUB65FUySvp9jqrmC946OkRqDzUiIjPPs
+ qB02sBtn79IukVHxUeCi8WwdSTp+B6enpYNs
+X-Google-Smtp-Source: ABdhPJzk3T0ZOwLe6PXNtqiHy7XP/F08h44S8Yjn8NfXIoHc3O2aEY9dOvYpIdJoaKLf762LIo/jWg==
+X-Received: by 2002:a05:6638:d47:b0:321:460a:88c8 with SMTP id
+ d7-20020a0566380d4700b00321460a88c8mr5263626jak.175.1647991355156; 
+ Tue, 22 Mar 2022 16:22:35 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
  [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- i81-20020a6bb854000000b00649c1b67a6csm2006324iof.28.2022.03.22.16.22.33
+ i81-20020a6bb854000000b00649c1b67a6csm2006324iof.28.2022.03.22.16.22.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Tue, 22 Mar 2022 16:22:34 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Mar 2022 17:22:15 -0600
-Message-Id: <20220322232224.2842266-2-james.hilliard1@gmail.com>
+Date: Tue, 22 Mar 2022 17:22:16 -0600
+Message-Id: <20220322232224.2842266-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220322232224.2842266-1-james.hilliard1@gmail.com>
 References: <20220322232224.2842266-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v12 02/11] package/clang: bump to version 11.1.0
+Subject: [Buildroot] [PATCH v12 03/11] package/lld: bump to version 11.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,35 +102,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/clang/clang.hash | 2 +-
- package/clang/clang.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/lld/lld.hash | 2 +-
+ package/lld/lld.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-index 067a2c0470..32a19c1659 100644
---- a/package/clang/clang.hash
-+++ b/package/clang/clang.hash
+diff --git a/package/lld/lld.hash b/package/lld/lld.hash
+index 2144cc5666..17b8d18997 100644
+--- a/package/lld/lld.hash
++++ b/package/lld/lld.hash
 @@ -1,3 +1,3 @@
  # locally calculated
--sha256 5778512b2e065c204010f88777d44b95250671103e434f9dc7363ab2e3804253 clang-9.0.1.src.tar.xz
-+sha256 0a8288f065d1f57cb6d96da4d2965cbea32edc572aa972e466e954d17148558b clang-11.1.0.src.tar.xz
- sha256 ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47 LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 939f000cbd..d1667d79b6 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -5,7 +5,8 @@
+-sha256 86262bad3e2fd784ba8c5e2158d7aa36f12b85f2515e95bc81d65d75bb9b0c82  lld-9.0.1.src.tar.xz
++sha256 017a788cbe1ecc4a949abf10755870519086d058a2e99f438829aef24f0c66ce  lld-11.1.0.src.tar.xz
+ sha256 f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
+diff --git a/package/lld/lld.mk b/package/lld/lld.mk
+index cd1a03c1d3..4bf903cda0 100644
+--- a/package/lld/lld.mk
++++ b/package/lld/lld.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
  # LLVM, Clang and lld should be version bumped together
--CLANG_VERSION = 9.0.1
-+CLANG_VERSION_MAJOR = 11
-+CLANG_VERSION = $(CLANG_VERSION_MAJOR).1.0
- CLANG_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)
- CLANG_SOURCE = clang-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = Apache-2.0 with exceptions
+-LLD_VERSION = 9.0.1
++LLD_VERSION = 11.1.0
+ LLD_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLD_VERSION)
+ LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
+ LLD_LICENSE = Apache-2.0 with exceptions
 -- 
 2.25.1
 
