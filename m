@@ -4,83 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0376C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 05:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC0A6C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 07:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A98840263;
-	Tue, 22 Mar 2022 05:46:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27D70415F0;
+	Tue, 22 Mar 2022 07:51:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OGR2h3jPjBRf; Tue, 22 Mar 2022 05:46:48 +0000 (UTC)
+	with ESMTP id TsM420SRD-sV; Tue, 22 Mar 2022 07:51:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A130E401C4;
-	Tue, 22 Mar 2022 05:46:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 423E01BF31C
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 05:46:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DD394174E;
+	Tue, 22 Mar 2022 07:51:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5095B1BF314
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 07:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B933401B2
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 05:46:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AAFC8436F
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 07:51:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1JLNVA8vo3Iw for <buildroot@lists.busybox.net>;
- Tue, 22 Mar 2022 05:46:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6C1CA4018C
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 05:46:43 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id e22so19062811ioe.11
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 22:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=/mfWKMSZK1UgZEDUAHYM54df4uofWNnkM2QHOy4pCz8=;
- b=ktQVvYu1rJJtHFBtQIlHxiPOfA2RDzABjwihCLE6jt0PPVqawjHd2PrGMC/s7f31+W
- E4AcKS89nv0ILuns5gcTBApwAoeIMwaIejdvSDCbm2Bmnksqcz5nPg5NsQW/fugNQ+R2
- zCKoHHJ7B35gomRHAGdj2JIueXXSzWs7eeM2ffH1GSwvVGKNUU5spg6wETPQOS9bT1u0
- v5UgYpbplsN8pbZ2egkR9RdV0wsZpJsZHAp8vwXAvmJKgxVrLnKJWy3ARwqkZOmgPIft
- dLXIQE+21vOPkP5eTGRmnnfMYgLsQuD/YzylPsuILNT4YEhLU9z4Tqnj+4IEjX1uUeKP
- 7zUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=/mfWKMSZK1UgZEDUAHYM54df4uofWNnkM2QHOy4pCz8=;
- b=BitOcLmTtMc3az4BY2jA0i00xl8WJJB0fjGr9sPGzQsKOL7OvgTbnkbFhv9zlhX7Ll
- 6kXA1pUCOqqQph09yNT8+qCuM5yDkr8hs1WBpKr6huBebSFpfemldTf3TUbr9eNhafkG
- 9rdvfdAI/n1zvtljMjZkdR9X3ZXYBEFCtGhyYIs7aL7wlgeR3JTL7OSdpxS0dfTC9cPi
- 4FQnApPxw6RWHSMVuG/LSybX/KxisqWZscRYlG1HcekZPmhihVAm4Xz+dHsMwuBo0Tz5
- Xog92wEYhhksBe1QM1i6W67wbNai0Uw/TYycfNIW2aTKPW0kwJKGShm8KPiqyhaRkOcr
- zDtA==
-X-Gm-Message-State: AOAM530UGUz4mIr4K17Dj+bbxBSt+7L8pXQOm/xW7aoQDvGTyUp9tA0l
- 0Y6AtCkil6ksYGekrcTe2a/lv1mM1TF2KQ==
-X-Google-Smtp-Source: ABdhPJzmKoUNtL4SDsHrncCniCcsEUjKOqKz8MxtZlY8ktXKD2/nXliTU0z6fEKyqEZF6O9SATtICg==
-X-Received: by 2002:a05:6638:1649:b0:31f:61f6:35f4 with SMTP id
- a9-20020a056638164900b0031f61f635f4mr8212103jat.205.1647928002040; 
- Mon, 21 Mar 2022 22:46:42 -0700 (PDT)
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com.
- [209.85.166.47]) by smtp.gmail.com with ESMTPSA id
- 12-20020a056e0216cc00b002c841fec17fsm754005ilx.50.2022.03.21.22.46.41
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 21 Mar 2022 22:46:41 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id d62so19050536iog.13
- for <buildroot@buildroot.org>; Mon, 21 Mar 2022 22:46:41 -0700 (PDT)
-X-Received: by 2002:a05:6638:1611:b0:321:47a8:637c with SMTP id
- x17-20020a056638161100b0032147a8637cmr3302080jas.147.1647928001464; Mon, 21
- Mar 2022 22:46:41 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mt7l_zYXhIlU for <buildroot@lists.busybox.net>;
+ Tue, 22 Mar 2022 07:51:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9B2284368
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 07:51:06 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BBB4AFF809;
+ Tue, 22 Mar 2022 07:51:02 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nWZID-008eXi-Gi; Tue, 22 Mar 2022 08:51:01 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220209203026.3724993-1-yann.morin.1998@free.fr>
+Date: Tue, 22 Mar 2022 08:51:01 +0100
+In-Reply-To: <20220209203026.3724993-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 9 Feb 2022 21:30:26 +0100")
+Message-ID: <878rt2h1cq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220322051448.2589854-1-christian@paral.in>
- <CA+h8R2qzrqF-1i9w1T0aCOp5MJCk_fPxPQFC+Uj7CsF9pgc3uA@mail.gmail.com>
- <CA+h8R2r3UYhf=gnsDhpNOtwgT0fdSNT_dQhowiX-zE8CK=NrUA@mail.gmail.com>
-In-Reply-To: <CA+h8R2r3UYhf=gnsDhpNOtwgT0fdSNT_dQhowiX-zE8CK=NrUA@mail.gmail.com>
-Date: Mon, 21 Mar 2022 22:46:30 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2q8zJ=aWGyiTqAfNorom=WmLnU67qRDeqwQB4hwotmgtg@mail.gmail.com>
-Message-ID: <CA+h8R2q8zJ=aWGyiTqAfNorom=WmLnU67qRDeqwQB4hwotmgtg@mail.gmail.com>
-To: Christian Stewart <christian@paral.in>
-Subject: Re: [Buildroot] [PATCH 1/1] package/go: bump to version 1.18
+Subject: Re: [Buildroot] [PATCH] support/scripts/graph-build-time: add
+ support for timeline graphing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,61 +60,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon, Mar 21, 2022 at 10:38 PM Christian Stewart <christian@paral.in> wrote:
-> On Mon, Mar 21, 2022 at 10:18 PM Christian Stewart <christian@paral.in> wrote:
-> > On Mon, Mar 21, 2022 at 10:14 PM Christian Stewart <christian@paral.in> wrote:
-> > >
-> > > The latest Go release, version 1.18, is a significant release, including changes
-> > > to the language, implementation of the toolchain, runtime, and libraries.
-> > >
-> > > https://go.dev/doc/go1.18
->
-> > I should note that this upgrade also will change a lot of the Go
-> > package hashes...
-> >
-> > Due to the way the "go mod vendor" step works, there's some
-> > incompatibility with the go 1.17 vendor format:
-> >
-> > go: inconsistent vendoring in /build/containerd-1.5.9:
-> >         github.com/containerd/containerd: is marked as replaced in
-> > vendor/modules.txt, but not replaced in go.mod
-> >
-> >         To ignore the vendor directory, use -mod=readonly or -mod=mod.
-> >         To sync the vendor directory, run:
-> >                 go mod vendor
-> >
-> > We will need to update the hashes and the archives for these packages.
->
-> Something weird is going on here...
->
-> https://asciinema.org/a/guJyOQeqbG5PIL1daVYQoyyef
->
-> With containerd checked out at v1.6.1 with Go 1.18,
+ > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > This commit adds support for a new type of graph, showing the timeline
+ > of a build. It shows, with one line per package, when each of this
+ > package steps started/ended, and therefore allows to see the
+ > sequencing of the package builds.
 
-This was indeed an incompatibility between containerd 1.6.1 and go 1.18:
+ > For a fully serialized build like we have today, this is not super
+ > useful (except to show that everything is serialized), but it becomes
+ > much more useful in the context of top-level parallel build.
 
- - https://github.com/golang/go/issues/51285
- - https://github.com/containerd/containerd/pull/6605
+ > We chose to order the graph by the time-of-configure, as it is the
+ > closest to the actual cascade-style of a true dependency graph, which is
+ > tiny bit more complex to achieve properly. The actual result still looks
+ > pretty good.
 
-The fix has not yet been released (for containerd).
+ > The graph-build make target is extended to also generate this new
+ > timeline graph.
 
-... so we should delay updating Go to 1.18 until all the packages in
-the tree support it w/ tagged releases.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > [yann.morin.1998@free.fr:
+ >   - sort by start-of-configure time
+ >   - re-use existing colorsets (default or alternate)
+ >   - fix python2isms
+ >   - fix check-package
+ > ]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Thanks & best,
-Christian Stewart
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
