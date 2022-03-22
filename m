@@ -1,57 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06015C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 21:28:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A37AFC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 22:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69369612B8;
-	Tue, 22 Mar 2022 21:28:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 460E840B6F;
+	Tue, 22 Mar 2022 22:21:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8kWPfygioV7x; Tue, 22 Mar 2022 21:28:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K5RKXI3twYJB; Tue, 22 Mar 2022 22:21:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FFC860E50;
-	Tue, 22 Mar 2022 21:28:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 56DDA1BF488
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 21:28:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5335D40AFB;
+	Tue, 22 Mar 2022 22:21:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 854341BF5B3
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 22:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EA4E60E50
- for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 21:28:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D4D840AFB
+ for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 22:21:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bnKoguHvlLPK for <buildroot@lists.busybox.net>;
- Tue, 22 Mar 2022 21:28:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BD93A60E4E
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 21:28:14 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.170.53.189])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 941C0B0053B;
- Tue, 22 Mar 2022 22:28:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1647984491;
- bh=iHGz9FXwr4HF/Z5CHEks3ZU2OwGWmQ1B0f3/lR899yA=;
- h=From:To:Cc:Subject:Date:From;
- b=N2habS4TThrYJ7BfcoyFzBPC4eJYPuSlawEvxhUq71H8gwYYK3596TzEfxh1Td6Fz
- L9iauNm4/L04/nDaYsRicjWK+afHsJ/AtL+dVZQKB0+mLuL8NdN0sTyxXzGzHZOxY+
- qx2YFr2qAftpQjjYT8+tpqRvM4eE9ZLeCNmlJVi51AeYwjYRsTtp7FF1/BJ3YxwqU5
- WB4OxwjLbIAaDWLJQt28zixJDn//2bZ42Bbwiu7bUPlnyPc17k+lnfIIjmeY5uuJQL
- iR0cADcdjsFvsnId9WZZlJ3tOpryybPHCxFVGBLlWiMdax2XEQMB3AFuYDfHrsxGaM
- eY5gZ+Pq/PtsQ==
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R5iME8riWDlw for <buildroot@lists.busybox.net>;
+ Tue, 22 Mar 2022 22:21:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
+ [IPv6:2607:f8b0:4864:20::1035])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1244340486
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 22:21:12 +0000 (UTC)
+Received: by mail-pj1-x1035.google.com with SMTP id
+ o6-20020a17090a9f8600b001c6562049d9so3412291pjp.3
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 15:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vHeWuKwTvyKoPpLMa/pI8Biwsnz1Ct32GA8KSHgCrbU=;
+ b=YhNyVLBo1M2hxRM84xf3GR8QtmxJW9NR3e3yEkx5izJUeXIxU6LAuW5b0XSKtmpbkW
+ KYwd8v9kNYRYOKEkk8g9sYGcS5KnD7OcCDgd9pZkV3MbqkH+h1vRHp8sxiTuf4ZZYg69
+ PgP1Cdx9Qk5GP3n0B2PsySW3Do4eDOGlgSjUhHFG9ic021meWFmKP2lCaaDPJdqITwuc
+ VwzR4pEwd44LrYK+Eh1Pv7Tq1tfWLKjZfaoiH+vymFpi8MtFAL47EdMIowphT0/Tuovc
+ ttL5uMDIn0fT0fuuMbFy4eZVnF979e7fyhgLC91CV1+4gZfR3yqHB7pWHmWDQYQL9E2W
+ fh8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vHeWuKwTvyKoPpLMa/pI8Biwsnz1Ct32GA8KSHgCrbU=;
+ b=t1+a6rKBf6D6PeQvRHRwpdTzZH3PE4PU5E+pT1XgegasrVEX1CBLzn/pzo57p2PWI1
+ Qr5LoRKAA0omkE/wYUeC2D/wM/BS9GpGelRwge9REbhaMC351lOAfy0MjObO/oyeDSgR
+ druCbnQjFOGcW7qX4832GDdeyeUf3zQsmyL83xJBW5AmB4v/GXzDa/BUaXNvRXGYWI73
+ ATKH6mip6Uwqu776ThCxK5jsHTBYidJLZzBzU/Fa7tebVRGBKN5E4bdrOXNgZXZmKilb
+ hGOkUI47eaY/1C54pJI3F+LN8JkLyIfkuOJsUUq2aTgH8h2Nk5hXAxGEixNeu1dcURyf
+ ddIA==
+X-Gm-Message-State: AOAM5323mIyF9MZ3qqlKRKBhx7Mrzqq/HrxuK5Zi5PhRSWbQkryySH4l
+ DacDJ/al78cnqn06OBxQJt2axRmmAC8=
+X-Google-Smtp-Source: ABdhPJwBRzEz3tMd9f5YbzqH9HD4ZbARDHDEWQ3/q6YmDiHMLnEg6MuivHOkaDBGG+qbYFAxFDptdA==
+X-Received: by 2002:a17:902:e803:b0:154:2699:7f39 with SMTP id
+ u3-20020a170902e80300b0015426997f39mr19801756plg.172.1647987671961; 
+ Tue, 22 Mar 2022 15:21:11 -0700 (PDT)
+Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net.
+ [72.194.116.95]) by smtp.gmail.com with ESMTPSA id
+ h14-20020a63384e000000b00366ba5335e7sm18415313pgn.72.2022.03.22.15.21.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Mar 2022 15:21:11 -0700 (PDT)
+From: Florian Fainelli <f.fainelli@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Mar 2022 22:27:50 +0100
-Message-Id: <20220322212750.2271424-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.35.1
+Date: Tue, 22 Mar 2022 15:21:04 -0700
+Message-Id: <20220322222106.42347-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rdma-core: new package
+Subject: [Buildroot] [PATCH 0/2] External GCC12 toolchain support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,278 +85,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: opendmb@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+ mmayer@broadcom.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is the userspace components for the Linux Kernel's
-drivers/infiniband subsystem.
+This patch series allows us to use Linaro's GCC12 snapshot that can be
+downloaded from here:
 
-https://github.com/linux-rdma/rdma-core
+https://snapshots.linaro.org/gnu-toolchain/12.0-2021.10-1/aarch64-linux-gnu/
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/rdma-core/Config.in                   | 28 +++++++
- package/rdma-core/linux-rdma.fragment         |  9 +++
- package/rdma-core/rdma-core.hash              |  5 ++
- package/rdma-core/rdma-core.mk                | 24 ++++++
- package/rdma-core/readme.txt                  | 74 +++++++++++++++++++
- .../testing/tests/package/test_rdma_core.py   | 41 ++++++++++
- 8 files changed, 183 insertions(+)
- create mode 100644 package/rdma-core/Config.in
- create mode 100644 package/rdma-core/linux-rdma.fragment
- create mode 100644 package/rdma-core/rdma-core.hash
- create mode 100644 package/rdma-core/rdma-core.mk
- create mode 100644 package/rdma-core/readme.txt
- create mode 100644 support/testing/tests/package/test_rdma_core.py
+Florian Fainelli (2):
+  toolchain/Config.in: add BR2_TOOLCHAIN_GCC_AT_LEAST_12 blind option
+  toolchain/toolchain-external/toolchain-external-custom: add gcc 12
+    version selection
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 942bb8fe9c..8fea5e31aa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1615,6 +1615,7 @@ F:	package/ptm2human/
- F:	package/python-distro/
- F:	package/python-gnupg/
- F:	package/python-pyalsa/
-+F:	package/rdma-core/
- F:	package/riscv-isa-sim/
- F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
-diff --git a/package/Config.in b/package/Config.in
-index 0d5d763180..f21f1fbc66 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -555,6 +555,7 @@ endmenu
- 	source "package/pulseview/Config.in"
- 	source "package/qoriq-cadence-dp-firmware/Config.in"
- 	source "package/raspi-gpio/Config.in"
-+	source "package/rdma-core/Config.in"
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rockchip-mali/Config.in"
-diff --git a/package/rdma-core/Config.in b/package/rdma-core/Config.in
-new file mode 100644
-index 0000000000..8fc2e4b8a1
---- /dev/null
-+++ b/package/rdma-core/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_RDMA_CORE
-+	bool "rdma-core"
-+	depends on BR2_USE_MMU # fork() used in rstream example
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_STATIC_LIBS # dlopen()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  This is the userspace components for the Linux Kernel's
-+	  drivers/infiniband subsystem.
-+
-+	  https://github.com/linux-rdma/rdma-core
-+
-+if BR2_PACKAGE_RDMA_CORE
-+
-+# The "rdma" binary is not a runtime dependency of this package, so it
-+# is not selected. Since a Buildroot user might want to add this
-+# command, and the condition to enable it is not trivial, we give a
-+# hint here.
-+comment "Note: The 'rdma' command is provided by the 'iproute2' package when compiled with 'libmnl'."
-+	depends on !BR2_PACKAGE_IPROUTE2 || !BR2_PACKAGE_LIBMNL
-+
-+endif # BR2_PACKAGE_RDMA_CORE
-+
-+comment "rdma-core needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/rdma-core/linux-rdma.fragment b/package/rdma-core/linux-rdma.fragment
-new file mode 100644
-index 0000000000..e305f27e62
---- /dev/null
-+++ b/package/rdma-core/linux-rdma.fragment
-@@ -0,0 +1,9 @@
-+CONFIG_INFINIBAND=m
-+CONFIG_INFINIBAND_USER_MAD=m
-+CONFIG_INFINIBAND_USER_ACCESS=m
-+CONFIG_RDMA_RXE=m
-+CONFIG_INFINIBAND_IPOIB=m
-+CONFIG_INFINIBAND_IPOIB_CM=y
-+CONFIG_INFINIBAND_IPOIB_DEBUG_DATA=y
-+CONFIG_INFINIBAND_RTRS_CLIENT=m
-+CONFIG_INFINIBAND_RTRS_SERVER=m
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-new file mode 100644
-index 0000000000..2dd01d749e
---- /dev/null
-+++ b/package/rdma-core/rdma-core.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256  40737df5158abdfdbf79ea744a74251aedff92fdf8ab7aa637125de6a1cf7e1c  rdma-core-39.0.tar.gz
-+sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
-+sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-new file mode 100644
-index 0000000000..a69c1b22d5
---- /dev/null
-+++ b/package/rdma-core/rdma-core.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# rdma-core
-+#
-+################################################################################
-+
-+RDMA_CORE_VERSION = 39.0
-+RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
-+RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
-+RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
-+RDMA_CORE_DEPENDENCIES = libnl
-+RDMA_CORE_INSTALL_STAGING = YES
-+
-+RDMA_CORE_CONF_OPTS = \
-+	-DNO_MAN_PAGES=1 \
-+	-DNO_PYVERBS=1
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+RDMA_CORE_CONF_OPTS += \
-+	-DCMAKE_EXE_LINKER_FLAGS=-latomic \
-+	-DCMAKE_SHARED_LINKER_FLAGS=-latomic
-+endif
-+
-+$(eval $(cmake-package))
-diff --git a/package/rdma-core/readme.txt b/package/rdma-core/readme.txt
-new file mode 100644
-index 0000000000..4f90720ca3
---- /dev/null
-+++ b/package/rdma-core/readme.txt
-@@ -0,0 +1,74 @@
-+Testing rdma-core userspace tools
-+=================================
-+
-+Testing rdma-core using Linux software RoCE implementation:
-+https://en.wikipedia.org/wiki/RDMA_over_Converged_Ethernet
-+
-+Using two systems with working TCP/IP conficutation, for example:
-+- Server IP: 192.168.123.10
-+- Client IP: 192.168.123.20
-+
-+Make sure firewall configurations are appropriate. Routable RoCE v2
-+uses udp/4791. ibv_rc_pingpong uses tcp/18515 for initial
-+synchronization.
-+
-+Note: this test can be executed in two qemu virtual machines with
-+bridged networking.
-+
-+
-+Kernel configuration
-+--------------------
-+
-+The Linux Kernel needs some Infiniband configuration. In this example
-+the kernel "rdma_rxe" driver is needed (CONFIG_RDMA_RXE=y). See the
-+example fragment file provided:
-+
-+    package/rdma-core/linux-rdma.fragment
-+
-+
-+Buildroot package configuration
-+-------------------------------
-+
-+For setting up a software RoCE link, the "rdma" program is needed. It
-+is provided by the "iproute2" package, when "libmnl" is also
-+selected. Make sure to have in your Buildroot configuration:
-+
-+    BR2_PACKAGE_IPROUTE2=y
-+    BR2_PACKAGE_LIBMNL=y
-+    BR2_PACKAGE_RDMA_CORE=y
-+
-+
-+Setting up the rdma link
-+------------------------
-+
-+On both server and client:
-+
-+    modprobe rdma_rxe
-+    rdma link add rxe0 type rxe netdev eth0
-+
-+
-+Testing with rping
-+------------------
-+
-+On the server side, run the command:
-+
-+    rping -s -v
-+
-+On the client side, run the command:
-+
-+    rping -c -v -a 192.168.123.10
-+
-+
-+Testing with ibv_rc_pingpong
-+----------------------------
-+
-+To test with the pingpong example using the reliable connected (RC)
-+transport:
-+
-+On the server side, run the command:
-+
-+    ibv_rc_pingpong -g rxe0 -g 1
-+
-+On the client side, run the command:
-+
-+    ibv_rc_pingpong -d rxe0 -g 1 192.168.123.10
-diff --git a/support/testing/tests/package/test_rdma_core.py b/support/testing/tests/package/test_rdma_core.py
-new file mode 100644
-index 0000000000..783146202d
---- /dev/null
-+++ b/support/testing/tests/package/test_rdma_core.py
-@@ -0,0 +1,41 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestRdmaCore(infra.basetest.BRTest):
-+
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.30"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="package/rdma-core/linux-rdma.fragment"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_IPROUTE2=y
-+        BR2_PACKAGE_LIBMNL=y
-+        BR2_PACKAGE_RDMA_CORE=y
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-+        # Add the rxe0 interface
-+        self.assertRunOk("rdma link add rxe0 type rxe netdev eth0")
-+
-+        # ibv_devinfo returns 255 if no devices are found
-+        self.assertRunOk("ibv_devinfo -v")
+ toolchain/Config.in                                   | 11 +++++++++--
+ .../toolchain-external-custom/Config.in.options       |  4 ++++
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
 -- 
-2.35.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
