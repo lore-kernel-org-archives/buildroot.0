@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFC5C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 23:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E26DAC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Mar 2022 23:22:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C7A4848EE;
-	Tue, 22 Mar 2022 23:22:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83B4F40C86;
+	Tue, 22 Mar 2022 23:22:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0nPT_8k9wSV0; Tue, 22 Mar 2022 23:22:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id khMP1uQSqKXJ; Tue, 22 Mar 2022 23:22:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7880C848E6;
-	Tue, 22 Mar 2022 23:22:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 45D401BF427
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CE8F40AFA;
+	Tue, 22 Mar 2022 23:22:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F13D31BF427
  for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33974612B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE3BB40AFA
  for <buildroot@lists.busybox.net>; Tue, 22 Mar 2022 23:22:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LVpesCoFRxYZ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z3NcWafnLjtX for <buildroot@lists.busybox.net>;
  Tue, 22 Mar 2022 23:22:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 332D960E83
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 23:22:34 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id h63so22010752iof.12
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 16:22:34 -0700 (PDT)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D614340194
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 23:22:35 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id d62so21989465iog.13
+ for <buildroot@buildroot.org>; Tue, 22 Mar 2022 16:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=BEpuGEAeiwFZaJKxuTyO9bugo22CVcMwdem/MIfVEnw=;
- b=SRlS0/iXY04G6Sx3U2F2WvBQIyWYZaErzVvYkLcoeAEOFNIjPIs8zEBcpqenjeXvZQ
- +IMjPkdUgTv3bgZz9qiaTFFRtfbcBONou0H0jLQLBGU0Ny0alpwB3DfEowNzmbXB2ldf
- 5sYCYYKbzW1aQi36ANrvx+hUJUcGHkheeZHBMmGA9e0+hln/BwJF4+0DQ42yOIXFUfgw
- YnyhopeTJMO9zRWI2A8BwysZpZelWqcw0rU24almEHSu2OTZtgy3Qdtvcd63oAgiGQSS
- pqhgNaSyZi121u62u26KR8lxxEHW2x1ZyFkVbiP+vru07xyHG+mGCtDwpXzvGqvi31Ey
- iEmA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=yrHr32a3mQmwipbg1O4lH47hElIBX1pWtKfBKRYXO/c=;
+ b=X0FaZYcqGN7v7xPnSGsFildD0pIgABh9+iS+Gfw+a++MGg0YIhx+ZIkCssHihXC6jy
+ jj/TDBkX0eSKfOyLO/0UHS/wn/AcwjmFCHkcXibqHhqr+TGTCVV7/dUeiLZijntU6h9B
+ PyH2KVgMVlC7BgTZGxVO2b2CFuOHfsZ25S/IOK5OYszevlPgkEk/L6+5wxPn/njCf0Mi
+ iY+paGS2Bi12qyqFF4jYvC670VGwFcctd0AXPZtR0XJ5zvEiv2Ls+cnq+FK+8Ga95lty
+ wbs6768km/Eo8+WUZDUbVD2g8TOGWmeKcmXcZhnY0HMacloaEjpxeirtN6kjqaXYwMVF
+ OD/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=BEpuGEAeiwFZaJKxuTyO9bugo22CVcMwdem/MIfVEnw=;
- b=virxyFTih+DUsYUe14fPSvShYFOAkJ0tTPXIcNBV7uTIkH1csH/1nes8ySTEzx93Nm
- CnV3GUZbK2DbK6wLkbysmeAmJp7uhytrLv4JXsnpc9bHmdTL05YsaVI9Q9nzPvo8Rp6O
- OhnFnMZCfnuU2h39tcEf7LVVBf4NclBhq0Q59lmYx9p5X8B/ueIHWZ4t6Wem5EYBEVcf
- HmK/hevvE8ixwtmI8VBtWw9HJkhnOYHlZ+cjQ/pWGWXuh5rVfqteytEpCSDwjegBrCZC
- Z+5xBznX4QbhhP6Esz2A35qNqsxVvbnByBvqVvcns1nmfTIXSV8uXH/lD5hh0PyoxpS4
- p+fw==
-X-Gm-Message-State: AOAM533fIfCs6oyGMoo0w/rMlRiFCH55pF7boWjRuYTxiDO4zi5eDw+y
- fkPT+mZO73wmv9dYKoQjgD6F0qOpvoBMSLbU
-X-Google-Smtp-Source: ABdhPJyCgLxP/40Ij6h3PSVhNUZ2LihzRx8VJURWOYj4q359PChDd695/pr1Q6Mx2vPAzaAQ1tC4Zw==
-X-Received: by 2002:a05:6638:258f:b0:31a:1c77:f6ef with SMTP id
- s15-20020a056638258f00b0031a1c77f6efmr13676179jat.25.1647991353787; 
- Tue, 22 Mar 2022 16:22:33 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=yrHr32a3mQmwipbg1O4lH47hElIBX1pWtKfBKRYXO/c=;
+ b=FLna3Yz9wsqXvE4DvaHR8cN409rdEhbXk3N3wqymGJiqH/8971bDtaMdD7hsVtUY62
+ HKFz/7bj1HS0Lh4kguy8aYVFFpbjP2tkSgLhrjSMJ6SKYNkgreXdATQ4JugWhO97qoVB
+ Tjxi1j7u4rdPSQDvqpfSkNlJCQkZQGQTYotJk/bimNHLgoDOvRgRLxc/w5q4ZHLOjnBl
+ oxTvf8mL1hVRCyCckkJlZAdGRMiBbhzeK8BBhaFFfl+Cdsr2wHk/+/cNj7Zpdx7T9lwk
+ m96zUxva4ZJytleWFqJjQlnLp72L2x8ebjIilqu4e4NBk2dSLgzCH2SRZCqq5jZoZ3Sb
+ DxIw==
+X-Gm-Message-State: AOAM5310q1xBpvIumUzt8rBiKOVYDopmICiNypfsnhK0EqP2gD9Y0YaC
+ htqUnAla69Pqdy4AKFASiv0YumEbZOPWV6vU
+X-Google-Smtp-Source: ABdhPJynYZclgCvDPKJvhZFySui5bgUbmDYE4gS19zkKWc3HdeeCQFrKGTpq2O48BJTPz9vkwRu2Jw==
+X-Received: by 2002:a5d:840e:0:b0:649:c671:6594 with SMTP id
+ i14-20020a5d840e000000b00649c6716594mr2701901ion.19.1647991354502; 
+ Tue, 22 Mar 2022 16:22:34 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
  [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
  i81-20020a6bb854000000b00649c1b67a6csm2006324iof.28.2022.03.22.16.22.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Mar 2022 16:22:33 -0700 (PDT)
+ Tue, 22 Mar 2022 16:22:34 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Mar 2022 17:22:14 -0600
-Message-Id: <20220322232224.2842266-1-james.hilliard1@gmail.com>
+Date: Tue, 22 Mar 2022 17:22:15 -0600
+Message-Id: <20220322232224.2842266-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220322232224.2842266-1-james.hilliard1@gmail.com>
+References: <20220322232224.2842266-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v12 01/11] package/llvm: bump to version 11.1.0
+Subject: [Buildroot] [PATCH v12 02/11] package/clang: bump to version 11.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,7 +90,6 @@ Cc: Joseph Kogut <joseph.kogut@gmail.com>,
  Bernd Kuhls <bernd.kuhls@t-online.de>,
  Matt Weber <matthew.weber@rockwellcollins.com>,
  Samuel Martin <s.martin49@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>
@@ -102,155 +101,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v11 -> v12:
-  - add gcc 5 dependency due to c++14 requirement
-  - propagate gcc 5 reverse dependency
-  - remove unsupported config options
----
- package/clang/Config.in  |  6 +++---
- package/llvm/Config.in   |  6 +++---
- package/llvm/llvm.hash   |  2 +-
- package/llvm/llvm.mk     | 20 ++++++--------------
- package/mesa3d/Config.in |  6 +++---
- 5 files changed, 16 insertions(+), 24 deletions(-)
+ package/clang/clang.hash | 2 +-
+ package/clang/clang.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/clang/Config.in b/package/clang/Config.in
-index a67e7631a8..7c732c7af7 100644
---- a/package/clang/Config.in
-+++ b/package/clang/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_CLANG
- 	bool "clang"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-@@ -14,10 +14,10 @@ config BR2_PACKAGE_CLANG
- 
- 	  http://clang.llvm.org
- 
--comment "clang needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
-+comment "clang needs a toolchain w/ wchar, threads, C++, gcc >= 5, dynamic library"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "clang needs a toolchain not affected by GCC bug 64735"
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 6ec2ffcfe6..c1887e36dd 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
- config BR2_PACKAGE_LLVM
- 	bool "llvm"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-@@ -55,10 +55,10 @@ config BR2_PACKAGE_LLVM_BPF
- 
- endif
- 
--comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
-+comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 5, dynamic library"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "llvm needs a toolchain not affected by GCC bug 64735"
-diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
-index 6bf2755777..e93a922492 100644
---- a/package/llvm/llvm.hash
-+++ b/package/llvm/llvm.hash
+diff --git a/package/clang/clang.hash b/package/clang/clang.hash
+index 067a2c0470..32a19c1659 100644
+--- a/package/clang/clang.hash
++++ b/package/clang/clang.hash
 @@ -1,3 +1,3 @@
  # locally calculated
--sha256 00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a llvm-9.0.1.src.tar.xz
-+sha256 ce8508e318a01a63d4e8b3090ab2ded3c598a50258cc49e2625b9120d4c03ea5 llvm-11.1.0.src.tar.xz
- sha256 8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee LICENSE.TXT
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 6c721c30b9..825de96392 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -5,7 +5,7 @@
+-sha256 5778512b2e065c204010f88777d44b95250671103e434f9dc7363ab2e3804253 clang-9.0.1.src.tar.xz
++sha256 0a8288f065d1f57cb6d96da4d2965cbea32edc572aa972e466e954d17148558b clang-11.1.0.src.tar.xz
+ sha256 ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47 LICENSE.TXT
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 939f000cbd..d1667d79b6 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -5,7 +5,8 @@
  ################################################################################
  
  # LLVM, Clang and lld should be version bumped together
--LLVM_VERSION = 9.0.1
-+LLVM_VERSION = 11.1.0
- LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
- LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
- LLVM_LICENSE = Apache-2.0 with exceptions
-@@ -157,15 +157,9 @@ LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
- HOST_LLVM_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
- LLVM_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
- 
--# Disable C++1y (ISO C++ 2014 standard)
--# Disable C++1z (ISO C++ 2017 standard)
--# Compile llvm with the C++11 (ISO C++ 2011 standard) which is the fallback.
--HOST_LLVM_CONF_OPTS += \
--	-DLLVM_ENABLE_CXX1Y=OFF \
--	-DLLVM_ENABLE_CXX1Z=OFF
--LLVM_CONF_OPTS += \
--	-DLLVM_ENABLE_CXX1Y=OFF \
--	-DLLVM_ENABLE_CXX1Z=OFF
-+# Compile llvm with the C++14 (ISO C++ 2014 standard).
-+HOST_LLVM_CONF_OPTS += -DCMAKE_CXX_STANDARD=14
-+LLVM_CONF_OPTS += -DCMAKE_CXX_STANDARD=14
- 
- # Disabled, requires sys/ndir.h header
- # Disable debug in module
-@@ -237,13 +231,11 @@ endif
- HOST_LLVM_CONF_OPTS += \
- 	-DLLVM_BUILD_EXTERNAL_COMPILER_RT=OFF \
- 	-DLLVM_BUILD_RUNTIME=OFF \
--	-DLLVM_INCLUDE_RUNTIMES=OFF \
--	-DLLVM_POLLY_BUILD=OFF
-+	-DLLVM_INCLUDE_RUNTIMES=OFF
- LLVM_CONF_OPTS += \
- 	-DLLVM_BUILD_EXTERNAL_COMPILER_RT=OFF \
- 	-DLLVM_BUILD_RUNTIME=OFF \
--	-DLLVM_INCLUDE_RUNTIMES=OFF \
--	-DLLVM_POLLY_BUILD=OFF
-+	-DLLVM_INCLUDE_RUNTIMES=OFF
- 
- HOST_LLVM_CONF_OPTS += \
- 	-DLLVM_ENABLE_WARNINGS=ON \
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index e41da562dc..b0ebc09212 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
- config BR2_PACKAGE_MESA3D_LLVM
- 	bool "llvm support"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-@@ -32,10 +32,10 @@ config BR2_PACKAGE_MESA3D_LLVM
- 	depends on BR2_USE_WCHAR # std::wstring
- 	select BR2_PACKAGE_LLVM
- 
--comment "llvm support needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
-+comment "llvm support needs a toolchain w/ wchar, threads, C++, gcc >= 5, dynamic library"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "llvm support needs a toolchain not affected by GCC bug 64735"
+-CLANG_VERSION = 9.0.1
++CLANG_VERSION_MAJOR = 11
++CLANG_VERSION = $(CLANG_VERSION_MAJOR).1.0
+ CLANG_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)
+ CLANG_SOURCE = clang-$(CLANG_VERSION).src.tar.xz
+ CLANG_LICENSE = Apache-2.0 with exceptions
 -- 
 2.25.1
 
