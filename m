@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B2BAC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D05C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5394484AAF;
-	Wed, 23 Mar 2022 20:27:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 271AF40CBD;
+	Wed, 23 Mar 2022 20:27:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F_z4u0O8QsxF; Wed, 23 Mar 2022 20:27:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dahd8WaR8XEH; Wed, 23 Mar 2022 20:27:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59605849D6;
-	Wed, 23 Mar 2022 20:27:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 411C81C1135
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AF1F40CB2;
+	Wed, 23 Mar 2022 20:27:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 108B51BF48C
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30AC184361
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FF83400C4
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O8N7X0LYANRk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KwVAwlUeWMIz for <buildroot@lists.busybox.net>;
  Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D21A84317
+ by smtp2.osuosl.org (Postfix) with ESMTP id 386DE40FBC
  for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A3DFE854E8; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
+ id 7CD81854E7; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 21:23:46 +0100
+Date: Wed, 23 Mar 2022 21:23:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92a3ca0932155498747c46d6f902a939d55c39f4
-X-Git-Newrev: f8a46311b5e0680609d3432d4256fbe83558c3b9
+X-Git-Oldrev: 803bc68d59a46ea68540f437ced6334cf3335a7e
+X-Git-Newrev: 8b2adbff1585b2581c76c9abcc8d5529134be60c
 X-Patchwork-Hint: ignore
-Message-Id: <20220323201808.A3DFE854E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.18
+Message-Id: <20220323201808.7CD81854E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5base: fix CVE comments
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +58,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8a46311b5e0680609d3432d4256fbe83558c3b9
+commit: https://git.buildroot.net/buildroot/commit/?id=8b2adbff1585b2581c76c9abcc8d5529134be60c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2022-February/000470.html
+Commit 5770a645a3a49a3f0f02972131a4ff5283b4c11e forgot to update CVE
+comments
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 0363b6e922..e70b266d92 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  1c67ccccdc81a75007c01dedc02ad608c4d856c60a6b89b9cd246e79f72aa2b8  dovecot-2.3.17.1.tar.gz
-+sha256  06e73f668c6c093c45bdeeeb7c20398ab8dc49317234f4b5781ac5e2cc5d6c33  dovecot-2.3.18.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index fb299a8e45..053462c6dd 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ef02edfc1d..4418f0d3ba 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -12,8 +12,7 @@ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
+ QT5BASE_INSTALL_STAGING = YES
+ QT5BASE_SYNC_QT_HEADERS = YES
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).17.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).18
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-# 0010-Avoid-processing-intensive-painting-of-high-number-o.patch
+-# 0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
++# 0006-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
+ QT5BASE_IGNORE_CVES += CVE-2021-38593
+ 
+ # A few comments:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
