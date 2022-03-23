@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD70C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7731DC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0932884357;
-	Wed, 23 Mar 2022 21:48:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JVl6D73_95Nr; Wed, 23 Mar 2022 21:48:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 056208429B;
-	Wed, 23 Mar 2022 21:48:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F8041BF9C8
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:47:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F43441A3D
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:47:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 426B341B6D;
+	Wed, 23 Mar 2022 21:49:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vKuNdLf2hS0G for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 21:47:56 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y9-WYt-McQYc; Wed, 23 Mar 2022 21:49:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 624E0418EC;
+	Wed, 23 Mar 2022 21:49:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 85A991BF489
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:48:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8258760ADD
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:48:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vuWtctimxM2Y for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 21:48:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B44D5418EC
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:47:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA5CA60AC3
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:48:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CC1EB857B1; Wed, 23 Mar 2022 21:38:56 +0000 (UTC)
+ id E11EB85A7E; Wed, 23 Mar 2022 21:39:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 22:47:25 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 83a15447c1a45802e1c15fcd0879f6d0f1c3694f
-X-Git-Newrev: 3106b412be4d70d4f8e6b7b2c81a6aa5a7eb8eff
+Date: Wed, 23 Mar 2022 22:47:19 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 0ad69d4363ad871e6637d9930f49f3efbdff349b
+X-Git-Newrev: f9f936b16763c9074434249960337be4c25b501d
 X-Patchwork-Hint: ignore
-Message-Id: <20220323213856.CC1EB857B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/apache: security
+Message-Id: <20220323213901.E11EB85A7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/apache: security
  bump version to 2.4.53
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3106b412be4d70d4f8e6b7b2c81a6aa5a7eb8eff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f9f936b16763c9074434249960337be4c25b501d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.53
 
@@ -106,7 +106,7 @@ index 014d920772..11dcdefe46 100644
  # Locally computed
  sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
 diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 5fcb887fbc..24d17364bb 100644
+index 3b518795be..d5eb65db43 100644
 --- a/package/apache/apache.mk
 +++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
