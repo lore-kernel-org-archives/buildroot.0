@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB80C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 382B8C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6F6A4051A;
-	Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD03941917;
+	Wed, 23 Mar 2022 21:40:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dir1CYGbYsVT; Wed, 23 Mar 2022 21:40:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id skcQkjE0ayaP; Wed, 23 Mar 2022 21:40:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9AAC24019D;
-	Wed, 23 Mar 2022 21:40:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE45A41919;
+	Wed, 23 Mar 2022 21:40:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0AE781BF489
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 998BC1BF489
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E78A041919
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 967B841919
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u5_Qs7CUat7h for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 21:40:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3004D41917
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:40:12 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A813B100003;
- Wed, 23 Mar 2022 21:40:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nX8i9-00A13t-Oq; Wed, 23 Mar 2022 22:40:09 +0100
+ with ESMTP id Uc9N3Np2s3jQ for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 21:40:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6EBF41917
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:40:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 05CF684F5C; Wed, 23 Mar 2022 21:31:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Sassen, Rutger" <rsassen@comecer.com>
-References: <YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
-Date: Wed, 23 Mar 2022 22:40:09 +0100
-In-Reply-To: <YQXPR01MB61216162093E0D5F17304D0BAE129@YQXPR01MB6121.CANPRD01.PROD.OUTLOOK.COM>
- (Rutger Sassen's message of "Thu, 17 Mar 2022 11:06:22 +0000")
-Message-ID: <87ee2se4au.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/rpi-firmware: fix missing
- files in overlays
+To: buildroot@buildroot.org
+Date: Wed, 23 Mar 2022 22:01:51 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: cce793940a09ce0ff0924c2e550734537cbc7173
+X-Git-Newrev: 5d78ea86f92ccfd6859acc2aff8147f624894405
+X-Patchwork-Hint: ignore
+Message-Id: <20220323213117.05CF684F5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libodb: add host
+ variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +53,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Martin Bark <martin@barkynet.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Sassen," == Sassen, Rutger <rsassen@comecer.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5d78ea86f92ccfd6859acc2aff8147f624894405
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > When supporting multiple hardware targets, overlay_map.dtb might
- > be needed to map overlay names to one of several implementations.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 7b9c81cc4eefd0972b91abced472e2bce8b53fa2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libodb/libodb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Signed-off-by: Rutger Sassen <rsassen@comecer.com>
- > ---
- > Changes v2 -> v3:
- >  - in Config.in use if statement instead of depends (suggested by Peter
- >    Seiderer)
- >  - mention the filename overlay_map.dtb in the help text (suggested by
- >    Peter Seiderer)
+diff --git a/package/libodb/libodb.mk b/package/libodb/libodb.mk
+index 11ca9de866..b25e8ac501 100644
+--- a/package/libodb/libodb.mk
++++ b/package/libodb/libodb.mk
+@@ -12,5 +12,7 @@ LIBODB_INSTALL_STAGING = YES
+ LIBODB_LICENSE = GPL-2.0
+ LIBODB_LICENSE_FILES = LICENSE
+ LIBODB_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++HOST_LIBODB_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
  
- > Changes v1 -> v2:
- >   - instead of always copying overlay_map.dtb, make it configurable
- >     (suggested by Peter Seiderer)
- >   - do not copy README since it a special case, only needed when
- >     installing overlays to a non-standard location (suggested by Peter
- >     Seiderer)
-
-Committed to 2021.02.x, 2021.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
