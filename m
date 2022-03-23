@@ -1,70 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97BD3C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 02:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8472C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 03:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4F2C40C94;
-	Wed, 23 Mar 2022 02:32:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41A9C41A19;
+	Wed, 23 Mar 2022 03:52:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o92zFNqgYVqz; Wed, 23 Mar 2022 02:32:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n1Df-iyxlKKD; Wed, 23 Mar 2022 03:52:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9275140C97;
-	Wed, 23 Mar 2022 02:32:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC3271BF5B4
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 02:32:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 493F241869;
+	Wed, 23 Mar 2022 03:52:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3504F1BF27A
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 03:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3F9540C8B
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 02:32:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23DCE41869
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 03:52:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GKq7GO29UxNb for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 02:32:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com
- [IPv6:2607:f8b0:4864:20::f33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5AC124013A
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 02:32:23 +0000 (UTC)
-Received: by mail-qv1-xf33.google.com with SMTP id kk12so272819qvb.13
- for <buildroot@buildroot.org>; Tue, 22 Mar 2022 19:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
- bh=cWh04Xk8ldSPfyT/fY9yR1DUiJdASEK8G6prvA25agQ=;
- b=Heq6p8i1Ukw5NQaHp5mFKPPu9nptXEXXdMq+uYw6ej/z9HoW+kcDGQ9wDqxM7btHNh
- ZaQMK8Hjbu9lAoAtbn7tjo2QCVsTF1L/1V+w/B9BbYRYSQBlbmwq/CqO8+ti40YFAZGP
- niBkkd3jISCgnixtK7ITpHSCSoC4Bn36nheR8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=cWh04Xk8ldSPfyT/fY9yR1DUiJdASEK8G6prvA25agQ=;
- b=wwR39F5AbIWnhj8oPQlUuZmbC+pI+3h4NnhVwLwLvjQUkJYFqp4WUpLE1XKhWcwrWM
- CDsgERsmfBRPGTC22VHGa/LdZ0KAp/ks+y4W4G5rztgV7c5tv6dCYAtTxivw/oClDAvZ
- MJHCCam6RPWtmduTTACfIeqQe6qOlNWiyGBmzZ0l1AZJrbsuUob2W5IrBuTb3owNPAiY
- 3EKgNg9ElKWZbTH/pzqC6YVLZ9Xo2STSyoUiVKPqaKA1lSX2fIPZaoBvAwFNwunQS4F8
- FcVsTSJ4tuxX6pgST0sHFGin5OgNubhDUO96J1PeE/pQl7XJuzyimO8MS7P7NvvOeBF2
- iEkA==
-X-Gm-Message-State: AOAM532j+OC06p+s7kk8Jtitw5B39ODWWHLLwlGXsam28QwDjbqWMvHJ
- 6adyABIGzixulLrAcZsPNaedsdAl/u4CoW+MVPxb/SnKCaA=
-X-Google-Smtp-Source: ABdhPJz2FkGg0myhQqpnt8KoQ9IgrhLMUndR5RBohDsbeXBGj/5dPx/mt0fuaYVFsqgnLVSe42GglbNPT7p5ROKJ80w=
-X-Received: by 2002:ad4:5f4a:0:b0:441:52e1:2ca9 with SMTP id
- p10-20020ad45f4a000000b0044152e12ca9mr3207506qvg.65.1648002740600; Tue, 22
- Mar 2022 19:32:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220315130737.428449-1-joel@jms.id.au>
-In-Reply-To: <20220315130737.428449-1-joel@jms.id.au>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 23 Mar 2022 02:32:08 +0000
-Message-ID: <CACPK8XfAZy_b+pSM5Q17PGSChfPOAk4ByvJZHPQ1nuEnRzThqw@mail.gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bPg1fXoxFxoR for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 03:52:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1EF2841864
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 03:52:42 +0000 (UTC)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by ams.source.kernel.org (Postfix) with ESMTPS id 71128B81AFE
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 03:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC54C340E8
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 03:52:38 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+ dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
+ header.b="Df9ot4jI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105; 
+ t=1648007557;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=K3XVAd8wS1X1b7t2IWH/wkitfnvjz31KWnkUNlsn0/U=;
+ b=Df9ot4jIo1imPh3HAi5+jxtBIC1MVwmID4ihDpvBDQFTDywc/u5UpkuOlLrHtjWrqKyK6d
+ veefJ7S2aTkvn1OfF6iIbFBXrv7DPeqnqnT4uDXGFlcZGq8HghJ/kgtyALx5a4ELe5V+3+
+ ompXx8Q9+7H1gXCKIEbYes4eNyzN3Mk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bbe5d32b
+ (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO); 
+ Wed, 23 Mar 2022 03:52:36 +0000 (UTC)
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 To: buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH] fakeroot: Fix segfault on ppc64le
+Date: Tue, 22 Mar 2022 21:52:33 -0600
+Message-Id: <20220323035233.140997-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/urandom-scripts: hash old seed with new
+ seed when saving
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,106 +71,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 15 Mar 2022 at 13:07, Joel Stanley <joel@jms.id.au> wrote:
->
-> When generating a filesystem image on a power10 build machine running
-> Ubuntu, we see a segfault when fakeroot is running chmod.
->
-> This has been reported and fixed upstream in Debian in version 1.26-1.2:
->
->  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=995393#53
->
-> Add the samae patch to resolve the segfault.
+Writing into /dev/urandom doesn't actually credit any entropy bits. And
+while it adds that data to the entropy pool, it won't actually be
+immediately used when reading from /dev/urandom subsequently. This is
+how the kernel's /dev/urandom has always worked, unfortunately.
 
-ping
+As a result of this behavior, which may be understandably surprising to
+you, writing a good seed file into /dev/urandom and then saving a new
+seed file immediately after is dangerous, because the new seed file may
+wind up being entirely deterministic, even if the old seed file was
+quite good.
 
->
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
-> This isn't a commit in the fakeroot tree, rather a patch from the Debian
-> packaging.
->
-> I would appreciate if this was added to the 2022.02 stable tree.
->
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  .../fakeroot/fix-prototype-generation.patch   | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 package/fakeroot/fix-prototype-generation.patch
->
-> diff --git a/package/fakeroot/fix-prototype-generation.patch b/package/fakeroot/fix-prototype-generation.patch
-> new file mode 100644
-> index 000000000000..38d32ff3b22c
-> --- /dev/null
-> +++ b/package/fakeroot/fix-prototype-generation.patch
-> @@ -0,0 +1,59 @@
-> +Subject: Fix prototype generation for openat
-> +Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
-> +Date: 2021-12-30
-> +Bug-Debian: https://bugs.debian.org/995393
-> +Forwarded: Yes (implicitely)
-> +
-> +    As jrtc27 pointed out in IRC, ppc64el is more strict than other
-> +    architectures when it comes to va_arg handling:
-> +
-> +        it's that ppc64le uses the elfv2 abi, and for variadic calls you
-> +        must reserve space for a parameter save area
-> +
-> +    So enhance wrapawk to create a proper prototype and argument
-> +    handling although it's specific to the openat call. Also add the
-> +    missing documentation for the sixth column to wrapfunc.inp.
-> +
-> +--- a/wrapawk
-> ++++ b/wrapawk
-> +@@ -37,7 +37,25 @@
-> +   argtype=$3;
-> +   argname=$4;
-> +   MACRO=$5;
-> +-  if(MACRO){
-> ++  openat_extra=$6;
-> ++  if(openat_extra){
-> ++    print "  {(void(*))&next_" name ", \"" name "\"},"  > structfile;
-> ++    print "extern " ret " (*next_" name ")" openat_extra ";" > headerfile;
-> ++    print ret " (*next_" name ")" openat_extra "=tmp_" name ";"> deffile;
-> ++
-> ++    print ret " tmp_" name,  openat_extra "{"           > tmpffile;
-> ++    print "  mode_t mode = 0;"                          > tmpffile;
-> ++    print "  if (flags & O_CREAT) {"                    > tmpffile;
-> ++    print "    va_list args;"                           > tmpffile;
-> ++    print "    va_start(args, flags);"                  > tmpffile;
-> ++    print "    mode = va_arg(args, int);"               > tmpffile;
-> ++    print "    va_end(args);"                           > tmpffile;
-> ++    print "  }"                                         > tmpffile;
-> ++    print "  load_library_symbols();"                   > tmpffile;
-> ++    print "  return  next_" name,  argname ";"          > tmpffile;
-> ++    print "}"                                           > tmpffile;
-> ++    print ""                                            > tmpffile;
-> ++  } else if(MACRO){
-> +     print "  {(void(*))&NEXT_" MACRO "_NOARG, " name "_QUOTE},"  > structfile;
-> +     print "extern " ret " (*NEXT_" MACRO "_NOARG)" argtype ";" > headerfile;
-> +     print ret " (*NEXT_" MACRO "_NOARG)" argtype "=TMP_" MACRO ";"> deffile;
-> +--- a/wrapfunc.inp
-> ++++ b/wrapfunc.inp
-> +@@ -9,8 +9,10 @@
-> + /**/                                                                    */
-> + /* each line of this file lists 4 fields, seperated by a ";".           */
-> + /* The first field is the name of the wrapped function, then it's return  */
-> +-/* value. After that come the function arguments with types, and the last */
-> ++/* value. After that come the function arguments with types, and the fifth */
-> + /* field contains the function arguments without types.                   */
-> ++/* A sixth field is a special needed when wrapping the openat syscall.    */
-> ++/* Otherwise it's like the third (function arguments with types).         */
-> + /**/
-> +
-> + /* __*xstat are used on glibc systems instead of just *xstat. */
-> --
-> 2.35.1
->
+I fixed this in systemd with
+<https://github.com/systemd/systemd/commit/da2862ef06f22fc8d31dafced6d2d6dc14f2ee0b>,
+and fortunately it's possible to do the same thing in shell script here.
+Specifically, instead of just saving new /dev/urandom output straight
+up, we hash the new /dev/urandom together with the old seed, in order to
+produce the new seed. This way the amount of entropy in the new seed
+will stay the same or get better, but not appreciably regress.
+
+At the same time, the pool size check in this script is useless. Writing
+to /dev/urandom never credits bits anyway, so no matter what, writing
+into /dev/urandom is useful and not harmful. There's also not much of a
+point in seeding with more than 256 bits, which is what the hashing
+operation above produces. So this commit removes the file size check.
+
+As a final note, while this commit improves upon the status quo by
+removing a vulnerability, this shell script still does not actually
+initialize the RNG like it says it does. For initialization via a seed
+file, the RNDADDENTROPY ioctl must be used.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ package/urandom-scripts/S20urandom | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
+
+diff --git a/package/urandom-scripts/S20urandom b/package/urandom-scripts/S20urandom
+index e4fd125721..f971ea905a 100644
+--- a/package/urandom-scripts/S20urandom
++++ b/package/urandom-scripts/S20urandom
+@@ -17,26 +17,16 @@ else
+ 	pool_size=512
+ fi
+ 
+-check_file_size() {
+-	[ -f "$URANDOM_SEED" ] || return 1
+-	# Try to read two blocks but exactly one will be read if the file has
+-	# the correct size.
+-	size=$(dd if="$URANDOM_SEED" bs="$pool_size" count=2 2> /dev/null | wc -c)
+-	test "$size" -eq "$pool_size"
+-}
+-
+ init_rng() {
+-	if check_file_size; then
+-		printf 'Initializing random number generator: '
+-		dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
+-		status=$?
+-		if [ "$status" -eq 0 ]; then
+-			echo "OK"
+-		else
+-			echo "FAIL"
+-		fi
+-		return "$status"
++	printf 'Initializing random number generator: '
++	dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
+ 	fi
++	return "$status"
+ }
+ 
+ save_random_seed() {
+@@ -44,7 +34,9 @@ save_random_seed() {
+ 	if touch "$URANDOM_SEED" 2> /dev/null; then
+ 		old_umask=$(umask)
+ 		umask 077
+-		dd if=/dev/urandom of="$URANDOM_SEED" bs="$pool_size" count=1 2> /dev/null
++		dd if=/dev/urandom of="$URANDOM_SEED.new" bs="$pool_size" count=1 2> /dev/null
++		cat "$URANDOM_SEED" "$URANDOM_SEED.new" 2>/dev/null | sha256sum | cut -d ' ' -f 1 > "$URANDOM_SEED"
++		rm "$URANDOM_SEED.new"
+ 		status=$?
+ 		umask "$old_umask"
+ 		if [ "$status" -eq 0 ]; then
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
