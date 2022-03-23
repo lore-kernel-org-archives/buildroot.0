@@ -1,46 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 695F8C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EE0BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28D368481D;
-	Wed, 23 Mar 2022 20:29:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3857D418B0;
+	Wed, 23 Mar 2022 20:43:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rIOpG1I1T2L7; Wed, 23 Mar 2022 20:29:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3U0oil5-_3GU; Wed, 23 Mar 2022 20:43:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9C92847F9;
-	Wed, 23 Mar 2022 20:29:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F91241872;
+	Wed, 23 Mar 2022 20:43:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD8C71BF48C
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FEB31BF48C
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:43:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9147940C71
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F05D140383
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:43:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hPTOPErngJxX for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22B8340CBD
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 58323854C9; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 21:09:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0fd31f073981a2cf586264bcde00ccd17ef9deb3
-X-Git-Newrev: 5086d75cc8613a9730150662ca83dfa4592dfef0
-X-Patchwork-Hint: ignore
-Message-Id: <20220323201808.58323854C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/poco: bump to version 1.11.1
+ with ESMTP id brz1olBhy5z7 for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 20:43:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 54601400C4
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:43:47 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id dr20so5253308ejc.6
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 13:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=blBEZVQ8auQ4TPdveeu8l0U3/5gTbbm4YDJ+03p83XU=;
+ b=gFPaI3A5X5QgYyeiEM1y0u4QdmXVhljRVSf2XuH08oFpU3d850Rhreo36n3EKHXgfp
+ Dcl8rJ4+PCMkNlAgqBq6LiF8soVEwFzQPW1KYv56CJomHMjcpuhkTYKVYauCjY39KZ5Q
+ oEOfE/os7uFOoLeL3fb9TXKlEVBoFOzQAbAjLi9SWmLNbt19W7Iiti3VWt2EXIPxbce+
+ pS5kw7N1/YTfoWBjyh/na8OyFLJo8aZ1byb01ad8bh8QBeSGb0YSfQ/fsse8/mJ+bMGb
+ d11wcKnDXwQqNURR2eaqWnJ4KGG99OdYoulT3istmynyncU2MD9SbE43F9H1QRW4oWNY
+ /pqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=blBEZVQ8auQ4TPdveeu8l0U3/5gTbbm4YDJ+03p83XU=;
+ b=GsRjNOCL6cyYQFPuB0Y3bEUysahcZGId5iA1nxdlt7b/WcWkNQXZU+6ZPEmp4DWKVz
+ 0oMO92Aa5lpHLjIU/T6DVFibVk7SY0FfY4xTUJTf6BU5+0BWKVt/F/Bo7MhYL+UWLhHq
+ nudTByYvBJaA+SvsXqIBsYpQMGlqfbfgjRWr5oiIkTIT16A1HsnRR1NbUTcpt/xAdD3O
+ slV3iA/f2b05X/xYkkEiSaRxd+tJLK6/FWW+CFMc1nywi5AqkKvCmVhFwhTawC5rt8Uu
+ ai+FhrhIr2cRTP7L8kjhhTFlHxLsGow4wL1nZxhBN7vEsvGokH7LBPvrDkEx/9WDUykt
+ esgg==
+X-Gm-Message-State: AOAM530d3h7FgPFCljrfmGB7ph4mukm4FiR/1dnG7VUd18aU8mlcpPwR
+ OZJqtrTYm72HqwyePyGWqRKrMg==
+X-Google-Smtp-Source: ABdhPJz8nb2thtYb3iGSkBQzoRLa8PiQsVDqlW42HAd4+aU5bHlseVfUel54bidnu6ZixA1NkFwo5g==
+X-Received: by 2002:a17:906:3adb:b0:6b7:876c:d11b with SMTP id
+ z27-20020a1709063adb00b006b7876cd11bmr2138681ejd.250.1648068225447; 
+ Wed, 23 Mar 2022 13:43:45 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ ch26-20020a0564021bda00b00418f99695f0sm429252edb.23.2022.03.23.13.43.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 23 Mar 2022 13:43:44 -0700 (PDT)
+Message-ID: <535e8a72-f175-8c1b-9cb9-e8156143796c@mind.be>
+Date: Wed, 23 Mar 2022 21:43:43 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220313130424.3046857-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220313130424.3046857-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 7.82.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,277 +95,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7666428583812220450=="
+Cc: Matt Weber <matthew.weber@collins.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7666428583812220450==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5086d75cc8613a9730150662ca83dfa4592dfef0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit drop patches, as they are now included upstream or no longer
-needed. It also introduces a new patch to fix a build failure for nios2.
+On 13/03/2022 14:04, Bernd Kuhls wrote:
+> Changelog: https://curl.se/changes.html
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/curl/curl/commit/0409192b1fde6b7a4f09667e80ca5dc555eab3f1
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-MySQL include and library paths can now be provided in variables passed
-to the build command. Variables MYSQL_{INC,LIB}DIR are renamed to
-POCO_MYSQL_{INCLUDE,LIB}. For PostgreSQL support, variables
-POCO_PGSQL_{INCLUDE,LIB} are also passed the same way to the build
-command.
+  Applied to master, after dropping the NSS option entirely, and with an 
+explanation in the commit message why we choose that rather than passing 
+--with-nss-deprecated.
 
-This poco version 1.11.1 introduces a new ActiveRecord component.
+  Regards,
+  Arnout
 
-For changelog, see:
-https://raw.githubusercontent.com/pocoproject/poco/poco-1.11.1-release/CHANGELOG
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...OS2-double-conversion-detection-to-fix-co.patch | 36 +++++++++++++++++++
- ...-poco-add-the-staging-path-to-search-path.patch | 40 ----------------------
- .../poco/0002-Add-support-for-m68000-1856.patch    | 32 -----------------
- ...src-utils.h-backport-double-conversion-ch.patch | 34 ------------------
- package/poco/Config.in                             |  4 +++
- package/poco/poco.hash                             |  2 +-
- package/poco/poco.mk                               |  9 +++--
- 7 files changed, 47 insertions(+), 110 deletions(-)
-
-diff --git a/package/poco/0001-Add-back-NIOS2-double-conversion-detection-to-fix-co.patch b/package/poco/0001-Add-back-NIOS2-double-conversion-detection-to-fix-co.patch
-new file mode 100644
-index 0000000000..7b31729347
---- /dev/null
-+++ b/package/poco/0001-Add-back-NIOS2-double-conversion-detection-to-fix-co.patch
-@@ -0,0 +1,36 @@
-+From d328829e9cb8b9fde9e70b07f2b991972cf474d1 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sat, 12 Mar 2022 10:34:04 +0100
-+Subject: [PATCH] Add back NIOS2 double conversion detection to fix compile
-+ errors
-+
-+The commit
-+https://github.com/pocoproject/poco/commit/558324f672d824300498060aff63356bc6bb8097
-+
-+removed the nios2 support, which was originally added in
-+https://github.com/pocoproject/poco/commit/e7b91e8125d6910b53f94de5be4bb53f38dc77c1
-+
-+This commit add it back.
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ Foundation/src/utils.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Foundation/src/utils.h b/Foundation/src/utils.h
-+index 4328344d7..0a222c77d 100644
-+--- a/Foundation/src/utils.h
-++++ b/Foundation/src/utils.h
-+@@ -102,7 +102,8 @@ int main(int argc, char** argv) {
-+     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
-+     defined(__riscv) || \
-+     defined(__or1k__) || defined(__arc__) || \
-+-    defined(__EMSCRIPTEN__)
-++    defined(__EMSCRIPTEN__) || \
-++    defined(nios2) || defined(__nios2) || defined(__nios2__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+ #elif defined(__mc68000__) || \
-+     defined(__pnacl__) || defined(__native_client__)
-+-- 
-+2.35.1
-+
-diff --git a/package/poco/0001-poco-add-the-staging-path-to-search-path.patch b/package/poco/0001-poco-add-the-staging-path-to-search-path.patch
-deleted file mode 100644
-index fbabfc8f26..0000000000
---- a/package/poco/0001-poco-add-the-staging-path-to-search-path.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From a53f3fd64a0f36ec9bc1307d7e66cdc2dee4aeaa Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 4 Aug 2015 10:14:00 +0200
--Subject: [PATCH] poco: add the staging path to search path
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Add the mysql headers and client libraries to the search path of the
--preprocessor and the linker. The $MYSQL_LIBDIR / $MYSQL_INCIDR variables
--must be set from the make command line.
--
--[Peter: Remove host dirs, add MYSQL_INCDIR]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--[Jörg: Update to version 1.6.1 from github]
--Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
--[Julien: Rebased on version 1.10.1]
--Signed-off-by: Julien Olivain <juju@cotds.org>
-----
-- Data/MySQL/Makefile | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Data/MySQL/Makefile b/Data/MySQL/Makefile
--index 64a7d3f82..955fee2d4 100644
----- a/Data/MySQL/Makefile
--+++ b/Data/MySQL/Makefile
--@@ -6,8 +6,8 @@
-- 
-- include $(POCO_BASE)/build/rules/global
-- 
---SYSLIBS += -L/usr/local/lib -L/usr/local/lib$(LIB64SUFFIX)/mysql -L/usr/lib$(LIB64SUFFIX)/mysql -L/usr/mysql/lib$(LIB64SUFFIX) -L/usr/mysql/lib$(LIB64SUFFIX)/mysql -L/usr/local/mysql/lib$(LIB64SUFFIX) -lmysqlclient
---INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql/ -I/usr/mysql/include/mysql -I/usr/local/mysql/include
--+SYSLIBS += -L$(MYSQL_LIBDIR) -lmysqlclient
--+INCLUDE += -I$(MYSQL_INCDIR)
-- SYSFLAGS += -DTHREADSAFE -DNO_TCL
-- 
-- objects = Binder Extractor SessionImpl Connector \
---- 
--2.26.2
--
-diff --git a/package/poco/0002-Add-support-for-m68000-1856.patch b/package/poco/0002-Add-support-for-m68000-1856.patch
-deleted file mode 100644
-index bc04a9bf69..0000000000
---- a/package/poco/0002-Add-support-for-m68000-1856.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 221e308ad452035f4c1dc25e194f817a30f38f7b Mon Sep 17 00:00:00 2001
--From: Jochen Sprickerhof <github@jochen.sprickerhof.de>
--Date: Wed, 23 Aug 2017 16:50:51 +0200
--Subject: [PATCH] Add support for m68000 (#1856)
--
--Originally taken from
--
--https://github.com/google/double-conversion/commit/da11179623145f53b204105a93b8bbca431141da
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--[Julien: rebased on version 1.10.1]
--Signed-off-by: Julien Olivain <juju@cotds.org>
-----
-- Foundation/src/utils.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/Foundation/src/utils.h b/Foundation/src/utils.h
--index c87cee13c..e891c0f10 100644
----- a/Foundation/src/utils.h
--+++ b/Foundation/src/utils.h
--@@ -66,6 +66,8 @@
-- 	defined(__AARCH64EL__) || \
--     defined(nios2) || defined(__nios2) || defined(__nios2__)
-- #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
--+#elif defined(__mc68000__)
--+#undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
-- #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-- #if defined(_WIN32)
-- // Windows uses a 64bit wide floating point stack.
---- 
--2.26.2
--
-diff --git a/package/poco/0003-Foundation-src-utils.h-backport-double-conversion-ch.patch b/package/poco/0003-Foundation-src-utils.h-backport-double-conversion-ch.patch
-deleted file mode 100644
-index c06eebe8b0..0000000000
---- a/package/poco/0003-Foundation-src-utils.h-backport-double-conversion-ch.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From fe7d230da03a35725ef768c07ce064324f941863 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 1 Jul 2018 15:37:47 +0200
--Subject: [PATCH] Foundation/src/utils.h: backport double-conversion change for
-- AArch64 BE support
--
--This commit, identical to upstream double-conversion commit
--https://github.com/google/double-conversion/commit/cb2beeb6771025377c665d1c3ea08388bc6e619a
--allows Poco to build on AArch64 big-endian.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/pocoproject/poco/pull/2378
--[Julien: rebased on version 1.10.1]
--Signed-off-by: Julien Olivain <juju@cotds.org>
-----
-- Foundation/src/utils.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Foundation/src/utils.h b/Foundation/src/utils.h
--index e891c0f10..892f7db18 100644
----- a/Foundation/src/utils.h
--+++ b/Foundation/src/utils.h
--@@ -63,7 +63,7 @@
--     defined(__SH4__) || defined(__alpha__) || \
--     defined(_MIPS_ARCH_MIPS32R2) || \
--     defined(__riscv) || \
---	defined(__AARCH64EL__) || \
--+	defined(__AARCH64EL__) || defined(__aarch64__) || \
--     defined(nios2) || defined(__nios2) || defined(__nios2__)
-- #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-- #elif defined(__mc68000__)
---- 
--2.26.2
--
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 714e40f447..699495a241 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -28,6 +28,10 @@ if BR2_PACKAGE_POCO
- 
- comment "poco components"
- 
-+config BR2_PACKAGE_POCO_ACTIVERECORD
-+	bool "ActiveRecord"
-+	select BR2_PACKAGE_POCO_XML
-+
- config BR2_PACKAGE_POCO_CPP_PARSER
- 	bool "CppParser"
- 
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index 2a2629733d..78d7d0b96e 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  44592a488d2830c0b4f3bfe4ae41f0c46abbfad49828d938714444e858a00818  poco-1.10.1.tar.gz
-+sha256  2412a5819a239ff2ee58f81033bcc39c40460d7a8b330013a687c8c0bd2b4ac0  poco-1.11.1.tar.gz
- sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 119711f3fd..fcf480c2a8 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POCO_VERSION = 1.10.1
-+POCO_VERSION = 1.11.1
- POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
-@@ -20,6 +20,7 @@ POCO_DEPENDENCIES = pcre zlib \
- 	$(if $(BR2_PACKAGE_POCO_XML),expat)
- 
- POCO_OMIT = Data/ODBC PageCompiler \
-+	$(if $(BR2_PACKAGE_POCO_ACTIVERECORD),,ActiveRecord) \
- 	$(if $(BR2_PACKAGE_POCO_CPP_PARSER),,CppParser) \
- 	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto) \
- 	$(if $(BR2_PACKAGE_POCO_DATA),,Data) \
-@@ -74,8 +75,10 @@ endef
- # Use $(MAKE1) to avoid failures on heavilly parallel machines (e.g. -j25)
- define POCO_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
--		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
--		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
-+		POCO_MYSQL_INCLUDE=$(STAGING_DIR)/usr/include/mysql \
-+		POCO_MYSQL_LIB=$(STAGING_DIR)/usr/lib/mysql \
-+		POCO_PGSQL_INCLUDE=$(STAGING_DIR)/usr/include/postgresql \
-+		POCO_PGSQL_LIB=$(STAGING_DIR)/usr/lib/postgresql \
- 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
- endef
- 
-
---===============7666428583812220450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> ---
+>   package/libcurl/libcurl.hash | 6 +++---
+>   package/libcurl/libcurl.mk   | 2 +-
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index 63d6ba306c..4be245041c 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated after checking pgp signature
+> -# https://curl.se/download/curl-7.81.0.tar.xz.asc
+> +# https://curl.se/download/curl-7.82.0.tar.xz.asc
+>   # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+> -sha256  a067b688d1645183febc31309ec1f3cdce9213d02136b6a6de3d50f69c95a7d3  curl-7.81.0.tar.xz
+> -sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+> +sha256  0aaa12d7bd04b0966254f2703ce80dd5c38dbbd76af0297d3d690cdce58a583c  curl-7.82.0.tar.xz
+> +sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 20ebb4f271..863cc268b4 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LIBCURL_VERSION = 7.81.0
+> +LIBCURL_VERSION = 7.82.0
+>   LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>   LIBCURL_SITE = https://curl.se/download
+>   LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7666428583812220450==--
