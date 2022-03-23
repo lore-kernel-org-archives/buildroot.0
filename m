@@ -1,71 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4D2DC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF383C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A641184A92;
-	Wed, 23 Mar 2022 20:07:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 670BB4190C;
+	Wed, 23 Mar 2022 20:24:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L-dV72Q5OBDO; Wed, 23 Mar 2022 20:07:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A689584A86;
-	Wed, 23 Mar 2022 20:07:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F2411BF48C
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:07:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EF0B41B68
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:07:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=zx2c4.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I1r3jlJ72XZO for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 20:07:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AB2141B2D
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:07:40 +0000 (UTC)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by dfw.source.kernel.org (Postfix) with ESMTPS id 34AF961529;
- Wed, 23 Mar 2022 20:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48225C340E8;
- Wed, 23 Mar 2022 20:07:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
- dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
- header.b="j2yyBwKV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105; 
- t=1648066056;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Afpa0sbRB+bG9tKIXmIHmyIZvJmKFcpJfZENXc8vL6g=;
- b=j2yyBwKVLp2ZyTAgogWi9YlphDYXUOzWfVsq+3Wc/w4PpSKWvAc2zb+DfSRxA0rxsf+C5l
- Q9Vce63coI44UgM06WI/NdXghU4gEuXUcOOeRRCz7MxTegPisdobt13BkR3KTRUcAhZZgT
- JmA8/eod/k5S+MIIPuQJIpnJVY50P/g=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ba5c8568
- (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO); 
- Wed, 23 Mar 2022 20:07:36 +0000 (UTC)
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: yann.morin.1998@free.fr,
-	buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 14:07:31 -0600
-Message-Id: <20220323200731.170409-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9oUAXNpjWF266m3mH5HvEvVWCthy64RHFye+mOktMegzg@mail.gmail.com>
-References: <CAHmME9oUAXNpjWF266m3mH5HvEvVWCthy64RHFye+mOktMegzg@mail.gmail.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HyYjJ9m81YE5; Wed, 23 Mar 2022 20:24:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79105418E6;
+	Wed, 23 Mar 2022 20:24:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DC4FD1BF48C
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:24:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C98F560AC3
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:24:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MjeBnirIC9Pj for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 20:24:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7DFE460AAA
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:24:18 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id t1so3239266edc.3
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 13:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=NMWNpamebRNdk3RyzA9HCdHc7UIhT21lsk8W69Zy4aM=;
+ b=WO5vC8JW7+lwVQXQudn8S6D1nZaTz79kzy9oAxK0ZWZwp2FN90HMX7c3p9n8Le4ol/
+ EMlPacDqLRJOzzRznjxz4r/rLAkgXZa6jPcYh/scJDhH5pnk2EC/hR7eDvGPbqArGxOI
+ u4nTtIWj0HzpZ37vxegx40+AK0oE4EWrkDJTEdbvaxZrcdmybkOuubgmv8N1ub4s/3AD
+ N3LQy67GF8ed93kYDRz9EXoCL3YNqgfnQeJiKFwSEj7LnO+Sq2l03Qio2uEC116i6VR0
+ cqw01t9T3w4ROKnf/4GnFAAagiryrF9586I6l+XTPUouHVFZMG80KATZkWy2ImHlzCoA
+ JEhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=NMWNpamebRNdk3RyzA9HCdHc7UIhT21lsk8W69Zy4aM=;
+ b=FND1pH6VdsR2dRtsbqPsC/B2TA060a7Yht95LNLxjhU5yOBJ00Ua6sY+e2AiiVAlNC
+ wu8PMosQKVFzaEf6jK/Ff5lIeNBzuI/DBKZcJcF0OetVk5tXkqdCvUPTAA4vxNcacHve
+ DCk3AXoxIhusBEZ5MWoJz+g3tCKWnfAsDQFWPj8Wea5KHbCPOG7RvAtrALYLQmS7fcYT
+ zZ/4nMowBwjA2miQ/L/S0kQ+hN6mOHiGQOp7xYZD/2f94FqMv1yNGvF3mv1UB7XGDGau
+ 0ijKdFLjBpE3a3jR3mtrWb/nQSEG6167EtEa2sm6ZMvQSBNOtZf1okLli18r+mchgotv
+ JjTw==
+X-Gm-Message-State: AOAM530I9r9EVu7r18gOfg7w5YHmMpbtV2W2Li2txoboBhAEJuGfybMU
+ Huw3Ko32Kqni2VDf9QXXdRXv1A==
+X-Google-Smtp-Source: ABdhPJww+AWdYuepIx7dtXyR2tUnwZfSrD49oLtore5DiDbRmTb7OmR1vwDxPIkFxfPH4Xo8ezffQw==
+X-Received: by 2002:a05:6402:350d:b0:419:547f:134a with SMTP id
+ b13-20020a056402350d00b00419547f134amr2418316edd.405.1648067056361; 
+ Wed, 23 Mar 2022 13:24:16 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ ga42-20020a1709070c2a00b006df76956b53sm311232ejc.212.2022.03.23.13.24.15
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 23 Mar 2022 13:24:15 -0700 (PDT)
+Message-ID: <84a7799a-3b41-3253-d5af-e664e68ee215@mind.be>
+Date: Wed, 23 Mar 2022 21:24:15 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/urandom-scripts: hash old seed with
- new seed when saving
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220313103737.751528-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220313103737.751528-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] Revert "package/ola: drop autoreconf"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,115 +95,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Writing into /dev/urandom doesn't actually credit any entropy bits. And
-while it adds that data to the entropy pool, it won't actually be
-immediately used when reading from /dev/urandom subsequently. This is
-how the kernel's /dev/urandom has always worked, unfortunately.
 
-As a result of this behavior, which may be understandably surprising,
-writing a good seed file into /dev/urandom and then saving a new seed
-file immediately after is dangerous, because the new seed file may wind
-up being entirely deterministic, even if the old seed file was quite
-good.
 
-This has been fixed in systemd with
-<https://github.com/systemd/systemd/commit/da2862ef06f22fc8d31dafced6d2d6dc14f2ee0b>,
-and fortunately it's possible to do the same thing in shell script here.
-Specifically, instead of just saving new /dev/urandom output straight
-up, we hash the new /dev/urandom together with the old seed, in order to
-produce the new seed. This way the amount of entropy in the new seed
-will stay the same or get better, but not appreciably regress.
+On 13/03/2022 11:37, Fabrice Fontaine wrote:
+> This reverts commit 66d348ae18c6e73d6ff9d935a241e55a65948be6 because
+> for an unknown reason, the build fails if autoreconf is dropped:
+> 
+> /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: warning: libolauartdmx.so.0, needed by olad/.libs/libolaserver.so, not found (try using -rpath or -rpath-link)
+> /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: warning: libolaserverplugininterface.so.0, needed by olad/.libs/libolaserver.so, not found (try using -rpath or -rpath-link)
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/f8164c69da0b9fa38081e8b785d8234f0f297ae1
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-At the same time, the pool size check in this script is useless. Writing
-to /dev/urandom never credits bits anyway, so no matter what, writing
-into /dev/urandom is useful and not harmful. There's also not much of a
-point in seeding with more than 256 bits, which is what the hashing
-operation above produces. So this commit removes the file size check.
+  Both applied to master. I also added a commit that adds a comment to 
+AUTORECONF, as suggested by Thomas.
 
-As a final note, while this commit improves upon the status quo by
-removing a vulnerability, this shell script still does not actually
-initialize the RNG like it says it does. For initialization via a seed
-file, the RNDADDENTROPY ioctl must be used.
+  Regards,
+  Arnout
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- package/urandom-scripts/S20urandom | 39 +++++++++++++-----------------
- 1 file changed, 17 insertions(+), 22 deletions(-)
-
-diff --git a/package/urandom-scripts/S20urandom b/package/urandom-scripts/S20urandom
-index e4fd125721..c6b2ebd48f 100644
---- a/package/urandom-scripts/S20urandom
-+++ b/package/urandom-scripts/S20urandom
-@@ -17,43 +17,38 @@ else
- 	pool_size=512
- fi
- 
--check_file_size() {
--	[ -f "$URANDOM_SEED" ] || return 1
--	# Try to read two blocks but exactly one will be read if the file has
--	# the correct size.
--	size=$(dd if="$URANDOM_SEED" bs="$pool_size" count=2 2> /dev/null | wc -c)
--	test "$size" -eq "$pool_size"
--}
--
- init_rng() {
--	if check_file_size; then
--		printf 'Initializing random number generator: '
--		dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
--		status=$?
--		if [ "$status" -eq 0 ]; then
--			echo "OK"
--		else
--			echo "FAIL"
--		fi
--		return "$status"
-+	printf 'Initializing random number generator: '
-+	dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
- 	fi
-+	return "$status"
- }
- 
- save_random_seed() {
- 	printf 'Saving random seed: '
--	if touch "$URANDOM_SEED" 2> /dev/null; then
-+	status=1
-+	if touch "$URANDOM_SEED.new" 2> /dev/null; then
- 		old_umask=$(umask)
- 		umask 077
--		dd if=/dev/urandom of="$URANDOM_SEED" bs="$pool_size" count=1 2> /dev/null
--		status=$?
-+		dd if=/dev/urandom of="$URANDOM_SEED.tmp" bs="$pool_size" count=1 2> /dev/null
-+		cat "$URANDOM_SEED" "$URANDOM_SEED.tmp" 2>/dev/null \
-+			| sha256sum \
-+			| cut -d ' ' -f 1 > "$URANDOM_SEED.new" && \
-+		mv "$URANDOM_SEED.new" "$URANDOM_SEED" && status=0
-+		rm -f "$URANDOM_SEED.tmp"
- 		umask "$old_umask"
- 		if [ "$status" -eq 0 ]; then
- 			echo "OK"
- 		else
- 			echo "FAIL"
- 		fi
-+
- 	else
--		status=$?
- 		echo "SKIP (read-only file system detected)"
- 	fi
- 	return "$status"
--- 
-2.35.1
-
+> ---
+>   package/ola/ola.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+> index 1874350784..5090076175 100644
+> --- a/package/ola/ola.mk
+> +++ b/package/ola/ola.mk
+> @@ -9,6 +9,7 @@ OLA_SITE = https://github.com/OpenLightingProject/ola/releases/download/$(OLA_VE
+>   OLA_LICENSE = LGPL-2.1+ (libola, libolacommon, Python bindings), GPL-2.0+ (libolaserver, olad, Python examples and tests)
+>   OLA_LICENSE_FILES = COPYING GPL LGPL LICENCE
+>   OLA_INSTALL_STAGING = YES
+> +OLA_AUTORECONF = YES
+>   
+>   # util-linux provides uuid lib
+>   OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex host-ola
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
