@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92AF1C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6988AC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:42:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4073B41A1B;
-	Wed, 23 Mar 2022 21:42:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 186C940FDC;
+	Wed, 23 Mar 2022 21:42:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I7XPtu9FI5f2; Wed, 23 Mar 2022 21:42:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9EmECIu3QnYa; Wed, 23 Mar 2022 21:42:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E307419E7;
-	Wed, 23 Mar 2022 21:42:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 962721C1135
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C7D840CBA;
+	Wed, 23 Mar 2022 21:42:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C75461BF489
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8492B60AC3
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCDBD403F7
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ysq_h_R8aruf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Asc8p0LArnMh for <buildroot@lists.busybox.net>;
  Wed, 23 Mar 2022 21:40:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A703360ABD
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3FED40278
  for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:40:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C1B4185638; Wed, 23 Mar 2022 21:31:24 +0000 (UTC)
+ id 0937F85638; Wed, 23 Mar 2022 21:31:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 21:55:57 +0100
+Date: Wed, 23 Mar 2022 22:31:29 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: a8e6b4b546f895651f1c48ed3f91ea3810d60de5
-X-Git-Newrev: aadba596b9c258f46b2c0e2ef5f1456d35364d1a
+X-Git-Oldrev: 75ecaa43e0bddb4d562378c33aec11c881a8cd99
+X-Git-Newrev: 813dec2b4236ab13d70f087ac9115fd6b485cd99
 X-Patchwork-Hint: ignore
-Message-Id: <20220323213124.C1B4185638@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/odb: backport
- more upstream commits to fix build with gcc 11.x
+Message-Id: <20220323213125.0937F85638@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/rpi-firmware: fix
+ missing files in overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,158 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aadba596b9c258f46b2c0e2ef5f1456d35364d1a
+commit: https://git.buildroot.net/buildroot/commit/?id=813dec2b4236ab13d70f087ac9115fd6b485cd99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Commit ac9855e761443dee4f9d461b83e12443d37e8678 ("package/odb: fix
-build with gcc 11") already fixed some gcc 11.x issues, but not all of
-them. This commit backports two upstream patches fixing the remaining
-issues, ensuring host-odb can be built on a gcc 11.x machine.
+When supporting multiple hardware targets, overlay_map.dtb might
+be needed to map overlay names to one of several implementations [1].
+If the correct overlay names are specified in config.txt, the map file
+is not needed, but it also doesn't hurt.
 
-Fixes:
+[1] https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/device-tree.adoc#the-overlay-map-file
 
-  http://autobuild.buildroot.net/results/d37c4271e66d923f7af6a4e3dbad603fcd1c8119/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+Signed-off-by: Rutger Sassen <rsassen@comecer.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+[Arnout: always install overlay_map.dtb]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 2d6e5a8501ff509760dca5c1477281d3f3430ddf)
+(cherry picked from commit da38cdead909aa133b9c468ddebf3f67c8d198f2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/odb/0012-Adjust-to-changes-in-GCC-11.patch | 50 ++++++++++++++++
- ...e-lookup-ambiguity-causing-error-with-GCC.patch | 68 ++++++++++++++++++++++
- 2 files changed, 118 insertions(+)
+ package/rpi-firmware/rpi-firmware.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/odb/0012-Adjust-to-changes-in-GCC-11.patch b/package/odb/0012-Adjust-to-changes-in-GCC-11.patch
-new file mode 100644
-index 0000000000..2959a71dea
---- /dev/null
-+++ b/package/odb/0012-Adjust-to-changes-in-GCC-11.patch
-@@ -0,0 +1,50 @@
-+From 5a5656920c6b49902ae0da6a0da84efe6e5a66f0 Mon Sep 17 00:00:00 2001
-+From: Boris Kolpackov <boris@codesynthesis.com>
-+Date: Wed, 31 Mar 2021 10:45:21 +0200
-+Subject: [PATCH] Adjust to changes in GCC 11
-+
-+[Upstream: 61d80f051293a7449a09081f60f48b8377bfbbad]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ odb/gcc.hxx | 20 ++++++++++++++++++++
-+ 1 file changed, 20 insertions(+)
-+
-+diff --git a/odb/gcc.hxx b/odb/gcc.hxx
-+index fb6a1bf..d8ad590 100644
-+--- a/odb/gcc.hxx
-++++ b/odb/gcc.hxx
-+@@ -164,6 +164,7 @@ gcc_tree_code_name (gcc_tree_code_type tc) {return tree_code_name[tc];}
-+ // In GCC 9:
-+ //
-+ // INCLUDED_FROM     Became linemap_included_from_linemap().
-++//
-+ // LAST_SOURCE_LINE  Was removed apparently as no longer used. Studying
-+ //                   the line-map.h diff from 8.3 suggests that the old
-+ //                   implementation should still work.
-+@@ -193,4 +194,23 @@ LAST_SOURCE_LINE (const line_map_ordinary* map)
-+ 
-+ #endif
-+ 
-++// In GCC 11:
-++//
-++// lookup_qualified_name() has a new interface.
-++//
-++// DECL_IS_BUILTIN became DECL_IS_UNDECLARED_BUILTIN.
-++//
-++#if BUILDING_GCC_MAJOR >= 11
-++
-++inline tree
-++lookup_qualified_name (tree scope, tree name, bool type, bool complain)
-++{
-++  return lookup_qualified_name (
-++    scope, name, (type ? LOOK_want::TYPE : LOOK_want::NORMAL), complain);
-++}
-++
-++#define DECL_IS_BUILTIN(decl) DECL_IS_UNDECLARED_BUILTIN(decl)
-++
-++#endif
-++
-+ #endif // ODB_GCC_HXX
-+-- 
-+2.34.1
-+
-diff --git a/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch b/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch
-new file mode 100644
-index 0000000000..79c3d982fa
---- /dev/null
-+++ b/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch
-@@ -0,0 +1,68 @@
-+From 60460df2a6d7b43a860a8f8b614c049ec0127ea8 Mon Sep 17 00:00:00 2001
-+From: Boris Kolpackov <boris@codesynthesis.com>
-+Date: Wed, 7 Jul 2021 09:26:57 +0200
-+Subject: [PATCH] Resolve name lookup ambiguity causing error with GCC 11
-+
-+[Upstream: 47035c0f72efd99a2210cd45db6e42423fb74533]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ odb/relational/header.hxx | 2 ++
-+ odb/relational/source.hxx | 8 ++++++++
-+ 2 files changed, 10 insertions(+)
-+
-+diff --git a/odb/relational/header.hxx b/odb/relational/header.hxx
-+index 63dea09..d7f78fa 100644
-+--- a/odb/relational/header.hxx
-++++ b/odb/relational/header.hxx
-+@@ -50,6 +50,8 @@ namespace relational
-+ 
-+       typedef typename member_base_impl<T>::member_info member_info;
-+ 
-++      using member_base_impl<T>::container;
-++
-+       virtual bool
-+       pre (member_info& mi)
-+       {
-+diff --git a/odb/relational/source.hxx b/odb/relational/source.hxx
-+index 716aa10..7da25fc 100644
-+--- a/odb/relational/source.hxx
-++++ b/odb/relational/source.hxx
-+@@ -1360,6 +1360,8 @@ namespace relational
-+ 
-+       typedef typename member_base_impl<T>::member_info member_info;
-+ 
-++      using member_base_impl<T>::container;
-++
-+       virtual bool
-+       pre (member_info& mi)
-+       {
-+@@ -1744,6 +1746,8 @@ namespace relational
-+ 
-+       typedef typename member_base_impl<T>::member_info member_info;
-+ 
-++      using member_base_impl<T>::container;
-++
-+       virtual bool
-+       pre (member_info& mi)
-+       {
-+@@ -2007,6 +2011,8 @@ namespace relational
-+ 
-+       typedef typename member_base_impl<T>::member_info member_info;
-+ 
-++      using member_base_impl<T>::container;
-++
-+       virtual void
-+       set_null (member_info&) = 0;
-+ 
-+@@ -2458,6 +2464,8 @@ namespace relational
-+ 
-+       typedef typename member_base_impl<T>::member_info member_info;
-+ 
-++      using member_base_impl<T>::container;
-++
-+       virtual void
-+       get_null (string const& var) const = 0;
-+ 
-+-- 
-+2.34.1
-+
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 3a4741a0ff..1921017291 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -48,6 +48,7 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	$(foreach ovldtb,$(wildcard $(@D)/boot/overlays/*.dtbo), \
+ 		$(INSTALL) -D -m 0644 $(ovldtb) $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir $(ovldtb))
+ 	)
++	$(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
+ endef
+ else
+ # Still create the directory, so a genimage.cfg can include it independently of
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
