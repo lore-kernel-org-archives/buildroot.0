@@ -4,63 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BE23C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 11:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E5C4C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 13:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD03740BEF;
-	Wed, 23 Mar 2022 11:13:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E39C640C47;
+	Wed, 23 Mar 2022 13:46:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OzXnvalDyJ8U; Wed, 23 Mar 2022 11:13:33 +0000 (UTC)
+	with ESMTP id 7cQfhYa0jw57; Wed, 23 Mar 2022 13:46:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3333040BEC;
-	Wed, 23 Mar 2022 11:13:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A55341BF5A2
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 11:13:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D17BD4056C;
+	Wed, 23 Mar 2022 13:45:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 756F51BF57B
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 13:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FA5D60AA8
- for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 11:13:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7226A84746
+ for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 13:45:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kCZAMxdygVJN for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 11:13:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9D523607FE
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 11:13:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:1d34:bdfa:f457:8010])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id C9AC219F5AE;
- Wed, 23 Mar 2022 12:13:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1648034008;
- bh=sYwxyn7gmoVog4vsq686haKIQcIUJw2HI3SQ14B22MU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IQYo00xngInzFmUZ3/C3TqqV/pGGT2nqATUOZbuYpwCXwrD2IIaFPmRiPsB7W0OTY
- h4Q6aUw/iFHSpSMnGPvx1a6JjrhdFj54AvkBHg5kcCwSztoG9grjh5P2uHLBfcRkgT
- UaShk5Mpl4SDEhWdHK9nTfjk+IGGPx5fC4lpthrcJ6R4Yhm3ShOS4ALOWR28W7wk13
- b8gxZcxr/NLzNT+wvUH3P/AohnsG43Wo55q+miTbnMWUiCHt3mpz6qOnAg9PcbVQ2H
- iFXjhpgkOr/czCma1RSUQU2ZQ8tOH8iMcsjpcLzIY4ekO0bfg8f+TXu/oqrKgvaJab
- p4yklo3KkYUmw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 23 Mar 2022 12:13:23 +0100
-Date: Wed, 23 Mar 2022 12:13:23 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Cornelia Huck <cohuck@redhat.com>
-Message-ID: <20220323111323.GN1566358@scaer>
-References: <20220322170800.1872403-1-cohuck@redhat.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ja2oi8W2VtSm for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 13:45:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4B86D84A41
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 13:45:54 +0000 (UTC)
+Received: from [192.168.0.175] ([151.127.53.97]) by mrelayeu.kundenserver.de
+ (mreue106 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1MxmFk-1oI04c3KNK-00zGYP; Wed, 23 Mar 2022 14:40:32 +0100
+Message-ID: <8ee34df1-a616-f9e4-a12d-777c055e83cf@green-communications.fr>
+Date: Wed, 23 Mar 2022 14:39:53 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220322170800.1872403-1-cohuck@redhat.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: add more arm
- support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: fr
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20220323035233.140997-1-Jason@zx2c4.com>
+ <20220323091336.GL1566358@scaer>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In-Reply-To: <20220323091336.GL1566358@scaer>
+X-Provags-ID: V03:K1:Vd1EbzU1kvnI/VtLWY5aA7iOh6/E30AONl3Fmqj6ByPWMyCW/ck
+ 88TJTjppyowTW+bWhIUg2Sw0QANiKjTGF2IMZ321btWcTkreSdUCRoBziTd7O61PkbyvAeJ
+ D/rCQNrnKGNZQfEHNxD2dGmUFyw4FajozovJLaHwFV6CSusF9kmEjG82y18a7Un7m6WKZtt
+ P8G5a5qQQr2xgNTDxsbhw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BrF9mA8bHFc=:z4ObkhSXUZwWNVZLrsw3YH
+ WOuWg1oWWhMwQ/PjGcGYfeOwgwig+rQv+n22zmM4h23wKldPRdaX0E6xLHm+7Hug/95H92B3s
+ ScYoe7JDXl+QGDSEueOLfCE/QMbowiXFoOYuJaCvQuPyYyXKRB/ttXTe0CKccEMuzbhpDnamR
+ 1qyhQBREYPSPvmJwYVHk0RnJVQxAy/jRGyPfgWWE32lPI+qOq4Q4EI7qyM2sCWRUSUu9oTXPQ
+ dJouLqIIWIvFoxhiLBgw+JSHfB5FvsJJJ8DWhBIzib1V/tZpXICLE/bZyKy74C0EW3EbaQqqd
+ 5gZ8EjbHtSQhTXAsrHec6gY/Mvx/va18SFjtslm6WW8d5buFYq7RTJ9w8PNSPEOJ4Q+oPqt3a
+ ZwGFnNEEG0GlgRToKutGaBAsyByFxna4+tHnze6nce2ZWVE01SMBGoDPzpgKEDBVWwcS4Ij+b
+ LkXu+ych9pwraNCwaCh+FkgOcxmSOlzhQMcrnwh97lvby4E5OxNvF5mORq2G1JAPDvds9DWaY
+ ugpgBdKXR9RiU+Jl4/zw9XHOogB7sPFnlgGGDQep/E+NfxczNLXols2fX/0QV8o40wnH9g4lo
+ AtK3ilLXfKQxOJ6TMO9TB8cymeW7Mg/0RTqSvTlKFywHr6CkhIlM0+ynMU0vPMBJikR5nuFPm
+ E2cCclmYHE35LIw1lsuLrzmJxBh0cgKWLeZnXqhhjqSO4DXSPLQewr8j4lZCMFakW2UJIHnfS
+ nPAElEJdXszJYo9bNDT1iHKDC+q+gb9Kd7RTyA==
+Subject: Re: [Buildroot] [PATCH] package/urandom-scripts: hash old seed with
+ new seed when saving
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,81 +75,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Cyril Bur <cyrilbur@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: =?UTF-8?Q?Christoph_M=c3=bcllner?=
+ <christoph.muellner@theobroma-systems.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Cornelia, All,
+On 23/03/2022 10:13, Yann E. MORIN wrote:
+>> As a final note, while this commit improves upon the status quo by
+>> removing a vulnerability, this shell script still does not actually
+>> initialize the RNG like it says it does. For initialization via a seed
+>> file, the RNDADDENTROPY ioctl must be used.
+> Is there a way to do that within a shell script? If so, would you be
+> kind enough to send a followup patch, please?
 
-On 2022-03-22 18:08 +0100, Cornelia Huck spake thusly:
-> Add some more cortexes with VHE, and enable aarch64.
-> 
-> Signed-off-by: Cornelia Huck <cohuck@redhat.com>
+No busybox applet is using RNDADDENTROPY, so it cannot probably be done 
+in a shell script :(
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> 
-> Resent because I was subscribed with a different email address.
-> Sorry about the spam.
-> 
-> ---
->  package/kvm-unit-tests/Config.in         | 5 ++++-
->  package/kvm-unit-tests/kvm-unit-tests.mk | 4 +++-
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-> index e470dd6157f0..b084375e62e9 100644
-> --- a/package/kvm-unit-tests/Config.in
-> +++ b/package/kvm-unit-tests/Config.in
-> @@ -3,7 +3,10 @@ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
->  	# On ARM, it uses virtualization extensions
->  	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
->  		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
-> -		BR2_cortex_a17 || BR2_cortex_a17_a7
-> +		BR2_cortex_a17 || BR2_cortex_a17_a7 || \
-> +		BR2_cortex_a55 || BR2_cortex_a75 || \
-> +		BR2_cortex_a75_a55 || BR2_cortex_a76 || \
-> +		BR2_cortex_a76_a55
->  	default y if BR2_i386 || BR2_x86_64
->  	default y if BR2_powerpc64 || BR2_powerpc64le
->  
-> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-> index d610442e039f..d72eba02bc3b 100644
-> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
-> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-> @@ -10,7 +10,9 @@ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive
->  KVM_UNIT_TESTS_LICENSE = LGPL-2.0
->  KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
->  
-> -ifeq ($(BR2_arm),y)
-> +ifeq ($(BR2_aarch64),y)
-> +KVM_UNIT_TESTS_ARCH = aarch64
-> +else ifeq ($(BR2_arm),y)
->  KVM_UNIT_TESTS_ARCH = arm
->  else ifeq ($(BR2_i386),y)
->  KVM_UNIT_TESTS_ARCH = i386
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+It's also unfortunate that the urandom(4) man page's example script 
+tells people to write to /dev/urandom exactly the way S20urandom does.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
