@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A240C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:27:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E64F5C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0507661364;
-	Wed, 23 Mar 2022 20:27:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CC5B84743;
+	Wed, 23 Mar 2022 20:27:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MwPeRNIJgCdG; Wed, 23 Mar 2022 20:27:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7Ubh4etzZcZV; Wed, 23 Mar 2022 20:27:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15BC960FF2;
-	Wed, 23 Mar 2022 20:27:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 182D01BF48C
+	by smtp1.osuosl.org (Postfix) with ESMTP id B784784356;
+	Wed, 23 Mar 2022 20:27:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 347CC1BF9C8
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06B4961042
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CB4A40FD7
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vRJsAPzg_ajA for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zod9Dso2XT-w for <buildroot@lists.busybox.net>;
  Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 072EE60B68
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:27:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F258400C4
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3AEF8854C9; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
+ id 439FD854E7; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 21:08:58 +0100
+Date: Wed, 23 Mar 2022 21:09:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae1deebb9e78b5338f5f30fe4765e3eb9e5be3d7
-X-Git-Newrev: 39c3ad67401fadf8ebcb7d591649d821dc02411a
+X-Git-Oldrev: 39c3ad67401fadf8ebcb7d591649d821dc02411a
+X-Git-Newrev: 386b0d6c5e9c6c9ece230ad63b25f126e249a37f
 X-Patchwork-Hint: ignore
-Message-Id: <20220323201808.3AEF8854C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/poco: reorder options
- alphabetically
+Message-Id: <20220323201808.439FD854E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poco: use poco component names in
+ kconfig variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,185 +59,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39c3ad67401fadf8ebcb7d591649d821dc02411a
+commit: https://git.buildroot.net/buildroot/commit/?id=386b0d6c5e9c6c9ece230ad63b25f126e249a37f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit reorders dependencies and Kconfig package options
-alphabetically for better maintainability.
-
-This commit does not change anything else.
+For clarity, use the same names used in documentation, and component
+selection in configure. Valid poco component names are defined in:
+https://github.com/pocoproject/poco/blob/poco-1.11.1-release/components
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/poco/Config.in | 82 +++++++++++++++++++++++++-------------------------
- package/poco/poco.mk   | 28 ++++++++---------
- 2 files changed, 55 insertions(+), 55 deletions(-)
+ package/poco/Config.in | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/package/poco/Config.in b/package/poco/Config.in
-index dd87ee36bb..df3d3cbc66 100644
+index df3d3cbc66..79ffac741d 100644
 --- a/package/poco/Config.in
 +++ b/package/poco/Config.in
-@@ -28,41 +28,50 @@ if BR2_PACKAGE_POCO
- 
+@@ -29,10 +29,10 @@ if BR2_PACKAGE_POCO
  comment "poco components"
  
-+config BR2_PACKAGE_POCO_CPP_PARSER
-+	bool "cpp_parser"
-+
-+config BR2_PACKAGE_POCO_CRYPTO
-+	bool "crypto"
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_POCO_DATA
-+	bool
-+
-+config BR2_PACKAGE_POCO_DATA_MYSQL
-+	bool "mysql"
-+	depends on BR2_USE_MMU # mysql
-+	select BR2_PACKAGE_MYSQL
-+	select BR2_PACKAGE_POCO_DATA
-+
-+config BR2_PACKAGE_POCO_DATA_SQLITE
-+	bool "sqlite"
-+	select BR2_PACKAGE_POCO_DATA
-+	select BR2_PACKAGE_SQLITE
-+
+ config BR2_PACKAGE_POCO_CPP_PARSER
+-	bool "cpp_parser"
++	bool "CppParser"
+ 
+ config BR2_PACKAGE_POCO_CRYPTO
+-	bool "crypto"
++	bool "Crypto"
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_OPENSSL
+ 
+@@ -40,58 +40,58 @@ config BR2_PACKAGE_POCO_DATA
+ 	bool
+ 
+ config BR2_PACKAGE_POCO_DATA_MYSQL
+-	bool "mysql"
++	bool "Data/MySQL"
+ 	depends on BR2_USE_MMU # mysql
+ 	select BR2_PACKAGE_MYSQL
+ 	select BR2_PACKAGE_POCO_DATA
+ 
+ config BR2_PACKAGE_POCO_DATA_SQLITE
+-	bool "sqlite"
++	bool "Data/SQLite"
+ 	select BR2_PACKAGE_POCO_DATA
+ 	select BR2_PACKAGE_SQLITE
+ 
  config BR2_PACKAGE_POCO_JSON
- 	bool "json"
+-	bool "json"
++	bool "JSON"
  
--config BR2_PACKAGE_POCO_XML
--	bool "xml"
--	select BR2_PACKAGE_EXPAT
-+config BR2_PACKAGE_POCO_JWT
-+	bool "jwt"
-+	select BR2_PACKAGE_POCO_CRYPTO
-+	select BR2_PACKAGE_POCO_JSON
+ config BR2_PACKAGE_POCO_JWT
+-	bool "jwt"
++	bool "JWT"
+ 	select BR2_PACKAGE_POCO_CRYPTO
+ 	select BR2_PACKAGE_POCO_JSON
  
--config BR2_PACKAGE_POCO_UTIL
--	bool "util"
--	select BR2_PACKAGE_POCO_XML
-+config BR2_PACKAGE_POCO_MONGODB
-+	bool "mongodb"
-+	select BR2_PACKAGE_POCO_NET
+ config BR2_PACKAGE_POCO_MONGODB
+-	bool "mongodb"
++	bool "MongoDB"
+ 	select BR2_PACKAGE_POCO_NET
  
  config BR2_PACKAGE_POCO_NET
- 	bool "net"
+-	bool "net"
++	bool "Net"
  
--config BR2_PACKAGE_POCO_CRYPTO
--	bool "crypto"
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
--
  config BR2_PACKAGE_POCO_NETSSL_OPENSSL
- 	bool "netssl_openssl"
--	select BR2_PACKAGE_POCO_NET
--	select BR2_PACKAGE_POCO_CRYPTO
--	select BR2_PACKAGE_POCO_UTIL
+-	bool "netssl_openssl"
++	bool "NetSSL_OpenSSL"
  	select BR2_PACKAGE_OPENSSL
--
--config BR2_PACKAGE_POCO_ZIP
--	bool "zip"
--	select BR2_PACKAGE_POCO_XML
-+	select BR2_PACKAGE_POCO_CRYPTO
+ 	select BR2_PACKAGE_POCO_CRYPTO
  	select BR2_PACKAGE_POCO_NET
  	select BR2_PACKAGE_POCO_UTIL
  
--config BR2_PACKAGE_POCO_CPP_PARSER
--	bool "cpp_parser"
--
  config BR2_PACKAGE_POCO_PDF
- 	bool "pdf"
+-	bool "pdf"
++	bool "PDF"
  	select BR2_PACKAGE_POCO_JSON
-@@ -73,28 +82,19 @@ config BR2_PACKAGE_POCO_REDIS
- 	bool "redis"
+ 	select BR2_PACKAGE_POCO_UTIL
+ 	select BR2_PACKAGE_POCO_XML
+ 
+ config BR2_PACKAGE_POCO_REDIS
+-	bool "redis"
++	bool "Redis"
  	select BR2_PACKAGE_POCO_NET
  
--config BR2_PACKAGE_POCO_MONGODB
--	bool "mongodb"
--	select BR2_PACKAGE_POCO_NET
--
--config BR2_PACKAGE_POCO_DATA
--	bool
--
--config BR2_PACKAGE_POCO_DATA_SQLITE
--	bool "sqlite"
--	select BR2_PACKAGE_POCO_DATA
--	select BR2_PACKAGE_SQLITE
-+config BR2_PACKAGE_POCO_UTIL
-+	bool "util"
-+	select BR2_PACKAGE_POCO_XML
+ config BR2_PACKAGE_POCO_UTIL
+-	bool "util"
++	bool "Util"
+ 	select BR2_PACKAGE_POCO_XML
  
--config BR2_PACKAGE_POCO_DATA_MYSQL
--	bool "mysql"
--	depends on BR2_USE_MMU # mysql
--	select BR2_PACKAGE_POCO_DATA
--	select BR2_PACKAGE_MYSQL
-+config BR2_PACKAGE_POCO_XML
-+	bool "xml"
-+	select BR2_PACKAGE_EXPAT
+ config BR2_PACKAGE_POCO_XML
+-	bool "xml"
++	bool "XML"
+ 	select BR2_PACKAGE_EXPAT
  
--config BR2_PACKAGE_POCO_JWT
--	bool "jwt"
--	select BR2_PACKAGE_POCO_JSON
--	select BR2_PACKAGE_POCO_CRYPTO
-+config BR2_PACKAGE_POCO_ZIP
-+	bool "zip"
-+	select BR2_PACKAGE_POCO_NET
-+	select BR2_PACKAGE_POCO_UTIL
-+	select BR2_PACKAGE_POCO_XML
- 
- endif # BR2_PACKAGE_POCO
- 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 857f215e3a..81409ffec4 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -11,29 +11,29 @@ POCO_LICENSE_FILES = LICENSE
- POCO_CPE_ID_VENDOR = pocoproject
- POCO_INSTALL_STAGING = YES
- 
--POCO_DEPENDENCIES = zlib pcre \
--	$(if $(BR2_PACKAGE_POCO_XML),expat) \
-+POCO_DEPENDENCIES = pcre zlib \
- 	$(if $(BR2_PACKAGE_POCO_CRYPTO),openssl) \
--	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),openssl) \
-+	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite) \
--	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql)
-+	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),openssl) \
-+	$(if $(BR2_PACKAGE_POCO_XML),expat)
- 
- POCO_OMIT = Data/ODBC PageCompiler \
-+	$(if $(BR2_PACKAGE_POCO_CPP_PARSER),,CppParser) \
-+	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto) \
-+	$(if $(BR2_PACKAGE_POCO_DATA),,Data) \
-+	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL) \
-+	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite) \
- 	$(if $(BR2_PACKAGE_POCO_JSON),,JSON) \
--	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
--	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
-+	$(if $(BR2_PACKAGE_POCO_JWT),,JWT) \
-+	$(if $(BR2_PACKAGE_POCO_MONGODB),,MongoDB) \
- 	$(if $(BR2_PACKAGE_POCO_NET),,Net) \
- 	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),,NetSSL_OpenSSL) \
--	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto) \
--	$(if $(BR2_PACKAGE_POCO_ZIP),,Zip) \
--	$(if $(BR2_PACKAGE_POCO_CPP_PARSER),,CppParser) \
- 	$(if $(BR2_PACKAGE_POCO_PDF),,PDF) \
- 	$(if $(BR2_PACKAGE_POCO_REDIS),,Redis) \
--	$(if $(BR2_PACKAGE_POCO_MONGODB),,MongoDB) \
--	$(if $(BR2_PACKAGE_POCO_DATA),,Data) \
--	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL) \
--	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite) \
--	$(if $(BR2_PACKAGE_POCO_JWT),,JWT)
-+	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
-+	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
-+	$(if $(BR2_PACKAGE_POCO_ZIP),,Zip)
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- POCO_CONF_OPTS += --no-fpenvironment --no-wstring
+ config BR2_PACKAGE_POCO_ZIP
+-	bool "zip"
++	bool "Zip"
+ 	select BR2_PACKAGE_POCO_NET
+ 	select BR2_PACKAGE_POCO_UTIL
+ 	select BR2_PACKAGE_POCO_XML
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
