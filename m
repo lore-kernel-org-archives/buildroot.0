@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E64F5C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B2BAC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 20:27:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CC5B84743;
-	Wed, 23 Mar 2022 20:27:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5394484AAF;
+	Wed, 23 Mar 2022 20:27:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Ubh4etzZcZV; Wed, 23 Mar 2022 20:27:24 +0000 (UTC)
+	with ESMTP id F_z4u0O8QsxF; Wed, 23 Mar 2022 20:27:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B784784356;
-	Wed, 23 Mar 2022 20:27:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 347CC1BF9C8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59605849D6;
+	Wed, 23 Mar 2022 20:27:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 411C81C1135
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CB4A40FD7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30AC184361
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 20:27:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zod9Dso2XT-w for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8N7X0LYANRk for <buildroot@lists.busybox.net>;
  Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F258400C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D21A84317
  for <buildroot@buildroot.org>; Wed, 23 Mar 2022 20:27:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 439FD854E7; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
+ id A3DFE854E8; Wed, 23 Mar 2022 20:18:08 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 21:09:01 +0100
+Date: Wed, 23 Mar 2022 21:23:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39c3ad67401fadf8ebcb7d591649d821dc02411a
-X-Git-Newrev: 386b0d6c5e9c6c9ece230ad63b25f126e249a37f
+X-Git-Oldrev: 92a3ca0932155498747c46d6f902a939d55c39f4
+X-Git-Newrev: f8a46311b5e0680609d3432d4256fbe83558c3b9
 X-Patchwork-Hint: ignore
-Message-Id: <20220323201808.439FD854E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/poco: use poco component names in
- kconfig variables
+Message-Id: <20220323201808.A3DFE854E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,107 +58,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=386b0d6c5e9c6c9ece230ad63b25f126e249a37f
+commit: https://git.buildroot.net/buildroot/commit/?id=f8a46311b5e0680609d3432d4256fbe83558c3b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For clarity, use the same names used in documentation, and component
-selection in configure. Valid poco component names are defined in:
-https://github.com/pocoproject/poco/blob/poco-1.11.1-release/components
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2022-February/000470.html
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/poco/Config.in | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index df3d3cbc66..79ffac741d 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -29,10 +29,10 @@ if BR2_PACKAGE_POCO
- comment "poco components"
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 0363b6e922..e70b266d92 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  1c67ccccdc81a75007c01dedc02ad608c4d856c60a6b89b9cd246e79f72aa2b8  dovecot-2.3.17.1.tar.gz
++sha256  06e73f668c6c093c45bdeeeb7c20398ab8dc49317234f4b5781ac5e2cc5d6c33  dovecot-2.3.18.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index fb299a8e45..053462c6dd 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_POCO_CPP_PARSER
--	bool "cpp_parser"
-+	bool "CppParser"
- 
- config BR2_PACKAGE_POCO_CRYPTO
--	bool "crypto"
-+	bool "Crypto"
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_OPENSSL
- 
-@@ -40,58 +40,58 @@ config BR2_PACKAGE_POCO_DATA
- 	bool
- 
- config BR2_PACKAGE_POCO_DATA_MYSQL
--	bool "mysql"
-+	bool "Data/MySQL"
- 	depends on BR2_USE_MMU # mysql
- 	select BR2_PACKAGE_MYSQL
- 	select BR2_PACKAGE_POCO_DATA
- 
- config BR2_PACKAGE_POCO_DATA_SQLITE
--	bool "sqlite"
-+	bool "Data/SQLite"
- 	select BR2_PACKAGE_POCO_DATA
- 	select BR2_PACKAGE_SQLITE
- 
- config BR2_PACKAGE_POCO_JSON
--	bool "json"
-+	bool "JSON"
- 
- config BR2_PACKAGE_POCO_JWT
--	bool "jwt"
-+	bool "JWT"
- 	select BR2_PACKAGE_POCO_CRYPTO
- 	select BR2_PACKAGE_POCO_JSON
- 
- config BR2_PACKAGE_POCO_MONGODB
--	bool "mongodb"
-+	bool "MongoDB"
- 	select BR2_PACKAGE_POCO_NET
- 
- config BR2_PACKAGE_POCO_NET
--	bool "net"
-+	bool "Net"
- 
- config BR2_PACKAGE_POCO_NETSSL_OPENSSL
--	bool "netssl_openssl"
-+	bool "NetSSL_OpenSSL"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_POCO_CRYPTO
- 	select BR2_PACKAGE_POCO_NET
- 	select BR2_PACKAGE_POCO_UTIL
- 
- config BR2_PACKAGE_POCO_PDF
--	bool "pdf"
-+	bool "PDF"
- 	select BR2_PACKAGE_POCO_JSON
- 	select BR2_PACKAGE_POCO_UTIL
- 	select BR2_PACKAGE_POCO_XML
- 
- config BR2_PACKAGE_POCO_REDIS
--	bool "redis"
-+	bool "Redis"
- 	select BR2_PACKAGE_POCO_NET
- 
- config BR2_PACKAGE_POCO_UTIL
--	bool "util"
-+	bool "Util"
- 	select BR2_PACKAGE_POCO_XML
- 
- config BR2_PACKAGE_POCO_XML
--	bool "xml"
-+	bool "XML"
- 	select BR2_PACKAGE_EXPAT
- 
- config BR2_PACKAGE_POCO_ZIP
--	bool "zip"
-+	bool "Zip"
- 	select BR2_PACKAGE_POCO_NET
- 	select BR2_PACKAGE_POCO_UTIL
- 	select BR2_PACKAGE_POCO_XML
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).17.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).18
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
