@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05D39C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E08C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 23 Mar 2022 21:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 946B141919;
-	Wed, 23 Mar 2022 21:40:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 99C1A40474;
+	Wed, 23 Mar 2022 21:40:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PULHmLFhdf5D; Wed, 23 Mar 2022 21:40:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dGbeGIMu8loY; Wed, 23 Mar 2022 21:40:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A751641B2D;
-	Wed, 23 Mar 2022 21:40:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4E5C1BF9C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73770403F7;
+	Wed, 23 Mar 2022 21:40:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BBCDF1C1135
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1950847A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9AEF60ADD
  for <buildroot@lists.busybox.net>; Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D2OnRC4l679x for <buildroot@lists.busybox.net>;
- Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uvgHLx5i6IsF for <buildroot@lists.busybox.net>;
+ Wed, 23 Mar 2022 21:40:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07ECB8475F
- for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:40:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED10560AC3
+ for <buildroot@buildroot.org>; Wed, 23 Mar 2022 21:40:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 31A7485583; Wed, 23 Mar 2022 21:31:17 +0000 (UTC)
+ id 0EEC785584; Wed, 23 Mar 2022 21:31:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Mar 2022 22:34:28 +0100
+Date: Wed, 23 Mar 2022 22:02:02 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b3f87a7ba3678c9d863244c66bdfec5a4382508f
-X-Git-Newrev: 9d5fd132f098026f36c64b0b0c52ab49c6519bd4
+X-Git-Oldrev: 5d78ea86f92ccfd6859acc2aff8147f624894405
+X-Git-Newrev: 9a0d8e74b936ee8f500eb8805fe1d88ed784dbee
 X-Patchwork-Hint: ignore
-Message-Id: <20220323213117.31A7485583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rpi-firmware: fix
- missing files in overlays
+Message-Id: <20220323213117.0EEC785584@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libodb-boost: add
+ host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d5fd132f098026f36c64b0b0c52ab49c6519bd4
+commit: https://git.buildroot.net/buildroot/commit/?id=9a0d8e74b936ee8f500eb8805fe1d88ed784dbee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-When supporting multiple hardware targets, overlay_map.dtb might
-be needed to map overlay names to one of several implementations [1].
-If the correct overlay names are specified in config.txt, the map file
-is not needed, but it also doesn't hurt.
+Add host variant of libodb-boost required by the ODB compiler.
+The libodb-boost headers are needed at compile time, and
+therefore installed in $(HOST_DIR).
 
-[1] https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/device-tree.adoc#the-overlay-map-file
-
-Signed-off-by: Rutger Sassen <rsassen@comecer.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-[Arnout: always install overlay_map.dtb]
+Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+[Arnout: add -std=c++11]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit da38cdead909aa133b9c468ddebf3f67c8d198f2)
+(cherry picked from commit e2f1f28efd4236431b333fabe6c75aceba9678bc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-firmware/rpi-firmware.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libodb-boost/libodb-boost.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 37bfa84eaf..230ba99372 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -23,6 +23,7 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- 	$(foreach ovldtb,$(wildcard $(@D)/boot/overlays/*.dtbo), \
- 		$(INSTALL) -D -m 0644 $(ovldtb) $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir $(ovldtb))
- 	)
-+	$(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
- endef
- else
- # Still create the directory, so a genimage.cfg can include it independently of
+diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
+index bac5f1e78f..6deb67f943 100644
+--- a/package/libodb-boost/libodb-boost.mk
++++ b/package/libodb-boost/libodb-boost.mk
+@@ -12,6 +12,9 @@ LIBODB_BOOST_INSTALL_STAGING = YES
+ LIBODB_BOOST_LICENSE = GPL-2.0
+ LIBODB_BOOST_LICENSE_FILES = LICENSE
+ LIBODB_BOOST_DEPENDENCIES = boost libodb
++HOST_LIBODB_BOOST_DEPENDENCIES = hoost-boost host-libodb
+ LIBODB_BOOST_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++HOST_LIBODB_BOOST_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
