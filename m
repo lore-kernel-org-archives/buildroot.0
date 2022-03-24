@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53F1BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E7EC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:44:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1210984498;
-	Thu, 24 Mar 2022 20:44:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 241E940502;
+	Thu, 24 Mar 2022 20:44:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QVSmrbepfy2n; Thu, 24 Mar 2022 20:44:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Uc5KvjQHZh_t; Thu, 24 Mar 2022 20:44:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C48D84487;
-	Thu, 24 Mar 2022 20:44:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D13BE401E1;
+	Thu, 24 Mar 2022 20:44:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 059B11C115D
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 124BF1BF333
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D12A4011A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0EEE4107E
  for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1E-roDylBsy2 for <buildroot@lists.busybox.net>;
+ with ESMTP id HnXCnK1o820s for <buildroot@lists.busybox.net>;
  Thu, 24 Mar 2022 20:43:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5B3041081
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF13D4107D
  for <buildroot@buildroot.org>; Thu, 24 Mar 2022 20:43:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CBB3B85C12; Thu, 24 Mar 2022 20:34:16 +0000 (UTC)
+ id DC70085C11; Thu, 24 Mar 2022 20:34:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 24 Mar 2022 21:10:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ffb0c357397a67ceaadd215669bf00dcb27bd558
-X-Git-Newrev: a3a1593b74048eec038cd351b06a6654e8bba0c4
+X-Git-Oldrev: 3396e945dfc1482cb21b65e5451abc5ec96a796b
+X-Git-Newrev: a38c6827dba0a5ccee5504167344ea6bba44e9d9
 X-Patchwork-Hint: ignore
-Message-Id: <20220324203416.CBB3B85C12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aioconsole: bump to version
- 0.4.1
+Message-Id: <20220324203416.DC70085C11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fakeroot: Fix segfault on ppc64le
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +58,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a1593b74048eec038cd351b06a6654e8bba0c4
+commit: https://git.buildroot.net/buildroot/commit/?id=a38c6827dba0a5ccee5504167344ea6bba44e9d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+When generating a filesystem image on a power10 build machine running
+Ubuntu, we see a segfault when fakeroot is running chmod.
+
+This has been reported and fixed upstream in Debian in version 1.26-1.2:
+
+ https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=995393#53
+
+Add the same patch to resolve the segfault.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+[Arnout: add patch signoff and give proper name (check-package)]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-aioconsole/python-aioconsole.hash | 4 ++--
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../fakeroot/0001-fix-prototype-generation.patch   | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 39ce16f8b2..af8b5c4de9 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  56a1e6542ea3627bdbc67f24abcaa341  aioconsole-0.4.0.tar.gz
--sha256  a30ad5276b85dd20a48d235111d0bd26c6bedf7b56d605ffc10ae27124b4b0b4  aioconsole-0.4.0.tar.gz
-+md5  105adca78033ef1f0b62d8e81d3efcac  aioconsole-0.4.1.tar.gz
-+sha256  0c0acb66b4e72d6606c9fa14ac9eb001a222c37c885b8fbdf65f41824cfa855f  aioconsole-0.4.1.tar.gz
- # Locally computed sha256 checksums
- sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index 44857054d4..a58fd33a61 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOCONSOLE_VERSION = 0.4.0
-+PYTHON_AIOCONSOLE_VERSION = 0.4.1
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/f2/7a/7628ec23f140ffca532c7f630e179503727b755849b5eab15576bbf7d3df
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/c5/16/a9de89d859eeaa0f9fdf5675a97ea1416265e1ebc039c7b9ea2c9e5433ac
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
+diff --git a/package/fakeroot/0001-fix-prototype-generation.patch b/package/fakeroot/0001-fix-prototype-generation.patch
+new file mode 100644
+index 0000000000..960bad2129
+--- /dev/null
++++ b/package/fakeroot/0001-fix-prototype-generation.patch
+@@ -0,0 +1,61 @@
++Subject: Fix prototype generation for openat
++Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
++Date: 2021-12-30
++Bug-Debian: https://bugs.debian.org/995393
++Forwarded: Yes (implicitely)
++
++    As jrtc27 pointed out in IRC, ppc64el is more strict than other
++    architectures when it comes to va_arg handling:
++
++        it's that ppc64le uses the elfv2 abi, and for variadic calls you
++        must reserve space for a parameter save area
++
++    So enhance wrapawk to create a proper prototype and argument
++    handling although it's specific to the openat call. Also add the
++    missing documentation for the sixth column to wrapfunc.inp.
++
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++
++--- a/wrapawk
+++++ b/wrapawk
++@@ -37,7 +37,25 @@
++   argtype=$3;
++   argname=$4;
++   MACRO=$5;
++-  if(MACRO){
+++  openat_extra=$6;
+++  if(openat_extra){
+++    print "  {(void(*))&next_" name ", \"" name "\"},"  > structfile;
+++    print "extern " ret " (*next_" name ")" openat_extra ";" > headerfile;
+++    print ret " (*next_" name ")" openat_extra "=tmp_" name ";"> deffile;
+++
+++    print ret " tmp_" name,  openat_extra "{"           > tmpffile;
+++    print "  mode_t mode = 0;"                          > tmpffile;
+++    print "  if (flags & O_CREAT) {"                    > tmpffile;
+++    print "    va_list args;"                           > tmpffile;
+++    print "    va_start(args, flags);"                  > tmpffile;
+++    print "    mode = va_arg(args, int);"               > tmpffile;
+++    print "    va_end(args);"                           > tmpffile;
+++    print "  }"                                         > tmpffile;
+++    print "  load_library_symbols();"                   > tmpffile;
+++    print "  return  next_" name,  argname ";"          > tmpffile;
+++    print "}"                                           > tmpffile;
+++    print ""                                            > tmpffile;
+++  } else if(MACRO){
++     print "  {(void(*))&NEXT_" MACRO "_NOARG, " name "_QUOTE},"  > structfile;
++     print "extern " ret " (*NEXT_" MACRO "_NOARG)" argtype ";" > headerfile;
++     print ret " (*NEXT_" MACRO "_NOARG)" argtype "=TMP_" MACRO ";"> deffile;
++--- a/wrapfunc.inp
+++++ b/wrapfunc.inp
++@@ -9,8 +9,10 @@
++ /**/									  */
++ /* each line of this file lists 4 fields, seperated by a ";".		  */
++ /* The first field is the name of the wrapped function, then it's return  */
++-/* value. After that come the function arguments with types, and the last */
+++/* value. After that come the function arguments with types, and the fifth */
++ /* field contains the function arguments without types.                   */
+++/* A sixth field is a special needed when wrapping the openat syscall.    */
+++/* Otherwise it's like the third (function arguments with types).         */
++ /**/
++ 
++ /* __*xstat are used on glibc systems instead of just *xstat. */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
