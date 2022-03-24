@@ -1,74 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5D5C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 23:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D6CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 23:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E39E6844B2;
-	Thu, 24 Mar 2022 23:39:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27CDC41CD8;
+	Thu, 24 Mar 2022 23:56:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oco308p8MSVa; Thu, 24 Mar 2022 23:39:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0b_ne8bk1L6y; Thu, 24 Mar 2022 23:56:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4E16843F6;
-	Thu, 24 Mar 2022 23:39:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A25611BF3BF
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 23:39:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 627CB41CD1;
+	Thu, 24 Mar 2022 23:56:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 203051BF3BF
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 23:56:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BF00843F1
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 23:39:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06DFE41098
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 23:56:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id smSczScRf7nE for <buildroot@lists.busybox.net>;
- Thu, 24 Mar 2022 23:39:26 +0000 (UTC)
-X-Greylist: delayed 00:06:31 by SQLgrey-1.8.0
-Received: from forward107p.mail.yandex.net (forward107p.mail.yandex.net
- [IPv6:2a02:6b8:0:1472:2741:0:8b7:115])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 70735843DB
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 23:39:26 +0000 (UTC)
-Received: from sas1-e8656b45f3e5.qloud-c.yandex.net
- (sas1-e8656b45f3e5.qloud-c.yandex.net
- [IPv6:2a02:6b8:c08:be91:0:640:e865:6b45])
- by forward107p.mail.yandex.net (Yandex) with ESMTP id DE9535571534;
- Fri, 25 Mar 2022 02:32:48 +0300 (MSK)
-Received: from sas8-c6148047b62a.qloud-c.yandex.net
- (sas8-c6148047b62a.qloud-c.yandex.net [2a02:6b8:c1b:2a11:0:640:c614:8047])
- by sas1-e8656b45f3e5.qloud-c.yandex.net (mxback/Yandex) with ESMTP id
- Lcj9KsCaDH-WmfKSAYG; Fri, 25 Mar 2022 02:32:48 +0300
-X-Yandex-Fwd: 2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=corrigendum.ru; s=mail;
- t=1648164768; bh=x3TnTF5x2ev1wTtlS4RS016x19QBnI/iSRJ6BHWeOvU=;
- h=In-Reply-To:From:To:Subject:Cc:References:Date:Message-ID;
- b=TrSHfT/dPMxZLVHMhDkI2MQTN8wzsKgIks7jXWg5c+8gz6Is3ruuaQj2CfWtT06J4
- 3HrF6NXgtuGHz2oDGQxA4BycHhTxeE3HaljG0JAsQT1L7HG0sttRonCClQy7kleUWb
- 37854rh8Q3v9vbxcyvPMhZCII+wMmNWHVC/Rd5/E=
-Authentication-Results: sas1-e8656b45f3e5.qloud-c.yandex.net;
- dkim=pass header.i=@corrigendum.ru
-Received: by sas8-c6148047b62a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
- id mo4RQ8Oaeq-WmKCOjPM; Fri, 25 Mar 2022 02:32:48 +0300
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client certificate not present)
-Message-ID: <aa8ee173-aeef-4fb3-cb06-b05f16057687@corrigendum.ru>
-Date: Fri, 25 Mar 2022 02:32:49 +0300
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z_orZAH_yxUO for <buildroot@lists.busybox.net>;
+ Thu, 24 Mar 2022 23:56:49 +0000 (UTC)
+X-Greylist: delayed 05:01:03 by SQLgrey-1.8.0
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (unknown
+ [IPv6:2a01:111:f400:7e89::46])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 926FC41094
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 23:56:49 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VE5vqJxfanPHxn1c44ZdJbPJ5u5JXwn0zJE5axJ+MoT39DGMoK1QnjrourKPurbQMWu+plsCmetWEWBvI/+eXvStggHlvGkCuvESQ0rTqUjYUziTh6J/Yy7XjoCRRoNy3y5OaVYabZ4tHf+bEleBOWwiU1ShtuDC4GHuTfjbW+m5NldG5oA9fZrx4fzUxpaiRzYleXLuRkSx0TcW5OPzLYuV8Ib/8O3VHJ1gwzFT7IC7VZPYjqMtT+zlDKvZzAqzkzr5hJ+5+ufJjCt2xwL4Tl+xRSa3cQDeJ3GKCtJNgoXBxDwQFqmQmw9DRvBVdCOWPOs+1sXuJhkViOOm0h3hpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A0kg3/1e8zRg0EfLsRZmURL0smA7AuvyMaijezz5Mng=;
+ b=aD2Mq6EEsSHfzdwyAhYZUhjZL/uP0gbYLg+isIpRhTUejMVyDrbGsKbDb1vGeTzS0G9awF6OagC87qKJmSAOpxKE9pdto3P5ZJMDEW2M/YnkqXFZIaeBwj3/ww2HgGSdJhxhV/XgKaCJrj/PWEvTR/tOAMpPQkofUuaucLZLT6/VyeoICMb8xh0JifRsmWjasdawMWNuMnsphMbQQQKxUTSWuu1YcrwwFe9wulXZMCrTHmg8MKBZFVTWmt/jaF6WXpyO7EjqC6kIXV0oYfsgI9SkNUQ0gOmNetH1ggaFyNO6DAFBkjmpR+YvmCSJwfxfRVadK8Kxwott8WS/cE8oow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A0kg3/1e8zRg0EfLsRZmURL0smA7AuvyMaijezz5Mng=;
+ b=BmaVAAsadaARzsMiWMYMgxx6rBNOCwdSR/Zx3R/HnjwvTxrKy2oMqf+NecbgpQiKlcwj7UDM1hYMlIJMQ5TTywf+HI0ey/KEa0GQNf2bQzYuZ5FRA0mXz7rWzvudoadQ1V1vvObHuqs8O6WCkX/cMD8/3kzHuGL/fkOChP24IvI=
+Received: from BN9PR03CA0697.namprd03.prod.outlook.com (2603:10b6:408:ef::12)
+ by MWHPR02MB3296.namprd02.prod.outlook.com (2603:10b6:301:6c::27)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Thu, 24 Mar
+ 2022 14:25:49 +0000
+Received: from BN1NAM02FT050.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:ef:cafe::32) by BN9PR03CA0697.outlook.office365.com
+ (2603:10b6:408:ef::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.19 via Frontend
+ Transport; Thu, 24 Mar 2022 14:25:48 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ amd.com discourages use of 149.199.62.198 as permitted sender)
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT050.mail.protection.outlook.com (10.13.2.158) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5102.17 via Frontend Transport; Thu, 24 Mar 2022 14:25:48 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 24 Mar 2022 07:25:36 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 24 Mar 2022 07:25:35 -0700
+Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
+ giulio.benetti@benettiengineering.com, michal.simek@amd.com,
+ peter@korsgaard.com, neal.frager@amd.com
+Received: from [172.25.185.186] (port=40354 helo=xcoapps69.xilinx.com)
+ by smtp.xilinx.com with esmtp (Exim 4.90)
+ (envelope-from <neal.frager@amd.com>)
+ id 1nXMef-000DGW-CZ; Thu, 24 Mar 2022 05:33:29 -0700
+To: <buildroot@buildroot.org>
+Date: Thu, 24 Mar 2022 06:31:17 -0600
+Message-ID: <20220324123117.2369981-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220313175615.406390-1-james.hilliard1@gmail.com>
- <5313758f-f64d-f9f8-cdf2-3ca2ab426c7e@mind.be>
- <87bd50d3-72e9-2211-b53f-4046381e7419@corrigendum.ru>
- <CADvTj4oFOfRM7cY9oxQhv4BNgMso9T7mQ7YR4go+64-Kai9rRg@mail.gmail.com>
-From: =?UTF-8?B?0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+?= <dpb@corrigendum.ru>
-In-Reply-To: <CADvTj4oFOfRM7cY9oxQhv4BNgMso9T7mQ7YR4go+64-Kai9rRg@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/pkg-python: migrate flit to
- new bootstrapping sequence
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e423d5ae-a66d-4268-9446-08da0da230f0
+X-MS-TrafficTypeDiagnostic: MWHPR02MB3296:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR02MB3296AB688E344491116D6C2FF0199@MWHPR02MB3296.namprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vEvRgAtlp36zij0u5hVmoxLaZfNMNdNpvbOwnKI/gvuE8CIojsNmM2rdeQaGB8qCJ17odkYn5US1nDiwko2+GVle12QajEFe2i8vljuZogZGxu3hp6C2qdCmF8FbGMsaFVxlSVJaXmj/6J4Re/94Gk5q0pul2KsbUKJCVkZEFdQGH5izIfBjjYF3Gt6D4e8erKIGYhnp51TxsaVQJ9ZdgcNPQLZl8zhtcNKXUnQ3mLvX1ly+ySyKJxDo6NovpkXpbWAdPlLtyWb5RUFWOUTR9PIDBCQUuq5kAU8R/S7tD/eEucblsXV0UhO9bEC9iPwYE4smYPXLYsEdlXZzxqmLODrrqzaQ2wVa2uUBPVdV7VCC8O7Kz6aj1yPTn2HE07IGJ09bPS1wRc9VrwPO8P+2ab+BFvdYYTiU3TVbUlu/eo7kQ9YClkqjT4g0MT9ikW9XMGyVaRYBca7j3VxodQ0T644gqfvaMEc+mZLtsTyR9q/9X0TlmJ0ZiV0Do0EI0Kn7dD4e1XSF40EiVg3AMWcZgB8LrOWhVSIN8LxEpZf/10+QO1kRxK+Do/A+wIpcULjO/HqrJh0/gjaHNogt1E5vK4rNZnIhGdLyIy/GeK6HzD+lRbgY5UssY415EFamFxMUA9seOPtFkvhdRvieSg6+7Va6WdCCoLMacU64BWH/C9hG9zlNJLGQ7rTd5tniw5aqjdvGQZmOmNNCQOw+mA+ElK2NTcCyUsGW1IAaPXjUCYjje19EAaiztoJe1HwNtK9vpHo+AZBUBU2oTeDENk6FM/Cd5r8eSFvg2EQXLCG9SVB17fJv4m0mxPaizqOrExP16Fsb8PM02DQ31sMGeGM9mg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
+ PTR:unknown-62-198.xilinx.com; CAT:NONE;
+ SFS:(13230001)(4636009)(46966006)(40470700004)(70206006)(8676002)(54906003)(70586007)(2906002)(966005)(86362001)(4326008)(82310400004)(5660300002)(6666004)(7636003)(36756003)(9786002)(336012)(356005)(26005)(35950700001)(2616005)(1076003)(8936002)(40460700003)(47076005)(508600001)(316002)(83380400001)(6916009)(44832011)(102446001);
+ DIR:OUT; SFP:1022; 
+X-OriginatorOrg: xilinx.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2022 14:25:48.2032 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e423d5ae-a66d-4268-9446-08da0da230f0
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
+ Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT050.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB3296
+Subject: [Buildroot] [PATCH v2 1/1] configs/zynqmp_zcu10x: change git to
+ https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,88 +125,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
+ michal.simek@amd.com, Neal Frager <neal.frager@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgoyNS4wMy4yMDIyIDE6NDcsIEphbWVzIEhpbGxpYXJkINC/0LjRiNC10YI6Cj4gT24gVGh1LCBN
-YXIgMjQsIDIwMjIgYXQgNDoyOCBQTSDQoNC+0LzQsNC9INCU0L7QvdGH0LXQvdC60L4gPGRwYkBj
-b3JyaWdlbmR1bS5ydT4gd3JvdGU6Cj4+Cj4+IEhpLAo+Pgo+PiAyNC4wMy4yMDIyIDIzOjM3LCBB
-cm5vdXQgVmFuZGVjYXBwZWxsZSDQv9C40YjQtdGCOgo+Pgo+Pj4+ICAgIGVsc2UKPj4+PiAgICAk
-KDIpX0JBU0VfRU5WID0gJCQoSE9TVF9QS0dfUFlUSE9OX1BFUDUxN19FTlYpCj4+Pj4gLSQoMilf
-QkFTRV9CVUlMRF9DTUQgPSAtbSBidWlsZCAtbiAtdwo+Pj4+IC0kKDIpX0JBU0VfSU5TVEFMTF9D
-TUQgPSAkKFRPUERJUikvc3VwcG9ydC9zY3JpcHRzL3B5aW5zdGFsbGVyLnB5Cj4+Pj4gZGlzdC8q
-ICQkKEhPU1RfUEtHX1BZVEhPTl9QRVA1MTdfSU5TVEFMTF9PUFRTKQo+Pj4+ICsjIFVzZSBmbGl0
-IGJ1aWx0IGluIHdoZWVsIGJ1aWxkZXIgZm9yIHBhY2thZ2VzIHRoYXQgYXJlCj4+Pj4gaG9zdC1w
-eXRob24tcHlwYS1idWlsZCBkZXBlbmRlbmNpZXMuCj4+Pj4gKyMgVGhpcyBpcyBuZWVkZWQgdG8g
-YXZvaWQgYSBjaXJjdWxhciB3aXRoIGhvc3QtcHl0aG9uLXB5cGEtYnVpbGQgYW5kCj4+Pj4gdGhv
-c2UgZGVwZW5kZW5jaWVzLgo+Pj4+ICsjCj4+Pj4gKyQoMilfQkFTRV9CVUlMRF9DTUQgPSAkJChp
-ZiBcCj4+Pj4gKyAgICAgICAgJCQoZmlsdGVyIFwKPj4+PiArICAgICAgICAgICAgaG9zdC1weXRo
-b24tZmxpdC1jb3JlIGhvc3QtcHl0aG9uLWluc3RhbGxlcgo+Pj4+IGhvc3QtcHl0aG9uLXBlcDUx
-NyBob3N0LXB5dGhvbi10b21saSwgXAo+Pj4+ICsgICAgICAgICAgICAkKDEpKSBcCj4+Pj4gKyAg
-ICAgICAgLCBcCj4+Pj4gKyAgICAgICAgLW0gZmxpdF9jb3JlLndoZWVsLCBcCj4+Pj4gKyAgICAg
-ICAgLW0gYnVpbGQgLW4gLXcgXAo+Pj4KPj4+ICAgIFRoaXMgaXMgYWRkaW5nIHdheSB0b28gbXVj
-aCBjb21wbGV4aXR5IHRvIHRoZSBpbmZyYSBqdXN0IHRvIHN1cHBvcnQKPj4+IHRoZXNlIGZvdXIg
-cGFja2FnZXMuIEkgdGhpbmsgdGhlcmUgYSBhIGNvdXBsZSBvZiBiZXR0ZXIgb3B0aW9uczoKPj4+
-Cj4+PiAtIGRvbid0IHVzZSBweXRob24gaW5mcmEgYXQgYWxsIGZvciB0aGVzZSBwYWNrYWdlczsg
-b3IKPj4+IC0gc2V0IEhPU1RfUFlUSE9OX0ZMSVRfQ09SRV9CVUlMRF9DTURTIGV0Yy4gaW4gcHl0
-aG9uLWZsaXQtY29yZS5tazsgb3IKPj4+IC0gYWRkIGEgZmlmdGggU0VUVVBfVFlQRSAiZ2VuZXJp
-YyIgb3IgImN1c3RvbSIgb3Igc29tZXRoaW5nLCB3aGljaAo+Pj4gcmVxdWlyZXMgJCgyKV9CQVNF
-XyogdG8gYmUgc2V0IGJ5IHRoZSBweXRob24tZmxpdC1jb3JlLm1rOwo+Pj4gLSBpbiB0aGUgaW5m
-cmEgY2hhbmdlIGl0IHRvICQoMilfQkFTRV9CVUlMRF9DTUQgPz0sIHNldAo+Pj4gSE9TVF9QWVRI
-T05fRkxJVF9DT1JFX0JBU0VfQlVJTERfQ01EIGluIHB5dGhvbi1mbGl0LWNvcmUubWs7IG9yCj4+
-PiAtIGFkZCBhIGZpZnRoIFNFVFVQX1RZUEUgImZsaXQtYm9vdHN0cmFwIiBvciBzb21ldGhpbmcg
-bGlrZSB0aGF0IHdoaWNoCj4+PiBvbmx5IGdldHMgdXNlZCBieSB0aGUgcHJvYmxlbWF0aWMgcGFj
-a2FnZXMuCj4gCj4gSSBhZGRlZCBhIGZsaXQtYm9vdHN0cmFwIFNFVFVQX1RZUEUgYW5kIGlzb2xh
-dGVkIHRoZSBzcGVjaWFsIGNhc2luZwo+IGxvZ2ljIHRvIHRoYXQ6Cj4gaHR0cHM6Ly9wYXRjaHdv
-cmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIyMDMyNDIyMzcxNS4xOTYx
-NDYxLTEtamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8KPiAKPj4+Cj4+Pgo+Pj4gICAgVGhlIGxh
-dHRlciB0d28gb3B0aW9ucyBoYXZlIG15IHByZWZlcmVuY2UgYmVjYXVzZSBJIHRoaW5rIHRoZXkg
-YXJlIHRoZQo+Pj4gY2xlYW5lc3QsIGJ1dCBhbnkgb2YgdGhlbSBpcyBPSyBmb3IgbWUuIFRoZSAi
-Z2VuZXJpYyIgc2V0dXAgdHlwZSBhbmQgdGhlCj4+PiBvdmVycmlkYWJsZSBfQkFTRV9CVUlMRF9D
-TUQgd291bGQgYWxzbyByZXF1aXJlIGFuIHVwZGF0ZSBpbiB0aGUgbWFudWFsLgo+Pgo+PiBJTU8s
-IHRoZSBzaW1wbGVzdCBpbXBsZW1lbnRhdGlvbiB3b3VsZCBiZToKPj4KPj4gMS4gRm9yIGhvc3Qt
-cHl0aG9uLWZsaXQtY29yZSBhbmQgaG9zdC1weXRob24taW5zdGFsbGVyLCB1c2UKPj4gaG9zdC1n
-ZW5lcmljLXBhY2thZ2UgYW5kIGRlZmluZSB0aGUgYnVpbGQgYW5kIGluc3RhbGwgY29tbWFuZHMg
-bWFudWFsbHkuCj4gCj4gVGhpcyBpcyBtb3JlIGNvbXBsZXggc2luY2Ugd2Ugb25seSBuZWVkIHRv
-IHNwZWNpYWwgY2FzZSBhIGZldyB0aGluZ3MuCgpJcyBpdCByZWFsbHkgdGhhdCBjb21wbGV4LCB0
-aG91Z2g/IEFkbWl0dGVkbHksIEknbSBub3QgaHVnZWx5IGZhbWlsaWFyIAp3aXRoIGJ1aWxkcm9v
-dCwgYnV0IEkgd3JvdGUgYSB0ZXN0IHZlcnNpb24gb2YgdGhlIG1ha2VmaWxlIGZvciAKZmxpdC1j
-b3JlLCBhbmQgSSBqdXN0IGhhZCB0byBkZWZpbmUgUFlUSE9OX0ZMSVRfQ09SRV9ERVBFTkRFTkNJ
-RVMgKD0gCmhvc3QtcHl0aG9uKSwgSE9TVF9QWVRIT05fRkxJVF9DT1JFX0JVSUxEX0NNRFMgYW5k
-IApIT1NUX1BZVEhPTl9GTElUX0NPUkVfSU5TVEFMTF9DTURTLgpJIHRoaW5rIGl0J3MgZWFzaWVy
-IHRvIHVuZGVyc3RhbmQgdGhhdCB0aGFuIHRvIHRyYWNrIGFsbCB0aGUgc3BlY2lhbCAKY2FzZXMg
-aW4gcGtnLXB5dGhvbi5tay4KCj4+Cj4+IDIuIEZvciBldmVyeSBvdGhlciBwYWNrYWdlIHdob3Nl
-IFNFVFVQX1RZUEUgaXMgImZsaXQiLCBoYXZlIGl0IGRlcGVuZCBvbgo+PiBqdXN0IGhvc3QtcHl0
-aG9uLWZsaXQtY29yZSBhbmQgaG9zdC1weXRob24taW5zdGFsbGVyLCBhbmQgYnVpbGQgd2l0aAo+
-PiAicHl0aG9uIC1tIGZsaXRfY29yZS53aGVlbCIuIEluIG90aGVyIHdvcmRzLCBkb24ndCB1c2UK
-Pj4gaG9zdC1weXRob24tcHlwYS1idWlsZC4KPiAKPiBUaGlzIGlzIG5vdCByZWNvbW1lbmRlZCBi
-eSB1cHN0cmVhbSBBRkFJVSwgInB5dGhvbiAtbSBmbGl0X2NvcmUud2hlZWwiIGlzCj4gb25seSBz
-dXBwb3NlZCB0byBiZSB1c2VkIGZvciBpbml0aWFsIHRvb2xjaGFpbiBib290c3RyYXBwaW5nIGFz
-IGl0J3MKPiBub3QgYSBnZW5lcmljCj4gcGVwNTE3IGJ1aWxkIGZyb250ZW5kLgoKWWVzLCBidXQg
-d2UgZG9uJ3QgbmVlZCBhIGdlbmVyaWMgYnVpbGQgZnJvbnRlbmQuIFdlIGFscmVhZHkga25vdyB0
-aGF0IAp0aGVzZSBwYWNrYWdlcyB1c2UgZmxpdCBhcyB0aGUgYmFja2VuZCwgYW5kIHRoZSBidWls
-ZCBkZXBlbmRlbmNpZXMgYXJlIAppbnN0YWxsZWQgYnkgQnVpbGRyb290LCBzbyB0aGUgZnVuY3Rp
-b24gb2YgdGhlIGZyb250ZW5kIGlzIHJlZHVjZWQgdG8gCmp1c3QgY2FsbGluZyB0aGUgYmFja2Vu
-ZCAtIHNvIHlvdSBtaWdodCBhcyB3ZWxsIHJlbW92ZSB0aGUgZnJvbnRlbmQgYW5kIApjYWxsIHRo
-ZSBiYWNrZW5kIGRpcmVjdGx5LgoKQWxzbywgeW91IGNhbiBzZWUgdGhhdCBmbGl0X2NvcmUud2hl
-ZWwgdXNlcyB0aGUgc2FtZSB1bmRlcmx5aW5nIGNvZGUgYXMgCkZsaXQncyBQRVAgNTE3IGJhY2tl
-bmQsIHNvIEkgZG9uJ3QgdGhpbmsgdGhlcmUgY2FuIGJlIGNhc2VzIHdoZXJlIHRoZSAKbGF0dGVy
-IHdpbGwgd29yaywgYnV0IHRoZSBmb3JtZXIgd29uJ3Q6CgpodHRwczovL2dpdGh1Yi5jb20vcHlw
-YS9mbGl0L2Jsb2IvMy43LjEvZmxpdF9jb3JlL2ZsaXRfY29yZS93aGVlbC5weSNMMjM1Cmh0dHBz
-Oi8vZ2l0aHViLmNvbS9weXBhL2ZsaXQvYmxvYi8zLjcuMS9mbGl0X2NvcmUvZmxpdF9jb3JlL2J1
-aWxkYXBpLnB5I0w3MAoKPiAKPj4KPj4gSSBkb24ndCB0aGluayB0aGVyZSBhcmUgYW55IGFkdmFu
-dGFnZXMgaW4gdXNpbmcgcHlwYS1idWlsZCBvdmVyIGp1c3QKPj4gcnVubmluZyBmbGl0X2NvcmUu
-d2hlZWwgZGlyZWN0bHksIGFuZCBkcm9wcGluZyBpdCB3b3VsZCByZWR1Y2UgdGhlCj4+IG51bWJl
-ciBvZiBwYWNrYWdlcyB0aGF0IG5lZWQgc3BlY2lhbCBoYW5kbGluZyBhbmQgc2ltcGxpZnkgdGhl
-Cj4+IGRlcGVuZGVuY3kgdHJlZS4KPiAKPiBXZSB3aWxsIG5lZWQgYSBmdWxsIHBlcDUxNyBidWls
-ZCBmcm9udGVuZCBhbnl3YXlzIHNvIHRoaXMgd291bGRuJ3Qgc2ltcGxpZnkKPiBhbnl0aGluZyBJ
-TU8uCgpUaGUgc2ltcGxpZmljYXRpb24gaXMgaW4gbm90IGhhdmluZyB0d28gZGlmZmVyZW50IGZs
-aXQtYmFzZWQgU0VUVVBfVFlQRXMuCgotUm9tYW4uCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+This patch migrates Xilinx Linux kernel and U-Boot from git:// to https://
+The git:// location is no longer supported.
+
+For more details:
+https://github.blog/2021-09-01-improving-git-protocol-security-github/
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+---
+V1->V2:
+ -separated DEVELOPERS file update to make stand alone patch
+---
+ configs/zynqmp_zcu102_defconfig | 4 ++--
+ configs/zynqmp_zcu106_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 4e96489179..2dd0817bd8 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -4,7 +4,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -22,7 +22,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu102/uboot.fragment"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 0a97975aa0..d836edfaf0 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -4,7 +4,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -22,7 +22,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu106/uboot.fragment"
+-- 
+2.17.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
