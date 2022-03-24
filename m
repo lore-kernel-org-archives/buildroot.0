@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C763C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 21:16:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C63C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 21:17:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD1114107C;
-	Thu, 24 Mar 2022 21:16:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 893C561040;
+	Thu, 24 Mar 2022 21:17:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DOUu-L5wsMqj; Thu, 24 Mar 2022 21:16:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IM886xoknOjn; Thu, 24 Mar 2022 21:17:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3FE60405AD;
-	Thu, 24 Mar 2022 21:16:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A68A56102A;
+	Thu, 24 Mar 2022 21:17:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1017A1BF313
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:15:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 114171BF313
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:15:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBBC74107E
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:15:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B30241086
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:15:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gc9ZYGenxD0Y for <buildroot@lists.busybox.net>;
+ with ESMTP id cYxgzeGdvv4O for <buildroot@lists.busybox.net>;
  Thu, 24 Mar 2022 21:15:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF2FA41085
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA4CE41081
  for <buildroot@buildroot.org>; Thu, 24 Mar 2022 21:15:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CE1F085C5F; Thu, 24 Mar 2022 21:06:19 +0000 (UTC)
+ id DEC7F85C5B; Thu, 24 Mar 2022 21:06:19 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 24 Mar 2022 21:51:36 +0100
+Date: Thu, 24 Mar 2022 21:51:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a23f6b7b011fee47812bb70a11c21b9d68844b0
-X-Git-Newrev: 4f617bbbf9fff6e436ae1b86f8af4d127e17fa08
+X-Git-Oldrev: f318c729f0776a8a51c9832e9d431c57edfd7990
+X-Git-Newrev: 49413c6d97b72ef5f44341a3dc720b902a88279b
 X-Patchwork-Hint: ignore
-Message-Id: <20220324210619.CE1F085C5F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{avro-c,
- python-avro}: bump to version 1.11.0
+Message-Id: <20220324210619.DEC7F85C5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbluray: bump to version 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,170 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f617bbbf9fff6e436ae1b86f8af4d127e17fa08
+commit: https://git.buildroot.net/buildroot/commit/?id=49413c6d97b72ef5f44341a3dc720b902a88279b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop avro-c patch (already in version)
-- Drop python-avro patch (not needed anymore)
-
-https://github.com/apache/avro/releases/tag/release-1.11.0
+https://code.videolan.org/videolan/libbluray/-/blob/1.3.1/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-Build-failure-without-a-C-compiler-again.patch | 34 ----------------
- package/avro-c/avro-c.hash                         |  4 +-
- package/avro-c/avro-c.mk                           |  2 +-
- ...-install-time-linting-and-imports-sorting.patch | 46 ----------------------
- package/python-avro/python-avro.hash               |  4 +-
- package/python-avro/python-avro.mk                 |  5 ++-
- 6 files changed, 8 insertions(+), 87 deletions(-)
+ package/libbluray/libbluray.hash | 4 ++--
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch b/package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch
-deleted file mode 100644
-index 8f7e59cf62..0000000000
---- a/package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 8f5633a29b083a84876c00b88fba6d3e8dbbf1a8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 19 Jul 2020 09:35:09 +0200
--Subject: [PATCH] cmake: Build failure without a C++ compiler (again)
--
--avro-c fails to build (again) without a C++ compiler because commit
--664c2fc7fba19709c1f974055f9cf4c8a799e108 reverted the change made by
--commit 414a51fdc1856083bb16851f09a4c61a48796132
--
--Fixes:
-- - http://autobuild.buildroot.org/results/cfa91db53cf5502cbb6f902d1e7ad6397c8d70fd
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://issues.apache.org/jira/browse/AVRO-2898]
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 6c8d7aaf..aa923e18 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -17,7 +17,7 @@
-- # under the License.
-- #
-- cmake_minimum_required(VERSION 3.1)
---project(AvroC)
--+project(AvroC C)
-- enable_testing()
-- 
-- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
---- 
--2.27.0
--
-diff --git a/package/avro-c/avro-c.hash b/package/avro-c/avro-c.hash
-index c4fd7d3f57..7a4a6f7aca 100644
---- a/package/avro-c/avro-c.hash
-+++ b/package/avro-c/avro-c.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/avro/avro-1.10.0/c/avro-c-1.10.0.tar.gz.sha512
--sha512  2e64926b214fd996abf0553572ec6f46b312cf84df17149d1a7e89f4033b63cc34fabef62b98d727799a8a5d452ac9254e275bdea4bf894e9e1e4588bc5dfc9b  avro-c-1.10.0.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.11.0/c/avro-c-1.11.0.tar.gz.sha512
-+sha512  5369ec11832e0ce1aa0181d594f657bae82ab5fb317ec1bee5ba190de9ed42956b425a5bf7e423940e8f871a54ae1246b92db2ce8562f270b4a05523ec4b60ae  avro-c-1.11.0.tar.gz
- 
- # License files
- sha256  d62488d6ba17132e92c23c03c80bfedc848267f96ab36489fec860f76cf6819a  LICENSE
-diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
-index ee6e864161..262a0fee5f 100644
---- a/package/avro-c/avro-c.mk
-+++ b/package/avro-c/avro-c.mk
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index 4ab8c85866..6e62bb49a1 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
+@@ -1,4 +1,4 @@
+-# From http://download.videolan.org/pub/videolan/libbluray/1.3.0/libbluray-1.3.0.tar.bz2.sha512
+-sha512  3d5145e6fd7de099c07f937282112c7abb12a5590b7c0b965b00bddee3837ddfd1a30076aaa6d6278d07a5beee3856f602125983ae075ab30eceb6ac1bd9bcdc  libbluray-1.3.0.tar.bz2
++# From http://download.videolan.org/pub/videolan/libbluray/1.3.1/libbluray-1.3.1.tar.bz2.sha512
++sha512  f39fc8a11771e8fdd5eeebf0ab23535ffab44721f64b350e5d153eee44555b31c618b6d765da114254dc83ff0ff89e84c6b185f61cdbcfedd2d47a5f6e26b75a  libbluray-1.3.1.tar.bz2
+ # Locally computed
+ sha256  b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 233797f38d..a9eb3c67c6 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AVRO_C_VERSION = 1.10.0
-+AVRO_C_VERSION = 1.11.0
- AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
- AVRO_C_LICENSE = Apache-2.0
- AVRO_C_LICENSE_FILES = LICENSE
-diff --git a/package/python-avro/0001-drop-install-time-linting-and-imports-sorting.patch b/package/python-avro/0001-drop-install-time-linting-and-imports-sorting.patch
-deleted file mode 100644
-index 41231e923d..0000000000
---- a/package/python-avro/0001-drop-install-time-linting-and-imports-sorting.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 3446a4af8474cd863efddeae7f3e5dd3f9b8e25e Mon Sep 17 00:00:00 2001
--From: Titouan Christophe <titouan.christophe@railnova.eu>
--Date: Mon, 17 Feb 2020 15:12:13 +0100
--Subject: [PATCH] drop install time linting and imports sorting
--
--Since the 1.9.2 release, the setup script is also performing code linting
--tasks, which require additional python libraries.
--
--These linting tasks are not needed anyway, since they are intended to prepare
--the code for distribution, but the Buildroot package is already using a
--distributed version. We therefore simply remove them.
--
--Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-----
-- setup.cfg | 2 --
-- setup.py  | 1 -
-- 2 files changed, 3 deletions(-)
--
--diff --git a/setup.cfg b/setup.cfg
--index 7b5de18..d46a36e 100644
----- a/setup.cfg
--+++ b/setup.cfg
--@@ -25,8 +25,6 @@ package_dir =
-- include_package_data = true
-- packages = avro
-- setup_requires = 
---	isort
---	pycodestyle
-- install_requires = 
-- zip_safe = true
-- scripts = 
--diff --git a/setup.py b/setup.py
--index f6297bb..91d3287 100755
----- a/setup.py
--+++ b/setup.py
--@@ -164,7 +164,6 @@ def main():
--     setuptools.setup(cmdclass={
--         "clean": CleanCommand,
--         "generate_interop_data": GenerateInteropDataCommand,
---        "lint": LintCommand,
--     })
-- 
-- 
---- 
--2.24.1
--
-diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
-index 2428be96e5..d752fa8ae6 100644
---- a/package/python-avro/python-avro.hash
-+++ b/package/python-avro/python-avro.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/avro/avro-1.10.0/py3/avro-python3-1.10.0.tar.gz.sha512
--sha512  fb41f9227d2410c29cde10d7573aebbc142c2bf3f5945a1aaffdeac8b4b5ec690b0befdfc813a8762289dbbb7fc4e1be1564ba0c69d03092b84d8e938d6156f6  avro-python3-1.10.0.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.11.0/py/avro-1.11.0.tar.gz.sha512
-+sha512  8af67deb33b9990b74ffd7ab5c3c55e13a649070b4623c7bbe2b278287fd0929e57ed6d0344f9e93f3eb79663b43f75891d0810812349dfaecce65fdd9b44e93  avro-1.11.0.tar.gz
- 
- # License files
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
-diff --git a/package/python-avro/python-avro.mk b/package/python-avro/python-avro.mk
-index dd6008b1ba..0c4c431777 100644
---- a/package/python-avro/python-avro.mk
-+++ b/package/python-avro/python-avro.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_AVRO_VERSION = $(AVRO_C_VERSION)
--PYTHON_AVRO_SITE = https://www-eu.apache.org/dist/avro/avro-$(PYTHON_AVRO_VERSION)/py3
--PYTHON_AVRO_SOURCE = avro-python3-$(PYTHON_AVRO_VERSION).tar.gz
-+PYTHON_AVRO_SITE = \
-+	https://www-eu.apache.org/dist/avro/avro-$(PYTHON_AVRO_VERSION)/py
-+PYTHON_AVRO_SOURCE = avro-$(PYTHON_AVRO_VERSION).tar.gz
- PYTHON_AVRO_LICENSE = Apache-2.0
- PYTHON_AVRO_LICENSE_FILES = avro/LICENSE
- PYTHON_AVRO_SETUP_TYPE = setuptools
+-LIBBLURAY_VERSION = 1.3.0
++LIBBLURAY_VERSION = 1.3.1
+ LIBBLURAY_SITE = http://download.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
