@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C122EC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D3B4C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69434404FF;
-	Thu, 24 Mar 2022 20:42:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0F7A40979;
+	Thu, 24 Mar 2022 20:42:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jczQiiZW7NBG; Thu, 24 Mar 2022 20:42:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2101A401E1;
-	Thu, 24 Mar 2022 20:42:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B5251BF333
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:42:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B2AB40250
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:42:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RygEKstEZfiM for <buildroot@lists.busybox.net>;
- Thu, 24 Mar 2022 20:41:59 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gaQjKST8_maz; Thu, 24 Mar 2022 20:42:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94E4F40250;
+	Thu, 24 Mar 2022 20:42:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CDEDC1BF333
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:42:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA37C60B5E
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:42:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OQI1TNlsDhus for <buildroot@lists.busybox.net>;
+ Thu, 24 Mar 2022 20:42:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 267BF40247
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 20:41:59 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id bi12so11575747ejb.3
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:41:58 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7CCFF605C9
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 20:42:18 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id dr20so11539531ejc.6
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=+CXA4SZ/V8stFdCad+LZ8M3MV3OipPdCX1lyloQ+WZU=;
- b=hqOxJfNGbvoSEbeBn3c7fbwhk9FYvPN55oSrs/o+JebeO2hNrBf1zjUuRvAom70Owf
- rFJ7Lj8BlhY5d34vhlqqfqfHFj5e5/q7wbuQYPLWwWVMzI49rjZ6MU5TSAjTfz5JN4d1
- ICbvv5FzHgIqCPq67ZNmhfEXf/nNaAK8cN1Q6iptzVuYUWLD9tPyjBBfSP1wM2+fNjE/
- eKYiwcy39JxGi1I5PSD2OH7d23h6sfZOKUMElzMtuQSIZeKdGuRhJXmCExr08u0TDdfM
- rSUjk0J6evbFGrO1PRqQreEZ1no6o9P238fZqJXhaxtKguVZq/fu17WcZCvVC1vvWYSf
- xNnQ==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=hXwldYIaCy06ECQsXekkczFqm3+wGFrq+ddsDJfWfY4=;
+ b=h9JK1146SXNB9nGiSBjNfXGDYu2PWd0dMh5dAjurYgVkbxr6s7UjoQKiqQWQSLXMwS
+ AfdGP+5G5UFSstUtarpJFyAOEufgZ0tQvqG08UsDTy6YBfYMrHAuBzOPyQsH1Tdv7tPV
+ OQC0TIIG5Z4asugycG7k10N55/0WlQD2wNgyecLyt2vJqYH0xecI3Nayey1QvFAzbJrH
+ Y55xsfSydasEJrIg64aG9fGiZozDqZ5l8Ex/E5FY3y9lHev5HSb54WYFyGWHrTEh8TVq
+ hQAjLTp+O2l919LpYVSbYVEw/hHS0MDY/ctMMYwzupY/gpBj0gnwcmzDBCURVzzafYP7
+ mxEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=+CXA4SZ/V8stFdCad+LZ8M3MV3OipPdCX1lyloQ+WZU=;
- b=jPPLaqs89NCt5Nm+YGVimYLxgygMUTzcsmTjywP1MQ5in2bsFSh95DR0HX6JhwVdoD
- cHM9C6pTcKoACoVMWdUJHbBLQeuPBooP3ZZy05B3gWn2PbmJ93KWKjmw07Cwi6Rv3TZa
- PcHaT9JHdCFgxMs94LzZvBIzCbFb8WIUPcygiWeqPzaQFCkBkFwswaDa2CeFJOAFBjOP
- xEjDiz/EIly3YN5u235Yoi8tcuVu3OPlX48CsBea3weIGEJ5g9gxbprE5e9ja2Dl+SUa
- zH+Ie9NFI0POwVc99FCv2UFVlRebh8kjNTCeJTEOLQnZ8Ciq+jB4ObhwaHvtiUNLfQDA
- XVWQ==
-X-Gm-Message-State: AOAM533HEIv2r8iA5GhoN9c2eXtfAkaT0K5RNEPM2BcwBOBdTmWCs+nH
- 2oS1kzOhnNsc0Yxri584A0RYSw==
-X-Google-Smtp-Source: ABdhPJwcI43jvwRMLmCLfdGRIrIf7AU6v0zil0sYz7zADYJozNAt2uxvPPRU7y/EJ+E87EGMGn5ijw==
-X-Received: by 2002:a17:907:3f9e:b0:6da:842e:873e with SMTP id
- hr30-20020a1709073f9e00b006da842e873emr7915421ejc.383.1648154517391; 
- Thu, 24 Mar 2022 13:41:57 -0700 (PDT)
+ bh=hXwldYIaCy06ECQsXekkczFqm3+wGFrq+ddsDJfWfY4=;
+ b=k44rmZgajGLUy3XAwPLoaKS+iRHPQH7o3h+yIeRTyFBE7Oh/iJ5IvsLofAQA9KD9ys
+ u8vQ2ozZz0pf9T1X5r3NKa6b6nLpIz1FTR9YJXJyLcgNPpfYmcChzoRpi54cnL1D6dvD
+ 1Vr6GTesmG6maKqS9kJ551OF5quPOkTpVKm987Xj+W1hglfj9vkYVOj+TnPanD0Xhc7E
+ pXnBpbv8JUkSoPlwcF5aeb5NEmIc9if08ai0MXBbQ9nxKqcTbL7jaLP8Ip7UDER1sF+t
+ kRqJ5WWg7jR5lwLAPIUARt79BcqVqB6Y+OKR6VCBbYgcqQzjrZJ/SQs8R+UMSbOmK/+8
+ 9ATw==
+X-Gm-Message-State: AOAM531pXfw85GfQ6hNbuJW5xnNz7vwGwjK8imqy276xdPOVCswobQws
+ bm4k+NRj4pX0JN8IKmJnR2g88OmtdsXXeA==
+X-Google-Smtp-Source: ABdhPJyKcxueM5rhVipmTKxa832XEmzB1zliSknhEQRZgIi7Zzo4G2CF7+hwxkbt5scv13tGcme9Gg==
+X-Received: by 2002:a17:907:9621:b0:6d7:355d:6da5 with SMTP id
+ gb33-20020a170907962100b006d7355d6da5mr7810275ejc.195.1648154536720; 
+ Thu, 24 Mar 2022 13:42:16 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- hr13-20020a1709073f8d00b006dfcc331a42sm1509957ejc.203.2022.03.24.13.41.55
+ s20-20020a056402015400b00418f9574a36sm1900260edu.73.2022.03.24.13.42.15
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 24 Mar 2022 13:41:56 -0700 (PDT)
-Message-ID: <186f7501-bf1e-c896-07e9-e7d439b2a044@mind.be>
-Date: Thu, 24 Mar 2022 21:41:51 +0100
+ Thu, 24 Mar 2022 13:42:16 -0700 (PDT)
+Message-ID: <b0b87b2f-6787-2ca2-ae7e-8ac2453c87b6@mind.be>
+Date: Thu, 24 Mar 2022 21:42:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220314183014.2173419-1-james.hilliard1@gmail.com>
+References: <20220314181634.2155997-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220314183014.2173419-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.61.3
+In-Reply-To: <20220314181634.2155997-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gstd: bump to
+ version 0.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,44 +102,142 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/03/2022 19:30, James Hilliard wrote:
+On 14/03/2022 19:16, James Hilliard wrote:
+> Drop patches that are now upstream.
+> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-  There's not really much point bumping a host-only package unless it actually 
-does something for the build. Still: applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/meson/meson.hash | 4 ++--
->   package/meson/meson.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   ...d-check-user-xenv.sh-for-systemd-se.patch} |  0
+>   ...treamer-check-1.0-unless-tests-are-e.patch | 33 ----------------
+>   ...on-python-module-for-python-install.patch} |  0
+>   ...tive-symlink-for-gstd-gst-client-exe.patch | 38 -------------------
+>   package/gstreamer1/gstd/gstd.hash             |  2 +-
+>   package/gstreamer1/gstd/gstd.mk               |  2 +-
+>   6 files changed, 2 insertions(+), 73 deletions(-)
+>   rename package/gstreamer1/gstd/{0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch => 0002-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch} (100%)
+>   delete mode 100644 package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch
+>   rename package/gstreamer1/gstd/{0005-Use-native-meson-python-module-for-python-install.patch => 0003-Use-native-meson-python-module-for-python-install.patch} (100%)
+>   delete mode 100644 package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch
 > 
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> index c2d53519d4..d909709b24 100644
-> --- a/package/meson/meson.hash
-> +++ b/package/meson/meson.hash
-> @@ -1,4 +1,4 @@
->   # Locally calculated after checking pgp signature
-> -# https://github.com/mesonbuild/meson/releases/download/0.61.1/meson-0.61.1.tar.gz.asc
-> -sha256  feb2cefb325b437dbf36146df7c6b87688ddff0b0205caa31dc64055c6da410c  meson-0.61.1.tar.gz
-> +# https://github.com/mesonbuild/meson/releases/download/0.61.3/meson-0.61.3.tar.gz.asc
-> +sha256  9c884434469471f3fe0cbbceb9b9ea0c8047f19e792940e1df6595741aae251b  meson-0.61.3.tar.gz
->   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index 125488dd46..4615e839fe 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
+> diff --git a/package/gstreamer1/gstd/0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch b/package/gstreamer1/gstd/0002-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch
+> similarity index 100%
+> rename from package/gstreamer1/gstd/0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch
+> rename to package/gstreamer1/gstd/0002-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch
+> diff --git a/package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch b/package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch
+> deleted file mode 100644
+> index 495fbfc3fa..0000000000
+> --- a/package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -From 586bb97459e72da30bd9991c228b6b8e9251c68b Mon Sep 17 00:00:00 2001
+> -From: James Hilliard <james.hilliard1@gmail.com>
+> -Date: Tue, 14 Sep 2021 01:49:49 -0600
+> -Subject: [PATCH] Don't require gstreamer-check-1.0 unless tests are enabled.
+> -
+> -Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> -[Upstream status:
+> -https://github.com/RidgeRun/gstd-1.x/pull/248]
+> ----
+> - meson.build | 4 +++-
+> - 1 file changed, 3 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/meson.build b/meson.build
+> -index 1d9ce9d..76990a0 100644
+> ---- a/meson.build
+> -+++ b/meson.build
+> -@@ -22,10 +22,12 @@ gio_unix_dep  = dependency('gio-unix-2.0',       version : '>=2.44.1')
+> - json_glib_dep = dependency('json-glib-1.0',      version : '>=0.16.2')
+> - libd_dep      = dependency('libdaemon',          version : '>=0.14')
+> - jansson_dep   = dependency('jansson',            version : '>=2.7')
+> --gst_check_dep = dependency('gstreamer-check-1.0',version : '>=1.0.5')
+> - thread_dep    = dependency('threads')
+> - libsoup_dep = dependency('libsoup-2.4',		       version : '>=2.4')
+> -
+> -+gst_check_required = get_option('enable-tests').enabled()
+> -+gst_check_dep = dependency('gstreamer-check-1.0', required : gst_check_required, version : '>=1.0.5')
+> -+
+> - systemd_required = get_option('enable-systemd').enabled()
+> - systemd_dep = dependency('systemd', required : systemd_required, version : '>=232')
+> -
+> ---
+> -2.25.1
+> -
+> diff --git a/package/gstreamer1/gstd/0005-Use-native-meson-python-module-for-python-install.patch b/package/gstreamer1/gstd/0003-Use-native-meson-python-module-for-python-install.patch
+> similarity index 100%
+> rename from package/gstreamer1/gstd/0005-Use-native-meson-python-module-for-python-install.patch
+> rename to package/gstreamer1/gstd/0003-Use-native-meson-python-module-for-python-install.patch
+> diff --git a/package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch b/package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch
+> deleted file mode 100644
+> index 265ea8d8c3..0000000000
+> --- a/package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch
+> +++ /dev/null
+> @@ -1,38 +0,0 @@
+> -From a670beca8dcc76171dcfe3f10970d76c6f0439be Mon Sep 17 00:00:00 2001
+> -From: James Hilliard <james.hilliard1@gmail.com>
+> -Date: Tue, 14 Sep 2021 02:49:10 -0600
+> -Subject: [PATCH] Use relative symlink for gstd/gst-client exe.
+> -
+> -This should fix the symlink path when cross compiling.
+> -
+> -Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> -[Upstream status:
+> -https://github.com/RidgeRun/gstd-1.x/pull/249]
+> ----
+> - gst_client/gst_client_symbolic_link.sh | 2 +-
+> - gstd/gstd_symbolic_link.sh             | 2 +-
+> - 2 files changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/gst_client/gst_client_symbolic_link.sh b/gst_client/gst_client_symbolic_link.sh
+> -index d8d7617..b87dd12 100755
+> ---- a/gst_client/gst_client_symbolic_link.sh
+> -+++ b/gst_client/gst_client_symbolic_link.sh
+> -@@ -4,4 +4,4 @@
+> - # $1: target
+> - # $2: link name
+> - rm -f ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+> --ln -s ${DESTDIR}${MESON_INSTALL_PREFIX}/$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+> -+ln -s --relative ${DESTDIR}${MESON_INSTALL_PREFIX}/$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+> -diff --git a/gstd/gstd_symbolic_link.sh b/gstd/gstd_symbolic_link.sh
+> -index d8d7617..b87dd12 100755
+> ---- a/gstd/gstd_symbolic_link.sh
+> -+++ b/gstd/gstd_symbolic_link.sh
+> -@@ -4,4 +4,4 @@
+> - # $1: target
+> - # $2: link name
+> - rm -f ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+> --ln -s ${DESTDIR}${MESON_INSTALL_PREFIX}/$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+> -+ln -s --relative ${DESTDIR}${MESON_INSTALL_PREFIX}/$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+> ---
+> -2.25.1
+> -
+> diff --git a/package/gstreamer1/gstd/gstd.hash b/package/gstreamer1/gstd/gstd.hash
+> index 6ec84bd58d..20c821a27f 100644
+> --- a/package/gstreamer1/gstd/gstd.hash
+> +++ b/package/gstreamer1/gstd/gstd.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  94c10c798d3618b63cc68cbe053fabd19335a57f982a47b3d66c27c37d325da3  gstd-0.13.0.tar.gz
+> +sha256  56afd58530b63d0d88dd818fd4e6c9230861819b3e131c6a87a46084c3f3fa96  gstd-0.14.0.tar.gz
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/gstreamer1/gstd/gstd.mk b/package/gstreamer1/gstd/gstd.mk
+> index 959e277272..08a29f26ff 100644
+> --- a/package/gstreamer1/gstd/gstd.mk
+> +++ b/package/gstreamer1/gstd/gstd.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -MESON_VERSION = 0.61.1
-> +MESON_VERSION = 0.61.3
->   MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
->   MESON_LICENSE = Apache-2.0
->   MESON_LICENSE_FILES = COPYING
+> -GSTD_VERSION = 0.13.0
+> +GSTD_VERSION = 0.14.0
+>   GSTD_SITE = $(call github,RidgeRun,gstd-1.x,v$(GSTD_VERSION))
+>   GSTD_LICENSE_FILES = COPYING
+>   GSTD_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
