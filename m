@@ -1,79 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7F3BC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 13:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F6D3C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 14:31:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CDEF4002B;
-	Thu, 24 Mar 2022 13:54:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D3F841C4C;
+	Thu, 24 Mar 2022 14:31:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id todNRuCAi4O7; Thu, 24 Mar 2022 13:54:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EmP0KxxtNl8W; Thu, 24 Mar 2022 14:31:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11816400D6;
-	Thu, 24 Mar 2022 13:54:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 215911BF40A
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 13:54:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADFC3418F9;
+	Thu, 24 Mar 2022 14:31:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A43F1BF3E1
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 14:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D15960BD1
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 13:54:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 02141418F9
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 14:31:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=zx2c4.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vn0l8OUYtp7S for <buildroot@lists.busybox.net>;
- Thu, 24 Mar 2022 13:54:45 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from dfw.source.kernel.org (dfw.source.kernel.org
- [IPv6:2604:1380:4641:c500::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C4E11606F5
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:54:45 +0000 (UTC)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by dfw.source.kernel.org (Postfix) with ESMTPS id 70DD760F34
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:54:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7658C340EC
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:54:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
- dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
- header.b="LMoweYu2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105; 
- t=1648130081;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=bC4UEJa4msuJ/qh1OWrCztt8UTQ8zrnreqwNgd/pirM=;
- b=LMoweYu2N7EpwwMwSkUJQYXGDMbwfDFOh/vMr5zuT3u3ck2861mrk8mXkBeOWIf/YBC7qs
- Jk1WvXJw6qKe3hZyiH8F5AjhkZbj8Jz6VyQz7OFDcpznEVb5hpRFPwfe28HnVJCe+GUWEK
- ZC2N9Bfo0scKHymY9Dg8aMRF9sTTpWQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d04e5b8c
- (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:54:41 +0000 (UTC)
-Received: by mail-yb1-f170.google.com with SMTP id g24so8527157ybj.13
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 06:54:41 -0700 (PDT)
-X-Gm-Message-State: AOAM531o5neQ0BUtVpkONweak5P+Oy5lDYxAI+/qz4/jCnI5TREFLB8F
- JlPFvsjfRrsvrMrraR72WDqtcr+94FZuaFT6bc4=
-X-Google-Smtp-Source: ABdhPJxWj/8tKZzH5iQiQXIKl1EbhGIGuSh9DEF3w1HClvd6jDRwsnWO+y3BKwxHGp4HJ44M6JQi1ZpG+CqW2k5la0E=
-X-Received: by 2002:a25:b854:0:b0:633:8a00:707a with SMTP id
- b20-20020a25b854000000b006338a00707amr4635301ybm.637.1648130079895; Thu, 24
- Mar 2022 06:54:39 -0700 (PDT)
-MIME-Version: 1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e_S4JbPHCy2R for <buildroot@lists.busybox.net>;
+ Thu, 24 Mar 2022 14:31:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from eu-smtp-delivery-151.mimecast.com
+ (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E46FC418F4
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 14:31:39 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-254-gNJCLxYeP_iMP1VaOn9IYw-1; Thu, 24 Mar 2022 14:31:36 +0000
+X-MC-Unique: gNJCLxYeP_iMP1VaOn9IYw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 24 Mar 2022 14:31:35 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 24 Mar 2022 14:31:35 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: "'Jason A. Donenfeld'" <Jason@zx2c4.com>
+Thread-Topic: [Buildroot] [PATCH v2] package/urandom-scripts: hash old seed
+ with new seed when saving
+Thread-Index: AQHYP1iknTroLI/B6E6vl8ATYchf8qzOQFvggABOTwCAAAoZ4A==
+Date: Thu, 24 Mar 2022 14:31:35 +0000
+Message-ID: <859deab97eb947eb9114cf491c871a00@AcuMS.aculab.com>
 References: <CAHmME9oUAXNpjWF266m3mH5HvEvVWCthy64RHFye+mOktMegzg@mail.gmail.com>
  <20220323200731.170409-1-Jason@zx2c4.com> <20220324082433.GA3649946@scaer>
  <be8ccaa597e343698f32663cfb937c2a@AcuMS.aculab.com>
-In-Reply-To: <be8ccaa597e343698f32663cfb937c2a@AcuMS.aculab.com>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Thu, 24 Mar 2022 07:54:28 -0600
-X-Gmail-Original-Message-ID: <CAHmME9p4sXHZB_jUfCwJ3bDZH71pCu2oaS0arSNCCogB6F+q=w@mail.gmail.com>
-Message-ID: <CAHmME9p4sXHZB_jUfCwJ3bDZH71pCu2oaS0arSNCCogB6F+q=w@mail.gmail.com>
-To: David Laight <David.Laight@aculab.com>
+ <CAHmME9p4sXHZB_jUfCwJ3bDZH71pCu2oaS0arSNCCogB6F+q=w@mail.gmail.com>
+In-Reply-To: <CAHmME9p4sXHZB_jUfCwJ3bDZH71pCu2oaS0arSNCCogB6F+q=w@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+ auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Subject: Re: [Buildroot] [PATCH v2] package/urandom-scripts: hash old seed
  with new seed when saving
 X-BeenThere: buildroot@buildroot.org
@@ -94,23 +86,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi David,
-
-On Thu, Mar 24, 2022 at 3:15 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Yann E. MORIN
-> > Sent: 24 March 2022 08:25
+From: Jason A. Donenfeld
+> Sent: 24 March 2022 13:54
+> 
+> On Thu, Mar 24, 2022 at 3:15 AM David Laight <David.Laight@aculab.com> wrote:
 > >
-> > +Peter: candidate for backporting as a security fix
->
-> Probably not - the security fix is the code that actually
-> initialises the RNG.
+> > From: Yann E. MORIN
+> > > Sent: 24 March 2022 08:25
+> > >
+> > > +Peter: candidate for backporting as a security fix
+> >
+> > Probably not - the security fix is the code that actually
+> > initialises the RNG.
+> 
+> No. The security fix here is that the old and new seeds are hashed
+> together so that the new one doesn't regress in entropy. Yann is
+> correct.
 
-No. The security fix here is that the old and new seeds are hashed
-together so that the new one doesn't regress in entropy. Yann is
-correct.
+But there is no entropy, you've never let the system collect any.
 
-Jason
+It is still completely broken.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
