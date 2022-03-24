@@ -1,89 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E9BFC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D0A7C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 303AB60BAD;
-	Thu, 24 Mar 2022 20:13:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE4A4401E1;
+	Thu, 24 Mar 2022 20:21:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 98_nHE48aa4b; Thu, 24 Mar 2022 20:13:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r3fGOMee6zPt; Thu, 24 Mar 2022 20:20:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7125960AF4;
-	Thu, 24 Mar 2022 20:12:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A42FE1BF333
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:12:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67C7240467;
+	Thu, 24 Mar 2022 20:20:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 88D8E1BF333
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92A0460ADC
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:12:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8078540467
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:20:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5arRNs_EyZ58 for <buildroot@lists.busybox.net>;
- Thu, 24 Mar 2022 20:12:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7AFB960BAD
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 20:12:56 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id bi12so11443967ejb.3
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 13:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=IILry4OH98FdqL2CyQaSukECGl4ALFZEllxjCU2c2xs=;
- b=gLNbQHhjtdm5Wv/dwZbSl7rAVW9gFhU06u4nRJM/SdJQQ5QV0yyU59T0082v+1k0A1
- HjpGISydxEh6kvkQ6P/4zbtPKCWCWCqPEQg6bowUICuQ5qDyrh5trn0hiPdrEvFHpN4Y
- hPovK2vAnWQfjVvH6K0TIskeZnJiGTWnK5P9C/3RLUKoDrEPER67THbiv4PGvKipOeFc
- 4PONSuCPxPYt5E8LSMu/fEjjEO+mOGKJW7ZpY0CHH8Ybwl8mmItVioQzIytNhGbWIlQ9
- jAlVUDYE/vrRvYYB/RCU+58F0MEHMqSi5MekWejYXfpLB8PywecnxY30fkoYmvDFrWGE
- GVWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=IILry4OH98FdqL2CyQaSukECGl4ALFZEllxjCU2c2xs=;
- b=KJL9zCIEBmldyD31MbKq9Tb2Q2RRQDWtwKSweCaBJnbGJGc+u5nYoCkRu3QmOjauVY
- tA944TfQyoMXOGu7FjtyyM0D+NQCGBjCPjhrv8alJuL0wxniPUneXKQrkCixXB3CVc7I
- XRZ616bWeCM8OuBoe1idAEzC6B2xiCqZsaoq6ubojZX/8b2HRJTt447nMdPCXDMUmE/T
- lTSfdS+TCPNGa162kNFR9jf7cCwroYscUq/hygQGqN5ulWqupfWDfu+o68qETvcGWG+6
- N6VO0XLsx+78ORm66feIOJNFmlrSPB2gtm+DSmUVRhJfjoj/N3Dk1g4mtKqHNmzX8wz/
- HZTQ==
-X-Gm-Message-State: AOAM530VbsvXIRwNnK1z0k1Nia/39aVF5LYSqPtMjiRsk8NzeCyi0KO8
- DpCEZCPzxyMaCbuIj8JyVNJN0x6mY+snkg==
-X-Google-Smtp-Source: ABdhPJxnLOsNEUEoxgBLwg84gj57UimmUXWwDLl7cS7CsXHTeARrfLdOD98YeCebfiku+iVu3bxdKA==
-X-Received: by 2002:a17:907:2d06:b0:6e0:2ec:c7bd with SMTP id
- gs6-20020a1709072d0600b006e002ecc7bdmr8079388ejc.656.1648152774678; 
- Thu, 24 Mar 2022 13:12:54 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- b7-20020a170906708700b006da8440d642sm1536450ejk.113.2022.03.24.13.12.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 24 Mar 2022 13:12:54 -0700 (PDT)
-Message-ID: <b4af61e1-671f-153a-b45c-2c263e5a1bd7@mind.be>
-Date: Thu, 24 Mar 2022 21:12:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-GB
-To: Thomas Ruschival <thomas@ruschival.de>, buildroot@buildroot.org
-References: <20220312104402.33075-2-thomas@ruschival.de>
- <20220314181347.190747-1-thomas@ruschival.de>
- <20220314181347.190747-2-thomas@ruschival.de>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220314181347.190747-2-thomas@ruschival.de>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/pistache: bump version &
- switch to meson build
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SD6Orj3dfphE for <buildroot@lists.busybox.net>;
+ Thu, 24 Mar 2022 20:20:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.185])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5C3464011A
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 20:20:55 +0000 (UTC)
+Received: from 1nXTwy-0008zk-UE by out3b.electric.net with emc1-ok (Exim
+ 4.94.2) (envelope-from <kris@embeddedTS.com>)
+ id 1nXTwz-00091k-VF; Thu, 24 Mar 2022 13:20:53 -0700
+Received: by emcmailer; Thu, 24 Mar 2022 13:20:53 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+ by out3b.electric.net with esmtps (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <kris@embeddedTS.com>)
+ id 1nXTwy-0008zk-UE; Thu, 24 Mar 2022 13:20:52 -0700
+Received: from tsdebian.ts-local.net (unknown [75.164.75.221])
+ by mail.embeddedts.com (Postfix) with ESMTPSA id 9FD1314262;
+ Thu, 24 Mar 2022 13:20:51 -0700 (MST)
+To: buildroot@buildroot.org
+Date: Thu, 24 Mar 2022 13:20:22 -0700
+Message-Id: <20220324202026.5688-1-kris@embeddedTS.com>
+X-Mailer: git-send-email 2.11.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS: TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=embeddedTS.com; s=mailanyone20220121; h=Message-Id:Date:To:From;
+ bh=+r7SnyYOWyPi/qCjjjeBSLtBs1fDJumFf1gQdUwZcWc=;
+ b=Z1uhqd9kgMqAI6uSdVH+9dEUuh07GmEb9aa0j3BwYY2uW2zXBlH5CxDjfAecVjpHc799TeARLXzWzB3E9qL5NRY08D4Xp4myNFlAlbTTdG8Ptp7M03G8VbIEtx66FrN+5Hs5RilC5XYFkRXEjEmjkxW0XdBnIXHh2+XKa0X1wtF0nQiD03uov+30Sm/TJ41FdX1LVCkBhikA46q1k8wKwPbFx1ZH8+yGfv4U2HOfYfbxWPI9JPe2R03W8qCLkeFDmDsC9BqqNrvPW6gJEuH20TNu4iVm+CVnWN5dfVzQs0C8/yQg0OQMfoCMdA3kFhUJANTHBZEy53iBuI3rpSTPng==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+Subject: [Buildroot] [PATCH 0/4] Pull in WILC Wi-Fi updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,79 +80,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: Kris Bahnsen <kris@embeddedTS.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Mark Featherston <mark@embeddedTS.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Kris Bahnsen <kris@embeddedTS.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This series bumps WILC1000/3000 firmware to the latest available from
+Microchip, updates existing defconfig files to include both WILC1000
+and WILC3000 blobs, and adds a package to build the wilc driver as
+an external kernel module.
 
+The previous wilc1000-firmware package was extremely outdated, no longer
+available on github, and installed the firmware files to the wrong
+location for the current upstream kernel wilc1000 driver and Microchip's
+separately maintained driver.
 
-On 14/03/2022 19:13, Thomas Ruschival wrote:
-> While upstream pistache has not yet released a stable 'tag'
+Since the firmware change includes individual WILC1000 and WILC3000
+config options, this package is renamed to wilc-firmware.
 
-  I don't think they ever will :-)
+The defconfigs of all platforms that used WILC1000 firmware were
+touched to also include WILC3000 firmware. They either natively
+have WILC3000 or can support either WILC1000/WILC3000 being connected
+to these platforms.
 
-> a lot has changed since June 2020:
-> 
-> * project has moved to meson build system, cmake builds
->    do not install headers.
-> * patches in buildroot are no longer required
-> * project-implemented Pistache::Optional was replaced by
->    use of std::optional. This is only available in C++17
-> * dependency to rapidjson has been introduced
-> 
-> Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
-> ---
->   ...-add-C-language-to-project-statement.patch | 70 --------------
->   ...eLists.txt-respect-BUILD_SHARED_LIBS.patch | 95 -------------------
->   ...de-pistache-typeid.h-include-cstddef.patch | 38 --------
->   package/pistache/Config.in                    |  9 +-
->   package/pistache/pistache.hash                |  2 +-
->   package/pistache/pistache.mk                  | 10 +-
->   6 files changed, 12 insertions(+), 212 deletions(-)
->   delete mode 100644 package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
->   delete mode 100644 package/pistache/0002-CMakeLists.txt-respect-BUILD_SHARED_LIBS.patch
->   delete mode 100644 package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch
-> 
+I've attempted to test the firmware changes against
+microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig as this is a board I
+have in my possession. However, the defconfig appears broken (Microchip
+now maintains the evk in their own BR2_EXTERNAL repo):
 
-[snip]
-> diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
-> index 4d6bd283ea..65d9b2412c 100644
-> --- a/package/pistache/pistache.mk
-> +++ b/package/pistache/pistache.mk
-> @@ -4,18 +4,20 @@
->   #
->   ################################################################################
->   
-> -PISTACHE_VERSION = f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d
-> +PISTACHE_VERSION = 3ec9d7c4f8b828fdd391550fff81b01e72dd6269
->   PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
->   PISTACHE_LICENSE = Apache-2.0
->   PISTACHE_LICENSE_FILES = LICENSE
->   
->   PISTACHE_INSTALL_STAGING = YES
-> +PISTACHE_DEPENDENCIES += rapidjson
->   
->   ifeq ($(BR2_PACKAGE_OPENSSL),y)
->   PISTACHE_DEPENDENCIES += openssl
-> -PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=ON
-> +PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=true
-> +PISTACHE_CONF_OPTS += -DPISTACHE_ENABLE_NETWORK_TESTS=false
+...
+Kernel command line: console=ttyS0,115200 initrd=0x21100000,25165824 root=/dev/ram0 rw
+...
+RAMDISK: Couldn't find valid RAM disk image starting at 0.
+mmc0: new ultra high speed DDR50 SDHC card at address aaaa
+List of all partitions:
+...
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(1,0)
+CPU: 0 PID: 1 Comm: swapper Not tainted 5.10.80-linux4microchip-2021.10 #1
+Hardware name: Atmel SAMA5
+Function entered at [<c010c0fc>] from [<c010974c>]
+Function entered at [<c010974c>] from [<c087e37c>]
+Function entered at [<c087e37c>] from [<c0b014bc>]
+Function entered at [<c0b014bc>] from [<c0b01788>]
+Function entered at [<c0b01788>] from [<c08872c0>]
+Function entered at [<c08872c0>] from [<c0100148>]
+Exception stack(0xc2c29fb0 to 0xc2c29ff8)
+9fa0:                                     00000000 00000000 00000000 00000000
+9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(1,0) ]---
 
-  I've applied to master as is, but this sounds like we would always want to 
-disable it (we don't build tests if we can avoid it). Follow-up patch to move it 
-out of the condition (if that's the right thing to do) welcome!
+The firmware and driver changes have been thoroughly tested, however,
+on an embeddedTS platform (BR patch for this in the future, waiting on
+kernel accepting FDT) that includes the WILC3000 device. We have a number
+of platforms that all use this same device and are starting to push for
+better upstream support overall. So this patch series is us laying the
+groundwork for that.
 
-  Regards,
-  Arnout
+Kris Bahnsen (4):
+  package/wilc1000-firmware: bump to 15.6
+  package/wilc-firmware: rename from wilc1000-firmware
+  configs: add WILC3000_FIRMWARE to compatible devices
+  package/wilc-driver: new package
 
->   else
-> -PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=OFF
-> +PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=false
->   endif
->   
-> -$(eval $(cmake-package))
-> +$(eval $(meson-package))
+ DEVELOPERS                                         |  6 ++-
+ configs/at91sam9x5ek_dev_defconfig                 |  1 +
+ configs/at91sam9x5ek_mmc_dev_defconfig             |  1 +
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig   |  1 +
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig   |  1 +
+ configs/atmel_sama5d3_xplained_dev_defconfig       |  1 +
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig   |  1 +
+ configs/atmel_sama5d4_xplained_dev_defconfig       |  1 +
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig   |  1 +
+ configs/microchip_sam9x60ek_mmc_dev_defconfig      |  1 +
+ .../microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig |  1 +
+ configs/microchip_sama5d2_icp_mmc_dev_defconfig    |  1 +
+ configs/microchip_sama7g5ek_mmc_dev_defconfig      |  1 +
+ package/Config.in                                  |  3 +-
+ package/wilc-driver/Config.in                      | 58 ++++++++++++++++++++++
+ package/wilc-driver/wilc-driver.hash               |  2 +
+ package/wilc-driver/wilc-driver.mk                 | 29 +++++++++++
+ package/wilc-firmware/Config.in                    | 29 +++++++++++
+ package/wilc-firmware/wilc-firmware.hash           |  2 +
+ package/wilc-firmware/wilc-firmware.mk             | 34 +++++++++++++
+ package/wilc1000-firmware/Config.in                |  6 ---
+ package/wilc1000-firmware/wilc1000-firmware.hash   |  2 -
+ package/wilc1000-firmware/wilc1000-firmware.mk     | 24 ---------
+ 23 files changed, 173 insertions(+), 34 deletions(-)
+ create mode 100644 package/wilc-driver/Config.in
+ create mode 100644 package/wilc-driver/wilc-driver.hash
+ create mode 100644 package/wilc-driver/wilc-driver.mk
+ create mode 100644 package/wilc-firmware/Config.in
+ create mode 100644 package/wilc-firmware/wilc-firmware.hash
+ create mode 100644 package/wilc-firmware/wilc-firmware.mk
+ delete mode 100644 package/wilc1000-firmware/Config.in
+ delete mode 100644 package/wilc1000-firmware/wilc1000-firmware.hash
+ delete mode 100644 package/wilc1000-firmware/wilc1000-firmware.mk
+
+-- 
+2.11.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
