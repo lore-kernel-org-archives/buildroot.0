@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C02DDC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E26C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 20:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C16C61028;
-	Thu, 24 Mar 2022 20:44:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E50B8448B;
+	Thu, 24 Mar 2022 20:44:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3VSZMg5l1eXv; Thu, 24 Mar 2022 20:44:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uhdwtcvjQAq3; Thu, 24 Mar 2022 20:44:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD2B66101E;
-	Thu, 24 Mar 2022 20:43:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F5561C1162
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1FB181379;
+	Thu, 24 Mar 2022 20:44:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0120E1BF333
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E03460BAD
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E309284481
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 20:43:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aMFcCrl1aljo for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qQsNme0WamLS for <buildroot@lists.busybox.net>;
  Thu, 24 Mar 2022 20:43:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC79160B5E
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7AE28447A
  for <buildroot@buildroot.org>; Thu, 24 Mar 2022 20:43:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AFA2D82AFE; Thu, 24 Mar 2022 20:34:16 +0000 (UTC)
+ id A696385C11; Thu, 24 Mar 2022 20:34:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 24 Mar 2022 21:10:36 +0100
+Date: Thu, 24 Mar 2022 20:44:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 26a16ed9d84cbd934fbad4d6042dfd10dc8063b4
-X-Git-Newrev: 2f3218567953185008ec862f814bebecb9d6ed82
+X-Git-Oldrev: 92f653c24057065a4964f83e9ed70e868eac0f89
+X-Git-Newrev: 26a16ed9d84cbd934fbad4d6042dfd10dc8063b4
 X-Patchwork-Hint: ignore
-Message-Id: <20220324203416.AFA2D82AFE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pistache: bump version & switch to
- meson build
+Message-Id: <20220324203416.A696385C11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/librtlsdr: switch to
+ autotools-package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,338 +54,307 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2408161509413376952=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2408161509413376952==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2f3218567953185008ec862f814bebecb9d6ed82
+commit: https://git.buildroot.net/buildroot/commit/?id=26a16ed9d84cbd934fbad4d6042dfd10dc8063b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While upstream pistache has not yet released a stable 'tag'
-a lot has changed since June 2020:
+Switch to autotools-package to avoid the following static build failure
+since commit d661740201405970f65c16c39a79f4148705af30:
 
-* project has moved to meson build system, cmake builds
-  do not install headers.
-* patches in buildroot are no longer required
-* project-implemented Pistache::Optional was replaced by
-  use of std::optional. This is only available in C++17
-* dependency to rapidjson has been introduced
+[ 56%] Linking C executable rtl_biast
+/home/peko/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.3.0/../../../../riscv64-buildroot-linux-musl/bin/ld: attempted static link of dynamic object `/home/peko/autobuild/instance-1/output-1/host/riscv64-buildroot-linux-musl/sysroot/lib/libatomic.so'
+collect2: error: ld returned 1 exit status
 
-Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
+Drop both cmake-related patches
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cf84759682848db8ed5610e1abe5a92337d0e957
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...s.txt-add-C-language-to-project-statement.patch | 70 ----------------
- ...-CMakeLists.txt-respect-BUILD_SHARED_LIBS.patch | 95 ----------------------
- ...include-pistache-typeid.h-include-cstddef.patch | 38 ---------
- package/pistache/Config.in                         |  9 +-
- package/pistache/pistache.hash                     |  2 +-
- package/pistache/pistache.mk                       | 10 ++-
- 6 files changed, 12 insertions(+), 212 deletions(-)
+ ...m-respect-DESTDIR-with-install-udev-rules.patch |  31 +++++
+ ...01-disable_shared_library_target_in_build.patch | 130 ---------------------
+ ...es-Version.cmake-don-t-use-Git-version-if.patch |  47 --------
+ package/librtlsdr/librtlsdr.mk                     |  26 ++---
+ 4 files changed, 42 insertions(+), 192 deletions(-)
 
-diff --git a/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch b/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
+diff --git a/package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch b/package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch
+new file mode 100644
+index 0000000000..1aec8166cc
+--- /dev/null
++++ b/package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch
+@@ -0,0 +1,31 @@
++From 082c9e4cb6c8f96aa59dd3d03b0288752518fad7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 19 Feb 2022 22:29:45 +0100
++Subject: [PATCH] Makefile.am: respect $(DESTDIR) with install-udev-rules
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/steve-m/librtlsdr/pull/67]
++---
++ Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 65b2f21..6b8691a 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -14,10 +14,10 @@ dist-hook:
++ 	echo $(VERSION) > $(distdir)/.tarball-version
++ 
++ install-udev-rules:
++-	$(INSTALL_DATA) rtl-sdr.rules /etc/udev/rules.d
+++	$(INSTALL_DATA) rtl-sdr.rules $(DESTDIR)/etc/udev/rules.d
++ 
++ uninstall-udev-rules:
++-	rm -rf /etc/udev/rules.d/rtl-sdr.rules
+++	rm -rf $(DESTDIR)/etc/udev/rules.d/rtl-sdr.rules
++ 
++ EXTRA_DIST = git-version-gen .version
++ 
++-- 
++2.34.1
++
+diff --git a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
 deleted file mode 100644
-index c393a48d0d..0000000000
---- a/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
+index 2fb63465de..0000000000
+--- a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
 +++ /dev/null
-@@ -1,70 +0,0 @@
--From a50fc9bde098e4e89584a5da9f94f620c11b6733 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 16 Aug 2020 12:31:46 +0200
--Subject: [PATCH] CMakeLists.txt: add C language to project statement
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,130 +0,0 @@
+-From 9a1c2587d4ef18e2026811deabd024eb7577d9ce Mon Sep 17 00:00:00 2001
+-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+-Date: Fri, 15 May 2020 16:14:48 +0200
+-Subject: [PATCH] disable shared library target in build
 -
--This will fix the detection of atomic:
+-Disable shared library target if BUILD_SHARED_LIBS if OFF.
 -
---- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB
---- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB - Failed
---- Looking for __atomic_load_8 in atomic
---- Looking for __atomic_load_8 in atomic - not found
--CMake Error at CMakeModules/CheckAtomic.cmake:76 (message):
--  Host compiler appears to require libatomic for 64-bit operations, but
--  cannot find it.
--Call Stack (most recent call first):
--  CMakeLists.txt:19 (include)
+-Patch retrieved from
+-https://git.buildroot.net/buildroot/tree/package/librtlsdr/0001-disable_shared_library_target_in_build.patch?h=2020.02.x
 -
--Indeed if C language is not enabled, the test will be run with the C++
--compiler resulting in the following error:
+-Patch has been updated to work with master and to be able to keep current
+-behavior of building shared and static version of library if
+-BUILD_SHARED_LIBS and BUILD_STATIC_LIBS are both set.
+-Moreover, if BUILD_STATIC_LIBS is OFF, only shared version of library
+-will be install.
 -
--Building CXX object CMakeFiles/cmTC_fad22.dir/CheckFunctionExists.cxx.o
--/tmp/instance-0/output-1/host/bin/mipsel-linux-g++ --sysroot=/tmp/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -D_FORTIFY_SOURCE=1 -Wall -Wconversion -pedantic -Wextra -Wno-missing-field-initializers -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG   -o CMakeFiles/cmTC_fad22.dir/CheckFunctionExists.cxx.o -c /tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
--<command-line>: error: new declaration 'char __atomic_load_8()' ambiguates built-in declaration 'long long unsigned int __atomic_load_8(const volatile void*, int)' [-fpermissive]
--/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx:7:3: note: in expansion of macro 'CHECK_FUNCTION_EXISTS'
--   CHECK_FUNCTION_EXISTS(void);
--   ^~~~~~~~~~~~~~~~~~~~~
--/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx: In function 'int main(int, char**)':
--/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx:17:25: error: too few arguments to function 'long long unsigned int __atomic_load_8(const volatile void*, int)'
--   CHECK_FUNCTION_EXISTS();
--                         ^
+-[Upstream status: http://lists.osmocom.org/pipermail/osmocom-sdr/2020-May/002075.html]
 -
--whereas with a C compiler, we'll get:
--
--Building C object CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o
--/home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc --sysroot=/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG   -o CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
--<command-line>: warning: conflicting types for built-in function ‘__atomic_load_8’ [-Wbuiltin-declaration-mismatch]
--/usr/share/cmake-3.16/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
--   CHECK_FUNCTION_EXISTS(void);
--   ^~~~~~~~~~~~~~~~~~~~~
--Linking C executable cmTC_4b0f4
--/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b0f4.dir/link.txt --verbose=1
--/home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc --sysroot=/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG    CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o  -o cmTC_4b0f4  -latomic
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2bf06c6a9e55b449ec5875cf9415a9e55b2065d6
--
+-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index edc73c5..0286647 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
-- set(CMAKE_CXX_EXTENSIONS OFF)
-- 
-- project (pistache
---    LANGUAGES CXX)
--+    LANGUAGES C CXX)
-- 
-- include(GNUInstallDirs)
-- 
---- 
--2.27.0
--
-diff --git a/package/pistache/0002-CMakeLists.txt-respect-BUILD_SHARED_LIBS.patch b/package/pistache/0002-CMakeLists.txt-respect-BUILD_SHARED_LIBS.patch
-deleted file mode 100644
-index 09f59b11ec..0000000000
---- a/package/pistache/0002-CMakeLists.txt-respect-BUILD_SHARED_LIBS.patch
-+++ /dev/null
-@@ -1,95 +0,0 @@
--From 45824f58b10575d8d88d4bce934aedee821a6df0 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 15 Oct 2020 22:26:55 +0200
--Subject: [PATCH] CMakeLists.txt: respect BUILD_SHARED_LIBS
--
--Don't build and install pistache_shared if the standard cmake
--BUILD_SHARED_LIBS is set to OFF
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Backport from upstream:
--  https://github.com/oktal/pistache/commit/c04166ca9e6420a8fbc93fef4055ee2eccdcebe4
--]
-----
-- src/CMakeLists.txt | 43 +++++++++++++++++++++++++------------------
-- 1 file changed, 25 insertions(+), 18 deletions(-)
+- src/CMakeLists.txt | 30 +++++++++++++++++++++---------
+- 1 file changed, 21 insertions(+), 9 deletions(-)
 -
 -diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 6521b20..c5b049f 100644
+-index de93044..13b7b1a 100644
 ---- a/src/CMakeLists.txt
 -+++ b/src/CMakeLists.txt
--@@ -26,31 +26,36 @@ set(include_install_dir ${CMAKE_INSTALL_INCLUDEDIR})
-- set(lib_install_dir ${CMAKE_INSTALL_LIBDIR})
-- set(bin_install_dir ${CMAKE_INSTALL_BINDIR})
+-@@ -18,6 +18,8 @@
+- ########################################################################
+- # Setup shared library variant
+- ########################################################################
+-+option(BUILD_SHARED_LIBS "Build shared library" ON)
+-+if(BUILD_SHARED_LIBS)
+- add_library(rtlsdr SHARED librtlsdr.c
+-   tuner_e4k.c tuner_fc0012.c tuner_fc0013.c tuner_fc2580.c tuner_r82xx.c)
+- target_link_libraries(rtlsdr PkgConfig::LIBUSB)
+-@@ -30,10 +32,14 @@ set_target_properties(rtlsdr PROPERTIES OUTPUT_NAME rtlsdr)
+- set_target_properties(rtlsdr PROPERTIES SOVERSION ${MAJOR_VERSION})
+- set_target_properties(rtlsdr PROPERTIES VERSION ${LIBVER})
+- generate_export_header(rtlsdr)
+-+list(APPEND rtlsdr_lib rtlsdr)
+-+endif()
 - 
---add_library(pistache_shared SHARED $<TARGET_OBJECTS:pistache>)
---add_library(pistache_static STATIC $<TARGET_OBJECTS:pistache>)
--+if (BUILD_SHARED_LIBS)
--+    add_library(pistache_shared SHARED $<TARGET_OBJECTS:pistache>)
--+    target_link_libraries(pistache_shared PRIVATE Threads::Threads ${CMAKE_REQUIRED_LIBRARIES})
--+    target_include_directories(pistache_shared INTERFACE ${PISTACHE_INCLUDE})
--+endif ()
+- ########################################################################
+- # Setup static library variant
+- ########################################################################
+-+option(BUILD_STATIC_LIBS "Build static library" ON)
+-+if(BUILD_STATIC_LIBS)
+- add_library(rtlsdr_static STATIC librtlsdr.c
+-   tuner_e4k.c tuner_fc0012.c tuner_fc0013.c tuner_fc2580.c tuner_r82xx.c)
+- target_link_libraries(rtlsdr_static PkgConfig::LIBUSB)
+-@@ -47,6 +53,8 @@ if(NOT WIN32)
+- set_target_properties(rtlsdr_static PROPERTIES OUTPUT_NAME rtlsdr)
+- endif()
+- generate_export_header(rtlsdr_static)
+-+list(APPEND rtlsdr_lib rtlsdr_static)
+-+endif()
 - 
---target_link_libraries(pistache_shared PRIVATE Threads::Threads ${CMAKE_REQUIRED_LIBRARIES})
--+add_library(pistache_static STATIC $<TARGET_OBJECTS:pistache>)
-- target_link_libraries(pistache_static PRIVATE Threads::Threads ${CMAKE_REQUIRED_LIBRARIES})
---
---target_include_directories(pistache_shared INTERFACE ${PISTACHE_INCLUDE})
-- target_include_directories(pistache_static INTERFACE ${PISTACHE_INCLUDE})
+- ########################################################################
+- # Set up Windows DLL resource files
+-@@ -90,37 +98,37 @@ add_executable(rtl_eeprom rtl_eeprom.c)
+- add_executable(rtl_adsb rtl_adsb.c)
+- add_executable(rtl_power rtl_power.c)
+- add_executable(rtl_biast rtl_biast.c)
+--set(INSTALL_TARGETS rtlsdr rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast)
+-+set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast)
 - 
-- if (PISTACHE_USE_SSL)
--     target_compile_definitions(pistache PUBLIC PISTACHE_USE_SSL)
---    target_compile_definitions(pistache_shared PUBLIC PISTACHE_USE_SSL)
--     target_compile_definitions(pistache_static PUBLIC PISTACHE_USE_SSL)
-- 
--     target_include_directories(pistache PRIVATE ${OPENSSL_INCLUDE_DIR})
---    target_link_libraries(pistache_shared PUBLIC OpenSSL::SSL OpenSSL::Crypto)
--     target_link_libraries(pistache_static PUBLIC OpenSSL::SSL OpenSSL::Crypto)
--+    if (BUILD_SHARED_LIBS)
--+        target_compile_definitions(pistache_shared PUBLIC PISTACHE_USE_SSL)
--+        target_link_libraries(pistache_shared PUBLIC OpenSSL::SSL OpenSSL::Crypto)
--+    endif ()
-- endif ()
-- 
-- set(Pistache_OUTPUT_NAME "pistache")
---set_target_properties(pistache_shared PROPERTIES
---    OUTPUT_NAME ${Pistache_OUTPUT_NAME}
---    VERSION ${version}
---    SOVERSION ${VERSION_MAJOR}
---)
--+if (BUILD_SHARED_LIBS)
--+    set_target_properties(pistache_shared PROPERTIES
--+        OUTPUT_NAME ${Pistache_OUTPUT_NAME}
--+        VERSION ${version}
--+        SOVERSION ${VERSION_MAJOR}
--+    )
--+endif ()
-- 
-- set_target_properties(pistache_static PROPERTIES 
--     OUTPUT_NAME ${Pistache_OUTPUT_NAME}
--@@ -60,13 +65,15 @@ if (PISTACHE_INSTALL)
--     set(Pistache_CONFIG_FILE "PistacheConfig.cmake")
--     set(Pistache_CONFIG_VERSION_FILE "PistacheConfigVersion.cmake")
-- 
---    install(
---      TARGETS pistache_shared
---      EXPORT PistacheTargets
---      ARCHIVE DESTINATION ${lib_install_dir}
---      LIBRARY DESTINATION ${lib_install_dir}
---      RUNTIME DESTINATION ${bin_install_dir}
---      INCLUDES DESTINATION ${include_install_dir})
--+    if (BUILD_SHARED_LIBS)
--+        install(
--+          TARGETS pistache_shared
--+          EXPORT PistacheTargets
--+          ARCHIVE DESTINATION ${lib_install_dir}
--+          LIBRARY DESTINATION ${lib_install_dir}
--+          RUNTIME DESTINATION ${bin_install_dir}
--+          INCLUDES DESTINATION ${include_install_dir})
--+    endif()
-- 
--     install(
--       DIRECTORY "${PROJECT_SOURCE_DIR}/include/pistache"
+--target_link_libraries(rtl_sdr rtlsdr convenience_static
+-+target_link_libraries(rtl_sdr ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_tcp rtlsdr convenience_static
+-+target_link_libraries(rtl_tcp ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_test rtlsdr convenience_static
+-+target_link_libraries(rtl_test ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_fm rtlsdr convenience_static
+-+target_link_libraries(rtl_fm ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_eeprom rtlsdr convenience_static
+-+target_link_libraries(rtl_eeprom ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_adsb rtlsdr convenience_static
+-+target_link_libraries(rtl_adsb ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_power rtlsdr convenience_static
+-+target_link_libraries(rtl_power ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_biast rtlsdr convenience_static
+-+target_link_libraries(rtl_biast ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+-@@ -156,12 +164,16 @@ endif()
+- ########################################################################
+- # Install built library files & utilities
+- ########################################################################
+-+if(BUILD_SHARED_LIBS)
+- install(TARGETS rtlsdr EXPORT RTLSDR-export
+-   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # .so/.dylib file
+-   )
+-+endif()
+-+if(BUILD_STATIC_LIBS)
+- install(TARGETS rtlsdr_static EXPORT RTLSDR-export
+-   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # .so/.dylib file
+-   )
+-+endif()
+- install(TARGETS rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast
+-   DESTINATION ${CMAKE_INSTALL_BINDIR}
+-   )
 --- 
--2.28.0
+-2.25.3
 -
-diff --git a/package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch b/package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch
+diff --git a/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
 deleted file mode 100644
-index be06ca760a..0000000000
---- a/package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch
+index 9c808edd41..0000000000
+--- a/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
 +++ /dev/null
-@@ -1,38 +0,0 @@
--From 37291201ed948e9d65993a717c59bb14f4187e13 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 5 Aug 2021 19:02:56 +0200
--Subject: [PATCH] include/pistache/typeid.h: include cstddef
+@@ -1,47 +0,0 @@
+-From feb5d9c6b7bcec788f9b01781c205e31fff260e7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 11 Aug 2020 23:07:08 +0200
+-Subject: [PATCH] cmake/Modules/Version.cmake: don't use Git version if not in
+- a Git repo
 -
--Include cstddef to avoid the following build failure with gcc 11:
+-If the librtlsdr code comes from a tarball, it doesn't have any .git/
+-metadata, and therefore even if Git (as a tool) is found, the logic in
+-cmake/Modules/Version.cmake fails finding a version through Git:
 -
--In file included from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/async.h:10,
--                 from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/client.h:9,
--                 from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/client/client.cc:7:
--/tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/typeid.h:26:12: error: expected type-specifier before 'size_t'
--   26 |   operator size_t() const { return reinterpret_cast<size_t>(id_); }
--      |            ^~~~~~
+--- Extracting version information from git describe...
+-fatal: Not a git repository (or any of the parent directories): .git
 -
--Fixes:
-- - http://autobuild.buildroot.org/results/2443559df8c2357476e4cbdbebb08280cbb80a3b
+-As a consequence, the VERSION variable is empty, which later causes
+-cmake to bail out with:
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/pistacheio/pistache/pull/965]
+-CMake Error at /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/WriteBasicConfigVersionFile.cmake:43 (message):
+-  No VERSION specified for WRITE_BASIC_CONFIG_VERSION_FILE()
+-Call Stack (most recent call first):
+-  /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/CMakePackageConfigHelpers.cmake:225 (write_basic_config_version_file)
+-  CMakeLists.txt:173 (write_basic_package_version_file)
+-
+-To avoid this, we only use Git to determine the version if the cmake
+-project top-level source directory has a .git/ folder.
+-
+-Upstream: https://github.com/librtlsdr/librtlsdr/pull/75
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- include/pistache/typeid.h | 1 +
-- 1 file changed, 1 insertion(+)
+- cmake/Modules/Version.cmake | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/include/pistache/typeid.h b/include/pistache/typeid.h
--index 10353ca..893e7c1 100644
----- a/include/pistache/typeid.h
--+++ b/include/pistache/typeid.h
--@@ -7,6 +7,7 @@
+-diff --git a/cmake/Modules/Version.cmake b/cmake/Modules/Version.cmake
+-index 2d4e76d..6f67fa4 100644
+---- a/cmake/Modules/Version.cmake
+-+++ b/cmake/Modules/Version.cmake
+-@@ -32,7 +32,7 @@ set(PATCH_VERSION ${VERSION_INFO_PATCH_VERSION})
+- ########################################################################
+- find_package(Git QUIET)
 - 
-- #pragma once
-- 
--+#include <cstddef>
-- #include <functional>
-- 
-- namespace Pistache
+--if(GIT_FOUND)
+-+if(GIT_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/.git)
+-     message(STATUS "Extracting version information from git describe...")
+-     execute_process(
+-         COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=4 --long
 --- 
--2.30.2
+-2.26.2
 -
-diff --git a/package/pistache/Config.in b/package/pistache/Config.in
-index 96aed5210a..806c27077a 100644
---- a/package/pistache/Config.in
-+++ b/package/pistache/Config.in
-@@ -1,22 +1,23 @@
- config BR2_PACKAGE_PISTACHE
- 	bool "pistache"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17, std::optional
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_RAPIDJSON
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 	help
- 	  Pistache is a modern and elegant HTTP and REST framework
--	  for C++. It is entirely written in pure C++14 and provides
-+	  for C++. It is entirely written in pure C++17 and provides
- 	  a clear and pleasant API.
+diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
+index 7796d1096a..908be158b1 100644
+--- a/package/librtlsdr/librtlsdr.mk
++++ b/package/librtlsdr/librtlsdr.mk
+@@ -9,29 +9,25 @@ LIBRTLSDR_SITE = $(call github,steve-m,librtlsdr,$(LIBRTLSDR_VERSION))
+ LIBRTLSDR_LICENSE = GPL-2.0+
+ LIBRTLSDR_LICENSE_FILES = COPYING
+ LIBRTLSDR_INSTALL_STAGING = YES
+-LIBRTLSDR_DEPENDENCIES = libusb
+-
+-# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
+-endif
++# From git
++LIBRTLSDR_AUTORECONF = YES
++LIBRTLSDR_DEPENDENCIES = host-pkgconf libusb
++LIBRTLSDR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
  
- 	  https://github.com/oktal/pistache
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-LIBRTLSDR_CONF_OPTS += -DINSTALL_UDEV_RULES=ON
++LIBRTLSDR_INSTALL_TARGET_OPTS += install-udev-rules
+ endif
  
--comment "pistache needs a glibc toolchain w/ C++, gcc >= 4.9, threads, wchar, not binutils bug 27597"
-+comment "pistache needs a glibc toolchain w/ C++, gcc >= 7, threads, wchar, not binutils bug 27597"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		   BR2_TOOLCHAIN_USES_UCLIBC || \
--		   !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		   !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
- 		   !BR2_TOOLCHAIN_HAS_THREADS || \
- 		   !BR2_USE_WCHAR || \
- 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
-index 5079387eb7..9a2cd1d1f9 100644
---- a/package/pistache/pistache.hash
-+++ b/package/pistache/pistache.hash
-@@ -1,3 +1,3 @@
- #locally computed
--sha256  70aeef5f5a4603cb2ceb20a284e3239f5da520e68f39dcb572c9f21473ac0b6d  pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d.tar.gz
-+sha256  f2b3e8b2581cfed5e036d1b97a9b97dc7022b3ddaab69c4691238faff3199bc1  pistache-3ec9d7c4f8b828fdd391550fff81b01e72dd6269.tar.gz
- sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
-diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
-index 4d6bd283ea..65d9b2412c 100644
---- a/package/pistache/pistache.mk
-+++ b/package/pistache/pistache.mk
-@@ -4,18 +4,20 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_LIBRTLSDR_DETACH_DRIVER),y)
+-LIBRTLSDR_CONF_OPTS += -DDETACH_KERNEL_DRIVER=1
++LIBRTLSDR_CONF_OPTS += --enable-driver-detach
++else
++LIBRTLSDR_CONF_OPTS += --disable-driver-detach
+ endif
  
--PISTACHE_VERSION = f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d
-+PISTACHE_VERSION = 3ec9d7c4f8b828fdd391550fff81b01e72dd6269
- PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
- PISTACHE_LICENSE = Apache-2.0
- PISTACHE_LICENSE_FILES = LICENSE
- 
- PISTACHE_INSTALL_STAGING = YES
-+PISTACHE_DEPENDENCIES += rapidjson
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PISTACHE_DEPENDENCIES += openssl
--PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=ON
-+PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=true
-+PISTACHE_CONF_OPTS += -DPISTACHE_ENABLE_NETWORK_TESTS=false
+ ifeq ($(BR2_PACKAGE_LIBRTLSDR_ZEROCOPY),y)
+-LIBRTLSDR_CONF_OPTS += -DENABLE_ZEROCOPY=ON
++LIBRTLSDR_CONF_OPTS += --enable-zerocopy
  else
--PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=OFF
-+PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=false
+-LIBRTLSDR_CONF_OPTS += -DENABLE_ZEROCOPY=OFF
++LIBRTLSDR_CONF_OPTS += --disable-zerocopy
  endif
  
 -$(eval $(cmake-package))
-+$(eval $(meson-package))
-
---===============2408161509413376952==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2408161509413376952==--
