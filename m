@@ -1,47 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9786C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 21:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BA33C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 24 Mar 2022 21:31:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C6F3417AF;
-	Thu, 24 Mar 2022 21:23:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A86306103F;
+	Thu, 24 Mar 2022 21:31:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tyiWBe8MGQzW; Thu, 24 Mar 2022 21:23:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id F6hcynHDIf1H; Thu, 24 Mar 2022 21:31:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4550141773;
-	Thu, 24 Mar 2022 21:23:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F1B41BF313
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:23:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A35646101F;
+	Thu, 24 Mar 2022 21:31:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D9E91BF313
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EED541755
- for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:23:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BEA96101F
+ for <buildroot@lists.busybox.net>; Thu, 24 Mar 2022 21:31:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bt8uXVI9j1De for <buildroot@lists.busybox.net>;
- Thu, 24 Mar 2022 21:23:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86B7A4174E
- for <buildroot@buildroot.org>; Thu, 24 Mar 2022 21:23:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 67E7185C63; Thu, 24 Mar 2022 21:14:39 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Thu, 24 Mar 2022 22:22:33 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0bdf40b1b0a36212fefef0b19632545f94c06423
-X-Git-Newrev: fe9f465036f80382d7fbc2e65d29e5c366dbe472
-X-Patchwork-Hint: ignore
-Message-Id: <20220324211439.67E7185C63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireplumber: fix default device
- behaviour
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UXda6Mv8RTXe for <buildroot@lists.busybox.net>;
+ Thu, 24 Mar 2022 21:31:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 88CEB6101E
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 21:31:36 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id t1so7119300edc.3
+ for <buildroot@buildroot.org>; Thu, 24 Mar 2022 14:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=f/ibd433Ra1EW/VpVOhC4Fxg7TyxkjqtKQmsTAKsAe8=;
+ b=Qh2uAMPKjnI5KttMOM0XsCgBo4BpEs/d6pOcNlEFsEpFQd+3QPATjJ/dlMZokQKShM
+ 6Aj9fdhMBlg/MPmzvdDqWxX4VH7Yi3BrYS8Hgj4dgR2Q4jf3D0xxzvHAbdXAKKRwgiX9
+ kX0/BUyB16TG/+WdWz1/sxd8OLHZVa3eLWKJDhXmK9iwzzMk2Wmm6sFUxj/8Vy3Dic5K
+ NRXMXhiumPHPbcV1Rxmb0ApcdJMEqk+0PKJcQokkN4sEBmZQJOz386zVobvyduz4Zuwj
+ gQz21O9VZlh9u4eqdEypXZSNpzcGNlRlANgFZ/DV+nw4y+MvCFmze7Vmm4jhkIDj+Hsr
+ hScw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=f/ibd433Ra1EW/VpVOhC4Fxg7TyxkjqtKQmsTAKsAe8=;
+ b=esXS7vpJLWU/mhFPLtc9Dq8Pbe4W8HTAhy1+gF8HA/LIvL/MweXD5/La6xg7oH7icB
+ IHOO/GfwNQp2ibz0eTINBHth0XSjeIMWwIKgrAAll7Rm5nGdjW5bmTBNLjs+cbBSGz8x
+ b57h2/tjGkzuy4mbO7ggryzgwNeYdJ0W6LqjQxI/hNtN0ld9y4Qy1oAuLeeNkXsPyEsb
+ 2XN46JZxhsED+kb2F6x2k1I/ZcvnYLsfLQYkYTIH8f2AbxBY8OsimEaPtOt/n+sGWNOF
+ q3Qk4SGYn9hfWmky7Jd/G8Pj5aU/P1F/0fJMCBulEzfCQMfz/NzB5BEAGc5JrBq/usSK
+ iuhA==
+X-Gm-Message-State: AOAM5312lvGk9bRW2coa/d8rPFYemHD1o+/QFgmmAl6OvAt41UN2OEwF
+ udnTIXNy1MeMEU+OKvlbBkS8pEp21yxtwA==
+X-Google-Smtp-Source: ABdhPJw+y45LGHqz9uBbbWpwJZot2KKENvHImRqEXClvi2eYj46zp+s5GV7/bqKheUCCdBbMTI+9dQ==
+X-Received: by 2002:a50:d64f:0:b0:418:f142:5d1c with SMTP id
+ c15-20020a50d64f000000b00418f1425d1cmr9170471edj.192.1648157494565; 
+ Thu, 24 Mar 2022 14:31:34 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ b3-20020aa7d483000000b00419209d4c85sm1901632edr.66.2022.03.24.14.31.33
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 24 Mar 2022 14:31:33 -0700 (PDT)
+Message-ID: <b4ebc447-0313-612c-1c63-d8db902e86c8@mind.be>
+Date: Thu, 24 Mar 2022 22:31:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Johannes Agricola <johannes.agricola@work-microwave.com>,
+ buildroot@buildroot.org
+References: <20220317075909.3705760-1-johannes.agricola@work-microwave.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220317075909.3705760-1-johannes.agricola@work-microwave.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: bump to version
+ 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,258 +94,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1441769384639333798=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1441769384639333798==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe9f465036f80382d7fbc2e65d29e5c366dbe472
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch has been applied upstream and is required to allow having
-default devices on non x86_64 platforms with WirePlumber v0.4.8.
-https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/e429db7e8c266045aee25e153fb2308bd61fe233
+On 17/03/2022 08:59, Johannes Agricola wrote:
+> Signed-off-by: Johannes Agricola <johannes.agricola@work-microwave.com>
+> ---
+>   package/libwebsockets/libwebsockets.hash | 2 +-
+>   package/libwebsockets/libwebsockets.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+> index 1761a7658a..f92c66018f 100644
+> --- a/package/libwebsockets/libwebsockets.hash
+> +++ b/package/libwebsockets/libwebsockets.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  6ece1f422c6d38aabedec2476f2ac12e9aede8691b08137068ad85545ce3ff78  libwebsockets-4.0.21.tar.gz
+> +sha256  8fdb1454a1b34cd9a6351beaab237a485e6853806101de7e62bd2bc250bb50af  libwebsockets-4.3.1.tar.gz
+>   sha256  5756db345eb9c21cb06dd7cb69c38ec234657a233f9a186b4f5fa453681bd394  LICENSE
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-fix-non-x86_64-architectures.patch        | 215 +++++++++++++++++++++
- 1 file changed, 215 insertions(+)
+  Hash of the license file changed. Could you check what changed - in 
+particular, if anything changed about the license itself (usually, however, it's 
+just an update of the copyright year). Document your findings in the commit 
+message. And of course, update the hash of the LICENSE file.
 
-diff --git a/package/wireplumber/0001-fix-non-x86_64-architectures.patch b/package/wireplumber/0001-fix-non-x86_64-architectures.patch
-new file mode 100644
-index 0000000000..19c34e4e1a
---- /dev/null
-+++ b/package/wireplumber/0001-fix-non-x86_64-architectures.patch
-@@ -0,0 +1,215 @@
-+From e429db7e8c266045aee25e153fb2308bd61fe233 Mon Sep 17 00:00:00 2001
-+From: Julian Bouzas <julian.bouzas@collabora.com>
-+Date: Wed, 9 Feb 2022 07:59:59 -0500
-+Subject: [PATCH] spa-json: fix va_list APIs for different architectures
-+
-+The va_list type might not always be a pointer in some architectures, so we
-+cannot guarantee it will be modified after using it for a second time in another
-+function. This fixes the issue by using macros so args does not get copied, and
-+always gets modified when using it more than once.
-+
-+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-+Upstream: https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/e429db7e8c266045aee25e153fb2308bd61fe233
-+---
-+ lib/wp/spa-json.c | 156 ++++++++++++++++++++++++----------------------
-+ 1 file changed, 80 insertions(+), 76 deletions(-)
-+
-+diff --git a/lib/wp/spa-json.c b/lib/wp/spa-json.c
-+index f14f395d..c5e59a3e 100644
-+--- a/lib/wp/spa-json.c
-++++ b/lib/wp/spa-json.c
-+@@ -363,33 +363,33 @@ wp_spa_json_new_string (const gchar *value)
-+       wp_spa_json_builder_new_formatted ("\"%s\"", value));
-+ }
-+ 
-+-static void
-+-wp_spa_json_builder_add_value (WpSpaJsonBuilder *self, const gchar *fmt,
-+-    va_list args)
-+-{
-+-  switch (*fmt) {
-+-    case 'n':
-+-      wp_spa_json_builder_add_null (self);
-+-      break;
-+-    case 'b':
-+-      wp_spa_json_builder_add_boolean (self, va_arg(args, gboolean));
-+-      break;
-+-    case 'i':
-+-      wp_spa_json_builder_add_int (self, va_arg(args, gint));
-+-      break;
-+-    case 'f':
-+-      wp_spa_json_builder_add_float (self, (float)va_arg(args, double));
-+-      break;
-+-    case 's':
-+-      wp_spa_json_builder_add_string (self, va_arg(args, const gchar *));
-+-      break;
-+-    case 'J':
-+-      wp_spa_json_builder_add_json (self, va_arg(args, WpSpaJson *));
-+-      break;
-+-    default:
-+-      return;
-+-  }
-+-}
-++/* Args is not a pointer in some architectures, so this needs to be a macro to
-++ * avoid args being copied */
-++#define wp_spa_json_builder_add_value(self,fmt,args)                           \
-++do {                                                                           \
-++  switch (*fmt) {                                                              \
-++    case 'n':                                                                  \
-++      wp_spa_json_builder_add_null (self);                                     \
-++      break;                                                                   \
-++    case 'b':                                                                  \
-++      wp_spa_json_builder_add_boolean (self, va_arg(args, gboolean));          \
-++      break;                                                                   \
-++    case 'i':                                                                  \
-++      wp_spa_json_builder_add_int (self, va_arg(args, gint));                  \
-++      break;                                                                   \
-++    case 'f':                                                                  \
-++      wp_spa_json_builder_add_float (self, (float)va_arg(args, double));       \
-++      break;                                                                   \
-++    case 's':                                                                  \
-++      wp_spa_json_builder_add_string (self, va_arg(args, const gchar *));      \
-++      break;                                                                   \
-++    case 'J':                                                                  \
-++      wp_spa_json_builder_add_json (self, va_arg(args, WpSpaJson *));          \
-++      break;                                                                   \
-++    default:                                                                   \
-++      break;                                                                   \
-++  }								               \
-++} while(false)
-+ 
-+ /*!
-+  * \brief Creates a spa json of type array
-+@@ -724,48 +724,46 @@ wp_spa_json_parse_object_valist (WpSpaJson *self, va_list args)
-+   return res;
-+ }
-+ 
-+-static gboolean
-+-wp_spa_json_parse_value (const gchar *data, int len, const gchar *fmt,
-+-    va_list args)
-+-{
-+-  switch (*fmt) {
-+-    case 'n':
-+-      if (!spa_json_is_null (data, len))
-+-        return FALSE;
-+-      break;
-+-    case 'b':
-+-      if (!wp_spa_json_parse_boolean_internal (data, len,
-+-          va_arg(args, gboolean *)))
-+-        return FALSE;
-+-      break;
-+-    case 'i':
-+-      if (spa_json_parse_int (data, len, va_arg(args, gint *)) < 0)
-+-        return FALSE;
-+-      break;
-+-    case 'f':
-+-      if (spa_json_parse_float (data, len,
-+-          (float *)va_arg(args, double *)) < 0)
-+-        return FALSE;
-+-      break;
-+-    case 's': {
-+-      gchar *str = wp_spa_json_parse_string_internal (data, len);
-+-      if (!str)
-+-        return FALSE;
-+-      *va_arg(args, gchar **) = str;
-+-      break;
-+-    }
-+-    case 'J': {
-+-      WpSpaJson *j = wp_spa_json_new (data, len);
-+-      if (!j)
-+-        return FALSE;
-+-      *va_arg(args, WpSpaJson **) = j;
-+-      break;
-+-    }
-+-    default:
-+-      return FALSE;
-+-  }
-+-  return TRUE;
-+-}
-++/* Args is not a pointer in some architectures, so this needs to be a macro to
-++ * avoid args being copied */
-++#define wp_spa_json_parse_value(data,len,fmt,args)                             \
-++do {                                                                           \
-++  switch (*fmt) {                                                              \
-++    case 'n':                                                                  \
-++      if (!spa_json_is_null (data, len))                                       \
-++        return FALSE;                                                          \
-++      break;                                                                   \
-++    case 'b':                                                                  \
-++      if (!wp_spa_json_parse_boolean_internal (data, len,                      \
-++          va_arg(args, gboolean *)))                                           \
-++        return FALSE;                                                          \
-++      break;                                                                   \
-++    case 'i':                                                                  \
-++      if (spa_json_parse_int (data, len, va_arg(args, gint *)) < 0)            \
-++        return FALSE;                                                          \
-++      break;                                                                   \
-++    case 'f':                                                                  \
-++      if (spa_json_parse_float (data, len, va_arg(args, float *)) < 0)         \
-++        return FALSE;                                                          \
-++      break;                                                                   \
-++    case 's': {                                                                \
-++      gchar *str = wp_spa_json_parse_string_internal (data, len);              \
-++      if (!str)                                                                \
-++        return FALSE;                                                          \
-++      *va_arg(args, gchar **) = str;                                           \
-++      break;                                                                   \
-++    }                                                                          \
-++    case 'J': {                                                                \
-++      WpSpaJson *j = wp_spa_json_new (data, len);                              \
-++      if (!j)                                                                  \
-++        return FALSE;                                                          \
-++      *va_arg(args, WpSpaJson **) = j;                                         \
-++      break;                                                                   \
-++    }                                                                          \
-++    default:                                                                   \
-++      return FALSE;                                                            \
-++  }                                                                            \
-++} while(false)
-+ 
-+ /*!
-+  * \brief Parses the object property values of a spa json object
-+@@ -827,8 +825,7 @@ wp_spa_json_object_get_valist (WpSpaJson *self, va_list args)
-+     value = g_value_get_boxed (&item);
-+ 
-+     if (g_strcmp0 (key_str, lookup_key) == 0) {
-+-      if (!wp_spa_json_parse_value (value->data, value->size, lookup_fmt, args))
-+-        return FALSE;
-++      wp_spa_json_parse_value (value->data, value->size, lookup_fmt, args);
-+       lookup_key = va_arg(args, const gchar *);
-+       if (!lookup_key)
-+         return TRUE;
-+@@ -1366,9 +1363,12 @@ gboolean
-+ wp_spa_json_parser_get_value (WpSpaJsonParser *self, const gchar *fmt,
-+     va_list args)
-+ {
-+-  return wp_spa_json_parser_advance (self) &&
-+-      wp_spa_json_parse_value (self->curr.cur,
-+-          self->curr.end - self->curr.cur, fmt, args);
-++  if (wp_spa_json_parser_advance (self)) {
-++    wp_spa_json_parse_value (self->curr.cur, self->curr.end - self->curr.cur,
-++        fmt, args);
-++    return TRUE;
-++  }
-++  return FALSE;
-+ }
-+ 
-+ /*!
-+@@ -1419,9 +1419,13 @@ wp_spa_json_parser_get_valist (WpSpaJsonParser *self, va_list args)
-+     if (!format)
-+       return TRUE;
-+ 
-+-    /* parse value */
-+-    if (!wp_spa_json_parser_get_value (self, format, args))
-++    /* advance */
-++    if (!wp_spa_json_parser_advance (self))
-+       return FALSE;
-++
-++    /* parse value */
-++    wp_spa_json_parse_value (self->curr.cur, self->curr.end - self->curr.cur,
-++        format, args);
-+   } while (TRUE);
-+ 
-+   return FALSE;
-+-- 
-+GitLab
-+
+  Until then, I've marked your patch as Changes Requested.
 
---===============1441769384639333798==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+  Thanks!
 
+  Regards,
+  Arnout
+
+> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+> index c25686d385..152659cee6 100644
+> --- a/package/libwebsockets/libwebsockets.mk
+> +++ b/package/libwebsockets/libwebsockets.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LIBWEBSOCKETS_VERSION = 4.0.21
+> +LIBWEBSOCKETS_VERSION = 4.3.1
+>   LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+>   LIBWEBSOCKETS_LICENSE = MIT with exceptions
+>   LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1441769384639333798==--
