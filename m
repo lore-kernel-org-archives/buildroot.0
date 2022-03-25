@@ -1,78 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A2D5C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 25 Mar 2022 19:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6350C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 25 Mar 2022 21:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF0A88415D;
-	Fri, 25 Mar 2022 19:09:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26B4560BB0;
+	Fri, 25 Mar 2022 21:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z2M2posFMTGO; Fri, 25 Mar 2022 19:09:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2pndxdM3sdHp; Fri, 25 Mar 2022 21:07:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D9658415A;
-	Fri, 25 Mar 2022 19:09:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D87B91BF310
- for <buildroot@lists.busybox.net>; Fri, 25 Mar 2022 19:09:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3402A60B64;
+	Fri, 25 Mar 2022 21:07:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DF501BF380
+ for <buildroot@lists.busybox.net>; Fri, 25 Mar 2022 21:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B82F54049E
- for <buildroot@lists.busybox.net>; Fri, 25 Mar 2022 19:09:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CD1E60B64
+ for <buildroot@lists.busybox.net>; Fri, 25 Mar 2022 21:07:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ph9zsBNlURDl for <buildroot@lists.busybox.net>;
- Fri, 25 Mar 2022 19:09:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7132140022
- for <buildroot@buildroot.org>; Fri, 25 Mar 2022 19:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1648235376;
- bh=a5KlrCqRnuiKZInpYNagb5FLhjuDtod5rcMtC+2I2aY=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=Z0czXLyKjX0SREJilqqWwTZLr9XJ46QSRAfYo/631aZYzVFTJ+Dkc5k8ra6MA+CGC
- Vp0sXQLz3K66cv8wRniiYsbJ4t30AgKw/qf0RLx3IVUjVla9Zy8C4KQNXuKa+hJEth
- zNNYRV51UTCLH6qy+gsKW/Wspu3jNRBCMqLnj73M=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.179]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N49hB-1oGL331AFV-01023w; Fri, 25 Mar 2022 20:09:36 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CWR7lt82z6jj for <buildroot@lists.busybox.net>;
+ Fri, 25 Mar 2022 21:07:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9079060B2C
+ for <buildroot@buildroot.org>; Fri, 25 Mar 2022 21:07:16 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id d7so12389967wrb.7
+ for <buildroot@buildroot.org>; Fri, 25 Mar 2022 14:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rTpLUbeU/sqQKe8CRJrVwvBFxYT3MY8v8b8sEJU/br4=;
+ b=OOEKl6CniQejuwMRzpgpoIUgXdzjqwuC7eCju9sS3/Mp3hZvL0awh1dW5Pm1wiyopl
+ Kqm4Qw4RCwOWWgyR3t0GPl5wlr0zhI3V01aP4D6riA+wN5mNHVCcIEDCIncQJHVm3yz9
+ B0NDpHsDlPsN6DFe/pvGFKCNqiPHpxs5iPNWYBCGm3IIwkbE99vequE2aCS9ZddFr5dq
+ t+7FJSUSbNObQz1ceyesCTtpTl2BL6MSVAmpzUDv53wtF0CbNB9SBvp37m7NXi55vkCk
+ h9owpS/FZpIilPIGTLoZeNK++LfrTRFkp6k1jV7Lg7s3R8iZPNY3DVqIkpdAOwcP1eAu
+ eFNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rTpLUbeU/sqQKe8CRJrVwvBFxYT3MY8v8b8sEJU/br4=;
+ b=4a6y5HzpgecR58sHdKItGxfKKG89Ijyor4AzgdKqMpX4nMQ4NAvOcDlumrMfWMRi5K
+ RsVwEcwAawK8uad13YX3IHR2yUhfT8Ad3vnJnaWzUG2KqeXgykTi871yi2N8GO3Fl3Km
+ PwZzr5LosRwQ12/oT0pdiBDbOOZY2WrSLiaPa6fmBMeVgUSWMqcjsCN2VywDB3SjLQ3y
+ mMAFFMPSZHmA3mjFijSmsoQIsAYqqmo0oQGXV0kVQm3dbBuFmJZCb0FJLe/XXrLxDpL3
+ 0k2RwxIcNo/eGuplWxejUk/zhOHnMNqMN0Xxzch8x7yyU0UllGizAvQRtZfLjVKuyBFn
+ sISw==
+X-Gm-Message-State: AOAM532zotgYtYOKaHHmIw4wSQQBfEfOFhAQzA2cHULMFs+fxlOx8ImP
+ duhLz3709xgbU0rvoVWADm4LGNmiyxM=
+X-Google-Smtp-Source: ABdhPJyyu6ofCvCaLHDICG0rZ1RNWkYhrrAY4DeAVJRsUgK8A5aFePuYdOz5Qb/nz7URBPPME9mmig==
+X-Received: by 2002:a5d:62c8:0:b0:203:e3bf:9259 with SMTP id
+ o8-20020a5d62c8000000b00203e3bf9259mr10455901wrv.509.1648242434494; 
+ Fri, 25 Mar 2022 14:07:14 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ o6-20020a05600002c600b002057f1738fcsm6482130wry.110.2022.03.25.14.07.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 25 Mar 2022 14:07:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Mar 2022 20:09:34 +0100
-Message-Id: <20220325190934.24982-1-ps.report@gmx.net>
+Date: Fri, 25 Mar 2022 22:05:54 +0100
+Message-Id: <20220325210554.526198-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:6XiqcrLJNK4lB+HSsICnLSfrqEKH23DNg3i7SfrzmnBA4xVb+rn
- OIF2J76vWZUK4UStSEfCcnfggk4EsyC93x1IL1jPMe4JZpIBbnlI0BxPAoaF7KS5sxUfuJK
- D/EzY2pWAYQRDB6fXQ8xwkWbRnUjI6fHbfoXToC3motCOz0TZGEx3yA3RtdQCpwfCs3JgTy
- P3r3/oaHvpaH3cNTr8puw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MYlbIXsDESk=:b5Q+a9dfYsXK1/EqX53OEH
- hOd1T3ldffRt8NmHr6dz7guEsNo9xVqrROC5GwAaosGcoa79D/ASgUgrL3ywU/JhL4xLZ7XdD
- ZxsK/mQa3EUOOrUFN32Rr5tFBYZh09IPqOsuXwgcpv9W4auDbL4QPT0FmzF9gJgJKsIWVl03G
- RLwbFiPxTQrUIFqdnvTnNlBGDPQ4NtOxSEP0ivSk0FGX81u6iet059bTtgRe7ukpg8UQD+z7h
- 5RnvuG3ZGhWUjA26JFd9BsmRuQefjEmFeQZqssY0VdA+NICnGl7B/wpSrCiut5q+KScbNRCeG
- ae6y5HE5JnEE03QeykYr4ixJlOFVVhscGKVWZMlcTDu0hvg/wjvT+oRt1cPx9UZEze5RHY51V
- liQ1uDYnd0vC2JzcCxNO//WlGpiXSgVWb/NL1H0nshpvUXuVL4kA16gIxZcJfRiKloBK5NGnj
- qH6VIciIDoqBLuUl5HdMaYgMeDuakTc/6wcI4fgxJOlizW+oT2MbXzaNdNbW8sZ2OXT1yZJof
- in3lauDGhUBAcqYYNgkM52QlY5PnckLkvhonp7OA7+RQCKFfI3VWNrcncE4mx/n8SKwzs4/wc
- 56HOr10r+IalKahbF0jqBs8vFNJ6GYtXJT8zrjYS3vGTZpH9ie7OknG7VueaT2kYHMOxbIxIo
- MtjxycNlCFvRcu4KPn4zYGtI/xbBPJnwIly9nh+Vk4gcKYf8f6v0O8uoZcR7jyJLu2ahuecOd
- rKx8OctaxjXwgBcRfl41CEuPJaouTsNMcGZkLTiq/FfReKM0K90A2Rspq+QeejIO+JjiTdnNU
- awm3llAvq3uKWnBr0+4ONaw1O9HomlYV3E21li/K+gI92wlqLK5bCLkPEtY8m0s9EVt8qptWq
- FIsDU/WM7c+9/ga4t06OJyLAGwDDmaDr7TAKv8fikeYeAgdr1Jral1YTDoK5ied0aoC6Bu5kV
- zmASdS+TYwAUovBOdZZpVckND+fWx53Z3fgFJ4noPgjICC0UtFZS8VMYXgYHdVlw9cjWO9of2
- NPn/81FXtVY94uvhFw/X3gBrXLgO0gZI6vIHszCX218nGh1f/gPa9LFvYbffvn6OZKgZdYHdt
- etSdHb+djTn/BA=
-Subject: [Buildroot] [PATCH v1] package/wireshark: fix compile with ccache
- enabled
+Subject: [Buildroot] [PATCH 1/1] package/iwd: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,39 +85,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dan Ambrosio <dambrosio@outrider.ai>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- use HOSTCC_NOCCACHE (instead of HOSTCC) for LEMON_C_COMPILER
+Fix the following uclibc build failure raised since bump to version 1.25
+in commit 0fc5bc235990073233df6352d1208624034a6b6e and
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=01cd8587606bf2da1af245163150589834126c1:
+
+/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: src/storage.o: in function `storage_init':
+storage.c:(.text+0x13a4): undefined reference to `explicit_bzero'
 
 Fixes:
-  [...] /usr/bin/cmake [...] -DLEMON_C_COMPILER=.../host/bin/ccache /usr/bin/gcc [...]
-  [...]
-  [  0%] Building C object tools/lemon/CMakeFiles/lemon.dir/lemon.c.o
-  .../host/bin/ccache: invalid option -- 'D'
+ - http://autobuild.buildroot.org/results/2aff8d3d7c33c95e2c57f7c8a71e69939f0580a1
 
-Reported-by: Dan Ambrosio <dambrosio@outrider.ai>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireshark/wireshark.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...-src-storage.c-fix-build-with-uclibc.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index a5ca4b1f73..1a549f7037 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -25,7 +25,7 @@ WIRESHARK_CONF_OPTS = \
- 	-DENABLE_ILBC=OFF \
- 	-DENABLE_PCAP=ON \
- 	-DENABLE_SMI=OFF \
--	-DLEMON_C_COMPILER=$(HOSTCC)
-+	-DLEMON_C_COMPILER=$(HOSTCC_NOCCACHE)
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- WIRESHARK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+diff --git a/package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch
+new file mode 100644
+index 0000000000..55fdaa86fd
+--- /dev/null
++++ b/package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch
+@@ -0,0 +1,37 @@
++From 99e74ade2ea892e6d0b070bec1df6a135ce2c8b3 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 25 Mar 2022 16:35:49 +0100
++Subject: [PATCH] src/storage.c: fix build with uclibc
++
++explicit_bzero is used in src/storage.c since commit
++01cd8587606bf2da1af245163150589834126c1c but src/missing.h is not
++included, as a result build with uclibc fails on:
++
++/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: src/storage.o: in function `storage_init':
++storage.c:(.text+0x13a4): undefined reference to `explicit_bzero'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2aff8d3d7c33c95e2c57f7c8a71e69939f0580a1
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://lists.01.org/hyperkitty/list/iwd@lists.01.org/thread/WB2XXRBUDHC5IVFDEOJBK23JHPURL427]
++---
++ src/storage.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/storage.c b/src/storage.c
++index 82a72443..aa8066b1 100644
++--- a/src/storage.c
+++++ b/src/storage.c
++@@ -44,6 +44,7 @@
++ #include <ell/ell.h>
++ #include "ell/useful.h"
++ 
+++#include "src/missing.h"
++ #include "src/common.h"
++ #include "src/storage.h"
++ #include "src/crypto.h"
++-- 
++2.35.1
++
 -- 
 2.35.1
 
