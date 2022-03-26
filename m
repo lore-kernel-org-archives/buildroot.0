@@ -1,81 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5AF5C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 25 Mar 2022 21:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E75A5C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 26 Mar 2022 07:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BAD840239;
-	Fri, 25 Mar 2022 21:37:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63F8781A18;
+	Sat, 26 Mar 2022 07:15:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ShfcQumOSkoz; Fri, 25 Mar 2022 21:37:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oJWR9uWZrr51; Sat, 26 Mar 2022 07:15:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0C6140AD0;
-	Fri, 25 Mar 2022 21:37:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14FFF81970;
+	Sat, 26 Mar 2022 07:15:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B68BB1BF380
- for <buildroot@lists.busybox.net>; Fri, 25 Mar 2022 21:37:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76C121BF859
+ for <buildroot@lists.busybox.net>; Sat, 26 Mar 2022 07:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4BBA60BB0
- for <buildroot@lists.busybox.net>; Fri, 25 Mar 2022 21:37:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7303C60C01
+ for <buildroot@lists.busybox.net>; Sat, 26 Mar 2022 07:15:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nAxKpg6XritO for <buildroot@lists.busybox.net>;
- Fri, 25 Mar 2022 21:37:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C6CE60BAA
- for <buildroot@buildroot.org>; Fri, 25 Mar 2022 21:37:20 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id u3so12484829wrg.3
- for <buildroot@buildroot.org>; Fri, 25 Mar 2022 14:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=L9+hAXudF7tHSdGec1IfZlVLtWMffHjsoZLXffu5VLk=;
- b=GJwNpy6tu5jD7/2H9nZfUApFS9afqI9rxU0JxcZhr7gZETuZC0Ve62hef4bF6zAjgm
- pCTJYjYCxt7liMmE2EYFW323LhbTbMFbRkdRnooAOdrFsTAPTbuTfeqF6yUmbYW5wTl9
- gxEr37H39eK9pIj40yPkV1/DkhVFHl/qipiaZBmgN0NzGgQbGzsiFidNGbe/sHOwGKJh
- EZyqG/tyaNsVscFzIkFTJ6TijDurbgJJMD50uwL1uW/QaPm9yAZNIHQmdxmvk7gDbbgp
- nyWS1oah6n+WJsRPqwUFQ6/Ec59r5u0X0cNDBZzvqUv/Fs1FirHlyCCPbt9FFztD7xrJ
- MXlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=L9+hAXudF7tHSdGec1IfZlVLtWMffHjsoZLXffu5VLk=;
- b=KpV2Bvfu9Ay8zJVhm/eb1Sgq7GRxetn8Bpt0WANbBXKU1mOPQDUMlG7QyquE+7LqGf
- vxwWAGm9bHpW/f7rOsQvVWRQ5q2H9FLHneTRQelHkXwVKsy21Ja6GGhFoORo+FKaZNIY
- +z9RvDUkPy+N7U65/EsDQWhy90bnAYni+VRNDSZbj83H4YKuaBNqdhR1B4hLe1i4jpDA
- DzyBgDo1zT35vodPDlAQ/n+0U6KK9uq+5qzUIwtiKSth8omoCc6Xxc3onKJPKPx0wXoR
- Vo3ncjbKzbONKCiHl47jGK50PRDZ+lrA/UqHKyc+rgji1Cd3OeyqO3nB8PMKep58rTw1
- +RPA==
-X-Gm-Message-State: AOAM5336aSeZzGoHKRz0syS5f4sCzoNvhM61r3L4OSCKdHGeVgZD+byB
- vmzYzlVYjiKWKXgY8B+ZdD15LTSQwLw=
-X-Google-Smtp-Source: ABdhPJz1B71ut6MptulorLlgurD/uIZlQIr8LkYzAm4AzJU2YcueuMW5MadYugKzKFUBDPPdO2uGHQ==
-X-Received: by 2002:adf:fcce:0:b0:203:dcdb:dd80 with SMTP id
- f14-20020adffcce000000b00203dcdbdd80mr11325130wrs.455.1648244238285; 
- Fri, 25 Mar 2022 14:37:18 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- a1-20020a056000188100b002041a652dfdsm6571215wri.25.2022.03.25.14.37.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Mar 2022 14:37:17 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 25 Mar 2022 22:35:57 +0100
-Message-Id: <20220325213557.757894-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id VQ3VjsQ17wbh for <buildroot@lists.busybox.net>;
+ Sat, 26 Mar 2022 07:15:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E532660692
+ for <buildroot@buildroot.org>; Sat, 26 Mar 2022 07:15:11 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1EAE2200010
+ for <buildroot@buildroot.org>; Sat, 26 Mar 2022 07:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1648278910; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=d6KLPrCagNB9tN1u7zI2PDiN3k0/FGMc7JKIYQCa3TQ=;
+ b=j2tzkXM3yA/Jf/CdI8YmBpipxcxW//5Y7YT9/p6ESRgxRpf2VRXwOEILjf0BzgaXpc3QDY
+ 2gagH5D927obYcKSDxOy6TD1QCaG/lVvpVpPxqMMOjNRnRT/qme7vZ39LxOE7AEUWPJlPI
+ j9WDT1SYqPVc47ZP7v8nZicWbwPSkUpNW5L1f87r/bFYPJMW1m92AJNM5jLR3+zCNH4T53
+ c9lwG18RNHTw2fwF49guAnukSy2eijje1ZABHX48JOkX8vkBSnrMTc9HS+fMQNeTpJKOXe
+ 4Qjok5qhYGs0J/7/YcM0dRcnjb8y1BFN9Mgt0gzezEqp1TN6WRxk6FwYDH7Y2g==
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/btrfs-progs: bump to version 5.16.2
+To: buildroot@buildroot.org
+Date: Sat, 26 Mar 2022 07:15:10 -0000
+Message-Id: <20220326071514.7303C60C01@smtp3.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-03-25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,211 +62,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patches (already in version)
+Hello,
 
-https://github.com/kdave/btrfs-progs/blob/v5.16.2/CHANGES
+Autobuild statistics for 2022-03-25
+===================================
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...nst-h-to-fix-build-with-5-12-headers.patch | 43 ----------------
- ...-sys-sysinfo-h-conditionally-on-musl.patch | 49 -------------------
- ...ocal-definition-for-alignment-macros.patch | 46 -----------------
- package/btrfs-progs/btrfs-progs.hash          |  2 +-
- package/btrfs-progs/btrfs-progs.mk            |  2 +-
- 5 files changed, 2 insertions(+), 140 deletions(-)
- delete mode 100644 package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
- delete mode 100644 package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
- delete mode 100644 package/btrfs-progs/0003-btrfs-progs-kerncompat-add-local-definition-for-alignment-macros.patch
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 46  |  7  |  1  | 54  |
+  2022.02.x  | 13  |  4  |  0  | 17  |
+    master   | 64  | 27  |  0  | 91  |
 
-diff --git a/package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch b/package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
-deleted file mode 100644
-index b6c1a42456..0000000000
---- a/package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From b28f7bd9bba6f65258da48955154794f466b4104 Mon Sep 17 00:00:00 2001
--From: Bruce Ashfield <bruce.ashfield@gmail.com>
--Date: Thu, 30 Dec 2021 15:23:59 +0200
--Subject: [PATCH] btrfs-progs: include linux/const.h to fix build with 5.12+
-- headers
--
--btrfs-tools compile fails with mips, musl and 5.12+ headers.
--
--The definition of __ALIGN_KERNEL has moved in 5.12+ kernels, so we
--add an explicit include of const.h to pickup the macro:
--
--  | make: *** [Makefile:595: mkfs.btrfs] Error 1
--  | make: *** Waiting for unfinished jobs....
--  | libbtrfs.a(volumes.o): in function `dev_extent_search_start':
--  | /usr/src/debug/btrfs-tools/5.12.1-r0/git/kernel-shared/volumes.c:464: undefined reference to `__ALIGN_KERNEL'
--  | collect2: error: ld returned 1 exit status
--
--This is safe for older kernel's as well, since the header still
--exists, and is valid to include.
--
--Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
--[remove invalid OE Upstream-status]
--Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
--Signed-off-by: David Sterba <dsterba@suse.com>
--[Retrieved from:
--https://github.com/kdave/btrfs-progs/commit/b28f7bd9bba6f65258da48955154794f466b4104]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- kerncompat.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/kerncompat.h b/kerncompat.h
--index df167fe6c..2503d1afa 100644
----- a/kerncompat.h
--+++ b/kerncompat.h
--@@ -29,6 +29,7 @@
-- #include <stddef.h>
-- #include <linux/types.h>
-- #include <linux/kernel.h>
--+#include <linux/const.h>
-- #include <stdint.h>
-- 
-- #include <features.h>
-diff --git a/package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch b/package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
-deleted file mode 100644
-index 7473fe67cb..0000000000
---- a/package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From a2511aaa85c8d95d12805dfdcbb5667fa3e30ba5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 8 Jan 2022 22:44:44 +0100
--Subject: [PATCH] btrfs-progs: include sys/sysinfo.h conditionally on musl
--
--Make inclusion of sys/sysinfo.h conditional to avoid the following build
--failure on musl:
--
--In file included from .../i586-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:4,
--                 from ./kerncompat.h:31,
--                 from common/utils.c:42:
--.../i586-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
--    7 | struct sysinfo {
--      |        ^~~~~~~
--In file included from common/utils.c:27:
--.../i586-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
--   10 | struct sysinfo {
--      |        ^~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/16f44fb9dea72a7079e8e5517e760dd79d2724cc
--
--The 'struct sysinfo' is defined in linux/sysinfo.h and sys/sysinfo.h,
--while both must not be included at the same time. Stop including
--linux/kernel.h that sometimes unconditionally includes sys/sysinfo.h and
--causes the double definition for some reason. As we now include
--linux/const.h directly, there's no other effective change.
--
--Pull-request: #433
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: David Sterba <dsterba@suse.com>
--[Retrieved from:
--https://github.com/kdave/btrfs-progs/commit/a2511aaa85c8d95d12805dfdcbb5667fa3e30ba5]
-----
-- kerncompat.h | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/kerncompat.h b/kerncompat.h
--index 2503d1afa..6ca1526e2 100644
----- a/kerncompat.h
--+++ b/kerncompat.h
--@@ -28,7 +28,6 @@
-- #include <assert.h>
-- #include <stddef.h>
-- #include <linux/types.h>
---#include <linux/kernel.h>
-- #include <linux/const.h>
-- #include <stdint.h>
-- 
-diff --git a/package/btrfs-progs/0003-btrfs-progs-kerncompat-add-local-definition-for-alignment-macros.patch b/package/btrfs-progs/0003-btrfs-progs-kerncompat-add-local-definition-for-alignment-macros.patch
-deleted file mode 100644
-index 86c63edc30..0000000000
---- a/package/btrfs-progs/0003-btrfs-progs-kerncompat-add-local-definition-for-alignment-macros.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From b0cfe12c4d4b8b4ef335cdf4ddefcbdcd1b70d58 Mon Sep 17 00:00:00 2001
--From: David Sterba <dsterba@suse.com>
--Date: Thu, 13 Jan 2022 14:47:08 +0100
--Subject: [PATCH] btrfs-progs: kerncompat: add local definition for alignment
-- macros
--
--There's still problem left with compilation on musl and kernel < 5.11,
--because __ALIGN_KERNEL is not defined anymore:
--
--../bin/ld: kernel-shared/volumes.o: in function `create_chunk':
--volumes.c:(.text+0x17f8): undefined reference to `__ALIGN_KERNEL'
--
--Due to the entangled includes and unconditional definition of
--__ALIGN_KERNEL, we can't use #ifdef in kerncompat.h to define it
--eventually (as kerncompat.h is the first include). Instead add local
--definitions of the macros and rename them to avoid name clashes.
--
--Pull-request: #433
--Signed-off-by: David Sterba <dsterba@suse.com>
--[Retrieved from:
--https://github.com/kdave/btrfs-progs/commit/b0cfe12c4d4b8b4ef335cdf4ddefcbdcd1b70d58]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- kerncompat.h | 9 ++++++++-
-- 1 file changed, 8 insertions(+), 1 deletion(-)
--
--diff --git a/kerncompat.h b/kerncompat.h
--index 6ca1526e2..f0a6e196e 100644
----- a/kerncompat.h
--+++ b/kerncompat.h
--@@ -359,7 +359,14 @@ do {					\
-- 
-- /* Alignment check */
-- #define IS_ALIGNED(x, a)                (((x) & ((typeof(x))(a) - 1)) == 0)
---#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
--+
--+/*
--+ * Alignment, copied and renamed from /usr/include/linux/const.h to work around
--+ * issues caused by moving the definition in 5.12
--+ */
--+#define __ALIGN_KERNEL__(x, a)		__ALIGN_KERNEL_MASK__(x, (typeof(x))(a) - 1)
--+#define __ALIGN_KERNEL_MASK__(x, mask)	(((x) + (mask)) & ~(mask))
--+#define ALIGN(x, a)		__ALIGN_KERNEL__((x), (a))
-- 
-- static inline int is_power_of_2(unsigned long n)
-- {
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 339eab02aa..14eeb1ca07 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256  6230f8f33961bd62633d601b0d049a3c6b833c1a1a7a2f2782d0c5796e7ab920  btrfs-progs-v5.15.1.tar.xz
-+sha256  9e9b303a1d0fd9ceaaf204ee74c1c8fa1fd55794e223d9fe2bc62875ecbd53d2  btrfs-progs-v5.16.2.tar.xz
- # Locally computed
- sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libbtrfsutil/COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 54922df839..9bf50ccfda 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 5.15.1
-+BTRFS_PROGS_VERSION = 5.16.2
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
+Classification of failures by reason for master
+-----------------------------------------------
+
+                  pango-1.50.5 | 8 
+                 dhcp-4.4.2-P1 | 5 
+                       unknown | 3 
+                mongodb-4.2.18 | 2 
+                 wavemon-0.9.4 | 2 
+                  exempi-2.6.1 | 1 
+              host-delve-1.8.0 | 1 
+             host-pango-1.50.5 | 1 
+                      iwd-1.25 | 1 
+              liquid-dsp-1.4.0 | 1 
+                 mesa3d-21.3.8 | 1 
+qt-webkit-kiosk-a7720e50f2b... | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    sh4      |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/230dc26c61f4a29cc755248285f7f938916f7649 | ORPH
+    arc      |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/86a0c2ab55fc2404b77107c403767b12042eced8 | ORPH
+   s390x     |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/e4df4f72e3782b712528fab4f33c0f48fc8c50e4 | ORPH
+    arm      |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/4d06e811ca90d48772a01cb83f172a1c5b7c9cfc | ORPH
+microblazeel |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/f9d3525e4cb3706b94317e747c70741a38051fb7 | ORPH
+    arm      |          exempi-2.6.1          | NOK | http://autobuild.buildroot.net/results/26e51513bbbf43b949da227d97ad1ad290c6a303 |     
+    arm      |        host-delve-1.8.0        | NOK | http://autobuild.buildroot.net/results/b59458266d09a1a1e6c82428cb48170cc0c95828 |     
+    arm      |       host-pango-1.50.5        | NOK | http://autobuild.buildroot.net/results/54369fff25c34e4fc01ba99943fac0b4520c93ed | ORPH
+  powerpc    |            iwd-1.25            | NOK | http://autobuild.buildroot.net/results/2aff8d3d7c33c95e2c57f7c8a71e69939f0580a1 |     
+    arm      |        liquid-dsp-1.4.0        | NOK | http://autobuild.buildroot.net/results/881826b4b6c141e59a0da2d7d1ad55d3709fdb95 |     
+    mips     |         mesa3d-21.3.8          | NOK | http://autobuild.buildroot.net/results/9b50c992567cc5d46dadb42ed5a72d27cd019388 |     
+   x86_64    |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/c23bb2884dfb54ec29db151bd8d6d3183de035ab |     
+   x86_64    |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/1211fe407e413742813c94dc2a7738ce5fd04735 |     
+    arm      |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/1cc8efe0895137828693f3059c22c139ff5295eb | ORPH
+    arm      |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/f52f6b3ed62d8a8e43b7db2c5b36c585e94adeea | ORPH
+ powerpc64   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/b18da16d29022eb27549d9aa431790259ae589d8 | ORPH
+    arm      |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/127875183c97e7bf70515eb1f3d2c0506200e149 | ORPH
+  sparc64    |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/3ff6bb98beecb72ef405563fa5341da2f140d57a | ORPH
+    i586     |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/85e2aa2c8e2e490ce613da58b02ab7e8e7b0305c | ORPH
+   s390x     |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/4acc36c6dc50a009bedd184cdf0343e375308dd6 | ORPH
+  powerpc    |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/1a78659b9f975913902c0a0d3bfc6467c9d2b0b4 | ORPH
+    i686     | qt-webkit-kiosk-a7720e50f2b... | NOK | http://autobuild.buildroot.net/results/89dd546426d045c42814b0378949d958e7b1a6df |     
+    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/a3f177a4e5cd93d188ae14b0cf0fa8bfaabb8474 |     
+   nios2     |            unknown             | NOK | http://autobuild.buildroot.net/results/d4f4e03841ae902b59a13e849ba0b679959be2f9 |     
+  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/774ae837717eb4bfc333877b66fae4a207b31a06 |     
+  aarch64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/d8fe28ad85df5415f15409285e601c39c36f557a |     
+    i686     |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/1102aa675d4b959c590f95439a9c20c253d273af |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 3 
+        glib-networking-2.66.0 | 1 
+           host-nodejs-12.22.9 | 1 
+                 hwloc-1.11.13 | 1 
+                   python-lxml | 1 
+                rocksdb-6.13.3 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    |     glib-networking-2.66.0     | NOK | http://autobuild.buildroot.net/results/ea89da41f8ac6d77775e3ae1dd52228eb682e5ff | ORPH
+    arm      |      host-nodejs-12.22.9       | NOK | http://autobuild.buildroot.net/results/0f24e44353f34fea25644d97d7bc586bb386d884 |     
+   xtensa    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/5c235348081cf917ab8b942f62bf3950ad66c105 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/c644605b7356269da97156577d5f0bc4a474f0fd |     
+   s390x     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/6079f06f494d970d8cdac4b7d3e7034a32738dc4 |     
+microblazeel |         hwloc-1.11.13          | NOK | http://autobuild.buildroot.net/results/ddc57a897ed3b4c69c5a25dc18cb4f2fb6b82bdf |     
+    m68k     |          python-lxml           | TIM | http://autobuild.buildroot.net/results/78c501c1499c7f093910dce4c5ddc793d0d4cb2b |     
+  powerpc    |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/86cc0dca02deb81354568f998b52f61f51059490 |     
+
+
+Classification of failures by reason for 2022.02.x
+--------------------------------------------------
+
+                  bind-9.16.26 | 1 
+             bluez5_utils-5.63 | 1 
+                 dhcp-4.4.2-P1 | 1 
+                  exempi-2.6.1 | 1 
+
+
+Detail of failures for 2022.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  nds32le    |          bind-9.16.26          | NOK | http://autobuild.buildroot.net/results/36293589d7bafdf29d542489240145a7a36eaa59 | ORPH
+    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/4aa68100c0becc4b0344fa5b5e8c39d6c784b120 |     
+  riscv64    |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/4b036e9e687490ff78383ceff4e59a6b108199e4 | ORPH
+    arm      |          exempi-2.6.1          | NOK | http://autobuild.buildroot.net/results/c5544a44e85fcbec25a2f45d9d175110a22bed2b |     
+
+
+Gitlab CI results for 2022-03-25
+================================
+
+Detail of runtime-test failures for 2021.11.3
+---------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+       TestLuajitLuaExpat | https://gitlab.com/buildroot.org/buildroot/-/jobs/2249566655  | ORPH 
+                  TestLxc | https://gitlab.com/buildroot.org/buildroot/-/jobs/2249566682  | ORPH 
+    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/2249566765  | ORPH 
+    TestPythonPy3Libftdi1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2249566610  | ORPH 
+        TestPythonPy3Treq | https://gitlab.com/buildroot.org/buildroot/-/jobs/2249566855  | ORPH 
+
+
+Detail of defconfig failures for master
+---------------------------------------
+
+                        defconfig |                        link to the job                        | orph?
+----------------------------------+---------------------------------------------------------------+------
+                amarula_a64_relic | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853884  |      
+                   andes_ae350_45 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853897  |      
+                      bananapi_m1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853955  |      
+                 bananapi_m1_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853957  |      
+                 bananapi_m2_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853958  |      
+                        bananapro | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853962  |      
+                     csky_gx6605s | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243853985  |      
+             freescale_imx6ullevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854014  |      
+             freescale_imx8qxpmek | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854039  |      
+            friendlyarm_nanopi_m1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854059  | ORPH 
+       friendlyarm_nanopi_m1_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854065  | ORPH 
+           friendlyarm_nanopi_neo | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854082  |      
+     friendlyarm_nanopi_neo_plus2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854084  |      
+            friendlyarm_nanopi_r1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854086  |      
+                          galileo | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854091  |      
+                       imx8mmpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854146  |      
+                        imx8mpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854148  |      
+                    licheepi_zero | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854164  |      
+        minnowboard_max-graphical | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854190  |      
+                orangepi_one_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854335  |      
+                    orangepi_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854355  | ORPH 
+                     orangepi_win | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854370  |      
+                       qemu_s390x | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854482  |      
+               raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854507  |      
+              snps_archs38_axs103 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854538  |      
+                    zynqmp_zcu102 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854592  |      
+                    zynqmp_zcu106 | https://gitlab.com/buildroot.org/buildroot/-/jobs/2243854593  |      
+
+
+
 -- 
-2.35.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
