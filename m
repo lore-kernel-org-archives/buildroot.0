@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B844C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B2AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:35:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E71A44092D;
-	Sun, 27 Mar 2022 16:35:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CB0960E2B;
+	Sun, 27 Mar 2022 16:35:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m9mnFFx3jOaF; Sun, 27 Mar 2022 16:35:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XcMu6KZqN3KJ; Sun, 27 Mar 2022 16:35:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1ACF5410A1;
-	Sun, 27 Mar 2022 16:35:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6A5360864;
+	Sun, 27 Mar 2022 16:35:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B5B11BF303
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 53FE11BF303
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1D7360D58
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91CD660BB2
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pkHxKYoNeaFg for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
+ with ESMTP id 7d748ejimg5m for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E29D860BB2
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E50860E64
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8165E85E08; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
+ id C94D085E91; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 18:12:23 +0200
+Date: Sun, 27 Mar 2022 18:12:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 082076ffc186392f2b794facaa0545529e4f5851
-X-Git-Newrev: f11f6ab6e62cb04e33487390f0f0d66d9ed2d950
+X-Git-Oldrev: c75dc73de4b71084ce30f38c6b20068188e13bfe
+X-Git-Newrev: 3dd0940081d5da5b5588fe3b4e9b5d20e4a4719e
 X-Patchwork-Hint: ignore
-Message-Id: <20220327162300.8165E85E08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iwd: fix uclibc build
+Message-Id: <20220327162300.C94D085E91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,68 +59,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f11f6ab6e62cb04e33487390f0f0d66d9ed2d950
+commit: https://git.buildroot.net/buildroot/commit/?id=3dd0940081d5da5b5588fe3b4e9b5d20e4a4719e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following uclibc build failure raised since bump to version 1.25
-in commit 0fc5bc235990073233df6352d1208624034a6b6e and
-https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=01cd8587606bf2da1af245163150589834126c1:
-
-/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: src/storage.o: in function `storage_init':
-storage.c:(.text+0x13a4): undefined reference to `explicit_bzero'
-
-Fixes:
- - http://autobuild.buildroot.org/results/2aff8d3d7c33c95e2c57f7c8a71e69939f0580a1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-src-storage.c-fix-build-with-uclibc.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/intel-gmmlib/0001-Drop-hardening-related-flags.patch | 2 +-
+ package/intel-gmmlib/intel-gmmlib.hash                       | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk                         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch
-new file mode 100644
-index 0000000000..55fdaa86fd
---- /dev/null
-+++ b/package/iwd/0001-src-storage.c-fix-build-with-uclibc.patch
-@@ -0,0 +1,37 @@
-+From 99e74ade2ea892e6d0b070bec1df6a135ce2c8b3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 25 Mar 2022 16:35:49 +0100
-+Subject: [PATCH] src/storage.c: fix build with uclibc
-+
-+explicit_bzero is used in src/storage.c since commit
-+01cd8587606bf2da1af245163150589834126c1c but src/missing.h is not
-+included, as a result build with uclibc fails on:
-+
-+/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: src/storage.o: in function `storage_init':
-+storage.c:(.text+0x13a4): undefined reference to `explicit_bzero'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2aff8d3d7c33c95e2c57f7c8a71e69939f0580a1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/hyperkitty/list/iwd@lists.01.org/thread/WB2XXRBUDHC5IVFDEOJBK23JHPURL427]
-+---
-+ src/storage.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/storage.c b/src/storage.c
-+index 82a72443..aa8066b1 100644
-+--- a/src/storage.c
-++++ b/src/storage.c
-+@@ -44,6 +44,7 @@
-+ #include <ell/ell.h>
-+ #include "ell/useful.h"
-+ 
-++#include "src/missing.h"
-+ #include "src/common.h"
-+ #include "src/storage.h"
-+ #include "src/crypto.h"
-+-- 
-+2.35.1
-+
+diff --git a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+index 581afd9066..c429df6581 100644
+--- a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
++++ b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+@@ -15,7 +15,7 @@ diff --git a/Source/GmmLib/Linux.cmake b/Source/GmmLib/Linux.cmake
+ index 1a09bc4..b28fc1b 100644
+ --- a/Source/GmmLib/Linux.cmake
+ +++ b/Source/GmmLib/Linux.cmake
+-@@ -62,7 +62,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
++@@ -99,7 +99,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
+      -DUSE_SSE3
+      -DUSE_SSSE3
+      # Other common flags
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index beb3cfd6ae..5e48238448 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d70ffc76e9dd7c533f4f3cd829da3a6df00b86418f78f057051d5e7cf208bc8d  intel-gmmlib-22.0.3.tar.gz
++sha256  3b9a6d5e7e3f5748b3d0a2fb0e980ae943907fece0980bd9c0508e71c838e334  intel-gmmlib-22.1.2.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 06628132a2..25cc733e0c 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_GMMLIB_VERSION = 22.0.3
++INTEL_GMMLIB_VERSION = 22.1.2
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
