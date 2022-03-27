@@ -4,44 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A0AC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5019EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D446409B2;
-	Sun, 27 Mar 2022 16:01:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF41440A05;
+	Sun, 27 Mar 2022 16:07:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ugzK55r5FPK2; Sun, 27 Mar 2022 16:01:00 +0000 (UTC)
+	with ESMTP id Nr0y4JNLAxfS; Sun, 27 Mar 2022 16:07:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4B0B409BA;
-	Sun, 27 Mar 2022 16:00:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A9DF4099D;
+	Sun, 27 Mar 2022 16:07:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9A4B21BF20B
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B39F01BF303
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79F4460E2E
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A303260BB2
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:07:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jGF00TjtkrtA for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:59:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DCBF60B03
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:59:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2682A85DB7; Sun, 27 Mar 2022 15:50:20 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 17:55:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d76b7564f1bb61762181ecd1fc69c72a925ed25c
-X-Git-Newrev: 328516a5add9e6f260d3a8e0d372c474ae30b2c1
-X-Patchwork-Hint: ignore
-Message-Id: <20220327155020.2682A85DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bluez5_utils: hid and hog needs
- headers >= 3.18
+ with ESMTP id qXCvX969QxQr for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 16:07:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CE77A60B9D
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:07:50 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id r13so24071496ejd.5
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 09:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=fx+Jd4ddogOeK0bDiqf4ZV9srUYPCM2DdtEkW23pKYM=;
+ b=POaJ2TWXCRR4s+iCOaTNr005kEFYjgmEKIGTzPNvheNLC5hmvOLgB4EgHKIa5LquR7
+ 9t1YB5QUl4NC7E7oNbTfR/4aABcMwYlKdQYVgj0vJ8JGk6/lCDDKTL12fmoWPXWhaCSc
+ uRC0UBXpUWjE2JCpLdAXfCq4XJZ0CA3MTuUfwUG+KeKN4VPCR0eLn4Etx5d0Evt4F1Qh
+ 4b5kYYGa2vKdhHIZkEQb5U7SB10QO+XrpcuTwm4Zl/7F+PSdrRPHXpsgP18C0hOPPBN5
+ VJcSayjBIzrFJPIn91PHgjgib+FvazlnLNXeMHTtFSw2LwdQFBt4MXJy/jbU6MpJczb6
+ omEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=fx+Jd4ddogOeK0bDiqf4ZV9srUYPCM2DdtEkW23pKYM=;
+ b=kIUoSRTyetpm46rR+yd4JZDKBMlUZ67zfaWAwAyByGWAKEhpi8gR3yjK8lxEkjuh+q
+ i2xfo53e2m1Lali/Mz6FPbrAe+FI7gqgfJyate7ns/TLakl3vE2nXNBzLT+9Pvj9Tlxe
+ usZyIvXNiHusS/q6THFcLWbY6M/pQ19w73359LfGp/aCuvLf7clHP0/zkkNdRbHVUaFT
+ ywoIMC7UuAcOeD4s+qxOVAIM8k/LVng4zRrI9xKh1RE2+bkDgftsrK2jfg4Gc4CkzKfT
+ sKQo/6UuIrKrwTKoDmcQ3wAqsRJmNpVIy8gXYyiLesPWFRRnnHOVOVSDI2NeJWlDhhse
+ 2vQg==
+X-Gm-Message-State: AOAM5302j1Ttt73Ui8dWEDeWm5/T1RKLcpQe71Jbr3dlKVykz/WzC+0X
+ WjrlcTL3PpTh1g0ZHjSlZF3o+w==
+X-Google-Smtp-Source: ABdhPJyJ95fKnCTIymxGBuHqscINtVJaAi/V/MczovsZQ1W3VxzqCEtbX+fmXOXadzCeBwHkjJeylQ==
+X-Received: by 2002:a17:907:7e88:b0:6db:ad88:2294 with SMTP id
+ qb8-20020a1709077e8800b006dbad882294mr22155832ejc.371.1648397269045; 
+ Sun, 27 Mar 2022 09:07:49 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ v2-20020a509d02000000b00412d53177a6sm5944297ede.20.2022.03.27.09.07.48
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 27 Mar 2022 09:07:48 -0700 (PDT)
+Message-ID: <3615aca5-6be5-5cee-a4b2-172ee3505fa1@mind.be>
+Date: Sun, 27 Mar 2022 18:07:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: =?UTF-8?Q?Vincent_Stehl=c3=a9?= <vincent.stehle@laposte.net>,
+ buildroot@buildroot.org
+References: <20220321145322.23881-1-vincent.stehle@laposte.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220321145322.23881-1-vincent.stehle@laposte.net>
+Subject: Re: [Buildroot] [PATCH] package/busybox: fix udhcpc options in
+ minimal config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,183 +96,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=328516a5add9e6f260d3a8e0d372c474ae30b2c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix the following build failure with hid and hog raised since their
-addition in commit fb9fc969d91f69851b4c70dba512b607e52bda7b and
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9b58288693680b021e5dcbc6f8bea80b5be89311
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=646db71713b05d50b2b0c421da34e80ed4c54fbd
-because UHID_GET_REPORT is only available since kernel 3.18 and
-https://github.com/torvalds/linux/commit/fa71f32b5de2be1644ee671ddbe211d79be7847f:
-
-profiles/input/device.c: In function 'uhid_send_get_report_reply':
-profiles/input/device.c:222:24: error: 'union <anonymous>' has no member named 'get_report_reply'
-  if (size > sizeof(ev.u.get_report_reply.data))
-                        ^
-profiles/input/device.c:223:21: error: 'union <anonymous>' has no member named 'get_report_reply'
-   size = sizeof(ev.u.get_report_reply.data);
-                     ^
-profiles/input/device.c:231:12: error: 'UHID_GET_REPORT_REPLY' undeclared (first use in this function)
-  ev.type = UHID_GET_REPORT_REPLY;
-            ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/1db406eac7620e3f76d997414eb7af7d2ac6cfe6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/bluez5_utils/Config.in | 16 ++++++++++++++++
- package/brltty/Config.in       |  2 +-
- package/cwiid/Config.in        |  6 +++---
- package/kodi/Config.in         |  6 +++---
- package/supertuxkart/Config.in |  2 +-
- 5 files changed, 24 insertions(+), 8 deletions(-)
-
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 2eea8c7ced..49bb719102 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -79,15 +79,23 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID
- 	bool "build hid plugin"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG
- 	help
- 	  Build plugin for HID (input) profiles.
- 
-+comment "hid plugin needs a toolchain w/ headers >= 3.18"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG
- 	bool "build hog plugin"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 	help
- 	  Build plugin for HoG (input) profiles.
- 
-+comment "hog plugin needs a toolchain w/ headers >= 3.18"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
- 	bool "build mesh plugin"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
-@@ -126,11 +134,15 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
- 	bool "build sixaxis plugin"
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # hid plugin
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
- 	help
- 	  Build sixaxis plugin (support Sony Dualshock
- 	  controller)
- 
-+comment "sixaxis plugin needs a toolchain w/ headers >= 3.18"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
- comment "sixaxis plugin needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
-@@ -142,11 +154,15 @@ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
- config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
- 	bool "build hid2hci tool"
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # hid plugin
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
- 	select BR2_PACKAGE_BLUEZ5_UTILS_TOOLS
- 	help
- 	  Build hid2hci tool
- 
-+comment "hid2hci tool needs a toolchain w/ headers >= 3.18"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
- comment "hid2hci tool needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
-diff --git a/package/brltty/Config.in b/package/brltty/Config.in
-index c728cb7e20..3527df6161 100644
---- a/package/brltty/Config.in
-+++ b/package/brltty/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_BRLTTY
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS # runtime
-+	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # runtime
- 	help
- 	  A daemon providing access to the Linux console for a blind
- 	  person using a refreshable braille display.
-diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-index 6ae2ac9405..7e8cdc3086 100644
---- a/package/cwiid/Config.in
-+++ b/package/cwiid/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
- 	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez5_utils -> dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # bluez5_utils -> dbus, libglib2
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # bluez5_utils hid plugin
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
- 	select BR2_PACKAGE_BLUEZ5_UTILS
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
-@@ -28,9 +28,9 @@ config BR2_PACKAGE_CWIID_WMGUI
- 	select BR2_PACKAGE_LIBGTK2
- endif
- 
--comment "cwiid needs a toolchain w/ dynamic lib, threads, wchar, headers >= 3.4"
-+comment "cwiid needs a toolchain w/ dynamic lib, threads, wchar, headers >= 3.18"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 	depends on !BR2_USE_MMU
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index c8e1e5d0ed..4c6e01745c 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -130,7 +130,7 @@ config BR2_PACKAGE_KODI_AVAHI
- 
- config BR2_PACKAGE_KODI_BLUEZ
- 	bool "bluetooth"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # bluez5_utils hid plugin
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
- 	select BR2_PACKAGE_BLUEZ5_UTILS
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO
-@@ -138,9 +138,9 @@ config BR2_PACKAGE_KODI_BLUEZ
- 	help
- 	    Enable bluetooth support
- 
--comment "bluetooth support needs a toolchain w/ headers >= 3.4"
-+comment "bluetooth support needs a toolchain w/ headers >= 3.18"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 
- config BR2_PACKAGE_KODI_DBUS
- 	bool "dbus"
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index 1dd5dcf058..319415754a 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_SUPERTUXKART
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS # runtime
-+	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # runtime
- 	help
- 	  Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
- 	  racer with multiple karts, tracks and modes you can play.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyMS8wMy8yMDIyIDE1OjUzLCBWaW5jZW50IFN0ZWhsw6kgdmlhIGJ1aWxkcm9vdCB3cm90
+ZToKPiBUaGUgYnVzeWJveC1taW5pbWFsLmNvbmZpZywgd2hpY2ggaXMgdXNlZCBieSBzeXN0ZW1z
+IHdpdGhvdXQgYW4gTU1VLCBzcGVjaWZpZXMKPiB0aGUgIi1iIiBjb21tYW5kIGxpbmUgb3B0aW9u
+IGZvciB1ZGhjcGMuIEhvd2V2ZXIsIHRoaXMgb3B0aW9uIGlzIG5vdCBzdXBwb3J0ZWQKPiBieSBC
+dXN5Qm94IHVkaGNwYyBhbnltb3JlIHNpbmNlIHZlcnNpb24gMS4yNy4wIHdoZW4gYnVpbGRpbmcg
+Zm9yIHN5c3RlbXMKPiB3aXRob3V0IGFuIE1NVS4KPiAKPiBSZW1vdmUgdGhlICItYiIgb3B0aW9u
+IGZyb20gYnVzeWJveC1taW5pbWFsLmNvbmZpZyB0byByZXBhaXIgbmV0d29yawo+IGluaXRpYWxp
+emF0aW9uIG9uIHN5c3RlbXMgd2l0aG91dCBhbiBNTVUuCj4gCj4gVGhpcyBmaXhlcyB0aGUgZm9s
+bG93aW5nIG5ldHdvcmsgaW5pdGlhbGl6YXRpb24gZmFpbHVyZToKPiAKPiAgICB1ZGhjcGM6IGlu
+dmFsaWQgb3B0aW9uIC0tIGIKPiAgICBGQUlMCj4gCj4gU2lnbmVkLW9mZi1ieTogVmluY2VudCBT
+dGVobMOpIDx2aW5jZW50LnN0ZWhsZUBsYXBvc3RlLm5ldD4KCiAgQXBwbGllZCB0byBtYXN0ZXIs
+IHRoYW5rcy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gLS0tCj4gCj4gCj4gSGksCj4gCj4gSSBo
+YXZlIHZlcmlmaWVkIG9uIHFlbXUgdGhhdCB0aGlzIHBhdGNoIGRvZXMgZml4IHRoZSBuZXR3b3Jr
+IGluaXRpYWxpemF0aW9uIGZvcgo+IHFlbXVfYXJtX3ZlcnNhdGlsZV9ub21tdV9kZWZjb25maWcg
+YW5kIHFlbXVfbTY4a19tY2Y1MjA4X2RlZmNvbmZpZy4KPiAKPiBJIGNvdWxkIG9ubHkgdmVyaWZ5
+IHRoZSBidWlsZCBmb3Igc3RtMzJmNDI5X2Rpc2NvX3hpcF9kZWZjb25maWcsCj4gc3RtMzJmNDY5
+X2Rpc2NvX3NkX2RlZmNvbmZpZyBhbmQgc3RtMzJmNDY5X2Rpc2NvX3hpcF9kZWZjb25maWcuCj4g
+Cj4gQmVzdCByZWdhcmRzLAo+IFZpbmNlbnQuCj4gCj4gCj4gICBwYWNrYWdlL2J1c3lib3gvYnVz
+eWJveC1taW5pbWFsLmNvbmZpZyB8IDIgKy0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
+bigrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2J1c3lib3gvYnVz
+eWJveC1taW5pbWFsLmNvbmZpZyBiL3BhY2thZ2UvYnVzeWJveC9idXN5Ym94LW1pbmltYWwuY29u
+ZmlnCj4gaW5kZXggOWVhZTBmNTFmNC4uMWZiNGUzOWUyMSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdl
+L2J1c3lib3gvYnVzeWJveC1taW5pbWFsLmNvbmZpZwo+ICsrKyBiL3BhY2thZ2UvYnVzeWJveC9i
+dXN5Ym94LW1pbmltYWwuY29uZmlnCj4gQEAgLTEwMTgsNyArMTAxOCw3IEBAIENPTkZJR19VREhD
+UF9ERUJVRz05Cj4gICBDT05GSUdfVURIQ1BDX1NMQUNLX0ZPUl9CVUdHWV9TRVJWRVJTPTgwCj4g
+ICAjIENPTkZJR19GRUFUVVJFX1VESENQX1JGQzMzOTcgaXMgbm90IHNldAo+ICAgIyBDT05GSUdf
+RkVBVFVSRV9VREhDUF84MDIxUSBpcyBub3Qgc2V0Cj4gLUNPTkZJR19JRlVQRE9XTl9VREhDUENf
+Q01EX09QVElPTlM9Ii1iIC1SIgo+ICtDT05GSUdfSUZVUERPV05fVURIQ1BDX0NNRF9PUFRJT05T
+PSItUiIKPiAgIAo+ICAgIwo+ICAgIyBQcmludCBVdGlsaXRpZXMKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
