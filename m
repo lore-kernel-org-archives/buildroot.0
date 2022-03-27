@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FA72C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B7F6C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:33:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F269C60F20;
-	Sun, 27 Mar 2022 16:33:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E784C4064D;
+	Sun, 27 Mar 2022 16:33:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zV0LZ4HAc_sr; Sun, 27 Mar 2022 16:33:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gHAXPHkoSmNw; Sun, 27 Mar 2022 16:33:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB866606C6;
-	Sun, 27 Mar 2022 16:33:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 04CA01BF9A4
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE10940641;
+	Sun, 27 Mar 2022 16:33:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FD221BF9AA
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE48781AAD
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D954560625
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GKIh6l9_aq1H for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PFMYvgvqbRUJ for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BECDD818CD
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EC4760E2B
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5886C85E91; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
+ id BEB7A85E90; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 18:12:12 +0200
+Date: Sun, 27 Mar 2022 18:12:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b848117699707390b6507e59e2e705c54acdc9fc
-X-Git-Newrev: 83ab8cc0bdb3ff376d7c61ceeb0b749f8c142b8a
+X-Git-Oldrev: bd651106fc87d2b22565d923217d315fcd537f0a
+X-Git-Newrev: c75dc73de4b71084ce30f38c6b20068188e13bfe
 X-Patchwork-Hint: ignore
-Message-Id: <20220327162300.5886C85E91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/network-manager: bump to version
- 1.36.4
+Message-Id: <20220327162300.BEB7A85E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,67 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83ab8cc0bdb3ff376d7c61ceeb0b749f8c142b8a
+commit: https://git.buildroot.net/buildroot/commit/?id=c75dc73de4b71084ce30f38c6b20068188e13bfe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CONTRIBUTING.md hash changed due to various style updates.
-
-Set new default wifi backend config option to iwd when enabled in
-cases where the default wpa_supplicant is not enabled.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/network-manager/network-manager.hash |  6 +++---
- package/network-manager/network-manager.mk   | 13 ++++++++++---
- 2 files changed, 13 insertions(+), 6 deletions(-)
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index d25f0e8194..26bcf843c2 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,6 +1,6 @@
--# From https://download.gnome.org/sources/NetworkManager/1.34/NetworkManager-1.34.0.sha256sum
--sha256  819795d0899076204f5672421a58f1b1d9e393536ee87bb844b911e6243bf0bd  NetworkManager-1.34.0.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.36/NetworkManager-1.36.4.sha256sum
-+sha256  61304e937dd926471d56715bdede7bab7ccac827356e67f2700d343317cd3c59  NetworkManager-1.36.4.tar.xz
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 044b9d7013..57499830b1 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  ad0abd8e90dd134cc5546f7a13eb4268707b77a5a1a5e3afe31dc4397a573a04  CONTRIBUTING.md
-+sha256  f3c5ae3cafa27c24590cf89e732581cbeb4d25d950fe49ce7e4042963012b105  CONTRIBUTING.md
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index a90228992c..3479bb3794 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+-sha256  b74227ab165fdb09f184968589129dbf29bf382b44b415dd69db9e612f551345  intel-media-22.2.2.tar.gz
++sha256  89940ae2f7e5c7ec182f0d4d0ce8e149ae614876edd5bdad2b852e699a29b3f9  intel-media-22.3.0.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index f0e9f46f07..3e53bc0a3d 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--NETWORK_MANAGER_VERSION_MAJOR = 1.34
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
-+NETWORK_MANAGER_VERSION_MAJOR = 1.36
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
-@@ -53,8 +53,15 @@ endif
- ifeq ($(BR2_PACKAGE_IWD),y)
- NETWORK_MANAGER_DEPENDENCIES += iwd
- NETWORK_MANAGER_CONF_OPTS += --with-iwd
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT),y)
-+NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=wpa_supplicant
- else
--NETWORK_MANAGER_CONF_OPTS += --without-iwd
-+NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=iwd
-+endif
-+else
-+NETWORK_MANAGER_CONF_OPTS += \
-+	--without-iwd \
-+	--with-config-wifi-backend-default=wpa_supplicant
- endif
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
  
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-INTEL_MEDIADRIVER_VERSION = 22.2.2
++INTEL_MEDIADRIVER_VERSION = 22.3.0
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
