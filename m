@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7044C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88BC1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FA19409A0;
-	Sun, 27 Mar 2022 15:45:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 502E581D7C;
+	Sun, 27 Mar 2022 15:45:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m3H09_JjKo-O; Sun, 27 Mar 2022 15:45:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GVOVKpLGXlyg; Sun, 27 Mar 2022 15:45:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 758C640993;
-	Sun, 27 Mar 2022 15:45:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B08A21BF3B9
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:45:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55B8981B6D;
+	Sun, 27 Mar 2022 15:45:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F0B9F1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACB9940133
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:45:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E039D4099B
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:45:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M_iSebzrV8hU for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:45:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fIF-gCihkUmO for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 15:45:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 82BDD40104
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:45:07 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id h4so6586254edr.3
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:45:07 -0700 (PDT)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EACD940993
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:45:37 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id a8so23963686ejc.8
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:45:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=InM8wv/FOsanzxfadg8zkNP5PZHohlPrpnb/D4aUNJc=;
- b=BhzVyUgRcReZtcbNoW6fHYEOTVxp78JmrSvYDr+oPI4SNgODNyYvbWBGFhrfMAjUi8
- Sukh6baSYJm3vxENTiqa19Frf3Jlo/9jtQRD4qNEY4BPfV9Dpt3y6dHzqIod/ZJQmUTy
- kHdU2q/gQUIjKaMgPr5dZwg5kluf2XpsLweq4w/1HLLNgSFxggFwUS8occwFmDnLpo/F
- jkQSfklxCKgMnsxeCeaq1Q/GCqWeG4gWNL8hsdHArM0tEpvuIi36E57aXDNYGWUzmhlV
- kBV+MFQvv0ydo0MY3/1E73BCBfsNsq+kdKfPgNaqLv0yCckhwNWZrUI0Y/cQblNlWDi3
- O+eQ==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=TG/7hlL1s9wCocNJX2wU+xNGrrfvul8w6hmUhV4U2uA=;
+ b=QzQ0R6Uu5O/81wErXaS8Av+ZfNKxDMM/KMmXgV5J5fYSR5I/+MiigOkV/dwSqrNPv4
+ ZbbPts48LxKk+XLKw2awhdn5Xnuim2uxqiVhMSVk1v5KcY6MQjKT11xMHDQC8kaOdztf
+ /STSXdjUWc+FM6sJTZ20a3HFhsDM9rtDKKxE9V359pLqjFPFmHUAvNxEVKNrc11ZbFCU
+ RWLbmwIDs1xtn8NiGu6s15qJExWkLBkZg3dcfJxL30fu868NKN5CrBL3kl5HqbcVhith
+ PXXGtkFSfTKlfL0vbP2trCnn1i01L1ajvs0vDzSDxSFYZljCQjr5wBUqQHJga2ff2URP
+ uBDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=InM8wv/FOsanzxfadg8zkNP5PZHohlPrpnb/D4aUNJc=;
- b=HmNYlb0RYugwfIMFN11XmUXDTotfJd2XjxS+5N1LETLmTH4y2mnWEAyCwoSj5w4a/l
- BkKi8KDicLuWpYn1sP/Kzn+4zxIpjwt2EIfH20b868HgTS04NqrwkKOe21goowRKo3Qb
- wzbitsFTc0mdTb75q38WxhuVCZvfDz3WuxCHwmHOK4DaTC2SWJ+atNlYJTv77PC16xXw
- XpTMA08aw0Dil+Pkuz17YCooV4pcrZi4+UaGl1h3KlPLsagCFNa1HQSM+9PmYwNefF23
- MWek+9YgP4Z4i27JK70GUY5vowJbgn3LToBceXBHbEJXY3CZ1Nx/KqtM5K1HILMn9dR1
- qa+g==
-X-Gm-Message-State: AOAM531LJCL+TfQ5gn6lD92cyNZF/iVGYY43OjwMX3yPWk7swB6ZrYy2
- /mLb1uDTGQOGiUnRtW/5u6OLfOEYSK6yzA==
-X-Google-Smtp-Source: ABdhPJxYO8FvAZTUDKVJFBZ/d4KdZdkpl5cnpGX0R1SlhqKaMjvXIQxa7j4oQGgVCWPZtjACtf3SOQ==
-X-Received: by 2002:a05:6402:1906:b0:418:ff14:62b8 with SMTP id
- e6-20020a056402190600b00418ff1462b8mr10950978edz.40.1648395905767; 
- Sun, 27 Mar 2022 08:45:05 -0700 (PDT)
+ bh=TG/7hlL1s9wCocNJX2wU+xNGrrfvul8w6hmUhV4U2uA=;
+ b=GqqNVocOYIbGsVJaEv98lC0RAm9ulf3LUDoFI7JCnCzh2nOYThPeTJQfzXr4kwCLwx
+ 2IMU5+J3t6QWCycDHm+6NxoEzmg0mY/vlYv3+YuGLdNw7Nw9u1lsolbl9Q7tB+tUOBIP
+ VkvR+9ODM154BfF6Dcxm6Z+GBOTnOZOm0fjZ6E7pxphdPmtuYh2pPjLKk7RCd/8wKOL/
+ YlzNpawyD16MWebX5sDqx7Fa5QRYgtWI8/bWtjUFvv/if46fwBkIuJESd/yNH0SKshHp
+ 2rorKvLiMTlSj+aXY37UvSGrXacgL+a2nXto2mI9ewWr5ktliw2XVz4KFhQK/YZ+57vB
+ 2U5A==
+X-Gm-Message-State: AOAM533OwyAVi99PQu31ImBnD4g93mMlZkqU66wYi4CF/X91EggonBy+
+ hi1oqh+8OJMeYXg/pCbVAqYN9KSaV//Rtw==
+X-Google-Smtp-Source: ABdhPJy4/EXG/ypQ6tJvIjatrxJyVO4sqAewHJ2i3qMLLG+5rDYv2WODNL1Ms4c56LJY9TOS+lb1Gg==
+X-Received: by 2002:a17:907:3f12:b0:6df:e7c1:9afb with SMTP id
+ hq18-20020a1709073f1200b006dfe7c19afbmr22491003ejc.84.1648395936160; 
+ Sun, 27 Mar 2022 08:45:36 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- qk30-20020a1709077f9e00b006dfae33d969sm4748660ejc.216.2022.03.27.08.45.05
+ eg6-20020a056402288600b0041919c78082sm5853496edb.87.2022.03.27.08.45.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 27 Mar 2022 08:45:05 -0700 (PDT)
-Message-ID: <1ebb6766-2a49-1452-87e9-73b7bddd4353@mind.be>
-Date: Sun, 27 Mar 2022 17:45:04 +0200
+ Sun, 27 Mar 2022 08:45:35 -0700 (PDT)
+Message-ID: <11ba0b58-3127-0d3d-7d40-d6a63877deeb@mind.be>
+Date: Sun, 27 Mar 2022 17:45:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
-References: <20220318175156.186854-1-joerg.krause@embedded.rocks>
+To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+References: <20220319061115.1641-1-br015@umbiko.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220318175156.186854-1-joerg.krause@embedded.rocks>
-Subject: Re: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.12.1
+In-Reply-To: <20220319061115.1641-1-br015@umbiko.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,38 +95,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxOC8wMy8yMDIyIDE4OjUxLCBKw7ZyZyBLcmF1c2Ugd3JvdGU6Cj4gVGhlIGxpY2Vuc2Ug
-ZmlsZSBoYXMgdXBkYXRlZCB0aGUgY29weXJpZ2h0IHllYXIgdG8gMjAyMiwgdGhlcmVmb3JlCj4g
-dXBkYXRlIHRoZSBoYXNoIG9mIHRoZSBsaWNlbnNlIGZpbGUgYXMgd2VsbC4KPiAKPiBTaWduZWQt
-b2ZmLWJ5OiBKw7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRlZC5yb2Nrcz4KCiAgQXBw
-bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gLS0tCj4gICBw
-YWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5oYXNoIHwgNCArKy0tCj4gICBwYWNrYWdlL3B1Z2l4bWwv
-cHVnaXhtbC5tayAgIHwgMiArLQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyks
-IDMgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHVnaXhtbC9wdWdpeG1s
-Lmhhc2ggYi9wYWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5oYXNoCj4gaW5kZXggNWM2MjlhYzY2Zi4u
-MTkwZGZiNmE2ZSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3B1Z2l4bWwvcHVnaXhtbC5oYXNoCj4g
-KysrIGIvcGFja2FnZS9wdWdpeG1sL3B1Z2l4bWwuaGFzaAo+IEBAIC0xLDMgKzEsMyBAQAo+ICAg
-IyBMb2NhbGx5IGNvbXB1dGVkOgo+IC1zaGEyNTYgIDhkZGY1N2I2NWZiODYwNDE2OTc5YTNmMDY0
-MGMyYWQ0NWRkZGRiYmFmYTgyNTA4ZWYwYTBhZjNjZTcwNjE3MTYgIHB1Z2l4bWwtMS4xMS40LnRh
-ci5nego+IC1zaGEyNTYgIGVlNDk1ZjM0YWVmZjBjNTc4YTk5ZjMzNTBhMjA1MGQ0ZTU4NjBkMjdi
-MjAwNGMwM2MzODRhNTk0ZmEyYjBhN2EgIExJQ0VOU0UubWQKPiArc2hhMjU2ICBkY2Y2NzFhOTE5
-Y2M0MDUxMjEwZjA4ZmZkM2VkZjllNDI0N2Y3OWFkNTgzYzYxNTc3YTEzZWU5M2FmMzNhZmM3ICBw
-dWdpeG1sLTEuMTIuMS50YXIuZ3oKPiArc2hhMjU2ICAyMDZmNjcxYjZkMzQyNTU3YWRjYzk3MzA4
-OGMyYzYzOGRmMGVjMGIxZGFiYmNkMjRlNjVhYWRkMjE5MTc3OGQyICBMSUNFTlNFLm1kCj4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvcHVnaXhtbC9wdWdpeG1sLm1rIGIvcGFja2FnZS9wdWdpeG1sL3B1
-Z2l4bWwubWsKPiBpbmRleCBiYzAxODE4MGVmLi45MTM3ZjA0NjMwIDEwMDY0NAo+IC0tLSBhL3Bh
-Y2thZ2UvcHVnaXhtbC9wdWdpeG1sLm1rCj4gKysrIGIvcGFja2FnZS9wdWdpeG1sL3B1Z2l4bWwu
-bWsKPiBAQCAtNCw3ICs0LDcgQEAKPiAgICMKPiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4g
-ICAKPiAtUFVHSVhNTF9WRVJTSU9OID0gMS4xMS40Cj4gK1BVR0lYTUxfVkVSU0lPTiA9IDEuMTIu
-MQo+ICAgUFVHSVhNTF9TSVRFID0gaHR0cHM6Ly9naXRodWIuY29tL3pldXgvcHVnaXhtbC9yZWxl
-YXNlcy9kb3dubG9hZC92JChQVUdJWE1MX1ZFUlNJT04pCj4gICBQVUdJWE1MX0xJQ0VOU0UgPSBN
-SVQKPiAgIFBVR0lYTUxfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UubWQKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 19/03/2022 07:11, Andreas Ziegler wrote:
+> Remove 0002-lib-alsa-Error-add-missing-include.patch, the upstream fix is part
+> of this release
+> 
+> Change log:
+>    https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.6/NEWS
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   ...2-lib-alsa-Error-add-missing-include.patch | 25 -------------------
+>   package/mpd/mpd.hash                          |  2 +-
+>   package/mpd/mpd.mk                            |  2 +-
+>   3 files changed, 2 insertions(+), 27 deletions(-)
+>   delete mode 100644 package/mpd/0002-lib-alsa-Error-add-missing-include.patch
+> 
+> diff --git a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch b/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
+> deleted file mode 100644
+> index c45a087a54..0000000000
+> --- a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
+> +++ /dev/null
+> @@ -1,25 +0,0 @@
+> -From 3856224df9160c201bc6d224aa927e7c358e3269 Mon Sep 17 00:00:00 2001
+> -From: aeolio <git@aeolio.de>
+> -Date: Tue, 14 Dec 2021 09:01:23 +0100
+> -Subject: [PATCH] lib/alsa/Error: add missing #include
+> -
+> -Downloaded from upstream commit:
+> -https://github.com/MusicPlayerDaemon/MPD/commit/3856224df9160c201bc6d224aa927e7c358e3269
+> -
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ----
+> - src/lib/alsa/Error.cxx | 1 +
+> - 1 file changed, 1 insertion(+)
+> -
+> -diff --git a/src/lib/alsa/Error.cxx b/src/lib/alsa/Error.cxx
+> -index cd351f37d1..8ceb4417ca 100644
+> ---- a/src/lib/alsa/Error.cxx
+> -+++ b/src/lib/alsa/Error.cxx
+> -@@ -29,6 +29,7 @@
+> -
+> - #include "Error.hxx"
+> -
+> -+#include <stdarg.h>
+> - #include <alsa/error.h>
+> -
+> - namespace Alsa {
+> diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+> index 56f88490cf..b09140abf5 100644
+> --- a/package/mpd/mpd.hash
+> +++ b/package/mpd/mpd.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated after checking pgp signature
+> -sha256  f22c2c25093a05f4566f9cd7207cfbcd8405af67ed29a989bcf8905f80b7a299  mpd-0.23.5.tar.xz
+> +sha256  cbc5928ee3ee1ef7ff6a58f6ba4afaee16c07e9eb42d0107bcc098010f4f26ed  mpd-0.23.6.tar.xz
+>   sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+> index a55e4adde2..12da36098f 100644
+> --- a/package/mpd/mpd.mk
+> +++ b/package/mpd/mpd.mk
+> @@ -5,7 +5,7 @@
+>   ################################################################################
+>   
+>   MPD_VERSION_MAJOR = 0.23
+> -MPD_VERSION = $(MPD_VERSION_MAJOR).5
+> +MPD_VERSION = $(MPD_VERSION_MAJOR).6
+>   MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+>   MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+>   MPD_DEPENDENCIES = host-pkgconf boost fmt
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
