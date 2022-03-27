@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69BF7C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72152C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24305828B5;
-	Sun, 27 Mar 2022 15:59:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DCA882F80;
+	Sun, 27 Mar 2022 16:00:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4HABrBd2PrQQ; Sun, 27 Mar 2022 15:59:56 +0000 (UTC)
+	with ESMTP id uhG-bkkZUzO0; Sun, 27 Mar 2022 16:00:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3965B81AAC;
-	Sun, 27 Mar 2022 15:59:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 10AAD1BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13F3282AC8;
+	Sun, 27 Mar 2022 16:00:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 196941BF3B9
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F19A81467
+ by smtp4.osuosl.org (Postfix) with ESMTP id 567B440149
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WkDo_3mcbO9U for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iZrK9Y88lGDQ for <buildroot@lists.busybox.net>;
  Sun, 27 Mar 2022 15:59:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 679778268F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 872BB4098B
  for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:59:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 09E2785DB7; Sun, 27 Mar 2022 15:50:20 +0000 (UTC)
+ id 3087585DB8; Sun, 27 Mar 2022 15:50:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 17:47:13 +0200
+Date: Sun, 27 Mar 2022 17:55:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 945f8a788f8b30983aa6b2ce7275551a8a60efc8
-X-Git-Newrev: ad21d84a589458fd4542993912891daa503d72dd
+X-Git-Oldrev: 328516a5add9e6f260d3a8e0d372c474ae30b2c1
+X-Git-Newrev: a960dbc5d5f68c7ffdded79e34f6739b0d90940e
 X-Patchwork-Hint: ignore
-Message-Id: <20220327155020.09E2785DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/usbguard: bump to version 1.1.1
+Message-Id: <20220327155020.3087585DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/json-glib: bump to version 1.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,82 +58,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad21d84a589458fd4542993912891daa503d72dd
+commit: https://git.buildroot.net/buildroot/commit/?id=a960dbc5d5f68c7ffdded79e34f6739b0d90940e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- This bump fixes unauthorized access via D-Bus (CVE-2019-25058):
-  https://github.com/advisories/GHSA-p5wh-m4gj-x2mr
-  but dbus is disabled on buildroot
-- musl is supported since
-  https://github.com/USBGuard/usbguard/commit/b04e8deacac4f3f4a82a10b219c2d555e1b2aa24
-- C++17 is now mandatory:
-  https://github.com/USBGuard/usbguard/commit/8c86264986685bf646c65228abce2432e08e3c4c
-- Update hash of license file (use license file from gnu.org:
-  https://github.com/USBGuard/usbguard/commit/3292511ab164ce0bdf6d58f0369ce3993dded9ad)
+- Update introspection option:
+  https://gitlab.gnome.org/GNOME/json-glib/-/commit/461edcc8cd6dc1c4efeb09aaaba02459293546f2
+- Disable docs (enabled by default since
+  https://gitlab.gnome.org/GNOME/json-glib/-/commit/8d6176451f9d7cd4d6660185c679733aee3b57ea)
+- Disable tests (added by:
+  https://gitlab.gnome.org/GNOME/json-glib/-/commit/8e835f8ed2299ad68032432eaf6491b2da8d532b)
+- Update indentation in hash file (two spaces)
 
-https://github.com/USBGuard/usbguard/blob/usbguard-1.1.1/CHANGELOG.md
+https://gitlab.gnome.org/GNOME/json-glib/-/blob/1.6.6/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/usbguard/Config.in     | 8 +++-----
- package/usbguard/usbguard.hash | 6 ++++--
- package/usbguard/usbguard.mk   | 2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/json-glib/json-glib.hash | 6 +++---
+ package/json-glib/json-glib.mk   | 9 +++++----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-index ca6d52034b..ce7a3b8bc4 100644
---- a/package/usbguard/Config.in
-+++ b/package/usbguard/Config.in
-@@ -3,9 +3,8 @@ config BR2_PACKAGE_USBGUARD
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	depends on !BR2_STATIC_LIBS # libqb, protobuf
--	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_LIBQB
-@@ -19,10 +18,9 @@ config BR2_PACKAGE_USBGUARD
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index b68794db37..680d404a4b 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.4/json-glib-1.4.4.sha256sum
+-sha256 720c5f4379513dc11fd97dc75336eb0c0d3338c53128044d9fabec4374f4bc47  json-glib-1.4.4.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.6/json-glib-1.6.6.sha256sum
++sha256  96ec98be7a91f6dde33636720e3da2ff6ecbb90e76ccaa49497f31a6855a490e  json-glib-1.6.6.tar.xz
  
- 	  https://usbguard.github.io/
- 
--comment "usbguard needs a glibc or uClibc toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "usbguard needs a toolchain w/ C++, threads, dynamic library, gcc >= 7"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
--		|| BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- comment "usbguard needs a toolchain not affected by GCC bug 64735"
-diff --git a/package/usbguard/usbguard.hash b/package/usbguard/usbguard.hash
-index fd77acc75a..a69240b3f9 100644
---- a/package/usbguard/usbguard.hash
-+++ b/package/usbguard/usbguard.hash
-@@ -1,3 +1,5 @@
-+# From https://github.com/USBGuard/usbguard/releases/download/usbguard-1.1.1/usbguard-1.1.1.tar.gz.sum
-+sha256  460ebfb4ffc5609739a202a3a1d9fda1c30de033b634845b8baa136352bfb432  usbguard-1.1.1.tar.gz
-+
- # Locally calculated
--sha256  5617986cd5dd1a2d311041648a1977d836cf4e33a4121d7f82599f21496abc42  usbguard-1.0.0.tar.gz
--sha256  a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753  LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
-index d2b03eeb2a..26dc40d15b 100644
---- a/package/usbguard/usbguard.mk
-+++ b/package/usbguard/usbguard.mk
-@@ -4,7 +4,7 @@
+ # Hash for license file:
+-sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index accdb4f888..52ca47e906 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--USBGUARD_VERSION = 1.0.0
-+USBGUARD_VERSION = 1.1.1
- USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
- USBGUARD_LICENSE = GPL-2.0+
- USBGUARD_LICENSE_FILES = LICENSE
+-JSON_GLIB_VERSION_MAJOR = 1.4
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).4
++JSON_GLIB_VERSION_MAJOR = 1.6
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
+ JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ JSON_GLIB_LICENSE = LGPL-2.1+
+ JSON_GLIB_LICENSE_FILES = COPYING
+ JSON_GLIB_INSTALL_STAGING = YES
++JSON_GLIB_CONF_OPTS = -Dgtk_doc=disabled -Dtests=false
+ 
+ JSON_GLIB_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+@@ -18,10 +19,10 @@ JSON_GLIB_DEPENDENCIES = \
+ 	libglib2
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-JSON_GLIB_CONF_OPTS += -Dintrospection=true
++JSON_GLIB_CONF_OPTS += -Dintrospection=enabled
+ JSON_GLIB_DEPENDENCIES += gobject-introspection
+ else
+-JSON_GLIB_CONF_OPTS += -Dintrospection=false
++JSON_GLIB_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
+ JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
