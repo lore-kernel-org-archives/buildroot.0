@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31781C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E8B9C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB35B40104;
-	Sun, 27 Mar 2022 16:27:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4BCF40283;
+	Sun, 27 Mar 2022 16:28:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iH3nAIu6-FKZ; Sun, 27 Mar 2022 16:27:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9hmwKAQKX44I; Sun, 27 Mar 2022 16:28:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 798AA40189;
-	Sun, 27 Mar 2022 16:27:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F17F01BF303
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:27:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17E0E401ED;
+	Sun, 27 Mar 2022 16:28:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D07F41BF303
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D775940189
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:27:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BEEE8818EC
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:28:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3kULPvlHEySw for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 16:27:49 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M6SMGNPxJ8Ij for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 16:28:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0987940104
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:27:48 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id pv16so24193989ejb.0
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 09:27:48 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A926818CD
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:28:15 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id b15so14431081edn.4
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 09:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=QyCYrusZiKGw9S4ey+yEKFxCgQpJkts4I6IfOtbDW5w=;
- b=ZayXZYoGQ/95AI6MMNtPRvrmmfU95T8PAqb2yHVBZQyLEGy+DwfqTlEQ/IwmbyoqQq
- 8gZfP7eHP5yWTy3fn//Il7IcZjAx/7lvCmBPPdW8zAaeHSFbdvrWWMAA5X5I7Z5ST7NY
- SGFQtbjLarK1fubNteCDqyjW9NENEDpKgBrxG1s2WFNuD7ywEGZqqe3Zhc3HgNUWyhWM
- sPLTCqqSqWCqpWP+hS4GBKg4BNYz5yvhc7GvhGJZ+d4BGemrPyUUBhJG5F+mpue5bidt
- 3yyksSGgw8YI8Dsz3sU7A7xhuFJyRS0AwQEh6lG65geoMT3355YxFBca+87bWJKqB7f8
- zvhg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=H39X6zT/8JQPqZzjqWT/ChWuisSKcEWruvqS6WQg1Jg=;
+ b=bbRxrnbxNMMOo6rwJ5FlnlTLOZGwkzLv6alLzFl5tuz1LkVaIuPeHFQTo62083YVzP
+ xLrlCSnVPEDQsBKKKfitRcW9JINXgqD6yN7GzDXN7ntczI6WdBUHuUHb62J31CI5YJnf
+ eyVQ1MnRG8RrLAWTt+GAkZcWq1VpUYK7okrLREnp698fHXZ8yC9zb+86UawCdaxMiq8E
+ dkseub+RaVQc4AZIH2W+ZCbsTEgMkviTLdZqjcGkBAmuzdXz5Jxp9T4nF4aes/Gcte7g
+ z6nQEwFc6keQa6DKWzac6icMgj/ZtH5GgVSg4l5Q+26whVeudkdt7KJvvBW3ey4rHv3g
+ TutA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=QyCYrusZiKGw9S4ey+yEKFxCgQpJkts4I6IfOtbDW5w=;
- b=lbQ3YptNEOmE3ONFU0tzXRuphrkH1qcUBlzbFDHOVf+eE3lDJ8hUy3uV+beb6ZLmQO
- RRtRFUdQBIQrZw266plUN6sXzRSSdRstNkXSmNpQ8wHKiehlFH7TLddpkHH1s3WYWNrR
- QotlNehbBVmZlRblQdxuc9EhfTfb9E5ixfcKi2280a1DTOD02o42UtF7PQ2PR13mYHHl
- wWxDOUAyNZmPMcz3K68kzCDIQ/X3iyS6G4l0+DFKxul0ay175NdjCo+wbzraBRq3+nXx
- 82I7bi9ZQnQKXYUkGCg4A6++aZjJ5o/hMuS+PAyn4HNYT1r2+HJggt2vVn6ZHs09HtUc
- O5zw==
-X-Gm-Message-State: AOAM5328/4agu1Jn86k0cKbVFl3DDCIkspt5tJUEB0608Cz3mjdjTr+R
- EFyihhLEejPiGXRf8hgLw/WNGw==
-X-Google-Smtp-Source: ABdhPJw4bMrZK91vrv94Kh6VCOVVS3jluzwfueJcs2CxO5rHoHM9+Q3LTvEQi7n2Y8Q4mnZRMn4M1g==
-X-Received: by 2002:a17:907:2d0a:b0:6df:8bc8:236f with SMTP id
- gs10-20020a1709072d0a00b006df8bc8236fmr22463507ejc.527.1648398467115; 
- Sun, 27 Mar 2022 09:27:47 -0700 (PDT)
+ bh=H39X6zT/8JQPqZzjqWT/ChWuisSKcEWruvqS6WQg1Jg=;
+ b=q+V4kuojQwzchwUrfSLYP4TfuBajAz4x9dBQVq31G0xxHbZdNEpjWoQ75JGaNBFfEe
+ bO9qLzwzosVaL2t8KuQs/0QLV5fCUPwtfU/UlWNQNWeRuZBzvftIqvHHvn7EyL5r78Gb
+ 1m35bqAgq6li+ZSpu3GWrTIhTjSUkVHBhXptWmzQCTSU1ggb++CdgjkPQYWziXAMpOp0
+ /Twv7h84XHV7EPR479qf0wT09Gt20YTvns4iNScxdJ9NwoTyMw6+zxH0r4kshojNksz7
+ z6I5vlW82J4qwmsVCXdXARaoJUIMKpa/K+qKHhYDldaHbY50kVK0FRdEu7Jx38+1xruO
+ hRjg==
+X-Gm-Message-State: AOAM5318YWIgXJqJeLTbJloAlydOjeuTDJ6GVNCoKbCStR5HmCWTj0WV
+ mEXZIR5b8xj0fsgbs++0mbNpxg==
+X-Google-Smtp-Source: ABdhPJxfESrNRAk/mUInuePSE6Crz9ecZyWP7IHE/fbrqn0MNy4NLJBimBFTB5aeVKvX32kFz9RhZw==
+X-Received: by 2002:a05:6402:1111:b0:416:2ac8:b98e with SMTP id
+ u17-20020a056402111100b004162ac8b98emr11095222edv.236.1648398493587; 
+ Sun, 27 Mar 2022 09:28:13 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- hp12-20020a1709073e0c00b006e02924bf20sm4781694ejc.117.2022.03.27.09.27.46
+ eq7-20020a056402298700b00419d8d46a8asm790143edb.39.2022.03.27.09.28.12
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 27 Mar 2022 09:27:46 -0700 (PDT)
-Message-ID: <66f33483-b1ac-640b-8226-a382de57d9c4@mind.be>
-Date: Sun, 27 Mar 2022 18:27:46 +0200
+ Sun, 27 Mar 2022 09:28:13 -0700 (PDT)
+Message-ID: <0463edce-bf9b-ecd1-2f6d-cc728a64409d@mind.be>
+Date: Sun, 27 Mar 2022 18:28:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220324063928.3448755-1-james.hilliard1@gmail.com>
+References: <20220324071817.1270488-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220324063928.3448755-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: bump to
- version 1.36.4
+In-Reply-To: <20220324071817.1270488-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-txaio: bump to version
+ 22.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,6 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -100,84 +104,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/03/2022 07:39, James Hilliard wrote:
-> CONTRIBUTING.md hash changed due to various style updates.
-> 
-> Set new default wifi backend config option to iwd when enabled in
-> cases where the default wpa_supplicant is not enabled.
+On 24/03/2022 08:18, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
-
-  However, I would like to challenge the order of preference here. If you select 
-network-manager, iwd and wpa_supplicant, and network-manager uses 
-wpa_supplicant, then you end up not using iwd at all, so that was probably not 
-the intention of the user. However, there is a good reason to still have 
-wpa_supplicant around when you have selected network-manager+iwd: wpa_supplicant 
-is also used for 802.1X authentication over Ethernet.
-
-  Either way, it's pretty hard to guess the intention of the user. So maybe a 
-Config.in choice is appropriate?
-
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/network-manager/network-manager.hash |  6 +++---
->   package/network-manager/network-manager.mk   | 13 ++++++++++---
->   2 files changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-> index d25f0e8194..26bcf843c2 100644
-> --- a/package/network-manager/network-manager.hash
-> +++ b/package/network-manager/network-manager.hash
-> @@ -1,6 +1,6 @@
-> -# From https://download.gnome.org/sources/NetworkManager/1.34/NetworkManager-1.34.0.sha256sum
-> -sha256  819795d0899076204f5672421a58f1b1d9e393536ee87bb844b911e6243bf0bd  NetworkManager-1.34.0.tar.xz
-> +# From https://download.gnome.org/sources/NetworkManager/1.36/NetworkManager-1.36.4.sha256sum
-> +sha256  61304e937dd926471d56715bdede7bab7ccac827356e67f2700d343317cd3c59  NetworkManager-1.36.4.tar.xz
->   # Locally computed
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-> -sha256  ad0abd8e90dd134cc5546f7a13eb4268707b77a5a1a5e3afe31dc4397a573a04  CONTRIBUTING.md
-> +sha256  f3c5ae3cafa27c24590cf89e732581cbeb4d25d950fe49ce7e4042963012b105  CONTRIBUTING.md
-> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-> index a90228992c..3479bb3794 100644
-> --- a/package/network-manager/network-manager.mk
-> +++ b/package/network-manager/network-manager.mk
-> @@ -4,8 +4,8 @@
->   #
->   ################################################################################
->   
-> -NETWORK_MANAGER_VERSION_MAJOR = 1.34
-> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
-> +NETWORK_MANAGER_VERSION_MAJOR = 1.36
-> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
->   NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
->   NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
->   NETWORK_MANAGER_INSTALL_STAGING = YES
-> @@ -53,8 +53,15 @@ endif
->   ifeq ($(BR2_PACKAGE_IWD),y)
->   NETWORK_MANAGER_DEPENDENCIES += iwd
->   NETWORK_MANAGER_CONF_OPTS += --with-iwd
-> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT),y)
-> +NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=wpa_supplicant
->   else
-> -NETWORK_MANAGER_CONF_OPTS += --without-iwd
-> +NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=iwd
-> +endif
-> +else
-> +NETWORK_MANAGER_CONF_OPTS += \
-> +	--without-iwd \
-> +	--with-config-wifi-backend-default=wpa_supplicant
-
-  This is set regardless of whether wpa_supplicant is enabled or not. Are you 
-sure that's OK?
 
   Regards,
   Arnout
 
->   endif
+> ---
+>   package/python-txaio/python-txaio.hash | 4 ++--
+>   package/python-txaio/python-txaio.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
+> index 5e05f02d3a..f06c14b21f 100644
+> --- a/package/python-txaio/python-txaio.hash
+> +++ b/package/python-txaio/python-txaio.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/txaio/json
+> -md5  7e80b80ed7797245a5eef803043bdede  txaio-21.2.1.tar.gz
+> -sha256  7d6f89745680233f1c4db9ddb748df5e88d2a7a37962be174c0fd04c8dba1dc8  txaio-21.2.1.tar.gz
+> +md5  9b692af4c4fce73cadd36374c138936b  txaio-22.2.1.tar.gz
+> +sha256  2e4582b70f04b2345908254684a984206c0d9b50e3074a24a4c55aba21d24d01  txaio-22.2.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+> diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
+> index 750d9e3d3d..1a8a888963 100644
+> --- a/package/python-txaio/python-txaio.mk
+> +++ b/package/python-txaio/python-txaio.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
 >   
->   ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> -PYTHON_TXAIO_VERSION = 21.2.1
+> +PYTHON_TXAIO_VERSION = 22.2.1
+>   PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
+> -PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/c5/39/2e715062283f8443d8ceeea32276db71741664d78d43c3edd3675498e926
+> +PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/6d/4b/28313388dfb2bdedb71b35b900459c56ba08ccb7ad2885487df037808c06
+>   PYTHON_TXAIO_LICENSE = MIT
+>   PYTHON_TXAIO_LICENSE_FILES = LICENSE
+>   PYTHON_TXAIO_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
