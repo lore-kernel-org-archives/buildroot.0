@@ -4,85 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10094C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6CB9C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:32:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C240760B9D;
-	Sun, 27 Mar 2022 16:31:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F7EF60E2B;
+	Sun, 27 Mar 2022 16:32:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gtj-3MQ3vN6j; Sun, 27 Mar 2022 16:31:41 +0000 (UTC)
+	with ESMTP id 2A0D8GW8nrEW; Sun, 27 Mar 2022 16:32:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0380606C6;
-	Sun, 27 Mar 2022 16:31:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BFCE60EE6;
+	Sun, 27 Mar 2022 16:32:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6351B1BF303
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:31:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 92D0D1BF303
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 611E281AAD
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:31:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F6C581AC4
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2L-5w4gHv_6S for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 16:31:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B1AEC818CD
- for <buildroot@busybox.net>; Sun, 27 Mar 2022 16:31:37 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id bq8so10175875ejb.10
- for <buildroot@busybox.net>; Sun, 27 Mar 2022 09:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=alaqXhj85UNLaEt2klN7tPxkuB/xcthVEDBps9VvwaU=;
- b=ZMHGc1TJugl0tyufR1+mO+XxyZxTlXN7UPai3nKJaNIYjAGhchl89V9npKt9LBMTDu
- O1wHVlXaCy14cc++P1HNTWxqVZjgKYPhgOXgibt4KYb657UDOg0Md3+uQWJXkbGh22NC
- 39qp52RNqpKb8hoUAW9kciN0JZAXf68U/BnekoTbwVwmbYrryw/CvyUOols8eA0uxEjb
- O39QezNX8At7pQN3svjqCbyKDs5TbJIDIzX6TSDfByCNMJaRgbVFi+q+ysUzyjUrzd9O
- qAImT3lfptHA80ZEoTIpHwrbe9GNISs8ZI4q7Vl/EQCtOvM900quVTllgEiwsZqT3bpf
- hbqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=alaqXhj85UNLaEt2klN7tPxkuB/xcthVEDBps9VvwaU=;
- b=j3iLS0JFDCTl7bya4vCRTca2LjFqWWtI/0f5WSU/1VVLLscP+Cc+jNy6SWnNERy/FD
- 1kiu2/GSmd9jlhaZtbh5uFyzOA+AxnUdQ7GZCjJpgWQUAvrqd3tae+KgKKAyPW8Fopkg
- qnEDe2oDpeYLjxo4wwLKLX2zqws7YkBdtSwmiN8M9rgvB/oCoAFUdyaJZHfcA5daVroW
- 7bwIXS3JsIbiraf+rbtRcSb6T6Qb8oxGdx6n9itRqEeV2h2MoAEN+U42QB9rZvE7vRpl
- QkISW1nlkpCJCe0ufRsxrT46/Bj+hjfG7upiuq6gywryIMErRWYmUm6Iqa2+DORH6P/H
- 6h1Q==
-X-Gm-Message-State: AOAM530NvgoW7sh1iKq3O/tYkYPF7Nwpd8ODA42pMMThTARt28ICgE/r
- 0q2TP9JKIVU7YhdJVy+svgAbVvlaQVyFwA==
-X-Google-Smtp-Source: ABdhPJwsKN8aQwtuxtUCx0MAGkFs8gzOfF4b5t57IkrdMHGlrscQg77xvY85vyQf63LaidgAWUq4jQ==
-X-Received: by 2002:a17:906:58d6:b0:6da:bc08:af7 with SMTP id
- e22-20020a17090658d600b006dabc080af7mr22476435ejs.537.1648398695960; 
- Sun, 27 Mar 2022 09:31:35 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- g21-20020a056402115500b00413c824e422sm5844363edw.72.2022.03.27.09.31.35
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 27 Mar 2022 09:31:35 -0700 (PDT)
-Message-ID: <74c2bcf3-61df-6077-1609-f4867379ebb3@mind.be>
-Date: Sun, 27 Mar 2022 18:31:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-GB
-To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20220327142048.1477306-1-francois.perrad@gadz.org>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220327142048.1477306-1-francois.perrad@gadz.org>
-Subject: Re: [Buildroot] [PATCH] package/luasec: bump to version 1.0.2
+ with ESMTP id OlUZldkJXRNo for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C77D481AAD
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 61D6785E92; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sun, 27 Mar 2022 18:12:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 83ab8cc0bdb3ff376d7c61ceeb0b749f8c142b8a
+X-Git-Newrev: 3cbe5a540f04ef29ecf00fb23bc26068c3a718ca
+X-Patchwork-Hint: ignore
+Message-Id: <20220327162300.61D6785E92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-txaio: bump to version
+ 22.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,53 +53,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=3cbe5a540f04ef29ecf00fb23bc26068c3a718ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/python-txaio/python-txaio.hash | 4 ++--
+ package/python-txaio/python-txaio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 27/03/2022 16:20, Francois Perrad wrote:
-> diff LICENSE:
-> -LuaSec 1.0 license
-> +LuaSec 1.0.2 license
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/luasec/luasec.hash | 4 ++--
->   package/luasec/luasec.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-> index 1ea422aa9..1e381612b 100644
-> --- a/package/luasec/luasec.hash
-> +++ b/package/luasec/luasec.hash
-> @@ -1,3 +1,3 @@
->   # computed by luarocks/buildroot
-> -sha256  b7e18f475c64896fe4921d367adabae765914f7526a68487a5fa6831040e7138  luasec-1.0-1.src.rock
-> -sha256  0d3431dad143f41c8902e4ee867e386a702ebad856c45239fb86460e27dabfbf  luasec/LICENSE
-> +sha256  7ed5d08aad8f0e8659abb3f43c935da1c898474d4dc121e9edfbeae5c4c67fb0  luasec-1.0.2-1.src.rock
-> +sha256  84376baf33cefbcc1e9adbca23fcf87f51c1107956660cda2880feaef86d6075  luasec/LICENSE
-> diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-> index 3ef0c14da..4ace94d16 100644
-> --- a/package/luasec/luasec.mk
-> +++ b/package/luasec/luasec.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LUASEC_VERSION = 1.0-1
-> +LUASEC_VERSION = 1.0.2-1
->   LUASEC_SUBDIR = luasec
->   LUASEC_LICENSE = MIT
->   LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
+index 5e05f02d3a..f06c14b21f 100644
+--- a/package/python-txaio/python-txaio.hash
++++ b/package/python-txaio/python-txaio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/txaio/json
+-md5  7e80b80ed7797245a5eef803043bdede  txaio-21.2.1.tar.gz
+-sha256  7d6f89745680233f1c4db9ddb748df5e88d2a7a37962be174c0fd04c8dba1dc8  txaio-21.2.1.tar.gz
++md5  9b692af4c4fce73cadd36374c138936b  txaio-22.2.1.tar.gz
++sha256  2e4582b70f04b2345908254684a984206c0d9b50e3074a24a4c55aba21d24d01  txaio-22.2.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
+index 750d9e3d3d..1a8a888963 100644
+--- a/package/python-txaio/python-txaio.mk
++++ b/package/python-txaio/python-txaio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TXAIO_VERSION = 21.2.1
++PYTHON_TXAIO_VERSION = 22.2.1
+ PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
+-PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/c5/39/2e715062283f8443d8ceeea32276db71741664d78d43c3edd3675498e926
++PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/6d/4b/28313388dfb2bdedb71b35b900459c56ba08ccb7ad2885487df037808c06
+ PYTHON_TXAIO_LICENSE = MIT
+ PYTHON_TXAIO_LICENSE_FILES = LICENSE
+ PYTHON_TXAIO_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
