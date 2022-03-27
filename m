@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C358C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 20:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D21C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 20:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F63B416AC;
-	Sun, 27 Mar 2022 20:29:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEC5483EFA;
+	Sun, 27 Mar 2022 20:29:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tdeOwAJQCeMJ; Sun, 27 Mar 2022 20:29:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ihLO9hEHAKhp; Sun, 27 Mar 2022 20:29:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 457C8416B4;
-	Sun, 27 Mar 2022 20:29:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 01F291BF3EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAFF483E78;
+	Sun, 27 Mar 2022 20:29:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6267A1BF3EF
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6166416A5
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:29:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FA92409E3
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:29:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 56Rfv_tkYiHD for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z4AJRwPaTK-9 for <buildroot@lists.busybox.net>;
  Sun, 27 Mar 2022 20:29:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 396CD41626
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DB5C40111
  for <buildroot@buildroot.org>; Sun, 27 Mar 2022 20:29:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6EE4385EA2; Sun, 27 Mar 2022 20:20:20 +0000 (UTC)
+ id 8260A85EA7; Sun, 27 Mar 2022 20:20:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 22:22:39 +0200
+Date: Sun, 27 Mar 2022 22:27:15 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2366533fd1be0bea767ef68fe2d8d45e676a4f5f
-X-Git-Newrev: d87883dc8d39bc597171e6f82bf0011b842876c6
+X-Git-Oldrev: 482b0099ea11e1ad0ccc839396bad88246992f8f
+X-Git-Newrev: 98cd43b646001a8617573f44e7e7666595ef861f
 X-Patchwork-Hint: ignore
-Message-Id: <20220327202020.6EE4385EA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/qt5/qt5base: fix
- CVE comments
+Message-Id: <20220327202020.8260A85EA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/nbd: security
+ bump to version 3.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d87883dc8d39bc597171e6f82bf0011b842876c6
+commit: https://git.buildroot.net/buildroot/commit/?id=98cd43b646001a8617573f44e7e7666595ef861f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit 5770a645a3a49a3f0f02972131a4ff5283b4c11e forgot to update CVE
-comments
+Fix CVE-2022-26495: In nbd-server in nbd before 3.24, there is an
+integer overflow with a resultant heap-based buffer overflow. A value of
+0xffffffff in the name length field will cause a zero-sized buffer to be
+allocated for the name, resulting in a write to a dangling pointer. This
+issue exists for the NBD_OPT_INFO, NBD_OPT_GO, and NBD_OPT_EXPORT_NAME
+messages.
+
+Fix CVE-2022-26496: In nbd-server in nbd before 3.24, there is a
+stack-based buffer overflow. An attacker can cause a buffer overflow in
+the parsing of the name field by sending a crafted NBD_OPT_INFO or
+NBD_OPT_GO message with an large value as the length of the name.
+
+https://github.com/NetworkBlockDevice/nbd/compare/nbd-3.21...nbd-3.24
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 8b2adbff1585b2581c76c9abcc8d5529134be60c)
+(cherry picked from commit bf2e459bb9fc9fe57147313cda35f7022172e6e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/nbd/nbd.hash | 8 ++++----
+ package/nbd/nbd.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ef38d03253..b20bdea7f6 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -12,8 +12,7 @@ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
- QT5BASE_INSTALL_STAGING = YES
- QT5BASE_SYNC_QT_HEADERS = YES
+diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
+index f0df35bc27..f58a89bf9a 100644
+--- a/package/nbd/nbd.hash
++++ b/package/nbd/nbd.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/nbd/files/nbd/3.21/
+-md5  c51c4c500fe1ed84c3d5d5dd2ca71d23  nbd-3.21.tar.xz
+-sha1  88c3296d43d20d7bda97e0f1bab0243a4f6fa880  nbd-3.21.tar.xz
++# From http://sourceforge.net/projects/nbd/files/nbd/3.24/
++md5  a6d9e7bbc311a2ed07ef84a58b82b5dd  nbd-3.24.tar.xz
++sha1  72c59ef5186ae355de6f539a1b348e18cbb8314e  nbd-3.24.tar.xz
  
--# 0010-Avoid-processing-intensive-painting-of-high-number-o.patch
--# 0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-+# 0006-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
- QT5BASE_IGNORE_CVES += CVE-2021-38593
+ # Locally calculated
+-sha256  e7688af39d91733bbcd2db08062c44fe503d004e51528740139c44aff6a6bef9  nbd-3.21.tar.xz
++sha256  6877156d23a7b33f75eee89d2f5c2c91c542afc3cdcb636dea5a88539a58d10c  nbd-3.24.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 0a7f08b2cf..f0fb23910e 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # A few comments:
+-NBD_VERSION = 3.21
++NBD_VERSION = 3.24
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
