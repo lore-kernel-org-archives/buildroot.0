@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0135CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E67C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:00:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7183829BB;
-	Sun, 27 Mar 2022 16:00:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96B6E4062A;
+	Sun, 27 Mar 2022 16:00:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j6-QTbH6EIOf; Sun, 27 Mar 2022 16:00:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RjQHOG1xbEZt; Sun, 27 Mar 2022 16:00:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6BAF82F9B;
-	Sun, 27 Mar 2022 16:00:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 83B0C1BF20B
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7000A40420;
+	Sun, 27 Mar 2022 16:00:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18AA51BF20B
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5926F60B9D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BED18193E
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:59:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vC94hPqd1aox for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kNzvuhX647zY for <buildroot@lists.busybox.net>;
  Sun, 27 Mar 2022 15:59:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6A8460E2E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91285828A9
  for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:59:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 60D8785DB7; Sun, 27 Mar 2022 15:50:20 +0000 (UTC)
+ id 394D285DB9; Sun, 27 Mar 2022 15:50:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 27 Mar 2022 17:55:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9a78a756134831da20c471dee575f3e8108f62a4
-X-Git-Newrev: 3eb888ce3959860dce8e4aa25fb2633a40b074f6
+X-Git-Oldrev: a960dbc5d5f68c7ffdded79e34f6739b0d90940e
+X-Git-Newrev: 05bbdfa382ec8b26d9b2f98b1696cb884ed7c2ca
 X-Patchwork-Hint: ignore
-Message-Id: <20220327155020.60D8785DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] packages/guile: bump to version 3.0.8
+Message-Id: <20220327155020.394D285DB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jack1: libsamplerate is optional,
+ not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,19 +59,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3eb888ce3959860dce8e4aa25fb2633a40b074f6
+commit: https://git.buildroot.net/buildroot/commit/?id=05bbdfa382ec8b26d9b2f98b1696cb884ed7c2ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+libsamplerate is only needed to build the NetJack backend and internal
+client
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...le-system-base-target.scm-support-riscv32.patch |    33 -
- ...-8f4538a53d64054ae2fc8b86c0f87c418c6176e6.patch | 13930 -------------------
- package/guile/guile.hash                           |     2 +-
- package/guile/guile.mk                             |     2 +-
- 4 files changed, 2 insertions(+), 13965 deletions(-)
+ package/jack1/Config.in | 1 -
+ package/jack1/jack1.mk  | 6 +++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/jack1/Config.in b/package/jack1/Config.in
+index 1c67f10332..625afdf8c1 100644
+--- a/package/jack1/Config.in
++++ b/package/jack1/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_JACK1
+ 	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 	select BR2_PACKAGE_BERKELEYDB
+-	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	help
+ 	  JACK Audio Connection Kit (JACK 1 implementation).
+diff --git a/package/jack1/jack1.mk b/package/jack1/jack1.mk
+index 311f7c9ba0..39183826a4 100644
+--- a/package/jack1/jack1.mk
++++ b/package/jack1/jack1.mk
+@@ -11,7 +11,11 @@ JACK1_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK1_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+ JACK1_INSTALL_STAGING = YES
+ 
+-JACK1_DEPENDENCIES = host-pkgconf alsa-lib berkeleydb libsamplerate libsndfile
++JACK1_DEPENDENCIES = host-pkgconf alsa-lib berkeleydb libsndfile
++
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++JACK1_DEPENDENCIES += libsamplerate
++endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ JACK1_DEPENDENCIES += readline
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
