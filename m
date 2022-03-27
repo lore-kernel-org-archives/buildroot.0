@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 571C5C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 20:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2C56C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 20:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 04D1E409F8;
-	Sun, 27 Mar 2022 20:36:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AF9C416B1;
+	Sun, 27 Mar 2022 20:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3IDopDWdMPlR; Sun, 27 Mar 2022 20:36:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9qHcFfQ5OfIN; Sun, 27 Mar 2022 20:37:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA1FD409ED;
-	Sun, 27 Mar 2022 20:36:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73D76416AD;
+	Sun, 27 Mar 2022 20:37:33 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BFA51BF3EF
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:36:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12C701BF3EF
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15D55409E7
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:36:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F40AE40498
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 20:37:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5DYBuYsUuP3a for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 20:36:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F374540004
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 20:36:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 331C585EBD; Sun, 27 Mar 2022 20:27:19 +0000 (UTC)
+ with ESMTP id FBPwuK_x6mmv for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 20:37:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94D3A40004
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 20:37:30 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EE195FF804;
+ Sun, 27 Mar 2022 20:37:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nYZdd-00EPO9-Tk; Sun, 27 Mar 2022 22:37:25 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 22:34:15 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 98cd43b646001a8617573f44e7e7666595ef861f
-X-Git-Newrev: 3171d7bc1b7b03d97e4c8df549b375742df21b05
-X-Patchwork-Hint: ignore
-Message-Id: <20220327202719.331C585EBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python-twisted:
- security bump to version 22.2.0
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220313114741.1127825-1-fontaine.fabrice@gmail.com>
+Date: Sun, 27 Mar 2022 22:37:25 +0200
+In-Reply-To: <20220313114741.1127825-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 13 Mar 2022 12:47:41 +0100")
+Message-ID: <87mthbb08q.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-twisted: security bump
+ to version 22.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,62 +60,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3171d7bc1b7b03d97e4c8df549b375742df21b05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix CVE-2022-21716: Twisted is an event-based framework for internet
-applications, supporting Python 3.6+. Prior to 22.2.0, Twisted SSH
-client and server implement is able to accept an infinite amount of data
-for the peer's SSH version identifier. This ends up with a buffer using
-all the available memory. The attach is a simple as `nc -rv localhost 22
-< /dev/zero`. A patch is available in version 22.2.0. There are
-currently no known workarounds.
+ > Fix CVE-2022-21716: Twisted is an event-based framework for internet
+ > applications, supporting Python 3.6+. Prior to 22.2.0, Twisted SSH
+ > client and server implement is able to accept an infinite amount of data
+ > for the peer's SSH version identifier. This ends up with a buffer using
+ > all the available memory. The attach is a simple as `nc -rv localhost 22
+ > < /dev/zero`. A patch is available in version 22.2.0. There are
+ > currently no known workarounds.
 
-https://github.com/twisted/twisted/releases/tag/twisted-22.2.0
+ > https://github.com/twisted/twisted/releases/tag/twisted-22.2.0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 92a3ca0932155498747c46d6f902a939d55c39f4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-twisted/python-twisted.hash | 4 ++--
- package/python-twisted/python-twisted.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 8f0935e4f0..63da0125b8 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5  c818cb1ab241dc249517442e5a0e0412  Twisted-22.1.0.tar.gz
--sha256  b7971ec9805b0f80e1dcb1a3721d7bfad636d5f909de687430ce373979d67b61  Twisted-22.1.0.tar.gz
-+md5  fd252d0b895ca2ab81b5b1454073d890  Twisted-22.2.0.tar.gz
-+sha256  57f32b1f6838facb8c004c89467840367ad38e9e535f8252091345dba500b4f2  Twisted-22.2.0.tar.gz
- # Locally computed sha256
- sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 8e867cfb58..e5d643ec05 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TWISTED_VERSION = 22.1.0
-+PYTHON_TWISTED_VERSION = 22.2.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/77/b8/8108806ebf2b33654989fd1511281dc94a49fa7e03326d84fe5498ecfae4
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/40/8b/56e8870d412c550b3ff2d6714ee212c7e80a6634f4e720c3a26a983e7b46
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+Committed to 2021.02.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
