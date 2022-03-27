@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40964C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03DF2C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE29260EEC;
-	Sun, 27 Mar 2022 15:48:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6E5F80BED;
+	Sun, 27 Mar 2022 15:48:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CFk8KMbxDkfP; Sun, 27 Mar 2022 15:48:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id np8TCPbgKYI5; Sun, 27 Mar 2022 15:48:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19CD260E2E;
-	Sun, 27 Mar 2022 15:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAF2E80BCE;
+	Sun, 27 Mar 2022 15:48:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 41A561BF3B9
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:46:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 538F21BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACCD34099B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8FB8409B0
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:46:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4TQLH1hMZ1Z0 for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:46:21 +0000 (UTC)
+ with ESMTP id 3lDpi-S3a70K for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 15:46:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A85E4409B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A2B6409A0
  for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:46:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5408985D65; Sun, 27 Mar 2022 15:37:12 +0000 (UTC)
+ id 26FE885D65; Sun, 27 Mar 2022 15:37:12 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 17:33:24 +0200
+Date: Sun, 27 Mar 2022 17:01:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92dfa760ad556e16340305e94fe1ed1e0dbc1798
-X-Git-Newrev: 8974c6fa26f626021aa170678989c57fa81e8faf
+X-Git-Oldrev: ed13a65a08cfe315aed9344abc609f5f2b92c782
+X-Git-Newrev: e2bc5e916beedc1965da2a7bf9a86e74b24a5562
 X-Patchwork-Hint: ignore
-Message-Id: <20220327153712.5408985D65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update to version 0.23.6
+Message-Id: <20220327153712.26FE885D65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera-apps: X11 support needs
+ libdrm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,76 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8974c6fa26f626021aa170678989c57fa81e8faf
+commit: https://git.buildroot.net/buildroot/commit/?id=e2bc5e916beedc1965da2a7bf9a86e74b24a5562
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove 0002-lib-alsa-Error-add-missing-include.patch, the upstream fix is part
-of this release
+- X11 support needs libdrm (optional libdrm dependency already
+  present in libcamera-apps.mk)
 
-Change log:
-  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.6/NEWS
+Fixes:
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+  http://autobuild.buildroot.net/results/5df48038df5deb4f1e85287cde9a403c5681c28e
+
+  .../build/libcamera-apps-2d1009e3badcc8047361ff81149ad6cba3b911b5/preview/egl_preview.cpp:18:10: fatal error: libdrm/drm_fourcc.h: No such file or directory
+     18 | #include <libdrm/drm_fourcc.h>
+        |          ^~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0002-lib-alsa-Error-add-missing-include.patch  | 25 ----------------------
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 27 deletions(-)
+ package/libcamera-apps/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch b/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-deleted file mode 100644
-index c45a087a54..0000000000
---- a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 3856224df9160c201bc6d224aa927e7c358e3269 Mon Sep 17 00:00:00 2001
--From: aeolio <git@aeolio.de>
--Date: Tue, 14 Dec 2021 09:01:23 +0100
--Subject: [PATCH] lib/alsa/Error: add missing #include
--
--Downloaded from upstream commit:
--https://github.com/MusicPlayerDaemon/MPD/commit/3856224df9160c201bc6d224aa927e7c358e3269
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/lib/alsa/Error.cxx | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/lib/alsa/Error.cxx b/src/lib/alsa/Error.cxx
--index cd351f37d1..8ceb4417ca 100644
----- a/src/lib/alsa/Error.cxx
--+++ b/src/lib/alsa/Error.cxx
--@@ -29,6 +29,7 @@
-- 
-- #include "Error.hxx"
-- 
--+#include <stdarg.h>
-- #include <alsa/error.h>
-- 
-- namespace Alsa {
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 56f88490cf..b09140abf5 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f22c2c25093a05f4566f9cd7207cfbcd8405af67ed29a989bcf8905f80b7a299  mpd-0.23.5.tar.xz
-+sha256  cbc5928ee3ee1ef7ff6a58f6ba4afaee16c07e9eb42d0107bcc098010f4f26ed  mpd-0.23.6.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a55e4adde2..12da36098f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).5
-+MPD_VERSION = $(MPD_VERSION_MAJOR).6
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
+index a1affc2d23..492a99cf55 100644
+--- a/package/libcamera-apps/Config.in
++++ b/package/libcamera-apps/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_TIFF
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
++	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+ 	select BR2_PACKAGE_LIBEPOXY if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+ 	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
