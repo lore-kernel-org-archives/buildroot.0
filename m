@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6268AC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0828BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18C9B81D65;
-	Sun, 27 Mar 2022 16:32:25 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJkrpbvCRqJs; Sun, 27 Mar 2022 16:32:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F96581AAD;
-	Sun, 27 Mar 2022 16:32:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB5661BF9A4
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9268E60EEC
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC65E60E6F;
+	Sun, 27 Mar 2022 16:32:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tz5ns4-XqI1D for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A5zrxBaj4yie; Sun, 27 Mar 2022 16:32:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFD5E60AD0;
+	Sun, 27 Mar 2022 16:32:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BD7701BF9AA
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD53A40A7A
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 09AVGWiJsiRU for <buildroot@lists.busybox.net>;
  Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF45960AD0
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE7DA4090F
  for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 77F0785E91; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
+ id 8B22485E92; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 18:12:20 +0200
+Date: Sun, 27 Mar 2022 18:12:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e54b82306d005eeb4ed013a4cbd39e59e5ea8f19
-X-Git-Newrev: 082076ffc186392f2b794facaa0545529e4f5851
+X-Git-Oldrev: f11f6ab6e62cb04e33487390f0f0d66d9ed2d950
+X-Git-Newrev: bc1ffa38ba7a47aea2b0ab5bb86e198607ee61b1
 X-Patchwork-Hint: ignore
-Message-Id: <20220327162300.77F0785E91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireshark: fix compile with ccache
- enabled
+Message-Id: <20220327162300.8B22485E92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/atk: bump to version 2.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,37 +58,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=082076ffc186392f2b794facaa0545529e4f5851
+commit: https://git.buildroot.net/buildroot/commit/?id=bc1ffa38ba7a47aea2b0ab5bb86e198607ee61b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- use HOSTCC_NOCCACHE (instead of HOSTCC) for LEMON_C_COMPILER
+https://gitlab.gnome.org/GNOME/atk/-/tags/2.38.0
 
-Fixes:
-  [...] /usr/bin/cmake [...] -DLEMON_C_COMPILER=.../host/bin/ccache /usr/bin/gcc [...]
-  [...]
-  [  0%] Building C object tools/lemon/CMakeFiles/lemon.dir/lemon.c.o
-  .../host/bin/ccache: invalid option -- 'D'
-
-Reported-by: Dan Ambrosio <dambrosio@outrider.ai>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/wireshark/wireshark.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/atk/atk.hash | 4 ++--
+ package/atk/atk.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index a5ca4b1f73..1a549f7037 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -25,7 +25,7 @@ WIRESHARK_CONF_OPTS = \
- 	-DENABLE_ILBC=OFF \
- 	-DENABLE_PCAP=ON \
- 	-DENABLE_SMI=OFF \
--	-DLEMON_C_COMPILER=$(HOSTCC)
-+	-DLEMON_C_COMPILER=$(HOSTCC_NOCCACHE)
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
+index 2e7c3b5fec..d8cd69ff1f 100644
+--- a/package/atk/atk.hash
++++ b/package/atk/atk.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atk/2.36/atk-2.36.0.sha256sum
+-sha256  fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788  atk-2.36.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/atk/2.38/atk-2.38.0.sha256sum
++sha256  ac4de2a4ef4bd5665052952fe169657e65e895c5057dffb3c2a810f6191a0c36  atk-2.38.0.tar.xz
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- WIRESHARK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ # Hash for license file
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index dfeb4de8b2..2820fb486d 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATK_VERSION_MAJOR = 2.36
++ATK_VERSION_MAJOR = 2.38
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
