@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C22C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:34:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94257C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D860940133;
-	Sun, 27 Mar 2022 15:34:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29743409A7;
+	Sun, 27 Mar 2022 15:35:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sp8hAnA_ReRi; Sun, 27 Mar 2022 15:34:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q14EQTNDX5pa; Sun, 27 Mar 2022 15:35:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB4F2400CC;
-	Sun, 27 Mar 2022 15:34:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C044D409A0;
+	Sun, 27 Mar 2022 15:35:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C6D061BF3B9
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:34:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3CA3A1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B3F6881A6F
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:34:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2914681A6F
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:35:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SpNFb3WyVjEO for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:34:53 +0000 (UTC)
+ with ESMTP id 6X24HW4m4zlQ for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 15:35:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 485FE81A65
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:34:52 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id bg10so23992167ejb.4
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:34:52 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A82681A65
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:35:07 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id yy13so24007415ejb.2
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=jYScbg7xSE/dsVPgxVzTJRtYF/uJhu7gAU1k04Qs7f0=;
- b=S6znBbV9seod3D+l51K288oK3jchAyKmmNFHBJcdGdfe/UMSgrPfMaXmFqnz03g5vc
- e4ID7yZJ5rkEy+rn2PPz3pDE/vKTYkBL3Jwtk2E7hjY2kXy4vaMLVCFPcaZy4dSr77Kw
- HNWTWW+fjbz6afaRNEzfA5shqxpm6uEI0l3eUeHG7xJEAmM0O7AG1AyTilE/1Apt5eYL
- 7aAKN6ZS76fRB6xVzRYUnsIyAoJTm4/YQwwcfY0n0HarYRYZSRBQi2q9javC8gEyPBnR
- xTjVfRs89SLKoXFfILDFMZ4TUZep+Q5ObVRzU+l9jBzuM2mOYqokBB5dMrSgVl3gZSRg
- pHvg==
+ bh=bKtVjVd34KA7XFRD0dI5iB8Ce3GRMTnSIs52vJXqfs4=;
+ b=EX+5aI0ih7KBQawphAbBtQMevyMGbCdsf1w0UJ8O4jSlJb1x4hhWFYrIGcPZU2ibNa
+ hkLxV6MceEO+gzOg2DUYBHRQHDyhUBIRbHX54CnjEuowxupmt/TSDq3JrgThR0SDwt+r
+ 6tJ9Xo6I3AgJ6RzU6jaICdyuim21Gz23Y4LP7BfK5AEDAo3cf/rT07YT+1idLPP2Hu2p
+ 1OAyerHcxM98uXFdMjBe0vbLt13vONM9xg0tIApvdnoyMPePVt6b64ZC42EuDZsCmdus
+ QIbQW+4EObho2BGb04U9TEF1x2LpA6+FI402azgcz8P2fXbT6WDR4in1CsYiSg8s+cR0
+ kFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=jYScbg7xSE/dsVPgxVzTJRtYF/uJhu7gAU1k04Qs7f0=;
- b=fFZAhh+6IO8/ZOdw6sQmbsdoQfFworYgJ8WWcG4GgDiabgslQV16O5zYeWFWSDztwA
- uDhnTa9kdBwavOG/HuhmEe4O6Ki30SSwaGtPDfh0BAN6V0EdJLDysCA18Dz3/eDUAZMZ
- 4+KssBFaAhZmXM/NC4+l+do49GcRrP6mQLJSplzxYjX2Qp5T+xOQ2awNsMv3MjAXEqEm
- +NHFTfyrZtmX4dncJbHR1Uuqkls6C4pqjRcCo0p3rrOvdSWfqeLgXnxeb2sciaFD4gBb
- zSbDnya8yDYwvltDrIVTcAFlfY8SDoz4GZgEMjzmr3xvWUYPJuhFCSEEruWR9prldwb6
- lnUA==
-X-Gm-Message-State: AOAM53050nPjRZhQgSwhPflFKGPixBEhpGPU8CjCs2YOw1oDdGx7kwBv
- kKpP3q7G4kCU+ddjLeJl+gsPPg==
-X-Google-Smtp-Source: ABdhPJzF0U1BlJLB1Ob6rrF/D+yVT7v3oYVDTlMkXGssgZnMMK/egIU24AxbLlamEagZEPbrjVWtFw==
-X-Received: by 2002:a17:906:1411:b0:6da:f354:fb83 with SMTP id
- p17-20020a170906141100b006daf354fb83mr22596533ejc.539.1648395290321; 
- Sun, 27 Mar 2022 08:34:50 -0700 (PDT)
+ bh=bKtVjVd34KA7XFRD0dI5iB8Ce3GRMTnSIs52vJXqfs4=;
+ b=KMF966E7DhAV9K5YLwEXpxBDhBtC06Cmy8NSkblhlxKUgbnxbGYnhAp7DsWXa1tdAm
+ 7MFSSrqz07pMkZDvqGpoMoZ/ZZywU/KMVy1N4TIWqJHeczXzRMCd3ugTDuxMSAI0dTDp
+ N5GW89aV/sbOQn0J7J7C+82rUHwlAPptp8Infxneiu1oJbuvage5CeZXXFZhFdN6TyXT
+ k88Tw28BU3zUTyURNjU2PCU5KV4dDzP1aDaktNhzeVgFj39j4+8Psp//8Qtm4+q9zwl0
+ nv63CCOcW87gAlzjZM7gi/jSJMAXA3UiR5GxChNyBj1+WOOF/YfS8tDe8zyE2z/V+3a8
+ ucTw==
+X-Gm-Message-State: AOAM532s96MX7C+E00acHEc6G9mWAgcVqZJhsZGq+ipEGeC9zBtddyPq
+ pk58sHKCyekmEd+X8mZQbVfC8A==
+X-Google-Smtp-Source: ABdhPJwO5iq+nrNnFnWIRVCia4ClYDW0qDJr+7IYaYTE0H7fRMfqHNfwuX6eUpFaxQ0j6T6IzjtHgA==
+X-Received: by 2002:a17:907:9801:b0:6db:ab31:96f4 with SMTP id
+ ji1-20020a170907980100b006dbab3196f4mr22568649ejc.571.1648395305962; 
+ Sun, 27 Mar 2022 08:35:05 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- c5-20020a170906d18500b006ce371f09d4sm4649988ejz.57.2022.03.27.08.34.49
+ r23-20020a170906365700b006e0acdf5541sm2849679ejb.106.2022.03.27.08.35.05
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 27 Mar 2022 08:34:49 -0700 (PDT)
-Message-ID: <5bf8ccc2-820e-763d-03a5-7633f91658bb@mind.be>
-Date: Sun, 27 Mar 2022 17:34:48 +0200
+ Sun, 27 Mar 2022 08:35:05 -0700 (PDT)
+Message-ID: <3567fd8c-8c60-874d-2137-df028cf22b62@mind.be>
+Date: Sun, 27 Mar 2022 17:35:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220317185615.179351-1-fontaine.fabrice@gmail.com>
+References: <20220317185842.183700-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220317185615.179351-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/libminiupnpc: drop dependencies
+In-Reply-To: <20220317185842.183700-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/ola: usbpro needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,10 +103,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 17/03/2022 19:56, Fabrice Fontaine wrote:
-> libminiupnpc can be statically built with or without binfmt flat since
-> version 1.7 and
-> https://github.com/miniupnp/miniupnp/commit/c183a72c46cae9e37ddf635318dfb0bdcd56ed9d
+On 17/03/2022 19:58, Fabrice Fontaine wrote:
+> Fix the following build failure with usbpro raised since re-introduction
+> of the package in commit 16ff948444c3978d63f483344a3d92d994c64312:
+> 
+> configure: error: compiler with C11 support is required to build libusb
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/e9239403bb13d3468db01a952da8c695c0e5ea30
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -117,50 +120,26 @@ On 17/03/2022 19:56, Fabrice Fontaine wrote:
   Arnout
 
 > ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->   - Rebase patch on current master
+>   package/ola/Config.in | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
->   package/libminiupnpc/Config.in       | 6 ------
->   package/libminiupnpc/libminiupnpc.mk | 8 ++++++++
->   2 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/libminiupnpc/Config.in b/package/libminiupnpc/Config.in
-> index a3410a0225..51f4b43bbb 100644
-> --- a/package/libminiupnpc/Config.in
-> +++ b/package/libminiupnpc/Config.in
-> @@ -1,7 +1,5 @@
->   config BR2_PACKAGE_LIBMINIUPNPC
->   	bool "libminiupnpc"
-> -	depends on !BR2_BINFMT_FLAT
-> -	depends on !BR2_STATIC_LIBS
+> diff --git a/package/ola/Config.in b/package/ola/Config.in
+> index 36b175138f..e59637b57f 100644
+> --- a/package/ola/Config.in
+> +++ b/package/ola/Config.in
+> @@ -164,8 +164,12 @@ config BR2_PACKAGE_OLA_PLUGIN_USBDMX
+>   
+>   config BR2_PACKAGE_OLA_PLUGIN_USBPRO
+>   	bool "usbpro"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+>   	select BR2_PACKAGE_LIBUSB
 >   	help
->   	  The UPnP protocol is supported by most home adsl/cable routers
->   	  and Microsoft Windows 2K/XP. The aim of the MiniUPnP project
-> @@ -14,7 +12,3 @@ config BR2_PACKAGE_LIBMINIUPNPC
->   	  ANSI C.
+>   	  Build UsbPro plugin for OLA.
 >   
->   	  http://miniupnp.free.fr
-> -
-> -comment "libminiupnpc needs a toolchain w/ dynamic library"
-> -	depends on BR2_STATIC_LIBS
-> -	depends on !BR2_BINFMT_FLAT
-> diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
-> index 0633ccd234..52fe9849f2 100644
-> --- a/package/libminiupnpc/libminiupnpc.mk
-> +++ b/package/libminiupnpc/libminiupnpc.mk
-> @@ -18,4 +18,12 @@ LIBMINIUPNPC_CPE_ID_VERSION = $(LIBMINIUPNPC_VERSION_MAJOR)
->   LIBMINIUPNPC_CPE_ID_UPDATE = $(LIBMINIUPNPC_VERSION_MINOR)
->   LIBMINIUPNPC_CONF_OPTS = -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_TESTS=OFF
->   
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +LIBMINIUPNPC_CONF_OPTS += -DUPNPC_BUILD_SHARED=OFF -DUPNPC_BUILD_STATIC=ON
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +LIBMINIUPNPC_CONF_OPTS += -DUPNPC_BUILD_SHARED=ON -DUPNPC_BUILD_STATIC=OFF
-> +else
-> +LIBMINIUPNPC_CONF_OPTS += -DUPNPC_BUILD_SHARED=ON -DUPNPC_BUILD_STATIC=ON
-> +endif
+> +comment "usbpro needs a toolchain w/ gcc >= 4.9"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 > +
->   $(eval $(cmake-package))
+>   endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
