@@ -1,79 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FAEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C22C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6495A82733;
-	Sun, 27 Mar 2022 15:08:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D860940133;
+	Sun, 27 Mar 2022 15:34:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nsFtcTeNaiCD; Sun, 27 Mar 2022 15:08:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Sp8hAnA_ReRi; Sun, 27 Mar 2022 15:34:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C3E381C0A;
-	Sun, 27 Mar 2022 15:08:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB4F2400CC;
+	Sun, 27 Mar 2022 15:34:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 579301BF3B9
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:08:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6D061BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4688481C0A
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:08:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3F6881A6F
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:34:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lskeNv1y1cqV for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:08:14 +0000 (UTC)
+ with ESMTP id SpNFb3WyVjEO for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 15:34:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7095981B7B
- for <buildroot@busybox.net>; Sun, 27 Mar 2022 15:08:14 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id m30so16941819wrb.1
- for <buildroot@busybox.net>; Sun, 27 Mar 2022 08:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 485FE81A65
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:34:52 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id bg10so23992167ejb.4
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:34:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=laCEhnKzn4Tr2MNDIbAtmOxPuU1m6d+Qu0pJMoIKdEs=;
- b=XzamgWXdeOmXP/OW0N5beFjgV7aiUkrEVWGDvTpvJe1iVwQ3UIfUCoBhPijJe/yYt+
- H98BLT0m5XbZxmyPMnvo4HASyh4pTvozjKrTlUwuJKx7r8Tf2S0jOqG0p2/J2NAny9ti
- yYMJRRKs4VWKsGpMo7yHeHn4viZxgWQMPLrcycS4naD9L6hKgm3ZwHGe/oqiaSOEa7/7
- IpdFsHq0GZF83t+TS0YZzf4vFlSJsvF7uhh0fKfJVN9RE1743XjnS8uq2T/znQy+xCho
- K+qxQh4LdSPpG2jdPs9tw9746L5U71tAJVIrf01MhYlNn07piHYaArsG9Z+XGKJ9aY6S
- XBmw==
+ bh=jYScbg7xSE/dsVPgxVzTJRtYF/uJhu7gAU1k04Qs7f0=;
+ b=S6znBbV9seod3D+l51K288oK3jchAyKmmNFHBJcdGdfe/UMSgrPfMaXmFqnz03g5vc
+ e4ID7yZJ5rkEy+rn2PPz3pDE/vKTYkBL3Jwtk2E7hjY2kXy4vaMLVCFPcaZy4dSr77Kw
+ HNWTWW+fjbz6afaRNEzfA5shqxpm6uEI0l3eUeHG7xJEAmM0O7AG1AyTilE/1Apt5eYL
+ 7aAKN6ZS76fRB6xVzRYUnsIyAoJTm4/YQwwcfY0n0HarYRYZSRBQi2q9javC8gEyPBnR
+ xTjVfRs89SLKoXFfILDFMZ4TUZep+Q5ObVRzU+l9jBzuM2mOYqokBB5dMrSgVl3gZSRg
+ pHvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=laCEhnKzn4Tr2MNDIbAtmOxPuU1m6d+Qu0pJMoIKdEs=;
- b=uweH2WbuZrC4ZxhNHJ5FtcEjyZnsVLOpaK4At/weBaOQUKTsgwQw9UHBP5eqJ90hLs
- 3Qoq57+XSWw1So7+UyylrwR+sdUGq+IH68NPWyBaZir3+UTOJlCK03O+FL4awLAP5Q8S
- zyf1GkV9k4lrj46VjAcWsuzVeeaoDBjxQO+bWSxlGNzaRreMN70nshUjljs68C0zPVxu
- Ti+CSR0izR9eKZ8JsD9MJKzYVNAoCpSkrV/i5lljkpq4XXiK+UqQhZE3p30DDd2yuDYj
- wZew4JkP1DlQU00clgC60QirgXf009TDVORcgD+6pYy6KtuyM+N5XyyZp45Fvg1AQF5f
- VB8Q==
-X-Gm-Message-State: AOAM531MwPHmy3Vmo6No/VJnqrYXdum0oPsjb3HGLUhWB6CD6opsbfTW
- EAZA59hghkuJ4A2L6V1bINliXnDW9J0=
-X-Google-Smtp-Source: ABdhPJxffaGssnC4MAY0pQY17ir5grf4PIyVwoZ120uKdq0zcXTgjqZYVtRvkBNQOtqgBxXB1b3efQ==
-X-Received: by 2002:adf:e2cb:0:b0:203:7564:1076 with SMTP id
- d11-20020adfe2cb000000b0020375641076mr17776479wrj.199.1648393692362; 
- Sun, 27 Mar 2022 08:08:12 -0700 (PDT)
-Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ bh=jYScbg7xSE/dsVPgxVzTJRtYF/uJhu7gAU1k04Qs7f0=;
+ b=fFZAhh+6IO8/ZOdw6sQmbsdoQfFworYgJ8WWcG4GgDiabgslQV16O5zYeWFWSDztwA
+ uDhnTa9kdBwavOG/HuhmEe4O6Ki30SSwaGtPDfh0BAN6V0EdJLDysCA18Dz3/eDUAZMZ
+ 4+KssBFaAhZmXM/NC4+l+do49GcRrP6mQLJSplzxYjX2Qp5T+xOQ2awNsMv3MjAXEqEm
+ +NHFTfyrZtmX4dncJbHR1Uuqkls6C4pqjRcCo0p3rrOvdSWfqeLgXnxeb2sciaFD4gBb
+ zSbDnya8yDYwvltDrIVTcAFlfY8SDoz4GZgEMjzmr3xvWUYPJuhFCSEEruWR9prldwb6
+ lnUA==
+X-Gm-Message-State: AOAM53050nPjRZhQgSwhPflFKGPixBEhpGPU8CjCs2YOw1oDdGx7kwBv
+ kKpP3q7G4kCU+ddjLeJl+gsPPg==
+X-Google-Smtp-Source: ABdhPJzF0U1BlJLB1Ob6rrF/D+yVT7v3oYVDTlMkXGssgZnMMK/egIU24AxbLlamEagZEPbrjVWtFw==
+X-Received: by 2002:a17:906:1411:b0:6da:f354:fb83 with SMTP id
+ p17-20020a170906141100b006daf354fb83mr22596533ejc.539.1648395290321; 
+ Sun, 27 Mar 2022 08:34:50 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- e9-20020a5d6d09000000b00203ecdca5b7sm10855796wrq.33.2022.03.27.08.08.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Mar 2022 08:08:11 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sun, 27 Mar 2022 16:20:48 +0200
-Message-Id: <20220327142048.1477306-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.32.0
+ c5-20020a170906d18500b006ce371f09d4sm4649988ejz.57.2022.03.27.08.34.49
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 27 Mar 2022 08:34:49 -0700 (PDT)
+Message-ID: <5bf8ccc2-820e-763d-03a5-7633f91658bb@mind.be>
+Date: Sun, 27 Mar 2022 17:34:48 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/luasec: bump to version 1.0.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220317185615.179351-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220317185615.179351-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/libminiupnpc: drop dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,47 +96,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE:
--LuaSec 1.0 license
-+LuaSec 1.0.2 license
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luasec/luasec.hash | 4 ++--
- package/luasec/luasec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-index 1ea422aa9..1e381612b 100644
---- a/package/luasec/luasec.hash
-+++ b/package/luasec/luasec.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  b7e18f475c64896fe4921d367adabae765914f7526a68487a5fa6831040e7138  luasec-1.0-1.src.rock
--sha256  0d3431dad143f41c8902e4ee867e386a702ebad856c45239fb86460e27dabfbf  luasec/LICENSE
-+sha256  7ed5d08aad8f0e8659abb3f43c935da1c898474d4dc121e9edfbeae5c4c67fb0  luasec-1.0.2-1.src.rock
-+sha256  84376baf33cefbcc1e9adbca23fcf87f51c1107956660cda2880feaef86d6075  luasec/LICENSE
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 3ef0c14da..4ace94d16 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUASEC_VERSION = 1.0-1
-+LUASEC_VERSION = 1.0.2-1
- LUASEC_SUBDIR = luasec
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
--- 
-2.32.0
+On 17/03/2022 19:56, Fabrice Fontaine wrote:
+> libminiupnpc can be statically built with or without binfmt flat since
+> version 1.7 and
+> https://github.com/miniupnp/miniupnp/commit/c183a72c46cae9e37ddf635318dfb0bdcd56ed9d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+> Changes v1 -> v2 (after review of Yann E. Morin):
+>   - Rebase patch on current master
+> 
+>   package/libminiupnpc/Config.in       | 6 ------
+>   package/libminiupnpc/libminiupnpc.mk | 8 ++++++++
+>   2 files changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/libminiupnpc/Config.in b/package/libminiupnpc/Config.in
+> index a3410a0225..51f4b43bbb 100644
+> --- a/package/libminiupnpc/Config.in
+> +++ b/package/libminiupnpc/Config.in
+> @@ -1,7 +1,5 @@
+>   config BR2_PACKAGE_LIBMINIUPNPC
+>   	bool "libminiupnpc"
+> -	depends on !BR2_BINFMT_FLAT
+> -	depends on !BR2_STATIC_LIBS
+>   	help
+>   	  The UPnP protocol is supported by most home adsl/cable routers
+>   	  and Microsoft Windows 2K/XP. The aim of the MiniUPnP project
+> @@ -14,7 +12,3 @@ config BR2_PACKAGE_LIBMINIUPNPC
+>   	  ANSI C.
+>   
+>   	  http://miniupnp.free.fr
+> -
+> -comment "libminiupnpc needs a toolchain w/ dynamic library"
+> -	depends on BR2_STATIC_LIBS
+> -	depends on !BR2_BINFMT_FLAT
+> diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
+> index 0633ccd234..52fe9849f2 100644
+> --- a/package/libminiupnpc/libminiupnpc.mk
+> +++ b/package/libminiupnpc/libminiupnpc.mk
+> @@ -18,4 +18,12 @@ LIBMINIUPNPC_CPE_ID_VERSION = $(LIBMINIUPNPC_VERSION_MAJOR)
+>   LIBMINIUPNPC_CPE_ID_UPDATE = $(LIBMINIUPNPC_VERSION_MINOR)
+>   LIBMINIUPNPC_CONF_OPTS = -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_TESTS=OFF
+>   
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +LIBMINIUPNPC_CONF_OPTS += -DUPNPC_BUILD_SHARED=OFF -DUPNPC_BUILD_STATIC=ON
+> +else ifeq ($(BR2_SHARED_LIBS),y)
+> +LIBMINIUPNPC_CONF_OPTS += -DUPNPC_BUILD_SHARED=ON -DUPNPC_BUILD_STATIC=OFF
+> +else
+> +LIBMINIUPNPC_CONF_OPTS += -DUPNPC_BUILD_SHARED=ON -DUPNPC_BUILD_STATIC=ON
+> +endif
+> +
+>   $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
