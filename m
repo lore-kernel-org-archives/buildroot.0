@@ -4,73 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C956DC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 17:12:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5A5EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 17:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31B6160C33;
-	Sun, 27 Mar 2022 17:12:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74D0B60C33;
+	Sun, 27 Mar 2022 17:31:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QKmJni-5UEoD; Sun, 27 Mar 2022 17:12:47 +0000 (UTC)
+	with ESMTP id OhtifO-zOQr9; Sun, 27 Mar 2022 17:31:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31A4560AED;
-	Sun, 27 Mar 2022 17:12:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 89BF51BF3F6
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 17:12:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D35B606E6;
+	Sun, 27 Mar 2022 17:31:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAC441BF3F6
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 17:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8642C60AED
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 17:12:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4A57408BD
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 17:31:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2H0Sv_ExoQUa for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 17:12:43 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3k9U_g1gkVkm for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 17:31:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com
- [IPv6:2001:4860:4864:20::35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F7AD607F6
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 17:12:43 +0000 (UTC)
-Received: by mail-oa1-x35.google.com with SMTP id
- 586e51a60fabf-de3f2a19c8so13031499fac.1
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 10:12:43 -0700 (PDT)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8BE45408B8
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 17:31:42 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id q11so14516821iod.6
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 10:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=hoZJGdRlPxXpv8SRDP2p0CGo66KPGlLENmpnTsdCFsE=;
- b=cWrvtXv9hkm1EaqnnnvdxwZgZuchHuD362nxbpz8O7YXTMink6F2QMOPNUJfj/ItKe
- mDLjTPsuf/wgd24jTsT1SWmU8qZ5Fj2j53UBDnzByOXKeQv6g2lNXYAzVI6zugmGlGcw
- Nie+2T/AK4jzT9QNY7FrVJZj0wi3jhy4bynM1x8fkutRdY9g3Q0iOrGZ3kO/sl3yxPjx
- Kray2E38gPE/qFAv2gyZx1Wzq2EmFFdZqqpA0/VJ39EIvbKddIjoFO/DoEp9dgPlnHAu
- 2OeDzlKD3ZTeTb8yCwad0Z+xYd1+A8Xf0YqHkvQ0wyrn/CcfCCHQGzsAXkxKPPuJDi1z
- 64og==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FLhFe+E42ZlKDEbzrQrgIKaa07OVzWltiA+e64aDMKI=;
+ b=BZg039nnzoJ0ACRh1sDImxBwjPMk3143D32FZQKPNj4+H+IrujFA5BjtzNFhzqouX8
+ fK43ogAYkMz2Cn2EaE26gDL633c6vLPFEihWqhjYg2l1aholNTQf0wSjwoaTBd63c9Sh
+ Q8ctKBKP7FueQZJxFnLqQdkhwlFJrbzTP5UkKVdRPTJSlSvhq2C/TMw1UoBD+rbUUJYd
+ IXsQqEtl1xjTTJYORfrTnI7xVZFDgkffUjobM/E292dI3dAouM2OPaHpL2cSejn2m8Th
+ XKInLgxB9OeqQDDAb5ahfYJkBdzm4ZpSSXQmdJBK4Peh4CN3gvFNFnjHW/DBBgHTbAVk
+ OBAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=hoZJGdRlPxXpv8SRDP2p0CGo66KPGlLENmpnTsdCFsE=;
- b=y4+b/eilOUdCQUFLfB6JMOhKuyuRjLzZxvRhfOrOA95jyOkV8M2sfD6qituJ6GneS3
- BywHoMSnL8Tui9WAxK8SS0ogW1A/TWBShNFRZVbYFhgtH7j+6l8jaql9M2yofiA80Cp8
- Z9Z6LjojaA+SC9lqGmqYZboXYpRCPQHn1eG5WHgQHBr+L5EB/zbKGNf9HH+aipkFUvtz
- KpeKAFGKx41AHeX/dP81WOKqfUEP7/6cxUGGh01MnQdByE4x5RbJX7EyhyHuMku37c//
- bDiFLCVoWk6mGbYO+EV6tvPROPvPzTq/M9DtnowKTvH116RCC9rwjH80OTSCLifAT6vP
- n/Vg==
-X-Gm-Message-State: AOAM532Fm6CjGKRKzHGPlc7LsCyFUsSTx+F/nCimaX6x2NOhWXtK7KLO
- nluv7nKAigl8+nv8Cg+HPG/7a5qv0Bm61rNrGzoBNsZtkkDwYw==
-X-Google-Smtp-Source: ABdhPJyQ6Wep/+TMatSxxqesJD1v/j0J6GmwdQyRMmQZGGsKF4TZOejNxbly9AF9mRZ+J8e6zf5RdK3IO+tJd7EE4n0=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr6958095oaa.200.1648401162454; Sun, 27
- Mar 2022 10:12:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220324063928.3448755-1-james.hilliard1@gmail.com>
- <66f33483-b1ac-640b-8226-a382de57d9c4@mind.be>
-In-Reply-To: <66f33483-b1ac-640b-8226-a382de57d9c4@mind.be>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FLhFe+E42ZlKDEbzrQrgIKaa07OVzWltiA+e64aDMKI=;
+ b=d3ZshUvEmKMtUr8hJiSxtrF7O+3qzVXYPS4SkMbox7b9ADz8wcig2nUXAqcPPS/iSs
+ IFb/2XtCZSKKK520ar3jyLolkCPjjuJCCxDWzma9yJTHB0qu1+vEG5bC5cy4bheJLj7x
+ soLjiTr+nvKpiAdzXsvKd9esVDM/cjFMWdOZET8eVP0O8Pvx+S7CsZBBpvDEVZ8q0Ph2
+ p0h42ej74UmZrredjSQKfya0wdalJwwRz0CPJ2zxbiRggVMsYo5afFH/R7BDKDivMMiy
+ txRrOn8JSMTvOrKWv0jbzOVmfJVl3xw/mifAAthxJwn650SJyL1fhY1GCjKGMw34w8Oc
+ ooOA==
+X-Gm-Message-State: AOAM5321orS8uzEW2ZJpqfZZv4LPbE0LDTIX6qhH9py5mk2r7LT0bA3U
+ jJsboeqNAQbt72g79kYBvLWMw9YzxleMew==
+X-Google-Smtp-Source: ABdhPJzM6jczpfvXwXCkwlxMxCEKO1iT6cqw61sn/6/T0/mXn+FySG23XIFTetmliltMCKgtbkvgSQ==
+X-Received: by 2002:a02:844d:0:b0:317:397b:1765 with SMTP id
+ l13-20020a02844d000000b00317397b1765mr11453169jah.67.1648402301418; 
+ Sun, 27 Mar 2022 10:31:41 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
+ [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
+ g2-20020a056e021e0200b002c82a3f69cesm6810383ila.8.2022.03.27.10.31.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 27 Mar 2022 10:31:41 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 27 Mar 2022 11:12:31 -0600
-Message-ID: <CADvTj4ruUJ4Do8BYw+-VtKj=gOYXHFJVdhCR82xTbnwxEVz+rw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: bump to
- version 1.36.4
+To: buildroot@buildroot.org
+Date: Sun, 27 Mar 2022 11:31:37 -0600
+Message-Id: <20220327173137.2575467-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v3 1/1] package/network-manager: migrate
+ autotools build system to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,106 +87,249 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Mar 27, 2022 at 10:27 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 24/03/2022 07:39, James Hilliard wrote:
-> > CONTRIBUTING.md hash changed due to various style updates.
-> >
-> > Set new default wifi backend config option to iwd when enabled in
-> > cases where the default wpa_supplicant is not enabled.
->
->   Applied to master, thanks.
->
->   However, I would like to challenge the order of preference here. If you select
-> network-manager, iwd and wpa_supplicant, and network-manager uses
-> wpa_supplicant, then you end up not using iwd at all, so that was probably not
-> the intention of the user. However, there is a good reason to still have
-> wpa_supplicant around when you have selected network-manager+iwd: wpa_supplicant
-> is also used for 802.1X authentication over Ethernet.
+We need to add dbus as a build dependency since the meson build system
+uses dbus pkg-config to determine install locations.
 
-This just sets a somewhat sane default, which can be overridden by the config
-files as with previous versions by setting the network manager config setting:
-[device]
-wifi.backend=iwd
+The meson build also requires mobile-broadband-info in order to get
+the database pkg-config variable.
 
-Note that upstream considers the iwd wifi backend somewhat experimental and
-defaults to wpa_supplicant even when iwd backend support is enabled.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - rebase on version 1.36.4 update
+Changes v1 -> v2:
+  - add comments on new dependencies
+---
+ package/network-manager/Config.in          |   1 +
+ package/network-manager/network-manager.mk | 106 ++++++++++-----------
+ 2 files changed, 51 insertions(+), 56 deletions(-)
 
->
->   Either way, it's pretty hard to guess the intention of the user. So maybe a
-> Config.in choice is appropriate?
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index a48cb37b15..da1a7d79b3 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -40,6 +40,7 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+ config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+ 	bool "modem-manager support"
+ 	select BR2_PACKAGE_MODEM_MANAGER
++	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+ 	help
+ 	  This option enables support for ModemManager
+ 
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 3479bb3794..19f2eb3b59 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -9,7 +9,7 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+-NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
++NETWORK_MANAGER_DEPENDENCIES = host-pkgconf dbus udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+@@ -17,136 +17,130 @@ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+ 
+-NETWORK_MANAGER_CONF_ENV = \
+-	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+-	ac_cv_file__etc_fedora_release=no \
+-	ac_cv_file__etc_mandriva_release=no \
+-	ac_cv_file__etc_debian_version=no \
+-	ac_cv_file__etc_redhat_release=no \
+-	ac_cv_file__etc_SuSE_release=no
+-
+ NETWORK_MANAGER_CONF_OPTS = \
+-	--disable-introspection \
+-	--disable-tests \
+-	--disable-qt \
+-	--disable-more-warnings \
+-	--with-crypto=gnutls \
+-	--with-iptables=/usr/sbin/iptables \
+-	--disable-ifupdown \
+-	--without-nm-cloud-setup
++	-Dintrospection=false \
++	-Ddocs=false \
++	-Dtests=no \
++	-Dqt=false \
++	-Dcrypto=gnutls \
++	-Diptables=/usr/sbin/iptables \
++	-Difupdown=false \
++	-Dnm_cloud_setup=false \
++	-Dsession_tracking_consolekit=false
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ NETWORK_MANAGER_DEPENDENCIES += audit
+-NETWORK_MANAGER_CONF_OPTS += --with-libaudit
++NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=yes
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-libaudit
++NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
++NETWORK_MANAGER_CONF_OPTS += -Ddhclient=/sbin/dhclient
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
++NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_IWD),y)
+ NETWORK_MANAGER_DEPENDENCIES += iwd
+-NETWORK_MANAGER_CONF_OPTS += --with-iwd
++NETWORK_MANAGER_CONF_OPTS += -Diwd=true
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=wpa_supplicant
++NETWORK_MANAGER_CONF_OPTS += -Dconfig_wifi_backend_default=wpa_supplicant
+ else
+-NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=iwd
++NETWORK_MANAGER_CONF_OPTS += -Dconfig_wifi_backend_default=iwd
+ endif
+ else
+ NETWORK_MANAGER_CONF_OPTS += \
+-	--without-iwd \
+-	--with-config-wifi-backend-default=wpa_supplicant
++	-Diwd=false \
++	-Dconfig_wifi_backend_default=wpa_supplicant
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libcurl
+-NETWORK_MANAGER_CONF_OPTS += --enable-concheck
++NETWORK_MANAGER_CONF_OPTS += -Dconcheck=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-concheck
++NETWORK_MANAGER_CONF_OPTS += -Dconcheck=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPSL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libpsl
+-NETWORK_MANAGER_CONF_OPTS += --with-libpsl
++NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-libpsl
++NETWORK_MANAGER_CONF_OPTS += -Dlibpsl=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ NETWORK_MANAGER_DEPENDENCIES += libselinux
+-NETWORK_MANAGER_CONF_OPTS += --with-selinux
++NETWORK_MANAGER_CONF_OPTS += -Dselinux=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-selinux
++NETWORK_MANAGER_CONF_OPTS += -Dselinux=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
+-NETWORK_MANAGER_DEPENDENCIES += modem-manager
+-NETWORK_MANAGER_CONF_OPTS += --with-modem-manager-1
++NETWORK_MANAGER_DEPENDENCIES += modem-manager mobile-broadband-provider-info
++NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
++NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
+-NETWORK_MANAGER_CONF_OPTS += --enable-ovs
++NETWORK_MANAGER_CONF_OPTS += -Dovs=true
+ NETWORK_MANAGER_DEPENDENCIES += jansson
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-ovs
++NETWORK_MANAGER_CONF_OPTS += -Dovs=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_PPPD),y)
+ NETWORK_MANAGER_DEPENDENCIES += pppd
+-NETWORK_MANAGER_CONF_OPTS += --enable-ppp
++NETWORK_MANAGER_CONF_OPTS += -Dppp=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-ppp
++NETWORK_MANAGER_CONF_OPTS += -Dppp=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
+ NETWORK_MANAGER_DEPENDENCIES += newt
+-NETWORK_MANAGER_CONF_OPTS += --with-nmtui
++NETWORK_MANAGER_CONF_OPTS += -Dnmtui=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-nmtui
++NETWORK_MANAGER_CONF_OPTS += -Dnmtui=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OFONO),y)
+ NETWORK_MANAGER_DEPENDENCIES += ofono
+-NETWORK_MANAGER_CONF_OPTS += --with-ofono
++NETWORK_MANAGER_CONF_OPTS += -Dofono=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-ofono
++NETWORK_MANAGER_CONF_OPTS += -Dofono=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ NETWORK_MANAGER_DEPENDENCIES += systemd
+ NETWORK_MANAGER_CONF_OPTS += \
+-	--with-systemd-journal \
+-	--with-config-logging-backend-default=journal \
+-	--with-session-tracking=systemd \
+-	--with-suspend-resume=systemd
++	-Dsystemd_journal=true \
++	-Dconfig_logging_backend_default=journal \
++	-Dsession_tracking=systemd \
++	-Dsuspend_resume=systemd
+ else
+ NETWORK_MANAGER_CONF_OPTS += \
+-	--without-systemd-journal \
+-	--with-config-logging-backend-default=syslog \
+-	--without-session-tracking \
+-	--with-suspend-resume=upower
++	-Dsystemd_journal=false \
++	-Dconfig_logging_backend_default=syslog \
++	-Dsession_tracking=no \
++	-Dsuspend_resume=upower \
++	-Dsystemdsystemunitdir=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POLKIT),y)
+ NETWORK_MANAGER_DEPENDENCIES += polkit
+-NETWORK_MANAGER_CONF_OPTS += --enable-polkit
++NETWORK_MANAGER_CONF_OPTS += -Dpolkit=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-polkit
++NETWORK_MANAGER_CONF_OPTS += -Dpolkit=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ NETWORK_MANAGER_DEPENDENCIES += readline
+-NETWORK_MANAGER_CONF_OPTS += --with-nmcli
++NETWORK_MANAGER_CONF_OPTS += -Dnmcli=true
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-nmcli
++NETWORK_MANAGER_CONF_OPTS += -Dnmcli=false
+ endif
+ 
+ define NETWORK_MANAGER_INSTALL_INIT_SYSV
+@@ -159,4 +153,4 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+ 
+ endef
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
+-- 
+2.25.1
 
-I figured overrides can be just done via overlay for this with a config file.
-
->
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >   package/network-manager/network-manager.hash |  6 +++---
-> >   package/network-manager/network-manager.mk   | 13 ++++++++++---
-> >   2 files changed, 13 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-> > index d25f0e8194..26bcf843c2 100644
-> > --- a/package/network-manager/network-manager.hash
-> > +++ b/package/network-manager/network-manager.hash
-> > @@ -1,6 +1,6 @@
-> > -# From https://download.gnome.org/sources/NetworkManager/1.34/NetworkManager-1.34.0.sha256sum
-> > -sha256  819795d0899076204f5672421a58f1b1d9e393536ee87bb844b911e6243bf0bd  NetworkManager-1.34.0.tar.xz
-> > +# From https://download.gnome.org/sources/NetworkManager/1.36/NetworkManager-1.36.4.sha256sum
-> > +sha256  61304e937dd926471d56715bdede7bab7ccac827356e67f2700d343317cd3c59  NetworkManager-1.36.4.tar.xz
-> >   # Locally computed
-> >   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> >   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-> > -sha256  ad0abd8e90dd134cc5546f7a13eb4268707b77a5a1a5e3afe31dc4397a573a04  CONTRIBUTING.md
-> > +sha256  f3c5ae3cafa27c24590cf89e732581cbeb4d25d950fe49ce7e4042963012b105  CONTRIBUTING.md
-> > diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-> > index a90228992c..3479bb3794 100644
-> > --- a/package/network-manager/network-manager.mk
-> > +++ b/package/network-manager/network-manager.mk
-> > @@ -4,8 +4,8 @@
-> >   #
-> >   ################################################################################
-> >
-> > -NETWORK_MANAGER_VERSION_MAJOR = 1.34
-> > -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
-> > +NETWORK_MANAGER_VERSION_MAJOR = 1.36
-> > +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
-> >   NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
-> >   NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
-> >   NETWORK_MANAGER_INSTALL_STAGING = YES
-> > @@ -53,8 +53,15 @@ endif
-> >   ifeq ($(BR2_PACKAGE_IWD),y)
-> >   NETWORK_MANAGER_DEPENDENCIES += iwd
-> >   NETWORK_MANAGER_CONF_OPTS += --with-iwd
-> > +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT),y)
-> > +NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=wpa_supplicant
-> >   else
-> > -NETWORK_MANAGER_CONF_OPTS += --without-iwd
-> > +NETWORK_MANAGER_CONF_OPTS += --with-config-wifi-backend-default=iwd
-> > +endif
-> > +else
-> > +NETWORK_MANAGER_CONF_OPTS += \
-> > +     --without-iwd \
-> > +     --with-config-wifi-backend-default=wpa_supplicant
->
->   This is set regardless of whether wpa_supplicant is enabled or not. Are you
-> sure that's OK?
->
->   Regards,
->   Arnout
->
-> >   endif
-> >
-> >   ifeq ($(BR2_PACKAGE_LIBCURL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
