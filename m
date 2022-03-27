@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0828BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C89C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 16:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC65E60E6F;
-	Sun, 27 Mar 2022 16:32:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65B5181D7D;
+	Sun, 27 Mar 2022 16:32:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A5zrxBaj4yie; Sun, 27 Mar 2022 16:32:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IXo1x5m1gC4G; Sun, 27 Mar 2022 16:32:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFD5E60AD0;
-	Sun, 27 Mar 2022 16:32:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD7701BF9AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A79D81AD1;
+	Sun, 27 Mar 2022 16:32:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E04ED1BF303
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD53A40A7A
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE3BA405CB
  for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 16:32:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 09AVGWiJsiRU for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 250Vms0cPVrM for <buildroot@lists.busybox.net>;
  Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE7DA4090F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7B6F404D0
  for <buildroot@buildroot.org>; Sun, 27 Mar 2022 16:32:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8B22485E92; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
+ id 4B18485E90; Sun, 27 Mar 2022 16:23:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 27 Mar 2022 18:12:25 +0200
+Date: Sun, 27 Mar 2022 18:12:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f11f6ab6e62cb04e33487390f0f0d66d9ed2d950
-X-Git-Newrev: bc1ffa38ba7a47aea2b0ab5bb86e198607ee61b1
+X-Git-Oldrev: 39ceb94fdb96da47a350b92e86513ddc57a657eb
+X-Git-Newrev: b848117699707390b6507e59e2e705c54acdc9fc
 X-Patchwork-Hint: ignore
-Message-Id: <20220327162300.8B22485E92@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/atk: bump to version 2.38.0
+Message-Id: <20220327162300.4B18485E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-meson: add cmake dependency
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +59,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc1ffa38ba7a47aea2b0ab5bb86e198607ee61b1
+commit: https://git.buildroot.net/buildroot/commit/?id=b848117699707390b6507e59e2e705c54acdc9fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.gnome.org/GNOME/atk/-/tags/2.38.0
+Meson dependencies and variables can be provided by cmake similar to
+how they can be provided by pkgconfig, for this to work we need to
+ensure that cmake_prefix_path is set for both cross and native
+targets along with the cmake binary path.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+See:
+https://mesonbuild.com/Dependencies.html#cmake
+https://mesonbuild.com/Dependencies.html#arbitrary-variables-from-dependencies-that-can-be-found-multiple-ways
+https://mesonbuild.com/Machine-files.html#meson-builtin-options
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/atk/atk.hash | 4 ++--
- package/atk/atk.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-meson.mk                   | 2 ++
+ support/misc/cross-compilation.conf.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/atk/atk.hash b/package/atk/atk.hash
-index 2e7c3b5fec..d8cd69ff1f 100644
---- a/package/atk/atk.hash
-+++ b/package/atk/atk.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/atk/2.36/atk-2.36.0.sha256sum
--sha256  fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788  atk-2.36.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/atk/2.38/atk-2.38.0.sha256sum
-+sha256  ac4de2a4ef4bd5665052952fe169657e65e895c5057dffb3c2a810f6191a0c36  atk-2.38.0.tar.xz
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 85de98e03a..9e70d49b60 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -79,6 +79,7 @@ define PKG_MESON_CROSSCONFIG_SED
+         -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$($(strip $(1))))%g" \
+         -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$($(strip $(3))))%g" \
+         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
++        -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
+         -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
+         -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
+         -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
+@@ -136,6 +137,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-Db_pie=false \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
++		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
+diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
+index 18cf258a8e..1977a83501 100644
+--- a/support/misc/cross-compilation.conf.in
++++ b/support/misc/cross-compilation.conf.in
+@@ -8,6 +8,7 @@ c = '@TARGET_CC@'
+ cpp = '@TARGET_CXX@'
+ ar = '@TARGET_AR@'
+ strip = '@TARGET_STRIP@'
++cmake = '@BR2_CMAKE@'
+ pkgconfig = '@PKGCONF_HOST_BINARY@'
+ g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+@@ -18,6 +19,7 @@ c_link_args = [@TARGET_LDFLAGS@]
+ cpp_args = [@TARGET_CXXFLAGS@]
+ cpp_link_args = [@TARGET_LDFLAGS@]
+ wrap_mode = 'nodownload'
++cmake_prefix_path = '@STAGING_DIR@/usr/lib/cmake'
  
- # Hash for license file
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index dfeb4de8b2..2820fb486d 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATK_VERSION_MAJOR = 2.36
-+ATK_VERSION_MAJOR = 2.38
- ATK_VERSION = $(ATK_VERSION_MAJOR).0
- ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
- ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+ [properties]
+ needs_exe_wrapper = true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
