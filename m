@@ -4,88 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44074C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:57:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6364C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:57:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0CB760E2E;
-	Sun, 27 Mar 2022 15:57:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98F7160F21;
+	Sun, 27 Mar 2022 15:57:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 32OSU9QtDe7d; Sun, 27 Mar 2022 15:57:19 +0000 (UTC)
+	with ESMTP id zP3kQW99j1RJ; Sun, 27 Mar 2022 15:57:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC8EF60A8A;
-	Sun, 27 Mar 2022 15:57:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AA4481BF3B9
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:57:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD82660EC6;
+	Sun, 27 Mar 2022 15:57:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CB7CE1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9941981C6F
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:57:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB0B9401D0
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:57:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yPONsGjKTN1U for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:57:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Rkr36xzbXcv for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 15:57:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1AE3081678
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:57:13 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id j15so24010088eje.9
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:57:12 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A2BE340088
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:57:33 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id z92so14345589ede.13
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=I8ymeu/aUf7xKU5AOeFfZpkRebbyBMZPmCN4XsmSmNM=;
- b=fL6LKg4M374r1bDFlNrr7GaPsVR5X2URsCPwPuSvBSE7N0wK5XXaJjJhMy8pZk46Rd
- R6gDXWwxe/EwvghojWyKiI1t9TTgYltfRCwzXXXRq4M46ud66Oj6tZLtzeL4ha+qHudp
- ST0ZeNym1WgVzLCSQo4UPAnN50wGc3I67aZEmqF9IdgydZnN0nugQJgoIynVyz90Skdf
- hQpQd6qFSR1jGgyjX5HEhpJ2QDdg+Qf3dECsCvsWq+WJT8tc0xh/a4pOKbPKUAo7hDz+
- f9UQwR8jknpCrCMtifFyi3fSNAu+bw+9vabNHNc0TQG81KBpir9bB4uAQ3XZrATNKY3H
- pURg==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=Q3rhrOOvJwipQMy0S7uWk1/6AhE7nayEoSa9etsD69s=;
+ b=ER026D57VvNvg/fLlmKCFxT3rH18V3xqSLIgatY0/elnS53t47KfrL8GKJSgQoDxXg
+ T7lRG7b2xZo+2YTjMm0+qt/1/jFosDQc8Y2ILISNwtNrqN2pGZUuZ0oXSNwViaKEfRu4
+ cWSSQ+vyFi/Uwoh9cuYGkQ99Mf+Sc7H4tdfAIbSajIgtbBrqhhT5e7Pyif/WFiQLPWL/
+ /poyjbq6f8kFuFTL+joHx9m39uGjlF/XDaqPsA4LY6Fq9tZiZ/2sale9GxQKFXqnzpV/
+ JKrkmsvGClgnx1sb7mxpzQ6Q5YsU54YoW0y8E4HRG7yqA/afkxE6+OD1NOtQAge5VMKI
+ 27qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=I8ymeu/aUf7xKU5AOeFfZpkRebbyBMZPmCN4XsmSmNM=;
- b=jFY4BOcQ7Rbn8QYqrJqHFdL2OM7LG5JOoQL96XqJbaZm8d72ZQ7cSqJhDzby7JbA5d
- eUTzRHDWtvsoFDr426fCu3cPdfU1j/gPK09GFvcRuhOSn9UwJOUBRAccP/N0aLEpsN0b
- KpuzOexGfgwPLmwTJTz5mp3GG9+5e+5EY4TRHt1hYuiTtddp5roe5LFpPdHu+6TooDd2
- gPUXYqp5BY6eTGv+vtQdbDIZ+QS+0tdVaKDc11s6GFH50SEWAWpcMpJMiciiQZ2oMisd
- JpHZHebFfrMzLp/DABLA75zI6hzZYKe0OMFXxQUiyweNM7MBmNFdgu16N3Xu03ivBcLk
- O72w==
-X-Gm-Message-State: AOAM5303MehUFYqrPzzbvsy61iRDX3dsyqD2IuFzQ6jepZ1Z8RLDF0uV
- H44ZtTWbMmsfKRmnZ8eD2QHB3g==
-X-Google-Smtp-Source: ABdhPJzDt9HwpoXIge+STjFx/rDCxrG0Cmw6BcGiTvn18g48P+6WFgk6OwsCTAby7uP4svx8Ff4FCQ==
-X-Received: by 2002:a17:907:6d19:b0:6db:89c8:52e3 with SMTP id
- sa25-20020a1709076d1900b006db89c852e3mr23239579ejc.754.1648396631296; 
- Sun, 27 Mar 2022 08:57:11 -0700 (PDT)
+ bh=Q3rhrOOvJwipQMy0S7uWk1/6AhE7nayEoSa9etsD69s=;
+ b=0lmmslzFVRpfA3Pz5lr4e+2WUDVfEmOr1N6hQfbx8gWKU+0PujxXch55Wi0r8Cygpc
+ qpLXgYpgsXwLnvMJQF9eePuo5JhpP568YbIYYql8F2T7EtfCQPTfcM8UuakfxFPbJWf/
+ Dw2oGjgC9hb5QZYoBpCT97NW4c143qAQuvtIpfQD1fIKk04FjZFQTThNga+FvNEQMp7n
+ 1RY7MCkxZAvuTk3+/wpR/5w1CVFU/8ExVYZLO/sxalksywl37XXCyQnUOh3tApjxzH4G
+ 10M3ZAnjCTmZ4mWGn0pMBwOP9kWQbisLwFq5sCnj7pmtuOK9nOo2pXwhWvhC0i/dzUvs
+ 99Aw==
+X-Gm-Message-State: AOAM531OFM25b1Bm2k4EauwTn1iby+B3rQ/r80adU9MmXfb/7GG25QeG
+ 1ApH0sqvgUN+LYa5abpN26JRiXbaYOOh9w==
+X-Google-Smtp-Source: ABdhPJxukrkFkxYqyYFXby/iNi5F3B9ZHp4WLtI3RMDmfZKmSVb6TXOY/s1/lZqyg/wUMZ5gWHX02A==
+X-Received: by 2002:a05:6402:295:b0:419:2533:f821 with SMTP id
+ l21-20020a056402029500b004192533f821mr11104891edv.64.1648396651781; 
+ Sun, 27 Mar 2022 08:57:31 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- g20-20020aa7c594000000b004194b07bbfasm1374642edq.10.2022.03.27.08.57.08
+ v2-20020a509d02000000b00412d53177a6sm5934460ede.20.2022.03.27.08.57.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 27 Mar 2022 08:57:10 -0700 (PDT)
-Message-ID: <d1c557ad-f077-abef-157b-85b161b221eb@mind.be>
-Date: Sun, 27 Mar 2022 17:57:08 +0200
+ Sun, 27 Mar 2022 08:57:31 -0700 (PDT)
+Message-ID: <8cec0c22-baa7-c9b5-6185-dcb7da137938@mind.be>
+Date: Sun, 27 Mar 2022 17:57:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
-References: <20211227074056.13882-1-br015@umbiko.net>
- <20220320114138.433796-1-br015@umbiko.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220320154750.1273563-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220320114138.433796-1-br015@umbiko.net>
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/zziplib: fix static build
- failure with mpd
+In-Reply-To: <20220320154750.1273563-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkcs11-helper: fix build
+ without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,9 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -107,130 +102,70 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 20/03/2022 12:41, Andreas Ziegler wrote:
-> The current released version of zziplib copies static libraries with appended
-> major version, but omits creating the necessary links to the base file names.
-> This prevents the linker to find the libraries via the search path.
+On 20/03/2022 16:47, Fabrice Fontaine wrote:
+> Fix the following build failure without threads and openvpn raised since
+> commit 0199dc161769e5f28e9aebc634230ece08ff5008:
 > 
-> The issue (https://github.com/gdraheim/zziplib/issues/117) has been
-> fixed upstream; this patch extracts the necessary part of commit 0e8d35f92efb680c81f6ec1fca9f11d173dce389, to enable creation of symlinks.
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libpkcs11-helper.so: undefined reference to `_pkcs11h_slotevent_init'
 > 
-> This resolves the following autobuild issues:
+> Fixes:
+>   - http://autobuild.buildroot.org/results/fcaa70cc035d6f9d35dfa8d564e9948c7e1cfd9e
 > 
-> http://autobuild.buildroot.net/results/6c56b645a2b723920f07b98474452824fba5e2c1
-> http://autobuild.buildroot.net/results/032aaff121fb114f388c67dbca3ad2b02f670e38
-> http://autobuild.buildroot.net/results/ba711034c0abe980f677e26de41739223e2f66e9
-> 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-> ---
-> Changes v1 -> v2:
->   - extract link creation from commit 0e8d35f
-> Changes v2 -> v3:
->   - update failure list
-> 
->   ...-implant-ZZIP_LIBLATEST-for-zzip_lib.patch | 78 +++++++++++++++++++
->   1 file changed, 78 insertions(+)
->   create mode 100644 package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-> 
-> diff --git a/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-> new file mode 100644
-> index 0000000000..50380861bc
-> --- /dev/null
-> +++ b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-> @@ -0,0 +1,78 @@
-> +Extract link creation for versioned libraries from commit
-> +0e8d35f92efb680c81f6ec1fca9f11d173dce389.
-> +
-> +Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-> +
-> +---
-> +From 0e8d35f92efb680c81f6ec1fca9f11d173dce389 Mon Sep 17 00:00:00 2001
-> +From: Guido Draheim <guidod@gmx.de>
-> +Date: Sat, 22 May 2021 15:13:28 +0200
-> +Subject: [PATCH] #117 implant ZZIP_LIBLATEST for zzip.lib
-
-  I've moved the part that you added down here, so it stays as a git-formatted 
-patch.
-
-[Andreas: Extract link creation for versioned libraries from commit
-0e8d35f92efb680c81f6ec1fca9f11d173dce389.]
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-
+> ---
+>   ...h-core.c-fix-build-without-slotevent.patch | 37 +++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+>   create mode 100644 package/pkcs11-helper/0001-lib-pkcs11h-core.c-fix-build-without-slotevent.patch
+> 
+> diff --git a/package/pkcs11-helper/0001-lib-pkcs11h-core.c-fix-build-without-slotevent.patch b/package/pkcs11-helper/0001-lib-pkcs11h-core.c-fix-build-without-slotevent.patch
+> new file mode 100644
+> index 0000000000..5b2829c5ca
+> --- /dev/null
+> +++ b/package/pkcs11-helper/0001-lib-pkcs11h-core.c-fix-build-without-slotevent.patch
+> @@ -0,0 +1,37 @@
+> +From 754911f553414a77d5b52001f5ef6e3a1314c4d5 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 20 Mar 2022 08:50:15 +0100
+> +Subject: [PATCH] lib/pkcs11h-core.c: fix build without slotevent
 > +
+> +Fix the following build failure with --disable-slotevent:
+> +
+> +/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libpkcs11-helper.so: undefined reference to `_pkcs11h_slotevent_init'
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/fcaa70cc035d6f9d35dfa8d564e9948c7e1cfd9e
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/OpenSC/pkcs11-helper/pull/50]
 > +---
-> + zzip/CMakeLists.txt | 57 +++++++++++++++++++++++++++++++++++----------
-> + 1 file changed, 45 insertions(+), 12 deletions(-)
+> + lib/pkcs11h-core.c | 2 ++
+> + 1 file changed, 2 insertions(+)
 > +
-> +diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
-> +index a966d5f..ccd08b6 100644
-> +--- a/zzip/CMakeLists.txt
-> ++++ b/zzip/CMakeLists.txt
-> +@@ -28,6 +28,12 @@ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" OFF)
-> + option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" OFF)
-> + endif()
+> +diff --git a/lib/pkcs11h-core.c b/lib/pkcs11h-core.c
+> +index d7bb4cd..0bf11e8 100644
+> +--- a/lib/pkcs11h-core.c
+> ++++ b/lib/pkcs11h-core.c
+> +@@ -726,9 +726,11 @@ pkcs11h_setProperty (
 > +
-> ++if(ZZIP_LIBTOOL OR ZZIP_PKGCONFIG)
-> ++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" ON)
-> ++else()
-> ++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" OFF)
-> ++endif()
-> ++
-> + # used in zzip/_config.h
-> + set(ZZIP_PACKAGE "${PROJECT_NAME}lib")
-> + set(ZZIP_VERSION "${PROJECT_VERSION}")
-> +@@ -346,6 +340,45 @@ if(ZZIP_LIBTOOL)
-> +   endif(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
-> + endif(ZZIP_LIBTOOL)
+> + 	switch (property) {
+> + 		case PKCS11H_PROPERTY_SLOT_EVENT_HOOK:
+> ++#if defined(ENABLE_PKCS11H_SLOTEVENT)
+> + 			if ((rv = _pkcs11h_slotevent_init ()) != CKR_OK) {
+> + 				goto cleanup;
+> + 			}
+> ++#endif
+> + 		break;
+> + 	}
+> + cleanup:
+> +--
+> +2.35.1
 > +
-> ++if(ZZIP_LIBLATEST)
-> ++  if(BUILD_SHARED_LIBS)
-> ++    set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
-> ++    set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
-> ++  else()
-> ++    set(lib ${CMAKE_STATIC_LIBRARY_PREFIX})
-> ++    set(dll ${CMAKE_STATIC_LIBRARY_SUFFIX})
-> ++  endif()
-> ++    get_target_property(libname libzzip OUTPUT_NAME)
-> ++    get_target_property(librelease libzzip RELEASE_POSTFIX)
-> ++    add_custom_target(libzzip_latest ALL
-> ++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
-> ++        )
-> ++    install(FILES
-> ++        ${outdir}/${lib}${libname}${dll}
-> ++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-> ++    if(ZZIPFSEEKO)
-> ++    get_target_property(libname libzzipfseeko OUTPUT_NAME)
-> ++    get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
-> ++    add_custom_target(libzzipfseeko_latest ALL
-> ++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
-> ++        )
-> ++    install(FILES
-> ++        ${outdir}/${lib}${libname}${dll}
-> ++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-> ++    endif(ZZIPFSEEKO)
-> ++    if(ZZIPMMAPPED)
-> ++    get_target_property(libname libzzipmmapped OUTPUT_NAME)
-> ++    get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
-> ++    add_custom_target(libzzipmmaped_latest ALL
-> ++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
-> ++        )
-> ++    install(FILES
-> ++        ${outdir}/${lib}${libname}${dll}
-> ++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-> ++    endif(ZZIPMMAPPED)
-> ++endif(ZZIP_LIBLATEST)
-> ++
-> ++
-> + ## messages ##############################################
-> +
-> + message(STATUS "lib zzipfseeko  to be compiled: ${ZZIPFSEEKO}")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
