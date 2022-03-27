@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04127C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A1F3C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 27 Mar 2022 15:37:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C8BA60E2E;
-	Sun, 27 Mar 2022 15:36:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEDD44062A;
+	Sun, 27 Mar 2022 15:37:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8E_w006PHdTE; Sun, 27 Mar 2022 15:36:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RlSsRAyDVLzI; Sun, 27 Mar 2022 15:37:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCB3A6068D;
-	Sun, 27 Mar 2022 15:36:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A212C1BF3B9
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:36:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EFE24020B;
+	Sun, 27 Mar 2022 15:37:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BC64B1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E2A96068D
- for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:36:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC01881ADE
+ for <buildroot@lists.busybox.net>; Sun, 27 Mar 2022 15:37:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jEVf3yfqMKaq for <buildroot@lists.busybox.net>;
- Sun, 27 Mar 2022 15:36:50 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SupxqvrWOa0C for <buildroot@lists.busybox.net>;
+ Sun, 27 Mar 2022 15:37:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C9D14605E3
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:36:49 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id bg10so23997425ejb.4
- for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:36:49 -0700 (PDT)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AD49281AF5
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 15:37:05 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id r13so23987708ejd.5
+ for <buildroot@buildroot.org>; Sun, 27 Mar 2022 08:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=DxP4vUguII60nxd2YDckdSLmcXgk2j8PjQNVjwtBf+M=;
- b=VFKJnZDuD4x+5KoeBhrY9kPcypp7HITyFzBqFpYMHxR1STKT/enr7nDOh4U3xWrwQX
- hVjYIx8SNpWn10iNUVLI9N4wf/sugVFAETfG6DA972qTfMiBb7ojIphF76vee07paUm0
- yRmScZLbwsXzsAI505ku9yayiOXx5MZCZuNca09jz72El5F4iZTRY04ntXz8Bfpk8yKX
- iwPZDaqegz6kjeYDG5IVyujW5kUY9YpAoEshmueaQfuyFNVeal8Uju5GkI1rgpjTDx03
- Q1x3OzIQfyIJv7UP+ja0WN7Ubu0FWcY7hpbT+2/rYOU8fXViuW8HBwJGK02heFo+Ewmn
- jqFQ==
+ bh=Mi/s6vYD7bzpLj7h1tRoAxl4FSvsCVBFuMn641pSNAY=;
+ b=BXb1mIeLuqJg0uFZE3GdZJ/s7zPLwH+sWZjkJaf8vhAacrzDOvd8VxgVihwd+qzUFZ
+ Cqks0gpS4IsDS+epTeDFRceQok4RYke6IAzc9iv3ITkshS899mgnb5KSz4w2YQ96lHMj
+ /plnbAGH8ZiLD0on6o8sLGiIuVnNkNmRMB1VE6kcKQZEXWAS3pNA/n2yVkCs+80B6SVg
+ SHND08cZFgiyh195s7jMiMuWL+bCYFKGwBwD5l9mK/RrvdDh9WvgROeA8XbhITrFUcyT
+ qVfAjVt8aephY5xTCcZ/HAxtghXRSoZO4bHgEefBJ+Josvtr3tDckG7COyPCWtKfIeqx
+ tfUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=DxP4vUguII60nxd2YDckdSLmcXgk2j8PjQNVjwtBf+M=;
- b=u51OxGX0rqgBupp76v9MCpDsn0sSuR0kXew1AnIE6XG7FLwog5zsxVetu0xUyno5tE
- 6XNIZFV3NKHnuANAaoFH4TsbwTt+oq8/T8EzGNqT1yatp90C42lLM98J4swaAgtEUMxb
- BAwoPXEyjaq9TZ0cnHMngh03FyLt7PUq4f0/kIKKvA3q1pZTAHtsIYOhrV+hbnHDCgj6
- JjHH7GglFCfZuXbVDiztHrH4XZbClsbo1HUd8wcwsaj+AynYp3mfdHkAyrmZ9l9RQdh6
- 3fB75ELkFYvxe3TfnG6PWczKUxBtto/5XZdTskrdenhfXVbJ6mzZe229m6ATwvdRkFZe
- zJ0A==
-X-Gm-Message-State: AOAM533jhz8GHHlbJkEq56BvXWXd/uLY7LZLeppslTfLNEU0ZCs2T1Me
- XJ4MOb2PXx84QCvumiyMusuCoA==
-X-Google-Smtp-Source: ABdhPJyF/yrLpTLZYkRxh1AZAPQCGY6bUswKI7I1KvsuhfWweFVaMu/H8ZycwaMDVZRYClO3O/qG4A==
-X-Received: by 2002:a17:907:961f:b0:6db:c8f3:dc72 with SMTP id
- gb31-20020a170907961f00b006dbc8f3dc72mr22380705ejc.92.1648395408072; 
- Sun, 27 Mar 2022 08:36:48 -0700 (PDT)
+ bh=Mi/s6vYD7bzpLj7h1tRoAxl4FSvsCVBFuMn641pSNAY=;
+ b=iHgi5O1C+Nu2a7cP0+yPIiR2lqOTkmMT3tNm6FQflEroY7gA9HEciqApSJC8sC4pID
+ E2JdFvZTp/JNJNmPvH6McGE2utJM4oz4u+Faj8i+Ynh9pgdpFl1h5Ey9tOzl9js44r24
+ MPFONVWLMA/UbKcrdz3M5mT0DdsVITgBR+De7sJ8guA62kPTHkwqQ9mBMmhifQjmFdFM
+ hhx6Y9ZYa6W0SGL/fjBkberNiuJSvBJpUtoJ9mSIzI5yYksOhs87pKHRMJrgVDgVhUjS
+ WZMvqQTBf4+i2MElXL9gpDXBxeB6FSteR1bmGhaga2vblNKYfWdJ9F8DLm3a5881vPcQ
+ WhkQ==
+X-Gm-Message-State: AOAM533J8GTfv0SSHEcjSGzq7nlDT/9osYHvWFIxlTPah0rgO63QZl0a
+ 0NOBJynkro1QWTJaR48tLvHPXg==
+X-Google-Smtp-Source: ABdhPJxWjVBIeHzdgFG1x5syuTgYPT/ysUR3UWQHtNmP6prOFxD1AIonJD0rWvU0JPGwUtXfTk5JEw==
+X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id
+ i7-20020a1709064fc700b006da92b2f572mr22614646ejw.184.1648395423946; 
+ Sun, 27 Mar 2022 08:37:03 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- g13-20020a50bf4d000000b00410d407da2esm5931655edk.13.2022.03.27.08.36.47
+ d1-20020a17090694c100b006da91d57e93sm4679627ejy.207.2022.03.27.08.37.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 27 Mar 2022 08:36:47 -0700 (PDT)
-Message-ID: <41c83efd-fef0-2462-befa-de14a47dc5e7@mind.be>
-Date: Sun, 27 Mar 2022 17:36:46 +0200
+ Sun, 27 Mar 2022 08:37:03 -0700 (PDT)
+Message-ID: <fba60289-c47b-0932-79b0-1a74035ca0ee@mind.be>
+Date: Sun, 27 Mar 2022 17:37:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Yair Ben-Avraham <yairba@protonmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <m8NCoWfElcFVVs6rJ5aCIPGaUztk0BOtLtImkjPWh0hVSsTMeKi8UxpeX71YI_AuRCYpynLSeSrBZ6avQPcmu9iqPseHAKLKLSzRq2_0lx8=@protonmail.com>
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+References: <20220318131058.32240-1-ps.report@gmx.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <m8NCoWfElcFVVs6rJ5aCIPGaUztk0BOtLtImkjPWh0hVSsTMeKi8UxpeX71YI_AuRCYpynLSeSrBZ6avQPcmu9iqPseHAKLKLSzRq2_0lx8=@protonmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/tpm2-tss: bump version to 3.2.0
+In-Reply-To: <20220318131058.32240-1-ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/libcamera-apps: X11 support
+ needs libdrm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,8 +102,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 18/03/2022 10:03, Yair Ben-Avraham via buildroot wrote:
-> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+On 18/03/2022 14:10, Peter Seiderer wrote:
+> - X11 support needs libdrm (optional libdrm dependency already
+>    present in libcamera-apps.mk)
+> 
+> Fixes:
+> 
+>    http://autobuild.buildroot.net/results/5df48038df5deb4f1e85287cde9a403c5681c28e
+> 
+>    .../build/libcamera-apps-2d1009e3badcc8047361ff81149ad6cba3b911b5/preview/egl_preview.cpp:18:10: fatal error: libdrm/drm_fourcc.h: No such file or directory
+>       18 | #include <libdrm/drm_fourcc.h>
+>          |          ^~~~~~~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
   Applied to master, thanks.
 
@@ -109,38 +122,21 @@ On 18/03/2022 10:03, Yair Ben-Avraham via buildroot wrote:
   Arnout
 
 > ---
->   package/tpm2-tss/tpm2-tss.hash | 2 +-
->   package/tpm2-tss/tpm2-tss.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/libcamera-apps/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-> index b6eb3c1f97..db6b3b7ad0 100644
-> --- a/package/tpm2-tss/tpm2-tss.hash
-> +++ b/package/tpm2-tss/tpm2-tss.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed:
-> -sha256  8900a6603f74310b749b65f23c3461cde6e2a23a5f61058b21004c25f9cf19e8  tpm2-tss-3.1.0.tar.gz
-> +sha256  48305e4144dcf6d10f3b25b7bccf0189fd2d1186feafd8cd68c6b17ecf0d7912  tpm2-tss-3.2.0.tar.gz
->   sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-> index 060883c377..568ac35c8f 100644
-> --- a/package/tpm2-tss/tpm2-tss.mk
-> +++ b/package/tpm2-tss/tpm2-tss.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
-> 
-> -TPM2_TSS_VERSION = 3.1.0
-> +TPM2_TSS_VERSION = 3.2.0
->   TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
->   TPM2_TSS_LICENSE = BSD-2-Clause
->   TPM2_TSS_LICENSE_FILES = LICENSE
-> --
-> 2.30.2
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
+> index a1affc2d23..492a99cf55 100644
+> --- a/package/libcamera-apps/Config.in
+> +++ b/package/libcamera-apps/Config.in
+> @@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+>   	select BR2_PACKAGE_LIBPNG
+>   	select BR2_PACKAGE_TIFF
+>   	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+> +	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+>   	select BR2_PACKAGE_LIBEPOXY if BR2_PACKAGE_XORG7 && (BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+>   	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
+>   	select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
