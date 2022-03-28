@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23000C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9336C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:54:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 624FA40ABB;
-	Mon, 28 Mar 2022 19:53:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8263C404F7;
+	Mon, 28 Mar 2022 19:54:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u2f_KvqevIR1; Mon, 28 Mar 2022 19:53:02 +0000 (UTC)
+	with ESMTP id 7D9UNg6Ff_3E; Mon, 28 Mar 2022 19:54:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96B4740AA2;
-	Mon, 28 Mar 2022 19:53:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A37F51BF2BA
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:52:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4561440191;
+	Mon, 28 Mar 2022 19:54:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 440B61BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:54:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 875E660FBF
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:52:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DE928139E
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:54:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vdf0gTcOjfEl for <buildroot@lists.busybox.net>;
- Mon, 28 Mar 2022 19:52:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K1weryAE_Oik for <buildroot@lists.busybox.net>;
+ Mon, 28 Mar 2022 19:54:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 98593607F7
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 19:52:55 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id bg10so30882073ejb.4
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 12:52:55 -0700 (PDT)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 541EB81396
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 19:54:29 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so30881715ejd.5
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 12:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=x9Hvu5xmturhJwFcjWq7eML3qTuduyqnmoY0eHNvjRU=;
- b=hh7Q1S2YSoHhk4FxmWlGVvxW1bidOG4+kNa3nhgPoRnNgCR61+gpuz5mjmME6pJeDd
- K7WXkjHlvuEvtMfRW25qQWIowPZ6AKbh8BBVErhlgVB+PEBmmfJTbbeJ6s8EpiXcxRRz
- 2z8MuTe5zR63HcC8dljSA1/QkRC7oBcU36h4rRIf7Q1JNEJg1ckum59GFe7d/53p4Anc
- 9fxE+oMLhhAe0z50vGKAB/BXeZpK5gzc1i9wn80KZu/Bpt09KYq11ly/L+/2ggiC2O9G
- au5UuClad62F7TevjYTM75aBWu/ABOCKwbej0glV6yzGw/cVmonkwi/9Wx+5fKYtBoT0
- U5Kg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=g9JjnxVr5xlYH6wVdH9sgVaqV7e03mSyaHj31m4p3h4=;
+ b=HMrU0ng/UpzbEJItiTTdGuJNu7aJqF9KmMmApisB1HSWaxGpd7fkv1C7mn/q5AX/jQ
+ UlTOJ3PbzUGhnc1DVz9hRoUTp5vzokA1TjCcfbSqetHzTB0SzaGmG3EGYkz1JZ0Go64A
+ tpgHdi4Gcd0LNE85OLUt4pN/UWEXuaPj+cxqPnBIBqqYMn+bMevLXUjUoA2ckH9Y4ZNY
+ NJIQi6VxsMfNCaPj5HkaeBqbKtfrbsklZ1fZdi+IaIspnTN2agAbZePZNT/kz90nrTv4
+ H7CtcWqt81hhdldgz/Nm/8mtXMqaZlyh+nK373d4gZLecnleKLYYgLuf1rb8SgeS6Oqg
+ Pngw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=x9Hvu5xmturhJwFcjWq7eML3qTuduyqnmoY0eHNvjRU=;
- b=vPw01xGq+HuS3+nBXZdFURKbZ5Sf3iAFG6PNeHNw0s5x0x1e3QUsRVhVMH6qCqLCdu
- siVJQWy5qau/ZFqI6ERFAPkJSEQ+clOki8nwgSYwXdznzgRzEPwYxLG3MIEE7RzZ8oeO
- lFiRieiWF4CY24klfhGUagpgegvbLEREvsLvbz0WYduT87WOwK66uW5bWMRNOQrp+oOs
- SoEviMqWAcakApT67pi8dRgKSTRovc42o9/VjsF/+Ufftz5McL23G3O9DGe3OGlt1Lj9
- lLRJn6JALUmdltiLQXfhndnToWy3tilngBjHlTY6lv3vU0UxNProDvZoOeoIfxmwwikz
- sR6g==
-X-Gm-Message-State: AOAM533TeXjvGR/CIT7khoGUooT9Q3HI3QaavrcDgchOF+LHRNqz01VP
- sWR53TS4PkeNdlEujfJvzwFCS+RpkBAITg==
-X-Google-Smtp-Source: ABdhPJzqdZmTHgZBASMifTZ5is4AGcSFujavwddDEc0jz8fAMC/EOmNOZBQtjZBzsSHsK3lZrvt/Wg==
-X-Received: by 2002:a17:906:4fc3:b0:6e0:66a5:d59c with SMTP id
- i3-20020a1709064fc300b006e066a5d59cmr29099148ejw.131.1648497173476; 
- Mon, 28 Mar 2022 12:52:53 -0700 (PDT)
+ bh=g9JjnxVr5xlYH6wVdH9sgVaqV7e03mSyaHj31m4p3h4=;
+ b=w/Eo6x5taOSCL0v4XJSuEWghpxL+mrDXRWlFlA8438/uVkBhTXADE6+Q8+05H3824/
+ Qw8upklYgftT4wAJhKWe70Xxz1KPooz4YkRydOUPf+cNVPdtsxqtROd62uBzdgxYVwoP
+ f2nJYtfnVNPPCtIzrKmSehN4TDevTQc01SkPkSBCnpZaVkZtrWZuZc09Mgxhuo6et/eZ
+ ocJco89Jcj9WtzX1PTSn13FBDVdOSaiWMyUzO3QAnYfImB/YxoOH3vlv3VPucrkNHb/o
+ rFFy6aUVEW6rHYAi+3DEUHfSktW9puK1zXCCGwmqT7xWlCaUWX7moFSKfg7bNDZhLqVM
+ WqSg==
+X-Gm-Message-State: AOAM5311mIRaP+zuXy01POI5zLBZ7Cz7Y5c4u5mOEzA98PaebIdy7fic
+ vqs+HKsQvZo1oBmRCtc1bxlm/Q==
+X-Google-Smtp-Source: ABdhPJyK1WB4Zl8N51M+npUdanvSjzjlptoSiWEmHAo8/5HO8gZ5sxfO4r1WnBIoDAol3NRh4s2Oeg==
+X-Received: by 2002:a17:907:6e2a:b0:6db:c440:532b with SMTP id
+ sd42-20020a1709076e2a00b006dbc440532bmr29975511ejc.95.1648497267299; 
+ Mon, 28 Mar 2022 12:54:27 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- k8-20020a1709067ac800b006e0d47d3a63sm3422446ejo.84.2022.03.28.12.52.51
+ sh15-20020a1709076e8f00b006df881fd066sm6324328ejc.9.2022.03.28.12.54.25
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 28 Mar 2022 12:52:52 -0700 (PDT)
-Message-ID: <88e09ed0-f4d9-bc00-e596-540111c707ce@mind.be>
-Date: Mon, 28 Mar 2022 21:52:50 +0200
+ Mon, 28 Mar 2022 12:54:26 -0700 (PDT)
+Message-ID: <9470c420-5f40-c626-173d-a7e22571ba7a@mind.be>
+Date: Mon, 28 Mar 2022 21:54:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: Lang Daniel <d.lang@abatec.at>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <VI1P190MB0493DD283963AD9660AF6CCE9F1D9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+To: Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org
+References: <20220328111413.1618964-1-foss+buildroot@0leil.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <VI1P190MB0493DD283963AD9660AF6CCE9F1D9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Subject: Re: [Buildroot] [PATCH 1/1] package/dbus-cxx: bump to version 2.2.0
+In-Reply-To: <20220328111413.1618964-1-foss+buildroot@0leil.net>
+Subject: Re: [Buildroot] [PATCH 1/2] package/qt5base: fix race with
+ libxkbcommon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,6 +96,10 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+ Joshua Henderson <joshua.henderson@microchip.com>,
+ Julien Corjon <corjon.j@ecagroup.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,35 +107,62 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 28/03/2022 14:29, Lang Daniel via buildroot wrote:
-> - License has been changed from GPL to LGPL or BSD-3-Clause
-> - Drop upstream patches
+On 28/03/2022 13:14, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 > 
-> Signed-off-by: Daniel Lang <d.lang@abatec.at>
-[snip]
-> diff --git a/package/dbus-cxx/dbus-cxx.mk b/package/dbus-cxx/dbus-cxx.mk
-> index 3e89fc9db7..b850d45003 100644
-> --- a/package/dbus-cxx/dbus-cxx.mk
-> +++ b/package/dbus-cxx/dbus-cxx.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
+> qt5wayland package currently has a bug if the xkbcommon Qt config is not
+> enabled which highlighted a race issues between qt5base, libxkbcommon
+> and qt5wayland.
+> 
+> qt5wayland has a dependency on libxkbcommon package if it's enabled.
+> qt5base only has a dependency on libxkbcommon if xcb support is to be
+> enabled.
+> 
+> If libxkbcommon package is built before qt5base, qt5base will detect it
+> during its configure step and enable the Qt config accordingly. This
+> will make it available to qt5wayland afterwards, even if xcb support is
+> not enabled in Buildroot Kconfig.
+> 
+> However, if qt5base is built before libxkbcommon is, qt5base will not
+> advertise support of xbcommon feature to qt5wayland (which will fail its
+> build because of a bug in the source code).
+> 
+> Since the package build order should not impact the outcome of the
+> build, let's explicit the dependency if and only if libxkbcommon package
+> is to be compiled at some point in time so that at least this feature is
+> not susceptible to races.
+> 
+> Cc: Quentin Schulz <foss+buildroot@0leil.net>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>   package/qt5/qt5base/qt5base.mk | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 4418f0d3ba..891635ad35 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -168,6 +168,11 @@ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-
+>   QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
+>   QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),directfb)
 >   
-> -DBUS_CXX_VERSION = 2.1.0
-> +DBUS_CXX_VERSION = 2.2.0
->   DBUS_CXX_SITE = $(call github,dbus-cxx,dbus-cxx,$(DBUS_CXX_VERSION))
-> -DBUS_CXX_LICENSE = GPL-3.0, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
-> +DBUS_CXX_LICENSE = LGPL-3.0 or BSD-3-Clause, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
+> +ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
+> +QT5BASE_CONFIGURE_OPTS += -xkbcommon
+> +QT5BASE_DEPENDENCIES   += libxkbcommon
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+>   QT5BASE_CONFIGURE_OPTS += -xcb
+>   QT5BASE_CONFIGURE_OPTS += -xkbcommon
 
-  It's LGPL-3.0+ actually.
-  Applied to master with that fixed, thanks.
+  The existing entries should be removed.
+
+  Applied both to master with that fixed, thanks.
 
   Regards,
   Arnout
 
->   DBUS_CXX_LICENSE_FILES = COPYING cmake-modules/LICENSE_1_0.txt tools/libcppgenerate/LICENSE
->   DBUS_CXX_INSTALL_STAGING = YES
->   DBUS_CXX_DEPENDENCIES = libsigc
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
