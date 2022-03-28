@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A23C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 06:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4685C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 13:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A26B884136;
-	Mon, 28 Mar 2022 06:11:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6P-a6S1vsVXM; Mon, 28 Mar 2022 06:11:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DB428411C;
-	Mon, 28 Mar 2022 06:11:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 883D71BF479
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 06:11:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F85C60B6E
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 06:11:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F23460B9B;
+	Mon, 28 Mar 2022 13:40:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xZ97eeFP7VEJ for <buildroot@lists.busybox.net>;
- Mon, 28 Mar 2022 06:11:43 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bZygcFSFPsqn; Mon, 28 Mar 2022 13:40:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6563160B17;
+	Mon, 28 Mar 2022 13:40:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C71531BF297
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 13:39:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B370D40354
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 13:39:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6EPvL6W7Ii7z for <buildroot@lists.busybox.net>;
+ Mon, 28 Mar 2022 13:39:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D3B960A8A
- for <buildroot@uclibc.org>; Mon, 28 Mar 2022 06:11:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B4514018F
+ for <buildroot@uclibc.org>; Mon, 28 Mar 2022 13:39:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id E5FDB845D1; Mon, 28 Mar 2022 06:02:33 +0000 (UTC)
+ id 36ED085EDA; Mon, 28 Mar 2022 13:30:48 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 28 Mar 2022 06:11:42 +0000
+Date: Mon, 28 Mar 2022 13:39:58 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.11.1
+X-Bugzilla-Version: 2022.02
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jose.pekkarinen@unikie.com
+X-Bugzilla-Who: w.meganck@televic.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -53,12 +53,11 @@ X-Bugzilla-Flags:
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
  target_milestone
-Message-ID: <bug-14701-163@https.bugs.busybox.net/>
+Message-ID: <bug-14706-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14701] New: Multiple unresolved symbols while
- building kernel module package
+Subject: [Buildroot] [Bug 14706] New: nodjs build problem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,108 +69,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNDcwMQoKICAgICAgICAg
-ICAgQnVnIElEOiAxNDcwMQogICAgICAgICAgIFN1bW1hcnk6IE11bHRpcGxlIHVucmVzb2x2ZWQg
-c3ltYm9scyB3aGlsZSBidWlsZGluZyBrZXJuZWwKICAgICAgICAgICAgICAgICAgICBtb2R1bGUg
-cGFja2FnZQogICAgICAgICAgIFByb2R1Y3Q6IGJ1aWxkcm9vdAogICAgICAgICAgIFZlcnNpb246
-IDIwMjEuMTEuMQogICAgICAgICAgSGFyZHdhcmU6IEFsbAogICAgICAgICAgICAgICAgT1M6IExp
-bnV4CiAgICAgICAgICAgIFN0YXR1czogTkVXCiAgICAgICAgICBTZXZlcml0eTogbm9ybWFsCiAg
-ICAgICAgICBQcmlvcml0eTogUDUKICAgICAgICAgQ29tcG9uZW50OiBPdGhlcgogICAgICAgICAg
-QXNzaWduZWU6IHVuYXNzaWduZWRAYnVpbGRyb290LnVjbGliYy5vcmcKICAgICAgICAgIFJlcG9y
-dGVyOiBqb3NlLnBla2thcmluZW5AdW5pa2llLmNvbQogICAgICAgICAgICAgICAgQ0M6IGJ1aWxk
-cm9vdEB1Y2xpYmMub3JnCiAgVGFyZ2V0IE1pbGVzdG9uZTogLS0tCgpIaSwKCkknbSB0cnlpbmcg
-dG8gYnVpbGQgYSBwYWNrYWdlIGZvciBzZ3ggZHJpdmVyOgoKaHR0cHM6Ly9naXRodWIuY29tL2lu
-dGVsL2xpbnV4LXNneAoKVGhlIHBhY2thZ2UgbG9va3MgbGlrZToKCnNneC1kcml2ZXIubWs6Cgoj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwojCiMgc2d4LWRyaXZlcgojCiMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjCgpTR1hfRFJJVkVSX1ZFUlNJT04gPSAyLjE0ClNHWF9EUklWRVJfU09VUkNFID0gc2d4
-X2RyaXZlcl8kKFNHWF9EUklWRVJfVkVSU0lPTikudGFyLmd6ClNHWF9EUklWRVJfU0lURSA9IGh0
-dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC9saW51eC1zZ3gtZHJpdmVyL2FyY2hpdmUvcmVmcy90YWdz
-ClNHWF9EUklWRVJfTElDRU5TRSA9IEJTRC0zLUNsYXVzZSwgR1BMLTIuMApTR1hfRFJJVkVSX0xJ
-Q0VOU0VfRklMRVMgPSBMaWNlbnNlLnR4dAoKJChldmFsICQoa2VybmVsLW1vZHVsZSkpCiQoZXZh
-bCAkKGdlbmVyaWMtcGFja2FnZSkpCgpDb25maWcuaW46Cgpjb21tZW50ICJzZ3gtZHJpdmVyIG5l
-ZWRzIGEgTGludXgga2VybmVsIHRvIGJlIGJ1aWx0IgogICAgICAgIGRlcGVuZHMgb24gIUJSMl9M
-SU5VWF9LRVJORUwKCmNvbmZpZyBCUjJfUEFDS0FHRV9TR1hfRFJJVkVSCiAgICAgICAgYm9vbCAi
-c2d4LWRyaXZlciIKICAgICAgICBkZXBlbmRzIG9uIEJSMl9MSU5VWF9LRVJORUwKICAgICAgICBo
-ZWxwCiAgICAgICAgICBJbnRlbCBzZ3ggZHJpdmVyIGZvciBzZWN1cmVkIGNvbnRhaW5lcnMuCgog
-ICAgICAgICAgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsL2xpbnV4LXNneC1kcml2ZXIKCldoZW4g
-YnVpbGRpbmcgd2l0aCBhIHZhbGlkIGNvbmZpZywgdGhlIGJ1aWxkIHByb2Nlc3MKc3RvcHMgbGlr
-ZSB0aGlzOgoKPj4+IHNneC1kcml2ZXIgMi4xNCBCdWlsZGluZyBrZXJuZWwgbW9kdWxlKHMpClBB
-VEg9Ii91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2hvc3QvYmlu
-Oi91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2hvc3Qvc2Jpbjov
-dXNyL2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9zYmluOi9i
-aW4iClBLR19DT05GSUc9Ii91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRy
-ZW1lL2hvc3QvYmluL3BrZy1jb25maWciClBLR19DT05GSUdfU1lTUk9PVF9ESVI9Ii8iIFBLR19D
-T05GSUdfQUxMT1dfU1lTVEVNX0NGTEFHUz0xClBLR19DT05GSUdfQUxMT1dfU1lTVEVNX0xJQlM9
-MQpQS0dfQ09ORklHX0xJQkRJUj0iL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZf
-dXB4dHJlbWUvaG9zdC9saWIvcGtnY29uZmlnOi91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRw
-dXRfeDg2X3VweHRyZW1lL2hvc3Qvc2hhcmUvcGtnY29uZmlnIgpCUl9CSU5BUklFU19ESVI9L3Vz
-ci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvaW1hZ2VzCktDRkxBR1M9
-LVduby1hdHRyaWJ1dGUtYWxpYXMgL3Vzci9iaW4vbWFrZSAtajkgLUMKL3Vzci9zcmMvb3V0cHV0
-L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVpbGQvbGludXgtdGMteDg2LTUuMTUtc2Vj
-CkhPU1RDQz0iL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvaG9z
-dC9iaW4vY2NhY2hlCi91c3IvYmluL2djYyAtTzIgLUkvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4v
-b3V0cHV0X3g4Nl91cHh0cmVtZS9ob3N0L2luY2x1ZGUKLUwvdXNyL3NyYy9vdXRwdXQvYnJfYWRt
-aW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9ob3N0L2xpYgotV2wsLXJwYXRoLC91c3Ivc3JjL291dHB1
-dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2hvc3QvbGliIiBBUkNIPXg4Nl82NApJTlNU
-QUxMX01PRF9QQVRIPS91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1l
-L3RhcmdldApDUk9TU19DT01QSUxFPSIvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
-Nl91cHh0cmVtZS9ob3N0L2Jpbi94ODZfNjQtVElJLWxpbnV4LWdudS0iCkRFUE1PRD0vdXNyL3Ny
-Yy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9ob3N0L3NiaW4vZGVwbW9kCklO
-U1RBTExfTU9EX1NUUklQPTEgClBXRD0vdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
-Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLgpNPS91c3Ivc3JjL291dHB1dC9icl9h
-ZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2J1aWxkL3NneC1kcml2ZXItMi4xNC8uIG1vZHVsZXMK
-bWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5CicvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0
-cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9saW51eC10Yy14ODYtNS4xNS1zZWMnCiAgQ0MgW01dIAov
-dXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJp
-dmVyLTIuMTQvLi9zZ3hfbWFpbi5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4v
-b3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfcGFnZV9jYWNo
-ZS5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVt
-ZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfaW9jdGwubwogIENDIFtNXSAKL3Vzci9zcmMv
-b3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0
-Ly4vc2d4X3ZtYS5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
-Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfdXRpbC5vCiAgQ0MgW01dIAov
-dXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJp
-dmVyLTIuMTQvLi9zZ3hfZW5jbC5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4v
-b3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfZW5jbDIubwog
-IExEIFtNXSAKL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVp
-bGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNneC5vCiAgTU9EUE9TVAovdXNyL3NyYy9vdXRwdXQvYnJf
-YWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9Nb2R1bGUu
-c3ltdmVycwpFUlJPUjogbW9kcG9zdDogImZsdXNoX3dvcmsiClsvdXNyL3NyYy9vdXRwdXQvYnJf
-YWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9pc2d4Lmtv
-XQp1bmRlZmluZWQhCkVSUk9SOiBtb2Rwb3N0OiAicHV0X3BpZCIKWy91c3Ivc3JjL291dHB1dC9i
-cl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2J1aWxkL3NneC1kcml2ZXItMi4xNC8uL2lzZ3gu
-a29dCnVuZGVmaW5lZCEKRVJST1I6IG1vZHBvc3Q6ICJ1cF9yZWFkIgpbL3Vzci9zcmMvb3V0cHV0
-L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNn
-eC5rb10KdW5kZWZpbmVkIQpFUlJPUjogbW9kcG9zdDogImJvb3RfY3B1X2RhdGEiClsvdXNyL3Ny
-Yy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIu
-MTQvLi9pc2d4LmtvXQp1bmRlZmluZWQhCkVSUk9SOiBtb2Rwb3N0OiAic3lzdGVtX2ZyZWV6aW5n
-X2NudCIKWy91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2J1aWxk
-L3NneC1kcml2ZXItMi4xNC8uL2lzZ3gua29dCnVuZGVmaW5lZCEKRVJST1I6IG1vZHBvc3Q6ICJt
-bXVfbm90aWZpZXJfcmVnaXN0ZXIiClsvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
-Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9pc2d4LmtvXQp1bmRlZmluZWQhCkVS
-Uk9SOiBtb2Rwb3N0OiAiX193YXJuX3ByaW50ayIKWy91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9v
-dXRwdXRfeDg2X3VweHRyZW1lL2J1aWxkL3NneC1kcml2ZXItMi4xNC8uL2lzZ3gua29dCnVuZGVm
-aW5lZCEKRVJST1I6IG1vZHBvc3Q6ICJfX3g4Nl9pbmRpcmVjdF9hbHRfY2FsbF9yYngiClsvdXNy
-L3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVy
-LTIuMTQvLi9pc2d4LmtvXQp1bmRlZmluZWQhCkVSUk9SOiBtb2Rwb3N0OiAiX194ODZfaW5kaXJl
-Y3RfdGh1bmtfcmN4IgpbL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJl
-bWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNneC5rb10KdW5kZWZpbmVkIQpFUlJPUjogbW9k
-cG9zdDogImFsbG9jX3BhZ2VzIgpbL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZf
-dXB4dHJlbWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNneC5rb10KdW5kZWZpbmVkIQpXQVJO
-SU5HOiBtb2Rwb3N0OiBzdXBwcmVzc2VkIDY1IHVucmVzb2x2ZWQgc3ltYm9sIHdhcm5pbmdzIGJl
-Y2F1c2UgdGhlcmUgd2VyZQp0b28gbWFueSkKV0FSTklORzogbW9kcG9zdDogbW9kcG9zdDogRm91
-bmQgMiB3cml0YWJsZSBmdW5jdGlvbiBwb2ludGVycy4KCldoaWxlIHRoZSBzeW1ib2xzIGNhbiBi
-ZSBmb3VuZCBpbiB0aGUgb3JpZ2luYWwKc291cmNlIGNvZGUgb2YgdGhlIGtlcm5lbC4gQW0gSSBt
-aXNzaW5nIHNvbWV0aGluZwppbiB0aGUgcGFja2FnZSB0byByZXNvbHYgdGhlIHN5bWJvbHM/CgpU
-aGFua3MhCgpKb3PDqS4KCi0tIApZb3UgYXJlIHJlY2VpdmluZyB0aGlzIG1haWwgYmVjYXVzZToK
-WW91IGFyZSBvbiB0aGUgQ0MgbGlzdCBmb3IgdGhlIGJ1Zy4KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+https://bugs.busybox.net/show_bug.cgi?id=14706
+
+            Bug ID: 14706
+           Summary: nodjs build problem
+           Product: buildroot
+           Version: 2022.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: w.meganck@televic.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
+
+Have a build problem with nodejs.
+
+mkdir -p
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/bin
+ln -sf
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/python3
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/bin/python
+/bin/sed -i -e "s%@MAYBE_WRAPPER@%%g"
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/node.gyp
+/bin/sed -i -e "s%@MAYBE_WRAPPER@%%g"
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/tools/v8_gypfiles/v8.gyp
+(cd
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3;
+PATH="/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin:/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/microchip/xc16/v1.41/bin:/opt/microchip/xc16/v1.41/bin"
+PKG_CONFIG="/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/pkg-config"
+PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+PKG_CONFIG_LIBDIR="/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib/pkgconfig:/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/share/pkgconfig"
+AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm"
+CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp"
+OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib"
+CPPFLAGS="-I/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include"
+CFLAGS="-O2
+-I/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include"
+CXXFLAGS="-O2
+-I/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include"
+LDFLAGS="-L/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib
+-Wl,-rpath,/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib"
+INTLTOOL_PERL=/usr/bin/perl
+PATH=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/bin:"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin:/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/microchip/xc16/v1.41/bin:/opt/microchip/xc16/v1.41/bin"
+PYTHON=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/python3
+/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/python3
+./configure
+--prefix=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host
+--without-dtrace --without-etw --shared-openssl
+--shared-openssl-includes=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include
+--shared-openssl-libpath=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib
+--shared-zlib --no-cross-compiling --with-intl=system-icu )
+Node.js configure: Found Python 3.10.2...
+Traceback (most recent call last):
+  File
+"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/./configure",
+line 30, in <module>
+    import configure
+  File
+"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/configure.py",
+line 14, in <module>
+    import bz2
+  File
+"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib/python3.10/bz2.py",
+line 17, in <module>
+    from _bz2 import BZ2Compressor, BZ2Decompressor
+ModuleNotFoundError: No module named '_bz2'
+package/pkg-generic.mk:272: recipe for target
+'/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/.stamp_configured'
+failed
+make[1]: ***
+[/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/.stamp_configured]
+Error 1
+Makefile:23: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
