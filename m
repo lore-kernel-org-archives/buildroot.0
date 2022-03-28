@@ -1,90 +1,154 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B19CEC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 20:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B21EAC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 21:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 689D34157F;
-	Mon, 28 Mar 2022 20:36:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15ECA40A96;
+	Mon, 28 Mar 2022 21:04:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LVLi7Ik8ceWf; Mon, 28 Mar 2022 20:36:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF31441519;
-	Mon, 28 Mar 2022 20:36:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6BDF61BF388
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 20:36:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6633140120
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 20:36:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PFtayoItwsoe for <buildroot@lists.busybox.net>;
- Mon, 28 Mar 2022 20:36:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 08F5240117
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 20:36:01 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id a17so18329791edm.9
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 13:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=qFMOzYIo2oNaq1JtRs64FdGscLfRDbwVrCSSmvQw4+s=;
- b=fvmTfahXVRgzVZ7zOl8K/41Wpi4JsbEf2bPueGD3gEMFUGAdMiy1/2cTojxfNSsjVO
- HKpHKO2+aqliC5ntTBovEczal1VTmdGmNg6zsWG35YYNqSrLVsW5SckOCBGeLReF/zON
- GfMD2wWUmFqY6Y72IADjr1Uxh1YODk2pymb5faFB/vjIN9J8xoH7pBm03zIky4XI5f04
- W3L+Elq20Tum6VS+E/+cKST51RB4u4TZ+vU7cDTKDIlR3tKeMRSFIF3PW+FMwC/8Tx+o
- 5bhe9DNmyKs6tXHD12y8bJ27zdeN5hlCuxkJ8yG8/nMrNQvsjhK0bWXcqqTwkNvlp994
- 8WzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=qFMOzYIo2oNaq1JtRs64FdGscLfRDbwVrCSSmvQw4+s=;
- b=fE41mvDBc4qRL9bl/a079BXQDtIsBshi0o2sJjbpbi8tOjTJHDmiydNFh/41cl49Ad
- WxMghVIMXidiFDqnplNphh2gv9LaaGImuofnASEe8N5ki08DZOoUrlnEXubctOFQv/T1
- cOhE01eBUTc4v35vC+ErjSKGfdvc4fvWbZZhYynBUUJX6C56WSvlIT/o2x+SrN+eYr+l
- FWac56QLhZa7F8FOdWKGMgjQOYr4+dHJmx3qncENr+T7+DKLqvGYOvd3UICJwxSQ7ygo
- 6hhb525fcIqLgt4j1/PWxmgayLETKQYjEqyXsskHaqMVeTDeOm0n39eGc2dEDn3Rc+/1
- LGKQ==
-X-Gm-Message-State: AOAM533nBw4ny/T32PZxZ4crBOgMZYxQSH6d/fsfJUyN8L4kinZmd/m4
- 5abzH2GyCcT17cJF2btB26umvQ==
-X-Google-Smtp-Source: ABdhPJxnnD/6qMWM2rVpKZMLymVNJSO1QakAGuaSdjulC0KR5MiUB0vKNHi2BCo9cXeCq59H6nGblA==
-X-Received: by 2002:a05:6402:4414:b0:408:4dc0:3ee9 with SMTP id
- y20-20020a056402441400b004084dc03ee9mr18450373eda.203.1648499759841; 
- Mon, 28 Mar 2022 13:35:59 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- nc13-20020a1709071c0d00b006dfa376ee55sm6355758ejc.131.2022.03.28.13.35.58
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 28 Mar 2022 13:35:59 -0700 (PDT)
-Message-ID: <8f356e94-2fe6-2d89-4d50-b8c2da1c96b7@mind.be>
-Date: Mon, 28 Mar 2022 22:35:58 +0200
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X4WZDpe6sbIw; Mon, 28 Mar 2022 21:04:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D998740242;
+	Mon, 28 Mar 2022 21:04:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 346791BF366
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 21:04:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56EBB81A39
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 21:04:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=collins.com header.b="Ny0QJecI";
+ dkim=pass (1024-bit key) header.d=rtxusers.onmicrosoft.us
+ header.b="zQUtwu7e"
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T30cfwox_bwB for <buildroot@lists.busybox.net>;
+ Mon, 28 Mar 2022 21:04:38 +0000 (UTC)
+X-Greylist: delayed 00:35:12 by SQLgrey-1.8.0
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 60A7C813A0
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 21:04:38 +0000 (UTC)
+Received: from pps.filterd (m0072139.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
+ 22SKBch8015961; Mon, 28 Mar 2022 20:29:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=collins.com;
+ h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=POD051818;
+ bh=S8HSTBF9L0nSS47a4bOJJb1ndlmFo1jx8tR4xyl7Ix4=;
+ b=Ny0QJecIhSIBP+OxqmwTzoaGb/qBYyWDy6l+GXABO2d3zoKeKrQNCBWFMluQ4fhbbHYJ
+ KatmWBeUqwQGiVSIDQWfGOxZsO2xX4cMNee1qvKdwAnfUELNSrcZ0tKB8/6yCt/pEOWe
+ 6awsM34VtJPjmYCN8KEmiZE7iesFZfsqmvj9p9d/Z7ygVg6zc417SwpJ9lIFwk4g1mb/
+ bPpx6vDAAqjhhLJpMswKr/c3KwYpZmfVT1gB6s+QdRNBpaa4Ab8WXTfZ8+Nw91LYSsPV
+ Cm6cBP/Kpz7lnHwh9JP+euT3q/IzN2nBxKnW+Syjeaqy2+iqH+dB1AuI6iFQ5QkLwdYX Uw== 
+Received: from xnwpv37.utc.com ([167.17.239.17])
+ by mx0a-00105401.pphosted.com with ESMTP id 3f1r6qgub4-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 28 Mar 2022 20:29:23 +0000
+Received: from qusnwadw.utcapp.com (QUSNWADW.utcapp.com [10.161.48.87])
+ by xnwpv37.utc.com (8.16.1.2/8.16.1.2) with ESMTPS id 22SKTLFj195946
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 28 Mar 2022 20:29:21 GMT
+Received: from UUSTOE24.utcmail.com (uustoe24.utcmail.com [10.221.63.38])
+ by qusnwadw.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 22SKTLrj001938
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=OK);
+ Mon, 28 Mar 2022 20:29:21 GMT
+Received: from uustoe20.utcmail.com (10.221.63.20) by UUSTOE24.utcmail.com
+ (10.221.63.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.922.27; Mon, 28 Mar
+ 2022 16:29:21 -0400
+Received: from uustoe1z.utcmail.com (10.221.63.19) by uustoe20.utcmail.com
+ (10.221.63.20) with Microsoft SMTP Server (TLS) id 15.0.1497.28; Mon, 28 Mar
+ 2022 15:29:21 -0500
+Received: from USG02-CY1-obe.outbound.protection.office365.us (23.103.199.176)
+ by uustoe1z.utcmail.com (10.221.63.19) with Microsoft SMTP Server
+ (TLS) id
+ 15.0.1497.28 via Frontend Transport; Mon, 28 Mar 2022 15:29:21 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
+ b=UpTJfaElXsFyXT1HG+ywX4PJFR9Z7uh1AOHIiErDCPG0fsJVo06keYy8CN50n3FtaRrW5uzjr4JNdd2s2rCafMjA4ZsshSYrT4JIKL0+YMkbqND/qvl4OVwba+tCUOAsKRdFeSLcggAAP3F11OYO1LnIFJZNoRg5FpvG2Hsg/vncHhq62wRv2tXHqErLI2XOUq7XAT6zgoOu0HJbTymmZi77sYkY+SC0RsZitUEHd4BpKnE6u71e/fW+6rO9+jIwTyadqM0tJDp+Z8sU70Mk0U3E5oAgPQ0kr8TYHZ6jUy55dPOFk+x/OhXB2oXE5WHrl7TeGxEUxhhG7hsu7Y7KdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector5401;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S8HSTBF9L0nSS47a4bOJJb1ndlmFo1jx8tR4xyl7Ix4=;
+ b=JK4ZLV2Botg6W745Nmjy7VGy0oXTKrMCeE05UiG7FXU54mCJJsH8P//aqy68cXVZUuCKjMJ8rVmZsQi3lB8MhDvG7wRm8QXaiO0tJQW1UDce1r1k9oGBnNrhth0X2dgE2DYUWnRYGV+cAF51mUVFAfzfPVjZlmuaCJhS7C28uKRFq6mNZavY/+yjHyTC5FMgZkqmXPUGW/xq4FLpamcgNQsKdoubs4ktlGOxzpVV+f8r+48bis5xprQCHB5rIUfpZCBo5AZKB3FTZEvbDoB1JHuQCgKR2rZIBY/QP6NZjeRkHukzKbDxkfIU0lPDXzinh/UD1OlR/al4fYWjQFCTbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=collins.com; dmarc=pass action=none header.from=collins.com;
+ dkim=pass header.d=collins.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rtxusers.onmicrosoft.us; s=selector1-rtxusers-onmicrosoft-us;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S8HSTBF9L0nSS47a4bOJJb1ndlmFo1jx8tR4xyl7Ix4=;
+ b=zQUtwu7eIbXhfmuri6MoYAcZ8EfZvVKF+RQxL9w3DXwoHjDjFBTlJpnVWPOOzdWeWzWT0hJWCySviA6fIBXXMZ9gFIkfWuMYbTeuIxnuKLpx7ag743dz6Oub39lf9VK/4nH+A8r1paCaOZDnEbImDKWiKjj4LyETP3fo63Thuh0=
+Received: from BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:17e::12)
+ by BN2P110MB1302.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:17f::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.25; Mon, 28 Mar
+ 2022 20:29:18 +0000
+Received: from BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::b567:79fb:91df:804c]) by BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::b567:79fb:91df:804c%3]) with mapi id 15.20.5081.026; Mon, 28 Mar 2022
+ 20:29:18 +0000
+To: James Hilliard <james.hilliard1@gmail.com>, Arnout Vandecappelle
+ <arnout@mind.be>
+Thread-Topic: [External] Re: [Buildroot] [PATCH 1/1] package:{clang, lld,
+ llvm}: bump to version 11.1.0
+Thread-Index: AQHYFodm+T10REZ7XE6rkIdXoh6Zuax9AKQAgAOrcgCAD0ZsgIA+UBsAgAI5FXE=
+Date: Mon, 28 Mar 2022 20:29:18 +0000
+Message-ID: <BN2P110MB16408DC4537E54EF7ECC7906F21A9@BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM>
+References: <20220131015937.4113728-1-james.hilliard1@gmail.com>
+ <20220131104553.715b97ce@windsurf>
+ <731c2ec5-e693-f2d4-5f48-0eaf376c57d1@smile.fr>
+ <CADvTj4q9ea12wJk3FfpRdwKVhvLDGrBa9HW89rA2tfPQhX+NRg@mail.gmail.com>
+ <6b5d3b43-fe50-0dd2-2903-e404ee7792b9@mind.be>
+ <CADvTj4pocqCAVyLLj=XXSRhCHaoa6Uh9Q7of45Ksm3bN7Tj+qw@mail.gmail.com>
+In-Reply-To: <CADvTj4pocqCAVyLLj=XXSRhCHaoa6Uh9Q7of45Ksm3bN7Tj+qw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: 2afcef5e-2482-9033-7c89-a9fd3ac190c2
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 42431be9-50e0-4db3-c440-08da10f9a2b2
+x-ms-traffictypediagnostic: BN2P110MB1302:EE_
+x-microsoft-antispam-prvs: <BN2P110MB130222067E46568CDCD4B1D9F21D9@BN2P110MB1302.NAMP110.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: k3xbmmz5Xl9Zwjf2j7PbwkZ/kiFfvMem491AhpDndNy389wBlHd3ZoD7f1i4vPnDef9zY+PQroITTa9LD6IUpzYuYQaSVAZhR/Gr/ok/Lg1LQdGYhiiv3ZYa/IQK8PVda2+ds5m2LeLlK/7PfQhsC8zV/s6vMY8en0gTmFeqsAyl20Ev2XIVKOUiZ3f3KEMw4GcdapU7RB4QthRcY2WcHzZCBgrZ4z0bCrjTqsZi8NudbvbBsfSa6t6nuKuoe/WLf5lIynGE3kWkNIuxuDailbYJje5ICGZiB0e+BpF00hEU765KqeEnuxrQrEz/II06AnICsh2hfkgas9W7NzO7vuqa7QCsZ3+7FGWlt9a9877NN51iiM2HQb6P+1yfNDljmAN1jmgR2pNNUD18AsgKdWE/jp/6KgTTRU08YhQz8UPxb2MfphVBreIfWRlNgzq7pxz56CzWnIl+hNaY658MkkJqFipxMzOV9c7CRW6tXVBanMZgaDnjzgBo+xK5KvQ0G2awmb6d2ZJ4KeD6obWV0uL20kGn5E3kqd3dLQpsnhS0EvtLpuOnl99uj1n1AQQ4BhCKS90zOKFuh7W7hspHA8cU0T5zwFy2bvuyjdCOfcutIb/cnu29MGAs4lWeGCP5
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230001)(366004)(2906002)(38070700005)(8936002)(122000001)(86362001)(83380400001)(71200400001)(5660300002)(52536014)(64756008)(38100700002)(66556008)(66946007)(76116006)(4326008)(66476007)(26005)(4744005)(66446008)(8676002)(82960400001)(6506007)(9686003)(498600001)(53546011)(186003)(7696005)(55016003)(110136005)(33656002)(54906003);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: cCvmlPJy/x1AtlcWPRyJhPlB0DiS7YT0mt+cJ97c8tCEt6IuB0TALH2Hdf+dpqqgJ4DxfxlvrCe6K/a3PuP22o/nHfqd0CLxmoVEVp+dw9Gx1+5R0ruKicDE+/1TQraLaT+Ki+pdVTNRbnYDJf5RfuwFHP15MUQb7LMgjrLYp9W65gCvdD4VsjietH16Kpr2J+CBwxVWZBVVS0XHJGgbChaGlBoqQca+okP/iLOmYA1zc2D0fEF/KQ6a/ZGqs0hJjvMC68VsUXYbSi+ESbGQXhOw7SWaeso+BqWR1CZjEYBLXK6CZgzagInDLuw/r6E2zLAzwKZyllaBZAtoZmoofv7fYfa9wFzbm7cKldeueUDg4p0SAX3wQjmb9/sGDjLpTO2wAytK5iMUEsAl6iTIchdg8ILlxSpU75ozifAna5w=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-GB
-To: Alsey Coleman Miller <alseycmiller@gmail.com>, buildroot@buildroot.org
-References: <20220328060027.2483147-1-alseycmiller@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220328060027.2483147-1-alseycmiller@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/swift: add Swift runtime
- libraries
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42431be9-50e0-4db3-c440-08da10f9a2b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2022 20:29:18.8091 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7a18110d-ef9b-4274-acef-e62ab0fe28ed
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN2P110MB1302
+X-PassedThroughOnPremises: Yes
+X-OriginatorOrg: Collins.com
+X-Proofpoint-ORIG-GUID: K0MBMrseeOfkEnZQ3m3NMXo9sXwJxft0
+X-Proofpoint-GUID: K0MBMrseeOfkEnZQ3m3NMXo9sXwJxft0
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ mlxlogscore=999 phishscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 clxscore=1011 suspectscore=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203280111
+Subject: Re: [Buildroot] [External] Re:  [PATCH 1/1] package:{clang, lld,
+ llvm}: bump to version 11.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,482 +160,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: "Weber, Matthew L Collins via buildroot" <buildroot@buildroot.org>
+Reply-To: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>, Romain Naour <romain.naour@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Alsey,
+James,
 
-  Thank you for your contribution! I have a number of review comments below. 
-Please take them into account and send a new patch series. For the time being, 
-I've marked the patch as Changes Requested in patchwork.
-
-  Firt of all, the patch should be split up in separate patches: one patch per 
-package you add. Make sure all of them are posted together and in the correct 
-order. Each patch should have as subject "package/...: new package".
-
-  I have a few more comments below, but it's hard to properly review such a big 
-patch so I will probably have missed some things.
-
-On 28/03/2022 08:00, Alsey Coleman Miller wrote:
-> Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
-> ---
->   package/Config.in                             |  11 +
-
-
-  Please add yourself to the DEVELOPERS file [1] for this package. This way, 
-you'll get an e-mail if the package fails in the autobuilders, or when a new 
-version is released if the package is registered on release-monitoring.org.
+> From: James Hilliard <james.hilliard1@gmail.com>
+> Sent: Wednesday, March 23, 2022 11:30 PM
+> To: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Romain Naour <romain.naour@smile.fr>; Joseph Kogut <joseph.kogut@gmail.com>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>; buildroot <buildroot@buildroot.org>; Romain Naour <romain.naour@gmail.com>; Weber, Matthew L Collins <Matthew.Weber@collins.com>; Valentin Korenblit <valentinkorenblit@gmail.com>
+> Subject: [External] Re: [Buildroot] [PATCH 1/1] package:{clang, lld, llvm}: bump to version 11.1.0 
+> 
 
 [snip]
-> diff --git a/package/foundation/Config.in b/package/foundation/Config.in
-> new file mode 100644
-> index 0000000000..7a9dc8b514
-> --- /dev/null
-> +++ b/package/foundation/Config.in
-> @@ -0,0 +1,14 @@
-> +if BR2_PACKAGE_SWIFT
 
-  I get that you only want swift-related packages to appear in the menus if 
-swift itself is selected. It would be even better, then, to sort all of them 
-under the swift main entry. Perhaps even prefix all of them with swift-, like is 
-done for python, perl and lua packages.
+> I think I managed to fix the blockers with libclc in Matt's series
+> which I've sent as a v12:
 
-> +
-> +config BR2_PACKAGE_FOUNDATION
-> +	bool "foundation"
-> +	depends on BR2_PACKAGE_SWIFT
-> +	select BR2_PACKAGE_LIBSWIFTDISPATCH
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBXML2
-> +	help
-> +	  The Foundation framework defines a base layer of functionality that is required for almost all applications. It provides primitive classes and introduces several paradigms that define functionality not provided by either the Objective-C runtime and language or Swift standard library and language.
+Thank you for picking up these patches!
 
-  Please make sure indentation is done correctly, as reported by the 
-utils/check-package script. In this case, the line length is way too long.
+I can confirm that the "runtest" passes for the CLANG compiler-rt (ARM64 QEMU) and I've successfully built/used an x86 defconfig(GCC8.x / Linux 4.14) I use for fuzzing.
 
-> +
-> +	  http://swift.org
-> +
-> +endif
-> diff --git a/package/foundation/foundation.hash b/package/foundation/foundation.hash
-> new file mode 100644
-> index 0000000000..f15edb8420
-> --- /dev/null
-> +++ b/package/foundation/foundation.hash
-> @@ -0,0 +1 @@
-> +sha256 3fa96321729ea1e99847320bc3b5eefcbc39ba57eb8750a16700afa0173b6bb0 swift-5.6-RELEASE.tar.gz
-> diff --git a/package/foundation/foundation.mk b/package/foundation/foundation.mk
-> new file mode 100644
-> index 0000000000..93c7cedbdd
-> --- /dev/null
-> +++ b/package/foundation/foundation.mk
-> @@ -0,0 +1,102 @@
-> +### Foundation
+Tested-by: Matthew Weber <matthew.weber@collins.com>
 
-  Missin comment header, as reported by check-package (I'm not going to repeat 
-all the other check-package errors).
-
-> +FOUNDATION_VERSION = $(SWIFT_VERSION)
-> +FOUNDATION_SOURCE = swift-$(SWIFT_VERSION)-RELEASE.tar.gz
-> +FOUNDATION_SITE = https://github.com/apple/swift-corelibs-foundation/archive/refs/tags
-
-  This doesn't look right - shouldn't you be using the github helper?
-
-> +FOUNDATION_LICENSE = Apache-2.0
-> +FOUNDATION_LICENSE_FILES = LICENSE
-> +FOUNDATION_INSTALL_STAGING = YES
-> +FOUNDATION_INSTALL_TARGET = YES
-
-  _INSTALL_TARGET = YES is not needed, it's done automatically.
-
-> +FOUNDATION_SUPPORTS_IN_SOURCE_BUILD = NO
-> +FOUNDATION_DEPENDENCIES = icu libxml2 libcurl swift libswiftdispatch
-> +
-> +FOUNDATION_CONF_OPTS += \
-> +    -DCMAKE_Swift_FLAGS=${SWIFTC_FLAGS} \
-> +	-DCMAKE_Swift_FLAGS_DEBUG="" \
-
-  Please consistently indent with one tab.
-
-> +	-DCMAKE_Swift_FLAGS_RELEASE="" \
-> +	-DCMAKE_Swift_FLAGS_RELWITHDEBINFO="" \
-> +    -DCF_DEPLOYMENT_SWIFT=ON \
-> +    -Ddispatch_DIR="$(LIBSWIFTDISPATCH_BUILDDIR)/cmake/modules" \
-> +    -DICU_I18N_LIBRARY_RELEASE=${STAGING_DIR}/usr/lib/libicui18n.so \
-> +    -DICU_UC_LIBRARY_RELEASE=${STAGING_DIR}/usr/lib/libicuuc.so \
-> +    -DICU_I18N_LIBRARY_DEBUG=${STAGING_DIR}/usr/lib/libicui18n.so \
-> +    -DICU_UC_LIBRARY_DEBUG=${STAGING_DIR}/usr/lib/libicuuc.so \
-> +    -DICU_INCLUDE_DIR="${STAGING_DIR}/usr/include" \
-> +
-> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
-
-  Since Config.in selects libcurl, this is always true.
-
-> +	FOUNDATION_DEPENDENCIES += libcurl
-
-  No indentation within make conditions.
-
-> +	FOUNDATION_CONF_OPTS += \
-> +    	-DCURL_LIBRARY_RELEASE=${STAGING_DIR}/usr/lib/libcurl.so \
-> +    	-DCURL_INCLUDE_DIR="${STAGING_DIR}/usr/include" \
-> +
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> +	FOUNDATION_DEPENDENCIES += libxml2
-> +	FOUNDATION_CONF_OPTS += \
-> +		-DLIBXML2_LIBRARY=${STAGING_DIR}/usr/lib/libxml2.so \
-> +    	-DLIBXML2_INCLUDE_DIR=${STAGING_DIR}/usr/include/libxml2 \
-> +	
-> +endif
-> +
-> +ifeq (FOUNDATION_SUPPORTS_IN_SOURCE_BUILD),YES)
-> +FOUNDATION_BUILDDIR			= $(FOUNDATION_SRCDIR)
-> +else
-> +FOUNDATION_BUILDDIR			= $(FOUNDATION_SRCDIR)/build
-> +endif
-
-  This stuff is done automatically by the infra.
-
-> +
-> +define FOUNDATION_CONFIGURE_CMDS
-> +	# Workaround Dispatch defined with cmake and module
-> +	rm -rf ${STAGING_DIR}/usr/lib/swift/dispatch
-> +	# Clean
-> +	rm -rf $(FOUNDATION_BUILDDIR)
-> +	rm -rf $(STAGING_DIR)/usr/lib/swift/CoreFoundation
-> +	# Configure
-> +	(mkdir -p $(FOUNDATION_BUILDDIR) && \
-> +	cd $(FOUNDATION_BUILDDIR) && \
-> +	rm -f CMakeCache.txt && \
-> +	PATH=$(BR_PATH):$(SWIFT_NATIVE_PATH) \
-> +	$(FOUNDATION_CONF_ENV) $(BR2_CMAKE) -S $(FOUNDATION_SRCDIR) -B $(FOUNDATION_BUILDDIR) -G Ninja \
-> +		-DCMAKE_INSTALL_PREFIX="/usr" \
-> +		-DBUILD_SHARED_LIBS=ON \
-> +		-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_RUNTIME_DEBUG),Debug,Release) \
-> +    	-DCMAKE_C_COMPILER=$(SWIFT_NATIVE_PATH)/clang \
-> +    	-DCMAKE_C_FLAGS="-w -fuse-ld=lld -target $(SWIFT_TARGET_NAME) --sysroot=$(STAGING_DIR) $(SWIFT_EXTRA_FLAGS) -I$(STAGING_DIR)/usr/include -B$(STAGING_DIR)/usr/lib -B$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION)) -L$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION))" \
-> +    	-DCMAKE_C_LINK_FLAGS="-target $(SWIFT_TARGET_NAME) --sysroot=$(STAGING_DIR)" \
-> +		-DCMAKE_ASM_FLAGS="-target $(SWIFT_TARGET_NAME) --sysroot=$(STAGING_DIR)" \
-> +		$(FOUNDATION_CONF_OPTS) \
-> +	)
-
-  I haven't looked at the details, but not using the cmake infrastructure is not 
-a good idea.
-
-
-> +endef
-> +
-> +define FOUNDATION_BUILD_CMDS
-> +	# Compile
-> +	(cd $(FOUNDATION_BUILDDIR) && ninja)
-
-  If the problem is that it only supports the ninja build system: please use [2] 
-and explain in the cover letter of your series that it depends on that.
-
-> +endef
-> +
-> +define FOUNDATION_INSTALL_TARGET_CMDS
-> +	cp $(FOUNDATION_BUILDDIR)/lib/*.so $(TARGET_DIR)/usr/lib/
-> +endef
-> +
-> +define FOUNDATION_INSTALL_STAGING_CMDS
-> +	# Copy libraries
-> +	cp $(FOUNDATION_BUILDDIR)/lib/*.so $(STAGING_DIR)/usr/lib/swift/linux/
-> +	# Copy CoreFoundation module
-> +	mkdir -p ${STAGING_DIR}/usr/lib/swift/CoreFoundation
-> +	cp $(FOUNDATION_BUILDDIR)/CoreFoundation.framework/Headers/*.h ${STAGING_DIR}/usr/lib/swift/CoreFoundation/
-> +	touch ${STAGING_DIR}/usr/lib/swift/CoreFoundation/module.map
-> +	echo 'framework module CoreFoundation [extern_c] [system] { umbrella header "${STAGING_DIR}/usr/lib/swift/CoreFoundation/CoreFoundation.h" }' > ${STAGING_DIR}/usr/lib/swift/CoreFoundation/module.map
-> +	# Copy CFXMLInterface module
-> +	mkdir -p ${STAGING_DIR}/usr/lib/swift/CFXMLInterface
-> +	touch ${STAGING_DIR}/usr/lib/swift/CFXMLInterface/module.map
-> +	echo 'framework module CFXMLInterface [extern_c] [system] { umbrella header "${STAGING_DIR}/usr/lib/swift/CFXMLInterface/CFXMLInterface.h" }' > ${STAGING_DIR}/usr/lib/swift/CFXMLInterface/module.map
-> +	# Copy CFURLSessionInterface module
-> +	mkdir -p ${STAGING_DIR}/usr/lib/swift/CFURLSessionInterface
-> +	touch ${STAGING_DIR}/usr/lib/swift/CFURLSessionInterface/module.map
-> +	echo 'framework module CFURLSessionInterface [extern_c] [system] { umbrella header "${STAGING_DIR}/usr/lib/swift/CFURLSessionInterface/CFURLSessionInterface.h" }' > ${STAGING_DIR}/usr/lib/swift/CFURLSessionInterface/module.map
-> +	# Copy Swift modules
-> +	cp $(FOUNDATION_BUILDDIR)/swift/*  ${STAGING_DIR}/usr/lib/swift/linux/$(SWIFT_TARGET_ARCH)/
-> +	# Restore Dispatch headers
-> +	$(LIBSWIFTDISPATCH_INSTALL_STAGING_CMDS)
-> +	
-> +endef
-> +
-> +$(eval $(generic-package))
-> diff --git a/package/libdispatch/Config.in b/package/libdispatch/Config.in
-> new file mode 100644
-> index 0000000000..2f7c115375
-> --- /dev/null
-> +++ b/package/libdispatch/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_LIBDISPATCH
-> +	bool "libdispatch"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-
-  When there are toolchain dependencies, there should also be a comment that 
-tells the user why the package can't be selected. Look at other packages for 
-examples.
-
-  Since it's not clear here, you should probably explain in the commit message 
-why these dependencies are needed.
-
-> +	select BR2_PACKAGE_LIBBSD
-> +	
-> +	help
-> +	  Grand Central Dispatch (GCD or libdispatch) provides comprehensive support for concurrent code execution on multicore hardware.
-> +
-> +	  http://swift.org
-> diff --git a/package/libdispatch/libdispatch.hash b/package/libdispatch/libdispatch.hash
-> new file mode 100644
-> index 0000000000..a89c48c55f
-> --- /dev/null
-> +++ b/package/libdispatch/libdispatch.hash
-> @@ -0,0 +1,2 @@
-> +sha256 d2bbfb5b98d129caa2c6bd7662c850bf57cb434572d09844b56641c4558906ab swift-5.6-RELEASE.tar.gz
-> +sha256 c83647dac6a1e36795a62626e3a9c7dab7ed4b46919a757afb5562d5ed49da73 libdispatch-5.5.3-armv5.patch
-> diff --git a/package/libdispatch/libdispatch.mk b/package/libdispatch/libdispatch.mk
-> new file mode 100644
-> index 0000000000..a334c3052d
-> --- /dev/null
-> +++ b/package/libdispatch/libdispatch.mk
-> @@ -0,0 +1,78 @@
-> +### Grand Central Dispatch (C API)
-> +LIBDISPATCH_VERSION = $(SWIFT_VERSION)
-> +LIBDISPATCH_SOURCE = swift-$(SWIFT_VERSION)-RELEASE.tar.gz
-> +LIBDISPATCH_SITE = https://github.com/apple/swift-corelibs-libdispatch/archive/refs/tags
-> +LIBDISPATCH_LICENSE = Apache-2.0
-> +LIBDISPATCH_LICENSE_FILES = LICENSE
-> +LIBDISPATCH_INSTALL_STAGING = YES
-> +LIBDISPATCH_INSTALL_TARGET = YES
-> +LIBDISPATCH_SUPPORTS_IN_SOURCE_BUILD = NO
-> +LIBDISPATCH_DEPENDENCIES = libbsd
-> +LIBDISPATCH_PATCH = \
-> +	https://gist.githubusercontent.com/colemancda/e19ec96d8b3caa7f4a3f9ec9a82f356a/raw/a8a62d61856de09f02618d32d14ac637017cc44f/libdispatch-5.5.3-armv5.patch
-
-  Downloading a patch from your own gist isn't exactly great for allowing 
-reviews :-). Please instead include the patch directly in Buildroot. Since 
-upstream is managed in git, please make this a git-formatted patch (generated 
-with git format-patch -N) [1]. Make sure it has a summary and description just 
-like any other commit, and also include your Signed-off-by. The latter is needed 
-to ascertain that the patch may be distributed under the upstream project's 
-license (which may be different from Buildroot's).
-
-[snip]
-> diff --git a/package/swift-hello/Config.in b/package/swift-hello/Config.in
-> new file mode 100644
-> index 0000000000..cbeed69667
-> --- /dev/null
-> +++ b/package/swift-hello/Config.in
-> @@ -0,0 +1,10 @@
-> +if BR2_PACKAGE_SWIFT
-> +
-> +config BR2_PACKAGE_SWIFT_HELLO
-> +	bool "swift-hello"
-> +	depends on BR2_PACKAGE_SWIFT
-> +	depends on BR2_PACKAGE_FOUNDATION
-> +	help
-> +	  Demo application for Swift.
-
-  If I understand correctly, this package serves no purpose other than proving 
-that it's possibleto biuld a swift application in Buildroot. Nobody is ever 
-going to select it. Instead, it would be better to move it to the runtime test 
-infrastructure (and of course actually runtime test it, which proves that the 
-generated binaries actually work).
-
-[snip]
-> diff --git a/package/swift-hello/swift-hello.mk b/package/swift-hello/swift-hello.mk
-> new file mode 100644
-> index 0000000000..b3cded3f7c
-> --- /dev/null
-> +++ b/package/swift-hello/swift-hello.mk
-> @@ -0,0 +1,33 @@
-> +### Swift Demo
-> +SWIFT_HELLO_VERSION = 0.1.0
-> +SWIFT_HELLO_SITE = $(SWIFT_HELLO_PKGDIR)/src
-> +SWIFT_HELLO_SITE_METHOD = local
-> +SWIFT_HELLO_INSTALL_STAGING = NO
-> +SWIFT_HELLO_INSTALL_TARGET = YES
-> +SWIFT_HELLO_SUPPORTS_IN_SOURCE_BUILD = YES
-> +SWIFT_HELLO_DEPENDENCIES = swift foundation
-> +SWIFT_HELLO_EXECUTABLES = swift-hello
-> +SWIFT_HELLO_BUILDDIR = $(SWIFT_HELLO_SRCDIR)/.build/$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release)
-> +
-> +define SWIFT_HELLO_BUILD_CMDS
-> +	( \
-
-  These parenthesis are actually not needed. They are still used in a lot of 
-places in Buildroot, but that's legacy stuff.
-
-> +	cd $(SWIFT_HELLO_SRCDIR) && \
-> +	rm -rf .build && \
-> +	PATH=$(BR_PATH):$(SWIFT_NATIVE_PATH) \
-> +	$(SWIFT_NATIVE_PATH)/swift build -c $(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) --destination $(SWIFTPM_DESTINATION_FILE) \
-> +	)
-> +endef
-> +
-> +define SWIFT_HELLO_INSTALL_TARGET_CMDS
-> +	# Copy dynamic libraries
-> +	#cp $(SWIFT_HELLO_BUILDDIR)/*.so $(TARGET_DIR)/usr/lib/
-
-  Please don't keep commented-out lines.
-
-> +	cp $(SWIFT_HELLO_BUILDDIR)/swift-hello $(TARGET_DIR)/usr/bin/hello
-> +endef
-> +
-> +define SWIFT_HELLO_INSTALL_STAGING_CMDS
-> +	# Copy dynamic libraries
-> +	#cp $(SWIFT_HELLO_BUILDDIR)/*.so $(STAGING_DIR)/usr/lib/swift/linux/
-> +	cp $(SWIFT_HELLO_BUILDDIR)/swift-hello $(STAGING_DIR)/usr/bin/hello
-> +endef
-> +
-> +$(eval $(generic-package))
-
-[snip]
-> +config BR2_PACKAGE_SWIFT
-> +	bool "swift"
-> +	depends on BR2_PACKAGE_SWIFT_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	select BR2_PACKAGE_ICU
-> +	select BR2_PACKAGE_LIBDISPATCH
-> +	help
-> +	  Swift is a general-purpose programming language built using a modern approach to safety, performance, and software design patterns.
-> +
-> +	  http://swift.org
-> +
-> +if BR2_PACKAGE_SWIFT || BR2_PACKAGE_LIBDISPATCH
-> +
-> +config BR2_PACKAGE_SWIFT_NATIVE_TOOLS
-> +	string "Path to host Swift toolchain"
-> +	default "/usr/bin"
-> +
-> +config BR2_PACKAGE_SWIFT_LLVM_DIR
-> +	string "Path to host LLVM library path"
-> +	default "/usr/lib/llvm-12"
-
-  I guess swift is built on top of LLVM. Is it possible to use package/llvm, or 
-is it a patched version?
-
-> +
-> +endif
-> +
-> +comment "swift needs a toolchain w/ Glibc, ICU, wchar, threads, C++, dynamic library"
-> +	depends on BR2_PACKAGE_SWIFT_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
-> +		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
-
-[snip]
-> diff --git a/package/swift/swift.mk b/package/swift/swift.mk
-> new file mode 100644
-> index 0000000000..da10aae8fd
-> --- /dev/null
-> +++ b/package/swift/swift.mk
-> @@ -0,0 +1,232 @@
-> +### Apple's Swift Programming Language
-> +SWIFT_VERSION = 5.6
-> +SWIFT_SOURCE = swift-$(SWIFT_VERSION)-RELEASE.tar.gz
-> +SWIFT_SITE = https://github.com/apple/swift/archive/refs/tags
-> +SWIFT_LICENSE = Apache-2.0
-> +SWIFT_LICENSE_FILES = LICENSE.txt
-> +SWIFT_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_SWIFT_TARGET_ARCH))
-> +SWIFT_NATIVE_PATH = $(call qstrip,$(BR2_PACKAGE_SWIFT_NATIVE_TOOLS))
-> +SWIFT_LLVM_DIR = $(call qstrip,$(BR2_PACKAGE_SWIFT_LLVM_DIR))
-> +SWIFT_INSTALL_STAGING = YES
-> +SWIFT_INSTALL_TARGET = YES
-> +SWIFT_SUPPORTS_IN_SOURCE_BUILD = NO
-> +SWIFT_DEPENDENCIES = icu libxml2 libbsd libdispatch
-> +
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +SWIFT_CONF_ENV += LIBS="-latomic"
-> +endif
-> +
-> +HOST_SWIFT_SUPPORT_DIR = $(HOST_DIR)/usr/share/swift
-> +SWIFTPM_DESTINATION_FILE = $(HOST_SWIFT_SUPPORT_DIR)/$(SWIFT_TARGET_NAME)-toolchain.json
-
-  This should have simply a SWIFT_ prefix, not SWIFTPM.
-
-[snip]
-> +define SWIFT_INSTALL_STAGING_CMDS
-> +	mkdir -p $(HOST_SWIFT_SUPPORT_DIR)
-> +	# Copy runtime libraries and swift interfaces
-> +	cp -rf $(SWIFT_BUILDDIR)/lib/swift ${STAGING_DIR}/usr/lib/
-> +	# Generate SwiftPM cross compilation toolchain file
-> +	rm -f $(SWIFTPM_DESTINATION_FILE)
-> +	touch $(SWIFTPM_DESTINATION_FILE)
-> +	echo '{' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "version":1,' >> $(SWIFTPM_DESTINATION_FILE)
-
-  We generally prefer to have a template file (called swift-toolchain.json.in) 
-in the package directory, and use sed to replace @XXXX@ entries. See e.g. how 
-it's done for cmake's toolchainfile.
-
-> +	echo '   "sdk":"$(STAGING_DIR)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "toolchain-bin-dir":"$(SWIFT_NATIVE_PATH)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "target":"$(SWIFT_TARGET_NAME)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "dynamic-library-extension":"so",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "extra-cc-flags":[' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-fPIC"' >> $(SWIFTPM_DESTINATION_FILE)
-> +
-> +	@if [ "$(SWIFT_TARGET_ARCH)" = "armv5" ]; then\
-> +		echo '      "-march=armv5te",' >> $(SWIFTPM_DESTINATION_FILE);\
-> +    fi
-> +
-> +	echo '   ],' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "extra-swiftc-flags":[' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-target", "$(SWIFT_TARGET_NAME)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-use-ld=lld",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-tools-directory", "$(SWIFT_NATIVE_PATH)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-rpath", "-Xlinker", "/usr/lib/swift/linux",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-L$(STAGING_DIR)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-L$(STAGING_DIR)/lib",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-L$(STAGING_DIR)/usr/lib",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-L$(STAGING_DIR)/usr/lib/swift/linux",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-L$(STAGING_DIR)/usr/lib/swift/linux/$(SWIFT_TARGET_ARCH)",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "-L$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION))",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xlinker", "--build-id=sha1",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-I$(STAGING_DIR)/usr/include",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-I$(STAGING_DIR)/usr/lib/swift",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-resource-dir", "$(STAGING_DIR)/usr/lib/swift",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xclang-linker", "-B$(STAGING_DIR)/usr/lib",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xclang-linker", "-B$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION))",' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-Xclang-linker", "-latomic",' >> $(SWIFTPM_DESTINATION_FILE);\
-> +
-> +	@if [ "$(SWIFT_TARGET_ARCH)" = "powerpc" ]; then\
-> +		echo '      "-Xcc", "-mcpu=7400",' >> $(SWIFTPM_DESTINATION_FILE);\
-> +    fi
-> +
-> +	@if [ "$(SWIFT_TARGET_ARCH)" = "armv5" ]; then\
-> +		echo '      "-Xcc", "-march=armv5te",' >> $(SWIFTPM_DESTINATION_FILE);\
-> +    fi
-> +
-> +	echo '      "-sdk", "$(STAGING_DIR)"' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   ],' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   "extra-cpp-flags":[' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '      "-lstdc++"' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '   ]' >> $(SWIFTPM_DESTINATION_FILE)
-> +	echo '}' >> $(SWIFTPM_DESTINATION_FILE)
-> +
-> +endef
-> +
-> +$(eval $(generic-package))
-> +$(eval $(host-generic-package))
-> \ No newline at end of file
-
-  Please make sure there's a newline at the end of the file.
-
-  Regards,
-  Arnout
-
-[1] https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
-[2] https://patchwork.ozlabs.org/project/buildroot/list/?series=282194
-[3] https://buildroot.org/manual.html#_format_and_licensing_of_the_package_patches
+Regards,
+Matt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
