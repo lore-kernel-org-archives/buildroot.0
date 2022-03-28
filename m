@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62F9FC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C366C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18BDC60E67;
-	Mon, 28 Mar 2022 19:59:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 233A540598;
+	Mon, 28 Mar 2022 19:59:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3rxlTWqPgKG7; Mon, 28 Mar 2022 19:59:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZTLNAVEiAzm7; Mon, 28 Mar 2022 19:59:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7BC160C02;
-	Mon, 28 Mar 2022 19:59:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D3EE4051E;
+	Mon, 28 Mar 2022 19:59:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B727E1BF9AC
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FE291BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13A52819F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 28D1C813A4
  for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7XLAvvurIk_B for <buildroot@lists.busybox.net>;
+ with ESMTP id Cu7yHfZJhLrK for <buildroot@lists.busybox.net>;
  Mon, 28 Mar 2022 19:58:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 564F581B10
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DDBE81B14
  for <buildroot@buildroot.org>; Mon, 28 Mar 2022 19:58:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5820185F3E; Mon, 28 Mar 2022 19:48:54 +0000 (UTC)
+ id 710FC85F3E; Mon, 28 Mar 2022 19:48:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 28 Mar 2022 20:54:50 +0200
+Date: Mon, 28 Mar 2022 21:22:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92e436b73df21ff9347c53c25fd33d8fd48a9d43
-X-Git-Newrev: ab1c99158aa499cca78058ad2284f1e16deb6045
+X-Git-Oldrev: f33260685bf9dedd76db5b19f2dce0f4b5cbce2b
+X-Git-Newrev: f44c5d3f54893195c731523423c01e355978ef6a
 X-Patchwork-Hint: ignore
-Message-Id: <20220328194854.5820185F3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luasocket: bump to version 3.0.0
+Message-Id: <20220328194854.710FC85F3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unclutter-xfixes: bump to version
+ 1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,76 +54,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8393170812070651363=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8393170812070651363==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ab1c99158aa499cca78058ad2284f1e16deb6045
+commit: https://git.buildroot.net/buildroot/commit/?id=f44c5d3f54893195c731523423c01e355978ef6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-moved under the hat of https://github.com/lunarmodules
+Update indentation in hash file (two spaces)
 
-diff LICENSE:
--LuaSocket 3.0 license
--Copyright � 2004-2013 Diego Nehab
-+Copyright (C) 2004-2022 Diego Nehab
+https://github.com/Airblader/unclutter-xfixes/releases/tag/v1.6
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/luasocket/Config.in      | 2 +-
- package/luasocket/luasocket.hash | 4 ++--
- package/luasocket/luasocket.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/unclutter-xfixes/unclutter-xfixes.hash | 4 ++--
+ package/unclutter-xfixes/unclutter-xfixes.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
-index 45263030f3..5ad00f5c48 100644
---- a/package/luasocket/Config.in
-+++ b/package/luasocket/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_LUASOCKET
- 	  It provides easy access to TCP, UDP, DNS, SMTP,
- 	  FTP, HTTP, MIME and much more.
- 
--	  http://luaforge.net/projects/luasocket/
-+	  https://github.com/lunarmodules/luasocket
-diff --git a/package/luasocket/luasocket.hash b/package/luasocket/luasocket.hash
-index 843647b27f..b66ae57b9b 100644
---- a/package/luasocket/luasocket.hash
-+++ b/package/luasocket/luasocket.hash
+diff --git a/package/unclutter-xfixes/unclutter-xfixes.hash b/package/unclutter-xfixes/unclutter-xfixes.hash
+index 785825da7a..b0bd5532ef 100644
+--- a/package/unclutter-xfixes/unclutter-xfixes.hash
++++ b/package/unclutter-xfixes/unclutter-xfixes.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 453fc1d0e9b6a44bbada4290d565f840a5e96ba2d1b47562ba38bd9c7e82195a  luasocket-3.0rc1-1.src.rock
--sha256 8e8c6314d9e78fe452ee355167f2c40cfbee8207e14dcb5ddd4a2655cb5c6aad  luasocket-3.0-rc1/LICENSE
-+sha256  63fd2dd18dfe242ca5bcc1203839e86a9c8936261a9ca9f3200f2deab431da88  luasocket-3.0.0-1.src.rock
-+sha256  224afe42d0738eaaeb57ab289466a1c4e77091591e69dbcef2dbb385589f2f41  luasocket/LICENSE
-diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index 20927fc1d6..eeece26fd5 100644
---- a/package/luasocket/luasocket.mk
-+++ b/package/luasocket/luasocket.mk
-@@ -4,8 +4,8 @@
+ # locally calculated
+-sha256 35c75ad24be989dd6708db1d9ce9b2a2f814b80638c0633cdb075c6df090ed11  unclutter-xfixes-1.5.tar.gz
+-sha256 33e94693849b57fdb34987c95fd0076b4aa4b70fcd9a3152313d00b86a3f7bf7  LICENSE
++sha256  6f7f248f16b7d4ec7cb144b6bc5a66bd49078130513a184f4dc16c498d457db9  unclutter-xfixes-1.6.tar.gz
++sha256  33e94693849b57fdb34987c95fd0076b4aa4b70fcd9a3152313d00b86a3f7bf7  LICENSE
+diff --git a/package/unclutter-xfixes/unclutter-xfixes.mk b/package/unclutter-xfixes/unclutter-xfixes.mk
+index 713a84bca6..6da607b660 100644
+--- a/package/unclutter-xfixes/unclutter-xfixes.mk
++++ b/package/unclutter-xfixes/unclutter-xfixes.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUASOCKET_VERSION = 3.0rc1-1
--LUASOCKET_SUBDIR = luasocket-3.0-rc1
-+LUASOCKET_VERSION = 3.0.0-1
-+LUASOCKET_SUBDIR = luasocket
- LUASOCKET_LICENSE = MIT
- LUASOCKET_LICENSE_FILES = $(LUASOCKET_SUBDIR)/LICENSE
- 
-
---===============8393170812070651363==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-UNCLUTTER_XFIXES_VERSION = 1.5
++UNCLUTTER_XFIXES_VERSION = 1.6
+ UNCLUTTER_XFIXES_SITE = $(call github,Airblader,unclutter-xfixes,v$(UNCLUTTER_XFIXES_VERSION))
+ UNCLUTTER_XFIXES_LICENSE = MIT
+ UNCLUTTER_XFIXES_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8393170812070651363==--
