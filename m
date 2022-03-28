@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7419C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD0C2C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A511A81B14;
-	Mon, 28 Mar 2022 19:58:22 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xAL92LlgLD4j; Mon, 28 Mar 2022 19:58:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6683819F6;
-	Mon, 28 Mar 2022 19:58:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3865F1BF9AC
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26CEA40178
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9571740876;
+	Mon, 28 Mar 2022 19:58:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iPHza7u5Blmo for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Jf6VgdLqxKLM; Mon, 28 Mar 2022 19:58:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B39A1410BA;
+	Mon, 28 Mar 2022 19:58:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FCF51BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D5B040AA5
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eW2kPxngwB4V for <buildroot@lists.busybox.net>;
  Mon, 28 Mar 2022 19:58:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8715B4015C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CF8140184
  for <buildroot@buildroot.org>; Mon, 28 Mar 2022 19:58:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8A4EE85F3E; Mon, 28 Mar 2022 19:48:54 +0000 (UTC)
+ id 4E54185F40; Mon, 28 Mar 2022 19:48:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 28 Mar 2022 21:22:36 +0200
+Date: Mon, 28 Mar 2022 20:54:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1cae2aa844f5ad0962ec073f6cac103c0dc6af1f
-X-Git-Newrev: be3f9cde29f1727e264d6a2a023588273410c800
+X-Git-Oldrev: a5eefab2d4e211adb51d261700b4022e76c60c20
+X-Git-Newrev: 92e436b73df21ff9347c53c25fd33d8fd48a9d43
 X-Patchwork-Hint: ignore
-Message-Id: <20220328194854.8A4EE85F3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: update comment
- pointing to patches fixing CVE-2021-38593
+Message-Id: <20220328194854.4E54185F40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opus: enable custom modes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be3f9cde29f1727e264d6a2a023588273410c800
+commit: https://git.buildroot.net/buildroot/commit/?id=92e436b73df21ff9347c53c25fd33d8fd48a9d43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patches aren't in Buildroot anymore but in the qt5base sources
-directly, so let's give the commit hash of the fixes instead.
+Enable custom modes to avoid the following build failure with jack2
+raised since commit 618a23100fe5ff54b90ada1a8f23453f6c5a77dc:
 
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Checking for header opus/opus_custom.h   : not found
+The above check failed, but the checkee is required for --opus.
+
+It should be noted that before this commit, opus was silently disabled
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b1c050ccd6152c43a6da5f5d2174c3cc0dc2ff3e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qt5/qt5base/qt5base.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/opus/opus.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 5f158bd6f2..972d217ef1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -12,7 +12,9 @@ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
- QT5BASE_INSTALL_STAGING = YES
- QT5BASE_SYNC_QT_HEADERS = YES
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index 3fb2d5d65f..4f816df477 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -17,6 +17,7 @@ OPUS_CFLAGS += -O0
+ endif
  
--# 0006-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-+# From commits:
-+# 4ce7053a59 "Avoid processing-intensive painting of high number of tiny dashes"
-+# e7ea2ed27c "Improve fix for avoiding huge number of tiny dashes"
- QT5BASE_IGNORE_CVES += CVE-2021-38593
- # From commit 2766b2cba6ca4b1c430304df5437e2a6c874b107 "QProcess/Unix: ensure we don't accidentally execute something from CWD"
- QT5BASE_IGNORE_CVES += CVE-2022-25255
+ OPUS_CONF_ENV = CFLAGS="$(OPUS_CFLAGS)"
++OPUS_CONF_OPTS = --enable-custom-modes
+ 
+ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+ OPUS_CONF_OPTS += --enable-fixed-point
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
