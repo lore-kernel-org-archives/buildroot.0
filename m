@@ -1,63 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8305C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 13:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23000C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6750E60E87;
-	Mon, 28 Mar 2022 13:50:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 624FA40ABB;
+	Mon, 28 Mar 2022 19:53:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tIZInBvp-GfK; Mon, 28 Mar 2022 13:50:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u2f_KvqevIR1; Mon, 28 Mar 2022 19:53:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 541BB60BCD;
-	Mon, 28 Mar 2022 13:50:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE1B31BF319
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 13:50:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96B4740AA2;
+	Mon, 28 Mar 2022 19:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A37F51BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCC6E40331
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 13:50:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 875E660FBF
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:52:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Or5aa_G7Zn_4 for <buildroot@lists.busybox.net>;
- Mon, 28 Mar 2022 13:50:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A2664032B
- for <buildroot@uclibc.org>; Mon, 28 Mar 2022 13:50:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id A59EB85EDA; Mon, 28 Mar 2022 13:40:54 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Mon, 28 Mar 2022 13:50:04 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: w.meganck@televic.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14711-163-jJAwNxwXr8@https.bugs.busybox.net/>
-In-Reply-To: <bug-14711-163@https.bugs.busybox.net/>
-References: <bug-14711-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vdf0gTcOjfEl for <buildroot@lists.busybox.net>;
+ Mon, 28 Mar 2022 19:52:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 98593607F7
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 19:52:55 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id bg10so30882073ejb.4
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 12:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=x9Hvu5xmturhJwFcjWq7eML3qTuduyqnmoY0eHNvjRU=;
+ b=hh7Q1S2YSoHhk4FxmWlGVvxW1bidOG4+kNa3nhgPoRnNgCR61+gpuz5mjmME6pJeDd
+ K7WXkjHlvuEvtMfRW25qQWIowPZ6AKbh8BBVErhlgVB+PEBmmfJTbbeJ6s8EpiXcxRRz
+ 2z8MuTe5zR63HcC8dljSA1/QkRC7oBcU36h4rRIf7Q1JNEJg1ckum59GFe7d/53p4Anc
+ 9fxE+oMLhhAe0z50vGKAB/BXeZpK5gzc1i9wn80KZu/Bpt09KYq11ly/L+/2ggiC2O9G
+ au5UuClad62F7TevjYTM75aBWu/ABOCKwbej0glV6yzGw/cVmonkwi/9Wx+5fKYtBoT0
+ U5Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=x9Hvu5xmturhJwFcjWq7eML3qTuduyqnmoY0eHNvjRU=;
+ b=vPw01xGq+HuS3+nBXZdFURKbZ5Sf3iAFG6PNeHNw0s5x0x1e3QUsRVhVMH6qCqLCdu
+ siVJQWy5qau/ZFqI6ERFAPkJSEQ+clOki8nwgSYwXdznzgRzEPwYxLG3MIEE7RzZ8oeO
+ lFiRieiWF4CY24klfhGUagpgegvbLEREvsLvbz0WYduT87WOwK66uW5bWMRNOQrp+oOs
+ SoEviMqWAcakApT67pi8dRgKSTRovc42o9/VjsF/+Ufftz5McL23G3O9DGe3OGlt1Lj9
+ lLRJn6JALUmdltiLQXfhndnToWy3tilngBjHlTY6lv3vU0UxNProDvZoOeoIfxmwwikz
+ sR6g==
+X-Gm-Message-State: AOAM533TeXjvGR/CIT7khoGUooT9Q3HI3QaavrcDgchOF+LHRNqz01VP
+ sWR53TS4PkeNdlEujfJvzwFCS+RpkBAITg==
+X-Google-Smtp-Source: ABdhPJzqdZmTHgZBASMifTZ5is4AGcSFujavwddDEc0jz8fAMC/EOmNOZBQtjZBzsSHsK3lZrvt/Wg==
+X-Received: by 2002:a17:906:4fc3:b0:6e0:66a5:d59c with SMTP id
+ i3-20020a1709064fc300b006e066a5d59cmr29099148ejw.131.1648497173476; 
+ Mon, 28 Mar 2022 12:52:53 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ k8-20020a1709067ac800b006e0d47d3a63sm3422446ejo.84.2022.03.28.12.52.51
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 28 Mar 2022 12:52:52 -0700 (PDT)
+Message-ID: <88e09ed0-f4d9-bc00-e596-540111c707ce@mind.be>
+Date: Mon, 28 Mar 2022 21:52:50 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14711] nodjs build problem missing bzip
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-GB
+To: Lang Daniel <d.lang@abatec.at>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <VI1P190MB0493DD283963AD9660AF6CCE9F1D9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <VI1P190MB0493DD283963AD9660AF6CCE9F1D9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Subject: Re: [Buildroot] [PATCH 1/1] package/dbus-cxx: bump to version 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,78 +95,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14711
 
---- Comment #1 from Wim Meganck <w.meganck@televic.com> ---
->>> host-nodejs 14.18.3 Configuring
-mkdir -p
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/bin
-ln -sf
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/python3
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/bin/python
-/bin/sed -i -e "s%@MAYBE_WRAPPER@%%g"
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/node.gyp
-/bin/sed -i -e "s%@MAYBE_WRAPPER@%%g"
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/tools/v8_gypfiles/v8.gyp
-(cd
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3;
-PATH="/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin:/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/microchip/xc16/v1.41/bin:/opt/microchip/xc16/v1.41/bin"
-PKG_CONFIG="/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/pkg-config"
-PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-PKG_CONFIG_LIBDIR="/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib/pkgconfig:/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/share/pkgconfig"
-AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm"
-CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp"
-OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib"
-CPPFLAGS="-I/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include"
-CFLAGS="-O2
--I/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include"
-CXXFLAGS="-O2
--I/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include"
-LDFLAGS="-L/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib
--Wl,-rpath,/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib"
-INTLTOOL_PERL=/usr/bin/perl
-PATH=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/bin:"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin:/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/microchip/xc16/v1.41/bin:/opt/microchip/xc16/v1.41/bin"
-PYTHON=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/python3
-/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/bin/python3
-./configure
---prefix=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host
---without-dtrace --without-etw --shared-openssl
---shared-openssl-includes=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/include
---shared-openssl-libpath=/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib
---shared-zlib --no-cross-compiling --with-intl=system-icu )
-Node.js configure: Found Python 3.10.2...
-Traceback (most recent call last):
-  File
-"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/./configure",
-line 30, in <module>
-    import configure
-  File
-"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/configure.py",
-line 14, in <module>
-    import bz2
-  File
-"/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/host/lib/python3.10/bz2.py",
-line 17, in <module>
-    from _bz2 import BZ2Compressor, BZ2Decompressor
-ModuleNotFoundError: No module named '_bz2'
-package/pkg-generic.mk:272: recipe for target
-'/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/.stamp_configured'
-failed
-make[1]: ***
-[/home/wm/projects/televic/dev/buildroot-new4/output_confidea_g4_wcap/build/host-nodejs-14.18.3/.stamp_configured]
-Error 1
-Makefile:23: recipe for target '_all' failed
-make: *** [_all] Error 2
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+On 28/03/2022 14:29, Lang Daniel via buildroot wrote:
+> - License has been changed from GPL to LGPL or BSD-3-Clause
+> - Drop upstream patches
+> 
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
+[snip]
+> diff --git a/package/dbus-cxx/dbus-cxx.mk b/package/dbus-cxx/dbus-cxx.mk
+> index 3e89fc9db7..b850d45003 100644
+> --- a/package/dbus-cxx/dbus-cxx.mk
+> +++ b/package/dbus-cxx/dbus-cxx.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -DBUS_CXX_VERSION = 2.1.0
+> +DBUS_CXX_VERSION = 2.2.0
+>   DBUS_CXX_SITE = $(call github,dbus-cxx,dbus-cxx,$(DBUS_CXX_VERSION))
+> -DBUS_CXX_LICENSE = GPL-3.0, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
+> +DBUS_CXX_LICENSE = LGPL-3.0 or BSD-3-Clause, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
+
+  It's LGPL-3.0+ actually.
+  Applied to master with that fixed, thanks.
+
+  Regards,
+  Arnout
+
+>   DBUS_CXX_LICENSE_FILES = COPYING cmake-modules/LICENSE_1_0.txt tools/libcppgenerate/LICENSE
+>   DBUS_CXX_INSTALL_STAGING = YES
+>   DBUS_CXX_DEPENDENCIES = libsigc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
