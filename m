@@ -4,44 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B53C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 13:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A23C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 06:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 739B6823A0;
-	Mon, 28 Mar 2022 13:19:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A26B884136;
+	Mon, 28 Mar 2022 06:11:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V89r8r2vfu0x; Mon, 28 Mar 2022 13:19:22 +0000 (UTC)
+	with ESMTP id 6P-a6S1vsVXM; Mon, 28 Mar 2022 06:11:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87C4881B36;
-	Mon, 28 Mar 2022 13:19:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DB428411C;
+	Mon, 28 Mar 2022 06:11:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D181D1BF297
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 13:19:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 883D71BF479
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 06:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C01D260FE4
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 13:19:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F85C60B6E
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 06:11:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X6yndLRPAUIO for <buildroot@lists.busybox.net>;
- Mon, 28 Mar 2022 13:19:09 +0000 (UTC)
+ with ESMTP id xZ97eeFP7VEJ for <buildroot@lists.busybox.net>;
+ Mon, 28 Mar 2022 06:11:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1441460C08
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 13:19:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B0CA085ED8; Mon, 28 Mar 2022 13:09:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 28 Mar 2022 15:18:37 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 58559ea02181b6b5f5e84a5ff7131c0ddd89a27c
-X-Git-Newrev: e9471cbad4d58eb0d95845c0d4e1e8bd846800c4
-X-Patchwork-Hint: ignore
-Message-Id: <20220328130958.B0CA085ED8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] configs/zynqmp_zcu10x:
- change git to https
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D3B960A8A
+ for <buildroot@uclibc.org>; Mon, 28 Mar 2022 06:11:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id E5FDB845D1; Mon, 28 Mar 2022 06:02:33 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Mon, 28 Mar 2022 06:11:42 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2021.11.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jose.pekkarinen@unikie.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-14701-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 14701] New: Multiple unresolved symbols while
+ building kernel module package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,75 +70,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9471cbad4d58eb0d95845c0d4e1e8bd846800c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-The git:// location is no longer supported by github, so change to https://
-
-For more details:
-https://github.blog/2021-09-01-improving-git-protocol-security-github/
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 92f653c24057065a4964f83e9ed70e868eac0f89)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/zynqmp_zcu102_defconfig | 4 ++--
- configs/zynqmp_zcu106_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 4e96489179..2dd0817bd8 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -4,7 +4,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -22,7 +22,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu102/uboot.fragment"
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 0a97975aa0..d836edfaf0 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -4,7 +4,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -22,7 +22,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu106/uboot.fragment"
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNDcwMQoKICAgICAgICAg
+ICAgQnVnIElEOiAxNDcwMQogICAgICAgICAgIFN1bW1hcnk6IE11bHRpcGxlIHVucmVzb2x2ZWQg
+c3ltYm9scyB3aGlsZSBidWlsZGluZyBrZXJuZWwKICAgICAgICAgICAgICAgICAgICBtb2R1bGUg
+cGFja2FnZQogICAgICAgICAgIFByb2R1Y3Q6IGJ1aWxkcm9vdAogICAgICAgICAgIFZlcnNpb246
+IDIwMjEuMTEuMQogICAgICAgICAgSGFyZHdhcmU6IEFsbAogICAgICAgICAgICAgICAgT1M6IExp
+bnV4CiAgICAgICAgICAgIFN0YXR1czogTkVXCiAgICAgICAgICBTZXZlcml0eTogbm9ybWFsCiAg
+ICAgICAgICBQcmlvcml0eTogUDUKICAgICAgICAgQ29tcG9uZW50OiBPdGhlcgogICAgICAgICAg
+QXNzaWduZWU6IHVuYXNzaWduZWRAYnVpbGRyb290LnVjbGliYy5vcmcKICAgICAgICAgIFJlcG9y
+dGVyOiBqb3NlLnBla2thcmluZW5AdW5pa2llLmNvbQogICAgICAgICAgICAgICAgQ0M6IGJ1aWxk
+cm9vdEB1Y2xpYmMub3JnCiAgVGFyZ2V0IE1pbGVzdG9uZTogLS0tCgpIaSwKCkknbSB0cnlpbmcg
+dG8gYnVpbGQgYSBwYWNrYWdlIGZvciBzZ3ggZHJpdmVyOgoKaHR0cHM6Ly9naXRodWIuY29tL2lu
+dGVsL2xpbnV4LXNneAoKVGhlIHBhY2thZ2UgbG9va3MgbGlrZToKCnNneC1kcml2ZXIubWs6Cgoj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwojCiMgc2d4LWRyaXZlcgojCiMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjCgpTR1hfRFJJVkVSX1ZFUlNJT04gPSAyLjE0ClNHWF9EUklWRVJfU09VUkNFID0gc2d4
+X2RyaXZlcl8kKFNHWF9EUklWRVJfVkVSU0lPTikudGFyLmd6ClNHWF9EUklWRVJfU0lURSA9IGh0
+dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC9saW51eC1zZ3gtZHJpdmVyL2FyY2hpdmUvcmVmcy90YWdz
+ClNHWF9EUklWRVJfTElDRU5TRSA9IEJTRC0zLUNsYXVzZSwgR1BMLTIuMApTR1hfRFJJVkVSX0xJ
+Q0VOU0VfRklMRVMgPSBMaWNlbnNlLnR4dAoKJChldmFsICQoa2VybmVsLW1vZHVsZSkpCiQoZXZh
+bCAkKGdlbmVyaWMtcGFja2FnZSkpCgpDb25maWcuaW46Cgpjb21tZW50ICJzZ3gtZHJpdmVyIG5l
+ZWRzIGEgTGludXgga2VybmVsIHRvIGJlIGJ1aWx0IgogICAgICAgIGRlcGVuZHMgb24gIUJSMl9M
+SU5VWF9LRVJORUwKCmNvbmZpZyBCUjJfUEFDS0FHRV9TR1hfRFJJVkVSCiAgICAgICAgYm9vbCAi
+c2d4LWRyaXZlciIKICAgICAgICBkZXBlbmRzIG9uIEJSMl9MSU5VWF9LRVJORUwKICAgICAgICBo
+ZWxwCiAgICAgICAgICBJbnRlbCBzZ3ggZHJpdmVyIGZvciBzZWN1cmVkIGNvbnRhaW5lcnMuCgog
+ICAgICAgICAgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsL2xpbnV4LXNneC1kcml2ZXIKCldoZW4g
+YnVpbGRpbmcgd2l0aCBhIHZhbGlkIGNvbmZpZywgdGhlIGJ1aWxkIHByb2Nlc3MKc3RvcHMgbGlr
+ZSB0aGlzOgoKPj4+IHNneC1kcml2ZXIgMi4xNCBCdWlsZGluZyBrZXJuZWwgbW9kdWxlKHMpClBB
+VEg9Ii91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2hvc3QvYmlu
+Oi91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2hvc3Qvc2Jpbjov
+dXNyL2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9zYmluOi9i
+aW4iClBLR19DT05GSUc9Ii91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRy
+ZW1lL2hvc3QvYmluL3BrZy1jb25maWciClBLR19DT05GSUdfU1lTUk9PVF9ESVI9Ii8iIFBLR19D
+T05GSUdfQUxMT1dfU1lTVEVNX0NGTEFHUz0xClBLR19DT05GSUdfQUxMT1dfU1lTVEVNX0xJQlM9
+MQpQS0dfQ09ORklHX0xJQkRJUj0iL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZf
+dXB4dHJlbWUvaG9zdC9saWIvcGtnY29uZmlnOi91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRw
+dXRfeDg2X3VweHRyZW1lL2hvc3Qvc2hhcmUvcGtnY29uZmlnIgpCUl9CSU5BUklFU19ESVI9L3Vz
+ci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvaW1hZ2VzCktDRkxBR1M9
+LVduby1hdHRyaWJ1dGUtYWxpYXMgL3Vzci9iaW4vbWFrZSAtajkgLUMKL3Vzci9zcmMvb3V0cHV0
+L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVpbGQvbGludXgtdGMteDg2LTUuMTUtc2Vj
+CkhPU1RDQz0iL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvaG9z
+dC9iaW4vY2NhY2hlCi91c3IvYmluL2djYyAtTzIgLUkvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4v
+b3V0cHV0X3g4Nl91cHh0cmVtZS9ob3N0L2luY2x1ZGUKLUwvdXNyL3NyYy9vdXRwdXQvYnJfYWRt
+aW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9ob3N0L2xpYgotV2wsLXJwYXRoLC91c3Ivc3JjL291dHB1
+dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2hvc3QvbGliIiBBUkNIPXg4Nl82NApJTlNU
+QUxMX01PRF9QQVRIPS91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1l
+L3RhcmdldApDUk9TU19DT01QSUxFPSIvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
+Nl91cHh0cmVtZS9ob3N0L2Jpbi94ODZfNjQtVElJLWxpbnV4LWdudS0iCkRFUE1PRD0vdXNyL3Ny
+Yy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9ob3N0L3NiaW4vZGVwbW9kCklO
+U1RBTExfTU9EX1NUUklQPTEgClBXRD0vdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
+Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLgpNPS91c3Ivc3JjL291dHB1dC9icl9h
+ZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2J1aWxkL3NneC1kcml2ZXItMi4xNC8uIG1vZHVsZXMK
+bWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5CicvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0
+cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9saW51eC10Yy14ODYtNS4xNS1zZWMnCiAgQ0MgW01dIAov
+dXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJp
+dmVyLTIuMTQvLi9zZ3hfbWFpbi5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4v
+b3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfcGFnZV9jYWNo
+ZS5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVt
+ZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfaW9jdGwubwogIENDIFtNXSAKL3Vzci9zcmMv
+b3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0
+Ly4vc2d4X3ZtYS5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
+Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfdXRpbC5vCiAgQ0MgW01dIAov
+dXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJp
+dmVyLTIuMTQvLi9zZ3hfZW5jbC5vCiAgQ0MgW01dIAovdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4v
+b3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9zZ3hfZW5jbDIubwog
+IExEIFtNXSAKL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVp
+bGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNneC5vCiAgTU9EUE9TVAovdXNyL3NyYy9vdXRwdXQvYnJf
+YWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9Nb2R1bGUu
+c3ltdmVycwpFUlJPUjogbW9kcG9zdDogImZsdXNoX3dvcmsiClsvdXNyL3NyYy9vdXRwdXQvYnJf
+YWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9pc2d4Lmtv
+XQp1bmRlZmluZWQhCkVSUk9SOiBtb2Rwb3N0OiAicHV0X3BpZCIKWy91c3Ivc3JjL291dHB1dC9i
+cl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2J1aWxkL3NneC1kcml2ZXItMi4xNC8uL2lzZ3gu
+a29dCnVuZGVmaW5lZCEKRVJST1I6IG1vZHBvc3Q6ICJ1cF9yZWFkIgpbL3Vzci9zcmMvb3V0cHV0
+L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJlbWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNn
+eC5rb10KdW5kZWZpbmVkIQpFUlJPUjogbW9kcG9zdDogImJvb3RfY3B1X2RhdGEiClsvdXNyL3Ny
+Yy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIu
+MTQvLi9pc2d4LmtvXQp1bmRlZmluZWQhCkVSUk9SOiBtb2Rwb3N0OiAic3lzdGVtX2ZyZWV6aW5n
+X2NudCIKWy91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9vdXRwdXRfeDg2X3VweHRyZW1lL2J1aWxk
+L3NneC1kcml2ZXItMi4xNC8uL2lzZ3gua29dCnVuZGVmaW5lZCEKRVJST1I6IG1vZHBvc3Q6ICJt
+bXVfbm90aWZpZXJfcmVnaXN0ZXIiClsvdXNyL3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4
+Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVyLTIuMTQvLi9pc2d4LmtvXQp1bmRlZmluZWQhCkVS
+Uk9SOiBtb2Rwb3N0OiAiX193YXJuX3ByaW50ayIKWy91c3Ivc3JjL291dHB1dC9icl9hZG1pbi9v
+dXRwdXRfeDg2X3VweHRyZW1lL2J1aWxkL3NneC1kcml2ZXItMi4xNC8uL2lzZ3gua29dCnVuZGVm
+aW5lZCEKRVJST1I6IG1vZHBvc3Q6ICJfX3g4Nl9pbmRpcmVjdF9hbHRfY2FsbF9yYngiClsvdXNy
+L3NyYy9vdXRwdXQvYnJfYWRtaW4vb3V0cHV0X3g4Nl91cHh0cmVtZS9idWlsZC9zZ3gtZHJpdmVy
+LTIuMTQvLi9pc2d4LmtvXQp1bmRlZmluZWQhCkVSUk9SOiBtb2Rwb3N0OiAiX194ODZfaW5kaXJl
+Y3RfdGh1bmtfcmN4IgpbL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZfdXB4dHJl
+bWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNneC5rb10KdW5kZWZpbmVkIQpFUlJPUjogbW9k
+cG9zdDogImFsbG9jX3BhZ2VzIgpbL3Vzci9zcmMvb3V0cHV0L2JyX2FkbWluL291dHB1dF94ODZf
+dXB4dHJlbWUvYnVpbGQvc2d4LWRyaXZlci0yLjE0Ly4vaXNneC5rb10KdW5kZWZpbmVkIQpXQVJO
+SU5HOiBtb2Rwb3N0OiBzdXBwcmVzc2VkIDY1IHVucmVzb2x2ZWQgc3ltYm9sIHdhcm5pbmdzIGJl
+Y2F1c2UgdGhlcmUgd2VyZQp0b28gbWFueSkKV0FSTklORzogbW9kcG9zdDogbW9kcG9zdDogRm91
+bmQgMiB3cml0YWJsZSBmdW5jdGlvbiBwb2ludGVycy4KCldoaWxlIHRoZSBzeW1ib2xzIGNhbiBi
+ZSBmb3VuZCBpbiB0aGUgb3JpZ2luYWwKc291cmNlIGNvZGUgb2YgdGhlIGtlcm5lbC4gQW0gSSBt
+aXNzaW5nIHNvbWV0aGluZwppbiB0aGUgcGFja2FnZSB0byByZXNvbHYgdGhlIHN5bWJvbHM/CgpU
+aGFua3MhCgpKb3PDqS4KCi0tIApZb3UgYXJlIHJlY2VpdmluZyB0aGlzIG1haWwgYmVjYXVzZToK
+WW91IGFyZSBvbiB0aGUgQ0MgbGlzdCBmb3IgdGhlIGJ1Zy4KX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
