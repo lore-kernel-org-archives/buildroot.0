@@ -1,82 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 605EAC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 20:18:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D81BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 20:23:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F290881A33;
-	Mon, 28 Mar 2022 20:18:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B53F401A3;
+	Mon, 28 Mar 2022 20:23:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 70Epb7Fg6zLu; Mon, 28 Mar 2022 20:18:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA2B781846;
-	Mon, 28 Mar 2022 20:18:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 028851BF28D
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 20:18:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B5FC4006F
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 20:18:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2cTM_UmDT2Oy for <buildroot@lists.busybox.net>;
- Mon, 28 Mar 2022 20:17:59 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w7HzqL17Jtmh; Mon, 28 Mar 2022 20:23:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F94240183;
+	Mon, 28 Mar 2022 20:23:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EF76A1BF28D
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 20:23:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE28C83E4A
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 20:23:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JZddLRw9o6_E for <buildroot@lists.busybox.net>;
+ Mon, 28 Mar 2022 20:23:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6FE6840993
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 20:17:58 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id i4so3129302wrb.5
- for <buildroot@buildroot.org>; Mon, 28 Mar 2022 13:17:58 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EDF6683EFA
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 20:23:05 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id d7so21977231wrb.7
+ for <buildroot@buildroot.org>; Mon, 28 Mar 2022 13:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FB7NcCUwGYmOUT/4UcL074Pqnsi9R/YFzYKXHku7Go0=;
- b=hbeE9XlAHm52VXyH/tGJvv96/kgd1240kpDGLmTQcan2lmBolQO7/oNTGSFFzwkvi1
- 31tAfENFsoibc4xwoO8Wpqq5DClsbBMwsun5YePeJpLlqUM88ydcRGBAYMq4kuBrt9ty
- ggl5/3P6Yjn6o2irw6Ne/TQHqIqvmjVUke10M9EJuvwcFrVRce7I2mWVmdnE1/FgWGyu
- IuZqbH8uWWHxswDCo9Yam1OjpXkJtqC2Sl/c19CtSIkOUb/rH3iSGO4oYArcpdTtL1bb
- vQIWsPdNVRPu6i749mmrmpke9k+d+PALgyzUeJijYmcukDy/Z3q0huosL4bmur/5j0I6
- nklQ==
+ bh=378iciaeRgaw+Xt3iQCQ5AsX7nR7DJv/r4ajheNfy30=;
+ b=CGdv6RxfMM0EAOKrpupsHX7Jr1aLn/15X/7YMQB6aJmbHaFgQGXWDvaLA4sG1en1YH
+ upcK+OxNG9K61G+XYzMytaL8v+SDidkMNJYVIbnAZV7LXSLGF+Vo6C1rgE8r6gjs8ClX
+ SB7nAT8yrMdx7JBgJ+zkyItROrxkL65IlmzJYS8h2caqAWP7BB5PKRTCU/jVdomWESKy
+ 7fLDA8eBDO04ZzyPODAs5dfNdIX0i5NsBMb235f+6M1gGfdFa/DFAgxdESG4pUbShEJc
+ EMjYJ7+sEbJamHvk1wX1g4jEjH23hwj3iRALhlAUFU7yuxbflxeOhDjgUmbjfH6UmjwC
+ +nMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FB7NcCUwGYmOUT/4UcL074Pqnsi9R/YFzYKXHku7Go0=;
- b=jJxD/Mb55w+uaw/qlNgSGl8qvILtonG7clBbay58CL9OyRXWh/i6qCa4G3DQMasNjl
- lBoT2D5rYKqC4CYSoZLs4GNiVTYPn+DU1kdemZaOXhaa15+3V3bo2wcx2qXr91EdM4gu
- C+RTNYiCOxqMqhX29zg/oyPElqsHfWupUEWItMZX+hQTb6MvRI7E8nfbQp9yE9n2wugG
- hGv8NfFbfGvQdu8qv86+crYQpXBqGXmzECKoz+8FxnNcp+4WMbLHej0vMGeC0WXgyRdx
- DcsZ1y/uzunwyFD1cWhwwMi59VdFiRiGLmQ1xFHOibgkCp3Ani0H11luyDFr026N8Lq2
- iOfg==
-X-Gm-Message-State: AOAM5325tHorU7dgNxp3IpVJWzsHe2EQpXkbVknOt+j7ACdi810iWl9F
- Mdkx+S+c+AIzVVZeNman/Qe9kxkUOKY=
-X-Google-Smtp-Source: ABdhPJzNn3jE6CyZPIkSVXHOgi8qfPZZSrebhZ66ehiazDtQyKxo9eU9mOSlRFSArJdKiguKzT7aSg==
-X-Received: by 2002:adf:e4c1:0:b0:205:8b74:8dee with SMTP id
- v1-20020adfe4c1000000b002058b748deemr26562415wrm.225.1648498677063; 
- Mon, 28 Mar 2022 13:17:57 -0700 (PDT)
+ bh=378iciaeRgaw+Xt3iQCQ5AsX7nR7DJv/r4ajheNfy30=;
+ b=26lAMNuR+Jsd/bn3ItTs18pvf5UlQ2R0qVgV4FFW/k54arGmCvhUjlKVS77fIzx33e
+ mXvXuPfVAzsHjGs47tAI2DuwHiBKUqsdIAOVn34vQxViNGSUvh3f6JANS1gUdfuG1r7T
+ uiKYan1LB9nyfETzYQPTId42pXGeJ0t+hwX7UEmd0+JTnp32JD1IlGUukwqAPGhQyOY5
+ 24JfhmktwfeV+1ALbIrtXGVpJR77RdBUYr0yhaJcaNS3XyYb5WGZJQa8sI2H4EEOAOQA
+ FxKSJzcZ5oY5nusHbyE4Q0o2AKFkkaDxKcQk0GfCjynivJ01WoFdEYg8hFGHeAS1qu5x
+ UYag==
+X-Gm-Message-State: AOAM530YulMMNIHJghZJupy3Ojr/7IIaJizLXjJsKhvMrRTvm4Abl3Iq
+ HMWGw4QFTTVjezUvSBnUvcbPYOxlxtc=
+X-Google-Smtp-Source: ABdhPJwzM2Usw0ilz5ZGmvk83kAUU0jblnPytuZaiJw/Wfa53UQW53AN/o5p9wX8A4rCs6RS+pAUhg==
+X-Received: by 2002:adf:cf12:0:b0:203:f917:82ba with SMTP id
+ o18-20020adfcf12000000b00203f91782bamr26708543wrj.538.1648498983859; 
+ Mon, 28 Mar 2022 13:23:03 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- p2-20020a1c7402000000b0038159076d30sm408052wmc.22.2022.03.28.13.17.56
+ p8-20020a5d4e08000000b002054b5437f2sm12832203wrt.115.2022.03.28.13.23.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Mar 2022 13:17:56 -0700 (PDT)
+ Mon, 28 Mar 2022 13:23:03 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Mar 2022 22:15:21 +0200
-Message-Id: <20220328201521.4084-1-fontaine.fabrice@gmail.com>
+Date: Mon, 28 Mar 2022 22:21:36 +0200
+Message-Id: <20220328202136.7182-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] Revert "package/tpm2-tss: bump version to
- 3.2.0"
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version 1.3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,65 +87,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This reverts commit ed13a65a08cfe315aed9344abc609f5f2b92c782 as it
-has the following non trivial issues:
- - pkgconfig files have no version number if we run autoreconf
-   (https://github.com/tpm2-software/tpm2-tss/issues/2329) resulting in
-   the following build failures with tpm2-{abrmd,pkcs11} or libsecret:
+Service release. Issues resolved:
+https://github.com/eclipse/paho.mqtt.c/milestone/17?closed=1
 
-   configure: error: Package requirements (tss2-esys >= 2.0) were not met:
-
-   Package dependency requirement 'tss2-esys >= 2.0' could not be satisfied.
-   Package 'tss2-esys' has version '', required version is '>= 2.0'
-
- - addgroup/groupadd and adduser/useradd are mandatory since
-   https://github.com/tpm2-software/tpm2-tss/commit/7fde604383c62fc764a1e060dff48fc06f79860b:
-
-    configure: error: addgroup or groupadd are needed.
-
-It seems better to find an upstreamable solution to both issues before
-bumping.
-
-Fixes:
- - http://autobuild.buildroot.org/results/d4d6807af3493deb47951c6f11f427040e5c5e11
- - http://autobuild.buildroot.org/results/a304e45bacb8cd7e7ea9bc49e4a8ec9359ca0a3a
- - http://autobuild.buildroot.org/results/be0befa81e955ac8cf16f9d20723f9b9b174e012
- - http://autobuild.buildroot.org/results/d4ebee400423f6df51613193c86db3c58c94ff88
+https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.10
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index db6b3b7ad0..b6eb3c1f97 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 4cdedfbf9a..931bf5b9c8 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,5 +1,5 @@
  # Locally computed:
--sha256  48305e4144dcf6d10f3b25b7bccf0189fd2d1186feafd8cd68c6b17ecf0d7912  tpm2-tss-3.2.0.tar.gz
-+sha256  8900a6603f74310b749b65f23c3461cde6e2a23a5f61058b21004c25f9cf19e8  tpm2-tss-3.1.0.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 2bb1235177..f475697e40 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
+-sha256  386c9b5fa1cf6d0d516db12d57fd8f6a410dd0fdc5e9a2da870aae437a2535ed  paho-mqtt-c-1.3.9.tar.gz
++sha256  c70db96e66adacae411d5d875fbb08bca6ff9945de3d215b3af93cbd22792db5  paho-mqtt-c-1.3.10.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 68b58f2e02..d6356a7ccc 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TPM2_TSS_VERSION = 3.2.0
-+TPM2_TSS_VERSION = 3.1.0
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
+-PAHO_MQTT_C_VERSION = 1.3.9
++PAHO_MQTT_C_VERSION = 1.3.10
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
 -- 
 2.35.1
 
