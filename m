@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EFFCC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 19:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF428C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 28 Mar 2022 20:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3479360F46;
-	Mon, 28 Mar 2022 19:59:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C47F81B6D;
+	Mon, 28 Mar 2022 20:00:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FMFZka9AtEnB; Mon, 28 Mar 2022 19:59:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T0_eIcfFT9bK; Mon, 28 Mar 2022 20:00:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49FFD60C02;
-	Mon, 28 Mar 2022 19:59:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 910061BF2BA
- for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 719AE80CB8;
+	Mon, 28 Mar 2022 20:00:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2188B1BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A87A40A9F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6030C81B10
  for <buildroot@lists.busybox.net>; Mon, 28 Mar 2022 19:58:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zK3hfD5kGZ44 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 67LoYxTkfmaV for <buildroot@lists.busybox.net>;
  Mon, 28 Mar 2022 19:58:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6680A40570
+ by smtp1.osuosl.org (Postfix) with ESMTP id 90E7581B35
  for <buildroot@buildroot.org>; Mon, 28 Mar 2022 19:58:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 7914385F3F; Mon, 28 Mar 2022 19:48:54 +0000 (UTC)
+ id 9205085F3F; Mon, 28 Mar 2022 19:48:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 28 Mar 2022 21:22:36 +0200
+Date: Mon, 28 Mar 2022 21:49:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f44c5d3f54893195c731523423c01e355978ef6a
-X-Git-Newrev: 5ed1baa7e2d20c2b6184db265f398d1c2bb0e2e8
+X-Git-Oldrev: be3f9cde29f1727e264d6a2a023588273410c800
+X-Git-Newrev: ba8f35eda65d3623967e35547d6bec38f5ebc66a
 X-Patchwork-Hint: ignore
-Message-Id: <20220328194854.7914385F3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/netatalk: security bump to version
- 3.1.13
+Message-Id: <20220328194854.9205085F3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5base: fix race with libxkbcommon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,84 +58,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ed1baa7e2d20c2b6184db265f398d1c2bb0e2e8
+commit: https://git.buildroot.net/buildroot/commit/?id=ba8f35eda65d3623967e35547d6bec38f5ebc66a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fixes CVE-2021-31439, CVE-2022-23121, CVE-2022-23123, CVE-2022-23122,
-  CVE-2022-23125, CVE-2022-23124 and CVE-2022-0194
-- Drop second patch (already in version)
-- Add tarball sha256
-- Update indentation in hash file (two spaces)
+qt5wayland package currently has a bug if the xkbcommon Qt config is not
+enabled which highlighted a race issues between qt5base, libxkbcommon
+and qt5wayland.
 
-https://sourceforge.net/projects/netatalk/files/netatalk/3.1.13
+qt5wayland has a dependency on libxkbcommon package if it's enabled.
+qt5base only has a dependency on libxkbcommon if xcb support is to be
+enabled.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+If libxkbcommon package is built before qt5base, qt5base will detect it
+during its configure step and enable the Qt config accordingly. This
+will make it available to qt5wayland afterwards, even if xcb support is
+not enabled in Buildroot Kconfig.
+
+However, if qt5base is built before libxkbcommon is, qt5base will not
+advertise support of xbcommon feature to qt5wayland (which will fail its
+build because of a bug in the source code).
+
+Since the package build order should not impact the outcome of the
+build, let's explicit the dependency if and only if libxkbcommon package
+is to be compiled at some point in time so that at least this feature is
+not susceptible to races.
+
+Move the xkbcommon entries out of the BR2_PACKAGE_QT5BASE_XCB condition,
+instead make them depend on BR2_PACKAGE_LIBXKBCOMMON. Since
+BR2_PACKAGE_QT5BASE_XCB selects BR2_PACKAGE_LIBXKBCOMMON they are still
+included if xcb is selected.
+
+Cc: Quentin Schulz <foss+buildroot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+[Arnout: remove the already existing xkbcommon entries]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-multiple-def-of-invalid_dircache_entries.patch | 25 ----------------------
- package/netatalk/netatalk.hash                     |  7 +++---
- package/netatalk/netatalk.mk                       |  2 +-
- 3 files changed, 5 insertions(+), 29 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch b/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-deleted file mode 100644
-index e7ccc52553..0000000000
---- a/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 32df6e155ccfc83216321925273c3e75e631ebe6 Mon Sep 17 00:00:00 2001
--From: Andrew Bauer <zonexpertconsulting@outlook.com>
--Date: Wed, 22 Jan 2020 09:59:47 -0600
--Subject: [PATCH] fix ftbs multiple def of invalid_dircache_entries
--
--[Retrieved from:
--https://github.com/Netatalk/Netatalk/pull/125/commits/32df6e155ccfc83216321925273c3e75e631ebe6]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- etc/afpd/directory.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/etc/afpd/directory.h b/etc/afpd/directory.h
--index eb89c606..81bfa9cb 100644
----- a/etc/afpd/directory.h
--+++ b/etc/afpd/directory.h
--@@ -91,7 +91,7 @@ struct maccess {
-- #define	AR_UWRITE	(1<<2)
-- #define	AR_UOWN		(1<<7)
-- 
---q_t *invalid_dircache_entries;
--+extern q_t *invalid_dircache_entries;
-- 
-- typedef int (*dir_loop)(struct dirent *, char *, void *);
-- 
-diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
-index 6c3250a005..6dead5457c 100644
---- a/package/netatalk/netatalk.hash
-+++ b/package/netatalk/netatalk.hash
-@@ -1,6 +1,7 @@
--# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.12/
--md5 021d2330cb7f7cd2977aec46299dcc1b  netatalk-3.1.12.tar.bz2
--sha1 cc1fe1ebdbdb4da9cf82835c440e82ba28a832c5  netatalk-3.1.12.tar.bz2
-+# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.13/
-+md5  697421623c32ee0ab9c8076191766e5f  netatalk-3.1.13.tar.bz2
-+sha1  16dd7fa84962a44b36b795b8c44393e728785947  netatalk-3.1.13.tar.bz2
- # Locally computed
-+sha256  89ada6bcfe1b39ad94f58c236654d1d944f2645c3e7de98b3374e0bd37d5e05d  netatalk-3.1.13.tar.bz2
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  7599ae145e53be03a08f8b558b2f2e0c828e1630f1843cc04f41981b8cefcd65  COPYRIGHT
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 0c219a2316..7cc950beb6 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 972d217ef1..0c811b3ac1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -174,9 +174,13 @@ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),directfb)
  
--NETATALK_VERSION = 3.1.12
-+NETATALK_VERSION = 3.1.13
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
++ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
++QT5BASE_CONFIGURE_OPTS += -xkbcommon
++QT5BASE_DEPENDENCIES   += libxkbcommon
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+ QT5BASE_CONFIGURE_OPTS += -xcb
+-QT5BASE_CONFIGURE_OPTS += -xkbcommon
+ 
+ QT5BASE_DEPENDENCIES   += \
+ 	libxcb \
+@@ -184,8 +188,7 @@ QT5BASE_DEPENDENCIES   += \
+ 	xcb-util-image \
+ 	xcb-util-keysyms \
+ 	xcb-util-renderutil \
+-	xlib_libX11 \
+-	libxkbcommon
++	xlib_libX11
+ ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
+ QT5BASE_DEPENDENCIES   += xlib_libXext
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
