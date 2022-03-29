@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F012DC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 29 Mar 2022 20:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1455C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 29 Mar 2022 20:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3EF0843B8;
-	Tue, 29 Mar 2022 20:31:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98807843C7;
+	Tue, 29 Mar 2022 20:31:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8oBWGTCd_68t; Tue, 29 Mar 2022 20:31:41 +0000 (UTC)
+	with ESMTP id IC-Tz3kHlumg; Tue, 29 Mar 2022 20:31:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0E52843A9;
-	Tue, 29 Mar 2022 20:31:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE19B843C2;
+	Tue, 29 Mar 2022 20:31:53 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 183A01BF2E3
- for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 20:29:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 137301BF2E3
+ for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 20:29:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D955F84397
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6035843A5
  for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 20:29:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XgWjnFFNqzFJ for <buildroot@lists.busybox.net>;
- Tue, 29 Mar 2022 20:29:35 +0000 (UTC)
+ with ESMTP id 5PUa8OK6aTS0 for <buildroot@lists.busybox.net>;
+ Tue, 29 Mar 2022 20:29:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71E67843A5
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7F24843A9
  for <buildroot@buildroot.org>; Tue, 29 Mar 2022 20:29:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2B0E585F88; Tue, 29 Mar 2022 20:20:22 +0000 (UTC)
+ id 6695185F88; Tue, 29 Mar 2022 20:20:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Mar 2022 21:44:33 +0200
+Date: Tue, 29 Mar 2022 22:02:19 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 525813a9e02492b73c71e1106fc50cf2441cb429
-X-Git-Newrev: df1fe3d8e8cba5ba0856a4d029dc6a2499fa67d4
+X-Git-Oldrev: a66f78923985a838ba5a8b2ed945ba2f77c7fb11
+X-Git-Newrev: 5adb8c23fdd0537fa04a9e7b673b7d9daf5d4d1c
 X-Patchwork-Hint: ignore
-Message-Id: <20220329202022.2B0E585F88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/python-aioconsole: bump to version 0.4.1
+Message-Id: <20220329202022.6695185F88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/dav1d: use
+ official tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df1fe3d8e8cba5ba0856a4d029dc6a2499fa67d4
+commit: https://git.buildroot.net/buildroot/commit/?id=5adb8c23fdd0537fa04a9e7b673b7d9daf5d4d1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a3a1593b74048eec038cd351b06a6654e8bba0c4)
+(cherry picked from commit 0bdf40b1b0a36212fefef0b19632545f94c06423)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-aioconsole/python-aioconsole.hash | 4 ++--
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dav1d/dav1d.hash | 3 ++-
+ package/dav1d/dav1d.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 39ce16f8b2..af8b5c4de9 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  56a1e6542ea3627bdbc67f24abcaa341  aioconsole-0.4.0.tar.gz
--sha256  a30ad5276b85dd20a48d235111d0bd26c6bedf7b56d605ffc10ae27124b4b0b4  aioconsole-0.4.0.tar.gz
-+md5  105adca78033ef1f0b62d8e81d3efcac  aioconsole-0.4.1.tar.gz
-+sha256  0c0acb66b4e72d6606c9fa14ac9eb001a222c37c885b8fbdf65f41824cfa855f  aioconsole-0.4.1.tar.gz
- # Locally computed sha256 checksums
- sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index 44857054d4..a58fd33a61 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index b0f163bae7..5e838b0951 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,3 +1,4 @@
++# From http://download.videolan.org/pub/videolan/dav1d/0.9.2/dav1d-0.9.2.tar.xz.sha256
++sha256  e3235ab6c43c0135b0db1d131e1923fad4c84db9d85683e30b91b33a52d61c71  dav1d-0.9.2.tar.xz
+ # Locally computed
+-sha256  0d198c4fe63fe7f0395b1b17de75b21c8c4508cd3204996229355759efa30ef8  dav1d-0.9.2.tar.bz2
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index d7224625c8..ecc4cc55c3 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.4.0
-+PYTHON_AIOCONSOLE_VERSION = 0.4.1
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/f2/7a/7628ec23f140ffca532c7f630e179503727b755849b5eab15576bbf7d3df
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/c5/16/a9de89d859eeaa0f9fdf5675a97ea1416265e1ebc039c7b9ea2c9e5433ac
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
+ DAV1D_VERSION = 0.9.2
+-DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
+-DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
++DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
++DAV1D_SITE = http://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
+ DAV1D_LICENSE_FILES = COPYING
+ DAV1D_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
