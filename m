@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4FF9C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 29 Mar 2022 18:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 464E1C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 29 Mar 2022 18:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F5CE418E2;
-	Tue, 29 Mar 2022 18:51:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE14461022;
+	Tue, 29 Mar 2022 18:51:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kxpt2Res1q4B; Tue, 29 Mar 2022 18:51:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PWSzUp0xIe0I; Tue, 29 Mar 2022 18:51:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD681418F5;
-	Tue, 29 Mar 2022 18:51:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EBDC1BF83C
- for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 18:51:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F7CB6101D;
+	Tue, 29 Mar 2022 18:51:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 69DBD1BF83C
+ for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 18:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BBDE4016D
- for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 18:51:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55C998430E
+ for <buildroot@lists.busybox.net>; Tue, 29 Mar 2022 18:51:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NCH_wNdPHCQT for <buildroot@lists.busybox.net>;
- Tue, 29 Mar 2022 18:51:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LHmFfqjOnLyR for <buildroot@lists.busybox.net>;
+ Tue, 29 Mar 2022 18:51:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
- [IPv6:2607:f8b0:4864:20::102e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 828ED4011D
- for <buildroot@buildroot.org>; Tue, 29 Mar 2022 18:51:24 +0000 (UTC)
-Received: by mail-pj1-x102e.google.com with SMTP id
- a16-20020a17090a6d9000b001c7d6c1bb13so3838963pjk.4
- for <buildroot@buildroot.org>; Tue, 29 Mar 2022 11:51:24 -0700 (PDT)
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
+ [IPv6:2607:f8b0:4864:20::102b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D38BB84303
+ for <buildroot@buildroot.org>; Tue, 29 Mar 2022 18:51:25 +0000 (UTC)
+Received: by mail-pj1-x102b.google.com with SMTP id
+ o68-20020a17090a0a4a00b001c686a48263so2031654pjo.1
+ for <buildroot@buildroot.org>; Tue, 29 Mar 2022 11:51:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=xFfzNJt5mA+aEPJx8oFHjTRM0mQSs9c9gxHn4gxXkQw=;
- b=BSDJrdzo4Jof2fwf+YzWhA1mOMkXPSDDhKY962Kegccf/WC61BdfRXN5i14C9D6x3V
- ncODokRunFFKIwga5pw4meI7srPzwtjkqtQWh8Ct8lQhBMbNnoTT8YcJ4qRXinO1yYrh
- B+GHhZDMlAt2FGhe8ik4sqXfnE7NxReSKehcoJzzZ3zDZlM/Y4qdups0yMMp6zTJfpUP
- FryJgXraLVDPWqN/naVi4wz3+gV1Olqb6LHYqosrS4I4aLTGXryQQDQLjDr1MwIip3mM
- SjmQg/+eVXdPCj3f1XXhP1MxtFohtGgBGX3SeexZKq2ZFXQi5+uU80murNDZm+QFl+zG
- VJjw==
+ bh=xabvM/RKKURkaDVx2RJ5jURBx6anj8ibjJkpr5RiBvE=;
+ b=GjMSEcKHk9WvpeJ9/ssCeOtN/PoI9+Jm8avgPkYCCbn5FviAnrMYvT+NmzSInE7+Cs
+ qJvk7Crbnn5Rqz4D1ROzL/JhOx8Hb0g37aVQfb5nRr6kCx0kVqVKI1bu5G+phXYggwk2
+ dUxSsq89mGKdccSmtMN/+6XfLjH877rX32IGAhJQxZF2O8T62Brxo8408uOCIQdTW9Ih
+ cLa0MRC7yvKYM2ajAgZ0bi+f1synTsgvenZ20TPnUwnP2/WystqlF0abFBKDH47itEaf
+ yp3oy4lW7mB3BwTL0APAVmAde2bemLTQkNp05h39HIGZqCZDK6+WGgWpe2dkUO8AkKup
+ Obdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=xFfzNJt5mA+aEPJx8oFHjTRM0mQSs9c9gxHn4gxXkQw=;
- b=4fflfDUJx6l3VexBZsXcvs4FgTerbUPzOgRU1skDpg/Bj5MPw45/s0Bx5wkOpXI+VZ
- qYpirMYZCToP0aZpIZRuqKdM2fzhygVqVs3rJgMZqEChXrbm+4IDqttAQhwuuC9wb/KH
- CyvmvfnoPbM8bwu8cIH09kJqLg9tTtkV6Us/2DA3MjXPJ/IvhVUUUKt4KtJCz05duXH1
- quyY37hiiTbgtvHvGx4MA1BbgXKWmOlFMiqEcRDoV6hiRwDOZ7Qqe6GB718h6/lmh5nt
- gD/pHdyJAu21Ur+mJJ7sKOelUvcHH+V0FPu8KS8iFwehHnoNO2MBendhC3UZPQkv3MDS
- Twrg==
-X-Gm-Message-State: AOAM531s64OuoQnn0DboLcjFgp+QR8B7Uk15tb54jzT3wjxvoCO/kAHU
- UQxE1XkG3p49oQsqWDvr/DR1Gy1WjgkKdg==
-X-Google-Smtp-Source: ABdhPJzvusAKIwHQY4sskqnz5hEaZsMp1PHEFcPLjoGbLr7E+Kf0VLCaRIvq30TP+C8tzrR8bJj7YA==
-X-Received: by 2002:a17:90b:17c6:b0:1c7:46bf:ba16 with SMTP id
- me6-20020a17090b17c600b001c746bfba16mr532087pjb.1.1648579883526; 
- Tue, 29 Mar 2022 11:51:23 -0700 (PDT)
+ bh=xabvM/RKKURkaDVx2RJ5jURBx6anj8ibjJkpr5RiBvE=;
+ b=z8apNLkiGahb/gPX7NLkITj+LglAaOOeah4Eb++fiM5A1zgrOU7WhyLwKsQrSTSMOc
+ KiwVg43svtDOpYwImcH5lvJekCkVHk9PO+Ac6zDNJOYVspcR4JJRZp2714yh8dXcsxPv
+ +RqemRuFvZ8al8pHCkU3Twzcii9qasLIvOR++xsmV08oUI3hqlTqJ5jwyTqWqfyDG0Fd
+ Dx19xmYNBnVKIGsgPvRAJl08CaLLCnAFZHmEn6mXbfcjzRMaaqc7u0ahp8h6cPXke3DX
+ MQae8c4y2pdf1eW41i+9PNcCDNO0IJgAS5sljv/hDThOc99eCkb+YHyRINgM9LILPZPB
+ 2OvQ==
+X-Gm-Message-State: AOAM531Tw6NBByVJyy8uKCGZ1ZteXCR47WRZv/LxOIeFBsnO9ucaT5kZ
+ FNnReadbjxhVw2zHClWId7/XG7nSLbiJjA==
+X-Google-Smtp-Source: ABdhPJxZEuUu6xfGoO+TTcjWnvKstzptlEWBhQkCv1XBwnJtlOpi6rP7XHL0L6/4GmC2O37liT9p4Q==
+X-Received: by 2002:a17:90b:2242:b0:1c6:80e3:71b6 with SMTP id
+ hk2-20020a17090b224200b001c680e371b6mr541532pjb.152.1648579884855; 
+ Tue, 29 Mar 2022 11:51:24 -0700 (PDT)
 Received: from mac-mini.. ([2806:1000:8003:5c6c::13])
  by smtp.googlemail.com with ESMTPSA id
- y12-20020a17090a784c00b001c6bdafc995sm4836774pjl.3.2022.03.29.11.51.22
+ y12-20020a17090a784c00b001c6bdafc995sm4836774pjl.3.2022.03.29.11.51.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Mar 2022 11:51:23 -0700 (PDT)
+ Tue, 29 Mar 2022 11:51:24 -0700 (PDT)
 From: Alsey Coleman Miller <alseycmiller@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Mar 2022 18:50:58 +0000
-Message-Id: <20220329185059.943889-3-alseycmiller@gmail.com>
+Date: Tue, 29 Mar 2022 18:50:59 +0000
+Message-Id: <20220329185059.943889-4-alseycmiller@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220329185059.943889-1-alseycmiller@gmail.com>
 References: <20220329185059.943889-1-alseycmiller@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/4] package/libdispatch: add fix for 32-bit arm
+Subject: [Buildroot] [PATCH 4/4] DEVELOPERS: add Alsey Miller for libdispatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,29 +97,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
 ---
- package/libdispatch/arm-yield.patch | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 package/libdispatch/arm-yield.patch
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libdispatch/arm-yield.patch b/package/libdispatch/arm-yield.patch
-new file mode 100644
-index 0000000000..fa7cf7cce4
---- /dev/null
-+++ b/package/libdispatch/arm-yield.patch
-@@ -0,0 +1,13 @@
-+diff --git a/src/shims/yield.c b/src/shims/yield.c
-+index 43f0017..d0c5fff 100644
-+--- a/src/shims/yield.c
-++++ b/src/shims/yield.c
-+@@ -36,7 +36,7 @@ void *
-+ _dispatch_wait_for_enqueuer(void **ptr)
-+ {
-+ #if !DISPATCH_HW_CONFIG_UP
-+-#if defined(__arm__) || defined(__arm64__)
-++#if (defined(__arm__) && defined(__APPLE__)) || defined(__arm64__)
-+ 	int spins = DISPATCH_WAIT_SPINS_WFE;
-+ 	void *value;
-+ 	while (unlikely(spins-- > 0)) {
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a66b9d7eee..555ec0175b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -122,6 +122,9 @@ F:	boot/opensbi/
+ F:	configs/hifive_unleashed_defconfig
+ F:	package/xen/
+ 
++N:	Alsey Miller <alseycmiller@gmail.com>
++F:	package/libdispatch/
++
+ N:	Alvaro G. M <alvaro.gamez@hazent.com>
+ F:	package/dcron/
+ F:	package/libxmlrpc/
 -- 
 2.35.1
 
