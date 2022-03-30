@@ -1,53 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 378C8C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 17:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A5DCC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 17:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1B9E41D83;
-	Wed, 30 Mar 2022 17:21:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2452E405AB;
+	Wed, 30 Mar 2022 17:21:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oZCzutT5UFte; Wed, 30 Mar 2022 17:21:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZvuPLvwjOVJH; Wed, 30 Mar 2022 17:21:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D91941D1C;
-	Wed, 30 Mar 2022 17:21:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1F741BF47E
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:21:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F09540E08;
+	Wed, 30 Mar 2022 17:21:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A2901BF47E
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0B57848D2
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:21:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 868C961277
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:21:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s0EB9fJ4QuLF for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 17:21:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7AE36848DC
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:21:05 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6E52660005;
- Wed, 30 Mar 2022 17:21:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nZc0E-0006ZF-Gx; Wed, 30 Mar 2022 19:21:02 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WiT269AvgP0A for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 17:21:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDF7B61272
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:21:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 9084285FCC; Wed, 30 Mar 2022 17:12:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20220318082446.18552-1-ps.report@gmx.net>
-Date: Wed, 30 Mar 2022 19:21:02 +0200
-In-Reply-To: <20220318082446.18552-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 18 Mar 2022 09:24:45 +0100")
-Message-ID: <87sfqz73wh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/spidev_test: fix
+To: buildroot@buildroot.org
+Date: Wed, 30 Mar 2022 19:20:38 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 0e94e0515f22b99f142206c8006c91e3f8b0f8c3
+X-Git-Newrev: 5cff54794f668598f64e45b95a11ddbe8f5a6046
+X-Patchwork-Hint: ignore
+Message-Id: <20220330171238.9084285FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/spidev_test: fix
  spidev_test.c version in Config.in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,25 +53,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5cff54794f668598f64e45b95a11ddbe8f5a6046
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > - fix spidev_test.c version in Config.in help text, version update to 4.10
- >   (missing from commit 'spidev_test: bump to version in Linux 4.10' [1])
+- fix spidev_test.c version in Config.in help text, version update to 4.10
+  (missing from commit 'spidev_test: bump to version in Linux 4.10' [1])
 
- > [1] https://git.buildroot.net/buildroot/commit/?id=a497a9fd6cdb518572282b1478279f476f870fb7
+[1] https://git.buildroot.net/buildroot/commit/?id=a497a9fd6cdb518572282b1478279f476f870fb7
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 53da16e3786cbf4c7637dacfddeef58c315cce66)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spidev_test/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2021.02.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
+index 44990c66b6..aa57b5edbf 100644
+--- a/package/spidev_test/Config.in
++++ b/package/spidev_test/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_SPIDEV_TEST
+ 	  proper operation of 'spidev_test'.
+ 
+ 	  The version used is based on your toolchain headers version,
+-	  if it's older than 3.15 then 3.0 is used, otherwise 3.15
++	  if it's older than 3.15 then 3.0 is used, otherwise 4.10
+ 	  is used.
+ 	  This means you won't have quad-pumped SPI support if your
+ 	  toolchain is too old.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
