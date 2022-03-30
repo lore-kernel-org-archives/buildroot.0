@@ -1,80 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 294E2C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 07:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A8A9C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 07:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0B7541BB8;
-	Wed, 30 Mar 2022 07:14:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE5CD8453E;
+	Wed, 30 Mar 2022 07:19:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cEo3hOA8xN5o; Wed, 30 Mar 2022 07:14:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B7AE41BA5;
-	Wed, 30 Mar 2022 07:14:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1FCB21BF5E0
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 07:14:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E1108131A
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 07:14:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L9GJsKB_5Rfw for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 07:14:52 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v7f4txDqs5cA; Wed, 30 Mar 2022 07:19:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9DA38453A;
+	Wed, 30 Mar 2022 07:19:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C40201BF5E0
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 07:19:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF52F41BA6
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 07:19:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y0jUrEZfbcbJ for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 07:19:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2EEA80E48
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 07:14:51 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id e22so23753377ioe.11
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 00:14:51 -0700 (PDT)
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com
+ [IPv6:2607:f8b0:4864:20::b30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1A1F41B99
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 07:19:18 +0000 (UTC)
+Received: by mail-yb1-xb30.google.com with SMTP id v35so35474398ybi.10
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 00:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=X5X600nlNnDbYNnZc5QX1g9Wn+Ckm3sBED7eOPD03/Q=;
- b=GnT5KXjb1zxflDQdq++NX4/+NwUlS1td+QR5cLQq8oloUbi4Ho+vUyw1Y//iw2iJOX
- n7Mlt3zX/eAj4OFAoc0tXL6LVdjeJF7N//d7tajtwGD1I98PdrWQsOD77k6fEDiqjk7S
- +eT/ugTzsweWcimsZNHvt3nuNhk0/iEfZ8kShdziCaZ4ze9xkFywHNeW/73NZQGQPzS6
- elElm+mbZet/8XADCTHUayTReH1XBytNnGt+LSIu7LS8L6pTP48ey1cXmCx3nwPKhkUm
- Xh3hQUIYrA7JHpS2yDDReut8z/f0KwGeuZKUJHdnPrS46S279NAbzhe/XhiiuFkxvKsy
- qiqA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=pY8mFq3R7VVEWDPZX48f70SOIXckqlfbvGfpYAzJyLk=;
+ b=ib+9wYYrxcmYj4hxZTYjA4N57YVLFqZ1c64T4sDxQ5A16m+Un3dBNNPh1N6y/lmj0F
+ wOcyIL5G3OOQqJDq9Wi8K7bVWR/4v6GR5AJrVWflQFydx812gc5TeCzHHNxcuOs0sQ5d
+ Kk+qy7hMrqfMJ28m0HUFT74Dp+qTDMunl7aTZESfcnbOqyVQlcVq0eohWyfpv3S/KbGN
+ 8uzZGCUJblnPp7Hfh+06geC0rD+tbh3gC/Xv2lWD80Tv9hlX4sqR9QORRt2SAYxFbQC9
+ avnr30z7elxZwgEQQNESSLOAZR3/PmKaBv7NjX/u/XCN9Oit9ArpYGGHCbQpUusm5Itw
+ CwjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=X5X600nlNnDbYNnZc5QX1g9Wn+Ckm3sBED7eOPD03/Q=;
- b=dsaN9XUPVPJRo95f2n2inDKZt8fZ57Jh7TZoEDnfKEdK9wnJDrm9J2pZ8pAFY6tfiJ
- f0QVdFvPAvDbGrbnYGpUyv7K2TDjypNNO/hmx8G+Cx4QIxxcGEadGrxz05ygLzXxvDTM
- XoMJmrdYhf1QyaHvHUQeqbcH7fPYwD1iXVtB9r92ZSbzADbGFJ3REI+UP/8TiRcPqYGr
- yVNOibB8nowqO2GflQwmPnLfJt43+mbyaLAbq5MljJVRuna8vfy9tJZlrDPveg33suV7
- +FfvtF6Pal8hbg7bJtLBYdQgBpbuOaCYZWuFCoQDuskqV9gCuBvWHEsuWc9QMmu6QQSO
- gqkA==
-X-Gm-Message-State: AOAM53064lza2TGRQLwTH5qNHFvQsL+sEXt1PjGe0Vh5ynQN4ftIgNQz
- YwLuQTY5PCMUGX4juj6/cQHes+MAg4PUWA==
-X-Google-Smtp-Source: ABdhPJx3hUzygIoRrRwC9o4g0keGa44OzGvfpkisG8vpmHdawWvDlsJEmSoSCNjbBWcal3zoKxiz+Q==
-X-Received: by 2002:a6b:fb15:0:b0:64c:9b3a:2182 with SMTP id
- h21-20020a6bfb15000000b0064c9b3a2182mr1152269iog.211.1648624490823; 
- Wed, 30 Mar 2022 00:14:50 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
- [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- r4-20020a924404000000b002c9dc82ab11sm1358805ila.79.2022.03.30.00.14.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Mar 2022 00:14:50 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 30 Mar 2022 01:14:49 -0600
-Message-Id: <20220330071449.4060342-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=pY8mFq3R7VVEWDPZX48f70SOIXckqlfbvGfpYAzJyLk=;
+ b=mOHrwk9BUwMDsZsaz4Kz5DzfdtG+efFX+PNWmpYhNt4qJWnoNYCi13qJ+R6YKpRxN8
+ qaaEK9AtW8pNPkwT35TgG0useZxgyI4dRedi4cbpQWx0E6e775nEnNKJpVmbKY8Ez3u3
+ wNxrUvM8Ram86FLzcUzW5t18WRLrXcc0kLxHKrQH5s1QGst3Tu07LY7yJMZQT4nTZ7mN
+ WR88Ci/nDZx8ge6GInZYeqvd9QcramUBtm38KINr4mL58RYfi92RoUGROwbjlpUe3eF7
+ En24GKDsEPorNYbFSXarZ3KQr80snbs6mTJh2bb93N8yNy8Iks2TPysS6Xk3dts1opyF
+ 9xNQ==
+X-Gm-Message-State: AOAM532EdgmBOetrPbrEjIYqkm5uktEh5I3edke46C1m7y+7+EsDcotM
+ QstwVA7wPAHn4S0RPHGXAXSo18J3X3FMdlPlh51wEfh47FE=
+X-Google-Smtp-Source: ABdhPJz++b9dltku1ZmSczbO2sLrwUZFjyS4HvVgf1O1GZSC2OIKDXY2Dw6JKcRtFrRo6ZIzWH3wlf8GyIY9nTOkb50=
+X-Received: by 2002:a25:51c8:0:b0:633:91ae:c476 with SMTP id
+ f191-20020a2551c8000000b0063391aec476mr29985761ybb.337.1648624757658; Wed, 30
+ Mar 2022 00:19:17 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.12.4
+References: <CAM70yxDW2GTLva+_JQ7wH1z+MQiXYxn__wNSu4KQ-w-MJnJ2gw@mail.gmail.com>
+ <CADvTj4qWax3zJXamtBgGEyPE31Pp-fH6Ge=ZYvk1c7XzcisntQ@mail.gmail.com>
+In-Reply-To: <CADvTj4qWax3zJXamtBgGEyPE31Pp-fH6Ge=ZYvk1c7XzcisntQ@mail.gmail.com>
+From: Emile Cormier <emile.cormier.jr@gmail.com>
+Date: Wed, 30 Mar 2022 04:19:06 -0300
+Message-ID: <CAM70yxB3EJmtX6PtBMB0UJtrzX6_8yhnRWBkGhbgK1Hxcm7fAA@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-python.mk: fix PEP517
+ purelib deployment path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,52 +83,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4265922242062040336=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+--===============4265922242062040336==
+Content-Type: multipart/alternative; boundary="0000000000000c57bc05db6a5d38"
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 839b12e619..00d3a4e191 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.12.1.tar.xz.sums
--md5  25a80a5a8a52b8873933a128151b8928  cog-0.12.1.tar.xz
--sha1  3b9f67bc23cd9e3db2221366d6cde4ca0b06b811  cog-0.12.1.tar.xz
--sha256  23caaafa2ef5c2f6a97d467fcce908ea71087ad03b72deb9280225c0dd561c91  cog-0.12.1.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.12.4.tar.xz.sums
-+md5  cdb8acdc3acc9b5082e7db9c279155c3  cog-0.12.4.tar.xz
-+sha1  600b30efadf55bf94ea5062a0a1b2ea0b74053e5  cog-0.12.4.tar.xz
-+sha256  9983c621c8e14fca3792ff566cb6b86d6a1f17446eb4c083af4a5a749112982f  cog-0.12.4.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 2f6ef402fb..f2ca0af93d 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.12.1
-+COG_VERSION = 0.12.4
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
--- 
-2.25.1
+--0000000000000c57bc05db6a5d38
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, Mar 30, 2022 at 4:07 AM James Hilliard <james.hilliard1@gmail.com>
+wrote:
+
+> On Tue, Mar 29, 2022 at 10:06 PM Emile Cormier
+> <emile.cormier.jr@gmail.com> wrote:
+> >
+> > - --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+> \
+> > +
+> --purelib=$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> >   --headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+> >   --scripts=$(HOST_DIR)/usr/bin \
+> >   --data=$(HOST_DIR)/usr
+>
+> For the host I think all these paths should not be under /usr.
+>
+
+For me output/host/usr is a simlink to output/host:
+ls -l output/host
+total 48
+drwxr-xr-x  3 emile emile  4096 Mar 30 01:27 arm-buildroot-linux-gnueabihf
+drwxr-xr-x  2 emile emile 12288 Mar 30 01:40 bin
+drwxr-xr-x  3 emile emile  4096 Mar 30 01:38 doc
+drwxr-xr-x  5 emile emile  4096 Mar 30 01:40 etc
+drwxr-xr-x 19 emile emile  4096 Mar 30 01:39 include
+drwxr-xr-x  7 emile emile  4096 Mar 30 01:39 lib
+lrwxrwxrwx  1 emile emile     3 Mar 30 01:27 lib64 -> lib
+drwxr-xr-x  2 emile emile  4096 Mar 30 01:32 libexec
+drwxr-xr-x  3 emile emile  4096 Mar 30 01:28 opt
+drwxr-xr-x  2 emile emile  4096 Mar 30 01:29 sbin
+drwxr-xr-x 22 emile emile  4096 Mar 30 01:38 share
+lrwxrwxrwx  1 emile emile     1 Mar 30 01:27 usr -> .
+
+--0000000000000c57bc05db6a5d38
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Mar 30, 2022 at 4:07 AM James=
+ Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmail.com">james.hilliard1@=
+gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">On Tue, Mar 29, 2022 at 10:06 PM Emile Cormier<br>
+&lt;<a href=3D"mailto:emile.cormier.jr@gmail.com" target=3D"_blank">emile.c=
+ormier.jr@gmail.com</a>&gt; wrote:<br>
+&gt;<br>
+&gt; - --purelib=3D$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-pack=
+ages \<br>
+&gt; + --purelib=3D$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-=
+packages \<br>
+&gt;=C2=A0 =C2=A0--headers=3D$(HOST_DIR)/usr/include/python$(PYTHON3_VERSIO=
+N_MAJOR)=C2=A0 \<br>
+&gt;=C2=A0 =C2=A0--scripts=3D$(HOST_DIR)/usr/bin \<br>
+&gt;=C2=A0 =C2=A0--data=3D$(HOST_DIR)/usr<br>
+<br>
+For the host I think all these paths should not be under /usr.<br>
+</blockquote><div><br></div><div>For me output/host/usr is a simlink to out=
+put/host:</div><div>ls -l output/host<br>total 48<br>drwxr-xr-x =C2=A03 emi=
+le emile =C2=A04096 Mar 30 01:27 arm-buildroot-linux-gnueabihf<br>drwxr-xr-=
+x =C2=A02 emile emile 12288 Mar 30 01:40 bin<br>drwxr-xr-x =C2=A03 emile em=
+ile =C2=A04096 Mar 30 01:38 doc<br>drwxr-xr-x =C2=A05 emile emile =C2=A0409=
+6 Mar 30 01:40 etc<br>drwxr-xr-x 19 emile emile =C2=A04096 Mar 30 01:39 inc=
+lude<br>drwxr-xr-x =C2=A07 emile emile =C2=A04096 Mar 30 01:39 lib<br>lrwxr=
+wxrwx =C2=A01 emile emile =C2=A0 =C2=A0 3 Mar 30 01:27 lib64 -&gt; lib<br>d=
+rwxr-xr-x =C2=A02 emile emile =C2=A04096 Mar 30 01:32 libexec<br>drwxr-xr-x=
+ =C2=A03 emile emile =C2=A04096 Mar 30 01:28 opt<br>drwxr-xr-x =C2=A02 emil=
+e emile =C2=A04096 Mar 30 01:29 sbin<br>drwxr-xr-x 22 emile emile =C2=A0409=
+6 Mar 30 01:38 share<br>lrwxrwxrwx =C2=A01 emile emile =C2=A0 =C2=A0 1 Mar =
+30 01:27 usr -&gt; .<br></div></div></div>
+
+--0000000000000c57bc05db6a5d38--
+
+--===============4265922242062040336==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4265922242062040336==--
