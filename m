@@ -1,73 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0578C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 17:04:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B6AFC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 17:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75DD06126B;
-	Wed, 30 Mar 2022 17:04:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8594418C5;
+	Wed, 30 Mar 2022 17:13:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aRQWFSQ277SM; Wed, 30 Mar 2022 17:04:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aWwgcq5CGVFe; Wed, 30 Mar 2022 17:13:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74B7F61262;
-	Wed, 30 Mar 2022 17:04:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F8561BF47E
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:04:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6028A4088C;
+	Wed, 30 Mar 2022 17:13:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 20BC41BF47E
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:13:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69B2B40569
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:04:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C54F402AD
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:13:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0xIIEw2qjoW7 for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 17:04:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 90E8B4015D
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:04:23 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id x4so25508117iop.7
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 10:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to;
- bh=pDjG+T6XCiWvzXObDvSrxFp1AMnCCf6RnXGMWCJ140s=;
- b=KHakXLJ6w+9S0d+XCWVS5q9SAf6ij5jlEC9vzxa4A2TRUe0WSZXsxNi6F4nLikoH/D
- xV02elroQUYX+eHfsfH9Uf5Xrmy5KgZrgM0THI2/LvZ3qvktHsWXAxVxWW7LPMopY3hs
- F1GB9VWYAsL8Hc09Mk0fDoihMnzyjNYjaJ+PzId036bc1NZLYwpx0Y/KBJPorZucZqhZ
- 9ZEwFVm01O/ZYySPYk9B9tqJzDum6hBsmvwHMUkkHf8zKtZ5oA7vHhfbvgGf7ZKY14XB
- tncS6jY8U1x8UKq+2myBWpq09Yo/TekGuyczoTR5KmvpCtRjDxaeP5dlNh5bTagBnuxW
- P3ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=pDjG+T6XCiWvzXObDvSrxFp1AMnCCf6RnXGMWCJ140s=;
- b=GZgF0tnMRwmvbrGvmheNsOMwknIa3TSRXW+QS9mU8gCy3e41O/Yn1n/Q0DZC1QWB7K
- 2GFJQ0qFGGyGdC0F5sejesWGht8wEPsNd/S1iVdWK0UQ+7nV5ypR4Zt4PAo+j7rlYEaW
- 5zFcqAyg2BOPb51rummP7Yz7G0h6scJNI0Vftg7nVqLC5Xg6e/wlxsOVTuUOu07sWgZF
- zptIEBRdYETD7HjCffSZXFYwOz1UralwcZUrgMShBv/U8T6VBzksjYh0775K6Sp8Rn3H
- kfgYaUIKEul9C29m1eSYjnCFsQufrSekSrP0likv5lt24NOJtSjmmmUHU5Yx8FFD1byy
- rINw==
-X-Gm-Message-State: AOAM531uXy0ZFuhtzsWhK/UtmNSQFH0Iu3rA75g6Awxu+05nKLkqaaFX
- XAtGrWpNDegxPvwkiac0gYunhmiJd3YEC4c3ggkQdyn53Bw=
-X-Google-Smtp-Source: ABdhPJx8AiCBhOMrG/+83NvkflJi9zt72M7LuSzmWfJ8xFNJxl3rNZfkYlP3bu98KxqNV09PWkd/hoGsUjyWz5MVaI0=
-X-Received: by 2002:a05:6638:2601:b0:31a:632e:3d69 with SMTP id
- m1-20020a056638260100b0031a632e3d69mr382291jat.229.1648659862379; Wed, 30 Mar
- 2022 10:04:22 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lIrxV3wDcBvQ for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 17:13:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 95F944088C
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:13:16 +0000 (UTC)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id 492FD61868
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:13:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627A6C340EE
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:13:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+ dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
+ header.b="QXIC1kN4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105; 
+ t=1648660390;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=lrNjZuvZokD44M0SfutTcgirD9kMRbDOT0MmoWPJn7I=;
+ b=QXIC1kN4dQvRtE+ixD1tPj3Mj2M7nVrWC4U2FzUI83/7WqQpzmRvrr77+5Bh5NTlKmiJTM
+ g9OJG37BI8qxPO0VYhNfxdt3bb6dHiTgo0wZdB/2n+U4KtgQJ2FbtV0wMSeCAMk97myOZd
+ e+fZ1EEvF546p38AwxF7hJNJBLF3ga0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d2b12da5
+ (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:13:10 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id g9so35439740ybf.1
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 10:13:10 -0700 (PDT)
+X-Gm-Message-State: AOAM533nSXCJF5rVqX3HubJGiwkXcszCSAfTokn/aCe2wl+NdAYKZQsj
+ nMoiEe0Fq083yeDWQNru8uyq6fhwQ1D5H93xX8k=
+X-Google-Smtp-Source: ABdhPJy7sXVZUkpzX24HKZUD+VwTxAEZEX84JUg0PwzPhea0n1X3gGDFtlgw7SDYHPBOC2B5nmM0r2F+R85ILOVWuWw=
+X-Received: by 2002:a5b:6cf:0:b0:61e:1371:3cda with SMTP id
+ r15-20020a5b06cf000000b0061e13713cdamr602694ybq.235.1648660389038; Wed, 30
+ Mar 2022 10:13:09 -0700 (PDT)
 MIME-Version: 1.0
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Wed, 30 Mar 2022 19:04:11 +0200
-Message-ID: <CADYjeSs3mV8Nhq6VzwKRfLB16cJeQkjJjc-bBeP8RO7z8RCdgw@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: [Buildroot] Run-time dependency error | C shared or static library
- 'acl' not found
+Received: by 2002:a05:7110:4707:b0:171:cd8f:b3d2 with HTTP; Wed, 30 Mar 2022
+ 10:13:08 -0700 (PDT)
+In-Reply-To: <871qyj8kpk.fsf@dell.be.48ers.dk>
+References: <20220327202415.1248312-1-Jason@zx2c4.com>
+ <20220329050401.110856-1-Jason@zx2c4.com>
+ <871qyj8kpk.fsf@dell.be.48ers.dk>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Wed, 30 Mar 2022 13:13:08 -0400
+X-Gmail-Original-Message-ID: <CAHmME9oRxF66kB9U93zTXC9EQq4xYTABPrZ9y2dPfhReAZdTpQ@mail.gmail.com>
+Message-ID: <CAHmME9oRxF66kB9U93zTXC9EQq4xYTABPrZ9y2dPfhReAZdTpQ@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH v3] package/urandom-scripts: actually credit
+ seed files via seedrng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,165 +86,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3801622143621243981=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3801622143621243981==
-Content-Type: multipart/alternative; boundary="00000000000074028e05db728900"
+Hi Peter,
 
---00000000000074028e05db728900
-Content-Type: text/plain; charset="UTF-8"
+On 3/30/22, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Jason" == Jason A Donenfeld <Jason@zx2c4.com> writes:
+>
+> Hi,
+>
+>  > The RNG can't actually be seeded from a shell script, due to the
+>  > reliance on ioctls. For this reason, the seedrng project provides a
+>  > basic script meant to be copy and pasted into projects like buildroot
+>  > and tweaked as needed: <https://git.zx2c4.com/seedrng/about/>.
+>
+>  > This commit imports it into buildroot and wires up the init scripts to
+>  > call it. This also is a significant improvement over the current init
+>  > script, which doesn't credit entropy and whose hashing in shell scripts
+>  > is sort of fragile.
+>
+>  > As seedrng.c is a short tiny C program, we include this here in the
+>  > package, like a few other packages do. Later we'll investigate adding
+>  > this to busybox, but for now, this is a good start and a positive step
+>  > in the right direction.
+>
+> As discussed on IRC, I think it would be nicer to just add a normal
+> seedrng package and depend on that from urandom-scripts, so the standard
+> version/license info/.. stuff works. I can do that change if needed.
+>
+> You mentioned something on IRC about this containing differences from
+> what it is seedrng.git. Those changes/fixes are presumably not specific
+> to Buildroot, will you add those changes to the git repo as well?
 
-Hello All,
+Absolutely not. This 100% does not work for me. I have made it
+abundantly clear to you that seedrng is code that's meant to be copied
+into individual distros and tweaked as needed, which I've done for
+Buildroot. Do not attempt to package it from any repos I may have. If
+you try to do that, I will intentionally interfere with those
+operations server side, and take whatever other adversarial steps to
+ensure my server is not misused for that purpose. I also will not
+incorporate buildroot-specific tweaks into the sample code repo.
 
-I am building casync to use with the "rauc" tool. And I am using Buildroot
-2022.02 as build system and I have enabled "host meson-tools " in Buildroot
-"menuconfig ". But while building using
-https://github.com/systemd/casync#building-casync
+That repo supplies sample code. After Yann's absence, I took the
+necessary steps that a maintainer like him would have done to
+customize it to Buildroot's needs, incorporating it into the project,
+and taking into account James' comments. You now have the result of
+that work here, and I think it'd be silly not to take it.
 
-meson build && ninja -C build && sudo ninja -C build install
+I am offering to maintain this code inside of Buildroot for you. I'm
+generally very much on top of things in that regard. I'm not offering
+to start and maintain an external project at your request, no matter
+how much pressure and conditionalization you apply on this mailing
+list or IRC. That's not work I'll do for you. However, again, I am
+offering to maintain this for you inside the buildroot repo as this
+patch does.
 
-I am getting the below errors:
-
-Found pkg-config: /root/raspcm4/sources/output/host/bin/pkg-config (1.6.3)
-Run-time dependency liblzma found: YES 5.2.5
-Run-time dependency zlib found: YES 1.2.11
-Run-time dependency libzstd found: YES 1.5.2
-Run-time dependency libcurl found: YES 7.81.0
-Run-time dependency openssl found: YES 1.1.1m
-
-meson.build:135:0: ERROR: C shared or static library 'acl' not found
-
-But BR2_PACKAGE_ACL=y is already selected.
-
-Can you please let me know what is the proper package that should be
-selected in Buildroot? And also what are the other Run-time dependencies
-(libs/packages) that should be selected in Buildroot?
-
-Your help will be much appreciated.
-
-Thanks in advance
+That's my offer; take it or leave it.
 
 
-Kind Regards,
+>
+>
+>  > +# The following knobs can be adjusted by placing uncommented modified
+> lines
+>  > +# into /etc/default/urandom:
+>  > +#
+>  > +# Set these to change where the seed and runtime lock file are stored:
+>  > +#
+>  > +#     export SEEDRNG_SEED_DIR=/var/lib/seedrng
+>  > +#     export SEEDRNG_LOCK_FILE=/var/run/seedrng.lock
+>  > +#
+>
+> Will you add the logic for these features to seedrng.git? If not, then I
+> don't think we should have them here either. A bunch of other code already
+> expects "normal" locations, so people generally have to handle such
+> customizations by symlinks in their rootfs(-overlay).
+>
+> If this customization is left in, then it should ideally use the
+> existing (directory part of) URANDOM_SEED, which used to be how the
+> location could be customized for backwards compatibility.
 
-Sourabh
+As mentioned, no tweaks go up to seedrng.git. That's sample code.
 
---00000000000074028e05db728900
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I'm inclined to agree with James' assessment about this, that
+Buildroot needs it to be customizable. Happy to send a v4 of this
+patch adjusting the defaults to have paths similar to what was there
+before.
 
-<div dir=3D"ltr"><p dir=3D"auto" style=3D"box-sizing:border-box;margin-bott=
-om:16px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&q=
-uot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;=
-,&quot;Segoe UI Emoji&quot;;font-size:14px;margin-top:0px">Hello All,</p><p=
- dir=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:1=
-6px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;=
-Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&qu=
-ot;Segoe UI Emoji&quot;;font-size:14px">I am building casync to use with th=
-e &quot;rauc&quot; tool. And I am using Buildroot 2022.02 as build system a=
-nd I have enabled &quot;<code style=3D"box-sizing:border-box;font-family:ui=
--monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberati=
-on Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;bor=
-der-radius:6px">host meson-tools &quot;</code>=C2=A0in Buildroot &quot;<cod=
-e style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&q=
-uot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font=
--size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">menuconfig &=
-quot;.</code>=C2=A0But while building using=C2=A0<a href=3D"https://github.=
-com/systemd/casync#building-casync">https://github.com/systemd/casync#build=
-ing-casync</a></p><p dir=3D"auto" style=3D"box-sizing:border-box;margin-top=
-:0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-apple-system,Blink=
-MacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple C=
-olor Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px"><code style=3D"=
-box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono=
-&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9p=
-x;padding:0.2em 0.4em;margin:0px;border-radius:6px">meson build &amp;&amp; =
-ninja -C build &amp;&amp; sudo ninja -C build install</code></p><p dir=3D"a=
-uto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;color=
-:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&=
-quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe =
-UI Emoji&quot;;font-size:14px">I am getting the below errors:</p><p dir=3D"=
-auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;colo=
-r:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI=
-&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe=
- UI Emoji&quot;;font-size:14px"><code style=3D"box-sizing:border-box;font-f=
-amily:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;=
-Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin=
-:0px;border-radius:6px">Found pkg-config: /root/raspcm4/sources/output/host=
-/bin/pkg-config (1.6.3)</code><br style=3D"box-sizing:border-box"><code sty=
-le=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;S=
-F Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size=
-:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">Run-time dependen=
-cy liblzma found: YES 5.2.5</code><br style=3D"box-sizing:border-box"><code=
- style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&qu=
-ot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-=
-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">Run-time depe=
-ndency zlib found: YES 1.2.11</code><br style=3D"box-sizing:border-box"><co=
-de style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&=
-quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;fon=
-t-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">Run-time de=
-pendency libzstd found: YES 1.5.2</code><br style=3D"box-sizing:border-box"=
-><code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regul=
-ar,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace=
-;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">Run-tim=
-e dependency libcurl found: YES 7.81.0</code><br style=3D"box-sizing:border=
--box"><code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-=
-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,mono=
-space;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">Ru=
-n-time dependency openssl found: YES 1.1.1m</code></p><p dir=3D"auto" style=
-=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;color:rgb(36,41=
-,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helv=
-etica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&q=
-uot;;font-size:14px"><code style=3D"box-sizing:border-box;font-family:ui-mo=
-nospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation =
-Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border=
--radius:6px">meson.build:135:0: ERROR: C shared or static library &#39;acl&=
-#39; not found</code></p><p dir=3D"auto" style=3D"box-sizing:border-box;mar=
-gin-top:0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-apple-syste=
-m,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;=
-Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px">But=C2=
-=A0<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Reg=
-ular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospa=
-ce;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">BR2_P=
-ACKAGE_ACL=3Dy</code>=C2=A0is already selected.</p><p dir=3D"auto" style=3D=
-"box-sizing:border-box;margin-top:0px;margin-bottom:16px;color:rgb(36,41,47=
-);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helveti=
-ca,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot=
-;;font-size:14px">Can you please let me know what is the proper package tha=
-t should be selected in Buildroot? And also what are the other Run-time dep=
-endencies (libs/packages) that should be selected in Buildroot?</p><p dir=
-=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;=
-color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Sego=
-e UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;S=
-egoe UI Emoji&quot;;font-size:14px">Your help will be much appreciated.</p>=
-<p dir=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;color:rgb(36,=
-41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,He=
-lvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji=
-&quot;;font-size:14px;margin-bottom:0px">Thanks in advance</p><p dir=3D"aut=
-o" style=3D"box-sizing:border-box;margin-top:0px;color:rgb(36,41,47);font-f=
-amily:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial=
-,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-s=
-ize:14px;margin-bottom:0px"><br></p><p style=3D"box-sizing:border-box;margi=
-n-top:0px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,=
-&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quo=
-t;,&quot;Segoe UI Emoji&quot;;font-size:14px;margin-bottom:0px">Kind Regard=
-s,</p><p style=3D"box-sizing:border-box;margin-top:0px;color:rgb(36,41,47);=
-font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica=
-,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;=
-font-size:14px;margin-bottom:0px">Sourabh</p></div>
+>
+>
+>  >  case "$1" in
+>  >  	start|restart|reload)
+>  >  		# Carry a random seed from start-up to start-up
+>  >  		# Load and then save the whole entropy pool
+>  > -		init_rng && save_random_seed;;
+>  > +		# Never fail, as this isn't worth making a fuss
+>  > +		# over if it doesn't go as planned.
+>  > +		seedrng || true;;
+>  >  	stop)
+>  >  		# Carry a random seed from shut-down to start-up
+>  >  		# Save the whole entropy pool
+>  > -		save_random_seed;;
+>  > +		seedrng;;
+>
+> Nice and short! The comments above are not really correct any more, as
+> the stop logic also loads.
 
---00000000000074028e05db728900--
+Ack, will get rid of those comments for v4.
 
---===============3801622143621243981==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+>
+>
+>  > +++ b/package/urandom-scripts/seedrng.c
+> ..
+>
+>  > +#define le32_to_cpup(a) le32toh(*(a))
+>  > +#define cpu_to_le32(a) htole32(a)
+>
+> What is the purpose of the to/from le32 stuff in this use case?
 
+So that blake2s passes its test vectors. We're not about to go messing
+around with the internal encoding of a hash function. B2s specifies
+little endian, so that's what we use.
+
+>
+>  > +
+>  > +	fprintf(stdout, "Saving %zu bits of %s seed for next boot\n",
+> new_seed_len * 8, new_seed_creditable ? "creditable" : "non-creditable");
+>  > +	fd = open(NON_CREDITABLE_SEED, O_WRONLY | O_CREAT | O_TRUNC, 0400);
+>
+> The 0400 confused me a bit, as that would normally cause the open to
+> fail when the file exists, but it happens to work as you unlink above /
+> use the lock file.
+>
+>
+>> +	if (fd < 0) {
+>  > +		fprintf(stderr, "ERROR: Unable to open seed file for writing: %s\n",
+> strerror(errno));
+>  > +		program_ret |= 1 << 4;
+>  > +		goto out;
+>  > +	}
+>  > +	if (write(fd, new_seed, new_seed_len) != (ssize_t)new_seed_len ||
+> fsync(fd) < 0) {
+>  > +		fprintf(stderr, "ERROR: Unable to write seed file: %s\n",
+> strerror(errno));
+>  > +		program_ret |= 1 << 5;
+>  > +		goto out;
+>  > +	}
+>  > +	if (new_seed_creditable && rename(NON_CREDITABLE_SEED, CREDITABLE_SEED)
+> < 0) {
+>  > +		fprintf(stderr, "WARNING: Unable to make new seed creditable: %s\n",
+> strerror(errno));
+>  > +		program_ret |= 1 << 6;
+>  > +	}
+>  > +out:
+>  > +	if (fd >= 0)
+>  > +		close(fd);
+>  > +	if (lock >= 0)
+>  > +		close(lock);
+>
+> No fsync of the directory like you do in seed_from_file_if_exists()?
+
+No, it's not necessary here, because this is a transition from
+no-credit to credit, so if the power clicks off at the bad moment, it
+fails closed instead of open.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3801622143621243981==--
