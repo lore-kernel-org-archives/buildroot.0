@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3648FC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 17:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 753A6C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 17:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDCC1848D2;
-	Wed, 30 Mar 2022 17:22:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 236E24056E;
+	Wed, 30 Mar 2022 17:25:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6oKWJDuRMS-a; Wed, 30 Mar 2022 17:22:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YuZE0a_F_LTT; Wed, 30 Mar 2022 17:25:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 056D4848C7;
-	Wed, 30 Mar 2022 17:22:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53FC840FBA;
+	Wed, 30 Mar 2022 17:25:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21C1F1BF9D1
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:22:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 92F031BF47E
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C83D41C5E
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:22:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B58441D6A
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 17:25:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hFvj9qpEWvju for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 17:22:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2680E41C16
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:22:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DCE2B85FD2; Wed, 30 Mar 2022 17:12:46 +0000 (UTC)
+ with ESMTP id ZOARHU2pVPLe for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 17:25:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1431241D37
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 17:25:29 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2B01F1C000A;
+ Wed, 30 Mar 2022 17:25:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nZc4S-0006iO-Q9; Wed, 30 Mar 2022 19:25:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 30 Mar 2022 19:20:21 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b78b4fedb5c19e87d866fdef0acd028c633fa900
-X-Git-Newrev: 997ac4e38bb9a98dfa3db8b046fcaaae192d5291
-X-Patchwork-Hint: ignore
-Message-Id: <20220330171246.DCE2B85FD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/spidev_test: fix
- spidev_test.c version in Config.in help text
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20220318131058.32240-1-ps.report@gmx.net>
+Date: Wed, 30 Mar 2022 19:25:24 +0200
+In-Reply-To: <20220318131058.32240-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 18 Mar 2022 14:10:57 +0100")
+Message-ID: <87o81n73p7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/libcamera-apps: X11 support
+ needs libdrm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,41 +60,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=997ac4e38bb9a98dfa3db8b046fcaaae192d5291
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-- fix spidev_test.c version in Config.in help text, version update to 4.10
-  (missing from commit 'spidev_test: bump to version in Linux 4.10' [1])
+ > - X11 support needs libdrm (optional libdrm dependency already
+ >   present in libcamera-apps.mk)
 
-[1] https://git.buildroot.net/buildroot/commit/?id=a497a9fd6cdb518572282b1478279f476f870fb7
+ > Fixes:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 53da16e3786cbf4c7637dacfddeef58c315cce66)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/spidev_test/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >   http://autobuild.buildroot.net/results/5df48038df5deb4f1e85287cde9a403c5681c28e
 
-diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-index 44990c66b6..aa57b5edbf 100644
---- a/package/spidev_test/Config.in
-+++ b/package/spidev_test/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_SPIDEV_TEST
- 	  proper operation of 'spidev_test'.
- 
- 	  The version used is based on your toolchain headers version,
--	  if it's older than 3.15 then 3.0 is used, otherwise 3.15
-+	  if it's older than 3.15 then 3.0 is used, otherwise 4.10
- 	  is used.
- 	  This means you won't have quad-pumped SPI support if your
- 	  toolchain is too old.
+ >   .../build/libcamera-apps-2d1009e3badcc8047361ff81149ad6cba3b911b5/preview/egl_preview.cpp:18:10: fatal error: libdrm/drm_fourcc.h: No such file or directory
+ >      18 | #include <libdrm/drm_fourcc.h>
+ >         |          ^~~~~~~~~~~~~~~~~~~~~
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
