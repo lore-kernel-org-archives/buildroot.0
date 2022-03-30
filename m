@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79F5EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 14:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C47BC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 14:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19E2941CA8;
-	Wed, 30 Mar 2022 14:21:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9312611F0;
+	Wed, 30 Mar 2022 14:55:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RW5XGRJxF6yw; Wed, 30 Mar 2022 14:21:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1MScXavAZ4fa; Wed, 30 Mar 2022 14:55:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE96D41C8F;
-	Wed, 30 Mar 2022 14:21:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B7C76120D;
+	Wed, 30 Mar 2022 14:55:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 851B91BF360
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 14:21:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 737821BF59F
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 14:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D334404F6
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 14:21:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61107404F4
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 14:55:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xyqoi1HNOist for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 14:20:59 +0000 (UTC)
+ with ESMTP id ba6Xm_hSKGYH for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 14:55:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C7B91402F3
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 14:20:59 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id r13so29497149wrr.9
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 07:20:59 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BA2AE404CF
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 14:55:22 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id u3so29716036wrg.3
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 07:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id;
- bh=Od9EKXjCxsYZFTu9tvTYyXvanHh3Q5oYRjS6kpi011A=;
- b=OWmazJETP/BidT67rfyZzCo7I8PVj9PAjLyk0qmI/YJbDqOCBpwl9AJVlJkvXd6cbq
- nkTb5OEsZI2UJdt7eN5XGQit7uxLonnppmDxghPQwNAFhpXuDdN6lONWmfftwWRXiZ8v
- KLiqLEf/rW3M2G2fBmrtPTus7IAx0eft8M+MrjKr7YX8zLDfDRQY8Z/02FTdjeIXC5Rd
- 6FDAOlw5e033CoY7cVEPiFUSrZpNs1Hx+IE313tjfGBkRvbokwwhs39Th44NpVwqRV4y
- U02u0iAAfoXOlY3oWW5htCB0fj/YvH1n2s2mJhgBXJ2qLFbxl4Eqyq8oMcTvG7e0mZ2L
- ku7w==
+ bh=rxtXMMa2puf4RVMemw1h9LvaliJRGptcc/GWBO5ZLWc=;
+ b=IfBU5vmtaGGTK1dQ5KBFwysfyKvbCusOHBvDNu4XtttLjOwYhFFLwHRxTvHyO2oUhy
+ 85uUDD2gK9MKNAEoL236NBsq0UoMdk5ZKJalE3//l+XLRHfYN5qH9SrSv9pr6ycYmvSW
+ skuWy8s5V4lQ5r+cu//2c379tRxo9KFSkc14QTqOZNXkpbcElBQxyIEi5nA8D+JaP5Jc
+ AtXW6gLA7NR9fSWO+HcmN1WrggMeZk0ade5g8P7Xh+q9s9WatWxGde/cdYFSq2EEMMTS
+ +P/42S0krQGCDxWt/ZoDOhJ7+B8dNUjyM3kjByBsirsUtqc5vTGQsykdpaf5UyYqgiuD
+ YsdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id;
- bh=Od9EKXjCxsYZFTu9tvTYyXvanHh3Q5oYRjS6kpi011A=;
- b=UQV3aPhgMr8XfTStJ8ofqzCJXwpki2DHIuDvBcLBA6RtNW41IatFYCHFJeJMN97kcq
- WE86/aDRa80fZpJqUWjU85wsfUd7sFIN039DvfPMRLuqumatE0iIMIh8cOuGrYkAi6sy
- NvfuU3zPoMlE/z4nPd5fNpNXrry+7Luc/Rf0FsEGAke6uk6aEDhAqUS8pnvKhRVM+HDo
- TKKxMvXn86TXPTTkNkGMAJ2f5xZRV9ZvxwYyVfWFRO3J8fZinr7/MzE9ipmFyj5Lpdju
- JSutiDpEthTHlE7L86tI0cQLM7oDMQRwpd+/+Sn/TKu7EmQgbtJyh2c/G88ZXK1YxwR7
- +RFw==
-X-Gm-Message-State: AOAM5310AQDdrXmudtTq+PFuW6U7h/cJlm9jeEhZpUB/F7WoZ7vTusin
- +aiv9t7+EUPofqFlmkw/A3DSpoa8FIVAag==
-X-Google-Smtp-Source: ABdhPJznTUW8a2Cmzav7nb0g2LiP+v8V+wz1FhFRK6Wx4e7TpvUrKVJ8WMQ1QIMvjqLHvGRN6xshoQ==
-X-Received: by 2002:adf:f481:0:b0:205:b814:887b with SMTP id
- l1-20020adff481000000b00205b814887bmr23590902wro.472.1648650057779; 
- Wed, 30 Mar 2022 07:20:57 -0700 (PDT)
+ bh=rxtXMMa2puf4RVMemw1h9LvaliJRGptcc/GWBO5ZLWc=;
+ b=EWuaTYC4W94DfLu5yKOxcKwtd2/oAEtC33hUwn03IwDd8pG5uIm38IErnrLwaUR+MA
+ kzr/cs/698HuXvu7INZM8Yhi8vSI6L9OkGhp9r4E5H9atI9E93ZFy6L1naR2P+hTEHwK
+ ZjgiQ3TRmh11mpNtwr/xJD/1jIM4okzFpYCRp9lBA2LyjrDnEZ09jclGh5pKZUDi1xaU
+ tqAm8vBwVre1Q/Xq4qovoqQVmfyXjmGJvujxgBw5BcY7mbNbNSbm5oAOLn1hT+LF/M5S
+ Z74yngl0XNtHObn32mXrrD3ZF3yoso4HOsZyPGNzjKBM4nUE/ZFeFWroM7bNHnItaD5c
+ LY/A==
+X-Gm-Message-State: AOAM533Ggf2p5dnUY4D2+We3wUBhD1RkE80+/3aaNLyrqMBQ6O2/DXrc
+ C59s5l6WrHHDm5T6VwNOVrcnSzXZqCuOuw==
+X-Google-Smtp-Source: ABdhPJwuuUdpjHPBD4eh/57s2I+LkIe+GEMYNNZQrdaAvAFlAkIE7ZTDJaHt+tz95cnJp+C56LIH0A==
+X-Received: by 2002:a5d:5886:0:b0:204:85e:5a3a with SMTP id
+ n6-20020a5d5886000000b00204085e5a3amr3039wrf.434.1648652120682; 
+ Wed, 30 Mar 2022 07:55:20 -0700 (PDT)
 Received: from localhost.localdomain
  (i19-lef01-ix2-176-180-85-92.dsl.dyn.abo.bbox.fr. [176.180.85.92])
  by smtp.gmail.com with ESMTPSA id
- d14-20020a056000186e00b0020405198faasm20334973wri.52.2022.03.30.07.20.56
+ r4-20020a1c2b04000000b0038a0e15ee13sm5217370wmr.8.2022.03.30.07.55.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Mar 2022 07:20:57 -0700 (PDT)
+ Wed, 30 Mar 2022 07:55:20 -0700 (PDT)
 From: David GOUARIN <dgouarin@gmail.com>
 X-Google-Original-From: David GOUARIN <david.gouarin@thalesgroup.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Mar 2022 17:30:13 +0200
-Message-Id: <20220330153013.16091-1-david.gouarin@thalesgroup.com>
+Date: Wed, 30 Mar 2022 18:04:36 +0200
+Message-Id: <20220330160436.16357-1-david.gouarin@thalesgroup.com>
 X-Mailer: git-send-email 2.17.1
 Subject: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: fix build with
  BR2_ENABLE_DEBUG
@@ -92,6 +92,16 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+When building with BR2_ENABLE_DEBUG, cargo packages are first built with --debug,
+then the installation step rebuilds the sources in release mode with cargo install.
+This is because cargo install forces a rebuild when the --path option is used.
+
+This patch adds a --debug to the cargo install command line as a workaround when
+necessary, but it does not address the root cause, which is that cargo install
+will rebuild the sources, possibly with different build options.
+For example, when one use PKG_CARGO_BUILD_OPTS = --features myfeature, one must
+also use PKG_CARGO_INSTALL_OPTS = --features myfeature.
 
 Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
 ---
