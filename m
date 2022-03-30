@@ -4,53 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDDBFC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 18:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6E5EC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 18:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 849E36127D;
-	Wed, 30 Mar 2022 18:06:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4ADAB60BE8;
+	Wed, 30 Mar 2022 18:52:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F6sXdaBLIJ_Q; Wed, 30 Mar 2022 18:06:12 +0000 (UTC)
+	with ESMTP id 3Z9P09aDZcwV; Wed, 30 Mar 2022 18:52:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83E9761278;
-	Wed, 30 Mar 2022 18:06:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D3DE61BF45A
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 18:06:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5C9E60AC9;
+	Wed, 30 Mar 2022 18:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B625C1BF45A
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 18:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C00C8843C5
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 18:06:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A397F40327
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 18:51:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cL3Zhe_QmshL for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 18:06:09 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 94EB2843B9
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 18:06:09 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout08.t-online.de (Postfix) with SMTP id 89C4360BF
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 20:06:06 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.188.174]) by fwd78.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nZchq-0ISkbJ0; Wed, 30 Mar 2022 20:06:06 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55608)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nZchp-000162-QL
- for buildroot@buildroot.org; Wed, 30 Mar 2022 20:06:05 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Wed, 30 Mar 2022 20:06:05 +0200
-Message-Id: <20220330180605.557933-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I1aEE73g_OMs for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 18:51:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com
+ [IPv6:2607:f8b0:4864:20::112d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 31645400D9
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 18:51:57 +0000 (UTC)
+Received: by mail-yw1-x112d.google.com with SMTP id
+ 00721157ae682-2e5827a76f4so229467297b3.6
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 11:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=RcvzedBcau/CYr7qH2DAeLkRVo4wnPnF8npb7elt8uM=;
+ b=lmicWah5qScFczLu05ECvxLXF3isPs+hLdjnAma3G39QnmEETootn4ceHqXjF8U5dj
+ DJ5VsSjuIFOf+as96rcPX6Q7yCDCBA28p6YRBrIC6MNV9hgme4v9nn/Eu+y01WJZvvuN
+ V8XOWVAHe5Jfi5uZ3lR011GtGEndy1RtOOX2aMhIb11gFvbYWxjfb5SOTNZ5DPAyhyO9
+ FTt/qNgR9kTPoyWEf6lcUwRxRzzRH4VYF7W6Oo7WKA1cuIXBZC6fsKMkEKcJ7b1IQc9h
+ HR3S9hqCHeAuyNDlaVq7L7JfZjK/YtWzcxhzkpBjp4/hyZZpyVFpY1ctuhMt+SIOQE26
+ vC+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=RcvzedBcau/CYr7qH2DAeLkRVo4wnPnF8npb7elt8uM=;
+ b=aBejn+taJ4e+kSeKMdrWTf5JLIIc3zXcWEQ6M8O5poAPRVXvqI73r48ntn52HHYb9B
+ 7/YOuippp8fdssMYEjNqy0pkrVsbrzRcu5sbu+qLv5MRuBibGp/a8/6d+kzrklLiJIWT
+ A0sgvWRpxD4SkF0PP5mMon4HQnL/7Em+GPboDOhHHdUb+1mpJPOaR5++3lVBe6yRuuCu
+ 6LzlrqSih0VqDA300XWLNYQJ1eqUbl44t4xEwXuJJAAgndJjNqRQb3HZ0DgL9GfDVk+r
+ DfU6sfjYRVhB/sTTIZfI+tR/Gs/i0lcyszvo3GQV+kzKdyEH/0qSMuzuC9J9JuJVAuW+
+ gvBg==
+X-Gm-Message-State: AOAM53394zBSYOrx9G5FinoZsSj/CCdrA+GHBxZDBXQCtSfQPa1UhEXi
+ rRwZPBFqEIHUy7lL6BEEDe8QEyAl37LTw/erT/qpOyZP
+X-Google-Smtp-Source: ABdhPJxJuygco8qur1IFh6Otnojkzms5zzrlvBBdS73Ex5r/pVV5D3s+AppVcEFBFMLZLLsJ2f5YZLz/BoPNwFbTKpI=
+X-Received: by 2002:a81:3dcd:0:b0:2ea:949b:a5d9 with SMTP id
+ k196-20020a813dcd000000b002ea949ba5d9mr1175965ywa.465.1648666316185; Wed, 30
+ Mar 2022 11:51:56 -0700 (PDT)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1648663566-0000AD4E-05C89A3B/0/0 CLEAN NORMAL
-X-TOI-MSGID: 5269a4c2-6866-46fb-b3f9-4629e803bd78
-Subject: [Buildroot] [PATCH v2 1/1] package/libzlib: security bump version
- to 1.2.12
+References: <CAM70yxDW2GTLva+_JQ7wH1z+MQiXYxn__wNSu4KQ-w-MJnJ2gw@mail.gmail.com>
+ <CADvTj4qWax3zJXamtBgGEyPE31Pp-fH6Ge=ZYvk1c7XzcisntQ@mail.gmail.com>
+ <CAM70yxB3EJmtX6PtBMB0UJtrzX6_8yhnRWBkGhbgK1Hxcm7fAA@mail.gmail.com>
+ <CADvTj4rNA_vsqU5-2Hu6XT4LjpRhmuO09FsZOEk8w16VMri6xw@mail.gmail.com>
+ <CAM70yxD=tU7FK1uf2iEpFVK_jDQyHv6j8xAdW9nEDz0r8njz6w@mail.gmail.com>
+ <CADvTj4qo_ac-wizQH_xvMbn5Y7urEHnNyopLGTmF4RJ3HP=+Hw@mail.gmail.com>
+In-Reply-To: <CADvTj4qo_ac-wizQH_xvMbn5Y7urEHnNyopLGTmF4RJ3HP=+Hw@mail.gmail.com>
+From: Emile Cormier <emile.cormier.jr@gmail.com>
+Date: Wed, 30 Mar 2022 15:51:45 -0300
+Message-ID: <CAM70yxB61g2r5+aHZYPbit+3TjaWG4khnb71vHC-2pfF+WoyfQ@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-python.mk: fix PEP517
+ purelib deployment path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,95 +88,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4096665309209649956=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2018-25032.
+--===============4096665309209649956==
+Content-Type: multipart/alternative; boundary="0000000000002127d505db740a10"
 
-Release notes:
-http://madler.net/pipermail/zlib-announce_madler.net/2022/000012.html
+--0000000000002127d505db740a10
+Content-Type: text/plain; charset="UTF-8"
 
-Changelog: https://github.com/madler/zlib/blob/master/ChangeLog
+On Wed, Mar 30, 2022 at 3:01 PM James Hilliard <james.hilliard1@gmail.com>
+wrote:
 
-Added upstream patch to fix build error.
+> I think keep /usr for STAGING/TARGET OPTS but remove for HOST OPTS.
+>
 
-Updated license hash due to version bump, reformatted hashes:
-https://github.com/madler/zlib/commit/21767c654d31d2dccdde4330529775c6c5fd5389
+Alright, I've changed it as you suggested and it still works for me. I'll
+post an updated patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added upstream patch to fix build error
+--0000000000002127d505db740a10
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- ...hat-discarded-provided-CC-definition.patch | 28 +++++++++++++++++++
- package/libzlib/libzlib.hash                  |  4 +--
- package/libzlib/libzlib.mk                    |  2 +-
- 3 files changed, 31 insertions(+), 3 deletions(-)
- create mode 100644 package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch
+<div dir=3D"ltr"><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail=
+_attr">On Wed, Mar 30, 2022 at 3:01 PM James Hilliard &lt;<a href=3D"mailto=
+:james.hilliard1@gmail.com">james.hilliard1@gmail.com</a>&gt; wrote:<br></d=
+iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
+er-left:1px solid rgb(204,204,204);padding-left:1ex">I think keep /usr for =
+STAGING/TARGET OPTS but remove for HOST OPTS.<br></blockquote><div><br></di=
+v><div>Alright, I&#39;ve changed it as you suggested and it still works for=
+ me. I&#39;ll post an updated patch.<br></div></div></div>
 
-diff --git a/package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch b/package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch
-new file mode 100644
-index 0000000000..398e1c9481
---- /dev/null
-+++ b/package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch
-@@ -0,0 +1,28 @@
-+From 05796d3d8d5546cf1b4dfe2cd72ab746afae505d Mon Sep 17 00:00:00 2001
-+From: Mark Adler <madler@alumni.caltech.edu>
-+Date: Mon, 28 Mar 2022 18:34:10 -0700
-+Subject: [PATCH] Fix configure issue that discarded provided CC definition.
-+
-+Downloaded from upstream commit:
-+https://github.com/madler/zlib/commit/05796d3d8d5546cf1b4dfe2cd72ab746afae505d
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/configure b/configure
-+index 52ff4a04e..3fa3e8618 100755
-+--- a/configure
-++++ b/configure
-+@@ -174,7 +174,10 @@ if test -z "$CC"; then
-+   else
-+     cc=${CROSS_PREFIX}cc
-+   fi
-++else
-++  cc=${CC}
-+ fi
-++
-+ cflags=${CFLAGS-"-O3"}
-+ # to force the asm version use: CFLAGS="-O3 -DASMV" ./configure
-+ case "$cc" in
-diff --git a/package/libzlib/libzlib.hash b/package/libzlib/libzlib.hash
-index e3736b1011..e6ca974e2f 100644
---- a/package/libzlib/libzlib.hash
-+++ b/package/libzlib/libzlib.hash
-@@ -1,4 +1,4 @@
- # From http://www.zlib.net/
--sha256 4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066  zlib-1.2.11.tar.xz
-+sha256  7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18  zlib-1.2.12.tar.xz
- # License files, locally calculated
--sha256 7960b6b1cc63e619abb77acaea5427159605afee8c8b362664f4effc7d7f7d15  README
-+sha256  fc2c3368901700f0acdeb1d8afeaca5923296768ec6824ecdf627aac396001fd  README
-diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-index a10fc748d1..933732d6ba 100644
---- a/package/libzlib/libzlib.mk
-+++ b/package/libzlib/libzlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBZLIB_VERSION = 1.2.11
-+LIBZLIB_VERSION = 1.2.12
- LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
- LIBZLIB_SITE = http://www.zlib.net
- LIBZLIB_LICENSE = Zlib
--- 
-2.30.2
+--0000000000002127d505db740a10--
+
+--===============4096665309209649956==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4096665309209649956==--
