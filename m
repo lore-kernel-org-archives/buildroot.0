@@ -4,69 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF69BC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 00:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5C81C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 04:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DD4140C6A;
-	Wed, 30 Mar 2022 00:54:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7958340C6A;
+	Wed, 30 Mar 2022 04:05:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UWBvJwoQ9eos; Wed, 30 Mar 2022 00:54:36 +0000 (UTC)
+	with ESMTP id Kw-3dypHeYA4; Wed, 30 Mar 2022 04:05:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C40540C64;
-	Wed, 30 Mar 2022 00:54:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 223DA1BF5F8
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 00:54:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E78D40C5B;
+	Wed, 30 Mar 2022 04:05:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 549BC1BF5EA
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 04:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01D3E400FF
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 00:54:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40B30844F4
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 04:05:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zBa5FUoKvc-F for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 00:54:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AAnwxBMTg8yd for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 04:05:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com
- [IPv6:2607:f8b0:4864:20::b29])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BA3A24005D
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 00:54:31 +0000 (UTC)
-Received: by mail-yb1-xb29.google.com with SMTP id f38so34488250ybi.3
- for <buildroot@buildroot.org>; Tue, 29 Mar 2022 17:54:31 -0700 (PDT)
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
+ [IPv6:2607:f8b0:4864:20::b34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EAED7844F3
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 04:05:47 +0000 (UTC)
+Received: by mail-yb1-xb34.google.com with SMTP id x20so34824170ybi.5
+ for <buildroot@buildroot.org>; Tue, 29 Mar 2022 21:05:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to:cc;
- bh=JN79hV0mVOZusFDMPYqGRm9cAGhJeZLDHzNGSm6s9FE=;
- b=MeWxXIwnHAKOOw3DCwf4uuxpqPIvJN+ZqRjjG7p3VUF3PkpWyaCXGGm81P8Soqac6u
- rgJwdm/PbQLkPkzHEJUZyKU38UdDymA8PU54084Z7iuhqtpKIon7qIaUZXc021u2wfv6
- iulpmX1I3dAEZsuG7Y0KwVw45CSadkZ5zUvQnTPlAkXkKAn9fGI0wglyrcKrTCLZtYcA
- X+BbfnrKxjhjapHjnpVeNM+0FLQgTml8d9kuZIYWR21Sw2bzq/Zxc3zfmm4ltnTUrTwu
- RXTdho4Relbl2cSnktYBmFkyGSAvf6XeJQJtmRz3BBm/FJHtctwvgAB4Pc+y19Z525e8
- r5EA==
+ h=mime-version:from:date:message-id:subject:to;
+ bh=TK5keihkWXiB+JVdU6OVza3eIyQK+A535Td05h0xBmw=;
+ b=ZUOHR4crEuqgWFp4VkyDSzNciTelEodxm+0w1AhuMYxEW6q2xAhielLsap5pJermmH
+ LJftcjIXidUEgqz0EBI1fDDvOMua3sUTqbnM49FTZCvm36CL3AQHgo1M7fkPcS/G3zDc
+ X+VfaHLtzNb5BsOeeDQondArAfQ0B9EPeoeOvdEezR0I8o8w57v5jNbjtMlqnxyn5ASx
+ DUaJlkI/XH4M2PcyeJJgJ6fPOyy4mRCo3eg94r8QbM8nSU7nVpJhcLMp7S6ojz3er/6g
+ KbCDxnUFKF36lb0NF/FTCyUpvgJR43w4HVCYcjbEAggq9EwQzdbhPACu8PhJQAotI9J2
+ +JrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
- bh=JN79hV0mVOZusFDMPYqGRm9cAGhJeZLDHzNGSm6s9FE=;
- b=rqAd1nQc4H9TwoAH9jiyyVMojqhheOsIqnUYUpyFtTM4Ou5YzF9uaVVpEC7OYkof1L
- 7o6CFvQ0VPCsXDKMzkGzd4+frlM91SfqBcUjYgpvuQNmiur9m1/R4If6H7eePAlmfqQi
- RYQxKOLRCrJHCWWH+eBESsakGyuDMBMP9vvI2rwcPPhpC0QkRwN13WGIbU8UvOBCLOyG
- 1TdKfNIcZ4rUqWiPaFOSa7AiO65maCCCp5sa5u68JK6iOlbNDZ0vNfZsXoOs85A3I+Zb
- W/jhu5xUAX2qByt965vTXFsExJ2TkeIt7XiduDuxyQ+HA8hm+Yj3shCaWpvP/e0y6Cpd
- s71Q==
-X-Gm-Message-State: AOAM531XgbhZUEG2O+PSDKsgCseFncK/yJ3HRSkVknEJ+iNpYArRKcEp
- Byb2Av9U4T/hqcvNNKA7gx8aMPdfGOEW2uihCsHdcDQmLlw=
-X-Google-Smtp-Source: ABdhPJyCLC/lHAvIPWYcEXRh7gyU/e/5/UnW1P6shkfEmUBd7i3RHrp5oGVWzYM8IKoahjYbuBAYSRlkrjSHm8EBWNA=
-X-Received: by 2002:a25:51c8:0:b0:633:91ae:c476 with SMTP id
- f191-20020a2551c8000000b0063391aec476mr29279714ybb.337.1648601669525; Tue, 29
- Mar 2022 17:54:29 -0700 (PDT)
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=TK5keihkWXiB+JVdU6OVza3eIyQK+A535Td05h0xBmw=;
+ b=v13A+pAX+WE5FldkR+Zl8yKekHFUQvU7pW1r03W0DirJGlUe3mqx2BkHy0KG1/nZNq
+ kk1wp6xAZ8xnHlBsBK4PDZ8/LhZ+066wKeMsZlTwaRCxbZGNtvc65DKQcoh1IoP8+DeB
+ AZ/P0t1l4Vn6pj6Aw+eXp7wTKTUhyhBc43BQzZgkpdTLmUOTF/OHauWKLS+EgffWrtOE
+ kb9WgOI6nym4aoPalze5xLNPWy6IBT2fORDlWsFPZcOX5UDvuKYuRfpzOPIbFMvTpRSV
+ WanvridCKiqB+SeaZ/EQn6ZKwS65OzK1lJeD4GwzzVI4/FoB/6hwFCrddfArZ12Dvc12
+ HSyA==
+X-Gm-Message-State: AOAM531BdFOn+RFjujVKvbBDtOIIn5Phml3eJQBjIb0c/mrgLS1BIcZE
+ TxNuObDMenpR6ocXg3YZBL3H788adaBA9LmnPeIqYw5AYDU=
+X-Google-Smtp-Source: ABdhPJyaMgomd6ol/SBYs4H6dYGdLnP1Zv6GHg0Se9z92QymFETVPFQL0Ydm88YBif3PqsuGOKEFI/oFZgy1jFyXggE=
+X-Received: by 2002:a25:cf56:0:b0:633:8fbc:774c with SMTP id
+ f83-20020a25cf56000000b006338fbc774cmr31201896ybg.570.1648613146737; Tue, 29
+ Mar 2022 21:05:46 -0700 (PDT)
 MIME-Version: 1.0
 From: Emile Cormier <emile.cormier.jr@gmail.com>
-Date: Tue, 29 Mar 2022 21:54:18 -0300
-Message-ID: <CAM70yxAwLLiC0CZCvOXgfFBydhyqT_EDztfEvhcQpwKyB4+51w@mail.gmail.com>
+Date: Wed, 30 Mar 2022 01:05:36 -0300
+Message-ID: <CAM70yxDW2GTLva+_JQ7wH1z+MQiXYxn__wNSu4KQ-w-MJnJ2gw@mail.gmail.com>
 To: buildroot@buildroot.org
-Subject: [Buildroot] python-argon2-cffi no longer works
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: fix PEP517 purelib
+ deployment path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,90 +79,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: james.hilliard1@gmail.com, yann.morin.1998@free.fr
-Content-Type: multipart/mixed; boundary="===============1936575561958430275=="
+Content-Type: multipart/mixed; boundary="===============5932845222325806382=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1936575561958430275==
-Content-Type: multipart/alternative; boundary="000000000000e3651305db64fcfd"
+--===============5932845222325806382==
+Content-Type: multipart/alternative; boundary="000000000000fbc13005db67a87e"
 
---000000000000e3651305db64fcfd
+--000000000000fbc13005db67a87e
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Everyone,
+package/pkg-python.mk: fix PEP517 purelib deployment path
 
-Commit https://github.com/buildroot/buildroot/commit
-e2957f5ce743cfaf4fb3aaa98d619e83e8e6989e breaks the argon2-cffi Python
-package for my ARM target (Beaglebone Black).
+This allows the Python interpreter to find packages built via the new Flit
+infrastructure and fixes bug #14721.
+Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
 
-The installation of the argon2-cffi Python package somehow got broken with
-the version bump. Just before that commit, I get (via serial terminal):
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 52ce402281..6aaca1f465 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -127,7 +127,7 @@ PKG_PYTHON_PEP517_ENV = \
+ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+  --interpreter=/usr/bin/python \
+  --script-kind=posix \
+- --purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++
+--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+\
+  --headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+  --scripts=$(TARGET_DIR)/usr/bin \
+  --data=$(TARGET_DIR)/usr
+@@ -135,7 +135,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+  --interpreter=/usr/bin/python \
+  --script-kind=posix \
+- --purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+\
++
+--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+\
+  --headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+  --scripts=$(STAGING_DIR)/usr/bin \
+  --data=$(STAGING_DIR)/usr
+@@ -149,7 +149,7 @@ HOST_PKG_PYTHON_PEP517_ENV = \
+ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+  --interpreter=/usr/bin/python \
+  --script-kind=posix \
+- --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++
+--purelib=$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+  --headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+  --scripts=$(HOST_DIR)/usr/bin \
+  --data=$(HOST_DIR)/usr
 
-# python -c 'help("modules")' | grep argon2
-__future__          argon2              gzip                selectors
-
-# python -c 'from argon2 import PasswordHasher;
-print(PasswordHasher().hash("cor
-rect horse battery staple"));'
-$argon2id$v=19$m=102400,t=2,p=8$qHc/evoNvfGlp98pE26Ayw$tZWcHYjxFTKDUoaSysapPA
-
-And just after that commit, I get:
-# python -c 'help("modules")' | grep argon2
-_argon2_cffi_bindings ast                 hmac                shutil
-
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-ModuleNotFoundError: No module named 'argon2'
-
-argon2-cffi is the only Python package I have enabled via make xconfig for
-this test.
-
-Any hints on how I can track down the problem would be appreciated. Note
-that I'm not an expert in Python or how its package management system
-works. I'm working on a project that is dependent on another Python project
-that depends on argon2-cffi.
-
-I submitted this bug report: https://bugs.busybox.net/show_bug.cgi?id=14721
-
-Cheers,
-Emile Cormier
-
---000000000000e3651305db64fcfd
+--000000000000fbc13005db67a87e
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div>Hi Everyone,</div><div><br></div><div>Commit <a href=
-=3D"https://github.com/buildroot/buildroot/commit">https://github.com/build=
-root/buildroot/commit</a> e2957f5ce743cfaf4fb3aaa98d619e83e8e6989e breaks t=
-he argon2-cffi Python package for my ARM target (Beaglebone Black).</div><b=
-r>The installation of the argon2-cffi Python package somehow got broken wit=
-h the version bump. Just before that commit, I get (via serial terminal):<b=
-r><br># python -c &#39;help(&quot;modules&quot;)&#39; | grep argon2<br>__fu=
-ture__ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0argon2 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0gzip =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0selectors<br><br># python -c &#39;from argon2 import PasswordHasher; =
-print(PasswordHasher().hash(&quot;cor<br>rect horse battery staple&quot;));=
-&#39;<br>$argon2id$v=3D19$m=3D102400,t=3D2,p=3D8$qHc/evoNvfGlp98pE26Ayw$tZW=
-cHYjxFTKDUoaSysapPA<br><br>And just after that commit, I get:<br># python -=
-c &#39;help(&quot;modules&quot;)&#39; | grep argon2<br>_argon2_cffi_binding=
-s ast =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 hmac =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0shutil<br><br>Traceback (mo=
-st recent call last):<br>=C2=A0 File &quot;&lt;string&gt;&quot;, line 1, in=
- &lt;module&gt;<br>ModuleNotFoundError: No module named &#39;argon2&#39;<br=
-><br><div>argon2-cffi is the only Python package I have enabled via make xc=
-onfig for this test.</div><div><br></div><div>Any hints on how I can track =
-down the problem would be appreciated. Note that I&#39;m not an expert in P=
-ython or how its package management system works. I&#39;m working on a proj=
-ect that is dependent on another Python project that depends on argon2-cffi=
-.</div><div><br></div><div>I submitted this bug report: <a href=3D"https://=
-bugs.busybox.net/show_bug.cgi?id=3D14721">https://bugs.busybox.net/show_bug=
-.cgi?id=3D14721</a></div><div><br></div><div>Cheers,</div><div>Emile Cormie=
-r<br></div></div>
+<div dir=3D"ltr">package/<a href=3D"http://pkg-python.mk">pkg-python.mk</a>=
+: fix PEP517 purelib deployment path<br><br>This allows the Python interpre=
+ter to find packages built via the new Flit<br>infrastructure and fixes bug=
+ #14721.<br>Signed-off-by: Emile Cormier &lt;<a href=3D"mailto:emile.cormie=
+r.jr@gmail.com">emile.cormier.jr@gmail.com</a>&gt; <br><br>diff --git a/pac=
+kage/<a href=3D"http://pkg-python.mk">pkg-python.mk</a> b/package/<a href=
+=3D"http://pkg-python.mk">pkg-python.mk</a><br>index 52ce402281..6aaca1f465=
+ 100644<br>--- a/package/<a href=3D"http://pkg-python.mk">pkg-python.mk</a>=
+<br>+++ b/package/<a href=3D"http://pkg-python.mk">pkg-python.mk</a><br>@@ =
+-127,7 +127,7 @@ PKG_PYTHON_PEP517_ENV =3D \<br>=C2=A0PKG_PYTHON_PEP517_INS=
+TALL_TARGET_OPTS =3D \<br>=C2=A0	--interpreter=3D/usr/bin/python \<br>=C2=
+=A0	--script-kind=3Dposix \<br>-	--purelib=3D$(TARGET_DIR)/lib/python$(PYTH=
+ON3_VERSION_MAJOR)/site-packages \<br>+	--purelib=3D$(TARGET_DIR)/usr/lib/p=
+ython$(PYTHON3_VERSION_MAJOR)/site-packages \<br>=C2=A0	--headers=3D$(TARGE=
+T_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) =C2=A0\<br>=C2=A0	--scrip=
+ts=3D$(TARGET_DIR)/usr/bin \<br>=C2=A0	--data=3D$(TARGET_DIR)/usr<br>@@ -13=
+5,7 +135,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS =3D \<br>=C2=A0PKG_PYTH=
+ON_PEP517_INSTALL_STAGING_OPTS =3D \<br>=C2=A0	--interpreter=3D/usr/bin/pyt=
+hon \<br>=C2=A0	--script-kind=3Dposix \<br>-	--purelib=3D$(STAGING_DIR)/lib=
+/python$(PYTHON3_VERSION_MAJOR)/site-packages \<br>+	--purelib=3D$(STAGING_=
+DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \<br>=C2=A0	--hea=
+ders=3D$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) =C2=A0\<br=
+>=C2=A0	--scripts=3D$(STAGING_DIR)/usr/bin \<br>=C2=A0	--data=3D$(STAGING_D=
+IR)/usr<br>@@ -149,7 +149,7 @@ HOST_PKG_PYTHON_PEP517_ENV =3D \<br>=C2=A0HO=
+ST_PKG_PYTHON_PEP517_INSTALL_OPTS =3D \<br>=C2=A0	--interpreter=3D/usr/bin/=
+python \<br>=C2=A0	--script-kind=3Dposix \<br>-	--purelib=3D$(HOST_DIR)/lib=
+/python$(PYTHON3_VERSION_MAJOR)/site-packages \<br>+	--purelib=3D$(HOST_DIR=
+)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \<br>=C2=A0	--header=
+s=3D$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) =C2=A0\<br>=C2=
+=A0	--scripts=3D$(HOST_DIR)/usr/bin \<br>=C2=A0	--data=3D$(HOST_DIR)/usr</d=
+iv>
 
---000000000000e3651305db64fcfd--
+--000000000000fbc13005db67a87e--
 
---===============1936575561958430275==
+--===============5932845222325806382==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -172,4 +182,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1936575561958430275==--
+--===============5932845222325806382==--
