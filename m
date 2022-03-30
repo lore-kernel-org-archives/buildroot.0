@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86DB5C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 19:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 698F1C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 19:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7D6D41084;
-	Wed, 30 Mar 2022 19:43:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23A4541017;
+	Wed, 30 Mar 2022 19:43:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UdkedG44237m; Wed, 30 Mar 2022 19:43:44 +0000 (UTC)
+	with ESMTP id cCPQh4GrhR0a; Wed, 30 Mar 2022 19:43:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8873041099;
-	Wed, 30 Mar 2022 19:43:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0354E1BF40D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1DFAC4100E;
+	Wed, 30 Mar 2022 19:43:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 376381BF9D1
  for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 19:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5A67849A9
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 19:43:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FA0241DD2
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 19:43:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4-JA3ifPeEnZ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ft0KC_jervCT for <buildroot@lists.busybox.net>;
  Wed, 30 Mar 2022 19:43:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04C8E849A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2DD241DCD
  for <buildroot@buildroot.org>; Wed, 30 Mar 2022 19:43:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8843A85FE0; Wed, 30 Mar 2022 19:34:09 +0000 (UTC)
+ id 7CBFC85FDF; Wed, 30 Mar 2022 19:34:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Mar 2022 21:40:41 +0200
+Date: Wed, 30 Mar 2022 21:26:15 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6c129d19ac2a657044b98b0c4e4f7515646bffe8
-X-Git-Newrev: 43fd3fd836d142a7c5d16c8b25366d59bdb6d8fc
+X-Git-Oldrev: 208aee57beb66f8b2739033c694277cd03bc9718
+X-Git-Newrev: 6c129d19ac2a657044b98b0c4e4f7515646bffe8
 X-Patchwork-Hint: ignore
-Message-Id: <20220330193409.8843A85FE0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/zziplib: fix
- static build failure with mpd
+Message-Id: <20220330193409.7CBFC85FDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mpd: update to
+ version 0.23.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,111 +59,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43fd3fd836d142a7c5d16c8b25366d59bdb6d8fc
+commit: https://git.buildroot.net/buildroot/commit/?id=6c129d19ac2a657044b98b0c4e4f7515646bffe8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The current released version of zziplib copies static libraries with appended
-major version, but omits creating the necessary links to the base file names.
-This prevents the linker to find the libraries via the search path.
+Remove 0002-lib-alsa-Error-add-missing-include.patch, the upstream fix is part
+of this release
 
-The issue (https://github.com/gdraheim/zziplib/issues/117) has been
-fixed upstream; this patch extracts the necessary part of commit 0e8d35f92efb680c81f6ec1fca9f11d173dce389, to enable creation of symlinks.
-
-This resolves the following autobuild issues:
-
-http://autobuild.buildroot.net/results/6c56b645a2b723920f07b98474452824fba5e2c1
-http://autobuild.buildroot.net/results/032aaff121fb114f388c67dbca3ad2b02f670e38
-http://autobuild.buildroot.net/results/ba711034c0abe980f677e26de41739223e2f66e9
+Change log:
+  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.6/NEWS
 
 Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0f3d6d2e6a924b9075accb27cf5d7351a30d8f17)
+(cherry picked from commit 8974c6fa26f626021aa170678989c57fa81e8faf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ .../0002-lib-alsa-Error-add-missing-include.patch  | 25 ----------------------
+ package/mpd/mpd.hash                               |  2 +-
+ package/mpd/mpd.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 27 deletions(-)
 
-diff --git a/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-new file mode 100644
-index 0000000000..780d990ab7
---- /dev/null
-+++ b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-@@ -0,0 +1,75 @@
-+From 0e8d35f92efb680c81f6ec1fca9f11d173dce389 Mon Sep 17 00:00:00 2001
-+From: Guido Draheim <guidod@gmx.de>
-+Date: Sat, 22 May 2021 15:13:28 +0200
-+Subject: [PATCH] #117 implant ZZIP_LIBLATEST for zzip.lib
-+
-+[Andreas: Extract link creation for versioned libraries from commit
-+0e8d35f92efb680c81f6ec1fca9f11d173dce389.]
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-+---
-+ zzip/CMakeLists.txt | 57 +++++++++++++++++++++++++++++++++++----------
-+ 1 file changed, 45 insertions(+), 12 deletions(-)
-+
-+diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
-+index a966d5f..ccd08b6 100644
-+--- a/zzip/CMakeLists.txt
-++++ b/zzip/CMakeLists.txt
-+@@ -28,6 +28,12 @@ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" OFF)
-+ option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" OFF)
-+ endif()
-+ 
-++if(ZZIP_LIBTOOL OR ZZIP_PKGCONFIG)
-++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" ON)
-++else()
-++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" OFF)
-++endif()
-++
-+ # used in zzip/_config.h
-+ set(ZZIP_PACKAGE "${PROJECT_NAME}lib")
-+ set(ZZIP_VERSION "${PROJECT_VERSION}")
-+@@ -346,6 +340,45 @@ if(ZZIP_LIBTOOL)
-+   endif(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
-+ endif(ZZIP_LIBTOOL)
-+ 
-++if(ZZIP_LIBLATEST)
-++  if(BUILD_SHARED_LIBS)
-++    set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
-++    set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
-++  else()
-++    set(lib ${CMAKE_STATIC_LIBRARY_PREFIX})
-++    set(dll ${CMAKE_STATIC_LIBRARY_SUFFIX})
-++  endif()
-++    get_target_property(libname libzzip OUTPUT_NAME)
-++    get_target_property(librelease libzzip RELEASE_POSTFIX)
-++    add_custom_target(libzzip_latest ALL
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
-++        )
-++    install(FILES
-++        ${outdir}/${lib}${libname}${dll}
-++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++    if(ZZIPFSEEKO)
-++    get_target_property(libname libzzipfseeko OUTPUT_NAME)
-++    get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
-++    add_custom_target(libzzipfseeko_latest ALL
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
-++        )
-++    install(FILES
-++        ${outdir}/${lib}${libname}${dll}
-++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++    endif(ZZIPFSEEKO)
-++    if(ZZIPMMAPPED)
-++    get_target_property(libname libzzipmmapped OUTPUT_NAME)
-++    get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
-++    add_custom_target(libzzipmmaped_latest ALL
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
-++        )
-++    install(FILES
-++        ${outdir}/${lib}${libname}${dll}
-++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++    endif(ZZIPMMAPPED)
-++endif(ZZIP_LIBLATEST)
-++
-++
-+ ## messages ##############################################
-+ 
-+ message(STATUS "lib zzipfseeko  to be compiled: ${ZZIPFSEEKO}")
+diff --git a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch b/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
+deleted file mode 100644
+index c45a087a54..0000000000
+--- a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 3856224df9160c201bc6d224aa927e7c358e3269 Mon Sep 17 00:00:00 2001
+-From: aeolio <git@aeolio.de>
+-Date: Tue, 14 Dec 2021 09:01:23 +0100
+-Subject: [PATCH] lib/alsa/Error: add missing #include
+-
+-Downloaded from upstream commit:
+-https://github.com/MusicPlayerDaemon/MPD/commit/3856224df9160c201bc6d224aa927e7c358e3269
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/lib/alsa/Error.cxx | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/lib/alsa/Error.cxx b/src/lib/alsa/Error.cxx
+-index cd351f37d1..8ceb4417ca 100644
+---- a/src/lib/alsa/Error.cxx
+-+++ b/src/lib/alsa/Error.cxx
+-@@ -29,6 +29,7 @@
+- 
+- #include "Error.hxx"
+- 
+-+#include <stdarg.h>
+- #include <alsa/error.h>
+- 
+- namespace Alsa {
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 56f88490cf..b09140abf5 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  f22c2c25093a05f4566f9cd7207cfbcd8405af67ed29a989bcf8905f80b7a299  mpd-0.23.5.tar.xz
++sha256  cbc5928ee3ee1ef7ff6a58f6ba4afaee16c07e9eb42d0107bcc098010f4f26ed  mpd-0.23.6.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index a55e4adde2..12da36098f 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).5
++MPD_VERSION = $(MPD_VERSION_MAJOR).6
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
