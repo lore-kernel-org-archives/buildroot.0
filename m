@@ -1,78 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5325C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 22:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78648C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 22:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48CF4612A0;
-	Wed, 30 Mar 2022 22:45:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B58641E1A;
+	Wed, 30 Mar 2022 22:53:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CfF-U1ewplhk; Wed, 30 Mar 2022 22:45:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dkG6zx5qWT40; Wed, 30 Mar 2022 22:53:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B91A610DE;
-	Wed, 30 Mar 2022 22:45:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D03511BF359
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 22:45:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FC6141D0A;
+	Wed, 30 Mar 2022 22:53:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF2501BF359
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 22:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE439610DE
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 22:45:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B47F41CFB
+ for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 22:53:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WGdB9obvBQSP for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 22:45:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gGU63nBL5OZb for <buildroot@lists.busybox.net>;
+ Wed, 30 Mar 2022 22:53:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 264D06059D
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 22:45:36 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id x9so15546646ilc.3
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 15:45:36 -0700 (PDT)
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
+ [IPv6:2001:4860:4864:20::32])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 116B441950
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 22:53:26 +0000 (UTC)
+Received: by mail-oa1-x32.google.com with SMTP id
+ 586e51a60fabf-dee0378ce7so13214357fac.4
+ for <buildroot@buildroot.org>; Wed, 30 Mar 2022 15:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OvqJG+F/p6oAh0HQHV3qnQA2MnKaCbA6apRvH4UTbUE=;
- b=Y2jaFTzdKG6JDI/9NtCn6gI3mZvBGsiyHT6GozLRjpzxRd4gQUTXOrRsBkmGoHrXkV
- LppFQdr547eeYzzCp1jc33DMoASW7u4Hze1+KriGpR3HoC4p265AeJ65fTOZ0tEw2ZE8
- T8W1kBZdGFNgzEChVVZrr2n4m8v1m0Q9Z1MLhxTo/tpwNUCSm0ddobNpo+UFC2L/Y50o
- uCDaWhRAuOoz7UmAzWsrJWEo77odLz/5UK9BxmO3dosIqWaQj0y38m1Q1B2b1d/f/aqm
- GvNY0+qLEfr8NiQHcCYMsz9/OXwlfWsHtmfp501Lf45w95Nljv9lM5LiUhh7KV9ID47b
- h1Fw==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=rFpXibFYKoUFcOMTJuhiWTOBPivI3pY9svvAKC73joA=;
+ b=aYQX7xwkJqIuyGmuccKN5R6XDcDk3AoS1kKbUIBlUdM8pYtdm4OtTn3J7VTcYzlP7p
+ YzJ260lMpvB/Vtooik7ZtTIlp8ZbUyfda2N3XU+IT4gvMVuoiWqgTdweKG7gNEfAGxoh
+ 9eTcuGxkZYb6oXTwh+aKI0tS4DEbtHBX3qMWBpfLzMu5uWHPnTnHClbumz2dE/OzYUvw
+ 0a7PxHi2wif68Q0MwNTz7BnxWb2uLaRWyOrg1HACU7lgudN0MpG1BOJ4ikYSH3uVaouv
+ booIYwKM42P9soBV6tf1P5G7syai2DXYFke2YWZom0o1kk5XsGKlglCbJKB9/1KQkcb9
+ KEyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OvqJG+F/p6oAh0HQHV3qnQA2MnKaCbA6apRvH4UTbUE=;
- b=cs/MVrLN7dXhrcs2wOpu+zJS39k10ddv67K8dTndnbVNGqG7jkDAw3n7Z7DQDkK5jc
- f2TPC08DZrmBn4wbPvxhb8j5Oe7/8fcDmcAXFNTyovkrf4Gs4qJG2oRNzGyabhuiYm2W
- RqDocMMtl76oScgHSv9kPMUxcXprjaJa4Khso0iteEfHjA7kSE50hkrk+O/KKbpSEeOs
- YitBp0+3Rt6OMx/NU2DmIrwlEPua3/Vxrb/hRyMNFV4fbcntLmpZrChv0TBzlIctvW7r
- VjB2hBvacRNghh3LCkd8+3v2nZ5zc6bZNkN0q+VAXYtBp8wivu2QaCdi29raaPnEggji
- 2F0g==
-X-Gm-Message-State: AOAM5338T6LOFWjMDziVozuymQOVOkPuj3w5LV1UbI7GKrmoBQ00rWOm
- Mq/PlTGzj+G8AkKOmXu7NQNpQdEpBJ9qAg==
-X-Google-Smtp-Source: ABdhPJy7eDnQAImxqq/9T1PZmAsHQPvbSic4u29bkkF5t2lm7s426+0Qgj85Dw/mHJ+8efBInmJ0Rw==
-X-Received: by 2002:a05:6e02:16c9:b0:2c9:bae7:7d6c with SMTP id
- 9-20020a056e0216c900b002c9bae77d6cmr8878018ilx.313.1648680335022; 
- Wed, 30 Mar 2022 15:45:35 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
- [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- i11-20020a056e020d8b00b002c79690d56esm11166410ilj.10.2022.03.30.15.45.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Mar 2022 15:45:34 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 30 Mar 2022 16:45:21 -0600
-Message-Id: <20220330224521.4142504-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=rFpXibFYKoUFcOMTJuhiWTOBPivI3pY9svvAKC73joA=;
+ b=eNl975PQmChvyEReDhLm7CCYIInfICyqLj0cn+3J/lJJUoqp3jUh7bXObJlIIlLK7e
+ voUG0h4wXTaF/B2BsB9GRyvUYxTrw8L/ZTfGN7YcGLUrYVIypSMGEfFl3+jDjw+IkP7Y
+ AQsCc9NyHyPcxx7jcOMpapZczyiIQ0EeqziQdieMXywBqVIWwR1gACGFF5cm7nsQEClU
+ Z+Q1su9arLk3nntWwJwsfx5p2NsepWbxuZvfQRDSJG4Kt/LDKD4HBweO9Gl/XS2M9+Qx
+ rfTBdD4YN2iNiHfDiWHfRePwQL+wXvGD1fn1tajJDf7ihKsKimXOqFprz9F73TLPC4wF
+ ZMww==
+X-Gm-Message-State: AOAM533Wj7jLP1y3YcAFPj4Wxv3e0wuHCZH017M70uYZuDY4z0GOjgQW
+ 6Tf4lLN/RgfYBBBmFFwiOquH/ElUT2ctRko2WF4=
+X-Google-Smtp-Source: ABdhPJzGyN9lle1Poj1WGW2GINSiDRdMkfkKWP/BRMScKp/UwJp6Sq1KwItTVlglES7dpgSy/z6lm458EML4WQ7qUok=
+X-Received: by 2002:a05:6870:d0c4:b0:dd:c7f6:2d62 with SMTP id
+ k4-20020a056870d0c400b000ddc7f62d62mr1182193oaa.99.1648680805901; Wed, 30 Mar
+ 2022 15:53:25 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/pkg-python.mk: fix PEP517 paths
+References: <CAM70yxDW2GTLva+_JQ7wH1z+MQiXYxn__wNSu4KQ-w-MJnJ2gw@mail.gmail.com>
+ <CADvTj4qWax3zJXamtBgGEyPE31Pp-fH6Ge=ZYvk1c7XzcisntQ@mail.gmail.com>
+ <CAM70yxB3EJmtX6PtBMB0UJtrzX6_8yhnRWBkGhbgK1Hxcm7fAA@mail.gmail.com>
+ <CADvTj4rNA_vsqU5-2Hu6XT4LjpRhmuO09FsZOEk8w16VMri6xw@mail.gmail.com>
+ <CAM70yxD=tU7FK1uf2iEpFVK_jDQyHv6j8xAdW9nEDz0r8njz6w@mail.gmail.com>
+ <CADvTj4qo_ac-wizQH_xvMbn5Y7urEHnNyopLGTmF4RJ3HP=+Hw@mail.gmail.com>
+ <CAM70yxB61g2r5+aHZYPbit+3TjaWG4khnb71vHC-2pfF+WoyfQ@mail.gmail.com>
+ <CAM70yxCMj-_4q_Rix-PK2=sG+RcfVE0GQr8FK4UqrRT6c7AsSw@mail.gmail.com>
+ <CADvTj4qO-YJDa4uqW8SzQpEHYyOPc948cxFrRonXCJMSO1m=7g@mail.gmail.com>
+ <CAM70yxD0LGfsKrDwHH8v8-nN9Xu3KQEvmo=jYXKKXMjQGq-isg@mail.gmail.com>
+In-Reply-To: <CAM70yxD0LGfsKrDwHH8v8-nN9Xu3KQEvmo=jYXKKXMjQGq-isg@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 30 Mar 2022 16:53:13 -0600
+Message-ID: <CADvTj4rs50K4FvGWnyu6ar7Afkdv=5SGNxuOvhf7TuBai4jTjw@mail.gmail.com>
+To: Emile Cormier <emile.cormier.jr@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-python.mk: fix PEP517
+ purelib deployment path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,76 +90,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Emile Cormier <emile.cormier.jr@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Emile Cormier <emile.cormier.jr@gmail.com>
+On Wed, Mar 30, 2022 at 2:18 PM Emile Cormier
+<emile.cormier.jr@gmail.com> wrote:
+>
+> Oops, missed the interpreter option for HOST_PKG_PYTHON_PEP517_INSTALL_OPTS. I made the change as you suggested and it still works. Revised patch follows:
 
-Use /usr target/staging prefix and / host prefix.
+You also missed data there as well, and it seems your patch has
+formatting issues,
+I went ahead and cleaned it up here, see if that works ok for you:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220330224521.4142504-1-james.hilliard1@gmail.com/
 
-This allows the Python interpreter to find packages built via the new
-Flit infrastructure and fixes bug #14721.
+FYI I think your email client is corrupting the patch a bit as it
+didn't apply cleanly,
+see guide here:
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
 
-Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - fixup formatting
-  - fix all pep517 prefix paths
----
- package/pkg-python.mk | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Make sure you send the patch using git send-email which should make sure
+the formatting isn't messed with by your email client.
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 52ce402281..867341fc7b 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -127,16 +127,16 @@ PKG_PYTHON_PEP517_ENV = \
- PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
- 	--interpreter=/usr/bin/python \
- 	--script-kind=posix \
--	--purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
-+	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--scripts=$(TARGET_DIR)/usr/bin \
- 	--data=$(TARGET_DIR)/usr
- 
- PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
- 	--interpreter=/usr/bin/python \
- 	--script-kind=posix \
--	--purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
-+	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--scripts=$(STAGING_DIR)/usr/bin \
- 	--data=$(STAGING_DIR)/usr
- 
-@@ -147,12 +147,12 @@ HOST_PKG_PYTHON_PEP517_ENV = \
- 	$(HOST_CONFIGURE_OPTS)
- 
- HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
--	--interpreter=/usr/bin/python \
-+	--interpreter=/bin/python \
- 	--script-kind=posix \
- 	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	--headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
--	--scripts=$(HOST_DIR)/usr/bin \
--	--data=$(HOST_DIR)/usr
-+	--headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
-+	--scripts=$(HOST_DIR)/bin \
-+	--data=$(HOST_DIR)
- 
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
--- 
-2.25.1
-
+>
+> -----
+>
+> package/pkg-python.mk: fix PEP517 purelib deployment path
+>
+> This allows the Python interpreter to find packages built via the new Flit
+> infrastructure and fixes bug #14721.
+> Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
+>
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index 52ce402281..81c33ba557 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -127,7 +127,7 @@ PKG_PYTHON_PEP517_ENV = \
+>  PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+>   --interpreter=/usr/bin/python \
+>   --script-kind=posix \
+> - --purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> + --purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>   --headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+>   --scripts=$(TARGET_DIR)/usr/bin \
+>   --data=$(TARGET_DIR)/usr
+> @@ -135,7 +135,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+>  PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+>   --interpreter=/usr/bin/python \
+>   --script-kind=posix \
+> - --purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> + --purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>   --headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+>   --scripts=$(STAGING_DIR)/usr/bin \
+>   --data=$(STAGING_DIR)/usr
+> @@ -147,11 +147,11 @@ HOST_PKG_PYTHON_PEP517_ENV = \
+>   $(HOST_CONFIGURE_OPTS)
+>
+>  HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+> - --interpreter=/usr/bin/python \
+> + --interpreter=/bin/python \
+>   --script-kind=posix \
+>   --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> - --headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+> - --scripts=$(HOST_DIR)/usr/bin \
+> + --headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)  \
+> + --scripts=$(HOST_DIR)/bin \
+>   --data=$(HOST_DIR)/usr
+>
+>  ################################################################################
+>
+> On Wed, Mar 30, 2022 at 4:25 PM James Hilliard <james.hilliard1@gmail.com> wrote:
+>>
+>> On Wed, Mar 30, 2022 at 12:52 PM Emile Cormier
+>> <emile.cormier.jr@gmail.com> wrote:
+>> >
+>> > package/pkg-python.mk: fix PEP517 purelib deployment path
+>> >
+>> > This allows the Python interpreter to find packages built via the new Flit
+>> > infrastructure and fixes bug #14721.
+>> > Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
+>> >
+>> > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+>> > index 52ce402281..ab4f7af6a6 100644
+>> > --- a/package/pkg-python.mk
+>> > +++ b/package/pkg-python.mk
+>> > @@ -127,7 +127,7 @@ PKG_PYTHON_PEP517_ENV = \
+>> >  PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+>> >   --interpreter=/usr/bin/python \
+>> >   --script-kind=posix \
+>> > - --purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>> > + --purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>> >   --headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+>> >   --scripts=$(TARGET_DIR)/usr/bin \
+>> >   --data=$(TARGET_DIR)/usr
+>> > @@ -135,7 +135,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+>> >  PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+>> >   --interpreter=/usr/bin/python \
+>> >   --script-kind=posix \
+>> > - --purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>> > + --purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>> >   --headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+>> >   --scripts=$(STAGING_DIR)/usr/bin \
+>> >   --data=$(STAGING_DIR)/usr
+>> > @@ -150,8 +150,8 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+>> >   --interpreter=/usr/bin/python \
+>> >   --script-kind=posix \
+>> >   --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>> > - --headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
+>> > - --scripts=$(HOST_DIR)/usr/bin \
+>> > + --headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)  \
+>> > + --scripts=$(HOST_DIR)/bin \
+>> >   --data=$(HOST_DIR)/usr
+>>
+>> I think it should be something like this for the host:
+>> HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+>> --interpreter=/bin/python \
+>> --script-kind=posix \
+>> --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>> --headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
+>> --scripts=$(HOST_DIR)/bin \
+>> --data=$(HOST_DIR)
+>>
+>>
+>> >
+>> >  ################################################################################
+>> >
+>> > On Wed, Mar 30, 2022 at 3:51 PM Emile Cormier <emile.cormier.jr@gmail.com> wrote:
+>> >>
+>> >> On Wed, Mar 30, 2022 at 3:01 PM James Hilliard <james.hilliard1@gmail.com> wrote:
+>> >>>
+>> >>> I think keep /usr for STAGING/TARGET OPTS but remove for HOST OPTS.
+>> >>
+>> >>
+>> >> Alright, I've changed it as you suggested and it still works for me. I'll post an updated patch.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
