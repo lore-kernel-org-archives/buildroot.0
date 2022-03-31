@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF9FC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 12:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63B32C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 12:18:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5BAA612F0;
-	Thu, 31 Mar 2022 12:18:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 185614195F;
+	Thu, 31 Mar 2022 12:18:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F5azc2nE3KNJ; Thu, 31 Mar 2022 12:18:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c_SU5pjd6S6d; Thu, 31 Mar 2022 12:18:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93144612F2;
-	Thu, 31 Mar 2022 12:18:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEC0B41935;
+	Thu, 31 Mar 2022 12:18:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31D771BF3CA
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:18:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B37861BF3CA
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2068F612E5
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:18:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A24B6612E5
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:18:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K7r7HTe8dHsU for <buildroot@lists.busybox.net>;
- Thu, 31 Mar 2022 12:18:05 +0000 (UTC)
+ with ESMTP id vTuo92H4eu2C for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 12:18:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 493EA612D0
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 12:18:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E27FB612F2
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 12:18:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 44C4E8608F; Thu, 31 Mar 2022 12:08:48 +0000 (UTC)
+ id DDC1786094; Thu, 31 Mar 2022 12:08:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 14:17:35 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: ff8555763aa51a43a108dccf4011406bce2d00d2
-X-Git-Newrev: 14c91f703526fee8e0b09a28018a57b0a835ccdd
+Date: Thu, 31 Mar 2022 14:14:37 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 5045b4de6de6c42ce36e31fbc9216dfb3e6a1493
+X-Git-Newrev: f93f4dc615414f71eab6fd2d5ea31b527318b37b
 X-Patchwork-Hint: ignore
-Message-Id: <20220331120848.44C4E8608F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/netatalk:
- security bump to version 3.1.13
+Message-Id: <20220331120852.DDC1786094@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/matio: security
+ bump to version 1.5.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,86 +59,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14c91f703526fee8e0b09a28018a57b0a835ccdd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f93f4dc615414f71eab6fd2d5ea31b527318b37b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-- Fixes CVE-2021-31439, CVE-2022-23121, CVE-2022-23123, CVE-2022-23122,
-  CVE-2022-23125, CVE-2022-23124 and CVE-2022-0194
-- Drop second patch (already in version)
-- Add tarball sha256
-- Update indentation in hash file (two spaces)
+- Fixed heap-based buffer overflows when reading (crafted) MAT file
+  (CVE-2020-36428, CVE-2021-36977)
+- Update hash of COPYING (year updated and contributors added:
+  https://github.com/tbeu/matio/commit/a3730c09797372a5919140b4618f217bb54bd1a1)
 
-https://sourceforge.net/projects/netatalk/files/netatalk/3.1.13
+https://github.com/tbeu/matio/releases/tag/v1.5.22
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5ed1baa7e2d20c2b6184db265f398d1c2bb0e2e8)
+(cherry picked from commit f33260685bf9dedd76db5b19f2dce0f4b5cbce2b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-multiple-def-of-invalid_dircache_entries.patch | 25 ----------------------
- package/netatalk/netatalk.hash                     |  7 +++---
- package/netatalk/netatalk.mk                       |  2 +-
- 3 files changed, 5 insertions(+), 29 deletions(-)
+ package/matio/matio.hash | 6 +++---
+ package/matio/matio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch b/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-deleted file mode 100644
-index e7ccc52553..0000000000
---- a/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 32df6e155ccfc83216321925273c3e75e631ebe6 Mon Sep 17 00:00:00 2001
--From: Andrew Bauer <zonexpertconsulting@outlook.com>
--Date: Wed, 22 Jan 2020 09:59:47 -0600
--Subject: [PATCH] fix ftbs multiple def of invalid_dircache_entries
--
--[Retrieved from:
--https://github.com/Netatalk/Netatalk/pull/125/commits/32df6e155ccfc83216321925273c3e75e631ebe6]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- etc/afpd/directory.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/etc/afpd/directory.h b/etc/afpd/directory.h
--index eb89c606..81bfa9cb 100644
----- a/etc/afpd/directory.h
--+++ b/etc/afpd/directory.h
--@@ -91,7 +91,7 @@ struct maccess {
-- #define	AR_UWRITE	(1<<2)
-- #define	AR_UOWN		(1<<7)
-- 
---q_t *invalid_dircache_entries;
--+extern q_t *invalid_dircache_entries;
-- 
-- typedef int (*dir_loop)(struct dirent *, char *, void *);
-- 
-diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
-index 6c3250a005..6dead5457c 100644
---- a/package/netatalk/netatalk.hash
-+++ b/package/netatalk/netatalk.hash
-@@ -1,6 +1,7 @@
--# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.12/
--md5 021d2330cb7f7cd2977aec46299dcc1b  netatalk-3.1.12.tar.bz2
--sha1 cc1fe1ebdbdb4da9cf82835c440e82ba28a832c5  netatalk-3.1.12.tar.bz2
-+# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.13/
-+md5  697421623c32ee0ab9c8076191766e5f  netatalk-3.1.13.tar.bz2
-+sha1  16dd7fa84962a44b36b795b8c44393e728785947  netatalk-3.1.13.tar.bz2
+diff --git a/package/matio/matio.hash b/package/matio/matio.hash
+index 4dd05dee07..4634074ca0 100644
+--- a/package/matio/matio.hash
++++ b/package/matio/matio.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/matio/files/matio/1.5.21/
+-sha512  b00bcad807e6a7e10afa656eb77a0e3e9fb08d9cecc3e94ba41ef91ce60367d6686e6d387a874bbb83eb2f895d4a97caac554a70e7f5f6f5cb750052702d411c  matio-1.5.21.tar.gz
++# From https://sourceforge.net/projects/matio/files/matio/1.5.22/
++sha512  33fd3991413e94dfc9aba13ffd08b09ddcbdb9dfa579124d981449e195a8c61a3dc95b55e46bba360d48456c117cf36403af1c3448689c26b8aea5fa9cf38323  matio-1.5.22.tar.gz
  # Locally computed
-+sha256  89ada6bcfe1b39ad94f58c236654d1d944f2645c3e7de98b3374e0bd37d5e05d  netatalk-3.1.13.tar.bz2
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  7599ae145e53be03a08f8b558b2f2e0c828e1630f1843cc04f41981b8cefcd65  COPYRIGHT
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 0c219a2316..7cc950beb6 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
+-sha256  69143d4a8f1933022bb909327df1ce812dd2420ed57949812dd8f370856bf2a1  COPYING
++sha256  3ed9a50d754fcc92d4accb8448e397eafeab686796b2a7445557ce782806e239  COPYING
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+index 236466d4d9..d282852d37 100644
+--- a/package/matio/matio.mk
++++ b/package/matio/matio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETATALK_VERSION = 3.1.12
-+NETATALK_VERSION = 3.1.13
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
+-MATIO_VERSION = 1.5.21
++MATIO_VERSION = 1.5.22
+ MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
+ MATIO_LICENSE = BSD-2-Clause
+ MATIO_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
