@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22913C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18F97C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB9C541DBC;
-	Thu, 31 Mar 2022 06:21:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A2AF40BF9;
+	Thu, 31 Mar 2022 06:23:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xJOKeSSUXqZE; Thu, 31 Mar 2022 06:21:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OMMUvFjkgkYS; Thu, 31 Mar 2022 06:23:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86A7641D3D;
-	Thu, 31 Mar 2022 06:21:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 124F41BF321
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:21:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6B5A40BB0;
+	Thu, 31 Mar 2022 06:23:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D489F1BF321
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3EC060ACB
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:21:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3AF983EB8
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:23:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DoyYPqLx3-hl for <buildroot@lists.busybox.net>;
- Thu, 31 Mar 2022 06:21:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PFm0Usb3JrjR for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 06:23:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 787BC60A81
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:21:43 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B51CE83EB7
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:23:00 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 207D31C0003;
- Thu, 31 Mar 2022 06:21:37 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2057220000A;
+ Thu, 31 Mar 2022 06:22:56 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nZoBc-000Y7q-E7; Thu, 31 Mar 2022 08:21:36 +0200
+ id 1nZoCu-000YCu-0M; Thu, 31 Mar 2022 08:22:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220320162012.1527261-1-fontaine.fabrice@gmail.com>
-Date: Thu, 31 Mar 2022 08:21:36 +0200
-In-Reply-To: <20220320162012.1527261-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 20 Mar 2022 17:20:12 +0100")
-Message-ID: <877d8a7ibz.fsf@dell.be.48ers.dk>
+References: <20220320211815.1798812-1-fontaine.fabrice@gmail.com>
+Date: Thu, 31 Mar 2022 08:22:55 +0200
+In-Reply-To: <20220320211815.1798812-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 20 Mar 2022 22:18:14 +0100")
+Message-ID: <8735iy7i9s.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: hid and hog needs
- headers >= 3.18
+Subject: Re: [Buildroot] [PATCH 1/2] package/jack1: libsamplerate is
+ optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,10 +59,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Marcin Bis <marcin@bis.org.pl>,
- Samuel Martin <s.martin49@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, buildroot@buildroot.org,
- Romain Naour <romain.naour@gmail.com>, Mario Lang <mlang@blind.guru>
+Cc: Adam Heinrich <adam@adamh.cz>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -71,26 +67,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure with hid and hog raised since their
- > addition in commit fb9fc969d91f69851b4c70dba512b607e52bda7b and
- > https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9b58288693680b021e5dcbc6f8bea80b5be89311
- > https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=646db71713b05d50b2b0c421da34e80ed4c54fbd
- > because UHID_GET_REPORT is only available since kernel 3.18 and
- > https://github.com/torvalds/linux/commit/fa71f32b5de2be1644ee671ddbe211d79be7847f:
-
- > profiles/input/device.c: In function 'uhid_send_get_report_reply':
- > profiles/input/device.c:222:24: error: 'union <anonymous>' has no member named 'get_report_reply'
- >   if (size > sizeof(ev.u.get_report_reply.data))
- >                         ^
- > profiles/input/device.c:223:21: error: 'union <anonymous>' has no member named 'get_report_reply'
- >    size = sizeof(ev.u.get_report_reply.data);
- >                      ^
- > profiles/input/device.c:231:12: error: 'UHID_GET_REPORT_REPLY' undeclared (first use in this function)
- >   ev.type = UHID_GET_REPORT_REPLY;
- >             ^
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/1db406eac7620e3f76d997414eb7af7d2ac6cfe6
+ > libsamplerate is only needed to build the NetJack backend and internal
+ > client
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
