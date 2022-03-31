@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1133C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E24F2C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A73660D7F;
-	Thu, 31 Mar 2022 06:51:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9324741D61;
+	Thu, 31 Mar 2022 06:52:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rkdtxyb9yakQ; Thu, 31 Mar 2022 06:51:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 26GGBN4MpxtH; Thu, 31 Mar 2022 06:52:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D3EC60D88;
-	Thu, 31 Mar 2022 06:51:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 193111C1162
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B00D41D58;
+	Thu, 31 Mar 2022 06:52:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 41B841BF321
  for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6A6B40BF9
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D91D41D58
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:51:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UhOyhG6k2drw for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0vD8qmqVgU5H for <buildroot@lists.busybox.net>;
  Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2464640BF4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F96F41D56
  for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9D11286014; Thu, 31 Mar 2022 06:41:51 +0000 (UTC)
+ id 846C686014; Thu, 31 Mar 2022 06:41:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 08:46:24 +0200
+Date: Thu, 31 Mar 2022 08:43:19 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9820d4903ea09a5640ed9bad83385243c3528eaa
-X-Git-Newrev: 0a5119afa0eceaf03493142d89b8bf2407f9b983
+X-Git-Oldrev: 0467bb87de58a9e6f0f8117e80ed510604ffa9e5
+X-Git-Newrev: 33951d7933c3162265cc44acfa0de7a61a5752f0
 X-Patchwork-Hint: ignore
-Message-Id: <20220331064151.9D11286014@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/jack2: fix build
- with libexecinfo
+Message-Id: <20220331064151.846C686014@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/wget: bump
+ version to 1.21.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +59,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5119afa0eceaf03493142d89b8bf2407f9b983
+commit: https://git.buildroot.net/buildroot/commit/?id=33951d7933c3162265cc44acfa0de7a61a5752f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure raised on uclibc and musl since the
-addition of libexecinfo package in commit
-eea8ba446c10701a273432552108d80fb2224ef4:
+- bump version to 1.21.3 (for details see [1])
 
-/home/peko/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: dbus/sigsegv.c.17.o: in function `signal_segv':
-sigsegv.c:(.text+0x98): undefined reference to `backtrace'
+- remove legacy --with-libidn option (see [2]), replace with
+  --enable-iri option in case locale support and libidn2 are available
 
-Fixes:
- - http://autobuild.buildroot.org/results/dca49cb9b3e66fac921601560e9358bcce9acffc
+[1] https://lists.gnu.org/archive/html/info-gnu/2022-02/msg00017.html
+[2] https://git.savannah.gnu.org/cgit/wget.git/commit/configure.ac?id=a24e67e239ef949cc77a4c4e5a0beb703026a296
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 930db465d9d9f2fd558e67bd808914309c2d4619)
+(cherry picked from commit b5f82a4a5a6f14b4d178a4d662784d7bd6f7fada)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jack2/jack2.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/wget/wget.hash | 4 ++--
+ package/wget/wget.mk   | 9 +++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 2e55169984..127c99eed1 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -14,6 +14,11 @@ JACK2_INSTALL_STAGING = YES
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 7f89bedb88..22674650a2 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.21.2.tar.lz.sig
++# https://ftp.gnu.org/gnu/wget/wget-1.21.3.tar.lz.sig
+ # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
+-sha256  1727a330a86acacb3e57615ce268f5f29978bf7adec4abe6a30d370207bc91b3  wget-1.21.2.tar.lz
++sha256  dbd2fb5e47149d4752d0eaa0dac68cc49cf20d46df4f8e326ffc8f18b2af4ea5  wget-1.21.3.tar.lz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 8a73c33699..455faaed12 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- JACK2_CONF_OPTS = --alsa
- 
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+JACK2_DEPENDENCIES += libexecinfo
-+JACK2_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lexecinfo"
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPUS),y)
- JACK2_DEPENDENCIES += opus
+-WGET_VERSION = 1.21.2
++WGET_VERSION = 1.21.3
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
+@@ -33,11 +33,12 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WGET_DEPENDENCIES += libiconv
  endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+-WGET_CONF_OPTS += --with-libidn
++# BR2_ENABLE_LOCALE and BR2_PACKAGE_LIBICONV are mutually exclusive
++ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV)$(BR2_PACKAGE_LIBIDN2),yy)
++WGET_CONF_OPTS += --enable-iri
+ WGET_DEPENDENCIES += libidn2
+ else
+-WGET_CONF_OPTS += --without-libidn
++WGET_CONF_OPTS += --disable-iri
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
