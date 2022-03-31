@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DC8C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 11:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26E5C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 12:03:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9202612F5;
-	Thu, 31 Mar 2022 11:53:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5253F41091;
+	Thu, 31 Mar 2022 12:03:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ycUp7muyc0KF; Thu, 31 Mar 2022 11:53:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nu51SWlWSraC; Thu, 31 Mar 2022 12:03:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A00FC612EC;
-	Thu, 31 Mar 2022 11:53:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B44C61BF3D2
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:53:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54AE041087;
+	Thu, 31 Mar 2022 12:03:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2905F1BF3D2
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B196C83F55
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:53:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 110E441CC6
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:03:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2O04HehcPB-i for <buildroot@lists.busybox.net>;
- Thu, 31 Mar 2022 11:53:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M6ZnQ6crpd44 for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 12:03:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08A3483F50
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 11:53:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B1BF41CBA
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 12:03:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0CA2A8607A; Thu, 31 Mar 2022 11:44:01 +0000 (UTC)
+ id 5804C86080; Thu, 31 Mar 2022 11:54:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 13:52:35 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2a80eca365eba8a77f250917e5c11d28eb24b073
-X-Git-Newrev: 898593378c1a89b4d6cb8c97c2bb610480e52f85
+Date: Thu, 31 Mar 2022 14:02:06 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 98eccb68f27144d6b4686eabf02a4688442c31c6
+X-Git-Newrev: 363284a04df1e4117e9789ee6b0eebbc3fee94c0
 X-Patchwork-Hint: ignore
-Message-Id: <20220331114401.0CA2A8607A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/luasec: bump to
- version 1.0.2
+Message-Id: <20220331115418.5804C86080@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/opus: enable
+ custom modes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=898593378c1a89b4d6cb8c97c2bb610480e52f85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=363284a04df1e4117e9789ee6b0eebbc3fee94c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-diff LICENSE:
--LuaSec 1.0 license
-+LuaSec 1.0.2 license
+Enable custom modes to avoid the following build failure with jack2
+raised since commit 618a23100fe5ff54b90ada1a8f23453f6c5a77dc:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Checking for header opus/opus_custom.h   : not found
+The above check failed, but the checkee is required for --opus.
+
+It should be noted that before this commit, opus was silently disabled
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b1c050ccd6152c43a6da5f5d2174c3cc0dc2ff3e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 6b609e77bfab37ee71d31eeff24640a302946a44)
+(cherry picked from commit 92e436b73df21ff9347c53c25fd33d8fd48a9d43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luasec/luasec.hash | 4 ++--
- package/luasec/luasec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/opus/opus.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-index 1ea422aa9b..1e381612bd 100644
---- a/package/luasec/luasec.hash
-+++ b/package/luasec/luasec.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  b7e18f475c64896fe4921d367adabae765914f7526a68487a5fa6831040e7138  luasec-1.0-1.src.rock
--sha256  0d3431dad143f41c8902e4ee867e386a702ebad856c45239fb86460e27dabfbf  luasec/LICENSE
-+sha256  7ed5d08aad8f0e8659abb3f43c935da1c898474d4dc121e9edfbeae5c4c67fb0  luasec-1.0.2-1.src.rock
-+sha256  84376baf33cefbcc1e9adbca23fcf87f51c1107956660cda2880feaef86d6075  luasec/LICENSE
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 3ef0c14daf..4ace94d168 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index 3fb2d5d65f..4f816df477 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -17,6 +17,7 @@ OPUS_CFLAGS += -O0
+ endif
  
--LUASEC_VERSION = 1.0-1
-+LUASEC_VERSION = 1.0.2-1
- LUASEC_SUBDIR = luasec
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+ OPUS_CONF_ENV = CFLAGS="$(OPUS_CFLAGS)"
++OPUS_CONF_OPTS = --enable-custom-modes
+ 
+ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+ OPUS_CONF_OPTS += --enable-fixed-point
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
