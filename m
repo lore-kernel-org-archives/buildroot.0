@@ -4,49 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3FF9C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46640C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B97C41D5C;
-	Thu, 31 Mar 2022 06:50:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9DDD41D5C;
+	Thu, 31 Mar 2022 06:51:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xIhjVkLJxyDY; Thu, 31 Mar 2022 06:50:49 +0000 (UTC)
+	with ESMTP id QMsEmH06tgvy; Thu, 31 Mar 2022 06:51:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4210041D56;
-	Thu, 31 Mar 2022 06:50:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4DA651BF321
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:50:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AB3341D58;
+	Thu, 31 Mar 2022 06:51:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D3D001BF321
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C22D60D7F
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:50:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB8B940BFA
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pIgSRLA7M2yd for <buildroot@lists.busybox.net>;
- Thu, 31 Mar 2022 06:50:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E704460C0C
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:50:29 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E0E14100009;
- Thu, 31 Mar 2022 06:50:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nZodW-000ZFW-UF; Thu, 31 Mar 2022 08:50:26 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sx39htVYkOVH for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C94640BF9
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:51:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id A7F8886016; Thu, 31 Mar 2022 06:41:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Jan Havran <jan.havran@audified.com>
-References: <YiXRxFsrmOttLX0v@jan-lenovo>
-Date: Thu, 31 Mar 2022 08:50:26 +0200
-In-Reply-To: <YiXRxFsrmOttLX0v@jan-lenovo> (Jan Havran's message of "Mon, 7
- Mar 2022 10:35:00 +0100")
-Message-ID: <87czi262fh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.20
+To: buildroot@buildroot.org
+Date: Thu, 31 Mar 2022 08:47:28 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 0a5119afa0eceaf03493142d89b8bf2407f9b983
+X-Git-Newrev: 6439b8dbe01b2a80f8cd7202277b8ccd822cc7e9
+X-Patchwork-Hint: ignore
+Message-Id: <20220331064151.A7F8886016@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/jack2: explicitly
+ {dis, en}able opus and readline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,85 +53,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Wojciech M. Zabolotny" <wzab01@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Jan" == Jan Havran <jan.havran@audified.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6439b8dbe01b2a80f8cd7202277b8ccd822cc7e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > - Fix URL for 'JACK DBus packaging' GitHub Wiki page.
- > https://github.com/jackaudio/jack2/releases/tag/v1.9.18
- > https://github.com/jackaudio/jack2/releases/tag/v1.9.19
- > https://github.com/jackaudio/jack2/releases/tag/v1.9.20
+Explicitly disable or enable opus and readline which have been added by
+commits 055cf588427b40533da74d16df1830e483c5618e and
+f658b1934f91e8c416fd7519c9f7e3ab86dca076
 
- > Signed-off-by: Jan Havran <jan.havran@audified.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 618a23100fe5ff54b90ada1a8f23453f6c5a77dc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jack2/jack2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Committed to 2022.02.x given the fixes, thanks.
-
-> ---
- >  package/jack2/Config.in  | 4 ++--
- >  package/jack2/jack2.hash | 2 +-
- >  package/jack2/jack2.mk   | 2 +-
- >  3 files changed, 4 insertions(+), 4 deletions(-)
-
- > diff --git a/package/jack2/Config.in b/package/jack2/Config.in
- > index bc883190d5..8abdda6376 100644
- > --- a/package/jack2/Config.in
- > +++ b/package/jack2/Config.in
- > @@ -30,7 +30,7 @@ config BR2_PACKAGE_JACK2_LEGACY
- >  	help
- >  	  Build and use jackd.
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 127c99eed1..6939aac9a6 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -21,10 +21,16 @@ endif
  
- > -	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
- > +	  https://github.com/jackaudio/jackaudio.github.com/wiki/JACK-DBus-packaging
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ JACK2_DEPENDENCIES += opus
++JACK2_CONF_OPTS += --opus=yes
++else
++JACK2_CONF_OPTS += --opus=no
+ endif
  
- >  config BR2_PACKAGE_JACK2_DBUS
- >  	bool "dbus jack2"
- > @@ -42,7 +42,7 @@ config BR2_PACKAGE_JACK2_DBUS
- >  	help
- >  	  Build and use jackdbus.
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ JACK2_DEPENDENCIES += readline
++JACK2_CONF_OPTS += --readline=yes
++else
++JACK2_CONF_OPTS += --readline=no
+ endif
  
- > -	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
- > +	  https://github.com/jackaudio/jackaudio.github.com/wiki/JACK-DBus-packaging
- 
- >  endif
- 
- > diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
- > index df708f7ca5..6361473cf7 100644
- > --- a/package/jack2/jack2.hash
- > +++ b/package/jack2/jack2.hash
- > @@ -1,3 +1,3 @@
- >  # Locally calculated
- > -sha256  38f674bbc57852a8eb3d9faa1f96a0912d26f7d5df14c11005ad499c8ae352f2  jack2-1.9.17.tar.gz
- > +sha256  915ad2900992159bdb729b9fc4ea134b962ce32b2df0b384fee40a2c5808835d  jack2-1.9.20.tar.gz
- >  sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
- > diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
- > index e6a036bac9..2e55169984 100644
- > --- a/package/jack2/jack2.mk
- > +++ b/package/jack2/jack2.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -JACK2_VERSION = 1.9.17
- > +JACK2_VERSION = 1.9.20
- >  JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- >  JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- >  JACK2_LICENSE_FILES = COPYING
- > -- 
-
- > 2.35.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
