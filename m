@@ -1,59 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA08BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 05:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8229AC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 06:08:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 30722405A4;
-	Thu, 31 Mar 2022 05:58:09 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uCoDcgtHQGzJ; Thu, 31 Mar 2022 05:58:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 026BF40BB7;
-	Thu, 31 Mar 2022 05:58:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7B0CB1BF423
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 05:58:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 625FD60D54
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 05:58:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B5B160B72;
+	Thu, 31 Mar 2022 06:08:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7W4c3wQbXRW1 for <buildroot@lists.busybox.net>;
- Thu, 31 Mar 2022 05:58:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F077260C0C
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 05:58:01 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 25F85D8C4858;
- Thu, 31 Mar 2022 07:57:59 +0200 (CEST)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gfy9JpthW1EF; Thu, 31 Mar 2022 06:08:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A796B607CE;
+	Thu, 31 Mar 2022 06:08:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 103D91BF321
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:08:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2A2883E9B
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 06:08:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l5XeO_ZEIoIk for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 06:08:27 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C9FE83E93
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:08:27 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A4B8BC0006
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 06:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1648706905; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=ThRj/cZTv3nrYUOVkVH1Ldea3ngivJWscKykGz9CUxQ=;
+ b=c+WK8u7EZs3rPem1xDSzK/4yWOBbD7fy5Pan7K4Cpvf/GEA4w3dBgzFaY/sDNrpxGb7aJP
+ M71UCTtFN4oVRIBXghfjDuAiWuZneNbplL3IxS7CHPk10Dp3Cv6JXI2KCbwtqHmeMd9Tjx
+ j96TShUj69lM0kYZFPMQF/MSWe5do3N52EXJpUCsb/m5hD1VmIJm3vjgnez0altvqnk+qq
+ jG9aJy9UDseGuYiuUVNOd76TYzfNnXG0kddwz3mqYus/PYXXYRnOgVr+BgNvaCovrQE24x
+ R0Eh23JWwu8jEd21DgJP3SmB4YKEsqemsdQQhgH6EaAfwAxEHngmehn0jN3Bkw==
 MIME-Version: 1.0
-Date: Thu, 31 Mar 2022 05:57:59 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Dan Jackson <dan@thejacksons.uk>
-In-Reply-To: <AM6PR02MB48840C01AEE7E7DFEBF4FA84DA1F9@AM6PR02MB4884.eurprd02.prod.outlook.com>
-References: <mailman.22068.1648533484.192135.buildroot@buildroot.org>
- <2854f91f1188e166bf02e3a6ab6249a4@umbiko.net>
- <AM6PR02MB48848F8B3F5238DF24891A59DA1E9@AM6PR02MB4884.eurprd02.prod.outlook.com>
- <0b1ebd93c431e1c06678303eaffd8a79@umbiko.net>
- <AM6PR02MB488490D703CC6DAD1FF356CFDA1E9@AM6PR02MB4884.eurprd02.prod.outlook.com>
- <54f87d03a99935fb452424992a81409c@umbiko.net>
- <AM6PR02MB4884A6522909A9322C4C9E2EDA1E9@AM6PR02MB4884.eurprd02.prod.outlook.com>
- <35c2351b33bcb44d81333adfa848d221@umbiko.net>
- <AM6PR02MB48840C01AEE7E7DFEBF4FA84DA1F9@AM6PR02MB4884.eurprd02.prod.outlook.com>
-Message-ID: <7a56c449ef38559922b9858eee8d1799@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] Adding USB support to existing device on 2.6.39.3
- kernel - possible?
+To: buildroot@buildroot.org
+Date: Thu, 31 Mar 2022 06:08:25 -0000
+Message-Id: <20220331060828.F2A2883E9B@smtp1.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-03-30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,191 +63,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2022-03-30 19:18, Dan Jackson wrote:
->> -----Original Message-----
->> From: Andreas Ziegler <br015@umbiko.net>
->> Sent: 30 March 2022 08:14
->> To: Dan Jackson <dan@thejacksons.uk>
->> Cc: buildroot@buildroot.org
->> Subject: Re: Adding USB support to existing device on 2.6.39.3 kernel 
->> -
->> possible?
->> 
->> Hi Dan,
->> 
->> cutting some old content.
->> 
->> On 2022-03-29 19:19, Dan Jackson wrote:
->> 
->> <cut>
->> 
->> >> > However, now I have a new missing file error, and I can't seem to
->> >> > locate a suitable candidate:
->> >> >
->> >> > In file included from
->> >> > /home/danj/buildroot-2022.02/output/build/linux-
->> >> custom/arch/arm/include/asm/system.h:165,
->> >> >                  from
->> >> > /home/danj/buildroot-2022.02/output/build/linux-
->> >> custom/arch/arm/include/asm/bitops.h:27,
->> >> >                  from include/linux/bitops.h:22,
->> >> >                  from include/linux/kernel.h:17,
->> >> >                  from include/linux/sched.h:55,
->> >> >                  from arch/arm/kernel/asm-offsets.c:13:
->> >> > /home/danj/buildroot-2022.02/output/build/linux-
->> >> custom/arch/arm/include/asm/memory.h:19:10:
->> >> > fatal error: mach/memory.h: No such file or directory
->> >> >    19 | #include <mach/memory.h>
->> >> >       |          ^~~~~~~~~~~~~~~
->> >> > compilation terminated.
->> >> > /home/danj/buildroot-2022.02/output/build/linux-custom/./Kbuild:81:
->> >> > recipe for target 'arch/arm/kernel/asm-offsets.s' failed
->> >> > make[3]: *** [arch/arm/kernel/asm-offsets.s] Error 1
->> >> > Makefile:1009: recipe for target 'prepare0' failed
->> >> > make[2]: *** [prepare0] Error 2
->> >> > make[2]: *** Waiting for unfinished jobs....
->> >> >   HOSTCC  scripts/mod/modpost.o
->> >> >   HOSTCC  scripts/mod/sumversion.o
->> >> >   HOSTLD  scripts/mod/modpost
->> >> > make[2]: *** wait: No child processes. Stop.
->> >> > package/pkg-generic.mk:289: recipe for target
->> >> > '/home/danj/buildroot-2022.02/output/build/linux-
->> custom/.stamp_built'
->> >> > failed
->> >> > make[1]: ***
->> >> > [/home/danj/buildroot-2022.02/output/build/linux-custom/.stamp_buil
->> >> > t]
->> >> > Error 2
->> >> > Makefile:84: recipe for target '_all' failed
->> >> > make: *** [_all] Error 2
->> >>
->> >> This seems not to be the defconfig from above? It now uses
->> >> linux-custom ...
->> >> The failure may be due to the default kernel configuration. Try to
->> >> configure the correct one and see if you get further.
->> >>
->> >> > I think maybe I am still doing something wrong because it sure
->> >> > seems to be compiling a lot of stuff instead of letting me configure
->> things.
->> >>
->> >> It gets better once everything necessary is built.
->> >
->> > Still no luck I'm afraid. Same error with mach/memory.h as above.
->> >
->> > Buildroot defconfig now looks like this:
->> >
->> > BR2_armeb=y
->> > BR2_STATIC_LIBS=y
->> > BR2_KERNEL_HEADERS_VERSION=y
->> > BR2_DEFAULT_KERNEL_VERSION="2.6.39.3"
->> > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y
->> > BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
->> > BR2_PTHREAD_DEBUG=y
->> > BR2_BINUTILS_VERSION_2_37_X=y
->> > BR2_GCC_VERSION_9_X=y
->> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> > BR2_PACKAGE_HOST_GDB=y
->> > BR2_GDB_VERSION_9_2=y
->> > BR2_LINUX_KERNEL=y
->> > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39.3"
->> > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> >
->> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/danj/DG3270_9.1.103
->> FB/sourcecode/ti_linux/linux-2.6.39.3/src/.config"
->> > BR2_PACKAGE_DROPBEAR=y
->> >
->> BR2_PACKAGE_DROPBEAR_LOCALOPTIONS_FILE="/home/danj/localoptions
->> .h"
->> > BR2_PACKAGE_JOE=y
->> >
->> > I forgot to mention this before but the buildroot manual page you
->> > mentioned said to create a local.mk file in order to use external
->> > source, this looks like this:
->> >
->> > LINUX_OVERRIDE_SRCDIR =
->> > /home/danj/DG3270_9.1.103FB/sourcecode/ti_linux/linux-2.6.39.3/src/
->> >
->> > For the kernel configuration I entered the kernel source dir and did
->> > "make menuconfig", I left everything at the defaults except for
->> > enabling the USB related items.
->> >
->> > The resulting configuration file is attached as a text file.
->> > Unfortunately it's been literally decades since I last actually
->> > compiled a kernel, so I'm afraid I have no idea what bits would be
->> > suitable to disable/remove to get the results I want (I'm guessing
->> > this will be the most likely way to eliminate the error I'm getting?)
->> 
->> I did a compile test this morning, the Buildroot version was some 
->> early
->> 2022.02 version, not up-to-date.
->> 
->> You have a potential header mismatch, Select Toolchain -> Kernel 
->> Headers
->> -> Same as kernel being built to use the vendor source also for the
->> headers.
->> 
->> I could configure Linux with make menuconfig, did not encounter the
->> missing memory.h error above, but the build stops during Linux kernel
->> compilation with this error:
->> 
->> /tmp/ccSO8f6S.s: Assembler messages:
->> /tmp/ccSO8f6S.s:950: Error: .err encountered
->> make[3]: *** [scripts/Makefile.build:284:
->> arch/arm/kernel/sys_oabi-compat.o] Error 1
->> make[2]: *** [Makefile:969: arch/arm/kernel] Error 2
->> make[1]: *** [package/pkg-generic.mk:292:
->> /home/data/test/buildroot/output/build/linux-custom/.stamp_built] 
->> Error
->> 2
->> make: *** [Makefile:84: _all] Error 2
->> 
->> Full error log is here: https://pastebin.com/VrXqSVsD
-> 
-> Looking at the error log, it seems like vfp has been selected? But my
-> target device only has Features: swp half thumb fastmult edsp java.
+Hello,
 
-This is just a warning, I would ignore it at this point in time. 
-Compiler syntax checks tend to get more strict over time ...
+Autobuild statistics for 2022-03-30
+===================================
 
-> Also, OABI does not seem like it is the correct ABI. For example, if I
-> run "file" against the busybox binary the device comes with, I get:
-> 
-> busybox: ELF 32-bit MSB executable, ARM, EABI5 version 1 (SYSV),
-> dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 63  |  6  |  0  | 69  |
+  2022.02.x  | 16  | 12  |  1  | 29  |
+    master   | 60  | 42  |  0  | 102 |
 
-It seems to be a compatibility layer for legacy software; disabling 
-OABI_COMPAT is an option, because you probably will never need it.
+Classification of failures by reason for master
+-----------------------------------------------
 
-I used the source tree and unmodified .config contained in the 
-Touchstone DG3270 Cable Gateway project on SourceForge for the test.
+                 dhcp-4.4.2-P1 | 8 
+                  pango-1.50.5 | 7 
+              tpm2-abrmd-2.3.3 | 6 
+                tpm2-tss-3.2.0 | 5 
+                tpm2-tools-5.2 | 3 
+                     frr-8.2.2 | 1 
+ glslsandbox-player-2021.08.24 | 1 
+                  jack2-1.9.20 | 1 
+              libsecret-0.20.5 | 1 
+                mongodb-4.2.18 | 1 
+                    mpd-0.23.6 | 1 
+qt-webkit-kiosk-a7720e50f2b... | 1 
+                sg3_utils-1.47 | 1 
+             tpm2-pkcs11-1.7.0 | 1 
+ulog-0389d243352255f6182326... | 1 
+                       unknown | 1 
+                    vlc-3.0.16 | 1 
+                 wavemon-0.9.4 | 1 
 
-The original build instructions seem to indicate that more software is 
-needed to build the device firmware. This might be the reason for 
-missing files ...
 
-Also, take a look at psp_drivers.Kconfig for the options necessary to 
-enable USB support.
+Detail of failures for master
+-----------------------------
 
->> 
->> You might now do some research:
->> 
->> https://stackoverflow.com/questions/61235299/gcc-8-3-arm-assembly-
->> error-when-building-linux-kernel-3-14-17-in-buildroot-2020
->> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85745
->> 
->> or try to switch to an older compiler ...
->> 
->> --
->> Andreas
->> 
->> <cut>
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/75beeb024a022513c17b25b9070083402045c1d3 | ORPH
+    sh4      |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/9144569593c077af0b840b8308f44aa56537545e | ORPH
+  powerpc    |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/66920b50afea6b510b1aea2ab26178f79e7d25e4 | ORPH
+    arm      |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/69da641c4bd6de1718f49bc04dafa081968dda96 | ORPH
+    arc      |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/d18b006dce7b46631ce8f4c72fb97eb861993939 | ORPH
+  riscv64    |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/32ea3d9366102da76e64c48e13f641fda6dced71 | ORPH
+  riscv64    |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/1ae01f53b213923113d4def79c2ef86d8f265dc2 | ORPH
+powerpc64le  |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/2e6b6cb0a40c9ac972a562e6dc17353e5e4003c1 | ORPH
+  mips64el   |           frr-8.2.2            | NOK | http://autobuild.buildroot.net/results/a8bd63dfc2012fbec48872b7a6cf4ba59829375c |     
+  aarch64    | glslsandbox-player-2021.08.24  | NOK | http://autobuild.buildroot.net/results/bd4e3fc903cbe0e328c5c46c77770682228ac1ed |     
+    m68k     |          jack2-1.9.20          | NOK | http://autobuild.buildroot.net/results/b59f60b60d51eb495780635ab31b1bb431282ed1 |     
+  aarch64    |        libsecret-0.20.5        | NOK | http://autobuild.buildroot.net/results/8c025659eaa2bedbc2f349891ca2e4722fb7830e | ORPH
+    arm      |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/b9d211d388701d4588db760df26f8114a9d4677c |     
+    arm      |           mpd-0.23.6           | NOK | http://autobuild.buildroot.net/results/f0a9e719114f19dc9d20622ed85dd4f8e968c20f |     
+ powerpc64   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/f7d227a39e4ec475c0967da031e90eca7399dbca | ORPH
+    mips     |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/7c3c2ea2b4ca326ebc11b40120993c9e20a22463 | ORPH
+ powerpc64   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/cef923b7e4847e8bd0d6d7f9bf469ce6fa740363 | ORPH
+    arm      |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/9589433c7340b2a6137c8134218e78726e38798c | ORPH
+    m68k     |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/21669e18d0d8659fa23697eb4656db082ba7e5d5 | ORPH
+  mips64el   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/7147895b373436a3a9edb42aac1562a2c171d3cd | ORPH
+   nios2     |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/b9dea403ee400d5448c1491bc265ad72847035e8 | ORPH
+    arc      | qt-webkit-kiosk-a7720e50f2b... | NOK | http://autobuild.buildroot.net/results/8029b01ce5816cbafd412b14985becce7a22e09d |     
+    m68k     |         sg3_utils-1.47         | NOK | http://autobuild.buildroot.net/results/dcc93ec2d1f861c4f3796d6b8ea5f609e8339161 |     
+    or1k     |        tpm2-abrmd-2.3.3        | NOK | http://autobuild.buildroot.net/results/f43d80dc23916f78168494da0d3b9b1574d92f87 | ORPH
+ powerpc64   |        tpm2-abrmd-2.3.3        | NOK | http://autobuild.buildroot.net/results/e031c62fe0180d403ab56da473b19da9f6161562 | ORPH
+  riscv64    |        tpm2-abrmd-2.3.3        | NOK | http://autobuild.buildroot.net/results/65e2bef20fe1bb1d820a1bfee289f58423dc14f7 | ORPH
+   mipsel    |        tpm2-abrmd-2.3.3        | NOK | http://autobuild.buildroot.net/results/9ba07ae640ba9bea01c555a5d5ba6d230781ca49 | ORPH
+   mipsel    |        tpm2-abrmd-2.3.3        | NOK | http://autobuild.buildroot.net/results/5a3ec27e213fe1d7092bd7f51511a3fb703fca78 | ORPH
+   xtensa    |        tpm2-abrmd-2.3.3        | NOK | http://autobuild.buildroot.net/results/239e4a5b8923fee53542845d1cffa67277a4480a | ORPH
+   x86_64    |       tpm2-pkcs11-1.7.0        | NOK | http://autobuild.buildroot.net/results/66323bd7d5f868874771aa743e08b93f0f6e69e0 |     
+  aarch64    |         tpm2-tools-5.2         | NOK | http://autobuild.buildroot.net/results/28cfd0284a01473c26c25cc2992b43c4bf9720c6 | ORPH
+   x86_64    |         tpm2-tools-5.2         | NOK | http://autobuild.buildroot.net/results/bcc9f0eb135873d665540c3c8a138f0e21bbe089 | ORPH
+    arm      |         tpm2-tools-5.2         | NOK | http://autobuild.buildroot.net/results/8900940ad30946c40e42ccc7c116153aa9c04741 | ORPH
+  riscv32    |         tpm2-tss-3.2.0         | NOK | http://autobuild.buildroot.net/results/0a01e354928a67a119edb4c9553025f3b2808c6a | ORPH
+  nds32le    |         tpm2-tss-3.2.0         | NOK | http://autobuild.buildroot.net/results/4a1f3212d570128ce8743dda7a9920b5d67cc9a2 | ORPH
+   x86_64    |         tpm2-tss-3.2.0         | NOK | http://autobuild.buildroot.net/results/89b5764d0a5c0f29d027f2b79c219f8347408955 | ORPH
+  sparc64    |         tpm2-tss-3.2.0         | NOK | http://autobuild.buildroot.net/results/785bb203e884c31845ef46774360fc47c27649e0 | ORPH
+    arm      |         tpm2-tss-3.2.0         | NOK | http://autobuild.buildroot.net/results/4ecf58b1d4483386945dca736c3e763b607cabc1 | ORPH
+   s390x     | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/b861aa6c0bc9ab39ba01c0afb658496e4f02d26e |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/56c8cacd93d9aff83a216b13a20be5afbcd3c09e |     
+    arm      |           vlc-3.0.16           | NOK | http://autobuild.buildroot.net/results/ef891307af29deecc89209bfc3ad25b33d70eca6 |     
+   x86_64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/0e02d2df8f05e209e3dcca2fbb9d9ce793509c7c |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 2 
+                 apache-2.4.53 | 1 
+           heirloom-mailx-12.5 | 1 
+monkey-f54856ce250c4e257354... | 1 
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    |         apache-2.4.53          | NOK | http://autobuild.buildroot.net/results/f2caf6ac63f50dd2fd59dbc0d3135c6f03a293eb |     
+    sh4      |      heirloom-mailx-12.5       | NOK | http://autobuild.buildroot.net/results/07e2147e57478e490741f3a40465b487c13ac06c |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/c5016c945fd218a26d1de6914d53f4f797851075 |     
+   xtensa    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/4398bf4ea42569012e541ab2a7badd833ce560d5 |     
+   s390x     | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/0e3e5d0437f25fb014a381e91fe28b76ca8c76bd |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/b0af23591a6cd6255a2548259c01dbe6c219d687 |     
+
+
+Classification of failures by reason for 2022.02.x
+--------------------------------------------------
+
+                  pango-1.50.5 | 4 
+                 dhcp-4.4.2-P1 | 1 
+             host-pango-1.50.5 | 1 
+                       libuwsc | 1 
+                      nbd-3.24 | 1 
+                  ndisc6-1.0.5 | 1 
+                 opencv4-4.5.5 | 1 
+               protozero-1.7.1 | 1 
+                       unknown | 1 
+           wpa_supplicant-2.10 | 1 
+
+
+Detail of failures for 2022.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    m68k     |         dhcp-4.4.2-P1          | NOK | http://autobuild.buildroot.net/results/11b0fc25b99d223b9648d822563aeb746de5eb01 | ORPH
+    arm      |       host-pango-1.50.5        | NOK | http://autobuild.buildroot.net/results/8bb4bf8414fc20e3ada64b12e579e9c65c6d9643 | ORPH
+   x86_64    |            libuwsc             | TIM | http://autobuild.buildroot.net/results/555b87bb5e9e003a9fd16b0c26cb62d10cee69b1 |     
+  riscv32    |            nbd-3.24            | NOK | http://autobuild.buildroot.net/results/10a90ace1cdc5d93bd98fb18ca5134a64a56318e |     
+    arm      |          ndisc6-1.0.5          | NOK | http://autobuild.buildroot.net/results/56df999d86a5d343447d23580e5bbbfad8d05fba | ORPH
+   x86_64    |         opencv4-4.5.5          | NOK | http://autobuild.buildroot.net/results/8ca60c6b072299ad08abaab4638ac544e6612b19 |     
+  mips64el   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/37218057bb3850609f1cde22d302fa828123d22d | ORPH
+    arm      |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/44e0caf61871e25b1aa22b5b30e2fdf70ca6fb44 | ORPH
+  mips64el   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/63e220221242385f9cd1631dcbd858a09a73f8e4 | ORPH
+ powerpc64   |          pango-1.50.5          | NOK | http://autobuild.buildroot.net/results/96f2a226ff1793156f1364a52ae3a2675d1a9f3a | ORPH
+   s390x     |        protozero-1.7.1         | NOK | http://autobuild.buildroot.net/results/ed941b92d306564d657ba6810006dc00e2ec20e8 |     
+   xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/b418dd5179b31a2a3921c731ca69128bb0f35b14 |     
+   mipsel    |      wpa_supplicant-2.10       | NOK | http://autobuild.buildroot.net/results/2dea7dee521794b306cc610601fda322987e6cd0 |     
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
