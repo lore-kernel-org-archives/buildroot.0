@@ -4,44 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF279C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 12:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDA1C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 12:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B73C41086;
-	Thu, 31 Mar 2022 12:14:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA45941081;
+	Thu, 31 Mar 2022 12:15:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pbnMqiwQPJis; Thu, 31 Mar 2022 12:14:28 +0000 (UTC)
+	with ESMTP id 6vcsoxdPox5R; Thu, 31 Mar 2022 12:15:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7190D402D0;
-	Thu, 31 Mar 2022 12:14:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CFEFF402D0;
+	Thu, 31 Mar 2022 12:15:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A70B91BF3CA
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:14:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 828041BF3CA
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A29FD41077
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:14:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E55C402D0
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 12:15:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DyFRk_phoeCn for <buildroot@lists.busybox.net>;
- Thu, 31 Mar 2022 12:14:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE3A04014D
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 12:14:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DBEC086085; Thu, 31 Mar 2022 12:05:08 +0000 (UTC)
+ with ESMTP id wZRxhWPuQ6L3 for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 12:15:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 292134014D
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 12:15:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A8BA224000C;
+ Thu, 31 Mar 2022 12:15:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nZthq-0014Dy-Qw; Thu, 31 Mar 2022 14:15:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 14:07:02 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a51644aa58832fbd78f205f5390ca90a8095c41e
-X-Git-Newrev: 5045b4de6de6c42ce36e31fbc9216dfb3e6a1493
-X-Patchwork-Hint: ignore
-Message-Id: <20220331120508.DBEC086085@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/systemd: bump to
- version 250.4
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220327203218.1331528-1-fontaine.fabrice@gmail.com>
+Date: Thu, 31 Mar 2022 14:15:14 +0200
+In-Reply-To: <20220327203218.1331528-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 27 Mar 2022 22:32:18 +0200")
+Message-ID: <875ynu48tp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/matio: security bump to version
+ 1.5.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,48 +59,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5045b4de6de6c42ce36e31fbc9216dfb3e6a1493
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit ea04ee34f0078952aae0e27150b683ec3c8defdf)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > - Fixed heap-based buffer overflows when reading (crafted) MAT file
+ >   (CVE-2020-36428, CVE-2021-36977)
+ > - Update hash pf COPYING (year updated and contributors added:
+ >   https://github.com/tbeu/matio/commit/a3730c09797372a5919140b4618f217bb54bd1a1)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 81f51eac20..3572b25965 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  87b0eee7b6e5aaab2ab56d158f9536daa6bfd5de011f2a5fc6ccdd81ee1e7a24  systemd-250.3.tar.gz
-+sha256  d2bda9d225da11dc9ff48b48e59fc36798d3e66902ed400a9f78fa370c596864  systemd-250.4.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index b07fac27d4..9feed9c084 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 250.3
-+SYSTEMD_VERSION = 250.4
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
+ > https://github.com/tbeu/matio/releases/tag/v1.5.22
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
