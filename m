@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 109D6C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 11:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D482C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 11:51:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BCF5541077;
-	Thu, 31 Mar 2022 11:51:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4837B41E39;
+	Thu, 31 Mar 2022 11:51:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5km_Q-wv1lRD; Thu, 31 Mar 2022 11:51:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EmwIy0orDGea; Thu, 31 Mar 2022 11:51:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C86FA405EC;
-	Thu, 31 Mar 2022 11:51:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2307E41E29;
+	Thu, 31 Mar 2022 11:51:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 31A9F1BF3D2
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:50:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F3491BF3D2
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F81241E39
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38F2241E1F
  for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:50:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id obVU-SqUr5d9 for <buildroot@lists.busybox.net>;
+ with ESMTP id DQ3Bz4W9fcIZ for <buildroot@lists.busybox.net>;
  Thu, 31 Mar 2022 11:50:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37A3641E1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 439CA41E29
  for <buildroot@buildroot.org>; Thu, 31 Mar 2022 11:50:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3EE8586074; Thu, 31 Mar 2022 11:41:37 +0000 (UTC)
+ id 4970386075; Thu, 31 Mar 2022 11:41:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 13:47:26 +0200
+Date: Thu, 31 Mar 2022 13:48:42 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f2e94303667b66a42f22f185ecfb12bef32728d2
-X-Git-Newrev: e9d3f2e8819d2a3cbd35913406060f33d2aec25a
+X-Git-Oldrev: e9d3f2e8819d2a3cbd35913406060f33d2aec25a
+X-Git-Newrev: 2a80eca365eba8a77f250917e5c11d28eb24b073
 X-Patchwork-Hint: ignore
-Message-Id: <20220331114137.3EE8586074@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/meson: bump to
- version 0.61.4
+Message-Id: <20220331114137.4970386075@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/vim: security
+ bump to version 8.2.4632
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9d3f2e8819d2a3cbd35913406060f33d2aec25a
+commit: https://git.buildroot.net/buildroot/commit/?id=2a80eca365eba8a77f250917e5c11d28eb24b073
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fix CVE-2022-0943: Heap-based Buffer Overflow occurs in vim in GitHub
+repository vim/vim prior to 8.2.4563.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 148e2115c0359ce0e39a75012f36ce985472e57f)
+(cherry picked from commit 7b66fdc55fa097d139590d979f24c15b694e8bc3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index d909709b24..8389adb243 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 8b60b7461f..d2c91dcfa5 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.61.3/meson-0.61.3.tar.gz.asc
--sha256  9c884434469471f3fe0cbbceb9b9ea0c8047f19e792940e1df6595741aae251b  meson-0.61.3.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.61.4/meson-0.61.4.tar.gz.asc
-+sha256  4e3733ddc66bac38e38c63b739c9b8b8fc5a866de5333396b0c85c2b144ddee9  meson-0.61.4.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 4615e839fe..e9c3145183 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+ # Locally computed
+-sha256  b0a5acbe83bbdd4b1412abd9dc2ae2e3593c6cff8ff11c551fda3e6e2a87ec81  vim-8.2.4450.tar.gz
++sha256  acca7330e41d01b53d4455ff98fafbf13282ba6461cd92eb1188836f6b03ec0f  vim-8.2.4632.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 28fd33c8ef..71aa735eff 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.61.3
-+MESON_VERSION = 0.61.4
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-VIM_VERSION = 8.2.4450
++VIM_VERSION = 8.2.4632
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
