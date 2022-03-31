@@ -1,84 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78648C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 30 Mar 2022 22:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA08BC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 05:58:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B58641E1A;
-	Wed, 30 Mar 2022 22:53:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30722405A4;
+	Thu, 31 Mar 2022 05:58:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dkG6zx5qWT40; Wed, 30 Mar 2022 22:53:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uCoDcgtHQGzJ; Thu, 31 Mar 2022 05:58:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FC6141D0A;
-	Wed, 30 Mar 2022 22:53:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF2501BF359
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 22:53:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 026BF40BB7;
+	Thu, 31 Mar 2022 05:58:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B0CB1BF423
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 05:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B47F41CFB
- for <buildroot@lists.busybox.net>; Wed, 30 Mar 2022 22:53:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 625FD60D54
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 05:58:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gGU63nBL5OZb for <buildroot@lists.busybox.net>;
- Wed, 30 Mar 2022 22:53:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
- [IPv6:2001:4860:4864:20::32])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 116B441950
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 22:53:26 +0000 (UTC)
-Received: by mail-oa1-x32.google.com with SMTP id
- 586e51a60fabf-dee0378ce7so13214357fac.4
- for <buildroot@buildroot.org>; Wed, 30 Mar 2022 15:53:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=rFpXibFYKoUFcOMTJuhiWTOBPivI3pY9svvAKC73joA=;
- b=aYQX7xwkJqIuyGmuccKN5R6XDcDk3AoS1kKbUIBlUdM8pYtdm4OtTn3J7VTcYzlP7p
- YzJ260lMpvB/Vtooik7ZtTIlp8ZbUyfda2N3XU+IT4gvMVuoiWqgTdweKG7gNEfAGxoh
- 9eTcuGxkZYb6oXTwh+aKI0tS4DEbtHBX3qMWBpfLzMu5uWHPnTnHClbumz2dE/OzYUvw
- 0a7PxHi2wif68Q0MwNTz7BnxWb2uLaRWyOrg1HACU7lgudN0MpG1BOJ4ikYSH3uVaouv
- booIYwKM42P9soBV6tf1P5G7syai2DXYFke2YWZom0o1kk5XsGKlglCbJKB9/1KQkcb9
- KEyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=rFpXibFYKoUFcOMTJuhiWTOBPivI3pY9svvAKC73joA=;
- b=eNl975PQmChvyEReDhLm7CCYIInfICyqLj0cn+3J/lJJUoqp3jUh7bXObJlIIlLK7e
- voUG0h4wXTaF/B2BsB9GRyvUYxTrw8L/ZTfGN7YcGLUrYVIypSMGEfFl3+jDjw+IkP7Y
- AQsCc9NyHyPcxx7jcOMpapZczyiIQ0EeqziQdieMXywBqVIWwR1gACGFF5cm7nsQEClU
- Z+Q1su9arLk3nntWwJwsfx5p2NsepWbxuZvfQRDSJG4Kt/LDKD4HBweO9Gl/XS2M9+Qx
- rfTBdD4YN2iNiHfDiWHfRePwQL+wXvGD1fn1tajJDf7ihKsKimXOqFprz9F73TLPC4wF
- ZMww==
-X-Gm-Message-State: AOAM533Wj7jLP1y3YcAFPj4Wxv3e0wuHCZH017M70uYZuDY4z0GOjgQW
- 6Tf4lLN/RgfYBBBmFFwiOquH/ElUT2ctRko2WF4=
-X-Google-Smtp-Source: ABdhPJzGyN9lle1Poj1WGW2GINSiDRdMkfkKWP/BRMScKp/UwJp6Sq1KwItTVlglES7dpgSy/z6lm458EML4WQ7qUok=
-X-Received: by 2002:a05:6870:d0c4:b0:dd:c7f6:2d62 with SMTP id
- k4-20020a056870d0c400b000ddc7f62d62mr1182193oaa.99.1648680805901; Wed, 30 Mar
- 2022 15:53:25 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7W4c3wQbXRW1 for <buildroot@lists.busybox.net>;
+ Thu, 31 Mar 2022 05:58:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F077260C0C
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 05:58:01 +0000 (UTC)
+Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 25F85D8C4858;
+ Thu, 31 Mar 2022 07:57:59 +0200 (CEST)
 MIME-Version: 1.0
-References: <CAM70yxDW2GTLva+_JQ7wH1z+MQiXYxn__wNSu4KQ-w-MJnJ2gw@mail.gmail.com>
- <CADvTj4qWax3zJXamtBgGEyPE31Pp-fH6Ge=ZYvk1c7XzcisntQ@mail.gmail.com>
- <CAM70yxB3EJmtX6PtBMB0UJtrzX6_8yhnRWBkGhbgK1Hxcm7fAA@mail.gmail.com>
- <CADvTj4rNA_vsqU5-2Hu6XT4LjpRhmuO09FsZOEk8w16VMri6xw@mail.gmail.com>
- <CAM70yxD=tU7FK1uf2iEpFVK_jDQyHv6j8xAdW9nEDz0r8njz6w@mail.gmail.com>
- <CADvTj4qo_ac-wizQH_xvMbn5Y7urEHnNyopLGTmF4RJ3HP=+Hw@mail.gmail.com>
- <CAM70yxB61g2r5+aHZYPbit+3TjaWG4khnb71vHC-2pfF+WoyfQ@mail.gmail.com>
- <CAM70yxCMj-_4q_Rix-PK2=sG+RcfVE0GQr8FK4UqrRT6c7AsSw@mail.gmail.com>
- <CADvTj4qO-YJDa4uqW8SzQpEHYyOPc948cxFrRonXCJMSO1m=7g@mail.gmail.com>
- <CAM70yxD0LGfsKrDwHH8v8-nN9Xu3KQEvmo=jYXKKXMjQGq-isg@mail.gmail.com>
-In-Reply-To: <CAM70yxD0LGfsKrDwHH8v8-nN9Xu3KQEvmo=jYXKKXMjQGq-isg@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 30 Mar 2022 16:53:13 -0600
-Message-ID: <CADvTj4rs50K4FvGWnyu6ar7Afkdv=5SGNxuOvhf7TuBai4jTjw@mail.gmail.com>
-To: Emile Cormier <emile.cormier.jr@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-python.mk: fix PEP517
- purelib deployment path
+Date: Thu, 31 Mar 2022 05:57:59 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: Dan Jackson <dan@thejacksons.uk>
+In-Reply-To: <AM6PR02MB48840C01AEE7E7DFEBF4FA84DA1F9@AM6PR02MB4884.eurprd02.prod.outlook.com>
+References: <mailman.22068.1648533484.192135.buildroot@buildroot.org>
+ <2854f91f1188e166bf02e3a6ab6249a4@umbiko.net>
+ <AM6PR02MB48848F8B3F5238DF24891A59DA1E9@AM6PR02MB4884.eurprd02.prod.outlook.com>
+ <0b1ebd93c431e1c06678303eaffd8a79@umbiko.net>
+ <AM6PR02MB488490D703CC6DAD1FF356CFDA1E9@AM6PR02MB4884.eurprd02.prod.outlook.com>
+ <54f87d03a99935fb452424992a81409c@umbiko.net>
+ <AM6PR02MB4884A6522909A9322C4C9E2EDA1E9@AM6PR02MB4884.eurprd02.prod.outlook.com>
+ <35c2351b33bcb44d81333adfa848d221@umbiko.net>
+ <AM6PR02MB48840C01AEE7E7DFEBF4FA84DA1F9@AM6PR02MB4884.eurprd02.prod.outlook.com>
+Message-ID: <7a56c449ef38559922b9858eee8d1799@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: Re: [Buildroot] Adding USB support to existing device on 2.6.39.3
+ kernel - possible?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,141 +65,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Mar 30, 2022 at 2:18 PM Emile Cormier
-<emile.cormier.jr@gmail.com> wrote:
->
-> Oops, missed the interpreter option for HOST_PKG_PYTHON_PEP517_INSTALL_OPTS. I made the change as you suggested and it still works. Revised patch follows:
-
-You also missed data there as well, and it seems your patch has
-formatting issues,
-I went ahead and cleaned it up here, see if that works ok for you:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220330224521.4142504-1-james.hilliard1@gmail.com/
-
-FYI I think your email client is corrupting the patch a bit as it
-didn't apply cleanly,
-see guide here:
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-Make sure you send the patch using git send-email which should make sure
-the formatting isn't messed with by your email client.
-
->
-> -----
->
-> package/pkg-python.mk: fix PEP517 purelib deployment path
->
-> This allows the Python interpreter to find packages built via the new Flit
-> infrastructure and fixes bug #14721.
-> Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
->
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index 52ce402281..81c33ba557 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -127,7 +127,7 @@ PKG_PYTHON_PEP517_ENV = \
->  PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
->   --interpreter=/usr/bin/python \
->   --script-kind=posix \
-> - --purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-> + --purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->   --headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
->   --scripts=$(TARGET_DIR)/usr/bin \
->   --data=$(TARGET_DIR)/usr
-> @@ -135,7 +135,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
->  PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
->   --interpreter=/usr/bin/python \
->   --script-kind=posix \
-> - --purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-> + --purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->   --headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
->   --scripts=$(STAGING_DIR)/usr/bin \
->   --data=$(STAGING_DIR)/usr
-> @@ -147,11 +147,11 @@ HOST_PKG_PYTHON_PEP517_ENV = \
->   $(HOST_CONFIGURE_OPTS)
->
->  HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
-> - --interpreter=/usr/bin/python \
-> + --interpreter=/bin/python \
->   --script-kind=posix \
->   --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-> - --headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
-> - --scripts=$(HOST_DIR)/usr/bin \
-> + --headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)  \
-> + --scripts=$(HOST_DIR)/bin \
->   --data=$(HOST_DIR)/usr
->
->  ################################################################################
->
-> On Wed, Mar 30, 2022 at 4:25 PM James Hilliard <james.hilliard1@gmail.com> wrote:
->>
->> On Wed, Mar 30, 2022 at 12:52 PM Emile Cormier
->> <emile.cormier.jr@gmail.com> wrote:
->> >
->> > package/pkg-python.mk: fix PEP517 purelib deployment path
->> >
->> > This allows the Python interpreter to find packages built via the new Flit
->> > infrastructure and fixes bug #14721.
->> > Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
->> >
->> > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
->> > index 52ce402281..ab4f7af6a6 100644
->> > --- a/package/pkg-python.mk
->> > +++ b/package/pkg-python.mk
->> > @@ -127,7 +127,7 @@ PKG_PYTHON_PEP517_ENV = \
->> >  PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
->> >   --interpreter=/usr/bin/python \
->> >   --script-kind=posix \
->> > - --purelib=$(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->> > + --purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->> >   --headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
->> >   --scripts=$(TARGET_DIR)/usr/bin \
->> >   --data=$(TARGET_DIR)/usr
->> > @@ -135,7 +135,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
->> >  PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
->> >   --interpreter=/usr/bin/python \
->> >   --script-kind=posix \
->> > - --purelib=$(STAGING_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->> > + --purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->> >   --headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
->> >   --scripts=$(STAGING_DIR)/usr/bin \
->> >   --data=$(STAGING_DIR)/usr
->> > @@ -150,8 +150,8 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
->> >   --interpreter=/usr/bin/python \
->> >   --script-kind=posix \
->> >   --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->> > - --headers=$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)  \
->> > - --scripts=$(HOST_DIR)/usr/bin \
->> > + --headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)  \
->> > + --scripts=$(HOST_DIR)/bin \
->> >   --data=$(HOST_DIR)/usr
->>
->> I think it should be something like this for the host:
->> HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
->> --interpreter=/bin/python \
->> --script-kind=posix \
->> --purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
->> --headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
->> --scripts=$(HOST_DIR)/bin \
->> --data=$(HOST_DIR)
->>
->>
->> >
->> >  ################################################################################
->> >
->> > On Wed, Mar 30, 2022 at 3:51 PM Emile Cormier <emile.cormier.jr@gmail.com> wrote:
+On 2022-03-30 19:18, Dan Jackson wrote:
+>> -----Original Message-----
+>> From: Andreas Ziegler <br015@umbiko.net>
+>> Sent: 30 March 2022 08:14
+>> To: Dan Jackson <dan@thejacksons.uk>
+>> Cc: buildroot@buildroot.org
+>> Subject: Re: Adding USB support to existing device on 2.6.39.3 kernel 
+>> -
+>> possible?
+>> 
+>> Hi Dan,
+>> 
+>> cutting some old content.
+>> 
+>> On 2022-03-29 19:19, Dan Jackson wrote:
+>> 
+>> <cut>
+>> 
+>> >> > However, now I have a new missing file error, and I can't seem to
+>> >> > locate a suitable candidate:
+>> >> >
+>> >> > In file included from
+>> >> > /home/danj/buildroot-2022.02/output/build/linux-
+>> >> custom/arch/arm/include/asm/system.h:165,
+>> >> >                  from
+>> >> > /home/danj/buildroot-2022.02/output/build/linux-
+>> >> custom/arch/arm/include/asm/bitops.h:27,
+>> >> >                  from include/linux/bitops.h:22,
+>> >> >                  from include/linux/kernel.h:17,
+>> >> >                  from include/linux/sched.h:55,
+>> >> >                  from arch/arm/kernel/asm-offsets.c:13:
+>> >> > /home/danj/buildroot-2022.02/output/build/linux-
+>> >> custom/arch/arm/include/asm/memory.h:19:10:
+>> >> > fatal error: mach/memory.h: No such file or directory
+>> >> >    19 | #include <mach/memory.h>
+>> >> >       |          ^~~~~~~~~~~~~~~
+>> >> > compilation terminated.
+>> >> > /home/danj/buildroot-2022.02/output/build/linux-custom/./Kbuild:81:
+>> >> > recipe for target 'arch/arm/kernel/asm-offsets.s' failed
+>> >> > make[3]: *** [arch/arm/kernel/asm-offsets.s] Error 1
+>> >> > Makefile:1009: recipe for target 'prepare0' failed
+>> >> > make[2]: *** [prepare0] Error 2
+>> >> > make[2]: *** Waiting for unfinished jobs....
+>> >> >   HOSTCC  scripts/mod/modpost.o
+>> >> >   HOSTCC  scripts/mod/sumversion.o
+>> >> >   HOSTLD  scripts/mod/modpost
+>> >> > make[2]: *** wait: No child processes. Stop.
+>> >> > package/pkg-generic.mk:289: recipe for target
+>> >> > '/home/danj/buildroot-2022.02/output/build/linux-
+>> custom/.stamp_built'
+>> >> > failed
+>> >> > make[1]: ***
+>> >> > [/home/danj/buildroot-2022.02/output/build/linux-custom/.stamp_buil
+>> >> > t]
+>> >> > Error 2
+>> >> > Makefile:84: recipe for target '_all' failed
+>> >> > make: *** [_all] Error 2
 >> >>
->> >> On Wed, Mar 30, 2022 at 3:01 PM James Hilliard <james.hilliard1@gmail.com> wrote:
->> >>>
->> >>> I think keep /usr for STAGING/TARGET OPTS but remove for HOST OPTS.
+>> >> This seems not to be the defconfig from above? It now uses
+>> >> linux-custom ...
+>> >> The failure may be due to the default kernel configuration. Try to
+>> >> configure the correct one and see if you get further.
 >> >>
+>> >> > I think maybe I am still doing something wrong because it sure
+>> >> > seems to be compiling a lot of stuff instead of letting me configure
+>> things.
 >> >>
->> >> Alright, I've changed it as you suggested and it still works for me. I'll post an updated patch.
+>> >> It gets better once everything necessary is built.
+>> >
+>> > Still no luck I'm afraid. Same error with mach/memory.h as above.
+>> >
+>> > Buildroot defconfig now looks like this:
+>> >
+>> > BR2_armeb=y
+>> > BR2_STATIC_LIBS=y
+>> > BR2_KERNEL_HEADERS_VERSION=y
+>> > BR2_DEFAULT_KERNEL_VERSION="2.6.39.3"
+>> > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y
+>> > BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+>> > BR2_PTHREAD_DEBUG=y
+>> > BR2_BINUTILS_VERSION_2_37_X=y
+>> > BR2_GCC_VERSION_9_X=y
+>> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>> > BR2_PACKAGE_HOST_GDB=y
+>> > BR2_GDB_VERSION_9_2=y
+>> > BR2_LINUX_KERNEL=y
+>> > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39.3"
+>> > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>> >
+>> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/danj/DG3270_9.1.103
+>> FB/sourcecode/ti_linux/linux-2.6.39.3/src/.config"
+>> > BR2_PACKAGE_DROPBEAR=y
+>> >
+>> BR2_PACKAGE_DROPBEAR_LOCALOPTIONS_FILE="/home/danj/localoptions
+>> .h"
+>> > BR2_PACKAGE_JOE=y
+>> >
+>> > I forgot to mention this before but the buildroot manual page you
+>> > mentioned said to create a local.mk file in order to use external
+>> > source, this looks like this:
+>> >
+>> > LINUX_OVERRIDE_SRCDIR =
+>> > /home/danj/DG3270_9.1.103FB/sourcecode/ti_linux/linux-2.6.39.3/src/
+>> >
+>> > For the kernel configuration I entered the kernel source dir and did
+>> > "make menuconfig", I left everything at the defaults except for
+>> > enabling the USB related items.
+>> >
+>> > The resulting configuration file is attached as a text file.
+>> > Unfortunately it's been literally decades since I last actually
+>> > compiled a kernel, so I'm afraid I have no idea what bits would be
+>> > suitable to disable/remove to get the results I want (I'm guessing
+>> > this will be the most likely way to eliminate the error I'm getting?)
+>> 
+>> I did a compile test this morning, the Buildroot version was some 
+>> early
+>> 2022.02 version, not up-to-date.
+>> 
+>> You have a potential header mismatch, Select Toolchain -> Kernel 
+>> Headers
+>> -> Same as kernel being built to use the vendor source also for the
+>> headers.
+>> 
+>> I could configure Linux with make menuconfig, did not encounter the
+>> missing memory.h error above, but the build stops during Linux kernel
+>> compilation with this error:
+>> 
+>> /tmp/ccSO8f6S.s: Assembler messages:
+>> /tmp/ccSO8f6S.s:950: Error: .err encountered
+>> make[3]: *** [scripts/Makefile.build:284:
+>> arch/arm/kernel/sys_oabi-compat.o] Error 1
+>> make[2]: *** [Makefile:969: arch/arm/kernel] Error 2
+>> make[1]: *** [package/pkg-generic.mk:292:
+>> /home/data/test/buildroot/output/build/linux-custom/.stamp_built] 
+>> Error
+>> 2
+>> make: *** [Makefile:84: _all] Error 2
+>> 
+>> Full error log is here: https://pastebin.com/VrXqSVsD
+> 
+> Looking at the error log, it seems like vfp has been selected? But my
+> target device only has Features: swp half thumb fastmult edsp java.
+
+This is just a warning, I would ignore it at this point in time. 
+Compiler syntax checks tend to get more strict over time ...
+
+> Also, OABI does not seem like it is the correct ABI. For example, if I
+> run "file" against the busybox binary the device comes with, I get:
+> 
+> busybox: ELF 32-bit MSB executable, ARM, EABI5 version 1 (SYSV),
+> dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
+
+It seems to be a compatibility layer for legacy software; disabling 
+OABI_COMPAT is an option, because you probably will never need it.
+
+I used the source tree and unmodified .config contained in the 
+Touchstone DG3270 Cable Gateway project on SourceForge for the test.
+
+The original build instructions seem to indicate that more software is 
+needed to build the device firmware. This might be the reason for 
+missing files ...
+
+Also, take a look at psp_drivers.Kconfig for the options necessary to 
+enable USB support.
+
+>> 
+>> You might now do some research:
+>> 
+>> https://stackoverflow.com/questions/61235299/gcc-8-3-arm-assembly-
+>> error-when-building-linux-kernel-3-14-17-in-buildroot-2020
+>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85745
+>> 
+>> or try to switch to an older compiler ...
+>> 
+>> --
+>> Andreas
+>> 
+>> <cut>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
