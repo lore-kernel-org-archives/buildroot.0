@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9110FC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 15:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1D2DC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 15:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4316483404;
-	Thu, 31 Mar 2022 15:49:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6CC17410D2;
+	Thu, 31 Mar 2022 15:50:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HhRQ6mT-oh-O; Thu, 31 Mar 2022 15:50:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DC6B410D1;
+	Thu, 31 Mar 2022 15:50:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D88761C113E
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 15:49:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5E8183396
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 15:49:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P_lfWO3EvXl4; Thu, 31 Mar 2022 15:49:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 713CB83396;
-	Thu, 31 Mar 2022 15:49:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C94F71BF3AE
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 15:49:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6C46612DB
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 15:49:46 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kUIbfoIRLCLK for <buildroot@lists.busybox.net>;
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WxIhw__IWwB6 for <buildroot@lists.busybox.net>;
  Thu, 31 Mar 2022 15:49:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1610460A8B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25ABA83339
  for <buildroot@buildroot.org>; Thu, 31 Mar 2022 15:49:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B2E12860AE; Thu, 31 Mar 2022 15:40:28 +0000 (UTC)
+ id C667C860B0; Thu, 31 Mar 2022 15:40:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 17:45:52 +0200
+Date: Thu, 31 Mar 2022 17:46:45 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fc1f28521055045d66fc3218eeee5e891d4d4ddd
-X-Git-Newrev: a43cd47910c37a54903714dd1ab32ffecbd86aed
+X-Git-Oldrev: 3b6347fca9dc103d272d28792f00d214e1452996
+X-Git-Newrev: 6ab6120d694c63f2b422d11c25ed0b4d14c7a377
 X-Patchwork-Hint: ignore
-Message-Id: <20220331154028.B2E12860AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/qt5/qt5base: bump
- to version d16bf02a11953dcac01dca73e6f3778f293adefe
+Message-Id: <20220331154028.C667C860B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/qt5/qt5base:
+ update comment pointing to patches fixing CVE-2021-38593
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a43cd47910c37a54903714dd1ab32ffecbd86aed
+commit: https://git.buildroot.net/buildroot/commit/?id=6ab6120d694c63f2b422d11c25ed0b4d14c7a377
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+The patches aren't in Buildroot anymore but in the qt5base sources
+directly, so let's give the commit hash of the fixes instead.
+
+Cc: Quentin Schulz <foss+buildroot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 8d88189202e61653850fe1a6d9b4e4d90ebcb1cf)
+(cherry picked from commit be3f9cde29f1727e264d6a2a023588273410c800)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.hash | 2 +-
- package/qt5/qt5base/qt5base.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 396f5044ff..1b9ff43ab2 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  269ae20ed74cb949420ac3abac0bdef3b65501ea47c9312c01e8f9073baf24fe  qtbase-53a047c212af7fbded6505651f648172f9d7a34d.tar.bz2
-+sha256  96b1c96041ae7b5186c94f231979217bd50e3c0a4caeba32982faa8054a6d113  qtbase-d16bf02a11953dcac01dca73e6f3778f293adefe.tar.bz2
- 
- # Hashes for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index b20bdea7f6..930b012e94 100644
+index 17c32c86b5..14b58ba384 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -12,7 +12,9 @@ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
+ QT5BASE_INSTALL_STAGING = YES
+ QT5BASE_SYNC_QT_HEADERS = YES
  
--QT5BASE_VERSION = 53a047c212af7fbded6505651f648172f9d7a34d
-+QT5BASE_VERSION = d16bf02a11953dcac01dca73e6f3778f293adefe
- QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
- QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
- 
+-# 0006-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
++# From commits:
++# 4ce7053a59 "Avoid processing-intensive painting of high number of tiny dashes"
++# e7ea2ed27c "Improve fix for avoiding huge number of tiny dashes"
+ QT5BASE_IGNORE_CVES += CVE-2021-38593
+ # From commit 2766b2cba6ca4b1c430304df5437e2a6c874b107 "QProcess/Unix: ensure we don't accidentally execute something from CWD"
+ QT5BASE_IGNORE_CVES += CVE-2022-25255
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
