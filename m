@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B270C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 11:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1FC9C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 31 Mar 2022 11:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 130C261170;
-	Thu, 31 Mar 2022 11:34:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F89D83F2E;
+	Thu, 31 Mar 2022 11:34:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BfPcyFYQsehC; Thu, 31 Mar 2022 11:34:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YWQMTXrI58dU; Thu, 31 Mar 2022 11:34:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E1D160E37;
-	Thu, 31 Mar 2022 11:34:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D97AD1BF3D2
- for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:34:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 435DC83F17;
+	Thu, 31 Mar 2022 11:34:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1119D1BF3D2
+ for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:34:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C703240176
+ by smtp4.osuosl.org (Postfix) with ESMTP id F36C041CE5
  for <buildroot@lists.busybox.net>; Thu, 31 Mar 2022 11:34:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7triqRnvBSU4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gmRxIY6Oo-7l for <buildroot@lists.busybox.net>;
  Thu, 31 Mar 2022 11:34:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0473D400E4
- for <buildroot@buildroot.org>; Thu, 31 Mar 2022 11:34:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D497419D9
+ for <buildroot@buildroot.org>; Thu, 31 Mar 2022 11:34:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1003285FC3; Thu, 31 Mar 2022 11:25:25 +0000 (UTC)
+ id 1978885FEA; Thu, 31 Mar 2022 11:25:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Mar 2022 13:20:43 +0200
+Date: Thu, 31 Mar 2022 13:23:00 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6439b8dbe01b2a80f8cd7202277b8ccd822cc7e9
-X-Git-Newrev: f976d735e96a2b82542d3eddd599b6ed5a36e393
+X-Git-Oldrev: f976d735e96a2b82542d3eddd599b6ed5a36e393
+X-Git-Newrev: a28617d676bd223c7440c1c00d58a1869e5a121c
 X-Patchwork-Hint: ignore
-Message-Id: <20220331112525.1003285FC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gdk-pixbuf: fix
- target loaders.cache
+Message-Id: <20220331112525.1978885FEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/pkg-meson: add
+ cmake dependency support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f976d735e96a2b82542d3eddd599b6ed5a36e393
+commit: https://git.buildroot.net/buildroot/commit/?id=a28617d676bd223c7440c1c00d58a1869e5a121c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-As reported by Rutger Sassen in
-https://lists.buildroot.org/pipermail/buildroot/2022-March/638895.html,
-target loaders.cache is broken since commit
-75361a9aba042799040591fb84192802b137fc3a so fix it by prepending /usr/
-to relative host paths
+Meson dependencies and variables can be provided by cmake similar to
+how they can be provided by pkgconfig, for this to work we need to
+ensure that cmake_prefix_path is set for both cross and native
+targets along with the cmake binary path.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+See:
+https://mesonbuild.com/Dependencies.html#cmake
+https://mesonbuild.com/Dependencies.html#arbitrary-variables-from-dependencies-that-can-be-found-multiple-ways
+https://mesonbuild.com/Machine-files.html#meson-builtin-options
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 39ceb94fdb96da47a350b92e86513ddc57a657eb)
+(cherry picked from commit b848117699707390b6507e59e2e705c54acdc9fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-meson.mk                   | 2 ++
+ support/misc/cross-compilation.conf.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index b22e9568c9..329c05520e 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -70,14 +70,14 @@ endif
- # gdk-pixbuf requires the loaders.cache file populated to work properly
- # Rather than doing so at runtime, since the fs can be read-only, do so
- # here after building and installing to target.
--# And since the cache file will contain absolute host directory names we
--# need to sanitize (strip) them.
-+# And since the cache file will contain relative host directory names we
-+# need to prepend them with /usr/.
- ifeq ($(BR2_STATIC_LIBS),)
- define GDK_PIXBUF_UPDATE_CACHE
- 	GDK_PIXBUF_MODULEDIR=$(HOST_DIR)/lib/gdk-pixbuf-2.0/2.10.0/loaders \
- 		$(HOST_DIR)/bin/gdk-pixbuf-query-loaders \
- 		> $(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
--	$(SED) "s,$(HOST_DIR)/lib,/usr/lib,g" \
-+	$(SED) 's,^"lib,"/usr/lib,g' \
- 		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 85de98e03a..9e70d49b60 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -79,6 +79,7 @@ define PKG_MESON_CROSSCONFIG_SED
+         -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$($(strip $(1))))%g" \
+         -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$($(strip $(3))))%g" \
+         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
++        -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
+         -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
+         -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
+         -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
+@@ -136,6 +137,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-Db_pie=false \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
++		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
  endef
- GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
+diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
+index 18cf258a8e..1977a83501 100644
+--- a/support/misc/cross-compilation.conf.in
++++ b/support/misc/cross-compilation.conf.in
+@@ -8,6 +8,7 @@ c = '@TARGET_CC@'
+ cpp = '@TARGET_CXX@'
+ ar = '@TARGET_AR@'
+ strip = '@TARGET_STRIP@'
++cmake = '@BR2_CMAKE@'
+ pkgconfig = '@PKGCONF_HOST_BINARY@'
+ g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+@@ -18,6 +19,7 @@ c_link_args = [@TARGET_LDFLAGS@]
+ cpp_args = [@TARGET_CXXFLAGS@]
+ cpp_link_args = [@TARGET_LDFLAGS@]
+ wrap_mode = 'nodownload'
++cmake_prefix_path = '@STAGING_DIR@/usr/lib/cmake'
+ 
+ [properties]
+ needs_exe_wrapper = true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
