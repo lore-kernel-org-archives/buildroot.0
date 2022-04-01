@@ -1,141 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D850C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 11:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89D6BC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 12:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBB514128B;
-	Fri,  1 Apr 2022 11:54:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2816E6F66A;
+	Fri,  1 Apr 2022 12:29:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JhKcEQ0WwwQQ; Fri,  1 Apr 2022 11:54:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DdtfscIRWeLu; Fri,  1 Apr 2022 12:29:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C20DE40538;
-	Fri,  1 Apr 2022 11:54:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC0D11BF355
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 11:54:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D36360EC1;
+	Fri,  1 Apr 2022 12:29:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BEDE41BF308
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 12:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6966417DA
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 11:54:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE05184313
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 12:29:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=cherrycloud.onmicrosoft.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dbtqQfvsgVhP for <buildroot@lists.busybox.net>;
- Fri,  1 Apr 2022 11:54:29 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iEPjn7aHPlr2 for <buildroot@lists.busybox.net>;
+ Fri,  1 Apr 2022 12:29:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
- (mail-db3eur04on062b.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe0c::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 863CE416F9
- for <buildroot@buildroot.org>; Fri,  1 Apr 2022 11:54:29 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWReoOnmgNa1IBOfMLBY+eQsyYi1apdmeClMdSK+ey0qXlyh2m+HqzqaA8vxfYbZfjvYkUSCiKanP0KvRv+hiKEVoKa23IqrHLY52R/e294QdCsONNM2jJ5YNT+8qlyfxNgF4CB+ouVh5rMTQ6VZsBWCqTuY+A3TG34VmRE0AX39dRuszTplxbhwx8cGuNuzC2Abb3bAnI63nUExpsgfFK45k5g3qRycBeBnAsBPg6VK1MKAdDezum6/G6NadJrYMyMGGTdQF6HyHCfIa3vhvYExFwlwQmioKK5a2oLM/c8rM+a9a01VcZMnBtbRA15Hx59ATDJ2si0gkqrpCn9tsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O+zF3RQp/8KTsEJ0cidTQAoYNrk4kDdBZbAARNRrR98=;
- b=b/0fNDPJCefehIzMewd7VHJQdzNAJrSxObM7B32Lmln6LZDjA9JettUHpPGzXrjEreuRXPo5o+uTuvYfr/RPAsXhjeRIu4IPtVKhLqZdUd2ZJdDQoflmhIbSBv4laL2veb7bZztZt/yGwkylcGly0HBjTK6eW/fVbgTA6h4RPbeG0m5HJcqHIf0xbwcABcpLm8hMkrLR1Wu0PznkYL3U5EU15v4cln6xtvgPhP78tNvWqqFbmWtpHlqEnwCrwWKc5kYFMgAO4Ua4Km55IU3OLWUXaE1ijeKZ9bm3BN6/RjaUrfVPbhotAJJORDwxmqIDAA59/AN8OmPzNFjSZjDlZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
- header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O+zF3RQp/8KTsEJ0cidTQAoYNrk4kDdBZbAARNRrR98=;
- b=LULB6kJ8/RR0rr9kekXKEAZymGTXItuoIvsnwuODTqaCyDOATTlAV8k2xfpelS8DQu61oE44cmcIY30L3iDC0WVl3Dc/8/MJI4BDX2vPYZt36hWHz+FfA5C+N6UI/QEOFWdIu5ahSYjH3bMNgdgGKVDc7ln9Z/u0HpSK8AzK6d0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
-Received: from PA4PR04MB9367.eurprd04.prod.outlook.com (2603:10a6:102:2aa::7)
- by AM5PR0401MB2675.eurprd04.prod.outlook.com (2603:10a6:203:35::8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Fri, 1 Apr
- 2022 11:54:26 +0000
-Received: from PA4PR04MB9367.eurprd04.prod.outlook.com
- ([fe80::8ca9:a2e2:60c8:95e]) by PA4PR04MB9367.eurprd04.prod.outlook.com
- ([fe80::8ca9:a2e2:60c8:95e%6]) with mapi id 15.20.5102.023; Fri, 1 Apr 2022
- 11:54:25 +0000
-Message-ID: <9271680c-ab96-f8c0-ff76-fea5e8e5d2ba@theobroma-systems.com>
-Date: Fri, 1 Apr 2022 13:54:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To: Sourabh Hegde <hrsourabh011@gmail.com>
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A44CE842F9
+ for <buildroot@buildroot.org>; Fri,  1 Apr 2022 12:29:40 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id z6so3038584iot.0
+ for <buildroot@buildroot.org>; Fri, 01 Apr 2022 05:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=5YsY4ScFmr9pGeNdwWvqcQ/ZAiyeBiFn7LhI/yT5EHc=;
+ b=FMqtuTSHohMXYvSgsHAEkgmbtpPpWQ5w7KzfC9gAhx7THldd0eIcKmKg2IGGwTrQQh
+ xzxpOqrLaTxA+2XcXl6tOS2vjLHCcLgYsucZAPq696Nvi4WFiKAwdHJNmo9NbKwfuAAA
+ Cu3af1d+1q92+q3UnoF91bpgrxWarEU1HqKW046/Q1iswk6AUCaE09dB2Thb59YdJ5XE
+ E/NUZwaVe/zJx8/+hToxgZmvb08A4ZLeAxTjCvpsJETEGsLr1Y9m0lNxuHzgdGgFzxr4
+ mRjpACPBwlpsba4IJd0VjoZzACIe9tdQsubIV6bx5gtt8dmGFTxps70FpNA9E71idHuN
+ WHeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=5YsY4ScFmr9pGeNdwWvqcQ/ZAiyeBiFn7LhI/yT5EHc=;
+ b=j08FuLLplJe8Fo2rWgvckiCmgzwflDAN19LkWjByeazT+ia8oA4p24HnuDA+LdP96T
+ sh+tdNZUND6zm2IGPjXCh/ly3Zeg8tSoTSCSZxZwJlmcp6MKi2SHih8k86ZwTpNJZ4Ub
+ NOYk+kUg2jnjiEDf29g6Au0mh7XguwFDLGAsuprpYYPrFa2K+/iTiBzmndYaWcPSf0Xr
+ icIDUG4ddSEdUeZGlVmck3xT1JH6SUpuroXVt9ZxYk6CO/DYXakfyr6eUjRyHVdAVEFH
+ lBp+cQVUa9FTTPEbdN7lY1dMDdgtV0i/QI/RZAioZ090dwmQA/0ZZRxmu9khr6lUqD3s
+ QxnA==
+X-Gm-Message-State: AOAM5310jjLOEqecaPCo2RIjGaiA8B3AdQhp/WD9nCznOuuJ4LZTpiJ2
+ HUs4cEqjcAg5yaArVugtCUGDlQLA/sn6NUkBlhDZ8oi4tJw=
+X-Google-Smtp-Source: ABdhPJx1zQRAhvBIcjqSxlHkA5QMgtwH84Iv7KV0JyLvfe/WuOJt0Rj0vIMdL4mV+sy2Z5nKGMxKZW8ZSZd68HP3zbQ=
+X-Received: by 2002:a6b:6d0d:0:b0:64c:7a7d:558d with SMTP id
+ a13-20020a6b6d0d000000b0064c7a7d558dmr11944575iod.42.1648816179725; Fri, 01
+ Apr 2022 05:29:39 -0700 (PDT)
+MIME-Version: 1.0
 References: <CADYjeStce6+hEvk54=LGcgwTfPy7f2D_o=463haRjqOAOLj_1A@mail.gmail.com>
  <f10fe951-249a-25cb-b476-20cca3122e65@theobroma-systems.com>
  <CADYjeSt9V+WjTfms4pM7J_g5-jSVE9ngc5uRjXRtfcq0iOtJNg@mail.gmail.com>
  <a44d36f4-05cd-1198-5788-1a5e1ec84c6f@theobroma-systems.com>
  <CADYjeSunuDshm9E8t9y+39tT9a1tu6BT3m=eKEgVG15uWgaM0Q@mail.gmail.com>
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-In-Reply-To: <CADYjeSunuDshm9E8t9y+39tT9a1tu6BT3m=eKEgVG15uWgaM0Q@mail.gmail.com>
-X-ClientProxiedBy: AM6PR0202CA0072.eurprd02.prod.outlook.com
- (2603:10a6:20b:3a::49) To PA4PR04MB9367.eurprd04.prod.outlook.com
- (2603:10a6:102:2aa::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f835bdec-767e-4a7c-796b-08da13d65e36
-X-MS-TrafficTypeDiagnostic: AM5PR0401MB2675:EE_
-X-Microsoft-Antispam-PRVS: <AM5PR0401MB2675864A5A99B43ACB305FF9C2E09@AM5PR0401MB2675.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ky0TS33Yw3h+FHJpECAb0EHS4R6NgZ9+V5r7ZonoNrh5+hnQnrlYSCpePCs/jKVtA/Vu2Ox8psVzKUdH8RVR1vyXMaZgzy9TOyg2lg6h+wM4t0KOzNu6xGgNaiowjvLWY0EFQ99l5kSU+aFm8Parszqthr727nu7HGlfRHXhf/GVhYZO01i0Z1vGsHu0zroVd4agA4m63WdDC9c1UpyQXgFRwCq16xNtgYz0wsokgq45NLgLNTuKPgsmFIF9xvj+mT9JsBJjkYgR4WXXtI/Hh4dH9cJfUeWlLh/9Xkfs5i9jyYsS0X9uwlGZiQDeNSMcUmYzNKDyxhKlueD0p1DoU3GEdbj6k4dQ2XqNMR4iOpFZYZkJSao5o+gCrc98fZ6t46rYdZZ2BoJyzmpVqNb5h1W1lWySKXM+8lOubli6AObLWO91FZ9+pG5cn0Hf7HYM2uYKm/c/VNGMlltEVqakCC8+EolO73P5jsol7l7RW4H5u/HcgL8ASpyUtDAzk4qtOwA+mNELwEToa0eYrzMBw/7mCe4GGJL+CPOVbJkjl+GC7aMxlt8a/8hViiIUbh4hw3amBgYCte3S+HsHxWLY4lEsi+q9tscmaZpD6wmJkhxwIt50wbWxlGU5Cz11OKTEc5Z+XNiBS1RA3gHi++OeDhcZH5IuDM1tvSiT8d8ARCsecNqB1+s5/0bCll9w06v5mMIexyPI3FGPW+w2rDycjHd3zQdOGi9kRkYntJ5vSP0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PA4PR04MB9367.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(366004)(2906002)(66556008)(8676002)(6512007)(26005)(5660300002)(66946007)(2616005)(86362001)(31696002)(53546011)(44832011)(38100700002)(4326008)(66476007)(6506007)(8936002)(966005)(186003)(508600001)(6916009)(6486002)(31686004)(36756003)(316002)(43740500002)(45980500001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bk81TjhHSUdwZTNOcm1mazU4dWdXSkhzUGpIclNtNEp5YjRPa2l6U0h3NFQx?=
- =?utf-8?B?YXhCc1NEdytld24zZ2RXdmVVVCtnTHc4cGRrQjlQNERFMk1VTGE5cCtHZkJD?=
- =?utf-8?B?THFDeVhWY3J1OFZCNFFDWTBicEsybWw3V2psMXBheGFTdkxGMUdJamR0NC9J?=
- =?utf-8?B?bXdVUmpUOVFnWGdlcUY5cnZFNzd4bm12cjlHNjdOdGVBU3BKU1ZWREZnUVhz?=
- =?utf-8?B?MmM3SHZnZGc4NEkyTlgvcGtrVVpLeEFmbjVNVS9SYjhLTjRmUHNaR2tYc1Zu?=
- =?utf-8?B?WGgzNWtUT1NTZGNtaXMyM0Z4WEFvVm1GZGZnUVNpZG0xVkl4Vi8zWFBmMHpm?=
- =?utf-8?B?aHEyWHVsTFg4aUpYNXBMeGNrcy8yOXZQVmYzZXpDVzJ1UHRjWVdoUmpTVTNr?=
- =?utf-8?B?Nk9Wa29TWC9pK1NmYUtyOVVkWjZ6QldXa1crbTN3dW4wM09ZOURic3dJWCsr?=
- =?utf-8?B?RnFjNWh3L1BheHRBeVg5L0dCMnZ4aFFsZWVkNjhvZDdQOFpqY2syKzU4TXVN?=
- =?utf-8?B?RWZWSXViZ250V1NzZjkvUFBsbXg4SDZRRVZMVnBPOU5qTUtsYUxXNENReXFp?=
- =?utf-8?B?T2o4MWtaNnhXRytHMnloNlVBQ2VMemJuRmlCUldEV1p3QWxWRm42RDlsMDl6?=
- =?utf-8?B?eExEODhUS2sxL0VacUIydHJzVmUwelFnM1lwWnYvOTNPS3BhRnoyUlJEVlZP?=
- =?utf-8?B?cVNjdnZTeU1RaG9YenE3dDFqL0F3U2J5WGtFU0ptdGtGMDhLMG00dnY0dk9P?=
- =?utf-8?B?RFNCaVhDWjdESXg3MXF2NStUVHErUGp3MERUcHVCeXYra0VsYkRRa2NHR2RU?=
- =?utf-8?B?c21RWFgvVmFPM2VYWkV3N1NWV01sakJoOHpBSkZGMXNqZUwrdmE4OXFKeExU?=
- =?utf-8?B?dU5QR2RPUEVKY1pWQUlramxSSTducldKelEvN1JDSlI3OHJjc2syNVc5RUpq?=
- =?utf-8?B?a3NIa0JHeDBRTVQ4c3Y3Ynd2QTBLVlJOSFhvekU4bTFoYXZ2NGxBb0g4Uzcy?=
- =?utf-8?B?RkFxZXFTeHYyN2FadWlxYW8vV0Rzc1k1eFdUdzNYV0dSNjV4YzFJR21QODhE?=
- =?utf-8?B?d3FnV0dLVUlVa0NaUWdlRkdMb0dybkVaSlV2ak1FRS9md3lFczhYOXloOXND?=
- =?utf-8?B?S2l1QmtGQ3pnUEU0MnNMWldTZFYwcnRhbTNJN3ltN0Nad0xtK1B1SzFOMWlS?=
- =?utf-8?B?K2lLbXUrVkFlUEViRGxaWWcyTGdrYU4rZ1lsVDBnOWdPQTFHMGlOQ2ZTRDlG?=
- =?utf-8?B?SFBEREdrYytxMStNOVkzUkV5OXRWR0JIclVtSkRiQzcwWlhNZi9iaHVqRlZW?=
- =?utf-8?B?cThFQXR5YTN0M2Z4Nk1LbGVFK1NHYTVYcTlSQThQTVZEanY3dUJpYlZuZmxq?=
- =?utf-8?B?UzQzdDIrdjgvV3ZHRjlEVFlyeGdmWWljaUorZ3hlWnIzZUZwZkpVdWVSNDRD?=
- =?utf-8?B?NmNTVmtpZU9JUHpNOGhxYXFJVTVDWGhRTzI4aE00dUYvV3lvTzBHN3FUc2Jp?=
- =?utf-8?B?bForUXpGK2VPcFF4TVU5dlZ6Y0tHaGVWZUpTaVFmd3NxWWsxRzdNaHpHblo4?=
- =?utf-8?B?WHUvcGk3WG1GYVdQZ3R1OGVVaVlESkZzODUwRUVRRytCWkRWdjVXK2JjOWZF?=
- =?utf-8?B?VmhXeFVFSy9oWmVqeitlSG0zS1JuZHk0UE1qVGk5V0NRZ0w0NGh1dU1nM1pF?=
- =?utf-8?B?TFZpUkVUejRGR0ZYdFFJVWNoMFVBdlh5WVdYTGlrQ2J6d2Y5MmVCNGYvcjl0?=
- =?utf-8?B?OXdGK3JBb0hiZEpzUEN0L1NJaGJXekR3aStEQ3kvbktYTUVzYzFzN3VmbU5E?=
- =?utf-8?B?M2dZYUovRlZtUzViQ01ILytLQkp2VmlCWDFoYjlhRUFJRkZRSGtmYXhYRVRI?=
- =?utf-8?B?dzJRYVBJZG4zWXAxM1hhbGk2Q01HYm9RVHpFKzU4N01naFlOdWlBVDhIbllP?=
- =?utf-8?B?OTdPckRQRlFZNjhBOUJpMEVvR2FXQkROQXEydXBwSFhSTlovL0kxL1ZEZWpy?=
- =?utf-8?Q?CH7r1O/CUr3Ps7zgaMay82AQJ27Qrk=3D?=
-X-OriginatorOrg: theobroma-systems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f835bdec-767e-4a7c-796b-08da13d65e36
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9367.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 11:54:25.3718 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dotEE2YDw69RvafXks1OjpWWIHoYsq8UDhVRpWy/G1Xqz8nu855yOxCfBCBJucgcSc+GOkWOUZjqeuPqglAwORIiPl3lDfOmmtPWDo+ixXlW796vaAsuy7KQUbCnqsld
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0401MB2675
+ <9271680c-ab96-f8c0-ff76-fea5e8e5d2ba@theobroma-systems.com>
+In-Reply-To: <9271680c-ab96-f8c0-ff76-fea5e8e5d2ba@theobroma-systems.com>
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Fri, 1 Apr 2022 14:29:28 +0200
+Message-ID: <CADYjeSuEG=Qh3-=tQDUi9R_n5D8J1hV0PZGDQg7NvbCbEjy4gQ@mail.gmail.com>
+To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Subject: Re: [Buildroot] Buildroot | ninja build error | /usr/bin/ld:error
  adding symbols: file in wrong format
 X-BeenThere: buildroot@buildroot.org
@@ -150,56 +88,195 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============0459384005583404316=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Sourabh,
+--===============0459384005583404316==
+Content-Type: multipart/alternative; boundary="000000000000b14a4205db96ee50"
 
-On 4/1/22 13:41, Sourabh Hegde wrote:
-> Hello Quentin,
-> 
-> make casync
->>
->> if you want it in an image created by Buildroot, modify your config with
->> make menuconfig and save your changes, then run make.
->>
-> 
-> But will this create binary for host system also? Sorry, its bit confusing
-> here.
-> 
+--000000000000b14a4205db96ee50
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-No, host packages and target packages are compiled with a different keyword.
+Hello Quentin,
 
-make casync is for target package
-make host-casync is for host package
+I assume you need this at build time then since you are talking about
+> binary for the host system. In that case, you need to add host-casync to
+> your config.
+>
+> However, casync is currently a target-only package.
+>
 
-> I need casync tool use with "rauc" as given in
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__rauc.readthedocs.io_en_latest_advanced.html-23creating-2Dcasync-2Dbundles&d=DwIFaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=AiN2bNa5EFj79y22K554djuFBBXe_MMEIRS1-gwEsbw3ch69jBq4q9j0tm_wz1V8&s=6mSs1PkEXKk01AMnuQKyCAPV0A9euTiPrj_bP4mGHJ0&e=
-> 
-> When I do "rauc convert --cert=<certfile> --key=<keyfile>
-> --keyring=<keyring> conventional-bundle.raucb casync-bundle.raucb"
-> 
-
-I assume you need this at build time then since you are talking about 
-binary for the host system. In that case, you need to add host-casync to 
-your config.
-
-However, casync is currently a target-only package.
-
-To create a host package, you need at the very least to add:
+If I understand correctly, then as of now Buildroot can't be used to create
+casync host package.
 
 $(eval $(host-meson-package))
+>
+> at the end of the package/casync/casync.mk file.
+>
 
-at the end of the package/casync/casync.mk file.
+I will try this solution.
 
-This might not be enough and might require some additional tweaks to the 
-package makefile.
+But what could be the other alternative to work with casync?
 
-Cheers,
-Quentin
+Thanks in advance
+
+On Fri, 1 Apr 2022 at 13:54, Quentin Schulz <
+quentin.schulz@theobroma-systems.com> wrote:
+
+> Hi Sourabh,
+>
+> On 4/1/22 13:41, Sourabh Hegde wrote:
+> > Hello Quentin,
+> >
+> > make casync
+> >>
+> >> if you want it in an image created by Buildroot, modify your config wi=
+th
+> >> make menuconfig and save your changes, then run make.
+> >>
+> >
+> > But will this create binary for host system also? Sorry, its bit
+> confusing
+> > here.
+> >
+>
+> No, host packages and target packages are compiled with a different
+> keyword.
+>
+> make casync is for target package
+> make host-casync is for host package
+>
+> > I need casync tool use with "rauc" as given in
+> >
+> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__rauc.readthedocs.i=
+o_en_latest_advanced.html-23creating-2Dcasync-2Dbundles&d=3DDwIFaQ&c=3D_sEr=
+5x9kUWhuk4_nFwjJtA&r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZh=
+kI_-172IIy1t&m=3DAiN2bNa5EFj79y22K554djuFBBXe_MMEIRS1-gwEsbw3ch69jBq4q9j0tm=
+_wz1V8&s=3D6mSs1PkEXKk01AMnuQKyCAPV0A9euTiPrj_bP4mGHJ0&e=3D
+> >
+> > When I do "rauc convert --cert=3D<certfile> --key=3D<keyfile>
+> > --keyring=3D<keyring> conventional-bundle.raucb casync-bundle.raucb"
+> >
+>
+> I assume you need this at build time then since you are talking about
+> binary for the host system. In that case, you need to add host-casync to
+> your config.
+>
+> However, casync is currently a target-only package.
+>
+> To create a host package, you need at the very least to add:
+>
+> $(eval $(host-meson-package))
+>
+> at the end of the package/casync/casync.mk file.
+>
+> This might not be enough and might require some additional tweaks to the
+> package makefile.
+>
+> Cheers,
+> Quentin
+>
+
+--000000000000b14a4205db96ee50
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello=C2=A0Quentin,<div><br></div><blockquote class=3D"gma=
+il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
+04,204);padding-left:1ex">I assume you need this at build time then since y=
+ou are talking about<br>binary for the host system. In that case, you need =
+to add host-casync to<br>your config.<br><br>However, casync is currently a=
+ target-only package.<br></blockquote><div><br></div><div>If I understand c=
+orrectly, then as of now Buildroot can&#39;t be used to create casync host =
+package.=C2=A0</div><div><br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">$(eval $(host-meson-package))<br><br>at the end of the package/c=
+async/<a href=3D"http://casync.mk/" rel=3D"noreferrer" target=3D"_blank">ca=
+sync.mk</a>=C2=A0file.<br></blockquote><div><br></div><div>I will try this =
+solution.</div><div><br></div><div>But what could be the other=C2=A0alterna=
+tive to work with casync?=C2=A0</div><div><br></div><div>Thanks in advance<=
+/div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_a=
+ttr">On Fri, 1 Apr 2022 at 13:54, Quentin Schulz &lt;<a href=3D"mailto:quen=
+tin.schulz@theobroma-systems.com">quentin.schulz@theobroma-systems.com</a>&=
+gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0=
+px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi So=
+urabh,<br>
+<br>
+On 4/1/22 13:41, Sourabh Hegde wrote:<br>
+&gt; Hello Quentin,<br>
+&gt; <br>
+&gt; make casync<br>
+&gt;&gt;<br>
+&gt;&gt; if you want it in an image created by Buildroot, modify your confi=
+g with<br>
+&gt;&gt; make menuconfig and save your changes, then run make.<br>
+&gt;&gt;<br>
+&gt; <br>
+&gt; But will this create binary for host system also? Sorry, its bit confu=
+sing<br>
+&gt; here.<br>
+&gt; <br>
+<br>
+No, host packages and target packages are compiled with a different keyword=
+.<br>
+<br>
+make casync is for target package<br>
+make host-casync is for host package<br>
+<br>
+&gt; I need casync tool use with &quot;rauc&quot; as given in<br>
+&gt; <a href=3D"https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__rauc=
+.readthedocs.io_en_latest_advanced.html-23creating-2Dcasync-2Dbundles&amp;d=
+=3DDwIFaQ&amp;c=3D_sEr5x9kUWhuk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1X=
+TSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&amp;m=3DAiN2bNa5EFj79y22K554djuFBBXe=
+_MMEIRS1-gwEsbw3ch69jBq4q9j0tm_wz1V8&amp;s=3D6mSs1PkEXKk01AMnuQKyCAPV0A9euT=
+iPrj_bP4mGHJ0&amp;e=3D" rel=3D"noreferrer" target=3D"_blank">https://urldef=
+ense.proofpoint.com/v2/url?u=3Dhttps-3A__rauc.readthedocs.io_en_latest_adva=
+nced.html-23creating-2Dcasync-2Dbundles&amp;d=3DDwIFaQ&amp;c=3D_sEr5x9kUWhu=
+k4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-=
+172IIy1t&amp;m=3DAiN2bNa5EFj79y22K554djuFBBXe_MMEIRS1-gwEsbw3ch69jBq4q9j0tm=
+_wz1V8&amp;s=3D6mSs1PkEXKk01AMnuQKyCAPV0A9euTiPrj_bP4mGHJ0&amp;e=3D</a><br>
+&gt; <br>
+&gt; When I do &quot;rauc convert --cert=3D&lt;certfile&gt; --key=3D&lt;key=
+file&gt;<br>
+&gt; --keyring=3D&lt;keyring&gt; conventional-bundle.raucb casync-bundle.ra=
+ucb&quot;<br>
+&gt; <br>
+<br>
+I assume you need this at build time then since you are talking about <br>
+binary for the host system. In that case, you need to add host-casync to <b=
+r>
+your config.<br>
+<br>
+However, casync is currently a target-only package.<br>
+<br>
+To create a host package, you need at the very least to add:<br>
+<br>
+$(eval $(host-meson-package))<br>
+<br>
+at the end of the package/casync/<a href=3D"http://casync.mk" rel=3D"norefe=
+rrer" target=3D"_blank">casync.mk</a> file.<br>
+<br>
+This might not be enough and might require some additional tweaks to the <b=
+r>
+package makefile.<br>
+<br>
+Cheers,<br>
+Quentin<br>
+</blockquote></div>
+
+--000000000000b14a4205db96ee50--
+
+--===============0459384005583404316==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0459384005583404316==--
