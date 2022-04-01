@@ -4,72 +4,142 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E96AC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 09:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACF17C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 09:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12808405BE;
-	Fri,  1 Apr 2022 09:43:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B90E4127F;
+	Fri,  1 Apr 2022 09:50:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VGZUEVAyHqw8; Fri,  1 Apr 2022 09:43:00 +0000 (UTC)
+	with ESMTP id rdB5IHFnKsCP; Fri,  1 Apr 2022 09:50:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A02440607;
-	Fri,  1 Apr 2022 09:42:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0DE801BF376
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:42:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 567EF405E6;
+	Fri,  1 Apr 2022 09:50:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 153671BF376
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E65A942577
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:42:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3EBD84077
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:50:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PkTV72k3kXUZ for <buildroot@lists.busybox.net>;
- Fri,  1 Apr 2022 09:42:55 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=cherrycloud.onmicrosoft.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FCJYtzCuzht9 for <buildroot@lists.busybox.net>;
+ Fri,  1 Apr 2022 09:50:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7189C42569
- for <buildroot@buildroot.org>; Fri,  1 Apr 2022 09:42:54 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id r2so2512685iod.9
- for <buildroot@buildroot.org>; Fri, 01 Apr 2022 02:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=6RSbhunMOaVSCjDt4XYVl1S/PbrrubNi7ADumtyXP8Y=;
- b=qW0UP3I7HMoN+4XOlopTjZ1J15CchlzyDuyiiYFVd+UpviWmFoKf+8y21IFOWpaGHC
- hJai3FuuNlI0nnwuna/I2/No8PJljTKO84/HFGL+fUw2KeFCyR9BBH2WV67ShtiNC7C7
- Yl/xDwXMvDbrHrY7ksWfkPjn0cO0CWEYvtjPYe9GWAtK84ZXzSCtQedr+8JJIeg3fhrE
- Hjod5Avv3hKw29e8mUEvzviBLmtzEthpxqXx2v6bTQ860olUtOSMon512nMJiwQZV9Vg
- GW6BZD9GX3OF17rbCD19reKOd9mW2iuCPla5vhJnUl1MmXaxAzriXfLXoFUkn2C60Ai7
- AMqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=6RSbhunMOaVSCjDt4XYVl1S/PbrrubNi7ADumtyXP8Y=;
- b=hA9UYCcuo4IeeQprmjfQvVcRgAQll0RdBDVYn29GyNh12iwoNpP62Qtm6MF5lBfDdc
- Opo9z1eFlJk6UpFzn+rpqMXhMQ/89E+5uN4EHAX/rmJiNAIR/F73Crj9c8xefk9INXHS
- yrSGL8Nid7ka1RFCuoDiww44yJqvYgg+PtlxkfHUr34ETZek2TbZc7yZFh//w/b+p/I8
- GQaZKA/uXlSHB4AFk8WeiYYxayODa+dESjkzgx2gyo+PXJWUUO4+qHoINWIqqh8pO8nO
- Kkc5Driw+mZfS4oBgpQDVYDgYPs35lMSPIunjIRBTTI8TYTaXhD+VWxWBR0wAGwkBvR8
- ee2A==
-X-Gm-Message-State: AOAM531D1v42eirT3RNFbi86ZSrj92Cv1eYDFIqGILS/EBF2w+eyFd1T
- Bo+VCKahMZaVWJGQzZ2s8/FGuyuR0Yq5JBSY8GRG0QeZ60g=
-X-Google-Smtp-Source: ABdhPJxHlS+5Gm6LD1RbWlI27hYmlH4la98omTjOyfzyCoth2R2hEC8B2SArCbREgXLs9dgDxLHSQoRGLHC0nkNuyGQ=
-X-Received: by 2002:a5e:a80a:0:b0:645:b477:bc23 with SMTP id
- c10-20020a5ea80a000000b00645b477bc23mr15907147ioa.191.1648806174015; Fri, 01
- Apr 2022 02:42:54 -0700 (PDT)
-MIME-Version: 1.0
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com
+ (mail-ve1eur03on0602.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe09::602])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A680E84002
+ for <buildroot@buildroot.org>; Fri,  1 Apr 2022 09:50:03 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lp5C31FeGFHGnCD0NtlSTkqPupGqNVcDFJFJoygRXR+7VJAnfEILKErHPMQ3vkO6vAV76Rb/3xHQ6yP16FA8hDNmnUGwwzRaHt4vlGQvD+tN7emMHd9Nwh/CztuevCgIpYw4K80sUV4Ra0bX1WDsqC3FmGKHcuKYYtDn0w0eS65ITzHE8h64J01OhSJhxCQB1HzWBs6PRemzxGdJ2O4W3GGkv7uo6Q4dO2T9RREaxFRsRd7UEVmLfVaayXXVeKjZnnP2GJTrU7SjnN/FBTbXTcBfjWBVYiEOE7iSE5aK2F381NpZAiTJ3tVBXX5LPzvoBenWDz1lnBSwc1zjEN5+ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k+vDfh/2sTaBsB48xqeEs/v/qrV6vUOcFpGRIym2EzM=;
+ b=N3no1ZgzI3+jj4rIqPKKiaSHhis8DVXK/en+rT/5VfQXSyEPH1ISyAPap4enMaPw6MLEcqbSU1Wo6lySBilYcrDnNoJh4KeXdgC21jAq9WJ2T0S9cTgxFHVPGB9wbcydHWDUBtL8uDZFGAB8zS6q51fd1VJPQ4BGFSb0Ow0+GOJPdjG0Jmip++Go2NK5mg6abF7bYDkUAFSWKsc6Bs3Sr7quFWYS3fxZnsluRJTSoCeXm4fHwUl9R/HTvY+QAxN23UXP6om/0WoNgAS8nCs76Up18MAqGuSj9Bap/YH7VOcR4YqgJwT8GL+UHMumT3ltZOK3ugY7NZcChv6B3FcCXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k+vDfh/2sTaBsB48xqeEs/v/qrV6vUOcFpGRIym2EzM=;
+ b=VWPzWjdFDGcjmc5HdYRH8mSLFMvjkRoqB6KZzPPneU8vip7kNdJTYnfZ2oJkcOReREAR2j/pw1U1WeNd4e8vnOllqjOv195gz7TDaUk8mDk8DrwU84LHe7umu4zwxbxJ9mfLzILnlb/14SIdqr3OvTg3V0lU7iEKHYpWk0TWNQI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com (2603:10a6:102:2aa::7)
+ by DB7PR04MB5100.eurprd04.prod.outlook.com (2603:10a6:10:14::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.25; Fri, 1 Apr
+ 2022 09:49:58 +0000
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::8ca9:a2e2:60c8:95e]) by PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::8ca9:a2e2:60c8:95e%6]) with mapi id 15.20.5102.023; Fri, 1 Apr 2022
+ 09:49:57 +0000
+Message-ID: <a44d36f4-05cd-1198-5788-1a5e1ec84c6f@theobroma-systems.com>
+Date: Fri, 1 Apr 2022 11:49:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To: Sourabh Hegde <hrsourabh011@gmail.com>
 References: <CADYjeStce6+hEvk54=LGcgwTfPy7f2D_o=463haRjqOAOLj_1A@mail.gmail.com>
  <f10fe951-249a-25cb-b476-20cca3122e65@theobroma-systems.com>
-In-Reply-To: <f10fe951-249a-25cb-b476-20cca3122e65@theobroma-systems.com>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Fri, 1 Apr 2022 11:42:42 +0200
-Message-ID: <CADYjeSt9V+WjTfms4pM7J_g5-jSVE9ngc5uRjXRtfcq0iOtJNg@mail.gmail.com>
-To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+ <CADYjeSt9V+WjTfms4pM7J_g5-jSVE9ngc5uRjXRtfcq0iOtJNg@mail.gmail.com>
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+In-Reply-To: <CADYjeSt9V+WjTfms4pM7J_g5-jSVE9ngc5uRjXRtfcq0iOtJNg@mail.gmail.com>
+X-ClientProxiedBy: AS8PR04CA0207.eurprd04.prod.outlook.com
+ (2603:10a6:20b:2f3::32) To PA4PR04MB9367.eurprd04.prod.outlook.com
+ (2603:10a6:102:2aa::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3e09c23d-026f-4086-76b4-08da13c4face
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5100:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR04MB5100CD4FDCB47EC7D421D245C2E09@DB7PR04MB5100.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PGFZTPS/cRQ1JJuXRpJbihzXk05EIlgFib24Sz/TFvzBBFTtTYXWv5LPT+vma1/Jan6gYA5dpsaJvFWufivNK8wRF3xQ8H/ti3EibHQ2ztwzj/gcGmE9TvsOSvwBNnjRZt19KZ7yQQd0arpegRaqweTsdhXpeLK5T00XRGR5Ph+4gsFN1DM02rdnueZr2L0t+8czyBzvBaYSkra1urbb2bW1dB/+NsPsjBnH2xdegZCaSPiBRFOBiI0EeM979zE+PneeEzfd6ZGlQWUClKVG9k42nP8BjvVWzF1ObsPRY9YDpVnrvKVUA9JWxaa0tmidzI+cqUc8ljgYgRa7++6j76DXZzbDQuY/GxE2PsFBrKBVPBv4wGne3Zj0zzfvlmBRkX+UGJcRNQw5/+BBPapxmUQyQUWCnclyjxLpX+y+rWqWHml26mLSymEY61/bYAJM+zusLQkPygEX/EFy2mPvjhwzdEJH7Dyc/EnI5bhrqGK1ZxJ+GJm6h+o7UHbiPMvW5hspD8IZHO7WQ53RMLzGTIrRDhaWBse0grtkwRh5xU+yhwSdWPO6dQNcw9McDGVGTMVWYBJoHswivdJ5qFC8trWylv2Px1aeUwSTq+Ca8KSuvGhtjRS0uEj5e4QPX7IoWHvg2p/j8OB8h3Mt0MJFRVyTFKuN/xCol8sB0oEKk2mD/xZjLb2+fIo2V8hPPIFeIrXjQSZkbberq2B5uYVbzu8DYW22Kc4HP6KTGwYy80w415YHVTfQvrKKajcVzbWJ2EwoRw6GVIeukJkRvlyRmU3TquHhOgyIo6A3SexqrdOCM7QGhdooE6YXbajWZBUKSVa5HmYVkR6yJffNI8KqLg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:PA4PR04MB9367.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(366004)(44832011)(6512007)(8936002)(86362001)(966005)(6486002)(8676002)(83380400001)(26005)(4326008)(186003)(66476007)(31696002)(5660300002)(66556008)(66946007)(6916009)(316002)(31686004)(2616005)(38100700002)(2906002)(36756003)(53546011)(508600001)(6506007)(45980500001)(43740500002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OVhoQWZwVlM5UUdWS2J5NWs3aHFhY2pxWW42RGRrc0JTc2EzaWpvZzhObnho?=
+ =?utf-8?B?d0laTjEzaWdHTnJKZFBmWGpUVVdoSVdJcGQrL0pzZ1BZekM2VmtvK0NHSUtz?=
+ =?utf-8?B?ZjBBODFiTERZRHdSMTlFWnhMNXd3OXVEa1l4WUtub0hIU21pbDF6UUQxc3hj?=
+ =?utf-8?B?UHRVSjlobTFxaytOd2gwMFpGMUtXcDJKLy9EZG1WZ2xwVUlDZVA2V0wwQ1dL?=
+ =?utf-8?B?MjFnYm9sYkx1ZEN1ZTJSZDk0Wk05WmV6eENIaEl0NmphWXNQQnlpbWhYUm9m?=
+ =?utf-8?B?OEdyZmNaeVlsNTVZK0ZMd2JiVHpQWUN5YlRGOGZuS2xCdTJVKzBhOVRyWlV5?=
+ =?utf-8?B?MVlpeFpsV09iNThFQW9qeWExUmgxM0NNaWF4Q0R1TnhCdWhYeU5zQmNodEN2?=
+ =?utf-8?B?OUJkR0JHc2hxWStiblBUV1hML1lDOVJuZjJqblFWV1JRaGZYYTluWFAyVnZC?=
+ =?utf-8?B?K1E1dW80ODlrU0dkekE2aXFFemxTbDJJMllqWUFtclZwMmFIWGJqbS9yUGsw?=
+ =?utf-8?B?b0xKWjZhdWtCdTRwam5rVjI2ajFtOGdqN1EvcUpCUUN0YlRYZUNuN28zRWo2?=
+ =?utf-8?B?YnhuNng5VVdzdmdrTDlIMXlZRzdrYnV4cENKZEx0dFVwck1UT1hJS1B1enk5?=
+ =?utf-8?B?c1lnZmhJcWYxaW9Tc1JPaU1YN00wOHBzdmxVZXd4cWhiRVFPb3dlSGVCK0dT?=
+ =?utf-8?B?b2xIYitsWGd5THdBTkpOZmI2Wk1aUlFwK2t5L2lKeXY1VFgzRVVxMmswbkk5?=
+ =?utf-8?B?bWhZQXp5eHViSFZkYjdWcVppakpOUXJYVFBYUUpESjlEVjhuTVk0QnBYRUNN?=
+ =?utf-8?B?Z2k1R3VQMUpjaXIxTjcvZ1k0RVJiMnBMZEVGVm9UZFJwOUhodk5tZmJOcUNt?=
+ =?utf-8?B?M3luc0JMMldkbFIvejNXVWRrOXJmWnlIUmJETU92eDZnc1hHVWp2ZTR5aFdZ?=
+ =?utf-8?B?ZkNwNGlrbHVNUC91czJ1Q1crZGw1djJ5Q2Zva2ZHR0tFeVYxNHFnSFJNL3g4?=
+ =?utf-8?B?OXY4ajBsWHc2WGF3cFdiQlRXMXNRTnZzc2VyS0ZydllnTVdUSzZZREI3Uzg2?=
+ =?utf-8?B?V3dDc09OR04wdjRYOGFUbldadW02YzRSZWpNOXEwUUV0cEV3UU9YMXJ1dDRn?=
+ =?utf-8?B?dnJJNDVOeHVLM0FsY0Z1d2pxOHBKbnp0a1lhN3dnQ29yQmdYVDBaYWJpaXNz?=
+ =?utf-8?B?UlVHUWpkQW4wdzVKRGVTb1A3QzJwbHE3ODFhVjJMdE5sN2dGV1FBeG1vOGpG?=
+ =?utf-8?B?RDBPalRrSnJCL05rWjVwSjI2SUUyNzZEd1BEY3A2U3ZsMjRGTlNHNG5XNldl?=
+ =?utf-8?B?R0tRM0ZwVHdpem9rV2VVdVhMVUNpTWVGbUdQY0dYbXZsSU5yZE5YL0tEYUND?=
+ =?utf-8?B?SjhWdUVZeG5kWXMxQ3o5cHdwUjRnYnRLTHpYRVhUa0UzQlFsVnFvL2RWRXBE?=
+ =?utf-8?B?NGVGNEJNbldoNWZEQUJFMzhiK3haNEVVR1ZLbHhSTHVJUTVHb3dJTjc4b1hh?=
+ =?utf-8?B?SDFpMkR5dlNCTkdjdDBLRjlvK1FHN2E1MTRWRzVrYzA1MHYyQ1pQa3dzNmNN?=
+ =?utf-8?B?eTZMaC9KblBsRWNQdkxiMVB1cXZFQjZEWUdRN0k1Y2ttL3hFUE1pN21qaHQ3?=
+ =?utf-8?B?aFdmNzZleW5FVHJObHh3NEdoT29FcXp3R0hnWGFQS1JBWk9WNndjeTJtdTA3?=
+ =?utf-8?B?d0dEeFJLaU5FZ2Zua0RMY1FhNmppc2gzK3RXR2hZK1hCMm9hRE5tYWl4cXpr?=
+ =?utf-8?B?UmJvRGQreWdOL25XWFRtVFlhb3dPMnJock0yOVV1dURWbGpFTWxXUlVHcHdK?=
+ =?utf-8?B?Vm5TMW9IZjBrN3R6VHd6LzVCeHZsYzE2ZWxxSlF1VVUvem9jV0srWW50d3BH?=
+ =?utf-8?B?b01mZWlmaUdJb3c1QmhvcGNYQ0Fhd29uK1ZQaXFwUk9rQW9WSHFPbnFpNitZ?=
+ =?utf-8?B?TGZoUi96QXdiMHpGRmloWXJ4UHh2QTk3Mmh1NTRRbENKNjB5NmloSzYvUFNi?=
+ =?utf-8?B?dnFCSnlvQURoWC8rRUJZaTFOTWZjenhiTlh1cjEwVmNXK0Z6Qy9oRHJDck1p?=
+ =?utf-8?B?dTN2bjFDWWdJeThZMUF0M1NPcFNYZW5tampVS2ptYTBaWTZjd2tKL3F3V1Mv?=
+ =?utf-8?B?VVZoNXNYbFBlL1RDN0ttbVhDTmpTMzBrb2RsYVI5MWpKSUN0My9IeEwxSGRB?=
+ =?utf-8?B?RG9tNXlLUkh2QzgyOU8rOFEwSm1BSVhoUHdzd2QrNUF4RHlpNmNhV0JqMHIz?=
+ =?utf-8?B?N1g3SHQrMnA0YkhJMEY2WWlOdERBQlUzWXdQdEphbVBkSmY3bjNSVGExd0RM?=
+ =?utf-8?B?RWNKYStpQmRpU1UzNUNwUTc4ditWYWhuMDBIZjRUclREL3VpTzJ6ZUZ4ZVc5?=
+ =?utf-8?Q?LjxCC5k7xdaMLzxkHt9cwzZjpmgUH1COIIjKH?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e09c23d-026f-4086-76b4-08da13c4face
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9367.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 09:49:57.4166 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AAZBfuhzcBtUh8Vj9fdnckPrvx9Ga0OoXz80LECs8qS3AFKRT3xA+fSMIQIEcX5Qvyp6XtXtTCOni3B9P/cYZbhxDEC9LJxNAOxCLyz0zFrnp+kmeQr1gKrlTXSmN5i6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5100
 Subject: Re: [Buildroot] Buildroot | ninja build error | /usr/bin/ld:error
  adding symbols: file in wrong format
 X-BeenThere: buildroot@buildroot.org
@@ -84,552 +154,52 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4476225011884157402=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4476225011884157402==
-Content-Type: multipart/alternative; boundary="0000000000004e423b05db949a66"
+Hi,
 
---0000000000004e423b05db949a66
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 4/1/22 11:42, Sourabh Hegde wrote:
+> Hello Quentin,
+> 
+> Thanks for the update.
+> 
+> I am following this guideline
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_systemd_casync-23building-2Dcasync&d=DwIFaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=E7Vx6coYDXRY655Egik49UZpZDdQ2JWKiYWJBrFF9kw3yPPVRGS-GvW7LrRZTcZV&s=Rs7PUiLj89kkH7rFu4ocmrVT20cGAtkh-dF1BLw4Dns&e=  . It says to build casync
+> run:
+> 
+> meson build && ninja -C build && sudo ninja -C build install
+> 
+> Actually, meson-build is successful but while running "ninja -C build" I am
+> getting above errors.
+> 
 
-Hello Quentin,
+Upstream projects usually don't account for cross-compilation and some 
+tricks might be needed for build systems to correctly compile some 
+pieces of software. So just reuse whatever the build system is giving 
+you first before trying without. That means using package 
+makefiles/recipes if they already exist.
 
-Thanks for the update.
-
-I am following this guideline
-https://github.com/systemd/casync#building-casync . It says to build casync
-run:
-
-meson build && ninja -C build && sudo ninja -C build install
-
-Actually, meson-build is successful but while running "ninja -C build" I am
-getting above errors.
-
-Having the actual package makefile for your casync package would help a
-> lot if it still does not work.
->
-
-I found this in
-https://github.com/buildroot/buildroot/blob/master/package/casync/casync.mk
-
-But how to use this to compile casync?
-
-Can you please let me know what needs to be done?
-
-Thanks in advance.
-
-Actually, meson-build is successful
-
-On Fri, 1 Apr 2022 at 11:11, Quentin Schulz <
-quentin.schulz@theobroma-systems.com> wrote:
-
-> Hi Sourabh Hegde,
->
-> On 3/31/22 19:55, Sourabh Hegde wrote:
-> > Hello All,
-> >
-> > While building casync using ninja build I am facing below errors
-> > related to /usr/bin/ld:
-> > . . .error adding symbols: file in wrong format
-> >
-> > I am following "casync" build guideline from
-> >
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__github.com_systemd=
-_casync-23building-2Dcasync&d=3DDwIBaQ&c=3D_sEr5x9kUWhuk4_nFwjJtA&r=3DLYjLe=
-xDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=3DEZ6d819a1qu=
-3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=3D0oAe2qUNmvkBsGYIi=
-apGRQ5OQYDghVxojZm5QaWUwiQ&e=3D
-> > <
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__github.com_ninja-2=
-Dbuild_ninja_issues_url&d=3DDwIBaQ&c=3D_sEr5x9kUWhuk4_nFwjJtA&r=3DLYjLexDn7=
-rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=3DEZ6d819a1qu3uAF=
-g1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=3D7qFZDk5q2JFekiEteeOVN=
-jQj50e86tte0akp-uMLm7k&e=3D
-> > , it uses "meson " along
-> > with ninja build.
-> >
-> > If build failures persist, run "meson setup --wipe" to rebuild from
-> scratch
-> > using the same options as passed when configuring the build.
-> > To change option values, run "meson configure" instead.
-> > ninja: Entering directory build'
-> > [1/31] Linking target casync-http
-> > FAILED: casync-http
-> > cc -o casync-http casync-http.p/src_casync-http.c.o -Wl,--as-needed
-> > -Wl,--no-undefined
-> >
-> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-lin=
-ux-gnu/sysroot/usr/lib
-> >
-> -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroo=
-t-linux-gnu/sysroot/usr/lib
-> > -Wl,--start-group src/libshared.a
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libcurl.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libssl.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libcrypto.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libz.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libzstd.so
-> > -lm -Wl,--end-group
-> > /usr/bin/ld:
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libcurl.so:
-> > error adding symbols: file in wrong format
-> > collect2: error: ld returned 1 exit status
-> > [2/31] Linking target test-cachunk
-> > FAILED: test-cachunk
-> > cc -o test-cachunk test-cachunk.p/test_test-cachunk.c.o -Wl,--as-needed
-> > -Wl,--no-undefined
-> >
-> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-lin=
-ux-gnu/sysroot/usr/lib
-> >
-> -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroo=
-t-linux-gnu/sysroot/usr/lib
-> > -Wl,--start-group src/libshared.a -lacl
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libselinux.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libz.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libzstd.so
-> > -lm
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libssl.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libcrypto.so
-> > -Wl,--end-group -pthread
-> > /usr/bin/ld:
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so:
-> > error adding symbols: file in wrong format
-> > collect2: error: ld returned 1 exit status
-> > [3/31] Linking target test-cachunker
-> > FAILED: test-cachunker
-> > cc -o test-cachunker test-cachunker.p/test_test-cachunker.c.o
-> > -Wl,--as-needed -Wl,--no-undefined
-> >
-> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-lin=
-ux-gnu/sysroot/usr/lib
-> >
-> -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroo=
-t-linux-gnu/sysroot/usr/lib
-> > -Wl,--start-group src/libshared.a -lacl
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libselinux.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libz.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libzstd.so
-> > -lm
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libssl.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libcrypto.so
-> > -Wl,--end-group -pthread
-> > /usr/bin/ld:
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so:
-> > error adding symbols: file in wrong format
-> > collect2: error: ld returned 1 exit status
-> > [4/31] Linking target test-caencoder
-> > FAILED: test-caencoder
-> > cc -o test-caencoder test-caencoder.p/test_test-caencoder.c.o
-> > -Wl,--as-needed -Wl,--no-undefined
-> >
-> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-lin=
-ux-gnu/sysroot/usr/lib
-> >
-> -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroo=
-t-linux-gnu/sysroot/usr/lib
-> > -Wl,--start-group src/libshared.a -lacl
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libselinux.so
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libz.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libzstd.so
-> > -lm
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/libssl.so
-> >
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libcrypto.so
-> > -Wl,--end-group -pthread
-> > /usr/bin/ld:
-> >
-> /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysr=
-oot/usr/lib/liblzma.so:
-> > error adding symbols: file in wrong format
-> > collect2: error: ld returned 1 exit status
-> > .
-> > .
-> > [10/31] Compiling C object test-camatch.p/test_test-camatch.c.o
-> > ninja: build stopped: subcommand failed.
-> >
-> > I am using Buildroot as build system and after following similar post i=
-n
-> >
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__stackoverflow.com_=
-questions_27967802_libstdc-2Dso-2Derror-2Dadding-2Dsymbols-2Dfile-2Din-2Dwr=
-ong-2Dformat&d=3DDwIBaQ&c=3D_sEr5x9kUWhuk4_nFwjJtA&r=3DLYjLexDn7rXIzVmkNPvw=
-5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=3DEZ6d819a1qu3uAFg1GbEGsYi60=
-IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=3DxHy7bTlAyWOY4-lBdA9bwycscXiZBIO-=
-Wkz7PZC9vbs&e=3D
-> > <
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__github.com_ninja-2=
-Dbuild_ninja_issues_url&d=3DDwIBaQ&c=3D_sEr5x9kUWhuk4_nFwjJtA&r=3DLYjLexDn7=
-rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=3DEZ6d819a1qu3uAF=
-g1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=3D7qFZDk5q2JFekiEteeOVN=
-jQj50e86tte0akp-uMLm7k&e=3D
-> > I changed the PATH
-> > environment
-> > like:
-> >
-> >
-> /root/raspcm4/sources/output/host/bin/:/root/bin:/usr/local/sbin:/usr/loc=
-al/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/raspcm4/sources/output/host/aarc=
-h64-buildroot-linux-gnu/sysroot/usr/bin
-> >
-> > But still, I end up getting the same errors
-> >
-> > Can anyone please let me know how to resolve this issue? Is there any
-> ninja
-> > build option to be selected in Buildroot?
-> >
->
-> Seems like cc is being used instead of the cross-compiler/linker.
->
-> Did you use the meson-package mechanism in Buildroot? c.f.
->
-> https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_me=
-son_based_packages
->
-> This should have everything required to compile meson packages. Define
-> only the variables that are required and add one by one optional
-> variables until you get it to build.
->
 > Having the actual package makefile for your casync package would help a
-> lot if it still does not work.
->
-> Cheers,
-> Quentin
->
+>> lot if it still does not work.
+>>
+> 
+> I found this in
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_buildroot_buildroot_blob_master_package_casync_casync.mk&d=DwIFaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=E7Vx6coYDXRY655Egik49UZpZDdQ2JWKiYWJBrFF9kw3yPPVRGS-GvW7LrRZTcZV&s=qykqjQKn5qe2ldZRFFEFO8SkK7wArzNb80WRnjwPc3s&e=
+> 
+> But how to use this to compile casync?
+> 
 
---0000000000004e423b05db949a66
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+make casync
 
-<div dir=3D"ltr">Hello=C2=A0Quentin,<div><br></div><div>Thanks for the upda=
-te.</div><div><br></div><div>I am following this guideline=C2=A0<a href=3D"=
-https://github.com/systemd/casync#building-casync">https://github.com/syste=
-md/casync#building-casync</a>=C2=A0. It says to build casync run:</div><div=
-><br></div><div>meson build &amp;&amp; ninja -C build &amp;&amp; sudo ninja=
- -C build install<br></div><div><br></div><div>Actually, meson-build is suc=
-cessful=C2=A0but while running &quot;ninja -C build&quot; I am getting=C2=
-=A0above errors.</div><div><br></div><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
-g-left:1ex">Having the actual package makefile for your casync package woul=
-d help a<br>lot if it still does not work.<br></blockquote><div><br></div><=
-div>I found this=C2=A0in=C2=A0<a href=3D"https://github.com/buildroot/build=
-root/blob/master/package/casync/casync.mk">https://github.com/buildroot/bui=
-ldroot/blob/master/package/casync/casync.mk</a></div><div><br></div><div>Bu=
-t how to use this to compile=C2=A0casync?=C2=A0</div><div><br></div><div>Ca=
-n you please let me know what needs to be done?</div><div><br></div><div>Th=
-anks in advance.</div><div><br></div><div>Actually, meson-build is successf=
-ul=C2=A0</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=
-=3D"gmail_attr">On Fri, 1 Apr 2022 at 11:11, Quentin Schulz &lt;<a href=3D"=
-mailto:quentin.schulz@theobroma-systems.com">quentin.schulz@theobroma-syste=
-ms.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"m=
-argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
-:1ex">Hi Sourabh Hegde,<br>
-<br>
-On 3/31/22 19:55, Sourabh Hegde wrote:<br>
-&gt; Hello All,<br>
-&gt; <br>
-&gt; While building casync using ninja build I am facing below errors<br>
-&gt; related to /usr/bin/ld:<br>
-&gt; . . .error adding symbols: file in wrong format<br>
-&gt; <br>
-&gt; I am following &quot;casync&quot; build guideline from<br>
-&gt; <a href=3D"https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__gith=
-ub.com_systemd_casync-23building-2Dcasync&amp;d=3DDwIBaQ&amp;c=3D_sEr5x9kUW=
-huk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI=
-_-172IIy1t&amp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc=
-8_-v_gj4&amp;s=3D0oAe2qUNmvkBsGYIiapGRQ5OQYDghVxojZm5QaWUwiQ&amp;e=3D" rel=
-=3D"noreferrer" target=3D"_blank">https://urldefense.proofpoint.com/v2/url?=
-u=3Dhttps-3A__github.com_systemd_casync-23building-2Dcasync&amp;d=3DDwIBaQ&=
-amp;c=3D_sEr5x9kUWhuk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP=
-6m6qZZ4njZguQhZhkI_-172IIy1t&amp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_N=
-FWucv2-olGfFGlWcnc8_-v_gj4&amp;s=3D0oAe2qUNmvkBsGYIiapGRQ5OQYDghVxojZm5QaWU=
-wiQ&amp;e=3D</a><br>
-&gt; &lt;<a href=3D"https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__=
-github.com_ninja-2Dbuild_ninja_issues_url&amp;d=3DDwIBaQ&amp;c=3D_sEr5x9kUW=
-huk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI=
-_-172IIy1t&amp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc=
-8_-v_gj4&amp;s=3D7qFZDk5q2JFekiEteeOVNjQj50e86tte0akp-uMLm7k&amp;e=3D" rel=
-=3D"noreferrer" target=3D"_blank">https://urldefense.proofpoint.com/v2/url?=
-u=3Dhttps-3A__github.com_ninja-2Dbuild_ninja_issues_url&amp;d=3DDwIBaQ&amp;=
-c=3D_sEr5x9kUWhuk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6q=
-ZZ4njZguQhZhkI_-172IIy1t&amp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWuc=
-v2-olGfFGlWcnc8_-v_gj4&amp;s=3D7qFZDk5q2JFekiEteeOVNjQj50e86tte0akp-uMLm7k&=
-amp;e=3D</a> &gt; , it uses &quot;meson &quot; along<br>
-&gt; with ninja build.<br>
-&gt; <br>
-&gt; If build failures persist, run &quot;meson setup --wipe&quot; to rebui=
-ld from scratch<br>
-&gt; using the same options as passed when configuring the build.<br>
-&gt; To change option values, run &quot;meson configure&quot; instead.<br>
-&gt; ninja: Entering directory build&#39;<br>
-&gt; [1/31] Linking target casync-http<br>
-&gt; FAILED: casync-http<br>
-&gt; cc -o casync-http casync-http.p/src_casync-http.c.o -Wl,--as-needed<br=
->
-&gt; -Wl,--no-undefined<br>
-&gt; -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-=
-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-build=
-root-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,--start-group src/libshared.a<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libcurl.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libssl.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libcrypto.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libz.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libzstd.so<br>
-&gt; -lm -Wl,--end-group<br>
-&gt; /usr/bin/ld:<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libcurl.so:<br>
-&gt; error adding symbols: file in wrong format<br>
-&gt; collect2: error: ld returned 1 exit status<br>
-&gt; [2/31] Linking target test-cachunk<br>
-&gt; FAILED: test-cachunk<br>
-&gt; cc -o test-cachunk test-cachunk.p/test_test-cachunk.c.o -Wl,--as-neede=
-d<br>
-&gt; -Wl,--no-undefined<br>
-&gt; -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-=
-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-build=
-root-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,--start-group src/libshared.a -lacl<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libselinux.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libz.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libzstd.so<br>
-&gt; -lm<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libssl.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libcrypto.so<br>
-&gt; -Wl,--end-group -pthread<br>
-&gt; /usr/bin/ld:<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so:<br>
-&gt; error adding symbols: file in wrong format<br>
-&gt; collect2: error: ld returned 1 exit status<br>
-&gt; [3/31] Linking target test-cachunker<br>
-&gt; FAILED: test-cachunker<br>
-&gt; cc -o test-cachunker test-cachunker.p/test_test-cachunker.c.o<br>
-&gt; -Wl,--as-needed -Wl,--no-undefined<br>
-&gt; -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-=
-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-build=
-root-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,--start-group src/libshared.a -lacl<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libselinux.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libz.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libzstd.so<br>
-&gt; -lm<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libssl.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libcrypto.so<br>
-&gt; -Wl,--end-group -pthread<br>
-&gt; /usr/bin/ld:<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so:<br>
-&gt; error adding symbols: file in wrong format<br>
-&gt; collect2: error: ld returned 1 exit status<br>
-&gt; [4/31] Linking target test-caencoder<br>
-&gt; FAILED: test-caencoder<br>
-&gt; cc -o test-caencoder test-caencoder.p/test_test-caencoder.c.o<br>
-&gt; -Wl,--as-needed -Wl,--no-undefined<br>
-&gt; -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-=
-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-build=
-root-linux-gnu/sysroot/usr/lib<br>
-&gt; -Wl,--start-group src/libshared.a -lacl<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libselinux.so<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libz.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libzstd.so<br>
-&gt; -lm<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/libssl.so<br>
-&gt;=C2=A0 =C2=A0/root/raspcm4/sources/output/host/bin/../aarch64-buildroot=
--linux-gnu/sysroot/usr/lib/libcrypto.so<br>
-&gt; -Wl,--end-group -pthread<br>
-&gt; /usr/bin/ld:<br>
-&gt; /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/s=
-ysroot/usr/lib/liblzma.so:<br>
-&gt; error adding symbols: file in wrong format<br>
-&gt; collect2: error: ld returned 1 exit status<br>
-&gt; .<br>
-&gt; .<br>
-&gt; [10/31] Compiling C object test-camatch.p/test_test-camatch.c.o<br>
-&gt; ninja: build stopped: subcommand failed.<br>
-&gt; <br>
-&gt; I am using Buildroot as build system and after following similar post =
-in<br>
-&gt; <a href=3D"https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__stac=
-koverflow.com_questions_27967802_libstdc-2Dso-2Derror-2Dadding-2Dsymbols-2D=
-file-2Din-2Dwrong-2Dformat&amp;d=3DDwIBaQ&amp;c=3D_sEr5x9kUWhuk4_nFwjJtA&am=
-p;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&amp;=
-m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&amp;s=
-=3DxHy7bTlAyWOY4-lBdA9bwycscXiZBIO-Wkz7PZC9vbs&amp;e=3D" rel=3D"noreferrer"=
- target=3D"_blank">https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__s=
-tackoverflow.com_questions_27967802_libstdc-2Dso-2Derror-2Dadding-2Dsymbols=
--2Dfile-2Din-2Dwrong-2Dformat&amp;d=3DDwIBaQ&amp;c=3D_sEr5x9kUWhuk4_nFwjJtA=
-&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&a=
-mp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&amp=
-;s=3DxHy7bTlAyWOY4-lBdA9bwycscXiZBIO-Wkz7PZC9vbs&amp;e=3D</a><br>
-&gt; &lt;<a href=3D"https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__=
-github.com_ninja-2Dbuild_ninja_issues_url&amp;d=3DDwIBaQ&amp;c=3D_sEr5x9kUW=
-huk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI=
-_-172IIy1t&amp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc=
-8_-v_gj4&amp;s=3D7qFZDk5q2JFekiEteeOVNjQj50e86tte0akp-uMLm7k&amp;e=3D" rel=
-=3D"noreferrer" target=3D"_blank">https://urldefense.proofpoint.com/v2/url?=
-u=3Dhttps-3A__github.com_ninja-2Dbuild_ninja_issues_url&amp;d=3DDwIBaQ&amp;=
-c=3D_sEr5x9kUWhuk4_nFwjJtA&amp;r=3DLYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6q=
-ZZ4njZguQhZhkI_-172IIy1t&amp;m=3DEZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWuc=
-v2-olGfFGlWcnc8_-v_gj4&amp;s=3D7qFZDk5q2JFekiEteeOVNjQj50e86tte0akp-uMLm7k&=
-amp;e=3D</a> &gt; I changed the PATH<br>
-&gt; environment<br>
-&gt; like:<br>
-&gt; <br>
-&gt; /root/raspcm4/sources/output/host/bin/:/root/bin:/usr/local/sbin:/usr/=
-local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/raspcm4/sources/output/host/a=
-arch64-buildroot-linux-gnu/sysroot/usr/bin<br>
-&gt; <br>
-&gt; But still, I end up getting the same errors<br>
-&gt; <br>
-&gt; Can anyone please let me know how to resolve this issue? Is there any =
-ninja<br>
-&gt; build option to be selected in Buildroot?<br>
-&gt; <br>
-<br>
-Seems like cc is being used instead of the cross-compiler/linker.<br>
-<br>
-Did you use the meson-package mechanism in Buildroot? c.f. <br>
-<a href=3D"https://buildroot.org/downloads/manual/manual.html#_infrastructu=
-re_for_meson_based_packages" rel=3D"noreferrer" target=3D"_blank">https://b=
-uildroot.org/downloads/manual/manual.html#_infrastructure_for_meson_based_p=
-ackages</a><br>
-<br>
-This should have everything required to compile meson packages. Define <br>
-only the variables that are required and add one by one optional <br>
-variables until you get it to build.<br>
-<br>
-Having the actual package makefile for your casync package would help a <br=
->
-lot if it still does not work.<br>
-<br>
-Cheers,<br>
-Quentin<br>
-</blockquote></div>
+if you want it in an image created by Buildroot, modify your config with 
+make menuconfig and save your changes, then run make.
 
---0000000000004e423b05db949a66--
-
---===============4476225011884157402==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Cheers,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4476225011884157402==--
