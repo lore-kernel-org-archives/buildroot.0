@@ -4,77 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E170AC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 18:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52549C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 20:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78EB060B24;
-	Fri,  1 Apr 2022 18:06:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8CED60EEE;
+	Fri,  1 Apr 2022 20:46:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YqWUhNCwj_5b; Fri,  1 Apr 2022 18:06:10 +0000 (UTC)
+	with ESMTP id FVEpIflj_wAQ; Fri,  1 Apr 2022 20:46:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B000760E95;
-	Fri,  1 Apr 2022 18:06:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1EE311BF20F
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 18:05:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15A4E60DED;
+	Fri,  1 Apr 2022 20:46:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 949871C1189
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 20:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1D01482B08
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 18:05:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83C634016B
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 20:46:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q1dQ9YUK0mfz for <buildroot@lists.busybox.net>;
- Fri,  1 Apr 2022 18:05:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12CED82B93
- for <buildroot@buildroot.org>; Fri,  1 Apr 2022 18:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1648836322;
- bh=M4qaCiuYuJg13n9SDmrfB3MXaa3QhboWQnbLlbzDRzA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Z3g6GKDWVt+lI9qKTeAWitUlNit4TKa/islx2Zb0GIdnhGKcZQFPmsagdi0DaqIsa
- f/I/8nMBOELBKqr7eZ8U4IQ9CeIpvBZHxRFVwh/wxeIjLoU9FYW2wKi8KlvH2VZjR4
- VkdnZCnavNIoz1gnTI0ATvnCtVGDMdkw+oEqEliY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.24]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McY8T-1oAUoh1OsX-00cwJb; Fri, 01
- Apr 2022 20:05:22 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jMEtTBKz90lw for <buildroot@lists.busybox.net>;
+ Fri,  1 Apr 2022 20:46:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 807124012D
+ for <buildroot@buildroot.org>; Fri,  1 Apr 2022 20:46:00 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ r83-20020a1c4456000000b0038ccb70e239so438704wma.3
+ for <buildroot@buildroot.org>; Fri, 01 Apr 2022 13:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=90hJ7Y5vREPpyryIRsYLSYd9cTDzw9ZKr7tJ74umbZo=;
+ b=k/5jOtCrdl6JozV0+xpXHz8UcL5gOCS+2+Z1yrohGYSo3vF3dXFW6dXyF6OSd7PnSJ
+ n9C1dgimbs/n27rS5Jp48x8j0pkzZ2myRG+bAhDXUrBm+Ep/VajduG8fxOsslogvqHrq
+ 5XXh9I7e6FtyVXzzN2l9+c29j7iK/mleV4qcsiTaqKLIKqG2GWQQlx9Fk+/uCMJNiVin
+ SReQNRcgWbGjt8Bfv6pO4hDC0P7C6aq0pp1xuXjcSROBw0JXAu2fp7FY1LgmYcfOMWj5
+ L8SdjoV95xkI3nqsFAW81DXCjiN6cpsUvgIaHAleuQqwdpAUIGLZAgLGYBgx8jZ/ABun
+ PbiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=90hJ7Y5vREPpyryIRsYLSYd9cTDzw9ZKr7tJ74umbZo=;
+ b=WBVGNSRuPjKCb6ReZA/IFxYNWjuz82WiBMh9e57l8vJgs8QonNdJmqSQZdFkdeHb4R
+ cxxyn6fjVs1DCeLqhAY3duwbbzv+mEPjMsO1ekpjWXrNU/kypHdBYPGyMfecIaGTBtKz
+ xAh9l9HO8zKdaGSygTNB9s6cMjgLF9eMidB1MsDx1m5Vh35xKBWo3PtEGtbBvNugZaYQ
+ 7eLp7V/Ph9SSV++lCrkvStv+ypA8vTr80z72RGIg+mq+JQzlPom0cczaefetGHmnF8lF
+ R9isjMLouZrKj59FbKbIbWyW6ER63/dpp+m8W2K3JmZo7MlNzZknlZ/HJpFfEhfeGLRy
+ oIpQ==
+X-Gm-Message-State: AOAM5316/L2yutr/e6LphS2e1xp0sTk+4aCeZsaNFlCrvVHJLtFbY/me
+ V76uaNp/w9dxr3CyEZOn6fvDWSjOGt4=
+X-Google-Smtp-Source: ABdhPJxpS01dTUqbwoO8V7Bk+HwdnpOyRxe64+sv55AMrhqaHog4J67LQsjO52UB8O54c2YiVXOf9Q==
+X-Received: by 2002:a1c:2744:0:b0:382:a9b7:1c8a with SMTP id
+ n65-20020a1c2744000000b00382a9b71c8amr9865988wmn.187.1648845959006; 
+ Fri, 01 Apr 2022 13:45:59 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ o29-20020a05600c511d00b0038e3532b23csm2676920wms.15.2022.04.01.13.45.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 01 Apr 2022 13:45:58 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Apr 2022 20:05:20 +0200
-Message-Id: <20220401180520.15772-4-ps.report@gmx.net>
+Date: Fri,  1 Apr 2022 22:44:11 +0200
+Message-Id: <20220401204411.942428-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401180520.15772-1-ps.report@gmx.net>
-References: <20220401180520.15772-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Mo/bGu28Ir0BQNcvlLNpa8jDHDUEVsiNkTjVmRgOkCXYCECXm/e
- zDj8bG+mMgupsstgTwHpNY1BS8wuTv8W68ffHDZEmicNE4+La8e6cExQkzOGmPPvAVGcePZ
- QdoQt5zTiJ8B792uWteiEP8gXGDosQfsHus0F8oVJsCLiVomuXBJwGUxi7hC1sX8UE9E2bN
- nx4SK/F2rKUO/LmPJprmw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rhK7tdy8Iu0=:cO49KSNUq+NvvnhBqyXdmW
- veXt3x50sNsdxX5KGojG6UT41DRANqaqLLZtYUvKLePy/M4g4Js6jRoU6OXtTQE9Knhce7ao0
- +e3MfFWwxsQdhwUptKrdJOxUMbkg8sUi6BH/ICZ/YHIqcwAUyDRh0XREpronv1qC9HhBc3JhZ
- 3PrMPu1QBR1ImCDfrBNFtw7+u7X0kHGQvsdw512XHdwaF+bDZxKgunqOFNojU4xAINspXb0KF
- pRX7Va1nEcza+BYT74qLn5M8beDpk9Aojq/CSphujLZGPk/6xZPZ6IwbY1GqQ5YAgVLD2QQuE
- 2APalxECZz63tstjPGf/eg5ieMneMJsOj2WXBv6bLX4cTMqMuNdz+ldI/BI39k7qvSX2R28HI
- K5uAAZgpORbWoAEeAWWtBoZZ6GrgRjj7joFVOG9LlfrnxSNXx8Yn6SOIc/eVUmOi2QDvyIBUV
- HJIFLpmmAthyHRk7+wY+SDuBS6oSDKAufmfmsD9b2+XI1tazJFqC16kNoCib2iPcNQBb/Y3lz
- OFDPB9scBDpdBaiLoFHFsP/KslC1row0wcY5R80y0whvupg0BwmFRLEv8zItdzQMO4CAAKmFT
- e3xZ8emI+cBUVf58merrhcGh4VE/Xuuhn40ZVccU4Pk/q/SoOfUqJdvO3UsHgtIJInhVM+U63
- Zj1oG0z9XRlUFn5IQ8aDN8gqZK5pO/bRhb6V6IZ+QDeAR2P9rQs5GfMLzXGHcpZjl89sfnvEJ
- e2eRDQorcapXJ/pdXtz3px5nGh8ltt4CLnHzC1xBd4e+p+W1KSD5LyAf+iMRBhaWPu+lVVzio
- BCYdFEoFeqkumPSwL01DZwnn9vl6qO9pRVYPsqbWEL0mwYrTsQAvEYSeDUCM+58V9QqY6M5TD
- d1zH0ywkTgdY+vvWI2+cIyvWcM1hm/qoNBAkXcHqesK9t8UXYeWDf2Bqf/AqdTT78rOdSLGAR
- cY7lJ55J4O+N8HZlUhK+SM4xUQt2GBhaC+lDJ45fB4o8PLywzEv4mrbVB5onr0oTSDc7IWOwD
- oZcFYU/IuAbsYjtPgsQ3UNEQGu/AHR2OCHf0U48/uQrGq57ESdQbTVwv3G/GU7Xw1hiXrjffN
- eE1wRlqQJo0OOQ=
-Subject: [Buildroot] [PATCH v1 4/4] package/apr-util: change project url
- from http to https
+Subject: [Buildroot] [PATCH 1/1] package/libcap-ng: bump to version 0.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,32 +88,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- change project url from http to https (and remove trailing slash)
+https://github.com/stevegrubb/libcap-ng/blob/v0.8.3/ChangeLog
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/apr-util/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcap-ng/libcap-ng.hash | 2 +-
+ package/libcap-ng/libcap-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-index 6c5e3bbdf5..c1a967bdec 100644
---- a/package/apr-util/Config.in
-+++ b/package/apr-util/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_APR_UTIL
- 	help
- 	  The utility library for the apache runtime project
+diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+index f775ae6fc9..d4590dd739 100644
+--- a/package/libcap-ng/libcap-ng.hash
++++ b/package/libcap-ng/libcap-ng.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  52c083b77c2b0d8449dee141f9c3eba76e6d4c5ad44ef05df25891126cb85ae9  libcap-ng-0.8.2.tar.gz
++sha256  bed6f6848e22bb2f83b5f764b2aef0ed393054e803a8e3a8711cb2a39e6b492d  libcap-ng-0.8.3.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 4fb0cf4777..46f72c702e 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  http://apr.apache.org/
-+	  https://apr.apache.org
- 
- comment "apr-util needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
+-LIBCAP_NG_VERSION = 0.8.2
++LIBCAP_NG_VERSION = 0.8.3
+ LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+ LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.35.1
 
