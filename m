@@ -1,74 +1,143 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E02FC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 09:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D65EBC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 09:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32E9A60B0A;
-	Fri,  1 Apr 2022 09:10:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EC3340607;
+	Fri,  1 Apr 2022 09:11:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R3w6gONbYKEK; Fri,  1 Apr 2022 09:10:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A75CB60B1E;
-	Fri,  1 Apr 2022 09:10:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DACC11BF376
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:10:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C957C405BE
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:10:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A6F4Z0IZkn9b for <buildroot@lists.busybox.net>;
- Fri,  1 Apr 2022 09:10:38 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id urCEUbkkrwgl; Fri,  1 Apr 2022 09:11:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F79F405BE;
+	Fri,  1 Apr 2022 09:11:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BC82A1BF376
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:11:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AABBE8448A
+ for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 09:11:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=cherrycloud.onmicrosoft.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BXnkscjlHvNH for <buildroot@lists.busybox.net>;
+ Fri,  1 Apr 2022 09:11:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5CD8140156
- for <buildroot@buildroot.org>; Fri,  1 Apr 2022 09:10:38 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id x9so1530462ilc.3
- for <buildroot@buildroot.org>; Fri, 01 Apr 2022 02:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
- bh=bHDuOFDcJ70IoJjufhPnowpqx+68kklxhzAPf2l7Oac=;
- b=RMO4HhZ3dKF8MlSQt3hM0SDFLmrstIjodtsKGB2nNWrbkixLBm7ikAfMriqghcq6Pm
- 2+apBfrIOt5ErtogUK2qdVjRdmNi3havP9HNG1E769y2CdP0W/2dGdDmMKgSS1XeJG2p
- gQMFFHYUOPSXbTU+anowD/QY1a4r+oT0oOBb+BNBApIxec/4xx9j3gXlv8cLNm4nqXFo
- cErYyZfLyt8MgT/KR46E/fnr772yfhLQwVajk+5CPwWhqdVAA0gp57KhxDJCOxB1ph/1
- XCo9JDnKDDaxLlPG+J49pAnG8JoQD3wco5FqkJUbaB1fKPaIoNbO+urko+L+lfLsGutR
- DF2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=bHDuOFDcJ70IoJjufhPnowpqx+68kklxhzAPf2l7Oac=;
- b=vStU4O363mJ6X0d/ZqVXNlFNsq14nqQy9LhnvR/wOA3lE6WExSEuptdh9LD5mZzo4m
- wcCXZqxMvppHfE9jJ7dvN3ICaj7wNneLuMYbBZzFDj1TEEDEcU8WnzWcuHLD9ysO2OBg
- FcPR4Me+LJLvOdKqb2wHpZ2lUx8FmAz5kZ0nqABeYCAD9jeELq4nKRqq6VLLXKwV/6Kf
- 3Gs6T3CG5itAHA0h81JlRrGAXPrkvQeX9ftq/utWIoEtWeH7KpUQrV5w+hbqWujuMCVe
- vTNNb+m7YAEOrlR5KX0gfmJ6QjRvrpGRHnzxO9vYivQnaT48tRO1Osv0s2FgfAzbuO07
- 0SPw==
-X-Gm-Message-State: AOAM531qChNlD+bvWKF4JjSRaI3VrBWMpH3/uKuDwnYKHVu50pDL8EUn
- R4Fkokm0G0iodc6Fnsfrb4OxLK4xiwmoJ3Cw42VOxHEe
-X-Google-Smtp-Source: ABdhPJwEUD5H2+IjxUN3MjIIW+S6ay4aUV7FgD3a7GNAxIeForbmWf//GWE8eiMDquL1Sn3Ht1zT2ehfrUUJ5R9PCtQ=
-X-Received: by 2002:a05:6e02:1a81:b0:2c9:e6ac:49c with SMTP id
- k1-20020a056e021a8100b002c9e6ac049cmr5659271ilv.281.1648804236806; Fri, 01
- Apr 2022 02:10:36 -0700 (PDT)
-MIME-Version: 1.0
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur01on0603.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe1e::603])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EADB98440E
+ for <buildroot@buildroot.org>; Fri,  1 Apr 2022 09:11:10 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qjhy4bXyeWXFRfy94hLndakfgiLfU60jhecm78C0TndUB+i5OfbOrW3a9qiokDPsnCMx20rtrICmXYSLzhO1u89d9ln8mNOF+qUZFSd/v5zjMvuwILiu5mKPROhCtyii0poVvM+AdMj52Ct6Adz09xIVPSnk9uGayd0hNwHC5qATItmpNhQG5WxFJE2XxrJ5SXMBehoo3ca+vUMEQcg2SsqOF+9DbNA++quqdrTqMTYoePv3qH0eV/ZPxteKmYPEHrjuwTo5Py4ASRBCLboB6ZK/JsN+snxi/yQMWyc1S+qLiMXIstoaBKtAzCo8oNLcm+I0ElU1kIkn9UaadzATPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q2WBnLWsdy/33ahM0xIRDvpVglLBsi0OUw8PR9S1O4w=;
+ b=RZYxOCZRW0pAN03930luAHPp4QAGuhk5CwEOIhGOJDYTAuti4O9t1a8CimhXeCx/feg2G40RMex0hpKMNFU6BKgPHcOqMK5Rubm/ZuNFeANwWnDSWSDsUYO3NVN6ALs/BcBJpRfBaS9tNLWlnp1TQzg+m3G8UKXqLYEQzVOs1kDSbPdOO3qIWmjmIrR/IUTrqgGP75971OI5GyI8Pu87Ks2cgbd/RhmDoYQ4ia+NdT395CJexPmfhyVh3xwvN+qOSbF/b3bvPfT4McZl5NuEgC/tRuJvc/TgBn7k4agMFt588b6Y8rEOjypGnyayn9am79+qaZZqfJbbPVEq7Sme9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q2WBnLWsdy/33ahM0xIRDvpVglLBsi0OUw8PR9S1O4w=;
+ b=Wib5Ug8QpC8ntSStRkVt28ed1ciK0Z+pK8b19n5OBT+dCqml/uf123CL52aoEUWrtob/WOyR2VrD7wv1K0r8tmXvmz6PQnS6G27VbqNGw1h4OLi7lxDop/TP1MPxjFu0CZPyZd7YjePSaiIQGvtDm7smnlDYD9PQOPyiytc47os=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com (2603:10a6:102:2aa::7)
+ by HE1PR0402MB2747.eurprd04.prod.outlook.com (2603:10a6:3:e1::14)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Fri, 1 Apr
+ 2022 09:11:05 +0000
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::8ca9:a2e2:60c8:95e]) by PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::8ca9:a2e2:60c8:95e%6]) with mapi id 15.20.5102.023; Fri, 1 Apr 2022
+ 09:11:04 +0000
+Message-ID: <f10fe951-249a-25cb-b476-20cca3122e65@theobroma-systems.com>
+Date: Fri, 1 Apr 2022 11:11:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To: Sourabh Hegde <hrsourabh011@gmail.com>, buildroot@buildroot.org
 References: <CADYjeStce6+hEvk54=LGcgwTfPy7f2D_o=463haRjqOAOLj_1A@mail.gmail.com>
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 In-Reply-To: <CADYjeStce6+hEvk54=LGcgwTfPy7f2D_o=463haRjqOAOLj_1A@mail.gmail.com>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Fri, 1 Apr 2022 11:10:24 +0200
-Message-ID: <CADYjeSu26N_9c4O3nMu=YFriPVyaXOqsR=h3K3KnqDahs9jmbQ@mail.gmail.com>
-To: buildroot@buildroot.org
+X-ClientProxiedBy: AS9PR06CA0418.eurprd06.prod.outlook.com
+ (2603:10a6:20b:461::23) To PA4PR04MB9367.eurprd04.prod.outlook.com
+ (2603:10a6:102:2aa::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 402417d2-33b3-4ad3-3dfa-08da13bf8bdd
+X-MS-TrafficTypeDiagnostic: HE1PR0402MB2747:EE_
+X-Microsoft-Antispam-PRVS: <HE1PR0402MB2747E4718E2B13EFD70EC761C2E09@HE1PR0402MB2747.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pe3cYprSmSafEcb6Vq+6Kc/oIIGfuROOlNJZ/U74/lkF3waK08DLg1raIzQ15H26LWsud/FjjmcGYDqFroDJflNT7NUIiEicStMCSQbjlxf5ZlNj11/OIinKUflBoUslGUjqBdOfvjV/4GhoEDLhYRYfhLUjrsojY/I91wdNqaRB/IfZtqXg7g1LlSx1X6oaVLieS0er/N6559BCcrF46L0ofqd/3I8UkwScBEx++7budlQaL7YGyIBP+14RFko9FD50Loldai1mWrf6QhIqcELAye0UOpF60C0DygR0cGzIfA+l3hpRnUV6lJw60yD5gwpJ8bWMNnC1JJxlRHa4HCuJwsHa7Th5QvP+VGOEx5loJZ/wn8r+mhjkwA7Oi4cPZtU20mfesUvNBHh/VnbnMFke++04UBecyGiZ5/ht/yPKq6cgfHEFqLo1nnwPEiicRbNrK4bMsRKiLGMfQ5tORU4H/d31i6ar9Mw2kQvSAmTVi/V3SnWeds6lZQTBM6Heigxjnt8xMr8p9VWScm0qy7uUKn0OKyXSv+mc8rtDlsdiBbZYPrRxYMoGxSsyfvpKJH2PgZ4d7eJRW8y4fHp6TbtddT8aJhF9wkEbuFY/fLGztJ1FnZLx8VBNKxsg8qzHTR5KXbStI7j5GHQGYWfc7JcBR6/m+NnMDS08XW/nFGJ1jR+G4IK9I2HejawEjuSX1U20GBTt4p8VkPpVVDKRGtavuNevNFg09gp4aI17ZVdZHTWLGZmH23oiz1p24Hd/VyaK498bJ5/AV7f/cyxJmx5Ih9/JsOZnatPuqYgthCkx2XCWNT9N5hX65CX9YlX5O+UM3sI6IRt+vx+Nz1rRxw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:PA4PR04MB9367.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(366004)(2616005)(186003)(6512007)(8936002)(2906002)(86362001)(83380400001)(44832011)(26005)(31686004)(36756003)(316002)(5660300002)(31696002)(53546011)(66946007)(38100700002)(966005)(6486002)(6506007)(6666004)(508600001)(66556008)(8676002)(66476007)(45980500001)(43740500002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3JGNHpiam1rbUNlMVRtakt5L0hDSEtab3VlZzBXbFRWVUFsZjVlVGY5Rmpq?=
+ =?utf-8?B?T1BrVi9wQnpkbjhWRG04b3VveVhxT1JIdkVQOXlWaXkzZU1TUWkyYmpHRXls?=
+ =?utf-8?B?SWtOektCdC9Qd05iUU11SzY2V1RpYjRZdFBXd1Y1alFxQWZNd0FpOTkyR3R5?=
+ =?utf-8?B?NjVZNVFPSWlVeGc4MXpPTFN3VjhORCtoWjNVa29QVm1PVGx5WGZnTW93K3B4?=
+ =?utf-8?B?eEJXYlJRY2F0M1VSUUZMLzc2V2U4N0xXc3hBWi90anUrdXRlelJUbHdnQWZI?=
+ =?utf-8?B?U0JCTkZKMzhXa2o0ejZzWWw5OUtIRUNseExsQXNaeDFjYUljU0czLzV4WTZM?=
+ =?utf-8?B?QmFTak9DM24xdTIvblVoekNhOEcwRlRraVB4c1FLajlKUUZhUGhBUGFVWk55?=
+ =?utf-8?B?N0RTL09nTXAzck81WndjZlpEVkhVSHVPQm42ZWx5UUUwVFdrWHk5SE5UNE42?=
+ =?utf-8?B?UUtIVXR6OWxOUklMVll5Qi96YkVTV01JYnFZT1htL1N5R1ZLMTVCMTU3VkxN?=
+ =?utf-8?B?TENvYjc2TW0xL201N3A5Y2M3ZHdaQjNDaDlEOEl5YUI1ckRnMURTTFhFYmZp?=
+ =?utf-8?B?Vm9Dcm1RNzM1TXlqU05YTmdqeHJFQW1qT3krdHF2MEd4Y1J5Y01BREg5bGQy?=
+ =?utf-8?B?NjByeHo4Z1RueHVvTlhHTkdPekF4VmFBWnEzc0tOcUpOczBkZEVXNkRhNVB2?=
+ =?utf-8?B?Y3UwaXN1aytNUnJKQU9vVURNSkFpakwxa1loNk5QOWcxM1I5MG1aRy9Fa0Mv?=
+ =?utf-8?B?a052RHNqQzNKL1E1YnovZ1BpdzRIOThYTW5ueEJaZ2pyQ3YzT2xBZXhLZ2hu?=
+ =?utf-8?B?aUpmLy84UmRXQWwrbzNsaTN4UTdSRTJFalMyQzFrS1pwNG85ZFVtR0dFRFZr?=
+ =?utf-8?B?cTRBWUF5OGp1ZGJ2V1U0Zys4VGFJaTR0SUh0ZHllLzUvUUZtZmVVMC9GU3A2?=
+ =?utf-8?B?TERHUXhzS1ExeVB4eEgxenRzVkkzZGdPSnJNWlpyRVcyM2dudUJQc0NXb1hy?=
+ =?utf-8?B?blJQV25kMllVVFMxMWFqdS95YXZYUUZoYmFoZENvOVNRUjMrNXFYSzJWbWJR?=
+ =?utf-8?B?cU5Dck5SN2pMYmVFWmhLd25iL1RwQUZPdHhzRk9HNHdWRHplM3lxNHh2ejFQ?=
+ =?utf-8?B?Q2NVRElLNUZERi81N0kyMy9idjZRWm0zWE5od25hTitPN25MQmVFSDNXVHNs?=
+ =?utf-8?B?TTRTdTFCZmxQZXd4QW9PZUwxNjd1SCtDZHlJTzFUZnlZUDBPaWluSkNySTNV?=
+ =?utf-8?B?b25ROEJBV3hHMWJ0SGJUcWJIVDJWOWZIcGpCSDZXQXNkMkdoUGhERW1zNGYr?=
+ =?utf-8?B?QW9jVGdZUHMvQzFkTjd6RDlWelh4MXpNTStJT0lhc0hCRWRDTUdLYWZBc2dN?=
+ =?utf-8?B?bDhWQXozRXJTRzlLSElkaHB3SHlReXFhU2lTUUlKcExOeWpLVkh2a21vV0M0?=
+ =?utf-8?B?Mk9UcXBLbEJRdWhSakUwWGczNkZEeUwxUnhhNVlad0UzNHhXM2FqUUFmckxm?=
+ =?utf-8?B?L1VFVXNOYnNFREJ1QlNoNVB2QzhwWVpwOHovbzBVVmNXUy9RSUJwMFJBR09C?=
+ =?utf-8?B?dWRzQ1hFS3NjQ2NlWHFvZXBQYXlpbThKaE53dGZZOWpPMHZOalZXREZMRzZh?=
+ =?utf-8?B?OWFqd2FOcnN1a2RYdi9oOGFPYnQ1UmltVUVoTVkrSTIrQ0F6c3JWaUtZNlpy?=
+ =?utf-8?B?VnkzWVlHU1BiK2lpQ3JTOSt1aS9OYW1pQUI5YmI0em80NTNPSU4xRU0vcjJs?=
+ =?utf-8?B?Unl4RzBjUmZ4cW5qZk5DVGJ4dXhiYThOQ1pIVW9ZTDgxUjlzL3ZZb1o5Yjho?=
+ =?utf-8?B?UTJ4bnVZdlkzR0RvVUszc21HOG1FWE5UT3VXcmUrTStPRzhlblVidERWS3hF?=
+ =?utf-8?B?SnVCWmZ6UkR4MkdEQnN0ZmlrMjR5a3ZkOEVEWXdiekVPQ1BJd2ZuTUhmNy9i?=
+ =?utf-8?B?clBWL3QvOU5JeHd1ck9UUU5CZXdMV2lxMDhSVjE2VmppZXlDRHR1L2VUZHdM?=
+ =?utf-8?B?MVFPV0FHRGRnTUFMNDczZWg3a21SaXZXTTNsd29keXpoK0RpblV5MjE1U3dC?=
+ =?utf-8?B?TDZmMmIxWlVreXdhK0ZHUWhjdERLZ1AwK3FXQjVaTEhVUEV6bGQ4cXJ0NVpQ?=
+ =?utf-8?B?SnhVMjROemlRZiszdmVVdlVnS2UzNFFkTnQ5d0dJK0RmdVUxR0t0NmJjUkp3?=
+ =?utf-8?B?bXlnZXozbHZsMnJ0STREckJucHFlVFBrdWpKNURsL1B0REFheHpZMVdySzZK?=
+ =?utf-8?B?WFV2MkI3MFB0b3BFTUk2eldTOVFucERDZ3VXL1lkUXdXcEdWdlZWYzIrUWRp?=
+ =?utf-8?B?VVpmNXRScVN5ZmRRWTZhK2JXcEIrUTlCcnhQRWw5ZDZUMmlZdjdvSkpDdjUv?=
+ =?utf-8?Q?c8dekdKct35mV3HCLoUdZHPW7lC/AUjTEBMK+?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 402417d2-33b3-4ad3-3dfa-08da13bf8bdd
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9367.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 09:11:04.8351 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VLxh46ijfOxs4V+wtfV3w/tq6rYsM3YzotSJudn5gyg2SdvzZp3ca2mNbnaoAn2lx/NO8Mh844g1Yzp+W8SlhKGLi+nosUIt6YNU9feU+XvyqK4Tv8HwbtCZVp+3yewq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0402MB2747
 Subject: Re: [Buildroot] Buildroot | ninja build error | /usr/bin/ld:error
  adding symbols: file in wrong format
 X-BeenThere: buildroot@buildroot.org
@@ -82,35 +151,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1541469104908358210=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1541469104908358210==
-Content-Type: multipart/alternative; boundary="000000000000d6ceff05db942617"
+Hi Sourabh Hegde,
 
---000000000000d6ceff05db942617
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-Any update on below request would be appreciated.
-
-Thanks in advance,
-Sourabh
-
-On Thu, Mar 31, 2022, 19:55 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
-
+On 3/31/22 19:55, Sourabh Hegde wrote:
 > Hello All,
->
-> While building casync using ninja build I am facing below errors related
-> to /usr/bin/ld: . . .error adding symbols: file in wrong format
->
+> 
+> While building casync using ninja build I am facing below errors
+> related to /usr/bin/ld:
+> . . .error adding symbols: file in wrong format
+> 
 > I am following "casync" build guideline from
-> https://github.com/systemd/casync#building-casync
-> <https://github.com/ninja-build/ninja/issues/url> , it uses "meson " along
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_systemd_casync-23building-2Dcasync&d=DwIBaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=EZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=0oAe2qUNmvkBsGYIiapGRQ5OQYDghVxojZm5QaWUwiQ&e=
+> <https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_ninja-2Dbuild_ninja_issues_url&d=DwIBaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=EZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=7qFZDk5q2JFekiEteeOVNjQj50e86tte0akp-uMLm7k&e= > , it uses "meson " along
 > with ninja build.
->
+> 
 > If build failures persist, run "meson setup --wipe" to rebuild from scratch
 > using the same options as passed when configuring the build.
 > To change option values, run "meson configure" instead.
@@ -118,19 +177,20 @@ On Thu, Mar 31, 2022, 19:55 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 > [1/31] Linking target casync-http
 > FAILED: casync-http
 > cc -o casync-http casync-http.p/src_casync-http.c.o -Wl,--as-needed
-> -Wl,--no-undefined -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
+> -Wl,--no-undefined
+> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,--start-group src/libshared.a
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
 > -lm -Wl,--end-group
 > /usr/bin/ld:
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so:
@@ -139,18 +199,19 @@ On Thu, Mar 31, 2022, 19:55 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 > [2/31] Linking target test-cachunk
 > FAILED: test-cachunk
 > cc -o test-cachunk test-cachunk.p/test_test-cachunk.c.o -Wl,--as-needed
-> -Wl,--no-undefined -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
+> -Wl,--no-undefined
+> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,--start-group src/libshared.a -lacl
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libselinux.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
 > -lm
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
 > -Wl,--end-group -pthread
 > /usr/bin/ld:
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so:
@@ -159,18 +220,19 @@ On Thu, Mar 31, 2022, 19:55 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 > [3/31] Linking target test-cachunker
 > FAILED: test-cachunker
 > cc -o test-cachunker test-cachunker.p/test_test-cachunker.c.o
-> -Wl,--as-needed -Wl,--no-undefined -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
+> -Wl,--as-needed -Wl,--no-undefined
+> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,--start-group src/libshared.a -lacl
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libselinux.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
 > -lm
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
 > -Wl,--end-group -pthread
 > /usr/bin/ld:
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so:
@@ -179,18 +241,19 @@ On Thu, Mar 31, 2022, 19:55 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 > [4/31] Linking target test-caencoder
 > FAILED: test-caencoder
 > cc -o test-caencoder test-caencoder.p/test_test-caencoder.c.o
-> -Wl,--as-needed -Wl,--no-undefined -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
+> -Wl,--as-needed -Wl,--no-undefined
+> -Wl,-rpath,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,-rpath-link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib
 > -Wl,--start-group src/libshared.a -lacl
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libselinux.so
->
+> 
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so
 > -lm
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.so
->  /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+>   /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
 > -Wl,--end-group -pthread
 > /usr/bin/ld:
 > /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so:
@@ -200,406 +263,36 @@ On Thu, Mar 31, 2022, 19:55 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 > .
 > [10/31] Compiling C object test-camatch.p/test_test-camatch.c.o
 > ninja: build stopped: subcommand failed.
->
+> 
 > I am using Buildroot as build system and after following similar post in
-> https://stackoverflow.com/questions/27967802/libstdc-so-error-adding-symbols-file-in-wrong-format
-> <https://github.com/ninja-build/ninja/issues/url> I changed the PATH environment
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__stackoverflow.com_questions_27967802_libstdc-2Dso-2Derror-2Dadding-2Dsymbols-2Dfile-2Din-2Dwrong-2Dformat&d=DwIBaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=EZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=xHy7bTlAyWOY4-lBdA9bwycscXiZBIO-Wkz7PZC9vbs&e=
+> <https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_ninja-2Dbuild_ninja_issues_url&d=DwIBaQ&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=EZ6d819a1qu3uAFg1GbEGsYi60IPAlDkSahx_NFWucv2-olGfFGlWcnc8_-v_gj4&s=7qFZDk5q2JFekiEteeOVNjQj50e86tte0akp-uMLm7k&e= > I changed the PATH
+> environment
 > like:
->
->
+> 
 > /root/raspcm4/sources/output/host/bin/:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/raspcm4/sources/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin
->
+> 
 > But still, I end up getting the same errors
->
+> 
 > Can anyone please let me know how to resolve this issue? Is there any ninja
 > build option to be selected in Buildroot?
->
-> Your help will be much appreciated.
->
-> Thanks in advance
->
-> P.S: Please let me know if any info is missing here
->
+> 
 
---000000000000d6ceff05db942617
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Seems like cc is being used instead of the cross-compiler/linker.
 
-<div dir=3D"auto">Hello,<div dir=3D"auto"><br></div><div dir=3D"auto">Any u=
-pdate on below request would be=C2=A0appreciated.</div><div dir=3D"auto"><b=
-r></div><div dir=3D"auto">Thanks in advance,</div><div dir=3D"auto">Sourabh=
-</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_=
-attr">On Thu, Mar 31, 2022, 19:55 Sourabh Hegde &lt;<a href=3D"mailto:hrsou=
-rabh011@gmail.com">hrsourabh011@gmail.com</a>&gt; wrote:<br></div><blockquo=
-te class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc so=
-lid;padding-left:1ex"><div dir=3D"ltr"><p dir=3D"auto" style=3D"box-sizing:=
-border-box;margin-bottom:16px;color:rgb(36,41,47);font-family:-apple-system=
-,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;A=
-pple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px;margin-top=
-:0px">Hello All,</p><p dir=3D"auto" style=3D"box-sizing:border-box;margin-t=
-op:0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-apple-system,Bli=
-nkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple=
- Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px">While buildin=
-g=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono=
--Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,mon=
-ospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">c=
-async=C2=A0</code>using=C2=A0<code style=3D"box-sizing:border-box;font-fami=
-ly:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Lib=
-eration Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0p=
-x;border-radius:6px">ninja build</code>=C2=A0I am facing below errors relat=
-ed to<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-R=
-egular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monos=
-pace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">=C2=
-=A0/usr/bin/ld: . . .error adding symbols: file in wrong format</code></p><=
-p dir=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:=
-16px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot=
-;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&q=
-uot;Segoe UI Emoji&quot;;font-size:14px">I am following &quot;casync&quot; =
-build guideline from=C2=A0<a href=3D"https://github.com/ninja-build/ninja/i=
-ssues/url" style=3D"box-sizing:border-box;text-decoration-line:none" target=
-=3D"_blank" rel=3D"noreferrer">https://github.com/systemd/casync#building-c=
-async</a>=C2=A0, it uses &quot;<code style=3D"box-sizing:border-box;font-fa=
-mily:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;L=
-iberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:=
-0px;border-radius:6px">meson &quot;</code>=C2=A0along with ninja build.</p>=
-<p dir=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom=
-:16px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quo=
-t;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&=
-quot;Segoe UI Emoji&quot;;font-size:14px"><code style=3D"box-sizing:border-=
-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Conso=
-las,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.=
-4em;margin:0px;border-radius:6px">If build failures persist, run &quot;meso=
-n setup --wipe&quot; to rebuild from scratch</code><br style=3D"box-sizing:=
-border-box"><code style=3D"box-sizing:border-box;font-family:ui-monospace,S=
-FMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot=
-;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6=
-px">using the same options as passed when configuring the build.</code><br =
-style=3D"box-sizing:border-box"><code style=3D"box-sizing:border-box;font-f=
-amily:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;=
-Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin=
-:0px;border-radius:6px">To change option values, run &quot;meson configure&=
-quot; instead.</code><br style=3D"box-sizing:border-box"><code style=3D"box=
--sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&qu=
-ot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;p=
-adding:0.2em 0.4em;margin:0px;border-radius:6px">ninja: Entering directory =
-build&#39;</code><br style=3D"box-sizing:border-box"><code style=3D"box-siz=
-ing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,=
-Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;paddi=
-ng:0.2em 0.4em;margin:0px;border-radius:6px">[1/31] Linking target casync-h=
-ttp</code><br style=3D"box-sizing:border-box"><code style=3D"box-sizing:bor=
-der-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,C=
-onsolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2e=
-m 0.4em;margin:0px;border-radius:6px">FAILED: casync-http</code><br style=
-=3D"box-sizing:border-box"><code style=3D"box-sizing:border-box;font-family=
-:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liber=
-ation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;=
-border-radius:6px">cc -o casync-http casync-http.p/src_casync-http.c.o -Wl,=
---as-needed -Wl,--no-undefined -Wl,</code>-<code style=3D"box-sizing:border=
--box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Cons=
-olas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0=
-.4em;margin:0px;border-radius:6px">rpath,/root/raspcm4/sources/output/host/=
-bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib -Wl,-rpath</code>-<code =
-style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quo=
-t;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-s=
-ize:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">link,/root/ras=
-pcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib=
- -Wl,--start-group src/libshared.a</code>=C2=A0<code style=3D"box-sizing:bo=
-rder-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,=
-Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2=
-em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sources/output/host/bi=
-n/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so</code>=C2=A0<co=
-de style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&=
-quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;fon=
-t-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/raspc=
-m4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/l=
-ibssl.so</code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-mo=
-nospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation =
-Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border=
--radius:6px">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-lin=
-ux-gnu/sysroot/usr/lib/libcrypto.so</code>=C2=A0<code style=3D"box-sizing:b=
-order-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo=
-,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.=
-2em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sources/output/host/b=
-in/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so</code>=C2=A0<c=
-ode style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,=
-&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;fo=
-nt-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/rasp=
-cm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/=
-libz.so</code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-mon=
-ospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation M=
-ono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-=
-radius:6px">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linu=
-x-gnu/sysroot/usr/lib/libzstd.so -lm -Wl,--end-group</code><br style=3D"box=
--sizing:border-box"><code style=3D"box-sizing:border-box;font-family:ui-mon=
-ospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation M=
-ono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-=
-radius:6px">/usr/bin/ld: /root/raspcm4/sources/output/host/bin/../aarch64-b=
-uildroot-linux-gnu/sysroot/usr/lib/libcurl.so: error adding</code>=C2=A0<co=
-de style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&=
-quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;fon=
-t-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">symbols: fi=
-le in wrong format</code><br style=3D"box-sizing:border-box"><code style=3D=
-"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mon=
-o&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9=
-px;padding:0.2em 0.4em;margin:0px;border-radius:6px">collect2: error: ld re=
-turned 1 exit status</code><br style=3D"box-sizing:border-box"><code style=
-=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF =
-Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:1=
-1.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">[2/31] Linking targ=
-et test-cachunk</code><br style=3D"box-sizing:border-box"><code style=3D"bo=
-x-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&q=
-uot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;=
-padding:0.2em 0.4em;margin:0px;border-radius:6px">FAILED: test-cachunk</cod=
-e><br style=3D"box-sizing:border-box"><code style=3D"box-sizing:border-box;=
-font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,=
-&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;=
-margin:0px;border-radius:6px">cc -o test-cachunk test-cachunk.p/test_test-c=
-achunk.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,</code>-<code style=3D"bo=
-x-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&q=
-uot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;=
-padding:0.2em 0.4em;margin:0px;border-radius:6px">rpath,/root/raspcm4/sourc=
-es/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib -Wl,-rpat=
-h</code>-<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMo=
-no-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,m=
-onospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px"=
->link,/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/=
-sysroot/usr/lib -Wl,--start-group src/libshared.a</code>=C2=A0-<code style=
-=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF =
-Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:1=
-1.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">lacl /root/raspcm4/=
-sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libl=
-zma.so</code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-mono=
-space,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mo=
-no&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-r=
-adius:6px">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux=
--gnu/sysroot/usr/lib/libselinux.so</code>=C2=A0<code style=3D"box-sizing:bo=
-rder-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,=
-Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2=
-em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sources/output/host/bi=
-n/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so</code>=C2=A0<code =
-style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quo=
-t;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-s=
-ize:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/=
-sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz=
-std.so -lm</code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-=
-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberatio=
-n Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;bord=
-er-radius:6px">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-l=
-inux-gnu/sysroot/usr/lib/libssl.so</code>=C2=A0<code style=3D"box-sizing:bo=
-rder-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,=
-Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2=
-em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sources/output/host/bi=
-n/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so -Wl,--end-gro=
-up -pthread</code><br style=3D"box-sizing:border-box"><code style=3D"box-si=
-zing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;=
-,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padd=
-ing:0.2em 0.4em;margin:0px;border-radius:6px">/usr/bin/ld: /root/raspcm4/so=
-urces/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/liblzm=
-a.so: error adding</code>=C2=A0<code style=3D"box-sizing:border-box;font-fa=
-mily:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;L=
-iberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:=
-0px;border-radius:6px">symbols: file in wrong format</code><br style=3D"box=
--sizing:border-box"><code style=3D"box-sizing:border-box;font-family:ui-mon=
-ospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation M=
-ono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-=
-radius:6px">collect2: error: ld returned 1 exit status</code><br style=3D"b=
-ox-sizing:border-box"><code style=3D"box-sizing:border-box;font-family:ui-m=
-onospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation=
- Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;borde=
-r-radius:6px">[3/31] Linking target test-cachunker</code><br style=3D"box-s=
-izing:border-box"><code style=3D"box-sizing:border-box;font-family:ui-monos=
-pace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mon=
-o&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-ra=
-dius:6px">FAILED: test-cachunker</code><br style=3D"box-sizing:border-box">=
-<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regula=
-r,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;=
-font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">cc -o te=
-st-cachunker test-cachunker.p/test_test-cachunker.c.o -Wl,--as-needed -Wl,-=
--no-undefined -Wl,</code>-<code style=3D"box-sizing:border-box;font-family:=
-ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Libera=
-tion Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;b=
-order-radius:6px">rpath,/root/raspcm4/sources/output/host/bin/../aarch64-bu=
-ildroot-linux-gnu/sysroot/usr/lib -Wl,-rpath</code>-<code style=3D"box-sizi=
-ng:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,M=
-enlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;paddin=
-g:0.2em 0.4em;margin:0px;border-radius:6px">link,/root/raspcm4/sources/outp=
-ut/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib -Wl,--start-grou=
-p src/libshared.a</code>=C2=A0-<code style=3D"box-sizing:border-box;font-fa=
-mily:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;L=
-iberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:=
-0px;border-radius:6px">lacl /root/raspcm4/sources/output/host/bin/../aarch6=
-4-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so</code>=C2=A0<code style=3D=
-"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mon=
-o&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9=
-px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sources/=
-output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libselinux.s=
-o</code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-monospace=
-,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&qu=
-ot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius=
-:6px">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/=
-sysroot/usr/lib/libz.so</code>=C2=A0<code style=3D"box-sizing:border-box;fo=
-nt-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&q=
-uot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;ma=
-rgin:0px;border-radius:6px">/root/raspcm4/sources/output/host/bin/../aarch6=
-4-buildroot-linux-gnu/sysroot/usr/lib/libzstd.so -lm</code>=C2=A0<code styl=
-e=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF=
- Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:=
-11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sour=
-ces/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.s=
-o</code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-monospace=
-,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&qu=
-ot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius=
-:6px">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/=
-sysroot/usr/lib/libcrypto.so -Wl,--end-group -pthread</code><br style=3D"bo=
-x-sizing:border-box"><code style=3D"box-sizing:border-box;font-family:ui-mo=
-nospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation =
-Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border=
--radius:6px">/usr/bin/ld: /root/raspcm4/sources/output/host/bin/../aarch64-=
-buildroot-linux-gnu/sysroot/usr/lib/liblzma.so: error adding</code>=C2=A0<c=
-ode style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,=
-&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;fo=
-nt-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">symbols: f=
-ile in wrong format</code><br style=3D"box-sizing:border-box"><code style=
-=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF =
-Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:1=
-1.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">collect2: error: ld=
- returned 1 exit status</code><br style=3D"box-sizing:border-box"><code sty=
-le=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;S=
-F Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size=
-:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">[4/31] Linking ta=
-rget test-caencoder</code><br style=3D"box-sizing:border-box"><code style=
-=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF =
-Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:1=
-1.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">FAILED: test-caenco=
-der</code><br style=3D"box-sizing:border-box"><code style=3D"box-sizing:bor=
-der-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,C=
-onsolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2e=
-m 0.4em;margin:0px;border-radius:6px">cc -o test-caencoder test-caencoder.p=
-/test_test-caencoder.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,</code>-<co=
-de style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&=
-quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;fon=
-t-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">rpath,/root=
-/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr=
-/lib -Wl,-rpath</code>-<code style=3D"box-sizing:border-box;font-family:ui-=
-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberatio=
-n Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;bord=
-er-radius:6px">link,/root/raspcm4/sources/output/host/bin/../aarch64-buildr=
-oot-linux-gnu/sysroot/usr/lib -Wl,--start-group src/libshared.a</code>=C2=
-=A0-<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Re=
-gular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monosp=
-ace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">lacl=
- /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysro=
-ot/usr/lib/liblzma.so</code>=C2=A0<code style=3D"box-sizing:border-box;font=
--family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quo=
-t;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;marg=
-in:0px;border-radius:6px">/root/raspcm4/sources/output/host/bin/../aarch64-=
-buildroot-linux-gnu/sysroot/usr/lib/libselinux.so</code>=C2=A0<code style=
-=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF =
-Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:1=
-1.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sourc=
-es/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so</=
-code>=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-monospace,SF=
-Mono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;=
-,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6p=
-x">/root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sys=
-root/usr/lib/libzstd.so -lm</code>=C2=A0<code style=3D"box-sizing:border-bo=
-x;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consola=
-s,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4e=
-m;margin:0px;border-radius:6px">/root/raspcm4/sources/output/host/bin/../aa=
-rch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.so</code>=C2=A0<code style=
-=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF =
-Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:1=
-1.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/root/raspcm4/sourc=
-es/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto=
-.so -Wl,--end-group -pthread</code><br style=3D"box-sizing:border-box"><cod=
-e style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&q=
-uot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font=
--size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">/usr/bin/ld:=
- /root/raspcm4/sources/output/host/bin/../aarch64-buildroot-linux-gnu/sysro=
-ot/usr/lib/liblzma.so: error adding</code>=C2=A0<code style=3D"box-sizing:b=
-order-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo=
-,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.=
-2em 0.4em;margin:0px;border-radius:6px">symbols: file in wrong format</code=
-><br style=3D"box-sizing:border-box"><code style=3D"box-sizing:border-box;f=
-ont-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&=
-quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;m=
-argin:0px;border-radius:6px">collect2: error: ld returned 1 exit status</co=
-de><br style=3D"box-sizing:border-box"><code style=3D"box-sizing:border-box=
-;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas=
-,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em=
-;margin:0px;border-radius:6px">.</code><br style=3D"box-sizing:border-box">=
-<code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regula=
-r,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;=
-font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px">.</code>=
-<br style=3D"box-sizing:border-box"><code style=3D"box-sizing:border-box;fo=
-nt-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&q=
-uot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;ma=
-rgin:0px;border-radius:6px">[10/31] Compiling C object test-camatch.p/test_=
-test-camatch.c.o</code><br style=3D"box-sizing:border-box"><code style=3D"b=
-ox-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&=
-quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px=
-;padding:0.2em 0.4em;margin:0px;border-radius:6px">ninja: build stopped: su=
-bcommand failed.</code><br></p><p dir=3D"auto" style=3D"box-sizing:border-b=
-ox;margin-top:0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-apple=
--system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,=
-&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px">I =
-am using Buildroot as build system and after following similar post in=C2=
-=A0<a href=3D"https://github.com/ninja-build/ninja/issues/url" style=3D"box=
--sizing:border-box;background-color:transparent;text-decoration-line:none" =
-target=3D"_blank" rel=3D"noreferrer">https://stackoverflow.com/questions/27=
-967802/libstdc-so-error-adding-symbols-file-in-wrong-format</a>=C2=A0I chan=
-ged the=C2=A0<code style=3D"box-sizing:border-box;font-family:ui-monospace,=
-SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quo=
-t;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:=
-6px">PATH=C2=A0</code>environment like:</p><p dir=3D"auto" style=3D"box-siz=
-ing:border-box;margin-top:0px;margin-bottom:16px;color:rgb(36,41,47);font-f=
-amily:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial=
-,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-s=
-ize:14px"><code style=3D"box-sizing:border-box;font-family:ui-monospace,SFM=
-ono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,=
-monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;border-radius:6px=
-">/root/raspcm4/sources/output/host/bin/:/root/bin:/usr/local/sbin:/usr/loc=
-al/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/raspcm4/sources/output/host/aarc=
-h64-buildroot-linux-gnu/sysroot/usr/bin</code></p><p dir=3D"auto" style=3D"=
-box-sizing:border-box;margin-top:0px;margin-bottom:16px;color:rgb(36,41,47)=
-;font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetic=
-a,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;=
-;font-size:14px">But still, I end up getting the same errors</p><p dir=3D"a=
-uto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;color=
-:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&=
-quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe =
-UI Emoji&quot;;font-size:14px">Can anyone please let me know how to resolve=
- this issue? Is there any=C2=A0<code style=3D"box-sizing:border-box;font-fa=
-mily:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;L=
-iberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:=
-0px;border-radius:6px">ninja build</code>=C2=A0option to be selected in Bui=
-ldroot?</p><p dir=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;ma=
-rgin-bottom:16px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSyst=
-emFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Em=
-oji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px">Your help will be much=
- appreciated.</p><p dir=3D"auto" style=3D"box-sizing:border-box;margin-top:=
-0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-apple-system,BlinkM=
-acSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Co=
-lor Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px">Thanks in advanc=
-e</p><p dir=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-b=
-ottom:16px;color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont=
-,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&qu=
-ot;,&quot;Segoe UI Emoji&quot;;font-size:14px">P.S: Please let me know if a=
-ny info is missing here</p></div>
-</blockquote></div>
+Did you use the meson-package mechanism in Buildroot? c.f. 
+https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_meson_based_packages
 
---000000000000d6ceff05db942617--
+This should have everything required to compile meson packages. Define 
+only the variables that are required and add one by one optional 
+variables until you get it to build.
 
---===============1541469104908358210==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Having the actual package makefile for your casync package would help a 
+lot if it still does not work.
 
+Cheers,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1541469104908358210==--
-
