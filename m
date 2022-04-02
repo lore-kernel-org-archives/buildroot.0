@@ -1,92 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 665D0C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9739BC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDD2E84043;
-	Sat,  2 Apr 2022 17:11:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E744E417D6;
+	Sat,  2 Apr 2022 17:12:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gpbBW9LZC_mM; Sat,  2 Apr 2022 17:11:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xEqQT779hxJn; Sat,  2 Apr 2022 17:12:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD0F48403B;
-	Sat,  2 Apr 2022 17:11:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A867C1BF96B
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC34E417FC;
+	Sat,  2 Apr 2022 17:12:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 812591BF96B
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93B668403B
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FDC260BA1
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L5jLiAYUYqMc for <buildroot@lists.busybox.net>;
- Sat,  2 Apr 2022 17:11:39 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l4baHS6IaZzS for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 17:11:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 528D784035
- for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:11:39 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id r13so11908063ejd.5
- for <buildroot@buildroot.org>; Sat, 02 Apr 2022 10:11:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 67B7D60B9F
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:11:57 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id q20so3470703wmq.1
+ for <buildroot@buildroot.org>; Sat, 02 Apr 2022 10:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bwEU5pnRfaWhxH/KVliev10UKpSoJsVBZ4KBPK0Ax8U=;
- b=Ws7vxVGX0V6Acbfe5mlNfq/uenXtX9DMfqCa5FNdzdg6Tc9nJ7y+QAp00WgxmczVCS
- X5FWOTIqhOoOwp24CVcKK2DooHMFu1rG75xOSVgA84OUw+4wL3ug6auhwgzPwQ9edTjZ
- EG+3HQKd43w/arxdTq0r1LHMGmVGzq4cmlbu1LRe8z12iL59MScA++tiAijqc5exX8v8
- eMj12Dsi26eP2INAk1KbBXtIip6boFP/v5oi1B9D/wlTc4uaxeYZdSqO6xgizXv3ahxI
- dbq04OkA33mMYd3pM8781gtacKeba39WBQoDy4efl3zhVDGo8TU/emNUCRVKzGuFfYe9
- DOlQ==
+ bh=Ckc5jaOlp4DoVF7YDBXBnjq8FvJQq+PLujICyU2oLWs=;
+ b=LYPgw/oQvx6eDSOipYxCjIL9FCkNhZadKoeQ4FlidDRr0HXEcQSqDlKJtctZnxYoYj
+ tdxePdhz69AIvEYM2Xrae3cEeHQApB4x1X9SCu/pdVZ1JNr4OIxPJk+JCuRQGMSYR1wP
+ MI9DD+XSdVadSZOrtEWc0m6wy/g5mhizR5f9JX3pqImarrW/FkZTOegUCjO9IlK9efAu
+ KXNp3GDeNU/i/a6FWGzSRIJyKicz3c63S6yN7E+WoKPRgXQQupZ+3bD8xslYvIePcI6L
+ etpRVuBrFSS4+BMMxqzMCV34RZGPNTKc4TZhhNwSVeg3oX9XO4CNZcCnK8JDEoukQsXB
+ pZWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bwEU5pnRfaWhxH/KVliev10UKpSoJsVBZ4KBPK0Ax8U=;
- b=Wr3bPrMBhJqy6jou6NvKZ+ykZWirZWvq9lqOROabHesCntrAlhiTBJRiGBgB0ozSac
- U2C9hHspP8aK8N3Yz0tBOw662gxMoyhl7LeUrI9ALoQAO1eq98z3ljOA91wy7aLAwOaR
- FEVcst89VcniiTTDO44xZDN8fgzQf6M/3bkZyGdomR7WtuCv59Q5NWnkM9qSZDFsvvau
- zaMUCMHTgYyAP8o+0KC64GOuYVvtDQJnLQnfBHNM54da6q2oYwvQn3ugeVS3jfeumI3e
- V6WKfcUwE5jA2vThCT3b4M14lvm1PDXiFdsp7a/FKTwwYGaUGqAQcXsd4WIzcqZZbIHC
- cAQA==
-X-Gm-Message-State: AOAM5300AdTZ8rRbvAAy6lCkDcSQL27XEPLGu7fz7tLXkq0ULdxaO5Vc
- ecKwsxzdLnmKdIEyCc72LrcyfQ==
-X-Google-Smtp-Source: ABdhPJy2Se1e2RalJEJp6w+YJwESRhggqSFEbVIRysb9mLS3WhM6WVjK72Ae8rwBG9fMPXQp/oHBWQ==
-X-Received: by 2002:a17:907:720d:b0:6df:c57f:e2bc with SMTP id
- dr13-20020a170907720d00b006dfc57fe2bcmr4321803ejc.345.1648919497276; 
- Sat, 02 Apr 2022 10:11:37 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:68f9:c8ef:77ab:7425?
- (ptr-9fplejof7ird5pjql2d.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:68f9:c8ef:77ab:7425])
+ bh=Ckc5jaOlp4DoVF7YDBXBnjq8FvJQq+PLujICyU2oLWs=;
+ b=32VQu1J89ugzJlmTI1oRUAY2ZAgVwFCfvpISt4uZGcv5r3EWMIdGXfCxr+pci5c7PH
+ f6wyfecKj58a6x9XU+nIy8lTk6dEeBDgo3e6m2qol+ytnhjQetodh3IIWSVc/glb2xnp
+ BbuxdEMo0wfcaro0OyPqihYufKWBmB2e7hP9wQ8tlX0cHEW6fcryn2mYG1IgqhO/EJxj
+ RDx0mClxx2H79kOfFJQeKi/M1SjPhvWHI1Nr578sQUIftlSG5MowTrUtT1uFDinAlOnL
+ ncDCY78FHSMQFRterLv2ELZT5vDmvH3wkXTc1izqukmuv8Pn+eCMZXAHE/KjQ23vAQj7
+ OMVQ==
+X-Gm-Message-State: AOAM532SdR6bAFBMSLkZd8TRhx3hy8R/2FdGhQ/bRHfQ7TYFZDbuDG5a
+ f1DLPw2mfs4HiwK+BCz/aNjFY7Mvl8s=
+X-Google-Smtp-Source: ABdhPJwXEhnZXo9oTuNcCtgQRu8sppKStLl1Tmre7tCjIhFTJ+9OZbSXzXyCs6OUCiWI1Cmlnb56Pg==
+X-Received: by 2002:a05:600c:4fd4:b0:38c:cc3f:ac01 with SMTP id
+ o20-20020a05600c4fd400b0038ccc3fac01mr13246349wmq.206.1648919515414; 
+ Sat, 02 Apr 2022 10:11:55 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- e19-20020a056402105300b004162d0b4cbbsm2643072edu.93.2022.04.02.10.11.35
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 02 Apr 2022 10:11:36 -0700 (PDT)
-Message-ID: <4ac4b8c5-875c-5559-7042-d7a87b42aa60@mind.be>
-Date: Sat, 2 Apr 2022 19:11:35 +0200
+ m2-20020a1c2602000000b0038ca9ffac53sm4766634wmm.11.2022.04.02.10.11.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 02 Apr 2022 10:11:54 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  2 Apr 2022 19:10:15 +0200
+Message-Id: <20220402171015.1180992-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-References: <20220322232224.2842266-1-james.hilliard1@gmail.com>
- <20220322232224.2842266-6-james.hilliard1@gmail.com>
- <c3610252-b676-f44f-a900-7ec8e9c6cb23@gmail.com>
- <CADvTj4pDYNkEmgxq=Zc4b+gRNeEoPMAhHu8zetRUNs5=dsrkCA@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CADvTj4pDYNkEmgxq=Zc4b+gRNeEoPMAhHu8zetRUNs5=dsrkCA@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH v12 06/11] package/libclc: bump version to
- 13.0.1
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,44 +87,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Bernd Kuhls <bernd.kuhls@t-online.de>,
- Matt Weber <matthew.weber@rockwellcollins.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>, Matt Weber <matthew.weber@collins.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+wireshark needs C++ since switch to cmake-package in commit
+7cb7fb8191fc52c1e2cc8b4b15ea52fd12c30d9a:
 
+CMake Error at CMakeLists.txt:32 (project):
+  No CMAKE_CXX_COMPILER could be found.
 
-On 31/03/2022 23:38, James Hilliard wrote:
-> On Thu, Mar 31, 2022 at 2:50 PM Romain Naour <romain.naour@gmail.com> wrote:
->>
->> Hi James,
->>
-[snip]
->> Ideally, llvm/clang should be updated to 13.0.1 first (or to the latest version
->> if possible).
-> 
-> There were some issues with lld in anything newer than 11.1.0, see:
-> https://lore.kernel.org/buildroot/20220131015937.4113728-1-james.hilliard1@gmail.com/
-> https://bugs.llvm.org/show_bug.cgi?id=49228
+Fixes:
+ - http://autobuild.buildroot.org/results/1ce9bc2a2330e27dfaceae682139d222feb806ae
 
-  To me that looks trivial to solve: we need to package libunwind (call it 
-llvm-libunwind because we already have a libunwind package) and make lld depend 
-on it. The CMakeLists.txt adds an include path that doesn't exist, but I think 
-that will get silently ignored.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wireshark/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-  Regards,
-  Arnout
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index 95fc9b38f3..fdeb9da259 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_WIRESHARK
+ 	depends on BR2_USE_MMU # fork(), glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBGCRYPT
+@@ -45,8 +46,8 @@ comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, host
+ 
+ endif # BR2_PACKAGE_WIRESHARK
+ 
+-comment "wireshark needs a toolchain w/ wchar, threads, dynamic library"
++comment "wireshark needs a toolchain w/ wchar, threads, dynamic library, C++"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
+-- 
+2.35.1
 
-> 
-> So I held off on going beyond 11.1.0 for now due to that.
-[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
