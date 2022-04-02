@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D24D0C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  1 Apr 2022 21:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B32F7C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 01:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EF5E41B66;
-	Fri,  1 Apr 2022 21:57:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C6A4841B6;
+	Sat,  2 Apr 2022 01:06:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YTDNSZ61Dg7E; Fri,  1 Apr 2022 21:57:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WNYbyhqu-J56; Sat,  2 Apr 2022 01:06:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7348341B4C;
-	Fri,  1 Apr 2022 21:57:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 293E6840CC;
+	Sat,  2 Apr 2022 01:06:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BBF8B1BF575
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 21:57:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A5BB1BF301
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 01:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B12204017E
- for <buildroot@lists.busybox.net>; Fri,  1 Apr 2022 21:57:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76F1F408CA
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 01:06:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=broadcom.com
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fuySmlorTNYK for <buildroot@lists.busybox.net>;
- Fri,  1 Apr 2022 21:57:04 +0000 (UTC)
+ with ESMTP id KfBg1kmPqe8S for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 01:06:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
- [IPv6:2607:f8b0:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B0C864023D
- for <buildroot@buildroot.org>; Fri,  1 Apr 2022 21:57:04 +0000 (UTC)
-Received: by mail-pf1-x42f.google.com with SMTP id s8so3760612pfk.12
- for <buildroot@buildroot.org>; Fri, 01 Apr 2022 14:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=broadcom.com; s=google;
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C7784408BB
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 01:06:11 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id h63so5062079iof.12
+ for <buildroot@buildroot.org>; Fri, 01 Apr 2022 18:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OMqEc+KXq99qZZ8wCubljEXkVgWjMQd0yGAl8rmsVCg=;
- b=S4L/JxR44jcNvRay32HhHz0Y13NC6TzlkkqZysRQcppJ/DC6MK8IHvxHr74j19Slbm
- vwRFuyoZuTQNe903VL2GSPTcMd36CJat0KcS3aRtoozaaC/xEkdgsoLOXvjWfKE9iDdn
- 3hrwugtccmiRKDHyDStKJnbiwk6rRZ3vk1w5c=
+ bh=80mFpgpTuf3DOs64HT/v3KR8CrUxkBlFvUS/ShPAjlE=;
+ b=aQRpHKdniBh8QuiPvqOLD6vyTnhhBNbkXxJPHhP0FK9q1b8UtRfhiUuC74XxLPMAGY
+ +cDFJcfApDYavZcnu84UEz0kRVFSZTVFnLXi2JEJNRdAH+mCSVbpxVLO9+Pb9+c2mowf
+ 7WdqIhRUSNcLDj3W4FPi0hCu06xi3n4xWnl7StnXAqnWWU3MZ/ErlFNIQQ30cTI9w7Uv
+ MyuqSg2iu+vcPwR5rB6lFUHa/7Mvn3f10nHFC+fUMZxf3bRYG1sWa2rDyQRj9HtjmTDd
+ nnT/UzfbJeTo8K1GZKjqoIfTtWHlKZT31j02bBTLDCGxvKLjSHUGeIl5mB6ITNrxCAT3
+ iDuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OMqEc+KXq99qZZ8wCubljEXkVgWjMQd0yGAl8rmsVCg=;
- b=1LB/Si5nohptbeMXor4u4/J1wudlpuduN7jfCV2ahM46V7je1KMmEYHIMtbd1odac9
- LlcyGTgNgRrb+Amvc1GBu/tonhmx3zp7LCGJ2p+PQUZH2jKJVkaMiqrHH1eFeFB17vXO
- CXVZnoYoqvd0o1MklXNDYs9ujijFBh1WZFRRTsqoqB5cUEW9FK3BFlIoC3k7/odgsedN
- NFCd1iELpw2I6jWCHYGC1XoKW5C4MuPDsi0paeS5aiHnNTFFzYFeX648sXc8pE9fvNdW
- ToG/lBaBM1KTmVMJchR9bKX4p03Di2zYJUfjnJr8mWBbTzRr0ZQUCFnbX3v7PnjXsGP4
- kEfA==
-X-Gm-Message-State: AOAM532umrWQ9b3lZ+ckOjNGWo8sZEX1tAuxVIJ+p6SmxiCyG7IR0hSA
- F7TjyK4Eue45kw/TiSZj7QWjNyOM5YZw7WIU
-X-Google-Smtp-Source: ABdhPJyGlNj7tkh0muPNI+3vpINLZUX5wan8oqywEpqdKy2Aa1GEGk3M8ljJ8nVCLMSYYm2lrMYl9w==
-X-Received: by 2002:a05:6a00:3486:b0:4fa:bb7e:b4c7 with SMTP id
- cp6-20020a056a00348600b004fabb7eb4c7mr12829040pfb.4.1648850223673; 
- Fri, 01 Apr 2022 14:57:03 -0700 (PDT)
-Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.250])
- by smtp.gmail.com with ESMTPSA id
- v17-20020a63b951000000b0038644f62aeesm3235142pgo.68.2022.04.01.14.57.02
+ bh=80mFpgpTuf3DOs64HT/v3KR8CrUxkBlFvUS/ShPAjlE=;
+ b=P4/mEbhGzPh5Egd9kRMB4Q5dA6v9Et8Mf6AqotWVdnsscNKMRrPOQS60oZ+KsdXbk9
+ 0MZIKJmLk4EO78V1Y1ax4fJ/Ej0Dp4BjWsODJ3yw5sE+JLPuKCE/M1Sg3lOHaaZaeVYR
+ iq9/fzJETM2plc+/jErEQg8eAuKTZVDXTrH4QIWFL5jsg+0+F83u15n/qk1Ag0znBF0z
+ H9o3F0yX/nDCMU5BMPBuwRmXN/K5eqXrAwmkEfQGiGWvEtb2WVd6GhGa0028PkDJijTt
+ QTc2sPMtmXF67VNAbG3pDTZwvEmCZBbmIPYrq0hpXjNRniSlEuvdncK71GdwwfrmkhKB
+ XUPg==
+X-Gm-Message-State: AOAM5328kKKia/QhoVHmBGxJaG5Y6SBb2kdfY1PHvQ9C0SAVn7/bk86g
+ tRkt0da2wZCRmvHbRdUk4U7K7/d3q9gXag==
+X-Google-Smtp-Source: ABdhPJzOLosfh6AaK8nZgjHltfOXoXphFaVSyFZO2mhW7UXF+dahQLU8ELa9YXPj5bLsEiDjuEK5pA==
+X-Received: by 2002:a05:6602:2e84:b0:646:2f68:f7a5 with SMTP id
+ m4-20020a0566022e8400b006462f68f7a5mr939841iow.34.1648861570670; 
+ Fri, 01 Apr 2022 18:06:10 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
+ [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
+ l14-20020a05660227ce00b00645ebb013c1sm2699872ios.45.2022.04.01.18.06.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Apr 2022 14:57:03 -0700 (PDT)
-Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
- id A79D945C6F9F; Fri,  1 Apr 2022 14:57:01 -0700 (PDT)
-To: Buildroot Mailing List <buildroot@buildroot.org>
-Date: Fri,  1 Apr 2022 14:56:53 -0700
-Message-Id: <20220401215653.1703616-1-mmayer@broadcom.com>
+ Fri, 01 Apr 2022 18:06:09 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  1 Apr 2022 19:05:59 -0600
+Message-Id: <20220402010559.410834-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package: replace git:// URLs with https:// URLs
- where possible
+Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: add randconfig based
+ --no-toolchains-csv option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,230 +87,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
-Cc: Markus Mayer <mmayer@broadcom.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replace the remaining git:// URLs with their https:// equivalents as
-this is more secure and also more palatable to corporate firewalls.
+Currently we only test a limited set of toolchains that are mostly
+prebuilt, add a flag to allow using randconfig for randomizing
+additional toolchain settings instead of randpackageconfig.
 
-This leaves package/dahdi-linux as the sole package still using a
-git:// URL for cloning.
+To avoid invalid configs we need to add additional config validation
+filtering and fixups.
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 3 ++-
- package/aer-inject/aer-inject.mk                  | 3 ++-
- package/firmware-utils/firmware-utils.mk          | 3 ++-
- package/flashbench/flashbench.mk                  | 3 ++-
- package/mmc-utils/mmc-utils.mk                    | 3 ++-
- package/mxsldr/mxsldr.mk                          | 3 ++-
- package/open62541/open62541.mk                    | 2 +-
- package/pahole/pahole.mk                          | 2 +-
- package/psplash/psplash.mk                        | 3 ++-
- package/rtc-tools/rtc-tools.mk                    | 3 ++-
- package/rtmpdump/rtmpdump.mk                      | 3 ++-
- package/sox/sox.mk                                | 2 +-
- package/tftpd/tftpd.mk                            | 3 ++-
- package/wilink-bt-firmware/wilink-bt-firmware.mk  | 2 +-
- 14 files changed, 24 insertions(+), 14 deletions(-)
+ utils/genrandconfig | 52 ++++++++++++++++++++++++++++++---------------
+ 1 file changed, 35 insertions(+), 17 deletions(-)
 
-diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
-index 3a1af9b02c7e..30b352f8e7df 100644
---- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
-+++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 3483d55c14..1e72e14461 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -315,6 +315,10 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n')
+         configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="%s"\n' % bootscr)
  
- BOOT_WRAPPER_AARCH64_VERSION = 8d5a765251d9113c3c0f9fa14de42a9e7486fe8a
--BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
-+BOOT_WRAPPER_AARCH64_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
-+BOOT_WRAPPER_AARCH64_SITE_METHOD = git
- BOOT_WRAPPER_AARCH64_LICENSE = BSD-3-Clause
- BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
- BOOT_WRAPPER_AARCH64_DEPENDENCIES = linux
-diff --git a/package/aer-inject/aer-inject.mk b/package/aer-inject/aer-inject.mk
-index 72495bbea26a..6bc9cb44da74 100644
---- a/package/aer-inject/aer-inject.mk
-+++ b/package/aer-inject/aer-inject.mk
-@@ -5,7 +5,8 @@
- ################################################################################
++    if 'BR2_ROOTFS_SKELETON_CUSTOM=y\n' in configlines and \
++       'BR2_ROOTFS_SKELETON_CUSTOM_PATH=""\n' in configlines:
++        configlines.remove('BR2_ROOTFS_SKELETON_CUSTOM=y\n')
++
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
  
- AER_INJECT_VERSION = 9bd5e2c7886fca72f139cd8402488a2235957d41
--AER_INJECT_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
-+AER_INJECT_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
-+AER_INJECT_SITE_METHOD = git
- AER_INJECT_LICENSE = GPL-2.0
- AER_INJECT_LICENSE_FILES = README
- AER_INJECT_DEPENDENCIES = host-flex host-bison
-diff --git a/package/firmware-utils/firmware-utils.mk b/package/firmware-utils/firmware-utils.mk
-index 151a01882d71..d5b079e4f5a7 100644
---- a/package/firmware-utils/firmware-utils.mk
-+++ b/package/firmware-utils/firmware-utils.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+@@ -331,11 +335,14 @@ def gen_config(args):
  
- FIRMWARE_UTILS_VERSION = 86739f2b3ae9502368b89ef37fa6f31c42aad6f4
--FIRMWARE_UTILS_SITE = git://git.openwrt.org/project/firmware-utils.git
-+FIRMWARE_UTILS_SITE = https://git.openwrt.org/project/firmware-utils.git
-+FIRMWARE_UTILS_SITE_METHOD = git
- FIRMWARE_UTILS_LICENSE = \
- 	BSD-2-Clause (tplink-safeloader), \
- 	BSD-3-Clause (seama), \
-diff --git a/package/flashbench/flashbench.mk b/package/flashbench/flashbench.mk
-index e89a250aa31a..f5791c3e95b6 100644
---- a/package/flashbench/flashbench.mk
-+++ b/package/flashbench/flashbench.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+     sysinfo = SystemInfo()
  
- FLASHBENCH_VERSION = 2e30b1968a66147412f21002ea844122a0d5e2f0
--FLASHBENCH_SITE = git://git.linaro.org/people/arnd/flashbench.git
-+FLASHBENCH_SITE = https://git.linaro.org/people/arnd/flashbench.git
-+FLASHBENCH_SITE_METHOD = git
- FLASHBENCH_LICENSE = GPL-2.0
- FLASHBENCH_LICENSE_FILES = COPYING
+-    # Select a random toolchain configuration
+-    configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
++    if args.toolchains_csv:
++        # Select a random toolchain configuration
++        configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
  
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 8c264a454a33..c84737869264 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+-    i = randint(0, len(configs) - 1)
+-    toolchainconfig = configs[i]
++        i = randint(0, len(configs) - 1)
++        toolchainconfig = configs[i]
++    else:
++        toolchainconfig = []
  
- MMC_UTILS_VERSION = d40ec535b9d4e4c974e8c2fbfb422cd0348cc5e8
--MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
-+MMC_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
-+MMC_UTILS_SITE_METHOD = git
- MMC_UTILS_LICENSE = GPL-2.0
- MMC_UTILS_LICENSE_FILES = mmc.h
+     configlines = list(toolchainconfig)
  
-diff --git a/package/mxsldr/mxsldr.mk b/package/mxsldr/mxsldr.mk
-index 239b40ad29af..2375b9f42b59 100644
---- a/package/mxsldr/mxsldr.mk
-+++ b/package/mxsldr/mxsldr.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+@@ -409,19 +416,22 @@ def gen_config(args):
+         bounded_loop -= 1
+         subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+                                "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+-                               "randpackageconfig"])
++                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
  
- MXSLDR_VERSION = 2793a657ab7a22487d21c1b020957806f8ae8383
--MXSLDR_SITE = git://git.denx.de/mxsldr.git
-+MXSLDR_SITE = https://git.denx.de/mxsldr.git
-+MXSLDR_SITE_METHOD = git
- MXSLDR_LICENSE = GPL-2.0+
- MXSLDR_LICENSE_FILES = COPYING
- HOST_MXSLDR_DEPENDENCIES = host-libusb host-pkgconf
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index fb28a614e2a7..627c29e95b6c 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -6,7 +6,7 @@
+         if fixup_config(sysinfo, configfile):
+-            break
+-
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "olddefconfig"])
++            if subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                                      "olddefconfig"]):
++                continue
  
- OPEN62541_VERSION = v1.2.2
- OPEN62541_SITE_METHOD = git
--OPEN62541_SITE = git://github.com/open62541/open62541.git
-+OPEN62541_SITE = https://github.com/open62541/open62541.git
- OPEN62541_GIT_SUBMODULES = YES
- OPEN62541_INSTALL_STAGING = YES
- OPEN62541_LICENSE = MPL-2.0
-diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
-index 1ad937062dfd..da6d67e6a293 100644
---- a/package/pahole/pahole.mk
-+++ b/package/pahole/pahole.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "savedefconfig"])
++            if subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                                      "savedefconfig"]):
++                continue
  
- PAHOLE_VERSION = v1.23
--PAHOLE_SITE = git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-+PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git
- PAHOLE_SITE_METHOD = git
- # pahole contains git submodule and relies on them to be built.
- PAHOLE_GIT_SUBMODULES = YES
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 5e61f2392f78..69f9bf386da0 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+-    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                            "dependencies"])
++            if subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                                "dependencies"]):
++                continue
++            break
++    return 0
  
- PSPLASH_VERSION = 44afb7506d43cca15582b4c5b90ba5580344d75d
--PSPLASH_SITE = git://git.yoctoproject.org/psplash
-+PSPLASH_SITE = https://git.yoctoproject.org/psplash
-+PSPLASH_SITE_METHOD = git
- PSPLASH_LICENSE = GPL-2.0+
- PSPLASH_LICENSE_FILES = COPYING
- PSPLASH_AUTORECONF = YES
-diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
-index 2ef850a81f60..2882c88575d3 100644
---- a/package/rtc-tools/rtc-tools.mk
-+++ b/package/rtc-tools/rtc-tools.mk
-@@ -5,7 +5,8 @@
- ################################################################################
  
- RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
--RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
-+RTC_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
-+RTC_TOOLS_SITE_METHOD = git
- RTC_TOOLS_LICENSE = GPL-2.0
- RTC_TOOLS_LICENSE_FILES = COPYING
+ if __name__ == '__main__':
+@@ -433,10 +443,18 @@ if __name__ == '__main__':
+     parser.add_argument("--buildrootdir", "-b",
+                         help="Buildroot directory (relative to current directory)",
+                         type=str, default='.')
+-    parser.add_argument("--toolchains-csv",
+-                        help="Path of the toolchain configuration file",
+-                        type=str,
+-                        default="support/config-fragments/autobuild/toolchain-configs.csv")
++
++    toolchains_csv = parser.add_mutually_exclusive_group(required=False)
++    toolchains_csv.add_argument("--toolchains-csv",
++                                dest="toolchains_csv",
++                                help="Path of the toolchain configuration file",
++                                type=str)
++    toolchains_csv.add_argument("--no-toolchains-csv",
++                                dest="toolchains_csv",
++                                help="Generate random toolchain configuration",
++                                action='store_false')
++    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
++
+     args = parser.parse_args()
  
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index db79a796dcac..fb381d0e1048 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- RTMPDUMP_VERSION = c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
--RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
-+RTMPDUMP_SITE = https://git.ffmpeg.org/rtmpdump
-+RTMPDUMP_SITE_METHOD = git
- RTMPDUMP_INSTALL_STAGING = YES
- # Note that rtmpdump is GPL-2.0 but librtmp has its own license and since we only
- # care about librtmp, it's LGPL-2.1+
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 4b09b94bc3e3..1896437ad4c7 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SOX_VERSION = 7524160b29a476f7e87bc14fddf12d349f9a3c5e
--SOX_SITE = git://git.code.sf.net/p/sox/code
-+SOX_SITE = https://git.code.sf.net/p/sox/code
- SOX_SITE_METHOD = git
- SOX_DEPENDENCIES = host-autoconf-archive host-pkgconf
- SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 42b5f17821ad..ceac24119eb4 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- TFTPD_VERSION = b2b34cecc8cbc18ff6f1fc00bda6ae6e9011e6c7
--TFTPD_SITE = git://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
-+TFTPD_SITE = https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
-+TFTPD_SITE_METHOD = git
- TFTPD_CONF_OPTS = --without-tcpwrappers
- TFTPD_LICENSE = BSD-4-Clause
- TFTPD_LICENSE_FILES = tftpd/tftpd.c
-diff --git a/package/wilink-bt-firmware/wilink-bt-firmware.mk b/package/wilink-bt-firmware/wilink-bt-firmware.mk
-index 722c4655cd75..a5f3a826090b 100644
---- a/package/wilink-bt-firmware/wilink-bt-firmware.mk
-+++ b/package/wilink-bt-firmware/wilink-bt-firmware.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- WILINK_BT_FIRMWARE_VERSION = 43fca73c6a98c63fcb98f82af5bf83761778e005
--WILINK_BT_FIRMWARE_SITE = git://git.ti.com/ti-bt/service-packs.git
-+WILINK_BT_FIRMWARE_SITE = https://git.ti.com/git/ti-bt/service-packs.git
- WILINK_BT_FIRMWARE_SITE_METHOD = git
- WILINK_BT_FIRMWARE_LICENSE = PROPRIETARY
- WILINK_BT_FIRMWARE_LICENSE_FILES = LICENSE
+     # We need the absolute path to use with O=, because the relative
 -- 
 2.25.1
 
