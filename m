@@ -1,67 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CC10C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7ACBC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE2C283E1A;
-	Sat,  2 Apr 2022 17:20:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DC7160C24;
+	Sat,  2 Apr 2022 17:22:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N2fb-zhUafhu; Sat,  2 Apr 2022 17:20:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ls5J3ArsXdLL; Sat,  2 Apr 2022 17:22:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5AE583E15;
-	Sat,  2 Apr 2022 17:20:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B9F960BB2;
+	Sat,  2 Apr 2022 17:22:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D4ED71BF968
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:20:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8325D1BF968
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCCBA41853
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:20:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 611B2418AA
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:22:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 49L6xiksC8TM for <buildroot@lists.busybox.net>;
- Sat,  2 Apr 2022 17:20:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CA929417D6
- for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:20:17 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:bcfa:8d59:a850:4621])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id B1A52780350;
- Sat,  2 Apr 2022 19:20:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1648920014;
- bh=DKdNlRJusTnKRsQO5QPwAyVHFupIuzHPScpoKpTASfE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=vGaCc3Ohwl2187vs96W4DFVyWETeVsVxYw+lO4yDOMDx383IqB6+rLtkiURVhb6Pt
- +4VE0q2U+/zppjTzv3MS5Q/NmSnuvnN/0GLDAjtAyQnGHCwVbRJI2rdQ91creLomKd
- o1Oi/HWJdwJKqXBYjCjjlh69xwwgAJ2rc3Vtfo6VLyWA5QmDWQwKkKdZj1cbXoZQBO
- IdgXD4qZHKCsKn1VGnBj0lI3G9pSfFdvv4PgFzKwLtR2OLREb6grgJ8V8xXAwXgdnH
- gVkjTer3OnqXt6r8gWEsHoMPa0QpreQQY9ZkjkBn25LLLkpsuVvoeUI4I2L2rscE1y
- Z2lMONPTATm4A==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 02 Apr 2022 19:20:12 +0200
-Date: Sat, 2 Apr 2022 19:20:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220402172012.GB1811301@scaer>
-References: <20220402141531.1320584-1-thomas.petazzoni@bootlin.com>
- <20220402141531.1320584-4-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220402141531.1320584-4-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 4/4] support/scripts/pkg-stats: reimplement
- CPE parsing in pkg-stats
+ with ESMTP id QnaXprh0S7Kx for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 17:22:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A859541853
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:22:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id A53B2838BF; Sat,  2 Apr 2022 17:13:08 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 2 Apr 2022 19:21:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bd1798ad959a901ccf5009b0c199fa5470912cc2
+X-Git-Newrev: 6626bf7c5fc1f5f47fcade03090de212a6121db3
+X-Patchwork-Hint: ignore
+Message-Id: <20220402171308.A53B2838BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: replace git:// URLs with https://
+ URLs where possible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,165 +53,245 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6626bf7c5fc1f5f47fcade03090de212a6121db3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-04-02 16:15 +0200, Thomas Petazzoni via buildroot spake thusly:
-> pkg-stats currently uses the services from support/scripts/cpedb.py to
-> match the CPE identifiers of packages with the official CPE database.
-> 
-> Unfortunately, the cpedb.py code uses regular ElementTree parsing,
-> which involves loading the full XML tree into memory. This causes the
-> pkg-stats process to consume a huge amount of memory:
-> 
-> thomas   1310458 85.2 21.4 3708952 3450164 pts/5 R+   16:04   0:33  |   |   \_ python3 ./support/scripts/pkg-stats
-> 
-> So, 3.7 GB of VSZ and 3.4 GB of RSS are used by the pkg-stats
-> process. This is causing the OOM killer to kick-in on machines with
-> relatively low memory.
-> 
-> This commit reimplements the XML parsing needed to do the CPE matching
-> directly in pkg-stats, using the XmlParser functionality of
-> ElementTree, also called "streaming parsing". Thanks to this, we never
-> load the entire XML tree in RAM, but only stream it through the
-> parser, and construct a very simple list of all CPE identifiers. The
-> max memory consumption of pkg-stats is now:
-> 
-> thomas   1317511 74.2  0.9 381104 152224 pts/5   R+   16:08   0:17  |   |   \_ python3 ./support/scripts/pkg-stats
-> 
-> So, 381 MB of VSZ and 152 MB of RSS, which is obviously much better.
-> 
-> Now, one will probably wonder why this isn't directly changed in
-> cpedb.py. The reason is simple: cpedb.py is also used by
-> support/scripts/missing-cpe, which (for now) heavily relies on having
-> in memory the ElementTree objects, to re-generate a snippet of XML
-> that allows us to submit to NIST new CPE entries.
-> 
-> So, future work could include one of those two options:
-> 
->  (1) Re-integrate cpedb.py into missing-cpe directly, and live with
->      two different ways of processing the CPE database.
-> 
->  (2) Rewrite the missing-cpe logic to also be compatible with a
->      streaming parsing, which would allow this logic to be again
->      shared between pkg-stats and missing-cpe.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/scripts/pkg-stats | 39 +++++++++++++++++++++++++++++++++++----
->  1 file changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index ae1a9aa5e4..cc163ebb1a 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -27,12 +27,14 @@ import re
->  import subprocess
->  import json
->  import sys
-> +import time
-> +import gzip
-> +import xml.etree.ElementTree
+Replace the remaining git:// URLs with their https:// equivalents as
+this is more secure and also more palatable to corporate firewalls.
 
-You for to import requests, which is used later on.
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+[yann.morin.1998@free.fr: convert dahdi-linux too]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 3 ++-
+ package/aer-inject/aer-inject.mk                  | 3 ++-
+ package/dahdi-linux/dahdi-linux.mk                | 3 ++-
+ package/firmware-utils/firmware-utils.mk          | 3 ++-
+ package/flashbench/flashbench.mk                  | 3 ++-
+ package/mmc-utils/mmc-utils.mk                    | 3 ++-
+ package/mxsldr/mxsldr.mk                          | 3 ++-
+ package/open62541/open62541.mk                    | 2 +-
+ package/pahole/pahole.mk                          | 2 +-
+ package/psplash/psplash.mk                        | 3 ++-
+ package/rtc-tools/rtc-tools.mk                    | 3 ++-
+ package/rtmpdump/rtmpdump.mk                      | 3 ++-
+ package/sox/sox.mk                                | 2 +-
+ package/tftpd/tftpd.mk                            | 3 ++-
+ package/wilink-bt-firmware/wilink-bt-firmware.mk  | 2 +-
+ 15 files changed, 26 insertions(+), 15 deletions(-)
 
-I also fixed a bunch of flake8 issues:
-
-    support/scripts/pkg-stats:49:1: E302 expected 2 blank lines, found 1
-    support/scripts/pkg-stats:632:9: E306 expected 1 blank line before a nested definition, found 0
-    support/scripts/pkg-stats:635:9: E306 expected 1 blank line before a nested definition, found 0
-    support/scripts/pkg-stats:639:5: E303 too many blank lines (2)
-    1     E302 expected 2 blank lines, found 1
-    1     E303 too many blank lines (2)
-    2     E306 expected 1 blank line before a nested definition, found 0
-
->  brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
->  
->  sys.path.append(os.path.join(brpath, "utils"))
->  from getdeveloperlib import parse_developers  # noqa: E402
-> -from cpedb import CPEDB  # noqa: E402
->  
->  INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
->  URL_RE = re.compile(r"\s*https?://\S*\s*$")
-> @@ -42,6 +44,7 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
->  RM_API_STATUS_FOUND_BY_PATTERN = 3
->  RM_API_STATUS_NOT_FOUND = 4
->  
-> +CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
-
-Instead of duplicating it here, I changed that to import it from cpedb.
-
-Applied to master with all the aboved fixed, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  class Defconfig:
->      def __init__(self, name, path):
-> @@ -624,12 +627,40 @@ def check_package_cves(nvd_path, packages):
->  
->  
->  def check_package_cpes(nvd_path, packages):
-> -    cpedb = CPEDB(nvd_path)
-> -    cpedb.get_xml_dict()
-> +    class CpeXmlParser:
-> +        cpes = []
-> +        def start(self, tag, attrib):
-> +            if tag == "{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item":
-> +                self.cpes.append(attrib['name'])
-> +        def close(self):
-> +            return self.cpes
-> +
-> +
-> +    print("CPE: Setting up NIST dictionary")
-> +    if not os.path.exists(os.path.join(nvd_path, "cpe")):
-> +        os.makedirs(os.path.join(nvd_path, "cpe"))
-> +
-> +    cpe_dict_local = os.path.join(nvd_path, "cpe", os.path.basename(CPEDB_URL))
-> +    if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
-> +        print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
-> +        cpe_dict = requests.get(CPEDB_URL)
-> +        open(cpe_dict_local, "wb").write(cpe_dict.content)
-> +
-> +    print("CPE: Unzipping xml manifest...")
-> +    nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
-> +
-> +    parser = xml.etree.ElementTree.XMLParser(target=CpeXmlParser())
-> +    while True:
-> +        c = nist_cpe_file.read(1024*1024)
-> +        if not c:
-> +            break
-> +        parser.feed(c)
-> +    cpes = parser.close()
-> +
->      for p in packages:
->          if not p.cpeid:
->              continue
-> -        if cpedb.find(p.cpeid):
-> +        if p.cpeid in cpes:
->              p.status['cpe'] = ("ok", "verified CPE identifier")
->          else:
->              p.status['cpe'] = ("error", "CPE version unknown in CPE database")
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+index 3a1af9b02c..30b352f8e7 100644
+--- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
++++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ BOOT_WRAPPER_AARCH64_VERSION = 8d5a765251d9113c3c0f9fa14de42a9e7486fe8a
+-BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
++BOOT_WRAPPER_AARCH64_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
++BOOT_WRAPPER_AARCH64_SITE_METHOD = git
+ BOOT_WRAPPER_AARCH64_LICENSE = BSD-3-Clause
+ BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
+ BOOT_WRAPPER_AARCH64_DEPENDENCIES = linux
+diff --git a/package/aer-inject/aer-inject.mk b/package/aer-inject/aer-inject.mk
+index 72495bbea2..6bc9cb44da 100644
+--- a/package/aer-inject/aer-inject.mk
++++ b/package/aer-inject/aer-inject.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ AER_INJECT_VERSION = 9bd5e2c7886fca72f139cd8402488a2235957d41
+-AER_INJECT_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
++AER_INJECT_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
++AER_INJECT_SITE_METHOD = git
+ AER_INJECT_LICENSE = GPL-2.0
+ AER_INJECT_LICENSE_FILES = README
+ AER_INJECT_DEPENDENCIES = host-flex host-bison
+diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
+index b9d5911953..93124f0e02 100644
+--- a/package/dahdi-linux/dahdi-linux.mk
++++ b/package/dahdi-linux/dahdi-linux.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ DAHDI_LINUX_VERSION = 5c840cf43838e0690873e73409491c392333b3b8
+-DAHDI_LINUX_SITE = git://git.asterisk.org/dahdi/linux.git
++DAHDI_LINUX_SITE = https://gerrit.asterisk.org/dahdi-linux
++DAHDI_LINUX_SITE_METHOD = git
+ 
+ # We need to download all those firmware blobs ourselves, otherwise
+ # dahdi-linux will try to download them at install time.
+diff --git a/package/firmware-utils/firmware-utils.mk b/package/firmware-utils/firmware-utils.mk
+index 151a01882d..d5b079e4f5 100644
+--- a/package/firmware-utils/firmware-utils.mk
++++ b/package/firmware-utils/firmware-utils.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ FIRMWARE_UTILS_VERSION = 86739f2b3ae9502368b89ef37fa6f31c42aad6f4
+-FIRMWARE_UTILS_SITE = git://git.openwrt.org/project/firmware-utils.git
++FIRMWARE_UTILS_SITE = https://git.openwrt.org/project/firmware-utils.git
++FIRMWARE_UTILS_SITE_METHOD = git
+ FIRMWARE_UTILS_LICENSE = \
+ 	BSD-2-Clause (tplink-safeloader), \
+ 	BSD-3-Clause (seama), \
+diff --git a/package/flashbench/flashbench.mk b/package/flashbench/flashbench.mk
+index e89a250aa3..f5791c3e95 100644
+--- a/package/flashbench/flashbench.mk
++++ b/package/flashbench/flashbench.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ FLASHBENCH_VERSION = 2e30b1968a66147412f21002ea844122a0d5e2f0
+-FLASHBENCH_SITE = git://git.linaro.org/people/arnd/flashbench.git
++FLASHBENCH_SITE = https://git.linaro.org/people/arnd/flashbench.git
++FLASHBENCH_SITE_METHOD = git
+ FLASHBENCH_LICENSE = GPL-2.0
+ FLASHBENCH_LICENSE_FILES = COPYING
+ 
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 8c264a454a..c847378692 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ MMC_UTILS_VERSION = d40ec535b9d4e4c974e8c2fbfb422cd0348cc5e8
+-MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
++MMC_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
++MMC_UTILS_SITE_METHOD = git
+ MMC_UTILS_LICENSE = GPL-2.0
+ MMC_UTILS_LICENSE_FILES = mmc.h
+ 
+diff --git a/package/mxsldr/mxsldr.mk b/package/mxsldr/mxsldr.mk
+index 239b40ad29..2375b9f42b 100644
+--- a/package/mxsldr/mxsldr.mk
++++ b/package/mxsldr/mxsldr.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ MXSLDR_VERSION = 2793a657ab7a22487d21c1b020957806f8ae8383
+-MXSLDR_SITE = git://git.denx.de/mxsldr.git
++MXSLDR_SITE = https://git.denx.de/mxsldr.git
++MXSLDR_SITE_METHOD = git
+ MXSLDR_LICENSE = GPL-2.0+
+ MXSLDR_LICENSE_FILES = COPYING
+ HOST_MXSLDR_DEPENDENCIES = host-libusb host-pkgconf
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index fb28a614e2..627c29e95b 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -6,7 +6,7 @@
+ 
+ OPEN62541_VERSION = v1.2.2
+ OPEN62541_SITE_METHOD = git
+-OPEN62541_SITE = git://github.com/open62541/open62541.git
++OPEN62541_SITE = https://github.com/open62541/open62541.git
+ OPEN62541_GIT_SUBMODULES = YES
+ OPEN62541_INSTALL_STAGING = YES
+ OPEN62541_LICENSE = MPL-2.0
+diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
+index 1ad937062d..da6d67e6a2 100644
+--- a/package/pahole/pahole.mk
++++ b/package/pahole/pahole.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PAHOLE_VERSION = v1.23
+-PAHOLE_SITE = git://git.kernel.org/pub/scm/devel/pahole/pahole.git
++PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+ PAHOLE_SITE_METHOD = git
+ # pahole contains git submodule and relies on them to be built.
+ PAHOLE_GIT_SUBMODULES = YES
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index 5e61f2392f..69f9bf386d 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ PSPLASH_VERSION = 44afb7506d43cca15582b4c5b90ba5580344d75d
+-PSPLASH_SITE = git://git.yoctoproject.org/psplash
++PSPLASH_SITE = https://git.yoctoproject.org/psplash
++PSPLASH_SITE_METHOD = git
+ PSPLASH_LICENSE = GPL-2.0+
+ PSPLASH_LICENSE_FILES = COPYING
+ PSPLASH_AUTORECONF = YES
+diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
+index 2ef850a81f..2882c88575 100644
+--- a/package/rtc-tools/rtc-tools.mk
++++ b/package/rtc-tools/rtc-tools.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
+-RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
++RTC_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
++RTC_TOOLS_SITE_METHOD = git
+ RTC_TOOLS_LICENSE = GPL-2.0
+ RTC_TOOLS_LICENSE_FILES = COPYING
+ 
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index db79a796dc..fb381d0e10 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ RTMPDUMP_VERSION = c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
+-RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
++RTMPDUMP_SITE = https://git.ffmpeg.org/rtmpdump
++RTMPDUMP_SITE_METHOD = git
+ RTMPDUMP_INSTALL_STAGING = YES
+ # Note that rtmpdump is GPL-2.0 but librtmp has its own license and since we only
+ # care about librtmp, it's LGPL-2.1+
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 4b09b94bc3..1896437ad4 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SOX_VERSION = 7524160b29a476f7e87bc14fddf12d349f9a3c5e
+-SOX_SITE = git://git.code.sf.net/p/sox/code
++SOX_SITE = https://git.code.sf.net/p/sox/code
+ SOX_SITE_METHOD = git
+ SOX_DEPENDENCIES = host-autoconf-archive host-pkgconf
+ SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
+diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
+index 42b5f17821..ceac24119e 100644
+--- a/package/tftpd/tftpd.mk
++++ b/package/tftpd/tftpd.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ TFTPD_VERSION = b2b34cecc8cbc18ff6f1fc00bda6ae6e9011e6c7
+-TFTPD_SITE = git://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
++TFTPD_SITE = https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
++TFTPD_SITE_METHOD = git
+ TFTPD_CONF_OPTS = --without-tcpwrappers
+ TFTPD_LICENSE = BSD-4-Clause
+ TFTPD_LICENSE_FILES = tftpd/tftpd.c
+diff --git a/package/wilink-bt-firmware/wilink-bt-firmware.mk b/package/wilink-bt-firmware/wilink-bt-firmware.mk
+index 722c4655cd..a5f3a82609 100644
+--- a/package/wilink-bt-firmware/wilink-bt-firmware.mk
++++ b/package/wilink-bt-firmware/wilink-bt-firmware.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ WILINK_BT_FIRMWARE_VERSION = 43fca73c6a98c63fcb98f82af5bf83761778e005
+-WILINK_BT_FIRMWARE_SITE = git://git.ti.com/ti-bt/service-packs.git
++WILINK_BT_FIRMWARE_SITE = https://git.ti.com/git/ti-bt/service-packs.git
+ WILINK_BT_FIRMWARE_SITE_METHOD = git
+ WILINK_BT_FIRMWARE_LICENSE = PROPRIETARY
+ WILINK_BT_FIRMWARE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
