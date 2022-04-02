@@ -1,80 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1015CC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 13:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4012C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 14:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5494405D3;
-	Sat,  2 Apr 2022 13:02:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A44741853;
+	Sat,  2 Apr 2022 14:15:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gn79C4tZ2q8A; Sat,  2 Apr 2022 13:02:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vQjrZ2CtEaHJ; Sat,  2 Apr 2022 14:15:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA61640530;
-	Sat,  2 Apr 2022 13:02:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D1F911BF418
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 13:02:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2168F4184E;
+	Sat,  2 Apr 2022 14:15:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D5741BF867
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEE8B40530
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 13:02:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6931A840F3
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:15:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EfNccwff6cQ1 for <buildroot@lists.busybox.net>;
- Sat,  2 Apr 2022 13:02:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CD913401D2
- for <buildroot@buildroot.org>; Sat,  2 Apr 2022 13:02:24 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id h4so7747958wrc.13
- for <buildroot@buildroot.org>; Sat, 02 Apr 2022 06:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1BIUGkK2COsvQMzc3b0Iwx7pO2wvXDcHZnuD4S33BGg=;
- b=VzeiPHTcAmMZNJpU2wsuA03ZkrZMPkWzmz2w3OufmUvL6kJrYiuLSQR+VLQsCOPdgc
- FVyimKT1W9zFOghYkNWBTXy8iMRZBlvq/oBJjOaGhVPlO3QI6zrr+0kkJMOE2F4bIgh6
- vm2Eg1zRI8SEGpfU5G0mexkdFYJeAnesUyney64eIfHXYFyHaVmKEy3cLV7g4TZVrC0p
- ZHQkaMh11cwyuPD3J+rXSHMgiZX4CJh1kc4Vx3EWE8dvngo5kdGSks5Tou9EEtPN5vTO
- rITr30lj+0fZAD5slp0ewm43sDXojn0GiQTaMcyMJGjP6Q5+hx9fqzLD0vAJUEnzDuDs
- ambQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1BIUGkK2COsvQMzc3b0Iwx7pO2wvXDcHZnuD4S33BGg=;
- b=cO3Z6zbVxInUwjBm+75hy9UN9E3RGmW8e2s0sSGEQcnvGMBtfB4fLjtlNjHBpN2ns7
- I095CbvlHzzocEA5hMr60EDmRVNB9S+6yUS+6KJfubjjEPDw71OugkAbLvpUxFlQMGTR
- nYMt928XxEelfEOqnA/47eEYzvIEYdpX653nYyrOeCMaNGUk/47DR4hdlVUUhCMsJqiq
- 0H47Ps3tAbxyHjP7ADqooen/v3OxUockxU5XgUGwN9pPHux8mdkoohxsMTeYGNTZxnbo
- tqjBFbpgt5CHHEsSHOhPLVqON309zePldIC+4mJa8Rboyinw7qv9kNb5p4HEX6ayGLoY
- A1MA==
-X-Gm-Message-State: AOAM530Za79tmJLDf7oGOkZIUBZX/ty3wAVYTnZMioQHQ5Xoh1gbJpmU
- CPVccroGbsh6V/WsQhl5uMIcBNFrtak=
-X-Google-Smtp-Source: ABdhPJwRKo8mb3UlZbkJZfODEYAbmRQcQND9XOIOUcPp+FOOL+oTFw0nSVTQxY2bOZOZoipDH4VPDQ==
-X-Received: by 2002:adf:df8c:0:b0:203:e4f3:920 with SMTP id
- z12-20020adfdf8c000000b00203e4f30920mr11067180wrl.461.1648904542574; 
- Sat, 02 Apr 2022 06:02:22 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- i10-20020a0560001aca00b00203daf3759asm4835561wry.68.2022.04.02.06.02.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Apr 2022 06:02:22 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LHc8PAIDM_hW for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 14:15:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A49E8840EB
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 14:15:41 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id AA68D60004;
+ Sat,  2 Apr 2022 14:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1648908939;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=cbJSHaILGdOqGeG1S/OMy29h7KDLa+jkTgY8MT/JScw=;
+ b=mduxTUIieyy3okt3I/6KibfAzc23msdWdnuZbjcRjQwz7FTVaKy+lB8Jz6bvqD+aCINmYf
+ +7ljOHRzQTRPRAjpvG+hYLqXQ9BJxO9MK+nx8BcB91z4rW4z7T5PzNL+Wo+JKl43JHnIO5
+ mt2HHl4F80wFF23NhgcKzZuhz9Op1Ft89Fc7q7jt61KDJMtR+rNwOZLjclInNLgL3qqZ0b
+ w4I6QQb7y594wLOnJxo/OhnGFLfh/LNBBzqKNuVDizwnJDKvrbNJo5lNs/TbRET3A72ymm
+ +SIRnoK/mXSBm8/13XxVtbkF/QRA1xWZ1ufjtxjoJIxWreURg2z2FmTA/zgOYg==
 To: buildroot@buildroot.org
-Date: Sat,  2 Apr 2022 15:00:49 +0200
-Message-Id: <20220402130049.453518-1-fontaine.fabrice@gmail.com>
+Date: Sat,  2 Apr 2022 16:15:29 +0200
+Message-Id: <20220402141531.1320584-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220402141531.1320584-1-thomas.petazzoni@bootlin.com>
+References: <20220402141531.1320584-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libkrb5: fix BR2_SHARED_STATIC_LIBS build
+Subject: [Buildroot] [PATCH 3/4] support/scripts/pkg-stats: add a timeout on
+ HTTP requests for upstream URLs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,47 +69,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with BR2_SHARED_STATIC_LIBS raised since
-the addition of the package in commit
-7ae94b51ed5d51fb9fa3f5a931bb8435bcbfaa42 and
-https://github.com/krb5/krb5/commit/bd13166a4098198832d921b8e50b97008b714b7b
+Some upstream sites are very slow to respond, and the default timeout
+of 300 seconds of the aiohttp.ClientSession() is too long. Let's
+reduce it to 15 seconds.
 
-configure: error: --enable-static must be specified with --disable-shared
-
-Fixes:
- - http://autobuild.buildroot.org/results/dadbf9f77ffdcc4d4e48c6d7e6beb5da303a8074
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:
- - Fix patch number
+ support/scripts/pkg-stats | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/libkrb5/libkrb5.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index d14c464b39..0553e9bdb4 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -37,6 +37,11 @@ LIBKRB5_CONF_OPTS = \
- 	--without-tcl \
- 	--disable-rpath
- 
-+# Enabling static and shared at the same time is not supported
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+LIBKRB5_CONF_OPTS = --disable-static
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENLDAP),y)
- LIBKRB5_CONF_OPTS += --with-ldap
- LIBKRB5_DEPENDENCIES += openldap
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 329b30a5ee..ae1a9aa5e4 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -451,7 +451,8 @@ async def check_url_status(session, pkg, npkgs, retry=True):
+ async def check_package_urls(packages):
+     tasks = []
+     connector = aiohttp.TCPConnector(limit_per_host=5)
+-    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
++    async with aiohttp.ClientSession(connector=connector, trust_env=True,
++                                     timeout=aiohttp.ClientTimeout(total=15)) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+             tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages))))
 -- 
 2.35.1
 
