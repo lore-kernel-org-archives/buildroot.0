@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1969BC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 14:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B346C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 14:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C75E540639;
-	Sat,  2 Apr 2022 14:42:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GvN-1dQybB43; Sat,  2 Apr 2022 14:42:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E639C408C0;
-	Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 376E81BF867
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A8C860E8B
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 129C160F61;
+	Sat,  2 Apr 2022 14:42:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ryx0rDxqORcg for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BL3VSpyoMKvc; Sat,  2 Apr 2022 14:42:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E92C60E8B;
+	Sat,  2 Apr 2022 14:42:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A4371BF968
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EFB9418AA
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hG78FJtI7RXS for <buildroot@lists.busybox.net>;
  Sat,  2 Apr 2022 14:42:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CBBC60DB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 352E8418A9
  for <buildroot@buildroot.org>; Sat,  2 Apr 2022 14:42:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 82D4185D3C; Sat,  2 Apr 2022 14:32:46 +0000 (UTC)
+ id 776A085AB3; Sat,  2 Apr 2022 14:32:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 2 Apr 2022 16:36:09 +0200
+Date: Sat, 2 Apr 2022 16:34:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1adcf5659804c17859b2799c0c3edb6b6ce68eb5
-X-Git-Newrev: 387c496b98895a3ad38d53554d45713a81d7a169
+X-Git-Oldrev: cd8a576c6d3fa65001a5d72ef9c0fae55a297c6c
+X-Git-Newrev: 1adcf5659804c17859b2799c0c3edb6b6ce68eb5
 X-Patchwork-Hint: ignore
-Message-Id: <20220402143246.82D4185D3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add a timeout
- on HTTP requests for upstream URLs
+Message-Id: <20220402143246.776A085AB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: allow disabling
+ package warnings retrieval
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=387c496b98895a3ad38d53554d45713a81d7a169
+commit: https://git.buildroot.net/buildroot/commit/?id=1adcf5659804c17859b2799c0c3edb6b6ce68eb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some upstream sites are very slow to respond, and the default timeout
-of 300 seconds of the aiohttp.ClientSession() is too long. Let's
-reduce it to 15 seconds.
+This is useful when debugging/developing the pkg-stats script.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/pkg-stats | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ support/scripts/pkg-stats | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 329b30a5ee..ae1a9aa5e4 100755
+index ef9482ed95..329b30a5ee 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -451,7 +451,8 @@ async def check_url_status(session, pkg, npkgs, retry=True):
- async def check_package_urls(packages):
-     tasks = []
-     connector = aiohttp.TCPConnector(limit_per_host=5)
--    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
-+    async with aiohttp.ClientSession(connector=connector, trust_env=True,
-+                                     timeout=aiohttp.ClientTimeout(total=15)) as sess:
-         packages = [p for p in packages if p.status['url'][0] == 'ok']
-         for pkg in packages:
-             tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages))))
+@@ -1125,7 +1125,7 @@ def parse_args():
+     parser.add_argument('--nvd-path', dest='nvd_path',
+                         help='Path to the local NVD database', type=resolvepath)
+     parser.add_argument('--disable', type=list_str,
+-                        help='Features to disable, comma-separated (cve, upstream, url, cpe)',
++                        help='Features to disable, comma-separated (cve, upstream, url, cpe, warning)',
+                         default=[])
+     args = parser.parse_args()
+     if not args.html and not args.json:
+@@ -1167,7 +1167,8 @@ def __main__():
+         pkg.set_license()
+         pkg.set_hash_info()
+         pkg.set_patch_count()
+-        pkg.set_check_package_warnings()
++        if "warnings" not in args.disable:
++            pkg.set_check_package_warnings()
+         pkg.set_current_version()
+         pkg.set_cpeid()
+         pkg.set_url()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
