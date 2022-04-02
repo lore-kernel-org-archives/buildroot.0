@@ -1,81 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9739BC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00FAAC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:17:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E744E417D6;
-	Sat,  2 Apr 2022 17:12:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82CA060BDB;
+	Sat,  2 Apr 2022 17:17:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xEqQT779hxJn; Sat,  2 Apr 2022 17:12:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC34E417FC;
-	Sat,  2 Apr 2022 17:12:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 812591BF96B
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FDC260BA1
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l4baHS6IaZzS for <buildroot@lists.busybox.net>;
- Sat,  2 Apr 2022 17:11:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 67B7D60B9F
- for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:11:57 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id q20so3470703wmq.1
- for <buildroot@buildroot.org>; Sat, 02 Apr 2022 10:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Ckc5jaOlp4DoVF7YDBXBnjq8FvJQq+PLujICyU2oLWs=;
- b=LYPgw/oQvx6eDSOipYxCjIL9FCkNhZadKoeQ4FlidDRr0HXEcQSqDlKJtctZnxYoYj
- tdxePdhz69AIvEYM2Xrae3cEeHQApB4x1X9SCu/pdVZ1JNr4OIxPJk+JCuRQGMSYR1wP
- MI9DD+XSdVadSZOrtEWc0m6wy/g5mhizR5f9JX3pqImarrW/FkZTOegUCjO9IlK9efAu
- KXNp3GDeNU/i/a6FWGzSRIJyKicz3c63S6yN7E+WoKPRgXQQupZ+3bD8xslYvIePcI6L
- etpRVuBrFSS4+BMMxqzMCV34RZGPNTKc4TZhhNwSVeg3oX9XO4CNZcCnK8JDEoukQsXB
- pZWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Ckc5jaOlp4DoVF7YDBXBnjq8FvJQq+PLujICyU2oLWs=;
- b=32VQu1J89ugzJlmTI1oRUAY2ZAgVwFCfvpISt4uZGcv5r3EWMIdGXfCxr+pci5c7PH
- f6wyfecKj58a6x9XU+nIy8lTk6dEeBDgo3e6m2qol+ytnhjQetodh3IIWSVc/glb2xnp
- BbuxdEMo0wfcaro0OyPqihYufKWBmB2e7hP9wQ8tlX0cHEW6fcryn2mYG1IgqhO/EJxj
- RDx0mClxx2H79kOfFJQeKi/M1SjPhvWHI1Nr578sQUIftlSG5MowTrUtT1uFDinAlOnL
- ncDCY78FHSMQFRterLv2ELZT5vDmvH3wkXTc1izqukmuv8Pn+eCMZXAHE/KjQ23vAQj7
- OMVQ==
-X-Gm-Message-State: AOAM532SdR6bAFBMSLkZd8TRhx3hy8R/2FdGhQ/bRHfQ7TYFZDbuDG5a
- f1DLPw2mfs4HiwK+BCz/aNjFY7Mvl8s=
-X-Google-Smtp-Source: ABdhPJwXEhnZXo9oTuNcCtgQRu8sppKStLl1Tmre7tCjIhFTJ+9OZbSXzXyCs6OUCiWI1Cmlnb56Pg==
-X-Received: by 2002:a05:600c:4fd4:b0:38c:cc3f:ac01 with SMTP id
- o20-20020a05600c4fd400b0038ccc3fac01mr13246349wmq.206.1648919515414; 
- Sat, 02 Apr 2022 10:11:55 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- m2-20020a1c2602000000b0038ca9ffac53sm4766634wmm.11.2022.04.02.10.11.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Apr 2022 10:11:54 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lg7VwYt7TWYb; Sat,  2 Apr 2022 17:17:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CF7760BA1;
+	Sat,  2 Apr 2022 17:17:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA82D1BF96B
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:17:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98C8F84044
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:17:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q2pvV9C8sz7G for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 17:17:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBF0484043
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:17:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id D493E823A2; Sat,  2 Apr 2022 17:08:13 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  2 Apr 2022 19:10:15 +0200
-Message-Id: <20220402171015.1180992-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: needs C++
+Date: Sat, 2 Apr 2022 19:14:17 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 387c496b98895a3ad38d53554d45713a81d7a169
+X-Git-Newrev: bd1798ad959a901ccf5009b0c199fa5470912cc2
+X-Patchwork-Hint: ignore
+Message-Id: <20220402170813.D493E823A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: reimplement CPE
+ parsing in pkg-stats
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,52 +53,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-wireshark needs C++ since switch to cmake-package in commit
-7cb7fb8191fc52c1e2cc8b4b15ea52fd12c30d9a:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd1798ad959a901ccf5009b0c199fa5470912cc2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CMake Error at CMakeLists.txt:32 (project):
-  No CMAKE_CXX_COMPILER could be found.
+pkg-stats currently uses the services from support/scripts/cpedb.py to
+match the CPE identifiers of packages with the official CPE database.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1ce9bc2a2330e27dfaceae682139d222feb806ae
+Unfortunately, the cpedb.py code uses regular ElementTree parsing,
+which involves loading the full XML tree into memory. This causes the
+pkg-stats process to consume a huge amount of memory:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+thomas   1310458 85.2 21.4 3708952 3450164 pts/5 R+   16:04   0:33  |   |   \_ python3 ./support/scripts/pkg-stats
+
+So, 3.7 GB of VSZ and 3.4 GB of RSS are used by the pkg-stats
+process. This is causing the OOM killer to kick-in on machines with
+relatively low memory.
+
+This commit reimplements the XML parsing needed to do the CPE matching
+directly in pkg-stats, using the XmlParser functionality of
+ElementTree, also called "streaming parsing". Thanks to this, we never
+load the entire XML tree in RAM, but only stream it through the
+parser, and construct a very simple list of all CPE identifiers. The
+max memory consumption of pkg-stats is now:
+
+thomas   1317511 74.2  0.9 381104 152224 pts/5   R+   16:08   0:17  |   |   \_ python3 ./support/scripts/pkg-stats
+
+So, 381 MB of VSZ and 152 MB of RSS, which is obviously much better.
+
+The JSON output of pkg-stats for the full package set, before and after
+this commit, is exactly identical.
+
+Now, one will probably wonder why this isn't directly changed in
+cpedb.py. The reason is simple: cpedb.py is also used by
+support/scripts/missing-cpe, which (for now) heavily relies on having
+in memory the ElementTree objects, to re-generate a snippet of XML
+that allows us to submit to NIST new CPE entries.
+
+So, future work could include one of those two options:
+
+ (1) Re-integrate cpedb.py into missing-cpe directly, and live with
+     two different ways of processing the CPE database.
+
+ (2) Rewrite the missing-cpe logic to also be compatible with a
+     streaming parsing, which would allow this logic to be again
+     shared between pkg-stats and missing-cpe.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr:
+  - add missing import of requests
+  - import CPEDB_URL from cpedb, instead of duplicating it
+  - fix flake8 errors
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wireshark/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 41 +++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 37 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index 95fc9b38f3..fdeb9da259 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_WIRESHARK
- 	depends on BR2_USE_MMU # fork(), glib2
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_LIBGCRYPT
-@@ -45,8 +46,8 @@ comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, host
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ae1a9aa5e4..f67be0063f 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -27,12 +27,16 @@ import re
+ import subprocess
+ import json
+ import sys
++import time
++import gzip
++import xml.etree.ElementTree
++import requests
  
- endif # BR2_PACKAGE_WIRESHARK
+ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
  
--comment "wireshark needs a toolchain w/ wchar, threads, dynamic library"
-+comment "wireshark needs a toolchain w/ wchar, threads, dynamic library, C++"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
--- 
-2.35.1
-
+ sys.path.append(os.path.join(brpath, "utils"))
+ from getdeveloperlib import parse_developers  # noqa: E402
+-from cpedb import CPEDB  # noqa: E402
++from cpedb import CPEDB_URL  # noqa: E402
+ 
+ INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+ URL_RE = re.compile(r"\s*https?://\S*\s*$")
+@@ -624,12 +628,41 @@ def check_package_cves(nvd_path, packages):
+ 
+ 
+ def check_package_cpes(nvd_path, packages):
+-    cpedb = CPEDB(nvd_path)
+-    cpedb.get_xml_dict()
++    class CpeXmlParser:
++        cpes = []
++
++        def start(self, tag, attrib):
++            if tag == "{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item":
++                self.cpes.append(attrib['name'])
++
++        def close(self):
++            return self.cpes
++
++    print("CPE: Setting up NIST dictionary")
++    if not os.path.exists(os.path.join(nvd_path, "cpe")):
++        os.makedirs(os.path.join(nvd_path, "cpe"))
++
++    cpe_dict_local = os.path.join(nvd_path, "cpe", os.path.basename(CPEDB_URL))
++    if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
++        print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
++        cpe_dict = requests.get(CPEDB_URL)
++        open(cpe_dict_local, "wb").write(cpe_dict.content)
++
++    print("CPE: Unzipping xml manifest...")
++    nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
++
++    parser = xml.etree.ElementTree.XMLParser(target=CpeXmlParser())
++    while True:
++        c = nist_cpe_file.read(1024*1024)
++        if not c:
++            break
++        parser.feed(c)
++    cpes = parser.close()
++
+     for p in packages:
+         if not p.cpeid:
+             continue
+-        if cpedb.find(p.cpeid):
++        if p.cpeid in cpes:
+             p.status['cpe'] = ("ok", "verified CPE identifier")
+         else:
+             p.status['cpe'] = ("error", "CPE version unknown in CPE database")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
