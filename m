@@ -4,53 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47A73C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 14:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1969BC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 14:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B645E40639;
-	Sat,  2 Apr 2022 14:40:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C75E540639;
+	Sat,  2 Apr 2022 14:42:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LLB51wyGhvGl; Sat,  2 Apr 2022 14:40:08 +0000 (UTC)
+	with ESMTP id GvN-1dQybB43; Sat,  2 Apr 2022 14:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B135B408C0;
-	Sat,  2 Apr 2022 14:40:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9CFAD1BF867
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:40:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E639C408C0;
+	Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 376E81BF867
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B8DD8403D
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:40:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A8C860E8B
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 14:42:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TQr6BFbOcR1W for <buildroot@lists.busybox.net>;
- Sat,  2 Apr 2022 14:40:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12FB884034
- for <buildroot@buildroot.org>; Sat,  2 Apr 2022 14:40:04 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout05.t-online.de (Postfix) with SMTP id 97E373BB6;
- Sat,  2 Apr 2022 16:39:25 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.188.174]) by fwd75.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1naeuS-0YvD610; Sat, 2 Apr 2022 16:39:24 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55968)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1naeuS-0002XR-5e;
- Sat, 02 Apr 2022 16:39:24 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ryx0rDxqORcg for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 14:42:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CBBC60DB2
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 14:42:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 82D4185D3C; Sat,  2 Apr 2022 14:32:46 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  2 Apr 2022 16:39:24 +0200
-Message-Id: <20220402143924.46610-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1648910364-000184BD-0ABBE388/0/0 CLEAN NORMAL
-X-TOI-MSGID: 10c9caa2-9c4f-4c99-8457-4ce4ecf0f09c
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediadriver: bump version to
- 22.3.1
+Date: Sat, 2 Apr 2022 16:36:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1adcf5659804c17859b2799c0c3edb6b6ce68eb5
+X-Git-Newrev: 387c496b98895a3ad38d53554d45713a81d7a169
+X-Patchwork-Hint: ignore
+Message-Id: <20220402143246.82D4185D3C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add a timeout
+ on HTTP requests for upstream URLs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +53,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=387c496b98895a3ad38d53554d45713a81d7a169
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Some upstream sites are very slow to respond, and the default timeout
+of 300 seconds of the aiohttp.ClientSession() is too long. Let's
+reduce it to 15 seconds.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 57499830b1..5c3d25eed8 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  89940ae2f7e5c7ec182f0d4d0ce8e149ae614876edd5bdad2b852e699a29b3f9  intel-media-22.3.0.tar.gz
-+sha256  0fdccad95a561178bd19fba69ab94be23bd4a3072e68aa18c3304c990d87d7d8  intel-media-22.3.1.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index c22aeecc77..4280f7fd29 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 22.3.0
-+INTEL_MEDIADRIVER_VERSION = 22.3.1
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
--- 
-2.30.2
-
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 329b30a5ee..ae1a9aa5e4 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -451,7 +451,8 @@ async def check_url_status(session, pkg, npkgs, retry=True):
+ async def check_package_urls(packages):
+     tasks = []
+     connector = aiohttp.TCPConnector(limit_per_host=5)
+-    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
++    async with aiohttp.ClientSession(connector=connector, trust_env=True,
++                                     timeout=aiohttp.ClientTimeout(total=15)) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+             tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages))))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
