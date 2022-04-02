@@ -1,97 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E347BC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 665D0C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  2 Apr 2022 17:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71D4840354;
-	Sat,  2 Apr 2022 17:08:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDD2E84043;
+	Sat,  2 Apr 2022 17:11:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9SdaYxp3dvEp; Sat,  2 Apr 2022 17:08:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gpbBW9LZC_mM; Sat,  2 Apr 2022 17:11:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7070640123;
-	Sat,  2 Apr 2022 17:08:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD0F48403B;
+	Sat,  2 Apr 2022 17:11:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 22B2F1BF968
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:08:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A867C1BF96B
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1289C81CA5
- for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:08:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93B668403B
+ for <buildroot@lists.busybox.net>; Sat,  2 Apr 2022 17:11:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rbB922hlqcBV for <buildroot@lists.busybox.net>;
- Sat,  2 Apr 2022 17:08:37 +0000 (UTC)
+ with ESMTP id L5jLiAYUYqMc for <buildroot@lists.busybox.net>;
+ Sat,  2 Apr 2022 17:11:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EDD1D819B8
- for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:08:36 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id u28so35255eda.12
- for <buildroot@buildroot.org>; Sat, 02 Apr 2022 10:08:36 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 528D784035
+ for <buildroot@buildroot.org>; Sat,  2 Apr 2022 17:11:39 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id r13so11908063ejd.5
+ for <buildroot@buildroot.org>; Sat, 02 Apr 2022 10:11:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=kEGjBLE+h/95M/RhWdzywMeAj39CWX0zVQwaPPFLCkc=;
- b=CzSlED9E04Vc4CtzaBpuxPGVChDT/qVLURpDJBA6KhwuqkoH5nILpbDqqfiNydN7Ul
- RJk681GW9bZ2K287+sySaIBawA5XjwJlvh/G3+SCS46XcYaq8QutujnuLYLlhWUE74zS
- XmSu/7eLTIvwGZ0cIi3b1Nv0hRlWPgzNOil7VHps+aNJn/OecTfvn+W00A15xXUGmmTY
- 9WLERpLGDHJxsWW4KjsJOoKl1utdYfZK6ZNMJtA+6HxTo7R66MWrCpWxrpRvkyO9Wosj
- PeWbIa+8UZgkdMDlqb0ifsLhdOOe4ALdUjlbn5pvV+vAEF9dmjVxfs6rsP4PfnPGuWGh
- WWqg==
+ bh=bwEU5pnRfaWhxH/KVliev10UKpSoJsVBZ4KBPK0Ax8U=;
+ b=Ws7vxVGX0V6Acbfe5mlNfq/uenXtX9DMfqCa5FNdzdg6Tc9nJ7y+QAp00WgxmczVCS
+ X5FWOTIqhOoOwp24CVcKK2DooHMFu1rG75xOSVgA84OUw+4wL3ug6auhwgzPwQ9edTjZ
+ EG+3HQKd43w/arxdTq0r1LHMGmVGzq4cmlbu1LRe8z12iL59MScA++tiAijqc5exX8v8
+ eMj12Dsi26eP2INAk1KbBXtIip6boFP/v5oi1B9D/wlTc4uaxeYZdSqO6xgizXv3ahxI
+ dbq04OkA33mMYd3pM8781gtacKeba39WBQoDy4efl3zhVDGo8TU/emNUCRVKzGuFfYe9
+ DOlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=kEGjBLE+h/95M/RhWdzywMeAj39CWX0zVQwaPPFLCkc=;
- b=ixjMFL/R5eUowaD1RqyOVieV+eD7+Uli0M03e44rrL2SeC/yZ7i5QVWPN/m/TW3KzH
- m759PA/EFQ4S1iopH3B+96VBEpydn7d7raA/cgVB7PQu/DcT1aIIu8NF6MnvGna0me4k
- 1XXNHLFFwEtF3EdzTrt+qo+umReLlJMIYrvv5Kfe8CWQbno63KT5L6AbwqFR3aGElOMX
- Z6nnQM1atV23ypoNMFOyW4bYWYxEfph9XrMU8lGlw3ac2Lk99d+Rf4FmUHxKWBeWqxPg
- Tr389OBbdIVU/M+h+RqZqvhm5QbUWSDufPoQPnOow03q4Fh+dPdNWqs0ObIVLmlUHSxs
- 8t1g==
-X-Gm-Message-State: AOAM530gSAhTYNtcrZgI+pOaAFEIyYRPqsxg64G3FHevWNIFFjghnvb1
- dZRm8RZWiWBGqaKQRxtVZmIOYA==
-X-Google-Smtp-Source: ABdhPJzLOvkuH8XqGNLHFYZct06UPN8gVkWN1q5LVeoH8ExJ9r8e5pJSCenO9QcI79K+ZduOfKxmaw==
-X-Received: by 2002:a05:6402:5186:b0:419:49af:428f with SMTP id
- q6-20020a056402518600b0041949af428fmr26164709edd.177.1648919314351; 
- Sat, 02 Apr 2022 10:08:34 -0700 (PDT)
+ bh=bwEU5pnRfaWhxH/KVliev10UKpSoJsVBZ4KBPK0Ax8U=;
+ b=Wr3bPrMBhJqy6jou6NvKZ+ykZWirZWvq9lqOROabHesCntrAlhiTBJRiGBgB0ozSac
+ U2C9hHspP8aK8N3Yz0tBOw662gxMoyhl7LeUrI9ALoQAO1eq98z3ljOA91wy7aLAwOaR
+ FEVcst89VcniiTTDO44xZDN8fgzQf6M/3bkZyGdomR7WtuCv59Q5NWnkM9qSZDFsvvau
+ zaMUCMHTgYyAP8o+0KC64GOuYVvtDQJnLQnfBHNM54da6q2oYwvQn3ugeVS3jfeumI3e
+ V6WKfcUwE5jA2vThCT3b4M14lvm1PDXiFdsp7a/FKTwwYGaUGqAQcXsd4WIzcqZZbIHC
+ cAQA==
+X-Gm-Message-State: AOAM5300AdTZ8rRbvAAy6lCkDcSQL27XEPLGu7fz7tLXkq0ULdxaO5Vc
+ ecKwsxzdLnmKdIEyCc72LrcyfQ==
+X-Google-Smtp-Source: ABdhPJy2Se1e2RalJEJp6w+YJwESRhggqSFEbVIRysb9mLS3WhM6WVjK72Ae8rwBG9fMPXQp/oHBWQ==
+X-Received: by 2002:a17:907:720d:b0:6df:c57f:e2bc with SMTP id
+ dr13-20020a170907720d00b006dfc57fe2bcmr4321803ejc.345.1648919497276; 
+ Sat, 02 Apr 2022 10:11:37 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:68f9:c8ef:77ab:7425?
  (ptr-9fplejof7ird5pjql2d.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:68f9:c8ef:77ab:7425])
  by smtp.gmail.com with ESMTPSA id
- n24-20020a17090673d800b006df8ec24712sm2314857ejl.215.2022.04.02.10.08.33
+ e19-20020a056402105300b004162d0b4cbbsm2643072edu.93.2022.04.02.10.11.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 02 Apr 2022 10:08:33 -0700 (PDT)
-Message-ID: <7bcc0cf7-5759-1ef4-9667-fd8ae0c4741f@mind.be>
-Date: Sat, 2 Apr 2022 19:08:32 +0200
+ Sat, 02 Apr 2022 10:11:36 -0700 (PDT)
+Message-ID: <4ac4b8c5-875c-5559-7042-d7a87b42aa60@mind.be>
+Date: Sat, 2 Apr 2022 19:11:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Content-Language: en-GB
-To: David Laight <David.Laight@ACULAB.COM>,
- "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
- James Hilliard <james.hilliard1@gmail.com>
-References: <20220327202415.1248312-1-Jason@zx2c4.com>
- <20220329050401.110856-1-Jason@zx2c4.com> <871qyj8kpk.fsf@dell.be.48ers.dk>
- <CAHmME9oRxF66kB9U93zTXC9EQq4xYTABPrZ9y2dPfhReAZdTpQ@mail.gmail.com>
- <CADvTj4obQf+p-bES_5NLK85D=TbjqFhVyxNgNTmWtHzY+nAkcQ@mail.gmail.com>
- <CAHmME9rNbxonoOXNV5FQh+AsUbYA4psgZYLUFJm4aZh1ERe9hQ@mail.gmail.com>
- <f16f09468ba64eb0bb9d985304daecb4@AcuMS.aculab.com>
+To: James Hilliard <james.hilliard1@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>
+References: <20220322232224.2842266-1-james.hilliard1@gmail.com>
+ <20220322232224.2842266-6-james.hilliard1@gmail.com>
+ <c3610252-b676-f44f-a900-7ec8e9c6cb23@gmail.com>
+ <CADvTj4pDYNkEmgxq=Zc4b+gRNeEoPMAhHu8zetRUNs5=dsrkCA@mail.gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <f16f09468ba64eb0bb9d985304daecb4@AcuMS.aculab.com>
-Subject: Re: [Buildroot] [PATCH v3] package/urandom-scripts: actually credit
- seed files via seedrng
+In-Reply-To: <CADvTj4pDYNkEmgxq=Zc4b+gRNeEoPMAhHu8zetRUNs5=dsrkCA@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH v12 06/11] package/libclc: bump version to
+ 13.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,8 +98,13 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Matt Weber <matthew.weber@rockwellcollins.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>, Matt Weber <matthew.weber@collins.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -112,81 +112,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/04/2022 13:34, David Laight wrote:
-> From: Jason A. Donenfeld
->> Sent: 01 April 2022 12:05
+On 31/03/2022 23:38, James Hilliard wrote:
+> On Thu, Mar 31, 2022 at 2:50 PM Romain Naour <romain.naour@gmail.com> wrote:
 >>
->> On 4/1/22, James Hilliard <james.hilliard1@gmail.com> wrote:
->>> I should add that I do also think this should be upstreamed to busybox,
->>> which
->>> will also reduce the amount of duplicate work as busybox is commonly used
->>> across many distros.
+>> Hi James,
 >>
->> I'll work on that.
-
-  +1 to have it in busybox.
-
->> And hopefully David won't sabotage it with his
->> "it's only 10 lines!" stuff.
+[snip]
+>> Ideally, llvm/clang should be updated to 13.0.1 first (or to the latest version
+>> if possible).
 > 
-> :-)
-> 
-> Busybox tends to care about code size.
+> There were some issues with lld in anything newer than 11.1.0, see:
+> https://lore.kernel.org/buildroot/20220131015937.4113728-1-james.hilliard1@gmail.com/
+> https://bugs.llvm.org/show_bug.cgi?id=49228
 
-  Yes, but if it's not overly bloated, it's not going to be blocker for initial 
-inclusion.
-
-> You really want to roll-up the unrolled loop in blakes2.
-> Performance really doesn't matter here.
-
-  AFAIU (but neither the commit message nor the seedrng about page explain it) 
-the Blake2 algorithm was simply chosen because it's small. Any hash function 
-should be fine. There's sha1, sha2 and sha3 in libbb, so I guess one of them 
-should have all the desired properties.
-
-> In any case, don't new kernels just 'stir' the new entropy into
-> input pool?
-> So feeding in non-random data doesn't really make the output
-> any worse?
-> So you could add the saved entropy, force a reseed of the output
-> generator, and then save data from /dev/urandom - which now
-> contains any entropy collected since boot and the saved seed.
-> No need for any cryprographic code in userspace??
-
-  This is explained in commit f0986de551f46e72268857fd817986e9be697cd0.
-TL;DR: the kernel actually does make the output worse if there's not much 
-entropy available.
-
-  Also, seedrng makes sure that it's powerfail safe. If power is interrupted at 
-any point in time, we have not lost entropy.
+  To me that looks trivial to solve: we need to package libunwind (call it 
+llvm-libunwind because we already have a libunwind package) and make lld depend 
+on it. The CMakeLists.txt adds an include path that doesn't exist, but I think 
+that will get silently ignored.
 
   Regards,
   Arnout
 
-
-> The old kernel code is just too horrid to think about.
-> IIRC the output generator is just and xor of several LFSR
-> and so is completely and trivially reversable.
-> (One of the random number generators did that.)
-> And the input pool tries to count bits in and out instead
-> of 'stirring' input data into some data structure.
-> So feed it non-random data and it discards the old random
-> data it had.
 > 
-> How much state does the blakes2 input pool have?
-> I'd have thought you'd want the input pool to have
-> much more state than the output generator?
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> So I held off on going beyond 11.1.0 for now due to that.
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
