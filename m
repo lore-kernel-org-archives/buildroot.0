@@ -1,88 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 249EBC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 02:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A13CC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 07:30:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9310F60AF6;
-	Sun,  3 Apr 2022 02:33:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A488783E3B;
+	Sun,  3 Apr 2022 07:30:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jSj4S0auvxrI; Sun,  3 Apr 2022 07:30:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB0BE83E05;
+	Sun,  3 Apr 2022 07:30:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 249751BF5A3
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 07:30:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2142360AC2
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 07:30:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sbEYtFJglIY3; Sun,  3 Apr 2022 02:33:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AACE260A70;
-	Sun,  3 Apr 2022 02:33:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C82FC1BF38A
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 02:33:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B3AB3817A8
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 02:33:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S7N32TF4ZWPa for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 02:33:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CB38A81759
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 02:33:42 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id a16so5503212plh.13
- for <buildroot@buildroot.org>; Sat, 02 Apr 2022 19:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=7iyD+yT7IgiN1uL8hE0GaRnVTz5bUJCaVR+1FxUlYD8=;
- b=hTDi26phsUknmA6JHhek1pD7bECOIkYRMOIMdZm1Cub9r6CKo8k4mRHQ9jqrlZNUC2
- DR89CwZEKWmhia9A2OIutjV/4YeuaSmQk0vl4XOXrhA6kS5dDSEW/mXSP1K0gijlkOxl
- 992fY6L/jLfXWk9xHuLytNZZctYejLJ2cKclJR5e479jC3mRacjJ1T0bs3EXQwOkPqDJ
- qZqiin4Cvdg5ZQvZvwRwjEqN1NzWeB7yslRKp9vPWfN9+bHFrM4YTzMIfbOsN18PVz3G
- Zkcya3fZQn/ptSIvWYuO0Dr3CwnZB+rbxhgUsBUgIdWkmpKIBw53Lk6cP1mUJUl1D9mM
- 6gLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=7iyD+yT7IgiN1uL8hE0GaRnVTz5bUJCaVR+1FxUlYD8=;
- b=1tFwRjMnBpEuIXYIx+t9571fmI905y/M5M1Ysqm2TwJY75acfe8sXkjCq8QhdNHTnQ
- THA0qMSJkYqAQmzIgcArDP4AioUVSsp/h06iwyECfoBCyONmaXecCbjmcLHAxVmL+x0K
- wZCQPOV4crqC9YKS9aX38wV5xrYzyHAdAeX2C8Vt2SCGbZHkL/jsBHhU0jL1r4VtNhKV
- ybXEUvuGi1WOMb9LTZB4U3Yiaku6m4vTgri9gMTCOv+dfddrhqPcB2kxr0HdiEBOnXvO
- x1oQuvXjqe5XEx+dQryLkzjv0EZv9+nl0aSzz8L8sN0ZQfD3tYMBHUmHEd3UHvXWDc5N
- 5AAg==
-X-Gm-Message-State: AOAM530KRuwCN0cs/rMCVLhbiNnyKlW7NXt262rmeAxVrCipMT8ryCWL
- SBXOYEZFhKVP/tikPI0F44XQYiyd/00=
-X-Google-Smtp-Source: ABdhPJxubuzj5rWsgfEwtwEHEv2YTiEIKrFYRzAXdIHh21vj1z3oxlaRnrBYv86RHyUB1JJqAzTI6A==
-X-Received: by 2002:a17:902:cf0d:b0:156:1cc:f08f with SMTP id
- i13-20020a170902cf0d00b0015601ccf08fmr17320371plg.42.1648953221811; 
- Sat, 02 Apr 2022 19:33:41 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:b937:33fe:a431:1d72?
- ([2600:8802:b00:4a48:b937:33fe:a431:1d72])
- by smtp.gmail.com with ESMTPSA id
- x38-20020a056a0018a600b004fafd05ac3fsm7742063pfh.37.2022.04.02.19.33.40
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 02 Apr 2022 19:33:41 -0700 (PDT)
-Message-ID: <761200bc-18e1-e94f-ae2b-cc874ebbb857@gmail.com>
-Date: Sat, 2 Apr 2022 19:33:39 -0700
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DkbwqBtd41jy for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 07:30:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from eu-smtp-delivery-151.mimecast.com
+ (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DFB9060A87
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 07:30:28 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-241-glwBTEN9Osap53v6il0XZA-1; Sun, 03 Apr 2022 08:30:25 +0100
+X-MC-Unique: glwBTEN9Osap53v6il0XZA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Sun, 3 Apr 2022 08:30:23 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Sun, 3 Apr 2022 08:30:23 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Arnout Vandecappelle' <arnout@mind.be>, "'Jason A. Donenfeld'"
+ <Jason@zx2c4.com>, James Hilliard <james.hilliard1@gmail.com>
+Thread-Topic: [Buildroot] [PATCH v3] package/urandom-scripts: actually credit
+ seed files via seedrng
+Thread-Index: AQHYRbhKzS72cv7q9kGHCbtoXkDsoaza6TGggAHjKgCAAPdlkA==
+Date: Sun, 3 Apr 2022 07:30:23 +0000
+Message-ID: <2d5e8287df984f16b4b90e8a2921d399@AcuMS.aculab.com>
+References: <20220327202415.1248312-1-Jason@zx2c4.com>
+ <20220329050401.110856-1-Jason@zx2c4.com> <871qyj8kpk.fsf@dell.be.48ers.dk>
+ <CAHmME9oRxF66kB9U93zTXC9EQq4xYTABPrZ9y2dPfhReAZdTpQ@mail.gmail.com>
+ <CADvTj4obQf+p-bES_5NLK85D=TbjqFhVyxNgNTmWtHzY+nAkcQ@mail.gmail.com>
+ <CAHmME9rNbxonoOXNV5FQh+AsUbYA4psgZYLUFJm4aZh1ERe9hQ@mail.gmail.com>
+ <f16f09468ba64eb0bb9d985304daecb4@AcuMS.aculab.com>
+ <7bcc0cf7-5759-1ef4-9667-fd8ae0c4741f@mind.be>
+In-Reply-To: <7bcc0cf7-5759-1ef4-9667-fd8ae0c4741f@mind.be>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+Authentication-Results: relay.mimecast.com;
+ auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-References: <20220322222106.42347-1-f.fainelli@gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220322222106.42347-1-f.fainelli@gmail.com>
-Subject: Re: [Buildroot] [PATCH 0/2] External GCC12 toolchain support
+Subject: Re: [Buildroot] [PATCH v3] package/urandom-scripts: actually credit
+ seed files via seedrng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,35 +83,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: opendmb@gmail.com, mmayer@broadcom.com
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
-
-On 3/22/2022 3:21 PM, Florian Fainelli wrote:
-> This patch series allows us to use Linaro's GCC12 snapshot that can be
-> downloaded from here:
+From: Arnout Vandecappelle
+> Sent: 02 April 2022 18:09
+...
+> > Busybox tends to care about code size.
 > 
-> https://snapshots.linaro.org/gnu-toolchain/12.0-2021.10-1/aarch64-linux-gnu/
-
-Should I be resending this?
-
+>   Yes, but if it's not overly bloated, it's not going to be blocker for initial
+> inclusion.
 > 
-> Florian Fainelli (2):
->    toolchain/Config.in: add BR2_TOOLCHAIN_GCC_AT_LEAST_12 blind option
->    toolchain/toolchain-external/toolchain-external-custom: add gcc 12
->      version selection
+> > You really want to roll-up the unrolled loop in blakes2.
+> > Performance really doesn't matter here.
 > 
->   toolchain/Config.in                                   | 11 +++++++++--
->   .../toolchain-external-custom/Config.in.options       |  4 ++++
->   2 files changed, 13 insertions(+), 2 deletions(-)
-> 
+>   AFAIU (but neither the commit message nor the seedrng about page explain it)
+> the Blake2 algorithm was simply chosen because it's small. Any hash function
+> should be fine. There's sha1, sha2 and sha3 in libbb, so I guess one of them
+> should have all the desired properties.
 
--- 
-Florian
+The unrolled blakes2 is typically 5kb of object code.
+The unrolled code is better for large buffers,
+but just fetching the code to the I-cache will
+significantly affect performance for small buffers.
+I really ought to sit and measure the cutoff.
+
+The code is:
++#define G(r, i, a, b, c, d) do { \
++	a += b + m[blake2s_sigma[r][2 * i + 0]]; \
++	d = ror32(d ^ a, 16); \
++	c += d; \
++	b = ror32(b ^ c, 12); \
++	a += b + m[blake2s_sigma[r][2 * i + 1]]; \
++	d = ror32(d ^ a, 8); \
++	c += d; \
++	b = ror32(b ^ c, 7); \
++} while (0)
++
++#define ROUND(r) do { \
++	G(r, 0, v[0], v[ 4], v[ 8], v[12]); \
++	G(r, 1, v[1], v[ 5], v[ 9], v[13]); \
++	G(r, 2, v[2], v[ 6], v[10], v[14]); \
++	G(r, 3, v[3], v[ 7], v[11], v[15]); \
++	G(r, 4, v[0], v[ 5], v[10], v[15]); \
++	G(r, 5, v[1], v[ 6], v[11], v[12]); \
++	G(r, 6, v[2], v[ 7], v[ 8], v[13]); \
++	G(r, 7, v[3], v[ 4], v[ 9], v[14]); \
++} while (0)
++		ROUND(0);
++		ROUND(1);
++		ROUND(2);
++		ROUND(3);
++		ROUND(4);
++		ROUND(5);
++		ROUND(6);
++		ROUND(7);
++		ROUND(8);
++		ROUND(9);
++
++#undef G
++#undef ROUND
+
+Now G() is a 14 instruction register dependency chain.
+But since each batch of 4 G() is independent the compiler can
+interleave them - significant on modern cpu.
+
+OTOH the 10 ROUND() just advance through blake2s_sigma[].
+Unrolling these that is probably not that significant.
+Especially if the compiler manages to increment the pointer.
+While modern gcc manage to optimise the array away completely
+the code isn't constrained by memory accesses so loading
+from an actual array won't make much difference.
+On some architectures the constants either take multiple
+instructions to load, or load from memory anyway.
+But these bloat that code block by a factor of 10.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
