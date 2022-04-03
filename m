@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3346AC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 11:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE3B0C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 11:07:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B9A9408F2;
-	Sun,  3 Apr 2022 11:07:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E3A9833CA;
+	Sun,  3 Apr 2022 11:07:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xdm_pGId_rbu; Sun,  3 Apr 2022 11:07:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ioMbT9D8WpaI; Sun,  3 Apr 2022 11:07:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80C4C408DA;
-	Sun,  3 Apr 2022 11:07:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE5951BF4E3
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 11:06:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A431832EB;
+	Sun,  3 Apr 2022 11:07:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 866191BF4E3
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 11:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D5DF607C9
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 11:06:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 755B24030B
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 11:06:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UGgB4s6sc_1d for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 11:06:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NSa4qbb5tjo6 for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 11:06:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B82A3607A4
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 11:06:46 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id m30so10432032wrb.1
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 04:06:46 -0700 (PDT)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D164E402AD
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 11:06:47 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id w4so10350395wrg.12
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 04:06:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=1XSY5cIm2OCGVs58/uxl4BmiiaiU+sthe3SDI3LZxaU=;
- b=Qj+tHF0DsYqGoalU1rThKNIMCBrr0DWhvmLcxn8LWmKDSkIDQNgLwPz+1CDWJc70fj
- RCM/bK8xPv2c18TTzAF+y56H5NuKf8BrFSFtBddy36fLxQgqlgw/xfMLCiWpdAUYPdIe
- nDCzH8qNiE4ohGKltNBkDYODagX+0jH6uD6plU6BQWzvUnL3n7vL957hTRtywMonTJb6
- EcVBRRWmAq8SVuHep9m8ahYAumsN/Cpcnd2D1TQ7vcfzZMbXgNb2BqyOLCj/nlPrKESc
- mObV5faWorFoJsFlRpdqP7hmSaov/pw0/0WDdq0PivavXxWMRVKFqVV2YHtp9syN1Uaa
- cK2w==
+ bh=A9yMbNO6gC5xDUh0sDvBXVnCNv08+nygv9NOT0fyEr4=;
+ b=n57bFzoeQXskQWejUvFc23QE3IgvXdVEqFTf3Xn6Kyy+fHggWjiNwS73kVJoI0VUgG
+ 6aYnYSU+67NLZ0TEudD8Y7C6Orb8HOTc8/sdbASemXtJjr8d7Ui74eawU9Ahw1rzmOim
+ j5JfibykKT4Vg1MNAMdhJXCvvaLd7hi3uLOTT0CdooA9vggsA6QOZpR/6VGbG6khssYh
+ /cfIHD+586+xHem9eZpesSzam6dCWLFoA6OgxTtWzLZSS6MO+msP3STzGvg5fy12MS5Y
+ C7Cq0r7DOtDJKJX2OM4o+tyeulU77OUPGy2Vk5PAqsh/RMzkdBLWz+wF38gJCfyI3OjX
+ /WRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=1XSY5cIm2OCGVs58/uxl4BmiiaiU+sthe3SDI3LZxaU=;
- b=4Bl+KjD6TOvvVTA4d3Kv73ZciQEcEGczz3Ymebkw8N4CmF78PRQvv9BrZ94xSU+yQr
- v6wXGxhZ/PL1pq3yg4hwmBeWmt99YdYUV8dKA+Z09AYw3wyqsLCQqik4hbvB3P9T929r
- bytsbRxhqBZQ1T3LQIuEkGmZQBJpes+ExB00t2YP+0096Y09gT2XKml1AweOYZIuhVKr
- 8qcLyBxzBJTu5uv14l67QEERb3CoGtUKLkijDi10abzlVoioFFV1TelSd5Cfm5/4FNLa
- YoC5eFsfB0OJuQ4PIFYh1hB8l0CnLNRhjaJuoAgH7sWo8vLGnANnC7LSY4CrWI5Va5Fh
- wi4w==
-X-Gm-Message-State: AOAM532toyEV66iHDrV7tBz/Ou9TxbGS3gfxyuvvfKzqJ2fkVZK4oQ25
- KBsX8rGTZ2dSQNr85TmW1lGhZLaHpmc=
-X-Google-Smtp-Source: ABdhPJx3MgRmO3kZPwQP5mbK8IVUAovJldEtku11solo29ex+eVEh8yqcX0poKByoZMksOuYO2Vv2g==
-X-Received: by 2002:a5d:55cf:0:b0:203:ee46:1c5 with SMTP id
- i15-20020a5d55cf000000b00203ee4601c5mr13352237wrw.370.1648984004582; 
- Sun, 03 Apr 2022 04:06:44 -0700 (PDT)
+ bh=A9yMbNO6gC5xDUh0sDvBXVnCNv08+nygv9NOT0fyEr4=;
+ b=RSulZHmAxK+edFWmQ5lTvbVjqJFOx729ETbnmemfjUpMkbIjJizukenvWcxU5ckfl5
+ W+7pXH7OSSomfbmBFQVvHcdCWCixGmaWHDwmT6RGKdYjyJTyqKz5xpWOiI8Sacu5/arE
+ nq7HHsnYsDrs2LgFCSZj52G0aioHbjWcZqB0EaaVtA5sZgdN0iKJ9d9wUi2YhfXLOUzD
+ 8BXg4Bh0CtKsTNjHE97fPBHCLt7/5vPiLvYeeu8ldwT+ayjtQdF92r3uDLgZ8K0/6vxV
+ QK+ocg1FhrRqfTUsTWTu4XPdfgCwpVWJRHZwfJTw1agH9eMyp4p5+PM06AOvJO9mZeBQ
+ Up8w==
+X-Gm-Message-State: AOAM530Lth8Ylr8U/6LhqlWKmEOby/0HfaigwF5EaKckgSRL98alI23P
+ nxgqTksyfx8rwJ1c19/uY7JEr7otx08=
+X-Google-Smtp-Source: ABdhPJwTZlonXLG3Bjb5RJ/N+2lLH67m7QepxjGKP6j7aUKBqSMKp1KS1KVeUQSD19Ht4OxpMFktTQ==
+X-Received: by 2002:adf:e0ce:0:b0:1ef:706d:d6b9 with SMTP id
+ m14-20020adfe0ce000000b001ef706dd6b9mr14115580wri.71.1648984005824; 
+ Sun, 03 Apr 2022 04:06:45 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- n18-20020a5d6612000000b00203fbd39059sm6548259wru.42.2022.04.03.04.06.44
+ n18-20020a5d6612000000b00203fbd39059sm6548259wru.42.2022.04.03.04.06.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Apr 2022 04:06:44 -0700 (PDT)
+ Sun, 03 Apr 2022 04:06:45 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  3 Apr 2022 13:04:54 +0200
-Message-Id: <20220403110455.2875846-2-fontaine.fabrice@gmail.com>
+Date: Sun,  3 Apr 2022 13:04:55 +0200
+Message-Id: <20220403110455.2875846-3-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220403110455.2875846-1-fontaine.fabrice@gmail.com>
 References: <20220403110455.2875846-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] package/htop: use official tarball
+Subject: [Buildroot] [PATCH 3/3] package/htop: fix hwloc static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,37 +95,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following static build failure with hwloc raised since commit
+c83bf9720632bcd4d438094a9fc30feff69fc555:
+
+checking for hwloc_get_proc_cpubind in -lhwloc... no
+configure: error: can not find required library libhwloc
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5d815ec08c580005a863df6ac9ac29deff7d4128
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/htop/htop.hash | 4 +++-
- package/htop/htop.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ...igure.ac-fix-static-build-with-hwloc.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/htop/0001-configure.ac-fix-static-build-with-hwloc.patch
 
-diff --git a/package/htop/htop.hash b/package/htop/htop.hash
-index dffe5ca1ad..d7c39be4d0 100644
---- a/package/htop/htop.hash
-+++ b/package/htop/htop.hash
-@@ -1,3 +1,5 @@
-+# From https://github.com/htop-dev/htop/releases/download/3.1.2/htop-3.1.2.tar.xz.sha256
-+sha256  884bce5b58cb113127860b9e368609019e92416a81550fdf0752052f3a64b388  htop-3.1.2.tar.xz
+diff --git a/package/htop/0001-configure.ac-fix-static-build-with-hwloc.patch b/package/htop/0001-configure.ac-fix-static-build-with-hwloc.patch
+new file mode 100644
+index 0000000000..0ac79766c5
+--- /dev/null
++++ b/package/htop/0001-configure.ac-fix-static-build-with-hwloc.patch
+@@ -0,0 +1,54 @@
++From 4ccad4604586c921b4ad831b254496c2cdece9fc Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 2 Apr 2022 17:27:01 +0200
++Subject: [PATCH] configure.ac: fix static build with hwloc
 +
- # Locally calculated
--sha256  fe9559637c8f21f5fd531a4c072048a404173806acbdad1359c6b82fd87aa001  htop-3.1.2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 210518da2f..1e7b171a17 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- HTOP_VERSION = 3.1.2
--HTOP_SITE = $(call github,htop-dev,htop,$(HTOP_VERSION))
-+HTOP_SOURCE = htop-$(HTOP_VERSION).tar.xz
-+HTOP_SITE = https://github.com/htop-dev/htop/releases/download/$(HTOP_VERSION)
- HTOP_DEPENDENCIES = ncurses
- HTOP_AUTORECONF = YES
- # Prevent htop build system from searching the host paths
++Retrieve hwloc dependencies through pkg-config to avoid the following
++static build failure:
++
++checking for hwloc_get_proc_cpubind in -lhwloc... no
++configure: error: can not find required library libhwloc
++
++This build failure is raised because without pkg-config, hwloc
++dependencies such as libxml2 are not retrieved:
++
++configure:8999: checking for hwloc_get_proc_cpubind in -lhwloc
++configure:9022: /home/autobuild/autobuild/instance-0/output-1/host/bin/powerpc-buildroot-linux-uclibc-gcc -o conftest -D_GNU_SOURCE -I/home/autobuild/autobuild/instance-0/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Og -g0  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lhwloc  -llzma -L/home/autobuild/autobuild/instance-0/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../usr/lib -lncurses -lm   >&5
++/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-0/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../usr/lib/libhwloc.a(topology-xml-libxml.o): in function `hwloc_libxml_free_buffer':
++topology-xml-libxml.c:(.text+0x6a): undefined reference to `xmlFree'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5d815ec08c580005a863df6ac9ac29deff7d4128
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/htop-dev/htop/commit/4ccad4604586c921b4ad831b254496c2cdece9fc]
++---
++ configure.ac | 14 ++++++++++++--
++ 1 file changed, 12 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 4ecac1ecf..6bb7eb69f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -456,8 +456,18 @@ case "$enable_hwloc" in
++    no)
++       ;;
++    yes)
++-      AC_CHECK_LIB([hwloc], [hwloc_get_proc_cpubind], [], [AC_MSG_ERROR([can not find required library libhwloc])])
++-      AC_CHECK_HEADERS([hwloc.h], [], [AC_MSG_ERROR([can not find require header file hwloc.h])])
+++      m4_ifdef([PKG_PROG_PKG_CONFIG], [
+++         PKG_PROG_PKG_CONFIG()
+++         PKG_CHECK_MODULES(HWLOC, hwloc, [
+++               CFLAGS="$CFLAGS $HWLOC_CFLAGS" LIBS="$LIBS $HWLOC_LIBS"
+++            ], [
+++               AC_CHECK_LIB([hwloc], [hwloc_get_proc_cpubind], [], [AC_MSG_ERROR([can not find required library libhwloc])])
+++               AC_CHECK_HEADERS([hwloc.h], [], [AC_MSG_ERROR([can not find require header file hwloc.h])])
+++            ])
+++         ], [
+++            AC_CHECK_LIB([hwloc], [hwloc_get_proc_cpubind], [], [AC_MSG_ERROR([can not find required library libhwloc])])
+++            AC_CHECK_HEADERS([hwloc.h], [], [AC_MSG_ERROR([can not find require header file hwloc.h])])
+++         ])
++       ;;
++    *)
++       AC_MSG_ERROR([bad value '$enable_hwloc' for --enable-hwloc])
 -- 
 2.35.1
 
