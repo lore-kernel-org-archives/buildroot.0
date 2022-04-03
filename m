@@ -4,74 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AED0C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 19:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 238A6C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 19:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49D1560E82;
-	Sun,  3 Apr 2022 19:14:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF4F5607A4;
+	Sun,  3 Apr 2022 19:19:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kd-aLCcdcVBT; Sun,  3 Apr 2022 19:14:11 +0000 (UTC)
+	with ESMTP id qJ0UQRD5yzq3; Sun,  3 Apr 2022 19:19:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6355060E37;
-	Sun,  3 Apr 2022 19:14:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB5060773;
+	Sun,  3 Apr 2022 19:19:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C642B1BF36B
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 19:14:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C7E5E1BF36B
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 19:19:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B3AE44048B
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 19:14:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B63764016D
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 19:19:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bjDB9FpT1pnO for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 19:14:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com
- [IPv6:2607:f8b0:4864:20::b33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1922640236
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 19:14:08 +0000 (UTC)
-Received: by mail-yb1-xb33.google.com with SMTP id z33so9553494ybh.5
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 12:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=zdo0CQH98g3fLypMXDaaFCkZTHLIOfroS4B8wcLC3VI=;
- b=VFQsr1pmwXHss5XJ3ujS7xNj88xxSdF2Kr8XvX2tW7n2lbU6+w6aI44PF25xh5qypb
- 79t4/7P0nLT5QRsCMd4v2wcdMHLvk/PMrG+GuiQBM0wI503TiPIN5gw8DO6PfaKJRGuv
- eCMs6Xf+VaiDDwxjKH/ZK6TEo/CSp1dwsIHSmH9WYuPlRef9FZ9xh9fyNnnXWbBtIqND
- NiJ2aTdyegwsovJ5lIsPr7ZO6eWfTtwj5VTIryqg3vU8FIXrhGCnP4XuLL0vUkDdgEKX
- uCrRccQT6IeEHT7vazCp4kJaLKfXXOOmUbmdksMI+7bLmVO61+89zPBoEh9htEd4PG9V
- mBnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=zdo0CQH98g3fLypMXDaaFCkZTHLIOfroS4B8wcLC3VI=;
- b=ZN3XjvuhVVVFOKRQdGRZm1VnBfqRojKW3L7tVYy/oxIWhMUj+MaAb+I9caDqW1mUHT
- 4QgnCeX6zIMwER2qabFKk9Od/fip/QNZrs1kGPJevsi7QSlmRjY/H20evsnAPsUXkbdA
- +/J5DBq8BRqTVqqaSpuydptmKt3D6fGYk+wKTdJBfQ383C2l2NhNb2CmJ14V+/fblGti
- CWyaiLSJDd+a0NaCdWebaDCwynfVvcUFgDUEznDT69fIq8a/XwsZr8NX1lg6HtduU4cE
- XpwPBZTH4GJVMXUU2v0bfyYtyw3EbtWz/2BkeBLr3RiIWMiXRi7JKp8lHp179qnQfln4
- 7zVA==
-X-Gm-Message-State: AOAM533FTAgMooZ4HrEN1G7MBTuGBDnBv/HODZHY8urTbhe+UlfoxsUm
- YFOS3r0FEHSGpxC4BXsO4ug8x1vSNoKBtBYKkCc=
-X-Google-Smtp-Source: ABdhPJyZNq1xrAvipGFgdW5r8kiEyOhvCVa/gyR4an+O0jIhyB2zLUT1YsJ8Az2YV0nTqAsUWb36vOIWiCLooMQeszw=
-X-Received: by 2002:a25:bc6:0:b0:633:b8aa:dc48 with SMTP id
- 189-20020a250bc6000000b00633b8aadc48mr17913906ybl.587.1649013246875; Sun, 03
- Apr 2022 12:14:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220330224521.4142504-1-james.hilliard1@gmail.com>
- <20220403083318.GE1811301@scaer>
-In-Reply-To: <20220403083318.GE1811301@scaer>
-From: Emile Cormier <emile.cormier.jr@gmail.com>
-Date: Sun, 3 Apr 2022 16:13:56 -0300
-Message-ID: <CAM70yxA=P=JGW0vay=FiOLwvBduyZJzLmu7B-FY1CT9Zj9AqpQ@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/pkg-python.mk: fix PEP517
- paths
+ with ESMTP id W8C5U0mwTW1Q for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 19:19:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA72C40137
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 19:19:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 5847A860CA; Sun,  3 Apr 2022 19:09:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 3 Apr 2022 21:17:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 158b062a42c393e9084bde9691f663ee0ef59b18
+X-Git-Newrev: 342631bed10f987351a83c9378c94447584a1515
+X-Patchwork-Hint: ignore
+Message-Id: <20220403190943.5847A860CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openocd: Allow to build BCM2835 on
+ aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,58 +53,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============7530666911810199912=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7530666911810199912==
-Content-Type: multipart/alternative; boundary="000000000000cf5c8505dbc4d0e5"
+commit: https://git.buildroot.net/buildroot/commit/?id=342631bed10f987351a83c9378c94447584a1515
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---000000000000cf5c8505dbc4d0e5
-Content-Type: text/plain; charset="UTF-8"
+Allow to build the BCM2835 bitbang interface on aarch64.
 
-On Sun, Apr 3, 2022 at 5:33 AM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/openocd/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> Applied to master, thanks.
->
-> Regards,
-> Yann E. MORIN.
->
-
-I confirm that the PasswordHasher test works for me with the latest master.
-Thanks Yann and James!
-
---000000000000cf5c8505dbc4d0e5
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail=
-_attr">On Sun, Apr 3, 2022 at 5:33 AM Yann E. MORIN &lt;<a href=3D"mailto:y=
-ann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt; wrote:<br></div><bl=
-ockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-lef=
-t:1px solid rgb(204,204,204);padding-left:1ex">
-Applied to master, thanks.<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br></blockquote><div><br></div><div>I confirm that the Passw=
-ordHasher test works for me with the latest master. Thanks Yann and James!<=
-br></div></div></div>
-
---000000000000cf5c8505dbc4d0e5--
-
---===============7530666911810199912==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index b14f940b27..cef109b511 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -190,13 +190,17 @@ config BR2_PACKAGE_OPENOCD_AT91RM
+ 	help
+ 	  Enable building support for AT91RM9200 based SBCs
+ 
++endif # BR2_arm
++
++if BR2_arm || BR2_aarch64
++
+ config BR2_PACKAGE_OPENOCD_BCM2835
+ 	bool "bitbanging on BCM2835"
+ 	help
+ 	  Enable building support for bitbanging on BCM2835
+ 	  (as found in Raspberry Pi)
+ 
+-endif # BR2_arm
++endif # BR2_arm || BR2_aarch64
+ 
+ config BR2_PACKAGE_OPENOCD_GW16012
+ 	bool "Gateworks GW16012 JTAG Programmer"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7530666911810199912==--
