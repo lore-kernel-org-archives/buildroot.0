@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF400C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 16:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDCAFC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 16:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55E1B404BB;
-	Sun,  3 Apr 2022 16:39:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6193A60E44;
+	Sun,  3 Apr 2022 16:39:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S7t7XBiKrldf; Sun,  3 Apr 2022 16:39:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GjXUR8cMgzSb; Sun,  3 Apr 2022 16:39:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8710440169;
-	Sun,  3 Apr 2022 16:39:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0F2211BF284
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:39:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FF4760E2C;
+	Sun,  3 Apr 2022 16:39:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 466731BF284
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 071AB82BFD
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:39:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35A4F60E2C
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:39:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDdqT8DZQWEb for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 16:39:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N3oD6f0s_KzZ for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 16:39:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D85A82BE5
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 16:39:25 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id h4so11015985wrc.13
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 09:39:25 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1FE6660E24
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 16:39:26 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id d29so5016495wra.10
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 09:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=srhzdpjNU2Z91ZIzOiH2QDYnWJB9zgm+NDDCsnAX1O0=;
- b=Qd7+mrEyUk6tlh8QL7qiMHQZFKLmRZM1Oxzx48zKsKnIGR3AKJsquBwpQUkLjVEd18
- goeChaW2/bmL70UF8axLwPJjqPHJ72/oDQ8DWvmyJ18C6swX0/24wg+zEX03+6/l8svE
- 5IjKToQU+m0zaFMWxqc1Fn3lW2Bi6oX/74YkJEdDEJoj59cGM8akgVwvWAEOW7E318BT
- n6vrWDFdBBA8yg86id2bmLmR7p95zl9liv6up81MYGC5da5iok2cKo66GWIB5ynzripX
- N5ZoRM7rxbTjKdUYzGFCE/e9bu+EiplDYfBQ1qMj27NTapEq+0pbQD10238NV3JZw2hb
- koTA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=HsvLr+EcERMSwnnZCuuswT+KuyDS4mdjldKEw06VZrU=;
+ b=l1ulzQeuQn6i96a78XXBzIdpzu7abXvp9ioDj23z8OpPBky+ya+jgSaWwl7RFHOJet
+ hfZWkpoyGq2j9hLSwYxwNPdb7aKSDqH/prP7vMmfek6TZuKWKRO/a3aQpGqiVOFro1Zw
+ 5vZVbDBppoqWxdQsxsQ/byvfFOltFgncagGKU6ujmWXfnEF75lv0o97jIAol8hbjVxIQ
+ YhbUqcWvZ1RbPYSSNd4hbl73v285HavzirW/5V9H/7IcIhitByqzHFWUQV9s8rb1gAvV
+ +3iqhWDHtsVe6N5I1Q+xjvoaynkeVgAy4Yfe9vCz/+Qw3qqHPZvrKihTrAs0GlvR9HP+
+ PiNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=srhzdpjNU2Z91ZIzOiH2QDYnWJB9zgm+NDDCsnAX1O0=;
- b=cq39nIi3RBxpf2d1y99EGGUtWrdhIBHa0EbsUgYvEQWjpzDds2MbWbnwpkppyA8FUo
- A23UvKnKq/GiMU3Pb7GpdVuWVX/12jlkZFR37BgfNsuPRk+bHKEIB+VM4h0k6aVJ+fa2
- QKdpXH/1zEFENqEVdmCchx90skBZHp6aD0fUo7ct03luqZEOc3TIT/ISdC85ldfYObz9
- /VA6BYwO68HPH3vfbCKb5HnKoK0dNkIX7QgrBuTYE4NQijwhltct5e4qgQeGjepJhKVQ
- eb9LkcZoO14304M6ZT2qsaFEYghlzPsci070I+PvH1vq1xQLhbBIsbk0zpM3gYR0GLC9
- aRJQ==
-X-Gm-Message-State: AOAM533jeXRqCiZueM4RBMdER6RG3vUK0KKTkp9LW26QYHFGPf2BuQf3
- IH8Wo2IbxjJ3QaxyBrh5G9OznQi4Y+I=
-X-Google-Smtp-Source: ABdhPJztuN54Tj3v11yyh/KE+dy3h2iN4XHyZCrlFN2fKHvA/uhz8C8/lzwDimkV/FRvDMRqsKclXQ==
-X-Received: by 2002:a05:6000:11ce:b0:206:100d:ba01 with SMTP id
- i14-20020a05600011ce00b00206100dba01mr1683973wrx.558.1649003963355; 
- Sun, 03 Apr 2022 09:39:23 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=HsvLr+EcERMSwnnZCuuswT+KuyDS4mdjldKEw06VZrU=;
+ b=4nx5hyE8nSWadUhn0r/t2qzSSGobx8EiqeQetA+CJLxFctzl6eMw+/RU6ZbZ01I3Mm
+ UW5VIjoPljmsJX0DOaFMQfguxdd/4YF4pMFkv7A+lDVzirGPEzNhASsjmZ7DcrBYVN38
+ eNN0OupqJWTyD1KcTLGWy3kB4OzWrMwDV+hVa5fxnN2itHYYFiSm0lujG+8Ar8z5tsVX
+ OkPHmb4G/QHhcYOlaQVg+puBP0BsA1gW4jHthuddKITILEOPdshBxwOtNN7lpyU6UFdw
+ 6mawiO8aOhNLXLbmrlLMyk35wL6kD4681biqn76gEDuYVTUYJhwv6NhHVJE6LjZnY+uP
+ Yx/w==
+X-Gm-Message-State: AOAM532LRzbu6M6/JEezvZUPzFOxB/8rvHk1VuSKsPRh6jTWThgJghik
+ u0Y86uDkdaRISXRDhkilGjSv5u+rFqY=
+X-Google-Smtp-Source: ABdhPJzVq3hSjwgMfOY1T+jwUrLFK4NsPAFmmT+xMX8kIYxAzwFBBUNVaP9Zymr3usrnShqVM2h+hg==
+X-Received: by 2002:a05:6000:1206:b0:205:c1e8:5d01 with SMTP id
+ e6-20020a056000120600b00205c1e85d01mr14084232wrx.168.1649003964894; 
+ Sun, 03 Apr 2022 09:39:24 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- m7-20020adffe47000000b002060d09327fsm2271307wrs.16.2022.04.03.09.39.22
+ m7-20020adffe47000000b002060d09327fsm2271307wrs.16.2022.04.03.09.39.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Apr 2022 09:39:23 -0700 (PDT)
+ Sun, 03 Apr 2022 09:39:24 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  3 Apr 2022 18:37:36 +0200
-Message-Id: <20220403163737.223577-1-fontaine.fabrice@gmail.com>
+Date: Sun,  3 Apr 2022 18:37:37 +0200
+Message-Id: <20220403163737.223577-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220403163737.223577-1-fontaine.fabrice@gmail.com>
+References: <20220403163737.223577-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/libyang: drop unrecognized options
+Subject: [Buildroot] [PATCH 2/2] package/libyang: disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,35 +95,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 2a3edc5e00b38f4f927894d0911990c9060e4415 forgot to drop
-ENABLE_LYD_PRIV and GEN_PYTHON_BINDINGS options which are not recognized
-anymore
+Disable tests which are enabled by default in debug mode since bump to
+version 2.0.0 in commit 2a3edc5e00b38f4f927894d0911990c9060e4415 and
+https://github.com/CESNET/libyang/commit/e84f12fc5eccd67ed41e852fa0e23c030ae8acb0
+as they will raise the following build failure if cmocka is built before
+libyang:
+
+In file included from /home/buildroot/autobuild/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/stdint.h:20,
+                 from /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/lib/gcc/riscv64-buildroot-linux-musl/10.3.0/include/stdint.h:9,
+                 from /home/buildroot/autobuild/instance-0/output-1/build/libyang-2.0.112/src/libyang.h:18,
+                 from /home/buildroot/autobuild/instance-0/output-1/build/libyang-2.0.112/tests/utests/utests.h:30,
+                 from /home/buildroot/autobuild/instance-0/output-1/build/libyang-2.0.112/tests/utests/extensions/test_yangdata.c:15:
+/home/buildroot/autobuild/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:53:24: error: conflicting types for 'uintptr_t'
+   53 | typedef unsigned _Addr uintptr_t;
+      |                        ^~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/7ae21fbb28b1a69183c5d8ed87cf5f5cbf055026
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libyang/libyang.mk | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/libyang/libyang.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-index 7de9531bff..832adcb627 100644
+index 832adcb627..a097b3ee95 100644
 --- a/package/libyang/libyang.mk
 +++ b/package/libyang/libyang.mk
-@@ -15,13 +15,10 @@ LIBYANG_DEPENDENCIES = pcre2
+@@ -15,9 +15,11 @@ LIBYANG_DEPENDENCIES = pcre2
  HOST_LIBYANG_DEPENDENCIES = host-pcre2
  
  LIBYANG_CONF_OPTS = \
--	-DENABLE_VALGRIND_TESTS=OFF \
--	-DGEN_PYTHON_BINDINGS=OFF \
--	-DENABLE_LYD_PRIV=ON
-+	-DENABLE_VALGRIND_TESTS=OFF
++	-DENABLE_TESTS=OFF \
+ 	-DENABLE_VALGRIND_TESTS=OFF
  
  HOST_LIBYANG_CONF_OPTS = \
--	-DENABLE_VALGRIND_TESTS=OFF \
--	-DGEN_PYTHON_BINDINGS=OFF
-+	-DENABLE_VALGRIND_TESTS=OFF
++	-DENABLE_TESTS=OFF \
+ 	-DENABLE_VALGRIND_TESTS=OFF
  
  $(eval $(cmake-package))
- $(eval $(host-cmake-package))
 -- 
 2.35.1
 
