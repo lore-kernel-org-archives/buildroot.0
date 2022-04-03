@@ -1,92 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2139C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 13:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F16C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 14:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 335A36079D;
-	Sun,  3 Apr 2022 13:58:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7DCE940520;
+	Sun,  3 Apr 2022 14:02:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oPhy96SxVRJv; Sun,  3 Apr 2022 13:58:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3VYkGtr4ZwHy; Sun,  3 Apr 2022 14:02:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9EF60C21;
-	Sun,  3 Apr 2022 13:58:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9779B40147;
+	Sun,  3 Apr 2022 14:02:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 04F2E1BF3B0
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 13:58:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6874C1BF3B0
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 14:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6D4D40147
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 13:58:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FD1240147
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 14:02:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dVsRq6LwBVBU for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 13:58:33 +0000 (UTC)
+ with ESMTP id q4aOJlK4LNcG for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 14:02:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 61B94400A6
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 13:58:33 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id w18so1873167edi.13
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 06:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8D891400A6
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 14:02:12 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id d7so10731007wrb.7
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 07:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=kjX+Jb6fnxnuWEuCLYazOFFcS44OEfBxpkWw9GqNVlo=;
- b=Dkdvt+0uy0OBk4gBO7RbooWxftf3D3taub0D5dRGL0Bkc0ksSTYKkuE1k1joTRRj2G
- S+y87Qnhsm+yX0Ms7K+1SLaCuhPTemVtkQDykswE3OWEcGDFs2IrYLCuVMI1cueiQ1sI
- 97WcQ4QjzT/5MVuFAi0PCcavSB9XmdgYSeT11+4LGJ7ktT9t4nz3p5k0CfwCXt3oB5gr
- o4xZtl5AcwpnTEL4sLMOZ3xo0kt7mUN3X/i8wp7EC6I84GQBwBzWYfrhSq6xpveYClww
- JYt4GgEazty6Fp/7HmgnHvM8uPjLrsoRCmMdn1O6a44ieEHTLf/UzhazviSz4tAG5iex
- gb9Q==
+ bh=/gNQhvbSrHGqfLb00AQe9y8RVVUEE6PSAQmOW/h+V6o=;
+ b=B01a1VTeqCRfLeNrCYxuqIFL4yaAftd+wy4f5KnoZ3TicuKjX+wgmBxWdZ0hZrrAnO
+ GMFxDr6tQhP3V9y/1CZIP7Ea6ch6JC51nUfYUFwlkJFZZijwWhJ2DvcDi6kNaaU7Sxjw
+ laA7xp7slLvpAmoLP7TKKg0E1mDZiblLI8vgR3ri7kH9RVMfimtn8pTc0Pmid4haTMC2
+ U8C86toKMDEWn8O0Mxr1J60lsU9v7UTpkqr49wgZ4clG7EefSq4Zz/j5MHv5AUPyRyLi
+ hygqPJBkVjbNMwgBs+LR3+lF+Ax+0UKae3OfN7CgdFrwMG+TIluN6lCLDG1F88Wox+Yh
+ 4B9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=kjX+Jb6fnxnuWEuCLYazOFFcS44OEfBxpkWw9GqNVlo=;
- b=mwQEGNPeuA9ps2BpABLr73+mea7U34ytPBuu2JSVLKRTDcFvP6bbkgYuxLmHhXlBLF
- XbocZxUPo6Ph4TN0P4fLJx0HKVe50ctkL93CX9O528EsjTiIyd+EUAqZLlEvjqP09Mnb
- c1xu1KVHEhGoGK7foY31ALz1gyUh/0vt4KeN2Gm4QKt8vLezrGAeJ37McictzcY8oAx3
- cmDqkGw53OLjtAJ6LDaAChijIsOlsCsPO4isJm/NHcWXCU/j7yM1GR03Ws3l/kP2+R3T
- jdpvi/jxsucIfliC3kkpKhFMv8XO2sk6LSRUNr/EvX8nrlDkWeB5PZOrok7IAvvfcPQO
- BWEw==
-X-Gm-Message-State: AOAM530AG8ouaqW449UjcWnMZKHBRGQIDxlrAFo7Yel1AQ4FCdLgB4tn
- eIBzniAaXqDK94DsIYfuk6NoDA==
-X-Google-Smtp-Source: ABdhPJzaPeKmMqHpiOqBz7PzutrqwFT716kZ/gUDchVftyqs0xBmhuw3mjl+4u0HJnILYwKcyssXfg==
-X-Received: by 2002:aa7:c888:0:b0:419:166a:93e2 with SMTP id
- p8-20020aa7c888000000b00419166a93e2mr29155514eds.22.1648994311301; 
- Sun, 03 Apr 2022 06:58:31 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:68f9:c8ef:77ab:7425?
- (ptr-9fplejof7ird5pjql2d.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:68f9:c8ef:77ab:7425])
+ bh=/gNQhvbSrHGqfLb00AQe9y8RVVUEE6PSAQmOW/h+V6o=;
+ b=QGJ3oYnM0XGsdH0DHGUZqLaAuvWD2zN/6GQ0d8/hhwFwMGIT+Mr38g7R1Ytu28OtUj
+ SJ9EulyR+hCBV1Gv+RJhiHTjXWKeYyx0N3amYxfI5Ra2AVXKfy9OUm8VdhQD8LQ/P/YR
+ DE8qsFfW0s8KlT4My7cmiEpRCalyuwB6jZYfnWTWncN98+6mpNwK1OdW+CnyiuuOH5Jj
+ LUAEkvOE2uZLm5HFaM9nhGTL7KaMdQE+77hM+niOwIohU3VUOkXcn+oc5AGFM+3UZ0Ut
+ o1d1xm79EL19zXsYnHVN2TjCe9F+XAhZKVUjnkvzN73PjvE2Q89jSU+awER99JvVistj
+ 8Srw==
+X-Gm-Message-State: AOAM5325ihrdidi8b3Gb/AVQRogQOEDIxuDeQsgqQtDqTLVjyCxxkoqS
+ vjQf/axKdKBGK2dJ6nDcz+n/Dqp6NJI=
+X-Google-Smtp-Source: ABdhPJztqzNVBoYL2ehQSkuLEJ7aA+SmKPEdx+stmlO2/OQr16YExc8Ex8F+fILtazcBlDUM0R0Q3g==
+X-Received: by 2002:a5d:5848:0:b0:203:fef3:888b with SMTP id
+ i8-20020a5d5848000000b00203fef3888bmr13964800wrf.611.1648994530369; 
+ Sun, 03 Apr 2022 07:02:10 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- p6-20020a170906614600b006e133d37f8bsm3262887ejl.138.2022.04.03.06.58.30
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 03 Apr 2022 06:58:30 -0700 (PDT)
-Message-ID: <7fa02b77-d609-4cd4-5b93-b8f58c50b45f@mind.be>
-Date: Sun, 3 Apr 2022 15:58:29 +0200
+ t9-20020a05600c198900b0038cb8b38f9fsm15124208wmq.21.2022.04.03.07.02.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 03 Apr 2022 07:02:09 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  3 Apr 2022 16:00:24 +0200
+Message-Id: <20220403140024.3774250-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220402010559.410834-1-james.hilliard1@gmail.com>
- <34c73050-b148-7887-63ec-56f1e90c854e@mind.be>
- <CADvTj4oJnqUCN2MuTh+vUh8mPcpR7xa2OWX-RBJTA0Xb9CJcDA@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CADvTj4oJnqUCN2MuTh+vUh8mPcpR7xa2OWX-RBJTA0Xb9CJcDA@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add randconfig
- based --no-toolchains-csv option
+Subject: [Buildroot] [PATCH 1/1] package/glib-networking: fix build with
+ libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,106 +86,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+glib-networking raises the following build failure with libressl:
 
+../tls/openssl/gtlsconnection-openssl.c: In function 'g_tls_connection_openssl_handshake_thread_request_rehandshake':
+../tls/openssl/gtlsconnection-openssl.c:419:27: error: 'TLS1_3_VERSION' undeclared (first use in this function); did you mean 'TLS1_2_VERSION'?
+  419 |   if (SSL_version(ssl) >= TLS1_3_VERSION)
+      |                           ^~~~~~~~~~~~~~
+      |                           TLS1_2_VERSION
+../tls/openssl/gtlsconnection-openssl.c:419:27: note: each undeclared identifier is reported only once for each function it appears in
+../tls/openssl/gtlsconnection-openssl.c:420:11: error: implicit declaration of function 'SSL_key_update' [-Werror=implicit-function-declaration]
+  420 |     ret = SSL_key_update (ssl, SSL_KEY_UPDATE_REQUESTED);
+      |           ^~~~~~~~~~~~~~
 
-On 02/04/2022 20:58, James Hilliard wrote:
-> On Sat, Apr 2, 2022 at 10:29 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>    Hi James,
->>
->> On 02/04/2022 03:05, James Hilliard wrote:
-[snip]
->>> +    if 'BR2_ROOTFS_SKELETON_CUSTOM=y\n' in configlines and \
->>> +       'BR2_ROOTFS_SKELETON_CUSTOM_PATH=""\n' in configlines:
->>> +        configlines.remove('BR2_ROOTFS_SKELETON_CUSTOM=y\n')
->>
->>    I don't understand why for this particular one you remove it explicitly, while
->> for other cases you rely (I guess) on the dependency check to make sure we get a
->> valid config (eventually).
-> 
-> Others were missing the empty string config for matching against so
-> this approach
-> didn't seem to work there.
+Fixes:
+ - http://autobuild.buildroot.org/results/b8dea5704903c84858c7a339a73ecb713ac2791c
 
-  I still don't understand... If I have the time, I'll try to cook up a patch 
-that does the check the same way as all the other checks are done, and you an 
-tell me if you're happy with that.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/glib-networking/Config.in          | 1 +
+ package/glib-networking/glib-networking.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-[snip]
->>    I agree though that it's more work to do that than the current patch, so
->> perhaps this is a good first step.
-> 
-> Yeah, best to do this incrementally IMO, since this is revealing issues already
-> in the autobuilder relating to config validation I'm running this on:
-> http://autobuild.buildroot.net/?submitter=James+Hilliard+%28asahi-mini%29
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+index 38cded5e6b..9c5d36af16 100644
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if !BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_P11_KIT if BR2_PACKAGE_GNUTLS
+ 	help
+ 	  Network-related GIO modules for glib.
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index f74e520d31..e8905dfff4 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -31,7 +31,7 @@ else
+ GLIB_NETWORKING_CONF_OPTS += -Dgnutls=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ GLIB_NETWORKING_DEPENDENCIES += openssl
+ GLIB_NETWORKING_CONF_OPTS += -Dopenssl=enabled
+ else
+-- 
+2.35.1
 
-  So this is running a modified buildroot-test that passes the 
---no-toolchains-csv option?
-
-> Note that this autobuilder is an aarch64(running
-> https://asahilinux.org/) host so
-> it doesn't use the prebuilt toolchains.
-
-[snip]
->>> -    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
->>> -                           "savedefconfig"])
->>> +            if subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
->>> +                                      "savedefconfig"]):
->>
->>    This one should simply never fail, so it should move outside of the loop,
->> after checking dependencies.
-> 
-> I just tested that this can fail so I've kept it in the loop for now.
-
-  Okay, let me rephrase: if 'make dependencies' passes, then 'make 
-savedefconfig' should never fail. If you had a situation where make 
-savedefconfig fails, I'd be interested to know about it and debug it.
-
-
-  Regards,
-  Arnout
-
->>> +                continue
->>>
->>> -    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
->>> -                            "dependencies"])
->>> +            if subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
->>> +                                "dependencies"]):
->>> +                continue
->>> +            break
->>> +    return 0
->>>
->>>
->>>    if __name__ == '__main__':
->>> @@ -433,10 +443,18 @@ if __name__ == '__main__':
->>>        parser.add_argument("--buildrootdir", "-b",
->>>                            help="Buildroot directory (relative to current directory)",
->>>                            type=str, default='.')
->>> -    parser.add_argument("--toolchains-csv",
->>> -                        help="Path of the toolchain configuration file",
->>> -                        type=str,
->>> -                        default="support/config-fragments/autobuild/toolchain-configs.csv")
->>> +
->>> +    toolchains_csv = parser.add_mutually_exclusive_group(required=False)
->>> +    toolchains_csv.add_argument("--toolchains-csv",
->>> +                                dest="toolchains_csv",
->>> +                                help="Path of the toolchain configuration file",
->>> +                                type=str)
->>> +    toolchains_csv.add_argument("--no-toolchains-csv",
->>> +                                dest="toolchains_csv",
->>> +                                help="Generate random toolchain configuration",
->>> +                                action='store_false')
->>> +    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
->>> +
->>>        args = parser.parse_args()
->>>
->>>        # We need the absolute path to use with O=, because the relative
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
