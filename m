@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71ADFC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 16:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF400C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 16:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D67F6416C8;
-	Sun,  3 Apr 2022 16:22:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55E1B404BB;
+	Sun,  3 Apr 2022 16:39:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I25Or_spGctG; Sun,  3 Apr 2022 16:22:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1380409F5;
-	Sun,  3 Apr 2022 16:22:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 762391BF284
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:22:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63F0D40125
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:22:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OH1zidchZbpX for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 16:22:32 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S7t7XBiKrldf; Sun,  3 Apr 2022 16:39:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8710440169;
+	Sun,  3 Apr 2022 16:39:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F2211BF284
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:39:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 071AB82BFD
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 16:39:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fDdqT8DZQWEb for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 16:39:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
- [IPv6:2001:4860:4864:20::29])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5D782400EA
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 16:22:32 +0000 (UTC)
-Received: by mail-oa1-x29.google.com with SMTP id
- 586e51a60fabf-e1e5e8d9faso2765832fac.4
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 09:22:32 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5D85A82BE5
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 16:39:25 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id h4so11015985wrc.13
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 09:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=SKh0MhD1yiSUm4QzQaSL00qWvITtaGQohXGks4pDX0g=;
- b=QH65VzCaR1Flefcbvp5NiPkn+jK7MA6Tu8UauUK25rdk2/QjpGTADeNFKlkpi6VrVj
- tXIwrd1bx+0y2f1V5jGEGf+mX6+JrNDAILBpDrFoVRDIYaTpvV4L+VmlbH2kycjMUNpG
- Uqsyw/fTmi5oDPby2cra6dQz/HMRyZOPCmBa5B9zDEf7MT/0eQA9PRAkRbv8dH+/bUPb
- PyayQ2FNnczVGbtnchVWnqJmiz45vF9BoYhndv8KenYG8sbuDBb59kGU/le2X4+uILKY
- emMoSMjW7Md56VaADzwPnmDzt0RWeM/x+dodhqZfqIbKiadckmvp8Sm7fKIU1iZXRzsx
- QBaw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=srhzdpjNU2Z91ZIzOiH2QDYnWJB9zgm+NDDCsnAX1O0=;
+ b=Qd7+mrEyUk6tlh8QL7qiMHQZFKLmRZM1Oxzx48zKsKnIGR3AKJsquBwpQUkLjVEd18
+ goeChaW2/bmL70UF8axLwPJjqPHJ72/oDQ8DWvmyJ18C6swX0/24wg+zEX03+6/l8svE
+ 5IjKToQU+m0zaFMWxqc1Fn3lW2Bi6oX/74YkJEdDEJoj59cGM8akgVwvWAEOW7E318BT
+ n6vrWDFdBBA8yg86id2bmLmR7p95zl9liv6up81MYGC5da5iok2cKo66GWIB5ynzripX
+ N5ZoRM7rxbTjKdUYzGFCE/e9bu+EiplDYfBQ1qMj27NTapEq+0pbQD10238NV3JZw2hb
+ koTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=SKh0MhD1yiSUm4QzQaSL00qWvITtaGQohXGks4pDX0g=;
- b=f5+M4qNDzAnsKPyRlaoKq0YjUuxZTDTI7DN6+GY9/TwHgME8MmnivTuiuPN5BoBwer
- Szb/ZHgJeU59PbIeBQbzo3WUKCUqappLU1Ffj+BaFQ081bYAuBnQSbbXSCav9F4zd2xy
- qdfrS2s86t5aHXU4ff14K4TeHDh7q6lxzSN6kDNKZcMA7Ir939jnu+YpF90pqzpakp3f
- oSFcUaH1SQZa1QufGIyzqvSfbR1eJkpeGwqoIDouCwBFH5SrttLMpMW5JdS/Ol9Uu3w8
- xgwMujFTc9edsCFSxYNgpKwioaP6ASndF70bo9uPgj5ycRCxGMJDOHMu3zMNmpRsn+Up
- AUpA==
-X-Gm-Message-State: AOAM532WYqRU3l5D2flM+OCBB5s8uqU7lfy1rzQpfD51AteFHn8B38Hk
- aeYqjGiAjtpA8mCTMVwj+HDnwwOsBqKuNgUbihJGf6IPv+iv2Q==
-X-Google-Smtp-Source: ABdhPJwHN5bx88ntlJ17iuTqLJYKpca1WeoQQU2rIBTyE8qeYv4RqKlSjbJKclaQQ2ICma+f9anTDwNQIEk9Mboq/uQ=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr8452161oaa.200.1649002951257; Sun, 03
- Apr 2022 09:22:31 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=srhzdpjNU2Z91ZIzOiH2QDYnWJB9zgm+NDDCsnAX1O0=;
+ b=cq39nIi3RBxpf2d1y99EGGUtWrdhIBHa0EbsUgYvEQWjpzDds2MbWbnwpkppyA8FUo
+ A23UvKnKq/GiMU3Pb7GpdVuWVX/12jlkZFR37BgfNsuPRk+bHKEIB+VM4h0k6aVJ+fa2
+ QKdpXH/1zEFENqEVdmCchx90skBZHp6aD0fUo7ct03luqZEOc3TIT/ISdC85ldfYObz9
+ /VA6BYwO68HPH3vfbCKb5HnKoK0dNkIX7QgrBuTYE4NQijwhltct5e4qgQeGjepJhKVQ
+ eb9LkcZoO14304M6ZT2qsaFEYghlzPsci070I+PvH1vq1xQLhbBIsbk0zpM3gYR0GLC9
+ aRJQ==
+X-Gm-Message-State: AOAM533jeXRqCiZueM4RBMdER6RG3vUK0KKTkp9LW26QYHFGPf2BuQf3
+ IH8Wo2IbxjJ3QaxyBrh5G9OznQi4Y+I=
+X-Google-Smtp-Source: ABdhPJztuN54Tj3v11yyh/KE+dy3h2iN4XHyZCrlFN2fKHvA/uhz8C8/lzwDimkV/FRvDMRqsKclXQ==
+X-Received: by 2002:a05:6000:11ce:b0:206:100d:ba01 with SMTP id
+ i14-20020a05600011ce00b00206100dba01mr1683973wrx.558.1649003963355; 
+ Sun, 03 Apr 2022 09:39:23 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ m7-20020adffe47000000b002060d09327fsm2271307wrs.16.2022.04.03.09.39.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 03 Apr 2022 09:39:23 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  3 Apr 2022 18:37:36 +0200
+Message-Id: <20220403163737.223577-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220402010559.410834-1-james.hilliard1@gmail.com>
- <34c73050-b148-7887-63ec-56f1e90c854e@mind.be>
- <CADvTj4oJnqUCN2MuTh+vUh8mPcpR7xa2OWX-RBJTA0Xb9CJcDA@mail.gmail.com>
- <7fa02b77-d609-4cd4-5b93-b8f58c50b45f@mind.be>
-In-Reply-To: <7fa02b77-d609-4cd4-5b93-b8f58c50b45f@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Apr 2022 10:22:19 -0600
-Message-ID: <CADvTj4oj3jHEmspBwsndLmK2GX5QdAmvtiNXnV0vKO-fwkSNBg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add randconfig
- based --no-toolchains-csv option
+Subject: [Buildroot] [PATCH 1/2] package/libyang: drop unrecognized options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,120 +87,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
+ Heiko Thiery <heiko.thiery@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Apr 3, 2022 at 7:58 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 02/04/2022 20:58, James Hilliard wrote:
-> > On Sat, Apr 2, 2022 at 10:29 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>    Hi James,
-> >>
-> >> On 02/04/2022 03:05, James Hilliard wrote:
-> [snip]
-> >>> +    if 'BR2_ROOTFS_SKELETON_CUSTOM=y\n' in configlines and \
-> >>> +       'BR2_ROOTFS_SKELETON_CUSTOM_PATH=""\n' in configlines:
-> >>> +        configlines.remove('BR2_ROOTFS_SKELETON_CUSTOM=y\n')
-> >>
-> >>    I don't understand why for this particular one you remove it explicitly, while
-> >> for other cases you rely (I guess) on the dependency check to make sure we get a
-> >> valid config (eventually).
-> >
-> > Others were missing the empty string config for matching against so
-> > this approach
-> > didn't seem to work there.
->
->   I still don't understand... If I have the time, I'll try to cook up a patch
-> that does the check the same way as all the other checks are done, and you an
-> tell me if you're happy with that.
+Commit 2a3edc5e00b38f4f927894d0911990c9060e4415 forgot to drop
+ENABLE_LYD_PRIV and GEN_PYTHON_BINDINGS options which are not recognized
+anymore
 
-Using a fixup avoids extra randconfig regenerations mostly, it's not
-strictly needed.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libyang/libyang.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
->
-> [snip]
-> >>    I agree though that it's more work to do that than the current patch, so
-> >> perhaps this is a good first step.
-> >
-> > Yeah, best to do this incrementally IMO, since this is revealing issues already
-> > in the autobuilder relating to config validation I'm running this on:
-> > http://autobuild.buildroot.net/?submitter=James+Hilliard+%28asahi-mini%29
->
->   So this is running a modified buildroot-test that passes the
-> --no-toolchains-csv option?
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index 7de9531bff..832adcb627 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -15,13 +15,10 @@ LIBYANG_DEPENDENCIES = pcre2
+ HOST_LIBYANG_DEPENDENCIES = host-pcre2
+ 
+ LIBYANG_CONF_OPTS = \
+-	-DENABLE_VALGRIND_TESTS=OFF \
+-	-DGEN_PYTHON_BINDINGS=OFF \
+-	-DENABLE_LYD_PRIV=ON
++	-DENABLE_VALGRIND_TESTS=OFF
+ 
+ HOST_LIBYANG_CONF_OPTS = \
+-	-DENABLE_VALGRIND_TESTS=OFF \
+-	-DGEN_PYTHON_BINDINGS=OFF
++	-DENABLE_VALGRIND_TESTS=OFF
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
+-- 
+2.35.1
 
-Yes, plus I'm using an out of tree utils/genrandconfig override to add
-the option.
-
->
-> > Note that this autobuilder is an aarch64(running
-> > https://asahilinux.org/) host so
-> > it doesn't use the prebuilt toolchains.
->
-> [snip]
-> >>> -    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-> >>> -                           "savedefconfig"])
-> >>> +            if subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-> >>> +                                      "savedefconfig"]):
-> >>
-> >>    This one should simply never fail, so it should move outside of the loop,
-> >> after checking dependencies.
-> >
-> > I just tested that this can fail so I've kept it in the loop for now.
->
->   Okay, let me rephrase: if 'make dependencies' passes, then 'make
-> savedefconfig' should never fail. If you had a situation where make
-> savedefconfig fails, I'd be interested to know about it and debug it.
-
-The make dependencies call is after savedefconfig so I think it would need
-to be checked due to that.
-
->
->
->   Regards,
->   Arnout
->
-> >>> +                continue
-> >>>
-> >>> -    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-> >>> -                            "dependencies"])
-> >>> +            if subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-> >>> +                                "dependencies"]):
-> >>> +                continue
-> >>> +            break
-> >>> +    return 0
-> >>>
-> >>>
-> >>>    if __name__ == '__main__':
-> >>> @@ -433,10 +443,18 @@ if __name__ == '__main__':
-> >>>        parser.add_argument("--buildrootdir", "-b",
-> >>>                            help="Buildroot directory (relative to current directory)",
-> >>>                            type=str, default='.')
-> >>> -    parser.add_argument("--toolchains-csv",
-> >>> -                        help="Path of the toolchain configuration file",
-> >>> -                        type=str,
-> >>> -                        default="support/config-fragments/autobuild/toolchain-configs.csv")
-> >>> +
-> >>> +    toolchains_csv = parser.add_mutually_exclusive_group(required=False)
-> >>> +    toolchains_csv.add_argument("--toolchains-csv",
-> >>> +                                dest="toolchains_csv",
-> >>> +                                help="Path of the toolchain configuration file",
-> >>> +                                type=str)
-> >>> +    toolchains_csv.add_argument("--no-toolchains-csv",
-> >>> +                                dest="toolchains_csv",
-> >>> +                                help="Generate random toolchain configuration",
-> >>> +                                action='store_false')
-> >>> +    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
-> >>> +
-> >>>        args = parser.parse_args()
-> >>>
-> >>>        # We need the absolute path to use with O=, because the relative
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
