@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3437FC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 09:42:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 925EBC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 19:15:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C61DC83490;
-	Sun,  3 Apr 2022 09:42:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5390E40590;
+	Sun,  3 Apr 2022 19:15:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZOPrNenuJHT7; Sun,  3 Apr 2022 09:42:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AipeW--gBlGY; Sun,  3 Apr 2022 19:15:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D418E8343E;
-	Sun,  3 Apr 2022 09:42:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 563E01BF599
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 09:42:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58F0F4059D;
+	Sun,  3 Apr 2022 19:15:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 669021BF36B
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 19:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37F0F8343E
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 09:42:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5552740236
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 19:15:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Pb2fDiUlu-R for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 09:42:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mJexLDvFwU5s for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 19:15:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A2F28344C
- for <buildroot@uclibc.org>; Sun,  3 Apr 2022 09:42:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B88434016D
+ for <buildroot@uclibc.org>; Sun,  3 Apr 2022 19:15:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 22A8385EBD; Sun,  3 Apr 2022 09:32:55 +0000 (UTC)
+ id 5AF348607A; Sun,  3 Apr 2022 19:05:41 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 03 Apr 2022 09:42:18 +0000
+Date: Sun, 03 Apr 2022 19:15:05 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -43,15 +43,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Who: emile.cormier.jr@gmail.com
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-14721-163-916hygZ3s0@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14721-163-HIzCPJOXYa@https.bugs.busybox.net/>
 In-Reply-To: <bug-14721-163@https.bugs.busybox.net/>
 References: <bug-14721-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,21 +76,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14721
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Emile, All,
-
-Thans for your bug report. We believe this has now been fixed with
-commit 5bea8c9521b3 (package/pkg-python.mk: fix PEP517 paths).
-
-Regards,
-Yann E. MORIN.
+--- Comment #4 from Emile Cormier <emile.cormier.jr@gmail.com> ---
+I confirm that the PasswordHasher test works for me with the latest master.
 
 -- 
 You are receiving this mail because:
