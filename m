@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A95C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 09:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76A68C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 09:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12BBE403F7;
-	Sun,  3 Apr 2022 09:43:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d7YkWNYb3Fmq; Sun,  3 Apr 2022 09:43:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F975403AC;
-	Sun,  3 Apr 2022 09:43:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 57BA31BF995
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 09:43:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54E5360634
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 09:43:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33C3160C24;
+	Sun,  3 Apr 2022 09:44:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WzBtiHur_AlC for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 09:43:28 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JmLeVevS-yTX; Sun,  3 Apr 2022 09:44:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41B3260C20;
+	Sun,  3 Apr 2022 09:44:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 960881BF599
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 09:43:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 845C7403AC
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 09:43:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CDhJWnv0looX for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 09:43:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8635D60625
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 09:43:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3D5640145
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 09:43:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 108DD85ED9; Sun,  3 Apr 2022 09:34:05 +0000 (UTC)
+ id 3E05685F3F; Sun,  3 Apr 2022 09:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Apr 2022 11:32:39 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: cd7f1dcad51c1dc77bb1d8a285180c69b2b60f41
-X-Git-Newrev: 3be390cbffea0d636f587a6199e7f8ce2fc536aa
+Date: Sun, 3 Apr 2022 09:02:33 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 6ab6120d694c63f2b422d11c25ed0b4d14c7a377
+X-Git-Newrev: 99cf9381a0f114994dd068e084108d1d5335a8fe
 X-Patchwork-Hint: ignore
-Message-Id: <20220403093405.108DD85ED9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-treq: bump
+Message-Id: <20220403093412.3E05685F3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/python-treq: bump
  to version 22.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3be390cbffea0d636f587a6199e7f8ce2fc536aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=99cf9381a0f114994dd068e084108d1d5335a8fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 - hyperlink is a dependency since version 20.4.0 and
   https://github.com/twisted/treq/commit/5475def96f3ec93075ff95709fec4acd154e6fed
@@ -79,12 +79,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index 9fd0f8b0ed..9875313e1e 100644
+index 7c02a35638..5d76a5cdd6 100644
 --- a/package/python-treq/Config.in
 +++ b/package/python-treq/Config.in
 @@ -3,9 +3,9 @@ config BR2_PACKAGE_PYTHON_TREQ
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
- 	depends on BR2_PACKAGE_PYTHON3 # python-twisted
+ 	# twisted TLS -> python-{pyopenssl,service-identity}
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
  	select BR2_PACKAGE_PYTHON_ATTRS # runtime
 +	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
  	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
