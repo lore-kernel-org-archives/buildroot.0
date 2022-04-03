@@ -1,46 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A837C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 20:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9DB9C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 20:57:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E75C04055E;
-	Sun,  3 Apr 2022 20:28:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2ED2041601;
+	Sun,  3 Apr 2022 20:57:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 29C-ZTloKkfL; Sun,  3 Apr 2022 20:28:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5J6bfZr5Qqck; Sun,  3 Apr 2022 20:57:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15829403B9;
-	Sun,  3 Apr 2022 20:28:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7B1011BF31F
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:28:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5185415FB;
+	Sun,  3 Apr 2022 20:57:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E6F61BF31F
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 78368607A4
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:28:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1581982F32
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:57:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VuuevR5PRGhz for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 20:28:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0F9A60773
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 20:28:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 57CC5860FE; Sun,  3 Apr 2022 20:19:23 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IqLyN4b4c6Sx for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 20:57:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E4A5782F31
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 20:57:43 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id j12so4153364wrb.5
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 13:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DuqR4qarjwpICWxZAzyeHUH+hk0sVE2jq7Wz+gV54cI=;
+ b=UNn2QV10NN+A220/hKW8lW9nx2mEoUG7WA0U7bRL7frJLOsWkOWdF8waMI071YIC3t
+ EgP1DWbUNgHa7uF6pde7q7k6gHrt/NqJY6+D0op+qlVxa/oE87IZvQWGw0Rhp5fMwv4U
+ T8I+prydiZ4R9GFRY9mH/k1/3Y2B3t1Ibv/ore03i8fqfR6Yp1I5siQjjbl++WBkKchu
+ M02eEkrRUILuJenh+andulloLx/WxLQFvI4Gy9V2wjOEehrFuW7SEWN27Yr2BLJJ+Wrz
+ 4rosUv7OrS6BRLbForWcUexIF+TkieTl8Cyt36K3pz+fcLhDNAdhdEMK5n+1pt40g49n
+ lD7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DuqR4qarjwpICWxZAzyeHUH+hk0sVE2jq7Wz+gV54cI=;
+ b=SVfaMr1Qh5PrzVCicpFyUFnTbkVRaqrNp5cKvgwm1LJfhBUbyAx4Gisau21u8Ok6Cw
+ ttRJ2WOMqknBSx7Uwqa/TnOGPArmP5z58UY8X1Qn7RdTv3yOtMUkWi95ogveCaJPIhEN
+ 0FQ5gzWqkJnd4MMzwwQ5CO4QaPjpb5e6d43k0UEz9lOv4JDRFjgOyund7eLO1BVRh3oF
+ 6bHFmJOp0JhyzJNTaynAmYaEBB4/EVVKwE+YnPNSJtTI7hWwmfRmDqlh8luDPyOQ+SYz
+ 40E+TnsMQVzAn4UFVC+9vSWQ8tqTvEVCZZYftLo4Vp3Hk9aXWiDhju4F6KoMnRyKdOn0
+ P/Mw==
+X-Gm-Message-State: AOAM530c4YJ95Q+ak+4E34hJ66Mz5fjBfjx5AzdVka9DK48+tkIdtapL
+ 9Fmx7XMcApOBUGA2wby3jKYuyzNExaU=
+X-Google-Smtp-Source: ABdhPJytQv6vo/hgcHot4m/dFtzjHH6azyFWhMUXu9mlgNkm6ELQTwRDCsdlvMs/RLBmhLTWHTBwww==
+X-Received: by 2002:a5d:6944:0:b0:203:e024:7cdd with SMTP id
+ r4-20020a5d6944000000b00203e0247cddmr14654669wrw.503.1649019461558; 
+ Sun, 03 Apr 2022 13:57:41 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ i74-20020adf90d0000000b0020373ba7beesm10558140wri.0.2022.04.03.13.57.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 03 Apr 2022 13:57:41 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Apr 2022 22:28:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea6cc91be4db390f03c81539a9ae44979fd162ea
-X-Git-Newrev: 2d806891cb0dc0fd2d30171d14bc9e911abbe76e
-X-Patchwork-Hint: ignore
-Message-Id: <20220403201923.57CC5860FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xmrig: needs C++
+Date: Sun,  3 Apr 2022 22:56:00 +0200
+Message-Id: <20220403205600.1836512-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/dieharder: drop rgb_operm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,54 +87,767 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Viard de Galbert <julien@vdg.name>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d806891cb0dc0fd2d30171d14bc9e911abbe76e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix the following build failure:
 
-xmrig needs C++ since its addition in commit
-6f70990ccf6cb993fc31519337390e436d15493b:
-
-CMake Error at CMakeLists.txt:2 (project):
-  No CMAKE_CXX_COMPILER could be found.
+/home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/m68k-buildroot-linux-uclibc/11.2.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: dieharder-add_ui_rngs.o:(.data+0xd8): undefined reference to `rgb_operm'
 
 Fixes:
- - http://autobuild.buildroot.org/results/48f4ff6dc8281ffa99a45401b5941b28f2c94bc2
+ - http://autobuild.buildroot.org/results/7be339674291b39f8eddb8ad065f0988128ecfe9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xmrig/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../0005-Remove-defunct-rgb_operm.patch       | 732 ++++++++++++++++++
+ 1 file changed, 732 insertions(+)
+ create mode 100644 package/dieharder/0005-Remove-defunct-rgb_operm.patch
 
-diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
-index 7024241017..c5c6b3e37b 100644
---- a/package/xmrig/Config.in
-+++ b/package/xmrig/Config.in
-@@ -8,15 +8,17 @@ config BR2_PACKAGE_XMRIG
- 	# xmrig needs fenv.h which is not provided by uclibc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBUV
- 	help
- 	  RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner.
- 
- 	  https://xmrig.com
- 
--comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library"
-+comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++"
- 	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS
-+		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS || \
-+		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/dieharder/0005-Remove-defunct-rgb_operm.patch b/package/dieharder/0005-Remove-defunct-rgb_operm.patch
+new file mode 100644
+index 0000000000..efc311dbaa
+--- /dev/null
++++ b/package/dieharder/0005-Remove-defunct-rgb_operm.patch
+@@ -0,0 +1,732 @@
++From 40d377b86c856f5a4510a6f5cd56be004873ad77 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Marcus=20M=C3=BCller?= <mueller@kit.edu>
++Date: Mon, 12 Oct 2020 21:30:12 +0200
++Subject: [PATCH] Remove defunct rgb_operm
++
++[Retrieved from:
++https://github.com/eddelbuettel/dieharder/pull/2/commits/40d377b86c856f5a4510a6f5cd56be004873ad77]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/Makefile.am           |   1 -
++ include/dieharder/rgb_operm.h |  38 --
++ include/dieharder/tests.h     |   2 -
++ libdieharder/rgb_operm.c      | 633 ----------------------------------
++ 4 files changed, 674 deletions(-)
++ delete mode 100644 include/dieharder/rgb_operm.h
++ delete mode 100644 libdieharder/rgb_operm.c
++
++diff --git a/include/Makefile.am b/include/Makefile.am
++index f80b4ff..e4659cd 100644
++--- a/include/Makefile.am
+++++ b/include/Makefile.am
++@@ -33,7 +33,6 @@ nobase_include_HEADERS = dieharder/copyright.h \
++ 	dieharder/rgb_lagged_sums.h \
++ 	dieharder/rgb_lmn.h \
++ 	dieharder/rgb_minimum_distance.h \
++-	dieharder/rgb_operm.h \
++ 	dieharder/rgb_persist.h \
++ 	dieharder/rgb_permutations.h \
++ 	dieharder/rgb_timing.h \
++diff --git a/include/dieharder/rgb_operm.h b/include/dieharder/rgb_operm.h
++deleted file mode 100644
++index c48fa37..0000000
++--- a/include/dieharder/rgb_operm.h
+++++ /dev/null
++@@ -1,38 +0,0 @@
++-/*
++- * rgb_operm test header.
++- */
++-
++-/*
++- * function prototype
++- */
++-int rgb_operm(Test **test,int irun);
++-
++-static Dtest rgb_operm_dtest __attribute__((unused)) = {
++-  "RGB Overlapping Permuations Test",
++-  "rgb_operm",
++-  "\n\
++-#========================================================================\n\
++-#                 RGB Overlapping Permutations Test\n\
++-# Forms both the exact (expected) covariance matrix for overlapping\n\
++-# permutations of random integer and an empirical covariance matrix\n\
++-# formed from a long string of samples.  The difference is expected\n\
++-# to have a chisq distribution and hence can be transformed into a\n\
++-# sample p-value.  Note that this is one possible functional replacement\n\
++-# for the broken/defunct diehard operm5 test, but one that permits k (the\n\
++-# number of numbers in the overlapping permutation window) to be varied\n\
++-# from 2 to perhaps 8.\n\
++-#\n",
++-  100,     /* Default psamples */
++-  100000,  /* Default tsamples */
++-  1,       /* We magically make all the bit tests return a single histogram */
++-  rgb_operm,
++-  0
++-};
++-
++-/*
++- * Global variables.
++- *
++- * rgb_operm_k is the size of the overlapping window that is slid along
++- * a data stream of rands from x_i to x_{i+k} to compute c[][].
++- */
++-unsigned int rgb_operm_k;
++diff --git a/include/dieharder/tests.h b/include/dieharder/tests.h
++index 1674aed..b50dbe3 100644
++--- a/include/dieharder/tests.h
+++++ b/include/dieharder/tests.h
++@@ -11,7 +11,6 @@
++ #include <dieharder/rgb_kstest_test.h>
++ #include <dieharder/rgb_lagged_sums.h>
++ #include <dieharder/rgb_minimum_distance.h>
++-#include <dieharder/rgb_operm.h>
++ #include <dieharder/rgb_permutations.h>
++ #include <dieharder/dab_bytedistrib.h>
++ #include <dieharder/dab_dct.h>
++@@ -80,7 +79,6 @@
++    RGB_PERMUTATIONS,
++    RGB_LAGGED_SUMS,
++    RGB_LMN,
++-   RGB_OPERM,
++    DAB_BYTEDISTRIB,
++    DAB_DCT,
++    DAB_FILLTREE,
++diff --git a/libdieharder/rgb_operm.c b/libdieharder/rgb_operm.c
++deleted file mode 100644
++index 15f8e9a..0000000
++--- a/libdieharder/rgb_operm.c
+++++ /dev/null
++@@ -1,633 +0,0 @@
++-/*
++- * ========================================================================
++- * $Id: rgb_operm.c 252 2006-10-10 13:17:36Z rgb $
++- *
++- * See copyright in copyright.h and the accompanying file COPYING
++- * ========================================================================
++- */
++-
++-/*
++- * ========================================================================
++- * This is the revised Overlapping Permutations test.  It directly
++- * simulates the covariance matrix of overlapping permutations.  The way
++- * this works below (tentatively) is:
++- *
++- *    For a bit ntuple of length N, slide a window of length N to the
++- *    right one bit at a time.  Compute the permutation index of the
++- *    original ntuple, the permutation index of the window ntuple, and
++- *    accumulate the covariance matrix of the two positions.  This
++- *    can be directly and precisely computed as well.  The simulated
++- *    result should be distributed according to the chisq distribution,
++- *    so we subtract the two and feed it into the chisq program as a
++- *    vector to compute p.
++- *
++- * This MAY NOT BE RIGHT.  I'm working from both Marsaglia's limited
++- * documentation (in a program that doesn't do ANYTHING like what the
++- * documentation says it does) and from Nilpotent Markov Processes.
++- * But I confess to not quite understand how to actually perform the
++- * test in the latter -- it is very good at describing the construction
++- * of the target matrix, not so good at describing how to transform
++- * this into a chisq and p.
++- *
++- * FWIW, as I get something that actually works here, I'm going to
++- * THOROUGHLY document it in the book that will accompany the test.
++- *========================================================================
++- */
++-
++-#include <dieharder/libdieharder.h>
++-#define RGB_OPERM_KMAX 10
++-
++-/*
++- * Some globals that will eventually go in the test include where they
++- * arguably belong.
++- */
++-double fpipi(int pi1,int pi2,int nkp);
++-uint piperm(size_t *data,int len);
++-void make_cexact();
++-void make_cexpt();
++-int nperms,noperms;
++-double **cexact,**ceinv,**cexpt,**idty;
++-double *cvexact,*cvein,*cvexpt,*vidty;
++-
++-int rgb_operm(Test **test,int irun)
++-{
++-
++- int i,j,n,nb,iv,s;
++- uint csamples;   /* rgb_operm_k^2 is vector size of cov matrix */
++- uint *count,ctotal; /* counters */
++- uint size;
++- double pvalue,ntuple_prob,pbin;  /* probabilities */
++- Vtest *vtest;   /* Chisq entry vector */
++-
++- gsl_matrix_view CEXACT,CEINV,CEXPT,IDTY;
++-
++- /*
++-  * For a given n = ntuple size in bits, there are n! bit orderings
++-  */
++- MYDEBUG(D_RGB_OPERM){
++-   printf("#==================================================================\n");
++-   printf("# rgb_operm: Running rgb_operm verbosely for k = %d.\n",rgb_operm_k);
++-   printf("# rgb_operm: Use -v = %d to focus.\n",D_RGB_OPERM);
++-   printf("# rgb_operm: ======================================================\n");
++- }
++-
++- /*
++-  * Sanity check first
++-  */
++- if((rgb_operm_k < 0) || (rgb_operm_k > RGB_OPERM_KMAX)){
++-   printf("\nError:  rgb_operm_k must be a positive integer <= %u.  Exiting.\n",RGB_OPERM_KMAX);
++-   exit(0);
++- }
++-
++- nperms = gsl_sf_fact(rgb_operm_k);
++- noperms = gsl_sf_fact(3*rgb_operm_k-2);
++- csamples = rgb_operm_k*rgb_operm_k;
++- gsl_permutation * p = gsl_permutation_alloc(nperms);
++-
++- /*
++-  * Allocate memory for value_max vector of Vtest structs and counts,
++-  * PER TEST.  Note that we must free both of these when we are done
++-  * or leak.
++-  */
++- vtest = (Vtest *)malloc(csamples*sizeof(Vtest));
++- count = (uint *)malloc(csamples*sizeof(uint));
++- Vtest_create(vtest,csamples+1);
++-
++- /*
++-  * We have to allocate and free the cexact and cexpt matrices here
++-  * or they'll be forgotten when these routines return.
++-  */
++- MYDEBUG(D_RGB_OPERM){
++-   printf("# rgb_operm: Creating and zeroing cexact[][] and cexpt[][].\n");
++- }
++- cexact = (double **)malloc(nperms*sizeof(double*));
++- ceinv  = (double **)malloc(nperms*sizeof(double*));
++- cexpt  = (double **)malloc(nperms*sizeof(double*));
++- idty   = (double **)malloc(nperms*sizeof(double*));
++- cvexact = (double *)malloc(nperms*nperms*sizeof(double));
++- cvein   = (double *)malloc(nperms*nperms*sizeof(double));
++- cvexpt  = (double *)malloc(nperms*nperms*sizeof(double));
++- vidty   = (double *)malloc(nperms*nperms*sizeof(double));
++- for(i=0;i<nperms;i++){
++-   /* Here we pack addresses to map the matrix addressing onto the vector */
++-   cexact[i] = &cvexact[i*nperms];
++-   ceinv[i] = &cvein[i*nperms];
++-   cexpt[i] = &cvexpt[i*nperms];
++-   idty[i] = &vidty[i*nperms];
++-   for(j = 0;j<nperms;j++){
++-     cexact[i][j] = 0.0;
++-     ceinv[i][j] = 0.0;
++-     cexpt[i][j]  = 0.0;
++-     idty[i][j]   = 0.0;
++-   }
++- }
++-
++- make_cexact();
++- make_cexpt();
++-
++- iv=0;
++- for(i=0;i<nperms;i++){
++-   for(j=0;j<nperms;j++){
++-     cvexact[iv] = cexact[i][j];
++-     cvexpt[iv]  = cexpt[i][j];
++-     vidty[iv]   = 0.0;
++-   }
++- }
++-
++- CEXACT = gsl_matrix_view_array(cvexact, nperms, nperms);
++- CEINV  = gsl_matrix_view_array(cvein  , nperms, nperms);
++- CEXPT  = gsl_matrix_view_array(cvexpt , nperms, nperms);
++- IDTY   = gsl_matrix_view_array(vidty  , nperms, nperms);
++-
++- /*
++-  * Hmmm, looks like cexact isn't invertible.  Duh.  So it has eigenvalues.
++-  * This seems to be important (how, I do not know) so let's find out.
++-  * Here is the gsl ritual for evaluating eigenvalues etc.
++-  */
++-
++- gsl_vector *eval = gsl_vector_alloc (nperms);
++- gsl_matrix *evec = gsl_matrix_alloc (nperms,nperms);
++- /*
++- gsl_eigen_nonsymm_workspace* w =  gsl_eigen_nonsymmv_alloc(nperms);
++- gsl_eigen_nonsymm_params (1,0,w);
++- gsl_eigen_nonsymmv(&CEXACT.matrix, eval, evec, w);
++- gsl_eigen_nonsymmv_free (w);
++- */
++- gsl_eigen_symmv_workspace* w =  gsl_eigen_symmv_alloc(nperms);
++- gsl_eigen_symmv(&CEXACT.matrix, eval, evec, w);
++- gsl_eigen_symmv_free (w);
++- gsl_eigen_symmv_sort (eval, evec, GSL_EIGEN_SORT_ABS_ASC);
++-
++- {
++-   int i;
++-
++-   printf("#==================================================================\n");
++-   for (i = 0; i < nperms; i++) {
++-     double eval_i = gsl_vector_get (eval, i);
++-     gsl_vector_view evec_i = gsl_matrix_column (evec, i);
++-     printf ("eigenvalue[%u] = %g\n", i, eval_i);
++-     printf ("eigenvector[%u] = \n",i);
++-     gsl_vector_fprintf (stdout,&evec_i.vector, "%10.5f");
++-   }
++-   printf("#==================================================================\n");
++- }
++-
++- gsl_vector_free (eval);
++- gsl_matrix_free (evec);
++-
++-/*
++- gsl_linalg_LU_decomp(&CEXACT.matrix, p, &s);
++- gsl_linalg_LU_invert(&CEXACT, p, &CEINV);
++- gsl_permutation_free(p);
++- gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, &CEINV.matrix, &CEXPT.matrix, 0.0, &IDTY.matrix);
++- printf("#==================================================================\n");
++- printf("# Should be inverse of C, assuming it is invertible:\n");
++- for(i=0;i<nperms;i++){
++-   printf("# ");
++-   for(j = 0;j<nperms;j++){
++-     printf("%8.3f ",idty[i][j]);
++-   }
++-   printf("\n");
++- }
++- printf("#==================================================================\n");
++- printf("#==================================================================\n");
++- printf("# Should be normal on identity:\n");
++- for(i=0;i<nperms;i++){
++-   printf("# ");
++-   for(j = 0;j<nperms;j++){
++-     printf("%8.3f ",idty[i][j]);
++-   }
++-   printf("\n");
++- }
++- printf("#==================================================================\n");
++- */
++-
++-    
++-
++- /*
++-  * OK, at this point we have two matrices:  cexact[][] is filled with
++-  * the exact covariance matrix expected for the overlapping permutations.
++-  * cexpt[][] has been filled numerically by generating strings of random
++-  * uints or floats, generating sort index permutations, and
++-  * using them to IDENTICALLY generate an "experimental" version of c[][].
++-  * The two should correspond, in the limit of large tsamples.  IF I
++-  * understand Alhakim, Kawczak and Molchanov, then the way to implement
++-  * the simplest possible chisq test is to evaluate:
++-  *       cexact^-1 cexpt \approx I
++-  * where the diagonal terms should form a vector that is chisq distributed?
++-  * Let's try this...
++-  */
++- 
++- 
++-
++- /*
++-  * Free cexact[][] and cexpt[][]
++-  * Fix this when we're done so we don't leak; for now to much trouble.
++- for(i=0;i<nperms;i++){
++-   free(cexact[i]);
++-   free(cexpt[i]);
++- }
++- free(cexact);
++- free(cexpt);
++-  */
++- 
++- return(0);
++-
++-}
++-
++-void make_cexact()
++-{
++-
++- int i,j,k,ip,t,nop;
++- double fi,fj;
++- /*
++-  * This is the test vector.
++-  */
++- double testv[RGB_OPERM_KMAX*2];  /* easier than malloc etc, but beware length */
++- /*
++-  * pi[] is the permutation index of a sample.  ps[] holds the
++-  * actual sample.
++-  */
++- size_t pi[4096],ps[4096];
++- /*
++-  * We seem to have made a mistake of sorts.  We actually have to sum
++-  * BOTH the forward AND the backward directions.  That means that the
++-  * permutation vector has to be of length 3k-1, with the pi=1 term
++-  * corresponding to the middle.  So for k=2, instead of 0,1,2 we need
++-  * 0 1 2 3 4 and we'll have to do 23, 34 in the leading direction and
++-  * 21, 10 in the trailing direction.
++-  */
++- gsl_permutation **operms;
++-
++- MYDEBUG(D_RGB_OPERM){
++-   printf("#==================================================================\n");
++-   printf("# rgb_operm: Running cexact()\n");
++- }
++-
++- /*
++-  * Test fpipi().  This is probably cruft, actually.
++- MYDEBUG(D_RGB_OPERM){
++-   printf("# rgb_operm: Testing fpipi()\n");
++-   for(i=0;i<nperms;i++){
++-     for(j = 0;j<nperms;j++){
++-       printf("# rgb_operm: fpipi(%u,%u,%u) = %f\n",i,j,nperms,fpipi(i,j,nperms));
++-     }
++-   }
++- }
++- */
++-
++- MYDEBUG(D_RGB_OPERM){
++-   printf("#==================================================================\n");
++-   printf("# rgb_operm: Forming set of %u overlapping permutations\n",noperms);
++-   printf("# rgb_operm: Permutations\n");
++-   printf("# rgb_operm:==============================\n");
++- }
++- operms = (gsl_permutation**) malloc(noperms*sizeof(gsl_permutation*));
++- for(i=0;i<noperms;i++){
++-   operms[i] = gsl_permutation_alloc(3*rgb_operm_k - 2);
++-   /* Must quiet down
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("# rgb_operm: ");
++-   }
++-   */
++-   if(i == 0){
++-     gsl_permutation_init(operms[i]);
++-   } else {
++-     gsl_permutation_memcpy(operms[i],operms[i-1]);
++-     gsl_permutation_next(operms[i]);
++-   }
++-   /*
++-   MYDEBUG(D_RGB_OPERM){
++-     gsl_permutation_fprintf(stdout,operms[i]," %u");
++-     printf("\n");
++-   }
++-   */
++- }
++-
++- /*
++-  * We now form c_exact PRECISELY the same way that we do c_expt[][]
++-  * below, except that instead of pulling random samples of integers
++-  * or floats and averaging over the permutations thus represented,
++-  * we iterate over the complete set of equally weighted permutations
++-  * to get an exact answer.  Note that we have to center on 2k-1 and
++-  * go both forwards and backwards.
++-  */
++- for(t=0;t<noperms;t++){
++-   /*
++-    * To sort into a perm, test vector needs to be double.
++-    */
++-   for(k=0;k<3*rgb_operm_k - 2;k++) testv[k] = (double) operms[t]->data[k];
++-
++-   /* Not cruft, but quiet...
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("#------------------------------------------------------------------\n");
++-     printf("# Generating offset sample permutation pi's\n");
++-   }
++-   */
++-   for(k=0;k<2*rgb_operm_k - 1;k++){
++-     gsl_sort_index((size_t *) ps,&testv[k],1,rgb_operm_k);
++-     pi[k] = piperm((size_t *) ps,rgb_operm_k);
++-
++-     /* Not cruft, but quiet...
++-     MYDEBUG(D_RGB_OPERM){
++-       printf("# %u: ",k);
++-       for(ip=k;ip<rgb_operm_k+k;ip++){
++-         printf("%.1f ",testv[ip]);
++-       }
++-       printf("\n# ");
++-       for(ip=0;ip<rgb_operm_k;ip++){
++-         printf("%u ",ps[ip]);
++-       }
++-       printf(" = %u\n",pi[k]);
++-     }
++-     */
++-
++-   }
++-
++-   /*
++-    * This is the business end of things.  The covariance matrix is the
++-    * the sum of a central function of the permutation indices that yields
++-    * nperms-1/nperms on diagonal, -1/nperms off diagonal, for all the
++-    * possible permutations, for the FIRST permutation in a sample (fi)
++-    * times the sum of the same function over all the overlapping permutations
++-    * drawn from the same sample.  Quite simple, really.
++-    */
++-   for(i=0;i<nperms;i++){
++-     fi = fpipi(i,pi[rgb_operm_k-1],nperms);
++-     for(j=0;j<nperms;j++){
++-       fj = 0.0;
++-       for(k=0;k<rgb_operm_k;k++){
++-         fj += fpipi(j,pi[rgb_operm_k - 1 + k],nperms);
++-         if(k != 0){
++-           fj += fpipi(j,pi[rgb_operm_k - 1 - k],nperms);
++-	 }
++-       }
++-       cexact[i][j] += fi*fj;
++-     }
++-   }
++-
++- }
++-
++- MYDEBUG(D_RGB_OPERM){
++-   printf("# rgb_operm:==============================\n");
++-   printf("# rgb_operm: cexact[][] = \n");
++- }
++- for(i=0;i<nperms;i++){
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("# ");
++-   }
++-   for(j=0;j<nperms;j++){
++-     cexact[i][j] /= noperms;
++-     MYDEBUG(D_RGB_OPERM){
++-       printf("%10.6f  ",cexact[i][j]);
++-     }
++-   }
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("\n");
++-   }
++- }
++-
++- /*
++-  * Free operms[]
++-  */
++- for(i=0;i<noperms;i++){
++-   gsl_permutation_free(operms[i]);
++- }
++- free(operms);
++-
++-}
++-
++-void make_cexpt()
++-{
++-
++- int i,j,k,ip,t;
++- double fi,fj;
++- /*
++-  * This is the test vector.
++-  */
++- double testv[RGB_OPERM_KMAX*2];  /* easier than malloc etc, but beware length */
++- /*
++-  * pi[] is the permutation index of a sample.  ps[] holds the
++-  * actual sample.
++-  */
++- int pi[4096],ps[4096];
++-
++- MYDEBUG(D_RGB_OPERM){
++-   printf("#==================================================================\n");
++-   printf("# rgb_operm: Running cexpt()\n");
++- }
++-
++- /*
++-  * We evaluate cexpt[][] by sampling.  In a nutshell, this involves
++-  *   a) Filling testv[] with 2*rgb_operm_k - 1 random uints or doubles
++-  * It clearly cannot matter which we use, as long as the probability of
++-  * exact duplicates in a sample is very low.
++-  *   b) Using gsl_sort_index the exact same way it was used in make_cexact()
++-  * to generate the pi[] index, using ps[] as scratch space for the sort
++-  * indices.
++-  *   c) Evaluating fi and fj from the SAMPLED result, tsamples times.
++-  *   d) Normalizing.
++-  * Note that this is pretty much identical to the way we formed c_exact[][]
++-  * except that we are determining the relative frequency of each sort order
++-  * permutation 2*rgb_operm_k-1 long.
++-  *
++-  * NOTE WELL!  I honestly think that it is borderline silly to view
++-  * this as a matrix and to go through all of this nonsense.  The theoretical
++-  * c_exact[][] is computed from the observation that all the permutations
++-  * of n objects have equal weight = 1/n!.  Consequently, they should
++-  * individually be binomially distributed, tending to normal with many
++-  * samples.  Collectively they should be distributed like a vector of
++-  * equal binomial probabilities and a p-value should follow either from
++-  * chisq on n!-1 DoF or for that matter a KS test.  I see no way that
++-  * making it into a matrix can increase the sensitivity of the test -- if
++-  * the p-values are well defined in the two cases they can only be equal
++-  * by their very definition.
++-  *
++-  * If you are a statistician reading these words and disagree, please
++-  * communicate with me and explain why I'm wrong.  I'm still very much
++-  * learning statistics and would cherish gentle correction.
++-  */
++- for(t=0;t<tsamples;t++){
++-   /*
++-    * To sort into a perm, test vector needs to be double.
++-    */
++-   for(k=0;k<3*rgb_operm_k - 2;k++) testv[k] = (double) gsl_rng_get(rng);
++-
++-   /* Not cruft, but quiet...
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("#------------------------------------------------------------------\n");
++-     printf("# Generating offset sample permutation pi's\n");
++-   }
++-   */
++-   for(k=0;k<2*rgb_operm_k-1;k++){
++-     gsl_sort_index(ps,&testv[k],1,rgb_operm_k);
++-     pi[k] = piperm(ps,rgb_operm_k);
++-
++-     /* Not cruft, but quiet...
++-     MYDEBUG(D_RGB_OPERM){
++-       printf("# %u: ",k);
++-       for(ip=k;ip<rgb_operm_k+k;ip++){
++-         printf("%.1f ",testv[ip]);
++-       }
++-       printf("\n# ");
++-       for(ip=0;ip<rgb_operm_k;ip++){
++-         printf("%u ",permsample->data[ip]);
++-       }
++-       printf(" = %u\n",pi[k]);
++-     }
++-     */
++-   }
++-
++-   /*
++-    * This is the business end of things.  The covariance matrix is the
++-    * the sum of a central function of the permutation indices that yields
++-    * nperms-1/nperms on diagonal, -1/nperms off diagonal, for all the
++-    * possible permutations, for the FIRST permutation in a sample (fi)
++-    * times the sum of the same function over all the overlapping permutations
++-    * drawn from the same sample.  Quite simple, really.
++-    */
++-   for(i=0;i<nperms;i++){
++-     fi = fpipi(i,pi[rgb_operm_k-1],nperms);
++-     for(j=0;j<nperms;j++){
++-       fj = 0.0;
++-       for(k=0;k<rgb_operm_k;k++){
++-         fj += fpipi(j,pi[rgb_operm_k - 1 + k],nperms);
++-	 if(k != 0){
++-           fj += fpipi(j,pi[rgb_operm_k - 1 - k],nperms);
++-	 }
++-       }
++-       cexpt[i][j] += fi*fj;
++-     }
++-   }
++-
++- }
++-
++- MYDEBUG(D_RGB_OPERM){
++-   printf("# rgb_operm:==============================\n");
++-   printf("# rgb_operm: cexpt[][] = \n");
++- }
++- for(i=0;i<nperms;i++){
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("# ");
++-   }
++-   for(j=0;j<nperms;j++){
++-     cexpt[i][j] /= tsamples;
++-     MYDEBUG(D_RGB_OPERM){
++-       printf("%10.6f  ",cexpt[i][j]);
++-     }
++-   }
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("\n");
++-   }
++- }
++-
++-}
++-
++-uint piperm(size_t *data,int len)
++-{
++-
++- uint i,j,k,max,min;
++- uint pindex,uret,tmp;
++- static gsl_permutation** lookup = 0;
++-
++- /*
++-  * Allocate space for lookup table and fill it.
++-  */
++- if(lookup == 0){
++-   lookup = (gsl_permutation**) malloc(nperms*sizeof(gsl_permutation*));
++-   MYDEBUG(D_RGB_OPERM){
++-     printf("# rgb_operm: Allocating piperm lookup table of perms.\n");
++-   }
++-   for(i=0;i<nperms;i++){
++-        lookup[i] = gsl_permutation_alloc(rgb_operm_k);
++-   }
++-   for(i=0;i<nperms;i++){
++-     if(i == 0){
++-       gsl_permutation_init(lookup[i]);
++-     } else {
++-       gsl_permutation_memcpy(lookup[i],lookup[i-1]);
++-       gsl_permutation_next(lookup[i]);
++-     }
++-   }
++-
++-   /*
++-    * This method yields a mirror symmetry in the permutations top to
++-    * bottom.
++-   for(i=0;i<nperms/2;i++){
++-     if(i == 0){
++-       gsl_permutation_init(lookup[i]);
++-       for(j=0;j<rgb_operm_k;j++){
++-         lookup[nperms-i-1]->data[rgb_operm_k-j-1] = lookup[i]->data[j];
++-       }
++-     } else {
++-       gsl_permutation_memcpy(lookup[i],lookup[i-1]);
++-       gsl_permutation_next(lookup[i]);
++-       for(j=0;j<rgb_operm_k;j++){
++-         lookup[nperms-i-1]->data[rgb_operm_k-j-1] = lookup[i]->data[j];
++-       }
++-     }
++-   }
++-   */
++-   MYDEBUG(D_RGB_OPERM){
++-     for(i=0;i<nperms;i++){
++-       printf("# rgb_operm: %u => ",i);
++-       gsl_permutation_fprintf(stdout,lookup[i]," %u");
++-       printf("\n");
++-     }
++-   }
++-
++- }
++-
++- for(i=0;i<nperms;i++){
++-   if(memcmp(data,lookup[i]->data,len*sizeof(uint))==0){
++-     /* Not cruft, but off:
++-     MYDEBUG(D_RGB_OPERM){
++-       printf("# piperm(): ");
++-       gsl_permutation_fprintf(stdout,lookup[i]," %u");
++-       printf(" = %u\n",i);
++-     }
++-     */
++-     return(i);
++-   }
++- }
++- printf("We'd better not get here...\n");
++-
++- return(0);
++-
++-}
++-
++-double fpipi(int pi1,int pi2,int nkp)
++-{
++-
++- int i;
++- double fret;
++-
++- /*
++-  * compute the k-permutation index from iperm for the window
++-  * at data[offset] of length len.  If it matches pind, return
++-  * the first quantity, otherwise return the second.
++-  */
++- if(pi1 == pi2){
++-
++-   fret = (double) (nkp - 1.0)/nkp;
++-   if(verbose < 0){
++-     printf(" f(%d,%d) = %10.6f\n",pi1,pi2,fret);
++-   }
++-   return(fret);
++-
++- } else {
++-
++-   fret = (double) (-1.0/nkp);
++-   if(verbose < 0){
++-     printf(" f(%d,%d) = %10.6f\n",pi1,pi2,fret);
++-   }
++-   return(fret);
++-
++- }
++-
++-
++-}
++-
++-
++-
++-
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
