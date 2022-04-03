@@ -1,82 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C6BC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 23:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14F87C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 23:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B4D360BD1;
-	Sun,  3 Apr 2022 23:13:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78CDE4157A;
+	Sun,  3 Apr 2022 23:27:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QQX_dUca7qwg; Sun,  3 Apr 2022 23:13:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k_4AU4CN8-S8; Sun,  3 Apr 2022 23:27:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6639660B94;
-	Sun,  3 Apr 2022 23:13:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8FB04156F;
+	Sun,  3 Apr 2022 23:27:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A9661BF25F
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 23:13:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB1291BF25F
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 23:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7218560B94
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 23:13:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5AB260A9D
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 23:27:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iA_ogwNHRV95 for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 23:13:19 +0000 (UTC)
+ with ESMTP id NlqM5yzI15wg for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 23:27:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
- [IPv6:2607:f8b0:4864:20::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7C2A160B04
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 23:13:19 +0000 (UTC)
-Received: by mail-oi1-x229.google.com with SMTP id j83so8480633oih.6
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 16:13:19 -0700 (PDT)
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 02D3960A6B
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 23:27:53 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id e13so1950497ils.8
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 16:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=MvQJZjPXZ0H/xX+Kht+HzKI+O4YI9N2eChJcS38uhm4=;
- b=HzilkeDfun8cd+93g9i7BuzX66ZhX6dqSDTJEMTxqZOH8NH5/hP1oRziPZoc+lriMR
- OVsCruVTf8CdLWnJSp6/Evo8tgqZ7G5jpntH4F/uu9fIrVdJiOse4hUhbfuC+EU1Wzow
- KFJCsw/KBHM30n2BYRpDl8/2o27cY+AlfBvbYTBGWdTFNHGEqNw0k3oo1RXHxkMYmimg
- fdVInWLR9fZmOx88plrBidBHaRUy3kQon188ddeATMU9O2PLJYOSXERLjUORC5do1PoX
- k/8O9QF9vhLYpKaSWQRFTBN4OtpsuHOVWkNLOYbEgZ5L/0PvXt8v68lKxyo2Dn71IMQJ
- qIxA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=6g1qqKZJHH9b6BoXwiYhtLZFzqMMh76bIhbpnmDevMM=;
+ b=H/C0lSjh8x5hr7BXO4fQhQYLXtlnr50avsb57w00z2w65rzKYQ1F1axNdbaik43TPa
+ WtM0RPI2NmUU3o2AWSQJ0BZZkhCY7ktXB6JG1ab9Nb4vfhkTY37INyDxdm2x8WmR4sWP
+ VMugCWPrSVexh50MSquNV5VMr4SwYvTHTDP/7pqSCnMl+M0n+Y0MGmF7BrzPGYLOK1jF
+ iMZ8tmpkbd+dkCuKRfDYL3Gvirb1tQY4hlIbSHZIWM0KPspHt0Qtg1jBTvcOQDq7svkP
+ xoGEaO4Tr76sGyZcgec30Q5cIwSAOTYOnFkM1k7XHwOlXHMAtN0yH195GOXWPdrIee41
+ Pg3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=MvQJZjPXZ0H/xX+Kht+HzKI+O4YI9N2eChJcS38uhm4=;
- b=PpMXlzF9eFpfiswGKs4XnY7mj/SyT9ReN738hNuZsttCV40lNgebYovrBIH5mddXtr
- Zq1EwkqFUKRDbw3wldI7kLBin5zq7I32kSRvwTQttILMOwmlHlmbEXGbqPOWt/fMqBxV
- GUQIyqwfGoTghEcRCb2/crAORTH0uB1qEEU0R4rMqpOQYxpJrloP5Pj8+Gq4hYEnLkdR
- jprMRZyB07RLmNPvetC4vM9Rjk2J9izE36CB3yzGCGlg+WA29EESE+S0az6TUS4NFW5N
- HO8mHv9L4w+U6OVQmm8I99LVHrXgw/4+qNYwwB5uiiF9YjXZeD3so/UjkQB2emwTg4Jq
- MmXA==
-X-Gm-Message-State: AOAM530qW9CTb4JMKeB1Ep4UTqWTuXUlWhq6Yt1B1qbq8T43oZjj1s0d
- 1vZQX3bhQwqBOuY2b9o4NQYQFY1AGVD9aaVzoOU=
-X-Google-Smtp-Source: ABdhPJyaL6EFfr7HHkS5m2LBT2I3JnjAU9PFdz7XO9fO+U6/gWWewqXM5cPvjeTWSv/XSAvxLdAtQZcUo0Nt0cL/xsM=
-X-Received: by 2002:a05:6808:df1:b0:2ec:b193:ad6c with SMTP id
- g49-20020a0568080df100b002ecb193ad6cmr8378724oic.200.1649027598439; Sun, 03
- Apr 2022 16:13:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220327202415.1248312-1-Jason@zx2c4.com>
- <20220329050401.110856-1-Jason@zx2c4.com>
- <871qyj8kpk.fsf@dell.be.48ers.dk>
- <CAHmME9oRxF66kB9U93zTXC9EQq4xYTABPrZ9y2dPfhReAZdTpQ@mail.gmail.com>
- <CADvTj4obQf+p-bES_5NLK85D=TbjqFhVyxNgNTmWtHzY+nAkcQ@mail.gmail.com>
- <CAHmME9rNbxonoOXNV5FQh+AsUbYA4psgZYLUFJm4aZh1ERe9hQ@mail.gmail.com>
- <f16f09468ba64eb0bb9d985304daecb4@AcuMS.aculab.com>
- <7bcc0cf7-5759-1ef4-9667-fd8ae0c4741f@mind.be>
- <20220403094236.GF1811301@scaer>
-In-Reply-To: <20220403094236.GF1811301@scaer>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=6g1qqKZJHH9b6BoXwiYhtLZFzqMMh76bIhbpnmDevMM=;
+ b=dPUZEELKE5tVISosAvigWewDzlwD9M9swyHJIl883L22UCPSts2Jj5hLUc8ZRqzUk7
+ fYNDSPoWcfNe2pq3W0R2QfIa1sx6GjKD/2RBU9UxBHmAottYy8WSdm/gj2eU9GRA7xK7
+ 90OFioTncLCL+xi+ysXSFunOHP7No3NEKvQg7Nim2B3ZoXAU/NFFUpBpRVzPGZiAcQ6b
+ a6fRDRjJMIVIFbsi7tQBN7GkXxmvJ5FX0yV9WmsDVjrU0FsvsGULSTSagXAq7/UiWNW/
+ 0StoeCh9P7O0BuJ63yvDja/gv7enw+grMG32QBcivJ97T3lOPZGX9KRaJTFwPQSRmVLh
+ 6OnA==
+X-Gm-Message-State: AOAM530AcbQsLLoxh4dKWZ7il5wY9AWa/TxMGCk16este9eaKQ3BoX/j
+ MNheoPt2WBqYsCug/YQWJos6p/odPRKODg==
+X-Google-Smtp-Source: ABdhPJysRjHbQHIjJKxmY3P8LrOPhosNv0VppYFAFrakwvEB1thEywdO5Yh3N/VMEMgyHtXgO/dSUQ==
+X-Received: by 2002:a05:6e02:1aa6:b0:2c9:cfd3:5d0b with SMTP id
+ l6-20020a056e021aa600b002c9cfd35d0bmr4414386ilv.38.1649028472833; 
+ Sun, 03 Apr 2022 16:27:52 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
+ [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
+ r3-20020a92d983000000b002c98eaa72ddsm4902669iln.84.2022.04.03.16.27.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 03 Apr 2022 16:27:52 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Apr 2022 17:13:06 -0600
-Message-ID: <CADvTj4pxMsrUmzx3VRMXHnJ1sFV-d7=q7sLVvTxvRoRosKEsCg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v3] package/urandom-scripts: actually credit
- seed files via seedrng
+To: buildroot@buildroot.org
+Date: Sun,  3 Apr 2022 17:27:47 -0600
+Message-Id: <20220403232747.560562-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v4 1/1] package/pkg-python: migrate flit to new
+ bootstrapping sequence
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,94 +87,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
- David Laight <David.Laight@aculab.com>, buildroot <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Apr 3, 2022 at 3:42 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> All,
->
-> On 2022-04-02 19:08 +0200, Arnout Vandecappelle spake thusly:
-> > On 01/04/2022 13:34, David Laight wrote:
-> > >From: Jason A. Donenfeld
-> > >>Sent: 01 April 2022 12:05
-> > >>On 4/1/22, James Hilliard <james.hilliard1@gmail.com> wrote:
-> > >>>I should add that I do also think this should be upstreamed to busybox,
-> > >>>which
-> > >>>will also reduce the amount of duplicate work as busybox is commonly used
-> > >>>across many distros.
-> > >>I'll work on that.
-> >  +1 to have it in busybox.
->
-> I still fail to understand why this can't be a standalone project.
->
-> The reasoning offered by Jason is that the code should be included
-> and duplicated into all and each init systems out there.
->
-> However, this increases the maintenance burden, as each implementation
-> has to be actively tracked (FTR: Jason said he would actively maintain
-> the implementation in Buildroot, which is very nice of him, so I
-> understand that he would also do so for all other projects where he'd
-> have seedrng included).
->
-> Instead of having one implementation suitable for every init systems
-> that use shell scripts, we'd end up with many different and diverging
-> implementations that each have their own warts and fixes (or worse,
-> counter-productive fixes that actually decrease the robustness of that
-> implementation).
->
-> On the other hand, having a common project would alow to centralise the
-> fixes. It would also allow to ensure that changes do not actually break
-> security. Finally, any evolution, be it fixes or features, would be
-> easily available to every init systems using the common project.
->
-> Furthermore, the level of customisation is very low. All that we can
-> expect to be customisable is the location where the seeds are stored.
-> This is already accounted for in the existing seedrng git tree. Using
-> another hash implementation could be another thing, but there's not
-> much point here, Blake2 being already pretty strong and known. So there
-> is probably not much more customisation left to do.
->
-> Moving it into busybox might seem a good idea at first, but this would
-> still make for an n-th implementation to track, and since busybox has a
-> focus on code size, the implementation there would probably diverge
-> substantially from the canonical code we saw so far, further increasing
-> the maintenance burden.
->
-> That would also not address distributions that do not use busybox (and
-> do not use systemd either). Buildroot can even be configured in such a
-> way, using a sys-v init system with coreutils et al,. and no busybox, in
-> which case having seedrng only in busybox would still not solve the
-> problem in such a case. And init systems are not limited to what we can
-> see publicly; there are maybe hundreds or thousands of such custom init
-> systems behind private doors. Buildroot even has an option to configure
-> for such an init system (BR2_INIT_NONE, which really means 'custom').
+There are a number of flit toolchain dependencies currently in the
+process of deprecating distutils based fallbacks.
 
-Maybe it should also be upstreamed to util-linux?
+This will be needed in order to update tomli.
 
->
-> On a final note: systemd has native support for this feature, and thus
-> one may argue that the feature is indeed already duplicated there.
-> However, this is different in two ways: first, systemd needs random
-> numbers for itself already, very early in the boot, possibly in an
-> initramfs, so it can't easily rely on an external tool to do that;
-> second, systemd is already C, so it does not make sense for the feature
-> to be implemented as an external tool either.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+We need to migrate these to use a new bootstrap based build+install
+sequence which relies on flit's bootstrap wheel build+install
+features to build and install host-python-pypa-build and
+host-python-installer which gives us a full pep517 toolchain.
+
+Note that one can run host-python-flit-core commands for building
+and installing itself since the package build directory is the cwd.
+
+We need to add a special flit-bootstrap SETUP_TYPE for dependencies
+of host-python-pypa-build and host-python-installer which can not
+use the normal flit SETUP_TYPE which would cause a circular dependency
+issue.
+
+We need to special case dependency exclusions for
+host-python-flit-core and host-python-installer to avoid circular
+dependencies in the flit-bootstrap SETUP_TYPE.
+
+We also need to special case the installation command for
+host-python-flit-core since it can not depend on host-python-installer
+due to host-python-installer requiring host-python-flit-core.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+Changes v3 -> v4:
+  - rebase
+Changes v2 -> v3:
+  - add special flit-bootstrap SETUP_TYPE
+  - don't change package SETUP_TYPE's yet
+Changes v1 -> v2:
+  - formatting/cleanup
+  - add comments
+---
+ package/pkg-python.mk | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 867341fc7b..2e7704a0a9 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -154,6 +154,9 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--scripts=$(HOST_DIR)/bin \
+ 	--data=$(HOST_DIR)
+ 
++HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
++	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
+ # and installation of a Python package should be done, implements a
+@@ -203,7 +206,7 @@ $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
+ $(2)_BASE_BUILD_CMD = setup.py build
+ $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+ endif
+-else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
++else ifneq ($$(filter flit flit-bootstrap pep517,$$($(2)_SETUP_TYPE)),)
+ ifeq ($(4),target)
+ $(2)_BASE_ENV = $$(PKG_PYTHON_PEP517_ENV)
+ $(2)_BASE_BUILD_CMD = -m build -n -w
+@@ -211,9 +214,24 @@ $(2)_BASE_INSTALL_TARGET_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $
+ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS)
+ else
+ $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
++# Use flit built in wheel builder for packages that are flit-bootstrap packages.
++# This is needed to avoid a circular with host-python-pypa-build and those dependencies.
++#
++ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
++$(2)_BASE_BUILD_CMD = -m flit_core.wheel
++ifeq ($(1),host-python-flit-core)
++# Use flit built in bootstrap_install for installing host-python-flit-core.
++# This is due to host-python-installer depending on host-python-flit-core.
++#
++$(2)_BASE_INSTALL_CMD = -m bootstrap_install dist/* $$(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS)
++else
++$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
++endif
++else
+ $(2)_BASE_BUILD_CMD = -m build -n -w
+ $(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
+ endif
++endif
+ else
+ $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
+ endif
+@@ -239,6 +257,12 @@ $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
+ ifeq ($$($(2)_SETUP_TYPE),flit)
+ $(2)_DEPENDENCIES += host-python-flit-core
+ endif
++else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
++ifneq ($$(filter host-python-flit-core host-python-installer,$(1)),)
++$(2)_DEPENDENCIES += $$(if $$(filter host-python-flit-core,$(1)),,host-python-flit-core)
++else
++$(2)_DEPENDENCIES += host-python-flit-core host-python-installer
++endif
+ endif # SETUP_TYPE
+ 
+ # Python interpreter to use for building the package.
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
