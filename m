@@ -1,78 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C1A0C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 20:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5828FC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 20:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CB894087A;
-	Sun,  3 Apr 2022 20:14:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01C104028D;
+	Sun,  3 Apr 2022 20:15:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VaSmbBmSDWzs; Sun,  3 Apr 2022 20:14:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EF9F40861;
-	Sun,  3 Apr 2022 20:14:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C6191BF31F
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:14:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A06140155
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:14:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZKP8trkBWWHP for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 20:14:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com
- [IPv6:2001:4860:4864:20::2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D59534011D
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 20:14:51 +0000 (UTC)
-Received: by mail-oa1-x2c.google.com with SMTP id
- 586e51a60fabf-d39f741ba0so8408081fac.13
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 13:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=JYq95eMU+H/U1CXio+TMOfqkdNJxnyc/YWLnclbkd+I=;
- b=pJTkf+ZXrdjWxrJ3JCtbHF+I4RoM+RntQnrpCKkmCsYZnf1NRTj8B5WBxk7ZqQPzzr
- hXJBhC557W9lMnzHg753aVgcRfQBZ5nh7647MaXXTvZ/b4dBrFnGFewYSmNlsFpMVGwB
- h/YlrJehmd6sTRy4mtX4GY00nHeuqYFB0L38YC1UFGKecwIYPJWgvW7Sdo8lFZTa1QsU
- rXIACHOvXTcQWunikLTAUPqjkIetkVL7ygZzhi7AJXJmYeMqwYMPDb733gN6oW44d/Ga
- yriBNhyW14/C7LMYUrdiakmhHVtcos6eLc1ZfFoXCOuGpoYXytY895N9U8zcSgKt0Oqm
- bDgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=JYq95eMU+H/U1CXio+TMOfqkdNJxnyc/YWLnclbkd+I=;
- b=wAeRmG2tychzqB/Xeb1/NHRb8XTJpY57mHu4DdkgNO7Yxb9UET9x0MTXtTqupKJhLR
- CL4bOhVObmMnS6wP1HJZspHnj0qT6Dyl6xGwifi+gtvWJnnyYtH1ygONQcYmAkhjPwYo
- TjTWuqShI4M33Ssldy4+Oe3npimWpwVGM1fM7brwtmYQ9j2m2xHHfj5NDX8l8pEyFjLV
- pl8U15cUhD/voMfDesmZ5yQDJ73QQkfv95EtkqEjMeikKhmoRUmehQxp6PQTIx5qfHrR
- VUyg6yuCRg0Aqhn/s+mCkq6RETrpOycEDMYfpdeTp9h3gcZhgrm4mazWQfNmIoKdFEPI
- ciCw==
-X-Gm-Message-State: AOAM5335dmJNkWLFJstcjwo4TnQxiscr7jq823WC/liJCPz7ILQKl/qG
- lF/Wm34NO67hT8sIlisDVU9fkHU5L74A9N8rHns=
-X-Google-Smtp-Source: ABdhPJx7QnNDfB0hAy5sDZfoNWQ7iOIEuqokSHDd/3fnE0IVbKBEOHN/HwlGP7wmMxX7IwZIYEooR5wz96ZI2uhNO7w=
-X-Received: by 2002:a05:6871:1c8:b0:de:1f3f:ce9a with SMTP id
- q8-20020a05687101c800b000de1f3fce9amr9521111oad.148.1649016890875; Sun, 03
- Apr 2022 13:14:50 -0700 (PDT)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T2LRpSvlcsJc; Sun,  3 Apr 2022 20:15:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0ADE4011D;
+	Sun,  3 Apr 2022 20:15:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EC5A1BF31F
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:15:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C93482A53
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 20:15:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cr5yVW5u8Xsq for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 20:15:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C8078275C
+ for <buildroot@buildroot.org>; Sun,  3 Apr 2022 20:15:36 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:314c:79b0:cf44:9021])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id AEBCD13F84C;
+ Sun,  3 Apr 2022 22:15:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1649016934;
+ bh=4PaROxRwQUYY15rjvxSv6psUUpmtNmO55A42Z2ny+9w=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Pycz7iKPLIBT30KKdf1CLZOYPz7/droKlPhKSugblnrco5JyKov5JN5MNd6gfRgGg
+ Ac8LTGIncecJcuS4UDjpXmGNHCkHoElRjHcG7ymhl4aFAi+KZigDCTUsbzJGEJMlC4
+ QH4OwICcpX33m8bmY2+Fkw/cV6935Y7pAQsq1/+7Xmw4mdbo1efSbwB1ToFnq38+4Q
+ 4z6y6vy+of1wsAvduF3uEKdeWVk9N7eJiy1vsAz3RWL8bpAxgMlEAp8E93KYrUAmex
+ IkfHFJirjCKkbQE1a0/WpmOCvzsF+clwp89gdDUczYatkA+SQK7sesAUUpkjeTsO6q
+ hMjV84JH8VFgg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 03 Apr 2022 22:15:30 +0200
+Date: Sun, 3 Apr 2022 22:15:30 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220403201530.GB2354230@scaer>
+References: <20220403185306.928833-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-References: <20220403191103.1019544-1-fontaine.fabrice@gmail.com>
- <20220403195905.GA2354230@scaer>
-In-Reply-To: <20220403195905.GA2354230@scaer>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 3 Apr 2022 22:13:06 +0200
-Message-ID: <CAPi7W82cXSh+aBNy5En8Qh3dpLpdi3SW4PDRuX+ZZo+09k5AmA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/zlib-ng: fix build on powerpc
+Content-Disposition: inline
+In-Reply-To: <20220403185306.928833-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: fix build with
+ libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,56 +72,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgZGltLiAzIGF2ci4gMjAyMiDDoCAyMTo1OSwgWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jpbi4x
-OTk4QGZyZWUuZnI+IGEgw6ljcml0IDoKPgo+IEZhYnJpY2UsIEFsbCwKPgo+IE9uIDIwMjItMDQt
-MDMgMjE6MTEgKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5Ogo+ID4gRGlzYWJs
-ZSBQT1dFUjggb3B0aW1pc2F0aW9ucyB0byBmaXggdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJl
-IHdpdGgKPiA+IHBvd2VycGMgYW5kIGxpYmdsaWIyIHJhaXNlZCBzaW5jZSBidW1wIHRvIHZlcnNp
-b24gMS45LjktYjEgaW4gY29tbWl0Cj4gPiAxZjdiMTJhMGI0NTcyZDdlNzYzYzQzMWE2M2MyMmNm
-YjkxMmI4YjE0IGFuZAo+ID4gaHR0cHM6Ly9naXRodWIuY29tL3psaWItbmcvemxpYi1uZy9jb21t
-aXQvYjgxZjRlZTk2ZGNiZGYxZGIzNGIwMDcyN2I2ZjE4MjlhMmJhMWVkYjoKPiA+Cj4gPiAvaG9t
-ZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTkvb3V0cHV0LTEvaG9zdC9saWIvZ2NjL3Bv
-d2VycGMtYnVpbGRyb290LWxpbnV4LW11c2wvMTEuMi4wLy4uLy4uLy4uLy4uL3Bvd2VycGMtYnVp
-bGRyb290LWxpbnV4LW11c2wvYmluL2xkOiAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3Rh
-bmNlLTkvb3V0cHV0LTEvaG9zdC9wb3dlcnBjLWJ1aWxkcm9vdC1saW51eC1tdXNsL3N5c3Jvb3Qv
-dXNyL2xpYi9saWJ6LmEoYWRsZXIzMl9wb3dlcjguYy5vKTogaW4gZnVuY3Rpb24gYGFkbGVyMzJf
-cG93ZXI4JzoKPiA+IC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtOS9vdXRwdXQt
-MS9idWlsZC96bGliLW5nLTIuMC42L2FyY2gvcG93ZXIvYWRsZXIzMl9wb3dlcjguYzoxMDY6IHVu
-ZGVmaW5lZCByZWZlcmVuY2UgdG8gYHZlY19zdW1zdScKPiA+Cj4gPiBGaXhlczoKPiA+ICAtIGh0
-dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2Y4NjRhMGUyMzA3ZTI1MzQyYjQ1
-YzkwYTViNGZiNTdhMGY1YzFjOTMKPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRh
-aW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+IC0tLQo+ID4gIHBhY2thZ2Uvemxp
-Yi1uZy96bGliLW5nLm1rIHwgMSArCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-Cj4gPgo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvemxpYi1uZy96bGliLW5nLm1rIGIvcGFja2Fn
-ZS96bGliLW5nL3psaWItbmcubWsKPiA+IGluZGV4IGZiNDk3YjhjMTEuLjA5ZWRmZTFmYWYgMTAw
-NjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL3psaWItbmcvemxpYi1uZy5tawo+ID4gKysrIGIvcGFja2Fn
-ZS96bGliLW5nL3psaWItbmcubWsKPiA+IEBAIC0xNSw2ICsxNSw3IEBAIFpMSUJfTkdfUFJPVklE
-RVMgPSB6bGliCj4gPiAgWkxJQl9OR19DT05GX09QVFMgKz0gXAo+ID4gICAgICAgLURXSVRIX0da
-RklMRU9QPTEgXAo+ID4gICAgICAgLURXSVRIX09QVElNPTEgXAo+ID4gKyAgICAgLURXSVRIX1BP
-V0VSOD1PRkYgXAo+Cj4gV2h5IGNhbid0IHRoYXQgYmUgY29uZGl0aW9uYWwgb24gQlIyX3Bvd2Vy
-cGNfcG93ZXI4ID8KCkl0IGNhbiwgSSdsbCBzZW5kIGEgdjIuCkhvd2V2ZXIsIGl0IHNob3VsZCBi
-ZSBub3RlZCB0aGF0IHBvd2VyOCBpcyB1bmNvbmRpdGlvbmFsbHkgZGlzYWJsZWQgb24KbWVzYTNk
-IHRob3VnaC4KCj4KPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4KPiA+ICAgICAgIC1EWkxJ
-Ql9DT01QQVQ9MSBcCj4gPiAgICAgICAtRFpMSUJfRU5BQkxFX1RFU1RTPU9GRgo+ID4KPiA+IC0t
-Cj4gPiAyLjM1LjEKPiA+Cj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo+Cj4gLS0KPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
-LS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlhbm4gRS4g
-TU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBj
-b25zcGlyYWN5OiB8Cj4gfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBc
-IC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEgMDk5IDQy
-NyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBp
-cyBubyAgfAo+IHwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhU
-TUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0t
-LScKQmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Fabrice, All,
+
+On 2022-04-03 20:53 +0200, Fabrice Fontaine spake thusly:
+> Fix the following build failure with libressl raised since bump to
+> version 6.4.29 in commit ba6fd52195f2e3d0b04baae40cfe084226824d31 and
+> https://gitlab.com/fetchmail/fetchmail/-/commit/340d00bf9910ed55163be26435f70baf65a64f9d:
+> 
+> configure: error: fetchmail cannot legally be linked against LibreSSL for lack of GPL2 clause 2b exception. See COPYING.
+
+This sentence is incorrect. It is legally not possible to *distribute*
+fetchmail when linked against LibreSSL, as the GPL conditions in that
+case only trigger at the moment of distribution.
+
+So, there should be no issue with linking fetchmail to LibreSSL for
+private use without redistribution.
+
+But: IANAL, TINLA, TTYL...
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/95ca66091efa0dafb7c4e8e8c7da1f929ef32d76
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/fetchmail/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
+> index a4bf5a7c20..1017df34b2 100644
+> --- a/package/fetchmail/Config.in
+> +++ b/package/fetchmail/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_FETCHMAIL
+>  	depends on BR2_USE_MMU # fork()
+>  	select BR2_PACKAGE_CA_CERTIFICATES
+>  	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+>  	help
+>  	  Fetchmail - the mail-retrieval daemon
+>  	  Client daemon to move mail from POP and IMAP to your local
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
