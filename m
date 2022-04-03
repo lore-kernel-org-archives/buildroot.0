@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF04C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 22:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 049B2C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 22:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8607415E9;
-	Sun,  3 Apr 2022 22:25:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9230C60E90;
+	Sun,  3 Apr 2022 22:38:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BvjJbwjb_eh1; Sun,  3 Apr 2022 22:38:08 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A50C060B04;
+	Sun,  3 Apr 2022 22:38:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DEB5A1BF350
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 22:38:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBFB2405CE
+ for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 22:38:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u77nLuO36Jft; Sun,  3 Apr 2022 22:25:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C73F415E2;
-	Sun,  3 Apr 2022 22:25:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D374F1BF350
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 22:25:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D091D82F41
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 22:25:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ABp9RxPaTWY8 for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 22:25:35 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4Fl5XEQWV_1E for <buildroot@lists.busybox.net>;
+ Sun,  3 Apr 2022 22:38:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C75682BC3
- for <buildroot@uclibc.org>; Sun,  3 Apr 2022 22:25:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A20CD40761
+ for <buildroot@uclibc.org>; Sun,  3 Apr 2022 22:38:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 74BBF860CB; Sun,  3 Apr 2022 22:16:10 +0000 (UTC)
+ id EC25385FF0; Sun,  3 Apr 2022 22:28:38 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 03 Apr 2022 22:25:34 +0000
+Date: Sun, 03 Apr 2022 22:38:03 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -51,7 +51,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14556-163-UiLegcBOhl@https.bugs.busybox.net/>
+Message-ID: <bug-14556-163-Dd4RWtWZI5@https.bugs.busybox.net/>
 In-Reply-To: <bug-14556-163@https.bugs.busybox.net/>
 References: <bug-14556-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,10 +76,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14556
 
---- Comment #2 from Emile Cormier <emile.cormier.jr@gmail.com> ---
-Submitted patch set starting with:
+--- Comment #3 from Emile Cormier <emile.cormier.jr@gmail.com> ---
+Submitted patch originated from my more recent fork on GitHub:
 
-https://lists.buildroot.org/pipermail/buildroot/2022-April/640097.html
+https://github.com/ecorm/buildroot/tree/bump-crossbar
+
+Due to some Python packages having been bumped since I first starting working
+on this bug, the submitted patch does not correspond directly to the steps
+described in my original post in this bug report.
 
 -- 
 You are receiving this mail because:
