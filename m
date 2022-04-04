@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E46BC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 661E6C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:36:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25B4760FE2;
-	Mon,  4 Apr 2022 19:36:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06D398272A;
+	Mon,  4 Apr 2022 19:36:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l0-z0wSUC6OG; Mon,  4 Apr 2022 19:36:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Wi1bhGPfwr2w; Mon,  4 Apr 2022 19:36:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30FBB60E8C;
-	Mon,  4 Apr 2022 19:36:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 14B381BF27E
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:36:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A284826DA;
+	Mon,  4 Apr 2022 19:36:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 55D411BF27E
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0383560E8C
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:36:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53509826DA
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:36:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uvM7IN_DTq8s for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 19:36:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F98F60BEF
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:36:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 929AC82626; Mon,  4 Apr 2022 19:27:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d98mdHwu0WzM for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 19:36:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4AD56826C8
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:36:54 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DC98EFF802;
+ Mon,  4 Apr 2022 19:36:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nbSVO-006d0j-Um; Mon, 04 Apr 2022 21:36:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 21:35:44 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e86a176c9bc9621fa51dd7ad080e89720f74f161
-X-Git-Newrev: 3002bbcc4cf998179737a3e353c015e54a1dde08
-X-Patchwork-Hint: ignore
-Message-Id: <20220404192711.929AC82626@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/xmrig: needs C++
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220403161751.204523-1-fontaine.fabrice@gmail.com>
+Date: Mon, 04 Apr 2022 21:36:50 +0200
+In-Reply-To: <20220403161751.204523-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Apr 2022 18:17:51 +0200")
+Message-ID: <871qycy71p.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/xmrig: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,56 +59,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3002bbcc4cf998179737a3e353c015e54a1dde08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-xmrig needs C++ since its addition in commit
-6f70990ccf6cb993fc31519337390e436d15493b:
+ > xmrig needs C++ since its addition in commit
+ > 6f70990ccf6cb993fc31519337390e436d15493b:
 
-CMake Error at CMakeLists.txt:2 (project):
-  No CMAKE_CXX_COMPILER could be found.
+ > CMake Error at CMakeLists.txt:2 (project):
+ >   No CMAKE_CXX_COMPILER could be found.
 
-Fixes:
- - http://autobuild.buildroot.org/results/48f4ff6dc8281ffa99a45401b5941b28f2c94bc2
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/48f4ff6dc8281ffa99a45401b5941b28f2c94bc2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2d806891cb0dc0fd2d30171d14bc9e911abbe76e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xmrig/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
-index 7024241017..c5c6b3e37b 100644
---- a/package/xmrig/Config.in
-+++ b/package/xmrig/Config.in
-@@ -8,15 +8,17 @@ config BR2_PACKAGE_XMRIG
- 	# xmrig needs fenv.h which is not provided by uclibc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBUV
- 	help
- 	  RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner.
- 
- 	  https://xmrig.com
- 
--comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library"
-+comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++"
- 	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS
-+		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS || \
-+		!BR2_INSTALL_LIBSTDCPP
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
