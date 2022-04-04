@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D959AC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:19:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C765EC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D5F760B71;
-	Mon,  4 Apr 2022 20:19:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71E6240A02;
+	Mon,  4 Apr 2022 20:20:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3n0z1KBN3tX3; Mon,  4 Apr 2022 20:19:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x4PuzB-hfJkq; Mon,  4 Apr 2022 20:20:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83AA060864;
-	Mon,  4 Apr 2022 20:19:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BB4C01BF9AF
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:19:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6FD0414C4;
+	Mon,  4 Apr 2022 20:20:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 35F4D1BF232
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:19:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9B0860FB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id AFB9840393
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:19:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fhgLy127bsMb for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 34Ad_It_DV1T for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 20:19:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8B6060B71
+ by smtp2.osuosl.org (Postfix) with ESMTP id E160640327
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 20:19:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 39B4A82DFB; Mon,  4 Apr 2022 20:09:48 +0000 (UTC)
+ id 308AC82DF6; Mon,  4 Apr 2022 20:09:48 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 21:47:55 +0200
+Date: Mon, 4 Apr 2022 21:47:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04e26cb7feb8681a07e72c96550972e9d938d1b2
-X-Git-Newrev: 581d397ec0c437aac06a9eaeca01de4ed9249faf
+X-Git-Oldrev: ee978e853a6a4c9bb5ed661c1ae704e79f155a35
+X-Git-Newrev: 04e26cb7feb8681a07e72c96550972e9d938d1b2
 X-Patchwork-Hint: ignore
-Message-Id: <20220404200948.39B4A82DFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libp11: fix build with libressl
+Message-Id: <20220404200948.308AC82DF6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zlib-ng: Backport patch to fix
+ linking on powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,79 +59,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=581d397ec0c437aac06a9eaeca01de4ed9249faf
+commit: https://git.buildroot.net/buildroot/commit/?id=04e26cb7feb8681a07e72c96550972e9d938d1b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with libressl:
+Commit 192dfc68c0e4 ("package/zlib-ng: fix build on powerpc") turned the
+Power8 optimisations off to fix a build issue. Instead apply a patch
+from the develop branch upstream to fix the issue.
 
-p11_rsa.c:355:14: error: static declaration of 'RSA_meth_get_finish' follows non-static declaration
-  355 | static int (*RSA_meth_get_finish(const RSA_METHOD *meth)) (RSA *rsa)
-      |              ^~~~~~~~~~~~~~~~~~~
+This patch is not yet in a released version of zlib-ng.
 
-Fixes:
- - http://autobuild.buildroot.org/results/de3b1e97796f717eac47d291911e3e1517cb557b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libp11/0001-Update-wp11_rsa.c.patch | 26 ++++++++++++++++++++++++++
- package/libp11/libp11.mk                    |  8 +++++++-
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ ...keyword-for-vec_sumsu-to-prevent-undefine.patch | 27 ++++++++++++++++++++++
+ package/zlib-ng/zlib-ng.mk                         |  6 -----
+ 2 files changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/package/libp11/0001-Update-wp11_rsa.c.patch b/package/libp11/0001-Update-wp11_rsa.c.patch
+diff --git a/package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch b/package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch
 new file mode 100644
-index 0000000000..0a2d6e65ce
+index 0000000000..cc103215de
 --- /dev/null
-+++ b/package/libp11/0001-Update-wp11_rsa.c.patch
-@@ -0,0 +1,26 @@
-+From 4968cfc64dbaa39bb479a24d9578d75099e2f337 Mon Sep 17 00:00:00 2001
-+From: patchMonkey156 <pagorman@asu.edu>
-+Date: Mon, 19 Oct 2020 17:12:15 -0400
-+Subject: [PATCH] Update p11_rsa.c
++++ b/package/zlib-ng/0001-Use-static-keyword-for-vec_sumsu-to-prevent-undefine.patch
+@@ -0,0 +1,27 @@
++From 677f56825f7080403e18e57ffe8177f3df290f20 Mon Sep 17 00:00:00 2001
++From: Nathan Moinvaziri <nathan@nathanm.com>
++Date: Sun, 23 Jan 2022 12:59:01 -0800
++Subject: [PATCH] Use static keyword for vec_sumsu to prevent undefined
++ reference error when g++ linking.
 +
-+Bugfix for new LibreSSL version 3.2.2
-+[Retrieved from:
-+https://github.com/OpenSC/libp11/commit/4968cfc64dbaa39bb479a24d9578d75099e2f337]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Joel Stanley <joel@jms.id.au>
 +---
-+ src/p11_rsa.c | 2 +-
++ arch/power/adler32_power8.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/p11_rsa.c b/src/p11_rsa.c
-+index b6beef0..ff12ed7 100644
-+--- a/src/p11_rsa.c
-++++ b/src/p11_rsa.c
-+@@ -336,7 +336,7 @@ int pkcs11_get_key_size(PKCS11_KEY *key)
-+ 	return RSA_size(rsa);
-+ }
++diff --git a/arch/power/adler32_power8.c b/arch/power/adler32_power8.c
++index 029aa3a84c57..fc4086322efc 100644
++--- a/arch/power/adler32_power8.c
+++++ b/arch/power/adler32_power8.c
++@@ -44,7 +44,7 @@
++ #include "adler32_p.h"
 + 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100005L || defined(LIBRESSL_VERSION_NUMBER)
-++#if ( ( defined (OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100005L ) || ( defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3020199L ) )
-+ 
-+ int (*RSA_meth_get_priv_enc(const RSA_METHOD *meth))
-+ 		(int flen, const unsigned char *from,
-diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-index 45a718ee99..c1873a920c 100644
---- a/package/libp11/libp11.mk
-+++ b/package/libp11/libp11.mk
-@@ -11,10 +11,16 @@ LIBP11_INSTALL_STAGING = YES
- LIBP11_LICENSE = LGPL-2.1+
- LIBP11_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-+LIBP11_ENGINESDIR = enginesdir
-+else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+LIBP11_ENGINESDIR = libdir
-+endif
++ /* Vector across sum unsigned int (saturate).  */
++-inline vector unsigned int vec_sumsu(vector unsigned int __a, vector unsigned int __b) {
+++static inline vector unsigned int vec_sumsu(vector unsigned int __a, vector unsigned int __b) {
++     __b = vec_sld(__a, __a, 8);
++     __b = vec_add(__b, __a);
++     __a = vec_sld(__b, __b, 4);
++-- 
++2.35.1
 +
- # pkg-config returns a libcrypto enginesdir prefixed with the sysroot,
- # so let's rip it out.
- LIBP11_CONF_OPTS = \
--	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable enginesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
-+	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable $(LIBP11_ENGINESDIR) libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index 938acd4181..fb497b8c11 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -23,10 +23,4 @@ ifeq ($(BR2_arm),y)
+ ZLIB_NG_CONF_OPTS += -DWITH_ACLE=1 -DWITH_NEON=1
+ endif
  
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
- LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+-ifeq ($(BR2_powerpc_power8),y)
+-ZLIB_NG_CONF_OPTS += -DWITH_POWER8=ON
+-else
+-ZLIB_NG_CONF_OPTS += -DWITH_POWER8=OFF
+-endif
+-
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
