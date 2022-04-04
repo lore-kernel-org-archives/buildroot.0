@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53935C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85FBFC433FE
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1A2460FFC;
-	Mon,  4 Apr 2022 18:47:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08AE48278F;
+	Mon,  4 Apr 2022 18:47:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j63k813ziuHq; Mon,  4 Apr 2022 18:47:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id op_ZKWhrYlmk; Mon,  4 Apr 2022 18:47:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F5CA60FF8;
-	Mon,  4 Apr 2022 18:47:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 444B01BF294
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:47:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09DB981B17;
+	Mon,  4 Apr 2022 18:47:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 117291BF294
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33089410A4
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:47:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 010F481B17
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:47:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WSCTkrRnoyKf for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 18:47:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PvHDOa-5cort for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 18:47:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1FC9C4058C
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 18:47:01 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id yy13so21924300ejb.2
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 11:47:00 -0700 (PDT)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E46B881AD7
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 18:47:47 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id bh17so21877699ejb.8
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 11:47:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=nRKGtFV0SMqf0e9VfJZPK7P2YzvSDsyuMrPsvkgIB1A=;
- b=K6MjQLiC2zfVfJlbqRrIHuJzEnrEmZGvtvq6eTPtw653cMKzPI8Vl8NGe5PrS89EY6
- IAKN68HNB+qtAGgiEUd5OpzaPEHxM4g0tfK4xTUXLP1pO4MwYdXvCaCEoWT/0g6KBWhx
- AfQO5u63nm1lGkrHyeA6VDqLkePWqh2PYVWnAxQ5VdxsUHOn74xNCk/LwZI6uBENRqkx
- AjUdOHZyohTa/5hAa1PxoK6Ww9OPYQpF17QXut8Kp0AwMQ+ITyQZ/JjkK8vs08ynd48v
- ccAGbKjfx0ElleYy7tayzohKQmlFJQ5H6z81BSt8oAEWUHEC5GDIwxu0V7DcL0wi0q8W
- LYMg==
+ bh=RnY7DYqJDo77r4CenhaFWDQfVANRWRSU+vuoiCAYMX4=;
+ b=AUxBWNFl/qu54MEebbEkXTNYugPHpRIjwydXBFpRVuQvsFehsiAQfvn4IthyfbiVPd
+ ZFzgwrCF5ZG+7awNCbtTvA5mRfoVZ6PUO9wqdnLnr06+2FEG0xOSIIu2EIVsH34KseiX
+ T7oBKo0LnV1qHUUIebAAGuflg9drt6T+UFK/0bR0BVQCWKOjuoMQtbzvRm+KuMTijonb
+ +6m/74/bnpfXG7+L6EMQy8iHuBDoAmdJLOvKXCFmsGQoQ1AY720pbMekzR9zDSpj8ukA
+ WXg7a5vhfce0a4UG7J7z8jKxgOZWabjhWpLDvByDB9ypMxgpZ2WyoX0Xu4m6t+6vBgx/
+ tS4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=nRKGtFV0SMqf0e9VfJZPK7P2YzvSDsyuMrPsvkgIB1A=;
- b=W6H+xCN2mEDGRSV94eYx0S4rhcKNpBpRL6Jsv9jo7ekZdXKKpZvYVBSZt8ZJ+FX2AW
- W/H/zlumREwnHGNlpYld7dEzSueNEknrbDYt0icWxrKz9o25p0Qt2xZWtRbcr7DJ2hSx
- Ei9PeV7NaKLZobGbsMskBMp5C94eFF/N8XYdK7JvCikmrlnS18u7qgwDzG5kQ26btOxc
- VnbCEsFYKqfA1B7N0FTLJdyAdtJI9wCsU6tLXuh97tsUDyJcDgNTE4gMRtP6okvbdimg
- 5P8oA9wFcigMEDr/y3XEipSHgKMPenQhyEEQRXBu71IKLkhL9U8Acf9PxJ6IAEM14OXc
- A0Zg==
-X-Gm-Message-State: AOAM533IXIfDtMz601eBKCFdOw3dxKvfHZlTcYEZphSGe7ZfhairvTga
- mMtbOvBOSpnFY5i+Dfy0QN4doQ/0geecvw==
-X-Google-Smtp-Source: ABdhPJwQSSfUCzJoquoBlApwTkTK8v7/2ulyro+yiBLrX7wvhOBZpNuieDnnvJlMvfcizUvohyVudw==
-X-Received: by 2002:a17:906:c08a:b0:6ce:36f8:bfe8 with SMTP id
- f10-20020a170906c08a00b006ce36f8bfe8mr1512019ejz.52.1649098019197; 
- Mon, 04 Apr 2022 11:46:59 -0700 (PDT)
+ bh=RnY7DYqJDo77r4CenhaFWDQfVANRWRSU+vuoiCAYMX4=;
+ b=Ao9OyvhGzF6m2fI6ZD71T8lWwANQVIQjawkLYYiIqD0MjeO4lKqcJBX0+YFtD5+Kw9
+ JaOxmmIrCo1tZYqjl6EWMLAakAXhtn11aQGlevgkUPmDWV6Gcby4w36ACYf4EMIlQoeM
+ UWrk6jrdCV/xYMwQN/VAB0YaR+4GECdamSX0AdH88WGBIMdu5KmgPoCuA7kA3J6vJMn9
+ LTh4PGIgJ/ybdp63hwgFGzWc1Hx1kKQDP6MM3eHzHjC1r2kMvlIJJCBaSJOqjaXcXD6F
+ UNvkrz1BWOq8s/Vwtbly+xIz8lzRah5hoPHhJ+FONM45zQEd27HdMCq0pcPvhiAAsUUj
+ 5dYQ==
+X-Gm-Message-State: AOAM530Lnw9jLJdt907YYGzLBRr2GoImEKzV9x/z3wTqXymRvGrGfHbV
+ EUd0dqHQibiKGTr3/M1gIw0x27iX2TxU0g==
+X-Google-Smtp-Source: ABdhPJxh7HXeK7Dif/aBxc7T22NnwoSwVw3zUFOao/ywB77iaCxA2ljVwv6Yw4oW7J3P6O5ta9AEdw==
+X-Received: by 2002:a17:907:97c7:b0:6e0:defd:342d with SMTP id
+ js7-20020a17090797c700b006e0defd342dmr1462823ejc.231.1649098066118; 
+ Mon, 04 Apr 2022 11:47:46 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- i3-20020a1709067a4300b006dd879b4680sm4782373ejo.112.2022.04.04.11.46.58
+ ke11-20020a17090798eb00b006e7fbf53398sm967562ejc.129.2022.04.04.11.47.45
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 04 Apr 2022 11:46:58 -0700 (PDT)
-Message-ID: <ae04706d-999c-375d-1f6f-8c60c1a52e23@mind.be>
-Date: Mon, 4 Apr 2022 20:46:57 +0200
+ Mon, 04 Apr 2022 11:47:45 -0700 (PDT)
+Message-ID: <5453983a-0c21-d2ad-ab11-c09c27322905@mind.be>
+Date: Mon, 4 Apr 2022 20:47:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220402085136.1685563-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220402143924.46610-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220402085136.1685563-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/quazip: bump to version 1.2
+In-Reply-To: <20220402143924.46610-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-mediadriver: bump version
+ to 22.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,48 +102,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 02/04/2022 10:51, Fabrice Fontaine wrote:
-> Update hash of COPYING which has been "clearly marked" as the definitive
-> license source:
-> https://github.com/stachenov/quazip/commit/0d1aedb0fba343a196c124541b4d6938b16cf6ee
-> 
-> https://github.com/stachenov/quazip/releases/tag/v1.2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 02/04/2022 16:39, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
+
+  Are we really going to bump this package every week? :-/
 
   Regards,
   Arnout
 
 > ---
->   package/quazip/quazip.hash | 4 ++--
->   package/quazip/quazip.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+>   package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-> index 5eff5cfb3d..bcb16acdc0 100644
-> --- a/package/quazip/quazip.hash
-> +++ b/package/quazip/quazip.hash
+> diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+> index 57499830b1..5c3d25eed8 100644
+> --- a/package/intel-mediadriver/intel-mediadriver.hash
+> +++ b/package/intel-mediadriver/intel-mediadriver.hash
 > @@ -1,3 +1,3 @@
 >   # Locally computed
-> -sha256  54edce9c11371762bd4f0003c2937b5d8806a2752dd9c0fd9085e90792612ad0  quazip-1.1.tar.gz
-> -sha256  3aab586a5bdc8ffbbf033c7106550fd3e849fd8888e33cbc9bfd30a433c4b1cb  COPYING
-> +sha256  2dfb911d6b27545de0b98798d967c40430312377e6ade57096d6ec80c720cb61  quazip-1.2.tar.gz
-> +sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
-> diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-> index 44645ec9b9..7731e59d94 100644
-> --- a/package/quazip/quazip.mk
-> +++ b/package/quazip/quazip.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> -sha256  89940ae2f7e5c7ec182f0d4d0ce8e149ae614876edd5bdad2b852e699a29b3f9  intel-media-22.3.0.tar.gz
+> +sha256  0fdccad95a561178bd19fba69ab94be23bd4a3072e68aa18c3304c990d87d7d8  intel-media-22.3.1.tar.gz
+>   sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+> diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+> index c22aeecc77..4280f7fd29 100644
+> --- a/package/intel-mediadriver/intel-mediadriver.mk
+> +++ b/package/intel-mediadriver/intel-mediadriver.mk
+> @@ -6,7 +6,7 @@
 >   
-> -QUAZIP_VERSION = 1.1
-> +QUAZIP_VERSION = 1.2
->   QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
->   QUAZIP_INSTALL_STAGING = YES
->   QUAZIP_DEPENDENCIES = \
+>   # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+>   
+> -INTEL_MEDIADRIVER_VERSION = 22.3.0
+> +INTEL_MEDIADRIVER_VERSION = 22.3.1
+>   INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+>   INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+>   INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
