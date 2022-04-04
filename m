@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 609F4C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64754C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F9084040C;
-	Mon,  4 Apr 2022 20:17:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0253140260;
+	Mon,  4 Apr 2022 20:18:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OWGEMqV40xiX; Mon,  4 Apr 2022 20:17:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kwsb3WG4BZDe; Mon,  4 Apr 2022 20:18:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E0D140204;
-	Mon,  4 Apr 2022 20:17:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC60140173;
+	Mon,  4 Apr 2022 20:18:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B8F71BF232
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:17:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 78C401BF232
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A41860A70
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:17:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6367660A70
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:18:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fkdmJC0FXgQO for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 20:17:36 +0000 (UTC)
+ with ESMTP id cblEwxiDJfx0 for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 20:17:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 617AD607F9
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 20:17:36 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id b15so12492039edn.4
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 13:17:36 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D81C607F9
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 20:17:59 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id bq8so22311953ejb.10
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 13:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=TcQ+KjQZudaVituiDUsP6zraVWsTSosklG9hZ6AJJQk=;
- b=cHAnzimgs4EkShoG2cbGu6UUabpvN13gZRkSS1nFfCGvXdjo8nadKQMx2g+1BR/pxR
- olOVMwHi6QdGoT9AVJni86Rr8EG89L5kij+hcQEgcUoPwJrRm5UApRgOku7ZimzOQ/PD
- 9eQptFO1gG0TWbhQK6AW6XzjS1Vr1eqv3bwcBdgWbxOo10HFS0ef1mbV6QSwWPhqVg5l
- 7TSkEDXgkgfNYAHoZmcnAlY5eIQfJlbliqBKcv9ZCMPLwFzVpqi3hSvBdyM5+kly9t9r
- 0Fjri0/uNC09TQFDkSBSvd/X8slC3vfn0x5EQuPD4KgjymLxL9Jot6SYUjWEDIEkg4Oe
- BxlA==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=v2AeJZ2UXq6Utdp980a3yXfm2WEWrZQ6GNlhQpGRrnQ=;
+ b=MHC1M+xCWu86ltjEQAxJNHhL55X0w6UcvxgCokex9MqC/UMvFfRk7KB0jQstTsBAUZ
+ rrQRQeYbuLCsy5s1P73pRPuKbq+LYSENwG0Xwfn1Gcxsxo5ElcjjwNk0YBkDxrl0mG7N
+ f9y2965pXKDHARAzKc8SlnCV4E3y74uKXfx0t+9VdOy2b5QU+F6xPCF/SEhviCqcLa8p
+ S0FPQ1XKKC3HYnps6HzRbail6ZEBqMthXnZWLISlPyC50tGc8cSKRZrijh6oW2z264EE
+ 1QZJLEw3DLYf3iKObbxUdvaSjbCAGz841LUfhcmQ7L6o0Os1q7XnzzbiVLbWpL4BcoLx
+ +umg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=TcQ+KjQZudaVituiDUsP6zraVWsTSosklG9hZ6AJJQk=;
- b=uOrubBtBBnPe2ZZwOS2TOiEwCT8Ufq92wB/1GQEbwozsXCw6ZU1+vN//jOnqumXZGP
- 58sR7zR08YSY9LamfTLXI4BDgo8zHA31wN7fh+EodYgBaq+eqqlyz9+rujXcMni45Yd3
- IcdOaMtlRx4g7Zg5nQpW1nv0FmVTvZ3/xBdwCDq5IibqKd2YX0XUczIUQ2dZ6k/gScqU
- IMMsVXZP8dAlSSAutWNhlfirofQ2SguwAHUtOtDyZF+LUV//Bb4GRupXOr4EUOBdH2L6
- HeUYoF7DwgI2XyJfc3/nxNOEWD07uBIaLnKs6ImADwVczeWuFjni1R/HJl5YgQlwEvVE
- 46Fg==
-X-Gm-Message-State: AOAM5312U+d5Edn8lcFukcVW+3i0Gjk2GwITyxuJFyIKq4sMUvOtIs2s
- qOBsUN1zkfDTiZA0N6Xl3J0bAw==
-X-Google-Smtp-Source: ABdhPJwWuGV7RZuJZxhiO483MMskk3Ul0RdlgiXwr5C2Q88NuLBVFa4s1lBbyGPMrBgyCXks99mc6Q==
-X-Received: by 2002:a05:6402:524c:b0:419:4d8c:e959 with SMTP id
- t12-20020a056402524c00b004194d8ce959mr2002222edd.398.1649103454488; 
- Mon, 04 Apr 2022 13:17:34 -0700 (PDT)
+ bh=v2AeJZ2UXq6Utdp980a3yXfm2WEWrZQ6GNlhQpGRrnQ=;
+ b=QPZ/opcrnl7vV6OOrn3H1ORXspe7wcV7rHPbjspfBVGfGr2MzEXFaCwzQTUHAV1V9d
+ msycNvln/r+DZjINOs3Oz4zBc8ivQK4Rw//0mVlAvkCrpXlU/5yYuM34XSQsdPqDVK71
+ GOlOle0R1vzW6k0wDF+eRS0JZZ0MT9Zvfw8oH++nOnSn/gZvNvX7ECpUTYLWzGTA/wJd
+ 90Yn5JpNrjqndPcX9hGA4kt7zlvJSMUO2ZXsQ+5m7o2EovLXZsTmxeR8JePExvLFgQJF
+ Xk2QRziMjYIksYKcwrE2sQ5Ufi8KrMcSiy2qwziup1f3iDwH1wIsDbiOfrysIu+hz8jc
+ C0gw==
+X-Gm-Message-State: AOAM533o3LrnFeT1KHbeTICC4Qmy+3ZfnMVAgyRc6U/3npdGALh8k1w/
+ bonL2+x2PhiQ4vmYvwUVrLTJkA==
+X-Google-Smtp-Source: ABdhPJxyrLylarpPz982d+Y+mZtFnHnMZbb9x9RqWlPqgdC6KLec3Zy5N51L9b5etio5dEeiMj/Srg==
+X-Received: by 2002:a17:907:3e82:b0:6e1:3fe3:9b14 with SMTP id
+ hs2-20020a1709073e8200b006e13fe39b14mr1772262ejc.561.1649103477463; 
+ Mon, 04 Apr 2022 13:17:57 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- ep16-20020a1709069b5000b006daa26de2fbsm4703286ejc.153.2022.04.04.13.17.33
+ s10-20020a50daca000000b0041cc361b1c9sm2752858edj.68.2022.04.04.13.17.56
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 04 Apr 2022 13:17:33 -0700 (PDT)
-Message-ID: <dca3ae89-9bed-b085-8e7c-203a8a1b30c4@mind.be>
-Date: Mon, 4 Apr 2022 22:17:32 +0200
+ Mon, 04 Apr 2022 13:17:57 -0700 (PDT)
+Message-ID: <ec65158d-12c9-4c71-7f1e-727e2ba2b0c5@mind.be>
+Date: Mon, 4 Apr 2022 22:17:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220404162248.325842-1-fontaine.fabrice@gmail.com>
+References: <20220404162545.326240-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220404162248.325842-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libp11: fix build with libressl
+In-Reply-To: <20220404162545.326240-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/ace: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,6 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,15 +103,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 04/04/2022 18:22, Fabrice Fontaine wrote:
-> Fix the following build failure with libressl:
+On 04/04/2022 18:25, Fabrice Fontaine wrote:
+> Fix the following build failure with libressl raised since the addition
+> of the package in commit 3621918d1bc1ddc9312dd1cc8dec6db61e712fe2:
 > 
-> p11_rsa.c:355:14: error: static declaration of 'RSA_meth_get_finish' follows non-static declaration
->    355 | static int (*RSA_meth_get_finish(const RSA_METHOD *meth)) (RSA *rsa)
->        |              ^~~~~~~~~~~~~~~~~~~
+> /home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
+>    174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
+>        |       ^~~~~~~~~~~~
+>        |       BIO_set_init
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/de3b1e97796f717eac47d291911e3e1517cb557b
+>   - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -119,65 +123,68 @@ On 04/04/2022 18:22, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/libp11/0001-Update-wp11_rsa.c.patch | 26 +++++++++++++++++++++
->   package/libp11/libp11.mk                    |  8 ++++++-
->   2 files changed, 33 insertions(+), 1 deletion(-)
->   create mode 100644 package/libp11/0001-Update-wp11_rsa.c.patch
+>   ...Asynch_BIO.cpp-fix-build-with-libres.patch | 52 +++++++++++++++++++
+>   1 file changed, 52 insertions(+)
+>   create mode 100644 package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
 > 
-> diff --git a/package/libp11/0001-Update-wp11_rsa.c.patch b/package/libp11/0001-Update-wp11_rsa.c.patch
+> diff --git a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
 > new file mode 100644
-> index 0000000000..0a2d6e65ce
+> index 0000000000..ad82c10172
 > --- /dev/null
-> +++ b/package/libp11/0001-Update-wp11_rsa.c.patch
-> @@ -0,0 +1,26 @@
-> +From 4968cfc64dbaa39bb479a24d9578d75099e2f337 Mon Sep 17 00:00:00 2001
-> +From: patchMonkey156 <pagorman@asu.edu>
-> +Date: Mon, 19 Oct 2020 17:12:15 -0400
-> +Subject: [PATCH] Update p11_rsa.c
+> +++ b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+> @@ -0,0 +1,52 @@
+> +From e06cadc3b95a577e6a8bbc94f93dd063710c73a1 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 3 Apr 2022 15:25:49 +0200
+> +Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl
 > +
-> +Bugfix for new LibreSSL version 3.2.2
-> +[Retrieved from:
-> +https://github.com/OpenSC/libp11/commit/4968cfc64dbaa39bb479a24d9578d75099e2f337]
+> +Fix the following build failure with libressl:
+> +
+> +/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
+> +  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
+> +      |       ^~~~~~~~~~~~
+> +      |       BIO_set_init
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
+> +
 > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/DOCGroup/ACE_TAO/commit/e06cadc3b95a577e6a8bbc94f93dd063710c73a1]
 > +---
-> + src/p11_rsa.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> + ACE/ace/SSL/SSL_Asynch_BIO.cpp | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
 > +
-> +diff --git a/src/p11_rsa.c b/src/p11_rsa.c
-> +index b6beef0..ff12ed7 100644
-> +--- a/src/p11_rsa.c
-> ++++ b/src/p11_rsa.c
-> +@@ -336,7 +336,7 @@ int pkcs11_get_key_size(PKCS11_KEY *key)
-> + 	return RSA_size(rsa);
-> + }
+> +diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
+> +index a657d8a14e6f7..64aa14c6ab9a7 100644
+> +--- a/ace/SSL/SSL_Asynch_BIO.cpp
+> ++++ b/ace/SSL/SSL_Asynch_BIO.cpp
+> +@@ -41,7 +41,7 @@ extern "C"
 > +
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100005L || defined(LIBRESSL_VERSION_NUMBER)
-> ++#if ( ( defined (OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100005L ) || ( defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3020199L ) )
+> + #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
 > +
-> + int (*RSA_meth_get_priv_enc(const RSA_METHOD *meth))
-> + 		(int flen, const unsigned char *from,
-> diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-> index 45a718ee99..c1873a920c 100644
-> --- a/package/libp11/libp11.mk
-> +++ b/package/libp11/libp11.mk
-> @@ -11,10 +11,16 @@ LIBP11_INSTALL_STAGING = YES
->   LIBP11_LICENSE = LGPL-2.1+
->   LIBP11_LICENSE_FILES = COPYING
->   
-> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-> +LIBP11_ENGINESDIR = enginesdir
-> +else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-> +LIBP11_ENGINESDIR = libdir
-> +endif
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+> + static BIO_METHOD methods_ACE =
+> +   {
+> +     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
+> +@@ -68,14 +68,14 @@ static BIO_METHOD methods_ACE =
+> + #else
+> + static BIO_METHOD* methods_ACE;
+> + # define BIO_set_num(b, val)
+> +-#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
+> ++#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
 > +
->   # pkg-config returns a libcrypto enginesdir prefixed with the sysroot,
->   # so let's rip it out.
->   LIBP11_CONF_OPTS = \
-> -	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable enginesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
-> +	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable $(LIBP11_ENGINESDIR) libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
->   
->   ifeq ($(BR2_PACKAGE_P11_KIT),y)
->   LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+> + ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+> +
+> + BIO *
+> + ACE_SSL_make_BIO (void * ssl_asynch_stream)
+> + {
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+> +   BIO * const pBIO = BIO_new (&methods_ACE);
+> + #else
+> +   if (!methods_ACE)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
