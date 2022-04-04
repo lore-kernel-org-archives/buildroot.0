@@ -1,46 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BA8C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2F2C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1FAF60FF4;
-	Mon,  4 Apr 2022 17:27:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28EEE404CF;
+	Mon,  4 Apr 2022 17:39:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BGyXWQWggHmN; Mon,  4 Apr 2022 17:27:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nhzi1KQiXnnR; Mon,  4 Apr 2022 17:39:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDFDB60FE2;
-	Mon,  4 Apr 2022 17:27:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 69A171BF35C
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:26:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D281B4017C;
+	Mon,  4 Apr 2022 17:39:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A7EE1BF35C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 514D7827CE
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:26:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97B7E4028C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:38:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dBkJyBlIGy7x for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 17:26:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF2A081B14
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 17:26:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6F5328622B; Mon,  4 Apr 2022 17:17:29 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 19:16:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8bcae68f37d2c608e9e151fb983f16c09c11f85e
-X-Git-Newrev: af457e6da30b78b53bd020a09c8487185e7316dd
-X-Patchwork-Hint: ignore
-Message-Id: <20220404171729.6F5328622B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stellarium: bump version to 0.22.0
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F72clupv4rNA for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 17:38:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C84A64025C
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 17:38:57 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id k2so4787100edj.9
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 10:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=zlKQ7Fc9KaQr/us5U7LkRWBEIfGkpFIG1nZ5lFHXcyY=;
+ b=cFZRACQHVLfTdJ4gUGtO8HF8/J0/09nVcOVzrgrHdKUR3YDwegnluJ2x5Q1tWP8zHe
+ QE/W0oGwzoOH3fDmrASGO0EykzmO+lv2Qs8PYH3QNjHBrBeHogpo28D1TN4dUwpRUnKN
+ 44V7vP+AcrL8/1yCcbU2F2HHCJNSfuuRsCNCBRFHXWLuRttuqqHdXhVLyasrUxkXR1jg
+ QMif50nqzY54CigZzNROKLT3++cQtkGBxGp5dfjRFHMZUCbBFUMU2L2ZoD+pCZY2gRJA
+ xAsQu41PJb++pUfsDBBk4VeRFPGmkF6M9pidfHZn4Jhh+HEVMJihWHWVphf/twDexU0q
+ W0bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=zlKQ7Fc9KaQr/us5U7LkRWBEIfGkpFIG1nZ5lFHXcyY=;
+ b=Wl3z+47KPjDmdGlayvifaml7JYnnVeO4EXBfrNfAwnIwuS8RwwSUHz1OAVYfjHUCK7
+ hIPugFi4zmr4BRvWaO4lp8GpgRhkEozhN0ODoxtl5voWI76eB/4kWPJB1tf9Xbv6VoH4
+ 6XMnGu+/8GwGuMCZE/VYkxDDi2K9oaOq1thR/pde3MGcApcenPIkSTY/SXVQrwnB+5X9
+ ZlAzN0Eav5488KG48rV76jtCdxaibpyPjBnaIjH9dO0UJk5kQ2IUdp86Tsm4aMdCOrO/
+ kVZbXlZ2qLS3j+tuuRi4ZsCN5oxFXyQEGgeOAJLoE23Zz0cm+yDbQBZ81HOITI+F93Ic
+ EIdw==
+X-Gm-Message-State: AOAM533rt9GJ0CNGEjBr+eC8BDZbXBtI7ijjesyvu+g4u/jP9dc0UPVf
+ hagXxJU/mH12CJDQPo0lWoldxVu8GFyhIw==
+X-Google-Smtp-Source: ABdhPJyn0dh8NV86kP5mslfNl9GExdI2JZtJbzte+4C7yA29+FaXolpdnr9cZ7KtakNL7iEveOEhFg==
+X-Received: by 2002:a05:6402:2318:b0:413:7645:fa51 with SMTP id
+ l24-20020a056402231800b004137645fa51mr1312220eda.201.1649093935977; 
+ Mon, 04 Apr 2022 10:38:55 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ g9-20020aa7c849000000b00412fc6bf26dsm5711819edt.80.2022.04.04.10.38.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 04 Apr 2022 10:38:55 -0700 (PDT)
+Message-ID: <eb0cfc91-7c2b-875f-9e2d-a8e8a0a8291f@mind.be>
+Date: Mon, 4 Apr 2022 19:38:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+References: <20220331132230.227424-1-br015@umbiko.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220331132230.227424-1-br015@umbiko.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: explicitly disable
+ features to avoid collision with host packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,140 +96,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af457e6da30b78b53bd020a09c8487185e7316dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-http://stellarium.org/release/2022/03/27/stellarium-0.22.0.html
 
-Added upstream patch to fix build error.
+On 31/03/2022 15:22, Andreas Ziegler wrote:
+> Background
+> During configuration, the meson build system tries to determine the
+> availability of optional dependencies using (host) pkgconfig and cmake in that
+> order. If a library does not exist on the target, pkg-config will fail, but
+> cmake sometimes finds and reports libraries that exist as host packages. This
+> has been observed for host-expat (cmake dependency) and host-zlib. The link
+> step subsequently fails, because necessary files are not present in the target
+> architecture.
+> 
+> Unconditionally disable optional features often found in host binaries and
+> modify the menu selection processing in mpd.mk to re-enable them where
+> necessary. Currently this concerns expat and zlib only.
+> 
+> This fixes the following build errors:
+> 
+> [expat]
+> /home/data/buildroot.x86_64/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.2.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: warning: libc.so.6, needed by /home/data/buildroot.x86_64/host/lib/libexpat.so.1.8.7, not found (try using -rpath or -rpath-link)
+> /home/data/buildroot.x86_64/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.2.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /home/data/buildroot.x86_64/host/lib/libexpat.so.1.8.7: undefined reference to `__errno_location@GLIBC_2.2.5'
+> 
+> [zlib]
+> http://autobuild.buildroot.net/results/f0a/f0a9e719114f19dc9d20622ed85dd4f8e968c20f/
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> ---
+>   package/mpd/mpd.mk | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+> index 12da36098f..4e67c9428c 100644
+> --- a/package/mpd/mpd.mk
+> +++ b/package/mpd/mpd.mk
+> @@ -14,6 +14,7 @@ MPD_LICENSE_FILES = COPYING
+>   # these refer to the FreeBSD PPP daemon
+>   MPD_IGNORE_CVES = CVE-2020-7465 CVE-2020-7466
+>   MPD_SELINUX_MODULES = mpd
+> +# These features are either unwanted or not selectable via the Buildroot menu
+>   MPD_CONF_OPTS = \
+>   	-Daudiofile=disabled \
+>   	-Ddocumentation=disabled \
+> @@ -21,6 +22,12 @@ MPD_CONF_OPTS = \
+>   	-Dpipewire=disabled \
+>   	-Dsnapcast=false
+>   
+> +# Explicitly disable features where meson's dependency detection picks up host
+> +# libraries. These settings can be overridden through menu options later
+> +MPD_CONF_OPTS += \
+> +	-Dexpat=disabled \
+> +	-Dzlib=disabled
 
-Added dependency to qt5charts following upstream commit:
-https://github.com/Stellarium/stellarium/commit/5b8fece8d03c64f27f37469f0604efd88d54393d#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aR487
+  It would be better to make these automatic conditional dependencies, like it's 
+done for ICU.
 
-Added configure option to disable qt5webengine support, the package is
-broken: https://bugs.busybox.net/show_bug.cgi?id=14681
+> +
+>   # Zeroconf support depends on libdns_sd from avahi.
+>   ifeq ($(BR2_PACKAGE_MPD_AVAHI_SUPPORT),y)
+>   MPD_DEPENDENCIES += avahi
+> @@ -300,11 +307,11 @@ ifeq ($(BR2_PACKAGE_MPD_UPNP_PUPNP),y)
+>   MPD_DEPENDENCIES += \
+>   	expat \
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...xed-building-Stellarium-without-scripting.patch | 49 ++++++++++++++++++++++
- package/stellarium/Config.in                       |  1 +
- package/stellarium/stellarium.hash                 |  4 +-
- package/stellarium/stellarium.mk                   |  4 +-
- 4 files changed, 55 insertions(+), 3 deletions(-)
+  That would also allow to remove this (it will be done implicitly since expat 
+is selected in Config.in and the automatic dependency will add it).
 
-diff --git a/package/stellarium/0001-Fixed-building-Stellarium-without-scripting.patch b/package/stellarium/0001-Fixed-building-Stellarium-without-scripting.patch
-new file mode 100644
-index 0000000000..57f15a8eff
---- /dev/null
-+++ b/package/stellarium/0001-Fixed-building-Stellarium-without-scripting.patch
-@@ -0,0 +1,49 @@
-+From 710d1c5acd9e962260ce395474819ded2eb6ce12 Mon Sep 17 00:00:00 2001
-+From: "Alexander V. Wolf" <alex.v.wolf@gmail.com>
-+Date: Tue, 29 Mar 2022 18:57:06 +0700
-+Subject: [PATCH] Fixed building Stellarium without scripting
-+
-+Downloaded from upstream commit:
-+https://github.com/Stellarium/stellarium/commit/710d1c5acd9e962260ce395474819ded2eb6ce12
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ plugins/Calendars/src/Calendars.cpp | 2 ++
-+ plugins/Calendars/src/Calendars.hpp | 2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/plugins/Calendars/src/Calendars.cpp b/plugins/Calendars/src/Calendars.cpp
-+index e5d89a4c063..4df6caee42e 100644
-+--- a/plugins/Calendars/src/Calendars.cpp
-++++ b/plugins/Calendars/src/Calendars.cpp
-+@@ -251,6 +251,7 @@ void Calendars::init()
-+ 	}
-+ }
-+ 
-++#ifdef ENABLE_SCRIPTING
-+ // Add calendar as scriptable object! Some scripting functions won't work though, as they use object types unknown to the scripting engine.
-+ void Calendars::makeCalendarsScriptable(StelScriptMgr *ssm)
-+ {
-+@@ -260,6 +261,7 @@ void Calendars::makeCalendarsScriptable(StelScriptMgr *ssm)
-+ 		ssm->addObject(cal);
-+ 	}
-+ }
-++#endif
-+ 
-+ void Calendars::loadSettings()
-+ {
-+diff --git a/plugins/Calendars/src/Calendars.hpp b/plugins/Calendars/src/Calendars.hpp
-+index 461ae1bd9ba..4696183d9d2 100644
-+--- a/plugins/Calendars/src/Calendars.hpp
-++++ b/plugins/Calendars/src/Calendars.hpp
-+@@ -145,8 +145,10 @@ class Calendars : public StelModule
-+ 	//! TODO: ADD HERE: Chinese, NewHinduSolar, NewHinduLunar, ...
-+ 	Calendar* getCal(QString name);
-+ 
-++	#ifdef ENABLE_SCRIPTING
-+ 	//! to be called after program startup, when StelScriptMgr has been set up.
-+ 	void makeCalendarsScriptable(StelScriptMgr *ssm);
-++	#endif
-+ 
-+ signals:
-+ 	//void jdChanged(double jd);
-diff --git a/package/stellarium/Config.in b/package/stellarium/Config.in
-index 5922162d44..566f8edc83 100644
---- a/package/stellarium/Config.in
-+++ b/package/stellarium/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_STELLARIUM
- 	select BR2_PACKAGE_QT5BASE_OPENGL
- 	select BR2_PACKAGE_QT5BASE_PRINTSUPPORT
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5CHARTS
- 	select BR2_PACKAGE_QT5LOCATION
- 	select BR2_PACKAGE_QT5MULTIMEDIA
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index c3f2e0e8d4..2c2427bf0e 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/Stellarium/stellarium/releases
--sha1  a3396c403050e073c592da695faeb048c1d5e19b  stellarium-0.21.3.tar.gz
--sha256  8ac6c054d12f136fe0d5c0deaaa8d7b69dd2a462be1711a187364574aef97e7f  stellarium-0.21.3.tar.gz
-+sha1  c4a00fd756c66fb7df633f496dd3be4300bf1d2b  stellarium-0.22.0.tar.gz
-+sha256  0b4dc23cf9054b5e76cd9bc5ad68e172eb221999e90af37e93667d04fe78c885  stellarium-0.22.0.tar.gz
- # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index ca5c07b2a7..1226b1190d 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
-@@ -4,18 +4,20 @@
- #
- ################################################################################
- 
--STELLARIUM_VERSION = 0.21.3
-+STELLARIUM_VERSION = 0.22.0
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
- STELLARIUM_DEPENDENCIES = \
- 	qt5base \
-+	qt5charts \
- 	qt5location \
- 	qt5multimedia \
- 	zlib
- STELLARIUM_CONF_OPTS = \
- 	-DENABLE_MEDIA=ON \
- 	-DENABLE_NLS=OFF \
-+	-DENABLE_QTWEBENGINE=OFF \
- 	-DUSE_SYSTEM_ZLIB=ON
- 
- ifeq ($(BR2_PACKAGE_QT5SCRIPT),y)
+>   	libupnp
+> -MPD_CONF_OPTS += -Dupnp=pupnp
+> +MPD_CONF_OPTS += -Dupnp=pupnp -Dexpat=enabled
+>   else ifeq ($(BR2_PACKAGE_MPD_UPNP_NPUPNP),y)
+>   MPD_DEPENDENCIES += \
+>   	libnpupnp
+> -MPD_CONF_OPTS += -Dupnp=npupnp
+> +MPD_CONF_OPTS += -Dupnp=npupnp -Dexpat=enabled
+
+  This is wrong: no dependency on expat is added so expat may not even be 
+selected or built at this point.
+
+  Marked as Changes Requested.
+
+  Regards,
+  Arnout
+
+>   else ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
+>   MPD_CONF_OPTS += -Dupnp=disabled
+>   endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
