@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7430DC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 16:27:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4195FC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 16:35:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 225CC60FFD;
-	Mon,  4 Apr 2022 16:27:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E234041520;
+	Mon,  4 Apr 2022 16:35:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ixzYep8wMQZW; Mon,  4 Apr 2022 16:27:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GJ_Vqu-ndYdr; Mon,  4 Apr 2022 16:35:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DF9460FF3;
-	Mon,  4 Apr 2022 16:27:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 604A31BF983
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 16:27:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A672B41518;
+	Mon,  4 Apr 2022 16:35:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B7B31BF983
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 16:35:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F0A860FF3
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 16:27:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89F3B41518
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 16:35:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w58POix44xOh for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 16:27:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 14JbEizUXIh6 for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 16:35:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5924560EDE
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 16:27:29 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id n35so6251180wms.5
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 09:27:29 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 176AB4150F
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 16:35:02 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id h4so15305709wrc.13
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 09:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=AbPJqUUNO3CSZsLLrM1mtZPEdYdJl2hhxx5KclvuKyE=;
- b=NLaJUOY/iAWDQGR8TUzUASFaszapLGb9Z9AGHKi3CQe8PSKkQNG752kPZjzLduD4o5
- ueK6pBWBvXNe8cCJqy8y6PUg9kdLj/az273gUmg1+J574LPMbIkr+wbDdLJ2Rs0dxBJs
- 5Ivl1axw12zfbIxGCAEaPCFA8m03j9gOv81P2VKlg8bPGviFyNtIefG5NZNbZIZXoLi+
- C0bVWs2yBu/br7JlIzAvfpWEqZEBeL74HWM+mo14poOyuJSd4PYo+akMcfAptdRLT2HR
- 9wnYcUon2qcjAOV27NQ7rIw4tCyjP0TKdapfjzx1e3vcRpMNopq12EaiZzaFrZer/RE5
- KjbQ==
+ bh=q7qQF3A4H75iRYcaJcdWRL0W0di9RnJiyD/hEUNeqlA=;
+ b=eki6lfGbdB+R3NSHrBTFJ7WGo35t9GcjvjsBZgxLiUlbPvtCuTkyHPcDbn4lFWb3lP
+ vUeY3axJrf+Ax4Fp28MFSIkoFPMMuLu+amUHcBUWbNYDX2xmfOsPAPNCA2yKaz5fGETM
+ INot41hE+1SIbIM2R/kiReCtcc34wGS0kCoCUW8jLdparZmU231/40G591MUyPjdLPf7
+ 4D1Dg//4rdjdR5aiO5KDm1dKm12zVCZPHil+ajbsQEiUhOQlkAbyQvZruKNS46Ng9UfL
+ JnRKDz5oWWQ9HKMh58yQPjFJdhUE1qWqETo3r587HuZ/d6zXur2w0jcKeaRTjSnf/7rC
+ pByQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=AbPJqUUNO3CSZsLLrM1mtZPEdYdJl2hhxx5KclvuKyE=;
- b=NCw27a0UUmQ60Y8OdtdQiqb9bhy4eYUXEQInEAt/fS26RpAyolucrJNiomPujVNMs4
- VYkq15qbAFfuEqk7sk6EGjUfinDT2qBMXWHrHuItgI8DsU+62/9XH7Ghxm+FkB0NQHmS
- P6IlkVhCQF30du+X7puvrQAp7wRi7uKdwkoHaiUakSA538Dx9zo4IalAYqrGhWypINLp
- GUIUo3MWqW3rIZbQJf7GZIxXbg5lW/nI0s2CYLlyfUsT048f33RuAVsN1SQ932FLsvSQ
- 9znLg1OcfJrEcYNW48p3rArQU1Rqw6d7r4lkD4B10bexWO1R0apoyPHGSmmp8qGN+etp
- exeQ==
-X-Gm-Message-State: AOAM531TMZwLspfddaS6zFtF0fKg3DP5xMRRXPTMVJlgfcvg2N8+/uf8
- wT1KSXghWRV3asV3nOaSmKw20apV0O8=
-X-Google-Smtp-Source: ABdhPJzPLZOW4BQkzEAaJGqKGBoDnpG85dAdAeoFXxql8wswZbSFb7TjwTdobOQY3mMT+pZkOPwgrQ==
-X-Received: by 2002:a05:600c:26d4:b0:38e:7b79:1095 with SMTP id
- 20-20020a05600c26d400b0038e7b791095mr2063983wmv.95.1649089647403; 
- Mon, 04 Apr 2022 09:27:27 -0700 (PDT)
+ bh=q7qQF3A4H75iRYcaJcdWRL0W0di9RnJiyD/hEUNeqlA=;
+ b=TCVHNurRy7lZClgAxcsmhew7FGsZqd+pZL2nUO+5yayYi1LIRPBoE5wbJ6/xnnq3CJ
+ go4koVZPl071ca25sahapjbAUlyyfUHP68oOHz5vWmkgNjUkz9LBBXMmKYrOkkBs/ful
+ BC0ihhpjYhaqVeNYH4ZtMwuwt8fWrTnorFYEwI5ZQ6xc7qftwAub6ivBaQtF7nbMmOtp
+ KrsCbRK6AyhcAZEDEKF7hMJhaLFmxdqGLwak0Wsbk2ViTqtMBY+o/342eBsN0lvFjGNj
+ axxcMU6sljNpitGaKdmg0WEsIE6ukkyXk+pqs1a7X0CxTjhyYqm2zrMonVzvJEkzbC4A
+ Fsmw==
+X-Gm-Message-State: AOAM5337d3bA+HKy//adboqOFKfg0+Iz5Y1yoZdRp0jFt18QVh70FN/W
+ RIbMvhqJngFdEOq7WlgMbdoIMomQR2A=
+X-Google-Smtp-Source: ABdhPJwV0yM+6GkU+ALF/ROHtgso/I6xHagf5O5rqxCYONSaW+YLralw/JznRF1SesWx7p4tX6hrNg==
+X-Received: by 2002:a5d:55c7:0:b0:204:5ff7:74e2 with SMTP id
+ i7-20020a5d55c7000000b002045ff774e2mr464142wrw.50.1649090099987; 
+ Mon, 04 Apr 2022 09:34:59 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- p14-20020a05600c1d8e00b0038dbb5ecc8asm6859wms.2.2022.04.04.09.27.26
+ u7-20020a5d6da7000000b00203d9d1875bsm11100913wrs.73.2022.04.04.09.34.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Apr 2022 09:27:27 -0700 (PDT)
+ Mon, 04 Apr 2022 09:34:59 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Apr 2022 18:25:45 +0200
-Message-Id: <20220404162545.326240-1-fontaine.fabrice@gmail.com>
+Date: Mon,  4 Apr 2022 18:33:20 +0200
+Message-Id: <20220404163320.337038-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ace: fix build with libressl
+Subject: [Buildroot] [PATCH 1/1] package/libcoap: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,92 +85,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Joris Lijssens <joris.lijssens@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with libressl raised since the addition
-of the package in commit 3621918d1bc1ddc9312dd1cc8dec6db61e712fe2:
-
-/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
-  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
-      |       ^~~~~~~~~~~~
-      |       BIO_set_init
-
-Fixes:
- - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...Asynch_BIO.cpp-fix-build-with-libres.patch | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
-
-diff --git a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
-new file mode 100644
-index 0000000000..ad82c10172
---- /dev/null
-+++ b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
-@@ -0,0 +1,52 @@
-+From e06cadc3b95a577e6a8bbc94f93dd063710c73a1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 3 Apr 2022 15:25:49 +0200
-+Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl
-+
-+Fix the following build failure with libressl:
-+
-+/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
-+  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
-+      |       ^~~~~~~~~~~~
-+      |       BIO_set_init
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/DOCGroup/ACE_TAO/commit/e06cadc3b95a577e6a8bbc94f93dd063710c73a1]
-+---
-+ ACE/ace/SSL/SSL_Asynch_BIO.cpp | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
-+index a657d8a14e6f7..64aa14c6ab9a7 100644
-+--- a/ace/SSL/SSL_Asynch_BIO.cpp
-++++ b/ace/SSL/SSL_Asynch_BIO.cpp
-+@@ -41,7 +41,7 @@ extern "C"
-+ 
-+ #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ static BIO_METHOD methods_ACE =
-+   {
-+     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
-+@@ -68,14 +68,14 @@ static BIO_METHOD methods_ACE =
-+ #else
-+ static BIO_METHOD* methods_ACE;
-+ # define BIO_set_num(b, val)
-+-#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
-++#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
-+ 
-+ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
-+ 
-+ BIO *
-+ ACE_SSL_make_BIO (void * ssl_asynch_stream)
-+ {
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+   BIO * const pBIO = BIO_new (&methods_ACE);
-+ #else
-+   if (!methods_ACE)
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSB3aXRoIGxpYnJlc3NsIHJhaXNlZCBzaW5j
+ZSBjb21taXQKOGIxNGY2YjQ5Yjk2MmQ0ZDhmNzEzNWQ4NWFmYTE1NjU4ZWE4Zjk0YjoKCnNyYy9j
+b2FwX29wZW5zc2wuYzoxMDc6MzogZXJyZXVyOiBub20gZGUgdHlwZSDCq8KgQklPX0FERFLCoMK7
+IGluY29ubnUKICAxMDcgfCAgIEJJT19BRERSICpiaW9fYWRkcjsKICAgICAgfCAgIF5+fn5+fn5+
+CgpGaXhlczoKIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMzAwMjJl
+NDM3ZjM0OTQ1OTk5NGRjY2ZiNjEyNzczZDUyOWQ5N2EyMAoKU2lnbmVkLW9mZi1ieTogRmFicmlj
+ZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci0tLQogcGFja2FnZS9saWJj
+b2FwL2xpYmNvYXAubWsgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
+ZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmNvYXAvbGliY29hcC5tayBiL3Bh
+Y2thZ2UvbGliY29hcC9saWJjb2FwLm1rCmluZGV4IDhhODVmZjNhMmUuLmVkY2MxYmJlZjggMTAw
+NjQ0Ci0tLSBhL3BhY2thZ2UvbGliY29hcC9saWJjb2FwLm1rCisrKyBiL3BhY2thZ2UvbGliY29h
+cC9saWJjb2FwLm1rCkBAIC0xOCw3ICsxOCw3IEBAIGlmZXEgKCQoQlIyX1BBQ0tBR0VfR05VVExT
+KSx5KQogTElCQ09BUF9ERVBFTkRFTkNJRVMgKz0gZ251dGxzCiBMSUJDT0FQX0NPTkZfT1BUUyAr
+PSBcCiAJLS1lbmFibGUtZHRscyAtLXdpdGgtZ251dGxzIC0td2l0aG91dC1tYmVkdGxzIC0td2l0
+aG91dC1vcGVuc3NsCi1lbHNlIGlmZXEgKCQoQlIyX1BBQ0tBR0VfT1BFTlNTTCkseSkKK2Vsc2Ug
+aWZlcSAoJChCUjJfUEFDS0FHRV9MSUJPUEVOU1NMKSx5KQogTElCQ09BUF9ERVBFTkRFTkNJRVMg
+Kz0gb3BlbnNzbAogTElCQ09BUF9DT05GX09QVFMgKz0gXAogCS0tZW5hYmxlLWR0bHMgLS13aXRo
+b3V0LWdudXRscyAtLXdpdGhvdXQtbWJlZHRscyAtLXdpdGgtb3BlbnNzbAotLSAKMi4zNS4xCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
