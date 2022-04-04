@@ -4,78 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14F87C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Apr 2022 23:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A196C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 00:41:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78CDE4157A;
-	Sun,  3 Apr 2022 23:27:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82D5A4155B;
+	Mon,  4 Apr 2022 00:41:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k_4AU4CN8-S8; Sun,  3 Apr 2022 23:27:57 +0000 (UTC)
+	with ESMTP id r9T5hEnenvOn; Mon,  4 Apr 2022 00:41:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8FB04156F;
-	Sun,  3 Apr 2022 23:27:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB1291BF25F
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 23:27:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E82F41554;
+	Mon,  4 Apr 2022 00:41:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7478B1BF9AA
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 00:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5AB260A9D
- for <buildroot@lists.busybox.net>; Sun,  3 Apr 2022 23:27:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61D7041554
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 00:41:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NlqM5yzI15wg for <buildroot@lists.busybox.net>;
- Sun,  3 Apr 2022 23:27:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CPC6zIL_pFj3 for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 00:41:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 02D3960A6B
- for <buildroot@buildroot.org>; Sun,  3 Apr 2022 23:27:53 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id e13so1950497ils.8
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 16:27:53 -0700 (PDT)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 079A741552
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 00:41:47 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id 9so9515991iou.5
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 17:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=6g1qqKZJHH9b6BoXwiYhtLZFzqMMh76bIhbpnmDevMM=;
- b=H/C0lSjh8x5hr7BXO4fQhQYLXtlnr50avsb57w00z2w65rzKYQ1F1axNdbaik43TPa
- WtM0RPI2NmUU3o2AWSQJ0BZZkhCY7ktXB6JG1ab9Nb4vfhkTY37INyDxdm2x8WmR4sWP
- VMugCWPrSVexh50MSquNV5VMr4SwYvTHTDP/7pqSCnMl+M0n+Y0MGmF7BrzPGYLOK1jF
- iMZ8tmpkbd+dkCuKRfDYL3Gvirb1tQY4hlIbSHZIWM0KPspHt0Qtg1jBTvcOQDq7svkP
- xoGEaO4Tr76sGyZcgec30Q5cIwSAOTYOnFkM1k7XHwOlXHMAtN0yH195GOXWPdrIee41
- Pg3A==
+ bh=iaNYxqipvQXdjQzFF6tMUD1jowM1FLKPoMNh1mVfXno=;
+ b=TbpOJmuwX5axm8WhmElbgCnwNgQ3wTSDTAXPfhBmO9lg4dL91wUxVCj4SG+vzV3mTA
+ QQyQScHB6MdlGBML5XDazvM9U76FA/3mSB49mvLTyt1bIlg45sgCR85eIq3tCDqsTmR0
+ 0nRBEXzfjBs/S5W7VZPJ0ZcA4ZLy7zWpZDC6KNgt/peHIr3ys16/Ylr2zhBvvnraxYwp
+ XZEmE+Ocr6r/kCsOtluTVBX2WNMjhNzVFN9WQRktKtOg8AXzDZrWu5rgCSBruXWCehDj
+ MN69iL9oWBjevjPsxOARgOVgkI2prT45vxF1tOuveziAqTcwQUsTv8HjBzBUJ7W0TLfz
+ Uj2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=6g1qqKZJHH9b6BoXwiYhtLZFzqMMh76bIhbpnmDevMM=;
- b=dPUZEELKE5tVISosAvigWewDzlwD9M9swyHJIl883L22UCPSts2Jj5hLUc8ZRqzUk7
- fYNDSPoWcfNe2pq3W0R2QfIa1sx6GjKD/2RBU9UxBHmAottYy8WSdm/gj2eU9GRA7xK7
- 90OFioTncLCL+xi+ysXSFunOHP7No3NEKvQg7Nim2B3ZoXAU/NFFUpBpRVzPGZiAcQ6b
- a6fRDRjJMIVIFbsi7tQBN7GkXxmvJ5FX0yV9WmsDVjrU0FsvsGULSTSagXAq7/UiWNW/
- 0StoeCh9P7O0BuJ63yvDja/gv7enw+grMG32QBcivJ97T3lOPZGX9KRaJTFwPQSRmVLh
- 6OnA==
-X-Gm-Message-State: AOAM530AcbQsLLoxh4dKWZ7il5wY9AWa/TxMGCk16este9eaKQ3BoX/j
- MNheoPt2WBqYsCug/YQWJos6p/odPRKODg==
-X-Google-Smtp-Source: ABdhPJysRjHbQHIjJKxmY3P8LrOPhosNv0VppYFAFrakwvEB1thEywdO5Yh3N/VMEMgyHtXgO/dSUQ==
-X-Received: by 2002:a05:6e02:1aa6:b0:2c9:cfd3:5d0b with SMTP id
- l6-20020a056e021aa600b002c9cfd35d0bmr4414386ilv.38.1649028472833; 
- Sun, 03 Apr 2022 16:27:52 -0700 (PDT)
+ bh=iaNYxqipvQXdjQzFF6tMUD1jowM1FLKPoMNh1mVfXno=;
+ b=d+8RhxB7DLCtzR6SsMl2pwYMTSAQgtywQW1uHWjEg5ezy+GujEStDAJYTuwu6ULKW9
+ sUFNXqpB+efVXBhc4Eet34A5D8MZ4OqITDHn30WIeuKhOqdFZJIsCTT0V1wyLQcybjAg
+ a56V/I25jT+GqDUJNwkb4kyy28VW4jptL2X+aFWR7zwuqpiEQWS6JMRathLGWWnMxzuw
+ ADk3BDUviBZnsWSoR/+T5JJwbtxZBCUrCSM62+6nGrC6K1Ua55RDhLXutP0XJVc6QAl8
+ uYUvh1lLeLCmcREfNP3nBug6Q0MM/dk9inOFSpXg3+7yMONvBqhYVscskr3OVXsC0xvI
+ 7Dhw==
+X-Gm-Message-State: AOAM533gOTNQTEXjW3KIzHq6SOjrpqMWfLo11YS01oYjLwVVNl8CJZWc
+ xl5S4SqkxoorXLt40qhW04wAKlwpfPC3yA==
+X-Google-Smtp-Source: ABdhPJx4JzzHZoih93THReUKxYg2VVfPvBHfNZ8aGFwFW5YZzd1bE/qJugCuyHP2TJDR2A9cRdiiew==
+X-Received: by 2002:a05:6638:3006:b0:317:9daf:4425 with SMTP id
+ r6-20020a056638300600b003179daf4425mr10963633jak.14.1649032906845; 
+ Sun, 03 Apr 2022 17:41:46 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
  [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- r3-20020a92d983000000b002c98eaa72ddsm4902669iln.84.2022.04.03.16.27.52
+ w2-20020a92c882000000b002c81bffee08sm5019193ilo.55.2022.04.03.17.41.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Apr 2022 16:27:52 -0700 (PDT)
+ Sun, 03 Apr 2022 17:41:46 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  3 Apr 2022 17:27:47 -0600
-Message-Id: <20220403232747.560562-1-james.hilliard1@gmail.com>
+Date: Sun,  3 Apr 2022 18:41:38 -0600
+Message-Id: <20220404004138.563732-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 1/1] package/pkg-python: migrate flit to new
- bootstrapping sequence
+Subject: [Buildroot] [PATCH 1/1] package/{rust,
+ rust-bin}: support additional host architectures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,117 +85,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are a number of flit toolchain dependencies currently in the
-process of deprecating distutils based fallbacks.
+There are host toolchains available for non-x86/x86_64 architectures,
+add them as supported along with their toolchain hashes.
 
-This will be needed in order to update tomli.
-
-We need to migrate these to use a new bootstrap based build+install
-sequence which relies on flit's bootstrap wheel build+install
-features to build and install host-python-pypa-build and
-host-python-installer which gives us a full pep517 toolchain.
-
-Note that one can run host-python-flit-core commands for building
-and installing itself since the package build directory is the cwd.
-
-We need to add a special flit-bootstrap SETUP_TYPE for dependencies
-of host-python-pypa-build and host-python-installer which can not
-use the normal flit SETUP_TYPE which would cause a circular dependency
-issue.
-
-We need to special case dependency exclusions for
-host-python-flit-core and host-python-installer to avoid circular
-dependencies in the flit-bootstrap SETUP_TYPE.
-
-We also need to special case the installation command for
-host-python-flit-core since it can not depend on host-python-installer
-due to host-python-installer requiring host-python-flit-core.
+Note that the gcc riscv64-unknown-linux-gnu arch needs to be mapped
+to the rust riscv64gc-unknown-linux-gnu arch.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
-Changes v3 -> v4:
-  - rebase
-Changes v2 -> v3:
-  - add special flit-bootstrap SETUP_TYPE
-  - don't change package SETUP_TYPE's yet
-Changes v1 -> v2:
-  - formatting/cleanup
-  - add comments
----
- package/pkg-python.mk | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ package/rust-bin/rust-bin.hash | 24 ++++++++++++++++++++++++
+ package/rustc/Config.in.host   | 11 ++++++++++-
+ package/rustc/rustc.mk         |  4 +++-
+ 3 files changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 867341fc7b..2e7704a0a9 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -154,6 +154,9 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
- 	--scripts=$(HOST_DIR)/bin \
- 	--data=$(HOST_DIR)
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index 9f8788a295..bac2f21c5c 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -1,6 +1,30 @@
++# From https://static.rust-lang.org/dist/rust-1.58.1-aarch64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-aarch64-unknown-linux-gnu.tar.xz.asc
++sha256  0a80900aa160de4292b1174e25f183bd88f6c2fbb3056a59fcb4d658c70084cb  rust-1.58.1-aarch64-unknown-linux-gnu.tar.xz
+ # From https://static.rust-lang.org/dist/rust-1.58.1-i686-unknown-linux-gnu.tar.xz.sha256
+ # Verified using https://static.rust-lang.org/dist/rust-1.58.1-i686-unknown-linux-gnu.tar.xz.asc
+ sha256  110ca4967351d8535f3d39e24f40e2941c20346c5765d3530270e134ae50568e  rust-1.58.1-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-mips-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-mips-unknown-linux-gnu.tar.xz.asc
++sha256  01d2e69ed06fbc05a779a7d09f99d0b54a0d10fef9a7dcd0ea07866d57900ca2  rust-1.58.1-mips-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-mipsel-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-mipsel-unknown-linux-gnu.tar.xz.asc
++sha256  0b8fafb75e06ba9d4ca58f2cde3179a677908aed8be64e798fc107135839c480  rust-1.58.1-mipsel-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-powerpc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-powerpc-unknown-linux-gnu.tar.xz.asc
++sha256  00216feea0a6468e9ce57c7d3ad50e22fe888dfc9aabc34128e1f4b02c5a09b9  rust-1.58.1-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-powerpc64-unknown-linux-gnu.tar.xz.asc
++sha256  f6f870875d9adbe5a8b7bb6f61c44b6c54381e5dff50b4d2cdce50d18a8a541e  rust-1.58.1-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256  45bf988d0337095a4d30bb237d552e3420b4381e208624f0d956e1caf6b90207  rust-1.58.1-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-riscv64gc-unknown-linux-gnu.tar.xz.asc
++sha256  488e30e926d1835c0140a01bff4d3fe6499be1e89e5c740b2ceace892ab4c2e6  rust-1.58.1-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.58.1-s390x-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.58.1-s390x-unknown-linux-gnu.tar.xz.asc
++sha256  48cf31128a54551330f9c094f69d274adaab1ac506869dd65353aaea5bcbf33f  rust-1.58.1-s390x-unknown-linux-gnu.tar.xz
+ # From https://static.rust-lang.org/dist/rust-1.58.1-x86_64-unknown-linux-gnu.tar.xz.sha256
+ # Verified using https://static.rust-lang.org/dist/rust-1.58.1-x86_64-unknown-linux-gnu.tar.xz.asc
+ sha256  f71b077caf0becbd0af9fd22bc1fa31c4fdf7a21fe046da8a15a7bde1286da25  rust-1.58.1-x86_64-unknown-linux-gnu.tar.xz
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index 80d1d1a3d8..4ea66c2d2d 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -1,7 +1,16 @@
+ # All host rust packages should depend on this option
+ config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	default y if BR2_HOSTARCH = "aarch64"
++	default y if BR2_HOSTARCH = "mips"
++	default y if BR2_HOSTARCH = "mipsel"
++	default y if BR2_HOSTARCH = "powerpc"
++	default y if BR2_HOSTARCH = "powerpc64"
++	default y if BR2_HOSTARCH = "powerpc64le"
++	default y if BR2_HOSTARCH = "riscv64"
++	default y if BR2_HOSTARCH = "s390x"
++	default y if BR2_HOSTARCH = "x86"
++	default y if BR2_HOSTARCH = "x86_64"
  
-+HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
-+	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
- # and installation of a Python package should be done, implements a
-@@ -203,7 +206,7 @@ $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
- $(2)_BASE_BUILD_CMD = setup.py build
- $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+ # The pre-built Rust standard library is only available for a number
+ # of architectures/C libraries combinations, with different levels of
+diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+index 0513dd0b40..b2cc131ee9 100644
+--- a/package/rustc/rustc.mk
++++ b/package/rustc/rustc.mk
+@@ -11,7 +11,9 @@ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+ RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-$(LIBC)$(RUSTC_ABI)
  endif
--else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
-+else ifneq ($$(filter flit flit-bootstrap pep517,$$($(2)_SETUP_TYPE)),)
- ifeq ($(4),target)
- $(2)_BASE_ENV = $$(PKG_PYTHON_PEP517_ENV)
- $(2)_BASE_BUILD_CMD = -m build -n -w
-@@ -211,9 +214,24 @@ $(2)_BASE_INSTALL_TARGET_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $
- $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
-+# Use flit built in wheel builder for packages that are flit-bootstrap packages.
-+# This is needed to avoid a circular with host-python-pypa-build and those dependencies.
-+#
-+ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
-+$(2)_BASE_BUILD_CMD = -m flit_core.wheel
-+ifeq ($(1),host-python-flit-core)
-+# Use flit built in bootstrap_install for installing host-python-flit-core.
-+# This is due to host-python-installer depending on host-python-flit-core.
-+#
-+$(2)_BASE_INSTALL_CMD = -m bootstrap_install dist/* $$(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS)
-+else
-+$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
-+endif
-+else
- $(2)_BASE_BUILD_CMD = -m build -n -w
- $(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
- endif
-+endif
- else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
- endif
-@@ -239,6 +257,12 @@ $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
- ifeq ($$($(2)_SETUP_TYPE),flit)
- $(2)_DEPENDENCIES += host-python-flit-core
- endif
-+else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
-+ifneq ($$(filter host-python-flit-core host-python-installer,$(1)),)
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python-flit-core,$(1)),,host-python-flit-core)
-+else
-+$(2)_DEPENDENCIES += host-python-flit-core host-python-installer
-+endif
- endif # SETUP_TYPE
  
- # Python interpreter to use for building the package.
+-ifeq ($(HOSTARCH),x86)
++ifeq ($(HOSTARCH),riscv64)
++RUSTC_HOST_ARCH = riscv64gc
++else ifeq ($(HOSTARCH),x86)
+ RUSTC_HOST_ARCH = i686
+ else
+ RUSTC_HOST_ARCH = $(HOSTARCH)
 -- 
 2.25.1
 
