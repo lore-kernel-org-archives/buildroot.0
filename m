@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B4BFC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE15C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:19:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 093A540267;
-	Mon,  4 Apr 2022 20:19:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED99340260;
+	Mon,  4 Apr 2022 20:19:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sFrlFruM4RPQ; Mon,  4 Apr 2022 20:19:22 +0000 (UTC)
+	with ESMTP id uYTlVDxAga-x; Mon,  4 Apr 2022 20:19:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0959409EA;
-	Mon,  4 Apr 2022 20:19:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 87F801BF232
+	by smtp4.osuosl.org (Postfix) with ESMTP id B174240AB9;
+	Mon,  4 Apr 2022 20:19:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B41411BF9AD
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7653A8274E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A244740569
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:19:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0KrYWioWx6nw for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 20:19:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vdunviodOsdG for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 20:19:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFC2E825B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id F32D140393
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 20:19:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1C5C282DFB; Mon,  4 Apr 2022 20:09:48 +0000 (UTC)
+ id 5386682DF6; Mon,  4 Apr 2022 20:09:48 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 21:47:50 +0200
+Date: Mon, 4 Apr 2022 22:12:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d949b4e26bc318f5f68f12e5e1634642ad08ba63
-X-Git-Newrev: a3cbdf8bf0192868be3c9958281fa08bd52556ea
+X-Git-Oldrev: 0796c878f4c9ad786a6c4c4716e4239fa070cd73
+X-Git-Newrev: 5ad3082fed22fc5a145f5c7f37ed9b109d29ff83
 X-Patchwork-Hint: ignore
-Message-Id: <20220404200948.1C5C282DFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/licheepi_zero: bump uboot custom
- version to 2022.01
+Message-Id: <20220404200948.5386682DF6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
+ 19.2.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,30 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3cbdf8bf0192868be3c9958281fa08bd52556ea
+commit: https://git.buildroot.net/buildroot/commit/?id=5ad3082fed22fc5a145f5c7f37ed9b109d29ff83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This also removes the dependency to have Python2 installed.
-
-Signed-off-by: Steve Critchlow <scritchlow@bioshall.co.uk>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- configs/licheepi_zero_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
-index 2e1a413988..d7a281a0a0 100644
---- a/configs/licheepi_zero_defconfig
-+++ b/configs/licheepi_zero_defconfig
-@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+index d40a068cb5..1f290b9331 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4c5ad45ba869c8064a0d64d7fc5c0a2e0c9f47f51184823872d6cd888ab7b2a0  kodi-pvr-waipu-19.2.0-Matrix.tar.gz
++sha256  61779eaac29930cfd7f2c23da44a27fdecb695252fbab9598c49c57ce8be7291  kodi-pvr-waipu-19.2.1-Matrix.tar.gz
+ sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+index 61c5bd67ae..19c750945e 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_WAIPU_VERSION = 19.2.0-Matrix
++KODI_PVR_WAIPU_VERSION = 19.2.1-Matrix
+ KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
+ KODI_PVR_WAIPU_LICENSE = GPL-2.0+
+ KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
