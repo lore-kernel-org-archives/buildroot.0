@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6B7C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30EADC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F350440986;
-	Mon,  4 Apr 2022 19:47:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F9F88271A;
+	Mon,  4 Apr 2022 19:47:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AAUf9bc_wMKK; Mon,  4 Apr 2022 19:47:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B823181AAB;
+	Mon,  4 Apr 2022 19:47:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C8101BF9AD
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8905340984
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ewo0RbnJIFsB; Mon,  4 Apr 2022 19:47:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C208740984;
-	Mon,  4 Apr 2022 19:47:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 635DE1BF27E
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51C8B60BEF
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iX9JNKncnXa8 for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UsH8N54GX6QX for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 19:46:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C5BD60B1C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B97240977
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:46:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C99F282965; Mon,  4 Apr 2022 19:37:32 +0000 (UTC)
+ id EADD082970; Mon,  4 Apr 2022 19:37:32 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 21:32:35 +0200
+Date: Mon, 4 Apr 2022 21:43:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5197ce5ff30d1a23b811ddddca8030f13658d7da
-X-Git-Newrev: 3239fb5b179d043ecfc854dd2f4962444d8b36a6
+X-Git-Oldrev: d0ffdb2bdd22432f6f269a43ceaf7f1e51d535b5
+X-Git-Newrev: 441bd6c4691bb514e157a1416ce926432086b1ab
 X-Patchwork-Hint: ignore
-Message-Id: <20220404193732.C99F282965@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpsl: fix build with libiconv
+Message-Id: <20220404193732.EADD082970@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gstd: fix build with
+ gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,90 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3239fb5b179d043ecfc854dd2f4962444d8b36a6
+commit: https://git.buildroot.net/buildroot/commit/?id=441bd6c4691bb514e157a1416ce926432086b1ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since the addition of the package
-in commit 47acda3a95bd4310f884e741f20785d374af7b22:
+Fix the following build failure with gcc 4.8 raised since bump to
+version 0.14.0 in commit a334b9a7668ba412cb2da79b75a019cd89985145 and
+https://github.com/RidgeRun/gstd-1.x/commit/e83c94920bb33846ff0642dcf070fc5fd124e4f6:
 
-/home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/libpsl.so.5.3.2.p/psl.c.o: in function `psl_str_to_utf8lower':
-psl.c:(.text+0x1584): undefined reference to `libiconv_open'
+../libgstd/libgstd.c: In function 'gstd_set_ipc':
+../libgstd/libgstd.c:119:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (gint ipc_idx = 0; ipc_idx < num_ipcs; ipc_idx++) {
+     ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/8f012331acd3edb96a69d374436884679add8860
+ - http://autobuild.buildroot.org/results/00ad1b8979000aa10a20228c998389bc913cbbd4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...001-Add-libiconv-dep-to-meson-build-again.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ package/gstreamer1/gstd/gstd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libpsl/0001-Add-libiconv-dep-to-meson-build-again.patch b/package/libpsl/0001-Add-libiconv-dep-to-meson-build-again.patch
-new file mode 100644
-index 0000000000..72f50aa593
---- /dev/null
-+++ b/package/libpsl/0001-Add-libiconv-dep-to-meson-build-again.patch
-@@ -0,0 +1,60 @@
-+From 5b63816e82287808e81b8603a528af3cc6fab354 Mon Sep 17 00:00:00 2001
-+From: Zhao Zhili <zhilizhao@tencent.com>
-+Date: Thu, 7 Jan 2021 20:59:17 +0800
-+Subject: [PATCH] Add libiconv dep to meson build again
+diff --git a/package/gstreamer1/gstd/gstd.mk b/package/gstreamer1/gstd/gstd.mk
+index 08a29f26ff..817e9143ae 100644
+--- a/package/gstreamer1/gstd/gstd.mk
++++ b/package/gstreamer1/gstd/gstd.mk
+@@ -28,6 +28,8 @@ GSTD_CONF_OPTS = \
+ 	-Dwith-gstd-logstatedir=/var/log/gstd \
+ 	-Dwith-gstd-systemddir=/usr/lib/systemd/system
+ 
++GSTD_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
 +
-+Build success on macOS and ubuntu.
-+
-+[Retrieved from:
-+https://github.com/rockdaboot/libpsl/commit/5b63816e82287808e81b8603a528af3cc6fab354]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build     | 14 ++++++++++++++
-+ src/meson.build |  2 +-
-+ 2 files changed, 15 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index f248171..fb2de31 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -20,6 +20,7 @@ libicu_dep = notfound
-+ libidn_dep = notfound
-+ libunistring = notfound
-+ networking_deps = notfound
-++libiconv_dep = notfound
-+ 
-+ # FIXME: Cleanup this when Meson gets 'feature-combo':
-+ # https://github.com/mesonbuild/meson/issues/4566
-+@@ -86,6 +87,19 @@ endif
-+ if libidn2_dep.found() or libidn_dep.found()
-+   # Check for libunistring, we need it for psl_str_to_utf8lower()
-+   libunistring = cc.find_library('unistring')
-++  found_iconv = false
-++  if cc.has_function('iconv_open')
-++    libiconv_dep = []
-++    found_iconv = true
-++  endif
-++  if not found_iconv and cc.has_header_symbol('iconv.h', 'iconv_open')
-++    libiconv_dep = [cc.find_library('iconv')]
-++    found_iconv = true
-++  endif
-++
-++  if not found_iconv
-++    error('iconv implementation not found')
-++  endif
-+ endif
-+ 
-+ if host_machine.system() == 'windows'
-+diff --git a/src/meson.build b/src/meson.build
-+index 0d1dcdf..746bf44 100644
-+--- a/src/meson.build
-++++ b/src/meson.build
-+@@ -19,7 +19,7 @@ cargs = [
-+ libpsl = library('psl', sources, suffixes_dafsa_h,
-+   include_directories : [configinc, includedir],
-+   c_args : cargs,
-+-  dependencies : [libidn2_dep, libidn_dep, libicu_dep, libunistring, networking_deps],
-++  dependencies : [libidn2_dep, libidn_dep, libicu_dep, libunistring, networking_deps, libiconv_dep],
-+   version: lt_version,
-+   install: true,
-+ )
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ GSTD_CONF_OPTS += -Denable-systemd=enabled -Denable-initd=disabled
+ GSTD_DEPENDENCIES += systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
