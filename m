@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39029C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 14:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1537AC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 14:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1A9D40983;
-	Mon,  4 Apr 2022 14:38:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8B9582512;
+	Mon,  4 Apr 2022 14:40:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dZluXnK948pk; Mon,  4 Apr 2022 14:38:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GhhblzRJur4F; Mon,  4 Apr 2022 14:40:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD0EF40912;
-	Mon,  4 Apr 2022 14:38:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1CD3A1BF228
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 14:38:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0C1E829AF;
+	Mon,  4 Apr 2022 14:40:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E47631BF228
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 14:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF9F560701
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 14:38:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFEBE40949
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 14:40:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=zx2c4.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cmJAzc1w4vRy for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 14:38:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tOx2hTOPRPXS for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 14:40:15 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from dfw.source.kernel.org (dfw.source.kernel.org
  [IPv6:2604:1380:4641:c500::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 73565606A0
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 14:38:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4D6AC409E1
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 14:40:15 +0000 (UTC)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
  (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
  (No client certificate requested)
- by dfw.source.kernel.org (Postfix) with ESMTPS id A6550614E2;
- Mon,  4 Apr 2022 14:38:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB01C2BBE4;
- Mon,  4 Apr 2022 14:38:40 +0000 (UTC)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id 7F8C56155D;
+ Mon,  4 Apr 2022 14:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86848C340F2;
+ Mon,  4 Apr 2022 14:40:12 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
  dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
- header.b="AzvZgAMD"
+ header.b="d1LTQPTY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105; 
- t=1649083119;
+ t=1649083211;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  in-reply-to:in-reply-to:references:references;
- bh=tpAfHKUXxxPuMaqzK3lY3yYumutTHeE9/Do7LWRxRWg=;
- b=AzvZgAMD7vXn6S4IEwPmKfXKJsQPxkf2KwU4ZsSF8sYOFNA3oCmYeI+4/4AJD2dpxbkH11
- vn+QLDWwUHASinFXrMRANYXJHviZD4maC1k8yx1HUmAmpILlXd2hfmMlfWXoLCOhZzn+gv
- RUjPkU8ZfRJIK0lXYV9F6jtGsZCY8nk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b88b4ca8
+ bh=3XPy1ryU7VZ3mgkr+vzYPQiFXayej42GdnMTCXhCukM=;
+ b=d1LTQPTYyQbe20KoelyDfYEE1I3sdDAE/dmRGk1LUaJjk0XCfpWEWE9DZCkwJ2jD1tKTSO
+ qysqcuzOSyRWZ3xSfwSVHB6ozfxPLTvtYR67CeF/m61XANWK24ZuzIrwmOTM7zvekVFTBU
+ obldOzVuwmHbda8YrcLy0qQQxfeJvDE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ba88300a
  (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO); 
- Mon, 4 Apr 2022 14:38:38 +0000 (UTC)
-Date: Mon, 4 Apr 2022 16:38:34 +0200
+ Mon, 4 Apr 2022 14:40:10 +0000 (UTC)
+Date: Mon, 4 Apr 2022 16:40:07 +0200
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <YksC6gFwwxlDn06C@zx2c4.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <YksDR4W8OvcHB3pv@zx2c4.com>
 References: <20220327202415.1248312-1-Jason@zx2c4.com>
  <20220329050401.110856-1-Jason@zx2c4.com>
  <871qyj8kpk.fsf@dell.be.48ers.dk>
@@ -69,9 +69,10 @@ References: <20220327202415.1248312-1-Jason@zx2c4.com>
  <f16f09468ba64eb0bb9d985304daecb4@AcuMS.aculab.com>
  <7bcc0cf7-5759-1ef4-9667-fd8ae0c4741f@mind.be>
  <20220403094236.GF1811301@scaer>
+ <CADvTj4pxMsrUmzx3VRMXHnJ1sFV-d7=q7sLVvTxvRoRosKEsCg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220403094236.GF1811301@scaer>
+In-Reply-To: <CADvTj4pxMsrUmzx3VRMXHnJ1sFV-d7=q7sLVvTxvRoRosKEsCg@mail.gmail.com>
 Subject: Re: [Buildroot] [PATCH v3] package/urandom-scripts: actually credit
  seed files via seedrng
 X-BeenThere: buildroot@buildroot.org
@@ -85,34 +86,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- David Laight <David.Laight@ACULAB.COM>, buildroot <buildroot@buildroot.org>
+Cc: David Laight <David.Laight@aculab.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+Hi James,
 
-On Sun, Apr 03, 2022 at 11:42:36AM +0200, Yann E. MORIN wrote:
-> I still fail to understand why this can't be a standalone project.
+On Sun, Apr 03, 2022 at 05:13:06PM -0600, James Hilliard wrote:
+> Maybe it should also be upstreamed to util-linux?
 
-Please stop whining about this. I'm offering to maintain and support
-this as part of projects where the code is relevant to have adhering to
-the various customs and conventions of each project. Unless you want to
-open your checkbook, I am not offering to start and maintain an external
-project. Stop badgering me about this; at this point, I find it quite
-obnoxious. I'm not going to spend my time doing that work. I will,
-however, as stated numerous times, maintain it diligently inside
-projects where it makes sense. Peter made the case that Buildroot isn't
-one such project where it makes sense, a decision which I'll respect,
-and so I'll look into it elsewhere, and maybe that'll circle back around
-to a Buildroot package again. Either way, for the time being and at
-least until that happens, your involvement here is done, and I'd
-appreciate it if you would cease your pressure campaign on me to take on
-volunteer work that I do not agree to do.
+Yea it might make sense there indeed; it's something I'm looking into.
+I'll let this list know the results of all this in ${TIME_INTERVAL} when
+things land various places, and I'll CC you on submissions I make.
 
-Thank you,
 Jason
 _______________________________________________
 buildroot mailing list
