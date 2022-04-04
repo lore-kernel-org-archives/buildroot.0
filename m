@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B064AC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2535FC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41ED7410E6;
-	Mon,  4 Apr 2022 17:20:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B512D8282C;
+	Mon,  4 Apr 2022 17:26:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0_i7K_BxgYnz; Mon,  4 Apr 2022 17:20:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gb04eIP8Lx1Z; Mon,  4 Apr 2022 17:26:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE8E540A00;
-	Mon,  4 Apr 2022 17:20:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18E251BF35C
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:20:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C13A18278F;
+	Mon,  4 Apr 2022 17:26:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B76771BF35C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00F2440A00
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:20:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5FAE8278F
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:26:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wDdIzcX4VFVG for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 17:20:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xXYaUu4WRbFE for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 17:26:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AE20D409FE
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 17:20:34 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id p23so4402417edi.8
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 10:20:34 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B4F0181B14
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 17:26:15 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id p15so21414002ejc.7
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 10:26:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=NnWdmWisnn52Y2WC4l4/u4GDEjRruTiozgEBh2vn8ho=;
- b=TpevKucTaLVkEjcg48MsHeWqo6qUGXVESiEwupuDr1MNW1TuitXlfT1uC8Zu77LSIk
- n7WhvLvQQqFtVpH2dYDXw1r1I7+b1DYcIxtuDUzx1ap0O1Q0wR5ii5eHHwAhvipxPPT/
- rCLkwOJGRezDneG4xrVQsLLA9ZM3KE7oaxFrRtz42A/rFa2A9leM68BoCGPWF4F/KNfi
- XNnoXyJt9MhtlYPVvWsGjzfS/MfM68j/pHbUCZZGaEaHmqi1qadpFUyfeKILG/7nq+B8
- UU0DpQ8gqUWVBT5udpOQD9f3IAJQAO9gMkoFK4EHwRcVdH2W7RRfmWmdSi3Rqna/g16b
- Vcrg==
+ :references:from:cc:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Rc27iyxRh4pwWgcAj0aFANsnZLgx+8/OlTS2yXKT+oc=;
+ b=QTBEZ8QclhiEZKFYhaBLWc7a3ovrc2F73XcK6wwgt7oKwBUcP151gnMtT+XnnFAWEa
+ mIWPWUzNhuGhSfry+8Q3U/56572U7Seo0NP3V6B4G/PwQFfIQw3liEXbxeQRmNxRovBa
+ lItne1ihJcIHkV/1OSqluMQxHhhpah2vc0oqwKa2UVNRBSw9NW1RzyS24jaNo9NcO9/C
+ WLowFVIWuNsSa6JKImcyiOwwrt8+iJTlZBahM2K1U3f0V6KsApOpFtJoOPCtO6DxKtmP
+ 3F8RtL6eOx3tMYSFk5B/sn1l7wQlrrDt5gssHdHqJgpxRWWrjU3NHClJV0/EXL7aWmkF
+ VlgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:references:from:cc:organization:in-reply-to
  :content-transfer-encoding;
- bh=NnWdmWisnn52Y2WC4l4/u4GDEjRruTiozgEBh2vn8ho=;
- b=e2W373rdgtXCFJitY94sZswfXfZ+NXUigVSIVIh2i8Tv3FnP9MNODqkR7Cmbr1FH7g
- zZmcMmY2e6DgWZsuMaXMw8gfkTnW1QdIPAXlCQt8X80XHIrwPT4eq9aOyLhtR4uPTTaQ
- e1UvpUHW52jCXHmshvpZ5iF67ImZNgUwuYvFt5DnLDuKeVfC9eQd6BwJ4lz6Clx/IKhp
- ZGJn+JnQa9igqmXqFd5viARA9ZCIC8Tdml501u7Hyku2vNMnw5Qvv70/X+SjQNAcNAAI
- jex+iIIrzs2YVW9nOEUN/w2ueTjCNx45Lf3GMpc6hbU0n0jKqRFgSf7TG17J8ejl8ckY
- 3G0w==
-X-Gm-Message-State: AOAM530C/cRI+i96Kkwdl1JDaGAbJcvltVOHiMM6rf/bGiQjZ6ItxNaJ
- xjM2u0m+RgPOdAvndQmCrYazyQ==
-X-Google-Smtp-Source: ABdhPJzFKX2lNddgJw6pOnyfuZRziKY1nIXzyNuoS8KEzuMM7a6mqcDMydUeXxdALeUBzpy6RQh9vg==
-X-Received: by 2002:a05:6402:1c87:b0:41c:dd9c:2e94 with SMTP id
- cy7-20020a0564021c8700b0041cdd9c2e94mr1318616edb.2.1649092832609; 
- Mon, 04 Apr 2022 10:20:32 -0700 (PDT)
+ bh=Rc27iyxRh4pwWgcAj0aFANsnZLgx+8/OlTS2yXKT+oc=;
+ b=PtIccozhDDra/hq0wDVWwKJNVgV1j/Zbiu89aeZt0y0IKmfJ5oo4ddbPlLrS4wCBpO
+ Kmr6/ZfejYMjzhGYT21Gi+lE3lcWzUWib5r8Fxkzi6un2UOH8zDdDXH1TXEt9WYMdQ+C
+ zcx1X9xmZ1iKT67UUWZ/DpIIw1Ow6A/qkOqgZfWOYmIavDKPbEk1uuxXslDE1GTO1TDP
+ WeiJ+dCZ8akTk6aFVcRiO7P/4MoMUXzo6p8zA4C0I+VxHYEWdjdJ0pG5846MCKD4pSbS
+ dSIwXSZngw+MEEqXRZ/JTwbeMCC2yQTX634GGndXts20gYDSNZyTQs8XR2Yu3AIbkXDa
+ 7UIw==
+X-Gm-Message-State: AOAM531VFgPfyOY/vKS+oOz7Z1UH587wlmy9Eqoqtk/XWeCdeKHDDETk
+ KANdQLzbKjGAvA2UMLHg57hLMw==
+X-Google-Smtp-Source: ABdhPJxyjIMzPI5tw+Jwl5IHNwtwItgbBH6MSelOAoyabBDuYOlnI50omuC53/vzKeWZf2Mu20oRvA==
+X-Received: by 2002:a17:907:9494:b0:6e7:fca2:d5e1 with SMTP id
+ dm20-20020a170907949400b006e7fca2d5e1mr1137846ejc.199.1649093173867; 
+ Mon, 04 Apr 2022 10:26:13 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- b25-20020a056402139900b0041904036ab1sm5640283edv.5.2022.04.04.10.20.31
+ qp27-20020a170907207b00b006e66a4e924bsm3190274ejb.201.2022.04.04.10.26.13
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 04 Apr 2022 10:20:31 -0700 (PDT)
-Message-ID: <3f55f9b9-ea95-4b25-a9fc-c4c1c12dc792@mind.be>
-Date: Mon, 4 Apr 2022 19:20:30 +0200
+ Mon, 04 Apr 2022 10:26:13 -0700 (PDT)
+Message-ID: <0658ea2e-ec83-aaf5-f432-26e1b1475073@mind.be>
+Date: Mon, 4 Apr 2022 19:25:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220330201009.1459182-1-bernd.kuhls@t-online.de>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20220328203139.1115402-1-ju.o@free.fr>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220330201009.1459182-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/stellarium: bump version to
- 0.22.0
+In-Reply-To: <20220328203139.1115402-1-ju.o@free.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
+ 2.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,6 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -100,68 +102,54 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 30/03/2022 22:10, Bernd Kuhls wrote:
-> Release notes:
-> http://stellarium.org/release/2022/03/27/stellarium-0.22.0.html
+On 28/03/2022 22:31, Julien Olivain wrote:
+> For change log since v2.2.5, see:
+> - https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.6
 > 
-> Added upstream patch to fix build error.
-> 
-> Added dependency to qt5charts following upstream commit:
-> https://github.com/Stellarium/stellarium/commit/5b8fece8d03c64f27f37469f0604efd88d54393d#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aR487
-> 
-> Added configure option to disable qt5webengine support, the package is
-> broken: https://bugs.busybox.net/show_bug.cgi?id=14681
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
+> Tested with:
+> 
+>      make check-package
+>      ...
+>      0 warnings generated
+> 
+>      ./utils/test-pkg -p fluidsynth
+>      ...
+>      6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
-[snip]
-> diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-> index c3f2e0e8d4..f8185869be 100644
-> --- a/package/stellarium/stellarium.hash
-> +++ b/package/stellarium/stellarium.hash
-> @@ -1,5 +1,5 @@
->   # From https://github.com/Stellarium/stellarium/releases
-> -sha1  a3396c403050e073c592da695faeb048c1d5e19b  stellarium-0.21.3.tar.gz
-> -sha256  8ac6c054d12f136fe0d5c0deaaa8d7b69dd2a462be1711a187364574aef97e7f  stellarium-0.21.3.tar.gz
-> +sha1  c4a00fd756c66fb7df633f496dd3be4300bf1d2b   stellarium-0.22.0.tar.gz
-                                                  ^^^
-  Separate with two spaces, as reported by check-package.
-
-  Applied to master with that fixed, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-> +sha256  0b4dc23cf9054b5e76cd9bc5ad68e172eb221999e90af37e93667d04fe78c885  stellarium-0.22.0.tar.gz
+> ---
+>   package/fluidsynth/fluidsynth.hash | 2 +-
+>   package/fluidsynth/fluidsynth.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+> index 0d41c16d8d..20eb9ec49f 100644
+> --- a/package/fluidsynth/fluidsynth.hash
+> +++ b/package/fluidsynth/fluidsynth.hash
+> @@ -1,3 +1,3 @@
 >   # Locally computed
->   sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-> diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-> index ca5c07b2a7..1226b1190d 100644
-> --- a/package/stellarium/stellarium.mk
-> +++ b/package/stellarium/stellarium.mk
-> @@ -4,18 +4,20 @@
+> -sha256  9037e703617f91c4c36039a5059e0f624164799d856af715bcd8a23c07ba03b8  fluidsynth-2.2.5.tar.gz
+> +sha256  ca90fe675cacd9a7b442662783c4e7fa0e1fd638b28d64105a4e3fe0f618d20f  fluidsynth-2.2.6.tar.gz
+>   sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+> diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+> index b500944c16..d7c72ed059 100644
+> --- a/package/fluidsynth/fluidsynth.mk
+> +++ b/package/fluidsynth/fluidsynth.mk
+> @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -STELLARIUM_VERSION = 0.21.3
-> +STELLARIUM_VERSION = 0.22.0
->   STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
->   STELLARIUM_LICENSE = GPL-2.0+
->   STELLARIUM_LICENSE_FILES = COPYING
->   STELLARIUM_DEPENDENCIES = \
->   	qt5base \
-> +	qt5charts \
->   	qt5location \
->   	qt5multimedia \
->   	zlib
->   STELLARIUM_CONF_OPTS = \
->   	-DENABLE_MEDIA=ON \
->   	-DENABLE_NLS=OFF \
-> +	-DENABLE_QTWEBENGINE=OFF \
->   	-DUSE_SYSTEM_ZLIB=ON
->   
->   ifeq ($(BR2_PACKAGE_QT5SCRIPT),y)
+> -FLUIDSYNTH_VERSION = 2.2.5
+> +FLUIDSYNTH_VERSION = 2.2.6
+>   FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+>   FLUIDSYNTH_LICENSE = LGPL-2.1+
+>   FLUIDSYNTH_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
