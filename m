@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 811EEC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 150F1C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E7E44050C;
-	Mon,  4 Apr 2022 17:41:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA6AA408F8;
+	Mon,  4 Apr 2022 17:41:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kt4SaqbdtG15; Mon,  4 Apr 2022 17:41:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F1B2408B8;
+	Mon,  4 Apr 2022 17:41:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E4C51BF35C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 980924017C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NuPutI2guR65; Mon,  4 Apr 2022 17:41:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63BDF404CF;
-	Mon,  4 Apr 2022 17:41:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A90561BF9AF
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 990F082656
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sACaGuBgA3VU for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iJjaICpXGjjh for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 17:40:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9E0782605
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFFC840182
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 17:40:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 65192803CB; Mon,  4 Apr 2022 17:31:29 +0000 (UTC)
+ id 5B156803B6; Mon,  4 Apr 2022 17:31:29 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 4 Apr 2022 19:35:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10d80eb39aed471b6c47400e1b155c94a61d8e61
-X-Git-Newrev: 4e4739ca5a9315ae3be20bb11c75d6d88e32b2ff
+X-Git-Oldrev: 94b5778c82e4fdaa43ab40102648257330cbda0c
+X-Git-Newrev: 10d80eb39aed471b6c47400e1b155c94a61d8e61
 X-Patchwork-Hint: ignore
-Message-Id: <20220404173129.65192803CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ed: bump to version 1.18
+Message-Id: <20220404173129.5B156803B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apr: fix CVE-2021-35940
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +58,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e4739ca5a9315ae3be20bb11c75d6d88e32b2ff
+commit: https://git.buildroot.net/buildroot/commit/?id=10d80eb39aed471b6c47400e1b155c94a61d8e61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-license has been switched back to GPL-2.0+:
-https://lists.gnu.org/archive/html/bug-ed/2022-02/msg00002.html
-
-https://lists.gnu.org/archive/html/bug-ed/2022-02/msg00000.html
+An out-of-bounds array read in the apr_time_exp*() functions was fixed
+in the Apache Portable Runtime 1.6.3 release (CVE-2017-12613). The fix
+for this issue was not carried forward to the APR 1.7.x branch, and
+hence version 1.7.0 regressed compared to 1.6.3 and is vulnerable to the
+same issue.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ed/ed.hash | 6 +++---
- package/ed/ed.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/apr/0004-apr-1.7.0-CVE-2021-35940.patch | 57 +++++++++++++++++++++++++
+ package/apr/apr.mk                              |  3 ++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/package/ed/ed.hash b/package/ed/ed.hash
-index 90d467d1f3..36f9b9c1e4 100644
---- a/package/ed/ed.hash
-+++ b/package/ed/ed.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnu.org/archive/html/bug-ed/2021-01/msg00000.html
--sha256  71de39883c25b6fab44add80635382a10c9bf154515b94729f4a6529ddcc5e54  ed-1.17.tar.lz
-+# From https://lists.gnu.org/archive/html/bug-ed/2022-02/msg00000.html
-+sha256  aca8efad9800c587724a20b97aa8fc47e6b5a47df81606feaba831b074462b4f  ed-1.18.tar.lz
- # Locally calculated
--sha256  f03a12bef9dfb7281864a0dd965166d4f4ec7a66633df2bc72fa4363e57de02c  COPYING
-+sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 975cf3be10..645cfb7696 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/apr/0004-apr-1.7.0-CVE-2021-35940.patch b/package/apr/0004-apr-1.7.0-CVE-2021-35940.patch
+new file mode 100644
+index 0000000000..b065a3330a
+--- /dev/null
++++ b/package/apr/0004-apr-1.7.0-CVE-2021-35940.patch
+@@ -0,0 +1,57 @@
++
++SECURITY: CVE-2021-35940 (cve.mitre.org)
++
++Restore fix for CVE-2017-12613 which was missing in 1.7.x branch, though
++was addressed in 1.6.x in 1.6.3 and later via r1807976.
++
++The fix was merged back to 1.7.x in r1891198.
++
++Since this was a regression in 1.7.0, a new CVE name has been assigned
++to track this, CVE-2021-35940.
++
++Thanks to Iveta Cesalova <icesalov redhat.com> for reporting this issue.
++
++https://svn.apache.org/viewvc?view=revision&revision=1891198
++
++[Retrieved from:
++https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++Index: ./time/unix/time.c
++===================================================================
++--- ./time/unix/time.c	(revision 1891197)
+++++ ./time/unix/time.c	(revision 1891198)
++@@ -142,6 +142,9 @@
++     static const int dayoffset[12] =
++     {306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275};
++ 
+++    if (xt->tm_mon < 0 || xt->tm_mon >= 12)
+++        return APR_EBADDATE;
+++
++     /* shift new year to 1st March in order to make leap year calc easy */
++ 
++     if (xt->tm_mon < 2)
++Index: ./time/win32/time.c
++===================================================================
++--- ./time/win32/time.c	(revision 1891197)
+++++ ./time/win32/time.c	(revision 1891198)
++@@ -54,6 +54,9 @@
++     static const int dayoffset[12] =
++     {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
++ 
+++    if (tm->wMonth < 1 || tm->wMonth > 12)
+++        return APR_EBADDATE;
+++
++     /* Note; the caller is responsible for filling in detailed tm_usec,
++      * tm_gmtoff and tm_isdst data when applicable.
++      */
++@@ -228,6 +231,9 @@
++     static const int dayoffset[12] =
++     {306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275};
++ 
+++    if (xt->tm_mon < 0 || xt->tm_mon >= 12)
+++        return APR_EBADDATE;
+++
++     /* shift new year to 1st March in order to make leap year calc easy */
++ 
++     if (xt->tm_mon < 2)
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 7ff2c007b4..77217ccbb3 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -16,6 +16,9 @@ APR_INSTALL_STAGING = YES
+ # so we need to autoreconf:
+ APR_AUTORECONF = YES
  
--ED_VERSION = 1.17
-+ED_VERSION = 1.18
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_SOURCE = ed-$(ED_VERSION).tar.lz
--ED_LICENSE = GPL-3.0+
-+ED_LICENSE = GPL-2.0+
- ED_LICENSE_FILES = COPYING
- ED_CPE_ID_VENDOR = gnu
- 
++# 0004-apr-1.7.0-CVE-2021-35940.patch
++APR_IGNORE_CVES += CVE-2021-35940
++
+ # avoid apr_hints.m4 by setting apr_preload_done=yes and set
+ # the needed CFLAGS on our own (avoids '-D_REENTRANT' in case
+ # not supported by toolchain and subsequent configure failure)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
