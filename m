@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7AA0C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A3FDC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 20:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32C1440319;
-	Mon,  4 Apr 2022 20:33:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A30FE409EE;
+	Mon,  4 Apr 2022 20:52:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r5TqaAtv8skD; Mon,  4 Apr 2022 20:33:20 +0000 (UTC)
+	with ESMTP id HX_d3UmoqgS1; Mon,  4 Apr 2022 20:52:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F41884026E;
-	Mon,  4 Apr 2022 20:33:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B5EEB1BF232
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64F9F40943;
+	Mon,  4 Apr 2022 20:52:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A04101BF2A2
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:52:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E0F060FF4
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:33:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99C3440327
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 20:52:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 53DbZQqfpe8M for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 20:33:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EyTRCWZS1TFy for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 20:52:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A93FA60FF0
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 20:33:15 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id c7so16412499wrd.0
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 13:33:15 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9EEC400D9
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 20:52:02 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id q20so6711561wmq.1
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 13:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BVykYodPAVgbXNla0Nny73e9EbW1kXnZeBNvRaIZmNI=;
- b=mZDgLPf5hnuSx4HUZRgW0ENEoQrO2ocpvSxSSlcNrze4ulw6ZnTzbe/O2yfxtJ1AxA
- gamXGx+s94Dlr4ww1qrmw827Auewn/0cXa4GgWJu71HDRK0plK/fvopEaTO3msMcUn2a
- fzqswcJn56DuNrb8huHE1JAO/V5yy988Hwoo5FfMdDtuTfS2WkdOBJzO19fmnlHQSfb1
- zC11vH0psCz5hwOXFYl09iJCpuOM/6bHdFE0FsnkttECdf3MuWaLDWrRMmv7LShvLQIT
- z6cROWQoMQPcS+3ivcXKO2Jm0UclAH7YMg5PgiVTuAaHyZfideMSKa7VOxxYi5KyZ2t/
- v+MQ==
+ bh=UNUptzF3R4Xph262lATIRMb6aq2nqMkvgcPoDfwGbYo=;
+ b=p+oIq1zhbQu9ylMI5r51ofbaOI0objGP8ZVAoDoZlxi4PC3P6qdydlUPjcYKNbptaB
+ EiU4hmOxdhecR6XoQN8k8tkPe5FEW285uHWNJAP7D1O0EPf7kH+kUAXpEv5zRSr4QABw
+ 2lqPyS033q5oyGxUpirKIQSHnCHTkpA1285Dz/5Ozddf2xAXhSKPrzO2+HOvCT1/cwjZ
+ 9TnaXCTajKoQmJk9g7uDzCaAt3RsujIWbK77UKWrUUaSCBYCNUPAKapde1YMY8bEquMV
+ +ZY/oeRDePAIeAbDf6WJOx9h6VHKqJKRK0bpSCvP/C8hR9zOJxTNzQSjqNKEZ9uAYioi
+ wgAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BVykYodPAVgbXNla0Nny73e9EbW1kXnZeBNvRaIZmNI=;
- b=Pq+xL0l0e/mqYk8SyoMoZ2Sdat/yqXxwI3xc0rQD0cTqa3dVFyhQL0SROQoYooTRVr
- GlMtzYGWot79EMnTJ/8dGcIYEIXdHqH6+pikaAarnssIJRzoMinedKqUoXc/v3ugbwpg
- RnWnKI2ow4g349xF2pnTo8hLR3qsi6dXl7CUtfVH3Y9u5MCjpDzN0glCOMdRVnCPTSBS
- znPJMsJuX9CNLFCLwjpxZo54i0Ed2i2iHzzVS8Nlwo9i3sR93YFBzXc1p4QetxYc2D4d
- jygFJ7qNhjsnjnmim17TCjyrcrG4sC89r6DvGETHO3uTNEHTLkhOsSyNP1yHK7vbjncM
- ib1w==
-X-Gm-Message-State: AOAM532ykxQTqLGAfwT9uP1roQ01EskkKLIcB98f2S0fkIg4WYdn/Chi
- v0gZCTAkrhTIPOcsXL69xjLWmkRyJwQ=
-X-Google-Smtp-Source: ABdhPJyA+YVj6DUokssEnS9VXHqK7IKcsCv64W8+VJCG5roXbwDoU2OwwMTduSKqxrjPOy/yL0UTVA==
-X-Received: by 2002:a5d:64e7:0:b0:204:b62:94c3 with SMTP id
- g7-20020a5d64e7000000b002040b6294c3mr4869wri.243.1649104393588; 
- Mon, 04 Apr 2022 13:33:13 -0700 (PDT)
+ bh=UNUptzF3R4Xph262lATIRMb6aq2nqMkvgcPoDfwGbYo=;
+ b=pqvX60+3cwbBqP2/2MY/NCIoXE0QZbPzrpqXkiQM348fTD+VzDYIGXWeWE7QVnd9Ss
+ xj7jMmEk4qAhPWboIKu4T48un0AmxHcPZcw8eQt2xZ1JnruOwj2+eN8TxdWTWh13cLaZ
+ Ix+gA4wKPGB8DFPGQBH2dJOqd1XNSv3SawS0s5OLQMt2XUMerlQl4rZPIH34bzLequf9
+ qHlGsKixNCLdTY0BmdOMdhxICF0QT9Ybas3IgdqW7Za3x0MpUwKljzhI0SHlw4E88Is4
+ ROKJLZsvQsKcbaxRqUIZxieWn5GBvIzIl+sFXKnzJzybAe5dQCCOG0doiATyM+2ceWn+
+ 8pyA==
+X-Gm-Message-State: AOAM531QDw3JCiP2If5ANplB0Rg+A1/eXa7pmSmugrIY+8kz8PEZCSg4
+ IIEmZ1BmIj9m1l4uPJzoYWQ+io8ATpw=
+X-Google-Smtp-Source: ABdhPJwF05+vz7sucQbmP/7looQvfGKK+mRp5H5viELNiiyYf7jj71e1fxWlpd0KizIjNN6USJf3vw==
+X-Received: by 2002:a1c:3587:0:b0:381:50ff:cbd with SMTP id
+ c129-20020a1c3587000000b0038150ff0cbdmr782163wma.140.1649105520609; 
+ Mon, 04 Apr 2022 13:52:00 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- a2-20020a5d53c2000000b0020604b2667asm10326389wrw.81.2022.04.04.13.33.12
+ t9-20020a05600c198900b0038cb8b38f9fsm97382wmq.21.2022.04.04.13.51.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Apr 2022 13:33:13 -0700 (PDT)
+ Mon, 04 Apr 2022 13:52:00 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Apr 2022 22:31:35 +0200
-Message-Id: <20220404203135.340172-1-fontaine.fabrice@gmail.com>
+Date: Mon,  4 Apr 2022 22:50:15 +0200
+Message-Id: <20220404205015.341053-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-ujson: needs C++
+Subject: [Buildroot] [PATCH 1/1] package/trace-cmd: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,43 +87,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Pierre Floury <pierre.floury@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-python-ujson needs C++ since bump to version 4.1.0 in commit
-a47f332a20bf3f79ef4903c8ddd2b7917217e354 and
-https://github.com/ultrajson/ultrajson/commit/eb7d894f225bb89d269188ba6ec559b914a71b8a:
+trace-cmd needs NPTL since bump to version 2.9.1 in commit
+0e1231a3c0719269ab3546defe4b1fb0f1f5d7d2 and
+https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/commit/?id=08b9d5076455c93c997376c8089ee12b9071785b:
 
-powerpc-buildroot-linux-gnu-gcc.br_real: error: ./deps/double-conversion/double-conversion/bignum-dtoa.cc: C++ compiler not installed on this system
+/nvmedata/autobuild/instance-24/output-1/host/lib/gcc/i586-buildroot-linux-uclibc/10.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-24/output-1/build/trace-cmd-2.9.7/lib/trace-cmd/libtracecmd.a(trace-timesync.o): in function `tracecmd_tsync_with_host':
+trace-timesync.c:(.text+0x12e1): undefined reference to `pthread_setaffinity_np'
 
 Fixes:
- - http://autobuild.buildroot.org/results/b11600bdba42be9b211163e92afa3173276c3f8f
+ - http://autobuild.buildroot.org/results/9a88aaf92760b34958ef5b1708de83e46ccdb587
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-ujson/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/trace-cmd/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-ujson/Config.in b/package/python-ujson/Config.in
-index 81d1bc457c..7af03e6497 100644
---- a/package/python-ujson/Config.in
-+++ b/package/python-ujson/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PYTHON_UJSON
- 	bool "python-ujson"
-+	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index 574541c571..2d0accd7ae 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TRACE_CMD
+ 	bool "trace-cmd"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# pthread_setaffinity_np
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
  	help
- 	  UltraJSON is an ultra fast JSON encoder and decoder written
- 	  in pure C with bindings for Python 3.
+@@ -13,6 +14,6 @@ config BR2_PACKAGE_TRACE_CMD
  
- 	  https://pypi.python.org/pypi/ujson
-+
-+comment "python-ujson needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+ 	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+ 
+-comment "trace-cmd needs a toolchain w/ threads, dynamic library"
++comment "trace-cmd needs a toolchain w/ NPTL, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 -- 
 2.35.1
 
