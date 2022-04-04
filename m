@@ -4,47 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C0BEC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 07:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8794DC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 07:27:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3AB282978;
-	Mon,  4 Apr 2022 07:19:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3585D82C98;
+	Mon,  4 Apr 2022 07:27:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LVnDQt0E-_UX; Mon,  4 Apr 2022 07:19:35 +0000 (UTC)
+	with ESMTP id HHMGzx6XMTHm; Mon,  4 Apr 2022 07:27:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCD5682965;
-	Mon,  4 Apr 2022 07:19:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C35A1BF306
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 07:19:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EC3F82C4D;
+	Mon,  4 Apr 2022 07:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 805C91BF306
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 07:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B36C82965
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 07:19:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A15440291
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 07:27:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gILLTc7CDTMA for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 07:19:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 11CFC8294A
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 07:19:30 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id A9BE7D8C5EE6;
- Mon,  4 Apr 2022 09:19:28 +0200 (CEST)
-MIME-Version: 1.0
-Date: Mon, 04 Apr 2022 07:19:28 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: tms320c5x@naver.com
-In-Reply-To: <mailman.1460.1649023173.219595.buildroot@buildroot.org>
-References: <mailman.1460.1649023173.219595.buildroot@buildroot.org>
-Message-ID: <4d616ed27f13e3460003ddbf54a0222c@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] buildroot-2022.02 installation problems
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v3gLjBj8Ykwp for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 07:27:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD25340423
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 07:27:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 5F0F886150; Mon,  4 Apr 2022 07:18:21 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 4 Apr 2022 09:27:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2eeb66a82b2dc5696cb1b9b9e9a1f0df1e7b1647
+X-Git-Newrev: 3763c30214d6c16c744c1e03a9ae7fe6fd061165
+X-Patchwork-Hint: ignore
+Message-Id: <20220404071821.5F0F886150@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,68 +52,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=3763c30214d6c16c744c1e03a9ae7fe6fd061165
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-04-03 21:59, ??? <tms320c5x@naver.com> wrote:
+wireshark needs C++ since switch to cmake-package in commit
+7cb7fb8191fc52c1e2cc8b4b15ea52fd12c30d9a:
 
-> Hello
-> I am trying to learn Linux late, but nothing is easy.
-> It takes a lot of effort and time to compile individually, such as
-> binutils, gcc, glibc, and kernel, etc which are required to build a
-> Linux environment.
-> and then have discovered buildroot and i thought that the buildroot
-> could be a little easier to reach my original purpose.
-> I am an engineer, so far I have developed non-linux fields such as
-> avr, stm32f4...
-> 
-> I'm a beginner and I don't have an embedded board. First, I will
-> create a virtual target using qemu on my laptop (ubuntu 20.04.3),
-> and upload the kernel (linux-5.11.22, non-ubuntu) there. To do this,
-> the toolchain and glibc, compiler will be created through buildroot.
-> The first time I did it without knowing anything, it was successful,
-> but I can't remember which option I chose.
+CMake Error at CMakeLists.txt:32 (project):
+  No CMAKE_CXX_COMPILER could be found.
 
-Did you use the predefined qemu_x86_defconfig?
+Fixes:
+ - http://autobuild.buildroot.org/results/1ce9bc2a2330e27dfaceae682139d222feb806ae
 
-> Maybe when it first succeeded, i think the gdb option was not checked .
-> 
-> Afterwards, if I build with the gdb option selected for the target, an
-> error occurs like below:
-> ....
-> [Makefile:9230: all-gdb] Error 2
-> 
-> My current purpose is to remotely debug a virtual target program
-> through gdbserver installed on the target based on qemu.
-> To do this, gdbserver must be installed on the target, but this does 
-> not work.
-> Attached is the .config file when the error occurs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/wireshark/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-File attachments rather don't work in this environment.
-
-Please enclose the content of your defconfig - the file that gets 
-created by 'make savedefconfig'.
-
-Kind regards,
-Andreas
-
-> I look forward to your reply.
-> 
-> host: ubuntu 20.04.3, arch: x86_64, x86_64-pc-linux-gnu-gcc
-> target: kernel 5.11.22(boot by qemu), arch: x86_64,
-> x86_64-buildroot-linux-gnu-gcc
-> =>The command to run qemu will:
-> qemu-system-x86_64 -kernel
-> /usr/src/linux-5.11.22/arch/x86/boot/bzImage -m 4096M -smp 1 -boot c
-> -hda /home/dggil/Downloads/buildroot/output/images/rootfs.ext4 -append
-> "root=/dev/sda rw acpi=off" -s
-
-<cut>
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index 95fc9b38f3..fdeb9da259 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_WIRESHARK
+ 	depends on BR2_USE_MMU # fork(), glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBGCRYPT
+@@ -45,8 +46,8 @@ comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, host
+ 
+ endif # BR2_PACKAGE_WIRESHARK
+ 
+-comment "wireshark needs a toolchain w/ wchar, threads, dynamic library"
++comment "wireshark needs a toolchain w/ wchar, threads, dynamic library, C++"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
