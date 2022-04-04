@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0999C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:49:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D43C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BB2182591;
-	Mon,  4 Apr 2022 18:49:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4834408B6;
+	Mon,  4 Apr 2022 18:49:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iO0P9DMHLocX; Mon,  4 Apr 2022 18:49:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MvmBMcCsJ0yx; Mon,  4 Apr 2022 18:49:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CBB982512;
-	Mon,  4 Apr 2022 18:49:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 804771BF294
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81B6A408AB;
+	Mon,  4 Apr 2022 18:49:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 95A091BF9AD
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63E5B81D47
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82ABB60B0D
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:49:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mONhpWTtgKJP for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4oGqBtwmNuf1 for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 18:49:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5B1A81D11
+ by smtp3.osuosl.org (Postfix) with ESMTP id B85A060FDE
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 18:49:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 16DCE818AF; Mon,  4 Apr 2022 18:39:37 +0000 (UTC)
+ id 2B8DF818A3; Mon,  4 Apr 2022 18:39:37 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 20:41:32 +0200
+Date: Mon, 4 Apr 2022 20:43:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cdc2a52a0fd619ee9762656c2ff8f84418a85ea1
-X-Git-Newrev: 6a11646968011c7209cfadb17d0714949e174f21
+X-Git-Oldrev: 3204fe4b4e0e60e6b9b9f1e63559c374544f2db4
+X-Git-Newrev: d0d70761131d0f2c029e95db4c97827944684aaa
 X-Patchwork-Hint: ignore
-Message-Id: <20220404183937.16DCE818AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ipmiutil: bump to version 3.1.8
+Message-Id: <20220404183937.2B8DF818A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libkrb5: fix
+ BR2_SHARED_STATIC_LIBS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +59,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a11646968011c7209cfadb17d0714949e174f21
+commit: https://git.buildroot.net/buildroot/commit/?id=d0d70761131d0f2c029e95db4c97827944684aaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop IPMIUTIL_TOUCH_CONFIG_H_IN as aclocal.m4 is not newer than
-config.h.in anymore
+Fix the following build failure with BR2_SHARED_STATIC_LIBS raised since
+the addition of the package in commit
+7ae94b51ed5d51fb9fa3f5a931bb8435bcbfaa42 and
+https://github.com/krb5/krb5/commit/bd13166a4098198832d921b8e50b97008b714b7b
 
-https://sourceforge.net/p/ipmiutil/news/2021/11/ipmiutil-318-is-released
+configure: error: --enable-static must be specified with --disable-shared
+
+Fixes:
+ - http://autobuild.buildroot.org/results/dadbf9f77ffdcc4d4e48c6d7e6beb5da303a8074
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ipmiutil/ipmiutil.hash | 6 +++---
- package/ipmiutil/ipmiutil.mk   | 8 +-------
- 2 files changed, 4 insertions(+), 10 deletions(-)
+ package/libkrb5/libkrb5.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
-index f87c2762de..c1a813ad1f 100644
---- a/package/ipmiutil/ipmiutil.hash
-+++ b/package/ipmiutil/ipmiutil.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ipmiutil/files/
--md5  fab260bc834a0f3f9324a6365fc26eca  ipmiutil-3.1.7.tar.gz
--sha1  a0cd29820b15166120eb4a51e6239bfa6f9c65dd  ipmiutil-3.1.7.tar.gz
-+md5  b38ef567b6bb8a24418e448f23115190  ipmiutil-3.1.8.tar.gz
-+sha1  0697fc2342c55ba4374e31dcd38e58a00d1287e8  ipmiutil-3.1.8.tar.gz
- # Locally computed
--sha256  911fd6f8b33651b98863d57e678d2fc593bc43fcd2a21f5dc7d5db8f92128a9a  ipmiutil-3.1.7.tar.gz
-+sha256  b14357b9723e38a19c24df2771cff63d5f15f8682cd8a5b47235044b767b1888  ipmiutil-3.1.8.tar.gz
- sha256  7e0ec8238aa1431e95a4950032a4483fe33fec3fac348eaade5856cdc5ae3e39  COPYING
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index 97a644e314..ad9fbfc24c 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -4,19 +4,13 @@
- #
- ################################################################################
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index d41e7559a5..f406cd9e49 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -37,6 +37,11 @@ LIBKRB5_CONF_OPTS = \
+ 	--without-tcl \
+ 	--disable-rpath
  
--IPMIUTIL_VERSION = 3.1.7
-+IPMIUTIL_VERSION = 3.1.8
- IPMIUTIL_SITE = https://sourceforge.net/projects/ipmiutil/files
- IPMIUTIL_LICENSE = BSD-3-Clause
- IPMIUTIL_LICENSE_FILES = COPYING
- 
- IPMIUTIL_MAKE = $(MAKE1)
- 
--# aclocal.m4 is newer than config.h.in. Touch the latter to avoid autoreconf
--define IPMIUTIL_TOUCH_CONFIG_H_IN
--	touch $(@D)/config.h.in
--endef
--IPMIUTIL_PRE_CONFIGURE_HOOKS += IPMIUTIL_TOUCH_CONFIG_H_IN
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- # tests against distro libcrypto so it might get a false positive when
- # the openssl version is old, so force it off
++# Enabling static and shared at the same time is not supported
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++LIBKRB5_CONF_OPTS += --disable-static
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENLDAP),y)
+ LIBKRB5_CONF_OPTS += --with-ldap
+ LIBKRB5_DEPENDENCIES += openldap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
