@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 150F1C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:41:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7101FC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 17:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA6AA408F8;
-	Mon,  4 Apr 2022 17:41:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21D7D408FE;
+	Mon,  4 Apr 2022 17:42:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kt4SaqbdtG15; Mon,  4 Apr 2022 17:41:50 +0000 (UTC)
+	with ESMTP id e-S47WOrnX25; Mon,  4 Apr 2022 17:42:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F1B2408B8;
-	Mon,  4 Apr 2022 17:41:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A889408D8;
+	Mon,  4 Apr 2022 17:42:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E4C51BF35C
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5FC151BF35C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 980924017C
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C68640182
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 17:40:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iJjaICpXGjjh for <buildroot@lists.busybox.net>;
+ with ESMTP id EFXi5CQvQF89 for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 17:40:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFFC840182
+ by smtp2.osuosl.org (Postfix) with ESMTP id B29194011C
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 17:40:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5B156803B6; Mon,  4 Apr 2022 17:31:29 +0000 (UTC)
+ id 3C601803B6; Mon,  4 Apr 2022 17:31:29 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 19:35:40 +0200
+Date: Mon, 4 Apr 2022 19:27:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94b5778c82e4fdaa43ab40102648257330cbda0c
-X-Git-Newrev: 10d80eb39aed471b6c47400e1b155c94a61d8e61
+X-Git-Oldrev: af457e6da30b78b53bd020a09c8487185e7316dd
+X-Git-Newrev: 1a3de362aea62db32d02533d84fcf61cf0389152
 X-Patchwork-Hint: ignore
-Message-Id: <20220404173129.5B156803B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apr: fix CVE-2021-35940
+Message-Id: <20220404173129.3C601803B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libabseil-cpp: fix uclibc-ng build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,99 +58,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10d80eb39aed471b6c47400e1b155c94a61d8e61
+commit: https://git.buildroot.net/buildroot/commit/?id=1a3de362aea62db32d02533d84fcf61cf0389152
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-An out-of-bounds array read in the apr_time_exp*() functions was fixed
-in the Apache Portable Runtime 1.6.3 release (CVE-2017-12613). The fix
-for this issue was not carried forward to the APR 1.7.x branch, and
-hence version 1.7.0 regressed compared to 1.6.3 and is vulnerable to the
-same issue.
+Fix the following build failure with uclibc-ng and grpc raised on arm
+and ppc:
+
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libabsl_random_internal_randen_hwaes.so.2111.0.0: undefined reference to `getauxval'
+
+Strangely enough it seems there is only one autobuilder failure despite
+the fact that libabseil-cpp is unconditionally using getauxval since its
+addition in commit 93568440eda120b12bcbfe267af8f0182484c3b6:
+https://github.com/abseil/abseil-cpp/blob/20200225/absl/random/internal/randen_detect.cc
+
+Perhaps this build failure is an unexpected side effect of commit
+8251d8c2559b25f11684776fc343059cf100657d
+
+Fixes:
+ - http://autobuild.buildroot.org/results/775f3ca3dedebff29e212b29dfa896b7613b7a02
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/apr/0004-apr-1.7.0-CVE-2021-35940.patch | 57 +++++++++++++++++++++++++
- package/apr/apr.mk                              |  3 ++
- 2 files changed, 60 insertions(+)
+ .../0002-fix-build-with-uclibc-ng.patch            | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/package/apr/0004-apr-1.7.0-CVE-2021-35940.patch b/package/apr/0004-apr-1.7.0-CVE-2021-35940.patch
+diff --git a/package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch b/package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch
 new file mode 100644
-index 0000000000..b065a3330a
+index 0000000000..0797d8e51b
 --- /dev/null
-+++ b/package/apr/0004-apr-1.7.0-CVE-2021-35940.patch
-@@ -0,0 +1,57 @@
++++ b/package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch
+@@ -0,0 +1,62 @@
++From b9ad9bbfed92199a1a58504306d026cd2597539e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 30 Mar 2022 21:56:20 +0200
++Subject: [PATCH] Fix build with uclibc-ng (#1145)
 +
-+SECURITY: CVE-2021-35940 (cve.mitre.org)
++uclibc-ng doesn't provide getauxval which results in the following build
++failure on arm or ppc with any user of abseil-cpp such as grpc:
 +
-+Restore fix for CVE-2017-12613 which was missing in 1.7.x branch, though
-+was addressed in 1.6.x in 1.6.3 and later via r1807976.
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libabsl_random_internal_randen_hwaes.so.2111.0.0: undefined reference to `getauxval'
 +
-+The fix was merged back to 1.7.x in r1891198.
++To fix this build failure, check that __UCLIBC__ is not defined before
++using getauxval (as Babel is not able to check function availability)
 +
-+Since this was a regression in 1.7.0, a new CVE name has been assigned
-+to track this, CVE-2021-35940.
++Fixes:
++ - http://autobuild.buildroot.org/results/775f3ca3dedebff29e212b29dfa896b7613b7a02
 +
-+Thanks to Iveta Cesalova <icesalov redhat.com> for reporting this issue.
-+
-+https://svn.apache.org/viewvc?view=revision&revision=1891198
-+
-+[Retrieved from:
-+https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/abseil/abseil-cpp/commit/b9ad9bbfed92199a1a58504306d026cd2597539e]
++---
++ absl/debugging/internal/vdso_support.cc | 2 +-
++ absl/random/internal/randen_detect.cc   | 7 ++++++-
++ 2 files changed, 7 insertions(+), 2 deletions(-)
 +
-+Index: ./time/unix/time.c
-+===================================================================
-+--- ./time/unix/time.c	(revision 1891197)
-++++ ./time/unix/time.c	(revision 1891198)
-+@@ -142,6 +142,9 @@
-+     static const int dayoffset[12] =
-+     {306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275};
++diff --git a/absl/debugging/internal/vdso_support.cc b/absl/debugging/internal/vdso_support.cc
++index c655cf452..e63ac4a3b 100644
++--- a/absl/debugging/internal/vdso_support.cc
+++++ b/absl/debugging/internal/vdso_support.cc
++@@ -33,7 +33,7 @@
++ #endif
++ #include <unistd.h>
 + 
-++    if (xt->tm_mon < 0 || xt->tm_mon >= 12)
-++        return APR_EBADDATE;
++-#if defined(__GLIBC__) && \
+++#if !defined(__UCLIBC__) && defined(__GLIBC__) && \
++     (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16))
++ #define ABSL_HAVE_GETAUXVAL
++ #endif
++diff --git a/absl/random/internal/randen_detect.cc b/absl/random/internal/randen_detect.cc
++index 9bb58fc68..6dababa35 100644
++--- a/absl/random/internal/randen_detect.cc
+++++ b/absl/random/internal/randen_detect.cc
++@@ -24,6 +24,11 @@
++ 
++ #include "absl/random/internal/platform.h"
++ 
+++#if !defined(__UCLIBC__) && defined(__GLIBC__) && \
+++    (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16))
+++#define ABSL_HAVE_GETAUXVAL
+++#endif
 ++
-+     /* shift new year to 1st March in order to make leap year calc easy */
-+ 
-+     if (xt->tm_mon < 2)
-+Index: ./time/win32/time.c
-+===================================================================
-+--- ./time/win32/time.c	(revision 1891197)
-++++ ./time/win32/time.c	(revision 1891198)
-+@@ -54,6 +54,9 @@
-+     static const int dayoffset[12] =
-+     {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
-+ 
-++    if (tm->wMonth < 1 || tm->wMonth > 12)
-++        return APR_EBADDATE;
-++
-+     /* Note; the caller is responsible for filling in detailed tm_usec,
-+      * tm_gmtoff and tm_isdst data when applicable.
-+      */
-+@@ -228,6 +231,9 @@
-+     static const int dayoffset[12] =
-+     {306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275};
-+ 
-++    if (xt->tm_mon < 0 || xt->tm_mon >= 12)
-++        return APR_EBADDATE;
-++
-+     /* shift new year to 1st March in order to make leap year calc easy */
-+ 
-+     if (xt->tm_mon < 2)
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 7ff2c007b4..77217ccbb3 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -16,6 +16,9 @@ APR_INSTALL_STAGING = YES
- # so we need to autoreconf:
- APR_AUTORECONF = YES
- 
-+# 0004-apr-1.7.0-CVE-2021-35940.patch
-+APR_IGNORE_CVES += CVE-2021-35940
-+
- # avoid apr_hints.m4 by setting apr_preload_done=yes and set
- # the needed CFLAGS on our own (avoids '-D_REENTRANT' in case
- # not supported by toolchain and subsequent configure failure)
++ #if defined(ABSL_ARCH_X86_64)
++ #define ABSL_INTERNAL_USE_X86_CPUID
++ #elif defined(ABSL_ARCH_PPC) || defined(ABSL_ARCH_ARM) || \
++@@ -31,7 +36,7 @@
++ #if defined(__ANDROID__)
++ #define ABSL_INTERNAL_USE_ANDROID_GETAUXVAL
++ #define ABSL_INTERNAL_USE_GETAUXVAL
++-#elif defined(__linux__)
+++#elif defined(__linux__) && defined(ABSL_HAVE_GETAUXVAL)
++ #define ABSL_INTERNAL_USE_LINUX_GETAUXVAL
++ #define ABSL_INTERNAL_USE_GETAUXVAL
++ #endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
