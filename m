@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE86C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 06:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BFB6C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 07:03:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E64882AA2;
-	Mon,  4 Apr 2022 06:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D796D402AC;
+	Mon,  4 Apr 2022 07:03:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BaDFVF-fqcs8; Mon,  4 Apr 2022 06:37:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JjrfkrJMVRfx; Mon,  4 Apr 2022 07:03:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BC9A82A72;
-	Mon,  4 Apr 2022 06:37:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B528840276;
+	Mon,  4 Apr 2022 07:03:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AAC311BF406
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 06:37:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4A1011BF406
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 07:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99214414CC
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 06:37:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38DCF40276
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 07:03:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id njNEByAoZlBT for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 06:37:13 +0000 (UTC)
+ with ESMTP id ln8GRx224t9B for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 07:03:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA031414CD
- for <buildroot@uclibc.org>; Mon,  4 Apr 2022 06:37:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B0474025E
+ for <buildroot@uclibc.org>; Mon,  4 Apr 2022 07:03:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5A161860AE; Mon,  4 Apr 2022 06:27:48 +0000 (UTC)
+ id 012DB84AB7; Mon,  4 Apr 2022 06:53:52 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 04 Apr 2022 06:37:13 +0000
+Date: Mon, 04 Apr 2022 07:03:18 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -43,15 +43,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: blocker
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Who: sujithkumar0903@gmail.com
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status cc resolution
-Message-ID: <bug-14741-163-LMczxSBqU3@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14741-163-uQbVrVut37@https.bugs.busybox.net/>
 In-Reply-To: <bug-14741-163@https.bugs.busybox.net/>
 References: <bug-14741-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -77,28 +77,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14741
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+--- Comment #2 from SUJITHKUMAR J P <sujithkumar0903@gmail.com> ---
+(In reply to Yann E. MORIN from comment #1)
+Hi Yann,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998@free.fr
-         Resolution|---                         |INVALID
+Thanks for your reply.Could you please share me steps for upgrade.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Sujithkumar,
-
-Thanks for your report.
-
-You reported on a failure of tune2fs 1.42.12. Buildroot last used that version
-of e2fsprogs in Buildroot 2015.05; that version is long unmaintained.
-
-Please, update your Buildroot to one of the curently supported maintenance
-branches: the latest 2022.02 LTS, the previous 2021.02.11 LTS, or the previous
-maintenance branch, 2021.11.3.
-
-Regards,
-Yann E. MORIN.
+thanks
+sujith
 
 -- 
 You are receiving this mail because:
