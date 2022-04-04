@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEE6EC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF161C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A08BE40393;
-	Mon,  4 Apr 2022 19:42:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F84360BEF;
+	Mon,  4 Apr 2022 19:42:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kLCc19gb3bNh; Mon,  4 Apr 2022 19:42:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OcKpoK_yt_IO; Mon,  4 Apr 2022 19:42:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F07B40201;
-	Mon,  4 Apr 2022 19:42:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7990360FB6;
+	Mon,  4 Apr 2022 19:42:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89B621BF27E
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:42:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6A401BF27E
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86D1840201
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:42:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B415540201
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:42:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 55eDR1rfpDKw for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 19:42:08 +0000 (UTC)
+ with ESMTP id 7Gb_n3ILqNzX for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 19:42:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46177401DF
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:42:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 108BE401DF
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:42:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 971EA8267E; Mon,  4 Apr 2022 19:32:41 +0000 (UTC)
+ id 61BA4826C6; Mon,  4 Apr 2022 19:32:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 21:40:43 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 5558c8c866aaf3ca85deccf9bee6b0747d16d75f
-X-Git-Newrev: 6de440a5c533b68d45614e13bba5fc296ca5d483
+Date: Mon, 4 Apr 2022 21:37:46 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 3002bbcc4cf998179737a3e353c015e54a1dde08
+X-Git-Newrev: 3e490dc836ad61f46c86376a711637154065407e
 X-Patchwork-Hint: ignore
-Message-Id: <20220404193241.971EA8267E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/zlib-ng: fix
+Message-Id: <20220404193248.61BA4826C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zlib-ng: fix
  build on powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6de440a5c533b68d45614e13bba5fc296ca5d483
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3e490dc836ad61f46c86376a711637154065407e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Handle WITH_POWER8 to fix the following build failure with powerpc and
 libglib2 raised since bump to version 1.9.9-b1 in commit
@@ -82,7 +82,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
-index c56fa72d6f..19bb9a9b5e 100644
+index fb497b8c11..938acd4181 100644
 --- a/package/zlib-ng/zlib-ng.mk
 +++ b/package/zlib-ng/zlib-ng.mk
 @@ -23,4 +23,10 @@ ifeq ($(BR2_arm),y)
