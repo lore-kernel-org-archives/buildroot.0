@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B682EC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DD1C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 727C660FF8;
-	Mon,  4 Apr 2022 18:03:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64BB181882;
+	Mon,  4 Apr 2022 18:04:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zKa63y9rVi0k; Mon,  4 Apr 2022 18:03:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id be4hV1LT3fgz; Mon,  4 Apr 2022 18:04:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7438260FE6;
-	Mon,  4 Apr 2022 18:03:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18C3F1BF35C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7402081291;
+	Mon,  4 Apr 2022 18:04:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B1171BF35C
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0873B4033A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69C268293F
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:03:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id USCcDxN9IyEQ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 83-j_v5M1E-c for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 18:03:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED60540360
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2A91828B3
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 18:03:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6E26B81250; Mon,  4 Apr 2022 17:53:53 +0000 (UTC)
+ id 62E508124D; Mon,  4 Apr 2022 17:53:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 4 Apr 2022 19:51:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3b8d098e4809f4cf20d88cce3d00479da25bfa6
-X-Git-Newrev: b49e3da1abf3a6c8affac08089311fc6590f54d0
+X-Git-Oldrev: e4b62f63084907b5dd6079b2c5360016a4eb6d3c
+X-Git-Newrev: e3b8d098e4809f4cf20d88cce3d00479da25bfa6
 X-Patchwork-Hint: ignore
-Message-Id: <20220404175353.6E26B81250@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/udpcast: fix build without pod2man
+Message-Id: <20220404175353.62E508124D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: fix pkg-config without
+ openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,79 +59,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b49e3da1abf3a6c8affac08089311fc6590f54d0
+commit: https://git.buildroot.net/buildroot/commit/?id=e3b8d098e4809f4cf20d88cce3d00479da25bfa6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-udpcast unconditionally build manpages which will raise the following
-build failure without pod2man since at least bump to version 20200328 in
-commit 4fb91d8b9dff314fc53438144f843b3e3ceaacaa:
+Fix the following build failure with libdbi-drivers raised since bump to
+version 14.1 in commit c9bd02911565819789120370178e82da5dfbacc0 and
+https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=beff361bc1edc24ee5f8b2073a1e5e4c92ea66eb:
 
-sh: line 1: pod2man: command not found
+configure: error: Package requirements (libpq) were not met:
 
-To fix this issue, rework how udpcast is built and installed to always
-build and install the sender or the receiver and never build the
-manpages. As a side effect, this will also avoid to install the unneeded
-rateGovernor.h
+Package 'libssl', required by 'libpq', not found
+Package 'libcrypto', required by 'libpq', not found
 
 Fixes:
- - http://autobuild.buildroot.org/results/ce602a09357e950d79794391cd4a852d565914f1
+ - http://autobuild.buildroot.org/results/415cb61a58b928a42623ed90b0b60c59032f0a4e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/udpcast/Config.in  |  2 ++
- package/udpcast/udpcast.mk | 24 ++++++++----------------
- 2 files changed, 10 insertions(+), 16 deletions(-)
+ ...0001-libpq-Fix-pkg-config-without-OpenSSL.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
-index ef94b30a99..cc38c6e57c 100644
---- a/package/udpcast/Config.in
-+++ b/package/udpcast/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_UDPCAST
- 	bool "udpcast"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UDPCAST_SENDER \
-+		if !BR2_PACKAGE_UDPCAST_RECEIVER
- 	help
- 	  A multicast protocol implementation which happens to
- 	  be very handy for imaging drives over the network.
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index 34ebddd2d5..4c151bb41f 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -9,23 +9,15 @@ UDPCAST_SITE = http://www.udpcast.linux.lu/download
- UDPCAST_DEPENDENCIES = host-m4
- UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
- UDPCAST_LICENSE_FILES = COPYING
-+UDPCAST_TARGETS = \
-+	$(if $(BR2_PACKAGE_UDPCAST_RECEIVER),udp-receiver) \
-+	$(if $(BR2_PACKAGE_UDPCAST_SENDER),udp-sender)
-+UDPCAST_MAKE_OPTS = $(UDPCAST_TARGETS)
- 
--define UDPCAST_REMOVE_UDP_SENDER
--	rm -f $(TARGET_DIR)/usr/sbin/udp-sender
--	rm -f $(TARGET_DIR)/usr/sbin/udp-sender.1
-+define UDPCAST_INSTALL_TARGET_CMDS
-+	$(foreach f,$(UDPCAST_TARGETS),\
-+		$(INSTALL) -D -m 755 $(@D)/$(f) $(TARGET_DIR)/usr/sbin/$(f)
-+	)
- endef
- 
--ifneq ($(BR2_PACKAGE_UDPCAST_SENDER),y)
--UDPCAST_POST_INSTALL_TARGET_HOOKS += UDPCAST_REMOVE_UDP_SENDER
--endif
--
--define UDPCAST_REMOVE_UDP_RECEIVER
--	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver
--	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver.1
--endef
--
--ifneq ($(BR2_PACKAGE_UDPCAST_RECEIVER),y)
--UDPCAST_POST_INSTALL_TARGET_HOOKS += UDPCAST_REMOVE_UDP_RECEIVER
--endif
--
- $(eval $(autotools-package))
+diff --git a/package/postgresql/0001-libpq-Fix-pkg-config-without-OpenSSL.patch b/package/postgresql/0001-libpq-Fix-pkg-config-without-OpenSSL.patch
+new file mode 100644
+index 0000000000..90b0577a20
+--- /dev/null
++++ b/package/postgresql/0001-libpq-Fix-pkg-config-without-OpenSSL.patch
+@@ -0,0 +1,34 @@
++From 465ab24296c27502c81c8c197725cba728b9b057 Mon Sep 17 00:00:00 2001
++From: Peter Eisentraut <peter@eisentraut.org>
++Date: Fri, 1 Apr 2022 17:12:56 +0200
++Subject: [PATCH] libpq: Fix pkg-config without OpenSSL
++
++Do not add OpenSSL dependencies to libpq pkg-config file if OpenSSL is
++not enabled.  Oversight in beff361bc1edc24ee5f8b2073a1e5e4c92ea66eb.
++
++Author: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Discussion: https://www.postgresql.org/message-id/flat/20220331163759.32665-1-fontaine.fabrice%40gmail.com
++[Retrieved from:
++https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=465ab24296c27502c81c8c197725cba728b9b057]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/interfaces/libpq/Makefile | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/interfaces/libpq/Makefile b/src/interfaces/libpq/Makefile
++index 89bf5e0126..b5fd72a4ac 100644
++--- a/src/interfaces/libpq/Makefile
+++++ b/src/interfaces/libpq/Makefile
++@@ -95,7 +95,9 @@ SHLIB_PREREQS = submake-libpgport
++ 
++ SHLIB_EXPORTS = exports.txt
++ 
+++ifeq ($(with_ssl),openssl)
++ PKG_CONFIG_REQUIRES_PRIVATE = libssl libcrypto
+++endif
++ 
++ all: all-lib libpq-refs-stamp
++ 
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
