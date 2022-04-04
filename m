@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C30FC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D856C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 18:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE38960FF5;
-	Mon,  4 Apr 2022 18:03:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B535A40363;
+	Mon,  4 Apr 2022 18:03:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X46aVf5YxlI9; Mon,  4 Apr 2022 18:03:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a_AVm9a9zTYV; Mon,  4 Apr 2022 18:03:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED6E560FE6;
-	Mon,  4 Apr 2022 18:03:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 987874030A;
+	Mon,  4 Apr 2022 18:03:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B89E41BF35C
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:02:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 70EA31BF35C
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B559060FE6
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:02:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 586476100A
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 18:03:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7yFu3CoIbZtV for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 18:02:56 +0000 (UTC)
+ with ESMTP id TaxqTyvYY3Ot for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 18:03:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E495760FE2
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 18:02:55 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id d10so7296942edj.0
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 11:02:55 -0700 (PDT)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 39E3360FE2
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 18:03:13 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id qh7so11605607ejb.11
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 11:03:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=PBj1RfMwTGjr6oq3B1nBiwv4GHiouXYzhKaj2H1aU48=;
- b=gQ1fumLVrUiW1nq8c4NY3+3TbSu6LYbthllvI16VRF0oeb89SV1nt6qEUiX6VeuAi6
- tSCPkfb7yJaU36HUrIAfidy/e2g0AHa7dSlR/ytVyywhrg88fggIUSDjNeZqZ3ZVryXv
- z4iod0zblzX6SthXT3R9hwKnvyXAdUtKmaRP1I8kd5n5NQNOhaIfZe1WXS6agFSockus
- P+77JIN71+Z5xkHqQwbj0f3JyxkuSChdkppytx+nqB5frlUsFRHUIPCHsJAip31Q2Lke
- dCH04Wx67aQsxi+YHknsB3OVMYABWb+zm5mu5pd4IDbwosWfyec8tRUASu0OXd2AWgaY
- VhaA==
+ bh=bIWUsurWS7hbZh1/Pwlicbf8WJY8tHGRg8EYixzr3Dg=;
+ b=JXGn2UT1QgoH0FijqGEjRzkydbEvwlOM8q4TcS4/98xSX+hXYEd2bbAA0xf+XN5S2C
+ jQ5uhZ4I3O0tVWvtUJ/hTF96HviOgrSyQwxfGDFYPaDPXYxMv68FQrJcSCdhGhKim9hY
+ sF777FKOt0y1lxSZQQqQfskJaGyDsM2mT77HbEDKFPoySNcnXxNH0OOfSwfd1vrFZ6HX
+ ysKZU15kfNrlleNBbFkRPdLO6dSKQJ2rzERKx8NTvu3oJTH/mHgytmM9876TY5ngsIDb
+ lY9pYtqSZ2JpQ8A67ewiWFUcRGWKFVozpgVIYRruyA9xUAgdrD7vAQWWoCVR9NekcHWj
+ AFwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=PBj1RfMwTGjr6oq3B1nBiwv4GHiouXYzhKaj2H1aU48=;
- b=1HAwgQMmCaWOxAEQU1hlj4aeyXpJtGRk8kJerOMHr2AU5DVXZRakCMCoP4kL+w4ZrY
- wz0BFI/1AUuAB/Ryq5WPUSJQ9U0tBCBTclPt9HxvYJrXCkhe0KZbdvf62koHDmTc7VK0
- hx6VA4yFXt9lNhylbatcrHXGdg6/oQ2UijmoX4V8owEEbmd0fr66B6xVX7j0DQTA3+KV
- 3mWUT4T2dD2w5AluE9cL14m/Xmh51Idq9JBlzl34k62iBgKB1J9KFtodeGZlzedmEPS2
- Rc6skYCXGLmNAqUPgILuvWwEaXGfdo2ldkrWgmuIURlm3hDo7V8JMwshXH+9Yq3ZrTVc
- LuEA==
-X-Gm-Message-State: AOAM533qN8mFAZL2HpR83icJiXT4P454ibiXFc9OvL33nl4nHH3IfCca
- EtsoTGePPmfhPElVhuB12OA9LaF6406SNA==
-X-Google-Smtp-Source: ABdhPJzNi1tLl2G06X0ZjnIwwOhxql0cQ3vWY8p6bN9H1EMR13XiAPjThqGD0JfVKIOEzqyV+skPyg==
-X-Received: by 2002:aa7:c3d6:0:b0:419:2370:4856 with SMTP id
- l22-20020aa7c3d6000000b0041923704856mr1467052edr.180.1649095374062; 
- Mon, 04 Apr 2022 11:02:54 -0700 (PDT)
+ bh=bIWUsurWS7hbZh1/Pwlicbf8WJY8tHGRg8EYixzr3Dg=;
+ b=wBvWxxPmZl9mbyUc7tvOdAwifGGQsTGUzanfnksrhB5+CtS7wIlDZ3jLnHvCENMG+H
+ tct9OHZQP/c11XEbw5/+ZaxSfz53rQptzuE6htA8K2M3+xSb0hr+KrXiIDAqVHbXgTfC
+ zP65TrpT/fqDCNCN/ookK5UVF6E8mtEuGk8EvgJNKx0v+1d5TLKqXg3BVLSWOUBx6CR/
+ i8DmcW46xGDbeG21Pv79gGklMhSLXqqIGGgwtk2yOZE4y5eqT4dWdvhxhkJnkWME9bkP
+ mBHGf50GzyvOqKOsINQcUbLpn9vlVoi6s5EFVUCOgU9cMqNP7oGXzgk9PT2M0ptE2+Uh
+ 2dhQ==
+X-Gm-Message-State: AOAM533nqmi7GAcZYZrPoX2FBnlIwNamWIXF7yjZMDlJjPfLXN77xNFn
+ P4ma8EQgHqBLWnxEH1GQTFoMHQ==
+X-Google-Smtp-Source: ABdhPJw3nV9E5mwwE5Z3o9R92z85EzbqNNpMGm3DSfumSbNCJPfCSIwvSaC2jq4ghIE43cq9drtJ3Q==
+X-Received: by 2002:a17:907:6ea4:b0:6e1:260e:a232 with SMTP id
+ sh36-20020a1709076ea400b006e1260ea232mr1319470ejc.15.1649095391059; 
+ Mon, 04 Apr 2022 11:03:11 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- hr38-20020a1709073fa600b006e0280f3bbdsm4656029ejc.110.2022.04.04.11.02.53
+ m25-20020a170906161900b006d43be5b95fsm4647652ejd.118.2022.04.04.11.03.10
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 04 Apr 2022 11:02:53 -0700 (PDT)
-Message-ID: <7ea28df0-42ef-18f5-cc66-de0e9c31f5f8@mind.be>
-Date: Mon, 4 Apr 2022 20:02:52 +0200
+ Mon, 04 Apr 2022 11:03:10 -0700 (PDT)
+Message-ID: <a99bc0b0-3222-2134-94b1-6ce6fad4ef40@mind.be>
+Date: Mon, 4 Apr 2022 20:03:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220401170255.540939-1-fontaine.fabrice@gmail.com>
+References: <20220401204411.942428-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220401170255.540939-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/udpcast: fix build without
- pod2man
+In-Reply-To: <20220401204411.942428-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcap-ng: bump to version 0.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,20 +101,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/04/2022 19:02, Fabrice Fontaine wrote:
-> udpcast unconditionally build manpages which will raise the following
-> build failure without pod2man since at least bump to version 20200328 in
-> commit 4fb91d8b9dff314fc53438144f843b3e3ceaacaa:
-> 
-> sh: line 1: pod2man: command not found
-> 
-> To fix this issue, rework how udpcast is built and installed to always
-> build and install the sender or the receiver and never build the
-> manpages. As a side effect, this will also avoid to install the unneeded
-> rateGovernor.h
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/ce602a09357e950d79794391cd4a852d565914f1
+On 01/04/2022 22:44, Fabrice Fontaine wrote:
+> https://github.com/stevegrubb/libcap-ng/blob/v0.8.3/ChangeLog
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -123,59 +112,33 @@ On 01/04/2022 19:02, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/udpcast/Config.in  |  2 ++
->   package/udpcast/udpcast.mk | 24 ++++++++----------------
->   2 files changed, 10 insertions(+), 16 deletions(-)
+>   package/libcap-ng/libcap-ng.hash | 2 +-
+>   package/libcap-ng/libcap-ng.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
-> index ef94b30a99..cc38c6e57c 100644
-> --- a/package/udpcast/Config.in
-> +++ b/package/udpcast/Config.in
-> @@ -6,6 +6,8 @@ config BR2_PACKAGE_UDPCAST
->   	bool "udpcast"
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
->   	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_UDPCAST_SENDER \
-> +		if !BR2_PACKAGE_UDPCAST_RECEIVER
->   	help
->   	  A multicast protocol implementation which happens to
->   	  be very handy for imaging drives over the network.
-> diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-> index 34ebddd2d5..4c151bb41f 100644
-> --- a/package/udpcast/udpcast.mk
-> +++ b/package/udpcast/udpcast.mk
-> @@ -9,23 +9,15 @@ UDPCAST_SITE = http://www.udpcast.linux.lu/download
->   UDPCAST_DEPENDENCIES = host-m4
->   UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
->   UDPCAST_LICENSE_FILES = COPYING
-> +UDPCAST_TARGETS = \
-> +	$(if $(BR2_PACKAGE_UDPCAST_RECEIVER),udp-receiver) \
-> +	$(if $(BR2_PACKAGE_UDPCAST_SENDER),udp-sender)
-> +UDPCAST_MAKE_OPTS = $(UDPCAST_TARGETS)
+> diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+> index f775ae6fc9..d4590dd739 100644
+> --- a/package/libcap-ng/libcap-ng.hash
+> +++ b/package/libcap-ng/libcap-ng.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated
+> -sha256  52c083b77c2b0d8449dee141f9c3eba76e6d4c5ad44ef05df25891126cb85ae9  libcap-ng-0.8.2.tar.gz
+> +sha256  bed6f6848e22bb2f83b5f764b2aef0ed393054e803a8e3a8711cb2a39e6b492d  libcap-ng-0.8.3.tar.gz
+>   sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+>   sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+> diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+> index 4fb0cf4777..46f72c702e 100644
+> --- a/package/libcap-ng/libcap-ng.mk
+> +++ b/package/libcap-ng/libcap-ng.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> -define UDPCAST_REMOVE_UDP_SENDER
-> -	rm -f $(TARGET_DIR)/usr/sbin/udp-sender
-> -	rm -f $(TARGET_DIR)/usr/sbin/udp-sender.1
-> +define UDPCAST_INSTALL_TARGET_CMDS
-> +	$(foreach f,$(UDPCAST_TARGETS),\
-> +		$(INSTALL) -D -m 755 $(@D)/$(f) $(TARGET_DIR)/usr/sbin/$(f)
-> +	)
->   endef
->   
-> -ifneq ($(BR2_PACKAGE_UDPCAST_SENDER),y)
-> -UDPCAST_POST_INSTALL_TARGET_HOOKS += UDPCAST_REMOVE_UDP_SENDER
-> -endif
-> -
-> -define UDPCAST_REMOVE_UDP_RECEIVER
-> -	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver
-> -	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver.1
-> -endef
-> -
-> -ifneq ($(BR2_PACKAGE_UDPCAST_RECEIVER),y)
-> -UDPCAST_POST_INSTALL_TARGET_HOOKS += UDPCAST_REMOVE_UDP_RECEIVER
-> -endif
-> -
->   $(eval $(autotools-package))
+> -LIBCAP_NG_VERSION = 0.8.2
+> +LIBCAP_NG_VERSION = 0.8.3
+>   LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+>   LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+>   LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
