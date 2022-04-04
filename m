@@ -4,76 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 057ECC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 01:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E021C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 06:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FF6A408B1;
-	Mon,  4 Apr 2022 01:43:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F26314093D;
+	Mon,  4 Apr 2022 06:19:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n2RGEXfGNcHG; Mon,  4 Apr 2022 01:43:10 +0000 (UTC)
+	with ESMTP id phGAkIlIKJXX; Mon,  4 Apr 2022 06:19:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B4F340887;
-	Mon,  4 Apr 2022 01:43:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E5E21BF343
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 01:43:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E50E40913;
+	Mon,  4 Apr 2022 06:19:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2468C1BF406
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 06:19:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0755F4087D
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 01:43:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12D5C60ACE
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 06:19:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NCCLe_CxvLds for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 01:43:05 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j-g22BZLvaIT for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 06:19:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C8C4240871
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 01:43:05 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id x9so5868724ilc.3
- for <buildroot@buildroot.org>; Sun, 03 Apr 2022 18:43:05 -0700 (PDT)
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com
+ [IPv6:2001:4860:4864:20::35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3870D60701
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 06:19:17 +0000 (UTC)
+Received: by mail-oa1-x35.google.com with SMTP id
+ 586e51a60fabf-df02f7e2c9so9500964fac.10
+ for <buildroot@buildroot.org>; Sun, 03 Apr 2022 23:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=w0E141WmeAlbU/BF1s9ihac+Fyqz7k+GUr2s6m6jrP4=;
- b=ael+aL0OW0wLrfZF62e95mkhrg9w83f6pD7NKkuElylcf9s+0gpmCanzu8mhy1VRV7
- 7YsPQmaFeH6yxj8SKfkSFOH5KFZ2zGmfvN7geOEJ1HtirLNggXUT4IJH7YGJPyv+Pzu7
- Z7zqEWpq9J/uGqIdy5OaTLQOPENTRTxhOtDdfJs+4rWZFc2qvwkhhm0P9fXNS4rzZlkf
- MMAh9J0kqQPx3UMVOUjt4+YOvMSPelbVETrhJ8v4mTTIezoErgt1v8sCb/Ju68fVYk7t
- 5+vPA68zAEUU1R5SOHcKBVLRP/serX1q4VxgYIO9w0eCvZbIcwH3C5XSLdRgjVWlDwFT
- G6yw==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=YU3h54goz9zPX4AZhKtjaLWKUMSToB/b6LVGYR9726o=;
+ b=XPBatY/gysDSQj/OKQxIukijPf8fhM3GPErfVi3qg7199YMvFLvjdK4D40AF2QCd+C
+ HXRp6AyK/YWrizlU0cIC9rXJi2Zmed7P8RSc1qInm3bQhOUVF/8VAn9eC7ZjYSyxBmEe
+ 7lxj9xBRnIvvtgZ1eu8UciWklgc3tUGfWr6Qjx/mGCmzq3k5Sdxb759wKqJKpRJ5wgIg
+ K+cnH/N48PZsdHkfccESHvufo67tFQ8ITig/APOpoo49c/HErYWfcHkfAh6gh3AN/7J3
+ As+GQaV0oB+SZvRspSm4BaeIiyaUdKWLa5Q/eWXbBiLoYvIUUVLt66jnwOG1WFyZfKD8
+ TSjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=w0E141WmeAlbU/BF1s9ihac+Fyqz7k+GUr2s6m6jrP4=;
- b=KpLu/lsfIqaeZxtijMe8G4jz11kSQUQlaNZoJAn2WUK0LGVAI1IPQO1707N/TuHgAd
- ECsrHfLLm5S96IvI4C8nfqJ0CpZGqa/DpyVVnwB95LG7tMKf5iB9KOXGyeLxZjNAlm2d
- qBB2wN+pNS+H1X82oQNCw639InXJ/NAI4q48kqm3+rOO6nQ4rabV45XsaQjHcRwq0Y5w
- ECNTRF5NJ3E7fK/PeDJyl9ALXuQFm1ks2DZ3O/gA6h2Dnjuz3/YLaXQKgd/Wq1QQCvao
- XX0gI7Bu6+hMbU88GIgEiVEaYX6av20t8guDcmH8az+6yYjS+VUnR/wIbjuLpaJNtSI7
- GPXw==
-X-Gm-Message-State: AOAM530s2XrCeq94O74aL46336GITqTUY2LwUg0yTe5142pK1tBwmyyz
- Whx2Gwc/W49I+mQRpMEatLp+XnCJXdXL3Q==
-X-Google-Smtp-Source: ABdhPJy6//6j0+WQDzwLzo+v1b5nev66/Um+Oxi1BBeKdkEI6aEBdXAJQ47NDX7kNinmEXTjF8VpsA==
-X-Received: by 2002:a05:6e02:1568:b0:2c9:cb97:973 with SMTP id
- k8-20020a056e02156800b002c9cb970973mr4318061ilu.132.1649036584725; 
- Sun, 03 Apr 2022 18:43:04 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
- [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- x14-20020a92dc4e000000b002c9e982fbc2sm5016637ilq.1.2022.04.03.18.43.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Apr 2022 18:43:04 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  3 Apr 2022 19:42:52 -0600
-Message-Id: <20220404014252.566711-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=YU3h54goz9zPX4AZhKtjaLWKUMSToB/b6LVGYR9726o=;
+ b=OfFburnNJR7MpwLxYdR7MTdGBTJmK1fU71WZnewpF5w5zaT+fHXTGZHdGrivB5xmP9
+ LMSK17MAl6LRLPvGSkBWVyLsK7Y07BSkHIFHPTVQCqQ1xYgMmKhClTBJgm4HyEIdxOU2
+ XyVpXJNd5XCIBr5BSPZjJHo/lzGv4LJQ64j8tJHUQs9DBy8rtPDNwTfts633s9CqOwuZ
+ nAjYiK1YxhGJIajqY+pNhcNNbynDNGMsjHUaiBaGke1VNC8Gu8v8VHsPoCjsbRyzuZ9n
+ Pov9t5FWuSoNL5RduANznuc93TiGNEi02BytX4RKGHNm+kfoQrMXL5+8uzagv+MsBUie
+ Qo/Q==
+X-Gm-Message-State: AOAM531AYWeWzuPQnSuyjjhA24L5FxeRNADaFAq686RYe/OJblfMb4Lk
+ VAosyLqlPE1eELEqIhPBfquaT2b7LoqBZQNUr+s=
+X-Google-Smtp-Source: ABdhPJzaPEapZJavrYLM/Axtq1213fLrLSGgLH/fbJp1TWu/Uz0/VQB9TQsDq5MWzS5Qx1zhTtaJtrIwxteoRwhXsBU=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr9374923oaa.200.1649053156230; Sun, 03
+ Apr 2022 23:19:16 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/protobuf: add additional supported
- host architectures
+References: <20220403100318.2581647-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220403100318.2581647-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 4 Apr 2022 00:19:04 -0600
+Message-ID: <CADvTj4rW6P6xkiner9-b0427EoDWLGBv6i2K70Hsh75P7wenvg@mail.gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: use internal bind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,170 +82,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Move supported host architectures under
-BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS and propagate the reverse
-dependency.
+On Sun, Apr 3, 2022 at 4:05 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Use internal bind as dhcp doesn't build since bump of bind to version
+> 9.16.26 in commit 8adeaec8afacbc680edebae91524f6144926ac92 and upstream
+> doesn't plan to fix it any time soon:
+> https://gitlab.isc.org/isc-projects/dhcp/-/issues/233#note_276883
+>
+> In file included from ../includes/dhcpd.h:91,
+>                  from ctrace.c:29:
+> ../includes/omapip/isclib.h:51:10: fatal error: isc/boolean.h: No such file or directory
+>    51 | #include <isc/boolean.h>
+>       |          ^~~~~~~~~~~~~~~
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d18b006dce7b46631ce8f4c72fb97eb861993939
 
-Add additional supported host architectures based on current
-src/google/protobuf/stubs/platform_macros.h
+Also fixes a different issue caused by the bind depends not being
+propagated to dhcp:
+http://autobuild.buildroot.net/results/c06/c06d57b57c9d7867e3fb7fedd8b5ab39872af285
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/collectd/Config.in         |  6 +++---
- package/kismet/Config.in           |  4 ++--
- package/protobuf-c/Config.in       |  4 ++--
- package/protobuf/Config.in         | 16 +++++++++++++++-
- package/python-protobuf/Config.in  |  2 +-
- package/riemann-c-client/Config.in |  4 ++--
- 6 files changed, 25 insertions(+), 11 deletions(-)
-
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 67413ffde0..43eef3bf66 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -725,7 +725,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
- 	bool "riemann"
- 	# riemann-c-client -> protobuf-c
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 	select BR2_PACKAGE_RIEMANN_C_CLIENT
- 	select BR2_PACKAGE_LIBTOOL
- 	help
-@@ -759,7 +759,7 @@ config BR2_PACKAGE_COLLECTD_WRITELOG
- config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
- 	bool "write_prometheus"
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
-@@ -768,7 +768,7 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
- 
- comment "write_prometheus needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_COLLECTD_WRITEREDIS
- 	bool "write_redis"
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 961d5f230e..7bde6c92af 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -3,14 +3,14 @@ comment "kismet needs a toolchain w/ threads, C++, gcc >= 5"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_KISMET
- 	bool "kismet"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_PROTOBUF_C
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index a32e6cd9e8..d96cd7b382 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PROTOBUF_C
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# host-protobuf only builds on certain architectures
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
- 	  from pure C (not C++).
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_PROTOBUF_C
- 
- comment "protobuf-c needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 46c820b9cf..47e987fa2b 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -14,6 +14,20 @@
- # and we can live with requiring gcc 4.8 on PowerPC to build protobuf.
- #
- # host-protobuf only builds on certain architectures
-+config BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_HOSTARCH = "aarch64"
-+	default y if BR2_HOSTARCH = "arm"
-+	default y if BR2_HOSTARCH = "mips"
-+	default y if BR2_HOSTARCH = "mipsel"
-+	default y if BR2_HOSTARCH = "powerpc"
-+	default y if BR2_HOSTARCH = "powerpc64"
-+	default y if BR2_HOSTARCH = "powerpc64le"
-+	default y if BR2_HOSTARCH = "sparc"
-+	default y if BR2_HOSTARCH = "sparc64"
-+	default y if BR2_HOSTARCH = "x86"
-+	default y if BR2_HOSTARCH = "x86_64"
-+
- config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_arm
-@@ -22,7 +36,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_x86_64
- 	default y if BR2_sparc64
- 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
- 
- config BR2_PACKAGE_PROTOBUF
-diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-index 1af82112b4..7de463520d 100644
---- a/package/python-protobuf/Config.in
-+++ b/package/python-protobuf/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_PROTOBUF
- 	bool "python-protobuf"
- 	# host-protobuf only builds on certain architectures
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  Python implementation of the Google Protocol Buffers.
-diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
-index e9982b2fb0..6c3c35caf8 100644
---- a/package/riemann-c-client/Config.in
-+++ b/package/riemann-c-client/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 	bool "riemann-c-client"
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Riemann-c-client is a C client library for the Riemann
-@@ -14,4 +14,4 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 
- comment "riemann-c-client needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
--- 
-2.25.1
-
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/dhcp/Config.in |  1 -
+>  package/dhcp/dhcp.mk   | 19 ++++++++++++++++---
+>  2 files changed, 16 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+> index 515040c612..e0706efafb 100644
+> --- a/package/dhcp/Config.in
+> +++ b/package/dhcp/Config.in
+> @@ -3,7 +3,6 @@ config BR2_PACKAGE_DHCP
+>         # fork()
+>         depends on BR2_USE_MMU
+>         depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> -       select BR2_PACKAGE_BIND
+>         help
+>           DHCP relay agent from the ISC DHCP distribution.
+>
+> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+> index 18765a3639..f1e3c22f1c 100644
+> --- a/package/dhcp/dhcp.mk
+> +++ b/package/dhcp/dhcp.mk
+> @@ -9,8 +9,10 @@ DHCP_SITE = https://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+>  DHCP_INSTALL_STAGING = YES
+>  DHCP_LICENSE = MPL-2.0
+>  DHCP_LICENSE_FILES = LICENSE
+> -DHCP_DEPENDENCIES = bind host-gawk
+> +DHCP_DEPENDENCIES = host-gawk
+>  DHCP_CPE_ID_VENDOR = isc
+> +# internal bind does not support parallel builds.
+> +DHCP_MAKE = $(MAKE1)
+>
+>  # use libtool-enabled configure.ac
+>  define DHCP_LIBTOOL_AUTORECONF
+> @@ -21,11 +23,12 @@ DHCP_CONF_ENV = \
+>         CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+>                 -D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+>         CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+> +DHCP_BIND_EXTRA_CONFIG = BUILD_CC='$(TARGET_CC)'
+>
+>  DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
+>
+>  DHCP_CONF_OPTS = \
+> -       --with-libbind=$(STAGING_DIR)/usr \
+> +       --with-bind-extra-config="$(DHCP_BIND_EXTRA_CONFIG)" \
+>         --with-randomdev=/dev/random \
+>         --with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
+>         --with-srv6-lease-file=/var/lib/dhcp/dhcpd6.leases \
+> @@ -38,8 +41,18 @@ DHCP_CONF_OPTS = \
+>         --with-relay-pid-file=/var/run/dhcrelay.pid \
+>         --with-relay6-pid-file=/var/run/dhcrelay6.pid
+>
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +DHCP_BIND_EXTRA_CONFIG += --with-zlib
+> +DHCP_DEPENDENCIES += zlib
+> +else
+> +DHCP_BIND_EXTRA_CONFIG += --without-zlib
+> +endif
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +DHCP_CONF_ENV += LIBS=-latomic
+> +endif
+> +
+>  ifeq ($(BR2_STATIC_LIBS),y)
+> -DHCP_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/bind9-config --libs bind9`"
+>  DHCP_CONF_OPTS += --disable-libtool
+>  else
+>  DHCP_POST_EXTRACT_HOOKS += DHCP_LIBTOOL_AUTORECONF
+> --
+> 2.35.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
