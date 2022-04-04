@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99755C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 12:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35382C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 12:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52A6082969;
-	Mon,  4 Apr 2022 12:43:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCCE4409FF;
+	Mon,  4 Apr 2022 12:44:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LNWI5d2pbevm; Mon,  4 Apr 2022 12:43:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zg-0ahop6C7M; Mon,  4 Apr 2022 12:44:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5745882909;
-	Mon,  4 Apr 2022 12:43:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7E90409F4;
+	Mon,  4 Apr 2022 12:44:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 663D81BF3D1
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:41:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F8311BF3D1
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF24760B73
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:41:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D05F60692
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:44:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4cKIWnmqKs1y for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 12:41:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D46CE60FC7
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 12:41:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D3090861AF; Mon,  4 Apr 2022 12:32:10 +0000 (UTC)
+ with ESMTP id 7fEAgTTiMY36 for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 12:44:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5A2FA600C9
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 12:44:56 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 50139100006;
+ Mon,  4 Apr 2022 12:44:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nbM4j-005slJ-Ed; Mon, 04 Apr 2022 14:44:53 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 14:39:01 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 745e02154582fe5b60739214c2bfa9c531e30101
-X-Git-Newrev: eae86599ca81c943821bac33f424669520a3fa8c
-X-Patchwork-Hint: ignore
-Message-Id: <20220404123210.D3090861AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- support/scripts/pkg-stats: reimplement CPE parsing in pkg-stats
+To: Markus Mayer via buildroot <buildroot@buildroot.org>
+References: <20220401215653.1703616-1-mmayer@broadcom.com>
+Date: Mon, 04 Apr 2022 14:44:53 +0200
+In-Reply-To: <20220401215653.1703616-1-mmayer@broadcom.com> (Markus Mayer via
+ buildroot's message of "Fri, 1 Apr 2022 14:56:53 -0700")
+Message-ID: <87mth1yq4a.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package: replace git:// URLs with https://
+ URLs where possible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,137 +59,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Markus Mayer <mmayer@broadcom.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae86599ca81c943821bac33f424669520a3fa8c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Markus" == Markus Mayer via buildroot <buildroot@buildroot.org> writes:
 
-pkg-stats currently uses the services from support/scripts/cpedb.py to
-match the CPE identifiers of packages with the official CPE database.
+ > Replace the remaining git:// URLs with their https:// equivalents as
+ > this is more secure and also more palatable to corporate firewalls.
 
-Unfortunately, the cpedb.py code uses regular ElementTree parsing,
-which involves loading the full XML tree into memory. This causes the
-pkg-stats process to consume a huge amount of memory:
+ > This leaves package/dahdi-linux as the sole package still using a
+ > git:// URL for cloning.
 
-thomas   1310458 85.2 21.4 3708952 3450164 pts/5 R+   16:04   0:33  |   |   \_ python3 ./support/scripts/pkg-stats
+ > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 
-So, 3.7 GB of VSZ and 3.4 GB of RSS are used by the pkg-stats
-process. This is causing the OOM killer to kick-in on machines with
-relatively low memory.
+Committed to 2021.02.x and 2022.02.x, thanks.
 
-This commit reimplements the XML parsing needed to do the CPE matching
-directly in pkg-stats, using the XmlParser functionality of
-ElementTree, also called "streaming parsing". Thanks to this, we never
-load the entire XML tree in RAM, but only stream it through the
-parser, and construct a very simple list of all CPE identifiers. The
-max memory consumption of pkg-stats is now:
-
-thomas   1317511 74.2  0.9 381104 152224 pts/5   R+   16:08   0:17  |   |   \_ python3 ./support/scripts/pkg-stats
-
-So, 381 MB of VSZ and 152 MB of RSS, which is obviously much better.
-
-The JSON output of pkg-stats for the full package set, before and after
-this commit, is exactly identical.
-
-Now, one will probably wonder why this isn't directly changed in
-cpedb.py. The reason is simple: cpedb.py is also used by
-support/scripts/missing-cpe, which (for now) heavily relies on having
-in memory the ElementTree objects, to re-generate a snippet of XML
-that allows us to submit to NIST new CPE entries.
-
-So, future work could include one of those two options:
-
- (1) Re-integrate cpedb.py into missing-cpe directly, and live with
-     two different ways of processing the CPE database.
-
- (2) Rewrite the missing-cpe logic to also be compatible with a
-     streaming parsing, which would allow this logic to be again
-     shared between pkg-stats and missing-cpe.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr:
-  - add missing import of requests
-  - import CPEDB_URL from cpedb, instead of duplicating it
-  - fix flake8 errors
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bd1798ad959a901ccf5009b0c199fa5470912cc2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/pkg-stats | 41 +++++++++++++++++++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 4 deletions(-)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index ae1a9aa5e4..f67be0063f 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -27,12 +27,16 @@ import re
- import subprocess
- import json
- import sys
-+import time
-+import gzip
-+import xml.etree.ElementTree
-+import requests
- 
- brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
- 
- sys.path.append(os.path.join(brpath, "utils"))
- from getdeveloperlib import parse_developers  # noqa: E402
--from cpedb import CPEDB  # noqa: E402
-+from cpedb import CPEDB_URL  # noqa: E402
- 
- INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile(r"\s*https?://\S*\s*$")
-@@ -624,12 +628,41 @@ def check_package_cves(nvd_path, packages):
- 
- 
- def check_package_cpes(nvd_path, packages):
--    cpedb = CPEDB(nvd_path)
--    cpedb.get_xml_dict()
-+    class CpeXmlParser:
-+        cpes = []
-+
-+        def start(self, tag, attrib):
-+            if tag == "{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item":
-+                self.cpes.append(attrib['name'])
-+
-+        def close(self):
-+            return self.cpes
-+
-+    print("CPE: Setting up NIST dictionary")
-+    if not os.path.exists(os.path.join(nvd_path, "cpe")):
-+        os.makedirs(os.path.join(nvd_path, "cpe"))
-+
-+    cpe_dict_local = os.path.join(nvd_path, "cpe", os.path.basename(CPEDB_URL))
-+    if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
-+        print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
-+        cpe_dict = requests.get(CPEDB_URL)
-+        open(cpe_dict_local, "wb").write(cpe_dict.content)
-+
-+    print("CPE: Unzipping xml manifest...")
-+    nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
-+
-+    parser = xml.etree.ElementTree.XMLParser(target=CpeXmlParser())
-+    while True:
-+        c = nist_cpe_file.read(1024*1024)
-+        if not c:
-+            break
-+        parser.feed(c)
-+    cpes = parser.close()
-+
-     for p in packages:
-         if not p.cpeid:
-             continue
--        if cpedb.find(p.cpeid):
-+        if p.cpeid in cpes:
-             p.status['cpe'] = ("ok", "verified CPE identifier")
-         else:
-             p.status['cpe'] = ("error", "CPE version unknown in CPE database")
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
