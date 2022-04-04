@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F450C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94165C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:30:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E675240327;
-	Mon,  4 Apr 2022 19:30:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F67D4092A;
+	Mon,  4 Apr 2022 19:30:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2PITuuhudFmY; Mon,  4 Apr 2022 19:30:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v1z_RLl6iDXa; Mon,  4 Apr 2022 19:30:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1EFBD401B7;
-	Mon,  4 Apr 2022 19:30:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AD58C1BF27E
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:30:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 532884091C;
+	Mon,  4 Apr 2022 19:30:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AC5E1BF27E
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B2A1401B7
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:30:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AB2F826DE
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:30:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3SjzaHBdaKOh for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 19:30:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 814ED401A3
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:30:35 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A5FEA40007;
- Mon,  4 Apr 2022 19:30:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nbSPI-006cRO-Qv; Mon, 04 Apr 2022 21:30:32 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WM6ebAGWsCLE for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 19:30:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AA5D826D5
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:30:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id BDDB2821B2; Mon,  4 Apr 2022 19:21:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220403183503.736373-1-fontaine.fabrice@gmail.com>
-Date: Mon, 04 Apr 2022 21:30:32 +0200
-In-Reply-To: <20220403183503.736373-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Apr 2022 20:35:03 +0200")
-Message-ID: <87ee2cy7c7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/minizip: bump to version 3.0.5
+To: buildroot@buildroot.org
+Date: Mon, 4 Apr 2022 21:29:46 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: fc9c97f0026191f3bab0cc1f37675de8e826a564
+X-Git-Newrev: 3e36fa4c2200c63d7cae2239b5e9b82f008509b7
+X-Patchwork-Hint: ignore
+Message-Id: <20220404192116.BDDB2821B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/minizip: bump to
+ version 3.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,32 +53,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3e36fa4c2200c63d7cae2239b5e9b82f008509b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > This bump will fix the following build failure with zlib-ng thanks to
- > https://github.com/zlib-ng/minizip-ng/commit/9184ba1216589077803b3e4e85f2b226f861ab2d:
+This bump will fix the following build failure with zlib-ng thanks to
+https://github.com/zlib-ng/minizip-ng/commit/9184ba1216589077803b3e4e85f2b226f861ab2d:
 
- > /home/autobuild/autobuild/instance-10/output-1/build/minizip-3.0.4/mz_crypt.c:19:14: fatal error: zlib-ng.h: No such file or directory
- >    19 | #    include "zlib-ng.h"
- >       |              ^~~~~~~~~~~
+/home/autobuild/autobuild/instance-10/output-1/build/minizip-3.0.4/mz_crypt.c:19:14: fatal error: zlib-ng.h: No such file or directory
+   19 | #    include "zlib-ng.h"
+      |              ^~~~~~~~~~~
 
- > https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.5
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.5
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/530fee780557941356dcd6aabb8cc9eb048574f3
+Fixes:
+ - http://autobuild.buildroot.org/results/530fee780557941356dcd6aabb8cc9eb048574f3
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b1d80083781f844cc70229c4a592253c9a34cbaa)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/minizip/minizip.hash | 2 +-
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index 3e87e64dae..e73637670c 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2ab219f651901a337a7d3c268128711b80330a99ea36bdc528c76b591a624c3c  minizip-3.0.4.tar.gz
++sha256  1a248c378fdf4ef6c517024bb65577603d5146cffaebe81900bec9c0a5035d4d  minizip-3.0.5.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 07f67c1354..b9259f0c54 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINIZIP_VERSION = 3.0.4
++MINIZIP_VERSION = 3.0.5
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
