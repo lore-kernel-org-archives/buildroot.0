@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32E4DC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 12:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17B3FC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 12:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D78ED410AD;
-	Mon,  4 Apr 2022 12:41:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3B94410E0;
+	Mon,  4 Apr 2022 12:42:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BbwcB_8MtL3U; Mon,  4 Apr 2022 12:41:52 +0000 (UTC)
+	with ESMTP id WnVN5aeVwQh6; Mon,  4 Apr 2022 12:42:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA147410A2;
-	Mon,  4 Apr 2022 12:41:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A88B81BF3D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D3F0410A8;
+	Mon,  4 Apr 2022 12:42:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B37DA1BF9AD
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E33682909
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E349401F2
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:40:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id whudV2tgmquW for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j9Ufzo4qI49h for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 12:40:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE85082923
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB50F40320
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 12:40:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC4448619F; Mon,  4 Apr 2022 12:31:24 +0000 (UTC)
+ id D79F78619E; Mon,  4 Apr 2022 12:31:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 14:39:28 +0200
+Date: Mon, 4 Apr 2022 14:37:20 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 05e714b0e496c5e2519def8fd239e970bd0479dd
-X-Git-Newrev: 676d2e8d5b0534432e9e086dc5967d0f9e149373
+X-Git-Oldrev: 856ffaf41cc68f787a130a6e481c7fc3ed7e629b
+X-Git-Newrev: da78e1e1e6b42772e4a5e9e09db2c15110e64400
 X-Patchwork-Hint: ignore
-Message-Id: <20220404123124.EC4448619F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- support/scripts/pkg-stats: allow disabling package warnings retrieval
+Message-Id: <20220404123124.D79F78619E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-paramiko:
+ security bump to version 2.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=676d2e8d5b0534432e9e086dc5967d0f9e149373
+commit: https://git.buildroot.net/buildroot/commit/?id=da78e1e1e6b42772e4a5e9e09db2c15110e64400
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This is useful when debugging/developing the pkg-stats script.
+Fix CVE-2022-24302: Creation of new private key files using PKey
+subclasses was subject to a race condition between file creation & mode
+modification, which could be exploited by an attacker with knowledge of
+where the Paramiko-using code would write out such files.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1adcf5659804c17859b2799c0c3edb6b6ce68eb5)
+https://github.com/paramiko/paramiko/blob/2.10.3/sites/www/changelog.rst
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ae699d7f9ad3caebe1fb338303f1b7c6ad42f6ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/python-paramiko/python-paramiko.hash | 4 ++--
+ package/python-paramiko/python-paramiko.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d9ecb45c3f..0eca2fb10f 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -1087,7 +1087,7 @@ def parse_args():
-     parser.add_argument('--nvd-path', dest='nvd_path',
-                         help='Path to the local NVD database', type=resolvepath)
-     parser.add_argument('--disable', type=list_str,
--                        help='Features to disable, comma-separated (cve, upstream, url, cpe)',
-+                        help='Features to disable, comma-separated (cve, upstream, url, cpe, warning)',
-                         default=[])
-     args = parser.parse_args()
-     if not args.html and not args.json:
-@@ -1129,7 +1129,8 @@ def __main__():
-         pkg.set_license()
-         pkg.set_hash_info()
-         pkg.set_patch_count()
--        pkg.set_check_package_warnings()
-+        if "warnings" not in args.disable:
-+            pkg.set_check_package_warnings()
-         pkg.set_current_version()
-         pkg.set_cpeid()
-         pkg.set_url()
+diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
+index b11acf1dbc..951bd8e114 100644
+--- a/package/python-paramiko/python-paramiko.hash
++++ b/package/python-paramiko/python-paramiko.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/paramiko/json
+-md5  44136d79da4cd7619e368018ad022619  paramiko-2.7.2.tar.gz
+-sha256  7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035  paramiko-2.7.2.tar.gz
++md5  6e47947882e2c1b81f35b4133e8e62b9  paramiko-2.10.3.tar.gz
++sha256  ddb1977853aef82804b35d72a0e597b244fa326c404c350bd00c5b01dbfee71a  paramiko-2.10.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
+diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
+index 3c135cf9b1..46209f5823 100644
+--- a/package/python-paramiko/python-paramiko.mk
++++ b/package/python-paramiko/python-paramiko.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PARAMIKO_VERSION = 2.7.2
++PYTHON_PARAMIKO_VERSION = 2.10.3
+ PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
+-PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/cf/a1/20d00ce559a692911f11cadb7f94737aca3ede1c51de16e002c7d3a888e0
++PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/d4/93/1a1eb7f214e6774099d56153db9e612f93cb8ffcdfd2eca243fcd5bb3a78
+ PYTHON_PARAMIKO_SETUP_TYPE = setuptools
+ PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
+ PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
