@@ -1,50 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C4A5C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 09:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EA40C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 10:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C1DC60A71;
-	Tue,  5 Apr 2022 09:39:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E54E82735;
+	Tue,  5 Apr 2022 10:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pHCWuE1UKsqE; Tue,  5 Apr 2022 09:39:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KjtF7tqGbCC5; Tue,  5 Apr 2022 10:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D250D60D7B;
-	Tue,  5 Apr 2022 09:39:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3508C1BF232
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 09:39:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25DFB8272A;
+	Tue,  5 Apr 2022 10:37:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BC0701BF2C4
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 10:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B0EE40258
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 09:39:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB04C8272A
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 10:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wDHtdSpX7LBz for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 09:39:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D7C540238
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 09:39:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4187A10000C;
- Tue,  5 Apr 2022 09:39:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1nbfeZ-008YML-Q9; Tue, 05 Apr 2022 11:39:11 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue,  5 Apr 2022 11:39:01 +0200
-Message-Id: <20220405093902.2038437-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yzcneorXMZnk for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 10:37:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 504D882725
+ for <buildroot@busybox.net>; Tue,  5 Apr 2022 10:37:34 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id r64so7665713wmr.4
+ for <buildroot@busybox.net>; Tue, 05 Apr 2022 03:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=brb9VGigojlD0+4jklBhUVsYoppjX2q8ll9UP4IzJZg=;
+ b=cv+khpwVv/sRO0hdrAfmguTYEZeUYAsxx4alKFURpxvu2Etnqg7nkIF9vmuWJ9zNLz
+ 1VwZBqvHhTOP1+xQEl41IqT5+FXVVZESR/N4n09mef/p+ojTvSK24wJsPColvWaGeBK0
+ vXx2cf2L5Y7yPqy+/+S5R+K7cJg+0sm9X7Ll5LnRlvyvBcS2sV19GSvyPKihzh3m3skU
+ uKzbq4MIBo2KP7LI+4lZeQtfAJER21shbTnTlbH0otX86t7S5loN2mZ22x70c+S5pt33
+ EySttsxxUJ5TexK4zm3qGnl1YcO46+Jt0CxmFPjZOpJFUXspTE/NmZwqHuMKhJ1FHWLs
+ //+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=brb9VGigojlD0+4jklBhUVsYoppjX2q8ll9UP4IzJZg=;
+ b=BAQqYTnByXdmVYsakt2GnpdHne3WdLb+CkkRitzWfbklSZCjoWfqOX98URZlESVC5d
+ dIctOMR9NS5JXN/e2BMCqj8b2WNOkLX2jC86/6kbGIXJt2oVww/bY0/vlKgpw3d5vSiL
+ elICgL6anpEiZWLGbQRpXDgwuYPDmClLobF0vashKGBfizMlkCKhgeJMVEFs6VTlQdJr
+ uNzHqKGElGrN8pDIC8KCrVF2fFKLLbrpZ6K1vK4/k0HBTEu2Ptu4y0HbAlGArTYWNE5O
+ GiFUnoIXjZUktMt8+/8Z9PDB1+dQENKPW2MH1dGjkX7sX2M+jE1E8QiVmdI7apnMmMjB
+ HlHg==
+X-Gm-Message-State: AOAM533h+awS5WFXfA78U6R3Cv8w16VuUcvhj5Sgsh6+HG+YPwRo9GkK
+ FabM6zqVGmjCwOiD3F3PNoMhFXjpgjA=
+X-Google-Smtp-Source: ABdhPJwS8f4xWPIrVflREH2C0r6F5c/zS16CXJlKXXjWCq5KdXL+hHGCPp+k89TQcUw5WTn5hwpprA==
+X-Received: by 2002:a7b:c5d1:0:b0:37f:a8a3:9e17 with SMTP id
+ n17-20020a7bc5d1000000b0037fa8a39e17mr2453076wmk.109.1649155052281; 
+ Tue, 05 Apr 2022 03:37:32 -0700 (PDT)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ 10-20020a5d47aa000000b00204012e4373sm13253184wrb.101.2022.04.05.03.37.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Apr 2022 03:37:31 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  4 Apr 2022 20:35:04 +0200
+Message-Id: <20220404183504.2392930-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/opus: fix build with BR2_OPTIMIZE_FAST
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,39 +91,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/194/1941e194e1f5ad0bc4982ad39c3e34d266bc49c6/
-
-opus requires that it is configured with --enable-float-approx when
--ffast-math (BR2_OPTIMIZE_FAST) is used, otherwise it errors out at build
-time:
-
-celt/arch.h:198:2: error: #error Cannot build libopus with -ffast-math
-unless FLOAT_APPROX is defined.  This could result in crashes on extreme
-(e.g.  NaN) input
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/opus/opus.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index 4f816df477..2fa929c7df 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -23,6 +23,10 @@ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
- OPUS_CONF_OPTS += --enable-fixed-point
- endif
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index b46cf3743..2f9594921 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
-+ifeq ($(BR2_OPTIMIZE_FAST),y)
-+OPUS_CONF_OPTS += --enable-float-approx
-+endif
-+
- # When we're on ARM, but we don't have ARM instructions (only
- # Thumb-2), disable the usage of assembly as it is not Thumb-ready.
- ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 5.15 LTS series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ 
+ # Toolchain
+ # glibc is needed for sunxi-mali-utgard package.
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.32"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 698137e46..e24857e0c 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 5.15 LTS series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ 
+ # Toolchain
+ # glibc is needed for sunxi-mali-utgard package.
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.32"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -- 
-2.30.2
+2.32.0
 
 _______________________________________________
 buildroot mailing list
