@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE9A4C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:47:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB43C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 19:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88FC040327;
-	Mon,  4 Apr 2022 19:47:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7064E60E8C;
+	Mon,  4 Apr 2022 19:47:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XP5C0KrCg7DF; Mon,  4 Apr 2022 19:47:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DJz2CngWRlwF; Mon,  4 Apr 2022 19:47:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91BA240562;
-	Mon,  4 Apr 2022 19:47:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8850160BEF;
+	Mon,  4 Apr 2022 19:47:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 36B401BF27E
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7470E1BF27E
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35E30401DF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E57440201
  for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 19:47:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1OLlw7mw07SA for <buildroot@lists.busybox.net>;
+ with ESMTP id wlM2U3ccFxUz for <buildroot@lists.busybox.net>;
  Mon,  4 Apr 2022 19:46:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 836D440201
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9428D40569
  for <buildroot@buildroot.org>; Mon,  4 Apr 2022 19:46:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D3A1F82970; Mon,  4 Apr 2022 19:37:32 +0000 (UTC)
+ id 0096182980; Mon,  4 Apr 2022 19:37:32 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 21:42:44 +0200
+Date: Mon, 4 Apr 2022 21:43:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3239fb5b179d043ecfc854dd2f4962444d8b36a6
-X-Git-Newrev: e02514ad7a11c24b8fbd7a4bd57c7b4419a61505
+X-Git-Oldrev: 441bd6c4691bb514e157a1416ce926432086b1ab
+X-Git-Newrev: 968450adfdf1042ddcd8a0ab157dd9747ec6ee8b
 X-Patchwork-Hint: ignore
-Message-Id: <20220404193732.D3A1F82970@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/glib-networking: doesn't support
- libressl
+Message-Id: <20220404193733.0096182980@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-snappy: bump version to
+ 0.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,60 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e02514ad7a11c24b8fbd7a4bd57c7b4419a61505
+commit: https://git.buildroot.net/buildroot/commit/?id=968450adfdf1042ddcd8a0ab157dd9747ec6ee8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-glib-networking raises the following build failure with libressl:
+Required by python-crossbar and python-autobahn[compress].
 
-../tls/openssl/gtlsconnection-openssl.c: In function 'g_tls_connection_openssl_handshake_thread_request_rehandshake':
-../tls/openssl/gtlsconnection-openssl.c:419:27: error: 'TLS1_3_VERSION' undeclared (first use in this function); did you mean 'TLS1_2_VERSION'?
-  419 |   if (SSL_version(ssl) >= TLS1_3_VERSION)
-      |                           ^~~~~~~~~~~~~~
-      |                           TLS1_2_VERSION
-../tls/openssl/gtlsconnection-openssl.c:419:27: note: each undeclared identifier is reported only once for each function it appears in
-../tls/openssl/gtlsconnection-openssl.c:420:11: error: implicit declaration of function 'SSL_key_update' [-Werror=implicit-function-declaration]
-  420 |     ret = SSL_key_update (ssl, SSL_KEY_UPDATE_REQUESTED);
-      |           ^~~~~~~~~~~~~~
-
-Since libressl doesn't (intend to) support post-1.0.2 openssl
-compatibility, this is only going to get worse. Therefore, require
-libopenssl.
-
-Fixes:
- - http://autobuild.buildroot.org/results/b8dea5704903c84858c7a339a73ecb713ac2791c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/glib-networking/Config.in          | 1 +
- package/glib-networking/glib-networking.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/python-snappy/python-snappy.hash | 6 +++---
+ package/python-snappy/python-snappy.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-index 38cded5e6b..9c5d36af16 100644
---- a/package/glib-networking/Config.in
-+++ b/package/glib-networking/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if !BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_P11_KIT if BR2_PACKAGE_GNUTLS
- 	help
- 	  Network-related GIO modules for glib.
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index f74e520d31..e8905dfff4 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -31,7 +31,7 @@ else
- GLIB_NETWORKING_CONF_OPTS += -Dgnutls=disabled
- endif
+diff --git a/package/python-snappy/python-snappy.hash b/package/python-snappy/python-snappy.hash
+index 1e0f96054f..c4dbc72077 100644
+--- a/package/python-snappy/python-snappy.hash
++++ b/package/python-snappy/python-snappy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-snappy/json
+-md5	82e09ffd44204096fc70d6de14d0ea2f  python-snappy-0.5.4.tar.gz
+-sha256	d9c26532cfa510f45e8d135cde140e8a5603d3fb254cfec273ebc0ecf9f668e2  python-snappy-0.5.4.tar.gz
++md5  fc84cfa3526fba06d66f0d0b2e764300  python-snappy-0.6.1.tar.gz
++sha256  b6a107ab06206acc5359d4c5632bd9b22d448702a79b3169b0c62e0fb808bb2a  python-snappy-0.6.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a  LICENSE
++sha256  d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a  LICENSE
+diff --git a/package/python-snappy/python-snappy.mk b/package/python-snappy/python-snappy.mk
+index d087c83b10..e80aa861df 100644
+--- a/package/python-snappy/python-snappy.mk
++++ b/package/python-snappy/python-snappy.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- GLIB_NETWORKING_DEPENDENCIES += openssl
- GLIB_NETWORKING_CONF_OPTS += -Dopenssl=enabled
- else
+-PYTHON_SNAPPY_VERSION = 0.5.4
+-PYTHON_SNAPPY_SITE = https://files.pythonhosted.org/packages/45/35/65d9f8cc537129894b4b32647d80212d1fa342877581c5b8a69872cea8be
++PYTHON_SNAPPY_VERSION = 0.6.1
++PYTHON_SNAPPY_SITE = https://files.pythonhosted.org/packages/98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96
+ PYTHON_SNAPPY_SETUP_TYPE = setuptools
+ PYTHON_SNAPPY_LICENSE = BSD-3-Clause
+ PYTHON_SNAPPY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
