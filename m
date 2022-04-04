@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4061C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 12:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9116C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 12:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B153410E8;
-	Mon,  4 Apr 2022 12:45:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6663982983;
+	Mon,  4 Apr 2022 12:45:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HFA3Jq_x3lAT; Mon,  4 Apr 2022 12:45:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B-uiyOOzmI2v; Mon,  4 Apr 2022 12:45:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4045410DC;
-	Mon,  4 Apr 2022 12:45:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C54BB1BF3D1
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:45:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DD2A813DA;
+	Mon,  4 Apr 2022 12:45:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AC3651BF3D1
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3FF3409F5
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:45:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BC5181380
+ for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 12:45:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LFBRgcyAqJ9J for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 12:45:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1AzkIrCcFIoD for <buildroot@lists.busybox.net>;
+ Mon,  4 Apr 2022 12:45:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07DDF409B3
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 12:45:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64362812FC
+ for <buildroot@buildroot.org>; Mon,  4 Apr 2022 12:45:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 00E1C861B6; Mon,  4 Apr 2022 12:35:34 +0000 (UTC)
+ id 60468861C0; Mon,  4 Apr 2022 12:35:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Apr 2022 14:44:17 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b8d6d7c3d317e5b52686857b7d08ffe2533e8ff2
-X-Git-Newrev: 626226eccb9ac3dcef5b660d9d8ca8950d8bf021
+Date: Mon, 4 Apr 2022 14:41:58 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: eae86599ca81c943821bac33f424669520a3fa8c
+X-Git-Newrev: 15d4f341ae48ffa4eb6cdea61b5b361b7b6e0ce1
 X-Patchwork-Hint: ignore
-Message-Id: <20220404123535.00E1C861B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package: replace git://
+Message-Id: <20220404123543.60468861C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package: replace git://
  URLs with https:// URLs where possible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=626226eccb9ac3dcef5b660d9d8ca8950d8bf021
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=15d4f341ae48ffa4eb6cdea61b5b361b7b6e0ce1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Replace the remaining git:// URLs with their https:// equivalents as
 this is more secure and also more palatable to corporate firewalls.
@@ -74,17 +74,19 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 3 ++-
  package/aer-inject/aer-inject.mk                  | 3 ++-
  package/dahdi-linux/dahdi-linux.mk                | 3 ++-
+ package/firmware-utils/firmware-utils.mk          | 3 ++-
  package/flashbench/flashbench.mk                  | 3 ++-
  package/mmc-utils/mmc-utils.mk                    | 3 ++-
  package/mxsldr/mxsldr.mk                          | 3 ++-
  package/open62541/open62541.mk                    | 2 +-
+ package/pahole/pahole.mk                          | 2 +-
  package/psplash/psplash.mk                        | 3 ++-
  package/rtc-tools/rtc-tools.mk                    | 3 ++-
  package/rtmpdump/rtmpdump.mk                      | 3 ++-
  package/sox/sox.mk                                | 2 +-
  package/tftpd/tftpd.mk                            | 3 ++-
  package/wilink-bt-firmware/wilink-bt-firmware.mk  | 2 +-
- 13 files changed, 23 insertions(+), 13 deletions(-)
+ 15 files changed, 26 insertions(+), 15 deletions(-)
 
 diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
 index 3a1af9b02c..30b352f8e7 100644
@@ -128,6 +130,20 @@ index b9d5911953..93124f0e02 100644
  
  # We need to download all those firmware blobs ourselves, otherwise
  # dahdi-linux will try to download them at install time.
+diff --git a/package/firmware-utils/firmware-utils.mk b/package/firmware-utils/firmware-utils.mk
+index 151a01882d..d5b079e4f5 100644
+--- a/package/firmware-utils/firmware-utils.mk
++++ b/package/firmware-utils/firmware-utils.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ FIRMWARE_UTILS_VERSION = 86739f2b3ae9502368b89ef37fa6f31c42aad6f4
+-FIRMWARE_UTILS_SITE = git://git.openwrt.org/project/firmware-utils.git
++FIRMWARE_UTILS_SITE = https://git.openwrt.org/project/firmware-utils.git
++FIRMWARE_UTILS_SITE_METHOD = git
+ FIRMWARE_UTILS_LICENSE = \
+ 	BSD-2-Clause (tplink-safeloader), \
+ 	BSD-3-Clause (seama), \
 diff --git a/package/flashbench/flashbench.mk b/package/flashbench/flashbench.mk
 index e89a250aa3..f5791c3e95 100644
 --- a/package/flashbench/flashbench.mk
@@ -171,26 +187,39 @@ index 239b40ad29..2375b9f42b 100644
  MXSLDR_LICENSE_FILES = COPYING
  HOST_MXSLDR_DEPENDENCIES = host-libusb host-pkgconf
 diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 8adf09a79d..74aa2b10b9 100644
+index fb28a614e2..627c29e95b 100644
 --- a/package/open62541/open62541.mk
 +++ b/package/open62541/open62541.mk
-@@ -7,7 +7,7 @@
- OPEN62541_VERSION = 1.0
- OPEN62541_DL_VERSION = v$(OPEN62541_VERSION)
+@@ -6,7 +6,7 @@
+ 
+ OPEN62541_VERSION = v1.2.2
  OPEN62541_SITE_METHOD = git
 -OPEN62541_SITE = git://github.com/open62541/open62541.git
 +OPEN62541_SITE = https://github.com/open62541/open62541.git
  OPEN62541_GIT_SUBMODULES = YES
  OPEN62541_INSTALL_STAGING = YES
  OPEN62541_LICENSE = MPL-2.0
+diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
+index 1ad937062d..da6d67e6a2 100644
+--- a/package/pahole/pahole.mk
++++ b/package/pahole/pahole.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PAHOLE_VERSION = v1.23
+-PAHOLE_SITE = git://git.kernel.org/pub/scm/devel/pahole/pahole.git
++PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+ PAHOLE_SITE_METHOD = git
+ # pahole contains git submodule and relies on them to be built.
+ PAHOLE_GIT_SUBMODULES = YES
 diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index a0f01869b4..2f1138b3f8 100644
+index 5e61f2392f..69f9bf386d 100644
 --- a/package/psplash/psplash.mk
 +++ b/package/psplash/psplash.mk
 @@ -5,7 +5,8 @@
  ################################################################################
  
- PSPLASH_VERSION = fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c
+ PSPLASH_VERSION = 44afb7506d43cca15582b4c5b90ba5580344d75d
 -PSPLASH_SITE = git://git.yoctoproject.org/psplash
 +PSPLASH_SITE = https://git.yoctoproject.org/psplash
 +PSPLASH_SITE_METHOD = git
@@ -239,7 +268,7 @@ index 4b09b94bc3..1896437ad4 100644
  SOX_DEPENDENCIES = host-autoconf-archive host-pkgconf
  SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
 diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index ffd52ce0d0..b8602442fb 100644
+index 42b5f17821..ceac24119e 100644
 --- a/package/tftpd/tftpd.mk
 +++ b/package/tftpd/tftpd.mk
 @@ -5,7 +5,8 @@
