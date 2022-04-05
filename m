@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F34DC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C02FC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13FFA82E29;
-	Tue,  5 Apr 2022 19:51:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TnkTs-FGNbfR; Tue,  5 Apr 2022 19:51:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3770782C89;
-	Tue,  5 Apr 2022 19:51:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA54C1BF21A
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:51:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A844C60BB0
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:51:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D66560EA5;
+	Tue,  5 Apr 2022 19:51:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tyIVRXat2o3O for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 19:51:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A63B9606DC
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:51:19 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 85EF31C0006;
- Tue,  5 Apr 2022 19:51:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nbpCt-00DT1W-Fv; Tue, 05 Apr 2022 21:51:15 +0200
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UJwQ0yFjI0cE; Tue,  5 Apr 2022 19:51:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C9AF60BB0;
+	Tue,  5 Apr 2022 19:51:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 044E31BF21A
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:51:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E6587409FA
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:51:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gH1TIHSRbIGx for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 19:51:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C429405E8
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:51:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 5E1A88362C; Tue,  5 Apr 2022 19:41:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20220328203139.1115402-1-ju.o@free.fr>
-Date: Tue, 05 Apr 2022 21:51:15 +0200
-In-Reply-To: <20220328203139.1115402-1-ju.o@free.fr> (Julien Olivain's message
- of "Mon, 28 Mar 2022 22:31:39 +0200")
-Message-ID: <87r16bux58.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
- 2.2.6
+To: buildroot@buildroot.org
+Date: Tue, 5 Apr 2022 21:50:53 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: d76f1433721b813661d1f3fb916590f8fd404b3b
+X-Git-Newrev: b82afb7f10d8561efa5651f452acf79824efc3fb
+X-Patchwork-Hint: ignore
+Message-Id: <20220405194155.5E1A88362C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/fluidsynth: bump
+ to version 2.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,23 +53,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b82afb7f10d8561efa5651f452acf79824efc3fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > For change log since v2.2.5, see:
- > - https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.6
+For change log since v2.2.5, see:
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.6
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit d2fc098faa5b8b8608b4c3d56dc526374c3319aa)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 0d41c16d8d..20eb9ec49f 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9037e703617f91c4c36039a5059e0f624164799d856af715bcd8a23c07ba03b8  fluidsynth-2.2.5.tar.gz
++sha256  ca90fe675cacd9a7b442662783c4e7fa0e1fd638b28d64105a4e3fe0f618d20f  fluidsynth-2.2.6.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index b500944c16..d7c72ed059 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUIDSYNTH_VERSION = 2.2.5
++FLUIDSYNTH_VERSION = 2.2.6
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
