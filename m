@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F28C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 02:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0DE3C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 03:17:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AE0560F1C;
-	Tue,  5 Apr 2022 02:51:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 552358148A;
+	Tue,  5 Apr 2022 03:17:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aRfnIlRZ8K7W; Tue,  5 Apr 2022 02:51:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WbbGVsI5_0qV; Tue,  5 Apr 2022 03:17:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56E2460BE4;
-	Tue,  5 Apr 2022 02:51:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 50E971BF2C6
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 02:51:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E23F81C21;
+	Tue,  5 Apr 2022 03:17:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D60E1BF33D
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 03:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3698F402F4
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 02:51:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B97181C21
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 03:17:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cl_Mvn-6tnuX for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 02:51:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uu4xQYWklyuN for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 03:17:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6CF6D4013D
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 02:51:00 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id e22so13620154ioe.11
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 19:51:00 -0700 (PDT)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8584081C20
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 03:17:31 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id k25so13680553iok.8
+ for <buildroot@buildroot.org>; Mon, 04 Apr 2022 20:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=CZ6yUk9EMly+LliDvIYwI4JpFL14bNKQByFkyXWlsWs=;
- b=crGF2tu47ZG/h5Uw4zpjQn1Ed+JWh3/Hd8qJd2vzg5Vs/r7MV9FaymUKICHNv9PBKd
- r/nNeV2Jjuo8qU4k6LyYAwbO5wePEskvtuPGgCSZL4g3jyfcikJkyy9c2s3sMSLgO10u
- HJXai1C22Rz2zDK8vN+5IH3wtOvLK0a9CK3jLrBTx0NHIyAanHfiV3rntzydcAdpqWq2
- EMNNx83y3JvxNzrgOYcGD1ZHAQzya1/01b9hvMPkMAobVUm/ofr/U3u+CzIi64sNA2PG
- U3bYpsJxBsR24xBqKpfpaEDl1+Y+9K7cSEXhKF76YbHqNt41O7t7kOaz5hIFVZk8ovK3
- LEGg==
+ bh=3/RIV+1IIfqnltcVwyPuRX9bD2Iq5P2f2JGycKQKvb0=;
+ b=gl59I482zBluLszba6tVo8McumlE5wv7xCfAimNch9k0SgUJv7xIf6cBsteGwbPint
+ x5b6NUXcP2beHgEAkvyLqwrsFGU9VVoxJM7U/yaQmadBrNNainVDjBvU+EjzMs4TX98T
+ KpvmgHL0MFOg5YnTCohdQVT4CShhLaQ047rdItIY0dsvjDi1n2oid2K0iufXLqE2MQNv
+ uosXC4sQtVpo6xc+IOlrRzoXyS+3Sj/aNrRWN42orLgGB0ihKKf+6PK5vJO4uY+3BSWG
+ wPdWQTysvDdSZYuVUYWs+iEs+iTthUpJNA4uq60GgK3g7x2ZDcDLlV6fsvd7WEHnppu9
+ MIQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=CZ6yUk9EMly+LliDvIYwI4JpFL14bNKQByFkyXWlsWs=;
- b=kiApPE1ZgtFFcU2MajyN2HoYGyi4+jHFkVfvTv9Z3eF7zaTYXvBLdUPWiRxXakIUez
- coR0Xkuy2obP+7cy4SE5emzgfa0kuHaUUaFkb1ks26lydL9FwsPTc95QvQy9Y8po2qLs
- PffLee2CB92MO1eLM3hHnB0atZJGxt83Z3BuX8zJuLFJkxLteu5CNWGWKFt50pheD0/J
- 8LZV3madYJzfthn/Fy0zLH9pOZRj7p4KGUmu2yN5JVMd933n+Y+/IJJkrH9eVwiK+4lY
- uhcLME7vyuunFfaICcPicA3QGQD0nsrZ1xETDAonEVmGg/rAfQNgL7awVxC9zyQT8TkG
- Nqug==
-X-Gm-Message-State: AOAM530t71f5o4qAQS3p5urtfZJaH2ggPyIwqWKJyTYbAReA1MBDDe1k
- 5qBbd7gir/M8U/JPkE1VDb+49W7QNpCIjA==
-X-Google-Smtp-Source: ABdhPJxn/YYUd0Y6i5K4aICqr5RMY2QNguSYQiUmdiE0GM07wjuqOvy4I/fbydQ/0ejFrUXgL2PpXA==
-X-Received: by 2002:a05:6638:2610:b0:323:bbe3:550b with SMTP id
- m16-20020a056638261000b00323bbe3550bmr873184jat.6.1649127059294; 
- Mon, 04 Apr 2022 19:50:59 -0700 (PDT)
+ bh=3/RIV+1IIfqnltcVwyPuRX9bD2Iq5P2f2JGycKQKvb0=;
+ b=zjd0l0toDq9mna+Xj0EmmB+o3in5UissTS9Vn29Zv0nLADy2JbGY3hdDWfxYC0E/q5
+ QyVyL7nDk+A0LWS1S6lotrO3ukm5VhU9Fewqrxn4TX8RmDPLwEeXnaTNxG7e/afZg/9y
+ rUCaNSvd09S4ZOQT45hGvTX9NzH66eSublVHkTEM+9GwV4frhDVoy0PxobrU7OUFQx4I
+ Op14aX2m9qciNkiWKYc58eHB8UgR0SlzCXwUKg9AcADvZKb4uPz5ZU04vcakPiw6WIKE
+ uBBh6msyFUKjMCZfT1XR95wOV/nKjDeqxh7IIaMxgQpCi8grDRalQGCu6evKqbjJD22D
+ 4fDA==
+X-Gm-Message-State: AOAM531rGEUioDBfpmKiKxGuX63eQRjS8vScxXSJw7vrYDwYjl/YgzZY
+ resDm+9QOKF6kAvjAioth8iASItinKd3qQ==
+X-Google-Smtp-Source: ABdhPJz3iU2haV9Goj5lj2VLNbG0crAlxFxyNyS3O7J6U/HRQPIjYKguqfJqIGbnibTDBzgDfVDjJg==
+X-Received: by 2002:a05:6602:122a:b0:649:5df1:36f0 with SMTP id
+ z10-20020a056602122a00b006495df136f0mr720156iot.214.1649128650431; 
+ Mon, 04 Apr 2022 20:17:30 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
  [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- h24-20020a6bfb18000000b006497692016bsm7496139iog.15.2022.04.04.19.50.58
+ j13-20020a056e02014d00b002c98acb8d32sm6723356ilr.45.2022.04.04.20.17.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Apr 2022 19:50:59 -0700 (PDT)
+ Mon, 04 Apr 2022 20:17:29 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Apr 2022 20:50:54 -0600
-Message-Id: <20220405025054.966064-1-james.hilliard1@gmail.com>
+Date: Mon,  4 Apr 2022 21:16:41 -0600
+Message-Id: <20220405031641.685678-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/aufs: don't set invalid AUFS_SITE
- if version is unset
+Subject: [Buildroot] [PATCH v3 1/1] utils/genrandconfig: add randconfig
+ based --no-toolchains-csv option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,42 +85,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Matt Weber <matthew.weber@collins.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-package/aufs/aufs.mk:24: *** AUFS_SITE (https://github.com/sfjro/aufs4-standalone/archive/) cannot have a trailing slash.  Stop.
-make: *** [Makefile:84: _all] Error 2
+Currently we only test a limited set of toolchains that are mostly
+prebuilt, add a flag to allow using randconfig for randomizing
+additional toolchain settings instead of randpackageconfig.
+
+To avoid invalid configs we need to add additional config validation
+filtering and fixups.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/aufs/aufs.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Changes v2 -> v3:
+  - properly check exit codes
+Changes v1 -> v2:
+  - refactor fixup_config control flow
+---
+ utils/genrandconfig | 54 +++++++++++++++++++++++++++++++--------------
+ 1 file changed, 37 insertions(+), 17 deletions(-)
 
-diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-index 4e95a350a0..b2dda771d9 100644
---- a/package/aufs/aufs.mk
-+++ b/package/aufs/aufs.mk
-@@ -8,6 +8,7 @@ AUFS_VERSION = $(call qstrip,$(BR2_PACKAGE_AUFS_VERSION))
- AUFS_LICENSE = GPL-2.0
- AUFS_LICENSE_FILES = COPYING
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 3483d55c14..c2919e5798 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -315,6 +315,10 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n')
+         configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="%s"\n' % bootscr)
  
-+ifneq ($(AUFS_VERSION),)
- ifeq ($(BR2_PACKAGE_AUFS_SERIES),3)
- AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
- AUFS_SITE_METHOD = git
-@@ -16,6 +17,7 @@ AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
- else ifeq ($(BR2_PACKAGE_AUFS_SERIES),5)
- AUFS_SITE = $(call github,sfjro,aufs5-standalone,$(AUFS_VERSION))
- endif
-+endif
++    if 'BR2_ROOTFS_SKELETON_CUSTOM=y\n' in configlines and \
++       'BR2_ROOTFS_SKELETON_CUSTOM_PATH=""\n' in configlines:
++        configlines.remove('BR2_ROOTFS_SKELETON_CUSTOM=y\n')
++
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
  
- ifeq ($(BR_BUILDING):$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),y:y:)
- $(error No aufs version specified)
+@@ -331,11 +335,14 @@ def gen_config(args):
+ 
+     sysinfo = SystemInfo()
+ 
+-    # Select a random toolchain configuration
+-    configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
++    if args.toolchains_csv:
++        # Select a random toolchain configuration
++        configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
+ 
+-    i = randint(0, len(configs) - 1)
+-    toolchainconfig = configs[i]
++        i = randint(0, len(configs) - 1)
++        toolchainconfig = configs[i]
++    else:
++        toolchainconfig = []
+ 
+     configlines = list(toolchainconfig)
+ 
+@@ -409,19 +416,24 @@ def gen_config(args):
+         bounded_loop -= 1
+         subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+                                "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+-                               "randpackageconfig"])
++                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
+ 
+-        if fixup_config(sysinfo, configfile):
+-            break
++        if not fixup_config(sysinfo, configfile):
++            continue
+ 
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "olddefconfig"])
++        if subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                            "olddefconfig"]):
++            continue
+ 
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "savedefconfig"])
++        if subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                            "savedefconfig"]):
++            continue
+ 
+-    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                            "dependencies"])
++        if subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                            "dependencies"]):
++            continue
++        break
++    return 0
+ 
+ 
+ if __name__ == '__main__':
+@@ -433,10 +445,18 @@ if __name__ == '__main__':
+     parser.add_argument("--buildrootdir", "-b",
+                         help="Buildroot directory (relative to current directory)",
+                         type=str, default='.')
+-    parser.add_argument("--toolchains-csv",
+-                        help="Path of the toolchain configuration file",
+-                        type=str,
+-                        default="support/config-fragments/autobuild/toolchain-configs.csv")
++
++    toolchains_csv = parser.add_mutually_exclusive_group(required=False)
++    toolchains_csv.add_argument("--toolchains-csv",
++                                dest="toolchains_csv",
++                                help="Path of the toolchain configuration file",
++                                type=str)
++    toolchains_csv.add_argument("--no-toolchains-csv",
++                                dest="toolchains_csv",
++                                help="Generate random toolchain configuration",
++                                action='store_false')
++    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
++
+     args = parser.parse_args()
+ 
+     # We need the absolute path to use with O=, because the relative
 -- 
 2.25.1
 
