@@ -1,67 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 506A0C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Apr 2022 22:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4C06C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 00:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0518F60BF1;
-	Mon,  4 Apr 2022 22:15:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C6564099B;
+	Tue,  5 Apr 2022 00:22:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UFRxFaYQd4M9; Mon,  4 Apr 2022 22:14:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OB2SImpRnRom; Tue,  5 Apr 2022 00:22:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62BFC60FF0;
-	Mon,  4 Apr 2022 22:14:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9CEFF1BF21A
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 22:14:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE36040991;
+	Tue,  5 Apr 2022 00:22:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C3B11BF3C1
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 00:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B36460BAF
- for <buildroot@lists.busybox.net>; Mon,  4 Apr 2022 22:14:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BBB782612
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 00:22:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yc0qpxIUEK9t for <buildroot@lists.busybox.net>;
- Mon,  4 Apr 2022 22:14:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com
- [209.85.210.179])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B87B60BAD
- for <buildroot@buildroot.org>; Mon,  4 Apr 2022 22:14:54 +0000 (UTC)
-Received: by mail-pf1-f179.google.com with SMTP id b15so10293148pfm.5
- for <buildroot@buildroot.org>; Mon, 04 Apr 2022 15:14:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=My+c8DRBiZc599na+59V9muJr5dBgl0Krf7luKnA7dk=;
- b=lysGqc8Xv7R9Iq7F9gmbriFhvgNN1qJbNvGYbx1g5I8Uww02SsD2/bjkHyLXFN0V58
- 8Nulw2wkNW5JzDuy8qSjNDj8TrlmEboUHHkyXjB0Qij1WJBJsT6+nLB4HlmsLQnlykx4
- Eob6Mf3aRdAazgpB/WHF1dz7EgEL7wGkcsD2/bCU/TwpIbfGig7g4X1oMo4rh68w3dyX
- pYgP+Y7MMVSiukzb8JpSf7cfNk1d30FYVAbW0CyzCOwKzmqwD3hj8Xv+mcGB5u7GHbu+
- UOY9hzcoFqYDfiktjkOrVwEBu1q9pvZqYnu2uPElfX1T/pHQ6dlDoJIjH+f+NfrxmC9F
- eTgg==
-X-Gm-Message-State: AOAM532mXfVhp7wY8kbxAuOh7DU72xP/9Cu165h+DpSSvxjwcMCMbZ8C
- 2AyRMDkxx6HAE6a3z1+CIVlR+wWgcWh3tQ==
-X-Google-Smtp-Source: ABdhPJyGlUAg2eAkQgrX2ZtEKqRfMMfxjbTnkRTrf87m5ruxCsqzPfkizJ+JqNcjn1x1jYehH8N7dw==
-X-Received: by 2002:a63:3d4b:0:b0:386:322:ff8c with SMTP id
- k72-20020a633d4b000000b003860322ff8cmr249706pga.385.1649110494302; 
- Mon, 04 Apr 2022 15:14:54 -0700 (PDT)
-Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
- by smtp.gmail.com with ESMTPSA id
- s11-20020a056a00178b00b004fb1997b775sm14002107pfg.10.2022.04.04.15.14.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Apr 2022 15:14:54 -0700 (PDT)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A_43nD7GpmLW for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 00:22:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 942DB825FE
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 00:22:05 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.18.114])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id bWxPnQngw79nYbWxPnTOnO; Tue, 05 Apr 2022 02:22:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1649118123; bh=I0wsutubtmjge8lzUTRPOTWEFU6rFr1RvkudlPBy+GQ=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=edNfLKB+mrm3Sp8f9cUBGSRkdVCaARZWKVWKmU2TQMHgVQHRkqCRfnmXav9HrQzOh
+ ZEsI4ChZhCoqPfJDZ1jfmq74pKaWjuoGdPTgVVDbrgO8a7492KiQi9NbVXe3KJ+exN
+ +LryQY2KxMJRsnVS2jIQwdv1ow+LZgZldkierG8A0iPBVM+c8zO/eNRl7wOcs8y6JU
+ bFBWdHjihnUsNs9/fZLyEefORKBc4sjQtxU+AocQMzhDVA8woFn+itM9Jwdh8Hmwfe
+ x9UOKiIJpvx4x1MEfdd0Cdfcn3PKQei6S0Vu315EcWhMsfxklBrCO7AcocsxAei/R8
+ e0766dOxp6ayA==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Apr 2022 15:14:51 -0700
-Message-Id: <20220404221451.610628-1-christian@paral.in>
-X-Mailer: git-send-email 2.35.1
+Date: Tue,  5 Apr 2022 02:22:02 +0200
+Message-Id: <20220405002202.1772332-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/containerd: bump to version v1.6.2
+X-CMAE-Envelope: MS4xfPZUARP53eGswPh76DgXBe1bKFLGaviStOQ7A9mS3qI3fPcQSWPHILdSKv7nHsw8f+j2EJoIItSOjltWJ/jlsa2uXdScMi5F0Or6BmmNM0ZaLVQt0+cz
+ drXK8YOyaOf8oSrvOHB6UAnEh+232TGadF0HJ9Rc/wAwwO1SRnpG6108XLAwTVonUS+Wb3WVeNPSW22OHYO21p00DvXHAQ1XDN/z8BMffLKhArXilUW6lkdz
+ VE2FCJK64V4ZeNXWYMP6i7Wd2HuQ8/ypc2+4cuz8LMGZohN5Rpc80zZifuuEuzzPfPE3rrboV5FgG5EKR5wPYQ==
+Subject: [Buildroot] [PATCH] package/libnss: bump to version 3.77
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,48 +66,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Note: this version adds compatibility for Go 1.18.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index d5aafe2e70..eb9f2894a9 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  40c9767af3e87f2c36adf2f563f0a8374e80b30bd2b7aa80058c85912406cef4  containerd-1.5.9.tar.gz
-+sha256  4ea21a6b4649512366e7c31ae547ad89c6a69c6586a6d8565cff07898de344b0  containerd-1.6.2.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 8976e12f1a..36f2db4125 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index b4b8be11f6..04e81e6b84 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_76_RTM/src/SHA256SUMS
+-sha256  1b8e0310add364d2ade40620cde0f1c37f4f00a6999b2d3e7ea8dacda4aa1630  nss-3.76.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_77_RTM/src/SHA256SUMS
++sha256  825edf5a2fd35b788a23ff80face591f82919ae3ad2b8f77d424a450d618dedd  nss-3.77.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 2f7a265136..57df104d6c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONTAINERD_VERSION = 1.5.9
-+CONTAINERD_VERSION = 1.6.2
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+-LIBNSS_VERSION = 3.76
++LIBNSS_VERSION = 3.77
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.35.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
