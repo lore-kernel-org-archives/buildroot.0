@@ -1,47 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C02FC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48E35C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D66560EA5;
-	Tue,  5 Apr 2022 19:51:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 043AB82D45;
+	Tue,  5 Apr 2022 19:52:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UJwQ0yFjI0cE; Tue,  5 Apr 2022 19:51:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rZ8P6-Sg66OP; Tue,  5 Apr 2022 19:52:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C9AF60BB0;
-	Tue,  5 Apr 2022 19:51:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 044E31BF21A
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:51:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20C3F826F5;
+	Tue,  5 Apr 2022 19:52:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EA9F1BF21A
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:52:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6587409FA
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:51:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BDFC826F5
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:52:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gH1TIHSRbIGx for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 19:51:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C429405E8
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:51:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5E1A88362C; Tue,  5 Apr 2022 19:41:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XcdD1uP5oaDO for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 19:52:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DDBEB81A27
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:52:38 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EB647100002;
+ Tue,  5 Apr 2022 19:52:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nbpEC-00DTUx-5Y; Tue, 05 Apr 2022 21:52:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 5 Apr 2022 21:50:53 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d76f1433721b813661d1f3fb916590f8fd404b3b
-X-Git-Newrev: b82afb7f10d8561efa5651f452acf79824efc3fb
-X-Patchwork-Hint: ignore
-Message-Id: <20220405194155.5E1A88362C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/fluidsynth: bump
- to version 2.2.6
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220330165702.1018014-1-fontaine.fabrice@gmail.com>
+Date: Tue, 05 Apr 2022 21:52:36 +0200
+In-Reply-To: <20220330165702.1018014-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 30 Mar 2022 18:57:02 +0200")
+Message-ID: <87mtgzux2z.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/pango: fix empty-body
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,49 +58,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b82afb7f10d8561efa5651f452acf79824efc3fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-For change log since v2.2.5, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.6
+ > Fix the following build failure raised since bump to version 1.50.5 in
+ > commit 68b0efbae49a42d0e14d6040e5e7e573d382ff75:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d2fc098faa5b8b8608b4c3d56dc526374c3319aa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > ../utils/viewer-cairo.c: In function 'cairo_vector_view_create':
+ > ../utils/viewer-cairo.c:228:5: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+ >      ;
+ >      ^
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 0d41c16d8d..20eb9ec49f 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9037e703617f91c4c36039a5059e0f624164799d856af715bcd8a23c07ba03b8  fluidsynth-2.2.5.tar.gz
-+sha256  ca90fe675cacd9a7b442662783c4e7fa0e1fd638b28d64105a4e3fe0f618d20f  fluidsynth-2.2.6.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index b500944c16..d7c72ed059 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUIDSYNTH_VERSION = 2.2.5
-+FLUIDSYNTH_VERSION = 2.2.6
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/dee3d631474f83b345f22eb26c59a305c32258f8
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Arnout Vandecappelle):
+ >  - Fix error instead of dropping -Werror
+
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
