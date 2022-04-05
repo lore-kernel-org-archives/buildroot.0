@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB49FC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 20:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C139AC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 20:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75ACE40A03;
-	Tue,  5 Apr 2022 20:43:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4784D83046;
+	Tue,  5 Apr 2022 20:57:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6fi5PQJ1E5NV; Tue,  5 Apr 2022 20:43:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j_iPIsWM9L0g; Tue,  5 Apr 2022 20:57:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DCF140496;
-	Tue,  5 Apr 2022 20:43:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5224A82FDE;
+	Tue,  5 Apr 2022 20:57:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03A6F1BF3A4
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 20:42:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE4FE1BF3A4
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 20:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E580840947
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 20:42:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB19E4136C
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 20:57:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AtymApo3BufA for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 20:42:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FC0540918
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 20:42:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1649191375;
- bh=RXCCH/9PRSOo/+Xz1cmxMyKlbLzCuRDEltv5IeI/hwg=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=Bnhh1tAi/o2qE1NzSEMgOtnoiEDWsJ/nsTMx5k6SbN03gSPRo7oeC9ldIVPMTcj9n
- x3TcFlJHDJn7kW3ag8Eh7giZzivFUroa5FttXRGjxOYld0xgMYAj+sxf7SYeJ1IFDj
- OwchLAAFQkTMraMuRkIMVGweY50rcHBcIki4XqOs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.249]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M9FjR-1nfz9E1DnD-006M4m for <buildroot@buildroot.org>; Tue, 05 Apr 2022
- 22:42:55 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+ with ESMTP id vzSpGs6eAHdT for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 20:57:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC5E841296
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 20:57:06 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id h4so255933wrc.13
+ for <buildroot@buildroot.org>; Tue, 05 Apr 2022 13:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rR2yfEHl2gVgvCXD5DktYAQKO1Ejz01luyBIrvofdWo=;
+ b=PneuiOJkveKsLjgYqndVPZjyjeJSwsJbBD5Vwz8qq+iVL04wdHYIAzpHj9xFi9p+6r
+ v0HiEIi7BLbjtDrrjczkD+38Jf1e411mBgx6GEpB/YCQY1gzTJQwJhfXGipfrkHd1Bha
+ 0yIKaS4uWf2aEOu09DYXTBQIBe9hanRjThrdQ2fpNXggqaAeBC3a8t/Bmhzz2iNH+k7h
+ pC+3Rn89VDWWJfeGJc5ZDWzAQgjZFqTdBdsclI6FdJ1hCeg56f5bxmmwrRq+3vrwOP6A
+ DwbCpSeZPlys+UhrJAZ1Y5N2dDgCXmMDNkBngeOa9vlxbMLu7ZkeR0ryzq9lPKaQH2do
+ c/Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rR2yfEHl2gVgvCXD5DktYAQKO1Ejz01luyBIrvofdWo=;
+ b=ZrE5FwK0mwQ9Tb1j2NBeOG45EATJWDA9mTYKHZmMC8it6aX3XiY24Ue7q5y0U4HmSJ
+ Gl5Lkl0Lz/Rin1SYGldCysbvdvq59bviTNLS8vi63x5Vewq8+q4JPTcfa0HcE1VR7vu7
+ XKcWDGo2LMcJ6hz5Z00NCEf18ZFYHiXGZTQFLkdeOfepc+tslSzKbazCjpvMQDvYEbHe
+ +U7xNJq/MhoCNZM8Eu6Qb7BR3D2gjffjExqKey02LjKM9OGoKMAUmMLBFusQ3lX80ivD
+ yU2D2vPc/y327/VQkH74mWCdYvOPXD4BL3MCUDa9J40weLSo1Hzqr+xTd7GzIqi7b/MJ
+ TX0Q==
+X-Gm-Message-State: AOAM532XRA8dBOCOWsnWEN7ROoodMSj5WPW1c//IWRwXD9eomXy4o9oZ
+ DDiD8+lsoeJ3Z9+cQWt+1XfqDHsdQvQ=
+X-Google-Smtp-Source: ABdhPJyVaUoN9BiO++TytdEV11seTs5tD29eEn8U3q1IepIXio4bnqHXTH9i5WrG+oF5twfMpCbGQA==
+X-Received: by 2002:a05:6000:1848:b0:204:e92:5af6 with SMTP id
+ c8-20020a056000184800b002040e925af6mr3989014wri.180.1649192224765; 
+ Tue, 05 Apr 2022 13:57:04 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ r15-20020a5d6c6f000000b002040552e88esm15204729wrz.29.2022.04.05.13.57.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Apr 2022 13:57:04 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Apr 2022 22:42:54 +0200
-Message-Id: <20220405204254.11147-1-ps.report@gmx.net>
+Date: Tue,  5 Apr 2022 22:55:21 +0200
+Message-Id: <20220405205521.2117028-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:4SvTnch9vW0XExYEAee+Y8VoA7d8pNooi+JYZq/fxc9/nSNSpRW
- B4KTHFfmne6vcVXDqvx37NpVroVPJuG0Abt2j7xVxP6BeeD0bRLUrfLgDsb0yn/igd6vwtc
- Yh+KRBSzbae8Mzmq9FjXIrQVkK4ikHjTgL127kRTgBZViG/5akiqo77gVlmiv2wn/59tHpK
- 8rKUPkC1MD0O6T6Ucy6iw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WYqVApw4C48=:TB1fHc1lBOSC0jbF8njXmz
- EKZAgRM0OhH8SXgTrjSuOPeD1V43aLt/NLWjZKsBOhWmM9x8g5PmG9FuEozWGDxGZQdGW1ps8
- 3e0Tb161+QRuX1PWEHkJuwtG9i+/VPc+k7KqZrbnx9fDILnTTOkCJ9cpD2lQk6S0j9Ay/iEDb
- TiQQ9zIovqQ8yBI0s55Ac1qwtwO7LHl8E3i/k0ViQcBiv5a6tB90EzwHK+Io7di+FPRqLETb+
- lzD7rffKwb3yOumHrh1CbUFmAVi5RjnD0hrecNVr1Ju1uTLK7xElxVq1jbK60KE2qGIgFlk7O
- 3uUbPJ150LnuI+8l+l9qaqAh1w41geelxmy+19+yAc/R2jsCi34duTQ8q9YYpVsO7JgsHgtys
- TvU+RU0nsIVtxMao7fUlACUulz2i0OqTJfJEyxSqTqlAGh89xjo3m+pcBYfYUQarww4pq/C7x
- wgURzUK/pTLqbuBCKAffRf7hBCvoE1n9eJIjdgaeeWzdi2oDn8HDSHnYUIT0d7cbuweRvPzwH
- vIJ42Eq1w570t43rq7OoY7g1T14D3b6uKx6DvYn2vRPd8adqZc8Si1ALaRLJWEwSWTXQWcZ02
- MFSwbufxOWgkSkOv4l5M9+ksfa9X7JnpaeKJmUQ8mUa3jFhNnoXR6rWIDtz5/snSKcF34C5le
- XLXieEDsTQvo2xGFd361Zhq7GbNUnq2JoDNrPXbL6L46/f0sTQhNdp6OzDHTZ0nN8ZPQM0IaY
- YPTe8OrB/FI+TpvMIJLSxZgryZoFJS2ykCMGg//RcOwEKJqhkPxN5l9PWKPAqFChb6oPIwqZO
- n43oj5X9uJt1scYG87B533YU38L2sri4KZxhwkAm78a2z8C9vO7CFjJHRRpLkmdx3cXcuTkrw
- gsCnvi0MtqReuDCzU9Ew6mTx/eZ/rvqjkiB7+q4wVsje/hqR0DFWin1D5P5SHHsX9t3yF626P
- ItatW1Zx6fe14G+0qJshlfC5dhNSmiPUafscmZTxGt++qkuHaM/sDYrDazqDVBJpe+IcUewPK
- JWJr3tYl7R+CNBSLJer4ONx6jcewQrBCK5MNcKu0TivZ5U2hOGU5pD/qEnMuPNVPqPQZ+lNGy
- 2suGABei5dv9Hk=
-Subject: [Buildroot] [PATCH v1] package/spidev_test: fix version
- determination (SPI_TX_OCTAL support needs linux headers >= 5.8)
+Subject: [Buildroot] [PATCH 1/1] package/lsof: drop first and second patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,52 +87,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
+Set LSOF_AR and LSOF_CC to be able to drop first patch which is not
+upstreamable: https://github.com/lsof-org/lsof/issues/197
 
-  - http://autobuild.buildroot.net/results/a5c008aaff40f4851ffa36439c7340b6243a4842
+$(TARGET_CONFIGURE_OPTS) must also be removed to avoid overriding AR
+and so we can drop LSOF_CFLAGS_OVERRIDE=1 and third patch
 
-  .../build/spidev_test-5.8/spidev_test.c:132:13: error: 'SPI_TX_OCTAL' undeclared (first use in this function); did you mean 'SPI_TX_DUAL'?
-    132 |  if (mode & SPI_TX_OCTAL)
-        |             ^~~~~~~~~~~~
-        |             SPI_TX_DUAL
+DEBUG="$(TARGET_CFLAGS)" can also be dropped from LSOF_BUILD_CMDS as it
+is already set in LSOF_CONFIGURE_CMDS
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/spidev_test/Config.in      | 2 +-
- package/spidev_test/spidev_test.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lsof/0001-makefile.patch                   | 14 --------------
+ ...cs.patch => 0001-remove-susvlegacy-funcs.patch} |  0
+ package/lsof/0003-override-cflags.patch            | 13 -------------
+ package/lsof/lsof.mk                               |  5 +++--
+ 4 files changed, 3 insertions(+), 29 deletions(-)
+ delete mode 100644 package/lsof/0001-makefile.patch
+ rename package/lsof/{0002-remove-susvlegacy-funcs.patch => 0001-remove-susvlegacy-funcs.patch} (100%)
+ delete mode 100644 package/lsof/0003-override-cflags.patch
 
-diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-index 81386adf7a..abfa885b73 100644
---- a/package/spidev_test/Config.in
-+++ b/package/spidev_test/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_SPIDEV_TEST
- 	  proper operation of 'spidev_test'.
+diff --git a/package/lsof/0001-makefile.patch b/package/lsof/0001-makefile.patch
+deleted file mode 100644
+index 65b1b2e2a7..0000000000
+--- a/package/lsof/0001-makefile.patch
++++ /dev/null
+@@ -1,14 +0,0 @@
+-diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
+---- a/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
+-+++ b/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
+-@@ -21,8 +21,8 @@
+- all:	${LIB}
+- 
+- ${LIB}:	${OBJ}
+--	${AR}
+--	${RANLIB}
+-+	${AR} cr ${LIB} ${OBJ}
+-+	${RANLIB} ${LIB}
+- 
+- clean:	FRC
+- 	rm -f ${LIB} ${OBJ} errs Makefile.bak a.out core
+diff --git a/package/lsof/0002-remove-susvlegacy-funcs.patch b/package/lsof/0001-remove-susvlegacy-funcs.patch
+similarity index 100%
+rename from package/lsof/0002-remove-susvlegacy-funcs.patch
+rename to package/lsof/0001-remove-susvlegacy-funcs.patch
+diff --git a/package/lsof/0003-override-cflags.patch b/package/lsof/0003-override-cflags.patch
+deleted file mode 100644
+index 135e599ac9..0000000000
+--- a/package/lsof/0003-override-cflags.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+---- lsof_4.84/Configure	2008-10-21 18:21:45.000000000 +0200
+-+++ lsof_4.84/Configure	2010-11-03 14:00:00.000000000 +0100
+-@@ -5206,6 +5206,10 @@
+-   cp $LSOF_MKFC ${LSOF_LIB}/$LSOF_LIBMKF
+- fi	# }
+- cat ./dialects/$LSOF_DIALECT_DIR/$LSOF_REST >> $LSOF_MKFC
+-+if test "X$LSOF_CFLAGS_OVERRIDE" != "X"	# {
+-+then
+-+  sed -i -e 's/^CFLAGS=/override CFLAGS=/' $LSOF_MKFC
+-+fi	# }
+- if test "X$LSOF_LIB_NO" = "X"	# {
+- then
+- 
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index ff09d64345..e4e339349a 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -33,7 +33,8 @@ endif
+ define LSOF_CONFIGURE_CMDS
+ 	(cd $(@D) ; \
+ 		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)" \
+-		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 \
++		LSOF_AR="$(TARGET_AR) cr" LSOF_CC=$(TARGET_CC) \
++		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" \
+ 		LINUX_CLIB=-DGLIBCV=2 LSOF_CFGL="$(TARGET_LDFLAGS)" \
+ 		./Configure linux)
+ 	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
+@@ -41,7 +42,7 @@ define LSOF_CONFIGURE_CMDS
+ endef
  
- 	  The version used is based on your toolchain headers version,
--	  if it's older than 3.15 then 3.0 is used, up to headers 4.20
-+	  if it's older than 3.15 then 3.0 is used, up to headers 5.7
- 	  version 4.10 is used and otherwise version 5.8.
- 	  This means you won't have quad-pumped SPI support if your
- 	  toolchain is too old.
-diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-index 6c5a9495a4..bd138b0142 100644
---- a/package/spidev_test/spidev_test.mk
-+++ b/package/spidev_test/spidev_test.mk
-@@ -10,7 +10,7 @@
- # If you need quad-pumped spi support you need to upgrade your toolchain.
- # Note that the location of spidev_test.c changes from v4.5 onwards.
+ define LSOF_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
  
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0),y)
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8),y)
- SPIDEV_TEST_VERSION = 5.8
- SPIDEV_TEST_PATH = tools/spi
- else ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+ define LSOF_INSTALL_TARGET_CMDS
 -- 
 2.35.1
 
