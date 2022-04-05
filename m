@@ -4,65 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A70C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 21:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F98DC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 21:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7419360E33;
-	Tue,  5 Apr 2022 21:13:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3973E60B75;
+	Tue,  5 Apr 2022 21:20:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jPvurS9fAF1N; Tue,  5 Apr 2022 21:12:59 +0000 (UTC)
+	with ESMTP id EZXsbVAh_cfY; Tue,  5 Apr 2022 21:20:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BCAE60B75;
-	Tue,  5 Apr 2022 21:12:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 521B51BF3A3
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 21:12:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61C0C60E33;
+	Tue,  5 Apr 2022 21:20:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C3C21BF3A3
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 21:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A23D4051C
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 21:12:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6720D415E3
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 21:19:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d4Nj-DQM_yRM for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 21:12:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 65419402F3
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 21:12:56 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b44e:a19f:2a4d:fe1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5391019F4F3;
- Tue,  5 Apr 2022 23:12:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1649193174;
- bh=HOheJdXP25mGiRJuzAJDFik9vbrr8XE56Z8T3+aFJd0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Mv8Gs90+bpfQx6nPXK2n5CoGXNU/BLmJFH7tbxB3a+2FMg5HN7tE9p0Vye8doT0IS
- sYltmJR6NMnqaaej48PCceEuB6JYgE7u1G7OAOxtyx8xFIIVmStmnqxzO/KXloyCCZ
- oSQcyw5/HfxY4Ho6AOZMuGDCUsOAwc1JiCisELsa3pbasOmxN1XsxaggBd2fhBToqk
- i7CQm8bm9NbGzS0eHYx5cp/qkzlgWE8bynldRZQTbBj74k9sM3+bsrKJlpT+FC3P2l
- LRKuZEW4vFdGYVeVPAx/zfhmOOaS50zCJTJSSZZ30dvToKhYyPBoXpdDmnwui3bisl
- HON4Pl27tQrfQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 05 Apr 2022 23:12:50 +0200
-Date: Tue, 5 Apr 2022 23:12:50 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220405211250.GJ2354230@scaer>
-References: <20220405025054.966064-1-james.hilliard1@gmail.com>
- <0a44404b-c3f5-677f-cfbe-09a08f41adad@mind.be>
- <CADvTj4pJFiWHQszKZ=ULCtAiS1MbmDS6sdsoV81DTGbn9cBEnQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADvTj4pJFiWHQszKZ=ULCtAiS1MbmDS6sdsoV81DTGbn9cBEnQ@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/aufs: don't set invalid
- AUFS_SITE if version is unset
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6fZ8jJVeJYDh for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 21:19:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83F2D415AF
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 21:19:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 7074B83657; Tue,  5 Apr 2022 21:10:29 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 5 Apr 2022 23:16:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ab85fc137faa46bd1feb5d95b14ba9bedb1513e8
+X-Git-Newrev: ac91235797fe9b234fb820c0112f21c26be1349f
+X-Patchwork-Hint: ignore
+Message-Id: <20220405211029.7074B83657@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spidev_test: fix version depending
+ on kernel headers version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,82 +53,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac91235797fe9b234fb820c0112f21c26be1349f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-04-05 14:09 -0600, James Hilliard spake thusly:
-> On Tue, Apr 5, 2022 at 11:19 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> > On 05/04/2022 04:50, James Hilliard wrote:
-> > > Fixes:
-> > > package/aufs/aufs.mk:24: *** AUFS_SITE (https://github.com/sfjro/aufs4-standalone/archive/) cannot have a trailing slash.  Stop.
-> > > make: *** [Makefile:84: _all] Error 2
-> >   How do you get this? I've tried a number of configurations, but I always get
-> > package/aufs/aufs.mk:21: *** No aufs version specified.  Stop.
-> > make: *** [Makefile:84: _all] Error 2
-> >   I could only reproduce with `make source`, but that's a bit a special case.
-> 
-> Something like this seems to hit it:
-> BR2_LINUX_KERNEL_EXT_AUFS=y
-> # BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3 is not set
-> BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4=y
-> # BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5 is not set
-> BR2_LINUX_KERNEL_EXT_AUFS_SERIES=4
-> BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""
-> BR2_PACKAGE_AUFS=y
-> BR2_PACKAGE_AUFS_SERIES=4
-> BR2_PACKAGE_AUFS_VERSION=""
-> # BR2_PACKAGE_AUFS_UTIL is not set
+Fixes:
 
-This still produces the expected error that Arnout reported:
+  - http://autobuild.buildroot.net/results/a5c008aaff40f4851ffa36439c7340b6243a4842
 
-    $ make qemu_m68k_q800_defconfig  # just for a config with a kernel
+  .../build/spidev_test-5.8/spidev_test.c:132:13: error: 'SPI_TX_OCTAL' undeclared (first use in this function); did you mean 'SPI_TX_DUAL'?
+    132 |  if (mode & SPI_TX_OCTAL)
+        |             ^~~~~~~~~~~~
+        |             SPI_TX_DUAL
 
-    $ cat <<_EOF_ >>.config
-    BR2_LINUX_KERNEL_EXT_AUFS=y
-    # BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3 is not set
-    BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4=y
-    # BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5 is not set
-    BR2_LINUX_KERNEL_EXT_AUFS_SERIES=4
-    BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""
-    BR2_PACKAGE_AUFS=y
-    BR2_PACKAGE_AUFS_SERIES=4
-    BR2_PACKAGE_AUFS_VERSION=""
-    # BR2_PACKAGE_AUFS_UTIL is not set
-    _EOF_
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/spidev_test/Config.in      | 2 +-
+ package/spidev_test/spidev_test.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    $ make olddefconfig
-
-    $ grep AUFS .config
-    BR2_LINUX_KERNEL_EXT_AUFS=y
-    # BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3 is not set
-    BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4=y
-    # BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5 is not set
-    BR2_LINUX_KERNEL_EXT_AUFS_SERIES=4
-    BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""
-    BR2_PACKAGE_AUFS=y
-    BR2_PACKAGE_AUFS_SERIES=4
-    BR2_PACKAGE_AUFS_VERSION=""
-    # BR2_PACKAGE_AUFS_UTIL is not set
-
-    $ make
-    package/aufs/aufs.mk:21: *** No aufs version specified.  Stop.
-    make: *** [Makefile:23: _all] Error 2
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
+index 81386adf7a..abfa885b73 100644
+--- a/package/spidev_test/Config.in
++++ b/package/spidev_test/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_SPIDEV_TEST
+ 	  proper operation of 'spidev_test'.
+ 
+ 	  The version used is based on your toolchain headers version,
+-	  if it's older than 3.15 then 3.0 is used, up to headers 4.20
++	  if it's older than 3.15 then 3.0 is used, up to headers 5.7
+ 	  version 4.10 is used and otherwise version 5.8.
+ 	  This means you won't have quad-pumped SPI support if your
+ 	  toolchain is too old.
+diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+index 6c5a9495a4..bd138b0142 100644
+--- a/package/spidev_test/spidev_test.mk
++++ b/package/spidev_test/spidev_test.mk
+@@ -10,7 +10,7 @@
+ # If you need quad-pumped spi support you need to upgrade your toolchain.
+ # Note that the location of spidev_test.c changes from v4.5 onwards.
+ 
+-ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0),y)
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8),y)
+ SPIDEV_TEST_VERSION = 5.8
+ SPIDEV_TEST_PATH = tools/spi
+ else ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
