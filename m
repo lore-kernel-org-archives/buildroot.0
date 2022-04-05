@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19149C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66F10C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:03:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D24FD80DE9;
-	Tue,  5 Apr 2022 19:03:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A261416B6;
+	Tue,  5 Apr 2022 19:03:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l6XNTt0zMcRl; Tue,  5 Apr 2022 19:03:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id knc1OSyYl5rG; Tue,  5 Apr 2022 19:03:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF4C180CE0;
-	Tue,  5 Apr 2022 19:03:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F34F040A03;
+	Tue,  5 Apr 2022 19:03:43 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 09B1C1BF83E
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 823C01BF83E
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E54F741560
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CA1F4155C
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NJG2g9qgHJj8 for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 19:02:49 +0000 (UTC)
+ with ESMTP id NYG8-zTYJvon for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 19:02:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C11C4155C
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:02:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF31141523
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:02:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 319C18361B; Tue,  5 Apr 2022 18:53:20 +0000 (UTC)
+ id 09F348361A; Tue,  5 Apr 2022 18:53:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Apr 2022 19:28:14 +0200
+Date: Tue, 5 Apr 2022 19:12:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91c056f0d598ed0d5b94ec4d4cebb9bd203efb50
-X-Git-Newrev: 2642edb0af08f04fb98f4cb5f88895faded4b325
+X-Git-Oldrev: f54b5a64f2f51c7e30b291dfa177f855bd88d6f2
+X-Git-Newrev: 43e859d47a5474d8acdaf81a0ea63aa9a909985f
 X-Patchwork-Hint: ignore
-Message-Id: <20220405185320.319C18361B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/containerd: security bump to
- version 1.5.11
+Message-Id: <20220405185320.09F348361A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opus: fix build with
+ BR2_OPTIMIZE_FAST
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2642edb0af08f04fb98f4cb5f88895faded4b325
+commit: https://git.buildroot.net/buildroot/commit/?id=43e859d47a5474d8acdaf81a0ea63aa9a909985f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Fixes:
+http://autobuild.buildroot.net/results/194/1941e194e1f5ad0bc4982ad39c3e34d266bc49c6/
 
-- CVE-2022-23648: containerd CRI plugin: Insecure handling of image volumes
-  https://github.com/containerd/containerd/security/advisories/GHSA-crp2-qrr5-8pq7
+opus requires that it is configured with --enable-float-approx when
+-ffast-math (BR2_OPTIMIZE_FAST) is used, otherwise it errors out at build
+time:
 
-- CVE-2022-24769: Default inheritable capabilities for linux container
-  should be empty
-  https://github.com/containerd/containerd/security/advisories/GHSA-c9cp-9c75-9v8c
+celt/arch.h:198:2: error: #error Cannot build libopus with -ffast-math
+unless FLOAT_APPROX is defined.  This could result in crashes on extreme
+(e.g.  NaN) input
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/opus/opus.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index d5aafe2e70..23dacded88 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  40c9767af3e87f2c36adf2f563f0a8374e80b30bd2b7aa80058c85912406cef4  containerd-1.5.9.tar.gz
-+sha256  6a289406c1c0583763e5a9754e31a1eced55cd5f162a7bc2a3a315d5eb05c7a1  containerd-1.5.11.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 8976e12f1a..c405b75e81 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index 4f816df477..2fa929c7df 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -23,6 +23,10 @@ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+ OPUS_CONF_OPTS += --enable-fixed-point
+ endif
  
--CONTAINERD_VERSION = 1.5.9
-+CONTAINERD_VERSION = 1.5.11
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
++ifeq ($(BR2_OPTIMIZE_FAST),y)
++OPUS_CONF_OPTS += --enable-float-approx
++endif
++
+ # When we're on ARM, but we don't have ARM instructions (only
+ # Thumb-2), disable the usage of assembly as it is not Thumb-ready.
+ ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
