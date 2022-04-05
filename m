@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2519BC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 175DDC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD83E82F76;
-	Tue,  5 Apr 2022 19:49:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B56DF4148D;
+	Tue,  5 Apr 2022 19:49:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HDoe2v5bT7_3; Tue,  5 Apr 2022 19:49:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id irsnKrnTM2TX; Tue,  5 Apr 2022 19:49:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50F79828BA;
-	Tue,  5 Apr 2022 19:49:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E510C1BF21A
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:49:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51C9D4109E;
+	Tue,  5 Apr 2022 19:49:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FF291BF21A
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:49:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2FE7405E8
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:49:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C60B606DC
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:49:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v5XMHWBJdoJG for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 19:49:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ru9PRhUGTr8d for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 19:49:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3172B402F3
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:49:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F5D6606AA
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:49:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 417C183621; Tue,  5 Apr 2022 19:39:49 +0000 (UTC)
+ id 7048383625; Tue,  5 Apr 2022 19:39:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Apr 2022 21:48:14 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 6de440a5c533b68d45614e13bba5fc296ca5d483
-X-Git-Newrev: b927353cb6606c415566c3a83b12b4d14ae0bbed
+Date: Tue, 5 Apr 2022 21:47:57 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 81317c9ee54bf464b89765afa9808f7ecb4db6b2
+X-Git-Newrev: d76f1433721b813661d1f3fb916590f8fd404b3b
 X-Patchwork-Hint: ignore
-Message-Id: <20220405193949.417C183621@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wireshark: needs
+Message-Id: <20220405193953.7048383625@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/wireshark: needs
  C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b927353cb6606c415566c3a83b12b4d14ae0bbed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d76f1433721b813661d1f3fb916590f8fd404b3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 wireshark needs C++ since switch to cmake-package in commit
 7cb7fb8191fc52c1e2cc8b4b15ea52fd12c30d9a:
