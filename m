@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33394C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:03:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19149C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Apr 2022 19:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1D52827AF;
-	Tue,  5 Apr 2022 19:03:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D24FD80DE9;
+	Tue,  5 Apr 2022 19:03:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bUKHFp2NI3PW; Tue,  5 Apr 2022 19:03:18 +0000 (UTC)
+	with ESMTP id l6XNTt0zMcRl; Tue,  5 Apr 2022 19:03:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD373823C6;
-	Tue,  5 Apr 2022 19:03:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 26C141BF83E
- for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF4C180CE0;
+	Tue,  5 Apr 2022 19:03:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 09B1C1BF83E
+ for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D27E402F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E54F741560
  for <buildroot@lists.busybox.net>; Tue,  5 Apr 2022 19:02:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8yUES3BlSoao for <buildroot@lists.busybox.net>;
- Tue,  5 Apr 2022 19:02:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NJG2g9qgHJj8 for <buildroot@lists.busybox.net>;
+ Tue,  5 Apr 2022 19:02:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E104840222
- for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:02:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C11C4155C
+ for <buildroot@buildroot.org>; Tue,  5 Apr 2022 19:02:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 124D58361B; Tue,  5 Apr 2022 18:53:20 +0000 (UTC)
+ id 319C18361B; Tue,  5 Apr 2022 18:53:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Apr 2022 19:14:38 +0200
+Date: Tue, 5 Apr 2022 19:28:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43e859d47a5474d8acdaf81a0ea63aa9a909985f
-X-Git-Newrev: 8111f5c27ca4757786b2f5faf30f7d96881314e6
+X-Git-Oldrev: 91c056f0d598ed0d5b94ec4d4cebb9bd203efb50
+X-Git-Newrev: 2642edb0af08f04fb98f4cb5f88895faded4b325
 X-Patchwork-Hint: ignore
-Message-Id: <20220405185320.124D58361B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-cli: bump to version
- v20.10.14
+Message-Id: <20220405185320.319C18361B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: security bump to
+ version 1.5.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8111f5c27ca4757786b2f5faf30f7d96881314e6
+commit: https://git.buildroot.net/buildroot/commit/?id=2642edb0af08f04fb98f4cb5f88895faded4b325
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/moby/moby/releases/tag/v20.10.14
+Fixes the following security issues:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+- CVE-2022-23648: containerd CRI plugin: Insecure handling of image volumes
+  https://github.com/containerd/containerd/security/advisories/GHSA-crp2-qrr5-8pq7
+
+- CVE-2022-24769: Default inheritable capabilities for linux container
+  should be empty
+  https://github.com/containerd/containerd/security/advisories/GHSA-c9cp-9c75-9v8c
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index f2fe316540..9a07acf89f 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index d5aafe2e70..23dacded88 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d86e3e6e10669634ee02b5e071e5ee504457a9d03941bbc5b7f2bd3683ebdb19  docker-cli-20.10.12.tar.gz
-+sha256  bda289b27b18675d6a6ff07568453768fe68c16c27b5e52724e46896d5464a55  docker-cli-20.10.14.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index d5cca34efc..c7458f85dd 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+ # Computed locally
+-sha256  40c9767af3e87f2c36adf2f563f0a8374e80b30bd2b7aa80058c85912406cef4  containerd-1.5.9.tar.gz
++sha256  6a289406c1c0583763e5a9754e31a1eced55cd5f162a7bc2a3a315d5eb05c7a1  containerd-1.5.11.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 8976e12f1a..c405b75e81 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.12
-+DOCKER_CLI_VERSION = 20.10.14
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+-CONTAINERD_VERSION = 1.5.9
++CONTAINERD_VERSION = 1.5.11
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
