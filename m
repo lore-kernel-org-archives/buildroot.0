@@ -1,75 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14AB4C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Apr 2022 02:05:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6A16C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Apr 2022 02:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E2BB40B1A;
-	Wed,  6 Apr 2022 02:05:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55536610A4;
+	Wed,  6 Apr 2022 02:06:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e8m_bofkDaqy; Wed,  6 Apr 2022 02:05:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cui6Z9LW1Q44; Wed,  6 Apr 2022 02:06:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 812EA40B07;
-	Wed,  6 Apr 2022 02:05:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7726C610A9;
+	Wed,  6 Apr 2022 02:06:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB9DA1BF296
- for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 02:05:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D4A8D1BF296
+ for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 02:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8BB2610A4
- for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 02:05:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C30E1610A9
+ for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 02:06:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=jms.id.au
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id alOboi07PE9L for <buildroot@lists.busybox.net>;
- Wed,  6 Apr 2022 02:05:31 +0000 (UTC)
+ with ESMTP id brv-vga_85cv for <buildroot@lists.busybox.net>;
+ Wed,  6 Apr 2022 02:06:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com
- [IPv6:2607:f8b0:4864:20::82a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D405160B08
- for <buildroot@buildroot.org>; Wed,  6 Apr 2022 02:05:30 +0000 (UTC)
-Received: by mail-qt1-x82a.google.com with SMTP id t2so2180666qtw.9
- for <buildroot@buildroot.org>; Tue, 05 Apr 2022 19:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=EojVYKrXHXECkMXR3vuYL1lJCqE04bUE3z34w9a0fX8=;
- b=bq4iky2zn8Goq3qSXt81ctOwMFaJDJLZwp6fpQTJH8Jxu/jyaFZKRE7KNWcqdBbSgb
- S9tnWQi963f7e+vggZy5FEIKuel4pgWWk1xg+Mb8gscNTPMeDQ2p5cqymn8vQjq1Lo3U
- xfoLBoCksZsscbnyCbH8oQelz4t+x2w5YBfuo=
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
+ [IPv6:2607:f8b0:4864:20::b2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EF3BC60B08
+ for <buildroot@buildroot.org>; Wed,  6 Apr 2022 02:06:14 +0000 (UTC)
+Received: by mail-yb1-xb2b.google.com with SMTP id l14so1664059ybe.4
+ for <buildroot@buildroot.org>; Tue, 05 Apr 2022 19:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=AgYjx8vZtA5BGW8sI+MbjnSJfc/tqJN74hQiAracrZg=;
+ b=MR3AXvxmRmlwg99GfPZJcScms1kRf4AbHm+LLx0gXgOITjfgYRNlD8J+0hxqtLDSRd
+ qmzGlTHCflb6lWnBG68L4a/5BIFuItrnd9BpZzZnF6zcAc+n1cGn0BN+2QwKmycK2n9J
+ bcPi8LuF7DaO8YxvRjnwCcNMdMAqqayEI64ayk6EcJ68PkQVwoLm0L6Bb5lJMABh7+z1
+ jBV2xbH1LGnSmrnkSKQkzbR0FVr8L92HLK2Wg1cwB+MF/QdKlxgiybercGwH3te9ZoFP
+ 0xYAdZwFDZL2QY6Jqa1NfTkJR9luw0Kcp6Ev8cYxVO0aGi2mkU0W7GGStOQ4WHrHhq6p
+ 39qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=EojVYKrXHXECkMXR3vuYL1lJCqE04bUE3z34w9a0fX8=;
- b=CsrJjsJ8VkHqnynsDoVNuti72F/vCEcCnSSqcPayDYitbBAsfgkiTocqaNA3tqJMbf
- 2pFdBW1401J7fpJsPHUTLWOG3ZJQesVg56Ra2sE7xep0ZZaZVPAfCVspOUpf4tjIvZju
- EKvvI3NgLE7IWPa/+77EtQVXdTjMasgj6dv8W1YDXNyxm4WZ0q5CZa6v8WYWoUqcEprm
- RmMLwBTs3Ux2PERKv/TLaB88MtUdT0G//YjOi310zTFU4jlqhwIhg6PulIRYdk7/+Kyg
- ZSzhBWzxYEnAGi6QnDO/JHLioLcyGDMjiPEhblaqEL2jaPNYIBLemuh7Qx3rPECmxNCb
- 2qEw==
-X-Gm-Message-State: AOAM533EZj3/QKeT6yo+qVYvSjvakaoMeQxMscqDD4fL+M79UlfIW6Nd
- ykVk62rC94xmEbwbOdskxJZYuZHLz0G3J9HkyFs=
-X-Google-Smtp-Source: ABdhPJwLFlHNn8aYd24HeJzc/BM16/dOe17O1+GPCfGwOiB2sfSeTx0Giy7c55/aXMBysDEGEltahLesIKJxNc7FaoM=
-X-Received: by 2002:a05:622a:4cd:b0:2e1:ec2f:8c22 with SMTP id
- q13-20020a05622a04cd00b002e1ec2f8c22mr5788209qtx.494.1649210729452; Tue, 05
- Apr 2022 19:05:29 -0700 (PDT)
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=AgYjx8vZtA5BGW8sI+MbjnSJfc/tqJN74hQiAracrZg=;
+ b=VaKcTQnPKt/jc9+/dk1raIRiOHQLfTzFt8CuRMAgxORdMX71aOTACufGFl3ba0Iokd
+ P+OQ2l5+B09yewTKf6llH4rAx69BaL2oRNNCD5si38z7t7zE0xGW7qX83VEyws/is7lU
+ cZ14baVpouqqTmIPkucIksJTVJmyEkTOKJ9AeWSoLYPjAh2Dppi18eKQlArBBt0OmHTS
+ PMF/MYXoQYWbzxxHyv0H517zrBmCQZJpxZla3ins2Lvp3rX9jJI1+xlh4WHIaw454Q5G
+ JzzXob4y/tMQ7ADIhy7mRVCxVo36tGgq0j8cluk3/1vcxscDnuFZv6g6Rnd6pvCcSGYw
+ p/Jw==
+X-Gm-Message-State: AOAM531yzFRgQB4vgoJ6wf1Jf3OW8Z+ZTRRsZPhg8kSTRLDM3Kv2/5SE
+ w8QT9dU9YdqKL2K/4iuoO0aLvgJCUQYzxfWUy+BzFeLcUrg=
+X-Google-Smtp-Source: ABdhPJzUfrnzI/TXLIS0/FpUSlA7IArzqDyrMwmom/9s507WkEybnHbz7YVfRdUSYQo+WtELD7i7EQYpK2c+wvpHaqE=
+X-Received: by 2002:a25:adc8:0:b0:633:b79d:92ee with SMTP id
+ d8-20020a25adc8000000b00633b79d92eemr4675669ybe.457.1649210772810; Tue, 05
+ Apr 2022 19:06:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220404091256.683581-1-joel@jms.id.au>
- <2ddab288-a57a-18ed-c392-d6695dd68e89@mind.be>
- <20220405195545.GH2354230@scaer>
-In-Reply-To: <20220405195545.GH2354230@scaer>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 6 Apr 2022 02:05:17 +0000
-Message-ID: <CACPK8XdO5j7QP==fPWwywp-m=FM9K9eOyLrpoNtvRHJrdq+M0w@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH] package/zlib-ng: Backport patch to fix
- linking on powerpc
+From: Emile Cormier <emile.cormier.jr@gmail.com>
+Date: Tue, 5 Apr 2022 23:06:02 -0300
+Message-ID: <CAM70yxCknY7qH9uiqNpDhynxAdsjw1zM9AH=UaiAzET+f7treA@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
+Subject: [Buildroot] [Feature Request] Host cmake built with the
+ --system-curl option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,117 +77,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: fontaine.fabrice@gmail.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4888418509816400897=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 5 Apr 2022 at 19:55, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Arnout, All,
->
-> On 2022-04-04 22:17 +0200, Arnout Vandecappelle spake thusly:
-> > On 04/04/2022 11:12, Joel Stanley wrote:
-> > >Commit 192dfc68c0e4 ("package/zlib-ng: fix build on powerpc") turned the
-> >  Peter just backported this one to 2022.02.x...
-> > >Power8 optimisations off to fix a build issue. Instead apply a patch
-> > >from the develop branch upstream to fix the issue.
-> > >
-> > >This patch is not yet in a released version of zlib-ng.
-> > >
-> > >Signed-off-by: Joel Stanley <joel@jms.id.au>
-> >  Applied to master, thanks.
->
-> Err... Why would we enable the POWER8 optimisations when the target is
-> not a POWER8 ?
->
-> Backporting the patch seems correct, but the enabling/disabling the
-> optinisations should have stayed, I believe...
+--===============4888418509816400897==
+Content-Type: multipart/alternative; boundary="00000000000045f12505dbf2ce7f"
 
-Taking a look at the cmake configuration, there's dozens of options
-that provide optimisations. It looks like it does detection of
-features:
+--00000000000045f12505dbf2ce7f
+Content-Type: text/plain; charset="UTF-8"
 
-    elseif(BASEARCH_PPC_FOUND)
-        # Common arch detection code
-        if(WITH_ALTIVEC)
-            check_ppc_intrinsics()
-        endif()
-        if(WITH_POWER8)
-            check_power8_intrinsics()
-        endif()
-        if(HAVE_VMX OR HAVE_POWER8_INTRIN)
-            list(APPEND ZLIB_ARCH_HDRS ${ARCHDIR}/power_features.h)
-            list(APPEND ZLIB_ARCH_SRCS ${ARCHDIR}/power_features.c)
-...
+When using cmake while running a post-build script, the ExternalProject_add
+command fails when the URL option is used to download a source tarball via
+https. This is because the host cmake is not built using the --system-curl
+option (https://github.com/Kitware/CMake/blob/master/bootstrap#L660).
 
-        if(WITH_POWER8)
-            if(HAVE_POWER8_INTRIN)
-                add_definitions(-DPOWER8)
-                add_definitions(-DPOWER_FEATURES)
-                add_definitions(-DPOWER8_VSX_ADLER32)
-                add_definitions(-DPOWER8_VSX_CHUNKSET)
-                add_definitions(-DPOWER8_VSX_SLIDEHASH)
-                set(POWER8_SRCS ${ARCHDIR}/adler32_power8.c
-${ARCHDIR}/chunkset_power8.c ${ARCHDIR}/slide_hash_power8.c)
-                if("${ARCH}" MATCHES "powerpc64(le)?")
-                    add_definitions(-DPOWER8_VSX_CRC32)
-                    list(APPEND POWER8_SRCS ${ARCHDIR}/crc32_power8.c)
-                endif()
-                list(APPEND ZLIB_ARCH_SRCS ${POWER8_SRCS})
-                set_property(SOURCE ${POWER8_SRCS} PROPERTY
-COMPILE_FLAGS "${POWER8FLAG} ${NOLTOFLAG}")
-            else()
-                set(WITH_POWER8 OFF)
-            endif()
+Without the system-curl option, the cmake build will use its own bundled
+libcurl without OpenSSL support, and thus downloading tarballs via https
+fails.
 
+Adding the --system-curl option would entail that libcurl also be built as
+a host library. I don't think it currently is.
 
-The check looks like this.
-
-check_power8_intrinsics() {
-    # Check whether features needed by POWER optimisations are available
-    cat > $test.c << EOF
-#include <sys/auxv.h>
-int main() { return (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_2_07); }
-EOF
-    if test $buildpower8 -eq 1 && try $CC -c $CFLAGS -mcpu=power8 $test.c; then
-        HAVE_POWER8_INTRIN=1
-        echo "Check whether POWER8 instructions are available ...
-Yes." | tee -a configure.log
-    else
-        HAVE_POWER8_INTRIN=0
-        echo "Check whether POWER8 instructions are available ... No."
-| tee -a configure.log
-    fi
-}
-
-So as long as your compiler defines the PPC_FEATURE2_ARCH_2_07 in
-auxv.h, and supports -mcpu=power8, it will build the code. The
-application then does runtime checking of auxv to decide if the
-optimisations should be used.
-
-Setting WITH_POWER8=OFF on the command line will skip the checks, and
-not build in the optimisations.
-
-WITH_POWER8=ON has no effect as it's the default and the cmake logic
-will turn it off if it detects the platform isn't capable.
-
-From what I can see, there's a small binary size reduction to be had
-by forcing Power8 off if your toolchain is power8 capable but you know
-your platform isn't. I think this is the case for GCC built for
-ppc64(le) but targeting a different CPU.
-
-I suggest we let the zlib-ng build system do its thing to ease the
-maintenance burden of keeping the flags up to date.
-
-I also welcome someone double checking my analysis, as I may have
-misunderstood something.
+I use CMake's ExternalProject_add in our project to download and build the
+static library dependencies that our embedded application needs. I know
+that buildroot provides various packages for cross-compiled libraries, but
+I have no control over the versions (and compile-time options) of these
+packages.
 
 Cheers,
+Emile Cormier
 
-Joel
+--00000000000045f12505dbf2ce7f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div></div><div>When using cmake while running a post-buil=
+d script, the ExternalProject_add command fails when the URL option is used=
+ to download a source tarball via https. This is because the host cmake is =
+not built using the --system-curl option (<a href=3D"https://github.com/Kit=
+ware/CMake/blob/master/bootstrap#L660">https://github.com/Kitware/CMake/blo=
+b/master/bootstrap#L660</a>).</div><div><br></div><div>Without the system-c=
+url option, the cmake build will use its own bundled libcurl without OpenSS=
+L support, and thus downloading tarballs via https fails.</div><div><br></d=
+iv><div>Adding the --system-curl option would entail that libcurl also be b=
+uilt as a host library. I don&#39;t think it currently is.<br></div><div><b=
+r></div><div>I use CMake&#39;s ExternalProject_add in our project to downlo=
+ad and build the static library dependencies that our embedded application =
+needs. I know that buildroot provides various packages for cross-compiled l=
+ibraries, but I have no control over the versions (and compile-time options=
+) of these packages.</div><div><br></div><div>Cheers,</div><div>Emile Cormi=
+er<br></div></div>
+
+--00000000000045f12505dbf2ce7f--
+
+--===============4888418509816400897==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4888418509816400897==--
