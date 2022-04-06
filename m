@@ -1,76 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F302C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Apr 2022 20:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1A8BC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Apr 2022 20:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBD16408A6;
-	Wed,  6 Apr 2022 20:13:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 470D881465;
+	Wed,  6 Apr 2022 20:59:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Co8qkUmRCnEw; Wed,  6 Apr 2022 20:13:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sQf8mPq4r4O9; Wed,  6 Apr 2022 20:59:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7109840400;
-	Wed,  6 Apr 2022 20:13:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5696C1BF317
- for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 20:13:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C13981758;
+	Wed,  6 Apr 2022 20:59:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3391BF27E
+ for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 20:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 454D640400
- for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 20:13:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C157408C1
+ for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 20:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SeEzOnqogSGV for <buildroot@lists.busybox.net>;
- Wed,  6 Apr 2022 20:13:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com
- [IPv6:2607:f8b0:4864:20::112b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DB52C403A8
- for <buildroot@buildroot.org>; Wed,  6 Apr 2022 20:13:16 +0000 (UTC)
-Received: by mail-yw1-x112b.google.com with SMTP id
- 00721157ae682-2eb57fd3f56so39281617b3.8
- for <buildroot@buildroot.org>; Wed, 06 Apr 2022 13:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=l0X+10q1UMtNhXvjfYhmmgqCPCMDIvVu+gqrLG8f8g0=;
- b=GIUyRSgSS+IeeBLnGds5foY+XSMdbWlOtVAoQzS/FVAinjpCOG+QYe+IouoEg5UpLy
- iphAo5BW1mrYk9Y4Dxx/a8UM6AtKZ2p40sSJCS5CZ19LsBRQllP2iztMbkdkva3NSGsB
- CZrqK+ddtOZy1eHb8gXYxA7o340JMQYzZf6WW/nzSLnVBwtaPSBXWNNPUljIFFQcJgt3
- PQXjU5p6fdr5qB0D+Fyz6UaX+gqr8vqfRh9wXp7tksMzst/g2kReOU6/u2sJOHzXOut7
- zxZmwJgTgaGpdzvJjd1zp7hXax1bcxyRkc6U7mJKCcF7UUjKoX3owXRAZ8gH8V0rw9fW
- D+Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=l0X+10q1UMtNhXvjfYhmmgqCPCMDIvVu+gqrLG8f8g0=;
- b=RpztAkHZWTQ0whpz6lfciHhzYJ5ZjpoQoGD6wf8jNS4ShFYT2vTx78plAqV0YDh3K+
- HziZGHGjkbwL+9eb69QzmYTp5GZ0XeLwPHSK5ot27OXcjA5HjqK6W9yT/RhKbJ47KlnN
- eLyq9cr0j037n/7lhD4yCwCXHLC59/1zUPcP1H/1ThrCjYC59yTKcEdE1CvcSR6XonAK
- Zt+duNqbH2g84yZca8JX748LHdwTkAMipksBCos5dLoAZwXEYfQx95fG3a1Y4K+gu4Wq
- V5NwQK12r+4AkVvnm0OylbnKvhc1vwnavpSfaNUMumWZTxsPy9v5JE8c3Tde/c2SCJNR
- I8VQ==
-X-Gm-Message-State: AOAM531kfk5bGcQoS38nz1FeKWOs0zyvUYbrudqnCu7Y+1Xp7o1LgTpe
- CCidl/2qhc6rLbupjv1vAfebavmaCUqNIbNp6GJka49f
-X-Google-Smtp-Source: ABdhPJyx/t8H47dpO7JzpxxafOmqT1uBQYBzu0xOexy+f144/DKAFAq0S7lA1MdmxUaKbu8bfTl6N8esEqlhlNnJec0=
-X-Received: by 2002:a81:f41:0:b0:2eb:70ce:4179 with SMTP id
- 62-20020a810f41000000b002eb70ce4179mr9019912ywp.187.1649275995897; Wed, 06
- Apr 2022 13:13:15 -0700 (PDT)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=igalia.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3L6Agp_Vd3va for <buildroot@lists.busybox.net>;
+ Wed,  6 Apr 2022 20:59:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B575D40B61
+ for <buildroot@buildroot.org>; Wed,  6 Apr 2022 20:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=7Hi2dxluJP/ZJ7ns1gLmY6YPjjazTZTD/8qGmHBJsps=; b=UnHGAi/eLFbbQjZLqgJGwUm19O
+ 96PPWYwrBewIoKGumLJE9Qh6p0lvACD1USdfR5/ilY8rOTkgNI6xB4wuQLquEEpJImX7CWWO3nqOx
+ KTdzVBR0AtMhDxSPzRyLotZeh+XoeVbzliedVrTghOehCV7OSYX+AyGUGPZCcUYmdvmG/FNMEY0n/
+ fkIVngwNUR00H89BwnqBSP/S787cF0PAlkYHQtf/TmOzwAz5DATRdu+/+x5pBFw5upRWlAtmub7YH
+ TptQHucxBJpFIgUzIgCLYXRFoiAKWRRH2Ax+6gCVBkpi1+eDwlJahDHB+xRa2OcjiHX4FnbbPP6XK
+ IGXMqq/A==;
+Received: from 91-152-140-238.elisa-laajakaista.fi ([91.152.140.238]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1ncCjz-000C3e-Rv; Wed, 06 Apr 2022 22:58:59 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id b820da5d;
+ Wed, 6 Apr 2022 20:58:41 +0000 (UTC)
+Date: Wed, 6 Apr 2022 23:58:27 +0300
+Message-ID: <20220406235827.GB2664461@momiji>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20220406185552.4011357-1-fontaine.fabrice@gmail.com>
+References: <20220406185552.4011357-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-References: <CAM70yxCknY7qH9uiqNpDhynxAdsjw1zM9AH=UaiAzET+f7treA@mail.gmail.com>
- <a4724812-eafb-0ffc-b14d-df9ed04aac80@mind.be>
-In-Reply-To: <a4724812-eafb-0ffc-b14d-df9ed04aac80@mind.be>
-From: Emile Cormier <emile.cormier.jr@gmail.com>
-Date: Wed, 6 Apr 2022 17:13:05 -0300
-Message-ID: <CAM70yxAu66JWhogiabz7fXqz4XpFGXmiOaahX5V3+GKQG_eUfw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [Feature Request] Host cmake built with the
- --system-curl option
+Subject: Re: [Buildroot] [PATCH 1/1] package/woff2: use github helper
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,161 +72,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============7892244463541195228=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2154207716483237178=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7892244463541195228==
-Content-Type: multipart/alternative; boundary="000000000000df414905dc01fd15"
 
---000000000000df414905dc01fd15
-Content-Type: text/plain; charset="UTF-8"
+--===============2154207716483237178==
+Content-Type: multipart/signed; boundary="5HVETlLIhv0anwGC"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-Thank you for your feedback on this request, Arnout.
 
-Buildroot's cmake is being executed in my post-build script instead of my
-system's cmake. How do I make my system's cmake take precedence?
+--5HVETlLIhv0anwGC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-On Wed, Apr 6, 2022 at 11:29 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+T24gV2VkLCAwNiBBcHIgMjAyMiAyMDo1NTo1MiArMDIwMCBGYWJyaWNlIEZvbnRhaW5lIDxmb250
+YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4gd3JvdGU6Cj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBG
+b250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CgpBY2tlZC1ieTogQWRyaWFuIFBl
+cmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cgo+IC0tLQo+ICBwYWNrYWdlL3dvZmYy
+L3dvZmYyLmhhc2ggfCAyICstCj4gIHBhY2thZ2Uvd29mZjIvd29mZjIubWsgICB8IDMgKy0tCj4g
+IDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IAo+IGRp
+ZmYgLS1naXQgYS9wYWNrYWdlL3dvZmYyL3dvZmYyLmhhc2ggYi9wYWNrYWdlL3dvZmYyL3dvZmYy
+Lmhhc2gKPiBpbmRleCA0NjkwNzFlM2MyLi4wODEyZGFiY2YxIDEwMDY0NAo+IC0tLSBhL3BhY2th
+Z2Uvd29mZjIvd29mZjIuaGFzaAo+ICsrKyBiL3BhY2thZ2Uvd29mZjIvd29mZjIuaGFzaAo+IEBA
+IC0xLDUgKzEsNSBAQAo+ICAjIExvY2FsbHkgZ2VuZXJhdGVkOgo+IC1zaGE1MTIgIGM3ODhiYmEx
+NTMwYWVjNDYzZTc1NWU5MDFmOTM0MmY0YjU5OWUzYTA3ZjU0NjQ1ZmVmMWRjMzg4YWI1ZDVjMzA2
+MjU1MzVlNWRkMzhlOWU3OTJlMDRhNjQwNTc0YmFhNTBlZWVmYjZiNzMzOGFiNDAzNzU1ZjRhNGUw
+YzMwNDRkICB2MS4wLjIudGFyLmd6Cj4gK3NoYTUxMiAgYzc4OGJiYTE1MzBhZWM0NjNlNzU1ZTkw
+MWY5MzQyZjRiNTk5ZTNhMDdmNTQ2NDVmZWYxZGMzODhhYjVkNWMzMDYyNTUzNWU1ZGQzOGU5ZTc5
+MmUwNGE2NDA1NzRiYWE1MGVlZWZiNmI3MzM4YWI0MDM3NTVmNGE0ZTBjMzA0NGQgIHdvZmYyLTEu
+MC4yLnRhci5nego+ICAKPiAgIyBIYXNoIGZvciBsaWNlbnNlIGZpbGVzOgo+ICBzaGE1MTIgIDhl
+ZTkyNGRhM2ZiNWQxNjEzNWFkY2Y2YThmYmU5ZTJlOGYzZDJkODA0Njg2MTdlNzJjYTRmYTA1OWE2
+MGY4NDU1YzlhNWY2OGE4ZGMzODFiMTI5N2M4YmYzOWM4ODdhOTEyZDBmNjkyNDZkMjYwNGFkYTc0
+ZDNkYTllOGU0OTBiICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd29mZjIvd29mZjIu
+bWsgYi9wYWNrYWdlL3dvZmYyL3dvZmYyLm1rCj4gaW5kZXggYjJmZjMzZmU5OC4uOTM3ZThjZjcz
+NiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3dvZmYyL3dvZmYyLm1rCj4gKysrIGIvcGFja2FnZS93
+b2ZmMi93b2ZmMi5tawo+IEBAIC01LDggKzUsNyBAQAo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Iwo+ICAKPiAgV09GRjJfVkVSU0lPTiA9IDEuMC4yCj4gLVdPRkYyX1NPVVJDRSA9IHYkKFdPRkYy
+X1ZFUlNJT04pLnRhci5nego+IC1XT0ZGMl9TSVRFID0gaHR0cHM6Ly9naXRodWIuY29tL2dvb2ds
+ZS93b2ZmMi9hcmNoaXZlCj4gK1dPRkYyX1NJVEUgPSAkKGNhbGwgZ2l0aHViLGdvb2dsZSx3b2Zm
+Mix2JChXT0ZGMl9WRVJTSU9OKSkKPiAgV09GRjJfTElDRU5TRSA9IE1JVAo+ICBXT0ZGMl9MSUNF
+TlNFX0ZJTEVTID0gTElDRU5TRQo+ICBXT0ZGMl9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAtLSAK
+PiAyLjM1LjEKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+
+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoK
+Q2hlZXJzLArigJRBZHJpw6FuCg==
 
->
->
-> On 06/04/2022 04:06, Emile Cormier wrote:
-> > When using cmake while running a post-build script, the
-> ExternalProject_add
-> > command fails when the URL option is used to download a source tarball
-> via
-> > https. This is because the host cmake is not built using the
-> --system-curl
-> > option (https://github.com/Kitware/CMake/blob/master/bootstrap#L660
-> > <https://github.com/Kitware/CMake/blob/master/bootstrap#L660>).
-> >
-> > Without the system-curl option, the cmake build will use its own bundled
-> libcurl
-> > without OpenSSL support, and thus downloading tarballs via https fails.
-> >
-> > Adding the --system-curl option would entail that libcurl also be built
-> as a
-> > host library. I don't think it currently is.
->
->   Not only that, we'd need to configure host-curl to pull in host-openssl
-> as well.
->
->   That is not really great. It means that cmake (which in many
-> configurations is
-> a very basic dependency) would pull in two more packages, which
-> significantly
-> increases build time.
->
->   And the only added value is that it allows you to build something
-> outside of
-> buildroot. If you need to do that, simply install cmake on your build
-> system and
-> use that instead of the buildroot-built cmake.
->
->   Regards,
->   Arnout
->
->
-> >
-> > I use CMake's ExternalProject_add in our project to download and build
-> the
-> > static library dependencies that our embedded application needs. I know
-> that
-> > buildroot provides various packages for cross-compiled libraries, but I
-> have no
-> > control over the versions (and compile-time options) of these packages.
-> >
-> > Cheers,
-> > Emile Cormier
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
+--5HVETlLIhv0anwGC
+Content-Type: application/pgp-signature; name="signature.asc"
 
---000000000000df414905dc01fd15
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+-----BEGIN PGP SIGNATURE-----
 
-<div dir=3D"ltr"><div>Thank you for your feedback on this request, Arnout.<=
-/div><div><br></div><div>Buildroot&#39;s cmake is being executed in my post=
--build script instead of my system&#39;s cmake. How do I make my system&#39=
-;s cmake take precedence?<br></div></div><br><div class=3D"gmail_quote"><di=
-v dir=3D"ltr" class=3D"gmail_attr">On Wed, Apr 6, 2022 at 11:29 AM Arnout V=
-andecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt; w=
-rote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0p=
-x 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
-<br>
-On 06/04/2022 04:06, Emile Cormier wrote:<br>
-&gt; When using cmake while running a post-build script, the ExternalProjec=
-t_add <br>
-&gt; command fails when the URL option is used to download a source tarball=
- via <br>
-&gt; https. This is because the host cmake is not built using the --system-=
-curl <br>
-&gt; option (<a href=3D"https://github.com/Kitware/CMake/blob/master/bootst=
-rap#L660" rel=3D"noreferrer" target=3D"_blank">https://github.com/Kitware/C=
-Make/blob/master/bootstrap#L660</a> <br>
-&gt; &lt;<a href=3D"https://github.com/Kitware/CMake/blob/master/bootstrap#=
-L660" rel=3D"noreferrer" target=3D"_blank">https://github.com/Kitware/CMake=
-/blob/master/bootstrap#L660</a>&gt;).<br>
-&gt; <br>
-&gt; Without the system-curl option, the cmake build will use its own bundl=
-ed libcurl <br>
-&gt; without OpenSSL support, and thus downloading tarballs via https fails=
-.<br>
-&gt; <br>
-&gt; Adding the --system-curl option would entail that libcurl also be buil=
-t as a <br>
-&gt; host library. I don&#39;t think it currently is.<br>
-<br>
-=C2=A0 Not only that, we&#39;d need to configure host-curl to pull in host-=
-openssl as well.<br>
-<br>
-=C2=A0 That is not really great. It means that cmake (which in many configu=
-rations is <br>
-a very basic dependency) would pull in two more packages, which significant=
-ly <br>
-increases build time.<br>
-<br>
-=C2=A0 And the only added value is that it allows you to build something ou=
-tside of <br>
-buildroot. If you need to do that, simply install cmake on your build syste=
-m and <br>
-use that instead of the buildroot-built cmake.<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-<br>
-<br>
-&gt; <br>
-&gt; I use CMake&#39;s ExternalProject_add in our project to download and b=
-uild the <br>
-&gt; static library dependencies that our embedded application needs. I kno=
-w that <br>
-&gt; buildroot provides various packages for cross-compiled libraries, but =
-I have no <br>
-&gt; control over the versions (and compile-time options) of these packages=
-.<br>
-&gt; <br>
-&gt; Cheers,<br>
-&gt; Emile Cormier<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-</blockquote></div>
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYk3+8wAKCRCRxVnb5MkS
+O9tVAJ9YL0WFVxZl1HxP+xb+IzGXhDOZCgCeLrXycrpAmoFgf/jXObvsuRhcDqU=
+=yxlj
+-----END PGP SIGNATURE-----
 
---000000000000df414905dc01fd15--
+--5HVETlLIhv0anwGC--
 
---===============7892244463541195228==
+--===============2154207716483237178==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -247,4 +143,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7892244463541195228==--
+--===============2154207716483237178==--
