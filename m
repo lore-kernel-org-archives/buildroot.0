@@ -4,79 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EC8CC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Apr 2022 14:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D85CC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Apr 2022 14:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2866404A5;
-	Wed,  6 Apr 2022 14:08:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 262444161E;
+	Wed,  6 Apr 2022 14:12:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pF5AyrE2i1Pi; Wed,  6 Apr 2022 14:08:02 +0000 (UTC)
+	with ESMTP id ATv94sjSy5jQ; Wed,  6 Apr 2022 14:12:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 773F5401FD;
-	Wed,  6 Apr 2022 14:08:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 78C991BF5DA
- for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 14:07:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CBEF40922;
+	Wed,  6 Apr 2022 14:12:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D68311BF300
+ for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 14:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67BB6408D7
- for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 14:07:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C723E83104
+ for <buildroot@lists.busybox.net>; Wed,  6 Apr 2022 14:12:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sq0czxTUMq_t for <buildroot@lists.busybox.net>;
- Wed,  6 Apr 2022 14:07:58 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f22fX3thKDhl for <buildroot@lists.busybox.net>;
+ Wed,  6 Apr 2022 14:12:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com
- [IPv6:2607:f8b0:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A1B840891
- for <buildroot@buildroot.org>; Wed,  6 Apr 2022 14:07:57 +0000 (UTC)
-Received: by mail-ot1-x330.google.com with SMTP id
- n19-20020a9d7113000000b005cd9cff76c3so1794709otj.1
- for <buildroot@buildroot.org>; Wed, 06 Apr 2022 07:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=T2K9xTTmMYeGHzdTK2ze71YS7X7VNgsECJKWTyf3CoI=;
- b=cybnzcKvg0hCX0TrnWyZUju0bRJEIsnPIGgQvEYJeEQPdPeYM9ZUuBx+aylW72Xi/U
- mg7Hzd0VeFKMK+15KnJ0gjfoci16MJC2YpoRYh85/rAtNeShUxWb0QaOQElEJHvNY8jk
- ZLoNy08isrh12hOK4VGfWgxBdQJRdKZ2GBntfHSbvsbFxfKLb5smzEYf+ybdCrlXbdrQ
- xluGvupX9A/6VkgJ8QjXjxWnwYT9R7F8trsYsGjn5jp3mCzVzWUKVO7imVwubcFv8veH
- vj3DIKIGnhnXTbRlI0MwSdJETIuo+8Yhm4/qhizNTcpjn8Ibe6PaQYbBr73GK8hsbm67
- ZKNw==
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3DA3082718
+ for <buildroot@buildroot.org>; Wed,  6 Apr 2022 14:12:46 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id k23so4575768ejd.3
+ for <buildroot@buildroot.org>; Wed, 06 Apr 2022 07:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=/GC6qIy/NG9842JHUyWtWvztTHxghKWyZDo5KN2oRsY=;
+ b=RtlLylLMwAZ7WCB+222fQL7Ah+TyEIzSGsuyfWyFOg8XWuzdNvd3bdFAi6Sqf/y79+
+ cGHOGFSrKjNzleC4ipQKTxFEcDp9D/xK4cUY0dc61ua0tbcZU/bpeMWHRUPvHjdlKpi2
+ uwf/K4o7l0fLF9BH1yFvvXU85qxBNwXEtSf4pwbvLeZr83A6oiN/LNteU2EpEbqsahPP
+ jlszL2nTv+wr5cj1XurCRKY32fpuABvhp9MlCct4ou8q5ho+6HGnDtUWuQzZRei9iuo8
+ ld6LUwy2zisKtzoiQMj0CAnfDCONK6WQH0s/sTT0YFwQXyc6qXHqC8lBSJd60lrDuqjQ
+ Oiew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=T2K9xTTmMYeGHzdTK2ze71YS7X7VNgsECJKWTyf3CoI=;
- b=pl5unrfg1UsM7k3odIOQWFwN6oI8LnqyU4NfhK36IHu/PL/L2b6DeRdmGDu95R8lQq
- ERlH3FPs66UWw5f6V9B/dQZVGoXKrveX8Xuwdh8KcBy+xzl6a2Wm5QWAZHw937kV1HyP
- czWl4jr24UHSlqsH+zgCLSmpp1UyDdsMrbwRDJ4ID3QBIppyvbitqOtg3B7cOFmB7bhi
- hbzf2SxBd7R77fG0KFg0hwfXpKh+pPFo6SuEuxuCoNaAGIJUzxVQAGgkeZairkB9SrZl
- R6Yx7rto9Rkle/GsGW7PUIyencQqZFqWj11ypjamD2nsaEQ2SyHymcAi99LG8QdP5ArL
- Ef3Q==
-X-Gm-Message-State: AOAM530Go5uOw+5UqImRg11wTFKH7mBMg+GA3BMYw9LreEJFpu5/g3oW
- 1wE4jJW1V3BN5RhQhR4SKe0KFLGDxaiDEYcXt0JyvxF0lJY=
-X-Google-Smtp-Source: ABdhPJx/sU3oLklR0cYjy2HpRxb9L8TfmKsfzCfcbUlK+hOPMVeBXJQ4PxBuxqBRU9I4qEsbpn0mCQ2yts8Fr+6Xx48=
-X-Received: by 2002:a9d:6a84:0:b0:5cd:ad64:a50 with SMTP id
- l4-20020a9d6a84000000b005cdad640a50mr3072280otq.114.1649254076892; Wed, 06
- Apr 2022 07:07:56 -0700 (PDT)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=/GC6qIy/NG9842JHUyWtWvztTHxghKWyZDo5KN2oRsY=;
+ b=36R4/5MVm0G1Gsg91lb6onl5zS5NzCwf75qL8fVRdYe0iOQWXAyhQ8FnRgmjx3lJNj
+ SfhuCwLMz34MgcE4s/sR0XiOCM7VRzq4RxFQghiVzzUgkhQ/IzLU5aAf5wZP0ffRDl2/
+ I3k1O4nGNI7URmyhwg6cUTK8kwmMPa7hKmpLzP1lB4/aKucWsZCHb3ouVFQSh/jKGir7
+ hkVVXWVlaredxrQuKViJ5O6Oehb7NKofznc4gZ5Bts92Lmsta+MmNudp9ozbJdgGZbOP
+ e7Llzra30cngV1UJB8C+lB1BKZ64zpi8BO+eUGDoCnvOIvfUOvMC0kL4kAPgISfiEAr9
+ cMzw==
+X-Gm-Message-State: AOAM533k1fp6Ee7tJmNB4IDdkA/h5+vdUsntQsqHLJkZGojdyBIh+vpn
+ EqKpS79EDAgg9e73zeQsW5w1u3915D8HEA==
+X-Google-Smtp-Source: ABdhPJxB0Ci2lv/jSwGnlki59SyeY65bsw8J2NqHIXWTRoWQga1WKFLg2FFG3oUKfP+GvRHTDe/Smg==
+X-Received: by 2002:a17:907:9482:b0:6da:8ad6:c8b5 with SMTP id
+ dm2-20020a170907948200b006da8ad6c8b5mr8401589ejc.372.1649254362080; 
+ Wed, 06 Apr 2022 07:12:42 -0700 (PDT)
+Received: from [192.168.0.179] ([83.217.130.159])
+ by smtp.gmail.com with ESMTPSA id
+ sh31-20020a1709076e9f00b006dff86479d7sm6662798ejc.21.2022.04.06.07.12.41
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 06 Apr 2022 07:12:41 -0700 (PDT)
+Message-ID: <41d50cfd-3009-13d4-6f41-f0b2bdf3297f@mind.be>
+Date: Wed, 6 Apr 2022 16:10:30 +0200
 MIME-Version: 1.0
-References: <DU0P251MB0779CD19DBCAA7F149788B41E3E49@DU0P251MB0779.EURP251.PROD.OUTLOOK.COM>
- <CAPi7W83fzfin6_1KXV8BTy=AmcguoAK86mm4bFRrviFHBKmPbw@mail.gmail.com>
- <DU0P251MB07793F7BF68D17755B50F5F1E3E49@DU0P251MB0779.EURP251.PROD.OUTLOOK.COM>
- <20220405181815.5dd6d85e@gmx.net>
- <GV1P251MB0771B70C2179F1A7FEFD76FBE3E79@GV1P251MB0771.EURP251.PROD.OUTLOOK.COM>
- <CAPi7W81e46JtetOtwT-RX8sJzVmEL_YMZrp89KBn1GCGrJfbyg@mail.gmail.com>
- <DU0P251MB0779CECB98F51521C578D9F2E3E79@DU0P251MB0779.EURP251.PROD.OUTLOOK.COM>
- <CAPi7W8353UEfJS3YOKxp8OnVQ-HKfBwaujzVn30Hx4jehTmwoA@mail.gmail.com>
-In-Reply-To: <CAPi7W8353UEfJS3YOKxp8OnVQ-HKfBwaujzVn30Hx4jehTmwoA@mail.gmail.com>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 6 Apr 2022 16:06:06 +0200
-Message-ID: <CAPi7W81W6iAJOpuEM21V2ADbx+tBS7G9yARN7iuAi5p4fN6HPw@mail.gmail.com>
-To: Tim Hammer <Tim.Hammer@orolia.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: use internal bind
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20220405115040.3779242-1-james.hilliard1@gmail.com>
+ <4a9f7aa1-82e4-664e-7177-71596cb021e7@mind.be>
+ <CADvTj4rHfM=3q0DXJ2U_AccCL7VYZyUtwQ3d215o9_ev6QUPEw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CADvTj4rHfM=3q0DXJ2U_AccCL7VYZyUtwQ3d215o9_ev6QUPEw@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH v4 1/1] utils/genrandconfig: add randconfig
+ based --no-toolchains-csv option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,83 +96,337 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot <buildroot@buildroot.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgbWVyLiA2IGF2ci4gMjAyMiDDoCAxNTozMCwgRmFicmljZSBGb250YWluZQo8Zm9udGFpbmUu
-ZmFicmljZUBnbWFpbC5jb20+IGEgw6ljcml0IDoKPgo+IExlIG1lci4gNiBhdnIuIDIwMjIgw6Ag
-MTQ6NTgsIFRpbSBIYW1tZXIgPFRpbS5IYW1tZXJAb3JvbGlhLmNvbT4gYSDDqWNyaXQgOgo+ID4K
-PiA+IE9uIFdlZCwgQXByIDA2LCAyMDIyIGF0IDA5OjA4OjU4QU0gKzAyMDAsIEZhYnJpY2UgRm9u
-dGFpbmUgd3JvdGU6Cj4gPiA+IExlIG1lci4gNiBhdnIuIDIwMjIgw6AgMDM6NTgsIFRpbSBIYW1t
-ZXIgPFRpbS5IYW1tZXJAb3JvbGlhLmNvbT4gYSDDqWNyaXQgOgo+ID4gPiA+Cj4gPiA+ID4gT24g
-VHVlLCBBcHIgMDUsIDIwMjIgYXQgMDY6MTg6MTVQTSArMDIwMCwgUGV0ZXIgU2VpZGVyZXIgd3Jv
-dGU6Cj4gPiA+ID4gPiBIZWxsbyBUaW0sCj4gPiA+ID4gPgo+ID4gPiA+ID4gT24gVHVlLCA1IEFw
-ciAyMDIyIDEyOjE1OjE0ICswMDAwLCBUaW0gSGFtbWVyIDxUaW0uSGFtbWVyQG9yb2xpYS5jb20+
-IHdyb3RlOgo+ID4gPiA+ID4KPiA+ID4gPiA+ID4gT24gVHVlLCBBcHIgMDUsIDIwMjIgYXQgMDg6
-MTk6MDhBTSArMDIwMCwgRmFicmljZSBGb250YWluZSB3cm90ZToKPiA+ID4gPiA+ID4gPiBEZWFy
-IFRpbSwKPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+IExlIG1hci4gNSBhdnIuIDIwMjIgw6Ag
-MDU6NTQsIFRpbSBIYW1tZXIgPFRpbS5IYW1tZXJAb3JvbGlhLmNvbT4gYSDDqWNyaXQgOgo+ID4g
-PiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+IE9uIFN1biwgQXByIDAzLCAyMDIyIGF0IDEyOjAz
-OjE4UE0gKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6Cj4gPiA+ID4gPiA+ID4gPiA+IFVz
-ZSBpbnRlcm5hbCBiaW5kIGFzIGRoY3AgZG9lc24ndCBidWlsZCBzaW5jZSBidW1wIG9mIGJpbmQg
-dG8gdmVyc2lvbgo+ID4gPiA+ID4gPiA+ID4gPiA5LjE2LjI2IGluIGNvbW1pdCA4YWRlYWVjOGFm
-YWNiYzY4MGVkZWJhZTkxNTI0ZjYxNDQ5MjZhYzkyIGFuZCB1cHN0cmVhbQo+ID4gPiA+ID4gPiA+
-ID4gPiBkb2Vzbid0IHBsYW4gdG8gZml4IGl0IGFueSB0aW1lIHNvb246Cj4gPiA+ID4gPiA+ID4g
-PiA+IGh0dHBzOi8vZ2l0bGFiLmlzYy5vcmcvaXNjLXByb2plY3RzL2RoY3AvLS9pc3N1ZXMvMjMz
-I25vdGVfMjc2ODgzCj4gPiA+ID4gPiA+ID4gPiA+Cj4gPiAuLi4KPiA+ID4gPiA+ID4KPiA+ID4g
-PiA+ID4KPiA+ID4gPiA+ID4gPiBIb3dldmVyLCBJIGFzc3VtZSB0aGF0IEJVSUxEX0NDIGFuZCBC
-VUlMRF9DRkxBR1MgaW4gYmluZC5tayBzaG91bGQKPiA+ID4gPiA+ID4gPiBhbHNvIGJlIHVwZGF0
-ZWQ/Cj4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+IEkgZG8gbm90IGhhdmUgdGhlIGlzc3VlIGJ1aWxk
-aW5nIGJpbmQgKDkuMTYuMjYpLCB0aGVyZSBsaWIvZG5zL01ha2VmaWxlLmluIHNlZW1zIHRvIGJl
-IGJldHRlciB3cml0dGVuOgo+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiAgICAgIGdlbjogZ2VuLmMK
-PiA+ID4gPiA+ID4gICAgICR7SE9TVENDfSAke0hPU1RfQ0ZMQUdTfSAtSSR7dG9wX3NyY2Rpcn0v
-bGliL2lzYy9pbmNsdWRlIFwKPiA+ID4gPiA+ID4gICAgICR7SE9TVF9MREZMQUdTfSAtbyAkQCAk
-e3NyY2Rpcn0vZ2VuLmMKPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gUGVyaGFwcyB3ZSBzaG91bGQg
-YmUgcGF0Y2hpbmcgdGhhdCBmaWxlIGluc3RlYWQgb2YgdGhlIGNvbmZpZz8KPiA+ID4gPiA+Cj4g
-PiA+ID4gPiBTZWUgaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvdHJlZS9wYWNr
-YWdlL2JpbmQvMDAwMS1jcm9zcy5wYXRjaAo+ID4gPiA+ID4KPiA+ID4gPiA+IFJlZ2FyZHMsCj4g
-PiA+ID4gPiBQZXRlcgo+ID4gPiA+ID4KPiA+ID4gPgo+ID4gPiA+IFllcywgdGhhdCByZWluZm9y
-Y2VzIG15IHRoaW5raW5nLiBVbmZvcnR1bmF0ZWx5LCB0aGUgYnVuZGxlZCBiaW5kIGlzIG5vdCB1
-bnppcHBlZCB1bnRpbCB0aGUgYnVpbGQgc3RlcAo+ID4gPiA+IGFuZCBJIGhhdmUgbm90IGZpZ3Vy
-ZWQgb3V0IGEgZ29vZCB3YXkgdG8gZ2V0IHRoaXMgZGlmZiBpbiBwbGFjZS4KPiA+ID4gPiBQZXJo
-YXBzIHNvbWVvbmUgd2l0aCBtb3JlIGV4cGVyaWVuY2UgY2FuIHNlZSB0aGUgc29sdXRpb24gdGhh
-dCBpcyBlbHVkaW5nIG1lPwo+ID4gPgo+ID4gPiBNeSBiYWQsIEkgbWFkZSBhIHR5cG8gaW4gbXkg
-Zmlyc3QgbWFpbCwgeW91IHNob3VsZCB1c2UgJChIT1NUQ0MpIGFuZAo+ID4gPiBub3QgJChIT1NU
-X0NDKS4KPiA+Cj4gPiBXb3csIGhvdyBtYW55IHRpbWVzIGRpZCBJIGxvb2sgYXQgdGhvc2UgbGlu
-ZXMgYW5kIG5vdCBzZWUgdGhlIGRpZmZlcmVuY2UhIDstKAo+ID4gVGhhbmtzIGZvciBjYXRjaGlu
-ZyB0aGF0IQo+ID4KPiA+ID4gUGF0Y2hpbmcgYmluZCBpcyBub3QgbmVlZGVkLgo+ID4gPiBJIGNh
-biBzZW5kIHRoZSBwYXRjaCBvciBsZXQgeW91IGhhbmRsZSBpdC4KPiA+Cj4gPiBJIGFtIHN0aWxs
-IGNvbmNlcm5lZCBhYm91dCBteSBhYmlsaXR5IHRvIHZlcmlmeS0KPiA+IEkgYWRkZWQgImNvcnJl
-Y3Rpb25zIiBmb3IgQlVJTERfQ0ZMQUdTICYgQlVJTERfTERGTEFHUyBzbyB0aG9zZSBtYXRjaCB0
-aGUgY2hhbmdlcyBpbiBiaW5kLm1rLAo+ID4gICAgICAgICAtREhDUF9CSU5EX0VYVFJBX0NPTkZJ
-RyA9IEJVSUxEX0NDPSckKFRBUkdFVF9DQyknCj4gPiAgICAgICAgICsKPiA+ICAgICAgICAgK0RI
-Q1BfQklORF9FWFRSQV9DT05GSUcgPSBCVUlMRF9DQz0nJChIT1NUQ0MpJwo+ID4gICAgICAgICAr
-REhDUF9CSU5EX0VYVFJBX0NPTkZJRyArPSBCVUlMRF9DRkxBR1M9JyQoSE9TVF9DRkxBR1MpJwo+
-ID4gICAgICAgICArREhDUF9CSU5EX0VYVFJBX0NPTkZJRyArPSBCVUlMRF9MREZMQUdTPSckKEhP
-U1RfTERGTEFHUyknCj4gPiBidXQgSSBhbSB1bnN1cmUgYWJvdXQgdGhlIG90aGVycyB1c2VkIChC
-VUlMRF9DUFBGTEFHUywgQlVJTERfTElCUywgTEZTXyopLi4uCj4gPiAgICAgICAgICR7QlVJTERf
-Q0N9ICR7QlVJTERfQ0ZMQUdTfSAtSSR7dG9wX3NyY2Rpcn0vbGliL2lzYy9pbmNsdWRlIFwKPiA+
-ICAgICAgICAgJHtMRlNfQ0ZMQUdTfSAke0xGU19MREZMQUdTfSBcCj4gPiAgICAgICAgICR7QlVJ
-TERfQ1BQRkxBR1N9ICR7QlVJTERfTERGTEFHU30gLW8gJEAgJHtzcmNkaXJ9L2dlbi5jIFwKPiA+
-ICAgICAgICAgJHtCVUlMRF9MSUJTfSAke0xGU19MSUJTfQo+ID4gU2hvdWxkIHRob3NlIGJlIHNl
-dCB0byBlbXB0eSBzdHJpbmdzPyBPciBpcyBpdCBzYWZlIHRvIGFzc3VtZSB0aGV5IGFyZSB1bmRl
-ZmluZWQgYnkgZGVmYXVsdD8KPgo+IEJVSUxEX0NQUEZMQUdTIHNob3VsZCBiZSBzZXQgdG8gSE9T
-VF9DUFBGTEFHUy4KPiBJTUhPIGl0IGlzIHNhZmUgdG8gYXNzdW1lIHRoYXQgQlVJTERfTElCUyBh
-bmQgTEZTXyogYXJlIGVtcHR5Lgo+Cj4gRmVlbCBmcmVlIHRvIHNlbmQgeW91ciBwYXRjaCB3aXRo
-IGEgbGluayB0byB0aGUgYXV0b2J1aWxkZXIgZmFpbHVyZSBzdWNoIGFzOgo+Cj4gRml4ZXM6Cj4g
-IC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvN2E1Y2RmMzA4ODFkMjA4
-ODA3OTc2Y2Y5ODk2MGM1ZmUyYWJmZWQ1MAoKVGhlIGNvcnJlY3QgbGluayBpcwpodHRwOi8vYXV0
-b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9kYTZmZDkwNGQxYTZiYWU3M2I2ZmY4OWRkMDA4
-ZGUxZjQ1OWJiN2Q3CgpUaGUgcHJldmlvdXMgb25lIGlzIGFib3V0IHpsaWIsIEknbGwgaW52ZXN0
-aWdhdGUgaXQuCgoKPgo+IEFybm91dCBvciB0aGUgb3RoZXJzIHdpbGwgbWFrZSBhIHNlY29uZCBy
-ZXZpZXcgYW5kIHNwb3QgYW55IHJlbWFpbmluZyBpc3N1ZXMuCj4KPiA+Cj4gPiA+Cj4gPiAuLi4K
-PiA+ID4KPiA+ID4gQmVzdCBSZWdhcmRzLAo+ID4gPgo+ID4gPiBGYWJyaWNlCj4gPgo+ID4gLlRp
-bQo+ID4gVGltIEQuIEhhbW1lcgo+ID4gdGltLmhhbW1lckBvcm9saWEuY29tCj4gPgo+ID4KPgo+
-IEJlc3QgUmVnYXJkcywKPgo+IEZhYnJpY2UKCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 05/04/2022 21:38, James Hilliard wrote:
+> On Tue, Apr 5, 2022 at 11:23 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>>
+>> On 05/04/2022 13:50, James Hilliard wrote:
+>>> Currently we only test a limited set of toolchains that are mostly
+>>> prebuilt, add a flag to allow using randconfig for randomizing
+>>> additional toolchain settings instead of randpackageconfig.
+>>>
+>>> To avoid invalid configs we need to add additional config validation
+>>> filtering and fixups.
+>>>
+>>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>> ---
+>>> Changes v3 -> v4:
+>>>     - use fixup_config instead of other retries to filter bad configs
+>>
+>>    Well, I don't like this. It means we have to duplicate the logic for checking
+>> the bad configs in two places: in the mk file and in genrandconfig.
+> 
+> Well it seems to work better since instead of regenerating it tries to
+> fixup the config. I think this gives better statistical coverage of some
+> config options.
+
+  It will create a bias towards the default option for the options you exclude. 
+See below.
+
+> 
+>>
+>>    If the problem is that you sometimes don't end up with a valid config even
+>> after 100 iterations, then I think a better solution is to feed valid values for
+>> the string options. That way, we still do a build test of e.g.
+>> BR2_ROOTFS_SKELETON_CUSTOM.
+> 
+> That looks a bit tricky, although we could probably add it for some cases
+> that we want test coverage for.
+> 
+>>
+>>    [Others may disagree with me of course.]
+>>
+>>    Regards,
+>>    Arnout
+>>
+>>
+>>> Changes v2 -> v3:
+>>>     - properly check exit codes
+>>> Changes v1 -> v2:
+>>>     - refactor fixup_config control flow
+>>> ---
+>>>    utils/genrandconfig | 215 ++++++++++++++++++++++++++++++++++++++++++--
+>>>    1 file changed, 206 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/utils/genrandconfig b/utils/genrandconfig
+>>> index 3483d55c14..59fe34e58d 100755
+>>> --- a/utils/genrandconfig
+>>> +++ b/utils/genrandconfig
+>>> @@ -315,6 +315,192 @@ def fixup_config(sysinfo, configfile):
+>>>            configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n')
+>>>            configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="%s"\n' % bootscr)
+>>>
+>>> +    if 'BR2_ROOTFS_SKELETON_CUSTOM=y\n' in configlines and \
+>>> +       'BR2_ROOTFS_SKELETON_CUSTOM_PATH=""\n' in configlines:
+
+  Here, the BR2_ROOTFS_SKELETON_CUSTOM_PATH check is basically redundant: 
+randconfig will never fill something in for the string, so it is always empty.
+
+>>> +        configlines.remove('BR2_ROOTFS_SKELETON_CUSTOM=y\n')
+>>> +        configlines.remove('BR2_ROOTFS_SKELETON_CUSTOM_PATH=""\n')
+
+  Thus, the result is that if a config is generated with 
+BR2_ROOTFS_SKELETON_CUSTOM=y, it will be removed again and revert to its default.
+
+  In this case, there are just two choices so it doesn't make a difference. But 
+if there are more than two choices, removing one of them creates a bias towards 
+the default option. I wouldn't call this "better statistical coverage". 
+Statistically, taking a completely random sampling and then discarding samples 
+that are somehow not appropriate is considered "better" than fudging 
+inappropriate samples in a certain direction.
+
+
+  Regards,
+  Arnout
+
+
+
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_USE_DEFCONFIG=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_DEFCONFIG=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_USE_DEFCONFIG=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_DEFCONFIG=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_GIT=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_REPO_URL=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_GIT=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_LATEST_VERSION=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_REPO_URL=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_HG=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_REPO_URL=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_HG=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_LATEST_VERSION=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_REPO_URL=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_SVN=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_REPO_URL=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_SVN=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_LATEST_VERSION=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_REPO_URL=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_TARBALL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_TARBALL=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_LATEST_VERSION=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_VERSION=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_VERSION=y\n')
+>>> +        configlines.append('BR2_LINUX_KERNEL_LATEST_VERSION=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=""\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_DTS_SUPPORT=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_INTREE_DTS_NAME=""\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_DTS_SUPPORT=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_INTREE_DTS_NAME=""\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=""\n')
+>>> +        if 'BR2_LINUX_KERNEL_APPENDED_UIMAGE=y\n' in configlines:
+>>> +            configlines.remove('BR2_LINUX_KERNEL_APPENDED_UIMAGE=y\n')
+>>> +            configlines.append('BR2_LINUX_KERNEL_UIMAGE=y\n')
+>>> +        if 'BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y\n' in configlines:
+>>> +            configlines.remove('BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y\n')
+>>> +            configlines.append('BR2_LINUX_KERNEL_ZIMAGE=y\n')
+>>> +        if 'BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n' in configlines:
+>>> +            configlines.remove('BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n')
+>>> +            configlines.append('BR2_LINUX_KERNEL_VMLINUX=y\n')
+>>> +
+>>> +    if 'BR2_LINUX_KERNEL_EXT_AUFS=y\n' in configlines and \
+>>> +       'BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n' in configlines:
+>>> +        configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS=y\n')
+>>> +        configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n')
+>>> +
+>>> +    if 'BR2_PACKAGE_LINUX_BACKPORTS=y\n' in configlines and \
+>>> +       'BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG=y\n' in configlines and \
+>>> +       'BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE=""\n' in configlines:
+>>> +        configlines.remove('BR2_PACKAGE_LINUX_BACKPORTS=y\n')
+>>> +        configlines.remove('BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG=y\n')
+>>> +        configlines.remove('BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE=""\n')
+>>> +
+>>> +    if 'BR2_PACKAGE_LINUX_BACKPORTS=y\n' in configlines and \
+>>> +       'BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG=y\n' in configlines and \
+>>> +       'BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG=""\n' in configlines:
+>>> +        configlines.remove('BR2_PACKAGE_LINUX_BACKPORTS=y\n')
+>>> +        configlines.remove('BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG=y\n')
+>>> +        configlines.remove('BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG=""\n')
+>>> +
+>>> +    if 'BR2_KERNEL_HEADERS_VERSION=y\n' in configlines and \
+>>> +       'BR2_DEFAULT_KERNEL_VERSION=""\n' in configlines:
+>>> +        configlines.remove('BR2_KERNEL_HEADERS_VERSION=y\n')
+>>> +        configlines.remove('BR2_DEFAULT_KERNEL_VERSION=""\n')
+>>> +
+>>> +    if 'BR2_KERNEL_HEADERS_CUSTOM_GIT=y\n' in configlines and \
+>>> +       'BR2_KERNEL_HEADERS_CUSTOM_REPO_URL=""\n':
+>>> +        configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_GIT=y\n')
+>>> +        configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_REPO_URL=""\n')
+>>> +
+>>> +    if 'BR2_KERNEL_HEADERS_CUSTOM_TARBALL=y\n' in configlines and \
+>>> +       'BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION=""\n' in configlines:
+>>> +        configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_TARBALL=y\n')
+>>> +        configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_AT91BOOTSTRAP3=y\n' in configlines and \
+>>> +       'BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_AT91BOOTSTRAP3=y\n')
+>>> +        configlines.remove('BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_BAREBOX=y\n' in configlines and \
+>>> +       'BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG=y\n' in configlines and \
+>>> +       'BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_BAREBOX=y\n')
+>>> +        configlines.remove('BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG=y\n')
+>>> +        configlines.remove('BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_BAREBOX=y\n' in configlines and \
+>>> +       'BR2_TARGET_BAREBOX_USE_DEFCONFIG=y\n' in configlines and \
+>>> +       'BR2_TARGET_BAREBOX_BOARD_DEFCONFIG=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_BAREBOX=y\n')
+>>> +        configlines.remove('BR2_TARGET_BAREBOX_USE_DEFCONFIG=y\n')
+>>> +        configlines.remove('BR2_TARGET_BAREBOX_BOARD_DEFCONFIG=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_OPTEE_OS=y\n' in configlines and \
+>>> +       'BR2_TARGET_OPTEE_OS_PLATFORM=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_OPTEE_OS=y\n')
+>>> +        configlines.remove('BR2_TARGET_OPTEE_OS_PLATFORM=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
+>>> +       'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
+>>> +        configlines.remove('BR2_TARGET_S500_BOOTLOADER_BOARD=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_UBOOT=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_UBOOT=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_UBOOT=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_USE_DEFCONFIG=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_BOARD_DEFCONFIG=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_UBOOT=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_USE_DEFCONFIG=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_BOARD_DEFCONFIG=""\n')
+>>> +
+>>> +    if 'BR2_TARGET_UBOOT=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y\n' in configlines and \
+>>> +       'BR2_TARGET_UBOOT_BOARDNAME=""\n' in configlines:
+>>> +        configlines.remove('BR2_TARGET_UBOOT=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y\n')
+>>> +        configlines.remove('BR2_TARGET_UBOOT_BOARDNAME=""\n')
+>>> +
+>>> +    if 'BR2_TOOLCHAIN_EXTERNAL=y\n' in configlines and \
+>>> +       'BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y\n' in configlines and \
+>>> +       'BR2_TOOLCHAIN_EXTERNAL_PATH=""\n' in configlines:
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL=y\n')
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y\n')
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL_PATH=""\n')
+>>> +        if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
+>>> +            return False
+>>> +
+>>> +    if 'BR2_TOOLCHAIN_EXTERNAL=y\n' in configlines and \
+>>> +       'BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y\n' in configlines and \
+>>> +       'BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y\n' in configlines and \
+>>> +       'BR2_TOOLCHAIN_EXTERNAL_URL=""\n' in configlines:
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL=y\n')
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y\n')
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y\n')
+>>> +        configlines.remove('BR2_TOOLCHAIN_EXTERNAL_URL=""\n')
+>>> +        if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
+>>> +            return False
+>>> +
+>>> +    if 'BR2_PACKAGE_XVISOR=y\n' in configlines and \
+>>> +       'BR2_PACKAGE_XVISOR_USE_CUSTOM_CONFIG=y\n' in configlines and \
+>>> +       'BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n' in configlines:
+>>> +        configlines.remove('BR2_PACKAGE_XVISOR_USE_CUSTOM_CONFIG=y\n')
+>>> +        configlines.append('BR2_PACKAGE_XVISOR_USE_DEFCONFIG=y\n')
+>>> +        configlines.remove('BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n')
+>>> +
+>>>        with open(configfile, "w+") as configf:
+>>>            configf.writelines(configlines)
+>>>
+>>> @@ -331,11 +517,14 @@ def gen_config(args):
+>>>
+>>>        sysinfo = SystemInfo()
+>>>
+>>> -    # Select a random toolchain configuration
+>>> -    configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
+>>> +    if args.toolchains_csv:
+>>> +        # Select a random toolchain configuration
+>>> +        configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
+>>>
+>>> -    i = randint(0, len(configs) - 1)
+>>> -    toolchainconfig = configs[i]
+>>> +        i = randint(0, len(configs) - 1)
+>>> +        toolchainconfig = configs[i]
+>>> +    else:
+>>> +        toolchainconfig = []
+>>>
+>>>        configlines = list(toolchainconfig)
+>>>
+>>> @@ -409,7 +598,7 @@ def gen_config(args):
+>>>            bounded_loop -= 1
+>>>            subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+>>>                                   "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+>>> -                               "randpackageconfig"])
+>>> +                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
+>>>
+>>>            if fixup_config(sysinfo, configfile):
+>>>                break
+>>> @@ -433,10 +622,18 @@ if __name__ == '__main__':
+>>>        parser.add_argument("--buildrootdir", "-b",
+>>>                            help="Buildroot directory (relative to current directory)",
+>>>                            type=str, default='.')
+>>> -    parser.add_argument("--toolchains-csv",
+>>> -                        help="Path of the toolchain configuration file",
+>>> -                        type=str,
+>>> -                        default="support/config-fragments/autobuild/toolchain-configs.csv")
+>>> +
+>>> +    toolchains_csv = parser.add_mutually_exclusive_group(required=False)
+>>> +    toolchains_csv.add_argument("--toolchains-csv",
+>>> +                                dest="toolchains_csv",
+>>> +                                help="Path of the toolchain configuration file",
+>>> +                                type=str)
+>>> +    toolchains_csv.add_argument("--no-toolchains-csv",
+>>> +                                dest="toolchains_csv",
+>>> +                                help="Generate random toolchain configuration",
+>>> +                                action='store_false')
+>>> +    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
+>>> +
+>>>        args = parser.parse_args()
+>>>
+>>>        # We need the absolute path to use with O=, because the relative
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
