@@ -4,73 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69B49C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Apr 2022 00:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC94C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Apr 2022 00:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F191640BAE;
-	Thu,  7 Apr 2022 00:32:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F29A40BB3;
+	Thu,  7 Apr 2022 00:36:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6fjiJDHuYM4h; Thu,  7 Apr 2022 00:32:18 +0000 (UTC)
+	with ESMTP id yWEqHFdGcKSg; Thu,  7 Apr 2022 00:36:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1719F408E6;
-	Thu,  7 Apr 2022 00:32:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A63421BF35F
- for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:32:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CA19408E6;
+	Thu,  7 Apr 2022 00:36:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E4E5F1C1135
+ for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91C0183EEB
- for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:32:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2D8E408E6
+ for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:36:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=jms.id.au
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hfuo3eQB2Nmz for <buildroot@lists.busybox.net>;
- Thu,  7 Apr 2022 00:32:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JGbJAG1S2LMt for <buildroot@lists.busybox.net>;
+ Thu,  7 Apr 2022 00:36:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A87E983EE1
- for <buildroot@buildroot.org>; Thu,  7 Apr 2022 00:32:12 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id t2so6877735qtw.9
- for <buildroot@buildroot.org>; Wed, 06 Apr 2022 17:32:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com
+ [IPv6:2607:f8b0:4864:20::1136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D59D1403A7
+ for <buildroot@buildroot.org>; Thu,  7 Apr 2022 00:36:38 +0000 (UTC)
+Received: by mail-yw1-x1136.google.com with SMTP id
+ 00721157ae682-2eb888cf7e7so44945417b3.13
+ for <buildroot@buildroot.org>; Wed, 06 Apr 2022 17:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=wXOF3kudcm1x4FIVUoaOJFhxxRopQyIgCBF8hbC+aeY=;
- b=RI8RcGXQRGmlfZFVUgFIGa53Bs3R73ANJJLb9yQUqqvpZ1COHIldz/ihVGo86X8Zdy
- X81wCjsiSX4U1vyufVXWYS47yKTlFuOJINeqOC25A994zuPr5ytCkWnO1y5qX/9WBy8F
- tuGv+IoU/RXg7UrnRU22aubzkLQtzBk7X+2gg=
+ :cc; bh=GzREbOfAK3ISFmopNVaJoakexBdgM4CdrA9RULLJyYo=;
+ b=Eiu/773Uy6dXy3GroNm9x9GRv4NBbucTWSYx2tkktFr9SfN89u61FG/iS/5oimdxHp
+ R1UST6GSMEUbig4hWEdgnht5a9M6qCnrxkDBLMJpQkeAv3P6xVeIBgOP5wXdFSygMDlS
+ +Ah+OpDMzHQCgXfFS3rGwFrNkz1Mgg69hLiIUXB/r375WmR8dT21INj/64NkBOHvB+3i
+ hhkXN9WKlOKICf4EEeGHLNTMIzCOq9Q1Z63GjD9LhZqddS5NZ8ua3/r6kuT3N14NkDM8
+ CJ98ToP54qac0w0Hb+H22tKq0wGktbUH+Uz/ptQr9pUdOTx8Ah9p8zakxQo3bVuZb8Vv
+ JCqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=wXOF3kudcm1x4FIVUoaOJFhxxRopQyIgCBF8hbC+aeY=;
- b=oIgwmv/F0/LwVRVpg/NXxkxM6Jl4OJ3jvWlouMs4V3/zth4F+xObbf4SS0oOqahx9p
- 5JnFWbx1HYtN6U9XdxrjOGK2dcCrQmPBZkanj1U4MkTyNVJ/2uqIi44bElpYZGEubZ+N
- yKVZCQx+z7qRtNC69vhCq/zKxRLOwWPkEga3aNH5PY0tM3pMGuS4aT/cG8/rmCO7jBff
- vj46J55qiIIa4EAe0PWwH70cj7TpvD2P9Gn5Ek7b0xdgZY2cOX9Mhphy5sR7LFrWV8t+
- 9WwHaHWbbPMXNjYevkui3GpPV5evlBxGQ1IpgJLvgxI69DS/tvYwU6LEXBmFfzykDQhO
- cDpw==
-X-Gm-Message-State: AOAM532nqBBM+Bj6ijlg7pAChM61czs9ILFEbtGTF4YDYmRblI1BXBby
- 5yW6jX0pZDKNA79uDIwjkC8xEFTUXrTakTY7BMdt3ISs
-X-Google-Smtp-Source: ABdhPJxofIC3eV0OdwXMAslCMJwhdkhTwpWeNwWBudHzXx0iei5qUGn7mF7d9yTHHZimMh3WWGYEQ+6Xzv3kxV83HVI=
-X-Received: by 2002:a05:622a:4cd:b0:2e1:ec2f:8c22 with SMTP id
- q13-20020a05622a04cd00b002e1ec2f8c22mr10013290qtx.494.1649291531444; Wed, 06
- Apr 2022 17:32:11 -0700 (PDT)
+ bh=GzREbOfAK3ISFmopNVaJoakexBdgM4CdrA9RULLJyYo=;
+ b=pCMwIxooSaN/TUvwZtz3MdWW5FW4PuawrDuN60WfRspdn8t8ppIxCBdBRCmjMIY0Eq
+ 6+QHVi/AXisbOF/ths6nPWdvjZnmoFirZK8bHmEPPnNGJx116sW2ZJwdDgeOkgJ7YRkY
+ C/ONf7ubeEgYXuvCsHXGGhcM1ALMGSoK0TFS+Dufv1TqfmmFYj5nE83bL1aEDhhNqnNv
+ 2jMEpSUtHqIqSrWW1PLQnul32FgIi1qMqv64LBi02YQRYji+dG6lLnm5CpNp/q4Cqy5x
+ k/WQQkI925dBRflfBl7Rxev3cMTASc6fm6EQWgyZVIDX/FX0O7yi1mrNjiYakP2/DBCz
+ uy1g==
+X-Gm-Message-State: AOAM532ujN+gZDVauSvNCA6yhoC/z/OjVDXX8Cocn6zC9NeN9Z7gx9oO
+ p0rX6Es5YaEk/uzPV9dHVOHjdyHTljKeI6sIx6TeKYNK
+X-Google-Smtp-Source: ABdhPJwuCQ16sLHw8oCy7mbuQgH6zbh26Tvy9YTABAG9piU1Tl1b+nPVtLRB/D95gsszxfmUfRKls6nUDAzRWK+STKs=
+X-Received: by 2002:a81:15d8:0:b0:2e9:e838:bf22 with SMTP id
+ 207-20020a8115d8000000b002e9e838bf22mr9098365ywv.157.1649291797885; Wed, 06
+ Apr 2022 17:36:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220404091256.683581-1-joel@jms.id.au>
- <2ddab288-a57a-18ed-c392-d6695dd68e89@mind.be>
- <20220405195545.GH2354230@scaer>
- <CACPK8XdO5j7QP==fPWwywp-m=FM9K9eOyLrpoNtvRHJrdq+M0w@mail.gmail.com>
-In-Reply-To: <CACPK8XdO5j7QP==fPWwywp-m=FM9K9eOyLrpoNtvRHJrdq+M0w@mail.gmail.com>
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 7 Apr 2022 00:31:59 +0000
-Message-ID: <CACPK8Xe-sn+w5veLz=btiK6uWWjwYDHeiXX=5Knfn3y__HBjbw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH] package/zlib-ng: Backport patch to fix
- linking on powerpc
+References: <CAM70yxCknY7qH9uiqNpDhynxAdsjw1zM9AH=UaiAzET+f7treA@mail.gmail.com>
+ <a4724812-eafb-0ffc-b14d-df9ed04aac80@mind.be>
+ <CAM70yxAu66JWhogiabz7fXqz4XpFGXmiOaahX5V3+GKQG_eUfw@mail.gmail.com>
+ <CADvTj4oT2COBMmeg3jONzVX4_wXxKFLEe9Nh3AakSBbon5RQjQ@mail.gmail.com>
+ <CAM70yxDPCUobSnoq7XhH=k7Q8B5x9j2=DSWS9a-VN3iX6zg5pA@mail.gmail.com>
+ <CADvTj4p_qDCOB5PysR+rNKpp9Fo4PCCn9n4AzpJ4mRkZnqtk_g@mail.gmail.com>
+ <CAM70yxDMKEOTKfesTPp02oakyCCB4zM+BmigQ0fqMoaSfeHjnA@mail.gmail.com>
+ <CADvTj4rvFLx28rNUEy=c5kgONHTiQRbBbyM51ehC6GUp8bmDhg@mail.gmail.com>
+In-Reply-To: <CADvTj4rvFLx28rNUEy=c5kgONHTiQRbBbyM51ehC6GUp8bmDhg@mail.gmail.com>
+From: Emile Cormier <emile.cormier.jr@gmail.com>
+Date: Wed, 6 Apr 2022 21:36:26 -0300
+Message-ID: <CAM70yxAULOdSF03JY+3MgSjy9HQsF81h1SYJ31w0sUk5HqhS6A@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [Feature Request] Host cmake built with the
+ --system-curl option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,54 +88,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============8787020620133181933=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 6 Apr 2022 at 02:05, Joel Stanley <joel@jms.id.au> wrote:
+--===============8787020620133181933==
+Content-Type: multipart/alternative; boundary="000000000000be794405dc05aba4"
+
+--000000000000be794405dc05aba4
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, Apr 6, 2022 at 8:11 PM James Hilliard <james.hilliard1@gmail.com>
+wrote:
+
+> You might still be able to share it for desktop builds for development
+> by creating
+> packages and then overriding them using the OVERRIDE_SRCDIR feature:
 >
-> On Tue, 5 Apr 2022 at 19:55, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Arnout, All,
-> >
-> > On 2022-04-04 22:17 +0200, Arnout Vandecappelle spake thusly:
-> > > On 04/04/2022 11:12, Joel Stanley wrote:
-> > > >Commit 192dfc68c0e4 ("package/zlib-ng: fix build on powerpc") turned the
-> > >  Peter just backported this one to 2022.02.x...
-> > > >Power8 optimisations off to fix a build issue. Instead apply a patch
-> > > >from the develop branch upstream to fix the issue.
-> > > >
-> > > >This patch is not yet in a released version of zlib-ng.
-> > > >
-> > > >Signed-off-by: Joel Stanley <joel@jms.id.au>
-> > >  Applied to master, thanks.
-> >
-> > Err... Why would we enable the POWER8 optimisations when the target is
-> > not a POWER8 ?
-> >
-> > Backporting the patch seems correct, but the enabling/disabling the
-> > optinisations should have stayed, I believe...
+> https://buildroot.org/downloads/manual/manual.html#_using_buildroot_during_development
 >
-> Taking a look at the cmake configuration, there's dozens of options
-> that provide optimisations. It looks like it does detection of
-> features:
 
-> I suggest we let the zlib-ng build system do its thing to ease the
-> maintenance burden of keeping the flags up to date.
->
-> I also welcome someone double checking my analysis, as I may have
-> misunderstood something.
+We use Qt Creator as an IDE, and it integrates very well with CMake-based
+projects, especially for debugging. I'm afraid that introducing buildroot
+into the mix would wreck our productivity for development.
 
-We can ignore my ramblings, because I was looking at the latest
-'develop' branch. The cmake configuration in the 2.0.6 release is
-quite different. I'll send a patch to reinstate the settings we had.
+The way I have it set up now with buildroot being exclusively used to
+produce "release" images for our embedded device is working well. Before
+buildroot, release images were assembled manually using a Debian ARM image
+provided by the board vendor, and then tailored to suit our needs. It goes
+without saying this was very tedious and error-prone. Using buildroot to
+generate device images is way easier and more consistent, plus we can
+tailor the operating system exactly as we need it.
 
-Cheers,
+It turns out that the problem with buildroot's cmake not supporting https
+downloads is a minor one that I can solve it two ways:
+1. Pre-download the tarballs using wget via build scripts
+2. Install a more recent cmake on the build system that meets buildroot's
+requirements
 
-Joel
+If this feature request is declined (as perhaps it should be), then it's no
+big deal, really.
+
+Thanks again for the advice.
+
+--000000000000be794405dc05aba4
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail=
+_attr">On Wed, Apr 6, 2022 at 8:11 PM James Hilliard &lt;<a href=3D"mailto:=
+james.hilliard1@gmail.com">james.hilliard1@gmail.com</a>&gt; wrote:<br></di=
+v><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
+r-left:1px solid rgb(204,204,204);padding-left:1ex">You might still be able=
+ to share it for desktop builds for development<br>
+by creating<br>
+packages and then overriding them using the OVERRIDE_SRCDIR feature:<br>
+<a href=3D"https://buildroot.org/downloads/manual/manual.html#_using_buildr=
+oot_during_development" rel=3D"noreferrer" target=3D"_blank">https://buildr=
+oot.org/downloads/manual/manual.html#_using_buildroot_during_development</a=
+><br></blockquote><div><br></div><div>We use Qt Creator as an IDE, and it i=
+ntegrates very well with CMake-based projects, especially for debugging. I&=
+#39;m afraid that introducing buildroot into the mix would wreck our produc=
+tivity for development.</div><div><br></div><div>The way I have it set up n=
+ow with buildroot being exclusively used to produce &quot;release&quot; ima=
+ges for our embedded device is working well. Before buildroot, release imag=
+es were assembled manually using a Debian ARM image provided by the board v=
+endor, and then tailored to suit our needs. It goes without saying this was=
+ very tedious and error-prone. Using buildroot to generate device images is=
+ way easier and more consistent, plus we can tailor the operating system ex=
+actly as we need it.</div><div><br></div><div>It turns out that the problem=
+ with buildroot&#39;s cmake not supporting https downloads is a minor one t=
+hat I can solve it two ways:</div><div>1. Pre-download the tarballs using w=
+get via build scripts<br></div><div>2. Install a more recent cmake on the b=
+uild system that meets buildroot&#39;s requirements</div><div><br></div><di=
+v>If this feature request is declined (as perhaps it should be), then it&#3=
+9;s no big deal, really.</div><div><br></div><div>Thanks again for the advi=
+ce.<br></div></div></div>
+
+--000000000000be794405dc05aba4--
+
+--===============8787020620133181933==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8787020620133181933==--
