@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03D60C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  7 Apr 2022 00:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A58C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Apr 2022 00:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A94A83F0C;
-	Thu,  7 Apr 2022 00:56:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E897E61199;
+	Thu,  7 Apr 2022 00:56:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1BaUbKxfyX_T; Thu,  7 Apr 2022 00:56:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xYYq0sOpGDY3; Thu,  7 Apr 2022 00:56:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D67B783EDB;
-	Thu,  7 Apr 2022 00:56:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6B1861C1135
- for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:56:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0194F60F41;
+	Thu,  7 Apr 2022 00:56:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 987761C1135
+ for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 59F7283EDB
- for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:56:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8652C40570
+ for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:56:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KHRNPnSIsue1 for <buildroot@lists.busybox.net>;
- Thu,  7 Apr 2022 00:56:26 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UVtJno_QPrRj for <buildroot@lists.busybox.net>;
+ Thu,  7 Apr 2022 00:56:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
- [IPv6:2607:f8b0:4864:20::102f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E162683E86
- for <buildroot@buildroot.org>; Thu,  7 Apr 2022 00:56:26 +0000 (UTC)
-Received: by mail-pj1-x102f.google.com with SMTP id
- nt14-20020a17090b248e00b001ca601046a4so7489395pjb.0
- for <buildroot@buildroot.org>; Wed, 06 Apr 2022 17:56:26 -0700 (PDT)
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
+ [IPv6:2607:f8b0:4864:20::636])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CD43040500
+ for <buildroot@buildroot.org>; Thu,  7 Apr 2022 00:56:30 +0000 (UTC)
+Received: by mail-pl1-x636.google.com with SMTP id f10so3494603plr.6
+ for <buildroot@buildroot.org>; Wed, 06 Apr 2022 17:56:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=PqlwKGT14+jq0DWB8xFUYd2YMUImtBCsDpABjpUdel4=;
- b=FtNxrEMjh32oy9XUCM17NehbX4BaD22kvaFGPniWzyXmQLfg2OyDRlk0cz9uGv5voD
- tzTjTv5xSTuUrplF8zmIemycdpXf+yuHUfgsH3S6FXv4RI0F5qvRtGmxICyll1SmJcKB
- 0WtsRQQ3/q4MLN8IbGgb2+fTyE0XUhJ3JM/zM8YRRPSpsUcEHacwpp7/kUl3jvVSAdej
- gCNkDCC3ubVNNQ95AEX+0uKQ/YgQxfnEt4TPHjZKq39RbLjUKWZzQQoPg0qkdMY/Xlaw
- JfqMDkJVDH85LkxLZ7DaWmr/xq91Ewn9bbuU+a8FU9W/FmBkQqfgYeFv9eVJxSW9TSGs
- So2w==
+ bh=kzSJafxD/867Fw06E6oFy+AMGGGNnOmjzEQZHlW9dj0=;
+ b=dNo8+gRu4A1c0AQWRB5EjIXzr9ArYREc2vUZk7bgp89LQxDjDv+wUl2vMAlrmyDr0E
+ 5UzCH+vmApMPs4/Kjaf5D6AE3/dD48o7xFJRHVM3Xp4Z0tJjUEVczvO4qi15VFtKa+vV
+ 78Y4kc6VKku90zcrLPojxqUajEq5xI8TcpHTmmdRfL9eQ65fd/cjGxTG0hOX6KVTcR0b
+ /O6eQX8h+44z4KgkeFkoYCkkhSh93NrzHAvMYujhpmmSER0H/bJh+bp6P+UYCQ/edf6D
+ 0gvxucLTIZpuMLKPvcdFURvDna78REk2haQTsnuunjIYLzvjBGYu+A9jWJnLEVhg18fM
+ fiLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=PqlwKGT14+jq0DWB8xFUYd2YMUImtBCsDpABjpUdel4=;
- b=zz/TOFvK/WWIQN8eGDqqv2Sz8Ri6PlzW+r6BtKR9rEs/Raodf2lVHtkifLKnc66c92
- S/EOxxvAEn2zuEWrkaLLOFkUjVl0iVunXPLILQ5qfd4OBMiym5NZ1WM5Xurym0HOUu20
- JbJzbvTZ9YP8/zvbeVvH8yuWeAM3purJW6GxSUao5hyFvprgbAjg/BD8KEr/c4Q0EUmi
- 3Kv3JEfYLvhhH3ULi8ruUgWOMGDiu5WsV4QCxaFUiQVeqWvGHygHG3zhcs53eMTTKqFr
- q5AUTzbm0De31RA2Pzgp8jdry/S+VghvsadoLzInLTQxul9Zo8bJGqp/0GySepQ/BUTr
- Eveg==
-X-Gm-Message-State: AOAM530M2GAaOKoAYtkc4Mqcoj2Y8fgKqtjvXqsYwENRo3N5YPNiMVS/
- 6bPnBPUk+c7XFyrIurmG77CI5oX/xmk=
-X-Google-Smtp-Source: ABdhPJxVZe+Ggahxbe0EHuLAqNBVmZnx+g6nLBtNK49uRur4/WdVylWBFoHlQmgeax8EhEac42ypXw==
-X-Received: by 2002:a17:902:cec5:b0:154:6b18:6157 with SMTP id
- d5-20020a170902cec500b001546b186157mr11220210plg.145.1649292985828; 
- Wed, 06 Apr 2022 17:56:25 -0700 (PDT)
+ bh=kzSJafxD/867Fw06E6oFy+AMGGGNnOmjzEQZHlW9dj0=;
+ b=FoLcPSS766cyyCV6ESKFxZu3d3iEfRv0yLAXEwLGhgSzCtkfgN5Q/bF+m/+mvztBuY
+ kjNPDxMKc85LQgorXO8NXmS0AnfoubXQYk69hqf5dJicWiNvKq3qS64uQ9loGbknPQPt
+ Z0Hs0llqnlwEa3MpFsAo0npHR/uVgPzSx7oJHFEjEJe/QPCOp7ZhhhmBRfGXB6GHdaEx
+ DHIJ8u9jVbJKEIkzDUxsK2cGtrZdszSLkIlEcWAG+BBXOHaInTeI6yP3pJAEMzHgXPmQ
+ 1RZhGajW3KVHPkHPIXTahRPukhKjj+4WTukA40WZlMZnukXVcUh3moVQuEO4J0x1lhsl
+ SLRg==
+X-Gm-Message-State: AOAM532yCz6Rk0ZkrS8ZR8GliRugv9x4mTnCboeyYYr4Sv1y/Gm3rup7
+ 7+yg9H9XLjMKx8e5BBIViBlJoQywPVs=
+X-Google-Smtp-Source: ABdhPJyyGK+xiYR0wWqobAxiDa5XENN7wamcfqjXVKJVAnZul4V0f1lfILVK+xQ35rDqmxqCfOPfFQ==
+X-Received: by 2002:a17:902:ce82:b0:156:bb3c:3297 with SMTP id
+ f2-20020a170902ce8200b00156bb3c3297mr11009595plg.159.1649292989624; 
+ Wed, 06 Apr 2022 17:56:29 -0700 (PDT)
 Received: from voyager.ibm.com (cpe-172-197-129-163.sa.foxtel.net.au.
  [172.197.129.163]) by smtp.gmail.com with ESMTPSA id
- x12-20020aa7956c000000b004fdf7a4d49dsm13067804pfq.158.2022.04.06.17.56.22
+ x12-20020aa7956c000000b004fdf7a4d49dsm13067804pfq.158.2022.04.06.17.56.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Apr 2022 17:56:24 -0700 (PDT)
+ Wed, 06 Apr 2022 17:56:28 -0700 (PDT)
 From: Joel Stanley <joel@jms.id.au>
 To: buildroot@buildroot.org,
 	fontaine.fabrice@gmail.com
-Date: Thu,  7 Apr 2022 10:26:06 +0930
-Message-Id: <20220407005608.203359-2-joel@jms.id.au>
+Date: Thu,  7 Apr 2022 10:26:07 +0930
+Message-Id: <20220407005608.203359-3-joel@jms.id.au>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220407005608.203359-1-joel@jms.id.au>
 References: <20220407005608.203359-1-joel@jms.id.au>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/3] arch/Config.in.powerpc: Add
- BR2_POWERPC_CPU_HAS_VSX
+Subject: [Buildroot] [PATCH v2 2/3] package/libnss: fix build on powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,40 +98,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Introduced to allow VSX to be selectively enabled for packages that
-support it. Initially used by libnss.
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
+Set NSS_DISABLE_CRYPTO_VSX which is available since version 3.64 and
+https://github.com/nss-dev/nss/commit/9dab43371d4d924419523e18ba84f02804880533
+to avoid the following build failure on powerpc:
+
+cc1: warning: '-mvsx' requires hardware floating point
+cc1: error: '-mno-vsx' turns off '-mcrypto'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6bedb5b658f6c9c16c26c73a524a995e5e84fcc8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- arch/Config.in.powerpc | 5 +++++
+v2: rework to use BR2_POWERPC_CPU_HAS_VSX
+---
+ package/libnss/libnss.mk | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 4a39cfee70d4..272f66f4e7ea 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -1,6 +1,9 @@
- config BR2_POWERPC_CPU_HAS_ALTIVEC
- 	bool
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 2f7a2651363e..318b6e305724 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -64,6 +64,11 @@ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+ LIBNSS_BUILD_VARS += NSS_DISABLE_ALTIVEC=1
+ endif
  
-+config BR2_POWERPC_CPU_HAS_VSX
-+	bool
++ifeq ($(BR2_POWERPC_CPU_HAS_VSX),)
++# Disable VSX if not supported
++LIBNSS_BUILD_VARS += NSS_DISABLE_CRYPTO_VSX=1
++endif
 +
- config BR2_POWERPC_CPU_HAS_SPE
- 	bool
- 
-@@ -123,9 +126,11 @@ config BR2_powerpc_power6
- config BR2_powerpc_power7
- 	bool "power7"
- 	select BR2_POWERPC_CPU_HAS_ALTIVEC
-+	select BR2_POWERPC_CPU_HAS_VSX
- config BR2_powerpc_power8
- 	bool "power8"
- 	select BR2_POWERPC_CPU_HAS_ALTIVEC
-+	select BR2_POWERPC_CPU_HAS_VSX
- endchoice
- 
- choice
+ ifeq ($(BR2_ARM_CPU_HAS_NEON),)
+ # Disable arm32-neon if neon is not supported
+ LIBNSS_BUILD_VARS += NSS_DISABLE_ARM32_NEON=1
 -- 
 2.35.1
 
