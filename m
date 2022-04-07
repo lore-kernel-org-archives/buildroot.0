@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C1D0C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  7 Apr 2022 00:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83BAAC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Apr 2022 01:51:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4F116119B;
-	Thu,  7 Apr 2022 00:57:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04C7A83EEB;
+	Thu,  7 Apr 2022 01:51:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rq1dUmQQ_PlK; Thu,  7 Apr 2022 00:57:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZWHhmN0hEeqL; Thu,  7 Apr 2022 01:51:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D911C6119D;
-	Thu,  7 Apr 2022 00:57:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DA2691C1135
- for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:56:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 200D883E8C;
+	Thu,  7 Apr 2022 01:51:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B7E9E1BF47F
+ for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 01:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D704A41970
- for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 00:56:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5A5E4048E
+ for <buildroot@lists.busybox.net>; Thu,  7 Apr 2022 01:50:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JwmjV0DIcScv for <buildroot@lists.busybox.net>;
- Thu,  7 Apr 2022 00:56:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HQzQUZKYwoc7 for <buildroot@lists.busybox.net>;
+ Thu,  7 Apr 2022 01:50:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
- [IPv6:2607:f8b0:4864:20::102c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 36B874196F
- for <buildroot@buildroot.org>; Thu,  7 Apr 2022 00:56:34 +0000 (UTC)
-Received: by mail-pj1-x102c.google.com with SMTP id
- j20-20020a17090ae61400b001ca9553d073so4596813pjy.5
- for <buildroot@buildroot.org>; Wed, 06 Apr 2022 17:56:34 -0700 (PDT)
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com
+ [IPv6:2001:4860:4864:20::35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C099A40616
+ for <buildroot@buildroot.org>; Thu,  7 Apr 2022 01:50:57 +0000 (UTC)
+Received: by mail-oa1-x35.google.com with SMTP id
+ 586e51a60fabf-e1e5e8d9faso4918730fac.4
+ for <buildroot@buildroot.org>; Wed, 06 Apr 2022 18:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=WFmmZT7jqGqP8Tfb3eBTSZfetRcZro3zlhV/SyQVVYM=;
- b=bPYHtVCGKsHdK4BMuTyf7QZsywuD0NSXm+/Sm5otl8x2U4IiOzid0lBzwXpuutW7zm
- O8lmp712zD5h8323jiiuqLCChAT8Q5pX13211bKKSUBlnmZDe9pFqbgMV5Z6I55RUKRk
- m4jlBFY5yjFEf2yHyyOvnesEMP5hUAYakVnMjlK5IUTrQQFfABRsEyEoGBcmh/7Du7Td
- WJhSdAUdwy9y8EP48yvxZ55oHG+O8XNASU823Lr+tNRWw4S/Wny3wuW+sAKWhUhWB2zS
- /z1PNIhuMg2R7qrH6wYPRWHCBXjDAWO5rAtgJuRA+C+1gcA1/46IrhrlIOlJvXqOk67w
- bsHg==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=ccUfChPcMPrB9nAxcfnIV55b0nw5g1eSBR3q8bTIj64=;
+ b=W2/BWZJudUYpPLpipt0MjVCvxcbh75EZi27KnSx7vYfCJeyz2+21FsVG+TuOiOLOA/
+ yjIVcDqWuOn+B4txG3A3Sfea+JFsV2xMumNe9fZkvise5WiR3I59aBQy+zPiZO6FIU1r
+ im+IKLhErjGghcbL9gAd3KJWOItkRdEhBftinJRD9gYXAjIHZOVWWxoZHSfEr1sk35Z5
+ BQk/2pc+5CQCgGeTOCdft7kdorTZ3VEC8XmoHuylHZwvv49+Z+txwbgG+R/E5gWYKqAJ
+ 6/iScBOnl8bjJa+0csSmis7knChHDh9Vgcq0/+KkfaapsNjVn0+IUicCnJYb68uAiXQ8
+ 0yJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=WFmmZT7jqGqP8Tfb3eBTSZfetRcZro3zlhV/SyQVVYM=;
- b=gfpLLh56/KRUshL4KbHWDHtnHWkUUOaODMUiTsuYo/XwAxm5cu0lY1qy6V5Qn5XBaJ
- UeZSe2LN5HBTG3CwXJSOsII80IggFEsiGGmKZ+MkM+JJrhhPvPadlNdHqb6+LhccnE2m
- l0dB4N7sNEUkwaOB6KEkBqey+VWigs+q/0iQtRuaPWzF5pGLT5cOg0A+hzJAx6IJEGBO
- mW1lJt6hHQseujr+LXbYe0eat0oBiLAp++aUfb+bPICHOlDW9JmR24I6jKjeODtTKQNV
- ZZ0vlB21vKglY9ebnyNeGjaOCORc8gJncQuKSGucQRbeDjQoNC3ivXvIMtLQHrtrHim+
- 2k5w==
-X-Gm-Message-State: AOAM530N6GlhGT2I0/LZ8ki40aW9fFZd+M/lbMdnIYUdy2wTv2B8IAez
- CK/hMcUK1UhM3vUGi5H/KCM4boz1yok=
-X-Google-Smtp-Source: ABdhPJwCFnGC45ih/UFzU2fn2AySqilLp4vwP+BfwoSNShHjbvN6TFSprgCAhv2q/Bit0R2vrlYlLQ==
-X-Received: by 2002:a17:903:2488:b0:156:1e8d:a82 with SMTP id
- p8-20020a170903248800b001561e8d0a82mr11250090plw.51.1649292993195; 
- Wed, 06 Apr 2022 17:56:33 -0700 (PDT)
-Received: from voyager.ibm.com (cpe-172-197-129-163.sa.foxtel.net.au.
- [172.197.129.163]) by smtp.gmail.com with ESMTPSA id
- x12-20020aa7956c000000b004fdf7a4d49dsm13067804pfq.158.2022.04.06.17.56.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Apr 2022 17:56:32 -0700 (PDT)
-From: Joel Stanley <joel@jms.id.au>
-To: buildroot@buildroot.org,
-	fontaine.fabrice@gmail.com
-Date: Thu,  7 Apr 2022 10:26:08 +0930
-Message-Id: <20220407005608.203359-4-joel@jms.id.au>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407005608.203359-1-joel@jms.id.au>
-References: <20220407005608.203359-1-joel@jms.id.au>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=ccUfChPcMPrB9nAxcfnIV55b0nw5g1eSBR3q8bTIj64=;
+ b=Z0FnTlOScSXbBA4jDqvzuTu6g/6M874V7JMSw2nClwGIUrGzHE4Jy5iyn9WDkeo0Yq
+ PjLJP883BfkeOb3u4H/cVXGb590Ajv+dqS2va0kfdtlbmJyGQnPCZT9xF766rmSWMXED
+ d1ZPMssl2jfHJNqdfjtlmWlbddactL8Gspk/Tdao+kIyueedx5egNFgUCp37KPaB3DqY
+ sDBs5d/nGbXni8He6dsmebY9XMHqdTPuWSFhYtM2Q2TrvRFdRQmU0JTK8Vip17diFx8p
+ x0JK+AsCCEBYZRPkXXQU1gLUwDBV7xqFxt2Q1Vs4ofJEwzHWxq+pqkMvzzkPeVNj7Og4
+ 8xXw==
+X-Gm-Message-State: AOAM530A9z6X2OFyOz86PpwzKjBy8V8XW9zDI0NMNkEUdG3Sv+dxNGhO
+ rno2gTkWGou66aPQwWm7rSv5SY5YB2p2BX09W6A=
+X-Google-Smtp-Source: ABdhPJy53jzFmAuZzYJAifx6YHr/SuXxr+BTWAbURDS7XIZlze0xClDVEIhbfBVlcFsuy4LhmXlm+rX/6Z6VThQ39tE=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr4987686oaa.200.1649296256710; Wed, 06
+ Apr 2022 18:50:56 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 3/3] package/flac: Configure powerpc vector
- extensions
+References: <CAM70yxCknY7qH9uiqNpDhynxAdsjw1zM9AH=UaiAzET+f7treA@mail.gmail.com>
+ <a4724812-eafb-0ffc-b14d-df9ed04aac80@mind.be>
+ <CAM70yxAu66JWhogiabz7fXqz4XpFGXmiOaahX5V3+GKQG_eUfw@mail.gmail.com>
+ <CADvTj4oT2COBMmeg3jONzVX4_wXxKFLEe9Nh3AakSBbon5RQjQ@mail.gmail.com>
+ <CAM70yxDPCUobSnoq7XhH=k7Q8B5x9j2=DSWS9a-VN3iX6zg5pA@mail.gmail.com>
+ <CADvTj4p_qDCOB5PysR+rNKpp9Fo4PCCn9n4AzpJ4mRkZnqtk_g@mail.gmail.com>
+ <CAM70yxDMKEOTKfesTPp02oakyCCB4zM+BmigQ0fqMoaSfeHjnA@mail.gmail.com>
+ <CADvTj4rvFLx28rNUEy=c5kgONHTiQRbBbyM51ehC6GUp8bmDhg@mail.gmail.com>
+ <CAM70yxAULOdSF03JY+3MgSjy9HQsF81h1SYJ31w0sUk5HqhS6A@mail.gmail.com>
+In-Reply-To: <CAM70yxAULOdSF03JY+3MgSjy9HQsF81h1SYJ31w0sUk5HqhS6A@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 6 Apr 2022 19:50:45 -0600
+Message-ID: <CADvTj4qCQBrn=Gah+x-xpRzU9i4Lvu1oHTLtyw60qcKnnb_1rQ@mail.gmail.com>
+To: Emile Cormier <emile.cormier.jr@gmail.com>
+Subject: Re: [Buildroot] [Feature Request] Host cmake built with the
+ --system-curl option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,50 +92,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Bernd Kuhls <bernd.kuhls@t-online.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Cyril Bur <cyrilbur@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove the hard coded disabling of altivec and vsx, and instead use the
-BR2_POWERPC_CPU_HAS_VSX and BR2_POWERPC_CPU_HAS_ALTIVEC variables to
-control the flags.
+On Wed, Apr 6, 2022 at 6:36 PM Emile Cormier <emile.cormier.jr@gmail.com> wrote:
+>
+> On Wed, Apr 6, 2022 at 8:11 PM James Hilliard <james.hilliard1@gmail.com> wrote:
+>>
+>> You might still be able to share it for desktop builds for development
+>> by creating
+>> packages and then overriding them using the OVERRIDE_SRCDIR feature:
+>> https://buildroot.org/downloads/manual/manual.html#_using_buildroot_during_development
+>
+>
+> We use Qt Creator as an IDE, and it integrates very well with CMake-based projects, especially for debugging. I'm afraid that introducing buildroot into the mix would wreck our productivity for development.
+>
+> The way I have it set up now with buildroot being exclusively used to produce "release" images for our embedded device is working well. Before buildroot, release images were assembled manually using a Debian ARM image provided by the board vendor, and then tailored to suit our needs. It goes without saying this was very tedious and error-prone. Using buildroot to generate device images is way easier and more consistent, plus we can tailor the operating system exactly as we need it.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- package/flac/flac.mk | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Using OVERRIDE_SRCDIR would just allow you to easily generate release images
+from your cmake projects working tree using buildroot infrastructure
+which shouldn't
+conflict with Qt Creator if that's only being used for developing the
+cmake project.
 
-diff --git a/package/flac/flac.mk b/package/flac/flac.mk
-index 3a18d81591e6..d1cc42f352f2 100644
---- a/package/flac/flac.mk
-+++ b/package/flac/flac.mk
-@@ -19,9 +19,15 @@ FLAC_AUTORECONF = YES
- FLAC_CONF_OPTS = \
- 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
- 	--disable-xmms-plugin \
--	--disable-altivec \
--	--disable-stack-smash-protection \
--	--disable-vsx
-+	--disable-stack-smash-protection
-+
-+ifeq ($(BR2_POWERPC_CPU_HAS_VSX),)
-+FLAC_CONF_OPTS += --disable-vsx
-+endif
-+
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
-+FLAC_CONF_OPTS += --disable-altivec
-+endif
- 
- ifeq ($(BR2_PACKAGE_LIBOGG),y)
- FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
--- 
-2.35.1
+The idea is that you use your existing debugging setup pretty much as is but
+redirect the buildroot package infrastructure to source your cmake package from
+your local development folder when you want to build a test release image.
 
+This way your release process would properly use buildroot package
+infrastructure
+for dependency handling while still allowing debugging to be done
+separately most
+of the time using existing workflows.
+
+>
+> It turns out that the problem with buildroot's cmake not supporting https downloads is a minor one that I can solve it two ways:
+> 1. Pre-download the tarballs using wget via build scripts
+> 2. Install a more recent cmake on the build system that meets buildroot's requirements
+>
+> If this feature request is declined (as perhaps it should be), then it's no big deal, really.
+>
+> Thanks again for the advice.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
