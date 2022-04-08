@@ -1,52 +1,146 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65AA5C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Apr 2022 13:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3332DC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  8 Apr 2022 13:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F13C541129;
-	Fri,  8 Apr 2022 13:23:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A29841745;
+	Fri,  8 Apr 2022 13:49:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id veqRBc3azh50; Fri,  8 Apr 2022 13:23:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8v8o0MEBS79z; Fri,  8 Apr 2022 13:49:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF0384048A;
-	Fri,  8 Apr 2022 13:23:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9660841726;
+	Fri,  8 Apr 2022 13:49:32 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A8E661BF314
- for <buildroot@lists.busybox.net>; Fri,  8 Apr 2022 13:23:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0778C1BF312
+ for <buildroot@lists.busybox.net>; Fri,  8 Apr 2022 13:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9769560AB0
- for <buildroot@lists.busybox.net>; Fri,  8 Apr 2022 13:23:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA1E860D75
+ for <buildroot@lists.busybox.net>; Fri,  8 Apr 2022 13:49:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FPIHh3BIC3bc for <buildroot@lists.busybox.net>;
- Fri,  8 Apr 2022 13:23:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 316A560AA7
- for <buildroot@buildroot.org>; Fri,  8 Apr 2022 13:23:01 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 991FDC9A47FB;
- Fri,  8 Apr 2022 15:22:59 +0200 (CEST)
+ with ESMTP id jQxPaWnNp8pK for <buildroot@lists.busybox.net>;
+ Fri,  8 Apr 2022 13:49:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2060c.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e88::60c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8C236133E
+ for <buildroot@buildroot.org>; Fri,  8 Apr 2022 13:49:29 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L5rKyvFJzrawauIF4rP1bDJ295Xa2B0jFLWZFvhSXigXk5Vuii54Esbdjbd7bC4aUsf6B23ANAowVze6bFX5qrlRHgo2zLo3WyER2opbIdFPfmxZFWfgc9M6V7juFYShL7bN/djKfa1sWO0fDERQRh8J9eccVDhfYBlnjsQzamj0s7vy8g4qdS4aspCFQYRbT1BWj7cGomaBOfC6SwrEPIv6lLdp3WM/Ri5lSDyj/Vf4B5VgETASRolrrRr+dhMKCCTxMfJrJljtWOtaX0HJ6x5P14vnDB66GSdhbBlg9DLWmfeVhbhX1nSEpL+FMMRthhc6xLKMQcbU98fGamQUlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=31KdImweX5u4Oa2luoGtflcUsWbNeleZvODt0us5ZSw=;
+ b=UNr2CbarZz/R3EO52KCoea1OFRUCcog5zlGaA0g95jaJx31XwKYlbvH+8DmhyfIChSEJTEtA4QIPhInTjoGv97GI37Iy+3M6sVxjZMaLIv0rUVR5ypZnAooUKIMnrzLz18i/ST+//6EttWhmL1ahQmzSo/8ZfDKcIeO6EcbZsMwYNY13+TBTfyN55TQoKBkmdqvW7TnwsmBIfHhgdhNaMFAP2il7AmQaAYEl+6uI+wA3jwugyi1F8a9OvgJsIVWb+5kA9/DjEcWlaIKClvsEg5IGckESORC0R12CjpA9Tq3FfQlicxKUOnoDD/loBVmqW1c59NmLTF3qd+lMMKHZjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=31KdImweX5u4Oa2luoGtflcUsWbNeleZvODt0us5ZSw=;
+ b=pGstKdwIrf+vbDxq6n2BjbmKm+ISvXF4ie/K5Ze5uzQtVRl2HD/uAhLAHIVybPngJ089FMfHMbIOpeXkrphmSYW6wmPeSMWWkd6EXxWZ6ExBvBIddV3qZvlJd1rUyLXp1e1uKXnyEHxb8AaVSW6U50aolSJRnwtP/UExdivDv4E=
+Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
+ by MN2PR02MB5806.namprd02.prod.outlook.com (2603:10b6:208:111::26)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
+ 2022 13:49:23 +0000
+Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
+ ([fe80::61ac:c1e9:f4ec:156c]) by SJ0PR02MB7758.namprd02.prod.outlook.com
+ ([fe80::61ac:c1e9:f4ec:156c%5]) with mapi id 15.20.5144.026; Fri, 8 Apr 2022
+ 13:49:23 +0000
+From: Neal Frager <nealf@xilinx.com>
+To: Arnout Vandecappelle <arnout@mind.be>, Neal Frager <neal.frager@amd.com>, 
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH v1 1/1] configs/zynq_qmtech_defconfig: move
+ post-image.sh to board/qmtech/zynq
+Thread-Index: AQHYRTR39UuxMNiTQ0ufDAMNjdOO96zgEM0AgAYC+BA=
+Date: Fri, 8 Apr 2022 13:49:23 +0000
+Message-ID: <SJ0PR02MB7758E0A7BEC24612BEFDFB8DD7E99@SJ0PR02MB7758.namprd02.prod.outlook.com>
+References: <20220331192030.3871720-1-neal.frager@amd.com>
+ <18ef2499-bc59-7403-84d9-2cee63998ef7@mind.be>
+In-Reply-To: <18ef2499-bc59-7403-84d9-2cee63998ef7@mind.be>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6ab66d6c-87a1-4094-bb7a-08da196696bd
+x-ms-traffictypediagnostic: MN2PR02MB5806:EE_
+x-microsoft-antispam-prvs: <MN2PR02MB58068DAEA9DD28C385D3615BD7E99@MN2PR02MB5806.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1m9RlhhI+8YCzzkQhMuZbUT8FUUctxlD43eBWCwXH8GiBmUSd06am0pCpDVxe3aaYM1emxPSNGhnN0KIbU4n8zn+ut7NtrXdjTFTg5c/grMoURWNJEFSzgig4cG7VJZQyEPZ/95EZ3396LfIOUWJguwTeK4PWZPfjZgk8G+LgpYUBIalzsLLaX1ErIH8hCPE/63HRKy4o8xH5gdKRIAZQCP97joBLcSdoXTnXfucfTROCdJ9hcvBigyLpwawAv/C7vFVu40vmv51k4EctSQ4/pBdduNlN/BpiJ+AXR9peXNY3a1x/+htKE3ZtRxJxzdvrrbbkkUjWWzJf9wrKD1VSdTbFOCxD9uY/VfSUjK0FeuoM91Uzc9me193isOqlDjj4YdVwajcvAYf1RL+lhUoCVw1rm5Xxk9zIROmy98ydPwPiLrubJHtX5d78yLkskq5lnG8UYhk2k6ysc/eqjuf8PmQF2fiLf+4BOZYUVK1cYC3rpGoD7BWjYJM2XxP4lgsvhNWjwkqtC9ENnSHWkvCMQIs5jeFrSCO5WsenyYs8o8GrVKzthl4LB68XXaKqC6o7ifpFb/qwo70eB5DqmgcF3U/jUP1bW0goITR3I+4f0qIHgzAU1OeDhPBxKgb93vTGQHfNGiPZvyUupZxD5ELukiC6cBxMltAv2ape2GpOcfNiKKfcsZQWCAFPMGrJU9N9XvZfGX5cHcoqYrSQJuDr0PXq1wopBGvFzCpAaTNc+D6XnfhTcYKwUVLLAzVDm+g
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(366004)(110136005)(55016003)(33656002)(76116006)(4326008)(86362001)(26005)(66476007)(66946007)(66556008)(66446008)(64756008)(316002)(83380400001)(122000001)(8676002)(186003)(38070700005)(71200400001)(508600001)(5660300002)(7696005)(9686003)(6506007)(8936002)(2906002)(52536014)(38100700002)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aHhieVlIcnJBMzErVTB5Um44Z0JLRDM2d2VFeFB5TnBoTmxoWXBwbU9HL0xU?=
+ =?utf-8?B?bTc0ekRJWXdMaUNhRC9JNGdIT0FWYitmQnZZNEl0OHNQYlNUQlVxV1hXVzN3?=
+ =?utf-8?B?YjB6eFE4ZlVOeS9qdmwvQy9NOThpZEQ4ZTByVS9xaDJwK2VxWnRSMFBEeVBX?=
+ =?utf-8?B?OGY1dzlpc3U2OWduNlZoK2hVUlpKOURUZDBSOUhZdUxCMWpFdE96Q0h4VW1J?=
+ =?utf-8?B?dy80L0VSVTFwWi9sSjJVQWFua2l6a1lGT000c2RTQVdJVVJZNDhqSmU5eVRr?=
+ =?utf-8?B?TjVLUWM0SzZsN3V6SmF2Y1FCN2dmWkFvQXZxaWRNQUlXc3JIdEs3c3JGSFZ5?=
+ =?utf-8?B?YmcxSFR3MnBWZFhPWEZQWVdwb3ZzSDJVSjBPaTJUa1lnbDZMU1Qxa3E2aVJR?=
+ =?utf-8?B?U1dpSys4cXdTR3BtdjB4TUhlS2hBNVoweWQybjZYTnlGQTVUMldHWDh5ZHYz?=
+ =?utf-8?B?cHg4amV4QU1nbmFWQjhYQXAxa2NWQS9pY2ZjNnd3YVVuRlNFTXpuV2pVaXNx?=
+ =?utf-8?B?bUxIVEZWR1VSSkFMbE9lY0NTRVRYTGplRzZoaExUbjVwMDhuejNaNmlsSFZ3?=
+ =?utf-8?B?WS9aVGpibHdodmFsSDVraCtBSGtzWkhUSVFWOCtRWUR0RnB3V2RCWHYybGdh?=
+ =?utf-8?B?VGg5UFIxR2xQeVRqYmgzU2VNalA5YzhFRURTanNtQ01JWC9uUllxVEFQQ25t?=
+ =?utf-8?B?WW90VTdNdE5FSExHSmNrWEtBOGprOTdHQnk4VU5pdzVDQkxnbGhsdU9rVHFW?=
+ =?utf-8?B?TGh6VjRGTUR6dlRSMXI3Mk03N3F6Wko4SEZoNnBsdlR6cm1TalUrUVRQQzhT?=
+ =?utf-8?B?aFh0UVNZUWJJd0gzYUVzNmU1MUxxbzRobmJ2Z21PblFvM3hCQUNacHBVSlFu?=
+ =?utf-8?B?SGZlMklaaTdRdTUySkp4MnRHc1Y2RjJCZE9jejN6RmJBK1pnT09UcTMrNWw5?=
+ =?utf-8?B?T3FJOWJoamZNdWk1LzNMMGR4clMzMTZUbno0TlRRU0ZFeDl4SW8yRDR1ZXg3?=
+ =?utf-8?B?TUU4R0tNSGV4Y1lCQjBxRFlnbUFLa0tLVmdqUVoyQXZwMytrTmJ0ZUNPNjlx?=
+ =?utf-8?B?Y1RsQUFnOUVYMjZvbHFzbnMwdzU0VzVyUkczWmwxN1lGNHdORjZPdVlqMmxm?=
+ =?utf-8?B?czA1bmFWdnJtaTdIcXlvSU9BV1c2dDBzeStaOTlsRXQ3dFI2Qm82TFA4TlFi?=
+ =?utf-8?B?UlhGek9CSFNIWjEzSWd0amc5MTB5VXYybVhxOHBXd3BmTXdaMGt2NWx2bDZk?=
+ =?utf-8?B?VXZVYy9WZ2h6MW93SWJOSm1rODlEanlRZnFHeHlhdzFDNFpIQktSVXlPUFZW?=
+ =?utf-8?B?QkpPUTM2aHBuV2EydU5ITXpOUjlqYTNFd3QxZlZERE1FMkpsVEVPdlE5cCsx?=
+ =?utf-8?B?d2N0VENUWCtqRmVoK0oxUENPRFd4VUV5UTRWbmlDa1NsVVl6M1k0VGFKOWVH?=
+ =?utf-8?B?VDVLTlVvVEZDcGk5WHBEY0FJdkZkV3hHNzhYNXg2c1gxeVJFYkw1U1NpR01H?=
+ =?utf-8?B?ZGxXeWZUQlJXdktiN2tIanFLd1VXL3IxSUpXL2tkM2VRWXhzdzF3QkM2YzR3?=
+ =?utf-8?B?NHNuNHFEQUtaR0dac1lST2g4ekFxVURsVm5ldmUvbEc4NENmWnI5dkdZK2VN?=
+ =?utf-8?B?SCtqSExwdWpDQTdxR3pJT0VDUTZ6NEhFSWMzZDNGaWR6ek5ZUHlnZ3RCWlRY?=
+ =?utf-8?B?TVRNL3NkWWhxZlo4Y1Aya1hGZ2VHK3V2blAzU3dnd3Z2UjlCc0hBeXRHV0pI?=
+ =?utf-8?B?S2lxQnFBTEp2TWxlaUM5TFJYa2lUYXh3UitTZkhvYzVrOFNHeE1tenZqTDRE?=
+ =?utf-8?B?VmM1NlJKTHNKUTBNSWtmdmV1Rlh3QjBzcGN4SzlsWTlVbEZVODV5L2VxQ1B3?=
+ =?utf-8?B?b2xhTm82THVFbUVWK1ZaQmwwdklYNnFtci9tUEplZlRaUlY0akZ4d1ArMjdw?=
+ =?utf-8?B?VEZWRHRLZVgrb21PTitIZHhqWmlWYzl0L1NNUmszR0RVZ3ByWEI3cWxjL01X?=
+ =?utf-8?B?Z0VTdlVZaXhqYjdHU2xYenRLR1VhNlp3K3RLSHNUU3diQ2oyRE9OZ1grLzFo?=
+ =?utf-8?B?VXR4L09BQVFXUGVYU1RxMjdYZUo3OVFJNVd3cU1CRzhDR05yMXhFZHo1Q2xM?=
+ =?utf-8?B?Y3Riek51cXlEdkRNRnpPU2R6VVpka2haUDVFZVdXMWZ1b0ZmbjI0enU0TU5E?=
+ =?utf-8?B?NU50dWFIelpPM1hlamh5UEJvdFd3bmxyNkVSQ1pIQmdUQUF6a0lUYVZlcjhr?=
+ =?utf-8?B?M1VFVk1MOFdYcmtFK1dxNWt5MU1jWEtNN0JOaU9aa3JCVUQ3VGExWFFaOEE2?=
+ =?utf-8?B?MmxybitjZCtRN0NxeTZvaWtsT0VHTDNTa012MHpEUGhFQzU4QWFVdz09?=
 MIME-Version: 1.0
-Date: Fri, 08 Apr 2022 13:22:59 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <eb0cfc91-7c2b-875f-9e2d-a8e8a0a8291f@mind.be>
-References: <20220331132230.227424-1-br015@umbiko.net>
- <eb0cfc91-7c2b-875f-9e2d-a8e8a0a8291f@mind.be>
-Message-ID: <9d97e0d4e0d90badb3339638aa7e453d@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: explicitly disable
- features to avoid collision with host packages
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ab66d6c-87a1-4094-bb7a-08da196696bd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 13:49:23.1784 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pxLK3D4kueT4dM0d44OxLU1GLo7a8kNsw1oFbhVf+q6Dmpx9MHm1aRH+NFvvRCboRKfeJ1sYyVRyCUJFPuqlMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB5806
+Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynq_qmtech_defconfig: move
+ post-image.sh to board/qmtech/zynq
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,157 +152,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?J=C3=B6rg_Krause?= <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Arnout,
 
-Thank you for taking a look.
+>  Since you're not actually making any change that makes a difference between the qmtech and other zynq boards, I don't see the point. In the other mail you mention something like "because the device tree is not in mainline", but that doesn't really > change anything, does it? Other then maybe the device tree having a different name, but that's already handled by the script.
 
-On 2022-04-04 17:38, Arnout Vandecappelle wrote:
-> On 31/03/2022 15:22, Andreas Ziegler wrote:
->> Background
->> During configuration, the meson build system tries to determine the
->> availability of optional dependencies using (host) pkgconfig and cmake 
->> in that
->> order. If a library does not exist on the target, pkg-config will 
->> fail, but
->> cmake sometimes finds and reports libraries that exist as host 
->> packages. This
->> has been observed for host-expat (cmake dependency) and host-zlib. The 
->> link
->> step subsequently fails, because necessary files are not present in 
->> the target
->> architecture.
->> 
->> Unconditionally disable optional features often found in host binaries 
->> and
->> modify the menu selection processing in mpd.mk to re-enable them where
->> necessary. Currently this concerns expat and zlib only.
->> 
->> This fixes the following build errors:
->> 
->> [expat]
->> /home/data/buildroot.x86_64/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.2.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: 
->> warning: libc.so.6, needed by 
->> /home/data/buildroot.x86_64/host/lib/libexpat.so.1.8.7, not found (try 
->> using -rpath or -rpath-link)
->> /home/data/buildroot.x86_64/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.2.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: 
->> /home/data/buildroot.x86_64/host/lib/libexpat.so.1.8.7: undefined 
->> reference to `__errno_location@GLIBC_2.2.5'
->> 
->> [zlib]
->> http://autobuild.buildroot.net/results/f0a/f0a9e719114f19dc9d20622ed85dd4f8e968c20f/
->> 
->> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
->> ---
->>   package/mpd/mpd.mk | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->> 
->> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
->> index 12da36098f..4e67c9428c 100644
->> --- a/package/mpd/mpd.mk
->> +++ b/package/mpd/mpd.mk
->> @@ -14,6 +14,7 @@ MPD_LICENSE_FILES = COPYING
->>   # these refer to the FreeBSD PPP daemon
->>   MPD_IGNORE_CVES = CVE-2020-7465 CVE-2020-7466
->>   MPD_SELINUX_MODULES = mpd
->> +# These features are either unwanted or not selectable via the 
->> Buildroot menu
->>   MPD_CONF_OPTS = \
->>   	-Daudiofile=disabled \
->>   	-Ddocumentation=disabled \
->> @@ -21,6 +22,12 @@ MPD_CONF_OPTS = \
->>   	-Dpipewire=disabled \
->>   	-Dsnapcast=false
->>   +# Explicitly disable features where meson's dependency detection 
->> picks up host
->> +# libraries. These settings can be overridden through menu options 
->> later
->> +MPD_CONF_OPTS += \
->> +	-Dexpat=disabled \
->> +	-Dzlib=disabled
-> 
->  It would be better to make these automatic conditional dependencies,
-> like it's done for ICU.
+>  Instead of forking, it would be preferable to still use the same script and genimage but just make it configurable.
 
-Good idea, but inclusion of ICU should be initiated by Config.in, like 
-every other feature.
+>  That said, making things configurable may also unnecessarily complicate things. It's a difficult balance to make. And impossible for me to evaluate without seeing what changes need to be made to the other zynq scripts.
 
->> +
->>   # Zeroconf support depends on libdns_sd from avahi.
->>   ifeq ($(BR2_PACKAGE_MPD_AVAHI_SUPPORT),y)
->>   MPD_DEPENDENCIES += avahi
->> @@ -300,11 +307,11 @@ ifeq ($(BR2_PACKAGE_MPD_UPNP_PUPNP),y)
->>   MPD_DEPENDENCIES += \
->>   	expat \
-> 
->  That would also allow to remove this (it will be done implicitly
-> since expat is selected in Config.in and the automatic dependency will
-> add it).
-> 
->>   	libupnp
->> -MPD_CONF_OPTS += -Dupnp=pupnp
->> +MPD_CONF_OPTS += -Dupnp=pupnp -Dexpat=enabled
->>   else ifeq ($(BR2_PACKAGE_MPD_UPNP_NPUPNP),y)
->>   MPD_DEPENDENCIES += \
->>   	libnpupnp
->> -MPD_CONF_OPTS += -Dupnp=npupnp
->> +MPD_CONF_OPTS += -Dupnp=npupnp -Dexpat=enabled
-> 
->  This is wrong: no dependency on expat is added so expat may not even
-> be selected or built at this point.
+>  So, for now I've marked it as Rejected. Feel free to re-post as part of a series that also updates the zynq defconfigs, or replace it with a patch that makes board/zynq/genimage.cfg configurable in the way it needs to be.
 
-Actually, the dependency is inherited from libnpupnp, but you are right, 
-this handling is not intuitive.
+I have found a better solution for this where we no longer need to fork the qmtech board to a separate post-image.sh.
 
->  Marked as Changes Requested.
+My new patch set updating all 4 zynq boards is coming shortly as soon as I finish my test and verification.
 
-Outline of the proposed next version of this change:
+Best regards,
+Neal Frager
+AMD
 
-[I did not want to make so many changes, but you are right, it makes 
-sense.]
-
-Separate logic from implementation: Remove feature dependencies from 
-mpd.mk and put selection logic into Config.in exclusively.
-
-In the makefile, a feature is responsible only to select or deselect its 
-configure option and, if this feature relies on a library, add a 
-dependency on this.
-
-Duplicated selection logic in mpd.mk will be eliminated. A build 
-dependency will only be added if it is present in the mpd configuration, 
-and not be inherited accidentally from concurrent packages.
-
-This impacts the following features: expat, id3tag, yajl. id3tag already 
-is half implemented, but not used consistently (has an option entry in 
-Config.in, but does not select this, but handles dependencies 
-individually). expat and yajl would be created as hidden options without 
-visibility (no user interaction necessary).
-
-Separate vorbis decoder and encoder options; currently the decoder 
-feature BR2_PACKAGE_MPD_VORBIS enables both ogg/vorbis decoding and 
-ogg/vorbis encoding, which is probably not intended.
-
-Create entry 'unicode' for ICU in Config.in.
-
-Set zlib to disabled (not used currently).
-
-Thoughts?
-
-Kind regards,
-Andreas
-
->  Regards,
->  Arnout
-> 
->>   else ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
->>   MPD_CONF_OPTS += -Dupnp=disabled
->>   endif
+>
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>   board/qmtech/zynq/genimage.cfg  | 27 +++++++++++++++++++++++++++
+>   board/qmtech/zynq/post-image.sh | 13 +++++++++++++
+>   configs/zynq_qmtech_defconfig   |  2 +-
+>   3 files changed, 41 insertions(+), 1 deletion(-)
+>   create mode 100644 board/qmtech/zynq/genimage.cfg
+>   create mode 100755 board/qmtech/zynq/post-image.sh
+>
+> diff --git a/board/qmtech/zynq/genimage.cfg 
+> b/board/qmtech/zynq/genimage.cfg new file mode 100644 index 
+> 0000000000..67baca795e
+> --- /dev/null
+> +++ b/board/qmtech/zynq/genimage.cfg
+> @@ -0,0 +1,27 @@
+> +image boot.vfat {
+> +     vfat {
+> +             files = {
+> +                     "boot.bin",
+> +                     "u-boot.img",
+> +                     "devicetree.dtb",
+> +                     "uImage"
+> +             }
+> +
+> +             file uramdisk.image.gz {
+> +                     image = "rootfs.cpio.uboot"
+> +             }
+> +     }
+> +
+> +     size = 32M
+> +}
+> +
+> +image sdcard.img {
+> +     hdimage {
+> +     }
+> +
+> +     partition boot {
+> +             partition-type = 0xC
+> +             bootable = "true"
+> +             image = "boot.vfat"
+> +     }
+> +}
+> diff --git a/board/qmtech/zynq/post-image.sh 
+> b/board/qmtech/zynq/post-image.sh new file mode 100755 index 
+> 0000000000..54c5493b4e
+> --- /dev/null
+> +++ b/board/qmtech/zynq/post-image.sh
+> @@ -0,0 +1,13 @@
+> +#!/bin/sh
+> +
+> +# By default U-Boot loads DTB from a file named "devicetree.dtb", so 
+> +# let's use a symlink with that name that points to the *first* # 
+> +devicetree listed in the config.
+> +
+> +FIRST_DT=$(sed -n \
+> +           's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9\-]*\).*"$/\1/p' \
+> +           ${BR2_CONFIG})
+> +
+> +[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb 
+> +${BINARIES_DIR}/devicetree.dtb
+> +
+> +support/scripts/genimage.sh -c board/qmtech/zynq/genimage.cfg
+> diff --git a/configs/zynq_qmtech_defconfig 
+> b/configs/zynq_qmtech_defconfig index 4db3f68b1f..dc3b22c876 100644
+> --- a/configs/zynq_qmtech_defconfig
+> +++ b/configs/zynq_qmtech_defconfig
+> @@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+>   BR2_GLOBAL_PATCH_DIR="board/qmtech/zynq/patches"
+>   BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>   BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qmtech/zynq/post-image.sh"
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xilinx-v2019.2.01)/linux-xilinx-v2019.2.01.tar.gz"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
