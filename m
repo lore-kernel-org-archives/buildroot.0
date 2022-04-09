@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E50CC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 14:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A1AEC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 14:09:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC648417C6;
-	Sat,  9 Apr 2022 14:04:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3EE7B40391;
+	Sat,  9 Apr 2022 14:09:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7UjbQFOcnnyD; Sat,  9 Apr 2022 14:04:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7jgwsbW3CvYP; Sat,  9 Apr 2022 14:09:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CFC341687;
-	Sat,  9 Apr 2022 14:04:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0582E1BF592
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:03:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DB7F40320;
+	Sat,  9 Apr 2022 14:09:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5477B1BF425
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E5BE541988
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:03:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 431F340320
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:09:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nUMkPLPLv0MS for <buildroot@lists.busybox.net>;
- Sat,  9 Apr 2022 14:03:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7ACF74196E
- for <buildroot@buildroot.org>; Sat,  9 Apr 2022 14:03:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0EDB48368B; Sat,  9 Apr 2022 13:53:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HJx3FCRCL1cE for <buildroot@lists.busybox.net>;
+ Sat,  9 Apr 2022 14:09:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1DDCD400A8
+ for <buildroot@buildroot.org>; Sat,  9 Apr 2022 14:09:28 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8BA8B1BF20A;
+ Sat,  9 Apr 2022 14:09:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ndBmG-003I5o-FN; Sat, 09 Apr 2022 16:09:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 9 Apr 2022 12:48:32 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: c522be0d509292b983b99f06c367da3e627e3c48
-X-Git-Newrev: 0e8dd13bf892cbcec21d6845a9fa9c9a49fab24b
-X-Patchwork-Hint: ignore
-Message-Id: <20220409135355.0EDB48368B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] fs/oci: depends on
- BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220403100318.2581647-1-fontaine.fabrice@gmail.com>
+Date: Sat, 09 Apr 2022 16:09:24 +0200
+In-Reply-To: <20220403100318.2581647-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Apr 2022 12:03:18 +0200")
+Message-ID: <8735ims60b.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: use internal bind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,106 +59,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e8dd13bf892cbcec21d6845a9fa9c9a49fab24b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Add a dependency on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS to avoid
-the following build failure when GO_GOARCH is empty (e.g. on mips32)
-which leads to an empty --arch argument in the sloci-image call, raised
-since the addition of the package in commmit
-ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d:
+ > Use internal bind as dhcp doesn't build since bump of bind to version
+ > 9.16.26 in commit 8adeaec8afacbc680edebae91524f6144926ac92 and upstream
+ > doesn't plan to fix it any time soon:
+ > https://gitlab.isc.org/isc-projects/dhcp/-/issues/233#note_276883
 
-printf '   	rm -rf /home/autobuild/autobuild/instance-6/output-1/images/rootfs-oci\n	/home/autobuild/autobuild/instance-6/output-1/host/bin/sloci-image --arch   --entrypoint "sh" --author "Buildroot" --user "0" /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/target /home/autobuild/autobuild/instance-6/output-1/images/rootfs-oci:latest\n' >> /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/fakeroot
-chmod a+x /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/fakeroot
-PATH="/home/autobuild/autobuild/instance-6/output-1/host/bin:/home/autobuild/autobuild/instance-6/output-1/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl" FAKEROOTDONTTRYCHOWN=1 /home/autobuild/autobuild/instance-6/output-1/host/bin/fakeroot -- /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/fakeroot
-rootdir=/home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/target
-table='/home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/full_devices_table.txt'
-Usage:
-  sloci-image [options] ROOTFS NAME[:TAG]
-  sloci-image [-h | -V]
+ > In file included from ../includes/dhcpd.h:91,
+ >                  from ctrace.c:29:
+ > ../includes/omapip/isclib.h:51:10: fatal error: isc/boolean.h: No such file or directory
+ >    51 | #include <isc/boolean.h>
+ >       |          ^~~~~~~~~~~~~~~
 
-Create a single-layer OCI image with the given rootfs.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/d18b006dce7b46631ce8f4c72fb97eb861993939
 
-Arguments:
-  ROOTFS                 Directory or tar.gz archive with rootfs to pack into the image.
-                         Important: Archive will be *moved* to the image, so make a copy if you
-                         need it. Directory will be preserved.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  NAME                   Name of the image.
+Committed to 2022.02.x, thanks.
 
-  TAG                    Tag for the image. Defaults to "latest".
-
-Options:
-  -m --arch ARCH         CPU architecture which the binaries in this image are built to run on.
-                         Defaults to $(uname -m).
-
-     --arch-variant      Variant of the CPU. This is typically used only for arm (v6, v7, v8).
-
-  -a --author NAME       Name and/or email address of the person which created the image.
-
-  -c --cmd CMD           Default arguments to the entrypoint of the container.
-
-     --debug             Print debug messages (it can be also enabled with env. variable DEBUG).
-
-  -C --entrypoint EP     Arguments to use as the command to execute when the container starts.
-
-  -e --env VAR=VAL       Default environment variables for container.
-
-  -l --label KEY=VALUE   Metadata for the container compliant with OCI annotation rules.
-                         If KEY starts with a dot, it will be prefixed with
-                         "org.opencontainers.image" (e.g. .url -> org.opencontainers.image.url).
-
-     --os OS             Name of the OS which the image is built to run on. Defaults to "linux".
-
-  -p --port PORT[/PROT]  Default set of ports to expose from a container running this image in
-                         format: <port>/tcp, <port>/udp, or <port> (same as <port>/tcp).
-                         Aliases: --expose.
-
-  -t --tar               Pack image in a TAR archive.
-
-  -u --user USER         The username or UID of user the process run as.
-
-  -v --volume PATH       Default set of directories describing where the process is likely write
-                         data specific to a container instance.
-
-  -w --working-dir DIR   Sets the current working directory of the entrypoint process in the
-                         container.
-
-  -V --version           Print version and exit.
-
-  -h --help              Print this message and exit.
-
-Please report bugs at <https://github.com/jirutka/sloci-image/issues>.
-make: *** [fs/oci/oci.mk:99: /home/autobuild/autobuild/instance-6/output-1/images/rootfs.oci] Error 1
-
-Fixes:
- - http://autobuild.buildroot.org/results/44da17a393421dfcb8bbdd63074cb82b436dfa94
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit efe832dbc3c8d0d2caa1e8ba0ccba8254292de6c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- fs/oci/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/oci/Config.in b/fs/oci/Config.in
-index 176785810a..8f36c91c8f 100644
---- a/fs/oci/Config.in
-+++ b/fs/oci/Config.in
-@@ -1,5 +1,6 @@
- config BR2_TARGET_ROOTFS_OCI
- 	bool "oci image"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	help
- 	  Build an OCI (Open Container Initiative) image.
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
