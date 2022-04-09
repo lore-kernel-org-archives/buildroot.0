@@ -1,48 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25507C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 10:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59266C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 10:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0C5D60F1D;
-	Sat,  9 Apr 2022 10:32:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05F3E404BF;
+	Sat,  9 Apr 2022 10:32:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1ycXtROM5MFs; Sat,  9 Apr 2022 10:32:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gkrZgS_-OTBu; Sat,  9 Apr 2022 10:32:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0394860BC1;
-	Sat,  9 Apr 2022 10:32:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EB7D71BF96B
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 10:32:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2053340183;
+	Sat,  9 Apr 2022 10:32:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C9DA1BF97D
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 10:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAA1E844D1
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 10:32:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A6CD41DFB
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 10:32:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f8qiaXs4R0BS for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yaKdplYiAHyi for <buildroot@lists.busybox.net>;
  Sat,  9 Apr 2022 10:32:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10780844A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C7E641DFE
  for <buildroot@buildroot.org>; Sat,  9 Apr 2022 10:32:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E95018350E; Sat,  9 Apr 2022 10:22:38 +0000 (UTC)
+ id 210B083515; Sat,  9 Apr 2022 10:22:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Apr 2022 12:26:31 +0200
+Date: Sat, 9 Apr 2022 12:29:14 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6ac463b65f3e57fcdd0340be47e97bb7d4838643
-X-Git-Newrev: 8945ba49480a7885d104445ca855ef7681a374ff
+X-Git-Oldrev: 12e33273561b27543c0c3d5d06d28c001dae3c15
+X-Git-Newrev: 422d263a71d943944f469db3c2ae8827337cd0bf
 X-Patchwork-Hint: ignore
-Message-Id: <20220409102238.E95018350E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- toolchain/toolchain-external: error if BR2_TOOLCHAIN_EXTERNAL_PATH is not
- set
+Message-Id: <20220409102239.210B083515@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ipmiutil: drop
+ dead code
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,35 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8945ba49480a7885d104445ca855ef7681a374ff
+commit: https://git.buildroot.net/buildroot/commit/?id=422d263a71d943944f469db3c2ae8827337cd0bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Arnout: add BR_BUILDING condition]
+ipmiutil depends on dynamic library since commit
+670095b4739c898a8f270b003ee19294206d91f6 so test on BR2_STATIC_LIBS
+added by commit 9f31cd14d01e306e6475b750c30554043c57491a is not needed
+anymore
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 8e91385a2cb81c5f8114354f4494230e2aebb93a)
+(cherry picked from commit cdc2a52a0fd619ee9762656c2ff8f84418a85ea1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/ipmiutil/ipmiutil.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 299b6008aa..c7f4175c9e 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -69,7 +69,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
- else
- TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(abspath $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH)))
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL)$(BR_BUILDING),yy)
-+ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
-+$(error No external toolchain path set, check your BR2_TOOLCHAIN_EXTERNAL_PATH setting)
-+endif
- endif
-+endif # BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 4c9de26583..97a644e314 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -17,8 +17,7 @@ define IPMIUTIL_TOUCH_CONFIG_H_IN
+ endef
+ IPMIUTIL_PRE_CONFIGURE_HOOKS += IPMIUTIL_TOUCH_CONFIG_H_IN
  
- ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
- ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+-# forgets to link against libcrypto dependencies breaking static link
+-ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ # tests against distro libcrypto so it might get a false positive when
+ # the openssl version is old, so force it off
+ # SKIP_MD2 can be used only if ALLOW_GNU is defined.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
