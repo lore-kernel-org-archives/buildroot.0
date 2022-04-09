@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01344C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 14:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E50CC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 14:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAD4E843C5;
-	Sat,  9 Apr 2022 14:04:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC648417C6;
+	Sat,  9 Apr 2022 14:04:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4St2bKFd7amB; Sat,  9 Apr 2022 14:04:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7UjbQFOcnnyD; Sat,  9 Apr 2022 14:04:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B06A3843FB;
-	Sat,  9 Apr 2022 14:04:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 56EA91BF592
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:03:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CFC341687;
+	Sat,  9 Apr 2022 14:04:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0582E1BF592
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 449DA600C6
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:03:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5BE541988
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:03:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GVtSaF0j-hzT for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nUMkPLPLv0MS for <buildroot@lists.busybox.net>;
  Sat,  9 Apr 2022 14:03:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DC3D6058A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7ACF74196E
  for <buildroot@buildroot.org>; Sat,  9 Apr 2022 14:03:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1657B8344D; Sat,  9 Apr 2022 13:53:55 +0000 (UTC)
+ id 0EDB48368B; Sat,  9 Apr 2022 13:53:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Apr 2022 12:48:55 +0200
+Date: Sat, 9 Apr 2022 12:48:32 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0e8dd13bf892cbcec21d6845a9fa9c9a49fab24b
-X-Git-Newrev: a591dafceaba29d1bd1771e50ed7dfa9265ad73d
+X-Git-Oldrev: c522be0d509292b983b99f06c367da3e627e3c48
+X-Git-Newrev: 0e8dd13bf892cbcec21d6845a9fa9c9a49fab24b
 X-Patchwork-Hint: ignore
-Message-Id: <20220409135355.1657B8344D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python-greenlet:
- disable cpp test
+Message-Id: <20220409135355.0EDB48368B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] fs/oci: depends on
+ BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,39 +59,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a591dafceaba29d1bd1771e50ed7dfa9265ad73d
+commit: https://git.buildroot.net/buildroot/commit/?id=0e8dd13bf892cbcec21d6845a9fa9c9a49fab24b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Disable cpp test to avoid the following build failure without C++ raised
-since the addition of the package in commit
-826ef33bedc0f2f39a38622f066978cd9cc05226 and
-https://github.com/python-greenlet/greenlet/commit/d9cb12af26da2abbabe9f05101564866f25a74e2:
+Add a dependency on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS to avoid
+the following build failure when GO_GOARCH is empty (e.g. on mips32)
+which leads to an empty --arch argument in the sloci-image call, raised
+since the addition of the package in commmit
+ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d:
 
-powerpc64-buildroot-linux-gnu-gcc.br_real: error: src/greenlet/tests/_test_extension_cpp.cpp: C++ compiler not installed on this system
+printf '   	rm -rf /home/autobuild/autobuild/instance-6/output-1/images/rootfs-oci\n	/home/autobuild/autobuild/instance-6/output-1/host/bin/sloci-image --arch   --entrypoint "sh" --author "Buildroot" --user "0" /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/target /home/autobuild/autobuild/instance-6/output-1/images/rootfs-oci:latest\n' >> /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/fakeroot
+chmod a+x /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/fakeroot
+PATH="/home/autobuild/autobuild/instance-6/output-1/host/bin:/home/autobuild/autobuild/instance-6/output-1/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl" FAKEROOTDONTTRYCHOWN=1 /home/autobuild/autobuild/instance-6/output-1/host/bin/fakeroot -- /home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/fakeroot
+rootdir=/home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/oci/target
+table='/home/autobuild/autobuild/instance-6/output-1/build/buildroot-fs/full_devices_table.txt'
+Usage:
+  sloci-image [options] ROOTFS NAME[:TAG]
+  sloci-image [-h | -V]
+
+Create a single-layer OCI image with the given rootfs.
+
+Arguments:
+  ROOTFS                 Directory or tar.gz archive with rootfs to pack into the image.
+                         Important: Archive will be *moved* to the image, so make a copy if you
+                         need it. Directory will be preserved.
+
+  NAME                   Name of the image.
+
+  TAG                    Tag for the image. Defaults to "latest".
+
+Options:
+  -m --arch ARCH         CPU architecture which the binaries in this image are built to run on.
+                         Defaults to $(uname -m).
+
+     --arch-variant      Variant of the CPU. This is typically used only for arm (v6, v7, v8).
+
+  -a --author NAME       Name and/or email address of the person which created the image.
+
+  -c --cmd CMD           Default arguments to the entrypoint of the container.
+
+     --debug             Print debug messages (it can be also enabled with env. variable DEBUG).
+
+  -C --entrypoint EP     Arguments to use as the command to execute when the container starts.
+
+  -e --env VAR=VAL       Default environment variables for container.
+
+  -l --label KEY=VALUE   Metadata for the container compliant with OCI annotation rules.
+                         If KEY starts with a dot, it will be prefixed with
+                         "org.opencontainers.image" (e.g. .url -> org.opencontainers.image.url).
+
+     --os OS             Name of the OS which the image is built to run on. Defaults to "linux".
+
+  -p --port PORT[/PROT]  Default set of ports to expose from a container running this image in
+                         format: <port>/tcp, <port>/udp, or <port> (same as <port>/tcp).
+                         Aliases: --expose.
+
+  -t --tar               Pack image in a TAR archive.
+
+  -u --user USER         The username or UID of user the process run as.
+
+  -v --volume PATH       Default set of directories describing where the process is likely write
+                         data specific to a container instance.
+
+  -w --working-dir DIR   Sets the current working directory of the entrypoint process in the
+                         container.
+
+  -V --version           Print version and exit.
+
+  -h --help              Print this message and exit.
+
+Please report bugs at <https://github.com/jirutka/sloci-image/issues>.
+make: *** [fs/oci/oci.mk:99: /home/autobuild/autobuild/instance-6/output-1/images/rootfs.oci] Error 1
 
 Fixes:
- - http://autobuild.buildroot.org/results/1140463b8b2407c2a28b9a955efab6037ee7dbeb
+ - http://autobuild.buildroot.org/results/44da17a393421dfcb8bbdd63074cb82b436dfa94
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit b91bf2dbe6dc57ca85598730617b4eaccbe7433b)
+(cherry picked from commit efe832dbc3c8d0d2caa1e8ba0ccba8254292de6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-greenlet/python-greenlet.mk | 1 +
+ fs/oci/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index 3b1ef7e314..72d2747970 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
-@@ -10,6 +10,7 @@ PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/0c/10/754e21b5bea
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
-+PYTHON_GREENLET_ENV = GREENLET_TEST_CPP=no
+diff --git a/fs/oci/Config.in b/fs/oci/Config.in
+index 176785810a..8f36c91c8f 100644
+--- a/fs/oci/Config.in
++++ b/fs/oci/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_TARGET_ROOTFS_OCI
+ 	bool "oci image"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	help
+ 	  Build an OCI (Open Container Initiative) image.
  
- $(eval $(python-package))
- $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
