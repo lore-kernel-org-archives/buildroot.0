@@ -1,46 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D54C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 14:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE949C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Apr 2022 15:41:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5418041E04;
-	Sat,  9 Apr 2022 14:41:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A98040492;
+	Sat,  9 Apr 2022 15:41:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qhMBQohWogdD; Sat,  9 Apr 2022 14:41:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id maWVATUcFEkj; Sat,  9 Apr 2022 15:41:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 950E341DF8;
-	Sat,  9 Apr 2022 14:41:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A38A71BF425
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:41:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54E8C4019E;
+	Sat,  9 Apr 2022 15:41:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C1BA11BF3DE
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 15:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A044860A6A
- for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 14:41:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFA3641DED
+ for <buildroot@lists.busybox.net>; Sat,  9 Apr 2022 15:41:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kTDcoXmN8MiA for <buildroot@lists.busybox.net>;
- Sat,  9 Apr 2022 14:41:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B8D860A46
- for <buildroot@buildroot.org>; Sat,  9 Apr 2022 14:41:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0046D83761; Sat,  9 Apr 2022 14:31:53 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 9 Apr 2022 16:00:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c114c9e8ce3cca598babe77dca0d2137fa404a4b
-X-Git-Newrev: 7818cef78bfaf8eab8ec86d715ca76b0dbfa46e8
-X-Patchwork-Hint: ignore
-Message-Id: <20220409143154.0046D83761@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sysdig: bump version to 0.27.1.
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sXJOcDekVS9l for <buildroot@lists.busybox.net>;
+ Sat,  9 Apr 2022 15:41:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4166541DF4
+ for <buildroot@buildroot.org>; Sat,  9 Apr 2022 15:41:46 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id b15so13235918edn.4
+ for <buildroot@buildroot.org>; Sat, 09 Apr 2022 08:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=vYGx1zempQkE+VwYp4/eTdueFqVyKBCpIsNlL3Wnr6U=;
+ b=ToIwdO47EKj19WAKB9phESREC9LeRggkUNBucC/cNkKx9NWUkmCTGEEmPmXSAbf0+9
+ gwbcJiCZTEh+D566srGSQ5pQNif/tIqTAjFmMolzpsRfkgqtntQTkaXd8XB4pPZR/xWO
+ a6txRPGs86BqWZFcquA4P1KyxD/xScD5//ACQKS6wzhFiNG0WWyqHXjavsNy8WoB5KOq
+ bEQvONDZH7VkwT0/6+0Ex5LeWAfTTwcKCraUYWTXNQy+rfZUO/aeAG4IbaL57wPmKWX9
+ tBLguMabTGYLZ9Gt/fsGZpunui1QiLWR97tItRhEjy/UHFmsv4tT3r16l5hzePUxqLsK
+ 1x7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=vYGx1zempQkE+VwYp4/eTdueFqVyKBCpIsNlL3Wnr6U=;
+ b=RS0RGhyJOYdHwCm7JK0sf0zEitSzynxrBKcqpFFhRa3JfLOIlpOR3tHkxl8wsciUPF
+ ChbhRMmZCBcEqhBjwDapGbbXb7NCJkEaYbdkojG6HQ0NWSgxUHn6Ufwa4IRFYLK0VXB6
+ kktT3Ix/LGM5Qil+AUaNAbm+X9ftRn3s59DFXpyQN1pG2eJwK6nXlFnqoOTaob4zyLKW
+ vpIYqc/WV7XCBPtth6FcUsraSH2W+or9PGi8/8R5QUzINUr8+QXQbEPJNjxm6OlLJoZS
+ bzdPKT2VGUwAgf7HvfnZGGP8ev+uXuTU1osbdEdBOa6OeEHx/sXDP+ltHRmc6IcpORPe
+ FtTQ==
+X-Gm-Message-State: AOAM530YRGmwu+ZMsjoupgTMHUwEukaY8z7av+D47ZWsqGaHw792cUmD
+ mecpZzhi5ltqYpfwLjtGGDRcsg==
+X-Google-Smtp-Source: ABdhPJx3fx+/wQFUu1N1L7m6VU4rEZwBNAnDISJgqv3+wlvwM5fIyJmd8LnILd5QNUSCWVGf77CGhg==
+X-Received: by 2002:a05:6402:40c4:b0:419:135b:83ac with SMTP id
+ z4-20020a05640240c400b00419135b83acmr24795486edb.321.1649518904276; 
+ Sat, 09 Apr 2022 08:41:44 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ g2-20020aa7dc42000000b00418ef55eabcsm11866557edu.83.2022.04.09.08.41.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 09 Apr 2022 08:41:43 -0700 (PDT)
+Message-ID: <185b80c4-9083-c5f9-a555-f28183160b11@mind.be>
+Date: Sat, 9 Apr 2022 17:41:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Andreas Ziegler <br015@umbiko.net>
+References: <20220331132230.227424-1-br015@umbiko.net>
+ <eb0cfc91-7c2b-875f-9e2d-a8e8a0a8291f@mind.be>
+ <9d97e0d4e0d90badb3339638aa7e453d@umbiko.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <9d97e0d4e0d90badb3339638aa7e453d@umbiko.net>
+Subject: [Buildroot] User-visible Config.in feature sub-options [was: Re:
+ [PATCH 1/1] package/mpd: explicitly disable features to avoid collision
+ with host packages]
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,296 +99,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7818cef78bfaf8eab8ec86d715ca76b0dbfa46e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-0.23.1 has compilation errors with recent kernels.
-
-0.27.1 changed license for userspace from GPLv2 to Apache and added MIT
-option for driver.
-
-New dependencies: c-ares, grpc, protobuf, tbb. There's also a dependency
-on gtest, but only if tests are enabled. Therefore, add conf opt to
-disable tests.
-
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-[Arnout:
- - Add Francis to DEVELOPERS for sysdig.
- - Add link to source of patch 2.
- - Remove N/M from patch 2 (check-package).
- - Correct license info and hashes.
- - Remove gtest dependency.
- - Add -DCREATE_TEST_TARGETS=OFF conf opt.
- - Propagate Config.in dependencies of reverse dependencies.]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                                         |  1 +
- ...ply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 ++++++++++++++++++++++
- ...ink-against-libabseil-cpp-which-grpc-uses.patch | 47 +++++++++++++
- package/sysdig/Config.in                           | 20 ++++--
- package/sysdig/sysdig.hash                         |  6 +-
- package/sysdig/sysdig.mk                           | 15 ++--
- 6 files changed, 158 insertions(+), 13 deletions(-)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ef4ddcab50..d5035b3239 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -970,6 +970,7 @@ F:	package/odhcploc/
- 
- N:	Francis Laniel <flaniel@linux.microsoft.com>
- F:	package/pahole/
-+F:	package/sysdig/
- F:	package/tbb/
- 
- N:	Francisco Gonzalez <gzmorell@gmail.com>
-diff --git a/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch b/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
-new file mode 100644
-index 0000000000..7873210281
---- /dev/null
-+++ b/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
-@@ -0,0 +1,82 @@
-+From cc8bccc3ebb90103900a7f0f2b085ddb723b8792 Mon Sep 17 00:00:00 2001
-+From: Francis Laniel <flaniel@linux.microsoft.com>
-+Date: Wed, 6 Apr 2022 16:54:37 +0100
-+Subject: [PATCH] libsinsp: Apply PATCH_COMMAND to fix lua types and function.
-+
-+Buildroot luajit 5.1 seems to not have compatibility between luaL_reg and
-+luaL_Reg.
-+So, we apply sysdig CMakeLists.txt PATCH_COMMAND to fix this and lua function
-+call as well.
-+Note that, this PATCH_COMMAND was added in sysdig in:
-+a064440394c9 ("Adding power support to Travis builds (#1566)")
-+
-+This patch is also present in kubernetes/minikube in:
-+f036c279bc59 ("Add patch for compiling sysdig with system luajit")
-+
-+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-+---
-+ userspace/libsinsp/chisel.cpp         | 6 +++---
-+ userspace/libsinsp/lua_parser.cpp     | 2 +-
-+ userspace/libsinsp/lua_parser_api.cpp | 2 +-
-+ 3 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/userspace/libsinsp/chisel.cpp b/userspace/libsinsp/chisel.cpp
-+index 0a6e3cf8..0c2e255a 100644
-+--- a/userspace/libsinsp/chisel.cpp
-++++ b/userspace/libsinsp/chisel.cpp
-+@@ -98,7 +98,7 @@ void lua_stackdump(lua_State *L)
-+ // Lua callbacks
-+ ///////////////////////////////////////////////////////////////////////////////
-+ #ifdef HAS_LUA_CHISELS
-+-const static struct luaL_reg ll_sysdig [] =
-++const static struct luaL_Reg ll_sysdig [] =
-+ {
-+ 	{"set_filter", &lua_cbacks::set_global_filter},
-+ 	{"set_snaplen", &lua_cbacks::set_snaplen},
-+@@ -134,7 +134,7 @@ const static struct luaL_reg ll_sysdig [] =
-+ 	{NULL,NULL}
-+ };
-+ 
-+-const static struct luaL_reg ll_chisel [] =
-++const static struct luaL_Reg ll_chisel [] =
-+ {
-+ 	{"request_field", &lua_cbacks::request_field},
-+ 	{"set_filter", &lua_cbacks::set_filter},
-+@@ -146,7 +146,7 @@ const static struct luaL_reg ll_chisel [] =
-+ 	{NULL,NULL}
-+ };
-+ 
-+-const static struct luaL_reg ll_evt [] =
-++const static struct luaL_Reg ll_evt [] =
-+ {
-+ 	{"field", &lua_cbacks::field},
-+ 	{"get_num", &lua_cbacks::get_num},
-+diff --git a/userspace/libsinsp/lua_parser.cpp b/userspace/libsinsp/lua_parser.cpp
-+index 0e26617d..78810d96 100644
-+--- a/userspace/libsinsp/lua_parser.cpp
-++++ b/userspace/libsinsp/lua_parser.cpp
-+@@ -32,7 +32,7 @@ extern "C" {
-+ #include "lauxlib.h"
-+ }
-+ 
-+-const static struct luaL_reg ll_filter [] =
-++const static struct luaL_Reg ll_filter [] =
-+ {
-+ 	{"rel_expr", &lua_parser_cbacks::rel_expr},
-+ 	{"bool_op", &lua_parser_cbacks::bool_op},
-+diff --git a/userspace/libsinsp/lua_parser_api.cpp b/userspace/libsinsp/lua_parser_api.cpp
-+index c89e9126..c3d8008a 100644
-+--- a/userspace/libsinsp/lua_parser_api.cpp
-++++ b/userspace/libsinsp/lua_parser_api.cpp
-+@@ -266,7 +266,7 @@ int lua_parser_cbacks::rel_expr(lua_State *ls)
-+ 					string err = "Got non-table as in-expression operand\n";
-+ 					throw sinsp_exception("parser API error");
-+ 				}
-+-				int n = luaL_getn(ls, 4);  /* get size of table */
-++				int n = lua_objlen (ls, 4);  /* get size of table */
-+ 				for (i=1; i<=n; i++)
-+ 				{
-+ 					lua_rawgeti(ls, 4, i);
-+-- 
-+2.25.1
-+
-diff --git a/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch b/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
-new file mode 100644
-index 0000000000..a9155fbb4a
---- /dev/null
-+++ b/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
-@@ -0,0 +1,47 @@
-+From a7fb3b863c3574470c45fdf6084dcc40931ca017 Mon Sep 17 00:00:00 2001
-+From: Francis Laniel <flaniel@linux.microsoft.com>
-+Date: Thu, 7 Apr 2022 18:30:23 +0100
-+Subject: [PATCH] Link against libabseil-cpp which grpc uses.
-+
-+This patch was taken from:
-+55c96b61f7b9 ("sysdig: make extra linking against abseil conditional") [1]
-+from hhoffstaette/portage.
-+
-+[1] https://github.com/hhoffstaette/portage/blob/55c96b61f7b91e4d91bed6723e86c00dd91f8d16/dev-util/sysdig/files/0.27.1-grpc-absl-sync.patch
-+
-+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-+---
-+ CMakeLists.txt                    | 1 +
-+ userspace/libsinsp/CMakeLists.txt | 4 ++++
-+ 2 files changed, 5 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 1f34f1d6..c0354b29 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -552,6 +552,7 @@ if(NOT WIN32 AND NOT APPLE)
-+ 			else()
-+ 				message(FATAL_ERROR "Couldn't find system grpc")
-+ 			endif()
-++			find_library(ABSL_SYNC_LIB NAMES absl_synchronization)
-+ 			find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin)
-+ 			if(NOT GRPC_CPP_PLUGIN)
-+ 				message(FATAL_ERROR "System grpc_cpp_plugin not found")
-+diff --git a/userspace/libsinsp/CMakeLists.txt b/userspace/libsinsp/CMakeLists.txt
-+index d72f9115..d1b7ea02 100644
-+--- a/userspace/libsinsp/CMakeLists.txt
-++++ b/userspace/libsinsp/CMakeLists.txt
-+@@ -214,6 +214,10 @@ if(NOT WIN32)
-+ 				"${JQ_LIB}"
-+ 				"${B64_LIB}")
-+ 
-++			if(ABSL_SYNC_LIB)
-++				target_link_libraries(sinsp "${ABSL_SYNC_LIB}")
-++			endif()
-++
-+ 			if(NOT MUSL_OPTIMIZED_BUILD)
-+ 			target_link_libraries(sinsp
-+ 				rt
-+-- 
-+2.25.1
-+
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 06d20c7f7b..3a4c033b2b 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -1,20 +1,25 @@
- config BR2_PACKAGE_SYSDIG
- 	bool "sysdig"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_LINUX_KERNEL
--	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, jq
--	depends on !BR2_STATIC_LIBS # elfutils
-+	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, jq, protobuf, tbb
-+	depends on !BR2_STATIC_LIBS # elfutils, protobuf, tbb
- 	depends on BR2_USE_WCHAR # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # elfutils, tbb
- 	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-+	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_GRPC
- 	select BR2_PACKAGE_JQ
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_LIBB64
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PROTOBUF
-+	select BR2_PACKAGE_TBB
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Sysdig is open source, system-level exploration:
-@@ -25,9 +30,10 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  https://github.com/draios/sysdig/wiki
- 
--comment "sysdig needs a glibc or uclibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
-+comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
-+		|| !BR2_TOOLCHAIN_USES_GLIBC \
- 	    || !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index 565b1e9828..4ec46abfc3 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,3 +1,5 @@
- # sha256 locally computed
--sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4cfa  sysdig-0.23.1.tar.gz
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  b9d05854493d245a7a7e75f77fc654508f720aab5e5e8a3a932bd8eb54e49bda  sysdig-0.27.1.tar.gz
-+sha256  a88fbf820b38b1c7fabc6efe291b8259e02ae21326f56fe31c6c9adf374b2702  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  driver/GPL2.txt
-+sha256  e3f6a43d097ed68176e9738de925d98b938e1bccf6d6bd1bcd79395eca8f76ed  driver/MIT.txt
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index 08d93750ae..9a9aaa35c3 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,16 +4,21 @@
- #
- ################################################################################
- 
--SYSDIG_VERSION = 0.23.1
-+SYSDIG_VERSION = 0.27.1
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
--SYSDIG_LICENSE = GPL-2.0
--SYSDIG_LICENSE_FILES = COPYING
-+SYSDIG_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
-+SYSDIG_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
- SYSDIG_CPE_ID_VENDOR = sysdig
--SYSDIG_CONF_OPTS = -DENABLE_DKMS=OFF -DUSE_BUNDLED_DEPS=OFF
-+SYSDIG_CONF_OPTS = \
-+	-DENABLE_DKMS=OFF \
-+	-DUSE_BUNDLED_DEPS=OFF \
-+	-DCREATE_TEST_TARGETS=OFF
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- SYSDIG_DEPENDENCIES = \
-+	c-ares \
- 	elfutils \
-+	grpc \
- 	jq \
- 	jsoncpp \
- 	libb64 \
-@@ -21,6 +26,8 @@ SYSDIG_DEPENDENCIES = \
- 	luainterpreter \
- 	ncurses \
- 	openssl \
-+	protobuf \
-+	tbb \
- 	zlib
- 
- # sysdig creates the module Makefile from a template, which contains a
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBbUHV0dGluZyB0aGUgb3RoZXIgbWFpbnRhaW5lcnMgaW4gQ2MgaGVyZSBiZWNhdXNlIHRoZXJl
+J3MgYSBiaXQgb2YgYSAKcG9saWN5L3BoaWxvc29waHkgZGVjaXNpb24uXQoKT24gMDgvMDQvMjAy
+MiAxNToyMiwgQW5kcmVhcyBaaWVnbGVyIHdyb3RlOgo+IEhpIEFybm91dCwKPiAKPgpbc25pcF0K
+PiBPdXRsaW5lIG9mIHRoZSBwcm9wb3NlZCBuZXh0IHZlcnNpb24gb2YgdGhpcyBjaGFuZ2U6Cj4g
+Cj4gW0kgZGlkIG5vdCB3YW50IHRvIG1ha2Ugc28gbWFueSBjaGFuZ2VzLCBidXQgeW91IGFyZSBy
+aWdodCwgaXQgbWFrZXMgc2Vuc2UuXQo+IAo+IFNlcGFyYXRlIGxvZ2ljIGZyb20gaW1wbGVtZW50
+YXRpb246IFJlbW92ZSBmZWF0dXJlIGRlcGVuZGVuY2llcyBmcm9tIG1wZC5tayBhbmQgCj4gcHV0
+IHNlbGVjdGlvbiBsb2dpYyBpbnRvIENvbmZpZy5pbiBleGNsdXNpdmVseS4KCiAgQXMgeW91IGNh
+biBzZWUgZnJvbSB0aGUgZGVzY3JpcHRpb24gYWJvdmU6IHRoaXMgaXMgbWFraW5nIHRoaW5ncyBx
+dWl0ZSAKY29tcGxpY2F0ZWQuIEFuZCBvbmUgb2YgdGhlIHRlbmV0cyBvZiBCdWlsZHJvb3QgaXMg
+dG8ga2VlcCB0aGluZ3Mgc2ltcGxlLgoKICBUaGF0IGlzIHRoZSByZWFzb24gd2h5IHdlIGdlbmVy
+YWxseSB3YW50IHRvIGF2b2lkIHN1Yi1vcHRpb25zIGluIENvbmZpZy5pbi4gCkJhc2ljYWxseSB3
+ZSBvbmx5IHdhbnQgc3ViLW9wdGlvbnMgaW4gdGhlIGZvbGxvd2luZyBjYXNlczoKCi0gSXQgbWFr
+ZXMgYSBiaWcgZGlmZmVyZW5jZSBpbiB0aGUgZmluYWwgdGFyZ2V0IGluc3RhbGxlZCBzaXplIGlm
+IHRoZSBvcHRpb24gaXMgCmtlcHQgZGlzYWJsZWQuIEUuZy4gQlIyX1BBQ0tBR0VfQVZBSElfREFF
+TU9OLgoKLSBUaGVyZSBhcmUgbXVsdGlwbGUgcG9zc2liaWxpdGllcyBhbmQgZGVwZW5kaW5nIG9u
+IHRoZSBjaXJjdW1zdGFuY2VzLCBvbmUgY2FuIApiZSBtb3JlIGFwcHJvcHJpYXRlIHRoYW4gdGhl
+IG90aGVyLiBFLmcuIGxpYmN1cmwgU1NML1RMUyBsaWJyYXJ5IHRvIHVzZS4KCi0gSXQgaXMgbm90
+IG9idmlvdXMgd2hpY2ggb3RoZXIgcGFja2FnZSBuZWVkcyB0byBiZSBlbmFibGVkIHRvIGVuYWJs
+ZSBhIGZlYXR1cmUuIApFLmcuIEJSMl9QQUNLQUdFX0JMVUVaX0FMU0FfSENJVE9QLgoKLSBUaGUg
+cGFja2FnZSBoYXMgbWFueSBzdWItZmVhdHVyZXMgd2l0aCB2YXJpb3VzIGRlcGVuZGVuY2llcywg
+aXQgaXMgdHlwaWNhbGx5IGEgCm1ham9yIHRvcC1sZXZlbCBwYWNrYWdlIChpLmUuIHNvbWV0aGlu
+ZyB0aGF0IHRoZSB1c2VyIHdhbnRzIGV4cGxpY2l0bHkgYW5kIGlzIApub3QgcHVsbGVkIGluIGJ5
+IHNvbWV0aGluZyBlbHNlKSwgYW5kIHRoZSBzdWItZmVhdHVyZXMgYXJlIHVzZXIgdmlzaWJsZS4K
+ClRoZSBtcGQgc3ViLW9wdGlvbnMgZmFsbCBpbiB0aGUgbGF0dGVyIGNhdGVnb3J5LiBJdCdzIHRo
+ZSBtb3N0IHRyaWNreSBvbmUgdG8gCmV2YWx1YXRlIGJlY2F1c2UgaXQgcHVsbHMgaW4gY29tcGxl
+eGl0eSB3aXRoIGEgZGlmZmljdWx0IHRyYWRlLW9mZi4gSXQncyBhbHNvIAp0aGUgb25lIEkgZGlz
+bGlrZSBtb3N0LCBiZWNhdXNlIGl0J3MgdmVyeSBzdWJqZWN0aXZlLiBBIHdheSB0byBtYWtlIGl0
+IG1vcmUgCm9iamVjdGl2ZSBpcyB0byBtYWtlIGEgdXNlci12aXNpYmxlIG9wdGlvbiBmb3IgZWFj
+aCBjb25maWcgb3B0aW9uIHRoYXQgdGhlIApwYWNrYWdlIHByb3ZpZGVzLiBIb3dldmVyLCBJIHRo
+aW5rIHRoYXQgZWFzaWx5IGxlYWRzIHRvIGFuIHVubmVjZXNzYXJ5IGV4cGxvc2lvbiAKb2YgQ29u
+ZmlnLmluIG9wdGlvbnMgd2l0aCBubyBiZW5lZml0IGZvciB0aGUgdXNlciBhbmQgcG9zc2libHkg
+Y2F1c2luZyAKY29uZnVzaW9uLiBBbmQgaXQncyBub3QgbmVjZXNzYXJpbHkgdGhhdCBzaW1wbGUg
+ZWl0aGVyLCBjZnIuIG1lc2EzZCAodGhvdWdoIGluIAp0aGF0IGNhc2UgaXQncyBnb2luZyB0byBi
+ZSBjb21wbGljYXRlZCBob3dldmVyIGl0J3MgYXBwcm9hY2hlZCkuCgogIFdlIGRvbid0IGhhdmUg
+YSBjb25zaXN0ZW50IHBvbGljeSBmb3IgdGhpcyBjYXNlLCBidXQgSSBiZWxpZXZlIHRoZSBwb2xp
+Y3kgCnNob3VsZCBiZToKCi0gQWRkIENvbmZpZy5pbiBvcHRpb25zIG9ubHkgZm9yIGZlYXR1cmVz
+IHRoYXQgYXJlIGltcG9ydGFudCwgbWVhbmluZ2Z1bCBmb3IgdGhlIAp1c2VyIChlLmcuIGNvZGVj
+IHN1cHBvcnQpLgoKLSBBZGQgQ29uZmlnLmluIG9wdGlvbnMgb25seSBmb3IgZmVhdHVyZXMgdGhh
+dCBoYXZlIGEgc2l6ZSBpbXBhY3QgKHVzdWFsbHkgZHVlIAp0byB0aGUgZGVwZW5kZW5jaWVzIHRo
+ZXkgcHVsbCBpbikuCgotIEluIHRoZSAubWsgZmlsZSwgZG9uJ3QgdXNlIHRoZSBDb25maWcuaW4g
+b3B0aW9ucyBidXQgaW5zdGVhZCB1c2UgYXV0b21hdGljIApkZXBlbmRlbmNpZXMgb25seS4KClRo
+YXQgd2F5LCB0aGUgLm1rIGZpbGUgaXMga2VwdCBzaW1wbGUgKG5vIHByb2JsZW1hdGljIGNhc2Vz
+IGxpa2UgdGhlIApsaWJ1cG5wL2V4cGF0IGludGVyYWN0aW9uIGluIHRoaXMgcGF0Y2gpLiBUaGUg
+Q29uZmlnLmluIGlzIGEgYml0IGNvbXBsaWNhdGVkLCAKYnV0IGl0IGRvZXNuJ3QgZXhwbG9kZS4K
+CiAgQm90dG9tIGxpbmU6IEkgdGhpbmsgaXQncyBhY3R1YWxseSB0aGUgcmV2ZXJzZSB0aGF0IG5l
+ZWRzIHRvIGJlIGRvbmUuCgoKPiBJbiB0aGUgbWFrZWZpbGUsIGEgZmVhdHVyZSBpcyByZXNwb25z
+aWJsZSBvbmx5IHRvIHNlbGVjdCBvciBkZXNlbGVjdCBpdHMgCj4gY29uZmlndXJlIG9wdGlvbiBh
+bmQsIGlmIHRoaXMgZmVhdHVyZSByZWxpZXMgb24gYSBsaWJyYXJ5LCBhZGQgYSBkZXBlbmRlbmN5
+IG9uIAo+IHRoaXMuCgogIFNvIEkgdGhpbmsgdGhlIC5tayBmaWxlIHNob3VsZCBzaW1wbHkgY29u
+dGFpbiB0aGluZ3MgbGlrZToKCmlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCVk9SQklTKSx5KQpNUERf
+REVQRU5ERU5DSUVTICs9IGxpYnZvcmJpcwpNUERfQ09ORl9PUFRTICs9IC1Edm9yYmlzPWVuYWJs
+ZWQgLUR2b3JiaXNlbmM9ZW5hYmxlZAplbHNlCk1QRF9DT05GX09QVFMgKz0gLUR2b3JiaXM9ZGlz
+YWJsZWQgLUR2b3JiaXNlbmM9ZGlzYWJsZWQKZW5kaWYKCmFuZCBCUjJfUEFDS0FHRV9NUERfVk9S
+QklTIG9ubHkgaGFzIGFuIGluZGlyZWN0IGVmZmVjdCwgYnkgc2VsZWN0aW5nIApCUjJfUEFDS0FH
+RV9MSUJWT1JCSVMuCgoKPiBEdXBsaWNhdGVkIHNlbGVjdGlvbiBsb2dpYyBpbiBtcGQubWsgd2ls
+bCBiZSBlbGltaW5hdGVkLiBBIGJ1aWxkIGRlcGVuZGVuY3kgd2lsbCAKPiBvbmx5IGJlIGFkZGVk
+IGlmIGl0IGlzIHByZXNlbnQgaW4gdGhlIG1wZCBjb25maWd1cmF0aW9uLCBhbmQgbm90IGJlIGlu
+aGVyaXRlZCAKPiBhY2NpZGVudGFsbHkgZnJvbSBjb25jdXJyZW50IHBhY2thZ2VzLgoKICBTbyB0
+aGlzIGlzIGV4YWN0bHkgdGhlIHJldmVyc2Ugb2Ygd2hhdCBJJ2Qgd2FudC4gSSB0aGluayBpdCBt
+YWtlcyB0aGUgLm1rIGZpbGUgCmhhcmRlciB0byBtYWludGFpbiBmb3Igbm8gcHJhY3RpY2FsIGdh
+aW4uCgoKPiBUaGlzIGltcGFjdHMgdGhlIGZvbGxvd2luZyBmZWF0dXJlczogZXhwYXQsIGlkM3Rh
+ZywgeWFqbC4gaWQzdGFnIGFscmVhZHkgaXMgaGFsZiAKPiBpbXBsZW1lbnRlZCwgYnV0IG5vdCB1
+c2VkIGNvbnNpc3RlbnRseSAoaGFzIGFuIG9wdGlvbiBlbnRyeSBpbiBDb25maWcuaW4sIGJ1dCAK
+PiBkb2VzIG5vdCBzZWxlY3QgdGhpcywgYnV0IGhhbmRsZXMgZGVwZW5kZW5jaWVzIGluZGl2aWR1
+YWxseSkuIGV4cGF0IGFuZCB5YWpsIAo+IHdvdWxkIGJlIGNyZWF0ZWQgYXMgaGlkZGVuIG9wdGlv
+bnMgd2l0aG91dCB2aXNpYmlsaXR5IChubyB1c2VyIGludGVyYWN0aW9uIAo+IG5lY2Vzc2FyeSku
+CgogIFllcywgdGhhdCB3b3VsZCBpbmRlZWQgYmUgYW4gYWx0ZXJuYXRpdmUgdG8ga2VlcCB0aGUg
+Lm1rIGZpbGUgc2ltcGxlci4gSSB0YWtlIAppdCB5b3UgbWVhbiB0byBhZGQgYSBibGluZCBvcHRp
+b24gQlIyX1BBQ0tBR0VfTVBEX0VYUEFUIHRoYXQgZ2V0cyBzZWxlY3RlZCBieSAKdGhlIG90aGVy
+IE1QRCBvcHRpb25zIHRoYXQgcmVseSBvbiBleHBhdC4gVGhpcyBpbmRlZWQgc2ltcGxpZmllcyB0
+aGluZ3MsIGJ1dCBpdCAKaXMgc3RpbGwgYSBiaXQgbW9yZSBjb21wbGljYXRlZCB0aGFuIHdoYXQg
+SSBwcm9wb3NlLgoKPiBTZXBhcmF0ZSB2b3JiaXMgZGVjb2RlciBhbmQgZW5jb2RlciBvcHRpb25z
+OyBjdXJyZW50bHkgdGhlIGRlY29kZXIgZmVhdHVyZSAKPiBCUjJfUEFDS0FHRV9NUERfVk9SQklT
+IGVuYWJsZXMgYm90aCBvZ2cvdm9yYmlzIGRlY29kaW5nIGFuZCBvZ2cvdm9yYmlzIGVuY29kaW5n
+LCAKPiB3aGljaCBpcyBwcm9iYWJseSBub3QgaW50ZW5kZWQuCgogIEkgZG9uJ3Qgc2VlIGEgcmVh
+c29uIHdoeSB5b3Ugd291bGQgd2FudCBvbmx5IG9uZSBvciB0aGUgb3RoZXIuIEl0IGhhcyAKdmly
+dHVhbGx5IG5vIGltcGFjdCBvbiBzaXplLgoKCiAgSW4gc3VtbWFyeSwgSSB0aGluayB3ZSBoYXZl
+IHRoZSBmb2xsb3dpbmcgdGhyZWUgb3B0aW9ucyBmb3IgcGFja2FnZXMgd2hlcmUgd2UgCmRlY2lk
+ZSB3ZSB3YW50IHVzZXItdmlzaWJsZSBzdWItb3B0aW9ucy4KCi0gMS10by0xIG1hcHBpbmcgd2l0
+aCB0aGUgcGFja2FnZSBjb25maWd1cmUgb3B0aW9ucy4gSW50ZXJhY3Rpb24gYmV0d2VlbiB0aGUg
+Cm9wdGlvbnMgaXMgZXhwcmVzc2VkIHdpdGggc2VsZWN0L2RlcGVuZHMgaW4gQ29uZmlnLmluLiBU
+aGUgLm1rIGZpbGUgc2ltcGx5IG1hcHMgCnRoZSBDb25maWcuaW4gb3B0aW9ucy4gSWYgaXQncyBy
+ZWFsbHkgbm90IHJlbGV2YW50IGZvciB0aGUgdXNlciwgYSBDb25maWcuaW4gCm9wdGlvbiBjYW4g
+YmUgbWFkZSBibGluZC4gVGhpcyBpcyB3aGF0IEFuZHJlYXMgcHJvcG9zZXMuCgotIE9ubHkgYXV0
+b21hdGljIGRlcGVuZGVuY2llcyBpbiB0aGUgLm1rIGZpbGUsIGV4Y2VwdCBpbiBjYXNlcyB3aGVy
+ZSBpdCBoYXMgYW4gCmltcG9ydGFudCBzaXplIG9yIGJlaGF2aW91ciBpbXBhY3QuIEFkZCBDb25m
+aWcuaW4gb3B0aW9ucyBvbmx5IGluIGNhc2UgaXQgaXMgCnJlbGV2YW50LiBUaGlzIGlzIHdoYXQg
+SSBwcm9wb3NlLgoKLSBBZGQgQ29uZmlnLmluIG9wdGlvbnMgZm9yIGltcG9ydGFudCBmZWF0dXJl
+cy4gRXhwcmVzcyBpbnRlcmRlcGVuZGVuY2llcyAKYmV0d2VlbiBwYWNrYWdlIGNvbmZpZ3VyZSBv
+cHRpb25zIGluIHRoZSAubWsgZmlsZS4gVGhpcyBpcyB0aGUgY3VycmVudCBzaXR1YXRpb24gCmZv
+ciBtcGQuCgoKICBUaGlua2luZyBtb3JlIGFib3V0IGl0LCBBbmRyZWFzJyBwcm9wb3NhbCBkb2Vz
+IGhhdmUgYW4gYXR0cmFjdGl2ZSBraW5kIG9mIAplbGVnYW5jZSBhYm91dCBpdCwgd2hpY2ggZ2l2
+ZXMgaXQgc2ltcGxpY2l0eSBldmVuIHRob3VnaCBpdCBpcyBtb3JlIGxpbmVzIG9mIGNvZGUuCgog
+IFNvIGxldCdzIHNlZSB3aGF0IHRoZSBvdGhlciBtYWludGFpbmVycyB0aGluay4gSWYgeW91IChv
+ciB0aGUgb3RoZXIgCm1haW50YWluZXJzKSBkb24ndCBhZ3JlZSwgd2UgY2FuIGNvbXByb21pc2Ug
+YW5kIGdvIGJhY2sgdG8gdGhlIG9yaWdpbmFsIHBhdGNoIAood2l0aCBqdXN0IHRoZSBucHVwbnAv
+ZXhwYXQgc2l0dWF0aW9uIHJlc29sdmVkKS4KCiAgSWRlYWxseSBJJ2QgbGlrZSB0aGUgbWFpbnRh
+aW5lcnMgKGFuZCBhbnlib2R5IGVsc2UsIHJlYWxseSkgdG8gY29tZSB0byBhIApkZWNpc2lvbiBo
+ZXJlIGFuZCBldmVudHVhbGx5IGZvcm1hbGl6ZSBpdCBpbiB0aGUgbWFudWFsLiBCZWNhdXNlIGl0
+J3Mgbm90IHRoZSAKZmlyc3QgdGltZSB0aGlzIGRpc2N1c3Npb24gY3JvcHMgdXAuCgoKICBSZWdh
+cmRzLAogIEFybm91dAoKCj4gQ3JlYXRlIGVudHJ5ICd1bmljb2RlJyBmb3IgSUNVIGluIENvbmZp
+Zy5pbi4KPiAKPiBTZXQgemxpYiB0byBkaXNhYmxlZCAobm90IHVzZWQgY3VycmVudGx5KS4KPiAK
+PiBUaG91Z2h0cz8KPiAKPiBLaW5kIHJlZ2FyZHMsCj4gQW5kcmVhcwo+IAo+PiDCoFJlZ2FyZHMs
+Cj4+IMKgQXJub3V0Cj4+Cj4+PiDCoCBlbHNlIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTVBEX1VQTlBf
+RElTQUJMRUQpLHkpCj4+PiDCoCBNUERfQ09ORl9PUFRTICs9IC1EdXBucD1kaXNhYmxlZAo+Pj4g
+wqAgZW5kaWYKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
