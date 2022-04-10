@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2BCC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:09:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A687C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:33:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06F3440575;
-	Sun, 10 Apr 2022 15:09:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93C7681447;
+	Sun, 10 Apr 2022 15:33:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nkqk1NoAvAI3; Sun, 10 Apr 2022 15:09:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sly2Ytzc62sv; Sun, 10 Apr 2022 15:33:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC20040569;
-	Sun, 10 Apr 2022 15:09:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB6618142E;
+	Sun, 10 Apr 2022 15:33:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B67471BF869
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C9A71BF869
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C48A2825E8
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 392AB81428
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:33:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xtVYjx7twgxJ for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F3F47826A4
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:08:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 45BA283874; Sun, 10 Apr 2022 14:58:54 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 17:02:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80a9e9057daf587242548aa23f8cd7a8d88bfa1f
-X-Git-Newrev: 129922140ed7ed03458398b5ec3bad1423f7e6cf
-X-Patchwork-Hint: ignore
-Message-Id: <20220410145854.45BA283874@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: needs
- C++
+ with ESMTP id WFAZ-lExltMr for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 15:33:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E887F81413
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:33:47 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B10A720009;
+ Sun, 10 Apr 2022 15:33:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ndZZP-004HaV-HF; Sun, 10 Apr 2022 17:33:43 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220404162248.325842-1-fontaine.fabrice@gmail.com>
+Date: Sun, 10 Apr 2022 17:33:43 +0200
+In-Reply-To: <20220404162248.325842-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Apr 2022 18:22:48 +0200")
+Message-ID: <87h771q7fs.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libp11: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,97 +59,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=129922140ed7ed03458398b5ec3bad1423f7e6cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-gst1-plugins-bad needs C++ since switch to meson-package in commit
-5d6c408e9535be4b5ba0c8a49215d2d03dcb5cd5:
+ > Fix the following build failure with libressl:
+ > p11_rsa.c:355:14: error: static declaration of 'RSA_meth_get_finish' follows non-static declaration
+ >   355 | static int (*RSA_meth_get_finish(const RSA_METHOD *meth)) (RSA *rsa)
+ >       |              ^~~~~~~~~~~~~~~~~~~
 
-The following exception(s) were encountered:
-Running "/home/autobuild/autobuild/instance-8/output-1/host/bin/microblaze-buildroot-linux-musl-g++ --version" gave "[Errno 2] No such file or directory: '/home/autobuild/autobuild/instance-8/output-1/host/bin/microblaze-buildroot-linux-musl-g++'"
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/de3b1e97796f717eac47d291911e3e1517cb557b
 
-Rewriting the meson.build so it only requires C++ for the modules that
-are actually written in C++ is quite complicated, so just let the whole
-package depend on C++. Hopefully however this is going to be fixed in
-some future release. Therefore, the dependencies for individual modules
-are kept as well (even though they're redundant now).
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/8f924cebeb8a1ed73e57103bf3073fb8f8d8752e
+Committed to 2022.02.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gstreamer1/gst1-imx/Config.in         | 6 ++++--
- package/gstreamer1/gst1-plugins-bad/Config.in | 4 ++++
- package/gstreamer1/gst1-vaapi/Config.in       | 5 +++--
- 3 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 7b46233b53..41ef8548c5 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -88,11 +88,13 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
- 	bool "imxv4l2videosink"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 # V4L2_COLORSPACE_DEFAULT
-+	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
- 	help
- 	  Elements for V4L2 output
- 
--comment "imxv4l2videosink needs a toolchain w/ headers >= 4.2"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+comment "imxv4l2videosink needs a toolchain w/ headers >= 4.2, C++"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 || \
-+		!BR2_INSTALL_LIBSTDCPP
- 
- endif
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 234d57636b..669360adb1 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -1,5 +1,6 @@
- menuconfig BR2_PACKAGE_GST1_PLUGINS_BAD
- 	bool "gst1-plugins-bad"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	help
- 	  A set of plug-ins for GStreamer that may be of poor quality
-@@ -724,3 +725,6 @@ comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.0"
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 
- endif
-+
-+comment "gst1-plugins-bad needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-index 91bd4f85dd..ade8b83a5f 100644
---- a/package/gstreamer1/gst1-vaapi/Config.in
-+++ b/package/gstreamer1/gst1-vaapi/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GST1_VAAPI
- 	bool "gst1-vaapi"
- 	depends on !BR2_STATIC_LIBS # dlopen(), libva
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libva, libdrm
-+	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBVA
- 	select BR2_PACKAGE_LIBDRM
-@@ -45,6 +46,6 @@ config BR2_PACKAGE_GST1_VAAPI_ENCODERS
- 
- endif
- 
--comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library"
-+comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library, C++"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_PACKAGE_HAS_UDEV
-+		!BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
