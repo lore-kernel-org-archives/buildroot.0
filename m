@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC21C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:39:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40944C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2CD2416B9;
-	Sun, 10 Apr 2022 15:39:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 016B4416C6;
+	Sun, 10 Apr 2022 15:39:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BOAMMJxtNUbF; Sun, 10 Apr 2022 15:39:11 +0000 (UTC)
+	with ESMTP id g5dBhSbe_AMv; Sun, 10 Apr 2022 15:39:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42E41414CD;
-	Sun, 10 Apr 2022 15:39:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F5C61BF869
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99548409E8;
+	Sun, 10 Apr 2022 15:39:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C8621BF995
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4DAED60D66
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A6CE4109B
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sZTKoRGFvwfu for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VBqXYjuJkss4 for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 15:38:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 78AD9600B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58569409FA
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:38:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A4EEB8388E; Sun, 10 Apr 2022 15:29:00 +0000 (UTC)
+ id 7C49D8388A; Sun, 10 Apr 2022 15:29:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 17:35:59 +0200
+Date: Sun, 10 Apr 2022 17:32:50 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e0121e94771e264c21ec1ea2dac908f79ee2af6c
-X-Git-Newrev: e05dbffa0770353fb32f44ec7b045258a9e1bfac
+X-Git-Oldrev: 314074e743133043674a1558d6819dfa047f0ea9
+X-Git-Newrev: 97fcc6ef0e07337dd419128663f4c0e95d1150ee
 X-Patchwork-Hint: ignore
-Message-Id: <20220410152900.A4EEB8388E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pipewire: needs
- NPTL
+Message-Id: <20220410152900.7C49D8388A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libp11: fix build
+ with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e05dbffa0770353fb32f44ec7b045258a9e1bfac
+commit: https://git.buildroot.net/buildroot/commit/?id=97fcc6ef0e07337dd419128663f4c0e95d1150ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure raised since bump to version 0.3.26 in
-commit a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9 and
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b029000610d122ac12939d02ade2264605ff43de
+Fix the following build failure with libressl:
 
-thread-loop.c:(.text+0x81c): undefined reference to `pthread_setname_np'
+p11_rsa.c:355:14: error: static declaration of 'RSA_meth_get_finish' follows non-static declaration
+  355 | static int (*RSA_meth_get_finish(const RSA_METHOD *meth)) (RSA *rsa)
+      |              ^~~~~~~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/6019f4e9676743685e8af81d60ef198c1eba1fde
+ - http://autobuild.buildroot.org/results/de3b1e97796f717eac47d291911e3e1517cb557b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f54b5a64f2f51c7e30b291dfa177f855bd88d6f2)
+(cherry picked from commit 581d397ec0c437aac06a9eaeca01de4ed9249faf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pipewire/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/libp11/0001-Update-wp11_rsa.c.patch | 26 ++++++++++++++++++++++++++
+ package/libp11/libp11.mk                    |  8 +++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index dd13f31a73..3bfcf42a81 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PIPEWIRE
- 	bool "pipewire"
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO if BR2_PACKAGE_BLUEZ5_UTILS # runtime
-@@ -46,7 +46,8 @@ comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
+diff --git a/package/libp11/0001-Update-wp11_rsa.c.patch b/package/libp11/0001-Update-wp11_rsa.c.patch
+new file mode 100644
+index 0000000000..0a2d6e65ce
+--- /dev/null
++++ b/package/libp11/0001-Update-wp11_rsa.c.patch
+@@ -0,0 +1,26 @@
++From 4968cfc64dbaa39bb479a24d9578d75099e2f337 Mon Sep 17 00:00:00 2001
++From: patchMonkey156 <pagorman@asu.edu>
++Date: Mon, 19 Oct 2020 17:12:15 -0400
++Subject: [PATCH] Update p11_rsa.c
++
++Bugfix for new LibreSSL version 3.2.2
++[Retrieved from:
++https://github.com/OpenSC/libp11/commit/4968cfc64dbaa39bb479a24d9578d75099e2f337]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/p11_rsa.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/p11_rsa.c b/src/p11_rsa.c
++index b6beef0..ff12ed7 100644
++--- a/src/p11_rsa.c
+++++ b/src/p11_rsa.c
++@@ -336,7 +336,7 @@ int pkcs11_get_key_size(PKCS11_KEY *key)
++ 	return RSA_size(rsa);
++ }
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100005L || defined(LIBRESSL_VERSION_NUMBER)
+++#if ( ( defined (OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100005L ) || ( defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3020199L ) )
++ 
++ int (*RSA_meth_get_priv_enc(const RSA_METHOD *meth))
++ 		(int flen, const unsigned char *from,
+diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+index 45a718ee99..c1873a920c 100644
+--- a/package/libp11/libp11.mk
++++ b/package/libp11/libp11.mk
+@@ -11,10 +11,16 @@ LIBP11_INSTALL_STAGING = YES
+ LIBP11_LICENSE = LGPL-2.1+
+ LIBP11_LICENSE_FILES = COPYING
  
- endif
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++LIBP11_ENGINESDIR = enginesdir
++else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++LIBP11_ENGINESDIR = libdir
++endif
++
+ # pkg-config returns a libcrypto enginesdir prefixed with the sysroot,
+ # so let's rip it out.
+ LIBP11_CONF_OPTS = \
+-	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable enginesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
++	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable $(LIBP11_ENGINESDIR) libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
  
--comment "pipewire needs a toolchain w/ dynamic library, threads, gcc >= 5"
-+comment "pipewire needs a toolchain w/ dynamic library, NTPL, gcc >= 5"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+ LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
