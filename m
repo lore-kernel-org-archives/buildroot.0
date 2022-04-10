@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63758C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 21:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBB18C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 21:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1974D41677;
-	Sun, 10 Apr 2022 21:12:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r4n0Eoefzdwt; Sun, 10 Apr 2022 21:12:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEF8E415EB;
-	Sun, 10 Apr 2022 21:12:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C8A91BF995
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A6848402C
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9412384031;
+	Sun, 10 Apr 2022 21:12:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I_jIli3HnDMv for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f_AE19wngLkU; Sun, 10 Apr 2022 21:12:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89D478402C;
+	Sun, 10 Apr 2022 21:12:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A3E71BF9A4
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47A904160B
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dafw30nH-Gvf for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 21:11:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 745258402B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55C8F415E9
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 21:11:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1C1E88396C; Sun, 10 Apr 2022 21:02:02 +0000 (UTC)
+ id F2D0B83912; Sun, 10 Apr 2022 21:02:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 23:10:54 +0200
+Date: Sun, 10 Apr 2022 23:07:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c0aaf9cc9e85f63ab4334db8c6deca25e6f8e878
-X-Git-Newrev: b5f07f62eb0392c3bddd63ac16d12adec7e98812
+X-Git-Oldrev: 4b1080d57ae642bd5d4b5783c49d4ba49f13dfe8
+X-Git-Newrev: 35be926c97836989d6cecbc7ecb49f9c9bd46eba
 X-Patchwork-Hint: ignore
-Message-Id: <20220410210202.1C1E88396C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liburing: needs MMU
+Message-Id: <20220410210201.F2D0B83912@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spice: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +58,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5f07f62eb0392c3bddd63ac16d12adec7e98812
+commit: https://git.buildroot.net/buildroot/commit/?id=35be926c97836989d6cecbc7ecb49f9c9bd46eba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-liburing needs MMU since its addition in commit
-03ca6f4e39874583060317e7e15e9e360220877e:
+spice needs C++ since bump to version 0.15.0 in commit
+b784f1bc0fc3ac33a20549069a81ff98260b58e9 and
+https://github.com/freedesktop/spice/commit/e6e6ded681ff154f236f260f071389c4c8c0d944:
 
-setup.c: In function 'io_uring_ring_dontfork':
-setup.c:119:8: warning: implicit declaration of function 'madvise'; did you mean 'raise'? [-Wimplicit-function-declaration]
-  119 |  ret = madvise(ring->sq.sqes, len, MADV_DONTFORK);
-      |        ^~~~~~~
-      |        raise
+configure: error: *** A compiler with support for C++11 language features is required.
 
 Fixes:
- - http://autobuild.buildroot.org/results/33f3c58e98daab07139b4f400b85f87c0e314240
+ - http://autobuild.buildroot.org/results/4e0dc43c28d45176cccf573fb56ea9690192f754
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liburing/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/spice/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/liburing/Config.in b/package/liburing/Config.in
-index d65a3f1322..fc13f1c17c 100644
---- a/package/liburing/Config.in
-+++ b/package/liburing/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBURING
- 	bool "liburing"
-+	depends on BR2_USE_MMU # madvise()
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 	help
-@@ -11,5 +12,6 @@ config BR2_PACKAGE_LIBURING
- 	  https://git.kernel.dk/cgit/liburing
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index 2241b55b3d..ca5c562ca1 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -1,12 +1,14 @@
+-comment "spice server needs a toolchain w/ wchar, threads"
++comment "spice server needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
  
- comment "liburing needs a toolchain w/ gcc >= 4.9, headers >= 5.1"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ config BR2_PACKAGE_SPICE
+ 	bool "spice server"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
