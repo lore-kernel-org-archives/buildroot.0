@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 458BEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31F02C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0264A60D6A;
-	Sun, 10 Apr 2022 14:54:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3AE482BA1;
+	Sun, 10 Apr 2022 14:54:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4AMF_BvoTa09; Sun, 10 Apr 2022 14:54:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pjfiz95DTyeB; Sun, 10 Apr 2022 14:54:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B79F60D89;
-	Sun, 10 Apr 2022 14:54:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 38E561BF3B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8B0B829BB;
+	Sun, 10 Apr 2022 14:54:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 55E021BF990
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8058040327
+ by smtp1.osuosl.org (Postfix) with ESMTP id E72EE82F20
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:53:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FNZL0a6NtdG2 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lGPLvPrOsQPO for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 14:53:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E647D41547
+ by smtp1.osuosl.org (Postfix) with ESMTP id D45D282EF1
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:53:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2BAA38382A; Sun, 10 Apr 2022 14:43:21 +0000 (UTC)
+ id 1950083828; Sun, 10 Apr 2022 14:43:21 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 16:48:35 +0200
+Date: Sun, 10 Apr 2022 16:48:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84b1eacc328baad3ceb63505ac588022620a05f6
-X-Git-Newrev: 3ecac95be4e815dabbd5abf163f2917ec2770c28
+X-Git-Oldrev: 2b1c7ebc9b2c4a8bea5967860a425625ce2f45e5
+X-Git-Newrev: b9e533d0326c340d1a5504350c93d0b071c3d70e
 X-Patchwork-Hint: ignore
-Message-Id: <20220410144321.2BAA38382A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spdlog: bump to version 1.10.0
+Message-Id: <20220410144321.1950083828@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump to version 3.77
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ecac95be4e815dabbd5abf163f2917ec2770c28
+commit: https://git.buildroot.net/buildroot/commit/?id=b9e533d0326c340d1a5504350c93d0b071c3d70e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index 02756fc98c..866d1d6d02 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index b4b8be11f6..04e81e6b84 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_76_RTM/src/SHA256SUMS
+-sha256  1b8e0310add364d2ade40620cde0f1c37f4f00a6999b2d3e7ea8dacda4aa1630  nss-3.76.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_77_RTM/src/SHA256SUMS
++sha256  825edf5a2fd35b788a23ff80face591f82919ae3ad2b8f77d424a450d618dedd  nss-3.77.tar.gz
  # Locally calculated
--sha256  6fff9215f5cb81760be4cc16d033526d1080427d236e86d70bb02994f85e3d38  spdlog-1.9.2.tar.gz
-+sha256  697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224  spdlog-1.10.0.tar.gz
- sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index b5dfc0c7b4..9c5e76a9e8 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 2f7a265136..57df104d6c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPDLOG_VERSION = 1.9.2
-+SPDLOG_VERSION = 1.10.0
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+-LIBNSS_VERSION = 3.76
++LIBNSS_VERSION = 3.77
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
