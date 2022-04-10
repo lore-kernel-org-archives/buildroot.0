@@ -1,87 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F67CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6C29C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B41004091A;
-	Sun, 10 Apr 2022 14:13:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F5984051B;
+	Sun, 10 Apr 2022 14:37:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z30Y4z9y_32K; Sun, 10 Apr 2022 14:13:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RFnZn13A1TrW; Sun, 10 Apr 2022 14:37:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 622834091B;
-	Sun, 10 Apr 2022 14:13:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5ADF84017A;
+	Sun, 10 Apr 2022 14:37:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD9911BF3B5
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:13:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA95C1BF3B5
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AD92408B3
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:13:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D80BE40074
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:37:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 91IlCovALtIU for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 14:13:34 +0000 (UTC)
+ with ESMTP id K6tB6S3yELEC for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 14:37:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 489DD4089D
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:13:34 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id t1so1680734wra.4
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 07:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 133694151A
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:37:03 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id x3so506868wmj.5
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 07:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=fXJjmeORntqXesJymr5+49+P7wduvqiJD3rl1w4o1Yw=;
- b=ATrrCysIwJC4P+Dx2V9a7NcVxasRVc8Pp1SGFhkzFHdEZyr/5nQgWnJQnxKA2+VudM
- lpVOHOPg5eW1/C08ig/LDUrbFqd8CTu3tmcgqvs5nAlc1oRLIgLLpXpXhJIvKGUcn3ZX
- vDW80w79TEJU+ObE7zwsc1WAFN41GDaCPLb8SPM6KoIii03UiokO56BLdmtyOdtKE0qp
- 7j6V6GJ1Asyipz40vb3UpWfEZDv+/PGEIxjF99nz94frbuhH/FaGwnwqxhv4ZvTLsx35
- XX6mVUGtDZ9lGTjT01ZZkVwOu0mHFu9aYVyJcWwiYZN3uznt4XR8rl+2yRcZvU7kaDwD
- OXHQ==
+ bh=lVbn9K1Yt7hpyg9kyEUG9uKU/5eKy0a8GxreXaFK4bc=;
+ b=DWX8jpIoFhGfzA9K+5y5H+t9Nk+isAXdg3qyoBlHgD+abpX9jiaI3LRlTVfMutsb+F
+ HHCfrpbHn6inDJ3oosMZPScg/HNVchUZPhHYKdhXlGDWrVkIjSLG/pbJCKVUFMOjQF9v
+ X0g5iKAnkCKQcaFIJg1mceNtOob4EK7jDFfSUxBtlj9Qv0oTg5zRbKOxCOyw6uuHpS0Z
+ pqg2nFWYTTKoOUqv2JSXqS6lnsuAP2Fl+LwzQZ1d8GarcGJKT9fdRbkXQhKs3aqMo8su
+ 48jh5tdPT98Mc5ratzh4uBpsluXzZyx9jVGzCGpZ1ebSnozPF1JCuA0vBcTBRZgCKRR2
+ XC0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=fXJjmeORntqXesJymr5+49+P7wduvqiJD3rl1w4o1Yw=;
- b=RsoxLgsgrVTpgV5mmS6SqYAkmnalKRxKTGYNBrthCE+sxosaMKVV1u0LjuhCCf7a10
- /WsJ56yN7+Wn7N+tciS0Z18ytwg8F1ygMcAHG443oog9us8CVA9GbFGpkmzNcMOWsMFF
- uEhfvCj9svRFqDVxD7FA98PzUxH4Z8s8PYfmQpLsb+R2PTHHGNfV+GQTV+YdS6JbZ6cO
- bw5RtrWJYUR9e7Nyeb2KEyZQ8tVW7CrkBdG3fcWxxR0ixJjQFH2rRHJ+NyPp8YM+KANG
- R8Fqtjb6ZVCIYYWTisZD7ktuMAEXyUwOafGYDvTrIPkMlSDBvQoP4hsyPpn43ejKhV7W
- JIUA==
-X-Gm-Message-State: AOAM530DYbe0IlSYLhBcMtU2ctm2z5pNpH74Kv9KkROBdhYxcvi6CoGE
- 48cIGN3j4blEDq9cOU0B6pwQ/w==
-X-Google-Smtp-Source: ABdhPJwTGrVfjjMDL9ML+XXntz5Ge7Z1D9U9irDdH4Y0lhv5JI+RE+g4bMZs5lIHM21spYmo4+gsMg==
-X-Received: by 2002:a05:6000:2c9:b0:204:1cdb:8f8d with SMTP id
- o9-20020a05600002c900b002041cdb8f8dmr22684028wry.49.1649600012287; 
- Sun, 10 Apr 2022 07:13:32 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ bh=lVbn9K1Yt7hpyg9kyEUG9uKU/5eKy0a8GxreXaFK4bc=;
+ b=Jol0d1XoxqQMUoxKha0w2KLCsPVaXDQ0VCLBYuUwXgoa7IQjTA9tTms/xAc3aZZ/Ss
+ gnwW/iPmW3HvRDS7+/A8Ex4pTScMlUICvSInuDbvBjaZDGC4vq8DIykJ/FeSFWZCu3io
+ /Jhhxzrquu61+Xi2ppEbhThUCRXASEndhC1IVsUeVOrLkZO/KALDO1sCWenGs0X9Fbk2
+ cXQD0Ju/t4cOcTc8cpeuGpgxduHXgb5WnFYr7LfJrtJMGAItkC/hJCF58ohCNVybHl7+
+ tTGBH2Ubo/zSH2D1g0UhejvylJXUtO6bnXL6KiIm/7F/rYnCUf0xZWN4WT0Y/+AzaGCp
+ Gxfw==
+X-Gm-Message-State: AOAM531KfKEdydOYBz3z4/KJrUB3oUO8CE3GXexBhm2LYcLf20/ESQKV
+ 0mIJ/irQfTKfXmk47XhOcKeViP/Uico=
+X-Google-Smtp-Source: ABdhPJxrI543zK/djqWJwXqc61rnVEsCfS1JwQy0CLZaRJw3gSqtEBFjveGWc59M6Agb09yOjuq8EQ==
+X-Received: by 2002:a7b:ca42:0:b0:38c:6d09:1362 with SMTP id
+ m2-20020a7bca42000000b0038c6d091362mr25454941wml.103.1649601421890; 
+ Sun, 10 Apr 2022 07:37:01 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- v5-20020adfe4c5000000b001edc1e5053esm23546267wrm.82.2022.04.10.07.13.31
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 10 Apr 2022 07:13:31 -0700 (PDT)
-Message-ID: <0548ce7b-225b-1520-61ea-ddd2a7bf76f9@mind.be>
-Date: Sun, 10 Apr 2022 16:13:30 +0200
+ y15-20020a056000168f00b002057a9f9f5csm28841454wrd.31.2022.04.10.07.37.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 10 Apr 2022 07:37:01 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 10 Apr 2022 16:34:13 +0200
+Message-Id: <20220410143413.146915-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220405200615.1755287-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220405200615.1755287-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/igh-ethercat: needs kernel < 3.5
+Subject: [Buildroot] [PATCH 1/1] package/kompexsqlite: security bump to
+ version 1.12.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,71 +88,199 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+- Update site to get latest version
+- Switch to generic-package and drop patches as upstream doesn't provide
+  autotools support
+- License is MIT since version 1.12.15
+- This bump will fix the following build failure with BR2_OPTIMIZE_FAST:
 
+src/sqlite3.c: In function 'sqlite3IsNaN':
+src/sqlite3.c:21797:3: error: #error SQLite will not work correctly with the -ffast-math option of GCC.
+21797 | # error SQLite will not work correctly with the -ffast-math option of GCC.
+      |   ^~~~~
 
-On 05/04/2022 22:06, Fabrice Fontaine wrote:
-> igh-ethercat needs kernel < 3.5 since bump to version 1.5.2 in commit
-> 88cd215169d6875a5ed0543b15254b98f9f83104:
+- This bump will also fix security issues by bumping sqlite to 3.36.0
+- Update indentation in hash file (two spaces)
 
-  Sorry, but no. If this is really true, we should just remove the package. It 
-makes no sense to try to maintain packages that rely on such ancient kernels.
-IMHO, of course ;-)
+http://sqlitewrapper.kompex-online.com/index.php?content=changelog
 
-  However, there seems to be a new upstream [1] that (based on the git history) 
-at least supports kernel 4.19. So switching to that would be a good idea.
+Fixes:
+ - http://autobuild.buildroot.org/results/63e07345b97faa6d6239933f1790c6f2e02da77f
 
-  There's another concern however, for which I included James in Cc. Quite a lot 
-of external kernel modules and other extensions (e.g. rtai) will only work with 
-specific kernel versions. I don't know if we can afford to really encode that in 
-the Config.in, especially because we don't have a good idea of the kernel 
-version that is being built (the headers version is just a strong hint, but e.g. 
-in case you build with an external toolchain it can be completely wrong). Up 
-until recently, this wasn't really a problem because we don't build them in the 
-autobuilders anyway. However, now James has added support for building kernels 
-in his autobuilder, we do get failures like this. How will we handle that?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...e-use-autoconf-CXX-for-proper-builds.patch | 27 ----------
+ .../0002-append-to-cflags-and-cxxflags.patch  | 49 -------------------
+ package/kompexsqlite/kompexsqlite.hash        |  5 +-
+ package/kompexsqlite/kompexsqlite.mk          | 45 ++++++++++++++---
+ 4 files changed, 42 insertions(+), 84 deletions(-)
+ delete mode 100644 package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
+ delete mode 100644 package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch
 
-  Regards,
-  Arnout
+diff --git a/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch b/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
+deleted file mode 100644
+index 408c100d71..0000000000
+--- a/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 769693d9ddf63b04dd4aad6cad080f3cee3f997e Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 11 Jun 2015 14:08:38 -0300
+-Subject: [PATCH] Makefile: use autoconf CXX for proper builds
+-
+-Status: applied upstream.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- Makefile.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 91fb8b2..fe862cd 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -23,6 +23,7 @@ mandir = $(prefix)/share/man/man3
+- headerdir = $(prefix)/include/kompex
+- 
+- CC = @CC@
+-+CXX = @CXX@
+- CFLAGS = @CFLAGS@
+- CPPFLAGS = $(CFLAGS) @CPPFLAGS@
+- LDFLAGS = @LDFLAGS@
+--- 
+-2.3.6
+-
+diff --git a/package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch b/package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch
+deleted file mode 100644
+index abd0dc0fdd..0000000000
+--- a/package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 3eb064ffa9b43fb5f245b8abda48a1c152a6f2d7 Mon Sep 17 00:00:00 2001
+-From: me <noemail@nowhere.com>
+-Date: Thu, 20 Nov 2014 14:37:34 -0700
+-Subject: [PATCH] Append to CFLAGS and CXXFLAGS as setup by ./configure.  This
+- can allow users to Customize the SQLite build process with compile time
+- #defines rather than altering the sources.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: 3eb064ffa9b43fb5f245b8abda48a1c152a6f2d7
+-
+- Makefile-shared.mk | 4 ++--
+- Makefile-static.mk | 4 ++--
+- 2 files changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile-shared.mk b/Makefile-shared.mk
+-index b2a4920..d15ce3c 100644
+---- a/Makefile-shared.mk
+-+++ b/Makefile-shared.mk
+-@@ -12,10 +12,10 @@ OBJS= \
+- 	${objsdir}/sqlite3.o
+- 
+- # C Compiler Flags
+--CFLAGS= -fPIC -MMD -MP
+-+CFLAGS+= -fPIC -MMD -MP
+- 
+- # CC Compiler Flags
+--CPPFLAGS= -DKOMPEX_SQLITEWRAPPER_EXPORT -DKOMPEX_SQLITEWRAPPER_DYN -fPIC -MMD -MP -I${includedir}
+-+CPPFLAGS+= -DKOMPEX_SQLITEWRAPPER_EXPORT -DKOMPEX_SQLITEWRAPPER_DYN -fPIC -MMD -MP -I${includedir}
+- 
+- # Link Libraries and Options
+- LDLIBSOPTIONS= -shared -fPIC
+-diff --git a/Makefile-static.mk b/Makefile-static.mk
+-index 429a4ff..0678681 100644
+---- a/Makefile-static.mk
+-+++ b/Makefile-static.mk
+-@@ -12,10 +12,10 @@ OBJS= \
+- 	${objsdir}/sqlite3.o
+- 
+- # C Compiler Flags
+--CFLAGS= -MMD -MP
+-+CFLAGS+= -MMD -MP
+- 
+- # CC Compiler Flags
+--CPPFLAGS= -I${includedir} -MMD -MP
+-+CPPFLAGS+= -I${includedir} -MMD -MP
+- 
+- # Link Libraries and Options
+- LDLIBSOPTIONS=
+diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
+index 8869e9b7d9..aa0f269570 100644
+--- a/package/kompexsqlite/kompexsqlite.hash
++++ b/package/kompexsqlite/kompexsqlite.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+-sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	kompexsqlite-1.10.12-1.tar.gz
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	LICENSE.txt
++sha256  81773ddb156fed51ef43a5f562e3b47761c4c33de9197bf0c3e7099b08579e2a  download.php?dl=KompexSQLiteWrapper-Source_1.12.15.tar.gz
++sha256  65fd20aeb67892740a710a09d788acfda8747741e746395739412919f84b5f9f  inc/KompexSQLiteDatabase.h
++sha256  001f26c0b2ca407a9a5d3f5e0690d7e576687b23110e18d2a08014dd774eb71c  inc/sqlite3.h
+diff --git a/package/kompexsqlite/kompexsqlite.mk b/package/kompexsqlite/kompexsqlite.mk
+index a40088fa2d..6a619de0ef 100644
+--- a/package/kompexsqlite/kompexsqlite.mk
++++ b/package/kompexsqlite/kompexsqlite.mk
+@@ -4,11 +4,44 @@
+ #
+ ################################################################################
+ 
+-KOMPEXSQLITE_VERSION = 1.10.12-1
+-KOMPEXSQLITE_SITE = \
+-	$(call github,Aethelflaed,kompex-sqlite-wrapper,v$(KOMPEXSQLITE_VERSION))
++KOMPEXSQLITE_VERSION = 1.12.15
++KOMPEXSQLITE_SOURCE = download.php?dl=KompexSQLiteWrapper-Source_$(KOMPEXSQLITE_VERSION).tar.gz
++KOMPEXSQLITE_SITE = http://sqlitewrapper.kompex-online.com/counter
+ KOMPEXSQLITE_INSTALL_STAGING = YES
+-KOMPEXSQLITE_LICENSE = LGPL-3.0+ (wrapper), Public Domain (bundled sqlite)
+-KOMPEXSQLITE_LICENSE_FILES = LICENSE.txt
++KOMPEXSQLITE_LICENSE = MIT (wrapper), Public Domain (bundled sqlite)
++KOMPEXSQLITE_LICENSE_FILES = inc/KompexSQLiteDatabase.h inc/sqlite3.h
+ 
+-$(eval $(autotools-package))
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++KOMPEXSQLITE_CONFS += ReleaseStaticLib
++define KOMPEXSQLITE_INSTALL_STATIC_LIB
++	$(INSTALL) -D -m 0644 $(@D)/lib/release/KompexSQLiteWrapper_Static.a \
++		$(STAGING_DIR)/usr/lib/libkompex-sqlite-wrapper.a
++endef
++endif
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++KOMPEXSQLITE_CONFS += ReleaseDynamicLib
++define KOMPEXSQLITE_INSTALL_SHARED_LIB
++	$(INSTALL) -D -m 0755 $(@D)/lib/release/KompexSQLiteWrapper.so \
++		$(1)/usr/lib/libkompex-sqlite-wrapper.so
++endef
++endif
++
++define KOMPEXSQLITE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		ALLCONFS="$(KOMPEXSQLITE_CONFS)" \
++		-C "$(@D)/Kompex SQLite Wrapper" all
++endef
++
++define KOMPEXSQLITE_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/kompex
++	$(INSTALL) -m 644 $(@D)/inc/* $(STAGING_DIR)/usr/include/kompex
++	$(KOMPEXSQLITE_INSTALL_STATIC_LIB)
++	$(call KOMPEXSQLITE_INSTALL_SHARED_LIB,$(STAGING_DIR))
++endef
++
++define KOMPEXSQLITE_INSTALL_TARGET_CMDS
++	$(call KOMPEXSQLITE_INSTALL_SHARED_LIB,$(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
+-- 
+2.35.1
 
-[1] https://gitlab.com/etherlab.org/ethercat
-
-> 
-> checking for kernel for 8139too driver... configure: error: kernel 5.15 not available for 8139too driver!
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/e8122e9d7c13d07a6ddc7d9a2d3a078c21521ecd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   package/igh-ethercat/Config.in | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
-> index e600ef5fcd..51b8584f78 100644
-> --- a/package/igh-ethercat/Config.in
-> +++ b/package/igh-ethercat/Config.in
-> @@ -1,9 +1,14 @@
->   comment "igh-ethercat needs a Linux kernel to be built"
->   	depends on !BR2_LINUX_KERNEL
->   
-> +comment "igh-ethercat needs a toolchain w/ headers < 3.5"
-> +	depends on BR2_LINUX_KERNEL
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-> +
->   config BR2_PACKAGE_IGH_ETHERCAT
->   	bool "igh-ethercat"
->   	depends on BR2_LINUX_KERNEL
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
->   	help
->   	  IgH EtherCAT Master for Linux.
->   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
