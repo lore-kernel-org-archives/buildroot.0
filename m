@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 570A1C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:48:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E82DAC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 122C382AC8;
-	Sun, 10 Apr 2022 14:48:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98BBE410D5;
+	Sun, 10 Apr 2022 14:48:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1mT9z91Gg98a; Sun, 10 Apr 2022 14:48:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LBen9Y6yeMQh; Sun, 10 Apr 2022 14:48:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35C918264A;
-	Sun, 10 Apr 2022 14:48:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1FD121BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70C574109D;
+	Sun, 10 Apr 2022 14:48:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2537A1BF995
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DE628401C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12A1840119
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:48:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9cQvjL07gegp for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AE2FHDceHpTr for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 14:48:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5737C84006
+ by smtp2.osuosl.org (Postfix) with ESMTP id 668DA400F1
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:48:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9496C837C4; Sun, 10 Apr 2022 14:38:37 +0000 (UTC)
+ id A678B837CC; Sun, 10 Apr 2022 14:38:37 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 16:15:09 +0200
+Date: Sun, 10 Apr 2022 16:47:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f83216ff1f86c625023bee3037773997fc2987d
-X-Git-Newrev: df3cc4bb1c91114d29e48d8bc8206adcc35e9b9c
+X-Git-Oldrev: c4872446c8c5cd34b2f8e0ed66932cb3ba62556a
+X-Git-Newrev: 2b1c7ebc9b2c4a8bea5967860a425625ce2f45e5
 X-Patchwork-Hint: ignore
-Message-Id: <20220410143837.9496C837C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/trace-cmd: needs NPTL
+Message-Id: <20220410143837.A678B837CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: bump to version v1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df3cc4bb1c91114d29e48d8bc8206adcc35e9b9c
+commit: https://git.buildroot.net/buildroot/commit/?id=2b1c7ebc9b2c4a8bea5967860a425625ce2f45e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-trace-cmd needs NPTL since bump to version 2.9.1 in commit
-0e1231a3c0719269ab3546defe4b1fb0f1f5d7d2 and
-https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/commit/?id=08b9d5076455c93c997376c8089ee12b9071785b:
+Note: this version adds compatibility for Go 1.18.
 
-/nvmedata/autobuild/instance-24/output-1/host/lib/gcc/i586-buildroot-linux-uclibc/10.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-24/output-1/build/trace-cmd-2.9.7/lib/trace-cmd/libtracecmd.a(trace-timesync.o): in function `tracecmd_tsync_with_host':
-trace-timesync.c:(.text+0x12e1): undefined reference to `pthread_setaffinity_np'
-
-Fixes:
- - http://autobuild.buildroot.org/results/9a88aaf92760b34958ef5b1708de83e46ccdb587
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/trace-cmd/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-index 574541c571..2d0accd7ae 100644
---- a/package/trace-cmd/Config.in
-+++ b/package/trace-cmd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TRACE_CMD
- 	bool "trace-cmd"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# pthread_setaffinity_np
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen()
- 	help
-@@ -13,6 +14,6 @@ config BR2_PACKAGE_TRACE_CMD
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 23dacded88..eb9f2894a9 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  6a289406c1c0583763e5a9754e31a1eced55cd5f162a7bc2a3a315d5eb05c7a1  containerd-1.5.11.tar.gz
++sha256  4ea21a6b4649512366e7c31ae547ad89c6a69c6586a6d8565cff07898de344b0  containerd-1.6.2.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index c405b75e81..36f2db4125 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
- 
--comment "trace-cmd needs a toolchain w/ threads, dynamic library"
-+comment "trace-cmd needs a toolchain w/ NPTL, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+-CONTAINERD_VERSION = 1.5.11
++CONTAINERD_VERSION = 1.6.2
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
