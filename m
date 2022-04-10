@@ -4,44 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA9FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 19:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12642C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 20:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B64CC415FC;
-	Sun, 10 Apr 2022 19:59:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABBE6415FD;
+	Sun, 10 Apr 2022 20:01:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wc0V_5rrUl8I; Sun, 10 Apr 2022 19:59:17 +0000 (UTC)
+	with ESMTP id gdS0nGET-QXd; Sun, 10 Apr 2022 20:01:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 821C8415F4;
-	Sun, 10 Apr 2022 19:59:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 76C8C1BF338
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 19:58:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94128415F4;
+	Sun, 10 Apr 2022 20:01:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C306B1BF338
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 20:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5697C60AFF
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 19:58:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C04C64014A
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 20:01:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T4AHm2RoK6uy for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 19:58:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A0ED60BA4
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 19:58:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 60D32838C5; Sun, 10 Apr 2022 19:49:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T-ut0jYB0GGj for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 20:01:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6CD5940106
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 20:01:30 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D9EB660005;
+ Sun, 10 Apr 2022 20:01:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nddkT-005Dl6-SW; Sun, 10 Apr 2022 22:01:25 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 21:57:07 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 15c6374a56691addbf718078143a7ff16ecf3e23
-X-Git-Newrev: 7fb40b1468867d158b7aa497abaad5592f267c5c
-X-Patchwork-Hint: ignore
-Message-Id: <20220410194900.60D32838C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libest: doesn't
- support libressl
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220405180944.946684-1-fontaine.fabrice@gmail.com>
+Date: Sun, 10 Apr 2022 22:01:25 +0200
+In-Reply-To: <20220405180944.946684-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 5 Apr 2022 20:09:44 +0200")
+Message-ID: <8735ikogh6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-libav: fix
+ build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,46 +60,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fb40b1468867d158b7aa497abaad5592f267c5c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix the following build failure with libressl raised since the addition
-of the package in commit f6f0e1e58168dfa9194db2e073efd20a98c15728:
+ > Fix the following build failure without C++ raised since bump to version
+ > 1.18.0 in commit 15dc48ca9becafec6ba11b08af18453bc0e40c9e:
 
-In file included from est.c:28:
-est.h:27:10: fatal error: openssl/srp.h: No such file or directory
-   27 | #include <openssl/srp.h>
-      |          ^~~~~~~~~~~~~~~
+ > The following exception(s) were encountered:
+ > Running
+ > "/nvmedata/autobuild/instance-9/output-1/host/bin/or1k-buildroot-linux-musl-g++
+ > --version" gave "[Errno 2] No such file or directory:
+ > '/nvmedata/autobuild/instance-9/output-1/host/bin/or1k-buildroot-linux-musl-g++'"
 
-Fixes:
- - http://autobuild.buildroot.org/results/0dd755effbdddfa1b578fec9f1b1c9366b6822bc
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/8ac0ba5eaaf7571857b4d8cfabf1488d640dc59a
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c4872446c8c5cd34b2f8e0ed66932cb3ba62556a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libest/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/libest/Config.in b/package/libest/Config.in
-index d8271ad69e..6abe9d2848 100644
---- a/package/libest/Config.in
-+++ b/package/libest/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBEST
- 	depends on !BR2_STATIC_LIBS # libexecinfo or glibc
- 	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
- 	  libest is a C implementation of RFC 7030 (Enrollment over
- 	  Secure Transport).
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
