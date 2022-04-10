@@ -1,89 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90BE3C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 13:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B19EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 156F460D66;
-	Sun, 10 Apr 2022 13:55:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7310241700;
+	Sun, 10 Apr 2022 14:12:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M6K2bBmgggmH; Sun, 10 Apr 2022 13:55:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uMMehU2nndVs; Sun, 10 Apr 2022 14:12:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12E4A60D55;
-	Sun, 10 Apr 2022 13:55:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D816B1BF86C
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 13:55:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20DBE416F7;
+	Sun, 10 Apr 2022 14:12:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 48C321BF3B5
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6FBB827C9
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 13:55:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 441D1416F7
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:12:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6M4930L7qrY7 for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 13:55:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yeg387SJs0gk for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 14:12:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6D7BF80EE8
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 13:55:21 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id bv19so2894007ejb.6
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 06:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=DE71GxbrJunvzLti1NpDDThzrMtyzs98Dpmm1o4azbU=;
- b=BCqYEQlSiv4UHisaXYI+gR5zyTT6z3Via38f9b6Qa0PavsPLqPTdx5VxjpOLYvRlDM
- cjKYWEHdmaxrDrMXsu7WmpsQRaBUQcZ4Lmcv3IWL1Kgsrj++2+SBigd9dvdLHE3z8O2S
- 6iI7b/aqHhLKWPdADp73ABGyD21w8KPq3blUIF9G6RR7xMCfP/yasI6av103DHgDIZ0s
- 8D8HbbvXGIRaw0vt8VAOew4gjKhOP8VueevsIPPfobdtA9Y7RF6CHRcyyXrt2YZmjuAI
- rO36ciRN5p6lgFgffR+1t89XdDalwIauVJhwBqrVvScQzJDOCowjf2Hq3hQkDls5p00+
- mQUg==
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F389241691
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:12:47 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id p189so8361641wmp.3
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 07:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=V7SAURokf43QcyT4cngJRhhpPDJQz8j25h/79pnaXvI=;
+ b=ZEJ9rpo9x+TpVP0sHKh4d8kCMqQstWLX/8FeGK5IVac2XeBhnyRTJRSlhqMpvyG0Es
+ c8SDJ6EqOSlxVigLeKXmk3ZKPV8CHHLgxNZyR8+Z161+j57Z8H2SIIOu2aUZYdqsME0h
+ Ju3Ndh10FQLkgqvNZcDH6ZSbTEChMIdgn2F3yE3ZW8AiufbGGm3Klv66xl8v85VbKVm0
+ r4tCs0QY+A7qo0yHG6xkeI4k7TZHRA6/o5jCIrV9by4wWqGswv2BTkqJeKqYk2mTEMK3
+ O4TXE+48kmv/bOUaLy1cHLigni89TpMR4IrXe63A4rESPje7PNuW6529ks76f2xzZM/F
+ 24fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DE71GxbrJunvzLti1NpDDThzrMtyzs98Dpmm1o4azbU=;
- b=srZrMQkZ6Z1F3PFHNpyaAfzAAtBlfet+It3G/b15C8oOCpl3dm19660DSgengMH5Gv
- TvCbYMJiSQRPIrxt05mbUzYtaFOHr4WCSHmLDM+dDfQaAdBkLphom0dz7m9OMIkKOvxi
- hR2FOkAxtaIqILC8woN9uh2/G/fA4/yjkkFkUq3TfIBJ25aqOcbmd10TnsjBDpD55tBM
- kTsK+w1LlaSv2+VJ2sLq/jimgex+bC7NyQlJhHy2zwhDnyxC1OUhqcRBzGoWI19r8jHr
- Bka5fH3jC9Pns0El3KQEuVDYT5UprGscMrKY/YWHNVUG/bPCUvYSu/7DnQc5fbWIlB+f
- A/SA==
-X-Gm-Message-State: AOAM531E17XzYaL1xlU56FB1JamV1oVTaeAGgMjMSeJXLFjaRh3v70hM
- 7O/hZjveGtJaQUl370nmP06/eeG3royyLw==
-X-Google-Smtp-Source: ABdhPJxc6Nu4O3Fn6ydDbmtMEchHSOAx+8epFTOk5xtmt1vekcast8K7QdsyFDNJWsVNs82WLc2NHQ==
-X-Received: by 2002:a17:906:39da:b0:6cf:7f09:a7bc with SMTP id
- i26-20020a17090639da00b006cf7f09a7bcmr27289753eje.457.1649598919450; 
- Sun, 10 Apr 2022 06:55:19 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ bh=V7SAURokf43QcyT4cngJRhhpPDJQz8j25h/79pnaXvI=;
+ b=0u7ln4cOTDpqopWgLQ+OROxYa02Mk7r2JqTGiiYWnM9+hE0bI4axeo1r4VToYz61e/
+ IlbQwMj0J0y321nxOTw3FScsptuPF07gIu+fe9bgKnZ9zD606BYiRVi9gnL78nVgazHY
+ UKvtz9sDHiTXKfw2Sid8XSgN/jtmvPNNOy9/k0DNwGTOt6bIVtLp6GesL7ybj2WmQEMH
+ A8T93lyQNcwDKSpEvXyqtp9fxbVFPrQ7uudq8d6fZRBBWEWqqsGhlh0zacFc+kQP+1Z2
+ mwKqDZA6Oz5wUjFNXftrjsAKS9WmLi2qHitEN5pic9eEWPpzaTK1cFxtR8gsp3w+KPs7
+ DgMA==
+X-Gm-Message-State: AOAM5328W5JlqPS2roDHJLWUgHECPml87+JhQNDPmzGh93OKVO7kOMK9
+ Q/VpnS0qxO2Dr5nQCnBSUBFoW03YmwA=
+X-Google-Smtp-Source: ABdhPJwnvfh878EDehNm48uZdUI+bVT3GB2K5cbwYpeZmXmeBqPVxvzZzEPsowGSuCTlyot7gLIavw==
+X-Received: by 2002:a05:600c:3ba8:b0:38e:ba3a:dc3b with SMTP id
+ n40-20020a05600c3ba800b0038eba3adc3bmr1845132wms.185.1649599966001; 
+ Sun, 10 Apr 2022 07:12:46 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- r19-20020a17090638d300b006d6e4fc047bsm11029108ejd.11.2022.04.10.06.55.18
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 10 Apr 2022 06:55:18 -0700 (PDT)
-Message-ID: <b55481af-16ad-4b5c-6db3-b6eaad44bade@mind.be>
-Date: Sun, 10 Apr 2022 15:55:17 +0200
+ p18-20020adfba92000000b001e4ae791663sm24080535wrg.62.2022.04.10.07.12.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 10 Apr 2022 07:12:45 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 10 Apr 2022 16:10:43 +0200
+Message-Id: <20220410141043.144288-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: =?UTF-8?B?6ri464+Z6reg?= <tms320c5x@naver.com>, buildroot@buildroot.org
-References: <cc5e9de75c10401fa84e97d2ed49e1@cweb002.nm.nfra.io>
- <ec2bb891e060dfac61aec910aac64df@cweb001.nm.nfra.io>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <ec2bb891e060dfac61aec910aac64df@cweb001.nm.nfra.io>
-Subject: Re: [Buildroot] buildroot-2022.02 installation problems
+Subject: [Buildroot] [PATCH 1/1] package/lftp: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,68 +85,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSwKCk9uIDA0LzA0LzIwMjIgMDM6MjMsIOq4uOuPmeq3oCB3cm90ZToKPiBIZWxsbwo+IAo+
-IEkgYW0gdHJ5aW5nIHRvIGxlYXJuIExpbnV4IGxhdGUsIGJ1dCBub3RoaW5nIGlzIGVhc3kuCj4g
-Cj4gSXQgdGFrZXMgYSBsb3Qgb2YgZWZmb3J0IGFuZCB0aW1lIHRvIGNvbXBpbGUgaW5kaXZpZHVh
-bGx5LCBzdWNoIGFzIGJpbnV0aWxzLCAKPiBnY2MsIGdsaWJjLCBhbmQga2VybmVsLCBldGMgd2hp
-Y2ggYXJlIHJlcXVpcmVkIHRvIGJ1aWxkIGEgTGludXggZW52aXJvbm1lbnQuCj4gCj4gYW5kIHRo
-ZW4gaGF2ZSBkaXNjb3ZlcmVkIGJ1aWxkcm9vdCBhbmQgaSB0aG91Z2h0IHRoYXQgdGhlIGJ1aWxk
-cm9vdCBjb3VsZCBiZSBhIAo+IGxpdHRsZSBlYXNpZXIgdG8gcmVhY2ggbXkgb3JpZ2luYWwgcHVy
-cG9zZS4KPiAKPiBJIGFtIGFuIGVuZ2luZWVyLCBzbyBmYXIgSSBoYXZlIGRldmVsb3BlZCBub24t
-bGludXggZmllbGRzIHN1Y2ggYXMgYXZyLCBzdG0zMmY0Li4uCj4gCj4gSSdtIGEgYmVnaW5uZXIg
-YW5kIEkgZG9uJ3QgaGF2ZSBhbiBlbWJlZGRlZCBib2FyZC4gRmlyc3QsIEkgd2lsbCBjcmVhdGUg
-YSAKPiB2aXJ0dWFsIHRhcmdldCB1c2luZyBxZW11IG9uIG15IGxhcHRvcCAodWJ1bnR1IDIwLjA0
-LjMpLAo+IAo+IGFuZCB1cGxvYWQgdGhlIGtlcm5lbCAobGludXgtNS4xMS4yMiwgbm9uLXVidW50
-dSkgdGhlcmUuIFRvIGRvIHRoaXMsIHRoZSAKCiAgTm90ZSB0aGF0IEJ1aWxkcm9vdCBjYW4gYnVp
-bGQgdGhlIGtlcm5lbCBmb3IgeW91IGFzIHdlbGwuCgo+IHRvb2xjaGFpbiBhbmQgZ2xpYmMsIGNv
-bXBpbGVyIHdpbGwgYmUgY3JlYXRlZCB0aHJvdWdoIGJ1aWxkcm9vdC4KPiAKPiBUaGUgZmlyc3Qg
-dGltZSBJIGRpZCBpdCB3aXRob3V0IGtub3dpbmcgYW55dGhpbmcsIGl0IHdhcyBzdWNjZXNzZnVs
-LCBidXQgSSBjYW4ndCAKPiByZW1lbWJlciB3aGljaCBvcHRpb24gSSBjaG9zZS4KPiAKPiBNYXli
-ZSB3aGVuIGl0IGZpcnN0IHN1Y2NlZWRlZCwgaSB0aGluayB0aGUgZ2RiIG9wdGlvbiB3YXMgbm90
-IGNoZWNrZWQgLgo+IAo+IEFmdGVyd2FyZHMsIGlmIEkgYnVpbGQgd2l0aCB0aGUgZ2RiIG9wdGlv
-biBzZWxlY3RlZCBmb3IgdGhlIHRhcmdldCwgYW4gZXJyb3IgCj4gb2NjdXJzIGxpa2UgYmVsb3c6
-Cj4gCj4gLi4uLgo+IAo+IFtNYWtlZmlsZTo5MjMwOiBhbGwtZ2RiXSBFcnJvciAyCgogIFRoaXMg
-aXMgbm90IHN1ZmZpY2llbnQgdG8gZGVidWcgdGhlIGlzc3VlLCB5b3UnZCBoYXZlIHRvIHBvc3Qg
-YSBsYXJnZXIgcGFydCBvZiAKdGhlIG91dHB1dC4gVGhhdCdzIHByb2JhYmx5IGdvaW5nIHRvIGJl
-IHRvbyBiaWcgZm9yIGFuIGVtYWlsLCBzbyBwdXQgaXQgaW4gYSAKcGFzdGViaW4gaW5zdGVhZCBh
-bmQganVzdCBwb3N0IHRoZSBsaW5rLgoKICBUaGF0IHNhaWQsIEkgY291bGQgcmVwcm9kdWNlIHRo
-ZSBpc3N1ZSB3aXRoIEdEQiA5ICh0aGUgZmlyc3QgY29uZmlnIHlvdSAKYXR0YWNoZWQpLCBpdCdz
-IGEga25vd24gaXNzdWUgd2l0aCBnbGliYy0yLjM0IFsxXSB3aGljaCB3YXMgZml4ZWQgaW4gR0RC
-IDEwLjIgCmJ1dCB0aGUgcGF0Y2ggd2Fzbid0IGJhY2twb3J0ZWQgdG8gR0RCIDkuIFNvIGNoYW5n
-aW5nIHRoZSBHREIgdmVyc2lvbiB0byAxMCAKc2hvdWxkIGZpeCBpdC4KCiAgVGhlIHNlY29uZCBj
-b25maWcgeW91IGluY2x1ZGVkIGRvZXMgaGF2ZSBHREIgMTAsIGJ1dCBJIGNvdWxkbid0IHJlcHJv
-ZHVjZSBhIApHREIgaXNzdWUgdGhlcmUuIEkgaGF2ZW4ndCBhdHRlbXB0ZWQgdG8gYnVpbGQgdGhl
-IGZ1bGwgY29uZmlnIGhvd2V2ZXIsIEkgdG9vayBhIApzaG9ydGN1dCBieSB1c2luZyB0aGUgZXh0
-ZXJuYWwgdG9vbGNoYWluLgoKICBTbyBpZiB5b3Ugd2FudCB0byBkZWJ1ZyBmdXJ0aGVyLCBwbGVh
-c2UgaW5jbHVkZSBhIG1vcmUgZXh0ZW5zaXZlIGxvZyBpbiAKYWRkaXRpb24gdG8gdGhlIGNvbmZp
-Z3VyYXRpb24uIEFsc28sIGl0J3MgYmV0dGVyIGlmIHlvdSBhdHRhY2ggYSBkZWZjb25maWcgKD0g
-CnRoZSByZXN1bHQgb2YgJ21ha2Ugc2F2ZWRlZmNvbmZpZycpIGluc3RlYWQgb2YgYWxsIGZ1bGwg
-Y29uZmlnLCBiZWNhdXNlIGl0J3MgYSAKbG90IHNtYWxsZXIuCgogIEJUVyBJIG5vdGljZWQgdGhh
-dCB5b3UgaGF2ZSBhIGxvdCBvZiB3ZWlyZCBwYWNrYWdlcyBzZWxlY3RlZCwgbGlrZSBDVlMuIERv
-IHlvdSAKcmVhbGx5IG5lZWQgYWxsIHRoYXQ/CgoKICBSZWdhcmRzLAogIEFybm91dAoKWzFdIGh0
-dHBzOi8vc291cmNld2FyZS5vcmcvYnVnemlsbGEvc2hvd19idWcuY2dpP2lkPTI3NTM1CgoKPiAK
-PiBNeSBjdXJyZW50IHB1cnBvc2UgaXMgdG8gcmVtb3RlbHkgZGVidWcgYSB2aXJ0dWFsIHRhcmdl
-dCBwcm9ncmFtIHRocm91Z2ggCj4gZ2Ric2VydmVyIGluc3RhbGxlZCBvbiB0aGUgdGFyZ2V0IGJh
-c2VkIG9uIHFlbXUuCj4gCj4gVG8gZG8gdGhpcywgZ2Ric2VydmVyIG11c3QgYmUgaW5zdGFsbGVk
-IG9uIHRoZSB0YXJnZXQsIGJ1dCB0aGlzIGRvZXMgbm90IHdvcmsuCj4gCj4gQXR0YWNoZWQgaXMg
-dGhlIC5jb25maWcgZmlsZSB3aGVuIHRoZSBlcnJvciBvY2N1cnMuCj4gCj4gSSBsb29rIGZvcndh
-cmQgdG8geW91ciByZXBseS4KPiAKPiBNeSBvcmlnaW5hbCBqb2IgaXMgdG8gY29udHJvbCB0aGUg
-bW90b3IuIEJ1dCBiZWZvcmUgdGhhdCwgSSdtIGFscmVhZHkgZXhoYXVzdGVkLgo+IAo+IAo+IGhv
-c3Q6IHVidW50dSAyMC4wNC4zLCBhcmNoOiB4ODZfNjQsIHg4Nl82NC1wYy1saW51eC1nbnUtZ2Nj
-Cj4gCj4gdGFyZ2V0OiBrZXJuZWwgNS4xMS4yMihib290IGJ5IHFlbXUpLCBhcmNoOiB4ODZfNjQs
-IHg4Nl82NC1idWlsZHJvb3QtbGludXgtZ251LWdjYwo+IAo+ID0+VGhlIGNvbW1hbmQgdG8gcnVu
-IHFlbXUgd2lsbDoKPiAKPiBxZW11LXN5c3RlbS14ODZfNjQgLWtlcm5lbCAvdXNyL3NyYy9saW51
-eC01LjExLjIyL2FyY2gveDg2L2Jvb3QvYnpJbWFnZSAtbSA0MDk2TSAKPiAtc21wIDEgLWJvb3Qg
-YyAtaGRhIC9ob21lL2RnZ2lsL0Rvd25sb2Fkcy9idWlsZHJvb3Qvb3V0cHV0L2ltYWdlcy9yb290
-ZnMuZXh0NCAKPiAtYXBwZW5kICJyb290PS9kZXYvc2RhIHJ3IGFjcGk9b2ZmIiAtcwo+IAo+IAo+
-IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRy
-b290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Fix the following build failure with libressl > 2.7.0:
+
+/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
+(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
+
+Fixes:
+ - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ..._ssl.c-fix-build-with-libressl-2.7.0.patch | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
+
+diff --git a/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
+new file mode 100644
+index 0000000000..4251a5e176
+--- /dev/null
++++ b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
+@@ -0,0 +1,36 @@
++From 3ffa0132987bdde986c82c924bc51b13b37f8b54 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 6 Apr 2022 22:56:21 +0200
++Subject: [PATCH] src/lftp_ssl.c: fix build with libressl >= 2.7.0
++
++X509_OBJECT_get0_X509_CRL is provided by libressl since version 2.7.0
++and
++https://github.com/libressl-portable/openbsd/commit/9866ae34c0af718973475296bd9ef036d3aaa94e
++resulting in the following build failure:
++
++/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
++(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/lavv17/lftp/commit/3ffa0132987bdde986c82c924bc51b13b37f8b54]
++---
++ src/lftp_ssl.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/lftp_ssl.cc b/src/lftp_ssl.cc
++index 26e91e4b..a814543d 100644
++--- a/src/lftp_ssl.cc
+++++ b/src/lftp_ssl.cc
++@@ -664,7 +664,7 @@ int gnutls_x509_crt_list_import(gnutls_x509_crt_t *certs, unsigned int* cert_max
++ #elif USE_OPENSSL
++ //static int lftp_ssl_passwd_callback(char *buf,int size,int rwflag,void *userdata);
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000L)
++ // for compatibility with older versions
++ X509_OBJECT *X509_OBJECT_new()
++ {
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
