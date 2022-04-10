@@ -4,76 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B19EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F67CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7310241700;
-	Sun, 10 Apr 2022 14:12:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B41004091A;
+	Sun, 10 Apr 2022 14:13:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uMMehU2nndVs; Sun, 10 Apr 2022 14:12:51 +0000 (UTC)
+	with ESMTP id Z30Y4z9y_32K; Sun, 10 Apr 2022 14:13:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20DBE416F7;
-	Sun, 10 Apr 2022 14:12:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 622834091B;
+	Sun, 10 Apr 2022 14:13:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 48C321BF3B5
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:12:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD9911BF3B5
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 441D1416F7
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:12:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AD92408B3
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:13:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yeg387SJs0gk for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 14:12:48 +0000 (UTC)
+ with ESMTP id 91IlCovALtIU for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 14:13:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F389241691
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:12:47 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id p189so8361641wmp.3
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 07:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 489DD4089D
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:13:34 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id t1so1680734wra.4
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 07:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=V7SAURokf43QcyT4cngJRhhpPDJQz8j25h/79pnaXvI=;
- b=ZEJ9rpo9x+TpVP0sHKh4d8kCMqQstWLX/8FeGK5IVac2XeBhnyRTJRSlhqMpvyG0Es
- c8SDJ6EqOSlxVigLeKXmk3ZKPV8CHHLgxNZyR8+Z161+j57Z8H2SIIOu2aUZYdqsME0h
- Ju3Ndh10FQLkgqvNZcDH6ZSbTEChMIdgn2F3yE3ZW8AiufbGGm3Klv66xl8v85VbKVm0
- r4tCs0QY+A7qo0yHG6xkeI4k7TZHRA6/o5jCIrV9by4wWqGswv2BTkqJeKqYk2mTEMK3
- O4TXE+48kmv/bOUaLy1cHLigni89TpMR4IrXe63A4rESPje7PNuW6529ks76f2xzZM/F
- 24fQ==
+ bh=fXJjmeORntqXesJymr5+49+P7wduvqiJD3rl1w4o1Yw=;
+ b=ATrrCysIwJC4P+Dx2V9a7NcVxasRVc8Pp1SGFhkzFHdEZyr/5nQgWnJQnxKA2+VudM
+ lpVOHOPg5eW1/C08ig/LDUrbFqd8CTu3tmcgqvs5nAlc1oRLIgLLpXpXhJIvKGUcn3ZX
+ vDW80w79TEJU+ObE7zwsc1WAFN41GDaCPLb8SPM6KoIii03UiokO56BLdmtyOdtKE0qp
+ 7j6V6GJ1Asyipz40vb3UpWfEZDv+/PGEIxjF99nz94frbuhH/FaGwnwqxhv4ZvTLsx35
+ XX6mVUGtDZ9lGTjT01ZZkVwOu0mHFu9aYVyJcWwiYZN3uznt4XR8rl+2yRcZvU7kaDwD
+ OXHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=V7SAURokf43QcyT4cngJRhhpPDJQz8j25h/79pnaXvI=;
- b=0u7ln4cOTDpqopWgLQ+OROxYa02Mk7r2JqTGiiYWnM9+hE0bI4axeo1r4VToYz61e/
- IlbQwMj0J0y321nxOTw3FScsptuPF07gIu+fe9bgKnZ9zD606BYiRVi9gnL78nVgazHY
- UKvtz9sDHiTXKfw2Sid8XSgN/jtmvPNNOy9/k0DNwGTOt6bIVtLp6GesL7ybj2WmQEMH
- A8T93lyQNcwDKSpEvXyqtp9fxbVFPrQ7uudq8d6fZRBBWEWqqsGhlh0zacFc+kQP+1Z2
- mwKqDZA6Oz5wUjFNXftrjsAKS9WmLi2qHitEN5pic9eEWPpzaTK1cFxtR8gsp3w+KPs7
- DgMA==
-X-Gm-Message-State: AOAM5328W5JlqPS2roDHJLWUgHECPml87+JhQNDPmzGh93OKVO7kOMK9
- Q/VpnS0qxO2Dr5nQCnBSUBFoW03YmwA=
-X-Google-Smtp-Source: ABdhPJwnvfh878EDehNm48uZdUI+bVT3GB2K5cbwYpeZmXmeBqPVxvzZzEPsowGSuCTlyot7gLIavw==
-X-Received: by 2002:a05:600c:3ba8:b0:38e:ba3a:dc3b with SMTP id
- n40-20020a05600c3ba800b0038eba3adc3bmr1845132wms.185.1649599966001; 
- Sun, 10 Apr 2022 07:12:46 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=fXJjmeORntqXesJymr5+49+P7wduvqiJD3rl1w4o1Yw=;
+ b=RsoxLgsgrVTpgV5mmS6SqYAkmnalKRxKTGYNBrthCE+sxosaMKVV1u0LjuhCCf7a10
+ /WsJ56yN7+Wn7N+tciS0Z18ytwg8F1ygMcAHG443oog9us8CVA9GbFGpkmzNcMOWsMFF
+ uEhfvCj9svRFqDVxD7FA98PzUxH4Z8s8PYfmQpLsb+R2PTHHGNfV+GQTV+YdS6JbZ6cO
+ bw5RtrWJYUR9e7Nyeb2KEyZQ8tVW7CrkBdG3fcWxxR0ixJjQFH2rRHJ+NyPp8YM+KANG
+ R8Fqtjb6ZVCIYYWTisZD7ktuMAEXyUwOafGYDvTrIPkMlSDBvQoP4hsyPpn43ejKhV7W
+ JIUA==
+X-Gm-Message-State: AOAM530DYbe0IlSYLhBcMtU2ctm2z5pNpH74Kv9KkROBdhYxcvi6CoGE
+ 48cIGN3j4blEDq9cOU0B6pwQ/w==
+X-Google-Smtp-Source: ABdhPJwTGrVfjjMDL9ML+XXntz5Ge7Z1D9U9irDdH4Y0lhv5JI+RE+g4bMZs5lIHM21spYmo4+gsMg==
+X-Received: by 2002:a05:6000:2c9:b0:204:1cdb:8f8d with SMTP id
+ o9-20020a05600002c900b002041cdb8f8dmr22684028wry.49.1649600012287; 
+ Sun, 10 Apr 2022 07:13:32 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- p18-20020adfba92000000b001e4ae791663sm24080535wrg.62.2022.04.10.07.12.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 10 Apr 2022 07:12:45 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 16:10:43 +0200
-Message-Id: <20220410141043.144288-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ v5-20020adfe4c5000000b001edc1e5053esm23546267wrm.82.2022.04.10.07.13.31
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Apr 2022 07:13:31 -0700 (PDT)
+Message-ID: <0548ce7b-225b-1520-61ea-ddd2a7bf76f9@mind.be>
+Date: Sun, 10 Apr 2022 16:13:30 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/lftp: fix build with libressl
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220405200615.1755287-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220405200615.1755287-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/igh-ethercat: needs kernel < 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,71 +93,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with libressl > 2.7.0:
 
-/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
-(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
 
-Fixes:
- - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
+On 05/04/2022 22:06, Fabrice Fontaine wrote:
+> igh-ethercat needs kernel < 3.5 since bump to version 1.5.2 in commit
+> 88cd215169d6875a5ed0543b15254b98f9f83104:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ..._ssl.c-fix-build-with-libressl-2.7.0.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
+  Sorry, but no. If this is really true, we should just remove the package. It 
+makes no sense to try to maintain packages that rely on such ancient kernels.
+IMHO, of course ;-)
 
-diff --git a/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
-new file mode 100644
-index 0000000000..4251a5e176
---- /dev/null
-+++ b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
-@@ -0,0 +1,36 @@
-+From 3ffa0132987bdde986c82c924bc51b13b37f8b54 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 6 Apr 2022 22:56:21 +0200
-+Subject: [PATCH] src/lftp_ssl.c: fix build with libressl >= 2.7.0
-+
-+X509_OBJECT_get0_X509_CRL is provided by libressl since version 2.7.0
-+and
-+https://github.com/libressl-portable/openbsd/commit/9866ae34c0af718973475296bd9ef036d3aaa94e
-+resulting in the following build failure:
-+
-+/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
-+(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/lavv17/lftp/commit/3ffa0132987bdde986c82c924bc51b13b37f8b54]
-+---
-+ src/lftp_ssl.cc | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/lftp_ssl.cc b/src/lftp_ssl.cc
-+index 26e91e4b..a814543d 100644
-+--- a/src/lftp_ssl.cc
-++++ b/src/lftp_ssl.cc
-+@@ -664,7 +664,7 @@ int gnutls_x509_crt_list_import(gnutls_x509_crt_t *certs, unsigned int* cert_max
-+ #elif USE_OPENSSL
-+ //static int lftp_ssl_passwd_callback(char *buf,int size,int rwflag,void *userdata);
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000L)
-+ // for compatibility with older versions
-+ X509_OBJECT *X509_OBJECT_new()
-+ {
--- 
-2.35.1
+  However, there seems to be a new upstream [1] that (based on the git history) 
+at least supports kernel 4.19. So switching to that would be a good idea.
 
+  There's another concern however, for which I included James in Cc. Quite a lot 
+of external kernel modules and other extensions (e.g. rtai) will only work with 
+specific kernel versions. I don't know if we can afford to really encode that in 
+the Config.in, especially because we don't have a good idea of the kernel 
+version that is being built (the headers version is just a strong hint, but e.g. 
+in case you build with an external toolchain it can be completely wrong). Up 
+until recently, this wasn't really a problem because we don't build them in the 
+autobuilders anyway. However, now James has added support for building kernels 
+in his autobuilder, we do get failures like this. How will we handle that?
+
+  Regards,
+  Arnout
+
+[1] https://gitlab.com/etherlab.org/ethercat
+
+> 
+> checking for kernel for 8139too driver... configure: error: kernel 5.15 not available for 8139too driver!
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/e8122e9d7c13d07a6ddc7d9a2d3a078c21521ecd
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/igh-ethercat/Config.in | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+> index e600ef5fcd..51b8584f78 100644
+> --- a/package/igh-ethercat/Config.in
+> +++ b/package/igh-ethercat/Config.in
+> @@ -1,9 +1,14 @@
+>   comment "igh-ethercat needs a Linux kernel to be built"
+>   	depends on !BR2_LINUX_KERNEL
+>   
+> +comment "igh-ethercat needs a toolchain w/ headers < 3.5"
+> +	depends on BR2_LINUX_KERNEL
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+> +
+>   config BR2_PACKAGE_IGH_ETHERCAT
+>   	bool "igh-ethercat"
+>   	depends on BR2_LINUX_KERNEL
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+>   	help
+>   	  IgH EtherCAT Master for Linux.
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
