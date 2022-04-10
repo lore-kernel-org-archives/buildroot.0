@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 543B8C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F77EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D32782ED2;
-	Sun, 10 Apr 2022 15:08:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1N8bCUWpoUcr; Sun, 10 Apr 2022 15:08:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0DA58329D;
-	Sun, 10 Apr 2022 15:08:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A02B31BF990
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D5AD607C9
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09EE760C31;
+	Sun, 10 Apr 2022 15:09:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tcDk9ZmWGglv for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 15:08:33 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6qB_jeybJUoH; Sun, 10 Apr 2022 15:09:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1787460D54;
+	Sun, 10 Apr 2022 15:09:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D0AF31BF869
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD13B4017A
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cYUEkvGyvSfW for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1A41607A4
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:08:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02B1940119
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:08:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0D64E83874; Sun, 10 Apr 2022 14:58:54 +0000 (UTC)
+ id 3A9D083875; Sun, 10 Apr 2022 14:58:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 16:53:46 +0200
+Date: Sun, 10 Apr 2022 16:53:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 00a9d2d45f23b4a88bc083fe35bd9209e4c527c4
-X-Git-Newrev: d9ac22b7e2565ec678b244701b92009701856583
+X-Git-Oldrev: 7d258f81cd95cf34888565504e6f82717e5e3407
+X-Git-Newrev: 80a9e9057daf587242548aa23f8cd7a8d88bfa1f
 X-Patchwork-Hint: ignore
-Message-Id: <20220410145854.0D64E83874@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.36.0
+Message-Id: <20220410145854.3A9D083875@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-libav: fix build
+ without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,87 +59,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9ac22b7e2565ec678b244701b92009701856583
+commit: https://git.buildroot.net/buildroot/commit/?id=80a9e9057daf587242548aa23f8cd7a8d88bfa1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to a new major release which brings in improvements and a few new
-features. Release notes:
+Fix the following build failure without C++ raised since bump to version
+1.18.0 in commit 15dc48ca9becafec6ba11b08af18453bc0e40c9e:
 
-  https://webkitgtk.org/2022/03/21/webkitgtk2.36.0-released.html
+The following exception(s) were encountered:
+Running "/nvmedata/autobuild/instance-9/output-1/host/bin/or1k-buildroot-linux-musl-g++ --version" gave "[Errno 2] No such file or directory: '/nvmedata/autobuild/instance-9/output-1/host/bin/or1k-buildroot-linux-musl-g++'"
 
-None of the new features need additional dependencies. The build option
-USE_SYSTEMD has been renamed to ENABLE_JOURNALD_LOG, though.
+Fixes:
+ - http://autobuild.buildroot.org/results/8ac0ba5eaaf7571857b4d8cfabf1488d640dc59a
 
-While at it, remove setting the ENABLE_PLUGIN_PROCESS_GTK2 option.
-Support for NPAPI plug-ins has been dropped already in 2.32.x and the
-option has been a no-op for a long time, see:
-
-  https://perezdecastro.org/2020/webkitgtk-npapi-sunsetting.html
-  https://webkitgtk.org/2021/03/26/webkitgtk2.32.0-released.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/webkitgtk/webkitgtk.hash |  8 ++++----
- package/webkitgtk/webkitgtk.mk   | 13 +++----------
- 2 files changed, 7 insertions(+), 14 deletions(-)
+ ...v-fix-build-on-systems-without-C-compiler.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 82c210c8f9..38068745ee 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.34.6.tar.xz.sums
--md5  a5eeedd02f5b4bba8bd891b92dc743d4  webkitgtk-2.34.6.tar.xz
--sha1  bb82517289baf9c858fa406d1d845274f81e25cb  webkitgtk-2.34.6.tar.xz
--sha256  6bc8fd034aad0432a2459ce4fc7ee25ad65a4924c618bf8d93b52b0c1a84c1f6  webkitgtk-2.34.6.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.36.0.tar.xz.sums
-+md5  1e3fe866ab6e41e7ec3deb80bd5b3a85  webkitgtk-2.36.0.tar.xz
-+sha1  5b90bc59c2f442223de1a4d9dc8ff604888abb3c  webkitgtk-2.36.0.tar.xz
-+sha256  b877cca1f105235f5dd57c7ac2b2c2be3c6b691ff444f93925c7254cf156c64d  webkitgtk-2.36.0.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 36e4b8943b..8d8f083ea2 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.34.6
-+WEBKITGTK_VERSION = 2.36.0
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
-@@ -84,13 +84,6 @@ WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_X11_TARGET=ON
- WEBKITGTK_DEPENDENCIES += libgl \
- 	xlib_libXcomposite xlib_libXdamage xlib_libXrender xlib_libXt
--# It can use libgtk2 for npapi plugins
--ifeq ($(BR2_PACKAGE_LIBGTK2),y)
--WEBKITGTK_CONF_OPTS += -DENABLE_PLUGIN_PROCESS_GTK2=ON
--WEBKITGTK_DEPENDENCIES += libgtk2
--else
--WEBKITGTK_CONF_OPTS += -DENABLE_PLUGIN_PROCESS_GTK2=OFF
--endif
- else # !X11
- # GTK3-BROADWAY/WAYLAND needs at least EGL
- WEBKITGTK_DEPENDENCIES += libegl
-@@ -115,10 +108,10 @@ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
- endif
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
--WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=ON
-+WEBKITGTK_CONF_OPTS += -DENABLE_JOURNALD_LOG=ON
- WEBKITGTK_DEPENDENCIES += systemd
- else
--WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=OFF
-+WEBKITGTK_CONF_OPTS += -DENABLE_JOURNALD_LOG=OFF
- endif
- 
- # JIT is not supported for MIPS r6, but the WebKit build system does not
+diff --git a/package/gstreamer1/gst1-libav/0001-gst-libav-fix-build-on-systems-without-C-compiler.patch b/package/gstreamer1/gst1-libav/0001-gst-libav-fix-build-on-systems-without-C-compiler.patch
+new file mode 100644
+index 0000000000..6b275220f8
+--- /dev/null
++++ b/package/gstreamer1/gst1-libav/0001-gst-libav-fix-build-on-systems-without-C-compiler.patch
+@@ -0,0 +1,35 @@
++From 1477eb1fad92ac07cd057b3ecdb04edeeef9edba Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 4 Apr 2022 23:32:56 +0200
++Subject: [PATCH] gst-libav: fix build on systems without C++ compiler
++
++Fix the following build failure on systems without C++ compiler:
++
++The following exception(s) were encountered:
++Running "/nvmedata/autobuild/instance-9/output-1/host/bin/or1k-buildroot-linux-musl-g++ --version" gave "[Errno 2] No such file or directory: '/nvmedata/autobuild/instance-9/output-1/host/bin/or1k-buildroot-linux-musl-g++'"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8ac0ba5eaaf7571857b4d8cfabf1488d640dc59a
++
++Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/2112>
++
++[Retrieved (and backported) from:
++https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/1477eb1fad92ac07cd057b3ecdb04edeeef9edba]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ subprojects/gst-libav/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index fbfa3049afe..7da94b80d59 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1,4 +1,4 @@
++-project('gst-libav', 'c', 'cpp',
+++project('gst-libav', 'c',
++   version : '1.20.1',
++   meson_version : '>= 0.60',
++   default_options : [ 'warning_level=1',
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
