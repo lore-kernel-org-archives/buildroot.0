@@ -1,53 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF984C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 20:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B2D9C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 20:08:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84C5C416DB;
-	Sun, 10 Apr 2022 20:07:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BC7C60C00;
+	Sun, 10 Apr 2022 20:08:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OS9s0j9UuztN; Sun, 10 Apr 2022 20:07:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AML6OcNiCrDl; Sun, 10 Apr 2022 20:08:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 564464168E;
-	Sun, 10 Apr 2022 20:07:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6641D1BF3E1
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 20:07:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3087C60F89;
+	Sun, 10 Apr 2022 20:08:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EEFFE1BF3E1
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 20:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5458E401D6
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 20:07:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE54A84085
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 20:08:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qk6PjTDNa1ls for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 20:07:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 376154014A
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 20:07:36 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C8DDC100002;
- Sun, 10 Apr 2022 20:07:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nddqO-005EFm-SF; Sun, 10 Apr 2022 22:07:32 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XYR1wDemuaT7 for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 20:08:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 234C884007
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 20:08:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id D7317838FF; Sun, 10 Apr 2022 19:58:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220410141043.144288-1-fontaine.fabrice@gmail.com>
-Date: Sun, 10 Apr 2022 22:07:32 +0200
-In-Reply-To: <20220410141043.144288-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 10 Apr 2022 16:10:43 +0200")
-Message-ID: <87h770n1mj.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/lftp: fix build with libressl
+To: buildroot@buildroot.org
+Date: Sun, 10 Apr 2022 22:07:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2759c40df782ca4f936c3dc995a27bf6cb9020b4
+X-Git-Newrev: e8394943e80c847793f13555697e0b4c76483322
+X-Patchwork-Hint: ignore
+Message-Id: <20220410195834.D7317838FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lftp: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,31 +52,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e8394943e80c847793f13555697e0b4c76483322
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure with libressl > 2.7.0:
- > /nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld:
- > /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o):
- > in function `X509_OBJECT_get0_X509_CRL':
- > (.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL';
- > /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894):
- > first defined here
+Fix the following build failure with libressl > 2.7.0:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
+/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
+(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
+new file mode 100644
+index 0000000000..4251a5e176
+--- /dev/null
++++ b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
+@@ -0,0 +1,36 @@
++From 3ffa0132987bdde986c82c924bc51b13b37f8b54 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 6 Apr 2022 22:56:21 +0200
++Subject: [PATCH] src/lftp_ssl.c: fix build with libressl >= 2.7.0
++
++X509_OBJECT_get0_X509_CRL is provided by libressl since version 2.7.0
++and
++https://github.com/libressl-portable/openbsd/commit/9866ae34c0af718973475296bd9ef036d3aaa94e
++resulting in the following build failure:
++
++/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
++(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/lavv17/lftp/commit/3ffa0132987bdde986c82c924bc51b13b37f8b54]
++---
++ src/lftp_ssl.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/lftp_ssl.cc b/src/lftp_ssl.cc
++index 26e91e4b..a814543d 100644
++--- a/src/lftp_ssl.cc
+++++ b/src/lftp_ssl.cc
++@@ -664,7 +664,7 @@ int gnutls_x509_crt_list_import(gnutls_x509_crt_t *certs, unsigned int* cert_max
++ #elif USE_OPENSSL
++ //static int lftp_ssl_passwd_callback(char *buf,int size,int rwflag,void *userdata);
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000L)
++ // for compatibility with older versions
++ X509_OBJECT *X509_OBJECT_new()
++ {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
