@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DADAC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6BDDC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2109D83E85;
-	Sun, 10 Apr 2022 15:40:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F7F260D90;
+	Sun, 10 Apr 2022 15:40:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H-ua_Bm-A-ac; Sun, 10 Apr 2022 15:40:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58F9F6058B;
+	Sun, 10 Apr 2022 15:40:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 651A11BF995
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 314D282512
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f9jqQoO65n4U; Sun, 10 Apr 2022 15:40:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F67783EFC;
-	Sun, 10 Apr 2022 15:40:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F2DC1BF990
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BA7340584
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dKxcx7nOroQK for <buildroot@lists.busybox.net>;
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GR5e8Dl_YM2a for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 15:38:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7FA4840583
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68CBF825B9
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:38:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ACD3783893; Sun, 10 Apr 2022 15:29:00 +0000 (UTC)
+ id 92EBD83893; Sun, 10 Apr 2022 15:29:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 17:36:06 +0200
+Date: Sun, 10 Apr 2022 17:34:32 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e05dbffa0770353fb32f44ec7b045258a9e1bfac
-X-Git-Newrev: 2134fee900e0644895144cb19aa84c0dacd2b328
+X-Git-Oldrev: 92da1d43290f88f8067580b985b44531a984f6a2
+X-Git-Newrev: 195e1f1383808571aae7541e76419cdaab32e853
 X-Patchwork-Hint: ignore
-Message-Id: <20220410152900.ACD3783893@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/opus: fix build
- with BR2_OPTIMIZE_FAST
+Message-Id: <20220410152900.92EBD83893@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ace: fix build
+ with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2134fee900e0644895144cb19aa84c0dacd2b328
+commit: https://git.buildroot.net/buildroot/commit/?id=195e1f1383808571aae7541e76419cdaab32e853
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
+Fix the following build failure with libressl raised since the addition
+of the package in commit 3621918d1bc1ddc9312dd1cc8dec6db61e712fe2:
+
+/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
+  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
+      |       ^~~~~~~~~~~~
+      |       BIO_set_init
+
 Fixes:
-http://autobuild.buildroot.net/results/194/1941e194e1f5ad0bc4982ad39c3e34d266bc49c6/
+ - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
 
-opus requires that it is configured with --enable-float-approx when
--ffast-math (BR2_OPTIMIZE_FAST) is used, otherwise it errors out at build
-time:
-
-celt/arch.h:198:2: error: #error Cannot build libopus with -ffast-math
-unless FLOAT_APPROX is defined.  This could result in crashes on extreme
-(e.g.  NaN) input
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 43e859d47a5474d8acdaf81a0ea63aa9a909985f)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 7da45d9b635d93cc7c0339796462a8e401407402)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opus/opus.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index 4f816df477..2fa929c7df 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -23,6 +23,10 @@ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
- OPUS_CONF_OPTS += --enable-fixed-point
- endif
- 
-+ifeq ($(BR2_OPTIMIZE_FAST),y)
-+OPUS_CONF_OPTS += --enable-float-approx
-+endif
+diff --git a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+new file mode 100644
+index 0000000000..ad82c10172
+--- /dev/null
++++ b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+@@ -0,0 +1,52 @@
++From e06cadc3b95a577e6a8bbc94f93dd063710c73a1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 3 Apr 2022 15:25:49 +0200
++Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl
 +
- # When we're on ARM, but we don't have ARM instructions (only
- # Thumb-2), disable the usage of assembly as it is not Thumb-ready.
- ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
++Fix the following build failure with libressl:
++
++/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
++  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
++      |       ^~~~~~~~~~~~
++      |       BIO_set_init
++
++Fixes:
++ - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/DOCGroup/ACE_TAO/commit/e06cadc3b95a577e6a8bbc94f93dd063710c73a1]
++---
++ ACE/ace/SSL/SSL_Asynch_BIO.cpp | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
++index a657d8a14e6f7..64aa14c6ab9a7 100644
++--- a/ace/SSL/SSL_Asynch_BIO.cpp
+++++ b/ace/SSL/SSL_Asynch_BIO.cpp
++@@ -41,7 +41,7 @@ extern "C"
++ 
++ #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++ static BIO_METHOD methods_ACE =
++   {
++     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
++@@ -68,14 +68,14 @@ static BIO_METHOD methods_ACE =
++ #else
++ static BIO_METHOD* methods_ACE;
++ # define BIO_set_num(b, val)
++-#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
+++#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
++ 
++ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
++ 
++ BIO *
++ ACE_SSL_make_BIO (void * ssl_asynch_stream)
++ {
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++   BIO * const pBIO = BIO_new (&methods_ACE);
++ #else
++   if (!methods_ACE)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
