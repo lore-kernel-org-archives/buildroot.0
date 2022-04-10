@@ -1,82 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF93BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 17:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E2B3C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 17:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67C7241528;
-	Sun, 10 Apr 2022 17:34:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AD44405E6;
+	Sun, 10 Apr 2022 17:40:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id web3HuIbu91E; Sun, 10 Apr 2022 17:34:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dK-pFXmeTOOX; Sun, 10 Apr 2022 17:40:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 118BF41508;
-	Sun, 10 Apr 2022 17:34:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1DCF41BF844
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 17:34:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9DA62405CE;
+	Sun, 10 Apr 2022 17:40:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 690F61BF844
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 17:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1AB9E60F80
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 17:34:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66B2084101
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 17:40:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rTSztC-Y4802 for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 17:34:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Zkzz_DMfEmj for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 17:40:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5A45760E57
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 17:34:50 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id h16so8593831wmd.0
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 10:34:50 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A555B84100
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 17:40:54 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ l62-20020a1c2541000000b0038e4570af2fso8688481wml.5
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 10:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1mqEZG3MPF22ZvZITiVCdu5BzBZWG0ro2CCU63cMqvg=;
- b=eE37cD3psV4kmBoVMZfFOaM7TOFv4H7WuPZuVAPOZZmigo7CH7utvE40J+Tm9HyF+A
- zKshTfwL0nADiBHDdS/9bd03JYpxIIzCVEKjrNCPBYKakyl2BZerHWUr2+EE7TOmKYML
- xw7A1MXy33yIezwmUh8OjrQdrrlS79eYM0ay6qE0xjbsjA7mXa3Kl4En7y5kwRp8XXMw
- 1qEgCyzLwtgMU6Pn6nLA/ZOt3AGmO7yfdgdIL39wQFjlDZs5YLhRZjpp0J/Z974k87jN
- Os+SMOREhgZpHNEsH+WA4WW1jmQ10uqxCRcBVkG+VKsURSD4HTQDlC7o1FLZRn9R/eVW
- 5I0g==
+ bh=01kNKr0Er0uXHHiOr5w6DwReEPAnr/bt+y3UnU9h8GY=;
+ b=RX3LlZGxcKbq4ZJ4+67LPHRpHA3tZBDdkBsVjMNysfhT3kFiwyXEjpArtEL0dW69B+
+ CJE/y5iPHspjNoQbh5kdKQ5FsCh0jc7bepcRXcezpbkA8UlEwaiGgJwBufsszzZldPjc
+ 7mQblekT0pDNxO5EXqgmelryUol6gpMhjoLv8fEASsP7xFR69XZD5tsxMN4pANkfT8rV
+ IUrAScULgMgmjosXRHzyVcWjhaf+p4kgC41kr1/UdwosI4lhgJQESJOR5x3hVlKVOGW1
+ xyf6Hw9nO4FLKbQUJY0PBig07is5etGfpHCYj87jHEXaK24/mNl4O8szQtZeuAL7Xv4c
+ HdDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1mqEZG3MPF22ZvZITiVCdu5BzBZWG0ro2CCU63cMqvg=;
- b=dM0p6vrFVRXGXlWZv2RVXbptRyd+A1mpyX/6oMNilDIa86Ou7Fl04Izmv8m7UjLFfL
- xWhuV28HcTHJjaOEqrK7HJ5Hqc6zf/q8r5ScJrCteRN6KI3k4XH6HO+rKDncF2ip2F5G
- VMsITWplcrKZETT01lMPx1kgHPYQqw8IZPRYRcs/xt2G0ozTvI3LnbQT+E9JUYTpb1Ut
- C91mZoPyEQN7rK6nMkSPh8uVEA85ye7fGGWoFZAs739c7c7bAnXkEVK9lTlU6Ors9g0e
- 7MK2fRv9eoMifUfE+Pk0zYpeDYqSGQ3IfyJIy/iq5h79/cNUKqei6hn0kOrf788ORHcM
- nDeQ==
-X-Gm-Message-State: AOAM533VtgAHc9hcT6hqope2OAxGrWkcHlQzH/enp6aEguL9V6g5HBP1
- bNnSYLmbzG8doNU3eCFCCMTxqQedUsw=
-X-Google-Smtp-Source: ABdhPJwNAV0jepnOIBnVuBNN0Y22IsEySaYchgcX5wnhbPCMyhbFPVz/IW1UanJrt4XxQQLf9nyFKA==
-X-Received: by 2002:a05:600c:651:b0:381:3d7b:40e0 with SMTP id
- p17-20020a05600c065100b003813d7b40e0mr26016176wmm.17.1649612088165; 
- Sun, 10 Apr 2022 10:34:48 -0700 (PDT)
+ bh=01kNKr0Er0uXHHiOr5w6DwReEPAnr/bt+y3UnU9h8GY=;
+ b=wlu4vmg3w6BoPSRkrUSdzOKYQ6WpmDTL+C2+Hhu+5MNCLVdIlqJHq2Da11TJt1xQwD
+ 0I+w9tjRbBxY5Pcj8effYe8Qvu+EGq+ofY52XpReGQdxKA+V9UQ/00t9B0Sskh1EQiPW
+ 6/xUCIeqH/v3grZkZobeMBgXug/RrLuAEiXbM6amkV5z9C4apmv+amdN6lTXdu3iy2SK
+ ezQV1gx9GuxNE1N8//qMHZ5R5m1Ecp8TJ3N4XHPu0pxqIoV1Aq+yNSq1HyUqbAUwpn+W
+ mXhUxN79bq0b4BgSf8Op+0HpnRJuL+K6ov6BvnEW6gSQKNuFXYTi9r9+aju2iV4PU/2p
+ 7GfQ==
+X-Gm-Message-State: AOAM530IJN/fQn8V5Y7M+gqz9G1zEGADjNmwilvpiirCoBcV/vLQ23vf
+ KhRfXbN9MmhP1TLbDPmrPR2oPG0mj38=
+X-Google-Smtp-Source: ABdhPJxYFyNPrFoQ3SK2BKlifO/jKgFDrpHjZD2LSbi5ijntxUoFYwYYUGs29pYZXYnvtyTHsSrWuQ==
+X-Received: by 2002:a05:600c:4e87:b0:38e:ada5:5c6f with SMTP id
+ f7-20020a05600c4e8700b0038eada55c6fmr8014299wmq.21.1649612452543; 
+ Sun, 10 Apr 2022 10:40:52 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- a1-20020a056000188100b002041a652dfdsm24497323wri.25.2022.04.10.10.34.47
+ b8-20020a05600c4e0800b0038c6c37efc3sm15274253wmq.12.2022.04.10.10.40.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 10 Apr 2022 10:34:47 -0700 (PDT)
+ Sun, 10 Apr 2022 10:40:52 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 19:32:59 +0200
-Message-Id: <20220410173259.604817-1-fontaine.fabrice@gmail.com>
+Date: Sun, 10 Apr 2022 19:39:03 +0200
+Message-Id: <20220410173903.624901-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: security bump to version
- 2.4.15
+Subject: [Buildroot] [PATCH 1/1] package/vim: security bump to version
+ 8.2.4732
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +95,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-0711: A flaw was found in the way HAProxy processed HTTP
-responses containing the "Set-Cookie2" header. This flaw could allow an
-attacker to send crafted HTTP response packets which lead to an infinite
-loop, eventually resulting in a denial of service condition. The highest
-threat from this vulnerability is availability.
+Fix CVE-2022-1154: Use after free in utf_ptr2char in GitHub repository
+vim/vim prior to 8.2.4646.
 
-https://www.mail-archive.com/haproxy@formilux.org/msg41963.html
-https://www.mail-archive.com/haproxy@formilux.org/msg41873.html
+Fix CVE-2022-1160: heap buffer overflow in get_one_sourceline in GitHub
+repository vim/vim prior to 8.2.4647.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index e3120b521f..18834c29b1 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.13.tar.gz.sha256
--sha256  4788fe975fe7e521746f826c25e80bc95cd15983e2bafa33e43bff23a3fe5ba1  haproxy-2.4.13.tar.gz
-+# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.15.tar.gz.sha256
-+sha256  3958b17b7ee80eb79712aaf24f0d83e753683104b36e282a8b3dcd2418e30082  haproxy-2.4.15.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index c162a4c3f4..d50821d8c9 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index d2c91dcfa5..d55b1ea355 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  acca7330e41d01b53d4455ff98fafbf13282ba6461cd92eb1188836f6b03ec0f  vim-8.2.4632.tar.gz
++sha256  ccd57b074326b2faa15591eba3c86dcc07e53781079c44a0354436b8c4fe9b70  vim-8.2.4732.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 71aa735eff..4eb659fd6e 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).15
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-VIM_VERSION = 8.2.4632
++VIM_VERSION = 8.2.4732
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 -- 
 2.35.1
 
