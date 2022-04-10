@@ -1,47 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01388C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B6A1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 14:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF08B4052E;
-	Sun, 10 Apr 2022 14:49:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vmD2CKiLuvKA; Sun, 10 Apr 2022 14:49:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7366F4051B;
-	Sun, 10 Apr 2022 14:49:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 77BF41BF990
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:48:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1A0AC84006
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29DB88331B;
+	Sun, 10 Apr 2022 14:50:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xufVkKPj69ie for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 14:48:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3EE3983F33
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:48:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 78D00837C4; Sun, 10 Apr 2022 14:38:37 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 16:15:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aeee90ec109b83c42779e6a2617f7d57e25a2b65
-X-Git-Newrev: f986b265511e6f4748595c8b7ea83f1f616ddd64
-X-Patchwork-Hint: ignore
-Message-Id: <20220410143837.78D00837C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{rust,
- rust-bin}: support additional host architectures
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lDkicrpc-BKw; Sun, 10 Apr 2022 14:50:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DA4D82F20;
+	Sun, 10 Apr 2022 14:50:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D753E1BF3B5
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:50:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C578860D55
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 14:50:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wuLcdvKkzyLP for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 14:50:45 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F16C360D54
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 14:50:44 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id d10so15413751edj.0
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 07:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=DyQhHgn1wfNhraV01ROPwhbNkVR5MrqWmHzQoBZzcso=;
+ b=g176BisCUY/brdKVbeBehdi/CBHtmg9qsJkdqvXsoiqkx0zVKfdzoHF4SoYHwZPwsN
+ zLS+4PgqjKlkEIdqE5rc764ILBHEHSAyFLmqDuHTDU4BZhVbH/4KSGbYvjo+gJSvqfM8
+ YJQoIC0+2+/vMII6j2ZmCPVJW9oQgCtm+5PSGEHm0jPChTI4ZZdGQkg37ejqeVVSo50/
+ 6CjidUKy7ka4mKJFvQISdqfNVSamlS/hrRAlrLB0ZBvNLpT2yS9USm2g2VMLruhL9am3
+ hNztBVH40Nezq968D2A/w+MzPEaPMIFPdIF7ZgQllrEegk8HkzEi9Hl9/5C5IpDGK184
+ EW2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=DyQhHgn1wfNhraV01ROPwhbNkVR5MrqWmHzQoBZzcso=;
+ b=3+jYMp3CKnLj8rj5qbpa4me8uFjD55N5ecyT8ubWEBJYehSQ7wh+LV5uF3kxjC0T0r
+ 6ZAwdkTZvBbAKHbQYI0Ekc+0KbycwN6l5Q4ds6qZfgC/5eqycyqZxr8C1NIC52KhnAs5
+ boRBrPPqI/CelYtVfqsZd30q6R9CRrp2TSFjO74jrwrBJvU1X7VeJlb+kj9CX76aJ2kn
+ d/ApxvEAX+Mp7zblsP/1jg83fIg8Cw6txrDF+r6Wi4WJsHRLcJ9LE4Gw9yAHoeHoKrcl
+ PmmnaTBN4yUsMqi+iZMMneeT6ZKopi4lYuk55nBvL+yaLCsVE2wbsa4M8Ozk1qzNiFXl
+ QDAQ==
+X-Gm-Message-State: AOAM532Kb5nv+jOVBP167mNtVJ/P4TMj//MbQNk0XtrftemqSipZigkv
+ TuzgRiq6Zse06xruiMz808jqSA==
+X-Google-Smtp-Source: ABdhPJw8GLXBt1qBY2Ii8UAeM4c/t6tas5N0eP8Zuz7m57SBuqjC43cawqQy4qxLNcuvWwfJIuHJmA==
+X-Received: by 2002:aa7:d553:0:b0:416:4dfc:126d with SMTP id
+ u19-20020aa7d553000000b004164dfc126dmr28719939edr.213.1649602243119; 
+ Sun, 10 Apr 2022 07:50:43 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ f13-20020a50bf0d000000b0041cdd9c9147sm8489341edk.40.2022.04.10.07.50.42
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Apr 2022 07:50:42 -0700 (PDT)
+Message-ID: <cb239a9b-836e-5e69-c4b2-6435a5a9ca50@mind.be>
+Date: Sun, 10 Apr 2022 16:50:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
+References: <20220405073603.496103-1-buildroot@heine.tech>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220405073603.496103-1-buildroot@heine.tech>
+Subject: Re: [Buildroot] [PATCH] package/spdlog: bump to version 1.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,101 +95,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f986b265511e6f4748595c8b7ea83f1f616ddd64
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There are host toolchains available for non-x86/x86_64 architectures,
-add them as supported along with their toolchain hashes.
 
-Note that the gcc riscv64-unknown-linux-gnu arch needs to be mapped
-to the rust riscv64gc-unknown-linux-gnu arch.
+On 05/04/2022 09:35, Michael Nosthoff via buildroot wrote:
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/rust-bin/rust-bin.hash | 24 ++++++++++++++++++++++++
- package/rustc/Config.in.host   | 11 ++++++++++-
- package/rustc/rustc.mk         |  4 +++-
- 3 files changed, 37 insertions(+), 2 deletions(-)
+  Applied to master, thanks.
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index 9f8788a295..bac2f21c5c 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,6 +1,30 @@
-+# From https://static.rust-lang.org/dist/rust-1.58.1-aarch64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-aarch64-unknown-linux-gnu.tar.xz.asc
-+sha256  0a80900aa160de4292b1174e25f183bd88f6c2fbb3056a59fcb4d658c70084cb  rust-1.58.1-aarch64-unknown-linux-gnu.tar.xz
- # From https://static.rust-lang.org/dist/rust-1.58.1-i686-unknown-linux-gnu.tar.xz.sha256
- # Verified using https://static.rust-lang.org/dist/rust-1.58.1-i686-unknown-linux-gnu.tar.xz.asc
- sha256  110ca4967351d8535f3d39e24f40e2941c20346c5765d3530270e134ae50568e  rust-1.58.1-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-mips-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-mips-unknown-linux-gnu.tar.xz.asc
-+sha256  01d2e69ed06fbc05a779a7d09f99d0b54a0d10fef9a7dcd0ea07866d57900ca2  rust-1.58.1-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-mipsel-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-mipsel-unknown-linux-gnu.tar.xz.asc
-+sha256  0b8fafb75e06ba9d4ca58f2cde3179a677908aed8be64e798fc107135839c480  rust-1.58.1-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-powerpc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-powerpc-unknown-linux-gnu.tar.xz.asc
-+sha256  00216feea0a6468e9ce57c7d3ad50e22fe888dfc9aabc34128e1f4b02c5a09b9  rust-1.58.1-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-powerpc64-unknown-linux-gnu.tar.xz.asc
-+sha256  f6f870875d9adbe5a8b7bb6f61c44b6c54381e5dff50b4d2cdce50d18a8a541e  rust-1.58.1-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256  45bf988d0337095a4d30bb237d552e3420b4381e208624f0d956e1caf6b90207  rust-1.58.1-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-riscv64gc-unknown-linux-gnu.tar.xz.asc
-+sha256  488e30e926d1835c0140a01bff4d3fe6499be1e89e5c740b2ceace892ab4c2e6  rust-1.58.1-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.58.1-s390x-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.58.1-s390x-unknown-linux-gnu.tar.xz.asc
-+sha256  48cf31128a54551330f9c094f69d274adaab1ac506869dd65353aaea5bcbf33f  rust-1.58.1-s390x-unknown-linux-gnu.tar.xz
- # From https://static.rust-lang.org/dist/rust-1.58.1-x86_64-unknown-linux-gnu.tar.xz.sha256
- # Verified using https://static.rust-lang.org/dist/rust-1.58.1-x86_64-unknown-linux-gnu.tar.xz.asc
- sha256  f71b077caf0becbd0af9fd22bc1fa31c4fdf7a21fe046da8a15a7bde1286da25  rust-1.58.1-x86_64-unknown-linux-gnu.tar.xz
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index 80d1d1a3d8..4ea66c2d2d 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -1,7 +1,16 @@
- # All host rust packages should depend on this option
- config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	bool
--	default y if BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	default y if BR2_HOSTARCH = "aarch64"
-+	default y if BR2_HOSTARCH = "mips"
-+	default y if BR2_HOSTARCH = "mipsel"
-+	default y if BR2_HOSTARCH = "powerpc"
-+	default y if BR2_HOSTARCH = "powerpc64"
-+	default y if BR2_HOSTARCH = "powerpc64le"
-+	default y if BR2_HOSTARCH = "riscv64"
-+	default y if BR2_HOSTARCH = "s390x"
-+	default y if BR2_HOSTARCH = "x86"
-+	default y if BR2_HOSTARCH = "x86_64"
- 
- # The pre-built Rust standard library is only available for a number
- # of architectures/C libraries combinations, with different levels of
-diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-index 0513dd0b40..b2cc131ee9 100644
---- a/package/rustc/rustc.mk
-+++ b/package/rustc/rustc.mk
-@@ -11,7 +11,9 @@ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
- RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-$(LIBC)$(RUSTC_ABI)
- endif
- 
--ifeq ($(HOSTARCH),x86)
-+ifeq ($(HOSTARCH),riscv64)
-+RUSTC_HOST_ARCH = riscv64gc
-+else ifeq ($(HOSTARCH),x86)
- RUSTC_HOST_ARCH = i686
- else
- RUSTC_HOST_ARCH = $(HOSTARCH)
+  Regards,
+  Arnout
+
+> ---
+>   package/spdlog/spdlog.hash | 2 +-
+>   package/spdlog/spdlog.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+> index 02756fc98c..866d1d6d02 100644
+> --- a/package/spdlog/spdlog.hash
+> +++ b/package/spdlog/spdlog.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  6fff9215f5cb81760be4cc16d033526d1080427d236e86d70bb02994f85e3d38  spdlog-1.9.2.tar.gz
+> +sha256  697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224  spdlog-1.10.0.tar.gz
+>   sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
+> diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+> index b5dfc0c7b4..9c5e76a9e8 100644
+> --- a/package/spdlog/spdlog.mk
+> +++ b/package/spdlog/spdlog.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -SPDLOG_VERSION = 1.9.2
+> +SPDLOG_VERSION = 1.10.0
+>   SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+>   SPDLOG_LICENSE = MIT
+>   SPDLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
