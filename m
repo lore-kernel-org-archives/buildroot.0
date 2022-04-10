@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69D1BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 21:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63758C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 21:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2022740558;
-	Sun, 10 Apr 2022 21:12:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1974D41677;
+	Sun, 10 Apr 2022 21:12:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3BMy1ryRK7bG; Sun, 10 Apr 2022 21:11:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r4n0Eoefzdwt; Sun, 10 Apr 2022 21:12:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 096E94050C;
-	Sun, 10 Apr 2022 21:11:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31B451BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEF8E415EB;
+	Sun, 10 Apr 2022 21:12:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C8A91BF995
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EE544050C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A6848402C
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tc3o3BQWJh36 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I_jIli3HnDMv for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 21:11:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6637F40496
+ by smtp1.osuosl.org (Postfix) with ESMTP id 745258402B
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 21:11:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 123AD8396B; Sun, 10 Apr 2022 21:02:02 +0000 (UTC)
+ id 1C1E88396C; Sun, 10 Apr 2022 21:02:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 23:09:27 +0200
+Date: Sun, 10 Apr 2022 23:10:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4032672736614397c803584ba7bb8a20ae1896e
-X-Git-Newrev: c0aaf9cc9e85f63ab4334db8c6deca25e6f8e878
+X-Git-Oldrev: c0aaf9cc9e85f63ab4334db8c6deca25e6f8e878
+X-Git-Newrev: b5f07f62eb0392c3bddd63ac16d12adec7e98812
 X-Patchwork-Hint: ignore
-Message-Id: <20220410210202.123AD8396B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: needs C++
+Message-Id: <20220410210202.1C1E88396C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/liburing: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,63 +58,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0aaf9cc9e85f63ab4334db8c6deca25e6f8e878
+commit: https://git.buildroot.net/buildroot/commit/?id=b5f07f62eb0392c3bddd63ac16d12adec7e98812
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-intel-gmmlib needs C++ since its addition in commit
-93e4ee81a2e3e163bf74c24b6ec68f9446f96ae4 and
-https://github.com/intel/gmmlib/commit/7a1ec78c0bc74939ba3ef61854f98eb4d7267cc3:
+liburing needs MMU since its addition in commit
+03ca6f4e39874583060317e7e15e9e360220877e:
 
-CMake Error at /nvmedata/autobuild/instance-15/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
-  The C++ compiler
-
-    "/usr/bin/clang++"
-
-  is not able to compile a simple test program.
+setup.c: In function 'io_uring_ring_dontfork':
+setup.c:119:8: warning: implicit declaration of function 'madvise'; did you mean 'raise'? [-Wimplicit-function-declaration]
+  119 |  ret = madvise(ring->sq.sqes, len, MADV_DONTFORK);
+      |        ^~~~~~~
+      |        raise
 
 Fixes:
- - http://autobuild.buildroot.org/results/8cadfee0288a05676868e05d56243d866cbf051d
+ - http://autobuild.buildroot.org/results/33f3c58e98daab07139b4f400b85f87c0e314240
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-gmmlib/Config.in      | 5 +++--
- package/intel-mediadriver/Config.in | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/liburing/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-index 9d5fbd9cae..b6f93f7416 100644
---- a/package/intel-gmmlib/Config.in
-+++ b/package/intel-gmmlib/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_INTEL_GMMLIB
- 	bool "intel-gmmlib"
- 	depends on BR2_x86_64
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/liburing/Config.in b/package/liburing/Config.in
+index d65a3f1322..fc13f1c17c 100644
+--- a/package/liburing/Config.in
++++ b/package/liburing/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBURING
+ 	bool "liburing"
++	depends on BR2_USE_MMU # madvise()
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
  	help
- 	  The Intel(R) Graphics Memory Management Library provides
- 	  device specific and buffer management for the Intel(R)
-@@ -10,5 +11,5 @@ config BR2_PACKAGE_INTEL_GMMLIB
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_LIBURING
+ 	  https://git.kernel.dk/cgit/liburing
  
- 	  https://github.com/intel/gmmlib
- 
--comment "intel-gmmlib needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "intel-gmmlib needs a toolchain w/ dynamic library, C++"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
-index c29c2fb6ab..ad56590008 100644
---- a/package/intel-mediadriver/Config.in
-+++ b/package/intel-mediadriver/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_INTEL_MEDIADRIVER
- 	bool "intel-mediadriver"
- 	depends on BR2_x86_64
- 	depends on !BR2_STATIC_LIBS # mesa3d, libva
--	depends on BR2_INSTALL_LIBSTDCPP # mesa3d
-+	depends on BR2_INSTALL_LIBSTDCPP # intel-gmmlib, mesa3d
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
+ comment "liburing needs a toolchain w/ gcc >= 4.9, headers >= 5.1"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
