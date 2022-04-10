@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D53BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C45CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16F5F84060;
-	Sun, 10 Apr 2022 15:08:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C91D40940;
+	Sun, 10 Apr 2022 15:08:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tCk0vTfkSQ5a; Sun, 10 Apr 2022 15:08:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tZJmOHikMzTK; Sun, 10 Apr 2022 15:08:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9DEB8405B;
-	Sun, 10 Apr 2022 15:08:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A678E1BF869
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DA24408DF;
+	Sun, 10 Apr 2022 15:08:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DA0151BF869
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 949AE607C9
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D66FB4017A
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:08:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hr1eJrDxbab6 for <buildroot@lists.busybox.net>;
- Sun, 10 Apr 2022 15:07:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Keg_VrKZqKSo for <buildroot@lists.busybox.net>;
+ Sun, 10 Apr 2022 15:08:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 33421607A4
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:07:58 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id c64so3215081edf.11
- for <buildroot@buildroot.org>; Sun, 10 Apr 2022 08:07:58 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E1E2F40119
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:08:21 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id bh17so26097699ejb.8
+ for <buildroot@buildroot.org>; Sun, 10 Apr 2022 08:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=VG0kSOp5TZT0VUSzG7V8ijKbwq3v4bwuMaqFFZ5JsEQ=;
- b=AD1eU9lmQQqU6EKuLPyTXu8sx61nv0sMyIs1CYsgScKwgt4B4bGT4/SW8WsomQiq/j
- +CKgS6UiyLRU57k0pucq/hoGYQBMH9SktsucJ+2p+EBimDtj+pxcuc3MpWz/fkU4D4Om
- I6XXHEK0Jd03T49AIP8kJ/gLF2xbyHjOFRwxHhsDGhwSCQKvaFy/e4NJss6D7ofndzyz
- p1ybOh7j1PB3uTukf/OImJeViskQBFEHyalcdt8NByxcsx4Iq4gIIByrVWcWmmJyG00U
- MZqH3r6yxTx3HH87/3HsJqQQFqW+X8xbjIG4Ju43QyrfAG1R9Gqy8nSDkvuhYlr9Oi55
- uABQ==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=QGdPCt44niwo/vqkVLAS07adcCdVaLekwxP/KLiD5xs=;
+ b=A8Q7ZYSoKkwKmHPXAyYgBKxu9Qorp7C1aIPSxJveZ7L3KAJxxd716GTrRK3N1Vr4vt
+ MT6ZtNMjYzdCujdq4eY22Bs0EmGEUDQbiAAz1Po8/pNQL9VG85Xr+4fP4ZvEykK21Wdh
+ yQLCRRhfHamJRNlP6qvrCYciNT2jEnUQiWepnAretE+4nNnApzbRCPDaWlGCiRl9JOVQ
+ UsT/oyaTtMRh8l8/gJRgjZ458hnBiAO5MqN+aL/CzW5m0N/bUEA5j+3GGWVUkkq05WEO
+ rpUJF5E8neGOWM0dG3fJa7oCRMm3jI+WXPJoeysceVOUzZUKdvXi+XyNTOZJYVJCNRvK
+ WXIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=VG0kSOp5TZT0VUSzG7V8ijKbwq3v4bwuMaqFFZ5JsEQ=;
- b=dxolaRrRaO4OCDnQtuWg9P/P8/bu19fptwF/xH55yyEkgChNUMwdr63UU0hO1/kCST
- D1D/Q1fLW0exJVjG6vl8m6ZpEBXQqThcoJUSx1k7WTvmrg3PRpJD7OZ9/0M1ApIO5kio
- Jg6kttbqJHYzbvs/gm4naFQPnynJMIP1q5gXoES/QQPFNE9Tg14VD6Quvw77eguETlz0
- 9GY5/mWabQ0irPVODfoSY/CQNjIJ940Ndv5ccG4E/F6xqmeGp/oS5KwopJuBIM8Zsy7s
- OsVWPQ12qtRX3Wah+3Z7sLkZgMSOtGfFXQdcpSPpaGpvls/91X7wr5s7p3D4OIcSU5Xp
- MXqA==
-X-Gm-Message-State: AOAM531HVygkHxGbkBxCgaaC6zvC8BBcm2vAh8RK2oQx8M6Z9ukfOx9w
- urtGb57h7HKNjIVXFJ5KNbjn+Fmj2kq79Q==
-X-Google-Smtp-Source: ABdhPJzheOATo+Ec7bAVw5IJt3jGRQvHFKxDx/6acehFXJmUxkmQivhhR2axEjrw8WTFPSHfjJoKYw==
-X-Received: by 2002:a05:6402:524c:b0:419:4d8c:e959 with SMTP id
- t12-20020a056402524c00b004194d8ce959mr29422575edd.398.1649603277214; 
- Sun, 10 Apr 2022 08:07:57 -0700 (PDT)
+ bh=QGdPCt44niwo/vqkVLAS07adcCdVaLekwxP/KLiD5xs=;
+ b=NEku3BUecM2of8x53k1Ucgk5vDo28dMQ4oHOC0OfKZSu5ZcY9oV8egzHMMEf5+en5u
+ UeYb3cEHM4uTh656+ZvKtJicHwDWb3sTml1cSkGVl9E46cdWGlyvKoIea76l/9bHexLj
+ XZ9e5F94EPhw3t9S1JaJDYVFW5HZCNI9GQbE4/JUfsVisI6E/jy+RcBZeRX2cXiX6eJC
+ wPjUe4sZ/bO4rSt8kERD+fAMvyGOufqTekoWnHNtxGfmf2gv+GAZ+JjsWW0aGy+QTeRx
+ rbKI13QuIJiqU3u8HTZ/kWryO/KzvjUS1FmUB/ILboo4ebzLcL2cL0z0B/0mbA9obceP
+ O81g==
+X-Gm-Message-State: AOAM533Cwz/0U0toFz/qG3gAUh+bVXC8DoLpEzmzE2riizzWupAfCSVQ
+ B1OAF/FI9uEi01xwYhhWbM5WiQ==
+X-Google-Smtp-Source: ABdhPJynhGbee+FYUcODJ+mj6CGt3w+MkdSVrxMKLE0YE0FydLg91Tx+xZGG4e4AbhiBJZICdDc37Q==
+X-Received: by 2002:a17:907:e8a:b0:6e7:f3cb:61eb with SMTP id
+ ho10-20020a1709070e8a00b006e7f3cb61ebmr26623796ejc.247.1649603299933; 
+ Sun, 10 Apr 2022 08:08:19 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- wn10-20020a170907068a00b006e87d354452sm1245295ejb.29.2022.04.10.08.07.56
+ s10-20020a50daca000000b0041cc361b1c9sm10659583edj.68.2022.04.10.08.08.19
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 10 Apr 2022 08:07:56 -0700 (PDT)
-Message-ID: <835e1fb4-8e41-4402-fdbc-17032be4cd6d@mind.be>
-Date: Sun, 10 Apr 2022 17:07:55 +0200
+ Sun, 10 Apr 2022 08:08:19 -0700 (PDT)
+Message-ID: <63ca4150-fb74-c0c8-32bb-1287e3d4a4f7@mind.be>
+Date: Sun, 10 Apr 2022 17:08:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220405194916.1754126-1-fontaine.fabrice@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20220405203030.3418304-1-giulio.benetti@benettiengineering.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220405194916.1754126-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
- needs C++
+In-Reply-To: <20220405203030.3418304-1-giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,90 +102,54 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/04/2022 21:49, Fabrice Fontaine wrote:
-> gst1-plugins-bad needs C++ since switch to meson-package in commit
-> 5d6c408e9535be4b5ba0c8a49215d2d03dcb5cd5:
+On 05/04/2022 22:30, Giulio Benetti wrote:
+> Since the major release changed I've built successfully all packages that
+> have direct dependency to harfbuzz:
+> - efl
+> - libass
+> - mupdf
+> - pango
+> - qt5base
+> - sdl2_ttf
+> - supertuxkart
+> - vlc
+> - webkitgtk
+> - wpewebkit
 > 
-> The following exception(s) were encountered:
-> Running "/home/autobuild/autobuild/instance-8/output-1/host/bin/microblaze-buildroot-linux-musl-g++ --version" gave "[Errno 2] No such file or directory: '/home/autobuild/autobuild/instance-8/output-1/host/bin/microblaze-buildroot-linux-musl-g++'"
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-  Again, I looked at instead fixing the meson.build so C++ is only required for 
-the modules that really use C++, but it doesn't look to be that simple. So 
-applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/8f924cebeb8a1ed73e57103bf3073fb8f8d8752e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->   package/gstreamer1/gst1-imx/Config.in         | 6 ++++--
->   package/gstreamer1/gst1-plugins-bad/Config.in | 4 ++++
->   package/gstreamer1/gst1-vaapi/Config.in       | 5 +++--
->   3 files changed, 11 insertions(+), 4 deletions(-)
+>   package/harfbuzz/harfbuzz.hash | 2 +-
+>   package/harfbuzz/harfbuzz.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-> index 7b46233b53..41ef8548c5 100644
-> --- a/package/gstreamer1/gst1-imx/Config.in
-> +++ b/package/gstreamer1/gst1-imx/Config.in
-> @@ -88,11 +88,13 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
->   config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
->   	bool "imxv4l2videosink"
->   	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 # V4L2_COLORSPACE_DEFAULT
-> +	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
->   	select BR2_PACKAGE_GST1_PLUGINS_BAD
->   	help
->   	  Elements for V4L2 output
+> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+> index e4674afa87..1576824a5a 100644
+> --- a/package/harfbuzz/harfbuzz.hash
+> +++ b/package/harfbuzz/harfbuzz.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  7158a87c4db82521fc506711f0c8864115f0292d95f7136c8812c11811cdf952  harfbuzz-3.4.0.tar.xz
+> +sha256  f2200f177768bdc21445aa09703326f3bbe8114ac083d081fe1a79d305c7ae73  harfbuzz-4.2.0.tar.xz
+>   sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> index 331b35c530..551277a788 100644
+> --- a/package/harfbuzz/harfbuzz.mk
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> -comment "imxv4l2videosink needs a toolchain w/ headers >= 4.2"
-> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-> +comment "imxv4l2videosink needs a toolchain w/ headers >= 4.2, C++"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 || \
-> +		!BR2_INSTALL_LIBSTDCPP
->   
->   endif
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index 234d57636b..669360adb1 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -1,5 +1,6 @@
->   menuconfig BR2_PACKAGE_GST1_PLUGINS_BAD
->   	bool "gst1-plugins-bad"
-> +	depends on BR2_INSTALL_LIBSTDCPP
->   	select BR2_PACKAGE_GST1_PLUGINS_BASE
->   	help
->   	  A set of plug-ins for GStreamer that may be of poor quality
-> @@ -724,3 +725,6 @@ comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.0"
->   		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
->   
->   endif
-> +
-> +comment "gst1-plugins-bad needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-> index 91bd4f85dd..ade8b83a5f 100644
-> --- a/package/gstreamer1/gst1-vaapi/Config.in
-> +++ b/package/gstreamer1/gst1-vaapi/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_GST1_VAAPI
->   	bool "gst1-vaapi"
->   	depends on !BR2_STATIC_LIBS # dlopen(), libva
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # libva, libdrm
-> +	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
->   	depends on BR2_PACKAGE_HAS_UDEV
->   	select BR2_PACKAGE_LIBVA
->   	select BR2_PACKAGE_LIBDRM
-> @@ -45,6 +46,6 @@ config BR2_PACKAGE_GST1_VAAPI_ENCODERS
->   
->   endif
->   
-> -comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library"
-> +comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library, C++"
->   	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-> -		!BR2_PACKAGE_HAS_UDEV
-> +		!BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP
+> -HARFBUZZ_VERSION = 3.4.0
+> +HARFBUZZ_VERSION = 4.2.0
+>   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+>   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+>   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
