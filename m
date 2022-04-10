@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBB18C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 21:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9226CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 21:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9412384031;
-	Sun, 10 Apr 2022 21:12:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CF788405E;
+	Sun, 10 Apr 2022 21:12:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f_AE19wngLkU; Sun, 10 Apr 2022 21:12:25 +0000 (UTC)
+	with ESMTP id TMjZFvbLmETa; Sun, 10 Apr 2022 21:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89D478402C;
-	Sun, 10 Apr 2022 21:12:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A3E71BF9A4
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 552EC8405C;
+	Sun, 10 Apr 2022 21:12:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EC181BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47A904160B
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D6AE60BB0
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 21:11:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dafw30nH-Gvf for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IbrJ0KZeH2pQ for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 21:11:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55C8F415E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F6C660B21
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 21:11:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F2D0B83912; Sun, 10 Apr 2022 21:02:01 +0000 (UTC)
+ id E91FE8396B; Sun, 10 Apr 2022 21:02:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 23:07:59 +0200
+Date: Sun, 10 Apr 2022 23:06:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b1080d57ae642bd5d4b5783c49d4ba49f13dfe8
-X-Git-Newrev: 35be926c97836989d6cecbc7ecb49f9c9bd46eba
+X-Git-Oldrev: 04164b81e76e29fb9482245e808b46af2aa67bc6
+X-Git-Newrev: 4b1080d57ae642bd5d4b5783c49d4ba49f13dfe8
 X-Patchwork-Hint: ignore
-Message-Id: <20220410210201.F2D0B83912@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spice: needs C++
+Message-Id: <20220410210201.E91FE8396B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/woff2: use github helper
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35be926c97836989d6cecbc7ecb49f9c9bd46eba
+commit: https://git.buildroot.net/buildroot/commit/?id=4b1080d57ae642bd5d4b5783c49d4ba49f13dfe8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-spice needs C++ since bump to version 0.15.0 in commit
-b784f1bc0fc3ac33a20549069a81ff98260b58e9 and
-https://github.com/freedesktop/spice/commit/e6e6ded681ff154f236f260f071389c4c8c0d944:
-
-configure: error: *** A compiler with support for C++11 language features is required.
-
-Fixes:
- - http://autobuild.buildroot.org/results/4e0dc43c28d45176cccf573fb56ea9690192f754
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spice/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/woff2/woff2.hash | 2 +-
+ package/woff2/woff2.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 2241b55b3d..ca5c562ca1 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -1,12 +1,14 @@
--comment "spice server needs a toolchain w/ wchar, threads"
-+comment "spice server needs a toolchain w/ wchar, threads, C++"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/woff2/woff2.hash b/package/woff2/woff2.hash
+index 469071e3c2..0812dabcf1 100644
+--- a/package/woff2/woff2.hash
++++ b/package/woff2/woff2.hash
+@@ -1,5 +1,5 @@
+ # Locally generated:
+-sha512  c788bba1530aec463e755e901f9342f4b599e3a07f54645fef1dc388ab5d5c30625535e5dd38e9e792e04a640574baa50eeefb6b7338ab403755f4a4e0c3044d  v1.0.2.tar.gz
++sha512  c788bba1530aec463e755e901f9342f4b599e3a07f54645fef1dc388ab5d5c30625535e5dd38e9e792e04a640574baa50eeefb6b7338ab403755f4a4e0c3044d  woff2-1.0.2.tar.gz
  
- config BR2_PACKAGE_SPICE
- 	bool "spice server"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
+ # Hash for license files:
+ sha512  8ee924da3fb5d16135adcf6a8fbe9e2e8f3d2d80468617e72ca4fa059a60f8455c9a5f68a8dc381b1297c8bf39c887a912d0f69246d2604ada74d3da9e8e490b  LICENSE
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+index b2ff33fe98..937e8cf736 100644
+--- a/package/woff2/woff2.mk
++++ b/package/woff2/woff2.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ WOFF2_VERSION = 1.0.2
+-WOFF2_SOURCE = v$(WOFF2_VERSION).tar.gz
+-WOFF2_SITE = https://github.com/google/woff2/archive
++WOFF2_SITE = $(call github,google,woff2,v$(WOFF2_VERSION))
+ WOFF2_LICENSE = MIT
+ WOFF2_LICENSE_FILES = LICENSE
+ WOFF2_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
