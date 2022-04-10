@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21435C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F95BC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Apr 2022 15:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C262D415E0;
-	Sun, 10 Apr 2022 15:40:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE81B415E1;
+	Sun, 10 Apr 2022 15:40:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PGxtTEPpa4Qg; Sun, 10 Apr 2022 15:40:40 +0000 (UTC)
+	with ESMTP id hBGlHmfmbfyY; Sun, 10 Apr 2022 15:40:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 867A84109B;
-	Sun, 10 Apr 2022 15:40:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 716BE41635;
+	Sun, 10 Apr 2022 15:40:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B8F481BF869
- for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA9721BF869
+ for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78C4D40577
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F92340569
  for <buildroot@lists.busybox.net>; Sun, 10 Apr 2022 15:38:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lavxE_xyd3O0 for <buildroot@lists.busybox.net>;
+ with ESMTP id H1XO87kXiV2Z for <buildroot@lists.busybox.net>;
  Sun, 10 Apr 2022 15:38:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70C7140569
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89D2A40586
  for <buildroot@buildroot.org>; Sun, 10 Apr 2022 15:38:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9BB148388A; Sun, 10 Apr 2022 15:29:00 +0000 (UTC)
+ id C61A78388A; Sun, 10 Apr 2022 15:29:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Apr 2022 17:35:16 +0200
+Date: Sun, 10 Apr 2022 17:36:52 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 195e1f1383808571aae7541e76419cdaab32e853
-X-Git-Newrev: e0121e94771e264c21ec1ea2dac908f79ee2af6c
+X-Git-Oldrev: f7706bb9ee1d8dc59148cddcc69c92a3a264eb23
+X-Git-Newrev: a2876878c4f26ddd5c9f8303ddb91bd5358ab9df
 X-Patchwork-Hint: ignore
-Message-Id: <20220410152900.9BB148388A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libcoap: doesn't
- build with libressl
+Message-Id: <20220410152900.C61A78388A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/runc: bump to
+ version v1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,57 +54,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1721709238796772397=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1721709238796772397==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e0121e94771e264c21ec1ea2dac908f79ee2af6c
+commit: https://git.buildroot.net/buildroot/commit/?id=a2876878c4f26ddd5c9f8303ddb91bd5358ab9df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with libressl raised since commit
-8b14f6b49b962d4d8f7135d85afa15658ea8f94b:
+Bugfix release, fixing a number of issues:
+https://github.com/opencontainers/runc/releases/tag/v1.1.1
 
-src/coap_openssl.c:107:3: erreur: nom de type « BIO_ADDR » inconnu
-  107 |   BIO_ADDR *bio_addr;
-      |   ^~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/30022e437f349459994dccfb612773d529d97a20
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0796c878f4c9ad786a6c4c4716e4239fa070cd73)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 91c056f0d598ed0d5b94ec4d4cebb9bd203efb50)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcoap/libcoap.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 8a85ff3a2e..edcc1bbef8 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -18,7 +18,7 @@ ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCOAP_DEPENDENCIES += gnutls
- LIBCOAP_CONF_OPTS += \
- 	--enable-dtls --with-gnutls --without-mbedtls --without-openssl
--else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+else ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- LIBCOAP_DEPENDENCIES += openssl
- LIBCOAP_CONF_OPTS += \
- 	--enable-dtls --without-gnutls --without-mbedtls --with-openssl
-
---===============1721709238796772397==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 38d9f52510..fe3c4cc488 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a8de57edbf0ff741ea798ccdd99ac0e1b79914f552871bd7cd92b0569f200964  runc-1.1.0.tar.gz
++sha256  11a34535c108b36fd59de58e7bef3a130444c9ea41e4b8bb8f8d4654c8ad654c  runc-1.1.1.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index a40075544e..2618b71f63 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 1.1.0
++RUNC_VERSION = 1.1.1
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
+ RUNC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1721709238796772397==--
