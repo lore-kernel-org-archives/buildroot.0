@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 731D4C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60A20C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:05:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15B204041C;
-	Mon, 11 Apr 2022 07:01:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A24660E2F;
+	Mon, 11 Apr 2022 07:05:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fnQt5KH4XuQe; Mon, 11 Apr 2022 07:01:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 087EF4025D;
-	Mon, 11 Apr 2022 07:01:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 59F301BF46A
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:01:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 563D460BBF
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:01:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (3072-bit key) header.d=samba.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fyyBrI6p0fUv for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 07:01:29 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UwIHWbcrng85; Mon, 11 Apr 2022 07:05:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A75B60E5B;
+	Mon, 11 Apr 2022 07:05:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A76941BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:04:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A559B82B94
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:04:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (3072-bit key) header.d=samba.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZVg6L8w9eD2P for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 07:04:57 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D17B560746
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 07:01:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7EB1E82B49
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 07:04:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org; 
  s=42; h=Message-Id:Date:Cc:To:From;
- bh=rqDwL9uKOtA8aLCODPTkkyGxhsFpD/Vcv3PMicouVbw=; b=N7+/hyOZe2/qzJIpb9/nzRTnx7
- 3c0HN734g0QC9a+KuwV2NCpLsp2N7W8iPUwmF8+rU+7tZGeaew1kT/pvJH9C0Wf63SUEBMRMMw51a
- /OiNi5LLCBoQ7tdrHeqYM28eW/9P3PU8B3yDA5k4TI5yGCuYDcKTzOMTrU7aC5THHbfp7/MdUxAgj
- m+vTQoPeCJ4p0LOAjzYhMxN6SKTfxbnhHPt92bazlUdwRMavd0m7++CfWoBP2zy0jFDN9u5yAzsWy
- ecxc6jiO2QXi3pG0Q4nsLDLmpORygpPxfZcW0bTI9Rr4575rZ4EzFfpUMQVnXdS3YmS8cnJhztp8L
- PXeSoogvfUWxftVALfKLvb9bqabhmqeyUhHQGTcFM0k8lWVUtsm2vcwaPar1GD12Fsyh+uVvBNnEw
- eBFHUHp+Yb5a9ViA7xFb8UPAChPtJQi9ZlwtR49dDEBlR65+zWiTQxhLl5/XExoVjw0pst6YZwDK0
- 8oaQJgWVES2vDjUHXhFcLlJN;
+ bh=FWIcOMtQExVVSV/czhGaeC556bYwn/4CIpDH069s+3A=; b=b84oHW0y0QXJPUJciGB9oytNFZ
+ hT3WdZliE4w3mJTRrlO1Ywg5yKmumyWoPXjdijmti5rDjmkgeGRLd1cRMuHqDbxLBLbi+h1+rbyYR
+ FjvEpfgwbZyB+vwe2PvTOKkpVuXhDwzBkWD/bpW9ic013seXDl90YlwmEgbJwI155/DpJUAINSgYk
+ Ja2Q5+uc8lvxcJ/X2lNccB++wBhOc0wOmi+iXN5/Ub/GkzhZ/Px3qWNmbk5BRL1DZFxRVyGcRTT8y
+ TgCXtZW42///tU2pzSoX8eXA0Fuu70jMQjBNIFjsRhAaWPZuXzH2Z4aGXJ9KboVH4YAV8KzHeUV/v
+ eQoHncWHT2BQAp8frJhkW4jB7/z2gqcqeaP68wTRIj0Dm37G6AKl0FYE98CCk6rtYTAjtE3E6q1zn
+ fVtTOex1J7ikE/I3BuvDqf4yoRvDtI6+yPIi+H0OMwj4pzmhc/DY8wCtCPf/nbnF9OwUhMUbDOdun
+ nZ8K5c05UgtLXqO5t8buypZV;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
  by hr2.samba.org with esmtpsa
  (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
- (Exim) id 1ndo3C-006OFY-CB; Mon, 11 Apr 2022 07:01:26 +0000
+ (Exim) id 1ndo6Z-006OH7-3J; Mon, 11 Apr 2022 07:04:55 +0000
 To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 09:01:25 +0200
-Message-Id: <20220411070125.77424-1-ambi@samba.org>
+Date: Mon, 11 Apr 2022 09:04:54 +0200
+Message-Id: <20220411070454.77482-1-ambi@samba.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <296339a6-e188-9549-12c5-c5983eb6a5ef@samba.org>
-References: <296339a6-e188-9549-12c5-c5983eb6a5ef@samba.org>
+In-Reply-To: <20220411070125.77424-1-ambi@samba.org>
+References: <20220411070125.77424-1-ambi@samba.org>
 MIME-Version: 1.0
 Subject: [Buildroot] [PATCH 1/2] package/openjdk-bin: add support for host
  architecture aarc64
@@ -78,8 +78,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 From: Christian Ambach <ambi@samba.org>
 
 Signed-off-by: Christian Ambach <ambi@samba.org>
-Signed-off-by: Christian Ambach <christian.ambach@deutschebahn.com>
 ---
+
+New version with removed duplicate Signed-off-by.
+
  package/openjdk-bin/openjdk-bin.hash |  2 ++
  package/openjdk-bin/openjdk-bin.mk   | 10 +++++++++-
  2 files changed, 11 insertions(+), 1 deletion(-)
