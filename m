@@ -1,46 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 021D3C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 21:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93732C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 21:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80A164074E;
-	Mon, 11 Apr 2022 21:50:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t__b2LLS6k5p; Mon, 11 Apr 2022 21:50:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CFDA4052A;
-	Mon, 11 Apr 2022 21:50:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ACA0C1BF30D
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 21:50:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BA5860A6D
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 21:50:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22EF960E43;
+	Mon, 11 Apr 2022 21:52:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ySm9OHdq__RD for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 21:50:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BB3A607C1
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 21:50:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EA42383A55; Mon, 11 Apr 2022 21:40:18 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id msUUzXofhfpC; Mon, 11 Apr 2022 21:52:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1134F60D75;
+	Mon, 11 Apr 2022 21:52:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D5A31BF30D
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 21:52:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A0AB4029F
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 21:52:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 05lWbdQEocuJ for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 21:52:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DDC264027D
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 21:52:06 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ u17-20020a05600c211100b0038eaf4cdaaeso439299wml.1
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 14:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vZviErbaoSYmTEhCGJN4sXQgjC7x5yzJXQr3KXqmM9A=;
+ b=b53WSKl1PjUq3BuezlM7nHaiW9Y9efJSepOzHl5x3mKMJQ0Ut3An8eMbQJ/p36PmNV
+ UInQkivziImsrdSLuXDotXXXABX8jACM1/wC6VEVQ9WY9iGmtOr9AIM61MnxUJK7NzzA
+ 4Id4pTM6VtGkxl3EwU2v2dhhHqmqSTZhkSgBmSbnUbcUtNF4sZn5OdACBow9YzNUQLa8
+ lJ7K13JcWKh4c3k/jyOBCZ3aURjWvSL2pdAvemrkugmwRvpy7IC+d96ERbWgZWIOauie
+ 4O9HfkV5pfyaXLDP9GsRI+HyK9Ap1Yhl+FghFGHnFIm0AE//5Yr/krZpvLkPpeNW4J8k
+ 7CCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vZviErbaoSYmTEhCGJN4sXQgjC7x5yzJXQr3KXqmM9A=;
+ b=UQVPtPBu6F7QRhIPxyxCfekDbP1XW40i+wLUomJ0LD2XPXAUJigvwICb68mkvwTlJI
+ NKzrn00ZF1TxwlQzBQ+SJ8+FIeXDwbEZWQOWWJe8v91AU0+uiK9jd63rV4TKaZihaD+t
+ 1cg0TyTZrIvT43Z9XKsJdPDDWChb08qXYKWVH3kMe7cpACbQ+rWx/aWfgMi/jCT+HQ3S
+ 2+EiqZrDHhRXmkW6EaIfLUKhOXRj5S8NwuQZmRQ0F8WiiH2XUlgFfXJSPDN8HnFxpS0w
+ sEgNP/ijWjqH4RSyUiYSd3JxdI5UdG2dO+G+3Eno2DhkPdUmo12pt7d5TDgWuQKaPPQw
+ 5itQ==
+X-Gm-Message-State: AOAM532x0yTP/HiV30aSLjhPqEdExUXpd3H13LYSyMxyyLrlaZ7gbagr
+ 54ByNs0YHeKtQ9OIkgNPCp9fjn9vvg4=
+X-Google-Smtp-Source: ABdhPJxr5pB864YeatDMnuBv4yiIAZtinO77kC6ksjnJ7bVOmD+SH6qaJ5+CvTO/nkn2GyqK3nO9ag==
+X-Received: by 2002:a05:600c:420c:b0:38e:b1d4:773a with SMTP id
+ x12-20020a05600c420c00b0038eb1d4773amr1068629wmh.120.1649713924870; 
+ Mon, 11 Apr 2022 14:52:04 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ p1-20020a5d59a1000000b002078c8b6dabsm14177097wrr.9.2022.04.11.14.52.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 11 Apr 2022 14:52:03 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 23:49:53 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a4c060c95680b7e7f56c2dba8b0442836ed9d08d
-X-Git-Newrev: 9da87c52934842026918b9eb8511b35cd935c552
-X-Patchwork-Hint: ignore
-Message-Id: <20220411214018.EA42383A55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.1
+Date: Mon, 11 Apr 2022 23:50:02 +0200
+Message-Id: <20220411215002.518739-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: fix FTBFS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,114 +88,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9da87c52934842026918b9eb8511b35cd935c552
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 54 ++++++++++++++++++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 57 insertions(+), 3 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 59ae8f15ce..da18142246 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,57 @@
-+2022.02.1, released April 11th, 2022
-+
-+	Important / security related fixes.
-+
-+	Graphs: Also generate a build time timeline graph (for top
-+	level parallel builds).
-+
-+	scripts/pkg-stats: Optimize memory consumption for CPE parsing
-+
-+	Fix compatibility issue with the fakeroot script logic and
-+	modern versions of dash.
-+
-+	Change git:// URLs pointing to Github to https://, now that
-+	Github has turned off support for git://
-+
-+	Updated/fixed packages: ace, apache, apr, apr-util, belr,
-+	bind, bluez5_utils, boinc, bpftool, busybox, cloop, cog,
-+	containerd, cppcms, dav1d, dhcp, dieharder, dnsmasq,
-+	docker-cli, docker-engine, efl, ell, fakeroot, flac,
-+	fluidsynth, gdk-pixbuf, glib-networking, gnutls, gst-omx,
-+	gst1-devtools, gst1-libav, gst1-plugins-bad,
-+	gst1-plugins-base, gst1-plugins-good, gst1-plugins-ugly,
-+	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
-+	gstreamer1-editing-services, haproxym htop, intel-gmmlib,
-+	ipmiutil, iwd, jack1, jack2, lftp, libabseil-cpp, libbluray,
-+	libcamera-apps, libcoap, libcurl, libest, libgee, libglib2,
-+	libgtk3, libiec61850, libkrb5, libminiupnpc, libodb,
-+	libodb-boost, libopenssl, libp11, libpsl, libressl, librstp,
-+	librtlsdr, liburing, libyang, libzlib, luasec, lxc, matio,
-+	meson, minidlna, minizip, mpd, mtools, netatalk, nbd, odb,
-+	openblas, openssh, openvpn, optee-os, opus, paho-mqtt-c,
-+	pango, php, pipewire, pkcs11-helper, postgresql, ppp,
-+	protozero, python-aioconsole, python-avro, python-brotli,
-+	python-greenlet, python-paramiko, python-pillow,
-+	python-rpi-gpio, python-treq, python-twisted, python-ujson,
-+	python-weasyprint, qt5base, qt5wayland, raptor, rpi-firmware,
-+	rpi-userland, rtl_433, runc, rust, rygel, samba4,
-+	shairport-sync, spice, spidev_test, stunnel, systemd,
-+	timescaledb, trace-cmd, trousers, ts4900-fpga, tvheadend,
-+	udpcast, unbound, upower, urandom-scripts, usbguard, valgrind,
-+	valijson, vim, wavpack, wget, wireplumber, wireshark, woff2,
-+	xmrig, zabbix, zlib-ng, zynaddsubfx, zziplib
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13971: ip6tables-nft build does not include MASQUERADE target..
-+	#14651: OpenSSH 8.9p1 compiler error under ARM
-+	#14656: Adding dependencies from an external tree does not work
-+	#14661: Fakeroot script relies on bash-isms, does not work ..
-+	#14686: genimage.cfg have a hard-coded .ext4 extension which..
-+	#14701: Multiple unresolved symbols while building kernel ..
-+	#14711: nodjs build problem missing bzip
-+	#14731: BR2_PACKAGE_IOSTAT
-+
- 2022.02, released March 8th, 2022
- 
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index db2ac30b10..ee7aedf71c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.02
-+export BR2_VERSION := 2022.02.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1646777000
-+BR2_VERSION_EPOCH = 1649713000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index a5a0e3f41a..6cf44d9216 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.02'
-+RELEASE='2022.02.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4IHRoZSBmb2xsb2luZyBidWlsZCBmYWlsdXJlIHJhaXNlZCBzaW5jZSBjb21taXQKMDQxNjRi
+ODFlNzZlMjlmYjk0ODIyNDVlODA4YjQ2YWYyYWE2N2JjNjoKCnNyYy91dGlscy5jOiBJbiBmdW5j
+dGlvbiAnc2hhNTEyc3VtMjU2JzoKc3JjL3V0aWxzLmM6NjE5OjQ1OiBlcnJvcjogdG9rZW4gIiAi
+IGlzIG5vdCB2YWxpZCBpbiBwcmVwcm9jZXNzb3IgZXhwcmVzc2lvbnMKICA2MTkgfCAjaWYgT1BF
+TlNTTF9WRVJTSU9OX05VTUJFUiA+PSAweDEwMTAxMDFmTCAmJiAhZGVmaW5lZChMSUJSRVNTTF9W
+RVJTSU9OX05VTUJFUikKICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIF4KCkZpeGVzOgogLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
+dWx0cy9jYWYwZjVlNGM2YWQwZjI3NjRmMDdkMzNmNTk0YjYxMjFjZWE4N2JjCgpTaWduZWQtb2Zm
+LWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KLS0tCiAu
+Li4vdHZoZWFkZW5kLzAwMDMtRml4LUZUQkZTLWluLXV0aWxzLWMucGF0Y2ggfCAyOCArKysrKysr
+KysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMjggaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1v
+ZGUgMTAwNjQ0IHBhY2thZ2UvdHZoZWFkZW5kLzAwMDMtRml4LUZUQkZTLWluLXV0aWxzLWMucGF0
+Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3R2aGVhZGVuZC8wMDAzLUZpeC1GVEJGUy1pbi11dGls
+cy1jLnBhdGNoIGIvcGFja2FnZS90dmhlYWRlbmQvMDAwMy1GaXgtRlRCRlMtaW4tdXRpbHMtYy5w
+YXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4yY2FhMjgxNDkwCi0t
+LSAvZGV2L251bGwKKysrIGIvcGFja2FnZS90dmhlYWRlbmQvMDAwMy1GaXgtRlRCRlMtaW4tdXRp
+bHMtYy5wYXRjaApAQCAtMCwwICsxLDI4IEBACitGcm9tIGZkMDE3MzcyNzBkOThjMjg0NjVjODZh
+Njg4YmQ3ZDFjNjQwNDg2YzUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBNaWNoYWVs
+IE1hcmxleSA8bWljaGFlbEBtaWNoYWVsbWFybGV5LmNvbT4KK0RhdGU6IFdlZCwgNiBBcHIgMjAy
+MiAyMTo0Nzo0OSAtMDQwMAorU3ViamVjdDogW1BBVENIXSBGaXggRlRCRlMgaW4gdXRpbHMuYwor
+CitVKzAwMjAgU1BBQ0UgYW5kIFUrMDBBMCBOTy1CUkVBSyBTUEFDRSBsb29rIHRoZSBzYW1lLCBi
+dXQgdGhleQorYXJlbid0IHRoZSBzYW1lLgorCitbUmV0cmlldmVkIGZyb206CitodHRwczovL2dp
+dGh1Yi5jb20vdHZoZWFkZW5kL3R2aGVhZGVuZC9jb21taXQvZmQwMTczNzI3MGQ5OGMyODQ2NWM4
+NmE2ODhiZDdkMWM2NDA0ODZjNV0KK1NpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZv
+bnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgorLS0tCisgc3JjL3V0aWxzLmMgfCAyICstCisgMSBm
+aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCisKK2RpZmYgLS1naXQg
+YS9zcmMvdXRpbHMuYyBiL3NyYy91dGlscy5jCitpbmRleCBlZWNiMTBlMTE2Li5iYzY0MDFkMjJm
+IDEwMDY0NAorLS0tIGEvc3JjL3V0aWxzLmMKKysrKyBiL3NyYy91dGlscy5jCitAQCAtNjE2LDcg
+KzYxNiw3IEBAIHNoYTI1NnN1bSAoIGNvbnN0IGNoYXIgKnN0ciwgaW50IGxvd2VyY2FzZSApCisg
+Y2hhciAqCisgc2hhNTEyc3VtMjU2ICggY29uc3QgY2hhciAqc3RyLCBpbnQgbG93ZXJjYXNlICkK
+KyB7CistI2lmIE9QRU5TU0xfVkVSU0lPTl9OVU1CRVIgPj0gMHgxMDEwMTAxZkwgJibCoCFkZWZp
+bmVkKExJQlJFU1NMX1ZFUlNJT05fTlVNQkVSKQorKyNpZiBPUEVOU1NMX1ZFUlNJT05fTlVNQkVS
+ID49IDB4MTAxMDEwMWZMICYmICFkZWZpbmVkKExJQlJFU1NMX1ZFUlNJT05fTlVNQkVSKQorICAg
+cmV0dXJuIG9wZW5zc2xfaGFzaF9oZXhzdHIoc3RyLCBsb3dlcmNhc2UsIEVWUF9zaGE1MTJfMjU2
+KCksIDMyKTsKKyAjZWxzZQorICAgcmV0dXJuIE5VTEw7Ci0tIAoyLjM1LjEKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
