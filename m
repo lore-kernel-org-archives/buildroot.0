@@ -1,91 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9957C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 17:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C17B0C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 18:07:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E33941498;
-	Mon, 11 Apr 2022 17:03:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 565FE60E21;
+	Mon, 11 Apr 2022 18:07:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YzXR2u8UF3Eh; Mon, 11 Apr 2022 17:03:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 72ZiBPF-xXc2; Mon, 11 Apr 2022 18:07:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2B3F410CA;
-	Mon, 11 Apr 2022 17:03:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 198CA60B4B;
+	Mon, 11 Apr 2022 18:07:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 649491BF2E4
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 17:03:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE0491BF372
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 18:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 541B881BCF
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 17:03:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD3F683126
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 18:06:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tzru5sZ82FVO for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 17:03:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6171A81A46
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 17:03:40 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id z99so10649062ede.5
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 10:03:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=e0OEGLqHXrg53Fr3JPFW35dmXdrdvq0zHxgoIKZRSdI=;
- b=iPkaH78Wuh/6SdnFx0YWAyUxIR1Fs+SdDtL/47dFO4wKzKsGQl3tM+Ro1eeXceSwrm
- NbU/CWy5Na9Y5zM1b7pnVgJwBHYQEKh7UirW5JQOtPhDk51FDINwED+kXWsVF3cypA0L
- w3Ag9Qd7E8Y2uPuitUXrz4xI244V0g403QOrEK5IgRzuhlIVB6waKz9dWo7Kqh3gzXYS
- s4BoivpQKN8EKoLBTBZwJmXg+f9x5oedgziw0wjSm8a1XV9y2DqlI6XkUrixLB67opQn
- 8OQ0BQCD2MOAI9nfr/93++fKMICgMeUczIENnbLcacRNAE5lQ1TOHC+OkI5y7sZIwght
- IFWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=e0OEGLqHXrg53Fr3JPFW35dmXdrdvq0zHxgoIKZRSdI=;
- b=64fjl5ODpIrbVHYeFX2QpBkOKCGSWhHmp3P4bNqaqdLRgp+4BeJvNT/zLQ28VG8Fjq
- d7gjv8kIkD/H4QQYuHWsLYhcDiYb1pfuqjjdm2+nQ8B755jvs3RbQ4nk30P6h3v5qf0n
- y9EAGqfk+x09QXvTHOG9QfNeqAh/GH78Z6XRC8g+bZi9F4MU47NzH24XmTMj30sDCPrV
- gRrGYR3aN6X78+e1h8Nx6y5ZhXfeFtIXc9DG/9gS0wbJOIFbhE28uYrwhvy5AQY87oFV
- JXpqAeNvAyLVM8qUUw8Lnijt9CL5SuWGvbQO98Rttdq6RqCsBwbAf1aDgZ+uBVLwKMf8
- a9pw==
-X-Gm-Message-State: AOAM531qoZQDDEY0Qm1U2iIT2LPiBn/pnpHqTsmMtRSlitAKNg1NiA0X
- Sq4VTfFmSO31dCWX8Oy5d6+Nqb/5XfZUBw==
-X-Google-Smtp-Source: ABdhPJztHGNZAsPs3/i/FdsWjPezQfIRKmmX7YtfgGptwOwsmXj2wwMrGPWaM5EFpixzEmnHgax+5Q==
-X-Received: by 2002:a50:ed0b:0:b0:41c:cf60:a882 with SMTP id
- j11-20020a50ed0b000000b0041ccf60a882mr34917312eds.12.1649696618604; 
- Mon, 11 Apr 2022 10:03:38 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- p14-20020a05640210ce00b00413211746d4sm15459880edu.51.2022.04.11.10.03.37
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 11 Apr 2022 10:03:38 -0700 (PDT)
-Message-ID: <07cb544d-bc42-d774-08aa-67cecc96c1b0@mind.be>
-Date: Mon, 11 Apr 2022 19:03:37 +0200
+ with ESMTP id K6jXB2bltC_n for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 18:06:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 731E9830C2
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 18:06:58 +0000 (UTC)
+Received: from pwmachine.localnet (unknown [92.186.13.154])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 2C160205657E;
+ Mon, 11 Apr 2022 11:06:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2C160205657E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1649700417;
+ bh=mnw9Tffz//BfH3J7+rWHwcg/zuEWZUoSiz85L1y9aUw=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=OHYwqrAWnm/OlfSlZrsgZOtFMwKEDmTQuVmuMQ7B6iEY2+QCujN6bcSRTZnn6REe3
+ DixVPOK4oEjzvFTCF30yAi24iRX4f6ZvhIvjhHc6UlRX0p06FZXB0i+x+MsKjzM62g
+ 8y6uv2vw/kxyqKTAhcGpGapYqWuOYp3BN6gLHTa0=
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: buildroot@buildroot.org, Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 11 Apr 2022 19:06:52 +0100
+Message-ID: <2625093.mvXUDI8C0e@pwmachine>
+Organization: Microsoft
+In-Reply-To: <fc1b7c76-80b2-51a5-d0f5-7afaf05a9a0a@mind.be>
+References: <20220407182425.194001-1-flaniel@linux.microsoft.com>
+ <20220407182425.194001-2-flaniel@linux.microsoft.com>
+ <fc1b7c76-80b2-51a5-d0f5-7afaf05a9a0a@mind.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: Marcus Hoffmann <marcus.hoffmann@othermo.de>, buildroot@buildroot.org,
- Peter Korsgaard <peter@korsgaard.com>
-References: <20220405185320.319C18361B@busybox.osuosl.org>
- <9ca9a86e-917a-ea5a-04bf-b9cd0e15aff5@othermo.de>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <9ca9a86e-917a-ea5a-04bf-b9cd0e15aff5@othermo.de>
-Subject: Re: [Buildroot] [git commit] package/containerd: security bump to
- version 1.5.11
+Subject: Re: [Buildroot] [RFC PATCH v1 1/2] tbb: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,59 +66,275 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ bradford barr <bradford@density.io>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxMS8wNC8yMDIyIDE0OjI4LCBNYXJjdXMgSG9mZm1hbm4gd3JvdGU6Cj4gSGkgUGV0ZXIs
-Cj4gCj4gT24gMDUuMDQuMjIgMTk6MjgsIFBldGVyIEtvcnNnYWFyZCB3cm90ZToKPj4gY29tbWl0
-OiAKPj4gaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvY29tbWl0Lz9pZD0yNjQy
-ZWRiMGFmMDhmMDRmYjk4ZjRjYjVmODg4OTVmYWRlZDRiMzI1IAo+Pgo+PiBicmFuY2g6IGh0dHBz
-Oi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1pdC8/aWQ9cmVmcy9oZWFkcy9tYXN0
-ZXIKPj4KPj4gRml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSBpc3N1ZXM6Cj4+Cj4+IC0gQ1ZF
-LTIwMjItMjM2NDg6IGNvbnRhaW5lcmQgQ1JJIHBsdWdpbjogSW5zZWN1cmUgaGFuZGxpbmcgb2Yg
-aW1hZ2Ugdm9sdW1lcwo+PiAgICAKPj4gaHR0cHM6Ly9naXRodWIuY29tL2NvbnRhaW5lcmQvY29u
-dGFpbmVyZC9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtY3JwMi1xcnI1LThwcTcKPj4KPj4gLSBD
-VkUtMjAyMi0yNDc2OTogRGVmYXVsdCBpbmhlcml0YWJsZSBjYXBhYmlsaXRpZXMgZm9yIGxpbnV4
-IGNvbnRhaW5lcgo+PiDCoMKgIHNob3VsZCBiZSBlbXB0eQo+PiAgICAKPj4gaHR0cHM6Ly9naXRo
-dWIuY29tL2NvbnRhaW5lcmQvY29udGFpbmVyZC9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtYzlj
-cC05Yzc1LTl2OGMKPj4KPj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgS29yc2dhYXJkIDxwZXRlckBr
-b3JzZ2FhcmQuY29tPgo+PiAtLS0KPj4gwqAgcGFja2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQu
-aGFzaCB8IDIgKy0KPj4gwqAgcGFja2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQubWvCoMKgIHwg
-MiArLQo+PiDCoCAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMo
-LSkKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvY29udGFpbmVyZC9jb250YWluZXJkLmhhc2gg
-Cj4+IGIvcGFja2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQuaGFzaAo+PiBpbmRleCBkNWFhZmUy
-ZTcwLi4yM2RhY2RlZDg4IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL2NvbnRhaW5lcmQvY29udGFp
-bmVyZC5oYXNoCj4+ICsrKyBiL3BhY2thZ2UvY29udGFpbmVyZC9jb250YWluZXJkLmhhc2gKPj4g
-QEAgLTEsMyArMSwzIEBACj4+IMKgICMgQ29tcHV0ZWQgbG9jYWxseQo+PiAtc2hhMjU2wqAgNDBj
-OTc2N2FmM2U4N2YyYzM2YWRmMmY1NjNmMGE4Mzc0ZTgwYjMwYmQyYjdhYTgwMDU4Yzg1OTEyNDA2
-Y2VmNCAgCj4+IGNvbnRhaW5lcmQtMS41LjkudGFyLmd6Cj4+ICtzaGEyNTbCoCA2YTI4OTQwNmMx
-YzA1ODM3NjNlNWE5NzU0ZTMxYTFlY2VkNTVjZDVmMTYyYTdiYzJhM2EzMTVkNWViMDVjN2ExICAK
-Pj4gY29udGFpbmVyZC0xLjUuMTEudGFyLmd6Cj4gCj4gSSBnZXQgYSBkaWZmZXJlbnQgaGFzaCBm
-b3IgdGhpcyBkb3dubG9hZCwgYm90aCB3aXRoaW4gYnVpbGRyb290IGFzIHdlbGwgYXMgCj4gZG93
-bmxvYWRpbmcgdGhlIGZpbGUgbWFudWFsbHkgZnJvbSBnaXRodWI6Cj4gCj4gRVJST1I6IGNvbnRh
-aW5lcmQtMS41LjExLnRhci5neiBoYXMgd3Jvbmcgc2hhMjU2IGhhc2g6Cj4gRVJST1I6IGV4cGVj
-dGVkOiA2YTI4OTQwNmMxYzA1ODM3NjNlNWE5NzU0ZTMxYTFlY2VkNTVjZDVmMTYyYTdiYzJhM2Ez
-MTVkNWViMDVjN2ExCj4gRVJST1I6IGdvdMKgwqDCoMKgIDogMDJiNzlkNWUyYjA3YjVlNjRjZDI4
-ZjFmZTg0Mzk1ZWUxMWVlZjk1ZmM0OWZkOTIzYTlhYjkzMDIyYjE0OGJlNgo+IEVSUk9SOiBJbmNv
-bXBsZXRlIGRvd25sb2FkLCBvciBtYW4taW4tdGhlLW1pZGRsZSAoTUlUTSkgYXR0YWNrCj4gCj4g
-Cj4gRGlkIHRoZSBmaWxlIGNoYW5nZSBpbiB0aGUgbWVhbnRpbWUgb3IgZGlkIHNvbWV0aGluZyBl
-bHNlIGdvIHdyb25nIGhlcmU/CgogIEl0IGFsc28gZ29lcyB3cm9uZyBpbiB0aGUgYXV0b2J1aWxk
-ZXJzICh0aGlzIG9uZSBvbiBtYXN0ZXIsIGJlZm9yZSBJIG1lcmdlZCAKdGhlIGJ1bXAgdG8gMS42
-LjIpIFsxXQoKPiBTaG91bGQgc2VuZCBhIHBhdGNoIGNoYW5naW5nIHRoZSBoYXNoIHRvIAo+IDAy
-Yjc5ZDVlMmIwN2I1ZTY0Y2QyOGYxZmU4NDM5NWVlMTFlZWY5NWZjNDlmZDkyM2E5YWI5MzAyMmIx
-NDhiZTY/CgogIExldCdzIGZpcnN0IGFsbG93IFBldGVyIHRvIGNoZWNrIHdoYXQgZXhhY3RseSB3
-ZW50IHdyb25nLiBIZSBzaG91bGQgaGF2ZSBhIApsb2NhbCBkb3dubG9hZCB3aXRoIHRoZSBoYXNo
-IGhlIHB1c2hlZCBzbyBoZSBjYW4gY29tcGFyZSB3aGF0IGNoYW5nZWQuCgogIEkgbG9va2VkIGF0
-IHRoZSBnaXRodWIgcmVwbywgYW5kIGl0IHNheXMgdGhhdCBpdCB3YXMgdGFnZ2VkIG9uIE1hcmNo
-IDI0LCBpLmUuIApiZWZvcmUgUGV0ZXIgZGlkIHRoZSBidW1wIHRvIDEuNS4xMS4gU28gaXQgZG9l
-c24ndCBsb29rIGxpa2UgdGhleSB1cGRhdGVkIHRoZSB0YWcuCgogIFJlZ2FyZHMsCiAgQXJub3V0
-CgoKMV0gCmh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2I1ZC9iNWRjZDU2
-NDkwZTgwN2RiOWU5MmUzYmJiZDY3NTM3MzgxMzJkYjU3L2J1aWxkLWVuZC5sb2cKCj4gCj4gID4g
-Wy4uLl0KPiAKPiBCZXN0LAo+IE1hcmN1cwo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Le samedi 9 avril 2022, 14:42:59 BST Arnout Vandecappelle a =E9crit :
+>   Hi Francis,
+
+Hi
+
+>   Thank you for this patch. I applied to master but with quite a few
+> changes.
+
+You are welcome and thank you for the modifications, they made the contribu=
+tion =
+
+better and I learnt some few tricks to make better buildroot contribution!
+
+> On 07/04/2022 20:24, Francis Laniel wrote:
+> > From: bradford barr <bradford@density.io>
+> > =
+
+> > Intel Threading Building Blocks (TBB), is a C++ library to help develop=
+ers
+> > write highly parallelized applications. OpenCV uses it to accelerate so=
+me
+> > of it's more heavy weight procedures.
+> > =
+
+> > Signed-off-by: bradford barr <bradford@density.io>
+> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > ---
+> > =
+
+> >   DEVELOPERS                                    |  1 +
+> >   package/Config.in                             |  1 +
+> >   .../0001-tbb-Enable-cross-compilation.patch   | 55 +++++++++++++++++++
+> >   package/tbb/Config.in                         | 16 ++++++
+> >   package/tbb/tbb.hash                          |  2 +
+> >   package/tbb/tbb.mk                            | 39 +++++++++++++
+> >   6 files changed, 114 insertions(+)
+> >   create mode 100644 package/tbb/0001-tbb-Enable-cross-compilation.patch
+> >   create mode 100644 package/tbb/Config.in
+> >   create mode 100644 package/tbb/tbb.hash
+> >   create mode 100644 package/tbb/tbb.mk
+> > =
+
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index a66b9d7eee..ef4ddcab50 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -970,6 +970,7 @@ F:	package/odhcploc/
+> > =
+
+> >   N:	Francis Laniel <flaniel@linux.microsoft.com>
+> >   F:	package/pahole/
+> > =
+
+> > +F:	package/tbb/
+> > =
+
+> >   N:	Francisco Gonzalez <gzmorell@gmail.com>
+> >   F:	package/ser2net/
+> > =
+
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 0d5d763180..24f7af5ea8 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -2044,6 +2044,7 @@ endif
+> > =
+
+> >   	source "package/skalibs/Config.in"
+> >   	source "package/sphinxbase/Config.in"
+> >   	source "package/startup-notification/Config.in"
+> > =
+
+> > +	source "package/tbb/Config.in"
+> > =
+
+> >   	source "package/tinycbor/Config.in"
+> >   	source "package/tz/Config.in"
+> >   	source "package/tzdata/Config.in"
+> > =
+
+> > diff --git a/package/tbb/0001-tbb-Enable-cross-compilation.patch
+> > b/package/tbb/0001-tbb-Enable-cross-compilation.patch new file mode
+> > 100644
+> > index 0000000000..652d59c47b
+> > --- /dev/null
+> > +++ b/package/tbb/0001-tbb-Enable-cross-compilation.patch
+> > @@ -0,0 +1,55 @@
+> > +From 42c3faff14917f687aab405d8f571e352ffdf3f5 Mon Sep 17 00:00:00 2001
+> > +From: Francis Laniel <flaniel@linux.microsoft.com>
+> > +Date: Wed, 6 Apr 2022 15:58:02 +0100
+> > +Subject: [PATCH] tbb: Enable cross-compilation.
+> > +
+> > +This patch replaces hardcoded value for CPLUS and CONLY with $(CXX) and
+> > $(CC). +So, by defining CC=3D it is possible to cross compile this libr=
+ary
+> > using a +cross-compiler.
+> > +
+> > +This patch was originally written by:
+> > +Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
+> > +and taken from:
+> > +https://github.com/intel/luv-yocto/blob/3b0688bc9a5e8d52b6ca461b15fb4a=
+bd3
+> > eaaf7a8/meta-oe/recipes-support/tbb/tbb/cross-compile.patch +
+> > +Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > +---
+> > + build/linux.clang.inc | 5 +++--
+> > + build/linux.gcc.inc   | 5 +++--
+> > + 2 files changed, 6 insertions(+), 4 deletions(-)
+> > +
+> > +diff --git a/build/linux.clang.inc b/build/linux.clang.inc
+> > +index 5a459ef5..a0777db5 100644
+> > +--- a/build/linux.clang.inc
+> > ++++ b/build/linux.clang.inc
+> > +@@ -31,8 +31,9 @@ DYLIB_KEY =3D -shared
+> > + EXPORT_KEY =3D -Wl,--version-script,
+> > + LIBDL =3D -ldl
+> > +
+> > +-CPLUS =3D clang++
+> > +-CONLY =3D clang
+> > ++CPLUS =3D $(CXX)
+> > ++CONLY =3D $(CC)
+> > ++CPLUS_FLAGS =3D $(CXXFLAGS)
+> =
+
+>   I dropped this patch. Instead, I simply passed CPLUS, CONLY and
+> CPLUS_FLAGS in the $(MAKE) call.
+> =
+
+> > + LIB_LINK_FLAGS =3D $(DYLIB_KEY) -Wl,-soname=3D$(BUILDING_LIBRARY)
+> > + LIBS +=3D -lpthread -lrt
+> > + LINK_FLAGS =3D -Wl,-rpath-link=3D. -rdynamic
+> > +diff --git a/build/linux.gcc.inc b/build/linux.gcc.inc
+> > +index 786c4153..30242a82 100644
+> > +--- a/build/linux.gcc.inc
+> > ++++ b/build/linux.gcc.inc
+> > +@@ -32,8 +32,9 @@ DYLIB_KEY =3D -shared
+> > + EXPORT_KEY =3D -Wl,--version-script,
+> > + LIBDL =3D -ldl
+> > +
+> > +-CPLUS =3D g++
+> > +-CONLY =3D gcc
+> > ++CPLUS =3D $(CXX)
+> > ++CONLY =3D $(CC)
+> > ++CPLUS_FLAGS =3D $(CXXFLAGS)
+> > + LIB_LINK_FLAGS =3D $(DYLIB_KEY) -Wl,-soname=3D$(BUILDING_LIBRARY)
+> > + LIBS +=3D -lpthread -lrt
+> > + LINK_FLAGS =3D -Wl,-rpath-link=3D. -rdynamic
+> > +--
+> > +2.25.1
+> > +
+> > diff --git a/package/tbb/Config.in b/package/tbb/Config.in
+> > new file mode 100644
+> > index 0000000000..0f40b74d31
+> > --- /dev/null
+> > +++ b/package/tbb/Config.in
+> > @@ -0,0 +1,16 @@
+> > +config BR2_PACKAGE_TBB
+> > +	bool "tbb"
+> > +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> > +	depends on !BR2_STATIC_LIBS
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> > +	depends on BR2_INSTALL_LIBSTDCPP
+> > +	help
+> > +	  Intel(R) Threading Building Blocks (Intel(R) TBB) lets you
+> > +	  easily write parallel C++ programs that take full advantage
+> > +	  of multicore performance, that are portable, composable and
+> > +	  have future-proof scalability.
+> > +
+> > +	  https://www.threadingbuildingblocks.org/
+> > +
+> > +comment "tbb needs a glibc toolchain w/ dynamic library, threads, C++"
+> > +	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS ||
+> > !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP diff --git
+> > a/package/tbb/tbb.hash b/package/tbb/tbb.hash
+> > new file mode 100644
+> > index 0000000000..e9fb7511b8
+> > --- /dev/null
+> > +++ b/package/tbb/tbb.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally calculated
+> > +sha256  b8dbab5aea2b70cf07844f86fa413e549e099aa3205b6a04059ca92ead93a3=
+72 =
+
+> > tbb-2018_U5.tar.gz
+>   You also need to include a hash for the license file.
+> =
+
+> > diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
+> > new file mode 100644
+> > index 0000000000..cf06579b98
+> > --- /dev/null
+> > +++ b/package/tbb/tbb.mk
+> > @@ -0,0 +1,39 @@
+> > +######################################################################=
+###
+> > ####### +#
+> > +# tbb
+> > +#
+> > +######################################################################=
+###
+> > ####### +
+> > +TBB_VERSION =3D 2018_U5
+> > +TBB_SITE =3D $(call github,01org,tbb,$(TBB_VERSION))
+> > +TBB_INSTALL_STAGING =3D YES
+> > +TBB_LICENSE =3D Apache-2.0
+> > +TBB_LICENSE_FILES =3D LICENSE
+> > +
+> > +TBB_SO_VERSION =3D 2
+> > +TBB_LIBS =3D libtbb libtbbmalloc libtbbmalloc_proxy
+> > +TBB_BIN_PATH =3D $(@D)/build/linux_*
+> > +
+> > +define TBB_BUILD_CMDS
+> > +	$(MAKE) $(TARGET_CONFIGURE_OPTS) arch=3D$(BR2_ARCH) -C $(@D)
+> =
+
+>   The values for arch that are used by tbb are different from the values
+> that BR2_ARCH has. I studied this in more detail:
+> =
+
+> # arch is normally set based on uname -m with some conversions. However,
+> # it is not really used for much:
+> # - to decide between 32 or 64-bit files (based on '64' in the name)
+> # - to decide on some arch-specific CFLAGS like -m32, which we don't
+> actually want # - to set DO_ITT_NOTIFY if it's x86 (32 or 64 bit)
+> # - to include assembler source, but it only exists for ia64
+> # The only thing we actually want from the above is the 32/64-bit, and
+> # DO_ITT_NOTIFY. Therefore, set arch to a fixed value which is unknown to
+> # the tbb build system, and set DO_ITT_NOTIFY explicitly.
+> =
+
+>   Regards,
+>   Arnout
+> =
+
+> > +endef
+> > +
+> > +define TBB_INSTALL_LIBS
+> > +	$(foreach lib,$(TBB_LIBS),
+> > +		$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib).so.$
+(TBB_SO_VERSION) \
+> > +			$(1)/usr/lib/$(lib).so.$(TBB_SO_VERSION) ;
+> > +		ln -sf $(lib).so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib).so
+> > +	)
+> > +endef
+> > +
+> > +define TBB_INSTALL_STAGING_CMDS
+> > +	mkdir -p $(STAGING_DIR)/usr/include/
+> > +	cp -a $(@D)/include/* $(STAGING_DIR)/usr/include/
+> > +	$(call TBB_INSTALL_LIBS,$(STAGING_DIR))
+> > +endef
+> > +
+> > +define TBB_INSTALL_TARGET_CMDS
+> > +	$(call TBB_INSTALL_LIBS,$(TARGET_DIR))
+> > +endef
+> > +
+> > +$(eval $(generic-package))
+
+
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
