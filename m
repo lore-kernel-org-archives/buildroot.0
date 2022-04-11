@@ -1,47 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BAD9C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 20:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0C88C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 20:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A53BE40871;
-	Mon, 11 Apr 2022 20:33:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 903D540420;
+	Mon, 11 Apr 2022 20:35:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SewKHXHacBro; Mon, 11 Apr 2022 20:33:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UQwbOqjgPxOS; Mon, 11 Apr 2022 20:35:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 303B14033B;
-	Mon, 11 Apr 2022 20:33:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 39B421BF32D
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 20:33:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9ED39403B8;
+	Mon, 11 Apr 2022 20:35:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 267631BF32D
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 20:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89CF14007F
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 20:33:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13B06403B8
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 20:35:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MUSy1yWyT2zK for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 20:33:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3694640998
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 20:33:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 90BC3839FF; Mon, 11 Apr 2022 20:23:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vgb3WxN7WLFt for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 20:35:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EC3FA4038E
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 20:35:00 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 35AF0FF807;
+ Mon, 11 Apr 2022 20:34:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ne0kR-008AMu-Tg; Mon, 11 Apr 2022 22:34:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 22:21:38 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ffe31cfec703c12e3d7c5840a5b63040e374a873
-X-Git-Newrev: 46a92832cf57fb7fdb5bb67471bc80b1a10d4a99
-X-Patchwork-Hint: ignore
-Message-Id: <20220411202317.90BC3839FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/containerd:
- correct download hash
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20220405185320.319C18361B@busybox.osuosl.org>
+ <9ca9a86e-917a-ea5a-04bf-b9cd0e15aff5@othermo.de>
+ <07cb544d-bc42-d774-08aa-67cecc96c1b0@mind.be>
+ <87bkx7h299.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Apr 2022 22:34:55 +0200
+In-Reply-To: <87bkx7h299.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 11 Apr 2022 21:02:42 +0200")
+Message-ID: <874k2zgxzk.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] package/containerd: security bump to
+ version 1.5.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,60 +63,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Marcus Hoffmann <marcus.hoffmann@othermo.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46a92832cf57fb7fdb5bb67471bc80b1a10d4a99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Something happened to the tarball logic on github, changing the hash of the 1.5.11 release:
+Hi,
 
-6a289406c1c0583763e5a9754e31a1eced55cd5f162a7bc2a3a315d5eb05c7a1  old/containerd-1.5.11.tar.gz
-02b79d5e2b07b5e64cd28f1fe84395ee11eef95fc49fd923a9ab93022b148be6  new/containerd-1.5.11.tar.gz
+ > @@ -55,7 +55,7 @@ var (
+ >         // NOTE: The $Format strings are replaced during 'git archive' thanks to the
+ >         // companion .gitattributes file containing 'export-subst' in this same
+ >         // directory.  See also https://git-scm.com/docs/gitattributes
+ > -       gitVersion   string = "v0.0.0-master+3df54a85234"
+ > +       gitVersion   string = "v0.0.0-master+3df54a8523"
+ >         gitCommit string = "3df54a852345ae127d1fa3092b95168e4a88e2f8"
+ > // sha1 from git, output of $(git rev-parse HEAD)
+ >         gitTreeState string = ""            // state of git tree, either "clean" or "dirty"
 
--rw-r--r-- 1 peko peko 7494478 Apr 11 20:53 old/containerd-1.5.11.tar.gz
--rw-r--r-- 1 peko peko 7494477 Apr  5 20:39 new/containerd-1.5.11.tar.gz
+ > So the gitVersion field lost a digit. No idea how this could
+ > happen. Looking at the file in the git repo I see that this is listed
+ > as:
 
-Extracting and comparing them gives:
+ > 	gitVersion   string = "v0.0.0-master+$Format:%H$"
+ > 	gitCommit    string = "$Format:%H$" // sha1 from git, output of $(git rev-parse HEAD)
 
---- a/containerd-1.5.11/vendor/k8s.io/client-go/pkg/version/base.go     2022-03-24 01:09:42.000000000 +0100
-+++ b/containerd-1.5.11/vendor/k8s.io/client-go/pkg/version/base.go     2022-03-24 01:09:42.000000000 +0100
-@@ -55,7 +55,7 @@ var (
-        // NOTE: The $Format strings are replaced during 'git archive' thanks to the
-        // companion .gitattributes file containing 'export-subst' in this same
-        // directory.  See also https://git-scm.com/docs/gitattributes
--       gitVersion   string = "v0.0.0-master+3df54a85234"
-+       gitVersion   string = "v0.0.0-master+3df54a8523"
-        gitCommit    string = "3df54a852345ae127d1fa3092b95168e4a88e2f8" // sha1 from git, output of $(git rev-parse HEAD)
-        gitTreeState string = ""            // state of git tree, either "clean" or "dirty"
+ > https://github.com/containerd/containerd/blob/main/vendor/k8s.io/client-go/pkg/version/base.go
 
-The file in the repo uses $Format:%H$ and set the export-subst git attribute:
+ > So I guess something in github is wrongly expanding this $Format?
 
-	gitVersion   string = "v0.0.0-master+$Format:%H$"
-	gitCommit    string = "$Format:%H$" // sha1 from git, output of $(git rev-parse HEAD)
+The format logic itself is part of git, as the export-subst attibute has
+been set for base.go:
 
-https://github.com/containerd/containerd/blob/main/vendor/k8s.io/client-go/pkg/version/base.go
+https://git-scm.com/docs/gitattributes
 
-So presumably it is related to that.  In any case, update the hash to match
-what Github is now serving to fix the build.
+But why the two $Format:%H$ lines expand to different things and why it
+has changed over time is unclear to me.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/containerd/containerd.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In any case, I've pushed a commit to 2022.02.x to adjust the hash to
+what Github is now serving.
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 23dacded88..3f5c9865e6 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  6a289406c1c0583763e5a9754e31a1eced55cd5f162a7bc2a3a315d5eb05c7a1  containerd-1.5.11.tar.gz
-+sha256  02b79d5e2b07b5e64cd28f1fe84395ee11eef95fc49fd923a9ab93022b148be6  containerd-1.5.11.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
