@@ -1,59 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C00FEC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 18:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7187C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 18:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6558C833AF;
-	Mon, 11 Apr 2022 18:11:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4726C607D0;
+	Mon, 11 Apr 2022 18:33:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yg3mMx0le1xw; Mon, 11 Apr 2022 18:11:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fzd2nPE9WTG1; Mon, 11 Apr 2022 18:33:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3151083386;
-	Mon, 11 Apr 2022 18:11:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BAC8F1BF372
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 18:11:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 850FF6059A;
+	Mon, 11 Apr 2022 18:33:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E64771BF372
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 18:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B816B83386
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 18:11:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5697600C5
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 18:33:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vUMGmAxAzjWD for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 18:11:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp1.osuosl.org (Postfix) with ESMTP id C76A98331B
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 18:11:10 +0000 (UTC)
-Received: from pwmachine.localnet (unknown [92.186.13.154])
- by linux.microsoft.com (Postfix) with ESMTPSA id E20C1209DDA1;
- Mon, 11 Apr 2022 11:11:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E20C1209DDA1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
- s=default; t=1649700670;
- bh=pHXYI8gdcAPRvnRo5jJ+PtUnnEDorNrmsMNqouFii1Y=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=pXlKma57OL1rOyJey+3dzb476Ng0DEh9rFUkhyTiU0x9DPWGigzwWl9r6OFp1fYu0
- ygq5nFJ3LsNePXzs6CyJxiPK4wJ0KlE0wyzQXWAnQoV0mcVycY3eYoSESoiJP4Zxhh
- 7xHF2TUTa5wzh1UVejhUMhez0GpYmOqIosPgwDJQ=
-From: Francis Laniel <flaniel@linux.microsoft.com>
-To: buildroot@buildroot.org, Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 11 Apr 2022 19:11:05 +0100
-Message-ID: <4729294.31r3eYUQgx@pwmachine>
-Organization: Microsoft
-In-Reply-To: <2b54dc64-98da-5de3-e94e-0fb7bbaaca8b@mind.be>
-References: <20220407182425.194001-1-flaniel@linux.microsoft.com>
- <20220407182425.194001-3-flaniel@linux.microsoft.com>
- <2b54dc64-98da-5de3-e94e-0fb7bbaaca8b@mind.be>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4o_xMMmf3oKE for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 18:33:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE71F60E96
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 18:33:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:e477:1938:276:3b86])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 7516C7802D6;
+ Mon, 11 Apr 2022 20:33:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1649702000;
+ bh=wQjH/Fe7yVwrn86WiyPhtaZ4hFd2m5OMqBl6rdRZSc0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=sDXcmVkWP2q6HRapN49AAEZf0t8ksY7xdARinOVOBiFvsj26Sc0Hf7p+oBVhxalyO
+ I/u23rdDOJPedA4wrYCMfJwFsNBK15/LEX7PLqgJEefxyfMTzUNUh6lV57QamqWdfQ
+ GcNGs8hhJSMOSUd0+PJ59/3AY3oSCqqMAW8R2dbrM/p9WvNrW9iR1Ojjo0Pl1m+D7E
+ F03AezsDhYUq6Ngf18kiCv8Jioeha36vFxwub6dSJWNsyvuDY6R/65KG1J/Oxf7hM1
+ Q9uzUzKN7HHZ/Mh/EXZN5eHhLTthajXc3hnCuoxwTo47CAJmjCR6vpWDQVQKUaUiPv
+ dY9vIVV8NsUDw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 11 Apr 2022 20:33:16 +0200
+Date: Mon, 11 Apr 2022 20:33:16 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220411183316.GB4029883@scaer>
+References: <20220405185320.319C18361B@busybox.osuosl.org>
+ <9ca9a86e-917a-ea5a-04bf-b9cd0e15aff5@othermo.de>
+ <07cb544d-bc42-d774-08aa-67cecc96c1b0@mind.be>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [RFC PATCH v1 2/2] package/sysdig: bump version to
- 0.27.1.
+Content-Disposition: inline
+In-Reply-To: <07cb544d-bc42-d774-08aa-67cecc96c1b0@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [git commit] package/containerd: security bump to
+ version 1.5.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,348 +72,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Marcus Hoffmann <marcus.hoffmann@othermo.de>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Le samedi 9 avril 2022, 15:40:20 BST Arnout Vandecappelle a =E9crit :
->   Hi Francis,
-
-Hi.
-
-> On 07/04/2022 20:24, Francis Laniel wrote:
-> > 0.23.1 has compilation errors with recent kernels.
-> > =
-
-> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> =
-
->   I've applied to master, with a number of changes.
-
-Thank you for it.
-
->   I've noticed that it doesn't build on e.g. aarch64, because it uses
-> syscalls like open(2) that simply don't exist on aarch64. Fixing that wou=
-ld
-> be quite a big undertaking, and upstream has simply removed the
-> syscall-handling code. So a better solution would be to update to 0.29.1.
-> However, *that* is a fairly big change again because they also got rid of
-> the kernel driver. It's easy enough to remove the kernel-module part on t=
-he
-> buildroot side, but I wouldn't know if it still behaves correctly at
-> runtime. So, Francis, would you care to look into updating to 0.29.1?
-
-I will try to update sysdig to this version but I sadly cannot give any dat=
-e =
-
-of delivery.
-Indeed, I am bit worried is that after 0.27.1 sysdig depends of falco/libs =
-and =
-
-I do not really know how to handle this.
-
->   If you do that, please also check if it requires a minimum kernel versi=
-on.
-> I think it uses all kinds of tracepoint or other kernel features which may
-> not exist in older kernels. If it does have a minimum kernel version,
-> please add a BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y dependency (with
-> explanation in the commit message how you got to that conclusion).
-> =
-
->   Also, I added you to DEVELOPERS for this package. It won't have much
-> effect other than being Cc'ed on patches, because sysdig isn't built in t=
-he
-> autobuilders (since it depends on a kernel to be built and we don't do th=
-at
-> in autobuilders).
-> =
-
-> > ---
-> > =
-
-> >   ...ATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 +++++++++++++++++++
-> >   ...gainst-libabseil-cpp-which-grpc-uses.patch | 45 ++++++++++
-> >   package/sysdig/Config.in                      |  5 ++
-> >   package/sysdig/sysdig.hash                    |  1 +
-> >   package/sysdig/sysdig.mk                      |  7 +-
-> >   5 files changed, 139 insertions(+), 1 deletion(-)
-> >   create mode 100644
-> >   package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and=
--f
-> >   u.patch create mode 100644
-> >   package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch> =
-
-> > diff --git
-> > a/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and=
--f
-> > u.patch
-> > b/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and=
--f
-> > u.patch new file mode 100644
-> > index 0000000000..7873210281
-> > --- /dev/null
-> > +++
-> > b/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and=
--f
-> > u.patch @@ -0,0 +1,82 @@
-> > +From cc8bccc3ebb90103900a7f0f2b085ddb723b8792 Mon Sep 17 00:00:00 2001
-> > +From: Francis Laniel <flaniel@linux.microsoft.com>
-> > +Date: Wed, 6 Apr 2022 16:54:37 +0100
-> > +Subject: [PATCH] libsinsp: Apply PATCH_COMMAND to fix lua types and
-> > function. +
-> > +Buildroot luajit 5.1 seems to not have compatibility between luaL_reg =
-and
-> > +luaL_Reg.
-> > +So, we apply sysdig CMakeLists.txt PATCH_COMMAND to fix this and lua
-> > function +call as well.
-> > +Note that, this PATCH_COMMAND was added in sysdig in:
-> > +a064440394c9 ("Adding power support to Travis builds (#1566)")
-> > +
-> > +This patch is also present in kubernetes/minikube in:
-> > +f036c279bc59 ("Add patch for compiling sysdig with system luajit")
-> > +
-> > +Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> =
-
->   Would it be possible to send this patch upstream, so we don't need to
-> maintain it going forward? Obviously, it's best to first bump to the late=
-st
-> version (and check if the patch is still needed).
-> =
-
-> [snip]
-> =
-
-> > diff --git
-> > a/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
-> > b/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
-> > new file mode 100644
-> > index 0000000000..60c3d31a3e
-> > --- /dev/null
-> > +++ b/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.pa=
-tch
-> > @@ -0,0 +1,45 @@
-> > +From a7fb3b863c3574470c45fdf6084dcc40931ca017 Mon Sep 17 00:00:00 2001
-> > +From: Francis Laniel <flaniel@linux.microsoft.com>
-> > +Date: Thu, 7 Apr 2022 18:30:23 +0100
-> > +Subject: [PATCH 2/2] Link against libabseil-cpp which grpc uses.
-> =
-
->   Don't include the 2/2 part (use git format-patch -N). check-package
-> reports this.
-> > +
-> > +This patch was taken from:
-> > +55c96b61f7b9 ("sysdig: make extra linking against abseil conditional")
-> > +from hhoffstaette/portage.
-> =
-
->   I've changed this to include the full URL of where you've taken it from=
-. I
-> should have done that for th other patch as well, but I forgot.
-> =
-
->   Also please send this patch upstream.
-
-For the luajit and abseil patch, I will first check if 0.29.1 still needs t=
-hem.
-If so, I will for sure send these patches upstream!
-
-> > +
-> > +Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> > +---
-> > + CMakeLists.txt                    | 1 +
-> > + userspace/libsinsp/CMakeLists.txt | 4 ++++
-> > + 2 files changed, 5 insertions(+)
-> > +
-> > +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> > +index 1f34f1d6..c0354b29 100644
-> > +--- a/CMakeLists.txt
-> > ++++ b/CMakeLists.txt
-> > +@@ -552,6 +552,7 @@ if(NOT WIN32 AND NOT APPLE)
-> > + 			else()
-> > + 				message(FATAL_ERROR "Couldn't find system grpc")
-> > + 			endif()
-> > ++			find_library(ABSL_SYNC_LIB NAMES absl_synchronization)
-> > + 			find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin)
-> > + 			if(NOT GRPC_CPP_PLUGIN)
-> > + 				message(FATAL_ERROR "System grpc_cpp_plugin not =
-
-found")
-> > +diff --git a/userspace/libsinsp/CMakeLists.txt
-> > b/userspace/libsinsp/CMakeLists.txt +index d72f9115..d1b7ea02 100644
-> > +--- a/userspace/libsinsp/CMakeLists.txt
-> > ++++ b/userspace/libsinsp/CMakeLists.txt
-> > +@@ -214,6 +214,10 @@ if(NOT WIN32)
-> > + 				"${JQ_LIB}"
-> > + 				"${B64_LIB}")
-> > +
-> > ++			if(ABSL_SYNC_LIB)
-> > ++				target_link_libraries(sinsp "${ABSL_SYNC_LIB}")
-> > ++			endif()
-> > ++
-> > + 			if(NOT MUSL_OPTIMIZED_BUILD)
-> > + 			target_link_libraries(sinsp
-> > + 				rt
-> > +--
-> > +2.25.1
-> > +
-> > diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> > index 06d20c7f7b..5a7fbb50e0 100644
-> > --- a/package/sysdig/Config.in
-> > +++ b/package/sysdig/Config.in
-> > @@ -8,13 +8,18 @@ config BR2_PACKAGE_SYSDIG
-> > =
-
-> >   	depends on BR2_USE_WCHAR # elfutils
-> >   	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC #
-> >   	elfutils
-> >   	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-> > =
-
-> > +	select BR2_PACKAGE_C_ARES
-> > =
-
-> >   	select BR2_PACKAGE_ELFUTILS
-> > =
-
-> > +	select BR2_PACKAGE_GRPC
-> =
-
->   You also need to propagate the dependencies of grpc. For grpc, that's j=
-ust
-> a matter of adding grpc to the comments above, but some other packages ha=
-ve
-> stricter dependencies.
-> =
-
-> > +	select BR2_PACKAGE_GTEST
-> =
-
->   gtest is only required if tests are enabled, so I added the conf opt to
-> disable tests instead.
-> =
-
-> >   	select BR2_PACKAGE_JQ
-> >   	select BR2_PACKAGE_JSONCPP
-> >   	select BR2_PACKAGE_LIBB64
-> >   	select BR2_PACKAGE_LIBCURL
-> >   	select BR2_PACKAGE_NCURSES
-> >   	select BR2_PACKAGE_OPENSSL
-> > =
-
-> > +	select BR2_PACKAGE_PROTOBUF
-> > +	select BR2_PACKAGE_TBB
-> > =
-
-> >   	select BR2_PACKAGE_ZLIB
-> >   	help
-> >   	=
-
-> >   	  Sysdig is open source, system-level exploration:
-> > diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-> > index 565b1e9828..4bce674f3e 100644
-> > --- a/package/sysdig/sysdig.hash
-> > +++ b/package/sysdig/sysdig.hash
-> > @@ -1,3 +1,4 @@
-> > =
-
-> >   # sha256 locally computed
-> > =
-
-> > +sha256  b9d05854493d245a7a7e75f77fc654508f720aab5e5e8a3a932bd8eb54e49b=
-da =
-
-> > sysdig-0.27.1.tar.gz> =
-
-> >   sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4=
-cfa
-> >    sysdig-0.23.1.tar.gz sha256 =
-
-> >   8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 =
-
-> >   COPYING
->   The COPYING file has changed, as shown by 'make legal-info'. Turns out
-> that the license changed to Apache-2.0, except for the driver which is
-> GPLv2 or MIT. So I updated the license hash and added the new license
-> files.
-> =
-
-> > diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-> > index 08d93750ae..d497c7c381 100644
-> > --- a/package/sysdig/sysdig.mk
-> > +++ b/package/sysdig/sysdig.mk
-> > @@ -4,7 +4,7 @@
-> > =
-
-> >   #
-> >   #####################################################################=
-###
-> >   ########> =
-
-> > -SYSDIG_VERSION =3D 0.23.1
-> > +SYSDIG_VERSION =3D 0.27.1
-> > =
-
-> >   SYSDIG_SITE =3D $(call github,draios,sysdig,$(SYSDIG_VERSION))
-> >   SYSDIG_LICENSE =3D GPL-2.0
-> >   SYSDIG_LICENSE_FILES =3D COPYING
-> =
-
->   This needed to be updated as well for the license change, of course.
-> =
-
->   Regards,
->   Arnout
-> =
-
-> > @@ -13,7 +13,10 @@ SYSDIG_CONF_OPTS =3D -DENABLE_DKMS=3DOFF
-> > -DUSE_BUNDLED_DEPS=3DOFF> =
-
-> >   SYSDIG_SUPPORTS_IN_SOURCE_BUILD =3D NO
-> >   =
-
-> >   SYSDIG_DEPENDENCIES =3D \
-> > =
-
-> > +	c-ares \
-> > =
-
-> >   	elfutils \
-> > =
-
-> > +	gtest \
-> > +	grpc \
-> > =
-
-> >   	jq \
-> >   	jsoncpp \
-> >   	libb64 \
-> > =
-
-> > @@ -21,6 +24,8 @@ SYSDIG_DEPENDENCIES =3D \
-> > =
-
-> >   	luainterpreter \
-> >   	ncurses \
-> >   	openssl \
-> > =
-
-> > +	protobuf \
-> > +	tbb \
-> > =
-
-> >   	zlib
-> >   =
-
-> >   # sysdig creates the module Makefile from a template, which contains a
-
-
-
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QXJub3V0LCBNYXJjdXMsIEFsbCwKCk9uIDIwMjItMDQtMTEgMTk6MDMgKzAyMDAsIEFybm91dCBW
+YW5kZWNhcHBlbGxlIHNwYWtlIHRodXNseToKPiBPbiAxMS8wNC8yMDIyIDE0OjI4LCBNYXJjdXMg
+SG9mZm1hbm4gd3JvdGU6Cj4gPk9uIDA1LjA0LjIyIDE5OjI4LCBQZXRlciBLb3JzZ2FhcmQgd3Jv
+dGU6Cj4gPj5jb21taXQ6IGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1p
+dC8/aWQ9MjY0MmVkYjBhZjA4ZjA0ZmI5OGY0Y2I1Zjg4ODk1ZmFkZWQ0YjMyNQo+ID4+Cj4gPj5i
+cmFuY2g6IGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1pdC8/aWQ9cmVm
+cy9oZWFkcy9tYXN0ZXIKPiA+Pgo+ID4+Rml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSBpc3N1
+ZXM6Cj4gPj4KPiA+Pi0gQ1ZFLTIwMjItMjM2NDg6IGNvbnRhaW5lcmQgQ1JJIHBsdWdpbjogSW5z
+ZWN1cmUgaGFuZGxpbmcgb2YgaW1hZ2Ugdm9sdW1lcwo+ID4+aHR0cHM6Ly9naXRodWIuY29tL2Nv
+bnRhaW5lcmQvY29udGFpbmVyZC9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtY3JwMi1xcnI1LThw
+cTcKPiA+Pgo+ID4+LSBDVkUtMjAyMi0yNDc2OTogRGVmYXVsdCBpbmhlcml0YWJsZSBjYXBhYmls
+aXRpZXMgZm9yIGxpbnV4IGNvbnRhaW5lcgo+ID4+wqDCoCBzaG91bGQgYmUgZW1wdHkKPiA+Pmh0
+dHBzOi8vZ2l0aHViLmNvbS9jb250YWluZXJkL2NvbnRhaW5lcmQvc2VjdXJpdHkvYWR2aXNvcmll
+cy9HSFNBLWM5Y3AtOWM3NS05djhjCj4gPj4KPiA+PlNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNn
+YWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KPiA+Pi0tLQo+ID4+wqAgcGFja2FnZS9jb250YWlu
+ZXJkL2NvbnRhaW5lcmQuaGFzaCB8IDIgKy0KPiA+PsKgIHBhY2thZ2UvY29udGFpbmVyZC9jb250
+YWluZXJkLm1rwqDCoCB8IDIgKy0KPiA+PsKgIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQo+ID4+Cj4gPj5kaWZmIC0tZ2l0IGEvcGFja2FnZS9jb250YWlu
+ZXJkL2NvbnRhaW5lcmQuaGFzaAo+ID4+Yi9wYWNrYWdlL2NvbnRhaW5lcmQvY29udGFpbmVyZC5o
+YXNoCj4gPj5pbmRleCBkNWFhZmUyZTcwLi4yM2RhY2RlZDg4IDEwMDY0NAo+ID4+LS0tIGEvcGFj
+a2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQuaGFzaAo+ID4+KysrIGIvcGFja2FnZS9jb250YWlu
+ZXJkL2NvbnRhaW5lcmQuaGFzaAo+ID4+QEAgLTEsMyArMSwzIEBACj4gPj7CoCAjIENvbXB1dGVk
+IGxvY2FsbHkKPiA+Pi1zaGEyNTbCoAo+ID4+NDBjOTc2N2FmM2U4N2YyYzM2YWRmMmY1NjNmMGE4
+Mzc0ZTgwYjMwYmQyYjdhYTgwMDU4Yzg1OTEyNDA2Y2VmNAo+ID4+Y29udGFpbmVyZC0xLjUuOS50
+YXIuZ3oKPiA+PitzaGEyNTbCoAo+ID4+NmEyODk0MDZjMWMwNTgzNzYzZTVhOTc1NGUzMWExZWNl
+ZDU1Y2Q1ZjE2MmE3YmMyYTNhMzE1ZDVlYjA1YzdhMQo+ID4+Y29udGFpbmVyZC0xLjUuMTEudGFy
+Lmd6Cj4gPkkgZ2V0IGEgZGlmZmVyZW50IGhhc2ggZm9yIHRoaXMgZG93bmxvYWQsIGJvdGggd2l0
+aGluIGJ1aWxkcm9vdCBhcyB3ZWxsIGFzCj4gPmRvd25sb2FkaW5nIHRoZSBmaWxlIG1hbnVhbGx5
+IGZyb20gZ2l0aHViOgo+ID5FUlJPUjogY29udGFpbmVyZC0xLjUuMTEudGFyLmd6IGhhcyB3cm9u
+ZyBzaGEyNTYgaGFzaDoKPiA+RVJST1I6IGV4cGVjdGVkOiA2YTI4OTQwNmMxYzA1ODM3NjNlNWE5
+NzU0ZTMxYTFlY2VkNTVjZDVmMTYyYTdiYzJhM2EzMTVkNWViMDVjN2ExCj4gPkVSUk9SOiBnb3TC
+oMKgwqDCoCA6IDAyYjc5ZDVlMmIwN2I1ZTY0Y2QyOGYxZmU4NDM5NWVlMTFlZWY5NWZjNDlmZDky
+M2E5YWI5MzAyMmIxNDhiZTYKPiA+RVJST1I6IEluY29tcGxldGUgZG93bmxvYWQsIG9yIG1hbi1p
+bi10aGUtbWlkZGxlIChNSVRNKSBhdHRhY2sKPiA+RGlkIHRoZSBmaWxlIGNoYW5nZSBpbiB0aGUg
+bWVhbnRpbWUgb3IgZGlkIHNvbWV0aGluZyBlbHNlIGdvIHdyb25nIGhlcmU/Cj4gIEl0IGFsc28g
+Z29lcyB3cm9uZyBpbiB0aGUgYXV0b2J1aWxkZXJzICh0aGlzIG9uZSBvbiBtYXN0ZXIsIGJlZm9y
+ZSBJIG1lcmdlZAo+IHRoZSBidW1wIHRvIDEuNi4yKSBbMV0KCk5vdGUgdGhhdCBnb2xhbmcgcGFj
+a2FnZXMgYXJlIHN1c2NlcHRpYmxlIHRvIGhhc2ggY2hhbmdlcyBpZm9uZSBvZiB0aGVpcgpkZXBl
+bmRlbmNpZXMgaXMgY2hhZ25lZC4gRm9yIGV4YW1wbGUsIGlmIGEgZ28gcGFja2FnZSBkZXBlbmRz
+LCBkaXJlY3RseQpvciB0cmFuc2l0aXZlbHksIG9uIGEgcGFja2FnZSBmb28gYXQgc29tZS10YWcs
+IGJ1dCBmb28gZ290IHJlLXRhZ2dlZCwgb3IKdGhlIHJlcG9zaXRvcnkgaGFzIG1vdmVkLCB0aGVu
+IHRoZSB2ZW5kb3Jpbmcgd2lsbCBnZXQgYSBkaWZmZXJlbnQgY29udGVudAp0aGFuIHByZXZpb3Vz
+bHkuCgpGb3IgZXhhbXBsZSwgZG9ja2VyJ3MgImRpc3RyaWJ1dGlvbiIgcmVwb3NpdG9yeSBoYXMg
+bW92ZWQgZnJvbSB1bmRlcgoiZG9ja2VyIiBvdXQgdG8gaXRzIG93biAiZGlzdHJpYnV0aW9uIiBu
+YW1lc3BhY2U6CgogICAgaHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9kaXN0cmlidXRpb24Kbm93
+IHJlZGlyZWN0cyB0bzoKICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9kaXN0cmlidXRpb24vZGlzdHJp
+YnV0aW9uCgo+ID5TaG91bGQgc2VuZCBhIHBhdGNoIGNoYW5naW5nIHRoZSBoYXNoIHRvCj4gPjAy
+Yjc5ZDVlMmIwN2I1ZTY0Y2QyOGYxZmU4NDM5NWVlMTFlZWY5NWZjNDlmZDkyM2E5YWI5MzAyMmIx
+NDhiZTY/Cj4gIExldCdzIGZpcnN0IGFsbG93IFBldGVyIHRvIGNoZWNrIHdoYXQgZXhhY3RseSB3
+ZW50IHdyb25nLiBIZSBzaG91bGQgaGF2ZSBhCj4gbG9jYWwgZG93bmxvYWQgd2l0aCB0aGUgaGFz
+aCBoZSBwdXNoZWQgc28gaGUgY2FuIGNvbXBhcmUgd2hhdCBjaGFuZ2VkLgo+ICBJIGxvb2tlZCBh
+dCB0aGUgZ2l0aHViIHJlcG8sIGFuZCBpdCBzYXlzIHRoYXQgaXQgd2FzIHRhZ2dlZCBvbiBNYXJj
+aCAyNCwKPiBpLmUuIGJlZm9yZSBQZXRlciBkaWQgdGhlIGJ1bXAgdG8gMS41LjExLiBTbyBpdCBk
+b2Vzbid0IGxvb2sgbGlrZSB0aGV5Cj4gdXBkYXRlZCB0aGUgdGFnLgo+IAo+IDFdIGh0dHA6Ly9h
+dXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2I1ZC9iNWRjZDU2NDkwZTgwN2RiOWU5MmUz
+YmJiZDY3NTM3MzgxMzJkYjU3L2J1aWxkLWVuZC5sb2cKCkkgdGhpbmsgdGhlIGVycm9yIGlzIHNv
+ZW1oaW5nIGVsc2UgaW4gdGhpcyBjYXNlOgogICAgdGFyOiBzdGRvdXQ6IHdyaXRlIGVycm9yCgpS
+ZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0t
+LS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlh
+bm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVy
+aWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVy
+IHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkg
+NDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJl
+IGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhU
+TUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0n
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
