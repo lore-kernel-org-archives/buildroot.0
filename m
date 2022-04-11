@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52679C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71D7DC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0817E60BBF;
-	Mon, 11 Apr 2022 07:17:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 143B583E6B;
+	Mon, 11 Apr 2022 07:17:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id whyeUKTcxQ0m; Mon, 11 Apr 2022 07:17:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AZimpiahF7CZ; Mon, 11 Apr 2022 07:17:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0260460E5B;
-	Mon, 11 Apr 2022 07:17:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4BCE11BF9AD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B4DB831F5;
+	Mon, 11 Apr 2022 07:17:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 644581BF9B5
  for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 461D740338
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5307B4157F
  for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:16:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bmpF_6UCKb1w for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vcgTVzP8thqI for <buildroot@lists.busybox.net>;
  Mon, 11 Apr 2022 07:16:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67D0A4018D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 734074155B
  for <buildroot@buildroot.org>; Mon, 11 Apr 2022 07:16:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1FA8883912; Mon, 11 Apr 2022 07:06:52 +0000 (UTC)
+ id 29DAA8396A; Mon, 11 Apr 2022 07:06:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 09:15:50 +0200
+Date: Mon, 11 Apr 2022 09:15:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9bee083e0baea16eb91af117033d0ff3fd290b1
-X-Git-Newrev: c3ac7eb13346789f9a48e8a302fe92181ff5dde3
+X-Git-Oldrev: c3ac7eb13346789f9a48e8a302fe92181ff5dde3
+X-Git-Newrev: 1fe5029122c8d6aba0194d6b9b0ddcd1fde2ee8d
 X-Patchwork-Hint: ignore
-Message-Id: <20220411070652.1FA8883912@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.{4, 10, 15, 16}.x series
+Message-Id: <20220411070652.29DAA8396A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: security bump to version
+ 9.16.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,79 +59,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3ac7eb13346789f9a48e8a302fe92181ff5dde3
+commit: https://git.buildroot.net/buildroot/commit/?id=1fe5029122c8d6aba0194d6b9b0ddcd1fde2ee8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security issues:
+
+- The rules for acceptance of records into the cache have been tightened to
+  prevent the possibility of poisoning if forwarders send records outside
+  the configured bailiwick.  (CVE-2021-25220)
+
+- TCP connections with keep-response-order enabled could leave the TCP
+  sockets in the CLOSE_WAIT state when the client did not properly shut down
+  the connection.  (CVE-2022-0396)
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f25b662aa5..4b4ea8d92b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 401e389e49..2c10a0429b 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.26/bind-9.16.26.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.16.27/bind-9.16.27.tar.xz.asc
+ # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  70b39a5eb71650358ec9ba41da3050d32aeac0aeb4a466684b23f35affa7fb45  bind-9.16.26.tar.xz
++sha256  90902aaf104c81019d75d6f8b2f7ec40fcd249406f894b44e4a9c6b5e08bf566  bind-9.16.27.tar.xz
+ sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index a595baabc5..5164001ab5 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.15.30" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.15.33" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.104-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.104-cip3-rt3" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 87a0f0465b..cf7ccc5cc5 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  cca7d6e053e33f44af1b39f7becec73a387911d81ede5a84ecf671692533138f  linux-5.16.16.tar.xz
--sha256  254ea2fe08f0aa07e4f7fffe95d12463df7fa6ff8a9ba72f321da15e50fa7132  linux-5.15.30.tar.xz
--sha256  c467c3077946370fb26c9277313b601d6c48bb557abc889f4892caf627fcdfea  linux-5.10.107.tar.xz
--sha256  61f7cd24cb8a38d41891d9066c1dfd14a688a9dff7f485922e385654ea8b39b9  linux-5.4.186.tar.xz
-+sha256  da6d2cfa8b5b82d8a17b032a627fc1c7885097523c32cc8a4294745697d59b7e  linux-5.16.19.tar.xz
-+sha256  c30a17e6090f9ebf2d8ff58cd6c92c7324b1f4a8b3aa6a7f68850310af05a9c4  linux-5.15.33.tar.xz
-+sha256  dbef6a06325433481551cb8cfca9254d908d0ae950bc809f3da8ade00c485693  linux-5.10.110.tar.xz
-+sha256  9fbc8bfdc28c9fce2307bdf7cf1172c9819df673397a411c40a5c3d0a570fdbc  linux-5.4.188.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  35017bb40b604e0b577fc2b87e727632b46608a2ba3a4f5858b9177f58f376b3  linux-4.4.302.tar.xz
--sha256  47470f83aa64e0098830a53176c959740742973663fead7ca7cc7b84e1f9d0f7  linux-4.9.307.tar.xz
--sha256  9b6178099cf33c534c971f3f065c0debe92788f0f504d54badb2f8c2ee089d69  linux-4.14.272.tar.xz
--sha256  530c5ac848111bbf7d1ad407a4ce8173ef8f9a4554477a32c695c5a4eaf02598  linux-4.19.235.tar.xz
-+sha256  e86a55a89e1e28756b890b2b78f8b582d05cecb3509ff5c353e9534866468614  linux-4.9.309.tar.xz
-+sha256  100a9960fb2d8e079c9feeef640715a7fb749ed728a57e427f9e2443212e58f9  linux-4.14.275.tar.xz
-+sha256  bafff35102cc486ec2bf94c6d908be8e24017b2e4a1873f52f24c855eb220cd8  linux-4.19.237.tar.xz
- # Locally computed
- sha256  63e6df81c4a747c60eed535ffc2f6f1ddb0c17ec349e860316d9a700c69ab38e  linux-cip-5.10.104-cip3.tar.gz
- sha256  9a45929d91ebaddbf6a0ef29750775e33d3c3f56f42f0a9e95e77e5b4eba3c6e  linux-cip-5.10.104-cip3-rt3.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 479f64b72e..decf02d175 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -381,13 +381,13 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.302"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.307"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.272"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.235"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.186"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.107"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.30"	if BR2_KERNEL_HEADERS_5_15
--	default "5.16.16"	if BR2_KERNEL_HEADERS_5_16
-+	default "4.9.309"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.275"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.237"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.188"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.110"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.33"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.16.19"	if BR2_KERNEL_HEADERS_5_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-BIND_VERSION = 9.16.26
++BIND_VERSION = 9.16.27
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
