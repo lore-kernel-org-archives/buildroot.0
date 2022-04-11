@@ -4,47 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9F70C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 12:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4247C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 17:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FCC3610D0;
-	Wed, 13 Apr 2022 12:43:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 413AC60FDF;
+	Mon, 11 Apr 2022 17:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Efy1bqTuYxDs; Wed, 13 Apr 2022 12:43:04 +0000 (UTC)
+	with ESMTP id EJRccsR4lM3e; Mon, 11 Apr 2022 17:02:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B10860E41;
-	Wed, 13 Apr 2022 12:43:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A79351BF426
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 12:43:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5597160FE9;
+	Mon, 11 Apr 2022 17:02:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EC53D1BF2E4
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 17:02:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 918F682862
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 12:43:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5FFF60FD4
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 17:02:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n5kDaldXt4L1 for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 12:43:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77897827CE
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 12:43:00 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AC55CC0006;
- Wed, 13 Apr 2022 12:42:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1necKk-00APUT-KJ; Wed, 13 Apr 2022 14:42:54 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Apr 2022 14:42:52 +0200
-Message-Id: <20220413124253.2481210-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F75GZSaHTpUI for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 17:02:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A7BE60FD0
+ for <buildroot@uclibc.org>; Mon, 11 Apr 2022 17:02:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id E74F983475; Mon, 11 Apr 2022 16:52:51 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Mon, 11 Apr 2022 17:02:33 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Outdated package
+X-Bugzilla-Version: 2022.02
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: olliesharratt34@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-14751-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/git: security bump to version 2.31.2
+Subject: [Buildroot] [Bug 14751] New: LVM2 Outdated Link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,59 +69,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issue:
+https://bugs.busybox.net/show_bug.cgi?id=14751
 
- CVE-2022-24765:
-  On multi-user machines, Git users might find themselves unexpectedly in
-  a Git worktree, e.g. when there is a scratch space (`/scratch/`) intended
-  for all users and another user created a repository in `/scratch/.git`.
-  Merely having a Git-aware prompt that runs `git status` (or `git diff`)
-  and navigating to a directory which is supposedly not a Git worktree, or
-  opening such a directory in an editor or IDE such as VS Code or Atom, will
-  potentially run commands defined by that other user via
-  `/scratch/.git/config`.
+            Bug ID: 14751
+           Summary: LVM2 Outdated Link
+           Product: buildroot
+           Version: 2022.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: olliesharratt34@gmail.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-https://www.openwall.com/lists/oss-security/2022/04/12/7
+Attempting to build LVM2 fails as http://sources.redhat.com/ is completely
+down.
+In my environment, I updated the LVM link to https://sourceware.org/ftp/lvm2/
+and updated the hash which fixed the problem and allowed my filesystem to
+build.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 1db29ac457..5868fbffda 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  9f61417a44d5b954a5012b6f34e526a3336dcf5dd720e2bb7ada92ad8b3d6680  git-2.31.1.tar.xz
-+sha256  d9167d801cf4aa2abca6e8f43d5d1b383e02e4d257ac1dc071802bb773ed0e2a  git-2.31.2.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 90b1acd6a4..0127ba5129 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.31.1
-+GIT_VERSION = 2.31.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
 -- 
-2.30.2
-
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
