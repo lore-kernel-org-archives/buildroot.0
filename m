@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3EBC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F34C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00E2540516;
-	Mon, 11 Apr 2022 07:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9C4B83323;
+	Mon, 11 Apr 2022 07:11:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FvuZzaotIYI5; Mon, 11 Apr 2022 07:11:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id URezZfLcqidv; Mon, 11 Apr 2022 07:11:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0668740338;
-	Mon, 11 Apr 2022 07:11:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BBBC882F76;
+	Mon, 11 Apr 2022 07:11:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98F511BF2B9
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:11:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E21051BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86E234157F
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:11:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEF6F409B1
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:11:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LJ9MrUOuiWct for <buildroot@lists.busybox.net>;
+ with ESMTP id Wx03hiYU707N for <buildroot@lists.busybox.net>;
  Mon, 11 Apr 2022 07:11:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76635409B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8143C4157C
  for <buildroot@buildroot.org>; Mon, 11 Apr 2022 07:11:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2975781400; Mon, 11 Apr 2022 07:01:58 +0000 (UTC)
+ id 35B7A83931; Mon, 11 Apr 2022 07:01:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 09:09:05 +0200
+Date: Mon, 11 Apr 2022 09:10:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 789a08dac5808401629d6fc586b7377f54ebb316
-X-Git-Newrev: 2364dafa70245a838f6bfbb95dfc2992e0750a01
+X-Git-Oldrev: 2364dafa70245a838f6bfbb95dfc2992e0750a01
+X-Git-Newrev: 2d4a9308d7b16e4fd613a9070a97c9effa055b4b
 X-Patchwork-Hint: ignore
-Message-Id: <20220411070158.2975781400@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/valgrind: needs threads
+Message-Id: <20220411070158.35B7A83931@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/trousers: fix build with libressl
+ >= 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +59,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2364dafa70245a838f6bfbb95dfc2992e0750a01
+commit: https://git.buildroot.net/buildroot/commit/?id=2d4a9308d7b16e4fd613a9070a97c9effa055b4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-valgrind needs threads since the addition of vgdb in
-https://sourceware.org/git/?p=valgrind.git;a=commit;h=2ee9e9048658773ceef3d30eb79f44764a024f3c:
+Fix the following build failure with libressl >= 2.7.0:
 
-vgdb.c:37:10: fatal error: pthread.h: No such file or directory
-   37 | #include <pthread.h>
-      |          ^~~~~~~~~~~
+crypto/openssl/rsa.c:43:1: error: static declaration of 'RSA_set0_key' follows non-static declaration
+   43 | RSA_set0_key(RSA *r, BIGNUM *n, BIGNUM *e, BIGNUM *d)
+      | ^~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/ffa2dbfd6d5efcc50d447c0e759fb4ffce0b59b9
+ - http://autobuild.buildroot.org/results/607131255453da2dc0dab20a24264b3e74001525
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/valgrind/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../0003-Fix-build-with-LibreSSL-2-7.patch         | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 56e4af21fa..700849130f 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -7,14 +7,15 @@ config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	depends on !BR2_MIPS_SOFT_FLOAT
- 
--comment "valgrind needs a toolchain w/ dynamic library"
-+comment "valgrind needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_VALGRIND
- 	bool "valgrind"
- 	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Tool for debugging and profiling Linux programs.
- 
+diff --git a/package/trousers/0003-Fix-build-with-LibreSSL-2-7.patch b/package/trousers/0003-Fix-build-with-LibreSSL-2-7.patch
+new file mode 100644
+index 0000000000..65da979f22
+--- /dev/null
++++ b/package/trousers/0003-Fix-build-with-LibreSSL-2-7.patch
+@@ -0,0 +1,24 @@
++Fix build with LibreSSL 2.7 
++
++LibreSSL 2.7 implemented OpenSSL 1.1 API
++
++See also: https://reviews.freebsd.org/D14849#change-KhYbRXBMIBod
++
++Cheers,
++Bernard Spil (brnrd@FreeBSD.org)
++
++[Retrieved (and backported) from:
++https://sourceforge.net/p/trousers/bugs/234]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++--- ./src/trspi/crypto/openssl/rsa.c.orig	2016-11-23 12:26:19 UTC
+++++ ./src/trspi/crypto/openssl/rsa.c
++@@ -38,7 +38,7 @@
++ #define DEBUG_print_openssl_errors()
++ #endif
++ 
++-#if (OPENSSL_VERSION_NUMBER < 0x10100001L) || defined(LIBRESSL_VERSION_NUMBER)
+++#if (OPENSSL_VERSION_NUMBER < 0x10100001L) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
++ static int
++ RSA_set0_key(RSA *r, BIGNUM *n, BIGNUM *e, BIGNUM *d)
++ {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
