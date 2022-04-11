@@ -1,67 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7805BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 08:29:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EA8FC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 09:07:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5A794151A;
-	Mon, 11 Apr 2022 08:29:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2D2882FF9;
+	Mon, 11 Apr 2022 09:07:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vQ2SB7CQsM1z; Mon, 11 Apr 2022 08:29:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h3iHHeV2Nzwu; Mon, 11 Apr 2022 09:07:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82B53410A7;
-	Mon, 11 Apr 2022 08:29:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E66B41BF3A0
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 08:29:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2C5082BBC;
+	Mon, 11 Apr 2022 09:07:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BA32F1BF44A
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 09:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D45BD40961
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 08:29:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A257F60AB5
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 09:07:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1ARAYYBpR3ly for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 08:29:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from gateway.work-microwave.com (gateway.work-microwave.com
- [185.170.114.92])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 81E4B41505
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 08:29:30 +0000 (UTC)
-Received: from mail.work-microwave.com (mail.work-microwave.com [10.9.5.20])
- by gateway.work-microwave.com (Postfix) with ESMTPS id 7149C40135;
- Mon, 11 Apr 2022 10:23:54 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.work-microwave.com (Postfix) with ESMTP id DEDD6F2280D;
- Mon, 11 Apr 2022 10:23:53 +0200 (CEST)
-Authentication-Results: mail-wsvr1.work-microwave.com (amavisd-new); dkim=pass
- reason="pass (just generated, assumed good)"
- header.d=work-microwave.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
- work-microwave.com; h=content-transfer-encoding:mime-version
- :x-mailer:message-id:date:date:subject:subject:from:from; s=
- default; t=1649665431; bh=SEe5eOHFM2qa1YTc/rZ+Hi6UOcgP6B4xomjFIs
- qQQpk=; b=MmBk+XI3o3cY8LR6JGzpTUgEWfw0o2medAoOcblYt1f2EJbBZoD8CH
- yxI1oXFfZvzmRmLap3AqVNx7MLZn23h4jgybbifXcXCkAXJpJ33J09iTzlWF5DVK
- lwbJe6doYlveY5Zi4CenToXCXhEwafetFzZ9w++dupZmKE2iRuwqW7N4lRvOku4i
- xOn3JI9P+NQFXbRFIs5iSC7FiARTEIPIVQeb1dRaB23IKwBCRzXkdEJk/YpSorp3
- UWSN/9ARBtyuozpGxwCAnU5XBd1X+7EOuqkJpUuS6ioknwmPSbz3lhprdKua+lOq
- GVaqrkoRjkOAXi32I5pfQSj1DdjgmxRA==
-Received: from mail.work-microwave.com ([127.0.0.1])
- by localhost (mail-wsvr1.work-microwave.com [127.0.0.1]) (amavisd-new,
- port 10026)
- with ESMTP id XyIv8h68CnZG; Mon, 11 Apr 2022 10:23:51 +0200 (CEST)
-From: Johannes Agricola <johannes.agricola@work-microwave.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VnC4DmehPc6u for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 09:07:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7A0A6607F9
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 09:07:34 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id t11so2466425eju.13
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 02:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=1+uMKFPzLpJaPaeJy6o3cdXfd7Bvav2p5SWuVj/XHds=;
+ b=Inj2eQi7T/xCCE71nZ1PWLx9+9t1quwlSoga3awou/AjJ4CzCZ+sxaRrt0LiwwqDKy
+ L9W/TM56hZ/M0sAWStSWhJ4S87FSRlS6xKng86XIgkxUy/BzkvYdqChGitskZ327KjCw
+ huBlS2h8EJKidqYBqpB4kO3J257IdC8jSYyySNT015g8GT7vuZgMd4rYiiEo6xAROd4y
+ KTdD3ScTsZsU6afbhyhLLDuHtEegPA+K8xkoDOoCXs8OX4UMg3ZhMJ9CV32txWvs9HqQ
+ qmEcNqEZUUU2GFggYhVVYbBwmW1ZE7NRrV0OfHrNNO5YBjxO5munSk3wWL1qGXy2FOB2
+ 1/3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=1+uMKFPzLpJaPaeJy6o3cdXfd7Bvav2p5SWuVj/XHds=;
+ b=i9uedMEjraPAvoO5VjtDgG6k2RDSGNGMCufhLqj92ZZ7mq8snSPt3x4flbwFZybUyX
+ +IESQhqn0g6RzizjpMz+H2L+WbzMQw7qAN/9FPws+tT3njUC5yDgPhs978OcEjAeZZeo
+ 88eJ/SfKjlDiaQwBigjOqRmK1Tay4NnJTee+xoK2Bbx7p5vwm0CBwZrvUcqtdQ25U/6u
+ goSe6RhDV2wNM/9LOc62zn7Xs6FrYJoz4RJV501Svt13T+qm/H/nNgVod93Lup5Yzb1e
+ wTx1o7XE6uX7HjuQnnT7UKTHmm1waD0GKCcMNAK19cT7LoqjftBRuMAkOuX7ZkUGIn5l
+ rbYA==
+X-Gm-Message-State: AOAM53338vIzDDGu2Mnan32W0uCiR87X7QEzfw4SOg7d5NDuI6dCBxzC
+ a7i6z/YLQZxFsihkskF8PCbhNYObTFQ=
+X-Google-Smtp-Source: ABdhPJwjp+v8R8/CYizWlmsLSJMkmAJJ9yvQioMa3jJ826gyUIWRrjoY9WkhUDFfBsYFnPHxyrrBCg==
+X-Received: by 2002:a17:907:6d94:b0:6e7:fe12:6e9a with SMTP id
+ sb20-20020a1709076d9400b006e7fe126e9amr29230345ejc.584.1649668052260; 
+ Mon, 11 Apr 2022 02:07:32 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ t1-20020a170906178100b006e7edb2c0bdsm9096609eje.15.2022.04.11.02.07.31
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Mon, 11 Apr 2022 02:07:31 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 10:23:09 +0200
-Message-Id: <20220411082308.1528455-1-johannes.agricola@work-microwave.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/libwebsockets: bump to version 4.3.1
+Date: Mon, 11 Apr 2022 11:07:23 +0200
+Message-Id: <20220411090723.13504-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+Subject: [Buildroot] [PATCH] package/wpa_supplicant: enable libnl for the
+ WIRED driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,63 +84,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Johannes Agricola <johannes.agricola@work-microwave.com>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is quite a version jump, so there are a lot of individual changes,
-see: https://github.com/warmcat/libwebsockets/blob/v4.3.1/changelog
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-LICENSE has also changed:
+BR2_PACKAGE_WPA_SUPPLICANT_WIRED also enables the MACSEC_LINUX
+driver. This driver requires libnl.
 
-- More items with license "MIT" were added:
-  - lib/misc/base64-decode.c
-  - lib/plat/windows/windows-resolv.c
-- One more item with a 2-Clause BSD license was added:
-  - lib/misc/ieeehalfprecision.c
-- Sublicense texts were copied into LICENSE
+Also fix CONFIG_DRIVER_MACSEC option to enable only the generic
+Linux driver and not QCA extensions.
 
-These should still be compatible with "MIT with exceptions" stated in
-`libwebsockets.mk`.
+Fixes:
+http://autobuild.buildroot.net/results/2dea7dee521794b306cc610601fda322987e6cd0
 
-Signed-off-by: Johannes Agricola <johannes.agricola@work-microwave.com>
-
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-Changes v1 -> v2:
-  - Update LICENSE hash
-  - Add changelog and LICENSE changes to commit message
----
- package/libwebsockets/libwebsockets.hash | 4 ++--
- package/libwebsockets/libwebsockets.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wpa_supplicant/Config.in         |  2 ++
+ package/wpa_supplicant/wpa_supplicant.mk | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 1761a7658a..e39d6e1853 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  6ece1f422c6d38aabedec2476f2ac12e9aede8691b08137068ad85545ce3ff78  libwebsockets-4.0.21.tar.gz
--sha256  5756db345eb9c21cb06dd7cb69c38ec234657a233f9a186b4f5fa453681bd394  LICENSE
-+sha256  8fdb1454a1b34cd9a6351beaab237a485e6853806101de7e62bd2bc250bb50af  libwebsockets-4.3.1.tar.gz
-+sha256  2b5dd8030691f3d1870a040f085c37e45d9ab9c684a7f1284f5f379c1e829b28  LICENSE
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index c25686d385..152659cee6 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 8f095cdf2d..0094531548 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -41,6 +41,8 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
  
--LIBWEBSOCKETS_VERSION = 4.0.21
-+LIBWEBSOCKETS_VERSION = 4.3.1
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = MIT with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
+ 	bool "Enable wired support"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_WPA_SUPPLICANT_EAP
+ 	help
+ 	  Include the "wired" driver, so the internal IEEE 802.1x
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index a2ca8a0b30..ac66d1f7e0 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -63,11 +63,18 @@ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_FILS
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIRED),)
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIRED),y)
++WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libnl
++WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_LIBNL32
++WPA_SUPPLICANT_CONFIG_ENABLE += \
++	CONFIG_DRIVER_WIRED \
++	CONFIG_MACSEC \
++	CONFIG_DRIVER_MACSEC_LINUX
++else
+ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_DRIVER_WIRED \
+ 	CONFIG_MACSEC \
+-	CONFIG_DRIVER_MACSEC
++	CONFIG_DRIVER_MACSEC_LINUX
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),)
 -- 
-2.25.1
+2.17.0
 
 _______________________________________________
 buildroot mailing list
