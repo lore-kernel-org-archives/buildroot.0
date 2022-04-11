@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71D7DC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95479C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Apr 2022 07:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 143B583E6B;
-	Mon, 11 Apr 2022 07:17:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 36FB5405BB;
+	Mon, 11 Apr 2022 07:46:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AZimpiahF7CZ; Mon, 11 Apr 2022 07:17:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BQDzaSurakaW; Mon, 11 Apr 2022 07:46:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B4DB831F5;
-	Mon, 11 Apr 2022 07:17:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 514C940556;
+	Mon, 11 Apr 2022 07:46:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 644581BF9B5
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:16:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A9E3B1BF951
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5307B4157F
- for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:16:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95A5E415AA
+ for <buildroot@lists.busybox.net>; Mon, 11 Apr 2022 07:46:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vcgTVzP8thqI for <buildroot@lists.busybox.net>;
- Mon, 11 Apr 2022 07:16:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 734074155B
- for <buildroot@buildroot.org>; Mon, 11 Apr 2022 07:16:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 29DAA8396A; Mon, 11 Apr 2022 07:06:52 +0000 (UTC)
+ with ESMTP id oNzoz40q5R02 for <buildroot@lists.busybox.net>;
+ Mon, 11 Apr 2022 07:46:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1FF20415A1
+ for <buildroot@buildroot.org>; Mon, 11 Apr 2022 07:46:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D18DC2000E;
+ Mon, 11 Apr 2022 07:46:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ndokY-005xYf-Lb; Mon, 11 Apr 2022 09:46:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Apr 2022 09:15:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c3ac7eb13346789f9a48e8a302fe92181ff5dde3
-X-Git-Newrev: 1fe5029122c8d6aba0194d6b9b0ddcd1fde2ee8d
-X-Patchwork-Hint: ignore
-Message-Id: <20220411070652.29DAA8396A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: security bump to version
- 9.16.27
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220410141043.144288-1-fontaine.fabrice@gmail.com>
+Date: Mon, 11 Apr 2022 09:46:14 +0200
+In-Reply-To: <20220410141043.144288-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 10 Apr 2022 16:10:43 +0200")
+Message-ID: <87wnfwhxkp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/lftp: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,55 +59,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fe5029122c8d6aba0194d6b9b0ddcd1fde2ee8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes the following security issues:
+ > Fix the following build failure with libressl > 2.7.0:
+ > /nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld:
+ > /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o):
+ > in function `X509_OBJECT_get0_X509_CRL':
+ > (.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL';
+ > /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894):
+ > first defined here
 
-- The rules for acceptance of records into the cache have been tightened to
-  prevent the possibility of poisoning if forwarders send records outside
-  the configured bailiwick.  (CVE-2021-25220)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
 
-- TCP connections with keep-response-order enabled could leave the TCP
-  sockets in the CLOSE_WAIT state when the client did not properly shut down
-  the connection.  (CVE-2022-0396)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2022.02.x, thanks.
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 401e389e49..2c10a0429b 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.16.26/bind-9.16.26.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.16.27/bind-9.16.27.tar.xz.asc
- # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
--sha256  70b39a5eb71650358ec9ba41da3050d32aeac0aeb4a466684b23f35affa7fb45  bind-9.16.26.tar.xz
-+sha256  90902aaf104c81019d75d6f8b2f7ec40fcd249406f894b44e4a9c6b5e08bf566  bind-9.16.27.tar.xz
- sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index a595baabc5..5164001ab5 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.16.26
-+BIND_VERSION = 9.16.27
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
