@@ -1,46 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 525C8C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 19:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3290C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 19:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 059A4834AE;
-	Tue, 12 Apr 2022 19:51:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92516610C0;
+	Tue, 12 Apr 2022 19:51:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CvuufswDKpQ3; Tue, 12 Apr 2022 19:51:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YCoh5CE8ugR0; Tue, 12 Apr 2022 19:51:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0044383F68;
-	Tue, 12 Apr 2022 19:51:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B10AA1BF3FD
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:49:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 902F1610B5;
+	Tue, 12 Apr 2022 19:51:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C0AE21BF3FD
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55175408FE
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:49:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF66140B47
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:51:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x_AGquUHHy9a for <buildroot@lists.busybox.net>;
- Tue, 12 Apr 2022 19:49:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6608340905
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 19:49:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id A003683B8E; Tue, 12 Apr 2022 19:39:53 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 21:40:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f17b71d3a8c7971d0f24f4832815f3e77cb7e1d9
-X-Git-Newrev: 69836fbf9cd64a758ca60a55742400f23027b6d6
-X-Patchwork-Hint: ignore
-Message-Id: <20220412193953.A003683B8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pango: bump to version 1.50.6
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DsflPbZWtPdE for <buildroot@lists.busybox.net>;
+ Tue, 12 Apr 2022 19:51:06 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 334B940B48
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 19:51:06 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:7133:9439:48a3:ea79])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9823E13F838;
+ Tue, 12 Apr 2022 21:51:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1649793063;
+ bh=2omMYFjdB2uoZBPIILlZlRFXov5qlkReLPM8Qvx/EMY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=QM6qz0a48aZR4WOcJXm1g+vh7mq5e+yAfzl7XWQr1Atr1jzTbS0Bg8hiHF7OJhhXy
+ 5ctlWhjxmmU9pPebiGQY9qAuhvAaXxHIKOdEn7+0GGMeV4CE2QgPehNwlBTViC32Jv
+ ncqvFkOyh9c0v5HIpfLPcaMMeK18jzV69YJnmQ+0MyhXn1lbRPnl4jbpsdRcSJ407Y
+ TviXtPrEX2YrYNcJHHKJLqbiZh7FHNNP9teMA1kdxLAG7Whft6YNIduZvkOw6Nz0ZZ
+ zWeq39FQShJuzGHNRtxvTkff7WwgPAaWlzsV1wNc1YJEtzr67JdE1xB2hL7iIVRtTe
+ +6+bk32JcSURQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 12 Apr 2022 21:51:01 +0200
+Date: Tue, 12 Apr 2022 21:51:01 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Johannes Agricola <johannes.agricola@work-microwave.com>
+Message-ID: <20220412195101.GC4029883@scaer>
+References: <20220411082308.1528455-1-johannes.agricola@work-microwave.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220411082308.1528455-1-johannes.agricola@work-microwave.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v2] package/libwebsockets: bump to version
+ 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,47 +72,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69836fbf9cd64a758ca60a55742400f23027b6d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Johannes, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2022-04-11 10:23 +0200, Johannes Agricola spake thusly:
+> This is quite a version jump, so there are a lot of individual changes,
+> see: https://github.com/warmcat/libwebsockets/blob/v4.3.1/changelog
+> 
+> LICENSE has also changed:
+> 
+> - More items with license "MIT" were added:
+>   - lib/misc/base64-decode.c
+>   - lib/plat/windows/windows-resolv.c
+> - One more item with a 2-Clause BSD license was added:
+>   - lib/misc/ieeehalfprecision.c
+> - Sublicense texts were copied into LICENSE
+> 
+> These should still be compatible with "MIT with exceptions" stated in
+> `libwebsockets.mk`.
+> 
+> Signed-off-by: Johannes Agricola <johannes.agricola@work-microwave.com>
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 319d9778c1..fecf368535 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.5.sha256sum
--sha256  6d136872da6207fe88c5cd2c95c36bcaf4ed29402b854663a86cd7efe99b0cf5  pango-1.50.5.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.6.sha256sum
-+sha256  a998bcf36881c3ac20495d40bceb304f4eaa9175bd2967c85656434cbdafe86a  pango-1.50.6.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 69ec5bb490..c264e76741 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).5
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).6
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+Thanks for the detailed analysis of the licensing changes.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>   - Update LICENSE hash
+>   - Add changelog and LICENSE changes to commit message
+> ---
+>  package/libwebsockets/libwebsockets.hash | 4 ++--
+>  package/libwebsockets/libwebsockets.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+> index 1761a7658a..e39d6e1853 100644
+> --- a/package/libwebsockets/libwebsockets.hash
+> +++ b/package/libwebsockets/libwebsockets.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  6ece1f422c6d38aabedec2476f2ac12e9aede8691b08137068ad85545ce3ff78  libwebsockets-4.0.21.tar.gz
+> -sha256  5756db345eb9c21cb06dd7cb69c38ec234657a233f9a186b4f5fa453681bd394  LICENSE
+> +sha256  8fdb1454a1b34cd9a6351beaab237a485e6853806101de7e62bd2bc250bb50af  libwebsockets-4.3.1.tar.gz
+> +sha256  2b5dd8030691f3d1870a040f085c37e45d9ab9c684a7f1284f5f379c1e829b28  LICENSE
+> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+> index c25686d385..152659cee6 100644
+> --- a/package/libwebsockets/libwebsockets.mk
+> +++ b/package/libwebsockets/libwebsockets.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBWEBSOCKETS_VERSION = 4.0.21
+> +LIBWEBSOCKETS_VERSION = 4.3.1
+>  LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+>  LIBWEBSOCKETS_LICENSE = MIT with exceptions
+>  LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
