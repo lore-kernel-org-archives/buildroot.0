@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C57DCC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 19:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35112C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 19:50:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7239F4173B;
-	Tue, 12 Apr 2022 19:50:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAD7E4173C;
+	Tue, 12 Apr 2022 19:50:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yifRTP4nW3c4; Tue, 12 Apr 2022 19:50:34 +0000 (UTC)
+	with ESMTP id 8gelQtaqycx9; Tue, 12 Apr 2022 19:50:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A06B409B4;
-	Tue, 12 Apr 2022 19:50:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0485F1BF3FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id F39DD41779;
+	Tue, 12 Apr 2022 19:50:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AF0C1BF3FD
  for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3557740B57
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3839A40914
  for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:49:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LCGDNDggVcrD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jg-sFAa1hcUO for <buildroot@lists.busybox.net>;
  Tue, 12 Apr 2022 19:49:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B5B640B48
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DC0E40904
  for <buildroot@buildroot.org>; Tue, 12 Apr 2022 19:49:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 96FB883B93; Tue, 12 Apr 2022 19:39:53 +0000 (UTC)
+ id 856B483B8E; Tue, 12 Apr 2022 19:39:53 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 21:40:05 +0200
+Date: Tue, 12 Apr 2022 21:40:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d9b33e61c9b450f12bc64e5ac18ec44cfb70668
-X-Git-Newrev: f17b71d3a8c7971d0f24f4832815f3e77cb7e1d9
+X-Git-Oldrev: c809fa2d0fd8229f2712747f114eb802ed64d780
+X-Git-Newrev: 0ab10ae245f0ad9d22592e8086132795f3c44600
 X-Patchwork-Hint: ignore
-Message-Id: <20220412193953.96FB883B93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mc: bump to version 4.8.28
+Message-Id: <20220412193953.856B483B8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libepoxy: bump to version 1.5.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f17b71d3a8c7971d0f24f4832815f3e77cb7e1d9
+commit: https://git.buildroot.net/buildroot/commit/?id=0ab10ae245f0ad9d22592e8086132795f3c44600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 6400f64b99..b0381474ff 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.27.sha256
--sha256  31be59225ffa9920816e9a8b3be0ab225a16d19e4faf46890f25bdffa02a4ff4  mc-4.8.27.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.28.sha256
-+sha256  e994d9be9a7172e9ac4a4ad62107921f6aa312e668b056dfe5b8bcebbaf53803  mc-4.8.28.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 678d687bcf..ac12c2173a 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 376920c3cc..bf6c52f99e 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.9.sha256sum
+-sha256  d168a19a6edfdd9977fef1308ccf516079856a4275cf876de688fb7927e365e4  libepoxy-1.5.9.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.10.sha256sum
++sha256  072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623  libepoxy-1.5.10.tar.xz
+ 
+ # Hashes for license files:
+ sha256  8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 5a71fe5998..2af2e2f6e8 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MC_VERSION = 4.8.27
-+MC_VERSION = 4.8.28
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).9
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).10
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
