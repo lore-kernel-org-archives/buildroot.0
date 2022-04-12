@@ -1,50 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7211EC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 15:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23B6C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 16:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D505983EDB;
-	Tue, 12 Apr 2022 15:02:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 539F040B1A;
+	Tue, 12 Apr 2022 16:38:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h5Dpjc5xX1h7; Tue, 12 Apr 2022 15:02:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AJOYwfNEXmgy; Tue, 12 Apr 2022 16:38:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA20183E6B;
-	Tue, 12 Apr 2022 15:02:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 793BD40B15;
+	Tue, 12 Apr 2022 16:38:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74E0A1BF30B
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 15:02:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C48AC1BF3FD
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 16:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60CFC40AF8
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 15:02:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B140440B15
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 16:38:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QV5EGX0SkFMy for <buildroot@lists.busybox.net>;
- Tue, 12 Apr 2022 15:02:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C120740AFA
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 15:02:40 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 99D0B20008
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 15:02:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1neI2O-008sU6-Ld
- for buildroot@buildroot.org; Tue, 12 Apr 2022 17:02:36 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id PYDyJXK0qxsy for <buildroot@lists.busybox.net>;
+ Tue, 12 Apr 2022 16:38:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8A2440B0F
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 16:38:33 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ l62-20020a1c2541000000b0038e4570af2fso1970738wml.5
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 09:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=e/XmKAatc7lM1GnsG7658Z3aNjyNRm1F1oqyOHy9yR8=;
+ b=DXgPUPbGPXRYGmRUZbxhrEsLDvTDeoLEONvycLp30cR2Zre7UZ3U5wOwLM71MdEe8d
+ iYq5hjaBOP75iZfgKeJ0TXtxPmFLORZ4xntQthR2xHGE/cruGt061vyJvZQeaM9PLTKv
+ C+iCOVXv66UIUjkAExmYAE3f9utbNFxREUThGZee0DNOJHYSZcQt+qee5Sk70OrUqTlS
+ p3KdLIClJZyw9o6rELI8h/j3y7zqJaDbOakL6iXh7YY4X1HbcTjhvgY06XkWPvParhME
+ ir/wpSpMmdu+t2FRwhEmKtyhNtfQVArFvbZFJOl/ysAFYZ2p9jkURusS22b1BruXCZGs
+ zcmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=e/XmKAatc7lM1GnsG7658Z3aNjyNRm1F1oqyOHy9yR8=;
+ b=AUA4qP7N4W73zeOPzLemzL9R6RWXsEFsOE9vYmv8yRlk0Mrlrzn+mQW88k6XtNC9fp
+ nU6abyVOITQBWD098QnOBZpnhImXB16pDdT2y2/FFzuhl0P//vKH9x4I0D9qdAQaRpPP
+ 2yckteq4OOKjYJozQUh0E1nPVXcblYx1dNEqYVvbPaAGdAjHc4jM1GdgwaR8jZyJUWcQ
+ 41+oWOYuU3x2oRoYPIFAyOjdarzDjC6kaVT7xi456yoCcHZmYUs0pJKBA/UYEp55PN9u
+ xR6g0QvhHSTtHJgZVfY1X5MyASFJNACC4CNwqe/zaWNiAw3ZnGy1DBy1REYnqlqVYrsu
+ UZCg==
+X-Gm-Message-State: AOAM5322EUuf1KslufnViwnxzhgjGHJOmcU94ozSu/f9ASz8wWYDGpa/
+ /QVQbJbEsAOPyEzNNCu4PX6lTl5ZuNI=
+X-Google-Smtp-Source: ABdhPJx35E3LzqskGxo6pysWk4yIi+RqzGQtdmCRzy5Y3hPAxmTdYjnB7WJDOZOCbgfkSNoxEV/EQQ==
+X-Received: by 2002:a05:600c:4f96:b0:38e:7dbf:f80b with SMTP id
+ n22-20020a05600c4f9600b0038e7dbff80bmr4948085wmq.2.1649781511712; 
+ Tue, 12 Apr 2022 09:38:31 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ a1-20020a056000188100b002041a652dfdsm30039798wri.25.2022.04.12.09.38.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 12 Apr 2022 09:38:30 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 17:02:36 +0200
-Message-ID: <87pmlme44z.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date: Tue, 12 Apr 2022 18:36:24 +0200
+Message-Id: <20220412163624.1143941-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2022.02.1 released
+Subject: [Buildroot] [PATCH 1/1] package/netdata: fix uclibc build without
+ wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,73 +87,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
-MjIuMDIuMSBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
-dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIyLjAyLjEudGFyLmd6CgpvcgoKaHR0cDovL2J1
-aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIyLjAyLjEudGFyLnh6CgpPciBnZXQg
-aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
-dCAyMDIyLjAyLjEgaXMgYSBidWdmaXggcmVsZWFzZSBvbiB0aGUgY3VycmVudCBsb25nIHRlcm0K
-cmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9ydGFudCAvIHNlY3VyaXR5IHJlbGF0ZWQg
-aXNzdWVzCmRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjIuMDIgcmVsZWFzZS4KCi0gR3JhcGhzOiBB
-bHNvIGdlbmVyYXRlIGEgYnVpbGQgdGltZSB0aW1lbGluZSBncmFwaCAoZm9yIHRvcCBsZXZlbAog
-IHBhcmFsbGVsIGJ1aWxkcykuCgotIHNjcmlwdHMvcGtnLXN0YXRzOiBPcHRpbWl6ZSBtZW1vcnkg
-Y29uc3VtcHRpb24gZm9yIENQRSBwYXJzaW5nCgotIEZpeCBjb21wYXRpYmlsaXR5IGlzc3VlIHdp
-dGggdGhlIGZha2Vyb290IHNjcmlwdCBsb2dpYyBhbmQgbW9kZXJuCiAgdmVyc2lvbnMgb2YgZGFz
-aC4KCi0gQ2hhbmdlIGdpdDovLyBVUkxzIHBvaW50aW5nIHRvIEdpdGh1YiB0byBodHRwczovLywg
-bm93IHRoYXQgR2l0aHViIGhhcwogIHR1cm5lZCBvZmYgc3VwcG9ydCBmb3IgZ2l0Oi8vCgotIFNl
-Y3VyaXR5IGZpeGVzIGZvciBhcGFjaGUsIGFwciwgYmluZCwgY29udGFpbmVyZCwgaGFwcm94eSwK
-ICBsaWJpZWM2MTg1MCwgbGlib3BlbnNzbCwgbGlicmVzc2wsIGxpYnpsaWIsIG1hdGlvLCBtaW5p
-ZGxuYSwgbmJkLAogIG5ldGF0YWxrLCBvcGVudnBuLCBweXRob24tcGFyYW1pa28sIHB5dGhvbi1w
-aWxsb3csIHB5dGhvbi10d2lzdGVkLAogIHF0NWJhc2UsIHJhcHRvciwgcnRsXzQzMywgdGltZXNj
-YWxlZGIsIHVyYW5kb20tc2NyaXB0cywgdmltLCB3YXZwYWNrCgotIEZpeGVzIGZvciBkb3dubG9h
-ZC9jb21waWxhdGlvbi9ydW50aW1lL2xpY2Vuc2UgaXNzdWVzIGluIGFjZSwgYmVsciwKICBibHVl
-ejVfdXRpbHMsIGJvaW5jLCBicGZ0b29sLCBidXN5Ym94LCBjbG9vcCwgY29nLCBjcHBjbXMsIGRh
-djFkLAogIGRoY3AsIGRpZWhhcmRlciwgZG5zbWFzcSwgZG9ja2VyLWNsaSwgZG9ja2VyLWVuZ2lu
-ZSwgZWZsLCBlbGwsCiAgZmFrZXJvb3QsIGZsYWMsIGZsdWlkc3ludGgsIGdkay1waXhidWYsIGds
-aWItbmV0d29ya2luZywgZ251dGxzLAogIGdzdC1vbXgsIGdzdDEtZGV2dG9vbHMsIGdzdDEtbGli
-YXYsIGdzdDEtcGx1Z2lucy1iYWQsCiAgZ3N0MS1wbHVnaW5zLWJhc2UsIGdzdDEtcGx1Z2lucy1n
-b29kLCBnc3QxLXBsdWdpbnMtdWdseSwgZ3N0MS1weXRob24sCiAgZ3N0MS1ydHNwLXNlcnZlciwg
-Z3N0MS12YWFwaSwgZ3N0cmVhbWVyMSwgZ3N0cmVhbWVyMS1lZGl0aW5nLXNlcnZpY2VzLAogIGh0
-b3AsIGludGVsLWdtbWxpYiwgaXBtaXV0aWwsIGl3ZCwgamFjazEsIGphY2syLCBsZnRwLCBsaWJh
-YnNlaWwtY3BwLAogIGxpYmJsdXJheSwgbGliY2FtZXJhLWFwcHMsIGxpYmNvYXAsIGxpYmN1cmws
-IGxpYmVzdCwgbGliZ2VlLCBsaWJnbGliMiwKICBsaWJndGszLCBsaWJrcmI1LCBsaWJtaW5pdXBu
-cGMsIGxpYm9kYiwgbGlib2RiLWJvb3N0LCBsaWJwMTEsIGxpYnBzbCwKICBsaWJyc3RwLCBsaWJy
-dGxzZHIsIGxpYnVyaW5nLCBsaWJ5YW5nLCBsdWFzZWMsIGx4YywgbWVzb24sIG1pbml6aXAsCiAg
-bXBkLCBtdG9vbHMsIG9kYiwgb3BlbmJsYXMsIG9wZW5zc2gsIG9wdGVlLW9zLCBvcHVzLCBwYWhv
-LW1xdHQtYywKICBwYW5nbywgcGhwLCBwaXBld2lyZSwgcGtjczExLWhlbHBlciwgcG9zdGdyZXNx
-bCwgcHBwZCwgcHJvdG96ZXJvLAogIHB5dGhvbi1haW9jb25zb2xlLCBweXRob24tYnJvdGxpLCBw
-eXRob24tZ3JlZW5sZXQsIHB5dGhvbi1ycGktZ3BpbywKICBweXRob24tdHJlcSwgcHl0aG9uLXVq
-c29uLCBweXRob24td2Vhc3lwcmludCwgcXQ1YmFzZSwgcXQ1d2F5bGFuZCwKICBycGktZmlybXdh
-cmUsIHJwaS11c2VybGFuZCwgcnVuYywgcnVzdCwgcnlnZWwsIHNhbWJhNCwgc2hhaXJwb3J0LXN5
-bmMsCiAgc3BpY2UsIHNwaWRldl90ZXN0LCBzdHVubmVsLCBzeXN0ZW1kLCB0cmFjZS1jbWQsIHRy
-b3VzZXJzLAogIHRzNDkwMC1mcGdhLCB0dmhlYWRlbmQsIHVkcGNhc3QsIHVuYm91bmQsIHVwb3dl
-ciwgdXNiZ3VhcmQsIHZhbGdyaW5kLAogIHZhbGlqc29uLCB3Z2V0LCB3aXJlcGx1bWJlciwgd2ly
-ZXNoYXJrLCB4bXJpZywgemFiYml4LCB6bGliLW5nLAogIHp5bmFkZHNmeCwgenppcGxpYgoKRm9y
-IG1vcmUgZGV0YWlscywgc2VlIHRoZSBDSEFOR0VTIGZpbGU6CgpodHRwczovL2dpdC5idWlsZHJv
-b3QubmV0L2J1aWxkcm9vdC9wbGFpbi9DSEFOR0VTP2lkPTIwMjIuMDIuMQoKVXNlcnMgb2YgdGhl
-IGFmZmVjdGVkIHBhY2thZ2VzIGFyZSBzdHJvbmdseSBlbmNvdXJhZ2VkIHRvIHVwZ3JhZGUuCgpN
-YW55IHRoYW5rcyB0byBhbGwgdGhlIHBlb3BsZSBjb250cmlidXRpbmcgdG8gdGhpcyByZWxlYXNl
-OgoKZ2l0IHNob3J0bG9nIC1zbiAyMDIyLjAyLi4KCiAgIDExMCAgRmFicmljZSBGb250YWluZQog
-ICAgMjggIFBldGVyIFNlaWRlcmVyCiAgICAxMiAgSmFtZXMgSGlsbGlhcmQKICAgICA5ICBUaG9t
-YXMgUGV0YXp6b25pCiAgICAgOCAgQmVybmQgS3VobHMKICAgICA4ICBQZXRlciBLb3JzZ2FhcmQK
-ICAgICA1ICBGcmFuY29pcyBQZXJyYWQKICAgICA1ICBRdWVudGluIFNjaHVsegogICAgIDUgIFJv
-bWFpbiBOYW91cgogICAgIDMgIEFuZ2VsbyBDb21wYWdudWNjaQogICAgIDMgIENocmlzdGlhbiBT
-dGV3YXJ0CiAgICAgMiAgQW5kcmVhcyBaaWVnbGVyCiAgICAgMiAgQXJub3V0IFZhbmRlY2FwcGVs
-bGUgKEVzc2Vuc2l1bS9NaW5kKQogICAgIDIgIEp1bGllbiBPbGl2YWluCiAgICAgMiAgS3JpcyBC
-YWhuc2VuCiAgICAgMiAgTmVhbCBGcmFnZXIKICAgICAyICBWaW5jZW50IFN0ZWhsw6kKICAgICAx
-ICBDbMOpbWVudCBMw6lnZXIKICAgICAxICBKYW4gSGF2cmFuCiAgICAgMSAgSmFzb24gQS4gRG9u
-ZW5mZWxkCiAgICAgMSAgSm9lbCBTdGFubGV5CiAgICAgMSAgSm9obiBLZWVwaW5nCiAgICAgMSAg
-S2FtZWwgQm91aGFyYQogICAgIDEgIEt5bGUgSGFyZGluZwogICAgIDEgIE1hcmt1cyBNYXllcgog
-ICAgIDEgIE1hdGhpZXUgTWlybW9udAogICAgIDEgIE1pcnphIEthcGV0YW5vdmljCiAgICAgMSAg
-UGV0ciBWb3JlbAogICAgIDEgIFLDqW1pIER1cmFmZm9ydAogICAgIDEgIFNhc3NlbiwgUnV0Z2Vy
-CiAgICAgMSAgVGhvbWFzIEh1dGgKICAgICAxICBZYW5uIEUuIE1PUklOCiAgICAgMSAgWWFubmlj
-ayBCcm9zc2VhdQogICAgIDEgIFl1bmhhbyBUaWFuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fix the following uclibc build failure without wchar raised since bump
+to version 1.33.1 in commit 73dc2eef2dc40b78e732872b26eee0bcea1087d1:
+
+configure: error: Netdata requires a compiler that supports C99 to build
+
+Fixes:
+ - http://autobuild.buildroot.org/results/bca4d370ed0553d5f99f1277d0a1e3b49f62b95f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/netdata/netdata.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index d29733d8f6..dade6c625b 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -18,6 +18,10 @@ NETDATA_CONF_OPTS = \
+ 	--disable-unit-tests
+ NETDATA_DEPENDENCIES = libuv util-linux zlib
+ 
++# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
++# provided by autoconf relies on wchar_t.
++NETDATA_CONF_ENV = ac_cv_prog_cc_c99=-std=gnu99
++
+ ifeq ($(BR2_GCC_ENABLE_LTO),y)
+ NETDATA_CONF_OPTS += --enable-lto
+ else
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
