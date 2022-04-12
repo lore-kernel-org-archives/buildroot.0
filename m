@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35112C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 19:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED84C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 19:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAD7E4173C;
-	Tue, 12 Apr 2022 19:50:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4E9D83FF2;
+	Tue, 12 Apr 2022 19:51:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8gelQtaqycx9; Tue, 12 Apr 2022 19:50:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yeRBW6AHqblY; Tue, 12 Apr 2022 19:51:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F39DD41779;
-	Tue, 12 Apr 2022 19:50:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7AF0C1BF3FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBFCD83F68;
+	Tue, 12 Apr 2022 19:51:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B14571BF3FD
  for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3839A40914
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35FE082CD3
  for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 19:49:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jg-sFAa1hcUO for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o0mEqGUo_tq7 for <buildroot@lists.busybox.net>;
  Tue, 12 Apr 2022 19:49:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DC0E40904
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5439682A87
  for <buildroot@buildroot.org>; Tue, 12 Apr 2022 19:49:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 856B483B8E; Tue, 12 Apr 2022 19:39:53 +0000 (UTC)
+ id 8E3DD83B91; Tue, 12 Apr 2022 19:39:53 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 21:40:00 +0200
+Date: Tue, 12 Apr 2022 21:40:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c809fa2d0fd8229f2712747f114eb802ed64d780
-X-Git-Newrev: 0ab10ae245f0ad9d22592e8086132795f3c44600
+X-Git-Oldrev: 0ab10ae245f0ad9d22592e8086132795f3c44600
+X-Git-Newrev: 2d9b33e61c9b450f12bc64e5ac18ec44cfb70668
 X-Patchwork-Hint: ignore
-Message-Id: <20220412193953.856B483B8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libepoxy: bump to version 1.5.10
+Message-Id: <20220412193953.8E3DD83B91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libevdev: bump to version 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +58,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ab10ae245f0ad9d22592e8086132795f3c44600
+commit: https://git.buildroot.net/buildroot/commit/?id=2d9b33e61c9b450f12bc64e5ac18ec44cfb70668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libepoxy/libepoxy.hash | 4 ++--
- package/libepoxy/libepoxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libevdev/libevdev.hash | 6 +++---
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-index 376920c3cc..bf6c52f99e 100644
---- a/package/libepoxy/libepoxy.hash
-+++ b/package/libepoxy/libepoxy.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.9.sha256sum
--sha256  d168a19a6edfdd9977fef1308ccf516079856a4275cf876de688fb7927e365e4  libepoxy-1.5.9.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.10.sha256sum
-+sha256  072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623  libepoxy-1.5.10.tar.xz
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 68a5ebdcba..dd76e158ef 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2021-November/001573.html
+-sha256  2f729e3480695791f9482e8388bd723402b89f0eaf118057bbdea3cecee9b237  libevdev-1.12.0.tar.xz
+-sha512  6c1c1362d5112cdf3816d1f735c27e625f5463ebf10a83d675cd9364c3fb291ebcb91c051da442f1a36ed28ba7dd99af74546707f61274f7d5715c544a0ed04c  libevdev-1.12.0.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2022-March/001574.html
++sha256  1dbba41bc516d3ca7abc0da5b862efe3ea8a7018fa6e9b97ce9d39401b22426c  libevdev-1.12.1.tar.xz
++sha512  eefce287a665e4f89eb2e0437dfefd45ecf8925c7dac35a1bdd46158541f77f2032c6146900a30a01321751d55a9b537bd1d61777cca9cfa02c39a6e31c97be4  libevdev-1.12.1.tar.xz
  
- # Hashes for license files:
- sha256  8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
-diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-index 5a71fe5998..2af2e2f6e8 100644
---- a/package/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
-@@ -5,7 +5,7 @@
+ # Hash for license files:
+ sha256  6f13de7ce28e4948ba95170e0723ee1254c1978ce1f127af82aeca597b567cb9  COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index cd80154be2..726a5afcee 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBEPOXY_VERSION_MAJOR = 1.5
--LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).9
-+LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).10
- LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
- LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
- LIBEPOXY_INSTALL_STAGING = YES
+-LIBEVDEV_VERSION = 1.12.0
++LIBEVDEV_VERSION = 1.12.1
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
