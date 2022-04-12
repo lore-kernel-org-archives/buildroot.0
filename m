@@ -4,79 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A9EC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 20:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB715C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 20:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3627460E9B;
-	Tue, 12 Apr 2022 20:33:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 614BC60E95;
+	Tue, 12 Apr 2022 20:50:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nxcJCRwjMfO5; Tue, 12 Apr 2022 20:33:23 +0000 (UTC)
+	with ESMTP id ZOYkj2qfpjPb; Tue, 12 Apr 2022 20:50:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B61060EAF;
-	Tue, 12 Apr 2022 20:33:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 254101BF346
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 20:33:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EBE560EF9;
+	Tue, 12 Apr 2022 20:50:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D7521BF346
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 20:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13DDC400FE
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 20:33:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D3FC410E9
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 20:50:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b7rQZM4WU8w1 for <buildroot@lists.busybox.net>;
- Tue, 12 Apr 2022 20:33:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pETaYKo8hkPZ for <buildroot@lists.busybox.net>;
+ Tue, 12 Apr 2022 20:50:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EF1C740B4D
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 20:33:18 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id p189so12654862wmp.3
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 13:33:18 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 09A9C40923
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 20:50:43 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ c190-20020a1c35c7000000b0038e37907b5bso2667077wma.0
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 13:50:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=M+9ZfejlB8bH/njGDqacvyQqzZfrthGFTMSYqsgxzOo=;
- b=NThY1/ALLF0Srat0tQ8fojpCI4bKaKRojElqABcs0iUrz/LOsbY4Z6QyPGyqteWUjR
- vPro+zo+eHuvcQ2Rqe1+dmxiZNDB4biancUfwwHve1AwkCEWDfWY+td5D4zRSy00KCSu
- XFVMNBvxUHXoWFqdG8oDQfHbUojMk7xfWvfDXKjWe/CxkUIyMRK3X6/PbF6FxL/CmGKI
- MEST4HG4FsQ0km9x20w+BMq/vF48X91VVEVpCPDFKTkL8Hm1qCdSku13RaxLqL3BFpmx
- kv5F0d5h8cSQkTVzwWEY+PdljX60Tm+kJowBXKscYAnZlTrOfLH0UPYI1ztPIIYRwBSh
- h70g==
+ bh=PIFWljaCLwzvANRWPLfgsKY62arSUF8KGxSahjs1Vpw=;
+ b=HGrNAG2ytT9nVle36x4SvIhf89cNOGNzyjUdLqb7fNW1J2bvw4gopE5CF+t7Hd6+Eu
+ O+oIsvvCn2oOFpmaMOvM2eLY4Lg3j3Fj4MoQ7C8YWus6JmFpnxg8uxgYdl29RG2LilSo
+ qfu/V1T5VMgTHTbZ2Wnsid4+QeL2UtUKZ2ln85w8K7EBYz8gfQjOgtRet2camwwzHGNR
+ oDStvATedOt/ZjPV9PS87TA0sCPkcHP88QQlKT6VhcEVEkp1BsfX/i1RUmvEYK29K6Nt
+ pjRK75CiV2TMjxL6CCW1+mooo8I3fsrI8CDwdjG6kCMuYo3q0fhNBqJ8jcgu0Q7l2Rfi
+ ov9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=M+9ZfejlB8bH/njGDqacvyQqzZfrthGFTMSYqsgxzOo=;
- b=HyTAX6qYhEghSPN2bEvovP3F43GNamoR4HUAF/iJWYkyVhkxfhmyWLLeozex1yTkry
- btj3f6CrzYe3O+Y+SiMMORSsyZ+musokbDZ9O9gq2sqQQaHHMPt6G2QrTBdv7tauv+gC
- isl17uJcmxJ7QcQn9nPjpQMYiW2UWlCVpaFVqv8FoK+imtaNegoN6MRZvGDQqboPPXsD
- Wr478iTXZJxEBDa+MBrrIECIHmfhU4vj62LbQCsgPWFaCYcH/LSfxwjpwLHeyD6KuQDE
- O7sQPBtCU6Ikk0Bl1R7pMRATVVRHA4EOT0rW2xzwXUPWlCDEQrTZ3fjokzegG8Ke+DEQ
- q9CA==
-X-Gm-Message-State: AOAM532FNEIYjSd+k7t5R4ZoR5jY8aGE3j0A04ZPTz+Rni+ZZii/nVQL
- r76sOvV90TE+Y18jyLcR+zsby0YVCCo=
-X-Google-Smtp-Source: ABdhPJww2Mjfbv1W6p8a3xBuRJihHM/zp+at2lNCp+PhWEne60RmjR8OA31VkmIpArCHuDv9Z8DrBw==
-X-Received: by 2002:a05:600c:240a:b0:38e:af6f:510f with SMTP id
- 10-20020a05600c240a00b0038eaf6f510fmr5609996wmp.46.1649795596838; 
- Tue, 12 Apr 2022 13:33:16 -0700 (PDT)
+ bh=PIFWljaCLwzvANRWPLfgsKY62arSUF8KGxSahjs1Vpw=;
+ b=X++bKBiev4OIJ4atno4ERNV6EfQCYMeIlj8/mQBBTO4Moixo6T92marel1J9QldvIn
+ DGYEdE75yC+ns6Lbc9cWt4Qa7yrcwGaFStHB5YFBpcQRAkms/C5vv4g6DnyU/WDClz73
+ BqDboE39+49+dq/aWSW1HswKawX8UMRZomjnezTJewpaGoNsQY78e3Wp8/iyuPKuXyIH
+ a0tfphe+2KMqA7DqPzgBOm/V9X7KGJFhHcqXn+V/wFHZdhBfbIYHU5NlsLTySzwAskJj
+ 7BMwj8WNSm/khKwz0Z0SDtEdTaZA8xtfPO2/+ki5WlUcD9THIbAMGu5iKzg+6uWV0PuI
+ KmMQ==
+X-Gm-Message-State: AOAM530Tyr5VaG4NNbYlR9C9XMd0wr+ah8vSCru330AKl2qPM7xU1cZL
+ tPdcfdBPDq2oXuWy2K2QxszkDdqOj5Q=
+X-Google-Smtp-Source: ABdhPJw8ZVmVFaJ7D+u5BvQ6+jNXM38exeEGL+jnHV0i1JKtTPsVt1B0sgIts1oicKL3yNg0BOwZAA==
+X-Received: by 2002:a7b:c0d5:0:b0:38e:ca29:f40 with SMTP id
+ s21-20020a7bc0d5000000b0038eca290f40mr3958015wmh.205.1649796641899; 
+ Tue, 12 Apr 2022 13:50:41 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- n7-20020a5d5987000000b00207891050d4sm14122410wri.46.2022.04.12.13.33.16
+ w4-20020a7bc104000000b0038eba17a797sm433832wmi.31.2022.04.12.13.50.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Apr 2022 13:33:16 -0700 (PDT)
+ Tue, 12 Apr 2022 13:50:41 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 22:30:48 +0200
-Message-Id: <20220412203048.23203-1-fontaine.fabrice@gmail.com>
+Date: Tue, 12 Apr 2022 22:48:44 +0200
+Message-Id: <20220412204844.24228-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libudfread: needs __sync_*_4 or
- threads
+Subject: [Buildroot] [PATCH 1/1] package/bpftool: needs __sync_*_4 intrisics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,45 +88,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+Cc: James Hilliard <james.hilliard1@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libudfread needs __sync_*_4 or threads since its addition in commit
-c477885e3f3c31d3922af1fc0e47e6f5f35b1645 and
-https://code.videolan.org/videolan/libudfread/-/commit/06c3cb9223a3cb5ab048e42ab353958f422a8f57
-to avoid the following build failure:
+bpftool needs __sync_*_4 intrisics since its addition in commit
+3675131e6c654d7536a184db0184fde7a97040e0 and
+https://github.com/libbpf/libbpf/commit/b0c3d7133faa55fbcbc19f76f9cc9e183e178c97:
 
-src/udfread.c:108:3: error: #error no atomic operation support
-  108 | # error no atomic operation support
-      |   ^~~~~
+/nvmedata/autobuild/instance-26/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-26/output-1/build/bpftool-v6.7.0/src/libbpf/libbpf.a(libbpf.o): in function `bpf_program__attach_kprobe_opts':
+libbpf.c:(.text+0xff88): undefined reference to `__sync_fetch_and_add_4'
 
 Fixes:
- - http://autobuild.buildroot.org/results/f76d475f49d525095ac0054224b50b9e612691d6
+ - http://autobuild.buildroot.org/results/919b8351d3783ca30a860df87ae814d5c4b9fd41
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libudfread/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/bpftool/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libudfread/Config.in b/package/libudfread/Config.in
-index 8d42570500..c1f3f23af9 100644
---- a/package/libudfread/Config.in
-+++ b/package/libudfread/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_LIBUDFREAD
- 	bool "libudfread"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  UDF reader
+diff --git a/package/bpftool/Config.in b/package/bpftool/Config.in
+index a1ef3843e6..461be9e5b4 100644
+--- a/package/bpftool/Config.in
++++ b/package/bpftool/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
+ config BR2_PACKAGE_BPFTOOL
+ 	bool "bpftool"
+ 	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_nios2 # binutils
+ 	depends on BR2_USE_WCHAR # binutils, elfutils
+ 	depends on !BR2_STATIC_LIBS # elfutils
+@@ -24,6 +25,7 @@ config BR2_PACKAGE_BPFTOOL
  
- 	  https://code.videolan.org/videolan/libudfread
-+
-+comment "libudfread needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_TOOLCHAIN_HAS_THREADS
+ comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.12"
+ 	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_nios2
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
 -- 
 2.35.1
 
