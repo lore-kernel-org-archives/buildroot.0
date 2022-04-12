@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E99C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 18:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEF87C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 18:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F39F1610C2;
-	Tue, 12 Apr 2022 18:02:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 793DF610C2;
+	Tue, 12 Apr 2022 18:02:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aINbaDbQPTIy; Tue, 12 Apr 2022 18:02:13 +0000 (UTC)
+	with ESMTP id q4eW5QO0BjWi; Tue, 12 Apr 2022 18:02:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14177610BA;
-	Tue, 12 Apr 2022 18:02:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06A93610C8;
+	Tue, 12 Apr 2022 18:02:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 707A41BF3C6
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:02:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B73111BF3C6
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6015483F97
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:02:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6E2C83F54
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:02:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WkWAF5R7oncW for <buildroot@lists.busybox.net>;
- Tue, 12 Apr 2022 18:02:09 +0000 (UTC)
+ with ESMTP id 3CSDJEdcDXNp for <buildroot@lists.busybox.net>;
+ Tue, 12 Apr 2022 18:02:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4A50783F68
- for <buildroot@busybox.net>; Tue, 12 Apr 2022 18:02:09 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id u3so28898599wrg.3
- for <buildroot@busybox.net>; Tue, 12 Apr 2022 11:02:09 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D719683F35
+ for <buildroot@busybox.net>; Tue, 12 Apr 2022 18:02:27 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id e21so12373979wrc.8
+ for <buildroot@busybox.net>; Tue, 12 Apr 2022 11:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=F4M93WmuNLsNB+mVXf6Lm8gfzm7pAVmOL9SxxdFseMI=;
- b=qA9uh0OzpIen2GUEKMy6AAs5tDuuV84LAjig71Sw5p34VvxUMQAGoMmcy0LuupIUhU
- w5T7/2blWE5UrKTYlR68ZQZeH8NBq3o5IhPS5y2RnohGrZmiqfJy+Wt51a/dZ9rQ61Ln
- vX513H3GdX2jTKbJkG9C4tuUSF7nBYxc8TgO67dJ6zcIz5SIpkrb3QMTuxC+jYBPUNL+
- fz1nYmBv9RO5AzktDKvm/CA4Zlm7N4aoA6mW4GLPrFfuS8TuurvWXUSdpmAZRRacxlC4
- QN/iK+Lxy3uavkQJ/kgGBVSPJ6OBPqrJWmXr41EKu7WxLU46FVJMseRuwtbbrlUq99+7
- sTwg==
+ bh=cwTAv0FW/4DU+Z6KRVP9ei+jsm0MIqwQrMv9uNmjRj0=;
+ b=o0RK0SnHO0TSGu9VVaMhFNx/L8H+yp4IeAiXUMTx7mmtI1K4fHLfyA7+r9a3seraPi
+ ex78yzpSilux/XJwQnRdc4WEn0gH3/WR8L0z/h6HPaircNcnNvmq8kZhTPCmjSfxF1J8
+ d4Co8o6rh6Hp1n9rZ4wX01Bvl4m3FJdIAJBrO66/DJFvXt+lWM+meXRQ8w2NVyx1gDla
+ NPU7srlz8LKCqeYXoIMzntAC58oK9IepOeRDODWPoF6UCJIESaDZ9gKNf0rdU0RNMkW5
+ Mh7r5DZnPaSUXocTzkFfv35hf420A/g0MzcocPBJY616ghBp17GgTTLDoRHAZhJdIIXF
+ PCsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=F4M93WmuNLsNB+mVXf6Lm8gfzm7pAVmOL9SxxdFseMI=;
- b=mlHymmu5qclZ4pIdiECFzCvEXvr7cxjalH9ARX84Zh4M6mvvmy3NI/nKwwdZukqaph
- PolDNH3KNW3l+Y8TAev0ltMlV7R3BDBSMxOdT5GOtHz+inY/L4O+4ae2FlOlmh9F77X5
- LVGceVjn06gg1LBdxQbrk6TvAAi/CfzTxa5X7qnL3rPPJI+7P+/17COMWZQLlF9SljYq
- fpyM68cdAMJ2vRgkn6bi46H7L/bMysGtYl9m+v49PL/lXhyf5iDe1zpoWc8rOHPyeipZ
- E8K3muKUvEEbGTTY76d2kbdjhCQLJxkO+y0m9txkKwML13mxKqfdN5qCoeZqG9zfiUAU
- VUcw==
-X-Gm-Message-State: AOAM532g1CZfVocT6McnDgyfzpUgolNHg/8QS1iFx7io0xq+6ocRaVrM
- MbkFCbaP+/mah/v6CMY2nh7D5uXIDxA=
-X-Google-Smtp-Source: ABdhPJxcr4ZybO4O1rORZ796qGPOUvCXXzfzzE3SyUOxycgcLltRortphSGgchFYGbUWhfnNYPJBdw==
-X-Received: by 2002:adf:dd10:0:b0:207:a8ce:c152 with SMTP id
- a16-20020adfdd10000000b00207a8cec152mr7461141wrm.714.1649786527526; 
- Tue, 12 Apr 2022 11:02:07 -0700 (PDT)
+ bh=cwTAv0FW/4DU+Z6KRVP9ei+jsm0MIqwQrMv9uNmjRj0=;
+ b=kxHwruLWDdN41bs7Dl+xn8PunDhO1AjoIZNrdcVnuyzoV8K3gCMKYOrLvbxkQgnl6g
+ SJbwcGLEzYXvc0vw1ZIGPlGH+5YcRBjmDydlM5F+jVdNL5A2UkmtrDedrRce7ULtzw5u
+ cgGUzbe6jpaIGuj6UfSQVm+t9KVgbl/YYTWeAYyRC8miREXtErJmf+4pQCiBRipbp2S1
+ bGUfWdpCJIE1nzR2g+y5+e3H75jFLZ5JGVM4ysI3NOTzScG773zqgaM2VdtgD/mi0xHk
+ dTVrPl33GzRRN0zLKSnU22UvApELn/4eDYWMDeJ8B1+CMRJB9Q03g0sTmPLmrRANFzRq
+ Ogvw==
+X-Gm-Message-State: AOAM531VhNvn1MrgpmDCCpLWDDMHNUWWvYIgoWPy+byhcp1Tj4uW7jGO
+ jISX54J5BwJQ7oCrr/cdtvEdW+xwUek=
+X-Google-Smtp-Source: ABdhPJxovy/9fWySVcDfmcSzOZSwt74yLmDtMYNIx/c2hbNpLS1CIh5kssa5puA7OhaLmGqoGhRNCg==
+X-Received: by 2002:a5d:64e3:0:b0:204:1a79:f1b9 with SMTP id
+ g3-20020a5d64e3000000b002041a79f1b9mr29229921wri.330.1649786545888; 
+ Tue, 12 Apr 2022 11:02:25 -0700 (PDT)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- c18-20020a7bc852000000b0038ebf5f191esm170345wml.45.2022.04.12.11.02.06
+ h9-20020a05600c350900b0038cbcbcf994sm153057wmq.36.2022.04.12.11.02.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Apr 2022 11:02:07 -0700 (PDT)
+ Tue, 12 Apr 2022 11:02:25 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 12 Apr 2022 20:01:57 +0200
-Message-Id: <20220412180157.2709680-1-francois.perrad@gadz.org>
+Date: Tue, 12 Apr 2022 20:02:13 +0200
+Message-Id: <20220412180213.2709733-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libevdev: bump  to version 1.12.1
+Subject: [Buildroot] [PATCH] package/mc: bump to version 4.8.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,37 +94,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libevdev/libevdev.hash | 6 +++---
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 68a5ebdcb..dd76e158e 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/input-tools/2021-November/001573.html
--sha256  2f729e3480695791f9482e8388bd723402b89f0eaf118057bbdea3cecee9b237  libevdev-1.12.0.tar.xz
--sha512  6c1c1362d5112cdf3816d1f735c27e625f5463ebf10a83d675cd9364c3fb291ebcb91c051da442f1a36ed28ba7dd99af74546707f61274f7d5715c544a0ed04c  libevdev-1.12.0.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2022-March/001574.html
-+sha256  1dbba41bc516d3ca7abc0da5b862efe3ea8a7018fa6e9b97ce9d39401b22426c  libevdev-1.12.1.tar.xz
-+sha512  eefce287a665e4f89eb2e0437dfefd45ecf8925c7dac35a1bdd46158541f77f2032c6146900a30a01321751d55a9b537bd1d61777cca9cfa02c39a6e31c97be4  libevdev-1.12.1.tar.xz
- 
- # Hash for license files:
- sha256  6f13de7ce28e4948ba95170e0723ee1254c1978ce1f127af82aeca597b567cb9  COPYING
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index cd80154be..726a5afce 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 6400f64b9..b0381474f 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.27.sha256
+-sha256  31be59225ffa9920816e9a8b3be0ab225a16d19e4faf46890f25bdffa02a4ff4  mc-4.8.27.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.28.sha256
++sha256  e994d9be9a7172e9ac4a4ad62107921f6aa312e668b056dfe5b8bcebbaf53803  mc-4.8.28.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 678d687bc..ac12c2173 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEVDEV_VERSION = 1.12.0
-+LIBEVDEV_VERSION = 1.12.1
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = MIT
+-MC_VERSION = 4.8.27
++MC_VERSION = 4.8.28
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
 -- 
 2.32.0
 
