@@ -4,79 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CF53C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 18:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A59C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 18:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32E41416C5;
-	Tue, 12 Apr 2022 18:24:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4A14416C5;
+	Tue, 12 Apr 2022 18:29:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R_VCXs22OvtV; Tue, 12 Apr 2022 18:24:42 +0000 (UTC)
+	with ESMTP id l885oDhg7mjP; Tue, 12 Apr 2022 18:29:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C64314109E;
-	Tue, 12 Apr 2022 18:24:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DA9DB1BF95D
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:24:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9854C40357;
+	Tue, 12 Apr 2022 18:29:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 16E971BF95D
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:29:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7B6B610B9
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:24:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13AAE40357
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:29:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d7ovwNx1hzYI for <buildroot@lists.busybox.net>;
- Tue, 12 Apr 2022 18:24:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l0yE7QNntY0a for <buildroot@lists.busybox.net>;
+ Tue, 12 Apr 2022 18:29:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A568A60FAA
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 18:24:37 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id k22so10398941wrd.2
- for <buildroot@buildroot.org>; Tue, 12 Apr 2022 11:24:37 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9FF6240303
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 18:29:36 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id e21so12471116wrc.8
+ for <buildroot@buildroot.org>; Tue, 12 Apr 2022 11:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=P3NzuBka0+EA9yhaVom5O+/0xmhB01yKPqYlkcFFP3s=;
- b=jxHsLICRxJja/hzvmGiABzt5L0zt+zWy01YLSqXKL+pzf4j5IfomYRfKX3t9+YIq/a
- 80hLnsYZw+mGmrSIi+LqXH1g0kNf4ePxt4dKnFyp1Y/XBE1urd5vwLAboFeOcf4jwqRo
- edYe9e19OTIUPVilG2+9VjNd3F5at7NFo6VvKo6RoQy98BUXSeCzsqJMMA64Em/MBhWR
- gFATGnqhueamzfTEtQEL94wlAhFWzXzYf7aR8ANlTMPWrgLLCyx8Mboy2OIozAzP/IpW
- Ws1r+eUUmtjgXlGwEcfFw3VHd4XxrrrkcYYrAp/cXV7sx/yVmW2MdHWbbfZGEEiuE241
- h1HA==
+ bh=qbKNC8FqqpEciMcyUlTR4+YcNSya58Ngdqag1Q6aY7E=;
+ b=FXGIuIVgL8fmu81crLQcXKz//5KsxR4Iv4efkM2Yw99ebCp3Bt9LbK69S2uiXKcc0v
+ FvW3UPj0RlPX0eQBOa7LuljByZTDxxD8fQ0Yaa/+rxklYBbGLsoZdmHNQj6CN9s/ljh2
+ bJU4GCk8y7juzjwqtPpphddGIEIZDBe+Jvd4nHgAeYTrm+66WxCBFMwiJCLjki3/wsS6
+ 7e6lEvp5WDvC3NinGN5i4B8BM0F6K0YStOpTPmqRvbx71PjjLC2azdoN7ECeKUGB/Iz0
+ OFoh5q4S+y5A/VMnhGZBf7vvjTqEKyIVAHYoNVkptqaj18gJ0wabiYtuxH9Bk5s65gZF
+ 0hyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=P3NzuBka0+EA9yhaVom5O+/0xmhB01yKPqYlkcFFP3s=;
- b=5ak9HMaXqN+nNaTehjsQ8sR42aEnaW5faYrdW+d83OOA3Q0321L7ji9AKgksKQ8NhS
- v2oKeAIwCGZ301P4qx+nQiMH4Yu/4AA8/UdAU4KeV0no5H6880jAnLkr04BN6aTVyNCf
- 5vj890yHPbi3UqQgImp6twXITtWTdTFg3GKV0cjQTTuZBVKXLB3QtN2QHEF+IZWE41Gw
- ds6BVJ42pQEFNQl/8+yVrWdXIllnLdihC9DnmlGNYN3NxuZ3/f0TsLzLuJwGNWzzCV7a
- 7yzuOn9vQUxqeR4Jg9qtsTa8jl+c16dQC/f4ganEVhZ6LcATcR8G9JGGxwVBXkCKqShu
- v1/Q==
-X-Gm-Message-State: AOAM530hkt9GUmbJB5J7gPY2nTyjAonzb2nihdkxgvmMGFew4QF0FOps
- /+FfW/eOJ6mUm8acxB5O6x4+nl078eU=
-X-Google-Smtp-Source: ABdhPJzP3Rw3ixsb8Td5tBw3uvqG10hwPIWhcRSPsSBtCOOxsv1j/yE7sEJU0TLkrmwf+Au0GioRZQ==
-X-Received: by 2002:a5d:6dac:0:b0:205:ccac:c676 with SMTP id
- u12-20020a5d6dac000000b00205ccacc676mr29679122wrs.156.1649787875534; 
- Tue, 12 Apr 2022 11:24:35 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=qbKNC8FqqpEciMcyUlTR4+YcNSya58Ngdqag1Q6aY7E=;
+ b=dtmJxCsYR2f9KI5OEd6yiN9nHEE4P+b+y3oB4KQILUQHu++CXIRN3erIZmd/RyxEgU
+ vpSlzBxW20cOUySZ7eHSDGrr56k0Q+DlhwMjyTRYCxKMlH0HVhWGBbd/ZBOGNXQ8XXtD
+ wqrpxn66XdTQ8XVTT/k0br3KZJjkRjsH6I4OYIS8JxdMRR56+Rnm7xXah3bIJFwLKn8F
+ zW9tI4aLLtyesScB/HwL8PrSePORMi4txGcZyIjQBRMO1iri4FArIF2tIZSraVn9KzIT
+ FCA1/J5LAZMvISK7Z0eqR2hg3+vgjCc+27uC06Mn82O51ks+QOyqQYYjq/zJIZ4a2L0w
+ UcHg==
+X-Gm-Message-State: AOAM530tYUNW3QL9fzZUYkIhqv4xmYygr0+sMjxPkcMLO0rgzAJzlOPz
+ Zab1tpBZVLbnTnCJOoBq6mh5jCmWyGM=
+X-Google-Smtp-Source: ABdhPJy65lDJ1rAbBZVTJY9yyI/C+UEEJjKrPu+7kCc2Xh6/3hSMeqrsj0dev4caV/T9ICFDfB52Gg==
+X-Received: by 2002:adf:e541:0:b0:207:adb8:aab2 with SMTP id
+ z1-20020adfe541000000b00207adb8aab2mr3986790wrm.67.1649788174659; 
+ Tue, 12 Apr 2022 11:29:34 -0700 (PDT)
+Received: from localhost.localdomain (gw1.ms-free.net. [185.243.124.10])
  by smtp.gmail.com with ESMTPSA id
- l41-20020a05600c1d2900b0038ec7fcb979sm197539wms.26.2022.04.12.11.24.34
+ w8-20020a1cf608000000b0038c8fdc93d6sm202961wmc.28.2022.04.12.11.29.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Apr 2022 11:24:35 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Tue, 12 Apr 2022 11:29:34 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 20:22:42 +0200
-Message-Id: <20220412182242.1452070-1-fontaine.fabrice@gmail.com>
+Date: Tue, 12 Apr 2022 20:29:27 +0200
+Message-Id: <20220412182927.142740-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/azure-iot-sdk-c: fix build with
- libressl >= 2.8.0
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump version to 5.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,122 +84,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with libressl >= 2.8.0 raised since
-https://github.com/libressl-portable/openbsd/commit/703abab3212b397d500bd8c2f5f7ee6b03feb159:
+Remove patch from this release.
 
-/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c: In function 'add_certificate_to_store':
-/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c:961:24: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
-  961 |             bio_method = BIO_s_mem();
-      |                        ^
-cc1: all warnings being treated as errors
-
-Fixes:
- - http://autobuild.buildroot.org/results/873f86fb2311ed29a791140f2341943475985fcc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...apters-fix-build-with-libressl-2.8.0.patch | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
+Tested:
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
 
-diff --git a/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch b/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
-new file mode 100644
-index 0000000000..e2a241bffe
---- /dev/null
-+++ b/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
-@@ -0,0 +1,85 @@
-+From 43b313988d66de144a528e4cf57827df1e8c692d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 12 Apr 2022 20:00:36 +0200
-+Subject: [PATCH] adapters: fix build with libressl >= 2.8.0 (#589)
-+
-+Fix the following build failure with libressl >= 2.8.0 raised since
-+https://github.com/libressl-portable/openbsd/commit/703abab3212b397d500bd8c2f5f7ee6b03feb159:
-+
-+/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c: In function 'add_certificate_to_store':
-+/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c:961:24: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
-+  961 |             bio_method = BIO_s_mem();
-+      |                        ^
-+cc1: all warnings being treated as errors
-+
-+Fix #585
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/873f86fb2311ed29a791140f2341943475985fcc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/Azure/azure-c-shared-utility/commit/43b313988d66de144a528e4cf57827df1e8c692d]
-+---
-+ adapters/tlsio_openssl.c                | 2 +-
-+ adapters/x509_openssl.c                 | 4 ++--
-+ tests/x509_openssl_ut/x509_openssl_ut.c | 4 ++--
-+ 3 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/c-utility/adapters/tlsio_openssl.c b/c-utility/adapters/tlsio_openssl.c
-+index 4a3df8496..aa48ce52d 100644
-+--- a/c-utility/adapters/tlsio_openssl.c
-++++ b/c-utility/adapters/tlsio_openssl.c
-+@@ -953,7 +953,7 @@ static int add_certificate_to_store(TLS_IO_INSTANCE* tls_io_instance, const char
-+         }
-+         else
-+         {
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
-+             const BIO_METHOD* bio_method;
-+ #else
-+             BIO_METHOD* bio_method;
-+diff --git a/c-utility/adapters/x509_openssl.c b/c-utility/adapters/x509_openssl.c
-+index 5a9e5ac29..46195b403 100644
-+--- a/c-utility/adapters/x509_openssl.c
-++++ b/c-utility/adapters/x509_openssl.c
-+@@ -75,7 +75,7 @@ static int load_certificate_chain(SSL_CTX* ssl_ctx, const char* certificate)
-+                 // certificates.
-+ 
-+                 /* Codes_SRS_X509_OPENSSL_07_006: [ If successful x509_openssl_add_ecc_credentials shall to import each certificate in the cert chain. ] */
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
-+                 SSL_CTX_clear_extra_chain_certs(ssl_ctx);
-+ #else
-+                 if (ssl_ctx->extra_certs != NULL)
-+@@ -345,7 +345,7 @@ int x509_openssl_add_certificates(SSL_CTX* ssl_ctx, const char* certificates)
-+         else
-+         {
-+             /*Codes_SRS_X509_OPENSSL_02_012: [ x509_openssl_add_certificates shall get the memory BIO method function by calling BIO_s_mem. ]*/
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
-+             const BIO_METHOD* bio_method;
-+ #else
-+             BIO_METHOD* bio_method;
-+diff --git a/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c b/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
-+index b3349f6b0..f73191e3f 100644
-+--- a/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
-++++ b/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
-+@@ -348,7 +348,7 @@ BEGIN_TEST_SUITE(x509_openssl_unittests)
-+         STRICT_EXPECTED_CALL(BIO_new_mem_buf((void*)TEST_PUBLIC_CERTIFICATE, -1));
-+         STRICT_EXPECTED_CALL(PEM_read_bio_X509_AUX(IGNORED_PTR_ARG, NULL, NULL, NULL));
-+         STRICT_EXPECTED_CALL(SSL_CTX_use_certificate(IGNORED_PTR_ARG, IGNORED_PTR_ARG));
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
-+         // Actual macro name: SSL_CTX_clear_extra_chain_certs:
-+         STRICT_EXPECTED_CALL(SSL_CTX_ctrl(TEST_SSL_CTX_STRUCTURE, SSL_CTRL_CLEAR_EXTRA_CHAIN_CERTS, 0, NULL));
-+ #endif
-+@@ -537,7 +537,7 @@ BEGIN_TEST_SUITE(x509_openssl_unittests)
-+ 
-+         umock_c_negative_tests_snapshot();
-+ 
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
-+     #ifdef __APPLE__
-+         size_t calls_cannot_fail_rsa[] = { 4, 5, 6, 10, 12, 13, 14 };
-+         size_t calls_cannot_fail_ecc[] = { 3, 4, 8, 10, 11, 12} ;
+ ...0001-lib-fix-ax25-h-include-for-musl.patch | 37 -------------------
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 39 deletions(-)
+ delete mode 100644 package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch
+
+diff --git a/package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch b/package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch
+deleted file mode 100644
+index 1f8860c5d8..0000000000
+--- a/package/iproute2/0001-lib-fix-ax25-h-include-for-musl.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 8bced38a941a181f1468fa39541e872e51b6022f Mon Sep 17 00:00:00 2001
+-From: Sam James <sam@gentoo.org>
+-Date: Thu, 13 Jan 2022 08:14:13 +0000
+-Subject: [PATCH] lib: fix ax25.h include for musl
+-
+-ax25.h isn't guaranteed to be avilable in netax25/*;
+-it's dependent on our choice of libc (it's not available
+-on musl at least) [0].
+-
+-Let's use the version from linux-headers.
+-
+-[0] https://sourceware.org/glibc/wiki/Synchronizing_Headers
+-Bug: https://bugs.gentoo.org/831102
+-
+-Signed-off-by: Sam James <sam@gentoo.org>
+-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+-
+-[Retrieved from:
+-https://github.com/shemminger/iproute2/commit/8bced38a941a181f1468fa39541e872e51b6022f]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/ax25_ntop.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/ax25_ntop.c b/lib/ax25_ntop.c
+-index cfd0e04b0..3a72a43e9 100644
+---- a/lib/ax25_ntop.c
+-+++ b/lib/ax25_ntop.c
+-@@ -2,7 +2,7 @@
+- 
+- #include <errno.h>
+- #include <sys/socket.h>
+--#include <netax25/ax25.h>
+-+#include <linux/ax25.h>
+- 
+- #include "utils.h"
+- 
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index f7e7f682a9..eafe7a6c9a 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  c064b66f6b001c2a35aa5224b5b1ac8aa4bee104d7dce30d6f10a84cb8b01e2f  iproute2-5.16.0.tar.xz
++sha256  6e384f1b42c75e1a9daac57866da37dcff909090ba86eb25a6e764da7893660e  iproute2-5.17.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index a51b5b2996..8ecde069f5 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.16.0
++IPROUTE2_VERSION = 5.17.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.35.1
 
