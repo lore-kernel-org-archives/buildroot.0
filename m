@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D0CC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 18:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B14FC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 12 Apr 2022 18:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D63C81A4E;
-	Tue, 12 Apr 2022 18:33:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33B6E60E95;
+	Tue, 12 Apr 2022 18:33:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tIwt-lKq0u9f; Tue, 12 Apr 2022 18:33:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7UormoTUIgGg; Tue, 12 Apr 2022 18:33:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5367B81826;
-	Tue, 12 Apr 2022 18:33:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 534F11BF95D
- for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:32:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E6CE610BC;
+	Tue, 12 Apr 2022 18:33:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11D791BF9D1
+ for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DE9D41739
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F1C140B3A
  for <buildroot@lists.busybox.net>; Tue, 12 Apr 2022 18:32:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id im34ktuRyX9G for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LskqPPzvQyfI for <buildroot@lists.busybox.net>;
  Tue, 12 Apr 2022 18:32:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A6FD41737
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47F3240B48
  for <buildroot@buildroot.org>; Tue, 12 Apr 2022 18:32:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 80BF2822ED; Tue, 12 Apr 2022 18:23:11 +0000 (UTC)
+ id A0F8183B14; Tue, 12 Apr 2022 18:23:11 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 12 Apr 2022 20:17:11 +0200
+Date: Tue, 12 Apr 2022 20:30:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e9d9b22797de25e5f6e1249a46258544ae6279f
-X-Git-Newrev: 24d2bc3b1c747fbeb100fa79dfcd9f3645b98dd3
+X-Git-Oldrev: 9e4b7386f06b56c15d3c20d30a6c9dacf6ad41d9
+X-Git-Newrev: 7c814fe9b2fe84d7e294d511c3d62319bcae3281
 X-Patchwork-Hint: ignore
-Message-Id: <20220412182311.80BF2822ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rt-tests: needs __sync_*_4
- intrisics
+Message-Id: <20220412182311.A0F8183B14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dhcp: build internal bind tool gen
+ for host (not target)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24d2bc3b1c747fbeb100fa79dfcd9f3645b98dd3
+commit: https://git.buildroot.net/buildroot/commit/?id=7c814fe9b2fe84d7e294d511c3d62319bcae3281
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-rt-tests needs __sync_*_4 intrisics since bump to version 1.9 in commit
-32be34427956a590d07d12e965f97fa9d2110ae9 and
-https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/?id=c86dec5765e1ad0bd1d0c429ca7c138c11da2c80:
+Building gen tool of the internal (bundled) bind needs to be for host, not target
+Switch to use internal build in commit 0c8dd6ebd656e06cf99a63eb93343715f4853503
+overlooked this.
 
-oslat.c:(.text+0x1034): undefined reference to `__sync_add_and_fetch_4'
+Building dns library in /home/autobuild/autobuild/instance-13/output-1/build/dhcp-4.4.2-P1/bind/bind-9.11.14/lib/dns
+/bin/sh: line 1: ./gen: cannot execute binary file: Exec format error
+
+Thus, we need to set not just CC, but also CFLAGS etc. otherwise the
+target CFLAGS etc. will be inherited from top-level configure.
 
 Fixes:
- - http://autobuild.buildroot.org/results/9b065ee7611db3a404863b85161f46a2e9e8ddad
+ - http://autobuild.buildroot.org/results/da6fd904d1a6bae73b6ff89dd008de1f459bb7d7/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Tim Hammer <Tim.Hammer@orolia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rt-tests/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/dhcp/dhcp.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 47fa7cd840..8efa3d194e 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 	depends on BR2_USE_MMU # fork(), numactl
-@@ -30,6 +31,7 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 460e62a81c..b52bf3a579 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -23,7 +23,12 @@ DHCP_CONF_ENV = \
+ 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+ 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+ 	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+-DHCP_BIND_EXTRA_CONFIG = BUILD_CC='$(TARGET_CC)'
++
++DHCP_BIND_EXTRA_CONFIG = \
++	BUILD_CC='$(HOSTCC)' \
++	BUILD_CFLAGS='$(HOST_CFLAGS)' \
++	BUILD_CPPFLAGS='$(HOST_CPPFLAGS)' \
++	BUILD_LDFLAGS='$(HOST_LDFLAGS)'
  
- comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 4.5, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
- 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 	depends on BR2_USE_MMU
+ DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
