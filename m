@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D22C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 19:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ACCDC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 19:34:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12A71837AC;
-	Wed, 13 Apr 2022 19:23:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1831C417D6;
+	Wed, 13 Apr 2022 19:34:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QtBNujvXXkql; Wed, 13 Apr 2022 19:23:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jmgzpeeU5phh; Wed, 13 Apr 2022 19:34:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91AA48348C;
-	Wed, 13 Apr 2022 19:23:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87DD3417CE;
+	Wed, 13 Apr 2022 19:34:13 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1103B1BF405
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 19:22:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A0D0A1BF405
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 19:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2B9660E31
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 19:22:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F31160AB3
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 19:34:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uhRLg90X8Nq7 for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 19:22:58 +0000 (UTC)
+ with ESMTP id GsU1wGINDhTL for <buildroot@lists.busybox.net>;
+ Wed, 13 Apr 2022 19:34:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0A8CA60E2C
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 19:22:57 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id g18so4022727wrb.10
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 12:22:57 -0700 (PDT)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A755560AA8
+ for <buildroot@buildroot.org>; Wed, 13 Apr 2022 19:34:11 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 123-20020a1c1981000000b0038b3616a71aso1801393wmz.4
+ for <buildroot@buildroot.org>; Wed, 13 Apr 2022 12:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=f2DSMF0skS4znC4LV3tA9qyw7OW5EaobWPpx7i2lzyE=;
- b=HRI2jZHxjAiLIluQOP6Gq4HMcDHfzH2QCGX1tLTLNxYAIfrDV2G8WTvFKW7UgRt2Uw
- zCWb9dvNzd2Ukh/50YBMvMTjBp8zjpuDhMQ3uPZ/k4vb0TuYAl6t+tfQulwTxFUpfGKz
- afPDetNk+Kvi/IcHAoMmbSTBmvN7y+opZA4swX/fSO8sirIJ7fjSglnbuZ+yA+yiG1vw
- x4b7OLBaLrEgHgVOzy2bD4+MbAJPQKtMM5gXveD+8DYRUEsRaUwlvzT35ppcCmTWZVuQ
- dH3Gd/jn6um+Bw1nwm3fiZOLKHhGmGXdjUX2CaH3iSwm0nodUZBG5h3GnqO9pLd+ZtAv
- /4LQ==
+ bh=dgH3Lznlq9u4DoiJyQso6KKHTxfk4hQYrrMUuwW63ew=;
+ b=THGz0Elc8nSkmUgC0i0Oh3hpQnOVRvjTL5xpARa2QZ8TC2hSRbux/vzeEJRy2QsaXh
+ z+jQPtsVFkV0htOja4FuOkQvvcWlFvPyeHtY9YwFKZkKXffQznW1UOmSOZvurkaTNCEL
+ iujyPqoHv4HEw1z5ba+wCBQJ2NPoWkgPFmZWNGBqB53z/J4YkU+iPM6VzVz2wJykEo+G
+ cHhEzy1wSvS3RLAltrs4+7F9Ja8Poz6pZw70LL88HINu+XvxTkYD3DDoOZqAhX/8Md76
+ 1LMo5vJbGiSv5f3byEiA8s8b8H86K9gb8iHbJcJcoRBeOwlovIALjVgRI5/4Wiomaue2
+ Ftfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=f2DSMF0skS4znC4LV3tA9qyw7OW5EaobWPpx7i2lzyE=;
- b=707BdydGIGK+L+l7N/3+HNkADNAIft094rQsJV8zPyeEf/qAododqtYDAdZIMw3yG1
- 9MooTs6q3o8rNxTlkNNbqVcphGnnO7Dq2yrxyEKcL8j2Obe1wrelnUcaKGoiBaek8KUQ
- L1hL0dCW+ELDNJwT/bbiuxvTshOi91xsBvu9D6nVg3r2P3QsE5bjlotMNi2/LjcPxad+
- +2Tb8+gEw4JcmqCxL/3tKALm6u5U6CvrLieJKiFBWLK1wze0SHk242vegcbD6tNM0k+b
- R0zovSPvx3ziiIfkS7dFcf5UtBebNiAJSCEPni7+6/99ZgweVmQS+Zby9DiTnrT14E+E
- YqsQ==
-X-Gm-Message-State: AOAM532EgQdZ+aDFJTQpkFNgMtaGup/xNMyKCmQBMNpUK91IQOv7Aigr
- 2WF7Ok3EuuHz/GXYmMlmiwX2VejaYWc=
-X-Google-Smtp-Source: ABdhPJyusZl04T3avovFU4G3NniXI8D109r0WIO99kf5bWOQKUfJExST+YN7Vdi6dD3WT1kOQF71Fg==
-X-Received: by 2002:a5d:6d0a:0:b0:204:109f:7833 with SMTP id
- e10-20020a5d6d0a000000b00204109f7833mr306908wrq.76.1649877776032; 
- Wed, 13 Apr 2022 12:22:56 -0700 (PDT)
+ bh=dgH3Lznlq9u4DoiJyQso6KKHTxfk4hQYrrMUuwW63ew=;
+ b=18q/a4aSlHJmcXaxMERRwvReQag9EQ31uG1Vb/mU++Nm1IVmTyPvC+Edvv226iYkUb
+ dIqHb6CT0NWVQiib0GHYZAIrNY5x0kUbM+VEGUazzDdEyjepHvjFI9YR+M46q03/qDh/
+ p+0y90+3fR2uxW+ZU4QYlxppxyKrtRfLuEQQtbcxL19S/Vtg8TI18hK0mXqjgy/Cankz
+ +gmNoHIRuIYjXDRz3KZWwn+pyJDOe7xacJLyJg5rOvEGZ+0Q4i0J6EgSjTPeDEMQ1+cT
+ kpL0cgIFfloRpEI1hVbUw0dAexdBA5KzY0j3XBk31y0CdP1wR49bAaJ29Hx54DezoIkl
+ +f8w==
+X-Gm-Message-State: AOAM531sszjTqBCESvMsROoZXmui89Z8DnAR32/yf2BVSxQiHZVK8cHF
+ QHPGhzw6Fgmaj9QDBu9B15gHzT2s0/U=
+X-Google-Smtp-Source: ABdhPJwcNXmm9u3sHcVtTfZO7VhcWbHq9II/i1Dq2ho8rZkxUAtW9ZJFPf44QT2Njqr/79oC+pqqVw==
+X-Received: by 2002:a1c:43c6:0:b0:38e:bb4c:6e1a with SMTP id
+ q189-20020a1c43c6000000b0038ebb4c6e1amr219524wma.111.1649878449611; 
+ Wed, 13 Apr 2022 12:34:09 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- f127-20020a1c3885000000b0038eeaf3e8a0sm2221300wma.43.2022.04.13.12.22.55
+ w17-20020a5d6091000000b00207a89b952asm7654265wrt.77.2022.04.13.12.34.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 13 Apr 2022 12:22:55 -0700 (PDT)
+ Wed, 13 Apr 2022 12:34:09 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Apr 2022 21:21:04 +0200
-Message-Id: <20220413192104.889800-1-fontaine.fabrice@gmail.com>
+Date: Wed, 13 Apr 2022 21:32:16 +0200
+Message-Id: <20220413193216.891178-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/uftrace: needs NPTL
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: disable on riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,49 +88,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-uftrace needs NPTL since its addition in commit
-09c97972d9f90b69cfc36f9ffe9e22c13daf9307 and
-https://github.com/namhyung/uftrace/commit/543fe53c256ceaef2d4d7cc44925bf1ad5a068a8:
+riscv is not supported since switch to internal bind resulting in the
+following build failure since commit
+0c8dd6ebd656e06cf99a63eb93343715f4853503:
 
-buildroot/build/uftrace-0.10/buildroot/build/uftrace-0.10/cmds/record.c:670: undefined reference to `pthread_setname_np'
+Invalid configuration `riscv64-buildroot-linux-musl': machine `riscv64-buildroot' not recognized
 
 Fixes:
- - http://autobuild.buildroot.org/results/8f884efb9d45f9145a4799981157c9226390b423
+ - http://autobuild.buildroot.org/results/d25b76e628ffe5293c6bc1fd467a6b8966cb1bc2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/uftrace/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/dhcp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-index 98ddb7cbfb..8f8c5d25fd 100644
---- a/package/uftrace/Config.in
-+++ b/package/uftrace/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
- config BR2_PACKAGE_UFTRACE
- 	bool "uftrace"
- 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_ARGP_STANDALONE if \
- 	       BR2_TOOLCHAIN_USES_UCLIBC || \
-@@ -23,6 +23,6 @@ config BR2_PACKAGE_UFTRACE
- 
- 	  https://github.com/namhyung/uftrace
- 
--comment "uftrace needs a toolchain w/ threads, dynamic library"
-+comment "uftrace needs a toolchain w/ NPTL, dynamic library"
- 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index e0706efafb..aef031e05b 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DHCP
+ 	bool "dhcp (ISC)"
++	depends on !BR2_riscv
+ 	# fork()
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 -- 
 2.35.1
 
