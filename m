@@ -4,44 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFCFEC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 08:14:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D59C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 08:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67954416EA;
-	Wed, 13 Apr 2022 08:14:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FEF940986;
+	Wed, 13 Apr 2022 08:29:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HJdvS306Wz6o; Wed, 13 Apr 2022 08:14:35 +0000 (UTC)
+	with ESMTP id CxPpjg_dvu0x; Wed, 13 Apr 2022 08:29:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB0074021D;
-	Wed, 13 Apr 2022 08:14:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B45B1BF403
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 08:12:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32971408DC;
+	Wed, 13 Apr 2022 08:29:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B81061BF403
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 08:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2181D82881
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 08:12:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3C4960B34
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 08:29:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cvrfHtscJmBh for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 08:12:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 167C582A6C
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 08:12:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 30A5183C17; Wed, 13 Apr 2022 08:02:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mEbiY-48B4or for <buildroot@lists.busybox.net>;
+ Wed, 13 Apr 2022 08:29:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8C14A60AB3
+ for <buildroot@buildroot.org>; Wed, 13 Apr 2022 08:29:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 78346FF815;
+ Wed, 13 Apr 2022 08:29:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1neYNC-009clX-E1; Wed, 13 Apr 2022 10:29:10 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Apr 2022 10:00:32 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 721901a4ddb4681b234bdf50c96bd8afaeac0d34
-X-Git-Newrev: 4caeb3260d3a192005e030d157685d39a7a0434c
-X-Patchwork-Hint: ignore
-Message-Id: <20220413080257.30A5183C17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pango: bump to
- version 1.50.6
+To: <Eugen.Hristev@microchip.com>
+References: <20220403100318.2581647-1-fontaine.fabrice@gmail.com>
+ <8735ims60b.fsf@dell.be.48ers.dk>
+ <d1a1ead3-98a8-35fe-4c4c-e7fd3f02e058@microchip.com>
+ <CAPi7W81VbAArhoyDEJrNMeseVXgmJzu2+K39njx1j5y3_5mb5g@mail.gmail.com>
+ <8735iifser.fsf@dell.be.48ers.dk>
+ <34fddc8f-8710-65f9-330d-81fefe64354a@microchip.com>
+ <87y20aeb04.fsf@dell.be.48ers.dk>
+ <CAPi7W83dikm9d7KWjKfqYwr7mP3U4WzAzdw6iLF6gmOkTgwB-Q@mail.gmail.com>
+ <8d53da79-2a90-8649-6f46-22b33b7bdbe5@microchip.com>
+Date: Wed, 13 Apr 2022 10:29:10 +0200
+In-Reply-To: <8d53da79-2a90-8649-6f46-22b33b7bdbe5@microchip.com> (Eugen
+ Hristev's message of "Wed, 13 Apr 2022 07:54:54 +0000")
+Message-ID: <87bkx5crop.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: use internal bind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,50 +67,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: fontaine.fabrice@gmail.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4caeb3260d3a192005e030d157685d39a7a0434c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 69836fbf9cd64a758ca60a55742400f23027b6d6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 319d9778c1..fecf368535 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.5.sha256sum
--sha256  6d136872da6207fe88c5cd2c95c36bcaf4ed29402b854663a86cd7efe99b0cf5  pango-1.50.5.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.6.sha256sum
-+sha256  a998bcf36881c3ac20495d40bceb304f4eaa9175bd2967c85656434cbdafe86a  pango-1.50.6.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 69ec5bb490..c264e76741 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).5
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).6
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gICA8RXVnZW4uSHJpc3RldkBtaWNyb2NoaXAuY29tPiB3cml0ZXM6CgogPiBPbiA0LzEy
+LzIyIDk6MTcgUE0sIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6CiA+PiBMZSBtYXIuIDEyIGF2ci4g
+MjAyMiDDoCAxNDozNCwgUGV0ZXIgS29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiBhIMOp
+Y3JpdCA6CiA+Pj4gCiA+Pj4+Pj4+PiA8RXVnZW4uSHJpc3RldkBtaWNyb2NoaXAuY29tPiB3cml0
+ZXM6CiA+Pj4gCiA+Pj4gSGksCiA+Pj4gCiA+Pj4gPj4gWWVhaC4gRXVnZW4sIGlzIHRoZXJlIGFu
+eSBzcGVjaWZpYyByZWFzb24gd2h5IHlvdSB1c2UgdGhlIGRoY3AgcGFja2FnZQogPj4+ID4+IG92
+ZXIgdGhlIG90aGVyIERIQ1AgY2xpZW50cyB3ZSBwcm92aWRlPwogPj4+IAogPj4+ID4gSGlzdG9y
+aWNhbCByZWFzb25zLCBhbmQgdGhlIGZhY3QgdGhhdCBwZW9wbGUgaGF2ZSB3b3JraW5nIGNvbmZp
+Z3VyYXRpb25zCiA+Pj4gPiB1c2luZyB0aGlzIHBhY2thZ2UuLi4gSSB3YXMgdW5hd2FyZSB0aGF0
+IGl0IHdhcyBkdWUgdG8gYmUgcmVtb3ZlZC4KID4+PiA+IFdlIHdpbGwgdHJ5IHRvIHN3aXRjaCB0
+byBhIGRpZmZlcmVudCBwYWNrYWdlIGluIHRoZSBmdXR1cmUuIFRoYW5rcyBmb3IKID4+PiA+IGxl
+dHRpbmcgbWUga25vdy4KID4+PiA+IEhvd2V2ZXIsIGlmIHRoZSBwYWNrYWdlIGlzIHN0aWxsIGlu
+IHRoaXMgYnVpbGRyb290IHJlbGVhc2UsIGl0IGhhcyB0bwogPj4+ID4gd29yayByaWdodCA/CiA+
+Pj4gCiA+Pj4gWWVzLCB0aGF0IGlzIHRoZSBpZGVhLiBJZiBpdCBpcyBkZWFkIHVwc3RyZWFtIGFu
+ZCBoYXJkIHRvIGZpeCB0aGVuIHRoYXQKID4+PiBuYXR1cmFsbHkgbWFrZXMgaXQgaGFyZGVyIHRv
+IGRvLCBidXQgdGhlIGludGVudGlvbiBpcyB0byBmaXggaXQuCiA+PiAKID4+IFRoZSBmb2xsb3dp
+bmcgcGF0Y2ggc2hvdWxkIGZpeCB0aGUgaXNzdWU6CiA+PiBodHRwczovL3BhdGNod29yay5vemxh
+YnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjIwNDEyMTgxNjA3LjE0NTE1ODAtMS1m
+b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbS8KCiA+IEhpLAoKID4geW91ciBwYXRjaCB0b2dldGhl
+ciB3aXRoIHRoZSBvdGhlciBvbmUgKCAKID4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9w
+cm9qZWN0L2J1aWxkcm9vdC9wYXRjaC9EVTBQMjUxTUIwNzc5N0NBQUU4MEM5ODVEQzg5NzYzMzVF
+M0U3OUBEVTBQMjUxTUIwNzc5LkVVUlAyNTEuUFJPRC5PVVRMT09LLkNPTS8KID4gKSwKCiA+IHNv
+bHZlIHRoZSBidWlsZCBwcm9ibGVtIGZvciB0aGlzIHBhY2thZ2UuCgpUaGV5IGFyZSBub3cgYm90
+aCBhZGRlZCB0byB0aGUgMjAyMi4wMi54IGJyYW5jaCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIg
+S29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
