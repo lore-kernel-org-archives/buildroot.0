@@ -1,82 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ACCDC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 19:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF47FC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 20:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1831C417D6;
-	Wed, 13 Apr 2022 19:34:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2740D83E46;
+	Wed, 13 Apr 2022 20:27:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6Bhit5pX3Tuj; Wed, 13 Apr 2022 20:27:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07A8F83E18;
+	Wed, 13 Apr 2022 20:27:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DEB8E1BF38D
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 20:27:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C9F8441732
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 20:27:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jmgzpeeU5phh; Wed, 13 Apr 2022 19:34:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87DD3417CE;
-	Wed, 13 Apr 2022 19:34:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A0D0A1BF405
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 19:34:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F31160AB3
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 19:34:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GsU1wGINDhTL for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 19:34:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A755560AA8
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 19:34:11 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 123-20020a1c1981000000b0038b3616a71aso1801393wmz.4
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 12:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=dgH3Lznlq9u4DoiJyQso6KKHTxfk4hQYrrMUuwW63ew=;
- b=THGz0Elc8nSkmUgC0i0Oh3hpQnOVRvjTL5xpARa2QZ8TC2hSRbux/vzeEJRy2QsaXh
- z+jQPtsVFkV0htOja4FuOkQvvcWlFvPyeHtY9YwFKZkKXffQznW1UOmSOZvurkaTNCEL
- iujyPqoHv4HEw1z5ba+wCBQJ2NPoWkgPFmZWNGBqB53z/J4YkU+iPM6VzVz2wJykEo+G
- cHhEzy1wSvS3RLAltrs4+7F9Ja8Poz6pZw70LL88HINu+XvxTkYD3DDoOZqAhX/8Md76
- 1LMo5vJbGiSv5f3byEiA8s8b8H86K9gb8iHbJcJcoRBeOwlovIALjVgRI5/4Wiomaue2
- Ftfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=dgH3Lznlq9u4DoiJyQso6KKHTxfk4hQYrrMUuwW63ew=;
- b=18q/a4aSlHJmcXaxMERRwvReQag9EQ31uG1Vb/mU++Nm1IVmTyPvC+Edvv226iYkUb
- dIqHb6CT0NWVQiib0GHYZAIrNY5x0kUbM+VEGUazzDdEyjepHvjFI9YR+M46q03/qDh/
- p+0y90+3fR2uxW+ZU4QYlxppxyKrtRfLuEQQtbcxL19S/Vtg8TI18hK0mXqjgy/Cankz
- +gmNoHIRuIYjXDRz3KZWwn+pyJDOe7xacJLyJg5rOvEGZ+0Q4i0J6EgSjTPeDEMQ1+cT
- kpL0cgIFfloRpEI1hVbUw0dAexdBA5KzY0j3XBk31y0CdP1wR49bAaJ29Hx54DezoIkl
- +f8w==
-X-Gm-Message-State: AOAM531sszjTqBCESvMsROoZXmui89Z8DnAR32/yf2BVSxQiHZVK8cHF
- QHPGhzw6Fgmaj9QDBu9B15gHzT2s0/U=
-X-Google-Smtp-Source: ABdhPJwcNXmm9u3sHcVtTfZO7VhcWbHq9II/i1Dq2ho8rZkxUAtW9ZJFPf44QT2Njqr/79oC+pqqVw==
-X-Received: by 2002:a1c:43c6:0:b0:38e:bb4c:6e1a with SMTP id
- q189-20020a1c43c6000000b0038ebb4c6e1amr219524wma.111.1649878449611; 
- Wed, 13 Apr 2022 12:34:09 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- w17-20020a5d6091000000b00207a89b952asm7654265wrt.77.2022.04.13.12.34.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 13 Apr 2022 12:34:09 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ifBI38C3Cp0w for <buildroot@lists.busybox.net>;
+ Wed, 13 Apr 2022 20:27:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8071C41705
+ for <buildroot@buildroot.org>; Wed, 13 Apr 2022 20:27:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 60B1383C36; Wed, 13 Apr 2022 20:17:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 13 Apr 2022 21:32:16 +0200
-Message-Id: <20220413193216.891178-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: disable on riscv
+Date: Wed, 13 Apr 2022 22:27:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4a9157705a5fec20a5a3aa47f7ea6bf4c95942ae
+X-Git-Newrev: 2699eb563156f6e9282342534122cf08ed7a0c25
+X-Patchwork-Hint: ignore
+Message-Id: <20220413201734.60B1383C36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireplumber: fix package by making
+ the dbus dependency optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,41 +52,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7876320082986739772=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-riscv is not supported since switch to internal bind resulting in the
-following build failure since commit
-0c8dd6ebd656e06cf99a63eb93343715f4853503:
+--===============7876320082986739772==
+Content-Type: text/plain
 
-Invalid configuration `riscv64-buildroot-linux-musl': machine `riscv64-buildroot' not recognized
+commit: https://git.buildroot.net/buildroot/commit/?id=2699eb563156f6e9282342534122cf08ed7a0c25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/d25b76e628ffe5293c6bc1fd467a6b8966cb1bc2
+The wireplumber currently as "dbus" in its DEPENDENCIES, but it does
+not select/depend on it at the Kconfig level. A simple configuration
+such as:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_PIPEWIRE=y
+BR2_PACKAGE_WIREPLUMBER=y
+
+Therefore fails to build with:
+
+Makefile:576: *** dbus is in the dependency chain of wireplumber that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+
+Since dbus is actually an optional dependency of wireplumber, this
+commit fixes the issue by really handling it as an optional
+dependency.
+
+Fixes: c9a3c10417aadce9ee4922e30235776409ce8eb3 ("package/wireplumber: new package")
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dhcp/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/wireplumber/wireplumber.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index e0706efafb..aef031e05b 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DHCP
- 	bool "dhcp (ISC)"
-+	depends on !BR2_riscv
- 	# fork()
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--- 
-2.35.1
+diff --git a/package/wireplumber/wireplumber.mk b/package/wireplumber/wireplumber.mk
+index 327138391d..763e3d7639 100644
+--- a/package/wireplumber/wireplumber.mk
++++ b/package/wireplumber/wireplumber.mk
+@@ -9,13 +9,17 @@ WIREPLUMBER_SOURCE = wireplumber-$(WIREPLUMBER_VERSION).tar.bz2
+ WIREPLUMBER_SITE = https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/$(WIREPLUMBER_VERSION)
+ WIREPLUMBER_LICENSE = MIT
+ WIREPLUMBER_LICENSE_FILES = LICENSE
+-WIREPLUMBER_DEPENDENCIES = host-pkgconf dbus pipewire libglib2 lua
++WIREPLUMBER_DEPENDENCIES = host-pkgconf pipewire libglib2 lua
+ 
+ WIREPLUMBER_CONF_OPTS = \
+ 	-Ddoc=disabled \
+ 	-Dsystem-lua=true \
+ 	-Dsystem-lua-version=
+ 
++ifeq ($(BR2_PACKAGE_DBUS),y)
++WIREPLUMBER_DEPENDENCIES += dbus
++endif
++
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ WIREPLUMBER_DEPENDENCIES += host-doxygen host-python-lxml gobject-introspection
+ WIREPLUMBER_CONF_OPTS += -Dintrospection=enabled
+
+--===============7876320082986739772==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7876320082986739772==--
