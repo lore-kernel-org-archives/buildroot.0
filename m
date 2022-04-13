@@ -1,67 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59AFDC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 07:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3927C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 07:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6AA460BDA;
-	Wed, 13 Apr 2022 07:34:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CFD681A6A;
+	Wed, 13 Apr 2022 07:48:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9-9ZwKod8Mf9; Wed, 13 Apr 2022 07:34:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dt1v_QOmYBWv; Wed, 13 Apr 2022 07:48:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 084BF610C3;
-	Wed, 13 Apr 2022 07:34:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 35FE71BF4E6
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 07:34:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A001081348;
+	Wed, 13 Apr 2022 07:48:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E0A7A1BF4E6
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 07:48:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 322E760BA1
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 07:34:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE1FA401A4
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 07:48:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WC8MBLe-r3lz for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 07:34:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M1JJvBnpLIVT for <buildroot@lists.busybox.net>;
+ Wed, 13 Apr 2022 07:48:29 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from gateway.work-microwave.com (gateway.work-microwave.com
- [185.170.114.92])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 031A760B9B
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 07:34:40 +0000 (UTC)
-Received: from mail.work-microwave.com (mail.work-microwave.com [10.9.5.20])
- by gateway.work-microwave.com (Postfix) with ESMTPS id 81D8540223;
- Wed, 13 Apr 2022 09:25:48 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.work-microwave.com (Postfix) with ESMTP id F18A7F22A35;
- Wed, 13 Apr 2022 09:25:47 +0200 (CEST)
-Authentication-Results: mail-wsvr1.work-microwave.com (amavisd-new); dkim=pass
- reason="pass (just generated, assumed good)"
- header.d=work-microwave.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
- work-microwave.com; h=content-transfer-encoding:mime-version
- :x-mailer:message-id:date:date:subject:subject:from:from; s=
- default; t=1649834745; bh=u+V7qY+DAg0DT2dB5SYNlbQLIjT6eZyxdgz0pf
- R0Yrc=; b=tbmEJk5zGbxwMA93hfM5lGAlrXXRdTBJZ4fNVFJK/4umMVOdlDg+no
- acncVa29CE3mwb5Wlv9l1llrMmNLT+Yw8oOaRARs0AwT0M1qvR2chKRdS+q12bsK
- FOYpGMoZ0wC0f2Nh3dTeHqYfmWRKNqyplsokT08vhxtDmTxEp9iIg5Zi2JA9infE
- +0hPH/opcmtNJ/GRI2fOXU40XpK2lYCiqtmjSbE9nx8TBUlk/XVjjVhEjCGN5Kj3
- /KtgPYmGCnSi8huNWZ/M/rxfS0hv6nA4zX+6V3uYc5gvnSVCCx1Xn97Julhr7ZoQ
- 1VvJA5Zuxd90890h1Ik+AFUY9wHhEcgg==
-Received: from mail.work-microwave.com ([127.0.0.1])
- by localhost (mail-wsvr1.work-microwave.com [127.0.0.1]) (amavisd-new,
- port 10026)
- with ESMTP id VxRR8Z4DjFCo; Wed, 13 Apr 2022 09:25:45 +0200 (CEST)
-From: Johannes Agricola <johannes.agricola@work-microwave.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Apr 2022 09:24:46 +0200
-Message-Id: <20220413072445.1600631-1-johannes.agricola@work-microwave.com>
-X-Mailer: git-send-email 2.25.1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 63A494013A
+ for <buildroot@buildroot.org>; Wed, 13 Apr 2022 07:48:29 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BC3B6FF80D;
+ Wed, 13 Apr 2022 07:48:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1neXjk-009ZHe-GQ; Wed, 13 Apr 2022 09:48:24 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220405215207.2696390-1-fontaine.fabrice@gmail.com>
+Date: Wed, 13 Apr 2022 09:48:24 +0200
+In-Reply-To: <20220405215207.2696390-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 5 Apr 2022 23:52:07 +0200")
+Message-ID: <87h76xe853.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libwebsockets: Require C++ toolchain
+Subject: Re: [Buildroot] [PATCH 1/1] package/rt-tests: needs __sync_*_4
+ intrisics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,44 +60,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Johannes Agricola <johannes.agricola@work-microwave.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Autobuild for libwebsockets failed as a C++ toolchain is required:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-http://autobuild.buildroot.net/results/f9631db632211e610b8a146e22bffda0ffb8fa28/build-end.log
+ > rt-tests needs __sync_*_4 intrisics since bump to version 1.9 in commit
+ > 32be34427956a590d07d12e965f97fa9d2110ae9 and
+ > https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/?id=c86dec5765e1ad0bd1d0c429ca7c138c11da2c80:
 
-Signed-off-by: Johannes Agricola <johannes.agricola@work-microwave.com>
----
- package/libwebsockets/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > oslat.c:(.text+0x1034): undefined reference to `__sync_add_and_fetch_4'
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index d7b529cafd..59d1e1097f 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBWEBSOCKETS
- 	bool "libwebsockets"
--	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_STATIC_LIBS && BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Libwebsockets is a lightweight pure C library built to use
-@@ -9,5 +9,5 @@ config BR2_PACKAGE_LIBWEBSOCKETS
- 
- 	  https://libwebsockets.org/
- 
--comment "libwebsockets needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "libwebsockets needs a toolchain w/ dynamic library and C++ support"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9b065ee7611db3a404863b85161f46a2e9e8ddad
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.02.x, thanks.
+
 -- 
-2.25.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
