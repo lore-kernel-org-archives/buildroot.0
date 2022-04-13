@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA77BC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 14:35:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F145C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 15:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73CDD40BA0;
-	Wed, 13 Apr 2022 14:35:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14EE661103;
+	Wed, 13 Apr 2022 15:16:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pI3c2OwlpPVF; Wed, 13 Apr 2022 14:35:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ajPtvLBuyH-b; Wed, 13 Apr 2022 15:16:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F32740BA5;
-	Wed, 13 Apr 2022 14:35:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E31B61BF429
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 14:35:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D5F1610EB;
+	Wed, 13 Apr 2022 15:16:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 99DE81BF41F
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 15:16:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C78564049D
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 14:35:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 958A94026C
+ for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 15:16:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hFP6KIs-O0eF for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 14:35:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dTSOx5rR99fI for <buildroot@lists.busybox.net>;
+ Wed, 13 Apr 2022 15:16:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29ECF4048A
- for <buildroot@uclibc.org>; Wed, 13 Apr 2022 14:35:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC26C4021B
+ for <buildroot@uclibc.org>; Wed, 13 Apr 2022 15:16:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 960DB81504; Wed, 13 Apr 2022 14:25:36 +0000 (UTC)
+ id 1F27081422; Wed, 13 Apr 2022 15:06:30 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 13 Apr 2022 14:35:22 +0000
+Date: Wed, 13 Apr 2022 15:16:16 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -51,7 +51,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14366-163-9iGyBBdk44@https.bugs.busybox.net/>
+Message-ID: <bug-14366-163-z61OlDzfdl@https.bugs.busybox.net/>
 In-Reply-To: <bug-14366-163@https.bugs.busybox.net/>
 References: <bug-14366-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -77,8 +77,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14366
 
---- Comment #8 from Frank Rogall <f.rogall@gmx.de> ---
-Still in 2022.02.1
+--- Comment #9 from Frank Rogall <f.rogall@gmx.de> ---
+(In reply to Jens Maus from comment #7)
+Patch is working on 2022.02.1
 
 -- 
 You are receiving this mail because:
