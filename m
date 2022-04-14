@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A0EFC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60096C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFE73409E0;
-	Thu, 14 Apr 2022 20:02:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1CB460FBB;
+	Thu, 14 Apr 2022 20:02:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VfBnmB4t5Q-w; Thu, 14 Apr 2022 20:02:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2TPr7VBdUytX; Thu, 14 Apr 2022 20:02:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD7A840142;
-	Thu, 14 Apr 2022 20:02:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D320160FAF;
+	Thu, 14 Apr 2022 20:02:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D034D1BF290
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:02:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29B0D1BF290
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9C91418F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA737418EB
  for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:02:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B0xGDgsf1KwO for <buildroot@lists.busybox.net>;
+ with ESMTP id 7oThNPqYWNlk for <buildroot@lists.busybox.net>;
  Thu, 14 Apr 2022 20:02:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE03E418EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id B47CD418EE
  for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:02:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5A16483CC9; Thu, 14 Apr 2022 19:52:36 +0000 (UTC)
+ id 6414783CCA; Thu, 14 Apr 2022 19:52:36 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 14 Apr 2022 21:46:19 +0200
+Date: Thu, 14 Apr 2022 22:02:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 41d22ae1abf3df441273bed9611e473a8326b190
-X-Git-Newrev: 1c79d64ca990da5beeb9682df0dd9e81eae575c4
+X-Git-Oldrev: 1c79d64ca990da5beeb9682df0dd9e81eae575c4
+X-Git-Newrev: f94ba5c31cf7f863e6fae996fc042a56e20118f3
 X-Patchwork-Hint: ignore
-Message-Id: <20220414195236.5A16483CC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: doesn't build with
- libressl
+Message-Id: <20220414195236.6414783CCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wayland: bump to version 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,81 +53,182 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3174814992378332242=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3174814992378332242==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1c79d64ca990da5beeb9682df0dd9e81eae575c4
+commit: https://git.buildroot.net/buildroot/commit/?id=f94ba5c31cf7f863e6fae996fc042a56e20118f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-systemd doesn't plan to fix the following build failure with libressl
-(https://github.com/systemd/systemd/issues/14928) and ED25519 support
-is still not available in libressl
-(https://github.com/libressl-portable/portable/issues/393 opened for
-more than 3 years):
+Drop patches that are now upstream.
 
-../src/home/homed-manager.c: In function ‘manager_generate_key_pair’:
-../src/home/homed-manager.c:1393:35: error: ‘EVP_PKEY_ED25519’ undeclared (first use in this function); did you mean ‘EVP_PKEY_DSA1’?
- 1393 |         ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_ED25519, NULL);
-      |                                   ^~~~~~~~~~~~~~~~
-      |                                   EVP_PKEY_DSA1
-
-Fixes:
- - http://autobuild.buildroot.org/results/47f31b36f123c4be4661f4fde2d1f7385c5d0ed5
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/systemd/Config.in  | 2 ++
- package/systemd/systemd.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .../0001-build-add-option-to-disable-tests.patch   | 58 ---------------------
+ .../0002-meson-only-require-cpp-for-tests.patch    | 59 ----------------------
+ package/wayland/wayland.hash                       |  6 +--
+ package/wayland/wayland.mk                         |  2 +-
+ 4 files changed, 4 insertions(+), 121 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index cc0736561e..00c817172d 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -234,6 +234,7 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # fscrypt_key
- 	select BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
- 	help
- 	  systemd-homed is a system service that may be used to create,
-@@ -412,6 +413,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- config BR2_PACKAGE_SYSTEMD_REPART
- 	bool "enable repart support"
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
- 	help
- 	  systemd-repart grows and adds partitions to a partition table,
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 9feed9c084..58a1376b51 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -498,7 +498,7 @@ else
- SYSTEMD_CONF_OPTS += -Dnss-resolve=false -Dresolve=false
- endif
+diff --git a/package/wayland/0001-build-add-option-to-disable-tests.patch b/package/wayland/0001-build-add-option-to-disable-tests.patch
+deleted file mode 100644
+index 5ecf100d64..0000000000
+--- a/package/wayland/0001-build-add-option-to-disable-tests.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 88f1605a826ca0c2ff02be6f4cf9ecabf68e8341 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Tue, 3 Mar 2020 15:27:51 -0700
+-Subject: [PATCH] build: add option to disable tests
+-
+-When building for a product, tests are not needed.
+-
+-Besides, one test requires a C++ compiler, which is not always
+-available.
+-
+-So, add an option to configure to disable building tests altogether.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/66]
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[yann.morin.1998@free.fr: backport from upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- meson.build       | 4 +++-
+- meson_options.txt | 4 ++++
+- 2 files changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index cdb66bc..714a86d 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -84,7 +84,9 @@ subdir('src')
+- if get_option('libraries')
+- 	subdir('cursor')
+- 	subdir('egl')
+--	subdir('tests')
+-+	if get_option('tests')
+-+		subdir('tests')
+-+	endif
+- 	if get_option('documentation')
+- 		subdir('doc')
+- 	endif
+-diff --git a/meson_options.txt b/meson_options.txt
+-index de588d1..4433fa0 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -6,6 +6,10 @@ option('scanner',
+-   description: 'Compile wayland-scanner binary',
+-   type: 'boolean',
+-   value: 'true')
+-+option('tests',
+-+  description: 'Compile Wayland tests',
+-+  type: 'boolean',
+-+  value: 'true')
+- option('documentation',
+-   description: 'Build the documentation (requires Doxygen, dot, xmlto, xsltproc)',
+-   type: 'boolean',
+--- 
+-2.25.1
+-
+diff --git a/package/wayland/0002-meson-only-require-cpp-for-tests.patch b/package/wayland/0002-meson-only-require-cpp-for-tests.patch
+deleted file mode 100644
+index 84d0e4cf6f..0000000000
+--- a/package/wayland/0002-meson-only-require-cpp-for-tests.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 4c2105312379b62dc84f6eaaf26e2ab293d51b92 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Fri, 16 Apr 2021 02:32:38 -0600
+-Subject: [PATCH] meson: only require cpp for tests
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/130]
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[yann.morin.1998@free.fr: backport from upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- meson.build       |  2 +-
+- tests/meson.build | 16 +++++++++-------
+- 2 files changed, 10 insertions(+), 8 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 12b4641..cdb66bc 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1,5 +1,5 @@
+- project(
+--	'wayland', 'c', 'cpp',
+-+	'wayland', 'c',
+- 	version: '1.19.0',
+- 	license: 'MIT',
+- 	meson_version: '>= 0.52.1',
+-diff --git a/tests/meson.build b/tests/meson.build
+-index a32ac50..2e11af4 100644
+---- a/tests/meson.build
+-+++ b/tests/meson.build
+-@@ -64,15 +64,17 @@ executable(
+- 	dependencies: test_runner_dep
+- )
+- 
+--test(
+--	'cpp-compile-test',
+--	executable(
+-+if add_languages('cpp')
+-+	test(
+- 		'cpp-compile-test',
+--		'cpp-compile-test.cpp',
+--		wayland_server_protocol_h,
+--		include_directories: src_inc
+-+		executable(
+-+			'cpp-compile-test',
+-+			'cpp-compile-test.cpp',
+-+			wayland_server_protocol_h,
+-+			include_directories: src_inc
+-+		)
+- 	)
+--)
+-+endif
+- 
+- sed_path = find_program('sed').path()
+- 
+--- 
+-2.31.1
+-
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index e9dcb63a90..cd4cb1a474 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-January/041692.html
+-sha256  baccd902300d354581cd5ad3cc49daa4921d55fb416a5883e218750fef166d15  wayland-1.19.0.tar.xz
+-sha512  d8a86f5e23e4a88e7c84b82fdb51eb350419086afe462ecb2f4d5c3ba9290ede310cbbcffd60215219ddccf5bad4adec21a5ebfbef6577200f66ac7a1b64a5ef  wayland-1.19.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-December/042064.html
++sha256  b8a034154c7059772e0fdbd27dbfcda6c732df29cae56a82274f6ec5d7cd8725  wayland-1.20.0.tar.xz
++sha512  e8a1f410994b947f850799bdd0d95a2429d8467f853e62a0ab3915a4e9fe130f8aa977e03715114ab740c6ec546edea63d275ce7f927d4f3029ea126e6a7d215  wayland-1.20.0.tar.xz
  
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- SYSTEMD_CONF_OPTS += \
- 	-Dgnutls=false \
- 	-Dopenssl=true \
-
---===============3174814992378332242==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # Locally calculated
+ sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index ecfe95d68a..4c19875bba 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_VERSION = 1.19.0
++WAYLAND_VERSION = 1.20.0
+ WAYLAND_SITE = https://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3174814992378332242==--
