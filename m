@@ -4,78 +4,132 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21D8AC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Apr 2022 22:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38C0DC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 05:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A32886112B;
-	Wed, 13 Apr 2022 22:40:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B3E060D71;
+	Thu, 14 Apr 2022 05:53:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3PdfFe39MJkW; Wed, 13 Apr 2022 22:40:13 +0000 (UTC)
+	with ESMTP id pqADLCwTLVOS; Thu, 14 Apr 2022 05:53:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8627860BD0;
-	Wed, 13 Apr 2022 22:40:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5D1360C24;
+	Thu, 14 Apr 2022 05:53:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC1DF1BF471
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 22:40:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 28F751BF861
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 05:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B37C88278F
- for <buildroot@lists.busybox.net>; Wed, 13 Apr 2022 22:40:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0764A81BBD
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 05:53:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CvwsaXGLY5kH for <buildroot@lists.busybox.net>;
- Wed, 13 Apr 2022 22:40:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A41038277E
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 22:40:10 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id x4so3538998iop.7
- for <buildroot@buildroot.org>; Wed, 13 Apr 2022 15:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zW2Jx3Dqh/x2j1gWI6StAVfUWB+C5GKMUzYcmwMgraE=;
- b=YfJC07/mnYXGmNal0golkednXsu/kBAgcEYULIwpHkDrRgr+XuYziVYM+6uWTfpim2
- mNIf8wXIA4bmyxg4ffwM2jFYDpk04yuYlOK82d2R1voFbBObqEhIhnOU+jXu8qTv6mIo
- Jot9hNv4qIKfkznE/BhDTzX21p+8fhvqup+HInK1VpsNkZrUgjjW3+MvadC8ETUeQ5Hd
- 2C4TKvh5GChpk5uU59O5D+qAzTEMvJ3wGqvuFB8wWIG0P0Dfk1Htn9qZF/M73aYzVDi+
- /uqucYCipOe7F2wKyczEMTScfky1RlDLGnbNIZHCUJclKcEzNxJc28+BxNZWvnWkY1Id
- Yhzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zW2Jx3Dqh/x2j1gWI6StAVfUWB+C5GKMUzYcmwMgraE=;
- b=Csay0v2f93ilcnqkyJLSlSDELgoNG/yyXKnrl80RJqzNrf/aZHCA08vUg5Cwy6zjLz
- XsxsUVJnXvAms5/FWCMfa4ZzftZQkirdheAnCPC3HU4+y0DjDbGhGLxypv3NTTqnLkpP
- 4frOpfhiUxyv+ArHQKzjsgZEeuUwJRplPhzsw16ODdX4haaaZdNc2CpUvDHbsh6I5OQt
- 2GznhBBr81fJ9V7JHPNm9d+dcQyGpKwRY7TngdiSPuBrg/YLYpSI6Tx+CGlDPaIxDhGZ
- 5QlLFMlSCMvoznyC8aCDbkCHYhwCYed9ajHwhfKcssApQaMxITUrWRPB9bweidYIdww9
- 2YBw==
-X-Gm-Message-State: AOAM531xEva3+zJcEiuzK0s1rnDOF44TCuWO8Km5AzFJ1O4Y55dk8Dlw
- bMpIzReul/8P6p0PbT80HIRJJMCwdfKXtA==
-X-Google-Smtp-Source: ABdhPJxVg8pFiRKn2LDEXK3hbDR0d1pVKIeoIVXKVyOrqpKqCHQHGxd9Mi8L84ryld0dSxxdF2X+yA==
-X-Received: by 2002:a05:6638:d51:b0:326:4f60:f2c4 with SMTP id
- d17-20020a0566380d5100b003264f60f2c4mr4442659jak.211.1649889609421; 
- Wed, 13 Apr 2022 15:40:09 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net.
- [71.218.122.133]) by smtp.gmail.com with ESMTPSA id
- c22-20020a5ea816000000b00649d360663asm134662ioa.40.2022.04.13.15.40.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 13 Apr 2022 15:40:08 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Apr 2022 16:40:04 -0600
-Message-Id: <20220413224004.1225568-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id KQ0G9UybYkLu for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 05:53:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from de-smtp-delivery-105.mimecast.com
+ (de-smtp-delivery-105.mimecast.com [194.104.109.105])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EA6DF81A34
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 05:53:44 +0000 (UTC)
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com
+ (mail-ve1eur02lp2050.outbound.protection.outlook.com [104.47.6.50]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-41-OEZWoHzCMIWxQ-i93ahKlQ-1; Thu, 14 Apr 2022 07:53:37 +0200
+X-MC-Unique: OEZWoHzCMIWxQ-i93ahKlQ-1
+Received: from AM0PR02MB5427.eurprd02.prod.outlook.com (2603:10a6:208:158::26)
+ by DB6PR0202MB2853.eurprd02.prod.outlook.com (2603:10a6:4:a9::22)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Thu, 14 Apr
+ 2022 05:53:36 +0000
+Received: from AM0PR02MB5427.eurprd02.prod.outlook.com
+ ([fe80::80eb:bd7c:2c60:221a]) by AM0PR02MB5427.eurprd02.prod.outlook.com
+ ([fe80::80eb:bd7c:2c60:221a%5]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
+ 05:53:35 +0000
+From: Andrei FOMITCHEV HERVIEU <andrei.fomitchevhervieu@getinge.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thread-Topic: [EXT] Re: [Buildroot] [PATCH 1/1] package/opkg: enable openssl
+ signature
+Thread-Index: AQHYTwh9I6bhCgkrqEWc+Sac7HwuS6zuV0QAgACO2lA=
+Date: Thu, 14 Apr 2022 05:53:35 +0000
+Message-ID: <AM0PR02MB5427EEEF5C87B7EDC15E85ABECEF9@AM0PR02MB5427.eurprd02.prod.outlook.com>
+References: <20220413073119.458265-1-andrei.fomitchevhervieu@getinge.com>
+ <20220413230848.63adde79@windsurf>
+In-Reply-To: <20220413230848.63adde79@windsurf>
+Accept-Language: fr-FR, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cde1491a-c511-4b0a-c6d5-08da1ddb1db5
+x-ms-traffictypediagnostic: DB6PR0202MB2853:EE_
+x-microsoft-antispam-prvs: <DB6PR0202MB2853551E5E8433F19F798B3AECEF9@DB6PR0202MB2853.eurprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: A2TBpO/yj3mXdWVRLKKWeuu/Ig7tqmmI+5yhjV4xDTxRhg1Al9sEaN7CkHcUvs8iY9pIN098Q4cSKqGvOKalzyxBjYB5UNcTUDbMzOHnykPgOrgX5euwCnz4xQzXF30i8PZsMJGYDa/knyjgnwg719omkaiEkqRyV7REUlg8XzOqKicm3SnT2+M+juhMVHlF7FmeZDRv+IBDdtfqvGEzqnHhIncezlQUgO9y/xsM05whbRQZLV10u1TS++AawqH7N53s+T/MEYIcXUdsbmBcUcekGb91rMkjvdCp4M6GlMhQaXGWgB2NgtKzq4n1Xh35FBiNKB1COeAZIhZUl/c5TQJlewHe1jJtUAmbwXbZkJIYPDGyqUsi9ArzsLTACdrFU175oOUMqMMmwxE6xkAze8gePhSG/+pChZaIRyqqKc/mlKPzEWKd2uAR2bK1gdSWmC6axrQrvR6lxZy35kZCH98mISWuDEtoMZtJM6Xfe/GuRdZnHV8k03VEwwJvXJcQYsDBRF0sFB9AKIMo6pHqD4f8ZgcEKw1ca75TZ/MFKNnrIsw4d90wz8AY0yzjAGPRzYNGfDNyM6P+ptaVGhgGe9K2FdMhoFiZRN7EHhx1kiUFqZwsF7QqKvbYqnYH8Wl1RDUrBLq1PeeJPZDXt/UxgQgALH5ZA6V71jmjwS8ZFhQXyLHe4CiSV2wsKGcprEqXvj6ZoCqsjHxQxuicFm3ZUoWqG8t9x/96KhhfffO17H9/8Yc8whem5m5s3k65j7Re6aLV96t15bQXbRVQOm+Z092avcxhfcGMS/GxTaWy61U=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AM0PR02MB5427.eurprd02.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(366004)(64756008)(316002)(71200400001)(186003)(8936002)(966005)(66446008)(2906002)(9686003)(7696005)(6506007)(122000001)(4326008)(76116006)(66946007)(52536014)(38100700002)(66476007)(8676002)(66556008)(55016003)(38070700005)(83380400001)(6916009)(33656002)(86362001)(5660300002)(508600001);
+ DIR:OUT; SFP:1101
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cWpyUXZGMWVpdlJ6NFpvWW5remdlZytwV2dwM1Vmd3NNcVNSdmFTRVlTWWRz?=
+ =?utf-8?B?TExhcEdzY1ZRWWxGYzFmZDNxQldpV1NnLzQwSC9JbklWejdXd0JGVzkwNnlk?=
+ =?utf-8?B?eHJJOU1MMmMvdStNTUZhZW5MOXlSVUI0S1Nsdm10QXFqbGFLSnM1NUtzQm42?=
+ =?utf-8?B?VlVna2YyMFgwSjNXVHJtV1hYdk4ycjJNWGVOR0xHK3pyTGVPRU4zOGxncG9L?=
+ =?utf-8?B?K1FlVzR6Mlprc2ZsWUZ6WkY3ckdoRm1XQ0IwSnJiMysxOWhrdGdDZ2dlKzN2?=
+ =?utf-8?B?T01jMmQ4amZQWVllQ1R5QUk5S1ptOGFSc1IyZzdOWjNjQTVoQWRNa1FSMlFN?=
+ =?utf-8?B?akhMNEUrelVXT2dXYVQ2SSt0WlZxUXlxS0ZuNHJ3NktFejE2TENhTmkzbGZi?=
+ =?utf-8?B?czlsdUNLWFpPUzViSFE5TFlmTHdsbGRNSGF0TzZvcFNBbVJsWktvWEU3am1Y?=
+ =?utf-8?B?Uzl4SUxSRXJPcWVxSEJMOVFMekIxWVJmN0ZoTkJXWm1DRldIL1ZhbWlhWnYw?=
+ =?utf-8?B?TWI2dVRPZnFzK09OYTNxanhnWXdqU0VBUWJTbzAzVmJFZDFHUjZzQXJkdXVJ?=
+ =?utf-8?B?dEFkY0VPSjl4YVRKUVhlWlhXdldLS3kwK0VISSt1N3R1R0FrdURyMGk3TW5t?=
+ =?utf-8?B?NEFTS0Z4Z1NnVkJTN2tiNStYWkp0cFI0a2NSWDBIN2kzRElPUWZuZXo1NURh?=
+ =?utf-8?B?VzdiUjErTmxnUVJCKzlJL0R4ZGI3TU1tS09OeUR6OVlVTFdYRUdMYWhYL294?=
+ =?utf-8?B?NytmRkFTUGJzclhFZVk1ZzU5WklBM3E0OGVoQnhEeFVXUEZVV202elJVNTNQ?=
+ =?utf-8?B?emxsL01lY0N4SHREU0pId1pWV20zTHpGVExTbkx2aUQrd2VyMFY1bnY3NnRZ?=
+ =?utf-8?B?TnhLdmovR0x2cDRyekYwSzZXWk1ZMXdRTitGcC9RSjB6dmNiWTh5ZG9UMm9u?=
+ =?utf-8?B?dUhCbDB0R3krTkFIQ05BaGNKMlNTbEI3RkZGQXM2Y0hUbTRYZ0lxdUgxTnBh?=
+ =?utf-8?B?VUduWTVYcUxURG5lK1g3dGRtM0pXeEQzVnVTd0pMNnNZbnhzdklBZjY3YVJE?=
+ =?utf-8?B?VWpheUpVVmZ1VVNReVpiTHFMKzlpeHFWeEJCZW9GYXpTZDdHT0dFVHNSV2pE?=
+ =?utf-8?B?MHNtNGZsMWR3RlBGK3B1c2U3UXZjNWJlUEdoMU9xTDJqUkgyeStpUGFqTG9p?=
+ =?utf-8?B?akJPUy8xekR1Q1Z6WWxTUU1BUEJLdzJua0pURXB5YUtDSGR6V1Y3U1dWaXhm?=
+ =?utf-8?B?dnBscU51RnE5VCtFTW53OHBYekl5UzFZOStmdFM0dm1TY2t1ZlNnVlI1WmZw?=
+ =?utf-8?B?UWs1eHh4QmxCY0ptcU03T0JKSVdDSzRYL2thcUlhNi9QYUtRenpRRkx1Z3pq?=
+ =?utf-8?B?OXRCeVhObDh3MWhKdk0vd0Rnb3NPcC8rVmJEeks5REVWQXU4MTI2MUZLQ0Qx?=
+ =?utf-8?B?S2lsUk5OSjE2TGlRVk1NSCtKRjdBMERSL0EyOStrbmtJTDMrU2poczE4RWh4?=
+ =?utf-8?B?SmRodnY4eHh4Q0M1OWZGK283cjczNmtkK081YkQwMzJQaVkwR2VmNk91Tkgw?=
+ =?utf-8?B?SlNqTjlLYnR5MmVsWkh6ZE1yTFFDRHZ5dEQrWE5Zb0hFTGJtL0NaeFB2L1lx?=
+ =?utf-8?B?elJYVmhRRlcrcENzMWZ1VHFKSUFncG82c0VxcVVPYzJIZXRxc2hHYTlJUE9Y?=
+ =?utf-8?B?Njk4b2VTai9DTFFqOGNJUnU2T2lDeFFEYVpwb2NFT3Z1TVNSUVE4Rko1VWFZ?=
+ =?utf-8?B?Y0RKT2kxb0dGRm9CQ3Y4L3dRVHhCeDIxSStJZkFnNGhWUXVyQzcvK3dqR2Vu?=
+ =?utf-8?B?UkMyMmZGemZPZ3FCc0IxYnlzdmxJbkI0elRQR3Z2OVpibFo2NmQ2ZUcyYzF6?=
+ =?utf-8?B?UUFzbW4xU0dGN2MyMFp3WmVGaDRvZFRVM2FnSEZBdXlraTFWc2VmN2FtV0ZK?=
+ =?utf-8?B?MDc4aXNkNklUZkF6Rm9mM0R3OURRWWtReFJ0dlZ2Qjg3eHNlWFFZd3RKeGNB?=
+ =?utf-8?B?N3h0YXJkZHhqeUcyZzdDYnQrUy96aWxMWC90bjN5Vlh6cjhFZVJUekhUZHkx?=
+ =?utf-8?B?TTdycmRPZE9hWFRSajdCSlpIRU9uS3RBU3czT1JCRlVCMkVoekJaMnN3VXd1?=
+ =?utf-8?B?cG5tTEw1OEFYQytvaXY0ZnZ3MGs2UlpRTkw4M0RHTEFvbHhpb3pOd2pIL2Fq?=
+ =?utf-8?B?Z3ozNDZZNm5lL0ZIemFCMlFMZVJ3NUdmU2JIcnJwTEtlRmR0am16NmNxWm5B?=
+ =?utf-8?B?em1MUHRNZnZKZEJpUDd4ZGNTWk9Nd2dNbVRDK0RkczVRcWh6MnhoYXh5RHRH?=
+ =?utf-8?B?N3NZZmhwa2pNdDE5bFUwQWhIb05XSUV5cDJSbmZKem9sbURTZ2FwOVV3elpK?=
+ =?utf-8?Q?rA/qJAU78YHsy3tzPgcGyJHksVG0kT65hgyCbQ8BoGl1B?=
+x-ms-exchange-antispam-messagedata-1: J9LtMfIfAzNjpaOQ+pMeQxEk6H1UxVsjPeHWqgDT97fHqCOBub3HLWKA
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] utils/genrandconfig: migrate to asyncio
- subprocess calls
+X-OriginatorOrg: getinge.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB5427.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cde1491a-c511-4b0a-c6d5-08da1ddb1db5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2022 05:53:35.9060 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d5faa72a-2614-4d56-abd8-865197339e56
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Om/OW5B74e3vsie4K6o2MaKeCRRx6unssnXS4OlwY979U/3K4jyvivMOrUW9ILJ3VViJiYJISaiwVkWZCSVeWbh7dG4124ze1loSEOnDyl7hkBE6fz0dRaQjcvVJ4v9o
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0202MB2853
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: getinge.com
+Content-Language: fr-FR
+Subject: Re: [Buildroot] [EXT] Re: [PATCH 1/1] package/opkg: enable openssl
+ signature
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,233 +141,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since genrandconfig no longer appears to support python2 we can
-migrate the subprocess calls to use asyncio variants.
-
-This has the advantage of allowing for runners like autobuild-run to
-integrate directly into genrandconfig by calling the asyncio
-gen_config using importlib instead of having to run genrandconfig as
-a subprocess.
-
-Using asyncio is advantageous here as it eliminates the requirement
-for the runner to deal with blocking subprocess calls(by having to
-use threading for example).
-
-Also cleanup some unused functions/python2 compatibility shims.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - compatibility shims for python 3.4 and newer
----
- utils/genrandconfig | 94 +++++++++++++++++++++++++++++----------------
- 1 file changed, 61 insertions(+), 33 deletions(-)
-
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 59fe34e58d..aa82a41d5c 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -18,23 +18,18 @@
- 
- # This script generates a random configuration for testing Buildroot.
- 
--import contextlib
-+import asyncio
- import csv
- import os
- from random import randint
--import subprocess
- import sys
- from distutils.version import StrictVersion
- import platform
- 
--if sys.hexversion >= 0x3000000:
--    import urllib.request as _urllib
-+if sys.version_info < (3, 8):
-+    from asyncio import coroutine
- else:
--    import urllib2 as _urllib
--
--
--def urlopen_closing(uri):
--    return contextlib.closing(_urllib.urlopen(uri))
-+    from types import coroutine
- 
- 
- class SystemInfo:
-@@ -63,6 +58,7 @@ class SystemInfo:
-         # --
-         return None
- 
-+    @coroutine
-     def has(self, prog):
-         """Checks whether a program is available.
-         Lazily evaluates missing entries.
-@@ -78,11 +74,13 @@ class SystemInfo:
-         have_it = self.find_prog(prog)
-         # java[c] needs special care
-         if have_it and prog in ('java', 'javac'):
--            with open(os.devnull, "w") as devnull:
--                if subprocess.call("%s -version | grep gcj" % prog,
--                                   shell=True,
--                                   stdout=devnull, stderr=devnull) != 1:
--                    have_it = False
-+            proc = yield from asyncio.create_subprocess_shell(
-+                "%s -version | grep gcj" % prog,
-+                stdout=asyncio.subprocess.DEVNULL,
-+                stderr=asyncio.subprocess.DEVNULL)
-+            ret = yield from proc.wait()
-+            if ret != 1:
-+                have_it = False
-         # --
-         self.progs[prog] = have_it
-         return have_it
-@@ -159,6 +157,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
-     return configs
- 
- 
-+@coroutine
- def is_toolchain_usable(configfile, config):
-     """Check if the toolchain is actually usable."""
- 
-@@ -179,8 +178,12 @@ def is_toolchain_usable(configfile, config):
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
--            ldd_version_output = subprocess.check_output(['ldd', '--version'])
--            glibc_version = ldd_version_output.splitlines()[0].split()[-1]
-+            proc = yield from asyncio.create_subprocess_exec(
-+                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
-+            ldd_version_output, _ = yield from proc.communicate()
-+            if proc.returncode:
-+                return False
-+            glibc_version = ldd_version_output.splitlines()[0].split()[-1].decode('utf-8')
-             if StrictVersion('2.14') > StrictVersion(glibc_version):
-                 print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
-                 return False
-@@ -188,6 +191,7 @@ def is_toolchain_usable(configfile, config):
-     return True
- 
- 
-+@coroutine
- def fixup_config(sysinfo, configfile):
-     """Finalize the configuration and reject any problematic combinations
- 
-@@ -202,7 +206,8 @@ def fixup_config(sysinfo, configfile):
- 
-     BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
- 
--    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
-+    has_java = yield from sysinfo.has("java")
-+    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not has_java:
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
-@@ -507,6 +512,7 @@ def fixup_config(sysinfo, configfile):
-     return True
- 
- 
-+@coroutine
- def gen_config(args):
-     """Generate a new random configuration
- 
-@@ -565,7 +571,8 @@ def gen_config(args):
- 
-     # Randomly enable BR2_REPRODUCIBLE 10% of times
-     # also enable tar filesystem images for testing
--    if sysinfo.has("diffoscope") and randint(0, 10) == 0:
-+    has_diffoscope = yield from sysinfo.has("diffoscope")
-+    if has_diffoscope and randint(0, 10) == 0:
-         configlines.append("BR2_REPRODUCIBLE=y\n")
-         configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
- 
-@@ -579,10 +586,14 @@ def gen_config(args):
-     with open(configfile, "w+") as configf:
-         configf.writelines(configlines)
- 
--    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                           "olddefconfig"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
-+    ret = yield from proc.wait()
-+    if ret:
-+        return ret
- 
--    if not is_toolchain_usable(configfile, toolchainconfig):
-+    toolchain_usable = yield from is_toolchain_usable(configfile, toolchainconfig)
-+    if not toolchain_usable:
-         return 2
- 
-     # Now, generate the random selection of packages, and fixup
-@@ -596,21 +607,34 @@ def gen_config(args):
-                   file=sys.stderr)
-             return 1
-         bounded_loop -= 1
--        subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                               "KCONFIG_PROBABILITY=%d" % randint(1, 20),
--                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
--
--        if fixup_config(sysinfo, configfile):
-+        proc = yield from asyncio.create_subprocess_exec(
-+            "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-+            "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-+            "randpackageconfig" if args.toolchains_csv else "randconfig")
-+        ret = yield from proc.wait()
-+        if ret:
-+            return ret
-+
-+        ret = yield from fixup_config(sysinfo, configfile)
-+        if ret:
-             break
- 
--    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                           "olddefconfig"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
-+    ret = yield from proc.wait()
-+    if ret:
-+        return ret
- 
--    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                           "savedefconfig"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig")
-+    ret = yield from proc.wait()
-+    if ret:
-+        return ret
- 
--    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                            "dependencies"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies")
-+    ret = yield from proc.wait()
-+    return ret
- 
- 
- if __name__ == '__main__':
-@@ -642,7 +666,11 @@ if __name__ == '__main__':
-     args.outputdir = os.path.abspath(args.outputdir)
- 
-     try:
--        ret = gen_config(args)
-+        if sys.version_info < (3, 7):
-+            loop = asyncio.get_event_loop()
-+            ret = loop.run_until_complete(gen_config(args))
-+        else:
-+            ret = asyncio.run(gen_config(args))
-     except Exception as e:
-         print(str(e), file=sys.stderr)
-         parser.exit(1)
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLA0KDQpUaGFuayB5b3UgZm9yIHRoZSBwb2ludC4gTWF5YmUgeW91IHJlbWVt
+YmVyLCBJIChzdGlsbCkgdXNlIHRoZSB2ZXJzaW9uIDIwMjEuMDIgb2YgYnVpbGRyb290IGFuZCB0
+aGlzIHZlcnNpb24gaW50ZWdyYXRlcyB0aGUgdmVyc2lvbiAwLjQuMiBvZiBPUEtHLiBUaGUgcXVv
+dGVkIGNvbW1lbnQgaW4gT1BLRyBzb3VyY2VzIHdhcyBpbnRyb2R1Y2VkIGluIHYwLjQuNSBhbmQg
+dGhlIHJlYXNvbiBpcyAicmVsYXRpdmVseSB1bnVzZWQgZmVhdHVyZSIgb2YgT3BlblNTTCBzaWdu
+YXR1cmVzIChodHRwczovL2dyb3Vwcy5nb29nbGUuY29tL2cvb3BrZy1kZXZlbC9jL2RycXc1X0h1
+WHVVKS4NClNvIEkgYWdyZWUsIHRoZSBPUEtHIHByb2plY3QgcGxhbnMgbWFrZSBteSBwYXRjaCB0
+byBidWlsZHJvb3QgdXNlbGVzcw0KDQpCZXN0IHJlZ2FyZHMNCg0KRGUgOiBUaG9tYXMgUGV0YXp6
+b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPg0KRW52b3nDqSA6IG1lcmNyZWRpIDEz
+IGF2cmlsIDIwMjIgMjM6MDkNCsOAIDogQW5kcmVpIEZPTUlUQ0hFViBIRVJWSUVVIDxhbmRyZWku
+Zm9taXRjaGV2aGVydmlldUBnZXRpbmdlLmNvbT4NCkNjIDogYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcNCk9iamV0IDogW0VYVF0gUmU6IFtCdWlsZHJvb3RdIFtQQVRDSCAxLzFdIHBhY2thZ2Uvb3Br
+ZzogZW5hYmxlIG9wZW5zc2wgc2lnbmF0dXJlDQoNCkNBVVRJT046IFRoaXMgZW1haWwgb3JpZ2lu
+YXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9yZ2FuaXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtz
+IG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSByZWNvZ25pemUgdGhlIHNlbmRlciBhbmQg
+a25vdyB0aGUgY29udGVudCBpcyBzYWZlLg0KDQpIZWxsbyBBbmRyZcOvLA0KDQpPbiBXZWQsIDEz
+IEFwciAyMDIyIDA5OjMxOjE5ICswMjAwDQpBbmRyZcOvIFYuIEZPTUlUQ0hFVi1IRVJWSUVVIDxt
+YWlsdG86YW5kcmVpLmZvbWl0Y2hldmhlcnZpZXVAZ2V0aW5nZS5jb20+IHdyb3RlOg0KDQo+IE9Q
+S0cgc3VwcG9ydHMgZWl0aGVyIEdQRyBvciBPcGVuU1NMIHNpZ25hdHVyZSBjaGVjay4gSXQgaXMg
+YWxyZWFkeSBwb3NzaWJsZQ0KPiB0byBlbmFibGUgaW4gYnVpbGRyb290IHRoZSBjaGVjayBvZiBH
+UEcgc2lnbmF0dXJlcy4gVGhpcyBwYXRjaCBhZGRzIHNpbWlsYXINCj4gY29uZmlndXJhdGlvbiB0
+byBlbmFibGUgdGhlIE9wZW5TU0wgc2lnbmF0dXJlIGNoZWNrcy4NCj4NCj4gU2lnbmVkLW9mZi1i
+eTogQW5kcmXDryBWLiBGT01JVENIRVYtSEVSVklFVSA8bWFpbHRvOmFuZHJlaS5mb21pdGNoZXZo
+ZXJ2aWV1QGdldGluZ2UuY29tPg0KPiBDaGFuZ2UtSWQ6IElkMmM3NmIzY2IzOWJhNWVlZDViZDBi
+ZWY3NjQ4Zjc5NzAwMzNiODdiDQoNCk5pY2UgdG8gc2VlIHlvdSBoZXJlLCB0aGFua3MgZm9yIHRo
+ZSBjb250cmlidXRpb24hDQoNCkhvd2V2ZXIsIGFyZSB5b3Ugc3VyZSBpdCBtYWtlcyBzZW5zZSB0
+byBzdXBwb3J0IHRoaXMgYW5kIHVzZSB0aGlzPw0KSW5kZWVkLCBvcGtnIGhhcyBkZXByZWNhdGVk
+IHRoZSB1c2FnZSBvZiBvcGVuc3NsIGZvciBzaWduYXR1cmUuIEZyb20NCm9wa2cncyBjb25maWd1
+cmUuYWM6DQoNCkFDX01TR19XQVJOKE9wZW5TU0wgc2lnbmF0dXJlLWNoZWNraW5nIHN1cHBvcnQg
+aXMgZGVwcmFjdGVkIGFuZCB3aWxsIGJlIFwNCnJlbW92ZWQgaW4gZnV0dXJlIHJlbGVhc2VzLiBD
+b25zaWRlciB1c2luZyBHUEdNRSAoLS1lbmFibGUtZ3BnKSBpbnN0ZWFkLikNCg0KU28sIGl0IGlz
+IHJlYWxseSBzZW5zaWJsZSB0byBzdXBwb3J0IHRoaXM/DQoNClRob21hcw0KLS0NClRob21hcyBQ
+ZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4NCkVtYmVkZGVkIExpbnV4IGFuZCBL
+ZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nDQpodHRwczovL2Jvb3RsaW4uY29tDQpUaGlz
+IGVtYWlsIGFuZCBhbnkgZmlsZXMgdHJhbnNtaXR0ZWQgd2l0aCBpdCBhcmUgY29uZmlkZW50aWFs
+IGFuZCBpbnRlbmRlZCBzb2xlbHkgZm9yIHRoZSB1c2Ugb2YgdGhlIGluZGl2aWR1YWwgb3IgZW50
+aXR5IHRvIHdoaWNoIHRoZXkgYXJlIGFkZHJlc3NlZC4gSWYgeW91IGhhdmUgcmVjZWl2ZWQgdGhp
+cyBlbWFpbCBpbiBlcnJvciBwbGVhc2Ugbm90aWZ5IHRoZSBzeXN0ZW0gbWFuYWdlci4gVGhpcyBt
+ZXNzYWdlIGNvbnRhaW5zIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBhbmQgaXMgaW50ZW5kZWQg
+b25seSBmb3IgdGhlIGluZGl2aWR1YWwgbmFtZWQuIElmIHlvdSBhcmUgbm90IHRoZSBuYW1lZCBh
+ZGRyZXNzZWUgeW91IHNob3VsZCBub3QgZGlzc2VtaW5hdGUsIGRpc3RyaWJ1dGUgb3IgY29weSB0
+aGlzIGUtbWFpbC4gUGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGJ5IGUtbWFp
+bCBpZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGUtbWFpbCBieSBtaXN0YWtlIGFuZCBkZWxldGUg
+dGhpcyBlLW1haWwgZnJvbSB5b3VyIHN5c3RlbS4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVk
+IHJlY2lwaWVudCB5b3UgYXJlIG5vdGlmaWVkIHRoYXQgZGlzY2xvc2luZywgY29weWluZywgZGlz
+dHJpYnV0aW5nIG9yIHRha2luZyBhbnkgYWN0aW9uIGluIHJlbGlhbmNlIG9uIHRoZSBjb250ZW50
+cyBvZiB0aGlzIGluZm9ybWF0aW9uIGlzIHN0cmljdGx5IHByb2hpYml0ZWQuDQpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
