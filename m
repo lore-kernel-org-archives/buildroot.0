@@ -1,90 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99A6FC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38775C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4936640A8C;
-	Thu, 14 Apr 2022 20:05:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2FFE41890;
+	Thu, 14 Apr 2022 20:07:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id URMEIhuhLLfV; Thu, 14 Apr 2022 20:05:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LWKr8TrEMhHO; Thu, 14 Apr 2022 20:07:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47FF240286;
-	Thu, 14 Apr 2022 20:05:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE979418EB;
+	Thu, 14 Apr 2022 20:07:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 07D901BF393
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:05:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 34AD91BF393
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DEAF81B60
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:05:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22982831BD
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:07:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 149vOgtDh-Cb for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 20:05:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 38AEE81C2F
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:05:10 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id c64so7698062edf.11
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 13:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=VcweGtiDwjEGKewSAuqChoThyNukFQBPWNCEfbbkF5k=;
- b=AI2zoJ2ZZsZu277+wXqf0Rp6SdIlBX3ylQXo/r0QUMKxIFcbbrfye5W4C7YMPuGqPW
- MM+VOLTpeIFhNBaSZmiyNrQ8XDCY2TpaHm3bRucHEO+sPeXIc9PcDEIQbupcCmF4SCG4
- zNYT9Y8xC4u5y6AMnVhjtBJrjAJuM6T6g6t9ZphunX5DwmB+nM9isiG+6uNt3r3C1JOD
- M5fzNyPbozA+ckm6hyXmqnk+3/OU83bPoBSYMhu/+3UYDMjOxRP6T1Y2pV36xLiu5o2Y
- 6gXsy09bfuNHgb3Pa3MGH6PIqc9vlzZbBsIRaOal4j42HGvU/H4vSU5PO73iUTgICitz
- +BLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=VcweGtiDwjEGKewSAuqChoThyNukFQBPWNCEfbbkF5k=;
- b=cJ4pTFr1Qe2lWfiA61hOjQ4hQx3bqSfiBVKARKjiKYtOiSCYsbxrbd0d2AzDTTME4m
- YWJ7zVtjPKDRQNWLuXRgfkYMJkYa9zkuk2Rp/9Ec7ODzLCVSNBIGZfJ87kTNb9TYPFiw
- MpPq/wdDTMWSSpnTsGREK2joilEOtH8+B33Ets81pd4qzTSNzrjmJ/JDZuJ+8Prxi7OJ
- noSrMev1Bg4bcjWXpJAOaQvEAjHiDouWvk1tMDOChOG7pN99VJqKw3qukKJpCgIcVBuy
- tQWiGXxIBeBFMDSYzPpO1KExLX1n8vSbQ6RDRCehiT+ek1KhwX6jZTkd7l17tcD3Qy9o
- L/nQ==
-X-Gm-Message-State: AOAM5300hW8HCSMVu4Fc0TI1QAJZ5lzCj1nQGnUeIhME2x7yGE54rCRx
- fIVzI71taKmqUNXNkx5E71HzVSZCgh1D9g==
-X-Google-Smtp-Source: ABdhPJx+3UlAzmQVzoeKblkET/NWALN5mB5SQndCwHqm7KIwwHJdksLfnCmVcSaxg+go4M/ZmHayzQ==
-X-Received: by 2002:aa7:d497:0:b0:41d:6fed:9f90 with SMTP id
- b23-20020aa7d497000000b0041d6fed9f90mr4844034edr.325.1649966708221; 
- Thu, 14 Apr 2022 13:05:08 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- jr16-20020a170906a99000b006e4c05e8919sm956399ejb.35.2022.04.14.13.05.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 Apr 2022 13:05:07 -0700 (PDT)
-Message-ID: <6119a03e-24d5-c988-f483-1c3efccda300@mind.be>
-Date: Thu, 14 Apr 2022 22:05:06 +0200
+ with ESMTP id qnkK5NOnyldu for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 20:07:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CEF7282C84
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:07:03 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7CDB91BF203;
+ Thu, 14 Apr 2022 20:07:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nf5k3-00BrQT-Hc; Thu, 14 Apr 2022 22:06:59 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20220405185320.319C18361B@busybox.osuosl.org>
+ <9ca9a86e-917a-ea5a-04bf-b9cd0e15aff5@othermo.de>
+ <07cb544d-bc42-d774-08aa-67cecc96c1b0@mind.be>
+ <87bkx7h299.fsf@dell.be.48ers.dk> <874k2zgxzk.fsf@dell.be.48ers.dk>
+ <4fead5f8-95e6-6f88-6a8c-f62a32fcec9f@mind.be>
+ <87ilrefy9b.fsf@dell.be.48ers.dk>
+ <73baff5b-2b45-446f-e910-be5a21e74c4e@mind.be>
+Date: Thu, 14 Apr 2022 22:06:59 +0200
+In-Reply-To: <73baff5b-2b45-446f-e910-be5a21e74c4e@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 14 Apr 2022 21:15:36 +0200")
+Message-ID: <87h76vbfa4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: Danilo <mail@dbrgn.ch>, buildroot@buildroot.org
-References: <20220410010640.1fdc8ada@c3po>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220410010640.1fdc8ada@c3po>
-Subject: Re: [Buildroot] [PATCH 1/1] package/janus-gateway: Add systemd
- service file
+Subject: Re: [Buildroot] [git commit] package/containerd: security bump to
+ version 1.5.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,69 +66,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 10/04/2022 01:06, Danilo wrote:
-> 
-> Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
+ >> On a related note, the go/rust vendoring stuff isn't great for the
+ >> source mirror, where we basically run make foo-source for all packages -
+ >> And which now builds an internal toolchain and host-go / host-rust
+ >> before doing the download :/ I guess I'll need to rework the mirroring
+ >> logic a bit.
 
-  Applied to master, thanks.
+ >  Just don't delete the output directory?
 
-  Regards,
-  Arnout
+That could kind of work if I used a per-branch output directory and
+cleaned it up one in a while to not have odd behaviour when the
+(dependences of) host-go / host-rust changes yeah.
 
-> ---
->   package/janus-gateway/janus-gateway.mk      |  5 +++++
->   package/janus-gateway/janus-gateway.service | 13 +++++++++++++
->   2 files changed, 18 insertions(+)
->   create mode 100644 package/janus-gateway/janus-gateway.service
-> 
-> diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-> index 84ca0bc116..381843a0af 100644
-> --- a/package/janus-gateway/janus-gateway.mk
-> +++ b/package/janus-gateway/janus-gateway.mk
-> @@ -131,4 +131,9 @@ else
->   JANUS_GATEWAY_CONF_OPTS += --disable-systemd-sockets
->   endif
-> 
-> +define JANUS_GATEWAY_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 644 package/janus-gateway/janus-gateway.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/janus-gateway.service
-> +endef
-> +
->   $(eval $(autotools-package))
-> diff --git a/package/janus-gateway/janus-gateway.service b/package/janus-gateway/janus-gateway.service
-> new file mode 100644
-> index 0000000000..6e6bc7f017
-> --- /dev/null
-> +++ b/package/janus-gateway/janus-gateway.service
-> @@ -0,0 +1,13 @@
-> +[Unit]
-> +Description=Janus WebRTC Gateway
-> +Wants=network.target
-> +StartLimitIntervalSec=0
-> +
-> +[Service]
-> +Type=simple
-> +ExecStart=/usr/bin/janus
-> +Restart=on-failure
-> +RestartSec=5
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> --
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+I'll give it a try.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
