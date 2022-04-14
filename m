@@ -1,86 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28105C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 19:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB4DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 19:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC2F041884;
-	Thu, 14 Apr 2022 19:43:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B96A682B1A;
+	Thu, 14 Apr 2022 19:45:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lBwuR-2KeUAt; Thu, 14 Apr 2022 19:43:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GnpnwWsWLTSu; Thu, 14 Apr 2022 19:45:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FD3E4187B;
-	Thu, 14 Apr 2022 19:43:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 15D151BF290
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:43:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C256B827F0;
+	Thu, 14 Apr 2022 19:45:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 394511BF290
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:45:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 041C160F8D
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:43:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 356A6416B5
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:45:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=paral.in
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X-KB1vKyrlsz for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 19:43:00 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TFIudujd1Hik for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 19:45:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 21F68607F7
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 19:42:59 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id r12so690053iod.6
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 12:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=1HEGYJ0vL6MHfR30vhiz/pQClw4+1pPhHbtJeiWJck8=;
- b=CdtIc0bIR5vOwoTvwXwyYh972EliuL2tEwpMHaeM7uOiTT4/wUZ6/pDyiMvEb5L/78
- dXY58+D1WfbPLjvHPT0nNfDXYM7jKpgxtAdkqFfB1dtSMO1SVpsQ/FQjEF26J30o5T3D
- GF26iODl1UK8sQUGn3BCbZQSdG5dNUVfXR7hwcmH/ssdx/IBRTRgt5MyRzIeizCOsJyV
- D4M8Qgq264uGRYaF49LbbxESZlz5uAEKAWcVyIfYyvEjD8HLH7uc/gvMMdtW3qvKmexy
- +y/ZEKTNp4lmSHzpyEDGXmq02rV8PqIrX/YeF9k6nIVQczf9RVIpzL9wqqGOqACefNHS
- y2Wg==
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 50F70410B0
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 19:45:06 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id 21so7702663edv.1
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 12:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=b2/d8lfpar6VIOJm5eS/l8nmC4UTcsVcDpm2xV4JKZc=;
+ b=G3WXDY9ZmBafL5JEN+CPbQjMqQm5Gz0DP5O5r9JRGxMd2O276/zYOtShRSqwyZ3KWh
+ iRJ62wap1f35/SDm7DUsJPML+dISNw1apiu0ugKzw94/VTlKLr8McY5/fKkxjzysc0jR
+ IthNPOf716/kkOwWE+y2M864k/G8XJ1qNApw3lD8kEpgpDxwu28iVM9J/Gb1blz6coa4
+ gyQ8b5DvYDt3C9oG2fV7AGAFZYbiDQqHmiYO9z5osuf/pWiP3iLaJlBGDi6vL49fGaF0
+ DucUsWqx7j49IJXp3mnFQU1TK589fJ3SeOMj7CqJN4hhU8NkrvtGpYvCuxzO0QF47aMM
+ X75w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=1HEGYJ0vL6MHfR30vhiz/pQClw4+1pPhHbtJeiWJck8=;
- b=mLCBNX5vEIHeld3GCHLAJfEjiYIPVPx20eJ0JpPt4lwIqNeXBfUX0AbAHMjlwnUo9O
- BDdAj/qajUS+QXa5E5XD8r0ehp2eEzMXEbDuKVCp0jWq6rKHhpeGLjQMbLQzr1Y5pLmZ
- /FbSWL87a9tfphvRmGZ8Vg2y8nA/BLH9QvMb2qD/IfntkobKDUQPDr+xa8TRi7v171Kg
- QgMTfGcBSXxrtWwtIIWNnl1/R58DSAO0GaTgvD3127r+1jj7pMHHTcv24yWdmbMd9vxC
- hSYtVHvolFsmVgbiQqQSPyVUly7lE8yx4THQZMuqrIJ5VSkx4TtQ9Hv0ewYwzUJY9/4S
- DFwA==
-X-Gm-Message-State: AOAM531jwFhsYgDVBqq597ifZ8UQUckhOo6qyJjMf9ErqBlfyNsZ/Lqo
- kWSVH0tE5H23qnHB4lbm8t4iazZszCYHvQ==
-X-Google-Smtp-Source: ABdhPJzSrwL7pdzoEErcx+YDMPAXfb4hl4PXu2phcp0sD+Dj0rMe/KguhPd89dX9GxqMVJdvmrxbBw==
-X-Received: by 2002:a05:6638:14d1:b0:326:307e:9a37 with SMTP id
- l17-20020a05663814d100b00326307e9a37mr1780895jak.175.1649965378833; 
- Thu, 14 Apr 2022 12:42:58 -0700 (PDT)
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com.
- [209.85.166.177]) by smtp.gmail.com with ESMTPSA id
- v11-20020a92d24b000000b002caacf87598sm1504707ilg.1.2022.04.14.12.42.58
- for <buildroot@buildroot.org>
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=b2/d8lfpar6VIOJm5eS/l8nmC4UTcsVcDpm2xV4JKZc=;
+ b=nEFkh6AqVAu3HmIgOONzs40mwWPVvXq+UJNYNa/TqvVyDhRFZaFNfqwJl5MBGAOElP
+ C4qRCFdhHZzW0gNw39ax1fu7Ww2X3TqB7IFcP7s45bm0FU7YTVI4069r6rgcmbk7wt85
+ 5YE8Ffo+adz2QAVBX+7ws8MMlyQzkEmcL5ORIKbk0cDrVYKqJtRI2RfMLrkAsuXfVb8R
+ x10S+swlXKVjQnvk8OgiHMKYsimzrAr+k7f/6d6FHbgMuvJRBrNBsbXfONaKQteSUov3
+ 1v1rTbK6WTUpveUvuUPG/fq7KoBU1oJuYL466D/2MN5r/bMJe/PLWvuN4/Pj+kB0S4mJ
+ KUFQ==
+X-Gm-Message-State: AOAM531PoJUBqsHwTaa/gFLoQkPryJckZhsMktm6nPUzLLgsSkQSNQPJ
+ xdflx/8U/gnV57Dm4V/liJWlDg==
+X-Google-Smtp-Source: ABdhPJxrVsKFHz87PT6czQJMtSp3bhP3XTnPx6PHOg6W4JCgJ3qyc6pOrsDtW97hYKa1DEbmeggeVA==
+X-Received: by 2002:a05:6402:51d2:b0:419:7d2e:9d0 with SMTP id
+ r18-20020a05640251d200b004197d2e09d0mr4732626edd.82.1649965504533; 
+ Thu, 14 Apr 2022 12:45:04 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ t19-20020a056402525300b0041952a1a764sm1560363edd.33.2022.04.14.12.45.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 Apr 2022 12:42:58 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id r7so3741162iln.9
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 12:42:58 -0700 (PDT)
-X-Received: by 2002:a05:6e02:12c6:b0:2ca:c0e9:df8c with SMTP id
- i6-20020a056e0212c600b002cac0e9df8cmr1691978ilm.232.1649965378044; Thu, 14
- Apr 2022 12:42:58 -0700 (PDT)
+ Thu, 14 Apr 2022 12:45:04 -0700 (PDT)
+Message-ID: <90261c69-cc58-eedc-d870-3e5fc63d34da@mind.be>
+Date: Thu, 14 Apr 2022 21:45:03 +0200
 MIME-Version: 1.0
-References: <20220413141711.2529851-1-peter@korsgaard.com>
-In-Reply-To: <20220413141711.2529851-1-peter@korsgaard.com>
-Date: Thu, 14 Apr 2022 12:42:47 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2pUPGeTL+gedUxm+mO9sO4NAfnVwBi0w92gFVGX8XTjYA@mail.gmail.com>
-Message-ID: <CA+h8R2pUPGeTL+gedUxm+mO9sO4NAfnVwBi0w92gFVGX8XTjYA@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.17.9
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org,
+ fontaine.fabrice@gmail.com
+References: <20220407005608.203359-1-joel@jms.id.au>
+ <20220407005608.203359-4-joel@jms.id.au>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220407005608.203359-4-joel@jms.id.au>
+Subject: Re: [Buildroot] [PATCH v2 3/3] package/flac: Configure powerpc
+ vector extensions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,45 +98,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Cyril Bur <cyrilbur@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
 
-I also sent a Go 1.18.1 patch, which now works w/ everything in the
-tree (as far as I'm aware).
 
-On Wed, Apr 13, 2022 at 7:17 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> go1.17.9 (released 2022-04-12) includes security fixes to the
-> crypto/elliptic and encoding/pem packages, as well as bug fixes to the
-> linker and runtime.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On 07/04/2022 02:56, Joel Stanley wrote:
+> Remove the hard coded disabling of altivec and vsx, and instead use the
+> BR2_POWERPC_CPU_HAS_VSX and BR2_POWERPC_CPU_HAS_ALTIVEC variables to
+> control the flags.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
 > ---
->  package/go/go.hash | 2 +-
->  package/go/go.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 85e6adfb8c..507887eaaa 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,3 +1,3 @@
->  # From https://golang.org/dl/
-> -sha256  2effcd898140da79a061f3784ca4f8d8b13d811fb2abe9dad2404442dabbdf7a  go1.17.8.src.tar.gz
-> +sha256  763ad4bafb80a9204458c5fa2b8e7327fa971aee454252c0e362c11236156813  go1.17.9.src.tar.gz
+>   package/flac/flac.mk | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+> index 3a18d81591e6..d1cc42f352f2 100644
+> --- a/package/flac/flac.mk
+> +++ b/package/flac/flac.mk
+> @@ -19,9 +19,15 @@ FLAC_AUTORECONF = YES
+>   FLAC_CONF_OPTS = \
+>   	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
 
-Reviewed-by: Christian Stewart <christian@paral.in>
+  I've rewritten this with --enable and --disable in the same style as this.
 
-Thanks,
-Christian
+  Series applied to master, thanks.
+
+  Regards,
+  Arnout
+
+>   	--disable-xmms-plugin \
+> -	--disable-altivec \
+> -	--disable-stack-smash-protection \
+> -	--disable-vsx
+> +	--disable-stack-smash-protection
+> +
+> +ifeq ($(BR2_POWERPC_CPU_HAS_VSX),)
+> +FLAC_CONF_OPTS += --disable-vsx
+> +endif
+> +
+> +ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+> +FLAC_CONF_OPTS += --disable-altivec
+> +endif
+>   
+>   ifeq ($(BR2_PACKAGE_LIBOGG),y)
+>   FLAC_CONF_OPTS += --with-ogg=$(STAGING_DIR)/usr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
