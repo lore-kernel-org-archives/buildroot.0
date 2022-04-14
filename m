@@ -4,79 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15255C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C556C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB58260FCF;
-	Thu, 14 Apr 2022 20:39:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1BFF60FF3;
+	Thu, 14 Apr 2022 20:49:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iajzfwvYSFkn; Thu, 14 Apr 2022 20:39:41 +0000 (UTC)
+	with ESMTP id r_myyLNYrCqk; Thu, 14 Apr 2022 20:49:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EB6260FBB;
-	Thu, 14 Apr 2022 20:39:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DFE8C1BF393
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:39:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C70F160FE5;
+	Thu, 14 Apr 2022 20:49:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DD6E1BF393
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC10841930
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:39:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B88560FE5
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:49:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rxwVqu729iPr for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 20:39:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qTKRN5LRjWL6 for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 20:49:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C663D41920
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:39:37 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id p18so7624747wru.5
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 13:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=pa7ErzfOhNzAOczKb1+vFLghv1FVfD0mrJ1+mRY+Fts=;
- b=MRqWVtdwFwzmVPK/KJr03OabGuL7p46gd2YlXzzFHLDiVUkwIKnM6tRXPBVrNN4tNN
- NQF+jbneGP/jq2RVGaInugxqzyVzAaBT3n/Ro6XULo6CFfKD4iuN7Heblev1bt7/QUUM
- s2Ygd25ofCSQ+70+MkLUyQgSlfy0s5BLdVwBhSHQLvqUpL+wzatIMJMnRDXRcVeFFIwD
- lfR3rqMtYNF95FUtr38Azu5L4mcdbfR0jHwrL+LtQ2cuV2r45/Jd+XH/0aiwNbPUx6OW
- vbGPUG2SpB/NGK13FzcSaaM3pYPG+jPHl4RdQAhgPpBm0TrXwk2A5MYWRBnYRxWfsfty
- fPvg==
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com
+ [209.85.214.172])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6BFA560FDF
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:49:26 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id n8so5679198plh.1
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 13:49:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=pa7ErzfOhNzAOczKb1+vFLghv1FVfD0mrJ1+mRY+Fts=;
- b=xszAzkwrXtAeYW+dWI0REkH3uCTuEmOPQtbnLLIzpJRwx4wFfnA94xjqXqY/P4cQ87
- 8PTuyMQkdZMT7uQLO3wISOZMGndH29hoTXiLwvfC6VY3AYXQVVuWyBgCLdlAOvRB+aBL
- p2xAiBnDyDUePorFGyXSrbYYRdHRN0dQUtlozCRDCy20pHUKIKUx3dWqKgF6SaylYEAy
- EQGpRFUEVm6SHgiKU2dvBGHyNoasXpYy6OTd5UoCdNvI+vpuWBYctrTSDg4SN6N0y0SQ
- ZU5QsfPy/QLLx5VmdM9evvuu5/GHjJ5VCqqP31IWzc7Qcs1TkjQJrpjyu+j9PtXJlD0h
- pNlQ==
-X-Gm-Message-State: AOAM532lWrbussGYXlheolY4MK0XP/FS2Bg7zDIEC7m5r/1yips9Bwxm
- 1JSCWcCAY2wpsoIRNLhy8bov0/nifqY=
-X-Google-Smtp-Source: ABdhPJxTQSm8lIRiujV4hgE5PesYeZar7Pa+YZBbfVeWK6Y0SRiAm6n9srUte0xGJ/FXg7zmF7OrQQ==
-X-Received: by 2002:a5d:4d82:0:b0:207:a0da:8f06 with SMTP id
- b2-20020a5d4d82000000b00207a0da8f06mr3302830wru.680.1649968775687; 
- Thu, 14 Apr 2022 13:39:35 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=lmLuuHcMTv9AZWvvL7LZqwnPb+EZc8G16nErIQxCUcc=;
+ b=BxQqqF24dt7n9QnKU4VwhSr/OZ8FDvmLxtQEx35RSue/Ivxv7r8oWcG8KhcNTmRaDf
+ oj9QG7MNkg2tblq8/vmcOAN4JKMslAgynU0BNXv89BQoYQvrdsSk4GdYblzshANtF8T9
+ XK7suxSZ+nOwhhzeCjVGbJ2Y0X2IYq2QJFUxBTnVLZE+zMWIZbgOO6qNJfblnkPwlB2c
+ Jf3Mat0CiTNpeA5qkzNWuXd2AX7Tf6m9YwFedmiATW9GwOXX/B+QI2nqAxU+/+CB6Tfn
+ GNRj3048J3nZGT7EDcBhsWDeasCr9qu4sCmZODJFAsDZ95c3/94PA1xwq8cf5bJTiw6K
+ cImA==
+X-Gm-Message-State: AOAM533gyVJkYhSQG8JjZBSxi4eIH46HzEPlfwd48RG/ihc0MXKP/Ol9
+ obvYNSVFfyMIOAmK739tvcZ04q9z+83bJw==
+X-Google-Smtp-Source: ABdhPJwZc5s8IOfmjIVCq5+Um0cfL4h2oMOTwBDVexDI7u4ITHxALiNOZ/i5nYhuRrYhAeLnu/khkA==
+X-Received: by 2002:a17:902:ced2:b0:158:85e5:4c8e with SMTP id
+ d18-20020a170902ced200b0015885e54c8emr15266793plg.92.1649969365507; 
+ Thu, 14 Apr 2022 13:49:25 -0700 (PDT)
+Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
  by smtp.gmail.com with ESMTPSA id
- j16-20020a05600c191000b0038c9249ffdesm3233410wmq.9.2022.04.14.13.39.34
+ u7-20020aa78487000000b00505d9277cb3sm729429pfn.38.2022.04.14.13.49.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Apr 2022 13:39:35 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Thu, 14 Apr 2022 13:49:25 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 14 Apr 2022 22:37:44 +0200
-Message-Id: <20220414203744.1819362-1-fontaine.fabrice@gmail.com>
+Date: Thu, 14 Apr 2022 13:49:22 -0700
+Message-Id: <20220414204922.866533-1-christian@paral.in>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: doesn't build with
- libressl
+Subject: [Buildroot] [PATCH v2 1/1] package/go: add support for riscv64
+ architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,44 +74,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-pure-ftpd doesn't build with libressl 3.4.3 which doesn't include
-https://github.com/libressl-portable/openbsd/commit/f5674b4e2330b382bacefd3393affc8eb2ee2ba8
-resulting in the following build failure:
+Enable the supported "riscv64" GOARCH.
 
-tls.c: In function 'tls_init_options':
-tls.c:329:5: warning: implicit declaration of function 'SSL_CTX_set_num_tickets'; did you mean 'SSL_CTX_set_options'? [-Wimplicit-function-declaration]
-     SSL_CTX_set_num_tickets(tls_ctx, 0);
-     ^~~~~~~~~~~~~~~~~~~~~~~
-     SSL_CTX_set_options
+Add a patch to fix a build failure due to GOARCH leaking into the calls to the
+go-bootstrap compiler. Unsets the GOARCH before calling go-bootstrap.
 
-Fixes:
- - http://autobuild.buildroot.org/results/f5d36180949278510199aa499e253780558c6ffe
+PR: https://github.com/golang/go/pull/52362
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+
 ---
- package/pure-ftpd/pure-ftpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index f3cbef84b9..0354949e28 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -45,7 +45,7 @@ else
- PURE_FTPD_CONF_OPTS += --without-ldap
- endif
+v1 -> v2:
+
+ - fixed build error with go-bootstrap
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ ...explicit-option-for-crosscompilation.patch |   8 +-
+ ...set-environment-before-generating-bu.patch | 111 ++++++++++++++++++
+ package/go/Config.in.host                     |   2 +-
+ package/go/go.mk                              |   2 +
+ 4 files changed, 118 insertions(+), 5 deletions(-)
+ create mode 100644 package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+
+diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+index f76c5b1d03..a32a6ee355 100644
+--- a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
++++ b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+@@ -1,4 +1,4 @@
+-From e1382a731a726293e30901038c6870fa77ef6095 Mon Sep 17 00:00:00 2001
++From 86fa3da18b5c73cc84dec91d92db4ae95f288bdc Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Date: Tue, 8 May 2018 16:08:44 +0200
+ Subject: [PATCH] build.go: explicit option for crosscompilation
+@@ -17,10 +17,10 @@ Signed-off-by: Anisse Astier <anisse@astier.eu>
+  1 file changed, 2 insertions(+), 1 deletion(-)
  
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- PURE_FTPD_CONF_OPTS += --with-tls
- PURE_FTPD_DEPENDENCIES += host-pkgconf openssl
- PURE_FTPD_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ diff --git a/src/cmd/dist/build.go b/src/cmd/dist/build.go
+-index 99d1db5..eb4097f 100644
++index d37c3f83ef..d838485bd3 100644
+ --- a/src/cmd/dist/build.go
+ +++ b/src/cmd/dist/build.go
+-@@ -252,12 +252,13 @@ func xinit() {
++@@ -273,12 +273,13 @@ func xinit() {
+  // $CC_FOR_goos_goarch, if set, applies only to goos/goarch.
+  func compilerEnv(envName, def string) map[string]string {
+  	m := map[string]string{"": def}
+@@ -36,5 +36,5 @@ index 99d1db5..eb4097f 100644
+  		}
+  		m[""] = env
+ -- 
+-2.7.4
++2.35.1
+ 
+diff --git a/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch b/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+new file mode 100644
+index 0000000000..44b3fbecc2
+--- /dev/null
++++ b/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+@@ -0,0 +1,111 @@
++From 00f3f4ee0d477779c87e4e60b08708362670e122 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Thu, 14 Apr 2022 13:34:26 -0700
++Subject: [PATCH] build: bootstrap: set environment before generating buildcfg
++
++The GOOS and GOARCH environment variables should be unset before calling
++mkbuildcfg. This change fixes a build failure when GOARCH=riscv64.
++
++Building Go toolchain1 using go-1.4-bootstrap-20171003.
++src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
++invalid operation: y << x (shift count type int64, must be unsigned integer)
++
++There is a build issue with go1.4 with the riscv64 code: however, why is the
++riscv64 code being compiled at all?
++
++GOARCH is set when calling mkbuildcfg, so go1.4 is trying to compile riscv64.
++---
++ src/cmd/dist/buildtool.go | 56 ++++++++++++++++++++-------------------
++ 1 file changed, 29 insertions(+), 27 deletions(-)
++
++diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
++index 036f8c52fa..73f6524969 100644
++--- a/src/cmd/dist/buildtool.go
+++++ b/src/cmd/dist/buildtool.go
++@@ -112,9 +112,6 @@ func bootstrapBuildTools() {
++ 	}
++ 	xprintf("Building Go toolchain1 using %s.\n", goroot_bootstrap)
++ 
++-	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
++-	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
++-
++ 	// Use $GOROOT/pkg/bootstrap as the bootstrap workspace root.
++ 	// We use a subdirectory of $GOROOT/pkg because that's the
++ 	// space within $GOROOT where we store all generated objects.
++@@ -126,6 +123,34 @@ func bootstrapBuildTools() {
++ 	base := pathf("%s/src/bootstrap", workspace)
++ 	xmkdirall(base)
++ 
+++	// Set up environment for invoking Go 1.4 go command.
+++	// GOROOT points at Go 1.4 GOROOT,
+++	// GOPATH points at our bootstrap workspace,
+++	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
+++	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
+++	// so that Go 1.4 builds whatever kind of binary it knows how to build.
+++	// Restore GOROOT, GOPATH, and GOBIN when done.
+++	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
+++	// because setup will take care of those when bootstrapBuildTools returns.
+++
+++	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
+++	os.Setenv("GOROOT", goroot_bootstrap)
+++
+++	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
+++	os.Setenv("GOPATH", workspace)
+++
+++	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
+++	os.Setenv("GOBIN", "")
+++
+++	os.Setenv("GOOS", "")
+++	os.Setenv("GOHOSTOS", "")
+++	os.Setenv("GOARCH", "")
+++	os.Setenv("GOHOSTARCH", "")
+++
+++	// Create the build config files.
+++	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
+++	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
+++
++ 	// Copy source code into $GOROOT/pkg/bootstrap and rewrite import paths.
++ 	writefile("module bootstrap\n", pathf("%s/%s", base, "go.mod"), 0)
++ 	for _, dir := range bootstrapDirs {
++@@ -172,30 +197,6 @@ func bootstrapBuildTools() {
++ 		})
++ 	}
++ 
++-	// Set up environment for invoking Go 1.4 go command.
++-	// GOROOT points at Go 1.4 GOROOT,
++-	// GOPATH points at our bootstrap workspace,
++-	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
++-	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
++-	// so that Go 1.4 builds whatever kind of binary it knows how to build.
++-	// Restore GOROOT, GOPATH, and GOBIN when done.
++-	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
++-	// because setup will take care of those when bootstrapBuildTools returns.
++-
++-	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
++-	os.Setenv("GOROOT", goroot_bootstrap)
++-
++-	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
++-	os.Setenv("GOPATH", workspace)
++-
++-	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
++-	os.Setenv("GOBIN", "")
++-
++-	os.Setenv("GOOS", "")
++-	os.Setenv("GOHOSTOS", "")
++-	os.Setenv("GOARCH", "")
++-	os.Setenv("GOHOSTARCH", "")
++-
++ 	// Run Go 1.4 to build binaries. Use -gcflags=-l to disable inlining to
++ 	// workaround bugs in Go 1.4's compiler. See discussion thread:
++ 	// https://groups.google.com/d/msg/golang-dev/Ss7mCKsvk8w/Gsq7VYI0AwAJ
++@@ -217,6 +218,7 @@ func bootstrapBuildTools() {
++ 		cmd = append(cmd, "-toolexec="+tool)
++ 	}
++ 	cmd = append(cmd, "bootstrap/cmd/...")
+++
++ 	run(base, ShowOutput|CheckExit, cmd...)
++ 
++ 	// Copy binaries into tool binary directory.
++-- 
++2.35.1
++
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index e82ab6e81a..8be86103ea 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+ 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+-		|| BR2_mips64 || BR2_mips64el || BR2_s390x
++		|| BR2_mips64 || BR2_mips64el || BR2_riscv || BR2_s390x
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	# MIPS R6 support in Go has not yet been developed.
+ 	depends on !BR2_MIPS_CPU_MIPS64R6
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 3df16c9a68..ba0da74b86 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -63,6 +63,8 @@ else ifeq ($(BR2_mips64),y)
+ GO_GOARCH = mips64
+ else ifeq ($(BR2_mips64el),y)
+ GO_GOARCH = mips64le
++else ifeq ($(BR2_riscv),y)
++GO_GOARCH = riscv64
+ else ifeq ($(BR2_s390x),y)
+ GO_GOARCH = s390x
+ endif
 -- 
 2.35.1
 
