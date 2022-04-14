@@ -4,57 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38775C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 862EFC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2FFE41890;
-	Thu, 14 Apr 2022 20:07:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3027541545;
+	Thu, 14 Apr 2022 20:11:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LWKr8TrEMhHO; Thu, 14 Apr 2022 20:07:07 +0000 (UTC)
+	with ESMTP id dILuMGM3qRaJ; Thu, 14 Apr 2022 20:11:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE979418EB;
-	Thu, 14 Apr 2022 20:07:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 34AD91BF393
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:07:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE23416B5;
+	Thu, 14 Apr 2022 20:11:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 88A951BF393
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 22982831BD
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:07:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75862404D7
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:11:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qnkK5NOnyldu for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 20:07:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D3MzFd_KHQiI for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 20:11:31 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CEF7282C84
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:07:03 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 11AA340142
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:11:30 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7CDB91BF203;
- Thu, 14 Apr 2022 20:07:00 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 690EB100006;
+ Thu, 14 Apr 2022 20:11:27 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nf5k3-00BrQT-Hc; Thu, 14 Apr 2022 22:06:59 +0200
+ id 1nf5oM-00Brjj-9u; Thu, 14 Apr 2022 22:11:26 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220405185320.319C18361B@busybox.osuosl.org>
- <9ca9a86e-917a-ea5a-04bf-b9cd0e15aff5@othermo.de>
- <07cb544d-bc42-d774-08aa-67cecc96c1b0@mind.be>
- <87bkx7h299.fsf@dell.be.48ers.dk> <874k2zgxzk.fsf@dell.be.48ers.dk>
- <4fead5f8-95e6-6f88-6a8c-f62a32fcec9f@mind.be>
- <87ilrefy9b.fsf@dell.be.48ers.dk>
- <73baff5b-2b45-446f-e910-be5a21e74c4e@mind.be>
-Date: Thu, 14 Apr 2022 22:06:59 +0200
-In-Reply-To: <73baff5b-2b45-446f-e910-be5a21e74c4e@mind.be> (Arnout
- Vandecappelle's message of "Thu, 14 Apr 2022 21:15:36 +0200")
-Message-ID: <87h76vbfa4.fsf@dell.be.48ers.dk>
+To: Christian Stewart <christian@paral.in>
+References: <20220413141711.2529851-1-peter@korsgaard.com>
+ <CA+h8R2pUPGeTL+gedUxm+mO9sO4NAfnVwBi0w92gFVGX8XTjYA@mail.gmail.com>
+Date: Thu, 14 Apr 2022 22:11:26 +0200
+In-Reply-To: <CA+h8R2pUPGeTL+gedUxm+mO9sO4NAfnVwBi0w92gFVGX8XTjYA@mail.gmail.com>
+ (Christian Stewart's message of "Thu, 14 Apr 2022 12:42:47 -0700")
+Message-ID: <87czhjbf2p.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/containerd: security bump to
- version 1.5.11
+Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.17.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,29 +60,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Anisse Astier <anisse@astier.eu>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Hi,
+ > Hi,
+ > I also sent a Go 1.18.1 patch, which now works w/ everything in the
+ > tree (as far as I'm aware).
 
- >> On a related note, the go/rust vendoring stuff isn't great for the
- >> source mirror, where we basically run make foo-source for all packages -
- >> And which now builds an internal toolchain and host-go / host-rust
- >> before doing the download :/ I guess I'll need to rework the mirroring
- >> logic a bit.
+Ok, the 1.17.9 bump is handy for backporting to 2022.02.x first though.
 
- >  Just don't delete the output directory?
+>> crypto/elliptic and encoding/pem packages, as well as bug fixes to the
+ >> linker and runtime.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/go/go.hash | 2 +-
+ >> package/go/go.mk   | 2 +-
+ >> 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> 
+ >> diff --git a/package/go/go.hash b/package/go/go.hash
+ >> index 85e6adfb8c..507887eaaa 100644
+ >> --- a/package/go/go.hash
+ >> +++ b/package/go/go.hash
+ >> @@ -1,3 +1,3 @@
+ >> # From https://golang.org/dl/
+ >> -sha256  2effcd898140da79a061f3784ca4f8d8b13d811fb2abe9dad2404442dabbdf7a  go1.17.8.src.tar.gz
+ >> +sha256  763ad4bafb80a9204458c5fa2b8e7327fa971aee454252c0e362c11236156813  go1.17.9.src.tar.gz
 
-That could kind of work if I used a per-branch output directory and
-cleaned it up one in a while to not have odd behaviour when the
-(dependences of) host-go / host-rust changes yeah.
+ > Reviewed-by: Christian Stewart <christian@paral.in>
 
-I'll give it a try.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
