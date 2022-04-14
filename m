@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA93AC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:12:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3941C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 20:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6761640A90;
-	Thu, 14 Apr 2022 20:12:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F73Qs1ByAijh; Thu, 14 Apr 2022 20:12:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E4C4404D7;
-	Thu, 14 Apr 2022 20:12:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E0FB41C1189
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:11:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCF09831E3
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5280783300;
+	Thu, 14 Apr 2022 20:12:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t0X_QENaxmTU for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 20:11:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBDA082C84
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:11:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 74D0E83CC8; Thu, 14 Apr 2022 20:01:53 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FFRSmq7ixPxk; Thu, 14 Apr 2022 20:12:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6982B831E3;
+	Thu, 14 Apr 2022 20:12:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A3A21BF393
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:11:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7791B409E0
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 20:11:55 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 781N6cQYxeJZ for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 20:11:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 683D4404D7
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:11:54 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 971491C0003
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 20:11:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1nf5ok-00Brm6-7L
+ for buildroot@buildroot.org; Thu, 14 Apr 2022 22:11:50 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Apr 2022 22:09:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e5c1dbb22bdd0e1daf9302ddc5ac7c89c461b05
-X-Git-Newrev: 83aeec71fd6488295292bd1886decfe1874f9442
-X-Patchwork-Hint: ignore
-Message-Id: <20220414200153.74D0E83CC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libkcapi: fix build with
- BR2_OPTIMIZE_0
+References: <20220413121822.2448474-1-peter@korsgaard.com>
+Date: Thu, 14 Apr 2022 22:11:50 +0200
+In-Reply-To: <20220413121822.2448474-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 13 Apr 2022 14:18:22 +0200")
+Message-ID: <874k2vbf21.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/subversion: security bump to
+ version 1.14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,51 +60,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83aeec71fd6488295292bd1886decfe1874f9442
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Override CPPFLAGS to fix the following build failure with BR2_OPTIMIZE_0
-raised since bump to version 0.14.0 in commit
-cd707a9112e38b4ce98326b96c0ed12054ca1cca and
-https://github.com/smuellerDD/libkcapi/commit/0e7b2b0300782aca19c324f3352f109777b4c51a:
+ > Fixes the following security issues:
+ > - CVE-2021-28544: SVN authz protected copyfrom paths regression
 
-/home/autobuild/autobuild/instance-15/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
+ >   Subversion servers reveal 'copyfrom' paths that should be hidden according
+ >   to configured path-based authorization (authz) rules.  When a node has
+ >   been copied from a protected location, users with access to the copy can
+ >   see the `copyfrom' path of the original.  This also reveals the fact that
+ >   the node was copied.  Only the 'copyfrom' path is revealed; not its
+ >   contents.  Both httpd and svnserve servers are vulnerable.
 
-configure adds -D_FORTIFY_SOURCE to CPPFLAGS if it is not already
-defined. However, we don't want _FORTIFY_SOURCE to be enabled unless
-it's enabled by Buildroot (for exactly the above reason). Therefore,
-override CPPFLAGS in th build step to remove _FORTIFY_SOURCE again.
+ >   https://subversion.apache.org/security/CVE-2021-28544-advisory.txt
 
-It should be noted that upstream already rejected a PR to remove
--Werror: https://github.com/smuellerDD/libkcapi/pull/132
+ > - CVE-2022-24070: Subversion's mod_dav_svn is vulnerable to memory corruption
 
-Fixes:
- - http://autobuild.buildroot.org/results/35141ea3046f5a4593e0b27ef92e4ace6bc0be66
+ >   While looking up path-based authorization rules, mod_dav_svn servers may
+ >   attempt to use memory which has already been freed.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libkcapi/libkcapi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ >   https://subversion.apache.org/security/CVE-2022-24070-advisory.txt
 
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 60b3f94388..09c5c028bc 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -15,6 +15,7 @@ LIBKCAPI_CONF_ENV = \
- 	ac_cv_path_DB2PDF="" \
- 	ac_cv_path_DB2PS="" \
- 	ac_cv_path_XMLTO=""
-+LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_LIBKCAPI_ENCAPP),y)
- LIBKCAPI_CONF_OPTS += --enable-kcapi-encapp
+ > Drop no longer needed patch and autoreconf, as this is now fixed upstream:
+
+ > https://svn.apache.org/viewvc?view=revision&revision=1881534
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
