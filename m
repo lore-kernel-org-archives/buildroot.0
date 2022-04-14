@@ -1,67 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA4BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 19:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB993C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 19:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09CC8409F8;
-	Thu, 14 Apr 2022 19:40:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CA44409F5;
+	Thu, 14 Apr 2022 19:40:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JvETY2E4Wl7w; Thu, 14 Apr 2022 19:40:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G2FivnvBDl95; Thu, 14 Apr 2022 19:40:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2350B40286;
-	Thu, 14 Apr 2022 19:40:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 49F421BF319
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:40:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BA414093F;
+	Thu, 14 Apr 2022 19:40:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D42601BF319
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC2BE40286
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:40:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCEF040935
+ for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 19:40:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fuHsjUD9Ww7v for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 19:40:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VGF9n1qXyLhh for <buildroot@lists.busybox.net>;
+ Thu, 14 Apr 2022 19:40:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com
- [209.85.214.170])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D2CD440142
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 19:40:05 +0000 (UTC)
-Received: by mail-pl1-f170.google.com with SMTP id d15so5494924pll.10
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 12:40:05 -0700 (PDT)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
+ [IPv6:2607:f8b0:4864:20::1032])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 34CF94091F
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 19:40:18 +0000 (UTC)
+Received: by mail-pj1-x1032.google.com with SMTP id
+ j8-20020a17090a060800b001cd4fb60dccso6645932pjj.2
+ for <buildroot@buildroot.org>; Thu, 14 Apr 2022 12:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=threespeedlogic-com.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=+Ydnaz5t41q1axe0JwpeZQCNLH76Dq1qpmLiBR7PDd4=;
+ b=MFV7bG+soqqp76qxFGmBjBjUQUUIJ/W2S8cmHa9PC85JJvwatp6YhC9gFpUAx0Btnl
+ qIL5KqbUzUb18djjExW1cSc3hD6PGe6APIY3n8apWRS2GowoeP8+GxGncljPsg/KhrVO
+ ShCEjB1BCdFy3eWzIPYx7j9A6z6q0rTHzMre/VBEAk8ELcrlnjfQdC0ywqiTXo4mTA5P
+ UyheJJ4wYQzipNJhPgfJWiM7fZolaBnvddLmJmguMLpqf1UhIZ86XfWHUQngAA1tJQjw
+ D3L+5Ngjeukj+5RpRuo11CBaZKvoABbOG4g7d2Qo+eKXc72MzXNBvuW/dJqYCCin0lg8
+ lzoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=CrvV7PRg/d2XtzD/MzkkJB0Neu78MMY38WgN9DQ1hYs=;
- b=UupmRnxYvsx0qCO7XPJY/xWodhyWZLbzdb+U/ATw3KD5+5BSwBDnraxQRN3BxYtqlU
- oa4ZOxZabaCDtPMRU2nGiI8S/LrSfTpL+xJYTmbxDNHUZZrOx9+2ipXL80XlBAm2S4uu
- DPoxqetqooNsaPH6ZG/3V4fXGY/zl3cB1k3I9keUiGp7V7IZki5rxAWbL+YRWAWh0Ejd
- kwAWc+lXLc/enspd+XHpYxgjFD/paLseLt2vnQRPDVtUe99rUXE35Y7VuBkLLiOnkJWl
- 4XUTYG4WMBEBpyJw4aMBULbhxMUDbuiKKHvJ3Tgqt8ONAm/9kUzTetT9DZ+68LZx/STz
- +lqw==
-X-Gm-Message-State: AOAM533vIB/i5cvLQkLay3E/nxJcqM1c2/iMpM8tQA7aVdkuYz8YLri7
- gGF1ic0FaEZY+oipvpcuPcWqrQCvGnQZHA==
-X-Google-Smtp-Source: ABdhPJyggjeQ/8zSAg3azIeZB/pmfIGPPZ/H6q5wzdvdMYLw2hOcAgqxlgtl0inDkADgsbPT5kwlqQ==
-X-Received: by 2002:a17:902:b495:b0:158:8318:4cf9 with SMTP id
- y21-20020a170902b49500b0015883184cf9mr15923396plr.33.1649965205010; 
- Thu, 14 Apr 2022 12:40:05 -0700 (PDT)
-Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
+ bh=+Ydnaz5t41q1axe0JwpeZQCNLH76Dq1qpmLiBR7PDd4=;
+ b=u+dhrvBQyvzvJy/1/ssKtNYk1SVXfnMwh9n1VT2kTxTq3j/rKjmJDSN5ksBE8bcDZZ
+ ym3cG6cgt8csV7ScAnnGv4nzPUDqEvuHI8O+V7Lm+31OBZeauwTPlkmJpBHSOkToyXaa
+ hO1cogqAsERHX0+FbUboHvB7RVhrHfnlekBdpMoWiUxulDOu55jH/Sc+lJ2vkLOsZqJt
+ jl7hWFE/5gcDT0wV6FaI9qc91VZrrrd0g4D3vSlVcnPDW9NURKA15MPQjg26HG4ppJsh
+ xAkECpQ/W3ydhP8UQrENQr6n27jubGLNdbm+uIe0i5Ntl8ymnQsoU/fUXlCk8kG4ydG6
+ R8gg==
+X-Gm-Message-State: AOAM530W65wd0NvVqxDg6lVonM7liGf/grweCTdNgnPup9tk98FppLPQ
+ 3hO8QCfS3jSBFNjhId8hvNF3+enSQmmKJ8L2
+X-Google-Smtp-Source: ABdhPJxjKPmtDuO+6EhTtsvzFvakeY5AaEcLEuArR9iXdek/WkokQdhPP+wb+sqtJ57VXKQwDQk1Vw==
+X-Received: by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP id
+ d7-20020a17090ab30700b001bd37f3f0fcmr187017pjr.132.1649965217386; 
+ Thu, 14 Apr 2022 12:40:17 -0700 (PDT)
+Received: from localhost.localdomain ([104.246.196.44])
  by smtp.gmail.com with ESMTPSA id
- w60-20020a17090a6bc200b001cbc1a6963asm2710312pjj.29.2022.04.14.12.40.04
+ n19-20020a635c53000000b0039dc2ea9876sm2532969pgm.49.2022.04.14.12.40.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Apr 2022 12:40:04 -0700 (PDT)
+ Thu, 14 Apr 2022 12:40:17 -0700 (PDT)
+From: Graeme Smecher <gsmecher@threespeedlogic.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Apr 2022 12:39:42 -0700
-Message-Id: <20220414193942.422360-1-christian@paral.in>
+Date: Thu, 14 Apr 2022 12:40:11 -0700
+Message-Id: <20220414194011.2044427-1-gsmecher@threespeedlogic.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/go: add support for riscv arch
+Subject: [Buildroot] [PATCH] Adds python-orjson support.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,50 +86,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Graeme Smecher <gsmecher@threespeedlogic.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable the supported "riscv64" GOARCH.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/Config.in.host | 2 +-
- package/go/go.mk          | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/Config.in                        |  1 +
+ package/python-orjson/Config.in          | 12 ++++++++++
+ package/python-orjson/python-orjson.hash |  3 +++
+ package/python-orjson/python-orjson.mk   | 28 ++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/python-orjson/Config.in
+ create mode 100644 package/python-orjson/python-orjson.hash
+ create mode 100644 package/python-orjson/python-orjson.mk
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index e82ab6e81a..8be86103ea 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
--		|| BR2_mips64 || BR2_mips64el || BR2_s390x
-+		|| BR2_mips64 || BR2_mips64el || BR2_riscv || BR2_s390x
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# MIPS R6 support in Go has not yet been developed.
- 	depends on !BR2_MIPS_CPU_MIPS64R6
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 3df16c9a68..ba0da74b86 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -63,6 +63,8 @@ else ifeq ($(BR2_mips64),y)
- GO_GOARCH = mips64
- else ifeq ($(BR2_mips64el),y)
- GO_GOARCH = mips64le
-+else ifeq ($(BR2_riscv),y)
-+GO_GOARCH = riscv64
- else ifeq ($(BR2_s390x),y)
- GO_GOARCH = s390x
- endif
+diff --git a/package/Config.in b/package/Config.in
+index 86a1c59696..db0e37b7f7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1122,6 +1122,7 @@ menu "External python modules"
+ 	source "package/python-numpy/Config.in"
+ 	source "package/python-oauthlib/Config.in"
+ 	source "package/python-opcua-asyncio/Config.in"
++	source "package/python-orjson/Config.in"
+ 	source "package/python-packaging/Config.in"
+ 	source "package/python-paho-mqtt/Config.in"
+ 	source "package/python-pam/Config.in"
+diff --git a/package/python-orjson/Config.in b/package/python-orjson/Config.in
+new file mode 100644
+index 0000000000..fa96eee57d
+--- /dev/null
++++ b/package/python-orjson/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_ORJSON
++	bool "python-orjson"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
++	help
++	  orjson is a fast, correct JSON library for Python. It benchmarks as
++	  the fastest Python library for JSON and is more correct than the
++	  standard json library or other third-party libraries. It serializes
++	  dataclass, datetime, numpy, and UUID instances natively.
++
++	  https://github.com/ijl/orjson
+diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
+new file mode 100644
+index 0000000000..158099c174
+--- /dev/null
++++ b/package/python-orjson/python-orjson.hash
+@@ -0,0 +1,3 @@
++sha256  4713b120ad86b1b273f5952cbf9578c13d0f453064bd26d823e04a10c84824e6  3.6.7.tar.gz
++sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
++sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
+new file mode 100644
+index 0000000000..91ead3b170
+--- /dev/null
++++ b/package/python-orjson/python-orjson.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# python-orjson
++#
++################################################################################
++
++PYTHON_ORJSON_VERSION = 3.6.7
++PYTHON_ORJSON_SOURCE = $(PYTHON_ORJSON_VERSION).tar.gz
++PYTHON_ORJSON_SITE = https://github.com/ijl/orjson/archive/refs/tags
++PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
++PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++PYTHON_ORJSON_DEPENDENCIES = host-python-cffi host-rustc
++PYTHON_ORJSON_CARGO_ENV = \
++	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
++
++# Vendor the Cargo crates at download time
++PYTHON_ORJSON_DOWNLOAD_POST_PROCESS = cargo
++PYTHON_ORJSON_DOWNLOAD_DEPENDENCIES = host-rustc
++PYTHON_ORJSON_DL_ENV = BR_CARGO_MANIFEST_PATH=Cargo.toml
++
++# orjson uses "maturin" to generate distribution packages - rather than teach
++# buildroot how to understand this, we reach in and install directly.
++define PYTHON_ORJSON_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/target/$(RUSTC_TARGET_NAME)/release/liborjson.so \
++		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/orjson.so
++endef
++
++$(eval $(cargo-package))
 -- 
 2.35.1
 
