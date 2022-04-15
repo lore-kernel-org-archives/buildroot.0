@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89971C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 06:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C9CC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 07:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E769E84113;
-	Fri, 15 Apr 2022 06:52:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87BB66103E;
+	Fri, 15 Apr 2022 07:01:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pIOQEWhYFFnw; Fri, 15 Apr 2022 06:52:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ebu9bCpsV91n; Fri, 15 Apr 2022 07:01:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE36B840FE;
-	Fri, 15 Apr 2022 06:52:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A9AEB1BF855
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 06:52:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81D6A60AAD;
+	Fri, 15 Apr 2022 07:01:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 357781BF855
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 07:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96B3F405C5
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 06:52:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22CF560AAD
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 07:01:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vbBe2a2ErnHO for <buildroot@lists.busybox.net>;
- Fri, 15 Apr 2022 06:52:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BmaZ3Y1xeiRL for <buildroot@lists.busybox.net>;
+ Fri, 15 Apr 2022 07:01:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on2060c.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe59::60c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B6141404D5
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 06:52:38 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam12on2062a.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe5b::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E008D60A69
+ for <buildroot@buildroot.org>; Fri, 15 Apr 2022 07:01:14 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fX/LYtivrUBbdVIbgrZicnJE0AVCQ/LHSjKpY2Vaa8gUziFkmWS4T+dQG156TrvjaHwLO/xWpZEuylz4Cpb4ILJnMhilrwNXitU4WeIpE3ZH72eMzRdE00HWIKW2o8BoVPBVyD6stDcteQOuyWE7qeU41IyzhmeDomnw5l6Vinhfx468sJgdOfQ7/1vgqWxZKXzfVZUFelqTpFKOyiK+kIAxomSnmdELa4XonaEDLpU4wgPKavmgLoouvPdFmhqkgRWAzahMvl9XR0+FQ9G5y6EI2MIjmKFwzBcWA29pr7YhYn47dve44w5izj1WvUnZaat70vXVBK0VAwvjR/5ThQ==
+ b=U/euGs2nqPpXeu37xynJmizHC12+jIf/bzFSRVCLs3tJgwmH14wRz1oVsT4SqSdhSaGQwk3+tHAFjglYUtK8YI7ItZGk9Sxq1V1EAfiJQrQ65jwode8dPqxD4CYCGpFcxpWNinIKRTQPmge1kRRnhU9KbuK9xuhaTmEwCeeHQOSjOCVebvEzQ9Zc9iMEJ/VYgyVs+ElnZ7s0FoXtXiKSWei+HG5i+5VOr2V4bFNd5Kc+oaWg+1+maD44KzxOCEEk63FqBb/ZxxYx1l0MUi/k85ETfclvd9rOTjBfnTtA6H5i9bfEqGLICq3CxyI8+qPyyIzfq9YdTbEK/RKB0dFBqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=86Gcgw0s56xnJs8sLXYruoV7GQMOzOcGLxehUt0qtC4=;
- b=nHG5JFZ0cwq9Tk5cyOgDdJDnKdFezut78MzXTJGI4phuPAhO2s4//M0CEFZLvomPU/tbqz5BiOirrXM2YrXonhyi2cwVsvSW06VaCUuWRvXdtu7V+q9g3VWwYx6X4sL+yhaqoH1/L0lNxoimrtZzGysn1qcxX2yes89+TnLmUKQaFL136Ey8l16MffypU2Ft7OCMmsCvHRiZ852FD6+RhIfFNfm5zZaX/yHoi4OgBQvItlmMqpXReI/GqnNEwNhONmPf5asnrKYRkhHF8IHZhmhWaQDGhiBXYCfUMlQ17ubOluSyXxdAVcqxNQbnVIA1Vp6uj0wL/Hm2u7d6ljXlSw==
+ bh=jpFBRAJN3lxwKN+TrUPeneDID0k/RFsbtR93/H7HgOA=;
+ b=CYyD6nY+IEBYJ/RBQPl87yhWAdv6zBDWdRyXvvTFOq6A26+y2DERh6BnzJ63zgSfahT3gFscqJi820cDYz2rfKzT9mo7qI1fCjdl/sqCKNAmasomLWVG3SG8o3z+uvDSwiztgIublnGhGxMde5GmPEv9HzxY+rJr+wI26FkgOSRDADDsX3U35ws47jBmQGgOmoH/4bNmU9LFi9UU+QyZVn6TEU/BoY7vQO2ywOPT41yEwsuKWWWTQaE5I0C/i/jdAfuY0McoyMUXtv1cY7pMO2O9Xlrlj/Kxf2KGC0Op7nC+SIDBH5bs8QLMYrZBSoLuWBIkQeD3VUDP/9A2GZw8sA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
  dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=86Gcgw0s56xnJs8sLXYruoV7GQMOzOcGLxehUt0qtC4=;
- b=I3CzoyP4IyN4hAtLAyzzC2te3Y0amttapEZBMW5bHHkyn+9/YcyfLqYqV5gDxJyuJhiwUa9UaSjClIehT5RrgVdsNetwm/ysLNnX19GRD4Vi8/VWdPRmMOfB1Z/37tvVemOzJ5u/fZNonxfJ4X/oPClTJjobKdul4R7dS08a/vs=
+ bh=jpFBRAJN3lxwKN+TrUPeneDID0k/RFsbtR93/H7HgOA=;
+ b=rMQPpUD1PJyV5hpJYxmxiS6oMw5xK+XDgwVxF3THKqN+pv9AgTQNm6O78AQ4mxlhHTfL1kPLt88aTeeKCyj6xDAkDybB8MgdZQetG0BH78nklt2EL7U7pmQPd6krCWO7abGb4K8QrRtDcYJ0iVJsU2j/1s8ptpSyOPmzTdOwHkA=
 Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by BYAPR02MB4135.namprd02.prod.outlook.com (2603:10b6:a03::24) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.20; Fri, 15 Apr 2022 06:52:34 +0000
+ by DM8PR02MB7960.namprd02.prod.outlook.com (2603:10b6:8:15::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 07:01:11 +0000
 Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
  ([fe80::61ac:c1e9:f4ec:156c]) by SJ0PR02MB7758.namprd02.prod.outlook.com
  ([fe80::61ac:c1e9:f4ec:156c%4]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
- 06:52:34 +0000
+ 07:01:10 +0000
 From: Neal Frager <nealf@xilinx.com>
 To: Arnout Vandecappelle <arnout@mind.be>, Neal Frager <neal.frager@amd.com>, 
  "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH v1 1/4] configs/zynq_zc706_defconfig: bump to
+Thread-Topic: [Buildroot] [PATCH v1 2/4] configs/zynq_zed_defconfig: bump to
  Xilinx 2021.2
-Thread-Index: AQHYS1jCIBhUrJ2T10y2XXcoR/MRfqzv3CmAgAC2VaA=
-Date: Fri, 15 Apr 2022 06:52:34 +0000
-Message-ID: <SJ0PR02MB7758E25006ADC3AAA0346C73D7EE9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+Thread-Index: AQHYS1jFvUnRxPiCRE2A9Pxr5IVQoqzv3bCAgAC2dWA=
+Date: Fri, 15 Apr 2022 07:01:10 +0000
+Message-ID: <SJ0PR02MB77583C8A9D6DFBF19D9621ECD7EE9@SJ0PR02MB7758.namprd02.prod.outlook.com>
 References: <20220408145531.1641356-1-neal.frager@amd.com>
- <23538a24-16fe-5302-0cba-c97e67a8ab97@mind.be>
-In-Reply-To: <23538a24-16fe-5302-0cba-c97e67a8ab97@mind.be>
+ <20220408145531.1641356-2-neal.frager@amd.com>
+ <0013bb7d-ca34-dd99-7119-8dad8c74a819@mind.be>
+In-Reply-To: <0013bb7d-ca34-dd99-7119-8dad8c74a819@mind.be>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -77,72 +76,72 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=xilinx.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fa7afca3-09a7-4127-7f89-08da1eac855f
-x-ms-traffictypediagnostic: BYAPR02MB4135:EE_
-x-microsoft-antispam-prvs: <BYAPR02MB41359784F5B89D12ED973EF1D7EE9@BYAPR02MB4135.namprd02.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: e7572412-0c5d-432a-646a-08da1eadb8be
+x-ms-traffictypediagnostic: DM8PR02MB7960:EE_
+x-microsoft-antispam-prvs: <DM8PR02MB79601D08039AF7CDC699F9F7D7EE9@DM8PR02MB7960.namprd02.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dpu8xHH4R7okA7LJkfVWgLZLGWApxq2zoBVoqFiDWL84jDn5RZyaMz1/jQXMueanu7ytxF1SgDMONo7luZtdtAc4hzqDFxkNujpCPWA0LUnVh0lQDCQmXPwW5at29+4evp2lhtPErLLrAzwj/WEVeEQiMDPIBXD8vwtoHHAiDIl15M6zvzs8vWJXS1PHgHJfTebBInqg7EzFO2SdQVKP7+v2jzttOqByIz7R0vG2wkBnvqmW5aN6ECqxQ4b9yHCCrvvSwl485Msnl7BSL3avRjj2CG5hDY2vFUlVfvGg6K7eSpawbDAC/aqNnn9aZVIrCTFpH+98eAjiV0plr6SmddKdCki5eAcCxaRgFdy3eOdf78x5fOuvaNt8ceXHKZdB97vHtvZV9wwvu3B+p4VZQOPdrvNuTKen1QsK+alBbiI7qj8weANail7N4JINbuQtpklJE/nRZk+q1knzUw0nuDxFOn8paZ0YJmxud8MWGRnF4Ur/siJUipqp5awEQY/SL7QRYkBOw97AoB07Fx5etqt/2TvU9ZQDxTjfBuw5RDKcw8WIC7QptLBXkV+w+NIXHKbgfLR38eSWRZte5KesA3fmqyDUNOSc1F8+byLjJkvwETj6t9UusO8kTICnS+xe9Yx1vMNXTp1eTCL2ePjNEi6M4MuzZaKUd+9sISoZzAksG2UMfUH+iubLKP63hN23MF96nSjEkiyYkU6NLchirayVsEWumoGqJCrzW0zBM58815a3HkWIyQFofYlFtzBIw6n4IuuYmE9EJFKlsynEzSGYFuyrGAOLsymnI7cGIkTEy1WYo4A4SWMPIdja7I0LBB849r76aZ3u+bHhpX3Og4j9PH7XNdBxnObjynjVB7E=
+x-microsoft-antispam-message-info: 4iXmB21yaNNYYRmqr1OCCkMKe3pmifxAaJqndQObEVNy9Aq+ykf7TjZhrMVWVjB4e4RHzD20yrCIdjWTxOUdnrCvxF01S3Qx1JNlirrmHOtDlW48Md0eWUl1vfl/cUMNfScNgFqV/MQFa4dpUSO1xXaQzbvUV6mP/Ko96OPLTK3B+1kH8jiWpwr4Tn4aZ04IL14ps+X46x1jmg/3B99/LeDalRwamJ4g/F3iCl9CguIfYPnxBT6ReZme3/5UGPynXjCdipsojV4JDu0QxRs5FCoWp2tdJYk/UVMgvVAX/8yZw2YSjozmeNM5FCZm3ykpNpRMY6NpLCDo2KvdiENDQoca5j1b4BE5S+9YS8Qsc5/NDsGJHARtoUZtc4wFefsEPEEdB2+deba5iewhl36DkkJLCKQk4Ae9gTm24cPH5H0jpfQ4cq4fTKszDV2TvneUTFjQ+z2Qup043e7/VD5izxul//T5m4Bnb/MVq5nYI3MZVa1ba4F0RaPpNOPyaD9/m2cAA0ltJvlTZGyi+Q7M2PBqAZoeVcOWrqAcSksgdipTSUh+5YN0eYexZAPY5DlX7zZQzx69fYScDRzBUHImoVtlYHbAVpiWsAn/XUF3KSwOQx7n/6TH3Aq3l/LMszKVSYJhmDFJrG2Xn8g+5taQCqwyjiZhrxAQCOHlxR7Ecdw5ujL8eNHfspQ/5XXOQn4AAMEb7F2gzlO7/ZwWfjqalcjsuH4JRarFnPYNJlliGhiTs9N95PXLHuY36XjIVAtyjip/E557vKtz4URLeT/chD9tPFsksUb8T5zCDGpi9wIboR4+bwn3VxSMLH7qPLPR
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(110136005)(54906003)(83380400001)(33656002)(2906002)(7696005)(38100700002)(186003)(66476007)(64756008)(66446008)(8676002)(76116006)(66556008)(4326008)(66946007)(38070700005)(122000001)(86362001)(5660300002)(6506007)(8936002)(508600001)(316002)(55016003)(52536014)(9686003)(71200400001)(41080700001);
+ SFS:(13230001)(4636009)(366004)(38100700002)(55016003)(54906003)(38070700005)(8936002)(110136005)(316002)(122000001)(8676002)(4326008)(66946007)(64756008)(66476007)(66446008)(66556008)(76116006)(2906002)(186003)(7696005)(5660300002)(508600001)(86362001)(52536014)(6506007)(33656002)(71200400001)(9686003)(41080700001);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c3BvZm9KMVRNQS9RZ1Z3bDVEV3daQ2FIbno5RTRrVDNSUnVaNlBnWXJPQzhk?=
- =?utf-8?B?NDBQSE5LUU11ZzJMRjkzZjFYdUlkaW90eS9oc3JOUjZjWndFT2h5MXFMbStX?=
- =?utf-8?B?Y3ZHV1N6Y1RGQUM4cDBNc2Rad0h4TWkyTUdCNnVOMGtsSTd1YU5YelFLUElo?=
- =?utf-8?B?TE5hUGwyTFMxWS9od2tCaS9nendtU3NVdzc4WDk3dXpvM3FWaWNCSUZhbWdS?=
- =?utf-8?B?Q1BxLzRJbVR1V0tBdDVaVEEwWUtQbGQvZUdtTXF3R1JhSHpRcTNESHB1ZlVC?=
- =?utf-8?B?cWpPRk5wTHdSOXByd1QzaFR3bnNyaC9Ua1V4YnhVQ2l1b3R0ZUdnSkU5VzZK?=
- =?utf-8?B?VjdJMFVzbDBjd0Vjbk54M25hSzdodHJNSHFXOStkenBQSktMUXBWNkNBekNV?=
- =?utf-8?B?d0Noa25PRzBBMVJZRGxxZTF4dzR0TWZFeXdscjc4V0oxY2JzZ3dkMnQ3Z1dU?=
- =?utf-8?B?akdOeWZqY2VjcWNjN0toVzZ4RDh6TkdWWWhjUGY4bnJmRnlRLzNWZG9NTkVR?=
- =?utf-8?B?dzZVTUV5QTRpbkQvbWkrY0UzMHdmQ0JXRWZJRjFHdTJ3YVFvbEt5T2xTbjJF?=
- =?utf-8?B?VjNNcmpzM3liYXkxeWp0aWlJN29icXJvUjBmZE1zczBrMEEzSGNlL2lKeHdu?=
- =?utf-8?B?aTVzLzl4QWdFSHZpU29LQTJxN2lKUit3UWExczNkSlJsVThSYkdSRld4UDYz?=
- =?utf-8?B?ZmVxa3dxU0lKNVFqK1FRcHIzS3dkRjJJa0M2VEZrdXlpdmFIaHZ2VktKdkUr?=
- =?utf-8?B?a1loVnB3a2kwMFlFOHBSVTYyMnhPTDgyTitveGlnRDh4ZStNZlBvTjdSYzlr?=
- =?utf-8?B?S3NTY2ZmcVlVUFlLckZBTC9zTnp1ekpKN1pBcDJQZU9wdm5DY1Q3OFM2RWtK?=
- =?utf-8?B?ZzhsRXovUTRXeEZKZXp0WFZvd2d4M1VWU1BBNHZJelFLWExUV25MUWRHeWtM?=
- =?utf-8?B?VEIySDhLcjJCOFQxemtXZXhZTW9XTjlqVUlCUkthTExFQlprT1F0b2Z0dVpJ?=
- =?utf-8?B?dThNcEF1RkFsL2V5WVVZRjQ0NW9maDBocmRQRG5BSE1IaTI5N3VWTTdKc0do?=
- =?utf-8?B?THlERUNJOS85eUFNNEkveGZQbEdickpMdktnRGVQWTByclAxSG1FbXRxcDQ1?=
- =?utf-8?B?K3E1RElvVDhVNG1XaVI0UGEzYzd5NUYzVGdCTHRjSmthWGNpQUNxMDBuZ0Uz?=
- =?utf-8?B?Y2pEQkJkSkhYY2JEMW1xbERQRGZ6OW5wZUppRE5BVHdLRW5aczhPV2I1Lyt4?=
- =?utf-8?B?dEQ5NjZMR1VkaE9MdzYzYlVnTmxKd252TFV6eEMyeUpqUklkaW8wQnZXTVB4?=
- =?utf-8?B?OU00R0hvZFRlTnc4ekd0WG1FS281RFZMSXR4QjcvL0lmMGxQQkdOekhqbFJK?=
- =?utf-8?B?dGp3eUREelZqMkhoT3JlZkU4RTFmbVhiUDVJYVhnNXlMWkU4ZW1NT21peldT?=
- =?utf-8?B?RkdNRURLdmhHMmFkYmxTVmFFNG8rYUlVWEpYdkNzNC9BZmM4M0pZRWdncmFR?=
- =?utf-8?B?TE5vS2RVMGNraExaUG1JaVBBbnE4bk5tOVZvNExNbHIvWXVxd0FEUmFiR2Q2?=
- =?utf-8?B?WHQwVGZrMTRnUklvTHcyYmVhYzhPajNXUGtNM0Y0cFd1dmYrM0xCeGpMc2hk?=
- =?utf-8?B?cEs1UWI4a1FkcENxaDVVL0twTkVJeWtYdGppQXlwVlo2Y2pCdCswYmE3TXFX?=
- =?utf-8?B?S1U2bTRqNGdSK0JPSFV2MzFrUWh1VS85M1ZGcUYrdk1zdGJsTXg0TEdMZkRy?=
- =?utf-8?B?eDZqYzF0bFhkWTBybEtTM2FLcDB3SUZvVFRYMzlJUkQ2VnhHRUtVT0lBQ0do?=
- =?utf-8?B?dHI1Q1VwbXpXN2EwTWRSYzJGL0h3ZE1DbnpjNG0rUlIwSERVZDk0cmRFTlJV?=
- =?utf-8?B?SXNUbk91UktPb1dBY2Qyc0ZNQnpkWEZyeU4yTG9hRmxkZ2pTdjNweTRHdEQ0?=
- =?utf-8?B?QTVpRGxWd3FXUWI4Wmt0MkpES1VIdWUvbHA2QnFuWVpodDN4T3ZzaEhzLzRG?=
- =?utf-8?B?SDRZL0xJdkFuR3krOW81WTVrNzg2RWRkdXBSam5pQnM1Zi80MFRPaEp2ZUNi?=
- =?utf-8?B?cnVWNEVEUmZCVVIwSEZqZ0l0Vm5XcVVwbVd3SVlIcWhkelVyeU1WVnNxdjJL?=
- =?utf-8?B?Wm5jWFd3elI4WGNPZUxKa2tsZ0Z6SEJzN3kvV282Q1VSZ241TEg0STFzSWxa?=
- =?utf-8?B?YUhsUUFMblVXN3Qvb2UvNzRKVEkrQTJNRlFpZnhReEtaM1c5S3hvWnhEbHdR?=
- =?utf-8?B?UDBWYTF6azkwN2d3bzhiVmZXMkorR2IrMlBldzgyeFhVbWRVZm1FZ082WU1L?=
- =?utf-8?B?bmo1WTN5TVBBUmlFSjRtajFqYUh6T2hZaFBDOTV0MG5Gb0p2elIweXR5b0Jv?=
- =?utf-8?Q?5TD+q3VMf8WnnpbpZW62xYWJ3ZreYSEvFZINcK8TaRBOs?=
-x-ms-exchange-antispam-messagedata-1: 9Em+D140oncRkA==
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlJ4K2pZTzBaQ2x1Wk54OVE0UEJ6NU9RM2FHQ1FLbUNIdEF6QnBCaklXbTlL?=
+ =?utf-8?B?TmZOWWhJMmNDQnpENkYvN0EwbjV0UzJJUnBlV1l3UG5EanRiTXR3L2hESlBM?=
+ =?utf-8?B?dUlYWXdObW5XTXI5NTNPeE51ay9XQWQ3Wm9TL1F4bHZyTjN3KzBnZDF1VW55?=
+ =?utf-8?B?SEx4MnVLbzE5V0xwNDlkMnJDS1VWQlYvZEFNa1EwQVliWDREV3hlUVQxOFR5?=
+ =?utf-8?B?MHRSMzhLQkdYclhMTkpIR0sveDd5Y1N4aXNoSjNxUHd1WXk2QVZCc052cEFs?=
+ =?utf-8?B?cVlsR2twWTIycTBSVlpDQlQvVjFteGVndWx5c01rYm5iNmYyQ1BmY2xoM2lI?=
+ =?utf-8?B?cVQxT0FNY0ZQRzBHVEE0T0FyblJUdGJwbmRDOEpxUGFFeEl1U0ZhcGJhdlhy?=
+ =?utf-8?B?NGhWQ1lqM1IxdjZFUFp1Z0RyV1UvcVkvUW5TZmw4Qmc1Tnc5OVFPUXNZU1l1?=
+ =?utf-8?B?QzlLazN4VVVWYllUWnNGaS9ES1IvU3QydGxCdjVpSEFrU05ycjNYcXVGYkl5?=
+ =?utf-8?B?V1EzbTRLMExsalNCSlBEU3BsMXh4bWd0VkRuejJ4NnNJT0FKM214bzlPR2xw?=
+ =?utf-8?B?b0t2YmVzZU90NURmSjF0Qm05djNVcFdIKzB2WXhLTHIxQzVXSi9CQW9mcmk0?=
+ =?utf-8?B?QTVCYk1iYmswUys4N2M1ZEhkd3BTandJN1hkSDV0U09zUGxVeFYvNUlGaWxY?=
+ =?utf-8?B?bG8rc2NZNkl1OVJaUC80WXNERXphRS9OSjlLVXRMRHN3UkQ0MzV6OHExVTdx?=
+ =?utf-8?B?ZW5oelliVFdqZDA1V2JhRW9XV3h3QUJtRHZ6ZnkrWGFOU1UvMFVVVDkrcldj?=
+ =?utf-8?B?RUhRQ1ZDZkpPRG5kZk5wRTVJK2RtWVhtVlIwVjhnUEh2SHd3UHM5SjMzcGV0?=
+ =?utf-8?B?blVXK0U1R055eTRLSldLckRidzQvU1lpTlRDa2Y3Nmp1Q25VR3ZneXZGd0ln?=
+ =?utf-8?B?djU4bklpNHhPYXV4OUtwNmNqcHJmcWczV082VWlHVGF0OWRrL0lFaU1ZQmEr?=
+ =?utf-8?B?SmZEbEt1eitiTUs0aXVpUjIvaTVJSGhGb1JWMlh6MEV5WkgwT0U3WXN4QU9H?=
+ =?utf-8?B?NWVFZnlsUGRobk5TV054bUcwK1BhVTBaSWRRcFBXTVFjRkpwS1Rpd3gyQmFG?=
+ =?utf-8?B?ak5XYjdFa0ZHMVFJU05MUGY0RE5VUnhLL0ZoSzhUOVFJV2E5QlNtUHdZd0Zx?=
+ =?utf-8?B?SFFnRWhTWVF4RHUyYWpEOUloQXNhYitHa0twUkFTQ2Z1b3FXalZ5NmJ0RGc5?=
+ =?utf-8?B?TG1DVG0rR05oOGVUS1JEZGtDT2JnNEZEWWwvdkNRaE9UL1JFQXlOb0sxamxp?=
+ =?utf-8?B?WWxscDNjZU5aV0lpUW5zQkNTUS9ZSXNIYkZlMFYyZTBvZXh0anY4ZFlVWEVv?=
+ =?utf-8?B?M2tJNmkrcHJMUU1sRUpGeURoYjR2VW1jU3p1WUllQ1hVZ3NEODFLOTVIbGE1?=
+ =?utf-8?B?SGlOQTErellkbCtFUTFhNkY1NW9kOWkvaUZjR0Z3eGszYmN3ZW9kb0VsbUFS?=
+ =?utf-8?B?U0VNcVlwWDUwdmNBTFZISlIrRXN0dWpzMlN6cnNhQ1E1b3lCcmd2bkdUclZ6?=
+ =?utf-8?B?R1VqN0NsZ0lNdkxnVTU1cTdTSW5LQkhubFZPUmJCVjJXR1VKTFNpcUh3UVVW?=
+ =?utf-8?B?VWFUTmZjTTF2SnpBZFNObU9CaXJJUjh2UCtydUpzSEpUNFlrM09aMkpRNmtk?=
+ =?utf-8?B?OGtwWTdtWWNycTE1cFZ3RlY4MndLVFp1OTNQang4RVVEakwzclB1YUFEeXgw?=
+ =?utf-8?B?U0pvRE16YmlZd2E3YkQ3U3lySkNoY0N4V0x5aG1ROS9RVDAxaWpycG05cXJJ?=
+ =?utf-8?B?ZmI2OUM3bG0vUCtCYm5MYUMyeWhkN041NHk2TEY3NlNzT1NjdVExak84d291?=
+ =?utf-8?B?WVd3RDZGRU0rYytEZFRURmlPSk1rMTJsSXVpUGVDRDhZeGVnNUZDbmcyWFJk?=
+ =?utf-8?B?OVorc1phb1FzeVdDZ2JnQll6Qy9uUE45aEZPUlZ2SHBSV1FwUDd6eDRVSk45?=
+ =?utf-8?B?elZSVGluWnF3cFhKcllreFZ1Wmc5UjJ0V1cveVJhd09HczV1Yi9tV01pQjlR?=
+ =?utf-8?B?ejNGYktneldmeXlrWlh3THo5YTRZY0dpTTFqSkV4akZXR1ZkM3NyemNwR0pi?=
+ =?utf-8?B?Z1lyL01RblNFTHpzMXMwaXJlamNYK0g3MG9kOWdtdkxxbHRwSFhOcHZ0b0pR?=
+ =?utf-8?B?U3pFOXF3VXFCNmhWZUFiT2hSRUttcGpLTE5HV0prZTZIUUdNSG12cWJvcTk1?=
+ =?utf-8?B?eE9pSTNwOHpheEFBU2FKSU9PQXNoRWlVSXFpdjNtOHorYzJqQktHeER4a2tq?=
+ =?utf-8?B?NmV0WVpZUEZFRHdtcWg1TklIaTlzRzRGYVpTcGZISFdpT1d2VDlaTWthWmQ0?=
+ =?utf-8?Q?CKCL1tBfH8lIf6QE/Hph6VvYU8vY4DmDaZA4XXpA8+fv+?=
+x-ms-exchange-antispam-messagedata-1: XlLzbC1nAYPQgg==
 MIME-Version: 1.0
 X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa7afca3-09a7-4127-7f89-08da1eac855f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 06:52:34.6558 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7572412-0c5d-432a-646a-08da1eadb8be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 07:01:10.2902 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QuURAWOUTmYn5paz+Srs6fqUJhQPl7NLTgehBFi+ESXPmEJg+brRMd8ppnnWG4ldDD7kPG3XPvFbw2w/3iHHBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4135
-Subject: Re: [Buildroot] [PATCH v1 1/4] configs/zynq_zc706_defconfig: bump
- to Xilinx 2021.2
+X-MS-Exchange-CrossTenant-userprincipalname: JLbVHLsBw0SLP89wovPgnWNyAn0U3lb49uQnpgjzT/3Kyz6ucoJJIeK5T5k8hlO3sd2yAcy+08Y9JglsZftFbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR02MB7960
+Subject: Re: [Buildroot] [PATCH v1 2/4] configs/zynq_zed_defconfig: bump to
+ Xilinx 2021.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -164,24 +163,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Arnout,
 
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xilinx-v2017.3)/linux-xilinx-v2017.3.tar.gz"
 > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
 > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
 
->  This is not so nice, we prefer the tarball download (it's a lot faster if the repo has never been cloned before, and not much slower if the git repo was already cloned; in addition, it's subject to github rate limiting).
+>   We generally prefer to use the upstream kernel rather than a vendor kernel - if it works of course. Is the vendor kernel dramatically better than upstream?
 
-I was not aware of a significant difference between the tarball download and git cloning.
-I only made this change in order to make the zynq defconfigs consistent with the zynqmp defconfigs which use git cloning.
-My only preference is to keep the zynq and zynqmp defconfigs as consistent and similar as possible.
-If the buildroot community prefers tarballs, then I will move both the zynq and zynqmp defconfigs to tarballs.
+I understand.  Unfortunately, not all of the zynq and zynqmp peripheral drivers are fully upstream to mainline.
+This often causes support issues on our side.  Specifically for peripherals like usb and qspi.
+Developers are certainly free to choose whichever u-boot or Linux kernel version they want.
+However, I see these defconfigs as promotional examples of how to use Xilinx zynq SoCs on our evaluation boards.
+Since we only perform production and regression testing on our software releases, 
+my preference would be to keep the Xilinx defconfigs on the Xilinx github for now.
 
->   BR2_TARGET_UBOOT_CUSTOM_GIT=y
->   BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.10_2021.2"
 
->  Actually you could switch this to tarball as well.
+>  There's also a xilinx-v2021.2 tag, which sounds more like what we'd want to use.
 
-Same comment as above.
+The xilinx-v2021.2 tag is functionally identical to the xlnx_rebase_v5.10_2021.2 tag.
+I tend to like the xlnx_rebase_v5.10_2021.2 tag name because it includes the Linux kernel version in the tag name.
+Same comment for the xlnx_rebase_v2021.01_2021.2 u-boot tag name.
 
 Best regards,
 Neal Frager
