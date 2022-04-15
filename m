@@ -1,69 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F02DC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Apr 2022 22:24:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C9C8C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 02:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C098941942;
-	Thu, 14 Apr 2022 22:24:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C29E60FF4;
+	Fri, 15 Apr 2022 02:52:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ya_T2mkgZjL2; Thu, 14 Apr 2022 22:24:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YJvsMxZBKR2m; Fri, 15 Apr 2022 02:52:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8869D4193E;
-	Thu, 14 Apr 2022 22:24:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D64191BF9A4
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 22:24:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43CD460FCB;
+	Fri, 15 Apr 2022 02:52:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F1B6D1BF388
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 02:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C46948176B
- for <buildroot@lists.busybox.net>; Thu, 14 Apr 2022 22:24:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF9DC60FCB
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 02:52:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5akIU3qzxMnu for <buildroot@lists.busybox.net>;
- Thu, 14 Apr 2022 22:24:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V_GqiRMvlKrm for <buildroot@lists.busybox.net>;
+ Fri, 15 Apr 2022 02:52:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E3D168151E
- for <buildroot@buildroot.org>; Thu, 14 Apr 2022 22:24:12 +0000 (UTC)
-Received: from [77.244.183.192] (port=63004 helo=[192.168.178.75])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nf7sp-000A4b-2N; Fri, 15 Apr 2022 00:24:11 +0200
-Message-ID: <a1178aa6-6a4c-b0cf-ed16-b70e436fab20@lucaceresoli.net>
-Date: Fri, 15 Apr 2022 00:24:10 +0200
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80D4A60769
+ for <buildroot@buildroot.org>; Fri, 15 Apr 2022 02:52:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+ s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=fEfFJ
+ GO8uPgJl3bZDItAqejB94fAT1z8MhM032ltISk=; b=RfVOEj136FNZsDJMF5g9L
+ pzCUBf6U8yd/E2hV4Ah8+HhDlfh2KPfFRhRHqJr4B1f1GUDTrKo5SSqFQjVeLy9B
+ GnT/6LogYZ8aS02gJqhgI3iN+dRtweG1nQqcYaRH0JFWh6HH14k117ex5lixaYrP
+ SSVcV4EFLQLGhIt8kSVRhs=
+Received: from localhost.localdomain (unknown [123.185.181.120])
+ by smtp7 (Coremail) with SMTP id C8CowAC3R5v73VhinGhyBQ--.35679S2;
+ Fri, 15 Apr 2022 10:52:44 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
+To: buildroot@buildroot.org
+Date: Thu, 14 Apr 2022 19:52:24 -0700
+Message-Id: <20220415025224.1876125-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: it-IT
-To: Arnout Vandecappelle <arnout@mind.be>, Neal Frager <neal.frager@amd.com>, 
- buildroot@buildroot.org
-References: <20220408145531.1641356-1-neal.frager@amd.com>
- <20220408145531.1641356-2-neal.frager@amd.com>
- <0013bb7d-ca34-dd99-7119-8dad8c74a819@mind.be>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <0013bb7d-ca34-dd99-7119-8dad8c74a819@mind.be>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH v1 2/4] configs/zynq_zed_defconfig: bump to
- Xilinx 2021.2
+X-CM-TRANSID: C8CowAC3R5v73VhinGhyBQ--.35679S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAF1xtw1DXF47Kry7Ar1UZFb_yoW5GFW5pr
+ WftF1UG3yqg34FvrWUJw1fZ3WY9Fs3Kr15G3WxC3W0vrWfXrsaqr929F4DZ34DWrW3A3y5
+ ZF48urW5ur4UXFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRVHqcUUUUU=
+X-Originating-IP: [123.185.181.120]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbCqR-jjV0DeyTc5AAAsh
+Subject: [Buildroot] [PATCH] package/network-manager: remove invalid
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,33 +66,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: giulio.benetti@benettiengineering.com, ju.o@free.fr
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aEkgYVJOT1VULCBuRUFMLEhpIE5lYWwsIEFybm91dCwKCk9uIDE0LzA0LzIyIDIxOjU5LCBBcm5v
-dXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPj4gLS0tIGEvY29uZmlncy96eW5xX3plZF9kZWZjb25m
-aWcKPj4gKysrIGIvY29uZmlncy96eW5xX3plZF9kZWZjb25maWcKPj4gQEAgLTIsMjYgKzIsMjgg
-QEAgQlIyX2FybT15Cj4+IMKgIEJSMl9jb3J0ZXhfYTk9eQo+PiDCoCBCUjJfQVJNX0VOQUJMRV9O
-RU9OPXkKPj4gwqAgQlIyX0FSTV9FTkFCTEVfVkZQPXkKPj4gLUJSMl9QQUNLQUdFX0hPU1RfTElO
-VVhfSEVBREVSU19DVVNUT01fNF8xNj15Cj4+IC1CUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9S
-VD0idHR5UFMwIgo+PiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzEw
-PXkKPj4gK0JSMl9ST09URlNfUE9TVF9CVUlMRF9TQ1JJUFQ9ImJvYXJkL3p5bnEvcG9zdC1idWls
-ZC5zaCIKPj4gwqAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvenlucS9wb3N0
-LWltYWdlLnNoIgo+PiDCoCBCUjJfTElOVVhfS0VSTkVMPXkKPj4gLUJSMl9MSU5VWF9LRVJORUxf
-Q1VTVE9NX1ZFUlNJT049eQo+PiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxV
-RT0iNC4xNiIKPj4gLUJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQo+
-PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fR0lUPXkKPj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VT
-VE9NX1JFUE9fVVJMPSJodHRwczovL2dpdGh1Yi5jb20vWGlsaW54L2xpbnV4LXhsbnguZ2l0Igo+
-Pgo+IAo+IMKgV2UgZ2VuZXJhbGx5IHByZWZlciB0byB1c2UgdGhlIHVwc3RyZWFtIGtlcm5lbCBy
-YXRoZXIgdGhhbiBhIHZlbmRvcgo+IGtlcm5lbCAtIGlmIGl0IHdvcmtzIG9mIGNvdXJzZS4gSXMg
-dGhlIHZlbmRvciBrZXJuZWwgZHJhbWF0aWNhbGx5IGJldHRlcgo+IHRoYW4gdXBzdHJlYW0/CgpJ
-bmRlZWQgSSB3b3VsZCBleHBlY3QgdG8gc2VlIHpjdTcwNiBzd2l0Y2ggdG8gbWFpbmxpbmUgcmF0
-aGVyIHRoYW4KYW5vdGhlciBib2FyZCBzd2l0Y2ggdG8gbm9uLW1haW5saW5lLiB6eW5xNyBoYXMg
-dmVyeSBnb29kIG1haW5saW5lCnN1cHBvcnQgc2luY2UgcXVpdGUgYSBsb25nIHRpbWUgYXMgZmFy
-IGFzIEkga25vdy4KCi0tIApMdWNhCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+Dependency on libiw has been removed since 0.9.3.990 [1].
+Dependency on libgcrypt has been removed since 1.2-beta1 [2].
+Dependency on libuuid has been removed since 1.31.4-dev [3].
+
+[1]: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/7d0761588c2dde8816c109c38c1c94233fd74afe
+[2]: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/b6f5f030331cc680edbe19ae322e894494d63687
+[3]: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/73b9883c6f30320b727a664ff2c84cc772aac94b
+
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+---
+ package/network-manager/Config.in          | 6 ------
+ package/network-manager/network-manager.mk | 2 +-
+ 2 files changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index a48cb37b15..1370c81c9c 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_NETWORK_MANAGER
+ 	bool "network-manager"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+@@ -13,11 +12,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBGCRYPT
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	select BR2_PACKAGE_WIRELESS_TOOLS
+-	select BR2_PACKAGE_WIRELESS_TOOLS_LIB
+ 	select BR2_PACKAGE_LIBNDP
+ 	help
+ 	  NetworkManager is a set of co-operative tools that make
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index a90228992c..d979cfc0d7 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -10,7 +10,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+-	libgcrypt wireless_tools util-linux host-intltool libndp
++	host-intltool libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
