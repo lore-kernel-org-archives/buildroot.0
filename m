@@ -1,83 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D45C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 18:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3174FC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 21:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00329840F7;
-	Fri, 15 Apr 2022 18:51:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EBE341B49;
+	Fri, 15 Apr 2022 21:11:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2TD2MSZuGy5K; Fri, 15 Apr 2022 18:51:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SpbxN8JusguW; Fri, 15 Apr 2022 21:11:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1811A84153;
-	Fri, 15 Apr 2022 18:51:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C5E81BF20D
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 18:51:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C78141A69;
+	Fri, 15 Apr 2022 21:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 238821C11A5
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 21:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17FAF40577
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 18:51:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1040341A69
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 21:11:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r-mWgkoM4l3x for <buildroot@lists.busybox.net>;
- Fri, 15 Apr 2022 18:51:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3F9B24014D
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 18:51:51 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 123-20020a1c1981000000b0038b3616a71aso5490654wmz.4
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 11:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9OikH34mSfhZB/7OZm698oEugaNaeNMLn4+a5BNtyNY=;
- b=H6bv/1Wp68iNUo9IPNPVXvrSRbR5MHYz7vPxLtN2piKy7t8dAcDaaTGmpe+2WE771o
- CH4d/vYBHKpkfLRTtT7soDGH02uzU9svVpQh6MWoS6G6hBxQa6CCQuhmkjojcH1xwqVo
- +4dgipmhDyWjWJECqqH8E0IbMJM1FkdVmQSIaeGxto9Y8qWPLZr17B49j4FSnhVWrrHc
- SGsrU8q0WDym2IbmMnwpNZlmopEtwQ9qRFiF8EAW9atvxRcGiiyvrAd5Dfi8DoVVgt05
- hvM8rIDNMl1hGYiIQhM6itC8VuhgQJ+UORBPltzx6kr/wCq+La3kByTWJs1OgoGFzjur
- Y3/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9OikH34mSfhZB/7OZm698oEugaNaeNMLn4+a5BNtyNY=;
- b=INenVTtIr7a2tFS7WZJnThM7Giwjx+kOGokYjPOj5ijVp9gW3ShN+XxS2faXRQcocP
- WFM/w3pOQCvSVgy4WqbbhT0wojxk4CdG6GtW8tWZ+E0vyzWrz3f0O7ulBQM6UloGJ4v6
- RkNjqP6Ia0dMnLIEzeVZOsdhJtPfxX3eKpxWf9mqZDjF7UOg8amwIdMh7kltEJDTMUA/
- DBfie3baRTmGQX0yURm6aGys2ReoJVMGL2Pq2mTwYlYWyzjuvK1D06j9X1OSEOp2jzSM
- tYkcpseKM5K0kOiSU9Qoi2d3mlKlM2I8zN03XQEzjouDqGy9BMTpQVq8eugQLK0rfM+Q
- mVsg==
-X-Gm-Message-State: AOAM530VwvYdHVskePn+nkmGLcJWjQuG7kDGY87R35lMVNRTJYZSJs86
- 9a/kn0bR1kTgg+MvdI4BBJaXjlCTvlc=
-X-Google-Smtp-Source: ABdhPJzPZ8sBiF05eF+0dkKn0tYWYetAEQCI6zc/NhTZuKimN/e+cPubz8oMQPnTvwk0b3suD8xEow==
-X-Received: by 2002:a1c:4e03:0:b0:38e:d730:11eb with SMTP id
- g3-20020a1c4e03000000b0038ed73011ebmr250389wmh.191.1650048709096; 
- Fri, 15 Apr 2022 11:51:49 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- i127-20020a1c3b85000000b00391a363f5adsm2342815wma.36.2022.04.15.11.51.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Apr 2022 11:51:48 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uca_2Fyidjkn for <buildroot@lists.busybox.net>;
+ Fri, 15 Apr 2022 21:11:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B58D64161A
+ for <buildroot@buildroot.org>; Fri, 15 Apr 2022 21:11:35 +0000 (UTC)
+Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 955BAC0EB3
+ for <buildroot@buildroot.org>; Fri, 15 Apr 2022 21:11:31 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3E34D200003;
+ Fri, 15 Apr 2022 21:11:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1nfTDl-00DOCk-VX; Fri, 15 Apr 2022 23:11:13 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Apr 2022 20:49:42 +0200
-Message-Id: <20220415184942.575667-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Fri, 15 Apr 2022 23:11:12 +0200
+Message-Id: <20220415211113.3191255-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/linux-tools: cpupower needs dynamic
- library
+Subject: [Buildroot] [PATCH] package/mutt: security bump to version 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,50 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpupower needs dynamic library since its addition in commit
-f1863ede94c29e120d7ce900f7cce211f1e8633a to avoid the following build
-failure:
+Fixes the following security issues:
 
-ld (ld-elf2flt): -shared used without passing a shared library ID
+CVE-2022-1328: mutt_decode_uuencoded() can read past the of the input line
 
-Fixes:
- - http://autobuild.buildroot.org/results/16f41b9169bd76352c2f2ed8c6239ad371b3a30e
+Buffer Overflow in uudecoder in Mutt affecting all versions starting from
+0.94.13 before 2.2.3 allows read past end of input line
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For details, see the release notes:
+https://marc.info/?l=mutt-users&m=164979464612885&w=2
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index f459b41762..791f2c085c 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -7,12 +7,16 @@ config BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index bbc9d459b0..952e0b7bc0 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e84597f06d03ca82f8ca3b5ec8bc294c150709b43ed2a0177bf479c3e3345314  mutt-2.2.0.tar.gz
++sha256  978addcdab454f447ed7d1de84b5767e714c30714285bf82e4a1745071d18d89  mutt-2.2.3.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 51178ef03d..45ae36530a 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LINUX_TOOLS_CPUPOWER
- 	bool "cpupower"
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LINUX_TOOLS
- 	select BR2_PACKAGE_PCIUTILS
- 	help
- 	  cpupower is a collection of tools to examine and tune power
- 	  saving related features of your processor.
- 
-+comment "cpupower needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_LINUX_TOOLS_GPIO
- 	bool "gpio"
- 	select BR2_PACKAGE_LINUX_TOOLS
+-MUTT_VERSION = 2.2.0
++MUTT_VERSION = 2.2.3
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 -- 
-2.35.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
