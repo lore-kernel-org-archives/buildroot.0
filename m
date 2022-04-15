@@ -4,67 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EBFFC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 12:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A3C3C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 16:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2176082B1E;
-	Fri, 15 Apr 2022 12:25:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05F1E84105;
+	Fri, 15 Apr 2022 16:20:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HBx3ZLcAAM_N; Fri, 15 Apr 2022 12:25:35 +0000 (UTC)
+	with ESMTP id kU1HJgnUiIAF; Fri, 15 Apr 2022 16:20:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FC27824DC;
-	Fri, 15 Apr 2022 12:25:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 852971BF32C
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 12:25:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A2FA840F0;
+	Fri, 15 Apr 2022 16:20:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 521871BF2BC
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 16:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81B6560773
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 12:25:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4675140865
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 16:20:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 64vgBBXzASx6 for <buildroot@lists.busybox.net>;
- Fri, 15 Apr 2022 12:25:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 154936068A
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 12:25:30 +0000 (UTC)
-Received: from [192.168.0.66] ([92.154.77.116]) by mrelayeu.kundenserver.de
- (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1Macf4-1oD2Cm2BUg-00cCXc; Fri, 15 Apr 2022 14:25:22 +0200
-Message-ID: <32c50049-ca86-b729-aec9-4893711dbc2c@green-communications.fr>
-Date: Fri, 15 Apr 2022 14:25:22 +0200
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zkdHW-uml8ci for <buildroot@lists.busybox.net>;
+ Fri, 15 Apr 2022 16:20:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA894403CA
+ for <buildroot@buildroot.org>; Fri, 15 Apr 2022 16:20:08 +0000 (UTC)
+Received: from pwmachine.lan (238.red-83-59-6.dynamicip.rima-tde.net
+ [83.59.6.238])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 3884920C3546;
+ Fri, 15 Apr 2022 09:20:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3884920C3546
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1650039607;
+ bh=ZW7fZwEIBsrKKnDGicNwGTVxNqJjnq2Y/wKfrhGp0fg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=N8hpOc704IHC6r14Bd5m8MGLoS/gdknrX/pU8b/5wUnwH+7Dcekct2HwsbtM/8/nn
+ qUQrzjtOv9oeOzB1TT/oNy1JLZbxFTZuGz7T7o/n31StnR9hU0f44rL9dRaA/YZm8n
+ BS94irCG5u4N6W+1inlwjZa/+sPNO+VEVmr4rvfM=
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: buildroot@buildroot.org
+Date: Fri, 15 Apr 2022 17:19:53 +0100
+Message-Id: <20220415161955.86520-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To: Eugen.Hristev@microchip.com, Jason@zx2c4.com
-References: <CAHmME9oUAXNpjWF266m3mH5HvEvVWCthy64RHFye+mOktMegzg@mail.gmail.com>
- <20220323200731.170409-1-Jason@zx2c4.com> <20220324082433.GA3649946@scaer>
- <87fsn2b4ht.fsf@dell.be.48ers.dk>
- <df314344-f151-7ae4-1e56-b65b8532d6d2@microchip.com>
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-In-Reply-To: <df314344-f151-7ae4-1e56-b65b8532d6d2@microchip.com>
-X-Provags-ID: V03:K1:WvfUBhQLdA9qXaTzwqiYUXqaTuD4SrY3sMSO8WPZFWT5UqmVkBA
- odkIAl4crxoB4PXl8Ln3te+3ttLaFqLBnguFExpb/hIt/U2NXZj5d8n3Zpi6IpHNvSf7Z71
- d8t6bQkBG1XwjI5r2WXgOeaDLY5lgbzEJZOTii3x3jutGZoOk4jKjhNIl73NSoJmnXqJ7jL
- NN1bNRw6uyYW7JIBzpG1g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:V+Qjac0xq6s=:ZeqcGW93nTcR/pVX+Hegwi
- xMR3IZsBswhSpvS6omxBKdNAPApompDMaUydBRxd5Y0uopcZSazVHyO1aR/LctwR5Cyu+WD6m
- MLgj/uBiVJ35Z7EqERpwdqy5nfhCWZT0EWH7i9dvEIc9lai0cqNZeDG4eGX+KbvJ7liemclXe
- q35fqgDwb0NjRPEQKfRssNWqUY8cmmptcRC7MiogTKodPl3xQnTBP8uznS0Y8DgbLiY3tnfon
- ltF7Sxpxo2LY2JX+6Wm7XQBFDqC44Oo5ktyOq+NFOcg6n51PHUP0PZCYru7S8+PPMQGs9VYxN
- bTbGrMsOgzMcMU0to7cdvK1sq9VaDYhv94WVORlmvx++pWQXS54YEOMP8i+gu5+UVD8h2/ZYw
- /kCWuagtgo+MJdPv3RzzTYNs++aN+cNMyTtEkWYHF3hrWZUe0swxMbEzAxr7GaPNewftGu0uo
- 0mJX6M++qKDn7LMM3wDfbf9o22PmZ+RMOcRjR/rnus0LpD17ppx7gs63t4bOGnj1PKhvtZBYf
- hYdIS/knrLjrb5Pa1LDcc40oMKm17tlMPmGXsWR/8FEQKbjczJu5pwruVydlq0BvNpfnRo4Ni
- 9AEQe8SnHUUVtgdcDD+xdBKKaZR07PF8jcqrohl0jCaqK8uQBPyENTaM+aJTn06lfwnW1/fnu
- v7ML6LdxGafQJmnieMjyjNd0dQEx7wtsZhzpDQwpJCW4Evn0ANbw7fXeUNOAhThtLshNNBpWh
- Eu2zvONnTRiRymiasCfxxoQD73UqxiZBR6/ATA==
-Subject: Re: [Buildroot] [PATCH v2] package/urandom-scripts: hash old seed
- with new seed when saving
+Subject: [Buildroot] [PATCH 0/2] Bump sysdig to 0.29.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,88 +63,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, buildroot@buildroot.org
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/04/2022 12:54, Eugen.Hristev--- via buildroot wrote:
-> On 3/28/22 4:17 PM, Peter Korsgaard wrote:
->>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->>
->>    > Jason, All,
->>    > +Peter: candidate for backporting as a security fix
->>
->>    > On 2022-03-23 14:07 -0600, Jason A. Donenfeld spake thusly:
->>    >> Writing into /dev/urandom doesn't actually credit any entropy bits. And
->>    >> while it adds that data to the entropy pool, it won't actually be
->>    >> immediately used when reading from /dev/urandom subsequently. This is
->>    >> how the kernel's /dev/urandom has always worked, unfortunately.
->>    >>
->>    >> As a result of this behavior, which may be understandably surprising,
->>    >> writing a good seed file into /dev/urandom and then saving a new seed
->>    >> file immediately after is dangerous, because the new seed file may wind
->>    >> up being entirely deterministic, even if the old seed file was quite
->>    >> good.
->>    >>
->>    >> This has been fixed in systemd with
->>    >> <https://github.com/systemd/systemd/commit/da2862ef06f22fc8d31dafced6d2d6dc14f2ee0b>,
->>    >> and fortunately it's possible to do the same thing in shell script here.
->>    >> Specifically, instead of just saving new /dev/urandom output straight
->>    >> up, we hash the new /dev/urandom together with the old seed, in order to
->>    >> produce the new seed. This way the amount of entropy in the new seed
->>    >> will stay the same or get better, but not appreciably regress.
->>    >>
->>    >> At the same time, the pool size check in this script is useless. Writing
->>    >> to /dev/urandom never credits bits anyway, so no matter what, writing
->>    >> into /dev/urandom is useful and not harmful. There's also not much of a
->>    >> point in seeding with more than 256 bits, which is what the hashing
->>    >> operation above produces. So this commit removes the file size check.
->>    >>
->>    >> As a final note, while this commit improves upon the status quo by
->>    >> removing a vulnerability, this shell script still does not actually
->>    >> initialize the RNG like it says it does. For initialization via a seed
->>    >> file, the RNDADDENTROPY ioctl must be used.
->>    >>
->>    >> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->>
->>    > Applied to master, thanks.
->>
->> Committed to 2021.02.x and 2022.02.x, thanks.
-> 
-> Hello Jason,
-> 
-> I noticed that you worked a lot on the S20urandom init script for
-> sysvinit in buildroot.
-> 
-> I recently updated from 2022.02 release to 2022.02.1 and now on booting
-> all our boards, I noticed this message:
-> 
-> "Initializing random number generator: FAIL"
-> 
-> 
-> With the 2022.02 release, with the same kernel, the message stated "OK".
-> 
-> So it might be something changed on this BR revision that causes this fail.
-> 
-> As you worked more on these scripts , do you have maybe an idea or a
-> hint about what I can try , to have it working as before ?
-> Or maybe what change can cause it ?
-> 
-> I tried to test 2022.02 + this patch I am replying to, and things appear
-> to work fine. So it must be something else then...
-> 
-> Thank you for your help !
+Hi.
 
-If /var/lib/random-seed does not already exist during boot then the new version 
-of the script will fail and not create it, because start is "init_rng && 
-save_random_seed" and init_rng will fail.  If S20urandom stop is never called 
-then this may explain the issue.
 
-I pointed this out before but it must have been lost:
+In this contribution, I bumped sysdig version to 0.29.1.
+Indeed, following this discussion [1], Arnout Vandecappelle noted sysdig 0.27.1
+cannot be cross-compiled to, e.g., aarch64 because it uses the open() syscall.
 
-https://lore.kernel.org/all/20220324103939.GD3649946@scaer/T/#md433db1bd1e08f3476eefd4e9a83ead5e12b1276
+To fix this, I bumped sysdig to 0.29.1.
+Sadly, some components of sysdig, like libsinsp, libscap and the kernel modules,
+were moved to falcosecurity/libs.
+So, I added the falcosecurity-libs package.
+A new patch was added to sysdig recipe to avoid compiling again
+falcosecurity-libs.
+Nonetheless, this patch is a bit big, so I prefered to keep the RFC tag to
+gather your opinion about it.
+
+I was nonetheless able to build and run sysdig with start-qemu.sh:
+Welcome to Buildroot
+buildroot login: root
+# insmod /lib/modules/5.15.18/extra/falco.ko
+falco: loading out-of-tree module taints kernel.
+falco: driver loading, scap 0.1.1dev
+# sysdig | head
+falco: adding new consumer 00000000b5aaf410
+falco: initializing ring buffer for CPU 0
+falco: CPU buffer initialized, size=8388608
+falco: starting capture
+2 17:18:14.088681520 0 sysdig (330) > switch next=11 pgft_maj=203 pgft_min=1165 vm_size=46264 vm_rss=18072 vm_swap=
+...
+24 17:18:14.095103470 0 sysdig (330) > switch next=0 pgft_maj=204 pgft_min=1165 vm_size=46264 vm_rss=18072 vm_swap=
+falco: deallocating consumer 00000000b5aaf410
+falco: no more consumers, stopping capture
+
+So, if you see a particular way to fix the problem I described above or any
+problem with this contribution, feel free to share it!
+
+Changes since:
+ v1:
+  - Drop nlohmann-json patch and use json-for-modern-cpp in place.
+  - Add a patch to avoid building falcosecurity-libs twice.
+
+Francis Laniel (2):
+  falcosecurity-libs: add new package
+  package/sysdig: bump to 0.29.1
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...cmake-Permit-setting-GRPC_CPP_PLUGIN.patch | 34 ++++++++
+ package/falcosecurity-libs/Config.in          | 38 +++++++++
+ .../falcosecurity-libs.hash                   |  5 ++
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 63 ++++++++++++++
+ ...BUNDLED_DEPS-before-getting-nlohmann.patch | 51 ++++++++++++
+ ...ATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 -------------------
+ ...gainst-libabseil-cpp-which-grpc-uses.patch | 47 -----------
+ ...e-Add-libsinsp.a-as-IMPORTED-library.patch | 59 +++++++++++++
+ package/sysdig/Config.in                      | 31 ++-----
+ package/sysdig/sysdig.hash                    |  4 +-
+ package/sysdig/sysdig.mk                      | 55 ++++++-------
+ 13 files changed, 283 insertions(+), 188 deletions(-)
+ create mode 100644 package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
+ create mode 100644 package/falcosecurity-libs/Config.in
+ create mode 100644 package/falcosecurity-libs/falcosecurity-libs.hash
+ create mode 100644 package/falcosecurity-libs/falcosecurity-libs.mk
+ create mode 100644 package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+ delete mode 100644 package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
+ delete mode 100644 package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
+ create mode 100644 package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch
+
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
