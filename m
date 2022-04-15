@@ -4,60 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A0AC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 21:14:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5BF0C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 22:26:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76215841C1;
-	Fri, 15 Apr 2022 21:14:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39C8384232;
+	Fri, 15 Apr 2022 22:26:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J3kI2p3-pWsr; Fri, 15 Apr 2022 21:14:43 +0000 (UTC)
+	with ESMTP id a0uhO_HL7rPo; Fri, 15 Apr 2022 22:26:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79E528415A;
-	Fri, 15 Apr 2022 21:14:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 257AB84225;
+	Fri, 15 Apr 2022 22:26:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CCFA1C11A5
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 21:14:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F4B71BF34A
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 22:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4868141A69
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 21:14:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B320415D7
+ for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 22:26:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oPQLqQ18AnvJ for <buildroot@lists.busybox.net>;
- Fri, 15 Apr 2022 21:14:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F07764161A
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 21:14:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D09C91C0003;
- Fri, 15 Apr 2022 21:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650057275;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Wr2poEI0agk/62FfMgl1nULmnyM+NdqPRoTQAuSoZc0=;
- b=Wr7oKIuuNgN5qdJ5k8t47jaJHKj3og0lOngLj3qdIsOIy/xlBfRBgK1pQU4rhjKsSP41zF
- 35Btj3BRR/IVgcTwr1PhHrRdIVJVL32qhyarTy8hWcwfGP98Jn+N0HeUB7BUT7iLFA69nA
- GPye0WN4up190qlPf1XjTUS536l9cyaI1FX0T+wUUCj7X/OUFEiNHLob1azwApUHo2hA9p
- cvWSl8SXK/3+U7oxEb08IjZKrBd1rQaWklwyMS7UPw2Yv+NhDj73pUu5h30UBr+6TM9Z6a
- mU7KYYPQ8UTw3FecToy4MguA7HA4gBL1E/fIXpQ1Esrl7IvaZY01Dd0FDuU/Uw==
-Date: Fri, 15 Apr 2022 23:14:33 +0200
-To: Thomas Perrot <thomas.perrot@bootlin.com>
-Message-ID: <20220415231433.0ead2ec4@windsurf>
-In-Reply-To: <20220415165240.2820911-1-thomas.perrot@bootlin.com>
-References: <20220415165240.2820911-1-thomas.perrot@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+ with ESMTP id acRUS7KOGbFj for <buildroot@lists.busybox.net>;
+ Fri, 15 Apr 2022 22:26:22 +0000 (UTC)
+X-Greylist: delayed 01:14:54 by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 702FC415C8
+ for <buildroot@buildroot.org>; Fri, 15 Apr 2022 22:26:21 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7B59E200003;
+ Fri, 15 Apr 2022 22:26:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1nfUOP-00Doo3-JD; Sat, 16 Apr 2022 00:26:17 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sat, 16 Apr 2022 00:26:15 +0200
+Message-Id: <20220415222615.3293508-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/byacc: add new host package
+Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
+ 16.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,101 +57,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
-
-Thanks for your contribution. The commit title should be just
-"package/byacc: new package". See below for more comments.
-
-On Fri, 15 Apr 2022 18:52:39 +0200
-Thomas Perrot <thomas.perrot@bootlin.com> wrote:
-
-> This package provides a Berkeley LALR Yacc parser generator that has been use
-> by i.MX Code Signing tool.
-> 
-> Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
-> ---
->  package/Config.in.host       |  1 +
->  package/byacc/Config.in.host | 10 ++++++++++
->  package/byacc/byacc.hash     |  3 +++
->  package/byacc/byacc.mk       | 16 ++++++++++++++++
->  4 files changed, 30 insertions(+)
-
-You forgot to add an entry in the DEVELOPERS file for this new package.
-
->  create mode 100644 package/byacc/Config.in.host
->  create mode 100644 package/byacc/byacc.hash
->  create mode 100644 package/byacc/byacc.mk
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index cd1c34b5a3d9..69c985842d1f 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -7,6 +7,7 @@ menu "Host utilities"
->  	source "package/babeltrace2/Config.in.host"
->  	source "package/bmap-tools/Config.in.host"
->  	source "package/btrfs-progs/Config.in.host"
-> +	source "package/byacc/Config.in.host"
-
-This is not needed. This tool is merely a build dependency of imx-cst,
-so we don't need a visible entry in menuconfig. Look at package/bison/:
-it doesn't have a visible menuconfig entry.
-
-
-> diff --git a/package/byacc/byacc.hash b/package/byacc/byacc.hash
-> new file mode 100644
-> index 000000000000..d2ad441df39f
-> --- /dev/null
-> +++ b/package/byacc/byacc.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  42c1805cc529314e6a76326fe1b33e80c70862a44b01474da362e2f7db2d749c  byacc-20220128.tgz
-> +sha256  654a231fe9cd4d36e580214962fa777a1df0771d6889cfc74d19a3d414f14711  LICENSE
-> diff --git a/package/byacc/byacc.mk b/package/byacc/byacc.mk
-> new file mode 100644
-> index 000000000000..e14c4d9c7914
-> --- /dev/null
-> +++ b/package/byacc/byacc.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# byacc
-> +#
-> +################################################################################
-> +
-> +BYACC_SITE = https://invisible-mirror.net/archives/byacc
-> +BYACC_SITE_METHOD = https
-
-Specifying the site method here is not needed.
-
-> +BYACC_VERSION = 20220128
-> +BYACC_SOURCE = byacc-$(BYACC_VERSION).tgz
-> +BYACC_LICENSE = PD
-
-It seems like we normally use "Public Domain" and not "PD".
-
-> +BYACC_LICENSE_FILES = LICENSE
-> +
-> +HOST_BYACC_CONF_OPTS += --program-transform-name='s,^,b,'
-
-+= not needed, a = is sufficient here. However, a comment above this
-line would be appreciated, as it's not obvious why you're doing this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSBpc3N1ZXM6CgoxNi4yNC4xOgoKQ1ZFLTIwMjEt
+Mzc3MDYgLyBBU1QtMjAyMi0wMDQ6IHBqcHJvamVjdDogaW50ZWdlciB1bmRlcmZsb3cgb24gU1RV
+TiBtZXNzYWdlCgpUaGUgaGVhZGVyIGxlbmd0aCBvbiBpbmNvbWluZyBTVFVOIG1lc3NhZ2VzIHRo
+YXQgY29udGFpbiBhbiBFUlJPUi1DT0RFCmF0dHJpYnV0ZSBpcyBub3QgcHJvcGVybHkgY2hlY2tl
+ZC4gIFRoaXMgY2FuIHJlc3VsdCBpbiBhbiBpbnRlZ2VyIHVuZGVyZmxvdy4KTm90ZSwgdGhpcyBy
+ZXF1aXJlcyBJQ0Ugb3IgV2ViUlRDIHN1cHBvcnQgdG8gYmUgaW4gdXNlIHdpdGggYSBtYWxpY2lv
+dXMKcmVtb3RlIHBhcnR5LgoKaHR0cHM6Ly9zZWNsaXN0cy5vcmcvZnVsbGRpc2Nsb3N1cmUvMjAy
+Mi9NYXIvMAoKQ1ZFLTIwMjItMjM2MDggLyBBU1QtMjAyMi0wMDU6IHBqcHJvamVjdDogdW5kZWZp
+bmVkIGJlaGF2aW9yIGFmdGVyIGZyZWVpbmcgYQpkaWFsb2cgc2V0CgpXaGVuIGFjdGluZyBhcyBh
+IFVBQywgYW5kIHdoZW4gcGxhY2luZyBhbiBvdXRnb2luZyBjYWxsIHRvIGEgdGFyZ2V0IHRoYXQg
+dGhlbgpmb3JrcyBBc3RlcmlzayBtYXkgZXhwZXJpZW5jZSB1bmRlZmluZWQgYmVoYXZpb3IgKGNy
+YXNoZXMsIGhhbmdzLCBldGPigKYpCmFmdGVyIGEgZGlhbG9nIHNldCBpcyBwcmVtYXR1cmVseSBm
+cmVlZC4KCmh0dHBzOi8vc2VjbGlzdHMub3JnL2Z1bGxkaXNjbG9zdXJlLzIwMjIvTWFyLzEKCkNW
+RS0yMDIyLTIxNzIzIC8gQVNULTIwMjItMDA2OiBwanByb2plY3Q6IHVuY29uc3RyYWluZWQgbWFs
+Zm9ybWVkIG11bHRpcGFydApTSVAgbWVzc2FnZQoKSWYgYW4gaW5jb21pbmcgU0lQIG1lc3NhZ2Ug
+Y29udGFpbnMgYSBtYWxmb3JtZWQgbXVsdGktcGFydCBib2R5IGFuIG91dCBvZgpib3VuZHMgcmVh
+ZCBhY2Nlc3MgbWF5IG9jY3VyLCB3aGljaCBjYW4gcmVzdWx0IGluIHVuZGVmaW5lZCBiZWhhdmlv
+ci4gIE5vdGUsCml04oCZcyBjdXJyZW50bHkgdW5jZXJ0YWluIGlmIHRoZXJlIGlzIGFueSBleHRl
+cm5hbGx5IGV4cGxvaXRhYmxlIHZlY3Rvcgp3aXRoaW4gQXN0ZXJpc2sgZm9yIHRoaXMgaXNzdWUs
+IGJ1dCBwcm92aWRpbmcgdGhpcyBhcyBhIHNlY3VyaXR5IGlzc3VlIG91dApvZiBjYXV0aW9uLgoK
+aHR0cHM6Ly9zZWNsaXN0cy5vcmcvZnVsbGRpc2Nsb3N1cmUvMjAyMi9NYXIvMgoKMTYuMjUuMjoK
+CkNWRS0yMDIyLTI2NDk4IC8gQVNULTIwMjItMDAxOiByZXNfc3Rpcl9zaGFrZW46IHJlc291cmNl
+IGV4aGF1c3Rpb24gd2l0aApsYXJnZSBmaWxlcwoKV2hlbiB1c2luZyBTVElSL1NIQUtFTiwgaXTi
+gJlzIHBvc3NpYmxlIHRvIGRvd25sb2FkIGZpbGVzIHRoYXQgYXJlIG5vdApjZXJ0aWZpY2F0ZXMu
+IFRoZXNlIGZpbGVzIGNvdWxkIGJlIG11Y2ggbGFyZ2VyIHRoYW4gd2hhdCB5b3Ugd291bGQgZXhw
+ZWN0IHRvCmRvd25sb2FkLgoKaHR0cHM6Ly9zZWNsaXN0cy5vcmcvZnVsbGRpc2Nsb3N1cmUvMjAy
+Mi9BcHIvMTcKCkNWRS0yMDIyLTI2NDk5IC8gQVNULTIwMjItMDAyOiByZXNfc3Rpcl9zaGFrZW46
+IFNTUkYgdnVsbmVyYWJpbGl0eSB3aXRoCklkZW50aXR5IGhlYWRlcgoKV2hlbiB1c2luZyBTVElS
+L1NIQUtFTiwgaXTigJlzIHBvc3NpYmxlIHRvIHNlbmQgYXJiaXRyYXJ5IHJlcXVlc3RzIGxpa2Ug
+R0VUIHRvCmludGVyZmFjZXMgc3VjaCBhcyBsb2NhbGhvc3QgdXNpbmcgdGhlIElkZW50aXR5IGhl
+YWRlci4KCmh0dHBzOi8vc2VjbGlzdHMub3JnL2Z1bGxkaXNjbG9zdXJlLzIwMjIvQXByLzE4CgpD
+VkUtMjAyMi0yNjY1MSAvIEFTVC0yMDIyLTAwMzogZnVuY19vZGJjOiBQb3NzaWJsZSBTUUwgSW5q
+ZWN0aW9uCgpTb21lIGRhdGFiYXNlcyBjYW4gdXNlIGJhY2tzbGFzaGVzIHRvIGVzY2FwZSBjZXJ0
+YWluIGNoYXJhY3RlcnMsIHN1Y2ggYXMKYmFja3RpY2tzLiAgSWYgaW5wdXQgaXMgcHJvdmlkZWQg
+dG8gZnVuY19vZGJjIHdoaWNoIGluY2x1ZGVzIGJhY2tzbGFzaGVzIGl0CmlzIHBvc3NpYmxlIGZv
+ciBmdW5jX29kYmMgdG8gY29uc3RydWN0IGEgYnJva2VuIFNRTCBxdWVyeSBhbmQgdGhlIFNRTCBx
+dWVyeQp0byBmYWlsLgoKaHR0cHM6Ly9zZWNsaXN0cy5vcmcvZnVsbGRpc2Nsb3N1cmUvMjAyMi9B
+cHIvMTkKClVwZGF0ZSBoYXNoIG9mIHNoYTEuYyBhZnRlciBhIGRveHlnZW4gY29tbWVudCB1cGRh
+dGU6Cmh0dHBzOi8vZ2l0aHViLmNvbS9hc3Rlcmlzay9hc3Rlcmlzay9jb21taXQvMzdjMjliNmEy
+ODFkN2Y2OWU4OTExMTcyNjlkYmY4YzIwYmFjYzkwNAoKU2lnbmVkLW9mZi1ieTogUGV0ZXIgS29y
+c2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPgotLS0KIHBhY2thZ2UvYXN0ZXJpc2svYXN0ZXJp
+c2suaGFzaCB8IDQgKystLQogcGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5tayAgIHwgMiArLQog
+MiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5oYXNoIGIvcGFja2FnZS9hc3Rlcmlzay9h
+c3Rlcmlzay5oYXNoCmluZGV4IGVhYmUxMWUwNTIuLmZlNTk0ODNiNzMgMTAwNjQ0Ci0tLSBhL3Bh
+Y2thZ2UvYXN0ZXJpc2svYXN0ZXJpc2suaGFzaAorKysgYi9wYWNrYWdlL2FzdGVyaXNrL2FzdGVy
+aXNrLmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIExvY2FsbHkgY29tcHV0ZWQKLXNoYTI1NiAgMWJh
+ODY2NjYwNzJiOTAzZTI0YjVjZmVmM2Q2ZDYwN2QwZDA5MGMwZmQyMzI0MjllZDQxMDQ5NmU4Zjkz
+YWM0MCAgYXN0ZXJpc2stMTYuMjEuMS50YXIuZ3oKK3NoYTI1NiAgMGZiODE3OTQzYTI3NmY1ZTU0
+MGMyYTk0MzJlODg0MWNkMzM5M2U3YzFiZDEyNTAwNTVjNjIwOTAyZjZlYWZjOCAgYXN0ZXJpc2st
+MTYuMjUuMi50YXIuZ3oKIAogIyBzaGExIGZyb206IGh0dHA6Ly9kb3dubG9hZHMuYXN0ZXJpc2su
+b3JnL3B1Yi90ZWxlcGhvbnkvc291bmRzL3JlbGVhc2VzCiAjIHNoYTI1NiBsb2NhbGx5IGNvbXB1
+dGVkCkBAIC0xMCw2ICsxMCw2IEBAIHNoYTI1NiAgNDQ5ZmI4MTBkMTY1MDJjMzA1MmZlZGYwMmY3
+ZTc3YjM2MjA2YWM1YTE0NWYzZGFjZjQxNzc4NDNhMmZjYjUzOCAgYXN0ZXJpCiAKICMgTGljZW5z
+ZSBmaWxlcywgbG9jYWxseSBjb21wdXRlZAogc2hhMjU2ICA4MmFmNDBlZDdmNDljMDg2ODUzNjA4
+MTE5OTNkOTM5NjMyMDg0MmYwMjFkZjgyODgwMWQ3MzNlOGZkYzAzMTJmICBDT1BZSU5HCi1zaGEy
+NTYgIGFjNTU3MWYwMGU1NThlM2I3YzliM2YxM2Y0MjFiODc0Y2MxMmNmNDI1MGM0ZjcwMDk0Yzcx
+NTQ0Y2Y0ODYzMTIgIG1haW4vc2hhMS5jCitzaGEyNTYgIDNjZTQ3NTViOGRhODcyYTBkZTkzZWNk
+YmJlMmY5NDA3NjNjYzk1YzkwMjdiYmYzYzRhMmU5MTRmY2Q4YmY0YzYgIG1haW4vc2hhMS5jCiBz
+aGEyNTYgIDYyMTVlM2VkNzNjMzk4MmE1YzY3MDExMjdkNjgxZWMwYjlmMTEyMWFjNzhhMjg4MDVi
+ZDkzZjkzYzNlYjg0YzAgIGNvZGVjcy9zcGVleC9zcGVleF9yZXNhbXBsZXIuaAogc2hhMjU2ICBl
+YTY5Y2M5NmFiOGE3NzljMTgwYTM2MjM3N2NhZWFkYTcxOTI2ODk3ZDFiNTViOTgwZjA0ZDc0YmE1
+YWFhMzg4ICB1dGlscy9kYjEtYXN0L2luY2x1ZGUvZGIuaApkaWZmIC0tZ2l0IGEvcGFja2FnZS9h
+c3Rlcmlzay9hc3Rlcmlzay5tayBiL3BhY2thZ2UvYXN0ZXJpc2svYXN0ZXJpc2subWsKaW5kZXgg
+MmI3ODU0Yjk4Mi4uOWI1OTk5N2I4MCAxMDA2NDQKLS0tIGEvcGFja2FnZS9hc3Rlcmlzay9hc3Rl
+cmlzay5taworKysgYi9wYWNrYWdlL2FzdGVyaXNrL2FzdGVyaXNrLm1rCkBAIC00LDcgKzQsNyBA
+QAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotQVNURVJJU0tfVkVSU0lPTiA9IDE2LjIx
+LjEKK0FTVEVSSVNLX1ZFUlNJT04gPSAxNi4yNS4yCiAjIFVzZSB0aGUgZ2l0aHViIG1pcnJvcjog
+aXQncyBhbiBvZmZpY2lhbCBtaXJyb3IgbWFpbnRhaW5lZCBieSBEaWdpdW0sIGFuZAogIyBwcm92
+aWRlcyB0YXJiYWxscywgd2hpY2ggdGhlIG1haW4gQXN0ZXJpc2sgZ2l0IHRyZWUgKGJlaGluZCBH
+ZXJyaXQpIGRvZXMgbm90LgogQVNURVJJU0tfU0lURSA9ICQoY2FsbCBnaXRodWIsYXN0ZXJpc2ss
+YXN0ZXJpc2ssJChBU1RFUklTS19WRVJTSU9OKSkKLS0gCjIuMzAuMgoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
