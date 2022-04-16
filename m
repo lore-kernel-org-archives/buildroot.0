@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1755C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 19:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6509AC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 19:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3729084228;
-	Sat, 16 Apr 2022 19:58:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24E1260C19;
+	Sat, 16 Apr 2022 19:59:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CLkjv2XhBU6q; Sat, 16 Apr 2022 19:58:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5aPQTqgUPxKB; Sat, 16 Apr 2022 19:59:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C6BC8421F;
-	Sat, 16 Apr 2022 19:58:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 72F031BF484
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 19:58:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A3DA611AD;
+	Sat, 16 Apr 2022 19:59:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6811E1BF239
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 19:59:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F0F78421B
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 19:58:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54CF240C5B
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 19:59:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LDRBcKP1zRcn for <buildroot@lists.busybox.net>;
- Sat, 16 Apr 2022 19:58:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLip-uBFrj5V for <buildroot@lists.busybox.net>;
+ Sat, 16 Apr 2022 19:59:38 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7928A84213
- for <buildroot@buildroot.org>; Sat, 16 Apr 2022 19:58:22 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 749C740185
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 19:59:38 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 413DA1BF204;
- Sat, 16 Apr 2022 19:58:19 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 636FF1C0003;
+ Sat, 16 Apr 2022 19:59:36 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nfoYk-00Eq18-1O; Sat, 16 Apr 2022 21:58:18 +0200
+ id 1nfoZz-00EqC7-Kt; Sat, 16 Apr 2022 21:59:35 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Jan Havran <havran.jan@email.cz>
-References: <YlNL99jqJBlcX+tM@arch-zen.localdomain>
-Date: Sat, 16 Apr 2022 21:58:18 +0200
-In-Reply-To: <YlNL99jqJBlcX+tM@arch-zen.localdomain> (Jan Havran's message of
- "Sun, 10 Apr 2022 23:28:23 +0200")
-Message-ID: <87mtgk7qcl.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220411215740.521106-1-fontaine.fabrice@gmail.com>
+Date: Sat, 16 Apr 2022 21:59:35 +0200
+In-Reply-To: <20220411215740.521106-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 11 Apr 2022 23:57:40 +0200")
+Message-ID: <87ilr87qag.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: bump revision to 73f826f0
+Subject: Re: [Buildroot] [PATCH 1/1] package/lvm2: update site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,16 +59,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Jan" == Jan Havran <havran.jan@email.cz> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Update out-of-tree driver to make it work with Linux kernel v5.17.
- > Signed-off-by: Jan Havran <havran.jan@email.cz>
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=14751
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
