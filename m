@@ -4,74 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9239EC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 15 Apr 2022 23:37:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39367C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 07:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 174FD41A6B;
-	Fri, 15 Apr 2022 23:37:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6789241B42;
+	Sat, 16 Apr 2022 07:22:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YH41Ta_291Sd; Fri, 15 Apr 2022 23:37:24 +0000 (UTC)
+	with ESMTP id xq55XfrJksSG; Sat, 16 Apr 2022 07:22:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AEB241A69;
-	Fri, 15 Apr 2022 23:37:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A72F31BF5F8
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 23:37:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBBA6419D6;
+	Sat, 16 Apr 2022 07:22:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FD141BF3DD
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 07:22:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3AC08403B
- for <buildroot@lists.busybox.net>; Fri, 15 Apr 2022 23:37:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9877419D6
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 07:22:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zt0_2GnMR2Np for <buildroot@lists.busybox.net>;
- Fri, 15 Apr 2022 23:37:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xnkknJoilx5B for <buildroot@lists.busybox.net>;
+ Sat, 16 Apr 2022 07:22:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com
- [IPv6:2607:f8b0:4864:20::112e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F1AC8403A
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 23:37:21 +0000 (UTC)
-Received: by mail-yw1-x112e.google.com with SMTP id
- 00721157ae682-2ef4a241cc5so88541787b3.2
- for <buildroot@buildroot.org>; Fri, 15 Apr 2022 16:37:21 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C5814419C5
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 07:22:45 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id r64so6010263wmr.4
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 00:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=SbCVQ3WBtcEZaLzJkr/NGLupbCSMDdkszr4ct+X99b0=;
- b=i2j8CW4W7afejIOTtXvcqU+/PQiQfuY6woc/Fx/16pl+ozZtXUQ5b4nZBheUba8RTK
- oR/6IoN7F6ZRTcDb0Wv68y/rsFdilGH27FF89ZkDP+oWpDxuOCEqJF+sZ+cJO/we0abu
- FsKLzUxF+I5STia7CXbB2b7w1zvEU4mibx43QDQE0OFhu0coGWH42n4Rt4+oSkDQRGY1
- rQZYnQWLI0gtNAdcECzgUaNonhWP+FJwFC70+hNvFLUXl3BB7dN6b4TgPLlLtaZju91R
- vIDx2pDcbkwNx0zOYKryBKzqknT3eKSPxRIloHDCxck8el3RR/+7O6Y/um8PLRXuricD
- liEw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=p889X+H57lZ5225NZEt8+S1wEs89mn9tFTPdPsId7mA=;
+ b=DgKpxvzXFR7KL2AeX6LXZc7KFukf0ksJSZLnUGI5/3yTpNPWrTFdb7q0YTR0QCgsXw
+ 0clyDUyczfygrZpx+SgBuVXQIVh46HpJU0eQSaVNQstBb2V7OcgfLIfb8sVM6KBqEenx
+ PFcibD7uUKQS2i3r5+JAIB1DsZrsJtUP51Fv1TXv51qh1kjf2lpGljVLD6IUPdRMpXgf
+ ulk7FUrK7Ek2GXad9zkbT64f7JtuXLnhKxhK0Hj/V1ErbXkwEQFnE8dVSFNoEyCLxhNP
+ 3R2ByzapQ5J1XLQy3t/auNKydovptgNW+yOD4T1o3gRWArVQsNrl73BV6sObI4rtOehe
+ 0PMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=SbCVQ3WBtcEZaLzJkr/NGLupbCSMDdkszr4ct+X99b0=;
- b=3NCIMsec4R4LyfqPxb/5FTnK/u3D9ivqF7fUZZVsXNdbOlGGzbsKrdWFQLnbhxXoNr
- +ZI9KxLG2UMaUjR6B1jCjXRMgP6vSeYx7XCScIyx/XlWejN+c6kRdUZf4OX02kLF2Y8o
- ES+yxC4z02naKYBE8NgQiB76NA30XF9rbDZh/7r+DHN9V1Uy1TTnR3g+uIrentcDASP8
- RUlMjnyc8YGo/FpGOFJc5RNlA2mwr+NmNE8c/snM8lIfd74A5YaFK05H+6FQiHoGwAx9
- Fhe5OUPpREgJpcW5KHALUUJarT+g/8QiHPN+jT/+t2TFc6FLtQIleAD8csnaKMMu+Yye
- PHPg==
-X-Gm-Message-State: AOAM532czzoP5m3TyKkQnutC8ZmSb/Uy9gMbWNdyUzrmPJuc7pJo/714
- 7UMBr7eYz4f28yLxsBuMuerAT9G64ZPVcnS41XpIZPfR
-X-Google-Smtp-Source: ABdhPJxtT0mU/GgZchHUGOYnfn3vd0eMKD+vwy1qQKl/1TpW4HumATllce1WyaivXRwE3eK0NUhq2WEMrtLR0W7ILSg=
-X-Received: by 2002:a81:7d43:0:b0:2ec:82a:a747 with SMTP id
- y64-20020a817d43000000b002ec082aa747mr1146842ywc.357.1650065840638; Fri, 15
- Apr 2022 16:37:20 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=p889X+H57lZ5225NZEt8+S1wEs89mn9tFTPdPsId7mA=;
+ b=wZXG7LE9VNIjPKLw6BpJkQXbWUeSQVPX3VIgMJTpVjt099rNG8HkkoG7jjkZ48kWLa
+ yfu6L/9TrP4Dom+DKkJID9b0JlMaWIrLzZp92kS8vrqaaQh9e8t7Si4THIYAKCdGLF7C
+ D35p0FhQIYdYI6VK+5oxa2VtOnPGCLng7F8rnC3ObqpUaIc8/a4JnW9Utyj1JwKcn4K+
+ KUYNqCltryHF0+3eVuFBKn9IikQphiwW+Y6Jy3iqomzo0tVcVU8qtvNo3r8nwEevbAYQ
+ unN3EYeW+/259TQZJOVioQeNyxIv9+rc9Cj4Xd/OemDPKE+8wKP1ToM4dG3RxheHasn7
+ PIwA==
+X-Gm-Message-State: AOAM532bVG31iglU5jLR8bf2HEqqaK1tUoXtwBClwlzdyIZenAeX0rRP
+ DB8WtB+07glcmDcKp74fXQ4opJBsDxk=
+X-Google-Smtp-Source: ABdhPJzJiyttnUEExGe3WfC7tGQyMENnxuGS9ZRpglS5hz8k9pcqbsOJHrz2i8W24N6K7VyJHTYEgQ==
+X-Received: by 2002:a1c:acc6:0:b0:38e:b184:7721 with SMTP id
+ v189-20020a1cacc6000000b0038eb1847721mr2120053wme.94.1650093763073; 
+ Sat, 16 Apr 2022 00:22:43 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ bh26-20020a05600c3d1a00b003928db85759sm322377wmb.15.2022.04.16.00.22.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 16 Apr 2022 00:22:42 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 16 Apr 2022 09:20:06 +0200
+Message-Id: <20220416072006.1099281-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220404193733.0096182980@busybox.osuosl.org>
-In-Reply-To: <20220404193733.0096182980@busybox.osuosl.org>
-From: Emile Cormier <emile.cormier.jr@gmail.com>
-Date: Fri, 15 Apr 2022 20:37:09 -0300
-Message-ID: <CAM70yxC66V8wbjeXsz07pbV8DiB4xhN+vgQaAf_R-Dfvpe735Q@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [git commit] package/python-snappy: bump version to
- 0.6.1
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-python: fix build
+ without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,185 +86,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============6128466002918468034=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6128466002918468034==
-Content-Type: multipart/alternative; boundary="000000000000498dd705dcb9e4f4"
+Fix the following build failure without C++ raised since the addition of
+the package in commit ba0d78b90705fa6f564e105437be4817caf2ca6c:
 
---000000000000498dd705dcb9e4f4
-Content-Type: text/plain; charset="UTF-8"
+The following exception(s) were encountered:
+Running "/home/autobuild/autobuild/instance-0/output-1/host/bin/i686-buildroot-linux-gnu-g++ --version" gave "[Errno 2] No such file or directory: '/home/autobuild/autobuild/instance-0/output-1/host/bin/i686-buildroot-linux-gnu-g++'"
 
-Just a heads-up that I'm dropping Crossbar in our project in favor of a C++
-based solution that doesn't require the heavyweight Python dependency.
+Fixes:
+ - http://autobuild.buildroot.org/results/eebf65036f79d21d347714d62afecd0108393308
 
-I'm going to unsubscribe from the buildroot mailing list due to the high
-traffic volume. Please remember to CC me directly if you decide to proceed
-with the remaining patches in this set.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-build-on-systems-without-C-compiler.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-python/0001-gst-python-fix-build-on-systems-without-C-compiler.patch
 
-On Mon, Apr 4, 2022 at 4:48 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=968450adfdf1042ddcd8a0ab157dd9747ec6ee8b
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Required by python-crossbar and python-autobahn[compress].
->
-> Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/python-snappy/python-snappy.hash | 6 +++---
->  package/python-snappy/python-snappy.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/package/python-snappy/python-snappy.hash
-> b/package/python-snappy/python-snappy.hash
-> index 1e0f96054f..c4dbc72077 100644
-> --- a/package/python-snappy/python-snappy.hash
-> +++ b/package/python-snappy/python-snappy.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/python-snappy/json
-> -md5    82e09ffd44204096fc70d6de14d0ea2f  python-snappy-0.5.4.tar.gz
-> -sha256 d9c26532cfa510f45e8d135cde140e8a5603d3fb254cfec273ebc0ecf9f668e2
-> python-snappy-0.5.4.tar.gz
-> +md5  fc84cfa3526fba06d66f0d0b2e764300  python-snappy-0.6.1.tar.gz
-> +sha256  b6a107ab06206acc5359d4c5632bd9b22d448702a79b3169b0c62e0fb808bb2a
-> python-snappy-0.6.1.tar.gz
->  # Locally computed sha256 checksums
-> -sha256 d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a
-> LICENSE
-> +sha256  d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a
-> LICENSE
-> diff --git a/package/python-snappy/python-snappy.mk
-> b/package/python-snappy/python-snappy.mk
-> index d087c83b10..e80aa861df 100644
-> --- a/package/python-snappy/python-snappy.mk
-> +++ b/package/python-snappy/python-snappy.mk
-> @@ -4,8 +4,8 @@
->  #
->
->  ################################################################################
->
-> -PYTHON_SNAPPY_VERSION = 0.5.4
-> -PYTHON_SNAPPY_SITE =
-> https://files.pythonhosted.org/packages/45/35/65d9f8cc537129894b4b32647d80212d1fa342877581c5b8a69872cea8be
-> +PYTHON_SNAPPY_VERSION = 0.6.1
-> +PYTHON_SNAPPY_SITE =
-> https://files.pythonhosted.org/packages/98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96
->  PYTHON_SNAPPY_SETUP_TYPE = setuptools
->  PYTHON_SNAPPY_LICENSE = BSD-3-Clause
->  PYTHON_SNAPPY_LICENSE_FILES = LICENSE
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---000000000000498dd705dcb9e4f4
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Just a heads-up that I&#39;m dropping Crossbar in our=
- project in favor of a C++ based solution that doesn&#39;t require the heav=
-yweight Python dependency.</div><div><br></div><div>I&#39;m going to unsubs=
-cribe from the buildroot mailing list due to the high traffic volume. Pleas=
-e remember to CC me directly if you decide to proceed with the remaining pa=
-tches in this set.<br></div></div><br><div class=3D"gmail_quote"><div dir=
-=3D"ltr" class=3D"gmail_attr">On Mon, Apr 4, 2022 at 4:48 PM Arnout Vandeca=
-ppelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt; wrote:<=
-br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">commit: <a href=
-=3D"https://git.buildroot.net/buildroot/commit/?id=3D968450adfdf1042ddcd8a0=
-ab157dd9747ec6ee8b" rel=3D"noreferrer" target=3D"_blank">https://git.buildr=
-oot.net/buildroot/commit/?id=3D968450adfdf1042ddcd8a0ab157dd9747ec6ee8b</a>=
-<br>
-branch: <a href=3D"https://git.buildroot.net/buildroot/commit/?id=3Drefs/he=
-ads/master" rel=3D"noreferrer" target=3D"_blank">https://git.buildroot.net/=
-buildroot/commit/?id=3Drefs/heads/master</a><br>
-<br>
-Required by python-crossbar and python-autobahn[compress].<br>
-<br>
-Signed-off-by: Emile Cormier &lt;<a href=3D"mailto:emile.cormier.jr@gmail.c=
-om" target=3D"_blank">emile.cormier.jr@gmail.com</a>&gt;<br>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) &lt;<a href=3D"mailto:=
-arnout@mind.be" target=3D"_blank">arnout@mind.be</a>&gt;<br>
----<br>
-=C2=A0package/python-snappy/python-snappy.hash | 6 +++---<br>
-=C2=A0package/python-snappy/<a href=3D"http://python-snappy.mk" rel=3D"nore=
-ferrer" target=3D"_blank">python-snappy.mk</a>=C2=A0 =C2=A0| 4 ++--<br>
-=C2=A02 files changed, 5 insertions(+), 5 deletions(-)<br>
-<br>
-diff --git a/package/python-snappy/python-snappy.hash b/package/python-snap=
-py/python-snappy.hash<br>
-index 1e0f96054f..c4dbc72077 100644<br>
---- a/package/python-snappy/python-snappy.hash<br>
-+++ b/package/python-snappy/python-snappy.hash<br>
-@@ -1,5 +1,5 @@<br>
-=C2=A0# md5, sha256 from <a href=3D"https://pypi.org/pypi/python-snappy/jso=
-n" rel=3D"noreferrer" target=3D"_blank">https://pypi.org/pypi/python-snappy=
-/json</a><br>
--md5=C2=A0 =C2=A0 82e09ffd44204096fc70d6de14d0ea2f=C2=A0 python-snappy-0.5.=
-4.tar.gz<br>
--sha256 d9c26532cfa510f45e8d135cde140e8a5603d3fb254cfec273ebc0ecf9f668e2=C2=
-=A0 python-snappy-0.5.4.tar.gz<br>
-+md5=C2=A0 fc84cfa3526fba06d66f0d0b2e764300=C2=A0 python-snappy-0.6.1.tar.g=
-z<br>
-+sha256=C2=A0 b6a107ab06206acc5359d4c5632bd9b22d448702a79b3169b0c62e0fb808b=
-b2a=C2=A0 python-snappy-0.6.1.tar.gz<br>
-=C2=A0# Locally computed sha256 checksums<br>
--sha256 d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a=C2=
-=A0 LICENSE<br>
-+sha256=C2=A0 d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938=
-f9a=C2=A0 LICENSE<br>
-diff --git a/package/python-snappy/<a href=3D"http://python-snappy.mk" rel=
-=3D"noreferrer" target=3D"_blank">python-snappy.mk</a> b/package/python-sna=
-ppy/<a href=3D"http://python-snappy.mk" rel=3D"noreferrer" target=3D"_blank=
-">python-snappy.mk</a><br>
-index d087c83b10..e80aa861df 100644<br>
---- a/package/python-snappy/<a href=3D"http://python-snappy.mk" rel=3D"nore=
-ferrer" target=3D"_blank">python-snappy.mk</a><br>
-+++ b/package/python-snappy/<a href=3D"http://python-snappy.mk" rel=3D"nore=
-ferrer" target=3D"_blank">python-snappy.mk</a><br>
-@@ -4,8 +4,8 @@<br>
-=C2=A0#<br>
-=C2=A0#####################################################################=
-###########<br>
-<br>
--PYTHON_SNAPPY_VERSION =3D 0.5.4<br>
--PYTHON_SNAPPY_SITE =3D <a href=3D"https://files.pythonhosted.org/packages/=
-45/35/65d9f8cc537129894b4b32647d80212d1fa342877581c5b8a69872cea8be" rel=3D"=
-noreferrer" target=3D"_blank">https://files.pythonhosted.org/packages/45/35=
-/65d9f8cc537129894b4b32647d80212d1fa342877581c5b8a69872cea8be</a><br>
-+PYTHON_SNAPPY_VERSION =3D 0.6.1<br>
-+PYTHON_SNAPPY_SITE =3D <a href=3D"https://files.pythonhosted.org/packages/=
-98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96" rel=3D"=
-noreferrer" target=3D"_blank">https://files.pythonhosted.org/packages/98/7a=
-/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96</a><br>
-=C2=A0PYTHON_SNAPPY_SETUP_TYPE =3D setuptools<br>
-=C2=A0PYTHON_SNAPPY_LICENSE =3D BSD-3-Clause<br>
-=C2=A0PYTHON_SNAPPY_LICENSE_FILES =3D LICENSE<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div>
-
---000000000000498dd705dcb9e4f4--
-
---===============6128466002918468034==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/gstreamer1/gst1-python/0001-gst-python-fix-build-on-systems-without-C-compiler.patch b/package/gstreamer1/gst1-python/0001-gst-python-fix-build-on-systems-without-C-compiler.patch
+new file mode 100644
+index 0000000000..7d3059d61a
+--- /dev/null
++++ b/package/gstreamer1/gst1-python/0001-gst-python-fix-build-on-systems-without-C-compiler.patch
+@@ -0,0 +1,35 @@
++From 26c2385faed0bb997368daabd4c64207b3fc01ca Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 15 Apr 2022 18:58:49 +0200
++Subject: [PATCH] gst-python: fix build on systems without C++ compiler
++
++Fix the following build failure on systems without C++ compiler:
++
++The following exception(s) were encountered:
++Running "/home/autobuild/autobuild/instance-0/output-1/host/bin/i686-buildroot-linux-gnu-g++ --version" gave "[Errno 2] No such file or directory: '/home/autobuild/autobuild/instance-0/output-1/host/bin/i686-buildroot-linux-gnu-g++'"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/eebf65036f79d21d347714d62afecd0108393308
++
++Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/2200>
++
++[Retrieved (and backported) from:
++https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/26c2385faed0bb997368daabd4c64207b3fc01ca]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ subprojects/gst-python/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 1462604b297..c28df16192a 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1,4 +1,4 @@
++-project('gst-python', 'c', 'cpp',
+++project('gst-python', 'c',
++   version : '1.20.1',
++   meson_version : '>= 0.60',
++   default_options : [ 'warning_level=1',
++-- 
++GitLab
++
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6128466002918468034==--
