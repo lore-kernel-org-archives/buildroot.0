@@ -1,82 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22AF6C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 21:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 679E9C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 21:47:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C00F783EF4;
-	Sat, 16 Apr 2022 21:15:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF084611DD;
+	Sat, 16 Apr 2022 21:47:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DBXhqugwliu4; Sat, 16 Apr 2022 21:15:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C749E83104;
-	Sat, 16 Apr 2022 21:15:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 343241BF341
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 21:15:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30A8560C33
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 21:15:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7fDaq6fzkgcR for <buildroot@lists.busybox.net>;
- Sat, 16 Apr 2022 21:15:35 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wzJzQ64h_OaG; Sat, 16 Apr 2022 21:47:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07755611D9;
+	Sat, 16 Apr 2022 21:47:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 88C491BF341
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 21:47:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73C9341C34
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 21:47:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id days_O4DT7Aw for <buildroot@lists.busybox.net>;
+ Sat, 16 Apr 2022 21:47:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 214CB60B86
- for <buildroot@buildroot.org>; Sat, 16 Apr 2022 21:15:34 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id e21so14393209wrc.8
- for <buildroot@buildroot.org>; Sat, 16 Apr 2022 14:15:34 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 10F9C41C32
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 21:47:31 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ c190-20020a1c35c7000000b0038e37907b5bso9682349wma.0
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 14:47:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=2NihjtGshnQlCpqLd8GZNenv7HKZkjcbvPDmrUtiT04=;
- b=I6naRrX7jF2iCmFdkZAcmT8yHXbfRkZ3IgFKCgj7LNonnYvplmbh6aES91yZV7thm2
- Wyt19aFJ/mCISo5QQyDf/48MGqeXUL9CyXy4vA+YyzFJdile2kltegmE/9ErxfTNwA0p
- iOvyIj2sUlKjuF/V9Sutew7IqisMwS2HBlRst+ULDknY7FVFLPuaxomFkFwH2y+BZgjb
- LsFKzySB7eJ0yZoE3G9yS25Y6oXrG+S7lzeAcbBID44Xr4GfPCqQJZcfWk3W/mGIrqET
- hHZ7sVKalWPwacvsCTGXOkLExifdkwNY0AEPfrXKKzqq0esRvPmULOjJH4AIf7BBEwlN
- hGnw==
+ bh=KyXTYmGJDKa6GrrnDB9kvE6TyR4SD4/XI/WyD9VlD0U=;
+ b=PkluSh9qFNy11SH519CTFQDTo4ueWyfoB3McqW16WlzLfVfVCx0xHwa84ZUDav+688
+ J82sja/TwIcidR8imZ+zwudbGZJ1Oo5IdV2F/bSrQEm2IltZwbS0BYIKYTpwbgyrM/Yi
+ YTfzZ32wCV9kgnfeQZlVfwGmi7DwhT6aKD0ouM5oXg1MV7GCSRQbo0ZDEAOQiKY/BClR
+ cNUUsGV1CgK82Tm+DYboBgCLIMWHqeRtIcWPCGXJfZaoF/tWLzxiESBIwmHLVDgUn0zs
+ 2HUkGPCq4GXIA7w6aPN9/105v54qaXVv3ucm6l2tBm7lHWwNzpoSlqXnx+nB1d1OjOSf
+ 2YOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=2NihjtGshnQlCpqLd8GZNenv7HKZkjcbvPDmrUtiT04=;
- b=O/FrLZY6MVMy79PCph0vS3MKNpUNDq3LgwRqSaSpi6/Ub2nKyRY7MndR576EUIM123
- LVVM5g6e1GG0J6DbhRZUGasPI7sHUwlXK1SeEw+BhisR8gMaLZTBDfN3pjf0KixcER17
- uE9vNBJpJMl+N7gwI7YaDkNJlOWIMKxQcV57KqnAOZentIkHm3KLlA8dv1pqmxv3C37R
- ADtx8zm0dKG2ArnE6KUW0Fpd/IW+RrcHIwTDXxvBC3sYWuFKAhp3SxvYnQrNu/x/Httw
- pFZI99ezlgfdK9WkBzoIUvcqaoIuuadeY5lQTRSYPo9eTqF8VGDtZStxC5TXtYK7Rqoe
- QtBA==
-X-Gm-Message-State: AOAM532+sQda2phZ3bkxRuQSdo7KNIM1LaM8LN7gROxyTX6CiH2cd+0o
- ouU6OilxLi5J4cDmvpn6WpvH6vB1TSI=
-X-Google-Smtp-Source: ABdhPJw5iTmaEuMQdbmSjOfd7uuOWwLib9L8jVPPy2XnokD9IOMkv5iPdnmyI7m5TQXOZMI2+t/f6A==
-X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
- m3-20020a5d64a3000000b0020a79315b84mr3603163wrp.407.1650143733214; 
- Sat, 16 Apr 2022 14:15:33 -0700 (PDT)
+ bh=KyXTYmGJDKa6GrrnDB9kvE6TyR4SD4/XI/WyD9VlD0U=;
+ b=nL+XCYi1e61uPfZ4m3P+lBlkkBfZQOoYWpFw6LHydJuJqrRLaNX0U0Hs8iFHNrm5uA
+ gQsX7ajARWCx7TAErN8hARJg41UuAOrixs6ffZICXj668sZwvy9nj8fDej0Z4C32xUWS
+ rLS6XIWXqjhAEpxXHr94PKQxJaBX6Q5IEmzIs2F/7uk7+nb7dctb/Ns9ouE2MFIfDtXv
+ VI+joU/EHnJV9xcTpHpKdkzo/pJxI78UNQIVUDH7HZJ9vuNlCQx7Mk10D2cJ5qcSpPVC
+ vN0LvdUTioVUkJAZlN2kb2zA78vEHL51MHiQifZzaVX3ZImW3zrNFNFURPiqrEPP9kZo
+ RFgQ==
+X-Gm-Message-State: AOAM532Abg3OAo7YwZNSgXW2ptQrPDFKm3Y1PFRDvLuBTIg0dJthsSKk
+ LS5WXameyQm2soxsJ463ibY0lhOp+LU=
+X-Google-Smtp-Source: ABdhPJwY2Ch4cEyO0DXWvD2pcDHPkBVsv2Jg/Uy6F4fM/YDAWEwFzyQrx+N83/hX36Ud1aokadGbtw==
+X-Received: by 2002:a7b:cbd3:0:b0:38e:bc95:5048 with SMTP id
+ n19-20020a7bcbd3000000b0038ebc955048mr4678256wmi.203.1650145649653; 
+ Sat, 16 Apr 2022 14:47:29 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- k124-20020a1ca182000000b0038eb706c030sm11647585wme.39.2022.04.16.14.15.32
+ t15-20020adfeb8f000000b002060d26c211sm7039035wrn.114.2022.04.16.14.47.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Apr 2022 14:15:32 -0700 (PDT)
+ Sat, 16 Apr 2022 14:47:29 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Apr 2022 23:13:23 +0200
-Message-Id: <20220416211323.3200669-1-fontaine.fabrice@gmail.com>
+Date: Sat, 16 Apr 2022 23:45:28 +0200
+Message-Id: <20220416214528.3515227-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pkgconf: fix BR2_SHARED_STATIC_LIBS
- build
+Subject: [Buildroot] [PATCH 1/1] package/aircrack-ng: fix sqlite3 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,45 +94,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add --static when calling pkg-config with BR2_SHARED_STATIC_LIBS to
-avoid the following build failure if a package (e.g. dash or zabbix)
-decide to use the static library of of its dependency instead of the
-shared library (e.g. edit or openssl) resulting in the following build
-failures:
+Fix the following build failure raised since bump to version 1.2 in
+commit 242227dd86efaaec7c785b32a14e8133f2e86dec:
 
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/powerpc64-buildroot-linux-gnu/10.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libedit.a(terminal.o): in function `terminal_tputs':
-terminal.c:(.text+0x1d4): undefined reference to `tputs'
-
-/nvmedata/autobuild/instance-28/output-1/host/lib/gcc/powerpc64le-buildroot-linux-gnu/10.3.0/../../../../powerpc64le-buildroot-linux-gnu/bin/ld: /nvmedata/autobuild/instance-28/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_globallookup':
-dso_dlfcn.c:(.text+0x28): warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+powerpc-buildroot-linux-gnu-gcc: WARNING: unsafe header/library path used in cross-compilation: '-I/usr/include'
+In file included from src/aircrack-ng/aircrack-ng.c:54:
+/usr/include/math.h:476:21: error: '_Float128' is not supported on this target
+  476 | # define _Mdouble_  _Float128
+      |                     ^~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/2032d6b1233ce5c79a0c9421052ab1b9184c5b89
- - http://autobuild.buildroot.org/results/b0e1bd19f0612a0e90d89ad8fe9e294f57871f6b
+ - http://autobuild.buildroot.org/results/83a114ce197fb6af53a26ed68184cf3bbb30c8a7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkgconf/pkgconf.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/aircrack-ng/aircrack-ng.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index 5d65f69c10..c40c8b9433 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -35,10 +35,10 @@ endef
- PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
- HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index ff87766d6f..95cda7c5a6 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -69,7 +69,7 @@ endif
  
--ifeq ($(BR2_STATIC_LIBS),y)
--HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
--else
-+ifeq ($(BR2_SHARED_LIBS),y)
- HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_SHARED
-+else
-+HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ AIRCRACK_NG_DEPENDENCIES += sqlite
+-AIRCRACK_NG_CONF_OPTS += --with-sqlite3
++AIRCRACK_NG_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+ else
+ AIRCRACK_NG_CONF_OPTS += --without-sqlite3
  endif
- 
- $(eval $(autotools-package))
 -- 
 2.35.1
 
