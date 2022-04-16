@@ -1,83 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33177C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 14:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1AD2C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 15:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C13CF81A24;
-	Sat, 16 Apr 2022 14:59:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EF9960AD4;
+	Sat, 16 Apr 2022 15:08:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D2tD8-TJaaSG; Sat, 16 Apr 2022 14:59:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id brhjsx5fiRyA; Sat, 16 Apr 2022 15:08:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA67E8186A;
-	Sat, 16 Apr 2022 14:59:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5822C60AC4;
+	Sat, 16 Apr 2022 15:08:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C2C51BF239
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 14:59:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACBFD1BF57F
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 15:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31647417A2
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 14:59:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 996E9417CB
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 15:08:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0bE4IC5jitd for <buildroot@lists.busybox.net>;
- Sat, 16 Apr 2022 14:59:14 +0000 (UTC)
+ with ESMTP id BIh5zqhUgRj7 for <buildroot@lists.busybox.net>;
+ Sat, 16 Apr 2022 15:08:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EAD36417A1
- for <buildroot@buildroot.org>; Sat, 16 Apr 2022 14:59:13 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- m15-20020a7bca4f000000b0038fdc1394b1so5746502wml.2
- for <buildroot@buildroot.org>; Sat, 16 Apr 2022 07:59:13 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 77DCB417CA
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 15:08:01 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id i20so13720372wrb.13
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 08:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=hbAuLqRgW5u+A7BxDzry8NwLt11VZzb4MFzYMXxOl4w=;
- b=fx+JQL6dFRURJOtxaYH1jr/ZGrBysCzWODxK4/lmVRKfJE8mkjeIBqw1nWEkzLY4nX
- hmgKdRtx1HYCHu67DukRxb9yE63yrcFpviS/3ICOHCaQRxqnaivl9gnQ/MYBnnezLrRp
- ql2hPDPUjiG8YKOpjna6uEOfpVGyAKm+UGRPA94VlaZhjsGcsE6O3+IknoGj2m8sG5Xb
- kpx4Ik4yHNDApHvGiMnrN3+FbjhMZN4vKpowuQh6uNK0raQ65+SKWTX9cvtxykntXEy+
- v4abRXqOO4EZj/JnTIPKIDgbcYl4KPm9oBwbFH24eRFaJydy44TmEMikA9ezjeuFNzYW
- /0fA==
+ bh=4dgqM1iuk11vhJBFFrTavqvjcHB+QYLYTUWT38elZgE=;
+ b=ovj7FqMX9T1Hhk/DyH/LwPu43iyEr9Qy7gHJgtYcP0D0tmCzciFIpgkfBwMFJgmKSK
+ M4MR2aiH8vhzEY0eTAEpij7r58+BeIKWUn0n4DtutUfv7gJbRCcu2vadvnMfDMtXSamk
+ /azfMdrxYn5q2/hQmvY2Pj/lvSF7NC8Ytjuck8DEYyRvpPEzIKeF0UtWlz4Lv5KU1iJI
+ Oi+nLaevbDh8wSBnuMIMqT6Flbl4RyyLZ86SQVlMYfaZkdo/UbuyAs9mwUnI1nEGkQQ3
+ wo/4/fzjnRTqApSfncFQ3zwoT3sKqkTx10DWFzIaqfRJSjdKguU0y4ukd21KB3bA99sY
+ Ebxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=hbAuLqRgW5u+A7BxDzry8NwLt11VZzb4MFzYMXxOl4w=;
- b=fToPqDxjbJpirWIp47MZ9akCcy7MP6b98MEdKZSZxDvash/hLMJ2aq7m9EOBXhWU+S
- Gb0uHRtueZKXGv8rbBZTqMUTGYxmVoTNWDp8x+mAu0h/5xG1gSMyiWSBR0AZ8D+p3CQN
- Al4kfm+ZtzNxXck7t+OnMsrGrhkT8ElrmMfl+FOQM3uRIzDei/djeQzOJ4FgRNlNP0qv
- jvuNbQKPmsltO+ac8mKgehBdHfJlFVfn2dwyOOglXbfIIi/bJeIaeZqg0wk4bMtDMMda
- h6aBnueOAWiHrHkKbfxTmZUZm6J9/s2YiLJiCYM+vUeECe2ad0Xc2ML9WEroZ7QrmZ55
- oGAg==
-X-Gm-Message-State: AOAM532XVGkGPzbI3E+0SBR2WS19Cl3ViQpwkXcFbCiz90NDtpZx4sR0
- 6/6xnfF8TMZFGKuYqlgyoQp4jfB3foc=
-X-Google-Smtp-Source: ABdhPJyIgdmQauKXwZII56+3xj4JiL2JzwfNh2zVvdQKNTUzkpzTemvNffbMTgHnHdwzELsI9yW8nQ==
-X-Received: by 2002:a05:600c:35cf:b0:391:b474:272c with SMTP id
- r15-20020a05600c35cf00b00391b474272cmr3533073wmq.198.1650121151539; 
- Sat, 16 Apr 2022 07:59:11 -0700 (PDT)
+ bh=4dgqM1iuk11vhJBFFrTavqvjcHB+QYLYTUWT38elZgE=;
+ b=zBftGySPsEasW3ErVwyvefzW77yGvHqtJH1TKlN1Y5Cngrz+8qU6gqUpu4T67cNFkd
+ LGTSo0lM78nTHilUuHQJt4LjYABN8jTOUXiMACWcqVW3pLkF/kv58h8WV5cG7aaCX6nL
+ NZ0nGJcIPay9h62Y84s0X7Jwxi/cmpP7/HJz8HRjVSkRsi1OZdTX/0dTlDbCcTGJz/YH
+ GfBQQCAy+GR/uZRGtgzsfZ9pqg6vLe+PoKTjOmaSAvSiSOBedeGEIziFsauWz+/tw9ZW
+ A7Pi2yYLN7Q854PHlkRnL5hyOE+s0JbK5mOpRil6kqJ60c8/K/UWeevfbwpd8DwkyPAt
+ caRw==
+X-Gm-Message-State: AOAM531dlyvmI1G/sO9qJUu8SG1jjgmTTf2gRYORNqgrfhKQc4UftYr7
+ mCHleU/e4E3CW+i4IawgHK6pRZLeZXI=
+X-Google-Smtp-Source: ABdhPJxbB8rzxYkgRadFM7wndyweBNZmX93WrJnNDf7Vvq470RsL7n9Bs+jVKI9KrYfiJaz5tPl34g==
+X-Received: by 2002:a5d:4143:0:b0:207:a9c0:d142 with SMTP id
+ c3-20020a5d4143000000b00207a9c0d142mr2780690wrq.510.1650121679330; 
+ Sat, 16 Apr 2022 08:07:59 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- 7-20020adf8287000000b00207a864fbb5sm6231083wrc.103.2022.04.16.07.59.10
+ n2-20020a5d6b82000000b0020a7e34ef20sm3672297wrx.47.2022.04.16.08.07.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Apr 2022 07:59:10 -0700 (PDT)
+ Sat, 16 Apr 2022 08:07:58 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Apr 2022 16:57:12 +0200
-Message-Id: <20220416145712.1956653-1-fontaine.fabrice@gmail.com>
+Date: Sat, 16 Apr 2022 17:06:04 +0200
+Message-Id: <20220416150604.1965916-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: fix build without
- threads
+Subject: [Buildroot] [PATCH 1/1] package/libsigsegv: bump to version 2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,49 +87,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Simon Dawson <spdawson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure without threads raised since bump to
-version 4.3.1 in commit 3a9cf51ab38b6a3a095241b8e87eab7e5b5bd617 and
-https://github.com/warmcat/libwebsockets/commit/8eca7e17f27c8588170c5fa5fa3e6b14eb90e35d:
+This bump will fix the following build failure on or1k and microblazeel:
 
-In file included from /nvmedata/autobuild/instance-1/output-1/build/libwebsockets-4.3.1/lib/plat/unix/unix-caps.c:28:
-/nvmedata/autobuild/instance-1/output-1/build/libwebsockets-4.3.1/lib/core/./private-lib-core.h:68:11: fatal error: pthread.h: No such file or directory
-   68 |  #include <pthread.h>
-      |           ^~~~~~~~~~~
+In file included from handler.c:20:
+handler-unix.c: In function 'sigsegv_handler':
+handler-unix.c:194:28: error: 'struct vma_struct' has no member named 'is_near_this'
+  194 |                       : vma.is_near_this (addr, &vma))
+      |                            ^
+
+https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=blob;f=NEWS;h=4d012f8b6cd9b2c1eccbf266a10aae56b0e79978;hb=9ad117adabd223b79e037575e071855c2b8b35c0
+https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=blob;f=ChangeLog;h=c52b227aae190ba9b161282efaa5f33cb4a127f9;hb=9ad117adabd223b79e037575e071855c2b8b35c0
 
 Fixes:
- - http://autobuild.buildroot.org/results/5d011b65e530339eb3f4d06a08caabc6a73b403b
+ - http://autobuild.buildroot.org/results/c693fafb8f1f68be30a281313fb1f0890cc08b1e
+ - http://autobuild.buildroot.org/results/ecde11129d102e3321b2aaef407697c29311c705
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libwebsockets/libwebsockets.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/libsigsegv/libsigsegv.hash | 4 ++--
+ package/libsigsegv/libsigsegv.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index ea483bf58b..b05418e86d 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -21,9 +21,13 @@ LIBWEBSOCKETS_CONF_OPTS = \
- # in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
- # amount of pthread mutex code is built into the library.
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
--LIBWEBSOCKETS_CONF_OPTS += -DLWS_MAX_SMP=1
-+LIBWEBSOCKETS_CONF_OPTS += \
-+	-DLWS_MAX_SMP=1 \
-+	-DLWS_WITH_SYS_SMD=OFF
- else
--LIBWEBSOCKETS_CONF_OPTS += -DLWS_MAX_SMP=
-+LIBWEBSOCKETS_CONF_OPTS += \
-+	-DLWS_MAX_SMP= \
-+	-DLWS_WITH_SYS_SMD=ON
- endif
+diff --git a/package/libsigsegv/libsigsegv.hash b/package/libsigsegv/libsigsegv.hash
+index c827e6b866..13978da398 100644
+--- a/package/libsigsegv/libsigsegv.hash
++++ b/package/libsigsegv/libsigsegv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libsigsegv/libsigsegv-2.13.tar.gz.sig
+-sha256  be78ee4176b05f7c75ff03298d84874db90f4b6c9d5503f0da1226b3a3c48119  libsigsegv-2.13.tar.gz
++# https://ftp.gnu.org/gnu/libsigsegv/libsigsegv-2.14.tar.gz.sig
++sha256  cdac3941803364cf81a908499beb79c200ead60b6b5b40cad124fd1e06caa295  libsigsegv-2.14.tar.gz
+ # Locally calculated
+ sha256  8f2983e9a940367f48999881c14775db725ee643bce1e2f1ba195eb629a33cde  COPYING
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index 87a5d7a124..98bcd55c8c 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBSIGSEGV_VERSION = 2.13
++LIBSIGSEGV_VERSION = 2.14
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
+ LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
 -- 
 2.35.1
 
