@@ -4,43 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 237B6C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 20:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 748E5C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Apr 2022 20:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7A41611C9;
-	Sat, 16 Apr 2022 20:00:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 126FC611AF;
+	Sat, 16 Apr 2022 20:15:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wLK2NP_mS_sP; Sat, 16 Apr 2022 20:00:22 +0000 (UTC)
+	with ESMTP id YTljJrTbhuSo; Sat, 16 Apr 2022 20:15:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4084C611AF;
-	Sat, 16 Apr 2022 20:00:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 589ED1BF484
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 19:59:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E91260E93;
+	Sat, 16 Apr 2022 20:15:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 04EBB1BF360
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 20:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55365611C1
- for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 19:59:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E758283EDA
+ for <buildroot@lists.busybox.net>; Sat, 16 Apr 2022 20:15:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZvavLItp5XYd for <buildroot@lists.busybox.net>;
- Sat, 16 Apr 2022 19:59:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4329F611AF
- for <buildroot@buildroot.org>; Sat, 16 Apr 2022 19:59:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6BB7C83D24; Sat, 16 Apr 2022 19:49:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QUpXNeR27Er2 for <buildroot@lists.busybox.net>;
+ Sat, 16 Apr 2022 20:15:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A2A22832D9
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 20:15:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6FBC1100003;
+ Sat, 16 Apr 2022 20:15:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nfopf-00Eqtt-5T; Sat, 16 Apr 2022 22:15:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 16 Apr 2022 21:58:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80c11958e6c2228686964c2d6f4e95273403888e
-X-Git-Newrev: 130cfc74d7a273999a3e61100a75d8ac1acc3579
-X-Patchwork-Hint: ignore
-Message-Id: <20220416194957.6BB7C83D24@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lvm2: update site
+To: Neal Frager <nealf@xilinx.com>
+References: <SJ0PR02MB77589C6E412691B171FB0527D7ED9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+Date: Sat, 16 Apr 2022 22:15:47 +0200
+In-Reply-To: <SJ0PR02MB77589C6E412691B171FB0527D7ED9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ (Neal Frager's message of "Tue, 12 Apr 2022 09:44:36 +0000")
+Message-ID: <87ee1w7pjg.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] Xilinx KV260 Support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,48 +58,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=130cfc74d7a273999a3e61100a75d8ac1acc3579
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Neal" == Neal Frager <nealf@xilinx.com> writes:
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=14751
+ > Dear buildroot community,
+ > I am working on adding a defconfig for the Xilinx KV260 Starter Kit.
+ > It is a low cost zynqmp development kit showcasing the first Xilinx Kria K26 SOM module.
+ > https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Looks nice!
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index c52eaee1e1..126748d339 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,4 +1,4 @@
--# From http://sources.redhat.com/pub/lvm2/sha512.sum
-+# From https://sourceware.org/ftp/lvm2/sha512.sum
- sha512  6a93bed1d5cf36f0f48d4d413d028b0e480cd4fc20e25d173770a892f265d2a0cc68d01a720b1513469953649e989532cd0c45f9538f92a4190eb3dc4555857d  LVM2.2.03.14.tgz
- # Locally computed sha256 checksums
- sha256  e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 89fdf2c1be..9caf99eb9b 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -6,7 +6,7 @@
- 
- LVM2_VERSION = 2.03.14
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
--LVM2_SITE = http://sources.redhat.com/pub/lvm2
-+LVM2_SITE = https://sourceware.org/ftp/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
+ > I have managed to get buildroot up and running on the hardware, but I currently need to implement some manual steps.
+
+ > Here are the issues I need to solve.  Both are related to a device tree overlay.
+
+ > 1. Install the zynqmp-sck-kv-g-revB.dtbo to the output/images directory:
+ > BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-sm-k26-revA xilinx/zynqmp-sck-kv-g-revB"
+ > BR2_LINUX_KERNEL_DTB_OVERLAYS_SUPPORT=y
+
+ > I need the build system to install the zynqmp-sm-k26-revA.dtb and the
+ > zynqmp-sck-kv-g-revB.dtbo files to the output/images directory.
+ > I have tried the BR2_LINUX_KERNEL_DTB_OVERLAYS_SUPPORT option above, but I do not see how to get the zynqmp-sck-kv-g-revB.dtbo
+ > Instead of the zynqmp-sck-kv-g-revB.dtb.
+
+Aren't they equvalent? E.G. the only difference between a normal .dtb
+and a .dtbo is afaik that dtc is executed with the -@ argument, which is
+what BR2_LINUX_KERNEL_DTB_OVERLAYS_SUPPORT does.
+
+
+ > 2. Apply the overlay to generate a system.dtb in the post-image.sh:
+
+ > I am currently using the following command to generate the system.dtb that I need for booting:
+ > fdtoverlay -o output/images/system.dtb -i output/images/zynqmp-sm-k26-revA.dtb output/images/zynqmp-sck-kv-g-revB.dtbo
+
+ > Does anyone have a good idea for how I could implement this in a generic way in the post-image.sh script?
+
+Why are you using device tree overlays in the first place if you want to
+merge it back at build time?
+
+Looking at the DTS submission from Michal, it sounds like something
+(U-Boot?) should do the carrier board detection and apply the correct
+overlay at runtime?
+
+https://lkml.org/lkml/2021/9/22/116
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
