@@ -1,143 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9C9DC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Apr 2022 06:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C92C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Apr 2022 06:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 472AF410B6;
-	Sun, 17 Apr 2022 06:50:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05EE9408C9;
+	Sun, 17 Apr 2022 06:50:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tL7u5p27zaGD; Sun, 17 Apr 2022 06:50:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAF8240A00;
-	Sun, 17 Apr 2022 06:50:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E86C11BF3FC
- for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 06:50:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3BD8408AE
- for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 06:50:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qvwHEF9_6EIO for <buildroot@lists.busybox.net>;
- Sun, 17 Apr 2022 06:50:15 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YF_5maCRWeLg; Sun, 17 Apr 2022 06:50:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68EC1408BF;
+	Sun, 17 Apr 2022 06:50:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 362A61BF3FC
+ for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 06:50:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 222A460E4B
+ for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 06:50:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 849jLaqw6MkF for <buildroot@lists.busybox.net>;
+ Sun, 17 Apr 2022 06:50:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on20627.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e88::627])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE2A2400D0
- for <buildroot@buildroot.org>; Sun, 17 Apr 2022 06:50:15 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LJd6Pz0rQpTz9g108SE/4x45UL8Kmt76o0W5siNTPGDkeqFH+Sy//dFwaCEmF/8uHdhqDltJ4dITYBwVGa190JHvy3M9Kjn41Rlol+Iqg6yyu45uUVu0cjyzFnUVtda4y3JHANCts+jM7H1YUcmSfa+VHv0vqwnTRIFBIYveTCYUomojdUrxT3vXEIi1jIuukCVpIGSxZpULcAwUzMNNo5jaRClnys7OQV9eyBDMLmX/JQg3sRzmR9RNp7Af09JymrA5iGQPSoN7q6TtAlBlmjTk6NGj7upDFw0jQxtEsjXE642W1cPkhjxi4cYqsUCyuNhYhVs5cpidqoxU8qBQ5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xuS3zo/CNYoyOUMuoxiGb7teG8se3sViuAP9MIV9td4=;
- b=gACeP+rjEc9cDaGjDJc3MIMTbKvG/4WOVetaTUpI7EeITD3Ei9U/d49bOHoMilKmxST3X4U7A54APF1lS6oCRahAjOyaguaFsIn72ODdDRZG2v4/eQUGB6zIHq7RJpNRMSDknJ54r/PCrCq68H3CQkj97c+sh+J8z7lgByVd2dgvFH31si07n5Vf9s/EkxWgKPsbvmYAoZW9s5c6Y75819DmgZo74A+DYqhglmMndo9Eh5H/VeDXILK7QE7RWBoer3yxSABqY10bbF5WYcnMZk5m6nkekuPT2LsJweAgN8NdTZ08c5TOf2fXLBieIX/T3FpUjC6jMc/cAbgr9KOFUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xuS3zo/CNYoyOUMuoxiGb7teG8se3sViuAP9MIV9td4=;
- b=pQSk/a1k8fUy+u7B5dkppT8SF/xyt3MPg3UkLyaz+zKrSuD9Z5RlNpnd3QJZlFt2Be3KOpoaxNN8S9z3YWH9ZDu8+BCU4+G8TNgrZWA3DYlk362DYirYRkMefHjpZQG7YpXR2EiZBYfFIFAcsk+mbuHyWDvcgY6sTdYV2E8Zlk0=
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by SN6PR02MB5248.namprd02.prod.outlook.com (2603:10b6:805:76::24)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Sun, 17 Apr
- 2022 06:50:12 +0000
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::61ac:c1e9:f4ec:156c]) by SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::61ac:c1e9:f4ec:156c%4]) with mapi id 15.20.5164.025; Sun, 17 Apr 2022
- 06:50:12 +0000
-From: Neal Frager <nealf@xilinx.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Thread-Topic: Xilinx KV260 Support
-Thread-Index: AdhOT7R9yeLH/m23RF2Ss8U5bJOKdwDfxEMBABYnV9Q=
-Date: Sun, 17 Apr 2022 06:50:12 +0000
-Message-ID: <EC86C191-5390-4082-9B9F-896268B5345C@xilinx.com>
-References: <SJ0PR02MB77589C6E412691B171FB0527D7ED9@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <87ee1w7pjg.fsf@dell.be.48ers.dk>
-In-Reply-To: <87ee1w7pjg.fsf@dell.be.48ers.dk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 006ba5be-a09f-4ec0-edea-08da203e858a
-x-ms-traffictypediagnostic: SN6PR02MB5248:EE_
-x-microsoft-antispam-prvs: <SN6PR02MB52484EB69BAD813DF248A9D1D7F09@SN6PR02MB5248.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VnYizsVXJOmDHxVTFmieKOuyTxyxpBIiFsae+q+P1DG7ThrYZItCL9llpG4z3IVhafYL0F5S9Lb2EmmI1Se2p93cW5Q1DIGyESGc6+kOcaC/H2irl2ti5E27kPpsu5cHVExu9kpTFs/J3naXgEegPa1LDsMd+qZs7UpdSn9NmZPycRTaMsOpe7KNL6ytsDHPl1MXSr6rym8NI3V3VQIb4KjBRwlpSpUx658XIc1HxrcTEXSooMuHT9fxEMwjzRQE6Ez21nP49Ou5ie8ifnck2d+OsRqPBnhqYz9OKb+OkMRwDGEvrok8FlEW9oHOKpGPsTduhk9jSzu5hyWwpXLGbk02odEQrVQpu2MTZhTWMLS5gz6/6YyG1fNRxFvFVJtxIBp9jPl7RD84akLrTApegSNDUOJL1D2blvwn6dw3LnYSrapjwSEiuKXV3ElmnQ8miqPtr+pwm4sykeiDSR15IbAYKhTVl6gZhrlf1u50GZ2ilqrDrlxBELGZbU7/bmwYl7/1gwmSjxT3wPEXKemeDXeIqUJEbaTGgmFvm+hVQ6WS8KSY9y/Wus0HEf3kKh/f64ePhOm4q4WYS4CHvlBkPuwcL1XZZQ+kXFMTFhY1JfWko4uUDASWd6uKBHuxMPhPDjmAcc+xPIK8BKy+jLPeKoHu1T8adHtCgg02gstudLUQ7NRU3j6026eROyoLRWXs0jvKY0pXcPwZ6gvJhAQk0MHfDvM+Z29SnaR2p96SWsUt86IlKqUuyN2PUaputnY6G966aUzCc22lSNuEANiymGgIZHbVFhHatwqOCu++cXHCM8FyBiAC0SiAc5Rn4Tm9
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(6506007)(2906002)(508600001)(316002)(6486002)(966005)(7116003)(36756003)(38070700005)(5660300002)(86362001)(8936002)(71200400001)(66476007)(4326008)(66556008)(66946007)(66446008)(8676002)(76116006)(64756008)(122000001)(38100700002)(6916009)(66574015)(33656002)(83380400001)(6512007)(2616005)(26005)(186003)(45980500001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MS9PSlh0aUtoaWRSQzZvRm5ZRjA3T0RzUHJvUFBEVXZLSXZvNjlpZlUxeXlz?=
- =?utf-8?B?R3FtK1NxaWkrQldzUVhVd3p3TjRaUENCYzZrck5GNi80T1B2QTRKK1YrMGlx?=
- =?utf-8?B?UXk5blFkSFNGdTZLbGFJTXg5MmR6c3ZGYlhxd2tvMFhIcjZidFphSHFrb01w?=
- =?utf-8?B?MWdjK1o3am8vdEhQcE5CWlNSVkI5QjdOSms2R1crUDdla0hKdWNKMUNEOW5E?=
- =?utf-8?B?Mm5qNGU5WFBMMjhNeml4bThkQURkSFhPMjRKSmxBajRjWTdHc3lxeW8wbk52?=
- =?utf-8?B?d2hUTzhkUzRsODh3Wm5VanY3eDFJNWp4YmlaSEtqVGZwS2VOUlI4ZDVYc1E3?=
- =?utf-8?B?S0FYSzE0bU5BYlZHbkJpQTVBaE9pKytJajhFTUxzN0lrK2tRNUVBOW1VSXhQ?=
- =?utf-8?B?a0kzekVIT2V1Q1Nqbkx0OCtTdnVSb3lvVElibXRuM1Q4bUJyaFhFaFQ1K2hs?=
- =?utf-8?B?amxjU29icUR6WDBtb3J5bTNnZ3hMUktrSjgyWkhSVzUySE9oSm5CSDJZRTNi?=
- =?utf-8?B?blFQcHc0SWkyb0U4MEp0dC9kVnp3Y2Z1RzNERmlaazFtcHRpK1MyR1lmYmFa?=
- =?utf-8?B?ZkJzOTQvNENUSVIvTW9aZWllQXNJZjFIRGxaVHdOODBqbE5hamdML1EzZ2tF?=
- =?utf-8?B?QWNxSDE5UHFuZTM4SS9mWjZCSzdIU3llNHY1dmJtUW9SREQxbDI5akdrejQ3?=
- =?utf-8?B?RlhjbzRmelpZM3ZkRmU0UW05YlREM1l5Y0cxbzI5Q0ppSkRjRWcxcm1kcTBy?=
- =?utf-8?B?b3VCSEoxZmh1ZXJ0bVdBaXUwVks0QlZwaGNSL2ZERTk5RXJGMkl3T0JNeUZO?=
- =?utf-8?B?SkJJWUtKUjd1cmtoeG1SQ1FlbUtDdzVBeGpnc0o1VE1MMG56elF2Q2pGeS9H?=
- =?utf-8?B?WHhVWlVHWFRkZzVUbG5VU09hN0toVHZmUjJiaTVxbVN1NU1IQ3QrSFo2UTlu?=
- =?utf-8?B?S0RrNjA0YmNpaUZwQUNxRmtRbXJXR2t0aWJyZGt4b2JnTStEOGtyMmZVTEpE?=
- =?utf-8?B?WWl5WmF0bU1IblBRMS9SRUNBK3NBUi9zZVpKSmZJNUFwclZPNm1pbEIxVXZG?=
- =?utf-8?B?Q3V5VFY1bWQzNkpmQjk2L0dwaTlYLzArajlsY0JOY1drNkNiMUVkUVZjOEt5?=
- =?utf-8?B?MGY0aHFHWGVFYk5CVE00cE9VeitMdkFPUzdhWUVUc25JMXhjRk1GbGpoMElk?=
- =?utf-8?B?SVJVMVpCL2krYjFySFJLZlIzUXdsYk5QUkorcHlXZlc0Z0dIYzVGeXNSOHh5?=
- =?utf-8?B?NDlCZGdjQzNmMGw1eWprSG5CWVlkbkhybGNVRE01bnM0aFhicnlLYVJUQ3hU?=
- =?utf-8?B?NGcvYUhvTEp2cHVFL0pIZGd4K0JScXIwRTlFQ3cxYWFFTXhrQ1JER0RNWjM4?=
- =?utf-8?B?NFYwUzRkNlZEeEFBYTJjL3gxNlE2ZGFHRkFPMHdFYXFNbmdKbjZTNHFtNlBi?=
- =?utf-8?B?aC9VYlVoVVZnZnVJUFF3Nk84Nkd1L1hkYjVaQzcvdFZTYlhMaFR1VUpTeHF1?=
- =?utf-8?B?aVNOTUcreDdSNnltZ2U1TXZyRmpHYTVGYW5BK28wTFM2WWc5M1g5ZUFFaVpJ?=
- =?utf-8?B?V3Y3SWlvVGRhQ0I5L2c1bTNnN0puYk8wR1RpQUd4NS84MjFCR3FoTDdJNGMv?=
- =?utf-8?B?V1Z2WlhRUUVrQmo1NHNQaXZtYU8yUVdNcFo4OUwraG9Mc0NrWkpsTkIrazdj?=
- =?utf-8?B?VmdKaCtQMEU0TXVHTEpBbEFsc0M2bXNqdFQ2blNKNEtaTjdMWTZrKzNnV21n?=
- =?utf-8?B?azlRQ3d3eXMzUlg3anFWUG5GelJRS1lRN2hCeG5hS2dyYnR5akxXU3gwcDhS?=
- =?utf-8?B?bDBvdlR6S0w1Zmg0LzhNSGMza3p0c2tGR0VNYm1naGVHZjh6QnVDcGIySGxV?=
- =?utf-8?B?VUQxSThYTjIzcDdseDdiSThEclo2dEtnLzlMYWlCTEVqdEJUdlh1MWF0L25O?=
- =?utf-8?B?bkd3clFWUVlZVCt1dnE1cmh6U3B1K0RPMFhYUm1uNnR0UXFVUVl5UkZRbzNv?=
- =?utf-8?B?anN0WVBnQUI1UVM0QVFvK1ZFN3ZiaDAxSkhmNUU1OVY2K1A0cURoeVJyUmtK?=
- =?utf-8?B?blV3Mzk1SjY4bHUwcWtwTlJmTWFYcDhXVzhRSktUWW5peXlQNVQvd3IwZTBh?=
- =?utf-8?B?NFE5cTB5RjdvQ3hEV1c1RjNYZFF2a2NaU1J1NnFPeStJeWhvZWJOYUFUbU1s?=
- =?utf-8?B?SG1NckxlVjUvdGZFd0hiNU1LMWhqN21YK2lIK3F1ejRpQU1TVmdiMGFsbHZh?=
- =?utf-8?B?QkR0d1F4OHhvdVpVb3JHZi9WcmtqVjM4WXZqYWpmb0FpeG9WcWFzK3Y1V1l1?=
- =?utf-8?B?eERRN2xRVFJTZkRUMkZpRXJWdXFLT2VJLytnYjV3amxtZ3A5NTFLQT09?=
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com
+ [IPv6:2001:4860:4864:20::36])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5ACA560A97
+ for <buildroot@buildroot.org>; Sun, 17 Apr 2022 06:50:31 +0000 (UTC)
+Received: by mail-oa1-x36.google.com with SMTP id
+ 586e51a60fabf-e5ca5c580fso1306610fac.3
+ for <buildroot@buildroot.org>; Sat, 16 Apr 2022 23:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=zYAFgMe1kuaTnHuCYNA5vQidyf9cWj4HbUjLD5Rkkq8=;
+ b=H8v/AMSTZNtwFDBaEXmfFdAOy7NMqeUVRNGi7kHvdGXXD51sVOculGo8QFfw5skhIg
+ RVXyjm4DPsdOHKLHkEVt55KSvicewwZvbSoPUf1i3MG10R7mfPxm2wTHbfzAcA/sKvXY
+ e0rd/DVH3+uNEoGnhVCCdqND1mUQRYHGj0DPhdY2V8M9riLB7kIyDYqM7WRZvzbGpPF7
+ aWAmlJi5GNZHBNiDAqKYt8APPb4b0OjwkkdwY5zA0CrTyPbQWChV/dvQfPWSECL2dNvF
+ AB90YGKwVjDk9/8sK2tW+xsc4Ho8ujDyRCpd+UrCJPNVuW6xUWGBwz80p40F9w81ql14
+ vJog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=zYAFgMe1kuaTnHuCYNA5vQidyf9cWj4HbUjLD5Rkkq8=;
+ b=Wm2N0LYhbi2haoh863mRobOX3yRha4Ad/771SKgqTX5W0oOZlElDb9UIm/bDvNYk29
+ VjitmZX+QTnqukZ+Zcvq5Neg1SyO3tdr5wHpZ43bg3MZBP5JV/nBnYYALkXuB3PddTHj
+ pNGFDDEvaYGysIfkUa8d1S+HL7xfG01omgjeu+2zA276PwR0c4AFgeLA3GEwtijJgiEa
+ RMWlisabuv3u6YRh871F/H0uHcbLlD7lDhl/Iwx5Z2qUipMX2SRQLjIbXjFNF/zpdand
+ yczh0HltulwvLqN8SnRA3rLYm7DUjAvk3yfUKzZzCH1sSBVBXwARyzGRI0XyVY4leSqT
+ V9zw==
+X-Gm-Message-State: AOAM533+bQckehlsbkX264GG6cqmcG2zji+X8WHxLN1HytpONgBQ6jA4
+ fM9jbh/VU8yhX5pBzxnX8l+2OTqt+U/Qfn2L9hI=
+X-Google-Smtp-Source: ABdhPJx1UoemHcAYOZ1C6jolcQej7ndrXMnhzfhjSeFWvjqi5kVwyIvhtRe5xHf2vjmtCrLh7/kcL6Dt0B/l/WtJa58=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr3869687oaa.200.1650178230040; Sat, 16
+ Apr 2022 23:50:30 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 006ba5be-a09f-4ec0-edea-08da203e858a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2022 06:50:12.5788 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZdFuB3P9Zj3q3+/oWLyqWby2ULeUG3Zc7H0ppnjtO6ufPyM1FVPCQBhSfRlbR3LA1MuFI6HKrCAUf425+wII+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB5248
-Subject: Re: [Buildroot] Xilinx KV260 Support
+References: <20220409020719.3126086-1-james.hilliard1@gmail.com>
+ <20220413225147.48bd5442@windsurf>
+In-Reply-To: <20220413225147.48bd5442@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 17 Apr 2022 00:50:19 -0600
+Message-ID: <CADvTj4rHaz8pVx=mz2Cs4K72D_9ZoF3j6CBp4j=v0xbA5t_H8w@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/binutils: disable 2.32 on
+ unuspported FLAT platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -149,57 +84,589 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUGV0ZXIsDQoNCj4gTGUgMTYgYXZyLiAyMDIyIMOgIDIyOjE1LCBQZXRlciBLb3JzZ2FhcmQg
-PHBldGVyQGtvcnNnYWFyZC5jb20+IGEgw6ljcml0IDoNCj4gDQo+IO+7v0NBVVRJT046IFRoaXMg
-bWVzc2FnZSBoYXMgb3JpZ2luYXRlZCBmcm9tIGFuIEV4dGVybmFsIFNvdXJjZS4gUGxlYXNlIHVz
-ZSBwcm9wZXIganVkZ21lbnQgYW5kIGNhdXRpb24gd2hlbiBvcGVuaW5nIGF0dGFjaG1lbnRzLCBj
-bGlja2luZyBsaW5rcywgb3IgcmVzcG9uZGluZyB0byB0aGlzIGVtYWlsLg0KPiANCj4gDQo+Pj4+
-Pj4gIk5lYWwiID09IE5lYWwgRnJhZ2VyIDxuZWFsZkB4aWxpbnguY29tPiB3cml0ZXM6DQo+IA0K
-Pj4gRGVhciBidWlsZHJvb3QgY29tbXVuaXR5LA0KPj4gSSBhbSB3b3JraW5nIG9uIGFkZGluZyBh
-IGRlZmNvbmZpZyBmb3IgdGhlIFhpbGlueCBLVjI2MCBTdGFydGVyIEtpdC4NCj4+IEl0IGlzIGEg
-bG93IGNvc3QgenlucW1wIGRldmVsb3BtZW50IGtpdCBzaG93Y2FzaW5nIHRoZSBmaXJzdCBYaWxp
-bnggS3JpYSBLMjYgU09NIG1vZHVsZS4NCj4+IGh0dHBzOi8vd3d3LnhpbGlueC5jb20vcHJvZHVj
-dHMvc29tL2tyaWEva3YyNjAtdmlzaW9uLXN0YXJ0ZXIta2l0Lmh0bWwNCj4gDQo+IExvb2tzIG5p
-Y2UhDQo+IA0KPj4gSSBoYXZlIG1hbmFnZWQgdG8gZ2V0IGJ1aWxkcm9vdCB1cCBhbmQgcnVubmlu
-ZyBvbiB0aGUgaGFyZHdhcmUsIGJ1dCBJIGN1cnJlbnRseSBuZWVkIHRvIGltcGxlbWVudCBzb21l
-IG1hbnVhbCBzdGVwcy4NCj4gDQo+PiBIZXJlIGFyZSB0aGUgaXNzdWVzIEkgbmVlZCB0byBzb2x2
-ZS4gIEJvdGggYXJlIHJlbGF0ZWQgdG8gYSBkZXZpY2UgdHJlZSBvdmVybGF5Lg0KPiANCj4+IDEu
-IEluc3RhbGwgdGhlIHp5bnFtcC1zY2sta3YtZy1yZXZCLmR0Ym8gdG8gdGhlIG91dHB1dC9pbWFn
-ZXMgZGlyZWN0b3J5Og0KPj4gQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9InhpbGlu
-eC96eW5xbXAtc20tazI2LXJldkEgeGlsaW54L3p5bnFtcC1zY2sta3YtZy1yZXZCIg0KPj4gQlIy
-X0xJTlVYX0tFUk5FTF9EVEJfT1ZFUkxBWVNfU1VQUE9SVD15DQo+IA0KPj4gSSBuZWVkIHRoZSBi
-dWlsZCBzeXN0ZW0gdG8gaW5zdGFsbCB0aGUgenlucW1wLXNtLWsyNi1yZXZBLmR0YiBhbmQgdGhl
-DQo+PiB6eW5xbXAtc2NrLWt2LWctcmV2Qi5kdGJvIGZpbGVzIHRvIHRoZSBvdXRwdXQvaW1hZ2Vz
-IGRpcmVjdG9yeS4NCj4+IEkgaGF2ZSB0cmllZCB0aGUgQlIyX0xJTlVYX0tFUk5FTF9EVEJfT1ZF
-UkxBWVNfU1VQUE9SVCBvcHRpb24gYWJvdmUsIGJ1dCBJIGRvIG5vdCBzZWUgaG93IHRvIGdldCB0
-aGUgenlucW1wLXNjay1rdi1nLXJldkIuZHRibw0KPj4gSW5zdGVhZCBvZiB0aGUgenlucW1wLXNj
-ay1rdi1nLXJldkIuZHRiLg0KPiANCj4gQXJlbid0IHRoZXkgZXF1dmFsZW50PyBFLkcuIHRoZSBv
-bmx5IGRpZmZlcmVuY2UgYmV0d2VlbiBhIG5vcm1hbCAuZHRiDQo+IGFuZCBhIC5kdGJvIGlzIGFm
-YWlrIHRoYXQgZHRjIGlzIGV4ZWN1dGVkIHdpdGggdGhlIC1AIGFyZ3VtZW50LCB3aGljaCBpcw0K
-PiB3aGF0IEJSMl9MSU5VWF9LRVJORUxfRFRCX09WRVJMQVlTX1NVUFBPUlQgZG9lcy4NCj4gDQo+
-IA0KPj4gMi4gQXBwbHkgdGhlIG92ZXJsYXkgdG8gZ2VuZXJhdGUgYSBzeXN0ZW0uZHRiIGluIHRo
-ZSBwb3N0LWltYWdlLnNoOg0KPiANCj4+IEkgYW0gY3VycmVudGx5IHVzaW5nIHRoZSBmb2xsb3dp
-bmcgY29tbWFuZCB0byBnZW5lcmF0ZSB0aGUgc3lzdGVtLmR0YiB0aGF0IEkgbmVlZCBmb3IgYm9v
-dGluZzoNCj4+IGZkdG92ZXJsYXkgLW8gb3V0cHV0L2ltYWdlcy9zeXN0ZW0uZHRiIC1pIG91dHB1
-dC9pbWFnZXMvenlucW1wLXNtLWsyNi1yZXZBLmR0YiBvdXRwdXQvaW1hZ2VzL3p5bnFtcC1zY2st
-a3YtZy1yZXZCLmR0Ym8NCj4gDQo+PiBEb2VzIGFueW9uZSBoYXZlIGEgZ29vZCBpZGVhIGZvciBo
-b3cgSSBjb3VsZCBpbXBsZW1lbnQgdGhpcyBpbiBhIGdlbmVyaWMgd2F5IGluIHRoZSBwb3N0LWlt
-YWdlLnNoIHNjcmlwdD8NCj4gDQo+IFdoeSBhcmUgeW91IHVzaW5nIGRldmljZSB0cmVlIG92ZXJs
-YXlzIGluIHRoZSBmaXJzdCBwbGFjZSBpZiB5b3Ugd2FudCB0bw0KPiBtZXJnZSBpdCBiYWNrIGF0
-IGJ1aWxkIHRpbWU/DQo+IA0KPiBMb29raW5nIGF0IHRoZSBEVFMgc3VibWlzc2lvbiBmcm9tIE1p
-Y2hhbCwgaXQgc291bmRzIGxpa2Ugc29tZXRoaW5nDQo+IChVLUJvb3Q/KSBzaG91bGQgZG8gdGhl
-IGNhcnJpZXIgYm9hcmQgZGV0ZWN0aW9uIGFuZCBhcHBseSB0aGUgY29ycmVjdA0KPiBvdmVybGF5
-IGF0IHJ1bnRpbWU/DQo+IA0KPiBodHRwczovL2xrbWwub3JnL2xrbWwvMjAyMS85LzIyLzExNg0K
-PiANCg0KVGhhbmsgeW91IGZvciB5b3VyIGZlZWRiYWNrLiAgWWVzLCBJIGNvbmZpcm0gdGhhdCB0
-aGlzIHdvcmtzIGZvciB0aGUgTGludXgga2VybmVsLg0KDQpOb3cgSSBqdXN0IG5lZWQgdG8gZmlu
-ZCB0aGUgY29ycmVjdCBzb2x1dGlvbiBmb3IgdS1ib290Lg0KDQo+IC0tDQo+IEJ5ZSwgUGV0ZXIg
-S29yc2dhYXJkDQoNCkJlc3QgcmVnYXJkcywNCk5lYWwgRnJhZ2VyDQpBTUQKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+On Wed, Apr 13, 2022 at 2:51 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello James,
+>
+> On Fri,  8 Apr 2022 20:07:19 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > These architectures are unsupported in config.bfd:
+> > https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/config.bfd;h=0e1ddb659c3ab7160aab0a7c173b85052f870e65;hb=a9d9a104dde6a749f40ce5c4576a0042a7d52d1f
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/332/33277d4687ca9a04dbfb02c50e5755ff9e55b0b4
+> >  - http://autobuild.buildroot.net/results/5e3/5e34d11393e14fc36fd6e72b69679bc4fd1e3798
+> >  - http://autobuild.buildroot.net/results/63d/63d01d33ae30f86b63b9f42a9fea116f2f3e9005
+> >  - http://autobuild.buildroot.net/results/45b/45bc90fd2dde7bb201d7f999db1a8024cf889a06
+> >  - http://autobuild.buildroot.net/results/d1b/d1b1dfe449f82944bd48215da3cdffd05797e2e9
+> >  - http://autobuild.buildroot.net/results/a3e/a3eb1ff6bf6357242ec7993db63e57d4afeccc7b
+> >  - http://autobuild.buildroot.net/results/f4d/f4d52cabee61ee0f234b03c1ec1bd02e85e7bb20
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/binutils/Config.in.host | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> > index ea1f020989..e1c59bfbd0 100644
+> > --- a/package/binutils/Config.in.host
+> > +++ b/package/binutils/Config.in.host
+> > @@ -15,6 +15,13 @@ choice
+> >  config BR2_BINUTILS_VERSION_2_32_X
+> >       bool "binutils 2.32"
+> >       depends on !BR2_csky
+> > +     depends on !(BR2_aarch64 && BR2_BINFMT_FLAT)
+> > +     depends on !(BR2_aarch64_be && BR2_BINFMT_FLAT)
+> > +     depends on !(BR2_sh2a && BR2_BINFMT_FLAT)
+> > +     depends on !(BR2_sh4 && BR2_BINFMT_FLAT)
+> > +     depends on !(BR2_sh4a && BR2_BINFMT_FLAT)
+> > +     depends on !(BR2_sh4aeb && BR2_BINFMT_FLAT)
+> > +     depends on !(BR2_sh4eb && BR2_BINFMT_FLAT)
+>
+> I'm not sure that how we want to handle this. Indeed, even with newer
+> binutils versions, I really doubt supporting aarch64 with the FLAT
+> binary format makes a lot of sense.
+
+Well our newer binutils versions do already have FLAT disabled
+entirely by setting:
+depends on !BR2_BINFMT_FLAT
+
+>
+> As far as I'm aware, there's currently no practical use-case for Linux
+> noMMU on aarch64 and SH4, so I would simply disallow that. So on ARM, I
+> would only allow the MMU to be disabled on ARMv7-M, and on SuperH, for
+> SH2A. I.e something like the below patch.
+>
+> Of course, that leaves the case of BR2_sh2a. But if binutils
+> 2.35/2.36/2.37 are broken for the FLAT format (which is why they are
+> disabled), and 2.32 is disabled for SH2A/FLAT, then there's nothing
+> left available for SH2A/FLAT
+
+Hmm, my assumption was that even though FLAT may not be supported
+by the buildroot toolchain it may be possible some external toolchains
+could have support for them, so I figured best just disable known invalid
+options here for buildroot toolchain binutils.
+
+> Except that
+> package/binutils/Config.in.host is wrong in disabling 2.35/2.36/2.37
+> for all FLAT configs: the bug is only related to ARM.
+
+Hmm, so maybe this set of depends plus an arm exclusion is needed
+for newer binutils?
+
+>
+> However, I feel strange that sh2a/FLAT was not supported back in
+> binutils 2.32. sh2a/FLAT has been around for a very long time. In fact
+> what happens is that we have a patch to allow sh2a as an architecture
+> name: package/binutils/2.32/0001-sh-conf.patch. But that patch is
+> probably no longer sufficient, and some adjustements are also needed in
+> bfd/config.bfd.
+
+So, that patch doesn't seem to add uclinux as a supported target,
+which seems to be required for BR2_BINFMT_FLAT builds based on:
+https://github.com/buildroot/buildroot/blob/2022.02.1/package/Makefile.in#L44-L45
+https://github.com/buildroot/buildroot/blob/2022.02.1/package/Makefile.in#L40
+https://github.com/buildroot/buildroot/blob/2022.02.1/package/binutils/binutils.mk#L83
+https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/config.bfd;h=0e1ddb659c3ab7160aab0a7c173b85052f870e65;hb=a9d9a104dde6a749f40ce5c4576a0042a7d52d1f#l1243
+
+The failures from what I can tell here are due to the lack of a uclinux
+target for sh2a in bfd/config.bfd.
+
+>
+> Bottom line: there is more work than just this proposal, which simply
+> papers over the problem without really fixing it.
+
+Yeah, that's probably a bit outside my area of expertise, I was just
+adding these dependencies by tracing the configure failure conditions.
+
+I'm not really familiar with no-mmu builds in general so wouldn't really
+know what's correct for the architecture mmu settings.
+
+>
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 98b0e40d51..e51ef60f40 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -228,7 +228,6 @@ config BR2_s390x
+>
+>  config BR2_sh
+>         bool "SuperH"
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         help
+>           SuperH (or SH) is a 32-bit reduced instruction set computer
+>           (RISC) instruction set architecture (ISA) developed by
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 85040ac89f..16f053fba3 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -73,21 +73,27 @@ config BR2_ARM_CPU_HAS_THUMB2
+>
+>  config BR2_ARM_CPU_ARMV4
+>         bool
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>
+>  config BR2_ARM_CPU_ARMV5
+>         bool
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>
+>  config BR2_ARM_CPU_ARMV6
+>         bool
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>
+>  config BR2_ARM_CPU_ARMV7A
+>         bool
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>
+>  config BR2_ARM_CPU_ARMV7M
+>         bool
+> +       select BR2_ARCH_HAS_MMU_OPTIONAL
+>
+>  config BR2_ARM_CPU_ARMV8A
+>         bool
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>
+>  choice
+>         prompt "Target Architecture Variant"
+> @@ -103,23 +109,19 @@ config BR2_arm920t
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV4
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_arm922t
+>         bool "arm922t"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV4
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_fa526
+>         bool "fa526/626"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_ARMV4
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_strongarm
+>         bool "strongarm sa110/sa1100"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_ARMV4
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>
+>  comment "armv5 cores"
+>  config BR2_arm926t
+> @@ -128,18 +130,15 @@ config BR2_arm926t
+>         select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV5
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_iwmmxt
+>         bool "iwmmxt"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_ARMV5
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_xscale
+>         bool "xscale"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV5
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>
+>  comment "armv6 cores"
+>  config BR2_arm1136j_s
+> @@ -147,34 +146,29 @@ config BR2_arm1136j_s
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV6
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_arm1136jf_s
+>         bool "arm1136jf-s"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_VFPV2
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV6
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_arm1176jz_s
+>         bool "arm1176jz-s"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV6
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_arm1176jzf_s
+>         bool "arm1176jzf-s"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_VFPV2
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV6
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_arm11mpcore
+>         bool "mpcore"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+>         select BR2_ARM_CPU_HAS_THUMB
+>         select BR2_ARM_CPU_ARMV6
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>
+>  comment "armv7a cores"
+>  config BR2_cortex_a5
+> @@ -184,7 +178,6 @@ config BR2_cortex_a5
+>         select BR2_ARM_CPU_MAYBE_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a7
+>         bool "cortex-A7"
+>         select BR2_ARM_CPU_HAS_ARM
+> @@ -192,7 +185,6 @@ config BR2_cortex_a7
+>         select BR2_ARM_CPU_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a8
+>         bool "cortex-A8"
+>         select BR2_ARM_CPU_HAS_ARM
+> @@ -200,7 +192,6 @@ config BR2_cortex_a8
+>         select BR2_ARM_CPU_HAS_VFPV3
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a9
+>         bool "cortex-A9"
+>         select BR2_ARM_CPU_HAS_ARM
+> @@ -208,7 +199,6 @@ config BR2_cortex_a9
+>         select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a12
+>         bool "cortex-A12"
+>         select BR2_ARM_CPU_HAS_ARM
+> @@ -216,7 +206,6 @@ config BR2_cortex_a12
+>         select BR2_ARM_CPU_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a15
+>         bool "cortex-A15"
+>         select BR2_ARM_CPU_HAS_ARM
+> @@ -224,7 +213,6 @@ config BR2_cortex_a15
+>         select BR2_ARM_CPU_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a15_a7
+>         bool "cortex-A15/A7 big.LITTLE"
+>         select BR2_ARM_CPU_HAS_ARM
+> @@ -232,7 +220,6 @@ config BR2_cortex_a15_a7
+>         select BR2_ARM_CPU_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+>  config BR2_cortex_a17
+>         bool "cortex-A17"
+> @@ -241,7 +228,6 @@ config BR2_cortex_a17
+>         select BR2_ARM_CPU_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>  config BR2_cortex_a17_a7
+>         bool "cortex-A17/A7 big.LITTLE"
+> @@ -250,14 +236,12 @@ config BR2_cortex_a17_a7
+>         select BR2_ARM_CPU_HAS_VFPV4
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>  config BR2_pj4
+>         bool "pj4"
+>         select BR2_ARM_CPU_HAS_ARM
+>         select BR2_ARM_CPU_HAS_VFPV3
+>         select BR2_ARM_CPU_ARMV7A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>
+>  comment "armv7m cores"
+>  config BR2_cortex_m3
+> @@ -286,7 +270,6 @@ config BR2_cortex_a32
+>         select BR2_ARM_CPU_HAS_THUMB2
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  config BR2_cortex_a35
+>         bool "cortex-A35"
+> @@ -295,7 +278,6 @@ config BR2_cortex_a35
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  config BR2_cortex_a53
+>         bool "cortex-A53"
+> @@ -304,7 +286,6 @@ config BR2_cortex_a53
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a57
+>         bool "cortex-A57"
+>         select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+> @@ -312,7 +293,6 @@ config BR2_cortex_a57
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a57_a53
+>         bool "cortex-A57/A53 big.LITTLE"
+>         select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+> @@ -320,7 +300,6 @@ config BR2_cortex_a57_a53
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  config BR2_cortex_a72
+>         bool "cortex-A72"
+> @@ -329,7 +308,6 @@ config BR2_cortex_a72
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>  config BR2_cortex_a72_a53
+>         bool "cortex-A72/A53 big.LITTLE"
+> @@ -338,7 +316,6 @@ config BR2_cortex_a72_a53
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  config BR2_cortex_a73
+>         bool "cortex-A73"
+> @@ -347,7 +324,6 @@ config BR2_cortex_a73
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_cortex_a73_a35
+>         bool "cortex-A73/A35 big.LITTLE"
+> @@ -356,7 +332,6 @@ config BR2_cortex_a73_a35
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_cortex_a73_a53
+>         bool "cortex-A73/A53 big.LITTLE"
+> @@ -365,14 +340,12 @@ config BR2_cortex_a73_a53
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_emag
+>         bool "emag"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+>  config BR2_exynos_m1
+>         bool "exynos-m1"
+> @@ -381,63 +354,54 @@ config BR2_exynos_m1
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>  config BR2_falkor
+>         bool "falkor"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_phecda
+>         bool "phecda"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+>  config BR2_qdf24xx
+>         bool "qdf24xx"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>  config BR2_thunderx
+>         bool "thunderx (aka octeontx)"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>  config BR2_thunderxt81
+>         bool "thunderxt81 (aka octeontx81)"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_thunderxt83
+>         bool "thunderxt83 (aka octeontx83)"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_thunderxt88
+>         bool "thunderxt88"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_thunderxt88p1
+>         bool "thunderxt88p1"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_xgene1
+>         bool "xgene1"
+> @@ -446,7 +410,6 @@ config BR2_xgene1
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+>
+>  comment "armv8.1a cores"
+> @@ -455,21 +418,18 @@ config BR2_thunderx2t99
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_thunderx2t99p1
+>         bool "thunderx2t99p1"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>  config BR2_vulcan
+>         bool "vulcan"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+>
+>  comment "armv8.2a cores"
+> @@ -478,21 +438,18 @@ config BR2_cortex_a55
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+>  config BR2_cortex_a75
+>         bool "cortex-A75"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+>  config BR2_cortex_a75_a55
+>         bool "cortex-A75/A55 big.LITTLE"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+>  config BR2_cortex_a76
+>         bool "cortex-A76"
+> @@ -501,7 +458,6 @@ config BR2_cortex_a76
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+>  config BR2_cortex_a76_a55
+>         bool "cortex-A76/A55 big.LITTLE"
+> @@ -510,7 +466,6 @@ config BR2_cortex_a76_a55
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+>  config BR2_neoverse_n1
+>         bool "neoverse-N1 (aka ares)"
+> @@ -519,14 +474,12 @@ config BR2_neoverse_n1
+>         select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+>  config BR2_tsv110
+>         bool "tsv110"
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+>
+>  comment "armv8.4a cores"
+> @@ -535,7 +488,6 @@ config BR2_saphira
+>         depends on BR2_ARCH_IS_64
+>         select BR2_ARM_CPU_HAS_FP_ARMV8
+>         select BR2_ARM_CPU_ARMV8A
+> -       select BR2_ARCH_HAS_MMU_OPTIONAL
+>         select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+>  endchoice
+>
+> diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+> index c1ba449dd5..94b034c158 100644
+> --- a/arch/Config.in.sh
+> +++ b/arch/Config.in.sh
+> @@ -7,14 +7,19 @@ choice
+>
+>  config BR2_sh2a
+>         bool "sh2a (SH2A big endian)"
+> +       select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_sh4
+>         bool "sh4 (SH4 little endian)"
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>  config BR2_sh4eb
+>         bool "sh4eb (SH4 big endian)"
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>  config BR2_sh4a
+>         bool "sh4a (SH4A little endian)"
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>  config BR2_sh4aeb
+>         bool "sh4aeb (SH4A big endian)"
+> +       select BR2_ARCH_HAS_MMU_MANDATORY
+>  endchoice
+>
+>  config BR2_ARCH
+>
+>
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
