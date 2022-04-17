@@ -1,62 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CD1C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Apr 2022 08:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA7B6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Apr 2022 09:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0820541CE0;
-	Sun, 17 Apr 2022 08:42:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7904D611F0;
+	Sun, 17 Apr 2022 09:16:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KdM5nMFlTDdU; Sun, 17 Apr 2022 08:42:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OJ2eSZ8qhgfO; Sun, 17 Apr 2022 09:16:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB45041CDD;
-	Sun, 17 Apr 2022 08:42:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9248060F41;
+	Sun, 17 Apr 2022 09:16:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A3A3B1BF286
- for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 08:42:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF87E1BF3F9
+ for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 09:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FC1441CDA
- for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 08:42:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBAC14171B
+ for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 09:16:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=fail (1024-bit key) reason="fail (body has been altered)"
+ header.d=163.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J_yFWJSJUl_B for <buildroot@lists.busybox.net>;
- Sun, 17 Apr 2022 08:42:49 +0000 (UTC)
+ with ESMTP id z84ix5NqnTiP for <buildroot@lists.busybox.net>;
+ Sun, 17 Apr 2022 09:16:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A337641CDD
- for <buildroot@buildroot.org>; Sun, 17 Apr 2022 08:42:48 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 56F72FF802;
- Sun, 17 Apr 2022 08:42:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650184966;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uoVxfVVG5kK96guyn8CSSKnZnjUNDddKRWndP9xTSuQ=;
- b=YiCzD3QrPX8LwK42d8vfWIHafabeUSVOMeXm5UrpxHImTRl/2Z5PKs8GMa9QSvpJR58zmj
- ZieTGWUc9M1dQEjAhnpOC3SG3P2b4KWkRVrxg5+fSt424ArUJsUYAyrT8gxbyQ1jXBUxmh
- 1hUzSz4v6EMkgGWT5EYhsezDFPW6C5lbPmcBTia6G8lsywmc6RSGCrcjdJTY+aj75stBkO
- pkcqDee5GN32AnwcL5tGKRjY+YfbchLx1ecZnd5AwXytemVtnynLw4kyqQrPjvM4NNs9ub
- KW7vHSMKUfc/NVD9vfOAQgQI+OtB57Z+XXuIBkcJO+OB4x5XxkppsVL06vTyuw==
-Date: Sun, 17 Apr 2022 10:42:44 +0200
-To: Francis Laniel <flaniel@linux.microsoft.com>
-Message-ID: <20220417104244.6d681b10@windsurf>
-In-Reply-To: <2098999.irdbgypaU6@pwmachine>
-References: <2098999.irdbgypaU6@pwmachine>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Received: from m1326.mail.163.com (m1326.mail.163.com [220.181.13.26])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C19941712
+ for <buildroot@buildroot.org>; Sun, 17 Apr 2022 09:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+ s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=WzOe2
+ zRyAkc8bZj9oe3DqGp+XTXkKWN/HuQrzm+qK0E=; b=cJmIZoB78eWyDjIQpaE/f
+ Dta8cVQvKJIFuGpTYGYQl+hWSLKuoQzQXtrjot3QX6vlv2abuKC/77h8h4wO51Wf
+ Z48Rz7ssMl39IL9DRySsyTPPsvCGK7F7lrIB36gA3XBdV8PhjlH0kui+9vyQhqfi
+ GD6geEi+aFxmJXfavmx8V8=
+Received: from andyshrk$163.com ( [58.22.7.114] ) by ajax-webmail-wmsvr26
+ (Coremail) ; Sun, 17 Apr 2022 17:16:47 +0800 (CST)
+X-Originating-IP: [58.22.7.114]
+Date: Sun, 17 Apr 2022 17:16:47 +0800 (CST)
+From: "Andy Yan" <andyshrk@163.com>
+To: buildroot@buildroot.org, ps.report@gmx.net
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-04-14
+Message-ID: <5868454e.114f.18036cf775d.Coremail.andyshrk@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GsGowAAXe6r_2ltiIN8KAA--.17001W
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiOwzlXmC5i4K6iQACst
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Subject: [Buildroot] Is there any plan for supporting Qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,114 +67,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 15 Apr 2022 17:42:23 +0100
-Francis Laniel <flaniel@linux.microsoft.com> wrote:
 
 
-> >     arch     |             reason             |                             
-> >          url
-> > -------------+--------------------------------+----------------------------
-> > ----------------------------------------------------- xtensa    |      
-> > host-pahole-v1.23        |
-> > http://autobuild.buildroot.net/results/fa4fb6ca383e058e89ff8796ac9ae68a0b16
-> > 81b5 m68k     |       host-pahole-v1.23        |
-> > http://autobuild.buildroot.net/results/b584c57a72e4604112f4b12c0c7b21e1a4b4
-> > 1dd5 arm      |       host-pahole-v1.23        |
-> > http://autobuild.buildroot.net/results/b43be30cb177066d1b49bf4822790ec0ca01
-> > 9d03
-> > 
-> > 
-> > Thanks for your contribution to Buildroot!  
-> 
-> I suspect this problem occurs because Ubuntu 14.04 kernel does not know the 
-> problematic symbols.
-> Indeed, PERF_COUNT_SW_BPF_OUTPUT was added in :
-> a43eec304259 ("bpf: introduce bpf_perf_event_output() helper")
-> which was released with kernel 4.4.
-> So, can you please give me the uname -r of the host-distro?
+Hello:
+      Buildroot is a great project, it gave me many convince for building embedded rootfs. 
+      I found Peter has submitted Qt6 support at the early of 2021[0], but it seems this series has
+not bee merged yet. May i Know if there is any further plan for Qt6 support in buildroot?
 
-I can't because these build issues (or at least the last one) occurs on
-Yann Morin's autobuilder, so I've added yann in Cc.
+[0]https://patchwork.ozlabs.org/project/buildroot/cover/20210213174013.32584-1-ps.report@gmx.net/
 
-> If my suspicion is good, I already wrote a patch to throw an error if host 
-> kernel is under 4.4 while building host-pahole.
-
-This is not going to be the solution. Why does host-pahole depend on
-the version of the kernel? Why does it need the NR_bpf symbol?
-
-There is some logic in src/bpf.c to get __NR_bpf if not provided by
-kernel headers:
-
-#ifndef __NR_bpf
-# if defined(__i386__)
-#  define __NR_bpf 357
-# elif defined(__x86_64__)
-#  define __NR_bpf 321
-# elif defined(__aarch64__)
-#  define __NR_bpf 280
-# elif defined(__sparc__)
-#  define __NR_bpf 349
-# elif defined(__s390__)
-#  define __NR_bpf 351
-# elif defined(__arc__)
-#  define __NR_bpf 280
-# elif defined(__mips__) && defined(_ABIO32)
-#  define __NR_bpf 4355
-# elif defined(__mips__) && defined(_ABIN32)
-#  define __NR_bpf 6319
-# elif defined(__mips__) && defined(_ABI64)
-#  define __NR_bpf 5315
-# else
-#  error __NR_bpf not defined. libbpf does not support your arch.
-# endif
-#endif
-
-but this logic is only partially duplicated in src/skel_internal.h:
-
-#ifndef __NR_bpf
-# if defined(__mips__) && defined(_ABIO32)
-#  define __NR_bpf 4355
-# elif defined(__mips__) && defined(_ABIN32)
-#  define __NR_bpf 6319
-# elif defined(__mips__) && defined(_ABI64)
-#  define __NR_bpf 5315
-# endif
-#endif
-
-That doesn't make much sense.
-
-Do we need that BPF support in host-pahole in our use-case of host-pahole?
-
-BTW, I'm seeing that we can avoid using the internal libbpf, and
-therefore avoid using git submodules:
-
-option(LIBBPF_EMBEDDED "Use the embedded version of libbpf instead of searching it via pkg-config" ON)
-if (NOT LIBBPF_EMBEDDED)
-        find_package(PkgConfig REQUIRED)
-        if(PKGCONFIG_FOUND)
-                pkg_check_modules(LIBBPF REQUIRED libbpf>=0.4.0)
-        endif()
-endif()
-
-So we should definitely do that, and have a separate Buildroot package
-for libbpf.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Many thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
