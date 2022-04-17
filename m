@@ -1,61 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA7B6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Apr 2022 09:16:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A075C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Apr 2022 19:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7904D611F0;
-	Sun, 17 Apr 2022 09:16:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2A7B40FD3;
+	Sun, 17 Apr 2022 19:36:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OJ2eSZ8qhgfO; Sun, 17 Apr 2022 09:16:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fgpSEKt9Q7Qb; Sun, 17 Apr 2022 19:36:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9248060F41;
-	Sun, 17 Apr 2022 09:16:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF87E1BF3F9
- for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 09:16:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C157C4091F;
+	Sun, 17 Apr 2022 19:36:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C22B1BF38C
+ for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 19:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBAC14171B
- for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 09:16:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6924A84008
+ for <buildroot@lists.busybox.net>; Sun, 17 Apr 2022 19:36:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=fail (1024-bit key) reason="fail (body has been altered)"
- header.d=163.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z84ix5NqnTiP for <buildroot@lists.busybox.net>;
- Sun, 17 Apr 2022 09:16:53 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lt1yU1JSHiOH for <buildroot@lists.busybox.net>;
+ Sun, 17 Apr 2022 19:36:12 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from m1326.mail.163.com (m1326.mail.163.com [220.181.13.26])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C19941712
- for <buildroot@buildroot.org>; Sun, 17 Apr 2022 09:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
- s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=WzOe2
- zRyAkc8bZj9oe3DqGp+XTXkKWN/HuQrzm+qK0E=; b=cJmIZoB78eWyDjIQpaE/f
- Dta8cVQvKJIFuGpTYGYQl+hWSLKuoQzQXtrjot3QX6vlv2abuKC/77h8h4wO51Wf
- Z48Rz7ssMl39IL9DRySsyTPPsvCGK7F7lrIB36gA3XBdV8PhjlH0kui+9vyQhqfi
- GD6geEi+aFxmJXfavmx8V8=
-Received: from andyshrk$163.com ( [58.22.7.114] ) by ajax-webmail-wmsvr26
- (Coremail) ; Sun, 17 Apr 2022 17:16:47 +0800 (CST)
-X-Originating-IP: [58.22.7.114]
-Date: Sun, 17 Apr 2022 17:16:47 +0800 (CST)
-From: "Andy Yan" <andyshrk@163.com>
-To: buildroot@buildroot.org, ps.report@gmx.net
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 436BF83F10
+ for <buildroot@buildroot.org>; Sun, 17 Apr 2022 19:36:12 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::228])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 28A0EC5550
+ for <buildroot@buildroot.org>; Sun, 17 Apr 2022 19:36:09 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A73F01BF205;
+ Sun, 17 Apr 2022 19:36:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650224163;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+yz2x1vJkBnpwCFmRZmNFD6XZzd2Lx1OfjUhN74YJL4=;
+ b=W4LTH0zDaDgn8EejrU56wWqfXfCP5PGejUoF7CASzMan2k6T9IWfevdkbnbeY5TLuyDHQW
+ uHLhQO1FhloCuEMoZ091N8u7YGrH4q7X9f6Zp4p/Jg2BLWDE9ZFAroHhUXEz0oFOJ4Tqm3
+ OTsWh7FiykZa27A2lnfeN6XgIiJUyhmxUEFxnB49K3U8HRocvEu2OBEcpsFjSTRu02GItQ
+ DIxczuEX2qvT43DsY4PYSlWZvo0BoEXxJRBMWD8/4cWzz1t6FvvV7BGr6dev+nMRJkrrJR
+ dm2MWNeN9+Cmqjt/KTeKyR0s+wtdc+K2K9E+FWWnrXMi+h1LYDi3gHBQwPkxXA==
+Date: Sun, 17 Apr 2022 21:36:01 +0200
+To: Herve Codina <herve.codina@bootlin.com>
+Message-ID: <20220417213601.78389ca7@windsurf>
+In-Reply-To: <20220415083657.357a65ce@bootlin.com>
+References: <20220414203059.1818820-1-fontaine.fabrice@gmail.com>
+ <20220415083657.357a65ce@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <5868454e.114f.18036cf775d.Coremail.andyshrk@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GsGowAAXe6r_2ltiIN8KAA--.17001W
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiOwzlXmC5i4K6iQACst
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-Subject: [Buildroot] Is there any plan for supporting Qt6
+Subject: Re: [Buildroot] [PATCH 1/1] package/php-apcu: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,22 +72,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Herve Codina via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-Hello:
-      Buildroot is a great project, it gave me many convince for building embedded rootfs. 
-      I found Peter has submitted Qt6 support at the early of 2021[0], but it seems this series has
-not bee merged yet. May i Know if there is any further plan for Qt6 support in buildroot?
-
-[0]https://patchwork.ozlabs.org/project/buildroot/cover/20210213174013.32584-1-ps.report@gmx.net/
-
-Many thanks.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSGVydsOpLAoKT24gRnJpLCAxNSBBcHIgMjAyMiAwODozNjo1NyArMDIwMApIZXJ2ZSBD
+b2RpbmEgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgoKPiBB
+Y2tlZC4KCklmIHlvdSB3YW50IHlvdXIgQWNrZWQtYnkgdG8gYmUgcmVjb3JkZWQgYnkgcGF0Y2h3
+b3JrLCBpdCBuZWVkcyB0byBiZSBhCmZ1bGwgQWNrZWQtYnk6LCBmb2xsb3dlZCBieSB5b3VyIG5h
+bWUgYW5kIGUtbWFpbC4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5k
+IENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0
+cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
