@@ -4,77 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333A5C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 21:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02724C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 22:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B22A641E4B;
-	Mon, 18 Apr 2022 21:56:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81DE341840;
+	Mon, 18 Apr 2022 22:22:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ggUA5e5OKb8O; Mon, 18 Apr 2022 21:56:13 +0000 (UTC)
+	with ESMTP id m23BXn_sMsjB; Mon, 18 Apr 2022 22:22:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 726D541E14;
-	Mon, 18 Apr 2022 21:56:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 56D3D1BF2F1
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:56:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FD31415F6;
+	Mon, 18 Apr 2022 22:22:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 07BBF1BF30A
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 22:22:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 437EF41E14
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:56:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7D6360EAB
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 22:22:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rlhCnw6qiVNX for <buildroot@lists.busybox.net>;
- Mon, 18 Apr 2022 21:56:10 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t7XCVhXOr4Nl for <buildroot@lists.busybox.net>;
+ Mon, 18 Apr 2022 22:22:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A7B941E0F
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 21:56:09 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- ay36-20020a05600c1e2400b0038ebc885115so239761wmb.1
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 14:56:09 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1217F60593
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 22:22:36 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id e21so20082697wrc.8
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 15:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=IV/YSh8MWrRu7Wj5+QzvRGuqvFoCSfYmAlIzkG+xvUU=;
- b=SvuPgLswhLRp53acxkmNtK0tSWNNmPhSuSvH6UnqnmbbVUgdUXV7dByL58jU35fcXe
- 2X8gn0oSyYTo+sQy9RX7qSvNW4X/HbW3lDvdKjg6pyzC5aHGeSIWLzFJSZHU+6jk8FJC
- 3bhWuw3lxTfH7O3Ndcv+SRmL2VJiti8AbN3NzYXviAKDQd0EjLI7D09iy7FSzdCSEFQU
- WyICE6pA9oQ22Dz1llrkIzNYZKwtVToZOd63532lDNlDXpFfURhUe/gSyKeFooG4gv8L
- gfIRFaIYpWXUWe1ePs1a4mzI0f+emjw2jkpviftxWcWh+z91I2wZDSNeXgK6fpQmKBWs
- l5vQ==
+ bh=aYcp7g2SK2mAO/yzKhpVXzu2Y1GfeVUnPM1rlCk7XDM=;
+ b=AGGs/927/HGFwL+CqrJVz9rInzfosIQqTQfCglqX/UtUS4tW1DZkiWtIjmEIDC3mS7
+ gD4yL+J780Y9AcJPXaLVYVE6WsK9yuk+bazWhhhgrj5psvOKjJc8lQOB57axysqLMMjX
+ JaUm34kc48FwZI3ml4pUAUw36I2NyDCC3no/aRV4XbbCWaBg0pO1V2APJDBsaZc4L9dH
+ gBfejGkEL/DiZJOaKW81gtBGNNjHtGBAvPkSI2QVGynbiavvyBbPcD8fhSarqhTW3v7v
+ +uQkS71UvZebpj54P/F1jbVN6TlujS2KdS2trDnaBIXKbgWBuxDYsnsc6jxEP6DLDciW
+ /oIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=IV/YSh8MWrRu7Wj5+QzvRGuqvFoCSfYmAlIzkG+xvUU=;
- b=QfbeFOYySd3aomPnbw1gOzP1lP3beYWILIO/Yh7534/8FELgFVtJO0+qtJtnJnv1mL
- ylC5gpvNEqBiVkuLxktKQXtrcXHDUlN9UKUEvob/VWSraQBYnDxctwe2X72JvBq7M8CL
- 9U8GnZOkebNry1RPLOuc+Ga/V5aupr3L8wzOL8itxb6inwSW65vYg2uD8l6aRw7gAbls
- 6RLMMDCo9La706fReCNEnsVmcJhMmQEEWQRYzVni3NJ9e/lMJOX0PcAJkBYRQSZtWsCs
- 4uAIen4lJy6bNyn6NEPBqntnYX8aEw+Lry9ToaYx5sf0pPOGVEK82tATF9lJ3XtH/HAs
- RRnA==
-X-Gm-Message-State: AOAM530chiTGvQYYDrN2IK69yER3QiH63vrk2K5S45Uh3dldLkwRL9Fq
- 4dvPZwcLLI+QMdA9EYpgxH5Q5jNTSBM=
-X-Google-Smtp-Source: ABdhPJzat7JjUTPUSWCA+MA7/JR4M+2UBTvumS2+zP4XlksDMjwyepJSBhRBFQYtkFZHhSTVAl+zOw==
-X-Received: by 2002:a05:600c:3d0e:b0:38f:f83b:e7dc with SMTP id
- bh14-20020a05600c3d0e00b0038ff83be7dcmr17007302wmb.29.1650318968104; 
- Mon, 18 Apr 2022 14:56:08 -0700 (PDT)
+ bh=aYcp7g2SK2mAO/yzKhpVXzu2Y1GfeVUnPM1rlCk7XDM=;
+ b=3uKTRyAcXgx8NJCv5GPW0zWlPq1/BMDMrd2SRr/FAbAwJqJ6WDFDsCFcWi9gCTHx/W
+ 1i9tI/sSplgu6uRKhAWQIJtgowWSefawVkBuae/CTyNBo4/iVXc+XXczmYidmvmyld6D
+ e5HKpk8GXOkRvsORceLUFxGCfCUqpBGiHbG+HPy2c39pUbxflqsIHuifmKGY8cS4w1hr
+ HhsFvQi2veC+vFtpvFBxDGLHBeDl2tLQRSL/voV8WMh5T9rsyuAtFTLj4mJy0p/jkx4t
+ UKYozXbeBwjJRE7fx/8NhB9oAJ2eMG0eYo5+cM2MnAOAq0ffHuZfLq5A/Svh8kOqcZUQ
+ Cnag==
+X-Gm-Message-State: AOAM531ZdJBCPRyqRhcDwGp87s7fpIHwj2sq1EX7rvrTZ6PHujHaSiBK
+ e45zHRXx7FsFwumwVUBcSJWuBjlKDi8=
+X-Google-Smtp-Source: ABdhPJxbJuiZVPVTr9unwzq/mB/wlZ5IyCnrNrwasnjm44TtCI22d7Pcb7zL3Vwi019FhU2rMvL/1w==
+X-Received: by 2002:a05:6000:1806:b0:207:a218:fcd2 with SMTP id
+ m6-20020a056000180600b00207a218fcd2mr9338782wrh.706.1650320555091; 
+ Mon, 18 Apr 2022 15:22:35 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- o11-20020a05600002cb00b0020a88c4ecb5sm6625751wry.3.2022.04.18.14.56.07
+ r10-20020a7bc08a000000b0039049f8b3f9sm12425221wmh.27.2022.04.18.15.22.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Apr 2022 14:56:07 -0700 (PDT)
+ Mon, 18 Apr 2022 15:22:34 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Apr 2022 23:54:12 +0200
-Message-Id: <20220418215412.892842-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Apr 2022 00:20:33 +0200
+Message-Id: <20220418222033.1279730-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2, 1/1] package/mariadb: fix build with libressl
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: disable backtrace on internal
+ bind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,42 +94,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with libressl:
+Disable backtrace on internal bind to avoid the following build failure
+since commit 0c8dd6ebd656e06cf99a63eb93343715f4853503:
 
-CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
-   LIBRESSL_RESULT (advanced)
-   LIBRESSL_RESULT__TRYRUN_OUTPUT (advanced)
-For details see /nvmedata/autobuild/instance-27/output-1/build/mariadb-10.3.34/TryRunResults.cmake
+/nvmedata/autobuild/instance-15/output-1/host/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/10.3.0/../../../../armeb-buildroot-linux-uclibcgnueabi/bin/ld: /nvmedata/autobuild/instance-15/output-1/build/dhcp-4.4.3/bind/bind-9.11.36/lib/isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
 
 Fixes:
- - http://autobuild.buildroot.org/results/cbdbfcdae4b89ac678e1bf6bcded96872c7223ab
+ - http://autobuild.buildroot.org/results/074786f3f1e7ffc858dcb1de1855ee138793869e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Prepend "LibreSSL " to $(LIBRESSL_VERSION) as
-   libmariadb/cmake/libressl_version.c prints LIBRESSL_VERSION_TEXT
+ package/dhcp/dhcp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/mariadb/mariadb.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 4eb9c71827..18667e7e70 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -60,6 +60,12 @@ MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
- # Explicitly disable dtrace to avoid detection of a host version
- MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 6ac9ed0147..e6f4c419f4 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -29,7 +29,8 @@ DHCP_BIND_EXTRA_CONFIG = \
+ 	BUILD_CFLAGS='$(HOST_CFLAGS)' \
+ 	BUILD_CPPFLAGS='$(HOST_CPPFLAGS)' \
+ 	BUILD_LDFLAGS='$(HOST_LDFLAGS)' \
+-	RANLIB='$(TARGET_RANLIB)'
++	RANLIB='$(TARGET_RANLIB)' \
++	--disable-backtrace
  
-+ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+MARIADB_CONF_OPTS += \
-+	-DLIBRESSL_RESULT=ON \
-+	-DLIBRESSL_RESULT__TRYRUN_OUTPUT="LibreSSL $(LIBRESSL_VERSION)"
-+endif
-+
- ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
- ifeq ($(BR2_PACKAGE_MARIADB_SERVER_EMBEDDED),y)
- MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
+ DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
+ 
 -- 
 2.35.1
 
