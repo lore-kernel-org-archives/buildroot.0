@@ -1,60 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED04C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 14:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA9C6C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 15:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 880FD41E02;
-	Mon, 18 Apr 2022 14:29:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D97B83E1B;
+	Mon, 18 Apr 2022 15:20:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v8T6OJcMDkHH; Mon, 18 Apr 2022 14:29:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pl472PhN7VHG; Mon, 18 Apr 2022 15:20:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4559741DF3;
-	Mon, 18 Apr 2022 14:29:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 712221BF376
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 14:29:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E59848378C;
+	Mon, 18 Apr 2022 15:20:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 138FF1BF358
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 15:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5DDA941DF3
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 14:29:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F403E40B9A
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 15:20:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QO639T7c2Zhc for <buildroot@lists.busybox.net>;
- Mon, 18 Apr 2022 14:29:33 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NjdexCxNQoOu for <buildroot@lists.busybox.net>;
+ Mon, 18 Apr 2022 15:20:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D73341DD2
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 14:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
- s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/vh/i
- ww5Ca5Asb1SCMwdW7/Pq9fA+/8bvBKqw/Fsu/k=; b=RopKHuwIDWlh2WMXdYik8
- zINuemcNnssgxuwKF3YeBI3ukf5HxD6GzOsKkV2kZ87rkFlHSoj0PbP8c2FNBtwV
- xePQt5bDYYoINj0L4iZbVITMhD/hhQ5KrWO43MbrLreXl2Gh8GTFgVDuPl0TA6Qb
- PhrW9HeyHpsy/s48P7jSkQ=
-Received: from localhost.localdomain (unknown [123.185.181.60])
- by smtp7 (Coremail) with SMTP id C8CowAAH8ZvHdV1in3yiBw--.54S2;
- Mon, 18 Apr 2022 22:29:27 +0800 (CST)
-From: TIAN Yuanhao <tianyuanhao3@163.com>
-To: buildroot@buildroot.org
-Date: Mon, 18 Apr 2022 07:28:55 -0700
-Message-Id: <20220418142855.3489541-1-tianyuanhao3@163.com>
-X-Mailer: git-send-email 2.25.1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DD4C403C2
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 15:20:24 +0000 (UTC)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 437B3FF807;
+ Mon, 18 Apr 2022 15:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650295220;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=a2742Xd/XHw/OWPJlUBQjuFRHFbn0R2SjXVTFxRpeX8=;
+ b=XmM1W/wbYX93pnP9Xj6oYQz2HG+CQSZ7NI+090O/kDA4+ueNE+SUVuXPHwzgUZqm/xwRmR
+ jEKRIfns+fe1CrjGn2uRb0RO7aEI1Rfq9Av+TNrfGT6zgkU4fppJMQrxQOqR030DRIUvln
+ RKFSfolAwbsqZa72eOgxyv6dICBysVGcFPiPeqBLn6/ZerHvaMOgFkBDv6gBUqtyZ3/njY
+ 0urrtutuELyJ7/jiCGYY0V0ZPZ+Dm6AeqHgoSxhfrsfMnCCuTO1RWczep2kePSGaMpArWV
+ YYDieOVZhIKFwLg/9mcOJaOzHXaQtuI+PYypkg0GaTniVDbZ7B9mSe/WfA4zoQ==
+Date: Mon, 18 Apr 2022 17:20:18 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220418172018.607608a7@bootlin.com>
+In-Reply-To: <20220417213601.78389ca7@windsurf>
+References: <20220414203059.1818820-1-fontaine.fabrice@gmail.com>
+ <20220415083657.357a65ce@bootlin.com>
+ <20220417213601.78389ca7@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CM-TRANSID: C8CowAAH8ZvHdV1in3yiBw--.54S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CryDWrW8WrW3trW5Wr15Jwb_yoW8WrW7pr
- ZxGw17t3s5Kr4UXFyUJr47ur93Wrs0gF1DJw45Jw4xt3yxGr45X3Z8ta1jqF13ZrW7J3W5
- AayDXry5WFy3Ka7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piJ5r8UUUUU=
-X-Originating-IP: [123.185.181.60]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbB2A-mjWBHJ2M2nAAAs1
-Subject: [Buildroot] [PATCH] package/rtl8188eu: bump to 903b6fc (v5.2.2.4
- branch HEAD)
+Subject: Re: [Buildroot] [PATCH 1/1] package/php-apcu: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,47 +71,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>, TIAN Yuanhao <tianyuanhao3@163.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Herve Codina via buildroot <buildroot@buildroot.org>
+Reply-To: Herve Codina <herve.codina@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Herve Codina via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This allows to build against newer kernels (up to 5.18).
-Tested on kernel v5.15.
-
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
----
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 37767f5d16..9c7f2de4b6 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b2b06c842bccd730d68a26b1c1b5a24f18373401e907147bf5e775fa42a36bbb  rtl8188eu-60cb0b5a3cfc95e3f2e6fc294a28d987096b0559.tar.gz
-+sha256  6bc46a13b20a2ed121844e51fd690216b2ab3b1faa1af8d9501090026ca9bd22  rtl8188eu-903b6fcb821465fe9c63e83416080df70c1c3c90.tar.gz
- sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index b2066080f3..fa420b0d57 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8188EU_VERSION = 60cb0b5a3cfc95e3f2e6fc294a28d987096b0559
-+RTL8188EU_VERSION = 903b6fcb821465fe9c63e83416080df70c1c3c90
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLCBGYWJyaWNlLAoKT24gU3VuLCAxNyBBcHIgMjAyMiAyMTozNjowMSArMDIwMApU
+aG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKCj4g
+SGVsbG8gSGVydsOpLAo+IAo+IE9uIEZyaSwgMTUgQXByIDIwMjIgMDg6MzY6NTcgKzAyMDAKPiBI
+ZXJ2ZSBDb2RpbmEgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3Rl
+Ogo+IAo+ID4gQWNrZWQuICAKPiAKPiBJZiB5b3Ugd2FudCB5b3VyIEFja2VkLWJ5IHRvIGJlIHJl
+Y29yZGVkIGJ5IHBhdGNod29yaywgaXQgbmVlZHMgdG8gYmUgYQo+IGZ1bGwgQWNrZWQtYnk6LCBm
+b2xsb3dlZCBieSB5b3VyIG5hbWUgYW5kIGUtbWFpbC4KPiAKPiBUaG9tYXMKCkFja2VkLWJ5OiBI
+ZXJ2ZSBDb2RpbmEgPGhlcnZlLmNvZGluYUBib290bGluLmNvbT4KCkhlcnbDqQpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
