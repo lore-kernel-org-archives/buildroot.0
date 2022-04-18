@@ -4,78 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34B77C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 21:48:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333A5C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 21:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3A2D41E57;
-	Mon, 18 Apr 2022 21:48:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B22A641E4B;
+	Mon, 18 Apr 2022 21:56:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p8pYHMXCNEgA; Mon, 18 Apr 2022 21:48:49 +0000 (UTC)
+	with ESMTP id ggUA5e5OKb8O; Mon, 18 Apr 2022 21:56:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B145D41E4B;
-	Mon, 18 Apr 2022 21:48:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 614C71BF2F1
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:48:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 726D541E14;
+	Mon, 18 Apr 2022 21:56:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 56D3D1BF2F1
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5CDDD40BF7
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:48:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 437EF41E14
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:56:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8K_04JGkeUOD for <buildroot@lists.busybox.net>;
- Mon, 18 Apr 2022 21:48:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rlhCnw6qiVNX for <buildroot@lists.busybox.net>;
+ Mon, 18 Apr 2022 21:56:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6F0294016D
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 21:48:46 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id b19so19985789wrh.11
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 14:48:46 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1A7B941E0F
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 21:56:09 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ ay36-20020a05600c1e2400b0038ebc885115so239761wmb.1
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 14:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Vo8czgGlQvnrdOpNqQ+RE1b5EbEo9o2VQlIWWa0I8fA=;
- b=WSmlIigD3/I9tP1Gkq6Jb2v8TsMC+poxrS8sgXgbXkznulH/D0StYa/4fZlN5JKqnU
- WlZUsxNq2CxKfV1OnhgUopv46lrQV1vEIYzuNmyzu7Rn5KHgLGdUmKZJQH81ee1o+84h
- 75XMu51J7EEQHzyNWxMRvOA7DyztCUBbreVApIojEsqek16PoT5g0DQfNJ+gaWf42hXH
- ftrEwcBzvsrYhBbR6vRzbMV8IGdyoV05mu1jBMhhHMJEDDeCaU1pa0ujcFgm86T2Mc//
- 29jM1/dgZGe5OGyi9s67fs30K1aCLIr+sv9xonO24uyMTtrkYiazc5okGgBCnuCRfW4t
- 3/0g==
+ bh=IV/YSh8MWrRu7Wj5+QzvRGuqvFoCSfYmAlIzkG+xvUU=;
+ b=SvuPgLswhLRp53acxkmNtK0tSWNNmPhSuSvH6UnqnmbbVUgdUXV7dByL58jU35fcXe
+ 2X8gn0oSyYTo+sQy9RX7qSvNW4X/HbW3lDvdKjg6pyzC5aHGeSIWLzFJSZHU+6jk8FJC
+ 3bhWuw3lxTfH7O3Ndcv+SRmL2VJiti8AbN3NzYXviAKDQd0EjLI7D09iy7FSzdCSEFQU
+ WyICE6pA9oQ22Dz1llrkIzNYZKwtVToZOd63532lDNlDXpFfURhUe/gSyKeFooG4gv8L
+ gfIRFaIYpWXUWe1ePs1a4mzI0f+emjw2jkpviftxWcWh+z91I2wZDSNeXgK6fpQmKBWs
+ l5vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Vo8czgGlQvnrdOpNqQ+RE1b5EbEo9o2VQlIWWa0I8fA=;
- b=rV0YWNS7Cwg1JYOunRONqbeOwARDjgi10KGAcMfn+l1EqKZxqvCs+iQAis0xjgFnuk
- 3SuCRPKU3bIcW3szFWHKjCdHlMVbppwTDe6dOHi6Q5iJXB6nOfVGFIwU9F6WfcOkiJHG
- iwZnYxTZitwCghXTsStreHJWGJF1ZYqfivCTGiRm6GYm/gRRkEbL5VGA7gzDKxmXs13N
- Ouy38TQdDCLDkkjSCwTUmsG7hpRUcb8FV2FKsFN5xxDZXO0Fs+LiXjePARSeDPLqe6Kh
- 6MftHMBzFLVwSbto2i/re3GjUUVfQjTOz/mTdezl5zg7x/AuscBWzhDCUepbDNBnz4v/
- 5tiA==
-X-Gm-Message-State: AOAM532vwt47RWzDRMBO8U/N+lscVTesMHsz8v29lo/FrdSfx87PZd6u
- VofMMhva4AuLvy4zWMKYFMmW27U09vo=
-X-Google-Smtp-Source: ABdhPJxgWC9/Sj/lv5smlKxzwTht3gN6CT08mZkPUcwJJQh79fi2javd7UAqKw1ByhVKQXj40SgIlg==
-X-Received: by 2002:a5d:6e87:0:b0:206:452:5b87 with SMTP id
- k7-20020a5d6e87000000b0020604525b87mr9339700wrz.473.1650318524246; 
- Mon, 18 Apr 2022 14:48:44 -0700 (PDT)
+ bh=IV/YSh8MWrRu7Wj5+QzvRGuqvFoCSfYmAlIzkG+xvUU=;
+ b=QfbeFOYySd3aomPnbw1gOzP1lP3beYWILIO/Yh7534/8FELgFVtJO0+qtJtnJnv1mL
+ ylC5gpvNEqBiVkuLxktKQXtrcXHDUlN9UKUEvob/VWSraQBYnDxctwe2X72JvBq7M8CL
+ 9U8GnZOkebNry1RPLOuc+Ga/V5aupr3L8wzOL8itxb6inwSW65vYg2uD8l6aRw7gAbls
+ 6RLMMDCo9La706fReCNEnsVmcJhMmQEEWQRYzVni3NJ9e/lMJOX0PcAJkBYRQSZtWsCs
+ 4uAIen4lJy6bNyn6NEPBqntnYX8aEw+Lry9ToaYx5sf0pPOGVEK82tATF9lJ3XtH/HAs
+ RRnA==
+X-Gm-Message-State: AOAM530chiTGvQYYDrN2IK69yER3QiH63vrk2K5S45Uh3dldLkwRL9Fq
+ 4dvPZwcLLI+QMdA9EYpgxH5Q5jNTSBM=
+X-Google-Smtp-Source: ABdhPJzat7JjUTPUSWCA+MA7/JR4M+2UBTvumS2+zP4XlksDMjwyepJSBhRBFQYtkFZHhSTVAl+zOw==
+X-Received: by 2002:a05:600c:3d0e:b0:38f:f83b:e7dc with SMTP id
+ bh14-20020a05600c3d0e00b0038ff83be7dcmr17007302wmb.29.1650318968104; 
+ Mon, 18 Apr 2022 14:56:08 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- c10-20020a056000184a00b0020a85e7f22asm7406002wri.26.2022.04.18.14.48.43
+ o11-20020a05600002cb00b0020a88c4ecb5sm6625751wry.3.2022.04.18.14.56.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Apr 2022 14:48:43 -0700 (PDT)
+ Mon, 18 Apr 2022 14:56:07 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Apr 2022 23:46:51 +0200
-Message-Id: <20220418214651.883524-1-fontaine.fabrice@gmail.com>
+Date: Mon, 18 Apr 2022 23:54:12 +0200
+Message-Id: <20220418215412.892842-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: fix build with libressl
+Subject: [Buildroot] [PATCH v2, 1/1] package/mariadb: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,11 +104,15 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Prepend "LibreSSL " to $(LIBRESSL_VERSION) as
+   libmariadb/cmake/libressl_version.c prints LIBRESSL_VERSION_TEXT
+
  package/mariadb/mariadb.mk | 6 ++++++
  1 file changed, 6 insertions(+)
 
 diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 4eb9c71827..17751124b6 100644
+index 4eb9c71827..18667e7e70 100644
 --- a/package/mariadb/mariadb.mk
 +++ b/package/mariadb/mariadb.mk
 @@ -60,6 +60,12 @@ MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
@@ -119,7 +122,7 @@ index 4eb9c71827..17751124b6 100644
 +ifeq ($(BR2_PACKAGE_LIBRESSL),y)
 +MARIADB_CONF_OPTS += \
 +	-DLIBRESSL_RESULT=ON \
-+	-DLIBRESSL_RESULT__TRYRUN_OUTPUT=$(LIBRESSL_VERSION)
++	-DLIBRESSL_RESULT__TRYRUN_OUTPUT="LibreSSL $(LIBRESSL_VERSION)"
 +endif
 +
  ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
