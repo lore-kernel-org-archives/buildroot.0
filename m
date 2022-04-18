@@ -1,59 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF9E7C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 09:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD63DC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 10:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49C7241008;
-	Mon, 18 Apr 2022 09:31:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F2C883FF1;
+	Mon, 18 Apr 2022 10:01:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G4g1HmR1Cfz2; Mon, 18 Apr 2022 09:31:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jE9x2HtelsVN; Mon, 18 Apr 2022 10:01:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 899B641005;
-	Mon, 18 Apr 2022 09:31:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C35583FEC;
+	Mon, 18 Apr 2022 10:01:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19CCE1BF391
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 09:31:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 44A841BF391
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 10:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16A1183F23
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 09:31:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3253E83FEC
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 10:01:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HxvPcS1atz_W for <buildroot@lists.busybox.net>;
- Mon, 18 Apr 2022 09:30:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 55F2583EDF
- for <buildroot@busybox.net>; Mon, 18 Apr 2022 09:30:57 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id CFE9F440757;
- Mon, 18 Apr 2022 12:30:15 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1650274215;
- bh=nW2E8fLlm9WErPPcv4cSMo/c579gjHlkGtVPhaD2osI=;
- h=From:To:Cc:Subject:Date:From;
- b=wBKlgPOQxKrQTPAULJRY6duTRrpem01/jQnvpJ/ZoemqdNfTJswAkrrz7NAQvwZCe
- UkBYc3HBV/FZJ/0xEHno4idpy8RtFW9aEyxIUrV3HqEg3nOQq/gv0Mi2oQD0/It0kp
- zDunv7WSWGC/9aOf2dXE5qqIPi7t6qQri9ydhWKc+K7F5Sl5pxrPHfKEdnWAIY/xT2
- 79NalClWUdODUIpyntjDLKt3uAJWCv5EyYAUT8eeU33eS2xqUR/10iwfm16PH2QKoF
- 3xd+niP5nYX/XcWoh1KQuY6s3OGn0fKfCwOmy3x2DH60LXLzr2iylLAi/1365JtS3E
- LUfVCEmgzgCsg==
-To: buildroot@busybox.net
-Date: Mon, 18 Apr 2022 12:30:50 +0300
-Message-Id: <05c2ec866042ea7dd9a215c76c6382f2096199ab.1650274250.git.baruch@tkos.co.il>
+ with ESMTP id llQV2NeHBzYU for <buildroot@lists.busybox.net>;
+ Mon, 18 Apr 2022 10:01:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D369083FB6
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 10:01:20 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id e21so18006151wrc.8
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 03:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Au1OSHQ+Z/KUq4lgry91tuAM8x/dLiqW7YL05WKdI0Q=;
+ b=KXGNEbaR1OByu9kUX8VcbJSMvViP8/Wms3W4tx7Badi7z0HspL85dR1Wny1Ulg5OQ6
+ PzcoKvFcEyKPJu5NghbUkoV3Jr007TcdkhzcuO1PByTIpZBgwVmIUVEJh2v7qCB0vxLL
+ FwFSR81CZtO7vbayu/zkM+CTzfvp2VE4314vBlvzWw9TDCFRo72sxJRLuazTv4dQgv3D
+ Qgq7a1gZegvMsMEuBA57lYe/omOv2bQFoXCjknDlwUQhf3rFM6nQjAxM9++LwEDoZenX
+ ajA92w3knipNx2lBlQcRebjIFAGLdofFmlP4QvCdxFDUty0IttchdYkKGod13HMShI26
+ 2clA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Au1OSHQ+Z/KUq4lgry91tuAM8x/dLiqW7YL05WKdI0Q=;
+ b=QzvjVbed1dWXcf0oNu1N7dRU8IwRprrL3GGpkoRPXRsWnos5vHHSSC0Ooa1XQp5UxK
+ B69rkbgeYz0ETd43FfseuO7ZUOquyXMNBzSjBVkzSY5zmNXz4PufkPEAGtqDkiNXJkh6
+ pQgxB5WZ2gVbYlZZ68KOipR/Z5b7sw3jpNdcUrrLXGZoL9majOQngtQJ4XrGiAdCvIVU
+ M9P8puzojeaktF6bL3A6pzfgQJUUZQ57F62aqlPdHgjSYgulPCWhX6wEd35/pGzZMi+V
+ n155d0eutHlgIqdg/K36/o+dmxepJyba+ShZe5w5/Q/sjbIOvEUqgeydE6psuTLOWQSN
+ sUYA==
+X-Gm-Message-State: AOAM530cYeT4xNBm2iqB6Tx1UbTqFixKCxljkXu7F1Gn4NV6R0rQrDh5
+ xKh8yX2GsbiYgZHSxMF2kuq5D7X2pm0=
+X-Google-Smtp-Source: ABdhPJwHkXMHRrZDPtr2dfRiGkuD60WnEKfTLG84nvExJSlVHkCfx6gt7pk857j1P1O6wjMstmhCvg==
+X-Received: by 2002:a5d:490a:0:b0:207:b3d0:18d6 with SMTP id
+ x10-20020a5d490a000000b00207b3d018d6mr7517200wrq.503.1650276078569; 
+ Mon, 18 Apr 2022 03:01:18 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ d5-20020a056000186500b0020a8688963bsm6108388wri.89.2022.04.18.03.01.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Apr 2022 03:01:18 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Apr 2022 11:59:19 +0200
+Message-Id: <20220418095919.13738-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2022.82
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,71 +85,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Ilias Apalodimas <apalos@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Support for the Twofish algorithm is removed upstream.
+Fix the following build failure with libressl:
 
-The dh_group1 algorithm is now disabled by default. Enable only when
-BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO is enabled.
+/nvmedata/autobuild/instance-9/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: check/libcheck.a(check_ssl.o): in function `ssl_connect':
+check_ssl.c:(.text+0x7da): undefined reference to `SSL_set0_wbio'
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+ - http://autobuild.buildroot.org/results/76f72a3c7350ea265e2277c89d68e5256410e94c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 6 ++----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ .../0003-fix-build-with-libressl.patch        | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/keepalived/0003-fix-build-with-libressl.patch
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 82ff454f0a56..ff6e312fde24 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  48235d10b37775dbda59341ac0c4b239b82ad6318c31568b985730c788aac53b  dropbear-2020.81.tar.bz2
-+sha256  3a038d2bbc02bf28bbdd20c012091f741a3ec5cbe460691811d714876aad75d1  dropbear-2022.82.tar.bz2
- 
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 1cbe63682c5b..bfb80345ece7 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2020.81
-+DROPBEAR_VERSION = 2022.82
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
-@@ -63,12 +63,12 @@ define DROPBEAR_ENABLE_LEGACY_CRYPTO
- 	echo '#define DROPBEAR_3DES 1'                  >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_ENABLE_CBC_MODE 1'       >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_DH_GROUP1 1'             >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
- else
- define DROPBEAR_DISABLE_LEGACY_CRYPTO
- 	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
--	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
- endif
-@@ -87,8 +87,6 @@ DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
- else
- define DROPBEAR_BUILD_FEATURED
- 	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
--	echo '#define DROPBEAR_TWOFISH128 1'            >> $(@D)/localoptions.h
--	echo '#define DROPBEAR_TWOFISH256 1'            >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
- DROPBEAR_DEPENDENCIES += zlib libtomcrypt
+diff --git a/package/keepalived/0003-fix-build-with-libressl.patch b/package/keepalived/0003-fix-build-with-libressl.patch
+new file mode 100644
+index 0000000000..090d35511c
+--- /dev/null
++++ b/package/keepalived/0003-fix-build-with-libressl.patch
+@@ -0,0 +1,50 @@
++From bbec15d4781670ac1be5e543cb04543f79200e69 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 12 Apr 2022 20:30:57 +0200
++Subject: [PATCH] fix build with libressl
++
++SSL_set0_rbio is provided by libressl since version 3.4.0 and
++https://github.com/libressl-portable/openbsd/commit/c99939f9665a9c3c648682b4987df46600b70efc
++but SSL_set0_wbio is not provided resulting in the following build
++failure:
++
++/nvmedata/autobuild/instance-9/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: check/libcheck.a(check_ssl.o): in function `ssl_connect':
++check_ssl.c:(.text+0x7da): undefined reference to `SSL_set0_wbio'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/76f72a3c7350ea265e2277c89d68e5256410e94c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/acassen/keepalived/commit/bbec15d4781670ac1be5e543cb04543f79200e69]
++---
++ configure.ac                 | 2 +-
++ keepalived/check/check_ssl.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5a2ea76ec..e8b5ccc41 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1327,7 +1327,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++ AC_CHECK_FUNCS([SSL_CTX_set_verify_depth])
++ 
++ # SSL_set0_rbio(), SSL_set0_wbio() OPENSSL_init_crypto() and TLS_method() introduced OpenSSL v1.1.0
++-AC_CHECK_FUNCS([SSL_set0_rbio OPENSSL_init_crypto TLS_method])
+++AC_CHECK_FUNCS([SSL_set0_wbio OPENSSL_init_crypto TLS_method])
++ 
++ # In OpenSSL v1.1.1 the call to SSL_CTX_new() fails if OPENSSL_init_crypto() has been called with
++ # OPENSSL_INIT_NO_LOAD_CONFIG. It does not fail in v1.1.0h and v1.1.1b.
++diff --git a/keepalived/check/check_ssl.c b/keepalived/check/check_ssl.c
++index 0155fce59..2cbedb8d3 100644
++--- a/keepalived/check/check_ssl.c
+++++ b/keepalived/check/check_ssl.c
++@@ -234,7 +234,7 @@ ssl_connect(thread_ref_t thread, int new_req)
++ 		BIO_get_fd(req->bio, &bio_fd);
++ 		if (fcntl(bio_fd, F_SETFD, fcntl(bio_fd, F_GETFD) | FD_CLOEXEC) == -1)
++ 			log_message(LOG_INFO, "Setting CLOEXEC failed on ssl socket - errno %d", errno);
++-#ifdef HAVE_SSL_SET0_RBIO
+++#ifdef HAVE_SSL_SET0_WBIO
++ 		BIO_up_ref(req->bio);
++ 		SSL_set0_rbio(req->ssl, req->bio);
++ 		SSL_set0_wbio(req->ssl, req->bio);
 -- 
 2.35.1
 
