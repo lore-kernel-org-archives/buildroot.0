@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F145C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 21:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7765C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Apr 2022 21:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5C744102A;
-	Mon, 18 Apr 2022 21:00:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FEB040BF6;
+	Mon, 18 Apr 2022 21:01:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cZMKbZZQ1yQ3; Mon, 18 Apr 2022 21:00:54 +0000 (UTC)
+	with ESMTP id lRzTO-hF5sq7; Mon, 18 Apr 2022 21:01:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E5AF4102C;
-	Mon, 18 Apr 2022 21:00:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C23741020;
+	Mon, 18 Apr 2022 21:01:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 207BC1BF28C
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:00:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CDBA01BF28C
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0DDC460E1A
- for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:00:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C975B6126C
+ for <buildroot@lists.busybox.net>; Mon, 18 Apr 2022 21:01:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kly4cxg38o1k for <buildroot@lists.busybox.net>;
- Mon, 18 Apr 2022 21:00:51 +0000 (UTC)
+ with ESMTP id RshMulQFyg5r for <buildroot@lists.busybox.net>;
+ Mon, 18 Apr 2022 21:01:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com
- [209.85.215.177])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F85360C1F
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 21:00:51 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id r83so853059pgr.2
- for <buildroot@buildroot.org>; Mon, 18 Apr 2022 14:00:51 -0700 (PDT)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com
+ [209.85.214.171])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E89D61264
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 21:01:48 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id v12so13326332plv.4
+ for <buildroot@buildroot.org>; Mon, 18 Apr 2022 14:01:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FYu23FVsGK0DTHW7huIdoPgaJ1W7kFg1OVRtIlROvHE=;
- b=S/rScEv+NJY7eQ2Z6folnEomnSLrVD5d/rv+itCZ35qDwckdVCb2HAO8EybPqWM3eI
- o13PuqzR2OrvzrLcWaQN7H9oag3mYci0cf75WwbU+IHZDY9SeVpJwdsR7fJy/+G31SXV
- aZWKD7236/Xor0JUneKH089kJnJTiOjFZLBQaxQ0pIhsa4k5VyIBjr9vElg9w9Y07zSY
- s+4g6zAVTNZOBlmkZyj0PrLWJXbRlQsV6Wx3W0X0RUQwmDtvt2VWZHtGc8SJrUIuKb0C
- zKAgMEEwY3CvS88sQ/1SE93+pcs+6ptEBuajXLOtv0ElnoPVnxyHVSnRZ1ZXegltXXIO
- DgiQ==
-X-Gm-Message-State: AOAM533lw1g9sPuGc0kOYLH5fiJ8kbmukwXY0FDSktK2PR8MDU4fXZy2
- Szl6nhUbir/fS8pi83VWY+NkCS13wr+B/w==
-X-Google-Smtp-Source: ABdhPJyOuchdDp3b2D8lazIzVz4HDNEky0P0GymUEr6L87J6WvntRAQ0HOkeVs8vG923wfuh4ygP5A==
-X-Received: by 2002:a63:5756:0:b0:36c:67bc:7f3f with SMTP id
- h22-20020a635756000000b0036c67bc7f3fmr11734018pgm.389.1650315650512; 
- Mon, 18 Apr 2022 14:00:50 -0700 (PDT)
+ bh=FXxyDt9LcFjxoakPVz22bep0uC3i3GNu58aW4bHmhh8=;
+ b=QAc0Fb+E0/2es3E4Ti39K1glIZr+bb1czPiXYdIosFxDNvbxKooy8pvN9kszztwFSr
+ zZAmjPd7JK4wIMkWzuuRRycSy8wDMruJKFFrFY5raAcgtNot2Xc8OcurSgp4kJfBhlDa
+ 9xLzA1G/Djq4pgGKwtYHyRerfzQNnou9Uhvh44Ig99iWUcPTCmSfiVawlSxoS4FwzRSZ
+ Jz0LqaBd4MqhLo1mL7lrZvPdG7KwOeiCbTSqkPrt2Dj+ZVySgIfmJcXRFWOmSvwxva3X
+ d31Juha9+G013ii+VuiPbqeIYLXgx/8f6WS/wRPN/6WsNNwlJYlXGLiiLz3suqSiOMrC
+ mmOw==
+X-Gm-Message-State: AOAM533rWDwMPBp+NdcUiPRNN0OqpuQG/JaIUXQHv3FDf9JtTN1v14Gr
+ Z9QhYlMMhdySgaWOgmHL/hq9gvX9hpDQnw==
+X-Google-Smtp-Source: ABdhPJyiuf0aW4YennH103emCV+insZRDjnxI9vyRhqpttHhu5wDJhZMBH6ZaFhwLcobT67z9IsNEg==
+X-Received: by 2002:a17:90b:4b84:b0:1d2:add6:804c with SMTP id
+ lr4-20020a17090b4b8400b001d2add6804cmr4770755pjb.107.1650315707399; 
+ Mon, 18 Apr 2022 14:01:47 -0700 (PDT)
 Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
  by smtp.gmail.com with ESMTPSA id
- n24-20020aa79058000000b0050612d0fe01sm13383696pfo.2.2022.04.18.14.00.48
+ v13-20020a17090a00cd00b001d297df6725sm4071841pjd.22.2022.04.18.14.01.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Apr 2022 14:00:49 -0700 (PDT)
+ Mon, 18 Apr 2022 14:01:46 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 18 Apr 2022 14:00:46 -0700
-Message-Id: <20220418210046.3061780-1-christian@paral.in>
+Date: Mon, 18 Apr 2022 14:01:44 -0700
+Message-Id: <20220418210144.3062100-1-christian@paral.in>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/qemu: add symlink to target
- qemu-system
+Subject: [Buildroot] [PATCH v1 1/1] boot/sun20i-d1-spl: update to mainline
+ 4da9c5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,32 +84,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Scripts which use the buildroot host system to execute a qemu for the compiled
-buildroot output can use the symlink at host/bin/qemu-system to execute the
-appropriate qemu-system for the target, for example qemu-system-riscv64.
+Update to latest (as of April 14, 2022).
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/qemu/qemu.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ boot/sun20i-d1-spl/sun20i-d1-spl.hash | 2 +-
+ boot/sun20i-d1-spl/sun20i-d1-spl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index e69e813059..1fcb949ab3 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -399,6 +399,12 @@ define HOST_QEMU_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
+diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.hash b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
+index 6ca60e5278..bb2fd66c28 100644
+--- a/boot/sun20i-d1-spl/sun20i-d1-spl.hash
++++ b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  69063601239a7254fb72e486b138d88a6f2b5c645b24cdfe9792123f975d4a8f  sun20i-d1-spl-771192d0b3737798d7feca87263c8fa74a449787.tar.gz
++sha256  3ef28affd35a37675d91d3ac50b85e3dfa356420005f69713df73c85798ff1d8  sun20i-d1-spl-4da9c518c124d6f6123bf274e449514863df3646.tar.gz
+diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.mk b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
+index 2462ce2322..3580ea4c25 100644
+--- a/boot/sun20i-d1-spl/sun20i-d1-spl.mk
++++ b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# install symlink to qemu-system
-+define HOST_QEMU_POST_INSTALL_SYMLINK
-+	ln -sf ./qemu-system-$(HOST_QEMU_ARCH) $(HOST_DIR)/bin/qemu-system
-+endef
-+HOST_QEMU_POST_INSTALL_HOOKS += HOST_QEMU_POST_INSTALL_SYMLINK
-+
- $(eval $(host-generic-package))
- 
- # variable used by other packages
+ # Commit on the 'mainline' branch
+-SUN20I_D1_SPL_VERSION = 771192d0b3737798d7feca87263c8fa74a449787
++SUN20I_D1_SPL_VERSION = 4da9c518c124d6f6123bf274e449514863df3646
+ SUN20I_D1_SPL_SITE = $(call github,smaeul,sun20i_d1_spl,$(SUN20I_D1_SPL_VERSION))
+ SUN20I_D1_SPL_INSTALL_TARGET = NO
+ SUN20I_D1_SPL_INSTALL_IMAGES = YES
 -- 
 2.35.1
 
