@@ -1,51 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9DAC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 07:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFA8FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 08:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58B6641DF3;
-	Tue, 19 Apr 2022 07:40:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7332B83689;
+	Tue, 19 Apr 2022 08:54:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oyvoao7ryGXV; Tue, 19 Apr 2022 07:40:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uuGyfvfZzvPE; Tue, 19 Apr 2022 08:54:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1C42416FC;
-	Tue, 19 Apr 2022 07:40:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 943CB1BF263
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 07:40:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97C0682ADD;
+	Tue, 19 Apr 2022 08:54:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A76F1BF29C
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 08:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E66640157
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 07:40:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76A29612CB
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 08:54:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6WJVHpQt00wN for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 07:40:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1AC3841060
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 07:40:02 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8F091C000C;
- Tue, 19 Apr 2022 07:39:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1ngiSq-002FnN-RW; Tue, 19 Apr 2022 09:39:56 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v-1UlVGRayf9 for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 08:54:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2D659612CA
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 08:54:45 +0000 (UTC)
+Received: from houde.tangerine ([193.138.218.222]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.168]) with ESMTPSA (Nemesis) id
+ 1MY5XR-1nQO4t2eOT-00YQAG; Tue, 19 Apr 2022 10:54:42 +0200
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 09:39:53 +0200
-Message-Id: <20220419073954.537319-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Date: Tue, 19 Apr 2022 10:54:09 +0200
+Message-Id: <20220419085411.125022-1-thomas.claveirole@green-communications.fr>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/openjdk{-bin}: security bump 11.x
- to version 11.0.14.1+1
+X-Provags-ID: V03:K1:cMDwMF9TN9ZX2wpgAdCfV4xvJN5yXJli6eq3YWafxVNmdTbGhD4
+ EayDFowUb18eV+RTfj8oUn/varqiSBEPueJ4kleO3KFRm9tCwRzuO11NikJnvFVjiFvx+Cj
+ +xAqDQV4LTMe9GVFAVik9JrVM/cOCkvgY0f8nJ/bt+H8RRyZxFSW7Qt6grIwmB3ZFhVxaDz
+ DRo9L4fpigfttS4iAiLJA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NHH7ZT7t+vw=:0YBz01QK5X+3Ue/U89u22v
+ qAdC2n7b2yq25Kni2/8J039fcqZ3AEBjqauqRGq7Brw1NHxNhTcy8W7bHCnH+SqEy3XYYzfjG
+ M/kUwDRWX5tbb0BVHT35T2ycsTxg/RNeuL6etBnbCS14sBHW7Zv4yzA9xtcuux0gLAeFMDMIz
+ QqNC75quHo1gY92onmjEYfC8PlJONv5KdWSikz61bQtAS7b5NRSi9a0jEy8vfRcXNQADVH97y
+ DFpfZyr+LHHiWqUUhpFQeSx7/30BxOjVjIoCH9UUpSAJzH5hrRwfdU/wEcNHDMU2YK2oL+tSj
+ TqC5YqFL5aFXiN5xotvQsgNSZq9gmJBXvpSWrfPlmBPstGDjp2F5Mpvy+xz3GJQjtQ0zfztKh
+ OItFYDmiO1RXw4QudUnRxuMJz2NctwnybPgoNtyB0oOOOaNJnavocGviyNMHGQM4FwPn++8Ut
+ qBMvQSqbZxVPu2j8cxIJc2AxmQfNkZUkeRvCqV1gAe0dLRlL99Ot1X7UTVWHiXCz01JkhW0MA
+ gVx6SrvH4lXajNYwino+AJ8JMMikweJ3qpapVSkdZ/dFROaDhXyRTGixJPEwuYBLJR/woQ8Lb
+ eRjhi4ecsc4iBPbt2bxyis2BXqxNnDI0Ijp6NbRiglE9t3nSkfWrzQyngvGRqi47DPEuloLBf
+ ap5T4EYWXCZXE921F0eL6s1WEgJEFVoJf+ybxN9aCUKXYzVYO3rOKkOZkPQUxrh1cco3URpZA
+ KvL957SRFDScse4EzMfaLvsHEgBleienmyOZhw==
+Subject: [Buildroot] [PATCH] package/openlayers: bump to version 6.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,110 +68,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tudor Holton <buildroot@tudorholton.com>
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
+ Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
-
-  - JDK-8217375: jarsigner breaks old signature with long lines in manifest
-  - JDK-8251329: (zipfs) Files.walkFileTree walks infinitely if zip has dir named "." inside
-  - JDK-8264934, CVE-2022-21248: Enhance cross VM serialization
-  - JDK-8268488: More valuable DerValues
-  - JDK-8268494: Better inlining of inlined interfaces
-  - JDK-8268512: More content for ContentInfo
-  - JDK-8268795: Enhance digests of Jar files
-  - JDK-8268801: Improve PKCS attribute handling
-  - JDK-8268813, CVE-2022-21283: Better String matching
-  - JDK-8269151: Better construction of EncryptedPrivateKeyInfo
-  - JDK-8269944: Better HTTP transport redux
-  - JDK-8270386, CVE-2022-21291: Better verification of scan methods
-  - JDK-8270392, CVE-2022-21293: Improve String constructions
-  - JDK-8270416, CVE-2022-21294: Enhance construction of Identity maps
-  - JDK-8270492, CVE-2022-21282: Better resolution of URIs
-  - JDK-8270498, CVE-2022-21296: Improve SAX Parser configuration management
-  - JDK-8270646, CVE-2022-21299: Improved scanning of XML entities
-  - JDK-8270952, CVE-2022-21277: Improve TIFF file handling
-  - JDK-8271962: Better TrueType font loading
-  - JDK-8271968: Better canonical naming
-  - JDK-8271987: Manifest improved manifest entries
-  - JDK-8272014, CVE-2022-21305: Better array indexing
-  - JDK-8272026, CVE-2022-21340: Verify Jar Verification
-  - JDK-8272236, CVE-2022-21341: Improve serial forms for transport
-  - JDK-8272272: Enhance jcmd communication
-  - JDK-8272462: Enhance image handling
-  - JDK-8273290: Enhance sound handling
-  - JDK-8273756, CVE-2022-21360: Enhance BMP image support
-  - JDK-8273838, CVE-2022-21365: Enhanced BMP processing
-  - JDK-8274096, CVE-2022-21366: Improve decoding of image files
-  - JDK-8279541: Improve HarfBuzz
-
-For more details, see the announcement:
-
-https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-January/011643.html
-https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-February/012348.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 2 +-
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index bbc939d4e8..082da7bf87 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -2,7 +2,7 @@
- sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index 2d6c2fb9d3..1c93b9a729 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  aeb8107a23a99d79efb6031c7cf901307b63571c39fd744f771d4a707e06a14f  v6.12.0-dist.zip
++sha256  8a9fda6e392688c049ebb88fb2c73b5788b4965b625443de4cca7d4688b1fb82  v6.14.1-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 7532bb7f68..4626e7545a 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # From https://github.com/adoptium/temurin11-binaries/releases
--sha256  3b1c0c34be4c894e64135a454f2d5aaa4bd10aea04ec2fa0c0efe6bb26528e30  OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
-+sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 266c93d363..c9ddc9f69f 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -9,7 +9,7 @@ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
- HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.13_8
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
- endif
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 2f46b044ad..f8a4f15260 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
--sha256  119c6233fe7ff5670c590e2f9d6686ac4d80c97b17065506998b75c547b54f2c  openjdk-11.0.13+8.tar.gz
-+sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 5fccdaa7ac..94b8cba577 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -9,7 +9,7 @@ OPENJDK_VERSION_MAJOR = 17
- OPENJDK_VERSION_MINOR = 0.1+12
- else
- OPENJDK_VERSION_MAJOR = 11
--OPENJDK_VERSION_MINOR = 0.13+8
-+OPENJDK_VERSION_MINOR = 0.14.1+1
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+-OPENLAYERS_VERSION = 6.12.0
++OPENLAYERS_VERSION = 6.14.1
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
 -- 
-2.30.2
+2.35.2
 
 _______________________________________________
 buildroot mailing list
