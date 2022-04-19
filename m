@@ -1,81 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 481F1C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 12:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D07CC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 12:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBDAD612D3;
-	Tue, 19 Apr 2022 12:16:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5998E40C64;
+	Tue, 19 Apr 2022 12:26:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ptK7j3G0EBiR; Tue, 19 Apr 2022 12:16:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H1daCPJfqsvj; Tue, 19 Apr 2022 12:26:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9FF460DB2;
-	Tue, 19 Apr 2022 12:16:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5750D40C58;
+	Tue, 19 Apr 2022 12:26:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A9C191BF288
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:16:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0662A1BF288
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 963D84000B
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:16:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E797640C58
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:26:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2S1pM-GzPEWt for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 12:16:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F6B940C58
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:16:14 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id k22so22175981wrd.2
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 05:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=O23IAsV4ysG0KOdo5IVH2lHztnneLGRUCdir3rAki3w=;
- b=arUWaDEsgv1wHo90zfnh3iDGgMmzvMlyL0UoztVwC/A8bgjQLEtKV5L9jUkIBQ3zFF
- xmNVL2RXdDi9XNt59Yjq8vcDhEaLttAfatMYPToz8D8dxHMGpw+tnOZy+AwIMYcD8NxN
- 8ecbS1NimKoEcUXUBPl3HacHdmYM64dZB85RFb4N5SFo3ynKHTrr9y01vTcQj5ANYO6l
- 3VusoaiEwfCoJbKnqFraj3A0kVOvbK0qaTcsE2w5JkdWukQ/LZ0bL2FT6pn+CgjYEY5K
- GMgfSxfrIJHBstz8HdCutClX/9v7jnok86tTKxIjNaKlSgOBjN6eYV5DX4kep7ixhvdN
- 9Jaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=O23IAsV4ysG0KOdo5IVH2lHztnneLGRUCdir3rAki3w=;
- b=2ov9+3tgRfHsHX+F/83dDFNfXFOkywRjyW4gvDLpf71+Mro+hAulUTSrh+f3o/aUE8
- bxUc1bh1oJBV2+LaNe8tw55kbDqJVRY85YkrWxI1YGNFxIZOhAEz+u9EUb3JVhA6Yqtu
- krRWyarGBaxVhYwWtL0KszMnwwAGXZOZAbvg/U3kIVCcCfcJ6AmKp7//eXT2hOeVohll
- 13dnVdOWnjtccVRTWfhXBhH2xMylkfqhkpcLRIuCQBlXqu7IGyEauXi7A89YrvGexEjN
- N5bM9oYXJAqFn84OUPdv4MunZO6MfqeG/JIrzVyyszc3zwAPcZK0lHqk+FAkcdvoEFOU
- pbyw==
-X-Gm-Message-State: AOAM533EL0vivNpc41vYsfZ1kOVk0eDhaFOC6RhfLUIQP5J4JpvzW+cc
- HPChdFFlIEmdXfQ7zvUTLaFmDgI5Vsg=
-X-Google-Smtp-Source: ABdhPJwC57lP5R4v9UG2fLTJHwBIGN+lCSH0UtJ0QbclDpzLXuhi2hnj8Ug43oL8NZuSxDDbDEmG7Q==
-X-Received: by 2002:a5d:64cb:0:b0:20a:a4b0:dbd6 with SMTP id
- f11-20020a5d64cb000000b0020aa4b0dbd6mr3202125wri.328.1650370572976; 
- Tue, 19 Apr 2022 05:16:12 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- n12-20020a5d588c000000b0020a9e80d2b1sm4004409wrf.107.2022.04.19.05.16.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Apr 2022 05:16:12 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 14:14:09 +0200
-Message-Id: <20220419121409.2055818-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id N8IUxiPEgBDA for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 12:26:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 89C1540125
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:26:39 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A98852000F;
+ Tue, 19 Apr 2022 12:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650371196;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MxbcO+lrbGZ9dj38h5jPG3WSopR5+/B//Up5eTb73Bs=;
+ b=QatEKl9qhuyQYDzH+Nvq31/btcZS84zasDVpjqP4UZQQtNLH5nt3oEi2d1q730yt6K8QBM
+ iDtbRB+Iw7JyBYT++EdscZWTdXJqkcq/Qqo8oVQcVBXxv8c4/1VBTnZHZS6AFl2MD8eoOh
+ CFnO9bDLNdLhscdBLt8bgHjzHm4aTntWtRSkgRcG3mPKOH9MmttEW0EsR8UWsma/Nu+B7h
+ HRVdki7lEkDIQhG70+WFiAhsdpkHXwvVftod4dQbmVGAd6+tKERVMT2vjN254rDOvnMdlt
+ 1fL7oCXuiCkPIL9kyR+y/2urJ5fYoXErzJEgvvZdqwQaYDcBbjF8pG97GV3BKQ==
+Date: Tue, 19 Apr 2022 14:26:35 +0200
+To: Thomas Perrot <thomas.perrot@bootlin.com>
+Message-ID: <20220419142635.008ac004@windsurf>
+In-Reply-To: <20220419092151.91638-3-thomas.perrot@bootlin.com>
+References: <20220419092151.91638-1-thomas.perrot@bootlin.com>
+ <20220419092151.91638-3-thomas.perrot@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] boot/shim: disable on mips64el
+Subject: Re: [Buildroot] [PATCH 2/2] package/imx-cst: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,44 +68,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure on mips64el raised since commit
-11b347c03ab0b38389ec11b48f63236a3b4d6547:
+Hello Thomas,
 
-In file included from shim.h:47,
-                 from shim.c:14:
-/nvmedata/autobuild/instance-17/output-1/build/shim-15.4/include/system/stdarg.h:72:2: error: #error what arch is this
-   72 | #error what arch is this
-      |  ^~~~~
+On Tue, 19 Apr 2022 11:21:51 +0200
+Thomas Perrot <thomas.perrot@bootlin.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/74f4f1d010cfde6978fd614195ef0006f0acb45a
+>  N:	Thomas Perrot <thomas.perrot@bootlin.com>
+>  F:	package/byacc
+> +F:	package/imx-cst
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- boot/shim/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Trailing slash needed.
 
-diff --git a/boot/shim/Config.in b/boot/shim/Config.in
-index 2f74d6f332..b0e549a51b 100644
---- a/boot/shim/Config.in
-+++ b/boot/shim/Config.in
-@@ -2,6 +2,7 @@ config BR2_TARGET_SHIM
- 	bool "shim"
- 	# it includes gnu-efi
- 	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
-+	depends on !BR2_mips64el
- 	help
- 	  Boot loader to chain-load signed boot loaders under Secure
- 	  Boot.
+> diff --git a/package/imx-cst/Config.in.host b/package/imx-cst/Config.in.host
+> new file mode 100644
+> index 000000000000..84cb825e59cf
+> --- /dev/null
+> +++ b/package/imx-cst/Config.in.host
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HOST_IMX_CST
+> +	bool "host imx-cst"
+> +	help
+> +	  I.MX code signing tool provides software code signing
+> +	  support designed that integrate the HABv4 and AHAB
+> +	  library.
+> +
+> +	  https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL
+
+When I go to this page, I need to agree to a "SOFTWARE LICENSE
+AGREEMENT i.MX CODE SIGNING TOOL", but then your .mk is pointing to a
+non-NXP Git repository, and you state the license is BSD-3-Clause.
+
+> +# debian/3.3.1+dfsg-2
+> +IMX_CST_SITE = https://gitlab.apertis.org/pkg/imx-code-signing-tool.git
+
+What is this location? Just someone who put the NXP code online? Or a
+separate implementation?
+
+> +IMX_CST_SITE_METHOD = git
+> +IMX_CST_VERSION = e2c687a856e6670e753147aacef42d0a3c07891a
+> +IMX_CST_LICENSE = BSD-3-Clause
+> +IMX_CST_LICENSE_FILES = LICENSE.bsd3
+
+There are two other license files in this Git repo, the hidapi license
+and the OpenSSL license. You are confident they are not relevant? Would
+be worth explaining that.
+
+> +HOST_IMX_CST_DEPENDENCIES = host-byacc host-flex host-openssl
+> +
+> +define HOST_IMX_CST_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> +		OSTYPE=linux64 \
+
+Would be useful to explain why linux64 is fine even on 32-bit host
+platforms. Actually, when I look at
+https://gitlab.apertis.org/pkg/imx-code-signing-tool/-/blob/apertis/v2023dev2/code/cst/code/obj.linux64/Makefile
+I believe that using OSTYPE=linux64 on 32-bit host machines will not
+work, as it adds -m64 to the compiler flags.
+
+> +		ENCRYPTION=yes \
+> +		COPTIONS="$(HOST_CFLAGS) $(HOST_CPPFLAGS)" \
+> +		LDFLAGS="$(HOST_LDFLAGS) -lcrypto" \
+> +		PWD=$(@D)/code/cst \
+> +		CC="$(CC) -I../../code/common/hdr \
+> +			-I../../code/back_end/hdr \
+> +			-I../../code/srktool/hdr \
+> +			-I../../code/front_end/hdr \
+> +			-I../../code/convlb/hdr" \
+
+This looks strange. Flags are normally passed using CFLAGS, and $(CC)
+in Buildroot doesn't exist, it's $(HOSTCC) that should be used.
+
+Also, I think the list of header paths is properly set with:
+
+CINCLUDES := $(SUBSYS:%=-I$(CST_CODE_PATH)/%/hdr)
+
+but it gets overridden by the fact that you override CFLAGS.
+
+I believe there's a better way, let me have a look.
+
+> +		LD=$(CC) \
+
+$(CC) doesn't exist, it should be $(HOSTCC).
+
+> +		-C $(@D)/code/cst \
+> +		build
+
+Best regards,
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
