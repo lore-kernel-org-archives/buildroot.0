@@ -1,52 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6BBC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 11:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51BDAC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 12:12:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 819DE418F1;
-	Tue, 19 Apr 2022 11:35:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q1plwYviWx50; Tue, 19 Apr 2022 11:35:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1759141878;
-	Tue, 19 Apr 2022 11:35:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E9DFD1BF8A8
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 11:35:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E59B34000B
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 11:35:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABB6040C59;
+	Tue, 19 Apr 2022 12:12:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GU8JTJ4spw0u for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 11:35:00 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tP1PCjtrPEw7; Tue, 19 Apr 2022 12:12:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7948A40183;
+	Tue, 19 Apr 2022 12:12:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 89FA71BF288
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:12:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 782C260DB2
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:12:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nRAe9ALZkBY7 for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 12:12:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CB95340C59
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 11:34:59 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::227])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 44311C5ADE
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 11:25:53 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F3C3720008;
- Tue, 19 Apr 2022 11:25:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1nglzN-004ASR-Mp; Tue, 19 Apr 2022 13:25:45 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 13:25:44 +0200
-Message-Id: <20220419112544.993456-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C37460D5B
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:12:47 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8194FE0008;
+ Tue, 19 Apr 2022 12:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650370365;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ziYZ17S9sdLMp9ah8PyJRFQ+HGWnKHT8J3oP34Khwac=;
+ b=gSbpY3oQ+TWxjA5j+GoUZO3b59bc1o8fNjcZEPVyiF1E5IkForLLM5Bxj8HA1ebc2g0V9J
+ AWj9MirYSQOs4itdmu7nCuwFUVOpqoAp4JjiDZXg62JkeCK3stSQWjNWPtZWjuA3TSK6BW
+ S+5Dnyf5OvBN0o9K3ZDPV0OlYu4gyTpXZT/RNdrHhDghElSd3s7aHJjWAyDmZv9o+v8zyk
+ ccn93zGZjBds3U8um5bsb9q7WaylV8HZ2H9bprC6uoWT8s1gwip8JPeEfs4jGb4UkaXuXK
+ w2OSC+v1PCEXERbXMlWxfikMVVfhnnpDkLv07gAVs2NttxNXawG81fnkF7cb1g==
+Date: Tue, 19 Apr 2022 14:12:44 +0200
+To: Thomas Perrot <thomas.perrot@bootlin.com>
+Message-ID: <20220419141244.1ef13dd4@windsurf>
+In-Reply-To: <20220419092151.91638-2-thomas.perrot@bootlin.com>
+References: <20220419092151.91638-1-thomas.perrot@bootlin.com>
+ <20220419092151.91638-2-thomas.perrot@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/gzip: security bump to version 1.12
+Subject: Re: [Buildroot] [PATCH 1/2] package/byacc: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +70,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+Hello Thomas,
 
-- CVE-2022-1271: An arbitrary file write vulnerability was found in GNU
-  gzip's zgrep utility.  When zgrep is applied on the attacker's chosen file
-  name (for example, a crafted file name), this can overwrite an attacker's
-  content to an arbitrary attacker-selected file.  This flaw occurs due to
-  insufficient validation when processing filenames with two or more
-  newlines where selected content and the target file names are embedded in
-  crafted multi-line file names.  This flaw allows a remote, low privileged
-  attacker to force zgrep to write arbitrary files on the system.
+Thanks for your contribution.
 
-https://lists.gnu.org/r/bug-gzip/2022-04/msg00011.html
+Commit title should be just:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gzip/gzip.hash | 4 ++--
- package/gzip/gzip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+	package/byacc: new package
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 1cf73ff912..80b86f4797 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gzip/gzip-1.12.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256  9b9a95d68fdcb936849a4d6fada8bf8686cddf58b9b26c9c4289ed0c92a77907  gzip-1.11.tar.xz
-+sha256  ce5e03e519f637e1f814011ace35c4f87b33c0bbabeec35baf5fbd3479e91956  gzip-1.12.tar.xz
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index 92588fcdb8..2092df363c 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GZIP_VERSION = 1.11
-+GZIP_VERSION = 1.12
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+On Tue, 19 Apr 2022 11:21:50 +0200
+Thomas Perrot <thomas.perrot@bootlin.com> wrote:
+
+> This package provides a Berkeley LALR Yacc parser generator that has been use
+> by i.MX Code Signing tool.
+> 
+> Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
+> ---
+>  DEVELOPERS                   |  3 +++
+>  package/byacc/Config.in.host | 10 ++++++++++
+
+Config.in.host not needed, this package is merely a build dependency of
+another, so we don't need to see it in menuconfig.
+
+> +N:	Thomas Perrot <thomas.perrot@bootlin.com>
+> +F:	package/byacc
+
+Please add a trailing slash, like other entries in this file.
+
+
+> diff --git a/package/byacc/byacc.hash b/package/byacc/byacc.hash
+> new file mode 100644
+> index 000000000000..d2ad441df39f
+> --- /dev/null
+> +++ b/package/byacc/byacc.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  42c1805cc529314e6a76326fe1b33e80c70862a44b01474da362e2f7db2d749c  byacc-20220128.tgz
+> +sha256  654a231fe9cd4d36e580214962fa777a1df0771d6889cfc74d19a3d414f14711  LICENSE
+> diff --git a/package/byacc/byacc.mk b/package/byacc/byacc.mk
+> new file mode 100644
+> index 000000000000..103970aac9d2
+> --- /dev/null
+> +++ b/package/byacc/byacc.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# byacc
+> +#
+> +################################################################################
+> +
+> +BYACC_SITE = https://invisible-mirror.net/archives/byacc
+> +BYACC_VERSION = 20220128
+> +BYACC_SOURCE = byacc-$(BYACC_VERSION).tgz
+> +BYACC_LICENSE = Public Domain
+> +BYACC_LICENSE_FILES = LICENSE
+> +
+> +HOST_BYACC_CONF_OPTS = --program-transform-name='s,^,b,'
+
+Please add a comment above this that explains why this is needed, it
+looks strange.
+
+Thanks!
+
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
