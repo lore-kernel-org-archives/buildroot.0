@@ -1,64 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51BDAC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 12:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 481F1C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 12:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABB6040C59;
-	Tue, 19 Apr 2022 12:12:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBDAD612D3;
+	Tue, 19 Apr 2022 12:16:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tP1PCjtrPEw7; Tue, 19 Apr 2022 12:12:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7948A40183;
-	Tue, 19 Apr 2022 12:12:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 89FA71BF288
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:12:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 782C260DB2
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:12:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nRAe9ALZkBY7 for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 12:12:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6C37460D5B
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:12:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8194FE0008;
- Tue, 19 Apr 2022 12:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650370365;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ziYZ17S9sdLMp9ah8PyJRFQ+HGWnKHT8J3oP34Khwac=;
- b=gSbpY3oQ+TWxjA5j+GoUZO3b59bc1o8fNjcZEPVyiF1E5IkForLLM5Bxj8HA1ebc2g0V9J
- AWj9MirYSQOs4itdmu7nCuwFUVOpqoAp4JjiDZXg62JkeCK3stSQWjNWPtZWjuA3TSK6BW
- S+5Dnyf5OvBN0o9K3ZDPV0OlYu4gyTpXZT/RNdrHhDghElSd3s7aHJjWAyDmZv9o+v8zyk
- ccn93zGZjBds3U8um5bsb9q7WaylV8HZ2H9bprC6uoWT8s1gwip8JPeEfs4jGb4UkaXuXK
- w2OSC+v1PCEXERbXMlWxfikMVVfhnnpDkLv07gAVs2NttxNXawG81fnkF7cb1g==
-Date: Tue, 19 Apr 2022 14:12:44 +0200
-To: Thomas Perrot <thomas.perrot@bootlin.com>
-Message-ID: <20220419141244.1ef13dd4@windsurf>
-In-Reply-To: <20220419092151.91638-2-thomas.perrot@bootlin.com>
-References: <20220419092151.91638-1-thomas.perrot@bootlin.com>
- <20220419092151.91638-2-thomas.perrot@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ptK7j3G0EBiR; Tue, 19 Apr 2022 12:16:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9FF460DB2;
+	Tue, 19 Apr 2022 12:16:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A9C191BF288
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:16:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 963D84000B
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:16:16 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2S1pM-GzPEWt for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 12:16:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1F6B940C58
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:16:14 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id k22so22175981wrd.2
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 05:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=O23IAsV4ysG0KOdo5IVH2lHztnneLGRUCdir3rAki3w=;
+ b=arUWaDEsgv1wHo90zfnh3iDGgMmzvMlyL0UoztVwC/A8bgjQLEtKV5L9jUkIBQ3zFF
+ xmNVL2RXdDi9XNt59Yjq8vcDhEaLttAfatMYPToz8D8dxHMGpw+tnOZy+AwIMYcD8NxN
+ 8ecbS1NimKoEcUXUBPl3HacHdmYM64dZB85RFb4N5SFo3ynKHTrr9y01vTcQj5ANYO6l
+ 3VusoaiEwfCoJbKnqFraj3A0kVOvbK0qaTcsE2w5JkdWukQ/LZ0bL2FT6pn+CgjYEY5K
+ GMgfSxfrIJHBstz8HdCutClX/9v7jnok86tTKxIjNaKlSgOBjN6eYV5DX4kep7ixhvdN
+ 9Jaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=O23IAsV4ysG0KOdo5IVH2lHztnneLGRUCdir3rAki3w=;
+ b=2ov9+3tgRfHsHX+F/83dDFNfXFOkywRjyW4gvDLpf71+Mro+hAulUTSrh+f3o/aUE8
+ bxUc1bh1oJBV2+LaNe8tw55kbDqJVRY85YkrWxI1YGNFxIZOhAEz+u9EUb3JVhA6Yqtu
+ krRWyarGBaxVhYwWtL0KszMnwwAGXZOZAbvg/U3kIVCcCfcJ6AmKp7//eXT2hOeVohll
+ 13dnVdOWnjtccVRTWfhXBhH2xMylkfqhkpcLRIuCQBlXqu7IGyEauXi7A89YrvGexEjN
+ N5bM9oYXJAqFn84OUPdv4MunZO6MfqeG/JIrzVyyszc3zwAPcZK0lHqk+FAkcdvoEFOU
+ pbyw==
+X-Gm-Message-State: AOAM533EL0vivNpc41vYsfZ1kOVk0eDhaFOC6RhfLUIQP5J4JpvzW+cc
+ HPChdFFlIEmdXfQ7zvUTLaFmDgI5Vsg=
+X-Google-Smtp-Source: ABdhPJwC57lP5R4v9UG2fLTJHwBIGN+lCSH0UtJ0QbclDpzLXuhi2hnj8Ug43oL8NZuSxDDbDEmG7Q==
+X-Received: by 2002:a5d:64cb:0:b0:20a:a4b0:dbd6 with SMTP id
+ f11-20020a5d64cb000000b0020aa4b0dbd6mr3202125wri.328.1650370572976; 
+ Tue, 19 Apr 2022 05:16:12 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ n12-20020a5d588c000000b0020a9e80d2b1sm4004409wrf.107.2022.04.19.05.16.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 19 Apr 2022 05:16:12 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 19 Apr 2022 14:14:09 +0200
+Message-Id: <20220419121409.2055818-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/byacc: add new package
+Subject: [Buildroot] [PATCH 1/1] boot/shim: disable on mips64el
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,81 +87,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Fix the following build failure on mips64el raised since commit
+11b347c03ab0b38389ec11b48f63236a3b4d6547:
 
-Thanks for your contribution.
+In file included from shim.h:47,
+                 from shim.c:14:
+/nvmedata/autobuild/instance-17/output-1/build/shim-15.4/include/system/stdarg.h:72:2: error: #error what arch is this
+   72 | #error what arch is this
+      |  ^~~~~
 
-Commit title should be just:
+Fixes:
+ - http://autobuild.buildroot.org/results/74f4f1d010cfde6978fd614195ef0006f0acb45a
 
-	package/byacc: new package
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ boot/shim/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Tue, 19 Apr 2022 11:21:50 +0200
-Thomas Perrot <thomas.perrot@bootlin.com> wrote:
-
-> This package provides a Berkeley LALR Yacc parser generator that has been use
-> by i.MX Code Signing tool.
-> 
-> Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
-> ---
->  DEVELOPERS                   |  3 +++
->  package/byacc/Config.in.host | 10 ++++++++++
-
-Config.in.host not needed, this package is merely a build dependency of
-another, so we don't need to see it in menuconfig.
-
-> +N:	Thomas Perrot <thomas.perrot@bootlin.com>
-> +F:	package/byacc
-
-Please add a trailing slash, like other entries in this file.
-
-
-> diff --git a/package/byacc/byacc.hash b/package/byacc/byacc.hash
-> new file mode 100644
-> index 000000000000..d2ad441df39f
-> --- /dev/null
-> +++ b/package/byacc/byacc.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  42c1805cc529314e6a76326fe1b33e80c70862a44b01474da362e2f7db2d749c  byacc-20220128.tgz
-> +sha256  654a231fe9cd4d36e580214962fa777a1df0771d6889cfc74d19a3d414f14711  LICENSE
-> diff --git a/package/byacc/byacc.mk b/package/byacc/byacc.mk
-> new file mode 100644
-> index 000000000000..103970aac9d2
-> --- /dev/null
-> +++ b/package/byacc/byacc.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# byacc
-> +#
-> +################################################################################
-> +
-> +BYACC_SITE = https://invisible-mirror.net/archives/byacc
-> +BYACC_VERSION = 20220128
-> +BYACC_SOURCE = byacc-$(BYACC_VERSION).tgz
-> +BYACC_LICENSE = Public Domain
-> +BYACC_LICENSE_FILES = LICENSE
-> +
-> +HOST_BYACC_CONF_OPTS = --program-transform-name='s,^,b,'
-
-Please add a comment above this that explains why this is needed, it
-looks strange.
-
-Thanks!
-
-Thomas
+diff --git a/boot/shim/Config.in b/boot/shim/Config.in
+index 2f74d6f332..b0e549a51b 100644
+--- a/boot/shim/Config.in
++++ b/boot/shim/Config.in
+@@ -2,6 +2,7 @@ config BR2_TARGET_SHIM
+ 	bool "shim"
+ 	# it includes gnu-efi
+ 	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
++	depends on !BR2_mips64el
+ 	help
+ 	  Boot loader to chain-load signed boot loaders under Secure
+ 	  Boot.
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
