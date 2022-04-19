@@ -1,50 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B63BC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 11:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6BBC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 11:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDD6F612A6;
-	Tue, 19 Apr 2022 11:34:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 819DE418F1;
+	Tue, 19 Apr 2022 11:35:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XEjFRfyWXOoB; Tue, 19 Apr 2022 11:34:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q1plwYviWx50; Tue, 19 Apr 2022 11:35:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A1D2612C1;
-	Tue, 19 Apr 2022 11:34:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D03131BF8A8
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 11:34:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1759141878;
+	Tue, 19 Apr 2022 11:35:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E9DFD1BF8A8
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 11:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD1D080B2F
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 11:34:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E59B34000B
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 11:35:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j3BQxmh-cs5g for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 11:34:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GU8JTJ4spw0u for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 11:35:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6EC348281A
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 11:34:15 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CB95340C59
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 11:34:59 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::227])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 44311C5ADE
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 11:25:53 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5E05B200003;
- Tue, 19 Apr 2022 11:34:12 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id F3C3720008;
+ Tue, 19 Apr 2022 11:25:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1ngm7X-004EOV-IS; Tue, 19 Apr 2022 13:34:11 +0200
+ id 1nglzN-004ASR-Mp; Tue, 19 Apr 2022 13:25:45 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 13:34:09 +0200
-Message-Id: <20220419113409.1008586-1-peter@korsgaard.com>
+Date: Tue, 19 Apr 2022 13:25:44 +0200
+Message-Id: <20220419112544.993456-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/xz: add upstream security fix for
- CVE-2022-1271 / ZDI-CAN-16587
+Subject: [Buildroot] [PATCH] package/gzip: security bump to version 1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,48 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issue:
+Fixes the following security issues:
 
-- CVE-2022-1271: Malicious filenames can make xzgrep to write to arbitrary
-  files or (with a GNU sed extension) lead to arbitrary code execution.
+- CVE-2022-1271: An arbitrary file write vulnerability was found in GNU
+  gzip's zgrep utility.  When zgrep is applied on the attacker's chosen file
+  name (for example, a crafted file name), this can overwrite an attacker's
+  content to an arbitrary attacker-selected file.  This flaw occurs due to
+  insufficient validation when processing filenames with two or more
+  newlines where selected content and the target file names are embedded in
+  crafted multi-line file names.  This flaw allows a remote, low privileged
+  attacker to force zgrep to write arbitrary files on the system.
 
-For more details, see the announcement and advisory:
-
-https://www.mail-archive.com/xz-devel@tukaani.org/msg00551.html
-https://www.zerodayinitiative.com/advisories/ZDI-22-619/
+https://lists.gnu.org/r/bug-gzip/2022-04/msg00011.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xz/xz.hash | 1 +
- package/xz/xz.mk   | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/gzip/gzip.hash | 4 ++--
+ package/gzip/gzip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 3dd0cbe459..9577e98e80 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,5 +1,6 @@
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+index 1cf73ff912..80b86f4797 100644
+--- a/package/gzip/gzip.hash
++++ b/package/gzip/gzip.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
- sha256  5117f930900b341493827d63aa910ff5e011e0b994197c3b71c08a20228a42df  xz-5.2.5.tar.bz2
-+sha256  98c6cb1042284fe704ec30083f3fc87364ce9ed2ea51f62bbb0ee9d3448717ec  xzgrep-ZDI-CAN-16587.patch
+-# https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar.xz.sig
++# https://ftp.gnu.org/gnu/gzip/gzip-1.12.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  9b9a95d68fdcb936849a4d6fada8bf8686cddf58b9b26c9c4289ed0c92a77907  gzip-1.11.tar.xz
++sha256  ce5e03e519f637e1f814011ace35c4f87b33c0bbabeec35baf5fbd3479e91956  gzip-1.12.tar.xz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index 92588fcdb8..2092df363c 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Hash for license files
- sha256  bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index af611975a0..cdb01e06a9 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -13,6 +13,10 @@ XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
- XZ_LICENSE_FILES = COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
- XZ_CPE_ID_VENDOR = tukaani
- 
-+XZ_PATCH = xzgrep-ZDI-CAN-16587.patch
-+# xzgrep-ZDI-CAN-16587.patch
-+XZ_IGNORE_CVES += CVE-2022-1271
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- XZ_CONF_OPTS += --enable-threads
- else
+-GZIP_VERSION = 1.11
++GZIP_VERSION = 1.12
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
 -- 
 2.30.2
 
