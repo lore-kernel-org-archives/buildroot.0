@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8ECAC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 21:08:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77495C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 21:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 727A6417A6;
-	Tue, 19 Apr 2022 21:08:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 178A340A9E;
+	Tue, 19 Apr 2022 21:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gbquEngpL5-e; Tue, 19 Apr 2022 21:08:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QFfExUG-0_6q; Tue, 19 Apr 2022 21:16:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDB09417A8;
-	Tue, 19 Apr 2022 21:08:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B2F621BF3F0
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 21:08:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16A3F40A76;
+	Tue, 19 Apr 2022 21:16:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BD6AF1BF3F0
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 21:16:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABEB483155
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 21:08:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB21760E48
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 21:16:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iGp0nshOkIdk for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 21:08:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MSt2M7t_7wUQ for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 21:16:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 391CD819CC
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 21:08:14 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id k23so35422866ejd.3
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 14:08:13 -0700 (PDT)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9281D60E41
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 21:16:46 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id i27so35437387ejd.9
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 14:16:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=Y3Yh238+MyFEbnFlW5nWTejrjV5d0kTln3Dmb4L7rbY=;
- b=HIdR/ML6dtdl8gemTogNgTOTHwZSaIQknsFi4l+DpZrq1KpR6B/9nNDYOb/7l4wXPc
- iXb8nzbBh4enYuZrDkdEhwsOxX96isMmHgMj26VIOTN4+0bs2tcuUveK/MBHuHGw9Jn1
- zXa6H6FJAveCbQu/AB/mZ8QyUMuzAPkG0qKBcpcGGiQDqt9BwIhGja/4pSIZRFhEKOWF
- LnXwCF7YgxiBu1zM0szOOdDZCbTm6JPTTyDF5Pqycdm1eF38dMNh4ZeQEXK6eRziMH61
- sDAH8EGzoZ+ai37/SfAl0MWQBCWDtOUM5SpHMcCSKhZDll3yc2zinDYfg+amj/XaXAn8
- lrBg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=sw8rQInZFmE+kNQPYrmhfvImSuyzpy+v9UKbTnb3P40=;
+ b=YoJZVeaktRNQjrhORcuZ/o2dztU+r8t8x+2CCAp3ElBVqX9SgHIydnCJhS30yqrK7l
+ OJJDX33/pDlVZkHhGBmhl2GC5O7QgZuWL3uc1Cbm3UPVyyf5YGa5QpNoAp52FWhlGiOx
+ cGxNtucGk0wHgtwgUPXi7AVajzAnIAKnksaHt1PwLYTbGeF+gbQ3k3GRCj/mbFkEKwzu
+ O2/GDq8gKVXsbm8rDKqqXV3AfJQKH5JKj7811ZbAwixYCOvuemnM63WgK6J8ICyMZuEn
+ Q6huk728PuFtx8h05VtF85zUvTRKRhd6OOBvABlvRv979rH17HkKeYyiX0aoj2g+hoKw
+ lqCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=Y3Yh238+MyFEbnFlW5nWTejrjV5d0kTln3Dmb4L7rbY=;
- b=xPiFDl/TiFFBRWqMjTWmfBCFlLQkgbwnMeOerBk1S8LgZYIrM32xleKGSWO1edQeS9
- WQlDOZu7zaMe+M9xNn9mG3DYuuVTgLqXdRe/lh5WC38ejeWmqMTFUO9kCwo5RmybxZ0n
- XjCURLoWlXxjjw0us44QPOUKPJuM1GBVTo0HQiUgpDRMIPwzKRYz8mVRAbV0HFraLRR4
- 2sykq7mHFfeBR7H2JaSjERKv/bbTPffyUU3GZLLPxqWvkQnCX0ULGXN8uC9H14yoomiL
- oFuY+PbQ76i8VKNd8DRhv34u/LS+SzHggAlZeMGZwRXFbFVA5pbFFmv8gleUxdsaYlK/
- w47Q==
-X-Gm-Message-State: AOAM531zc5zP4kVaIOF2MT66pqlCshqm5vbQl2EmI9XrPUsGXT8djMlI
- Zk0eea+GiwwRfT/AZ/4AstafBmTZZLgy+A==
-X-Google-Smtp-Source: ABdhPJxM97F15HAp3GcWI1anzDAwgQNMmsSz5KoZ+WCdqFc1UdW0y1jT12IW9OMWcAAVnZsETD22UQ==
-X-Received: by 2002:a17:907:7d90:b0:6e8:cd12:8893 with SMTP id
- oz16-20020a1709077d9000b006e8cd128893mr15577629ejc.13.1650402492401; 
- Tue, 19 Apr 2022 14:08:12 -0700 (PDT)
+ bh=sw8rQInZFmE+kNQPYrmhfvImSuyzpy+v9UKbTnb3P40=;
+ b=dWpD+lst7SbhRKb1on8ltIys2FzBacAIs7NDHr46NvRQ373pbA+M1LaV9ovt7YQ4Po
+ Nb58Up0isH9d79bdleLR65XWySXhAEj/OEFbf5R4/B5ZSWQ52/9gOAUagfFeRMNxxXUS
+ unUPYulrWoH1ZIknEnafZTC4mDQJVBgKdjxgD5nTLHmOXN6wkNxqK/pzMZOYDefGXYyF
+ XASqrF3VSUwGUVFGDCvfc0fMeWjIwDq2UeMUlgDOwX9cQW+cxUcTDEgk31NWU64LvVUF
+ Q1hTVWAP9wmsGk87G+ipuYZeMnBG/pjrYOnTQmxbupxdDV9MF8aMyf3QP29TDJEyCh3N
+ VKZQ==
+X-Gm-Message-State: AOAM530MXvvbE8LzyE1rijmUwhfXjcQQg13wj5R0RODRuQ0iuiXPPtg+
+ ig9xdU1S7NMt/TBnQhCN5jHKjQ==
+X-Google-Smtp-Source: ABdhPJyst95t5QGjpJcs1MNcZj3DPdftyOTUSBPWDuVBdXepMoEVNz3+dXVbzu4qW/kqkxLASuBPqQ==
+X-Received: by 2002:a17:907:96a7:b0:6ef:f52a:421f with SMTP id
+ hd39-20020a17090796a700b006eff52a421fmr1132803ejc.752.1650403004595; 
+ Tue, 19 Apr 2022 14:16:44 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- g15-20020a170906520f00b006cd07ba40absm6013525ejm.160.2022.04.19.14.08.11
+ x7-20020aa7cd87000000b004207282701fsm8778389edv.63.2022.04.19.14.16.43
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 19 Apr 2022 14:08:11 -0700 (PDT)
-Message-ID: <fdcb803b-4b47-c221-a538-aaa722449713@mind.be>
-Date: Tue, 19 Apr 2022 23:08:11 +0200
+ Tue, 19 Apr 2022 14:16:43 -0700 (PDT)
+Message-ID: <6813316c-23f9-3521-1eca-df43f9205d34@mind.be>
+Date: Tue, 19 Apr 2022 23:16:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Graeme Smecher <gsmecher@threespeedlogic.com>, buildroot@buildroot.org
-References: <20220414194011.2044427-1-gsmecher@threespeedlogic.com>
+To: Francis Laniel <flaniel@linux.microsoft.com>, buildroot@buildroot.org
+References: <20220414172857.35100-1-flaniel@linux.microsoft.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220414194011.2044427-1-gsmecher@threespeedlogic.com>
-Subject: Re: [Buildroot] [PATCH] Adds python-orjson support.
+In-Reply-To: <20220414172857.35100-1-flaniel@linux.microsoft.com>
+Subject: Re: [Buildroot] [RFC PATCH v1 0/1] New "docker" ready qemu config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,142 +95,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Gerome Burlats <gerome.burlats@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Graeme,
-
-  I have a few fairly small remarks. Care to fix them up and resend?
-
-  First of all, the subject line should be:
-
-package/python-orjson: new package
-
-Also, add a Signed-off-by line for yourself at the end of the commit message. 
-This is a short way for you to assert that you are entitled to contribute the 
-patch under buildroot's GPL license.  See  [1] for more details.
-
-On 14/04/2022 21:40, Graeme Smecher wrote:
-> ---
->   package/Config.in                        |  1 +
->   package/python-orjson/Config.in          | 12 ++++++++++
->   package/python-orjson/python-orjson.hash |  3 +++
->   package/python-orjson/python-orjson.mk   | 28 ++++++++++++++++++++++++
-
-  Please add yourself to the DEVELOPERS file [1] for this package. This way, 
-you'll get an e-mail if the package fails in the autobuilders, or when a new 
-version is released if the package is registered on release-monitoring.org.
 
 
->   4 files changed, 44 insertions(+)
->   create mode 100644 package/python-orjson/Config.in
->   create mode 100644 package/python-orjson/python-orjson.hash
->   create mode 100644 package/python-orjson/python-orjson.mk
+On 14/04/2022 19:28, Francis Laniel wrote:
+> Hi.
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 86a1c59696..db0e37b7f7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1122,6 +1122,7 @@ menu "External python modules"
->   	source "package/python-numpy/Config.in"
->   	source "package/python-oauthlib/Config.in"
->   	source "package/python-opcua-asyncio/Config.in"
-> +	source "package/python-orjson/Config.in"
->   	source "package/python-packaging/Config.in"
->   	source "package/python-paho-mqtt/Config.in"
->   	source "package/python-pam/Config.in"
-> diff --git a/package/python-orjson/Config.in b/package/python-orjson/Config.in
-> new file mode 100644
-> index 0000000000..fa96eee57d
-> --- /dev/null
-> +++ b/package/python-orjson/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PYTHON_ORJSON
-> +	bool "python-orjson"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_PYTHON_CFFI # runtime
-> +	help
-> +	  orjson is a fast, correct JSON library for Python. It benchmarks as
-> +	  the fastest Python library for JSON and is more correct than the
-> +	  standard json library or other third-party libraries. It serializes
-> +	  dataclass, datetime, numpy, and UUID instances natively.
-> +
-> +	  https://github.com/ijl/orjson
-> diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-> new file mode 100644
-> index 0000000000..158099c174
-> --- /dev/null
-> +++ b/package/python-orjson/python-orjson.hash
-> @@ -0,0 +1,3 @@
-> +sha256  4713b120ad86b1b273f5952cbf9578c13d0f453064bd26d823e04a10c84824e6  3.6.7.tar.gz
-> +sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
-> +sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-> diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-> new file mode 100644
-> index 0000000000..91ead3b170
-> --- /dev/null
-> +++ b/package/python-orjson/python-orjson.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# python-orjson
-> +#
-> +################################################################################
-> +
-> +PYTHON_ORJSON_VERSION = 3.6.7
-> +PYTHON_ORJSON_SOURCE = $(PYTHON_ORJSON_VERSION).tar.gz
-> +PYTHON_ORJSON_SITE = https://github.com/ijl/orjson/archive/refs/tags
+> 
+> First, I hope you are fine and the same for your relatives.
+> 
+> In this contribution, I added a new qemu config for x86_64.
+> This configuration is mainly based on qemu_x86_64_defconfig but it adds kernel
+> CONFIG_ to be able to use docker.
+> It also adds package related to docker like DOCKER_CLI and CONTAINERD.
 
-  Rather than the above two lines, keep the default tarball name 
-(python-orjson-3.6.7.tar.gz) and use the github helper:
+  We don't like adding "demo" defconfigs that are basically another defconfig 
+with some packages enabled. It's true that there is some value to knowing which 
+combination of packages can provide a certain super-feature, but the problem is 
+that the basic config (in this case, qemu_x86_64) is not going to be useful for 
+most people.
 
-PYTHON_ORJSON_SITE = $(call github,ijl,orjson,$(PYTHON_ORJSON_VERSION))
+  In this particular case, there isn't even that much "combination". Just 
+docker-engine and docker-cli.
 
-> +PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
-> +PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> +PYTHON_ORJSON_DEPENDENCIES = host-python-cffi host-rustc
-
-  host-rustc is already added by cargo-package.
-
-> +PYTHON_ORJSON_CARGO_ENV = \
-> +	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-> +
-> +# Vendor the Cargo crates at download time
-> +PYTHON_ORJSON_DOWNLOAD_POST_PROCESS = cargo
-> +PYTHON_ORJSON_DOWNLOAD_DEPENDENCIES = host-rustc
-
-  These two are (or should be) added automatically already by the cargo 
-infrastructure, so are unneeded.
-
-> +PYTHON_ORJSON_DL_ENV = BR_CARGO_MANIFEST_PATH=Cargo.toml
-
-  This is the default, so unneeded.
-
-> +
-> +# orjson uses "maturin" to generate distribution packages - rather than teach
-> +# buildroot how to understand this, we reach in and install directly.
-> +define PYTHON_ORJSON_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 $(@D)/target/$(RUSTC_TARGET_NAME)/release/liborjson.so \
-
-  We normally add -D to the INSTALL arguments, so the target directory is 
-created if it doesn't exist yet.
-
-> +		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/orjson.so
-> +endef
-> +
-> +$(eval $(cargo-package))
+  The kernel config options do have value, but these should instead be set by 
+containerd (or docker-engine, or docker-proxy, as appropriate), using 
+CONTAINERD_LINUX_CONFIG_FIXUPS.
 
 
   Regards,
   Arnout
 
 
-[1] http://elinux.org/Developer_Certificate_Of_Origin
-[2] https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
-
+> 
+> The CONFIG_ options added were checked with moby check-config script [1].
+> 
+> I was able to build and execute the image with start-qemu.sh:
+> Welcome to Buildroot
+> buildroot login: root
+> # docker run --rm hello-world
+> Unable to find image 'hello-world:latest' locally
+> latest: Pulling from library/hello-world
+> 2db29710123e: Pull complete
+> Digest: sha256:10d7d58d5ebd2a652f4d93fdd86da8f265f5318c6a73cc5b6a9798ff6d2b2e67
+> Status: Downloaded newer image for hello-world:latest
+> 
+> Hello from Docker!
+> This message shows that your installation appears to be working correctly.
+> 
+> Sadly, the image has to a bit big (more than 300M) but I think it is fine since
+> this image will only be used for virtualization.
+> 
+> If you say any way to improve this contribution, feel free to share it!
+> 
+> Francis Laniel (1):
+>    qemu_x86_64_docker: add new qemu defconfig
+> 
+>   DEVELOPERS                             |   2 +
+>   board/qemu/x86_64_docker/linux.config  | 112 +++++++++++++++++++++++++
+>   board/qemu/x86_64_docker/post-build.sh |  11 +++
+>   board/qemu/x86_64_docker/readme.txt    |   7 ++
+>   configs/qemu_x86_64_docker_defconfig   |  49 +++++++++++
+>   5 files changed, 181 insertions(+)
+>   create mode 100644 board/qemu/x86_64_docker/linux.config
+>   create mode 100755 board/qemu/x86_64_docker/post-build.sh
+>   create mode 100644 board/qemu/x86_64_docker/readme.txt
+>   create mode 100644 configs/qemu_x86_64_docker_defconfig
+> 
+> 
+> Best regards and thank you in advance.
+> ---
+> [1] https://github.com/moby/moby/blob/master/contrib/check-config.sh
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
