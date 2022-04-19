@@ -4,62 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53347C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 19:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F846C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 19:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFD684181D;
-	Tue, 19 Apr 2022 19:38:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 836BA41873;
+	Tue, 19 Apr 2022 19:42:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C9FXWuiZ5zpI; Tue, 19 Apr 2022 19:38:22 +0000 (UTC)
+	with ESMTP id G1tzrFb8yJek; Tue, 19 Apr 2022 19:42:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D30C417D7;
-	Tue, 19 Apr 2022 19:38:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 296C141851;
+	Tue, 19 Apr 2022 19:42:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4000C1BF867
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:38:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E96E1BF867
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C7A660A8D
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:38:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C59A60BDC
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:42:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AwiLCLR11ISd for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 19:38:18 +0000 (UTC)
+ with ESMTP id 5uZz2_Q0Cnf2 for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 19:42:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 194B66080B
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 19:38:17 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E35866080B
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 19:42:46 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D6B2D20005;
- Tue, 19 Apr 2022 19:38:14 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 579AA200002;
+ Tue, 19 Apr 2022 19:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650397095;
+ t=1650397363;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cBiSfMG9fF7cbz7S2KtPohYo6vJeN4Sp0ENOY7Sa/g4=;
- b=TnwHeR5/ojQg62KIGsFds6TKURvdLrWb4VWTG56CNXunxc3rTX7gkPugpLsoet9DPeh1lK
- 6+6F00rBfrzoUucl5lxVfdODAeNGYHMbRRn3v2/2dfqyxA16dDdfdiFfz0QUK1Ww1em41Q
- 8aMf56fX9Y//EFRdUziaO4kA+HFBqzLg4Zx7fgjVJYjbMyVEvm1qNT5OojBU8466WRmwKH
- Yk2BrHrfBnjUMnUwitbkLL85RYrv0k2CjUOrO6p/X7lhuNe18UK/Btr1SMl76gXbK3mHT/
- eknrK+XO0dvFPNZhGHuRv5ARIsmMmn3YMnmZR2hRfPfjeYTP0cORwK6GJ/KkUw==
-Date: Tue, 19 Apr 2022 21:38:13 +0200
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Message-ID: <20220419213813.018a7601@windsurf>
-In-Reply-To: <20220419142635.008ac004@windsurf>
-References: <20220419092151.91638-1-thomas.perrot@bootlin.com>
- <20220419092151.91638-3-thomas.perrot@bootlin.com>
- <20220419142635.008ac004@windsurf>
+ bh=GRRna7nHwLcGb3t6y/gmV+xu6lGtKbriMyVW7e95bXM=;
+ b=cIPZvEPkxeYT7SR+YE+DgOW8IqmBV2gnCcj4agPGnmYNs7NcAPBo5V0aY9EKEqdFZDi/y2
+ 8MOHrvyPhPmD/pSDWcJQjvvxMmMP7zWVno0wepaf7bmrTnmkEzg39tN/35f8siSfUNYkq7
+ cwC7rQw7CCXGGq/z7a7duC2euJjIajyrGxz2/v60ewTx1/Pu3tc0aLTp3VRY8YPBhqTLJl
+ fmJ53XFR27frh0axCY8uuZ1SVtVXjH2aX9UeQVVmqYCQKOROU4UPOJCXMwd66nHG1IRxWa
+ WJ2lM44dJ68fB73c/ojQNTzKMHjqjO8yRawEHFWseFn5oUHzxhstRvz7tWFihQ==
+Date: Tue, 19 Apr 2022 21:42:42 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220419214242.44ee10dd@windsurf>
+In-Reply-To: <CADvTj4rHaz8pVx=mz2Cs4K72D_9ZoF3j6CBp4j=v0xbA5t_H8w@mail.gmail.com>
+References: <20220409020719.3126086-1-james.hilliard1@gmail.com>
+ <20220413225147.48bd5442@windsurf>
+ <CADvTj4rHaz8pVx=mz2Cs4K72D_9ZoF3j6CBp4j=v0xbA5t_H8w@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/imx-cst: add new package
+Subject: Re: [Buildroot] [PATCH 1/1] package/binutils: disable 2.32 on
+ unuspported FLAT platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,61 +74,95 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perrot <thomas.perrot@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot <buildroot@buildroot.org>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 19 Apr 2022 14:26:35 +0200
-Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+Hello,
 
-> This looks strange. Flags are normally passed using CFLAGS, and $(CC)
-> in Buildroot doesn't exist, it's $(HOSTCC) that should be used.
+On Sun, 17 Apr 2022 00:50:19 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> > I'm not sure that how we want to handle this. Indeed, even with newer
+> > binutils versions, I really doubt supporting aarch64 with the FLAT
+> > binary format makes a lot of sense.  
 > 
-> Also, I think the list of header paths is properly set with:
+> Well our newer binutils versions do already have FLAT disabled
+> entirely by setting:
+> depends on !BR2_BINFMT_FLAT
+
+Right, but as I state below, this is incorrect: they are disabled
+because they introduce a regression on ARM noMMU. Other noMMU
+architectures are (as far as we know), not affected.
+
+> > As far as I'm aware, there's currently no practical use-case for Linux
+> > noMMU on aarch64 and SH4, so I would simply disallow that. So on ARM, I
+> > would only allow the MMU to be disabled on ARMv7-M, and on SuperH, for
+> > SH2A. I.e something like the below patch.
+> >
+> > Of course, that leaves the case of BR2_sh2a. But if binutils
+> > 2.35/2.36/2.37 are broken for the FLAT format (which is why they are
+> > disabled), and 2.32 is disabled for SH2A/FLAT, then there's nothing
+> > left available for SH2A/FLAT  
 > 
-> CINCLUDES := $(SUBSYS:%=-I$(CST_CODE_PATH)/%/hdr)
+> Hmm, my assumption was that even though FLAT may not be supported
+> by the buildroot toolchain it may be possible some external toolchains
+> could have support for them, so I figured best just disable known invalid
+> options here for buildroot toolchain binutils.
+
+Practically speaking, nobody is using/testing FLAT on aarch64, SH4 or
+other MMU-capable architectures. We should support reasonable use-cases
+only IMO.
+
+> > Except that
+> > package/binutils/Config.in.host is wrong in disabling 2.35/2.36/2.37
+> > for all FLAT configs: the bug is only related to ARM.  
 > 
-> but it gets overridden by the fact that you override CFLAGS.
+> Hmm, so maybe this set of depends plus an arm exclusion is needed
+> for newer binutils?
+
+I'm not following you here.
+
+> > However, I feel strange that sh2a/FLAT was not supported back in
+> > binutils 2.32. sh2a/FLAT has been around for a very long time. In fact
+> > what happens is that we have a patch to allow sh2a as an architecture
+> > name: package/binutils/2.32/0001-sh-conf.patch. But that patch is
+> > probably no longer sufficient, and some adjustements are also needed in
+> > bfd/config.bfd.  
 > 
-> I believe there's a better way, let me have a look.
+> So, that patch doesn't seem to add uclinux as a supported target,
 
-Here is what I could come up with:
+No, it makes it support sh2a as an architecture name.
 
-ifneq ($(filter %64,$(HOSTARCH)),)
-HOST_IMX_CST_OSTYPE = linux64
-else
-HOST_IMX_CST_OSTYPE = linux32
-endif
+> which seems to be required for BR2_BINFMT_FLAT builds based on:
+> https://github.com/buildroot/buildroot/blob/2022.02.1/package/Makefile.in#L44-L45
+> https://github.com/buildroot/buildroot/blob/2022.02.1/package/Makefile.in#L40
+> https://github.com/buildroot/buildroot/blob/2022.02.1/package/binutils/binutils.mk#L83
+> https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/config.bfd;h=0e1ddb659c3ab7160aab0a7c173b85052f870e65;hb=a9d9a104dde6a749f40ce5c4576a0042a7d52d1f#l1243
+> 
+> The failures from what I can tell here are due to the lack of a uclinux
+> target for sh2a in bfd/config.bfd.
 
-# We don't use HOST_CONFIGURE_OPTS when building cst, because we need
-# to preserve the CFLAGS/LDFLAGS used by their Makefile.
-define HOST_IMX_CST_BUILD_CMDS
-	$(HOST_MAKE_ENV) $(MAKE) \
-		OSTYPE=$(HOST_IMX_CST_OSTYPE) \
-		ENCRYPTION=yes \
-		AR="$(HOSTAR)" \
-		CC="$(HOSTCC)" \
-		LD="$(HOSTCC)" \
-		OBJCOPY="$(HOSTOBJCOPY)" \
-		RANLIB="$(HOSTRANLIB)" \
-		EXTRACFLAGS="$(HOST_CFLAGS) $(HOST_CPPFLAGS)" \
-		EXTRALDFLAGS="$(HOST_LDFLAGS)" \
-		PWD=$(@D)/code/cst \
-		-C $(@D)/code/cst \
-		build
-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-		COPTS="$(HOST_CFLAGS) $(HOST_CPPFLAGS) $(HOST_LDFLAGS)" \
-		-C $(@D)/code/hab_csf_parser
-endef
+I need to have a closer look it seems.
 
-define HOST_IMX_CST_INSTALL_CMDS
-	$(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.$(HOST_IMX_CST_OSTYPE)/cst $(HOST_DIR)/bin/cst
-	$(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.$(HOST_IMX_CST_OSTYPE)/srktool $(HOST_DIR)/bin/srktool
-	$(INSTALL) -D -m 755 $(@D)/code/hab_csf_parser/csf_parser $(HOST_DIR)/bin/csf_parser
-endef
+> > Bottom line: there is more work than just this proposal, which simply
+> > papers over the problem without really fixing it.  
+> 
+> Yeah, that's probably a bit outside my area of expertise, I was just
+> adding these dependencies by tracing the configure failure conditions.
+> 
+> I'm not really familiar with no-mmu builds in general so wouldn't really
+> know what's correct for the architecture mmu settings.
+
+Yeah, that's also why I'm advocating for a broader solution. I'll try
+to cook some patches. I don't think I'll fix all problems in one go,
+but we can progressively get there.
+
+Best regards,
 
 Thomas
 -- 
