@@ -1,47 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97FF8C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 20:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8ECAC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 21:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 528E182EA2;
-	Tue, 19 Apr 2022 20:56:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 727A6417A6;
+	Tue, 19 Apr 2022 21:08:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qVHbcUcYXzwS; Tue, 19 Apr 2022 20:56:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gbquEngpL5-e; Tue, 19 Apr 2022 21:08:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4484F82C1E;
-	Tue, 19 Apr 2022 20:56:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 701FE1BF9B4
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:56:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDB09417A8;
+	Tue, 19 Apr 2022 21:08:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B2F621BF3F0
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 21:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5CBCA40993
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:56:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABEB483155
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 21:08:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zuOSnn3srd7E for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 20:56:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EABC4097F
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 20:56:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8618D82830; Tue, 19 Apr 2022 20:46:12 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 22:48:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c66ac07a0783b21f95e699b3762edd15e27bdf9
-X-Git-Newrev: 30be0473162ff801a38b0ccbe6d8f6c30a282c0c
-X-Patchwork-Hint: ignore
-Message-Id: <20220419204612.8618D82830@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openjdk{-bin}: security bump 11.x
- to version 11.0.14.1+1
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iGp0nshOkIdk for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 21:08:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 391CD819CC
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 21:08:14 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id k23so35422866ejd.3
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 14:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=Y3Yh238+MyFEbnFlW5nWTejrjV5d0kTln3Dmb4L7rbY=;
+ b=HIdR/ML6dtdl8gemTogNgTOTHwZSaIQknsFi4l+DpZrq1KpR6B/9nNDYOb/7l4wXPc
+ iXb8nzbBh4enYuZrDkdEhwsOxX96isMmHgMj26VIOTN4+0bs2tcuUveK/MBHuHGw9Jn1
+ zXa6H6FJAveCbQu/AB/mZ8QyUMuzAPkG0qKBcpcGGiQDqt9BwIhGja/4pSIZRFhEKOWF
+ LnXwCF7YgxiBu1zM0szOOdDZCbTm6JPTTyDF5Pqycdm1eF38dMNh4ZeQEXK6eRziMH61
+ sDAH8EGzoZ+ai37/SfAl0MWQBCWDtOUM5SpHMcCSKhZDll3yc2zinDYfg+amj/XaXAn8
+ lrBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Y3Yh238+MyFEbnFlW5nWTejrjV5d0kTln3Dmb4L7rbY=;
+ b=xPiFDl/TiFFBRWqMjTWmfBCFlLQkgbwnMeOerBk1S8LgZYIrM32xleKGSWO1edQeS9
+ WQlDOZu7zaMe+M9xNn9mG3DYuuVTgLqXdRe/lh5WC38ejeWmqMTFUO9kCwo5RmybxZ0n
+ XjCURLoWlXxjjw0us44QPOUKPJuM1GBVTo0HQiUgpDRMIPwzKRYz8mVRAbV0HFraLRR4
+ 2sykq7mHFfeBR7H2JaSjERKv/bbTPffyUU3GZLLPxqWvkQnCX0ULGXN8uC9H14yoomiL
+ oFuY+PbQ76i8VKNd8DRhv34u/LS+SzHggAlZeMGZwRXFbFVA5pbFFmv8gleUxdsaYlK/
+ w47Q==
+X-Gm-Message-State: AOAM531zc5zP4kVaIOF2MT66pqlCshqm5vbQl2EmI9XrPUsGXT8djMlI
+ Zk0eea+GiwwRfT/AZ/4AstafBmTZZLgy+A==
+X-Google-Smtp-Source: ABdhPJxM97F15HAp3GcWI1anzDAwgQNMmsSz5KoZ+WCdqFc1UdW0y1jT12IW9OMWcAAVnZsETD22UQ==
+X-Received: by 2002:a17:907:7d90:b0:6e8:cd12:8893 with SMTP id
+ oz16-20020a1709077d9000b006e8cd128893mr15577629ejc.13.1650402492401; 
+ Tue, 19 Apr 2022 14:08:12 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ g15-20020a170906520f00b006cd07ba40absm6013525ejm.160.2022.04.19.14.08.11
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 19 Apr 2022 14:08:11 -0700 (PDT)
+Message-ID: <fdcb803b-4b47-c221-a538-aaa722449713@mind.be>
+Date: Tue, 19 Apr 2022 23:08:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Graeme Smecher <gsmecher@threespeedlogic.com>, buildroot@buildroot.org
+References: <20220414194011.2044427-1-gsmecher@threespeedlogic.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220414194011.2044427-1-gsmecher@threespeedlogic.com>
+Subject: Re: [Buildroot] [PATCH] Adds python-orjson support.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,112 +94,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30be0473162ff801a38b0ccbe6d8f6c30a282c0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  Hi Graeme,
 
-Fixes the following security issues:
+  I have a few fairly small remarks. Care to fix them up and resend?
 
-  - JDK-8217375: jarsigner breaks old signature with long lines in manifest
-  - JDK-8251329: (zipfs) Files.walkFileTree walks infinitely if zip has dir named "." inside
-  - JDK-8264934, CVE-2022-21248: Enhance cross VM serialization
-  - JDK-8268488: More valuable DerValues
-  - JDK-8268494: Better inlining of inlined interfaces
-  - JDK-8268512: More content for ContentInfo
-  - JDK-8268795: Enhance digests of Jar files
-  - JDK-8268801: Improve PKCS attribute handling
-  - JDK-8268813, CVE-2022-21283: Better String matching
-  - JDK-8269151: Better construction of EncryptedPrivateKeyInfo
-  - JDK-8269944: Better HTTP transport redux
-  - JDK-8270386, CVE-2022-21291: Better verification of scan methods
-  - JDK-8270392, CVE-2022-21293: Improve String constructions
-  - JDK-8270416, CVE-2022-21294: Enhance construction of Identity maps
-  - JDK-8270492, CVE-2022-21282: Better resolution of URIs
-  - JDK-8270498, CVE-2022-21296: Improve SAX Parser configuration management
-  - JDK-8270646, CVE-2022-21299: Improved scanning of XML entities
-  - JDK-8270952, CVE-2022-21277: Improve TIFF file handling
-  - JDK-8271962: Better TrueType font loading
-  - JDK-8271968: Better canonical naming
-  - JDK-8271987: Manifest improved manifest entries
-  - JDK-8272014, CVE-2022-21305: Better array indexing
-  - JDK-8272026, CVE-2022-21340: Verify Jar Verification
-  - JDK-8272236, CVE-2022-21341: Improve serial forms for transport
-  - JDK-8272272: Enhance jcmd communication
-  - JDK-8272462: Enhance image handling
-  - JDK-8273290: Enhance sound handling
-  - JDK-8273756, CVE-2022-21360: Enhance BMP image support
-  - JDK-8273838, CVE-2022-21365: Enhanced BMP processing
-  - JDK-8274096, CVE-2022-21366: Improve decoding of image files
-  - JDK-8279541: Improve HarfBuzz
+  First of all, the subject line should be:
 
-For more details, see the announcement:
+package/python-orjson: new package
 
-https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-January/011643.html
-https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-February/012348.html
+Also, add a Signed-off-by line for yourself at the end of the commit message. 
+This is a short way for you to assert that you are entitled to contribute the 
+patch under buildroot's GPL license.  See  [1] for more details.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 2 +-
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+On 14/04/2022 21:40, Graeme Smecher wrote:
+> ---
+>   package/Config.in                        |  1 +
+>   package/python-orjson/Config.in          | 12 ++++++++++
+>   package/python-orjson/python-orjson.hash |  3 +++
+>   package/python-orjson/python-orjson.mk   | 28 ++++++++++++++++++++++++
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index bbc939d4e8..082da7bf87 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -2,7 +2,7 @@
- sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
- 
- # From https://github.com/adoptium/temurin11-binaries/releases
--sha256  3b1c0c34be4c894e64135a454f2d5aaa4bd10aea04ec2fa0c0efe6bb26528e30  OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
-+sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 266c93d363..c9ddc9f69f 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -9,7 +9,7 @@ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
- HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.13_8
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
- endif
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 2f46b044ad..f8a4f15260 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
--sha256  119c6233fe7ff5670c590e2f9d6686ac4d80c97b17065506998b75c547b54f2c  openjdk-11.0.13+8.tar.gz
-+sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 5fccdaa7ac..94b8cba577 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -9,7 +9,7 @@ OPENJDK_VERSION_MAJOR = 17
- OPENJDK_VERSION_MINOR = 0.1+12
- else
- OPENJDK_VERSION_MAJOR = 11
--OPENJDK_VERSION_MINOR = 0.13+8
-+OPENJDK_VERSION_MINOR = 0.14.1+1
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+  Please add yourself to the DEVELOPERS file [1] for this package. This way, 
+you'll get an e-mail if the package fails in the autobuilders, or when a new 
+version is released if the package is registered on release-monitoring.org.
+
+
+>   4 files changed, 44 insertions(+)
+>   create mode 100644 package/python-orjson/Config.in
+>   create mode 100644 package/python-orjson/python-orjson.hash
+>   create mode 100644 package/python-orjson/python-orjson.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 86a1c59696..db0e37b7f7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1122,6 +1122,7 @@ menu "External python modules"
+>   	source "package/python-numpy/Config.in"
+>   	source "package/python-oauthlib/Config.in"
+>   	source "package/python-opcua-asyncio/Config.in"
+> +	source "package/python-orjson/Config.in"
+>   	source "package/python-packaging/Config.in"
+>   	source "package/python-paho-mqtt/Config.in"
+>   	source "package/python-pam/Config.in"
+> diff --git a/package/python-orjson/Config.in b/package/python-orjson/Config.in
+> new file mode 100644
+> index 0000000000..fa96eee57d
+> --- /dev/null
+> +++ b/package/python-orjson/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_PYTHON_ORJSON
+> +	bool "python-orjson"
+> +	depends on BR2_PACKAGE_PYTHON3
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_PYTHON_CFFI # runtime
+> +	help
+> +	  orjson is a fast, correct JSON library for Python. It benchmarks as
+> +	  the fastest Python library for JSON and is more correct than the
+> +	  standard json library or other third-party libraries. It serializes
+> +	  dataclass, datetime, numpy, and UUID instances natively.
+> +
+> +	  https://github.com/ijl/orjson
+> diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
+> new file mode 100644
+> index 0000000000..158099c174
+> --- /dev/null
+> +++ b/package/python-orjson/python-orjson.hash
+> @@ -0,0 +1,3 @@
+> +sha256  4713b120ad86b1b273f5952cbf9578c13d0f453064bd26d823e04a10c84824e6  3.6.7.tar.gz
+> +sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
+> +sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+> diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
+> new file mode 100644
+> index 0000000000..91ead3b170
+> --- /dev/null
+> +++ b/package/python-orjson/python-orjson.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# python-orjson
+> +#
+> +################################################################################
+> +
+> +PYTHON_ORJSON_VERSION = 3.6.7
+> +PYTHON_ORJSON_SOURCE = $(PYTHON_ORJSON_VERSION).tar.gz
+> +PYTHON_ORJSON_SITE = https://github.com/ijl/orjson/archive/refs/tags
+
+  Rather than the above two lines, keep the default tarball name 
+(python-orjson-3.6.7.tar.gz) and use the github helper:
+
+PYTHON_ORJSON_SITE = $(call github,ijl,orjson,$(PYTHON_ORJSON_VERSION))
+
+> +PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
+> +PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> +PYTHON_ORJSON_DEPENDENCIES = host-python-cffi host-rustc
+
+  host-rustc is already added by cargo-package.
+
+> +PYTHON_ORJSON_CARGO_ENV = \
+> +	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+> +
+> +# Vendor the Cargo crates at download time
+> +PYTHON_ORJSON_DOWNLOAD_POST_PROCESS = cargo
+> +PYTHON_ORJSON_DOWNLOAD_DEPENDENCIES = host-rustc
+
+  These two are (or should be) added automatically already by the cargo 
+infrastructure, so are unneeded.
+
+> +PYTHON_ORJSON_DL_ENV = BR_CARGO_MANIFEST_PATH=Cargo.toml
+
+  This is the default, so unneeded.
+
+> +
+> +# orjson uses "maturin" to generate distribution packages - rather than teach
+> +# buildroot how to understand this, we reach in and install directly.
+> +define PYTHON_ORJSON_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 $(@D)/target/$(RUSTC_TARGET_NAME)/release/liborjson.so \
+
+  We normally add -D to the INSTALL arguments, so the target directory is 
+created if it doesn't exist yet.
+
+> +		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/orjson.so
+> +endef
+> +
+> +$(eval $(cargo-package))
+
+
+  Regards,
+  Arnout
+
+
+[1] http://elinux.org/Developer_Certificate_Of_Origin
+[2] https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
