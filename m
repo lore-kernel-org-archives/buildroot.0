@@ -1,79 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90232C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 19:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50048C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 19:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EC57415BD;
-	Tue, 19 Apr 2022 19:00:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB225408E1;
+	Tue, 19 Apr 2022 19:36:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ye8Cuirp0YMt; Tue, 19 Apr 2022 19:00:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mwUNHLTKp2tP; Tue, 19 Apr 2022 19:36:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8A4E41592;
-	Tue, 19 Apr 2022 19:00:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 516D31BF873
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:00:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A7CC408E8;
+	Tue, 19 Apr 2022 19:36:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 43A0D1BF867
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:36:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E51141592
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:00:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4046C828C5
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 19:36:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u53eI3GuHDjy for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 19:00:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1475341588
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 19:00:29 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id w4so23681519wrg.12
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6K/d0u4uCwExQ3NUCzzTDhWDzU9HbYqCEvcPDr8XZGE=;
- b=NytFWkFko7mizCQmvOTT4r3ag20ADO80j5xgyr2Xoennkc84tJQCpmF3dLN6UVuRIh
- lUO+x6FO6+e9w4dBMWJ6w5/kuKvCF2b5VhTXrwczTGD6AgWPv7dBes90lJyT11Rmv/9m
- wccjNeOnRz+t3OydYKJWGIkskKAY+GOgk+pKMLhcPuJI3y8lfr1sr4gO0vG5mr04ZthC
- PmqSDBTbrmBkWUSq9ilgVn0LY30+/xgm60/AkfjYD0cH5klSk7LELD1KhU54rsE2LdWk
- N1BfhzwHvVi1bAKNT6b/ZIX34kcgZSinmAHJb6i9s0CJkby0te7EsdKpeInzgus+eC7t
- kOEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6K/d0u4uCwExQ3NUCzzTDhWDzU9HbYqCEvcPDr8XZGE=;
- b=qeva/zRr/e1h4FpbRewZhs2IOT1BII3igAosRtWhS/icGFJEHGOHSegPkSfldxMAUC
- ciZWJF86CT1cUz9jGDdBPSg37YBv+FAj0raZjw7nehyypxVyarezw3AuwRhibpH+u4Nr
- j6x7NfMaZRbrY1B66NpEqDCo4hhMOjOllGySRkCXYcjBGCIQnbzOalWa9p/Pqi5xCqKY
- ullOLbfE14iSJl95NtXdkzAIrOSAdJxokpkGm6TphWJT3uIvp3aU4uSkZEU8qVPSmFT6
- xl1X8+eZk2dW6YBCOGxmqUxxaSuEyUTwwp1z2S+xq410yJA+PChGa27gPooSAQAr5NQ+
- 86hg==
-X-Gm-Message-State: AOAM532/3xIb0/ZI/QxO6xjz54lqUzJbuHrV/3Wc+rwKMJNvbmIJi1PO
- cQ9Z050h7oObO4zENKWykZHtmTReGGc=
-X-Google-Smtp-Source: ABdhPJyAiXV8S1/O6uOdn1PPuj5Fy8Ke5F8JUodiq/xp4um9fYgZf54SIbUAX1KtEZooR0Jb6+p8wA==
-X-Received: by 2002:adf:e9d1:0:b0:207:b80e:dc22 with SMTP id
- l17-20020adfe9d1000000b00207b80edc22mr13095634wrn.405.1650394827942; 
- Tue, 19 Apr 2022 12:00:27 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- m7-20020adfe0c7000000b002060e7bbe49sm15657630wri.45.2022.04.19.12.00.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Apr 2022 12:00:27 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 20:58:21 +0200
-Message-Id: <20220419185821.4087483-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nnIzHviEd-Ut for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 19:36:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A277828AA
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 19:36:20 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 06F4E240004;
+ Tue, 19 Apr 2022 19:36:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650396979;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=u0BafXSVBEsDtT8lk3Cm/ak157bEh9nqaCkXNG1a/UM=;
+ b=ePrZEaszdVIX+7UPXQOKe4dYadL3ILgUsiSrObN2JQ1cjxwZyHBsN+V2xGk/jmIFnyk14j
+ VTvqsABhUAcCbk9XYZ5+FsFx2mE7/zz7sKBVR4/7kmwTuINIstwhuRPgoOYha15EolBVQh
+ WjRB7fgmz66aw/8GZP0BzusaEEF1ro/xf4oUUsfu3RItoKZ8oTD1K3YvWVBR6yXmZ1Xwbn
+ fQCZR6rVo4Iy9ogSUidaSpGAlXIc+QUO2szjdQTkjrWb3pj81MJdq1WvcSSih32zh1Qi33
+ 4TtTg6ZgUeUL5ccsGJ9u7Gm9FOUze4Dn5QSueWlktFkVQmGq7VrrJNHhveibaw==
+Date: Tue, 19 Apr 2022 21:36:18 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220419213618.58920b81@windsurf>
+In-Reply-To: <20220419121409.2055818-1-fontaine.fabrice@gmail.com>
+References: <20220419121409.2055818-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/batman-adv: needs CONFIG_CRC16
+Subject: Re: [Buildroot] [PATCH 1/1] boot/shim: disable on mips64el
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,39 +69,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CONFIG_CRC16 is needed to avoid the following build failure:
+On Tue, 19 Apr 2022 14:14:09 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-ERROR: modpost: "crc16" [/nvmedata/autobuild/instance-6/output-1/build/batman-adv-2021.4/net/batman-adv/batman-adv.ko] undefined!
+> Fix the following build failure on mips64el raised since commit
+> 11b347c03ab0b38389ec11b48f63236a3b4d6547:
+> 
+> In file included from shim.h:47,
+>                  from shim.c:14:
+> /nvmedata/autobuild/instance-17/output-1/build/shim-15.4/include/system/stdarg.h:72:2: error: #error what arch is this
+>    72 | #error what arch is this
+>       |  ^~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/64bf0f89ef444dda4d1277c0e46d189ad2515713
+As usual, I don't like this kind of fixes that consist in simply "let's
+disable in the specific case that causes problem". If you look at that
+include/system/stdarg.h, you see:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/batman-adv/batman-adv.mk | 1 +
- 1 file changed, 1 insertion(+)
+#if defined(__aarch64__) || defined(__arm__) || defined(__i386__) || \
+        defined(__i486__) || defined(__i686__)
 
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index 838f9b1851..6a1aaa699c 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -35,6 +35,7 @@ define BATMAN_ADV_CONFIGURE_CMDS
- endef
- 
- define BATMAN_ADV_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC16)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_LIBCRC32C)
- endef
- 
+...
+
+#elif defined(__x86_64__)
+
+...
+
+#else
+#error what arch is this
+#endif
+
+So basically, any architecture other than the ones listed above is
+going to raise this build issue, not just mips64el.
+
+Yes, BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS already disables on most CPU
+architectures, but shim also has its own list of CPU architectures it
+supports. So we probably want a BR2_TARGET_SHIM_ARCH_SUPPORTS, which
+depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS and then adds an explicit
+list of architectures that shim supports.
+
+Thanks!
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
