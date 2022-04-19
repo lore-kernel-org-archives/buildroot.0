@@ -1,53 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3EBC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 07:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9DAC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 07:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E962541065;
-	Tue, 19 Apr 2022 07:40:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58B6641DF3;
+	Tue, 19 Apr 2022 07:40:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pRjnjprbA2uN; Tue, 19 Apr 2022 07:40:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Oyvoao7ryGXV; Tue, 19 Apr 2022 07:40:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC6DB4106A;
-	Tue, 19 Apr 2022 07:40:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1C42416FC;
+	Tue, 19 Apr 2022 07:40:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2703E1BF263
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 07:40:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 943CB1BF263
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 07:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BEF041064
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E66640157
  for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 07:40:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cDYvjheDt_1j for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 07:40:02 +0000 (UTC)
+ with ESMTP id 6WJVHpQt00wN for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 07:40:03 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 787FB40157
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 07:40:01 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1AC3841060
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 07:40:02 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 52CC120000A;
- Tue, 19 Apr 2022 07:39:58 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E8F091C000C;
+ Tue, 19 Apr 2022 07:39:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1ngiSr-002FnS-Ao; Tue, 19 Apr 2022 09:39:57 +0200
+ id 1ngiSq-002FnN-RW; Tue, 19 Apr 2022 09:39:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 09:39:54 +0200
-Message-Id: <20220419073954.537319-2-peter@korsgaard.com>
+Date: Tue, 19 Apr 2022 09:39:53 +0200
+Message-Id: <20220419073954.537319-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419073954.537319-1-peter@korsgaard.com>
-References: <20220419073954.537319-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/openjdk{-bin}: security bump 17.x
- to version 17.0.2+8
+Subject: [Buildroot] [PATCH 1/2] package/openjdk{-bin}: security bump 11.x
+ to version 11.0.14.1+1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,11 +65,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fixes the following security issues:
 
+  - JDK-8217375: jarsigner breaks old signature with long lines in manifest
   - JDK-8251329: (zipfs) Files.walkFileTree walks infinitely if zip has dir named "." inside
   - JDK-8264934, CVE-2022-21248: Enhance cross VM serialization
   - JDK-8268488: More valuable DerValues
   - JDK-8268494: Better inlining of inlined interfaces
   - JDK-8268512: More content for ContentInfo
+  - JDK-8268795: Enhance digests of Jar files
+  - JDK-8268801: Improve PKCS attribute handling
   - JDK-8268813, CVE-2022-21283: Better String matching
   - JDK-8269151: Better construction of EncryptedPrivateKeyInfo
   - JDK-8269944: Better HTTP transport redux
@@ -94,10 +95,12 @@ Fixes the following security issues:
   - JDK-8273756, CVE-2022-21360: Enhance BMP image support
   - JDK-8273838, CVE-2022-21365: Enhanced BMP processing
   - JDK-8274096, CVE-2022-21366: Improve decoding of image files
+  - JDK-8279541: Improve HarfBuzz
 
 For more details, see the announcement:
 
-https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-January/011709.html
+https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-January/011643.html
+https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-February/012348.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
@@ -108,52 +111,54 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  4 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index 082da7bf87..62691ed6f0 100644
+index bbc939d4e8..082da7bf87 100644
 --- a/package/openjdk-bin/openjdk-bin.hash
 +++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
-+sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
+@@ -2,7 +2,7 @@
+ sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
  
  # From https://github.com/adoptium/temurin11-binaries/releases
- sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+-sha256  3b1c0c34be4c894e64135a454f2d5aaa4bd10aea04ec2fa0c0efe6bb26528e30  OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
++sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
 diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index c9ddc9f69f..3d1ebd7429 100644
+index 266c93d363..c9ddc9f69f 100644
 --- a/package/openjdk-bin/openjdk-bin.mk
 +++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,7 +6,7 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_8
+@@ -9,7 +9,7 @@ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+ HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
  else
  HOST_OPENJDK_BIN_VERSION_MAJOR = 11
- HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.13_8
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
+ endif
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
 diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index f8a4f15260..293787792d 100644
+index 2f46b044ad..f8a4f15260 100644
 --- a/package/openjdk/openjdk.hash
 +++ b/package/openjdk/openjdk.hash
 @@ -1,4 +1,4 @@
  # Locally computed
--sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
-+sha256  2fdd23261526362d4aaf58323441d4c31d29de2e374ba94bbf2727a00adc0ea7  openjdk-17.0.2+8.tar.gz
- sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
+ sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
+-sha256  119c6233fe7ff5670c590e2f9d6686ac4d80c97b17065506998b75c547b54f2c  openjdk-11.0.13+8.tar.gz
++sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
 diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 94b8cba577..42d52d57c4 100644
+index 5fccdaa7ac..94b8cba577 100644
 --- a/package/openjdk/openjdk.mk
 +++ b/package/openjdk/openjdk.mk
-@@ -6,7 +6,7 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.1+12
-+OPENJDK_VERSION_MINOR = 0.2+8
+@@ -9,7 +9,7 @@ OPENJDK_VERSION_MAJOR = 17
+ OPENJDK_VERSION_MINOR = 0.1+12
  else
  OPENJDK_VERSION_MAJOR = 11
- OPENJDK_VERSION_MINOR = 0.14.1+1
+-OPENJDK_VERSION_MINOR = 0.13+8
++OPENJDK_VERSION_MINOR = 0.14.1+1
+ endif
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 -- 
 2.30.2
 
