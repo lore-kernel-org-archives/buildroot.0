@@ -4,46 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9281C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 18:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18950C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 18:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 674A04056C;
-	Tue, 19 Apr 2022 18:48:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B20394056C;
+	Tue, 19 Apr 2022 18:50:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xW8ZMwuPMQWy; Tue, 19 Apr 2022 18:48:03 +0000 (UTC)
+	with ESMTP id pievbo9fR03Y; Tue, 19 Apr 2022 18:50:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 68AAB40522;
-	Tue, 19 Apr 2022 18:48:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A11661BF873
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 18:48:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6FB940502;
+	Tue, 19 Apr 2022 18:50:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 389001BF873
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 18:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C76640522
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 18:48:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 260C8415CB
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 18:50:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ivG_E7emF0Ut for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 18:48:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EeNlgmGnIklC for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 18:50:42 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E4BD840502
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 18:48:00 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (30)
-Received: from bartekk-pc.lan (dynamic-78-10-107-45.ssp.dialog.net.pl
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1DA5741560
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 18:50:41 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (5)
+Received: from [192.168.10.50] (dynamic-78-10-107-45.ssp.dialog.net.pl
  [78.10.107.45])
- by server220076.nazwa.pl (Postfix) with ESMTP id 2C1131BCC8C;
- Tue, 19 Apr 2022 20:47:58 +0200 (CEST)
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 20:47:56 +0200
-Message-Id: <20220419184756.255846-1-b.bilas@grinn-global.com>
-X-Mailer: git-send-email 2.35.3
+ by server220076.nazwa.pl (Postfix) with ESMTP id 353871BD066;
+ Tue, 19 Apr 2022 20:50:39 +0200 (CEST)
+Message-ID: <bf6ac8b1-56b7-5d89-e7fe-3fd4344e1e0f@grinn-global.com>
+Date: Tue, 19 Apr 2022 20:50:38 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] packages/libwebsockets: add patch that removes
- duplicate LwsCheckRequirements
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220419044315.DADA71BBEDC@server220076.nazwa.pl>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+In-Reply-To: <20220419044315.DADA71BBEDC@server220076.nazwa.pl>
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2022-04-18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,63 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Bilas <bartosz.bilas@hotmail.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>, fontaine.fabrice@gmail.com
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-  CMake Error at /home/buildroot/autobuild/run/instance-2/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/libwebsockets/libwebsockets-config.cmake:35 (include):
-  include could not find load file:
+Hello Thomas,
 
-      LwsCheckRequirements
-  Call Stack (most recent call first):
-    CMakeLists.txt:54 (find_package)
+On 19.04.2022 06:43, Thomas Petazzoni wrote:
+> Hello,
+>
+> Autobuilder failures
+> ====================
+>
+> Below is a list of build failures reported by the Buildroot autobuilders
+> in relation to packages or CPU architectures you are in charge of.
+> Please help us improving the quality of Buildroot by investigating those
+> build failures and sending patches to fix them.
+>
+> Results for the 'master' branch
+> -------------------------------
+>
+> Build failures related to your packages:
+>
+>      arch     |             reason             |                                       url
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>      arm      |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/0f7952eee8e3dcdd3f5df1b18ce561cca78ba7e0
+>      arm      |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/0b6a917b9572574ce8585a7978db86729a8ef8d3
+>      arc      |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/e1636589992b8896477ed2229bc7ccfc18847e9a
+>      sh4      |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/f28872352d28b1ce67a3c81d524feb0138fe0284
+>      i686     |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/e488a1035c2de3a5d58127c0363390dcb9a0c68f
+>      m68k     |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/66045099ba830c1527a75c0308bd55d4655df20d
+>    mips64el   |           ttyd-1.6.3           | http://autobuild.buildroot.net/results/d198d6285847d570329c2d2e1ea86a2f423b2829
 
-Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- ...emove-duplicate-LwsCheckRequirements.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch
+https://patchwork.ozlabs.org/project/buildroot/patch/20220419184756.255846-1-b.bilas@grinn-global.com/
 
-diff --git a/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch b/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch
-new file mode 100644
-index 0000000000..fc76a2b610
---- /dev/null
-+++ b/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch
-@@ -0,0 +1,26 @@
-+From 99a8b9c4422bed45c8b7412a1e121056f2a6132a Mon Sep 17 00:00:00 2001
-+From: Andy Green <andy@warmcat.com>
-+Date: Mon, 7 Feb 2022 14:48:55 +0000
-+Subject: [PATCH] cmake: remove duplicate LwsCheckRequirements
-+
-+Signed-off-by: Andy Green <andy@warmcat.com>
-+Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
-+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-+---
-+ cmake/libwebsockets-config.cmake.in | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/cmake/libwebsockets-config.cmake.in b/cmake/libwebsockets-config.cmake.in
-+index 6247b2cb..8ba97e6f 100644
-+--- a/cmake/libwebsockets-config.cmake.in
-++++ b/cmake/libwebsockets-config.cmake.in
-+@@ -32,6 +32,5 @@ endforeach()
-+ 
-+ include(CheckIncludeFile)
-+ include(CheckCSourceCompiles)
-+-include(LwsCheckRequirements)
-+ set(requirements 1)
-+ 
-+-- 
-+2.35.3
-+
--- 
-2.35.3
-
+Best
+Bartek
+>
+>
+> Thanks for your contribution to Buildroot!
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
