@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A410FC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 20:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43A28C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 20:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B33660E6F;
-	Tue, 19 Apr 2022 20:41:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C60FD41794;
+	Tue, 19 Apr 2022 20:48:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9Xq_jXAJ4azH; Tue, 19 Apr 2022 20:41:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iZtqge88kyiT; Tue, 19 Apr 2022 20:48:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C55C60E49;
-	Tue, 19 Apr 2022 20:41:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F0CF1BF860
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:41:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CE304176D;
+	Tue, 19 Apr 2022 20:48:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B5D361BF860
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53D8D40A9D
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:41:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1B0B4176D
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O0gA0uGNjZje for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 20:41:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qh17MzNQS9DU for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 20:48:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 75485404D7
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 20:41:01 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id s18so35402633ejr.0
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 13:41:01 -0700 (PDT)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3CA694177C
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 20:48:06 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id lc2so35284401ejb.12
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 13:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=5ag1UPuCaZBobqmCI73Pjp0RnA8I5XDXGPY47EMiuKI=;
- b=QGc7W08ByLIyXzeboQsxbOR7lKpjtOcSg0P0x+9kxHn1tt1LAxzeTcXZKvU/ierFMe
- lPCSR8HNiT0IAwdld+TN6e1D03KLKodgE/xFBxLrE2PITm9/G/ZO+bbwb2D7KMWXYqhL
- x9NRsXkthY6kWTh0mXmXNYye1TYCHmTMe0rjK4MVhQmnz6FRfdbsc5XmkjeI6fpeaKox
- TKF6Ij3vGvGTx3tUgfBqC15SzjitHZhv1//Lxf0z8mVNnWg7m5eiIuU7E9cy4DLhV8SY
- 5qup0IIrjQhTFWS03F6XmD+XRpFtohT1vGqHtjo4Ewv6tQPClbZYtJQhV/k4xSTKenhE
- 6TEQ==
+ bh=lJJMx8LkZmFNYeFSAqhR0M8Nj2IKscTHgqzNSPhqpr8=;
+ b=IVuK8Ki7687AxMmWTXd7z4XZLMRoWkS6/lUhCS36voZMn4ddbIXHW21Z0v7OsTqM3D
+ TfXomjGkQfqj0rgRVaqxOHqU0tAYCYHUdniXnB862EG4XRo73uAVWdLLkl1se1Q3oyz3
+ pPTl0Pu/Y9v7Ni3lQtGDrhU3vJO0Zt4PqTlX0RE6CREXRgR/uRSjC4oQzHDaANUMx5/F
+ Yqnwzj9eD5y4d/GjjbBTbRDmpgJ27NmbPzK/CzXzk2SUpwqtkhk2quB9HeJLZ/5YyK1/
+ XxJMr9t8aQDeYPGGAlP/DGS6DUAhHkvn5uiPhFZ6A6gu1rvzcwbaccsOwtMldCSFJUkF
+ SfPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=5ag1UPuCaZBobqmCI73Pjp0RnA8I5XDXGPY47EMiuKI=;
- b=DSXwQA/FCVkvZ7OpULNRBEXaf3+Bryo06gouthL2IYsOj41sdZ7p2TLn3QNln0lWdJ
- PMusV5EO8CHsPvHbvje3jHuie9oXNXR4+kE6YMOh5758dQdMvCBidJzI1rH87SdeJzjC
- GtatHHXlFFjXj3CU4dGRGBLf2eqVBaMEVUTQh0eN/UirRiQlJzLhu/sI0+me5a8A7iHA
- dkMQIyimtRNaSLieg57tWckorOmDIabDdHWEP3SLZpLBBh9bE+Q62enr4uC14nfJMhlT
- kcoFzv3wqFSJzG33Lx0D805T6yT/CrWQ3eDqzXxcK2+2yO+0AI4uFNvSqIFwj9hKqhFy
- S6lg==
-X-Gm-Message-State: AOAM5337smXWPnEoGv14UaBsPNaSORyeHa2dBcpQe2nK0fL/n+ekw9Fc
- AjOINk5XfqTfvNCA7jEHm3xKMWSngTGqXA==
-X-Google-Smtp-Source: ABdhPJzMMx7KNa28xPIMHwMxi6K+H4aXwnbxpKoPQjBgUUbkmS2nLno6YTVphT21H/FKO2R6Fm8F3Q==
-X-Received: by 2002:a17:906:f20a:b0:6ef:b9a3:3ca9 with SMTP id
- gt10-20020a170906f20a00b006efb9a33ca9mr8675904ejb.693.1650400859669; 
- Tue, 19 Apr 2022 13:40:59 -0700 (PDT)
+ bh=lJJMx8LkZmFNYeFSAqhR0M8Nj2IKscTHgqzNSPhqpr8=;
+ b=YcAaG1HBmK8Q+muXOS9WBTve6z9NdH1QCPt/8k9d4UVHB4lgPszLHUtzpCj6XiFtU/
+ TDRgVpAiXmSMHZluYk4BrStgIo2Y0GRGrmwgSReog601pl2Y6qtK5LRxJwZCYLsnLqRh
+ iMQb/90ay1kVSOpW+MfI2URJFGvCvE1GuUlq/t5wEPyP1xlmMxi5vR932OseIDAtpU/a
+ N50mbHbd6ThpTKwXfxiSCtbgMHjNkfBmbemIfKaVHjP/8S+q1qe+g3rc04uD1J1VKVSt
+ Z8AlV9plescpEV4umIhFvXaK5ooE7w4KtqusyPp4KL9VhX0CW72Rqbh6e+M7oqLNZqiN
+ 6TzQ==
+X-Gm-Message-State: AOAM533VReq2w2by9iuPe/9YV83nn5LyLPOjvF4dN0Z+dYdBUe2z/D5+
+ MXn2Yl2b1ofk/5DWkr194yd380WOagrW8g==
+X-Google-Smtp-Source: ABdhPJxchLEgbZUDooYd52arsInXHg+gR2vT1LKMSw+cUn/fND1eX+HZzXmEuOETjCZ8lFfCsshkMg==
+X-Received: by 2002:a17:907:6e88:b0:6da:8f01:7a8f with SMTP id
+ sh8-20020a1709076e8800b006da8f017a8fmr15010552ejc.619.1650401284885; 
+ Tue, 19 Apr 2022 13:48:04 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- r3-20020aa7cb83000000b0041b573e2654sm8898931edt.94.2022.04.19.13.40.58
+ g11-20020a1709061e0b00b006eff90d9c18sm106250ejj.92.2022.04.19.13.48.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 19 Apr 2022 13:40:59 -0700 (PDT)
-Message-ID: <b1139dc5-9d2f-50bf-2aa4-006117da4cc3@mind.be>
-Date: Tue, 19 Apr 2022 22:40:58 +0200
+ Tue, 19 Apr 2022 13:48:04 -0700 (PDT)
+Message-ID: <cbe24936-565a-09fb-d649-1e4b28cf2078@mind.be>
+Date: Tue, 19 Apr 2022 22:48:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220414203059.1818820-1-fontaine.fabrice@gmail.com>
+To: Francis Laniel <flaniel@linux.microsoft.com>, buildroot@buildroot.org,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220416210750.3065016-1-fontaine.fabrice@gmail.com>
+ <4391488.LvFx2qVVIh@pwmachine>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220414203059.1818820-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/php-apcu: needs threads
+In-Reply-To: <4391488.LvFx2qVVIh@pwmachine>
+Subject: Re: [Buildroot] [PATCH 1/2] package/tbb: bump to version 2021.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,53 +95,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?Herv=c3=a9_Codina?= <herve.codina@bootlin.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 14/04/2022 22:30, Fabrice Fontaine wrote:
-> php-apcu needs threads since its addition in commit
-> 8ddeeffa186d8bce875ac713c1e71483c618842a:
-> 
-> In file included from /home/buildroot/autobuild/instance-3/output-1/build/php-apcu-5.1.20/apc_lock.c:20:
-> /home/buildroot/autobuild/instance-3/output-1/build/php-apcu-5.1.20/apc_lock.h:41:11: fatal error: pthread.h: No such file or directory
->     41 | # include "pthread.h"
->        |           ^~~~~~~~~~~
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/314405423aeece5ee55d76ec5c4fa1919e7ee853
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/php-apcu/Config.in | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/php-apcu/Config.in b/package/php-apcu/Config.in
-> index 6338980222..f8e1eb17bb 100644
-> --- a/package/php-apcu/Config.in
-> +++ b/package/php-apcu/Config.in
-> @@ -1,6 +1,10 @@
->   config BR2_PACKAGE_PHP_APCU
->   	bool "php-apcu"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->   	help
->   	  APCu is an in-memory key-value store for PHP.
->   
->   	  https://pecl.php.net/package/APCu
-> +
-> +comment "php-apcu needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxOS8wNC8yMDIyIDE4OjMyLCBGcmFuY2lzIExhbmllbCB3cm90ZToKPiBIaS4KPiAKPiBM
+ZSBzYW1lZGkgMTYgYXZyaWwgMjAyMiwgMjI6MDc6NDkgQlNUIEZhYnJpY2UgRm9udGFpbmUgYSDD
+qWNyaXQgOgo+PiAtIFN3aXRjaCB0byBjbWFrZS1wYWNrYWdlCj4+IC0gRHJvcCBET19JVFRfTk9U
+SUZZIHdoaWNoIGlzIG9ubHkgdXNlZCBpbiBleGFtcGxlIGFuZCB0ZXN0Cj4+IC0gbGljZW5zZSBm
+aWxlIGhhcyBiZWVuIHJlbmFtZWQgdG8gTElDRU5TRS50eHQKPj4gLSBBZGQgdXBzdHJlYW0gcGF0
+Y2hlcyB0byBmaXggbXVzbCBidWlsZAo+Pgo+PiBodHRwczovL3d3dy5pbnRlbC5jb20vY29udGVu
+dC93d3cvdXMvZW4vZGV2ZWxvcGVyL2FydGljbGVzL3JlbGVhc2Utbm90ZXMvaW50Cj4+IGVsLW9u
+ZWFwaS10aHJlYWRpbmctYnVpbGRpbmctYmxvY2tzLXJlbGVhc2Utbm90ZXMuaHRtbAo+Pgo+PiBT
+aWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNv
+bT4KCiAgQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCltzbmlwXQo+IAo+IEkgdGVzdGVkIHlv
+dXIgcGF0Y2ggYW5kIGl0IGJ1aWxkcyBzdWNjZXNmdWxseSBhbmQgc3lzZGlnICgwLjI3LjEpIGlz
+IHN0aWxsCj4gcnVubmluZyBsaWtlIGEgY2hhcm0uCgogIFBsZWFzZSBmb3JtYWxseSBkZWNsYXJl
+IHdoZW4geW91IHJldmlld2VkIG9yIHRlc3RlZCBhIHBhdGNoLCBlLmcuCgpSZXZpZXdlZC1ieTog
+RnJhbmNpcyBMYW5pZWwgPGZsYW5pZWxAbGludXgubWljcm9zb2Z0LmNvbT4KVGVzdGVkLWJ5OiBG
+cmFuY2lzIExhbmllbCA8ZmxhbmllbEBsaW51eC5taWNyb3NvZnQuY29tPgoKVGhpcyBnZXRzIHBp
+Y2tlZCB1cCBieSBwYXRjaHdvcmsgYW5kIHRlbGxzIHVzIGl0J3MgYSBwYXRjaCB3ZSBzaG91bGQg
+cHJpb3JpdGl6ZSAKKHNpbmNlIHNvbWVvbmUgZWxzZSBhbHJlYWR5IGxvb2tlZCBhdCBpdCwgd2Ug
+ZG9uJ3QgbmVlZCB0byByZXZpZXcgaXQgaW4gZGV0YWlsIAphbnkgbW9yZSkuCgoKICAoQWxzbywg
+aWYgeW91IHB1dCB0ZXh0IGJlbG93IGEgdmVyeSBsb25nIHBpZWNlIG9mIHF1b3RlZCB0ZXh0LCBp
+dCdzIG5pY2UgdG8gCnJlbW92ZSBwYXJ0IG9mIHRoZSBxdW90ZWQgdGV4dCBzbyB0aGUgcmVhZGVy
+IGRvZXNuJ3QgbmVlZCB0byBzY3JvbGwgYXMgbXVjaC4pCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+
+IFNvLCB0aGFuayB5b3UgZm9yIHRoZSBidW1waW5nIChJIHNob3VsZCBoYXZlIGRvIGl0Li4uKSBh
+bmQgdGhlIHNpbXBsaWZpY2F0aW9uCj4gb2YgdGJiLm1rLgo+IAo+IAo+IEJlc3QgcmVnYXJkcy4K
+PiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
