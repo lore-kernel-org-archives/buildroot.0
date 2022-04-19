@@ -1,67 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69A58C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 12:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64375C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 13:30:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06B2F418B7;
-	Tue, 19 Apr 2022 12:35:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D57A8329E;
+	Tue, 19 Apr 2022 13:30:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id up6G8qjud4yA; Tue, 19 Apr 2022 12:35:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LTe9rtMT9KrS; Tue, 19 Apr 2022 13:30:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDA064167C;
-	Tue, 19 Apr 2022 12:35:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B21FD8322E;
+	Tue, 19 Apr 2022 13:30:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A3551BF288
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:35:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A3D971BF42C
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 13:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 76D1E40C64
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 12:35:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FECE410A6
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 13:30:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=othermo.de
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kZRePRnuVJct for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 12:35:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org [195.10.208.52])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 691CA40125
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 12:35:25 +0000 (UTC)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org
- [IPv6:2001:67c:2050:105:465:1:1:0])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4KjNYh6bk9z9sld
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 14:35:20 +0200 (CEST)
-Message-ID: <8e960e59-65c7-22eb-eccf-7217ec6b09e8@othermo.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=othermo.de; s=MBO0001; 
- t=1650371718;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=cXTCzndctt5r84fn8hieGjYcVZDTn1ggZ20uZ4wKr4I=;
- b=uxaE7B5xidEQMvnlMK1GMOH4mU5ZXJNc/NuB3VLy1kgHjCeUGcCrEotHJqzh+RsBQicT7A
- dOj5JsAXFrDsJRePvLPITVYXVm/OGW2y/JS7bC8eAXMYBmht13rICDRLty21vUZBxj84t0
- DlECqjq6Cx2JNg/Rx5CN4yv/zMRaNc14QFkBzxxTibTINOqPi2xyrDnh3WpncZhufDW2HI
- U2k+XV+7X6UhWOoBdpH6p5u/xQOmHPnEu9qXbROf57x+YIgURw0JUaJAMH7NwF15y/Ircg
- eUulgydoip9eIyzZvmpz7UZBQ9hhzQA75B1uMoboCbMEPN+8m1pVVDgvjXlqxw==
-Date: Tue, 19 Apr 2022 14:35:13 +0200
-MIME-Version: 1.0
-Content-Language: en-US
+ with ESMTP id XZ_WLs1NPA91 for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 13:30:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8C79940C81
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 13:30:09 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ u17-20020a05600c211100b0038eaf4cdaaeso1581361wml.1
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 06:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CIIdSzayDLJTp6kvLXHaYH3BM3rY7WR36nptwb0dszs=;
+ b=AwhCsFtOeNIsC0dgEfsvLfVF/4zeaxY7Cgjcb15qKv27JZ23pMuwmbDJUpNfd2BlGT
+ wOfTS/lr6nCwGeYDeWh8Bw6cokSVGd0jEabzXohfgmya/aG+Uuwol64ipUbuGEuJrD8s
+ rgtVkuTF+tKlyUzGTgEwdvMKH9Rz+NiLBkdkyzpYQfCaKMjHtlM/z5P9Vo0EHh2IreSq
+ pwCdG6xS2xp2Y/VhIGRspW4EoZrOzyyO3mFrnXGBN5Mq55uBNgNYklUFImSKmQlUYxRG
+ muFnHL7n9YYbrDXDmbbUBJVnCD+Zo4exPP9mO5V7WCl92zdsagIlfgzrbetQn2DqongE
+ PdOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CIIdSzayDLJTp6kvLXHaYH3BM3rY7WR36nptwb0dszs=;
+ b=iLPIJk9lHrlejd1Ao7lxKnUL1f+gJ3HjuA/cHMaAGvJQf+RRcRoPk3F7Z3HWtGscrz
+ MV6XjMDqDKgcQFw7UybXtbPiDoKPYGF5MXEQAOqzkXynBjWtQ7nP6fWFFYU43G25NtWf
+ +TRWKmUWfjhBxsFl2/b5vQztzBz+8nfrmuSSOczeSxUUOWB5BBcJI+GK3QkujuhVGWT1
+ kc0SRsCs1MYdb7LIGo8/gn1q/nd4tXMV0NVQu7zuXJ9JFy1edsVCS3YfRB1ge6BzR+Cq
+ TdyLFznqztblX19VjKIzGbjPRdhdkq9If6/ZYgkYi8111s7nVqX0c4htfNO++nCrKVzg
+ dfdw==
+X-Gm-Message-State: AOAM530qOYw0UfTFxWjlRS/BZA7sK2775qsh1JSiF2hWnl90tyC7TfWq
+ rvq3i8QA6KQZj4dKyYMrbhUsHFXGnOM=
+X-Google-Smtp-Source: ABdhPJxrsjXydSzQ6473SjQzrFgJxAyoq7bvHkeavgFv/WDeqJ9dToGM74SHbY7GfRaQbsaD+nrQcA==
+X-Received: by 2002:a05:600c:1e85:b0:391:ca59:76be with SMTP id
+ be5-20020a05600c1e8500b00391ca5976bemr18577813wmb.184.1650375007290; 
+ Tue, 19 Apr 2022 06:30:07 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ l14-20020adffe8e000000b00207af9cdd90sm12392801wrr.39.2022.04.19.06.30.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 19 Apr 2022 06:30:06 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-References: <20220419113409.1008586-1-peter@korsgaard.com>
-From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-In-Reply-To: <20220419113409.1008586-1-peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH] package/xz: add upstream security fix for
- CVE-2022-1271 / ZDI-CAN-16587
+Date: Tue, 19 Apr 2022 15:28:04 +0200
+Message-Id: <20220419132805.2571073-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/netsurf: fix build with
+ BR2_OPTIMIZE_FAST
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,59 +89,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19.04.22 13:34, Peter Korsgaard wrote:
-> Fixes the following security issue:
-> 
-> - CVE-2022-1271: Malicious filenames can make xzgrep to write to arbitrary
->    files or (with a GNU sed extension) lead to arbitrary code execution.
-> 
-> For more details, see the announcement and advisory:
-> 
-> https://www.mail-archive.com/xz-devel@tukaani.org/msg00551.html
-> https://www.zerodayinitiative.com/advisories/ZDI-22-619/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Disable duktape with BR2_OPTIMIZE_FAST to fix the following build
+failure:
 
-Ah, that's better than my attempt :-).
+In file included from content/handlers/javascript/duktape/duktape.h:195,
+                 from build/Linux-framebuffer/duktape/application_cache.c:21:
+content/handlers/javascript/duktape/duk_config.h:2861:2: error: #error __FAST_MATH__ defined, refusing to compile
+ 2861 | #error __FAST_MATH__ defined, refusing to compile
+      |  ^~~~~
 
-Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/2f1b42e2be3aa76cbacd84f3d0ad8b13edce6982
 
-> ---
->   package/xz/xz.hash | 1 +
->   package/xz/xz.mk   | 4 ++++
->   2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-> index 3dd0cbe459..9577e98e80 100644
-> --- a/package/xz/xz.hash
-> +++ b/package/xz/xz.hash
-> @@ -1,5 +1,6 @@
->   # Locally calculated after checking pgp signature
->   sha256  5117f930900b341493827d63aa910ff5e011e0b994197c3b71c08a20228a42df  xz-5.2.5.tar.bz2
-> +sha256  98c6cb1042284fe704ec30083f3fc87364ce9ed2ea51f62bbb0ee9d3448717ec  xzgrep-ZDI-CAN-16587.patch
->   
->   # Hash for license files
->   sha256  bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
-> diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-> index af611975a0..cdb01e06a9 100644
-> --- a/package/xz/xz.mk
-> +++ b/package/xz/xz.mk
-> @@ -13,6 +13,10 @@ XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
->   XZ_LICENSE_FILES = COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
->   XZ_CPE_ID_VENDOR = tukaani
->   
-> +XZ_PATCH = xzgrep-ZDI-CAN-16587.patch
-> +# xzgrep-ZDI-CAN-16587.patch
-> +XZ_IGNORE_CVES += CVE-2022-1271
-> +
->   ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->   XZ_CONF_OPTS += --enable-threads
->   else
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/netsurf/netsurf.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index 1064698c12..574c1423df 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -14,6 +14,17 @@ NETSURF_CPE_ID_VENDOR = netsurf-browser
+ NETSURF_DEPENDENCIES = expat jpeg libpng \
+ 	host-bison host-flex host-gperf host-pkgconf host-vim
+ 
++# internal duktape doesn't build with BR2_OPTIMIZE_FAST
++ifeq ($(BR2_OPTIMIZE_FAST),y)
++define NETSURF_DUKTAPE_CONFIGURE_CMDS
++	echo "override NETSURF_USE_DUKTAPE := NO"       >> $(@D)/netsurf/Makefile.config
++endef
++else
++define NETSURF_DUKTAPE_CONFIGURE_CMDS
++	echo "override NETSURF_USE_DUKTAPE := YES"      >> $(@D)/netsurf/Makefile.config
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_NETSURF_GTK),y)
+ NETSURF_DEPENDENCIES += libgtk2
+ NETSURF_FRONTEND = gtk2
+@@ -77,6 +88,7 @@ endef
+ endif
+ 
+ define NETSURF_CONFIGURE_CMDS
++	$(NETSURF_DUKTAPE_CONFIGURE_CMDS)
+ 	$(NETSURF_ICONV_CONFIGURE_CMDS)
+ 	$(NETSURF_SVG_CONFIGURE_CMDS)
+ 	$(NETSURF_FONTLIB_CONFIGURE_CMDS)
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
