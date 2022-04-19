@@ -1,46 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F360EC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 20:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05B27C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Apr 2022 20:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 921FF8339C;
-	Tue, 19 Apr 2022 20:48:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jp35hRt4L6ZT; Tue, 19 Apr 2022 20:48:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 626C883131;
-	Tue, 19 Apr 2022 20:48:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 178E41BF860
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:48:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04A1E41769
- for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:48:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 809074184E;
+	Tue, 19 Apr 2022 20:54:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7h2FSFbMS2x9 for <buildroot@lists.busybox.net>;
- Tue, 19 Apr 2022 20:48:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CC3B4176D
- for <buildroot@buildroot.org>; Tue, 19 Apr 2022 20:48:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D13AC81423; Tue, 19 Apr 2022 20:38:12 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 19 Apr 2022 22:42:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4bd5fc000bec111820f6caea0c9dc02a3f068c94
-X-Git-Newrev: 3c66ac07a0783b21f95e699b3762edd15e27bdf9
-X-Patchwork-Hint: ignore
-Message-Id: <20220419203812.D13AC81423@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tbb: bump to version 2021.5.0
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qx28f6RptTDa; Tue, 19 Apr 2022 20:54:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01AD241836;
+	Tue, 19 Apr 2022 20:54:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 59FA51BF860
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:54:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 450F9408EF
+ for <buildroot@lists.busybox.net>; Tue, 19 Apr 2022 20:54:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PqxGfOs5FMin for <buildroot@lists.busybox.net>;
+ Tue, 19 Apr 2022 20:54:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0D89C40142
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 20:54:46 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id t11so35321463eju.13
+ for <buildroot@buildroot.org>; Tue, 19 Apr 2022 13:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=00dV2eSjWR25aADBSYFLqCxTV6Uwb5bbqTMLgsIuFKU=;
+ b=drNt65iGfR5LSkSBlSXMMGfciiDxKp3Xzed5TqwC4JD+f40SvVU9vnb89swwf/Kgzu
+ uj5P45NMZbvCHf/QuL+A9g6tIZ4aq6rv4mYfMgScA0jBsql582pPYMstlYIvWFwMxVlT
+ ywdMwe9e3oU3LEqRT6O4niPlLVabz9ql9CH8izEoWJzUwb9ZGMzRBmKDlt3HvGHWWA8l
+ 0tnUAnYZDIxtXo+LCMt4paPtmEW/awRXbg0mH1CusyN1Eh+ThMLoV0YNNksvsXiqhNPP
+ Mc7ilKUmqEBPKbRsLx+AvxHxjkzk4jaYVxcfXnvXfXqxr7py5bhWwxmybzmdkZU9Qjlr
+ aAeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=00dV2eSjWR25aADBSYFLqCxTV6Uwb5bbqTMLgsIuFKU=;
+ b=e803mcZF465PRXFy4f5l+WOKCu6SisFceIonrkOnEhdmydKbIDLBGRVKElGXxjw12v
+ yvuSYffuPmIJ2hWoUzHzQqr8fZbJT8tboUoCgYhOJhe2xaOZEotW6P5QkmR44LkpBxa4
+ JyLzuc7bWtWfthteu8T+8uPvUFnXv/UtGFeoxnoIE7Xce8jveGtegr6vf8n2K3rnkVVg
+ gBosvJMruYNC0jBQ1k5l3u5ZAclriGWPe1SK3H9pm0/8oSKjoUsuy0EscxdB8Ap/VY8U
+ c6aQCKyOCyf9RnRxVpiFcKy4tbnDB4o8Pw9jpWisulnHrdmHYZNunkusCe8WfB0MBfWS
+ OhnA==
+X-Gm-Message-State: AOAM530xb5f1MRYRhlAdojR4GpIeKewGf0Bi7hDxWXD9XwG/DNp11kJ6
+ vRQ1HfFEMHmtaXLsGGXkx7ShBqcOUHw32A==
+X-Google-Smtp-Source: ABdhPJzmP01izmZkExYSnCwB/KwlsX2CblYTtwjVkUgJhe02OWQgsomKi2q05wL9jTd6L4xzr4yWQQ==
+X-Received: by 2002:a17:907:7e8c:b0:6e8:92df:1656 with SMTP id
+ qb12-20020a1709077e8c00b006e892df1656mr16213693ejc.386.1650401684938; 
+ Tue, 19 Apr 2022 13:54:44 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ cb7-20020a170906a44700b006e879b4ba2dsm5971126ejb.56.2022.04.19.13.54.42
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 19 Apr 2022 13:54:44 -0700 (PDT)
+Message-ID: <afc126a1-3afc-44e8-710c-69e9be5dd1ed@mind.be>
+Date: Tue, 19 Apr 2022 22:54:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20220419073954.537319-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220419073954.537319-1-peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/openjdk{-bin}: security bump
+ 11.x to version 11.0.14.1+1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,236 +96,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Christian Ambach <ambi@samba.org>, Tudor Holton <buildroot@tudorholton.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c66ac07a0783b21f95e699b3762edd15e27bdf9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to cmake-package
-- Drop DO_ITT_NOTIFY which is only used in example and test
-- license file has been renamed to LICENSE.txt
-- Add upstream patches to fix musl build
 
-https://www.intel.com/content/www/us/en/developer/articles/release-notes/intel-oneapi-threading-building-blocks-release-notes.html
+On 19/04/2022 09:39, Peter Korsgaard wrote:
+> Fixes the following security issues:
+> 
+>    - JDK-8217375: jarsigner breaks old signature with long lines in manifest
+>    - JDK-8251329: (zipfs) Files.walkFileTree walks infinitely if zip has dir named "." inside
+>    - JDK-8264934, CVE-2022-21248: Enhance cross VM serialization
+>    - JDK-8268488: More valuable DerValues
+>    - JDK-8268494: Better inlining of inlined interfaces
+>    - JDK-8268512: More content for ContentInfo
+>    - JDK-8268795: Enhance digests of Jar files
+>    - JDK-8268801: Improve PKCS attribute handling
+>    - JDK-8268813, CVE-2022-21283: Better String matching
+>    - JDK-8269151: Better construction of EncryptedPrivateKeyInfo
+>    - JDK-8269944: Better HTTP transport redux
+>    - JDK-8270386, CVE-2022-21291: Better verification of scan methods
+>    - JDK-8270392, CVE-2022-21293: Improve String constructions
+>    - JDK-8270416, CVE-2022-21294: Enhance construction of Identity maps
+>    - JDK-8270492, CVE-2022-21282: Better resolution of URIs
+>    - JDK-8270498, CVE-2022-21296: Improve SAX Parser configuration management
+>    - JDK-8270646, CVE-2022-21299: Improved scanning of XML entities
+>    - JDK-8270952, CVE-2022-21277: Improve TIFF file handling
+>    - JDK-8271962: Better TrueType font loading
+>    - JDK-8271968: Better canonical naming
+>    - JDK-8271987: Manifest improved manifest entries
+>    - JDK-8272014, CVE-2022-21305: Better array indexing
+>    - JDK-8272026, CVE-2022-21340: Verify Jar Verification
+>    - JDK-8272236, CVE-2022-21341: Improve serial forms for transport
+>    - JDK-8272272: Enhance jcmd communication
+>    - JDK-8272462: Enhance image handling
+>    - JDK-8273290: Enhance sound handling
+>    - JDK-8273756, CVE-2022-21360: Enhance BMP image support
+>    - JDK-8273838, CVE-2022-21365: Enhanced BMP processing
+>    - JDK-8274096, CVE-2022-21366: Improve decoding of image files
+>    - JDK-8279541: Improve HarfBuzz
+> 
+> For more details, see the announcement:
+> 
+> https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-January/011643.html
+> https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-February/012348.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/sysdig/Config.in                           |  2 +-
- ...0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch | 33 ++++++++++++++
- ...info-is-only-defined-on-glibc-and-android.patch | 42 ++++++++++++++++++
- package/tbb/Config.in                              | 12 ++++--
- package/tbb/tbb.hash                               |  4 +-
- package/tbb/tbb.mk                                 | 50 +++-------------------
- 6 files changed, 94 insertions(+), 49 deletions(-)
+  Applied to master, thanks.
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 3a4c033b2b..c124054105 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, jq, protobuf, tbb
- 	depends on !BR2_STATIC_LIBS # elfutils, protobuf, tbb
- 	depends on BR2_USE_WCHAR # elfutils
--	depends on BR2_TOOLCHAIN_USES_GLIBC # elfutils, tbb
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_ELFUTILS
-diff --git a/package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch b/package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch
-new file mode 100644
-index 0000000000..82182ce109
---- /dev/null
-+++ b/package/tbb/0001-Musl-linux-can-not-use-RTLD_DEEPBIND.patch
-@@ -0,0 +1,33 @@
-+From 883c2e5245c39624b3b5d6d56d5b203cf09eac38 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Wed, 15 Dec 2021 08:08:07 -0800
-+Subject: [PATCH] Musl/linux can not use RTLD_DEEPBIND (#684)
-+
-+Exclude non-glibc linux systems along with android
-+Fixes
-+src/tbb/dynamic_link.cpp:417:29: error: use
-+ of undeclared identifier 'RTLD_DEEPBIND'                                                                                    |             flags = flags | RTLD_DEEPBIND;
-+|                             ^
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+[Retrieved from:
-+https://github.com/oneapi-src/oneTBB/commit/883c2e5245c39624b3b5d6d56d5b203cf09eac38]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/tbb/dynamic_link.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/tbb/dynamic_link.cpp b/src/tbb/dynamic_link.cpp
-+index 3f1342503..5330d7107 100644
-+--- a/src/tbb/dynamic_link.cpp
-++++ b/src/tbb/dynamic_link.cpp
-+@@ -413,7 +413,7 @@ namespace r1 {
-+         int flags = RTLD_NOW;
-+         if (local_binding) {
-+             flags = flags | RTLD_LOCAL;
-+-#if __linux__ && !__ANDROID__ && !__TBB_USE_SANITIZERS
-++#if (__linux__ && __GLIBC__) && !__TBB_USE_SANITIZERS
-+             flags = flags | RTLD_DEEPBIND;
-+ #endif
-+         } else {
-diff --git a/package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch b/package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch
-new file mode 100644
-index 0000000000..9b397cac41
---- /dev/null
-+++ b/package/tbb/0002-mallinfo-is-only-defined-on-glibc-and-android.patch
-@@ -0,0 +1,42 @@
-+From 3a7f96db56cc9821055cbc769d3065db86b8b4c9 Mon Sep 17 00:00:00 2001
-+From: Julien Voisin <jvoisin@users.noreply.github.com>
-+Date: Mon, 7 Feb 2022 07:56:15 +0100
-+Subject: [PATCH] mallinfo is only defined on glibc and android (#764)
-+
-+It currently prevents compilation under musl:
-+
-+```
-+[ 90%] Building CXX object src/tbbmalloc_proxy/CMakeFiles/tbbmalloc_proxy.dir/proxy.cpp.o
-+/__w/mimalloc-bench/mimalloc-bench/extern/tbb/src/tbbmalloc_proxy/proxy.cpp:263:26: error: return type 'struct mallinfo' is incomplete
-+  263 | struct mallinfo mallinfo() __THROW
-+      |                          ^
-+compilation terminated due to -Wfatal-errors.
-+``
-+
-+[Retrieved from:
-+https://github.com/oneapi-src/oneTBB/commit/3a7f96db56cc9821055cbc769d3065db86b8b4c9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/tbbmalloc_proxy/proxy.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/tbbmalloc_proxy/proxy.cpp b/src/tbbmalloc_proxy/proxy.cpp
-+index e58e55e0b..23b9c19c1 100644
-+--- a/src/tbbmalloc_proxy/proxy.cpp
-++++ b/src/tbbmalloc_proxy/proxy.cpp
-+@@ -260,6 +260,7 @@ int mallopt(int /*param*/, int /*value*/) __THROW
-+     return 1;
-+ }
-+ 
-++#if defined(__GLIBC__) || defined(__ANDROID__)
-+ struct mallinfo mallinfo() __THROW
-+ {
-+     struct mallinfo m;
-+@@ -267,6 +268,7 @@ struct mallinfo mallinfo() __THROW
-+ 
-+     return m;
-+ }
-++#endif
-+ 
-+ #if __ANDROID__
-+ // Android doesn't have malloc_usable_size, provide it to be compatible
-diff --git a/package/tbb/Config.in b/package/tbb/Config.in
-index 0f40b74d31..b2e97829b5 100644
---- a/package/tbb/Config.in
-+++ b/package/tbb/Config.in
-@@ -1,9 +1,11 @@
- config BR2_PACKAGE_TBB
- 	bool "tbb"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# tbb needs fenv.h which is not provided by uclibc
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	help
- 	  Intel(R) Threading Building Blocks (Intel(R) TBB) lets you
- 	  easily write parallel C++ programs that take full advantage
-@@ -12,5 +14,9 @@ config BR2_PACKAGE_TBB
- 
- 	  https://www.threadingbuildingblocks.org/
- 
--comment "tbb needs a glibc toolchain w/ dynamic library, threads, C++"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+comment "tbb needs a glibc or musl toolchain w/ dynamic library, threads, C++"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+
-+comment "tbb needs exception_ptr"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
-index 81d224b3ca..9992fb3c4f 100644
---- a/package/tbb/tbb.hash
-+++ b/package/tbb/tbb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b8dbab5aea2b70cf07844f86fa413e549e099aa3205b6a04059ca92ead93a372  tbb-2018_U5.tar.gz
--sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-+sha256  e5b57537c741400cf6134b428fc1689a649d7d38d9bb9c1b6d64f092ea28178a  tbb-2021.5.0.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
-index 87e83551fe..afe756a85a 100644
---- a/package/tbb/tbb.mk
-+++ b/package/tbb/tbb.mk
-@@ -4,52 +4,16 @@
- #
- ################################################################################
- 
--TBB_VERSION = 2018_U5
--TBB_SITE = $(call github,01org,tbb,$(TBB_VERSION))
-+TBB_VERSION = 2021.5.0
-+TBB_SITE = $(call github,01org,tbb,v$(TBB_VERSION))
- TBB_INSTALL_STAGING = YES
- TBB_LICENSE = Apache-2.0
--TBB_LICENSE_FILES = LICENSE
-+TBB_LICENSE_FILES = LICENSE.txt
- TBB_CPE_ID_VENDOR = intel
- TBB_CPE_ID_PRODUCT = threading_building_blocks
- 
--TBB_SO_VERSION = 2
--TBB_LIBS = libtbb libtbbmalloc libtbbmalloc_proxy
--TBB_BIN_PATH = $(@D)/build/linux_*
-+TBB_CONF_OPTS = \
-+	-DTBB_STRICT=OFF \
-+	-DTBB_TEST=OFF
- 
--# arch is normally set based on uname -m with some conversions. However,
--# it is not really used for much:
--# - to decide between 32 or 64-bit files (based on '64' in the name)
--# - to decide on some arch-specific CFLAGS like -m32, which we don't actually want
--# - to set DO_ITT_NOTIFY if it's x86 (32 or 64 bit)
--# - to include assembler source, but it only exists for ia64
--# The only thing we actually want from the above is the 32/64-bit, and
--# DO_ITT_NOTIFY. Therefore, set arch to a fixed value which is unknown to
--# the tbb build system, and set DO_ITT_NOTIFY explicitly.
--TBB_ARCH = $(if $(BR2_ARCH_IS_64),buildroot64,buildroot32)
--TBB_ITT_NOTIFY = $(if $(BR2_i386)$(BR2_x86_64),-DDO_ITT_NOTIFY)
--TBB_CXXFLAGS = $(TARGET_CXXFLAGS) $(TBB_ITT_NOTIFY)
--
--define TBB_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) arch=$(TBB_ARCH) \
--		CPLUS="$(TARGET_CXX)" CONLY="$(TARGET_CC)" CXXFLAGS="$(TBB_CXXFLAGS)"
--endef
--
--define TBB_INSTALL_LIBS
--	$(foreach lib,$(TBB_LIBS),
--		$(INSTALL) -D -m 0755 $(TBB_BIN_PATH)/$(lib).so.$(TBB_SO_VERSION) \
--			$(1)/usr/lib/$(lib).so.$(TBB_SO_VERSION) ;
--		ln -sf $(lib).so.$(TBB_SO_VERSION) $(1)/usr/lib/$(lib).so
--	)
--endef
--
--define TBB_INSTALL_STAGING_CMDS
--	mkdir -p $(STAGING_DIR)/usr/include/
--	cp -a $(@D)/include/* $(STAGING_DIR)/usr/include/
--	$(call TBB_INSTALL_LIBS,$(STAGING_DIR))
--endef
--
--define TBB_INSTALL_TARGET_CMDS
--	$(call TBB_INSTALL_LIBS,$(TARGET_DIR))
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+  This also invalidates [1], care to send an update of it?
+
+  Regards,
+  Arnout
+
+[1] 
+https://patchwork.ozlabs.org/project/buildroot/patch/20220411070454.77482-1-ambi@samba.org/
+
+
+
+> ---
+>   package/openjdk-bin/openjdk-bin.hash | 2 +-
+>   package/openjdk-bin/openjdk-bin.mk   | 2 +-
+>   package/openjdk/openjdk.hash         | 2 +-
+>   package/openjdk/openjdk.mk           | 2 +-
+>   4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+> index bbc939d4e8..082da7bf87 100644
+> --- a/package/openjdk-bin/openjdk-bin.hash
+> +++ b/package/openjdk-bin/openjdk-bin.hash
+> @@ -2,7 +2,7 @@
+>   sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
+>   
+>   # From https://github.com/adoptium/temurin11-binaries/releases
+> -sha256  3b1c0c34be4c894e64135a454f2d5aaa4bd10aea04ec2fa0c0efe6bb26528e30  OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
+> +sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+>   
+>   # Locally calculated
+>   sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+> diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+> index 266c93d363..c9ddc9f69f 100644
+> --- a/package/openjdk-bin/openjdk-bin.mk
+> +++ b/package/openjdk-bin/openjdk-bin.mk
+> @@ -9,7 +9,7 @@ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+>   HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
+>   else
+>   HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+> -HOST_OPENJDK_BIN_VERSION_MINOR = 0.13_8
+> +HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
+>   endif
+>   HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
+>   HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+> diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+> index 2f46b044ad..f8a4f15260 100644
+> --- a/package/openjdk/openjdk.hash
+> +++ b/package/openjdk/openjdk.hash
+> @@ -1,4 +1,4 @@
+>   # Locally computed
+>   sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
+> -sha256  119c6233fe7ff5670c590e2f9d6686ac4d80c97b17065506998b75c547b54f2c  openjdk-11.0.13+8.tar.gz
+> +sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
+>   sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+> index 5fccdaa7ac..94b8cba577 100644
+> --- a/package/openjdk/openjdk.mk
+> +++ b/package/openjdk/openjdk.mk
+> @@ -9,7 +9,7 @@ OPENJDK_VERSION_MAJOR = 17
+>   OPENJDK_VERSION_MINOR = 0.1+12
+>   else
+>   OPENJDK_VERSION_MAJOR = 11
+> -OPENJDK_VERSION_MINOR = 0.13+8
+> +OPENJDK_VERSION_MINOR = 0.14.1+1
+>   endif
+>   OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+>   OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
