@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D2D8C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 20:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F26B2C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 20:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 088D441934;
-	Wed, 20 Apr 2022 20:42:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cf6AFy0UnADi; Wed, 20 Apr 2022 20:42:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC1E741889;
-	Wed, 20 Apr 2022 20:42:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11D971BF2A5
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0EE4C82CFA
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9D6282D75;
+	Wed, 20 Apr 2022 20:42:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 01nA-ZGrTEUm for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BkOxYwKD2iXT; Wed, 20 Apr 2022 20:42:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9634C82CD4;
+	Wed, 20 Apr 2022 20:42:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EF6F1C1135
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C28B40584
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TV2LdXNg_yUO for <buildroot@lists.busybox.net>;
  Wed, 20 Apr 2022 20:42:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6241F82C33
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BD064010C
  for <buildroot@buildroot.org>; Wed, 20 Apr 2022 20:42:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 6AF4183F54; Wed, 20 Apr 2022 20:32:11 +0000 (UTC)
+ id 757BB83F55; Wed, 20 Apr 2022 20:32:11 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 22:37:01 +0200
+Date: Wed, 20 Apr 2022 22:37:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbc318be1721990784497821dc4ecc7aea8c848e
-X-Git-Newrev: 3f18f7f2d9e44d3d62582d9db32d909cb8074881
+X-Git-Oldrev: 3f18f7f2d9e44d3d62582d9db32d909cb8074881
+X-Git-Newrev: 4ce665083a2d81f3caf6d48dfc88c76c3fced06d
 X-Patchwork-Hint: ignore
-Message-Id: <20220420203211.6AF4183F54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-bidict: bump to version
- 0.22.0
+Message-Id: <20220420203211.757BB83F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-charset-normalizer: bump to
+ version 2.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f18f7f2d9e44d3d62582d9db32d909cb8074881
+commit: https://git.buildroot.net/buildroot/commit/?id=4ce665083a2d81f3caf6d48dfc88c76c3fced06d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to adding dates/author name:
-https://github.com/jab/bidict/commit/b5c9f346ce0e3450a9df41c8740c32ed8b62f7f3
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-bidict/python-bidict.hash | 6 +++---
- package/python-bidict/python-bidict.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-charset-normalizer/python-charset-normalizer.hash | 4 ++--
+ package/python-charset-normalizer/python-charset-normalizer.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-bidict/python-bidict.hash b/package/python-bidict/python-bidict.hash
-index 59229f96d9..fe9a94af53 100644
---- a/package/python-bidict/python-bidict.hash
-+++ b/package/python-bidict/python-bidict.hash
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.hash b/package/python-charset-normalizer/python-charset-normalizer.hash
+index 3c6e58a616..da540bbb8f 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.hash
++++ b/package/python-charset-normalizer/python-charset-normalizer.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bidict/json
--md5  d9342771969dd0d42092a669ed6f3241  bidict-0.21.3.tar.gz
--sha256  d50bd81fae75e34198ffc94979a0eb0939ff9adb3ef32bcc93a913d8b3e3ed1d  bidict-0.21.3.tar.gz
-+md5  da3d37ae93c740c191b5666918c3164f  bidict-0.22.0.tar.gz
-+sha256  5c826b3e15e97cc6e615de295756847c282a79b79c5430d3bfc909b1ac9f5bd8  bidict-0.22.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/charset-normalizer/json
+-md5  2abe3754fef25c99799a518cb83a81ae  charset-normalizer-2.0.11.tar.gz
+-sha256  98398a9d69ee80548c762ba991a4728bfc3836768ed226b3945908d1a688371c  charset-normalizer-2.0.11.tar.gz
++md5  f6664e0e90dbb3cc9cfc154a980f9864  charset-normalizer-2.0.12.tar.gz
++sha256  2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597  charset-normalizer-2.0.12.tar.gz
  # Locally computed sha256 checksums
--sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  LICENSE
-+sha256  be0487398bba08e7772b4077b637787b94973b53c44b3cbdd6c7dab10ed15035  LICENSE
-diff --git a/package/python-bidict/python-bidict.mk b/package/python-bidict/python-bidict.mk
-index c6b7b862ea..7ba15db605 100644
---- a/package/python-bidict/python-bidict.mk
-+++ b/package/python-bidict/python-bidict.mk
+ sha256  eb31a0c5a4fb09b8a4e32055d25c1e5f9c358a2752fef3cd720213d1ccfee241  LICENSE
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index c37b068b36..0742fac639 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BIDICT_VERSION = 0.21.3
-+PYTHON_BIDICT_VERSION = 0.22.0
- PYTHON_BIDICT_SOURCE = bidict-$(PYTHON_BIDICT_VERSION).tar.gz
--PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/3f/81/7221b28d692af5c5fc180c4850b8e4a48c7db92b3d529b430488f67db74f
-+PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/2b/84/159749556b9c49ea4489dadeb94d44f05d6033d1db3af4c83120ecac5b15
- PYTHON_BIDICT_SETUP_TYPE = setuptools
- PYTHON_BIDICT_LICENSE = MPL-2.0
- PYTHON_BIDICT_LICENSE_FILES = LICENSE
+-PYTHON_CHARSET_NORMALIZER_VERSION = 2.0.11
++PYTHON_CHARSET_NORMALIZER_VERSION = 2.0.12
+ PYTHON_CHARSET_NORMALIZER_SOURCE = charset-normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
+-PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/e8/e8/b6cfd28fb430b2ec9923ad0147025bf8bbdf304b1eb3039b69f1ce44ed6e
++PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/56/31/7bcaf657fafb3c6db8c787a865434290b726653c912085fbd371e9b92e1c
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
