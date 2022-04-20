@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6053CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 18:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89532C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 18:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EB1F60E15;
-	Wed, 20 Apr 2022 18:36:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B9C4410E8;
+	Wed, 20 Apr 2022 18:42:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PD3L-N0qbQct; Wed, 20 Apr 2022 18:36:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XvP_EE7dSwMv; Wed, 20 Apr 2022 18:42:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F39760C09;
-	Wed, 20 Apr 2022 18:36:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 13B1E1BF3B0
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:36:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26020404F9;
+	Wed, 20 Apr 2022 18:42:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B030C1BF3B0
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 022D160C09
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:36:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D76A404F9
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:42:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o0VflIhzz0r9 for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 18:36:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C1x9co-_IN3R for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 18:42:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7C0EA60BF2
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 18:36:49 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id e1so1567171ile.2
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:36:49 -0700 (PDT)
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C4B7F40119
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 18:42:19 +0000 (UTC)
+Received: by mail-oi1-x22c.google.com with SMTP id q129so3071599oif.4
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=3iY2NgE/K8ukpAtWnHPQ+g80TC1/df6VwAy8hRwCW+0=;
- b=nfRJ8/fxrpBoJ2szNubz8Ko5ZVZ1h2v/7YObHzo8rt14ePmuvzBm77hViEoX2GCymB
- Ba2oPQD94kRl51Qij+wMwa4/p2/DvFac1FDV0EBT/wCBrijPIP8y2UT3DOxd+wBNf+ux
- 6oxd/rir4O+qFsCozPprvzYpzWDsvL2AsE9L7SQJw6Ae6PJrgVtBYsDUIIJSs7YQWWfv
- VqNMsBdrHVdMaWMfbb2KEUW1e/c2bsM9ffw7dEekojHtjsGJLL9lY9S0bWorna8KhdfB
- fKkJ2xOLwZ0hai9b/7n2Hy9dOEkar1EDwuwbrEvv0JlfYqauDYLsFc2/yKZN26xC5oX+
- QPWw==
+ bh=GFLRWsgdCJalzD1g3t4xNkaxn2T5v8Njfvd7kouDm6Y=;
+ b=I63luBpdrv3//q9wrtQJvrkeMnJU3ajJJ8yBKi6mEMPwg/vBALbRNLk2rY7Kkgqzhw
+ skO1mh1b/YHSZ+ebsR/1fAYWjouDqEruUmKaHti1ZjIArJU7HwnSEY/1qWD23gObd3SI
+ U5Zgfl+RYE1uJDhQUMwsll5pFe+xeylqzMnSZsXT0vfdIn5S9j7M7Z38bRaUYdYpddkY
+ Z/INLRYMoBEwtYIXNmJ9nvq7O5ezgVmG3YdMFZhtR23Hua4iWC0j4Qc7J2GeWRViz+/6
+ 4CNc8yhYBMAmtefiNLwwHAHs5jF+TIuqTSrDx/9jKWZnTfa28lDT7x9FB7tqNUZRGapb
+ s6sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=3iY2NgE/K8ukpAtWnHPQ+g80TC1/df6VwAy8hRwCW+0=;
- b=lp+Kh4uPuYuWhlgFXP5YgMilzE+T5iWroYukUaCHFgtRmrncVTPu0Wu0jRRQpKmZBY
- rnlWkbGv4Yj5LrdctWd+B4YOmCxF0gha77F/diSRjENqBmNIDqT+EcFnjHuvkvQIw26v
- XD1knujeQHNZCU+wPnBc0GZw3KTP4CaF7RT5EMqJB+5uFUrYVZBAQ0RtCnVdD+xMbh1E
- jxCoK2queujazJ5Rhjx1thzodcJhhUpgdWbeK1Afq5r85vEP17o3avFre4trgUQI3GOD
- inyGaxLWCyDNlVw+GFxHd+C2nNAOh0VhzpTFZ9AKsJJrSUnapDFuDtVMZl+t2J9bFPXb
- 9bsA==
-X-Gm-Message-State: AOAM531ut1MaSLYxUwW9tntY1Nn/tQ3pjwR0Fsvcl0IB2SYvrOw+nImk
- wLvY9C7BzmMkowf2cgTkvphbn6P0jXSv5g==
-X-Google-Smtp-Source: ABdhPJyE8bCJgRACvH+9VxkyH69zjzuVjYrA714JUDpNwODeFRQ8n5ibBBmY0DuoRUDuZMHqZl50JQ==
-X-Received: by 2002:a92:da49:0:b0:2ca:9242:42bf with SMTP id
- p9-20020a92da49000000b002ca924242bfmr9520726ilq.265.1650479808446; 
- Wed, 20 Apr 2022 11:36:48 -0700 (PDT)
+ bh=GFLRWsgdCJalzD1g3t4xNkaxn2T5v8Njfvd7kouDm6Y=;
+ b=RD4btEjrkVcSfOiML5HMZsiq45Ru+ubcFQLY9gC3WqC4xcmPgqhv6U3Hp0F70o2Eed
+ AKEY/TEbr7/w2coYsHCLppIctk95JiLHhnVUUWSLIUSeOWoW00F+NGUfyOjMlzHsYvJW
+ +XN7ImD+dJfSYcsiFYcR6/IWM+8JwFQYCKeP6HkqqsSP3Bo34+VhZMQDviDafuom92O4
+ c6kLEEoDXs47UHiMQRKtJWJ6ZIlI0xcnv4PbBfuZpQqjVsbBhRht9r6IZRSAhPgU2PBi
+ NhMQp5q+hw1NgpKVRbP1sVeMo1aQVUMpXklIy6dPreYUisd+8+Vrqo07Bt7kz614h3ao
+ DlSA==
+X-Gm-Message-State: AOAM53056jL+cU1DfNNE67/py+H/EWh23vu4ldYnisyzyHjw0A3+c4WJ
+ RJSCIHcHZYtQwXs9RXIRsHw2inHuS8lxvA==
+X-Google-Smtp-Source: ABdhPJxVPK3/bsPT1Y6lK3l1skoThWH8ryUJs8zYoLef0x0Hb9nucoETKyYQ9AMpYQI6XijABsrZFg==
+X-Received: by 2002:a05:6808:309a:b0:2f9:eced:3857 with SMTP id
+ bl26-20020a056808309a00b002f9eced3857mr2341783oib.176.1650480138596; 
+ Wed, 20 Apr 2022 11:42:18 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- n12-20020a92dd0c000000b002cac22690b6sm10786745ilm.0.2022.04.20.11.36.47
+ z5-20020a0568301da500b006054fd8c847sm3022132oti.11.2022.04.20.11.42.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Apr 2022 11:36:47 -0700 (PDT)
+ Wed, 20 Apr 2022 11:42:18 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 12:36:46 -0600
-Message-Id: <20220420183646.774923-1-james.hilliard1@gmail.com>
+Date: Wed, 20 Apr 2022 12:42:16 -0600
+Message-Id: <20220420184216.777380-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-weasyprint: bump to version
- 54.3
+Subject: [Buildroot] [PATCH 1/1] package/python-zopfli: bump to version 0.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,38 +92,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-weasyprint/python-weasyprint.hash | 4 ++--
- package/python-weasyprint/python-weasyprint.mk   | 4 ++--
+ package/python-zopfli/python-zopfli.hash | 4 ++--
+ package/python-zopfli/python-zopfli.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
-index 90ccc1d057..3ad59b6abb 100644
---- a/package/python-weasyprint/python-weasyprint.hash
-+++ b/package/python-weasyprint/python-weasyprint.hash
+diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
+index 92b51bdf18..969ed97992 100644
+--- a/package/python-zopfli/python-zopfli.hash
++++ b/package/python-zopfli/python-zopfli.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/weasyprint/json
--md5  3917447c277db6931b8370f1d725db49  weasyprint-54.2.tar.gz
--sha256  d5e8aa82e3e2a2477a4543f0646d9fb14080c9ba34a0859751eb23757cc00466  weasyprint-54.2.tar.gz
-+md5  262af43e54ad89ecd0e304bad799c47c  weasyprint-54.3.tar.gz
-+sha256  e04da040630566c44caa202033f07f858765f536709045a809739f3d048e89d6  weasyprint-54.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/zopfli/json
+-md5  f66b6f4132533b9b0ab8b0af757237bf  zopfli-0.1.9.zip
+-sha256  78de3cc08a8efaa8013d61528907d91ac4d6cc014ffd8a41cc10ee75e9e60d7b  zopfli-0.1.9.zip
++md5  505ea595d86b8a7fec55620c839a4859  zopfli-0.2.1.zip
++sha256  e5263d2806e2c1ccb23f52b2972a235d31d42f22f3fa3032cc9aded51e9bf2c6  zopfli-0.2.1.zip
  # Locally computed sha256 checksums
- sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
-diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
-index 925de855bc..f36e5b51d1 100644
---- a/package/python-weasyprint/python-weasyprint.mk
-+++ b/package/python-weasyprint/python-weasyprint.mk
+ sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
+diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
+index 95a0067b05..689634fefa 100644
+--- a/package/python-zopfli/python-zopfli.mk
++++ b/package/python-zopfli/python-zopfli.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEASYPRINT_VERSION = 54.2
-+PYTHON_WEASYPRINT_VERSION = 54.3
- PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
--PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/f3/dc/d3d6f1d87a0a0b09637a1f5076790e229cc803c3584ed4edb76553844001
-+PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/e3/ba/d3453a6024e56a789ec9099a770c08b9998f8a60bf9b6375d9e76d67101a
- PYTHON_WEASYPRINT_SETUP_TYPE = flit
- PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
- PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+-PYTHON_ZOPFLI_VERSION = 0.1.9
++PYTHON_ZOPFLI_VERSION = 0.2.1
+ PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
+-PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/10/7d/278fd896401b0ef76e06cd42c3ce1541572d83b1c713b6786795c60a1bbe
++PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/91/25/ba6f370e18359292f05ca4df93642eb7d1c424721ef61f61b8610a63d0c5
+ PYTHON_ZOPFLI_SETUP_TYPE = setuptools
+ PYTHON_ZOPFLI_LICENSE = Apache-2.0
+ PYTHON_ZOPFLI_LICENSE_FILES = COPYING
 -- 
 2.25.1
 
