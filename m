@@ -4,78 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64EBAC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 07:26:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E329C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 07:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3A3C410D5;
-	Wed, 20 Apr 2022 07:26:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB9CF410E7;
+	Wed, 20 Apr 2022 07:26:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5jlH9GqcuhZ3; Wed, 20 Apr 2022 07:26:24 +0000 (UTC)
+	with ESMTP id WmKn8-oA9tW3; Wed, 20 Apr 2022 07:26:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A33F410C8;
-	Wed, 20 Apr 2022 07:26:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07601410E4;
+	Wed, 20 Apr 2022 07:26:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C3D21BF38A
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 07:26:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 58F1F1BF38A
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 07:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AF4A840CE
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 07:26:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47777840CE
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 07:26:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gyXdunJInKuy for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 07:26:21 +0000 (UTC)
+ with ESMTP id CemfaCNlGcbw for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 07:26:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 320F782ADD
- for <buildroot@busybox.net>; Wed, 20 Apr 2022 07:26:21 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id q20so582016wmq.1
- for <buildroot@busybox.net>; Wed, 20 Apr 2022 00:26:21 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 94D7882ADD
+ for <buildroot@busybox.net>; Wed, 20 Apr 2022 07:26:36 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id e21so951932wrc.8
+ for <buildroot@busybox.net>; Wed, 20 Apr 2022 00:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=w4kftYxMshUXFoqjJqXZTokdLjKhynL93OjiF4UsCrs=;
- b=IIKdsn+9DiurfgaoOnKotLJSJlBFZrfEuCZUkIErHyoNJhATBwXMREVJ41S/Y80RsR
- edEvM+r+RS3hwXrJlCxZW9L5Yeif51MQAWeCmb2GVZRwoObo+6RjQWenOvSdxr2KDSrJ
- uc9ykWmZc+PnbeMOX4Q2LoTTr2r6JSDaqcYp/U+8hzqJduTKf45AOwrrIwTNLSJW5m0H
- tRoO5RNJPMBGesor7gGeoNy2unbke7neaBMIU95Nccjyyz3CXMjbW06UftHPHl7y9vxo
- LvZNQ+RlgwlDc/ciApahBTuJd/YrlkwT7YJiHSLArO2cM4S7WN53q6NLq6jNg62smDAz
- YC7A==
+ bh=EoBxQledB46XRkEO/mRIBv04i7l3ZNaeIM3MBMgqlSQ=;
+ b=jwXd9ol66nv2VedkmkqjUuxOKZUjj9D42+El1Mpt8J2UlfOmnmRmM/Lw6haDQtZ7Z0
+ xv04XDavaGMyp+4EU8xysECW8ArtXwb9QpvjpUbmBPYUGuyfNH7fWM7BHqWkJRYGGVR7
+ sQgignHI5bB+tX8owf6T1e+y5va9BByoSG+63kV7fcywWVwm+g0EpanTW/Ao0c4ldrOp
+ 2FBLh/l4WxBrZO9oTkpXu9l7SBnsxyLIgmG58YKicJ5fqYDVDcbWPaf1zo/uLBTWyN0g
+ EHRnspc8iT3GsiSdaRR5soMxR22mszYbbB188KGhXHEFXzM8JeunfyTuKN15AYVUz+5g
+ rw0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=w4kftYxMshUXFoqjJqXZTokdLjKhynL93OjiF4UsCrs=;
- b=Gbz9c5fkjFFSomUAZNYEAdSrN62pk54942WQncK216i4UwaAFr9tVpuyiG/eiXdGB2
- 6TQCGm82jbAF45Ua12MPLmU7u9fcJDgyaFh7505DQ45sl6PXlW6/HO3ORQt5WXg7nAn+
- N1zcsi9oE7WrTEGxStOUsLvRa/xJ2O6i0w9BKRPpWgGFFIkXdFOuiEjLow535B/nfGT2
- L7+Em9NyH6MaJ5f1AWfZ8IMPJR0JIbUH5LjwB6FBQjo/E9si5g6YRjCe9JETmumGdayP
- tJBwbULraRUh2vSrZwlaO/H6Q7gmkw+5BhD9grIj8qaumnsH92fFuHL6AkUx4i44uJg6
- phxA==
-X-Gm-Message-State: AOAM533fiPg/Lyx5iGF73S0M5BTj9iMvaL1xpExjl6wVAzN/Y8WUcyaX
- W11aoUyso53eAofpXypqQES5mXKpVFA=
-X-Google-Smtp-Source: ABdhPJwhs8gasIcBk2XspE8z7x/RXD8kPNgbeOFiOu9tWfvYUw2FTqPdx1Ku7AzInwI84LhqrVaCxg==
-X-Received: by 2002:a05:600c:3ca4:b0:38e:54d0:406d with SMTP id
- bg36-20020a05600c3ca400b0038e54d0406dmr2176545wmb.199.1650439579443; 
- Wed, 20 Apr 2022 00:26:19 -0700 (PDT)
+ bh=EoBxQledB46XRkEO/mRIBv04i7l3ZNaeIM3MBMgqlSQ=;
+ b=CzD22XLtrcJ+yLr7iUnGwfST5gAlVDCy0tp1TOhQiyB3/F0suvr6o82/TMLmm6Be2x
+ vyNqSeSjsOjnjHOU+oi+LZSwNs4aK4PFMeq28suoIeWuc/8SBxUWxl0GHYz9QKbONnsy
+ oGP++bxGC1h6bA2JVTO3QhVWpFz8NBCWTd+3Y8OFwxgiKowuVE73tTjwe6u23tCq4M3R
+ 68dFDdgOpaVHYb3HdvVb759tGSJ73eWM9PBqubOthfyP35B+7UOvmkWJ49O5f1CgDijN
+ 0a3T9oNmCQBOHOXkqPPUsI/C9WblzgfRBw63mm7NYfwAx1D3SjKMQklzpOUe678lX7tQ
+ +ASQ==
+X-Gm-Message-State: AOAM531b859g9r+E/EZ1ydixlytIQie1tKNNv3feYwqVsUv97+DHJNl9
+ Xi3zBXs4Hw2IbL10w5ydsqo7gt6ZITY=
+X-Google-Smtp-Source: ABdhPJwZT55tcT1QZLr1cmvrjpJiIBB8mFc8NGc4AHpXK3TqqkGPgAzg2MeZOzxCT8y2JPs/bz2kGQ==
+X-Received: by 2002:a5d:5144:0:b0:207:9a13:ca73 with SMTP id
+ u4-20020a5d5144000000b002079a13ca73mr14577340wrt.268.1650439594892; 
+ Wed, 20 Apr 2022 00:26:34 -0700 (PDT)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- l28-20020a05600c1d1c00b0038ece66f1b0sm18724045wms.8.2022.04.20.00.26.18
+ r14-20020a5d6c6e000000b0020a9f757708sm5904766wrz.33.2022.04.20.00.26.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Apr 2022 00:26:19 -0700 (PDT)
+ Wed, 20 Apr 2022 00:26:34 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed, 20 Apr 2022 09:26:09 +0200
-Message-Id: <20220420072609.3422227-1-francois.perrad@gadz.org>
+Date: Wed, 20 Apr 2022 09:26:24 +0200
+Message-Id: <20220420072624.3422282-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libarchive: bump to version 3.6.1
+Subject: [Buildroot] [PATCH] package/luajit: bump to version
+ f2b37f51f69ba7e9f8defd05e5aca648121f0fe6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,35 +93,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+diff COPYRIGHT:
+-Copyright (C) 2005-2021 Mike Pall. All rights reserved.
++Copyright (C) 2005-2022 Mike Pall. All rights reserved.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/luajit/luajit.hash | 4 ++--
+ package/luajit/luajit.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 5dd8e5c16..ca580b497 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  5cac725dd4be31c4a10b65d30f29dc957ea29ef3d758df6e46e8ae90a996a19a  libarchive-3.5.3.tar.xz
-+sha256  5a411aceb978f43e626f0c2d1812ddd8807b645ed892453acabd532376c148e6  libarchive-3.6.1.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index cf16c27e6..865f605e2 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index d92eefb39..cfc00e852 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  7ea92e2414b6405c7fb3974ab092707c400a5496e8d4936174b5bd3aa6e94477  luajit-a91d0d9d3bba1a936669cfac3244509a0f2ac0e3.tar.gz
++sha256  e3f9c04e82d5c776335dfb4e53ec1532914ab010b60bffbb0176a8390f100666  luajit-f2b37f51f69ba7e9f8defd05e5aca648121f0fe6.tar.gz
+ 
+ # Locally calculated
+-sha256  43fc251179d900f9948e51dd3cc93733d1219f2db060faaa0c8100ad054f54d8  COPYRIGHT
++sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index cca806309..6155cbba8 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.5.3
-+LIBARCHIVE_VERSION = 3.6.1
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
+-LUAJIT_VERSION = a91d0d9d3bba1a936669cfac3244509a0f2ac0e3
++LUAJIT_VERSION = f2b37f51f69ba7e9f8defd05e5aca648121f0fe6
+ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
 -- 
 2.32.0
 
