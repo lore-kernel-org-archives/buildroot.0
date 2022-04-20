@@ -1,73 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5693AC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 11:24:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D466AC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 11:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6DA6830E6;
-	Wed, 20 Apr 2022 11:24:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 789FC419BD;
+	Wed, 20 Apr 2022 11:25:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3JZFYX2ZZGnZ; Wed, 20 Apr 2022 11:24:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lj2rC-tSQH_N; Wed, 20 Apr 2022 11:25:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2ED982443;
-	Wed, 20 Apr 2022 11:24:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F99A4195C;
+	Wed, 20 Apr 2022 11:25:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 537921BF5A3
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 11:24:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7CE3B1BF5A3
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 11:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41A1782443
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 11:24:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79BAD81A58
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 11:25:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y3-lnloCwXmv for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 11:24:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 90F3C823C6
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:24:43 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id k23so2885241ejd.3
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 04:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to
- :content-transfer-encoding;
- bh=3Llu98XqvkZ0uePvRemlk91DC4tKTSewTOoJ42Arw3I=;
- b=Uj/zd/DMSOFkxfJe2blHcz0XsM0kt/gGOJdfTXGDZxq8M9x678by58LIFF8iBHVTzM
- r+fqarXTCfY+6HCwpBv+fRsTTea+idYagFBIMwbgA2Af9zXeq61hoAIyBLYbbHvtYZJ0
- ZbaPIA7SEEO5Nw5QWus+fUvMeKAtLuf3lTPczs67Pja1/qz+f53DZeLqXCj6HM/v2yfE
- caWFE9ayY3/We0gRUfwj/ZWKa5LGaXIXXudw00eHzQhuW+FcsY0hsxCcVZJzAgH65Rcq
- oVKgd981dB7JwZVT4ZQYiy8r8ohzUOxWsyUayhjgHH3KQqYqr1lnKu5xbClO7GfXpxOA
- XkDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to
- :content-transfer-encoding;
- bh=3Llu98XqvkZ0uePvRemlk91DC4tKTSewTOoJ42Arw3I=;
- b=uJ74Xqj2mP53lW3cyDiPIqLV/KNp+OpE8yGqP0Ft/5NF0Y/uXiUJYnkx4fB7NQ+7Jv
- XetRSx7rjF9U5KXCbZiOvc/leBWLfmhXoIUrisV7itaU2HiRAyIYrSGT34hyzvSXgY92
- B4Hj6XHomGO5HGA+VVduKK/+IdFjf4uHjUq7o+u6XPl9stv5DhkknUjzWKeOqbBXtZ68
- V50dEvp7mcTw8b3SueGwSvqNd7qWJ10vGnak1XNAi58az/AbstAryG+xmKqXC0FuiG5i
- VXVEyOlK55XbGbaSmjMdEf+Uoe1XinTLprdmfVnv2ZqOGJQZvk+Mzn8IzFGE+Flz/4dK
- Eglw==
-X-Gm-Message-State: AOAM533CKavUQbWZScxHukTCQ/O9yUVRzZviH58inp9YbCiFBAIPsE5Q
- kjCljQgQ5oXpQsfR5ZwhRQT6G3yIh7rj79MV2/JslngKV5/imw==
-X-Google-Smtp-Source: ABdhPJwtxOucbpUUjiLyb533/2unMMo5HGsVi/ft10Sf5bE5FaskTqPlqM8abUUjcW6226mB5gA/9uBsMDcrQKFOEpU=
-X-Received: by 2002:a17:906:1692:b0:6e8:d245:44a9 with SMTP id
- s18-20020a170906169200b006e8d24544a9mr17835374ejd.639.1650453881218; Wed, 20
- Apr 2022 04:24:41 -0700 (PDT)
+ with ESMTP id osktWcOXx1sg for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 11:25:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 398B2823C6
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:25:50 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2DCCAC0002;
+ Wed, 20 Apr 2022 11:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650453948;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=zazNzwpnpYs5UE949qXjT4GINb88Jg87xFWT+5Wy/5U=;
+ b=ZVhEyYoqC11iS6Wb0c81ai2Djbz6TKg3Hf2slLkQzWWhZHqnFkl5NnPiXqnpihLza4itrZ
+ j55Sy3lL2GHQM+7ozfTxVn/wfO3Dsn1d/kgFEM6StzlXWX9XbzSMdr0egt6Vqb6RBv0gfs
+ F6N/TJPFz0O5lX9DFxH4fLxef4TuR0reH26N3C6RKfjy7gQ2p6wX72VDXjua6AHiNlAxOy
+ 5KpDDDr+qnfQUQtXUQuU6C3I15+dRTtTBYFcTQMIzxN5kHvSXi4Sgtx1zHmRAmvABvv3ch
+ E4K7NzE6zwjewVfG6vhM78mi43X7HtGJPWc7FN8zKVcjiryF4+kv87SuD26Sqw==
+Date: Wed, 20 Apr 2022 13:25:47 +0200
+To: Thomas Perrot <thomas.perrot@bootlin.com>
+Message-ID: <20220420132541.7aad1182@windsurf>
+In-Reply-To: <aa8ded3d92323550b31ac24dd2ad283d13307a0e.camel@bootlin.com>
+References: <20220419092151.91638-1-thomas.perrot@bootlin.com>
+ <20220419092151.91638-3-thomas.perrot@bootlin.com>
+ <20220419142635.008ac004@windsurf>
+ <aa8ded3d92323550b31ac24dd2ad283d13307a0e.camel@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-From: =?UTF-8?Q?Nuno_Gon=C3=A7alves?= <nunojpg@gmail.com>
-Date: Wed, 20 Apr 2022 12:24:30 +0100
-Message-ID: <CAEXMXLSfJb_POn6fxsg1Gwi7odHx0yj9LWN4XQ_mc9epsi=dsg@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: [Buildroot] [PATCH] package/gcc: don't install
- libstdc++.so.a.b.c-gdb.py
+Subject: Re: [Buildroot] [PATCH 2/2] package/imx-cst: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,24 +72,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bGlic3RkYysrLnNvLmEuYi5jLWdkYi5weSBpcyBub3QgcmVxdWlyZWQgYW5kIGluIGFueSBjYXNl
-IGl0IGlzIGN1cnJlbnRseQp1c2luZyBob3N0IHBhdGhzIGFuZCBzbyBub3QgZnVuY3Rpb25hbC4K
-ClNpZ25lZC1vZmYtYnk6IE51bm8gR29uw6dhbHZlcyA8bnVub2pwZ0BnbWFpbC5jb20+Ci0tLQog
-cGFja2FnZS9nY2MvZ2NjLWZpbmFsL2djYy1maW5hbC5tayB8IDEgKwogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9nY2MvZ2NjLWZpbmFsL2djYy1m
-aW5hbC5tawpiL3BhY2thZ2UvZ2NjL2djYy1maW5hbC9nY2MtZmluYWwubWsKaW5kZXggYWE4ODNi
-ZWI3Yi4uNTAxOGYzYTZjMSAxMDA2NDQKLS0tIGEvcGFja2FnZS9nY2MvZ2NjLWZpbmFsL2djYy1m
-aW5hbC5taworKysgYi9wYWNrYWdlL2djYy9nY2MtZmluYWwvZ2NjLWZpbmFsLm1rCkBAIC0xOTks
-NiArMTk5LDcgQEAgZW5kZWYKCiBpZmVxICgkKEJSMl9TVEFUSUNfTElCUyksKQogZGVmaW5lIEhP
-U1RfR0NDX0ZJTkFMX0lOU1RBTExfU0hBUkVEX0xJQlMKKyBybSAtZiAkKEhPU1RfR0NDX0ZJTkFM
-X0dDQ19MSUJfRElSKS9saWJzdGRjKysuc28qLWdkYi5weSA7IFwKICBmb3IgaSBpbiAkKEhPU1Rf
-R0NDX0ZJTkFMX1VTUl9MSUJTKSA7IGRvIFwKICBjcCAtZHBmICQoSE9TVF9HQ0NfRklOQUxfR0ND
-X0xJQl9ESVIpLyQke2l9LnNvKiBcCiAgJChTVEFHSU5HX0RJUikvdXNyL2xpYi8gOyBcCi0tIAoy
-LjMyLjAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello,
+
+On Wed, 20 Apr 2022 10:39:16 +0200
+Thomas Perrot <thomas.perrot@bootlin.com> wrote:
+
+> > What is this location? Just someone who put the NXP code online? Or a
+> > separate implementation?  
+> 
+> NXP code has been put by Debian maintainers.
+
+OK.
+
+> I think it is correct because from source the file
+> "Software_Content_Register_CST.txt" indicates that the outgoing license
+> is BSD-3-Clause, and Debian also use this BSD license.
+
+Indeed, it seems OK.
+
+Maybe it would have been useful to have those details somewhere (in the
+commit log perhaps)? But it's probably not worth sending another
+iteration just for this.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
