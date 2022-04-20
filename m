@@ -4,78 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D728EC433FE
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 19:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD17C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 19:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 631FA410F7;
-	Wed, 20 Apr 2022 19:50:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F5A3410FF;
+	Wed, 20 Apr 2022 19:59:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A4EBuRPUQU7Z; Wed, 20 Apr 2022 19:50:36 +0000 (UTC)
+	with ESMTP id VOjHTCULCaMr; Wed, 20 Apr 2022 19:59:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5664D4035D;
-	Wed, 20 Apr 2022 19:50:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C4EFD1BF418
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 19:50:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 431E7410FA;
+	Wed, 20 Apr 2022 19:59:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BCFDC1BF418
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 19:58:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C23BB60D68
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 19:50:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA62E41A00
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 19:58:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0hoBaPFd8fVF for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 19:50:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zG-qhr0P8p9F for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 19:58:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 087CF6009C
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 19:50:30 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id b5so1712298ile.0
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 12:50:30 -0700 (PDT)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 528B541896
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 19:58:58 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id p62so3101830iod.0
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 12:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FiB2hOh+1lsVvErSaag2HWoUgeQyxMSddjw8PfFGET0=;
- b=hIhoQ1EtbxEMPe0ZPx/mkutx5MZexyYVx8YHkDXxSadwyCC7Y5z7iZxKdIKuktAMd3
- UfP+U/hMZXD4wYaU+pWXog0AqrKU0RS0FA1fkdZlEo8S/vLsDfmj5WDzBVG6GgF6vGRX
- Yag+iuzkA2OKXtpKUUIswB/6eER46DBeLqZ2+QvupSLgFE0y0DtcYIn59KTSnjaXPu3i
- WGWsHVNACO9ehDFQWtvey3l/4ErExjsT+cnW051pXK/hUQBb+gNHRhNqqcaHUGmSh/lw
- nFrrSDZaph02cnZItlBrDlUt/UMvv3ciPipGD7sjx823OWuUeYsU+QQRmr4IByt/XhB3
- 0jcg==
+ bh=cPYUX6cFfM3LKgURIRB3ZSoxgk6u8NKlRQKR6ml2lOc=;
+ b=b2Lzcu2iQO++nwDzfbrcYZYvWxHYAkK2GYbJHlW6CJA0HJzzzun2eEnyXK9zxhv1aB
+ aQxWBrEtfGp+/BUDRd9qLQCpQ2TRDteTsURyRfmQY9M4G+EWYW3hRuLB4GlzeMH79m+q
+ PFjvwAtos7GYG5p0S3gDJ5/Mtqimum5U/+2c+hQrLBYu9PGaMxVi1EKl971HJAxCljLc
+ OFvWivTvsPjTfygSPcQaCYuzPB4Lv1t4o6AoR154ZtCCOkihS7+f2P0+3u5PoQnzVZZE
+ kcDtZt1h/ARq9EFwigmqG45Gjd7vgMqt7X1WIgKMo1ixUek2MPIVWY9vZsLq3uCP+SX3
+ okeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FiB2hOh+1lsVvErSaag2HWoUgeQyxMSddjw8PfFGET0=;
- b=7qynQnTFMZVa10N6rwfLqlr+SyCT4gWnxdZ7ZuoiZPTl0rega7/mXFANFoc5J3c2QS
- B5dIqxkXy56KgessEzl7C2AL6xVDvqzRHLePT9zEBIkIpZznZpR7oKHBX9CU2SGfyxPE
- pqojqaiszVpodFbQrPv4g5GydiPWCFDWmn27hpC9BGrKjd/WkJ7Cxbg47NehbjqAAJVl
- ZdXtmAN9c67ZmlqeC81vvZywzxtxeKg+sDSWgWbABG7X9nz56p7kMgqkB5BQZ7Z2NSyJ
- JyxDD4UXc/zRlvIk9fV4yjP9aHfPD6NsCaCU21Ijlbs5jz+lhEP3Y6TYOOXf5Nj5WmMi
- GlkQ==
-X-Gm-Message-State: AOAM531BzxV//kkTwTPguREvHxsP3ocR3YcvZdUk4vZLt4Vds5q34r+Z
- Frb24Bynoy8Ob1LVeIeLQeB5LbX406spsQ==
-X-Google-Smtp-Source: ABdhPJzJhSOLv+Eq9gRK3E8Vqjy4PWVzZhkb43CPCz+597x9KznK+XysRRhYyqQnMWAVQ1MWYKvfPg==
-X-Received: by 2002:a92:ae02:0:b0:2c6:798d:2be with SMTP id
- s2-20020a92ae02000000b002c6798d02bemr9055411ilh.18.1650484229622; 
- Wed, 20 Apr 2022 12:50:29 -0700 (PDT)
+ bh=cPYUX6cFfM3LKgURIRB3ZSoxgk6u8NKlRQKR6ml2lOc=;
+ b=IrYY5+8hX3qbyg0iip5JkZhv2S+JpxOWSKKj5LivvSk288CJj5hlv4dp9g2dW71xhc
+ CcLXRrA8PtoSsKVpZWmFivpfWICxMaW8yC7rwGDU0aQUGT8oMFVoozEwYMidtJ77RnVe
+ IfzoaOCP+DaXIHaR5I0vesSTXpLloAqEtzSRgJHwjUe3Mpm3Gv4lJ8c9SGbyOmQHsE1v
+ 3cJZ/oExz/V1HDtHhiOvrWyYHtBPs4/jgq04qgeafnvP7V9ZDP/3ye4WsLoyzRrx20ZJ
+ sQKawlisLS99eXzDUl6ozNTsjcskX5pTg7Mhefv9NgBZnnXum4/ayba0dmlyAjAJc4Bt
+ xIrg==
+X-Gm-Message-State: AOAM5338o2kSCB6MsT+e0CmhW2iSppq9EI7voDnE6qcNC63Ai0EZ4LMS
+ /U+n81ii6oRAJguYrOxdaz/q0d2e09IeVA==
+X-Google-Smtp-Source: ABdhPJwaQkW+qRRMHAKRn/8me8GQ5xu/TpD6EXv6RtIJxR4QI5uBBlCXfc1ifwUgENtdJTzAabkjaw==
+X-Received: by 2002:a05:6638:3790:b0:32a:8874:10b9 with SMTP id
+ w16-20020a056638379000b0032a887410b9mr2562506jal.17.1650484736980; 
+ Wed, 20 Apr 2022 12:58:56 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- b19-20020a5d8553000000b00649f02b1b0csm11932371ios.39.2022.04.20.12.50.29
+ k6-20020a6b4006000000b00649d7111ebasm11899109ioa.0.2022.04.20.12.58.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Apr 2022 12:50:29 -0700 (PDT)
+ Wed, 20 Apr 2022 12:58:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 13:50:27 -0600
-Message-Id: <20220420195027.883653-1-james.hilliard1@gmail.com>
+Date: Wed, 20 Apr 2022 13:58:43 -0600
+Message-Id: <20220420195843.896993-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-bsdiff4: bump to version
- 1.2.2
+Subject: [Buildroot] [PATCH 1/1] package/python-lxml: bump to version 4.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +92,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate build system from distutils to setuptools.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-bsdiff4/python-bsdiff4.hash | 6 +++---
- package/python-bsdiff4/python-bsdiff4.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-bsdiff4/python-bsdiff4.hash b/package/python-bsdiff4/python-bsdiff4.hash
-index 4fddd137e6..bb84bb09a5 100644
---- a/package/python-bsdiff4/python-bsdiff4.hash
-+++ b/package/python-bsdiff4/python-bsdiff4.hash
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index e33a8f8109..3600d7759a 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bsdiff4/json
--md5  58889a1cd439c82c78aa2e4776b1ff38  bsdiff4-1.2.1.tar.gz
--sha256  87cffc7522effdda03fd1564b212ad2279c0af50d16c3e65776f80acb6705d4b  bsdiff4-1.2.1.tar.gz
--# Locally computed sha256
-+md5  fc5ea1adfe629a7c7ac6f4bb1a0dca93  bsdiff4-1.2.2.tar.gz
-+sha256  1880ac3f52a6c46ae6bcc6db117e4fb35f9b0ccd5af75fd4fee6907d00d6983c  bsdiff4-1.2.2.tar.gz
-+# Locally computed sha256 checksums
- sha256  c6c921c90383f1c43beb53c49a652d28309a410a7c394c729fd8870271451cf0  LICENSE
-diff --git a/package/python-bsdiff4/python-bsdiff4.mk b/package/python-bsdiff4/python-bsdiff4.mk
-index e1c3f7765b..7a50e3379a 100644
---- a/package/python-bsdiff4/python-bsdiff4.mk
-+++ b/package/python-bsdiff4/python-bsdiff4.mk
-@@ -4,13 +4,13 @@
+ # Locally computed
+-sha256  6e84edecc3a82f90d44ddee2ee2a2630d4994b8471816e226d2b771cda7ac4ca  lxml-4.6.5.tar.gz
++sha256  f63f62fc60e6228a4ca9abae28228f35e1bd3ce675013d1dfb828688d50c6e23  lxml-4.8.0.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 8c2e965af6..90935a7ee1 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_BSDIFF4_VERSION = 1.2.1
-+PYTHON_BSDIFF4_VERSION = 1.2.2
- PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
--PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/d8/97/101315b0d8c8d6340ee310484a1af6a2ccf65d7bb4762c3a669cf9457c71
-+PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/34/e2/e28dd282974f919a6b9adb3b7e64bb1fa4390046706c3e58a60b94aeb497
- PYTHON_BSDIFF4_LICENSE = BSD-2-Clause, BSD-Protection (core.c)
- PYTHON_BSDIFF4_LICENSE_FILES = LICENSE
- PYTHON_BSDIFF4_CPE_ID_VENDOR = pypi
- PYTHON_BSDIFF4_CPE_ID_PRODUCT = bsdiff4
--PYTHON_BSDIFF4_SETUP_TYPE = distutils
-+PYTHON_BSDIFF4_SETUP_TYPE = setuptools
+-PYTHON_LXML_VERSION = 4.6.5
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/e6/e1/34b3ab08553fe9a30e15b2bb9d1803a49d7d907dd9f245638839190042f0
++PYTHON_LXML_VERSION = 4.8.0
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/3b/94/e2b1b3bad91d15526c7e38918795883cee18b93f6785ea8ecf13f8ffa01e
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
  
- $(eval $(python-package))
+ # Not including the GPL, because it is used only for the test scripts.
 -- 
 2.25.1
 
