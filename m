@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7C4FC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 20:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF940C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 20:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2F681C38;
-	Wed, 20 Apr 2022 20:44:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 993444189B;
+	Wed, 20 Apr 2022 20:44:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hhV_TR7VOuvE; Wed, 20 Apr 2022 20:44:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id phtB0OE5gLgt; Wed, 20 Apr 2022 20:44:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81F8B81B99;
-	Wed, 20 Apr 2022 20:44:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E30D41889;
+	Wed, 20 Apr 2022 20:44:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 912391C1135
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A37821BF2A5
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D47160E69
+ by smtp3.osuosl.org (Postfix) with ESMTP id 769B56114D
  for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 20:42:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ml-W7b6sQY93 for <buildroot@lists.busybox.net>;
+ with ESMTP id aB_1aEYWo8Ij for <buildroot@lists.busybox.net>;
  Wed, 20 Apr 2022 20:42:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB37561152
+ by smtp3.osuosl.org (Postfix) with ESMTP id B04A16115D
  for <buildroot@buildroot.org>; Wed, 20 Apr 2022 20:42:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id B658683F5A; Wed, 20 Apr 2022 20:32:11 +0000 (UTC)
+ id BF22B83F54; Wed, 20 Apr 2022 20:32:11 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 22:37:36 +0200
+Date: Wed, 20 Apr 2022 22:37:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: daf331b3afac908e0d7949e55659182810dbbf1c
-X-Git-Newrev: 19e0d88dca22c81fdbb08de405ce80f9e9f69ea0
+X-Git-Oldrev: 19e0d88dca22c81fdbb08de405ce80f9e9f69ea0
+X-Git-Newrev: 94a4e96553b195f3b1c3ec9d047b9b08ccc00a07
 X-Patchwork-Hint: ignore
-Message-Id: <20220420203211.B658683F5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-bsdiff4: bump to version
- 1.2.2
+Message-Id: <20220420203211.BF22B83F54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-lxml: bump to version 4.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19e0d88dca22c81fdbb08de405ce80f9e9f69ea0
+commit: https://git.buildroot.net/buildroot/commit/?id=94a4e96553b195f3b1c3ec9d047b9b08ccc00a07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Migrate build system from distutils to setuptools.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-bsdiff4/python-bsdiff4.hash | 6 +++---
- package/python-bsdiff4/python-bsdiff4.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-bsdiff4/python-bsdiff4.hash b/package/python-bsdiff4/python-bsdiff4.hash
-index 4fddd137e6..bb84bb09a5 100644
---- a/package/python-bsdiff4/python-bsdiff4.hash
-+++ b/package/python-bsdiff4/python-bsdiff4.hash
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index e33a8f8109..3600d7759a 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bsdiff4/json
--md5  58889a1cd439c82c78aa2e4776b1ff38  bsdiff4-1.2.1.tar.gz
--sha256  87cffc7522effdda03fd1564b212ad2279c0af50d16c3e65776f80acb6705d4b  bsdiff4-1.2.1.tar.gz
--# Locally computed sha256
-+md5  fc5ea1adfe629a7c7ac6f4bb1a0dca93  bsdiff4-1.2.2.tar.gz
-+sha256  1880ac3f52a6c46ae6bcc6db117e4fb35f9b0ccd5af75fd4fee6907d00d6983c  bsdiff4-1.2.2.tar.gz
-+# Locally computed sha256 checksums
- sha256  c6c921c90383f1c43beb53c49a652d28309a410a7c394c729fd8870271451cf0  LICENSE
-diff --git a/package/python-bsdiff4/python-bsdiff4.mk b/package/python-bsdiff4/python-bsdiff4.mk
-index e1c3f7765b..7a50e3379a 100644
---- a/package/python-bsdiff4/python-bsdiff4.mk
-+++ b/package/python-bsdiff4/python-bsdiff4.mk
-@@ -4,13 +4,13 @@
+ # Locally computed
+-sha256  6e84edecc3a82f90d44ddee2ee2a2630d4994b8471816e226d2b771cda7ac4ca  lxml-4.6.5.tar.gz
++sha256  f63f62fc60e6228a4ca9abae28228f35e1bd3ce675013d1dfb828688d50c6e23  lxml-4.8.0.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 8c2e965af6..90935a7ee1 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_BSDIFF4_VERSION = 1.2.1
-+PYTHON_BSDIFF4_VERSION = 1.2.2
- PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
--PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/d8/97/101315b0d8c8d6340ee310484a1af6a2ccf65d7bb4762c3a669cf9457c71
-+PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/34/e2/e28dd282974f919a6b9adb3b7e64bb1fa4390046706c3e58a60b94aeb497
- PYTHON_BSDIFF4_LICENSE = BSD-2-Clause, BSD-Protection (core.c)
- PYTHON_BSDIFF4_LICENSE_FILES = LICENSE
- PYTHON_BSDIFF4_CPE_ID_VENDOR = pypi
- PYTHON_BSDIFF4_CPE_ID_PRODUCT = bsdiff4
--PYTHON_BSDIFF4_SETUP_TYPE = distutils
-+PYTHON_BSDIFF4_SETUP_TYPE = setuptools
+-PYTHON_LXML_VERSION = 4.6.5
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/e6/e1/34b3ab08553fe9a30e15b2bb9d1803a49d7d907dd9f245638839190042f0
++PYTHON_LXML_VERSION = 4.8.0
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/3b/94/e2b1b3bad91d15526c7e38918795883cee18b93f6785ea8ecf13f8ffa01e
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
  
- $(eval $(python-package))
+ # Not including the GPL, because it is used only for the test scripts.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
