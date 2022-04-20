@@ -1,63 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6814DC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 09:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5693AC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 11:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F35CD6101A;
-	Wed, 20 Apr 2022 09:14:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6DA6830E6;
+	Wed, 20 Apr 2022 11:24:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HbvVWf-hUHM6; Wed, 20 Apr 2022 09:14:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3JZFYX2ZZGnZ; Wed, 20 Apr 2022 11:24:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF42460BD3;
-	Wed, 20 Apr 2022 09:14:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 971881BF29D
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 09:14:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2ED982443;
+	Wed, 20 Apr 2022 11:24:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 537921BF5A3
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 11:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 851EA41E44
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 09:14:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41A1782443
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 11:24:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=email.cz
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FvzneYre2QBr for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 09:13:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8E9F41E00
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 09:13:57 +0000 (UTC)
-Received: from email.seznam.cz
- by email-smtpc19b.ng.seznam.cz (email-smtpc19b.ng.seznam.cz [10.23.18.23])
- id 7f97f538ff709fa57de3cb56; Wed, 20 Apr 2022 11:13:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz; s=beta;
- t=1650446035; bh=XlWlUFJwiebG5aC3KvS0Fe2cO4GyVco1iNW5POA1Eq8=;
- h=Received:Date:From:To:Cc:Subject:Message-ID:References:
- MIME-Version:Content-Type:Content-Disposition:
- Content-Transfer-Encoding:In-Reply-To:X-szn-frgn:X-szn-frgc;
- b=Aq5Zy9W1xzLB6LSgtJv+3Sjr+fOPiI4fRBy1S+O+mz+Bd//ao89GrOv5ibnxyP9m9
- GuJo3e5/fhb2WxPjGhmtfds5vNYUgAAf9G/po5kYMKlE2C8X6oRfowga+rfswgVFfg
- CI/oOG/wzwLTldJRovyaDAX4hguYtwdG1X/9/pzw=
-Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
- by email-relay9.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
- Wed, 20 Apr 2022 11:13:50 +0200 (CEST)  
-Date: Wed, 20 Apr 2022 11:13:45 +0200
-From: Jan Havran <havran.jan@email.cz>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <Yl/OyX6uV/Fegje3@arch-zen.localdomain>
-References: <20220419161130.3431492-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y3-lnloCwXmv for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 11:24:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 90F3C823C6
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:24:43 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id k23so2885241ejd.3
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 04:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to
+ :content-transfer-encoding;
+ bh=3Llu98XqvkZ0uePvRemlk91DC4tKTSewTOoJ42Arw3I=;
+ b=Uj/zd/DMSOFkxfJe2blHcz0XsM0kt/gGOJdfTXGDZxq8M9x678by58LIFF8iBHVTzM
+ r+fqarXTCfY+6HCwpBv+fRsTTea+idYagFBIMwbgA2Af9zXeq61hoAIyBLYbbHvtYZJ0
+ ZbaPIA7SEEO5Nw5QWus+fUvMeKAtLuf3lTPczs67Pja1/qz+f53DZeLqXCj6HM/v2yfE
+ caWFE9ayY3/We0gRUfwj/ZWKa5LGaXIXXudw00eHzQhuW+FcsY0hsxCcVZJzAgH65Rcq
+ oVKgd981dB7JwZVT4ZQYiy8r8ohzUOxWsyUayhjgHH3KQqYqr1lnKu5xbClO7GfXpxOA
+ XkDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+ :content-transfer-encoding;
+ bh=3Llu98XqvkZ0uePvRemlk91DC4tKTSewTOoJ42Arw3I=;
+ b=uJ74Xqj2mP53lW3cyDiPIqLV/KNp+OpE8yGqP0Ft/5NF0Y/uXiUJYnkx4fB7NQ+7Jv
+ XetRSx7rjF9U5KXCbZiOvc/leBWLfmhXoIUrisV7itaU2HiRAyIYrSGT34hyzvSXgY92
+ B4Hj6XHomGO5HGA+VVduKK/+IdFjf4uHjUq7o+u6XPl9stv5DhkknUjzWKeOqbBXtZ68
+ V50dEvp7mcTw8b3SueGwSvqNd7qWJ10vGnak1XNAi58az/AbstAryG+xmKqXC0FuiG5i
+ VXVEyOlK55XbGbaSmjMdEf+Uoe1XinTLprdmfVnv2ZqOGJQZvk+Mzn8IzFGE+Flz/4dK
+ Eglw==
+X-Gm-Message-State: AOAM533CKavUQbWZScxHukTCQ/O9yUVRzZviH58inp9YbCiFBAIPsE5Q
+ kjCljQgQ5oXpQsfR5ZwhRQT6G3yIh7rj79MV2/JslngKV5/imw==
+X-Google-Smtp-Source: ABdhPJwtxOucbpUUjiLyb533/2unMMo5HGsVi/ft10Sf5bE5FaskTqPlqM8abUUjcW6226mB5gA/9uBsMDcrQKFOEpU=
+X-Received: by 2002:a17:906:1692:b0:6e8:d245:44a9 with SMTP id
+ s18-20020a170906169200b006e8d24544a9mr17835374ejd.639.1650453881218; Wed, 20
+ Apr 2022 04:24:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220419161130.3431492-1-fontaine.fabrice@gmail.com>
-X-szn-frgn: <8f514b2a-4215-4e5f-85a0-a5c31fc0cfa6>
-X-szn-frgc: <0>
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: untar internal bind
+From: =?UTF-8?Q?Nuno_Gon=C3=A7alves?= <nunojpg@gmail.com>
+Date: Wed, 20 Apr 2022 12:24:30 +0100
+Message-ID: <CAEXMXLSfJb_POn6fxsg1Gwi7odHx0yj9LWN4XQ_mc9epsi=dsg@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: [Buildroot] [PATCH] package/gcc: don't install
+ libstdc++.so.a.b.c-gdb.py
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,81 +79,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V=A0Tue, Apr 19, 2022 at 06:11:30PM +0200,=A0Fabrice Fontaine napsal(a):
-> Untar internal bind so libtool patches will be applied on bind's
-> libtool. This will fix:
->  - installation of some libraries such as libisccfg. Indeed, if libtool
->    is not patched those libraries will be "relinked" and so not
->    installed.
->  - build failures with riscv and or1k:
-> =
-
->   Invalid configuration `riscv64-buildroot-linux-musl': machine `riscv64-=
-buildroot' not recognized
-> =
-
->   Invalid configuration `or1k-buildroot-linux-uclibc': machine `or1k-buil=
-droot' not recognized
-> =
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/d25b76e628ffe5293c6bc1fd467a6b8=
-966cb1bc2
->  - http://autobuild.buildroot.org/results/ba3258d8df00a7626784189125f0202=
-fb161c40e
-> =
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-With this patch I no longer get following error and dhcp works for me:
-dhclient: error while loading shared libraries: libisccfg.so.163: cannot op=
-en shared object file: No such file or directory
-
-Tested on ARM/PineCube.
-
-Tested-by: Jan Havran <havran.jan@email.cz>
-
-> ---
->  package/dhcp/dhcp.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> =
-
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index e6f4c419f4..f815c6c802 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -14,6 +14,13 @@ DHCP_CPE_ID_VENDOR =3D isc
->  # internal bind does not support parallel builds.
->  DHCP_MAKE =3D $(MAKE1)
->  =
-
-> +# untar internal bind so libtool patches will be applied on bind's libto=
-ol
-> +define DHCP_UNTAR_INTERNAL_BIND
-> +	$(TAR) xf $(@D)/bind/bind.tar.gz -C $(@D)/bind/
-> +endef
-> +
-> +DHCP_POST_EXTRACT_HOOKS =3D DHCP_UNTAR_INTERNAL_BIND
-> +
->  # use libtool-enabled configure.ac
->  define DHCP_LIBTOOL_AUTORECONF
->  	cp $(@D)/configure.ac+lt $(@D)/configure.ac
-> -- =
-
-> 2.35.1
-> =
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+bGlic3RkYysrLnNvLmEuYi5jLWdkYi5weSBpcyBub3QgcmVxdWlyZWQgYW5kIGluIGFueSBjYXNl
+IGl0IGlzIGN1cnJlbnRseQp1c2luZyBob3N0IHBhdGhzIGFuZCBzbyBub3QgZnVuY3Rpb25hbC4K
+ClNpZ25lZC1vZmYtYnk6IE51bm8gR29uw6dhbHZlcyA8bnVub2pwZ0BnbWFpbC5jb20+Ci0tLQog
+cGFja2FnZS9nY2MvZ2NjLWZpbmFsL2djYy1maW5hbC5tayB8IDEgKwogMSBmaWxlIGNoYW5nZWQs
+IDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9nY2MvZ2NjLWZpbmFsL2djYy1m
+aW5hbC5tawpiL3BhY2thZ2UvZ2NjL2djYy1maW5hbC9nY2MtZmluYWwubWsKaW5kZXggYWE4ODNi
+ZWI3Yi4uNTAxOGYzYTZjMSAxMDA2NDQKLS0tIGEvcGFja2FnZS9nY2MvZ2NjLWZpbmFsL2djYy1m
+aW5hbC5taworKysgYi9wYWNrYWdlL2djYy9nY2MtZmluYWwvZ2NjLWZpbmFsLm1rCkBAIC0xOTks
+NiArMTk5LDcgQEAgZW5kZWYKCiBpZmVxICgkKEJSMl9TVEFUSUNfTElCUyksKQogZGVmaW5lIEhP
+U1RfR0NDX0ZJTkFMX0lOU1RBTExfU0hBUkVEX0xJQlMKKyBybSAtZiAkKEhPU1RfR0NDX0ZJTkFM
+X0dDQ19MSUJfRElSKS9saWJzdGRjKysuc28qLWdkYi5weSA7IFwKICBmb3IgaSBpbiAkKEhPU1Rf
+R0NDX0ZJTkFMX1VTUl9MSUJTKSA7IGRvIFwKICBjcCAtZHBmICQoSE9TVF9HQ0NfRklOQUxfR0ND
+X0xJQl9ESVIpLyQke2l9LnNvKiBcCiAgJChTVEFHSU5HX0RJUikvdXNyL2xpYi8gOyBcCi0tIAoy
+LjMyLjAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
