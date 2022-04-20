@@ -1,82 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2094C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 08:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1874C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 08:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64E31410D3;
-	Wed, 20 Apr 2022 08:21:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AF1142504;
+	Wed, 20 Apr 2022 08:39:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BqUHDtp9cFDP; Wed, 20 Apr 2022 08:21:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p40voD4xPXBP; Wed, 20 Apr 2022 08:39:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F77640936;
-	Wed, 20 Apr 2022 08:21:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B41A42506;
+	Wed, 20 Apr 2022 08:39:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6A0361BF319
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:21:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C502C1BF319
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:39:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 569B061047
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:21:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0DF860B1D
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:39:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8xkvAVbhn4ol for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 08:21:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0FAE6605A9
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 08:21:41 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id b19so1128667wrh.11
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 01:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OHDap1NfDg5Wz1xsg+qqJxPj4Na7dt1dVx1SQwrTZEU=;
- b=IPpuMnoGJTr6VgnwtcC2m9+yyQTXfmo138xjAt6+QraByafsKUaFVL5WDkH8XzoCNS
- PDo7LNRG/PatWy3D6tv3fmRDhZypCnukxjdrtsXvtb2fZNmJxFX5oKitHcNT91v9REmC
- sJTkHArXU7OSLZddjoz+Xi2bmGOesziXHVr7DPLWfQQmg/thEGhmfdmgyHoyICqYIB84
- EpJ2h7kSr0TKZXsgYBxRyC9NUhyV8c7eEhunAwHZ8fOIbur73rZGCcg2sKpWCPXksFh9
- EdHQLCF9nNRGXiNS+c5aU1ikU1GTQdSNrgig/95WzVrQjOm5C4ub+VzaFBrnD2AAS+eh
- paNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=OHDap1NfDg5Wz1xsg+qqJxPj4Na7dt1dVx1SQwrTZEU=;
- b=Cg9OC5aKO/Kj1gJuosD13f20I3MZ53RGZa2pN5uSrS7K2iAmXCXS9KQGUGZowFGebQ
- I9Hwwm65xURs7uu0STl0Jd4UtXRytcoZcK1h5zZYhNmjJPtRzw58X5xOJM50kjfUTRKE
- vc7f+5n/CJ9vwI4bkbWQrMpnhwy8gpPsrEwxxp0zEwvFb7WQsj/5nhZ9CvdPfHOHtaY+
- y52Yrc8ZOFA0Afo9n5ZswqryEWrT12+iVHs1JpgH5o16TvPAoS2NvNZmEng+kZa7oFMC
- COEvoUCef7xyhGAHapPFDDtLsDTmWrWUYI/OdMEkTO0VxMUsAiyMa703M+xnaoOGWBtI
- ELfA==
-X-Gm-Message-State: AOAM531W6QUchtnV8JsF+4IIACgspQ3CMyAJcbHDK8CCDgteoVqMCzUS
- 9kpt7AptFklqd7TvK5ZKlpTcs9A5vo0=
-X-Google-Smtp-Source: ABdhPJx6OpbCOLjGcCrgRpCpqi6uI77uviNtxdBjD9s4/6gD5XlJwWx5QlQKZAh45losI4gvPcT4fw==
-X-Received: by 2002:a5d:47aa:0:b0:20a:8b96:5b2c with SMTP id
- 10-20020a5d47aa000000b0020a8b965b2cmr13459657wrb.621.1650442899997; 
- Wed, 20 Apr 2022 01:21:39 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- n5-20020adf8b05000000b00207a4fd0185sm14610216wra.7.2022.04.20.01.21.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Apr 2022 01:21:39 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 10:19:39 +0200
-Message-Id: <20220420081939.295448-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id V0NgFCHleZKp for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 08:39:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 24DE560AAD
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 08:39:21 +0000 (UTC)
+Received: (Authenticated sender: thomas.perrot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E9EB7C000F;
+ Wed, 20 Apr 2022 08:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1650443957;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=bP+ztVzTXJKS1lFv97x6Fp14zLJ2q5lQbiS2g+vGJ68=;
+ b=cn3zRJ5NVoLgnzbarAd5Z9y2FP7lXtOo7K4ETeaN0/tA70JgOXNSvKGShNSz2L2FIhd+Jx
+ owqijJkgt/PXiAuOL/krblUbugPLSWGKv1FA2zwabQZ38NPQTG8ZyLgmSBHn0mD7kn9OmW
+ 3sbjnX+q6Ucelf1CrMJMPblYm+aLGgCJog7WKvZxy3vubzV4G3SBiJoT8MTwAsjx+b4180
+ QwDTmYT2S5tO5ZSf3slpObgSEy2VCbL9MrzYFIgmOYxZGh5/xhyvaZyZ3xebcTQeOzbwQU
+ r3eJ5TI3gVZxxT21SLT6qbATku2V3h36eADY+kDDlG5mBMEABTN4liqHvwfhqA==
+Message-ID: <aa8ded3d92323550b31ac24dd2ad283d13307a0e.camel@bootlin.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 20 Apr 2022 10:39:16 +0200
+In-Reply-To: <20220419142635.008ac004@windsurf>
+References: <20220419092151.91638-1-thomas.perrot@bootlin.com>
+ <20220419092151.91638-3-thomas.perrot@bootlin.com>
+ <20220419142635.008ac004@windsurf>
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: all features needs dynamic
- library
+Subject: Re: [Buildroot] [PATCH 2/2] package/imx-cst: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,100 +69,192 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>,
- Sergio Prado <sergio.prado@e-labworks.com>,
- Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Perrot via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perrot <thomas.perrot@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============5112392564265823643=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add dynamic library dependency to BR2_PACKAGE_WOLFSSL_ALL to fix the
-following static build failure with ibrdtnd, a "wolfssl all"-enabled
-libcurl and openssl:
 
-/nvmedata/autobuild/instance-5/output-1/per-package/ibrdtnd/host/opt/ext-toolchain/bin/../lib/gcc/sh4aeb-buildroot-linux-musl/11.2.0/../../../../sh4aeb-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-5/output-1/per-package/ibrdtnd/host/bin/../sh4aeb-buildroot-linux-musl/sysroot/usr/lib/libssl.a(ssl_ciph.o): in function `SSL_COMP_get_compression_methods':
-ssl_ciph.c:(.text+0x25ac): multiple definition of `SSL_COMP_get_compression_methods'; /nvmedata/autobuild/instance-5/output-1/per-package/ibrdtnd/host/sh4aeb-buildroot-linux-musl/sysroot/usr/lib/libwolfssl.a(libwolfssl_la-ssl.o):ssl.c:(.text+0x1ca60): first defined here
+--===============5112392564265823643==
+Content-Type: multipart/signed; micalg="pgp-sha256";
+	protocol="application/pgp-signature"; boundary="=-CEcTArhAaVkPdTyjutIO"
 
-Fixes:
- - http://autobuild.buildroot.org/results/be1d327ed4c91a6280a88906a399dfe146f0b64e
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcurl/Config.in      | 5 +++++
- package/libuhttpd/Config.in    | 3 ++-
- package/libuhttpd/libuhttpd.mk | 2 +-
- package/wolfssl/Config.in      | 4 ++++
- 4 files changed, 12 insertions(+), 2 deletions(-)
+--=-CEcTArhAaVkPdTyjutIO
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index f2ddce6e81..84ad18211a 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -78,8 +78,13 @@ config BR2_PACKAGE_LIBCURL_MBEDTLS
- config BR2_PACKAGE_LIBCURL_WOLFSSL
- 	bool "WolfSSL"
- 	depends on BR2_PACKAGE_WOLFSSL
-+	depends on !BR2_STATIC_LIBS # wolfssl-all
- 	select BR2_PACKAGE_WOLFSSL_ALL
- 
-+comment "WolfSSL needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_WOLFSSL
-+	depends on BR2_STATIC_LIBS
-+
- endchoice
- 
- comment "A TLS library is needed for SSL/TLS support"
-diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
-index 97fc984ea0..a552a88f0c 100644
---- a/package/libuhttpd/Config.in
-+++ b/package/libuhttpd/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_LIBUHTTPD
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_LIBEV
--	select BR2_PACKAGE_WOLFSSL_ALL if BR2_PACKAGE_WOLFSSL
-+	select BR2_PACKAGE_WOLFSSL_ALL if BR2_PACKAGE_WOLFSSL && \
-+		!BR2_STATIC_LIBS
- 	help
- 	  A lightweight and fully asynchronous HTTP server
- 	  library based on libev
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index b8cf935d01..0d5306c6dd 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -18,7 +18,7 @@ LIBUHTTPD_CONF_OPTS += \
- 	-DUSE_MBEDTLS=OFF \
- 	-DUSE_OPENSSL=ON \
- 	-DUSE_WOLFSSL=OFF
--else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-+else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
- LIBUHTTPD_DEPENDENCIES += wolfssl
- LIBUHTTPD_CONF_OPTS += \
- 	-DSSL_SUPPORT=ON \
-diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
-index 3c6d68f592..3a97125e8d 100644
---- a/package/wolfssl/Config.in
-+++ b/package/wolfssl/Config.in
-@@ -13,9 +13,13 @@ if BR2_PACKAGE_WOLFSSL
- 
- config BR2_PACKAGE_WOLFSSL_ALL
- 	bool "enable all features, except SSLv3"
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Enable all wolfSSL features, except SSL version 3.0 support.
- 
-+comment "all features, except SSLv3 needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_WOLFSSL_SSLV3
- 	bool "enable SSLv3"
- 	help
--- 
-2.35.1
+Hello Thomas,
+
+On Tue, 2022-04-19 at 14:26 +0200, Thomas Petazzoni via buildroot
+wrote:
+> Hello Thomas,
+>=20
+> On Tue, 19 Apr 2022 11:21:51 +0200
+> Thomas Perrot <thomas.perrot@bootlin.com> wrote:
+>=20
+> > =C2=A0N:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Thomas Perrot <thomas.perrot@boot=
+lin.com>
+> > =C2=A0F:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0package/byacc
+> > +F:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0package/imx-cst
+>=20
+> Trailing slash needed.
+>=20
+> > diff --git a/package/imx-cst/Config.in.host b/package/imx-
+> > cst/Config.in.host
+> > new file mode 100644
+> > index 000000000000..84cb825e59cf
+> > --- /dev/null
+> > +++ b/package/imx-cst/Config.in.host
+> > @@ -0,0 +1,8 @@
+> > +config BR2_PACKAGE_HOST_IMX_CST
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "host imx-cst"
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 I.MX code signing too=
+l provides software code signing
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 support designed that=
+ integrate the HABv4 and AHAB
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 library.
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > https://www.nxp.com/webapp/sps/download/license.jsp?colCode=3DIMX_CST_T=
+OOL
+>=20
+> When I go to this page, I need to agree to a "SOFTWARE LICENSE
+> AGREEMENT i.MX CODE SIGNING TOOL", but then your .mk is pointing to a
+> non-NXP Git repository, and you state the license is BSD-3-Clause.
+>=20
+> > +# debian/3.3.1+dfsg-2
+> > +IMX_CST_SITE =3D
+> > https://gitlab.apertis.org/pkg/imx-code-signing-tool.git
+>=20
+> What is this location? Just someone who put the NXP code online? Or a
+> separate implementation?
+
+NXP code has been put by Debian maintainers.
+
+>=20
+> > +IMX_CST_SITE_METHOD =3D git
+> > +IMX_CST_VERSION =3D e2c687a856e6670e753147aacef42d0a3c07891a
+> > +IMX_CST_LICENSE =3D BSD-3-Clause
+> > +IMX_CST_LICENSE_FILES =3D LICENSE.bsd3
+>=20
+> There are two other license files in this Git repo, the hidapi
+> license
+> and the OpenSSL license. You are confident they are not relevant?
+> Would
+> be worth explaining that.
+
+I think it is correct because from source the file
+"Software_Content_Register_CST.txt" indicates that the outgoing license
+is BSD-3-Clause, and Debian also use this BSD license.
+
+Kind regards,
+Thomas Perrot
+
+>=20
+> > +HOST_IMX_CST_DEPENDENCIES =3D host-byacc host-flex host-openssl
+> > +
+> > +define HOST_IMX_CST_BUILD_CMDS
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$(HOST_MAKE_ENV) $(MAKE) $(H=
+OST_CONFIGURE_OPTS) \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0OSTYPE=3Dlinux64 \
+>=20
+> Would be useful to explain why linux64 is fine even on 32-bit host
+> platforms. Actually, when I look at
+> https://gitlab.apertis.org/pkg/imx-code-signing-tool/-/blob/apertis/v2023=
+dev2/code/cst/code/obj.linux64/Makefile
+> I believe that using OSTYPE=3Dlinux64 on 32-bit host machines will not
+> work, as it adds -m64 to the compiler flags.
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ENCRYPTION=3Dyes \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0COPTIONS=3D"$(HOST_CFLAGS) $(HOST_CPPFLAGS)" \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0LDFLAGS=3D"$(HOST_LDFLAGS) -lcrypto" \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0PWD=3D$(@D)/code/cst \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0CC=3D"$(CC) -I../../code/common/hdr \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-I../.=
+./code/back_end/hdr \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-I../.=
+./code/srktool/hdr \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-I../.=
+./code/front_end/hdr \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-I../.=
+./code/convlb/hdr" \
+>=20
+> This looks strange. Flags are normally passed using CFLAGS, and $(CC)
+> in Buildroot doesn't exist, it's $(HOSTCC) that should be used.
+>=20
+> Also, I think the list of header paths is properly set with:
+>=20
+> CINCLUDES :=3D $(SUBSYS:%=3D-I$(CST_CODE_PATH)/%/hdr)
+>=20
+> but it gets overridden by the fact that you override CFLAGS.
+>=20
+> I believe there's a better way, let me have a look.
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0LD=3D$(CC) \
+>=20
+> $(CC) doesn't exist, it should be $(HOSTCC).
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0-C $(@D)/code/cst \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0build
+>=20
+> Best regards,
+>=20
+> Thomas
+
+--=20
+Thomas Perrot, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+
+--=-CEcTArhAaVkPdTyjutIO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCAAdFiEEh0B3xqajCiMDqBIhn8ALBXH+Cu0FAmJfxrQACgkQn8ALBXH+
+Cu3EJQv/ZznbiuNFAmvDQEFZ1d5e6CR9BeJgyDFo3p8JZHwTXrpq945Ct8JDGZx3
+Cz3ywLEzqVcPfmSjy0loqwuXQ+pROPm/jwavlJtTkbjzHfQTLFebTcLuj1sfzdGp
+orgkoT6dZ3Jl9W9JsuEQvF+bgJ72T793w5HWNKif43Lf6ktMMGzkozmHCu+H7Noz
+xzhzs3645E4p7UKgZotMVLKQZH+Gqwx4B37aRAfsMBeGo9sjfgsix8nO0y6q6OFZ
+SJK1nHTeNIYjk8PSTgcTYl3vna+64q8nDI7TUk415eKIqPkmtjxaL2fkmtQdnN3I
+uQTPyeF+2XTaNothtlB3nvbT/8+To0vV8oaGXSNCBnY9LYTvKJJ6QUL8LWvmvlYa
+oZlHheWmabhU2ylGMoLIGSp1Exr6poR/LVKobkHBCoqc5DiCmjvU7VqAlTuobg4V
+EwMDn97dOzPjPbumyfv71iyPu8TT8YDZzwV8UqS4idG8ct+C9ShpislfRjMaoFK1
+WJQAcfSQ
+=hlcN
+-----END PGP SIGNATURE-----
+
+--=-CEcTArhAaVkPdTyjutIO--
+
+--===============5112392564265823643==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5112392564265823643==--
