@@ -1,59 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D167EC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 08:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26289C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 08:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06ED04256A;
-	Wed, 20 Apr 2022 08:39:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA29B83449;
+	Wed, 20 Apr 2022 08:39:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CNGHoIJbxLP2; Wed, 20 Apr 2022 08:39:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FFOPplY0JNqA; Wed, 20 Apr 2022 08:39:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DBA74250A;
-	Wed, 20 Apr 2022 08:39:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 298E61BF319
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:39:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C977483227;
+	Wed, 20 Apr 2022 08:39:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F3A1B1BF319
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:39:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17A7B410D3
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:39:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E177282BC3
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 08:39:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w_tbE551aTnr for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 08:39:33 +0000 (UTC)
-X-Greylist: delayed 23:17:30 by SQLgrey-1.8.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kXLljIBDFQvN for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 08:39:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA56E40103
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 08:39:32 +0000 (UTC)
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A95E782B3E
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 08:39:34 +0000 (UTC)
 Received: (Authenticated sender: thomas.perrot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A8549E0010;
- Wed, 20 Apr 2022 08:39:28 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 564B5E0012;
+ Wed, 20 Apr 2022 08:39:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650443969;
+ t=1650443973;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=yZWsEoNaRdO2mwAvd0GISZOkos/tSSBYYb21thPkfxk=;
- b=U4YXuo2Qqr7gq9HRLBAkBtZ51Xiffabs8ossdAywn6S35zGpl0220BV3YbK1N/zdj0/7/U
- pLdc73kEY00eC8pND6riF+jwiia9YI7ClLv7QozTFUuU/BLiyBUTjhW8cwBFhvPHiRB823
- NZ7nokNPEEuT+c58GjgI1L3vqCz6Ybqv1TWJCsWdu7iyQxQFSe70BGfqEn7P8YLmW45fKC
- g3ZSIs2uPskLiiLorpqy9przEUoinukbN9f9KrxffEXxgN8KFbvfopaE9L72XcqtQrysIg
- eI9EVLk9IG2MAN57DXs6b0Yvr8la+Tmd/VUmX5yIFmERdTTDUBJ5mPkAUK0HNg==
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fbF6Rvf8drEGueuJ7GmB4ZUNWFI0Kc6/22bkIuA9CfY=;
+ b=dFF/K9JTrmfn54daqKScu46Ra7+yvEB6omGlD2ZDBccLrldlN+4gNs0Oy5jmo20Mrvn3Ji
+ 0qXEx1oTQJuY1O+YPNn0hJU4Bvwsb7mv2mmqi1KKapU6dY3O/H/DHN0M9p+qA+VaoJNDzg
+ Z7vpakGvuSEm5qP2mbx/sEnnEQpq3qNyihBiGXih5vxtRbUSYNHhZPR42tNL15dk7Y9B5D
+ CvSF1qqgqaqHyEdUzrZpcZEzcrAC83NTTUIf7pbr4llzqMOt9hsHREZgQ4tiivQF249PuW
+ W3VNi644P/GPr9/wIVe/XrWemx4kEAkEKJJd25A5QSlchyi7W4/fdwDpqMd9XA==
 To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 10:39:22 +0200
-Message-Id: <20220420083923.3875405-1-thomas.perrot@bootlin.com>
+Date: Wed, 20 Apr 2022 10:39:23 +0200
+Message-Id: <20220420083923.3875405-2-thomas.perrot@bootlin.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220420083923.3875405-1-thomas.perrot@bootlin.com>
+References: <20220420083923.3875405-1-thomas.perrot@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/2] package/byacc: new package
+Subject: [Buildroot] [PATCH 2/2] package/imx-cst: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,69 +74,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package provides a Berkeley LALR Yacc parser generator that has been use
-by i.MX Code Signing tool.
+This package provides i.MX Code Signing Tools uses to sign i.MX bootloader
+to enable secure boot (HABv4 and AHAB).
 
 Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
 ---
 
 Changes v2:
-- Remove Config.in.host
-- Add a trailing slash
-- Add a comment about HOST_BYACC_CONF_OPTS
+- - Add a trailing slash
+  - Preserve CFLAGS and LDFLAGS
 
- DEVELOPERS               |  3 +++
- package/byacc/byacc.hash |  3 +++
- package/byacc/byacc.mk   | 16 ++++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/byacc/byacc.hash
- create mode 100644 package/byacc/byacc.mk
+ DEVELOPERS                     |  1 +
+ package/Config.in.host         |  1 +
+ package/imx-cst/Config.in.host |  8 ++++++
+ package/imx-cst/imx-cst.hash   |  3 +++
+ package/imx-cst/imx-cst.mk     | 49 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 62 insertions(+)
+ create mode 100644 package/imx-cst/Config.in.host
+ create mode 100644 package/imx-cst/imx-cst.hash
+ create mode 100644 package/imx-cst/imx-cst.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ca9decb58fec..6e49334dcc42 100644
+index 6e49334dcc42..86cb04e54e5d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2765,6 +2765,9 @@ F:	package/frotz/
- F:	package/kvm-unit-tests/
- F:	package/xorcurses/
+@@ -2767,6 +2767,7 @@ F:	package/xorcurses/
 
-+N:	Thomas Perrot <thomas.perrot@bootlin.com>
-+F:	package/byacc/
-+
+ N:	Thomas Perrot <thomas.perrot@bootlin.com>
+ F:	package/byacc/
++F:	package/imx-cst/
+
  N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  F:	arch/Config.in.arm
- F:	board/beaglev/
-diff --git a/package/byacc/byacc.hash b/package/byacc/byacc.hash
+diff --git a/package/Config.in.host b/package/Config.in.host
+index cd1c34b5a3d9..282594b40b8d 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -40,6 +40,7 @@ menu "Host utilities"
+ 	source "package/google-breakpad/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imagemagick/Config.in.host"
++	source "package/imx-cst/Config.in.host"
+ 	source "package/imx-mkimage/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jh71xx-tools/Config.in.host"
+diff --git a/package/imx-cst/Config.in.host b/package/imx-cst/Config.in.host
 new file mode 100644
-index 000000000000..d2ad441df39f
+index 000000000000..84cb825e59cf
 --- /dev/null
-+++ b/package/byacc/byacc.hash
++++ b/package/imx-cst/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_IMX_CST
++	bool "host imx-cst"
++	help
++	  I.MX code signing tool provides software code signing
++	  support designed that integrate the HABv4 and AHAB
++	  library.
++
++	  https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL
+diff --git a/package/imx-cst/imx-cst.hash b/package/imx-cst/imx-cst.hash
+new file mode 100644
+index 000000000000..9c27bfe82038
+--- /dev/null
++++ b/package/imx-cst/imx-cst.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  42c1805cc529314e6a76326fe1b33e80c70862a44b01474da362e2f7db2d749c  byacc-20220128.tgz
-+sha256  654a231fe9cd4d36e580214962fa777a1df0771d6889cfc74d19a3d414f14711  LICENSE
-diff --git a/package/byacc/byacc.mk b/package/byacc/byacc.mk
++sha256  2bcc03c7cedba58f7207a72a28e75cfe78007988d68c1095c793cce991c2936e  imx-cst-e2c687a856e6670e753147aacef42d0a3c07891a-br1.tar.gz
++sha256  5dee6f54c636a97b15d7e9dfc8075248c36764b3819828cbc94cbd17c1755fb9  LICENSE.bsd3
+diff --git a/package/imx-cst/imx-cst.mk b/package/imx-cst/imx-cst.mk
 new file mode 100644
-index 000000000000..648dc9a040ca
+index 000000000000..c91dfb602cbf
 --- /dev/null
-+++ b/package/byacc/byacc.mk
-@@ -0,0 +1,16 @@
++++ b/package/imx-cst/imx-cst.mk
+@@ -0,0 +1,49 @@
 +################################################################################
 +#
-+# byacc
++# imx-cst
 +#
 +################################################################################
 +
-+BYACC_SITE = https://invisible-mirror.net/archives/byacc
-+BYACC_VERSION = 20220128
-+BYACC_SOURCE = byacc-$(BYACC_VERSION).tgz
-+BYACC_LICENSE = Public Domain
-+BYACC_LICENSE_FILES = LICENSE
++# debian/3.3.1+dfsg-2
++IMX_CST_SITE = https://gitlab.apertis.org/pkg/imx-code-signing-tool.git
++IMX_CST_SITE_METHOD = git
++IMX_CST_VERSION = e2c687a856e6670e753147aacef42d0a3c07891a
++IMX_CST_LICENSE = BSD-3-Clause
++IMX_CST_LICENSE_FILES = LICENSE.bsd3
 +
-+# To name byacc instead of yacc the binary built.
-+HOST_BYACC_CONF_OPTS = --program-transform-name='s,^,b,'
++HOST_IMX_CST_DEPENDENCIES = host-byacc host-flex host-openssl
 +
-+$(eval $(host-autotools-package))
++ifneq ($(filter %64,$(HOSTARCH)),)
++HOST_IMX_CST_OSTYPE = linux64
++else
++HOST_IMX_CST_OSTYPE = linux32
++endif
++
++# We don't use HOST_CONFIGURE_OPTS when building cst, because we need
++# to preserve the CFLAGS/LDFLAGS used by their Makefile.
++define HOST_IMX_CST_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) \
++		OSTYPE=$(HOST_IMX_CST_OSTYPE) \
++		ENCRYPTION=yes \
++		AR="$(HOSTAR)" \
++		CC="$(HOSTCC)" \
++		LD="$(HOSTCC)" \
++		OBJCOPY="$(HOSTOBJCOPY)" \
++		RANLIB="$(HOSTRANLIB)" \
++		EXTRACFLAGS="$(HOST_CFLAGS) $(HOST_CPPFLAGS)" \
++		EXTRALDFLAGS="$(HOST_LDFLAGS)" \
++		PWD=$(@D)/code/cst \
++		-C $(@D)/code/cst \
++		build
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		COPTS="$(HOST_CFLAGS) $(HOST_CPPFLAGS) $(HOST_LDFLAGS)" \
++		-C $(@D)/code/hab_csf_parser
++endef
++
++define HOST_IMX_CST_INSTALL_CMDS
++	$(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.linux64/cst $(HOST_DIR)/bin/cst
++	$(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.linux64/srktool $(HOST_DIR)/bin/srktool
++	$(INSTALL) -D -m 755 $(@D)/code/hab_csf_parser/csf_parser $(HOST_DIR)/bin/csf_parser
++endef
++
++$(eval $(host-generic-package))
 --
 2.35.1
 _______________________________________________
