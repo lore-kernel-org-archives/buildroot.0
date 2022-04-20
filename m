@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB2B3C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 18:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D53FC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Apr 2022 18:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28EBE419F8;
-	Wed, 20 Apr 2022 18:16:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33DFE823C6;
+	Wed, 20 Apr 2022 18:20:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GKXfB6aYEwoq; Wed, 20 Apr 2022 18:16:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ou_MA_rE0shl; Wed, 20 Apr 2022 18:20:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC543419CC;
-	Wed, 20 Apr 2022 18:16:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 48D501BF3B0
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:16:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 380A781D2D;
+	Wed, 20 Apr 2022 18:20:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 02BBA1BF3B0
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3665D60D6A
- for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:16:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F40EA81B35
+ for <buildroot@lists.busybox.net>; Wed, 20 Apr 2022 18:20:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F8srYNFgX-Qy for <buildroot@lists.busybox.net>;
- Wed, 20 Apr 2022 18:16:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n-_pBcs_JACU for <buildroot@lists.busybox.net>;
+ Wed, 20 Apr 2022 18:20:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5B83160BD6
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 18:16:29 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id y16so1518982ilc.7
- for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:16:29 -0700 (PDT)
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
+ [IPv6:2607:f8b0:4864:20::12f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2BE3D81D2D
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 18:20:16 +0000 (UTC)
+Received: by mail-il1-x12f.google.com with SMTP id e1so1537821ile.2
+ for <buildroot@buildroot.org>; Wed, 20 Apr 2022 11:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ebcby+xkg/v/x5/0qG2VhYIwgIpOiFuayUIHa7sPWII=;
- b=K/DAFnMn+ogJN/4X95iJd3qSVikFGongmSEPx+XNXeHnZHGpCYk203OE19o5I4E/BZ
- cWrTJWmToPqCS5dA9pLb4RWjQoHWt09TGOoNKz+xZI7P8V+kZNwL5xq9FTpfHckoi3JX
- TI50qG29nvlCJfqTX+nJOE4K4YLCA5chi58qzPSal5mgjU4/Ql0D7Ec4dyL4amKcPysg
- 6wKj6qtqoJoxwED5ZIowtTf2fFo0hyZKE/APcN8ipS46L3+TJeUlX3/UMscusNnON6kg
- gZeTThK1r3Gh2YoZMcwrJmgv2cQPc6arPMLrYu15bMI/SEUpfqbKXV/imiUGr1EDtJc1
- FMtA==
+ bh=7K2yOi4xC1YK0z7sUYWVi/ZjGNPXko82mru94VzM130=;
+ b=H1eWgN9d3IRcIQCswNL5Cc7eVWBepVhKCydX9GcE8QinE7zHHw44t7vMMFyA/Ln5Bu
+ DiLR5TgkWq9EGQs7E/zK627JIdZKa8hNXRW+MBHtAHAmEZa0B8UIEWbk0S7dSh8X4HsZ
+ KDsg7FYGaELH837cCv7kbZ9YbOtsrrwMhcWFXstp0RCjbk3pStUJ6usjsGxhWHhE5RhN
+ 1Pt2PwYBYG0sAKwn4jiLplettgq14++Wuuvo6JMWsT/7tPk3LNHQNfSGWKc30dmn4bkb
+ mCjDzvKfA3FwJtsaoqCIDfY4CmMNicrMIy2zyfxEzO29E6ZEtxD1+mOZ58NzyP8bdtk2
+ JXCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ebcby+xkg/v/x5/0qG2VhYIwgIpOiFuayUIHa7sPWII=;
- b=ZVonSlMysyFlqaNsZCJ4rWk4vPkjXxysJ75duxKe3C200B5B3+irSz7/gXjTh3WYCu
- WjyqTF2i1ZTmQNyKcttvBX4zk6xeaWyyKNROrpQBXw9iqB1hFsp6SfcOUOMRZ/UVvxCw
- TEbpuKWd/nif5Z2OTrPeyoGxecybBwVq3s2ruAkp16RZdRiG2+muyPymblw5uoqqGP5M
- ORKdfmrd0SGOAH4K65U9K4jE9FxxrYQixFvnmSv1bZzZU/cOAsZzig3MkmItIzLLp7LI
- LzP41VyIGveTkPBGx3zYZCJBM6YPoTnaRZvbuasA057tABMdwyx/rXc6P+H3shGyyYGx
- RyyA==
-X-Gm-Message-State: AOAM532/xquHEBjovsl7L3wgaLJXz54XUCA9f8/Ygbv4GcIKU8KCae0n
- glK2wuzoqXv82aCpOE5F7WBCAQ/V0y4wqw==
-X-Google-Smtp-Source: ABdhPJzf0PVtAGlT6mjQcCrh1FEfJwJFvfRWOAHRsjUndCPypyzsMl8C5669m2Xp6pqGdFov0YcBww==
-X-Received: by 2002:a92:ce87:0:b0:2cc:4400:4133 with SMTP id
- r7-20020a92ce87000000b002cc44004133mr4312813ilo.202.1650478588209; 
- Wed, 20 Apr 2022 11:16:28 -0700 (PDT)
+ bh=7K2yOi4xC1YK0z7sUYWVi/ZjGNPXko82mru94VzM130=;
+ b=qffmDPEOyCQljvtJOsQd2jOlNilunWxBTcELDQtjfqIcgcSK760TADtDgwDoBbB8d3
+ lekqlbTNFVsYARSVwCnoJaARDddvYktDLcL9yRqm9KemVk9+/vZqgGa4JBksloB15gbQ
+ NZ8l4wK5OPirIU/kWDh6W+6YvVc8uM7EVDBfere2rmaZ3HESmrjuxuUSgi5MTmCwLiNJ
+ ZEPUcqSmHNY26hzEisO+OLD8wY3e0MPbslAl8XJmZL1As1vIKlLgzaxl7DhN/l1/n0Hx
+ J859imgcD+bPvYOByUU6YMwxQ3bLNFWjnrokzCsve55Uwdm591sv52p2N8T5B4NBcCvA
+ T/ig==
+X-Gm-Message-State: AOAM531r5xS8fyQNnrhP77cqBOLOkPdhYaHwieLljdpeDw4dJEhkJuNn
+ VJO3PnPKg2/qYH8dQxc9VSvPQUPaTHX8wg==
+X-Google-Smtp-Source: ABdhPJwP6lfwX1Wce2+yCfRUaqpGCOwDjXL2ZX8nEuhu7/PgiTaTo5qC8oFXuVXHeoGXuh9Vi5a27Q==
+X-Received: by 2002:a05:6e02:13e6:b0:2ca:a5b3:fa34 with SMTP id
+ w6-20020a056e0213e600b002caa5b3fa34mr10209412ilj.273.1650478815027; 
+ Wed, 20 Apr 2022 11:20:15 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- y12-20020a056e02178c00b002cc2cd7409fsm5384967ilu.48.2022.04.20.11.16.27
+ o16-20020a92c690000000b002cbf7f76878sm9032627ilg.6.2022.04.20.11.20.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Apr 2022 11:16:27 -0700 (PDT)
+ Wed, 20 Apr 2022 11:20:14 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Apr 2022 12:16:25 -0600
-Message-Id: <20220420181625.762383-1-james.hilliard1@gmail.com>
+Date: Wed, 20 Apr 2022 12:20:13 -0600
+Message-Id: <20220420182013.763567-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-bidict: bump to version
- 0.22.0
+Subject: [Buildroot] [PATCH 1/1] package/python-charset-normalizer: bump to
+ version 2.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +91,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to adding dates/author name:
-https://github.com/jab/bidict/commit/b5c9f346ce0e3450a9df41c8740c32ed8b62f7f3
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-bidict/python-bidict.hash | 6 +++---
- package/python-bidict/python-bidict.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../python-charset-normalizer/python-charset-normalizer.hash  | 4 ++--
+ .../python-charset-normalizer/python-charset-normalizer.mk    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-bidict/python-bidict.hash b/package/python-bidict/python-bidict.hash
-index 59229f96d9..fe9a94af53 100644
---- a/package/python-bidict/python-bidict.hash
-+++ b/package/python-bidict/python-bidict.hash
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.hash b/package/python-charset-normalizer/python-charset-normalizer.hash
+index 3c6e58a616..da540bbb8f 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.hash
++++ b/package/python-charset-normalizer/python-charset-normalizer.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bidict/json
--md5  d9342771969dd0d42092a669ed6f3241  bidict-0.21.3.tar.gz
--sha256  d50bd81fae75e34198ffc94979a0eb0939ff9adb3ef32bcc93a913d8b3e3ed1d  bidict-0.21.3.tar.gz
-+md5  da3d37ae93c740c191b5666918c3164f  bidict-0.22.0.tar.gz
-+sha256  5c826b3e15e97cc6e615de295756847c282a79b79c5430d3bfc909b1ac9f5bd8  bidict-0.22.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/charset-normalizer/json
+-md5  2abe3754fef25c99799a518cb83a81ae  charset-normalizer-2.0.11.tar.gz
+-sha256  98398a9d69ee80548c762ba991a4728bfc3836768ed226b3945908d1a688371c  charset-normalizer-2.0.11.tar.gz
++md5  f6664e0e90dbb3cc9cfc154a980f9864  charset-normalizer-2.0.12.tar.gz
++sha256  2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597  charset-normalizer-2.0.12.tar.gz
  # Locally computed sha256 checksums
--sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  LICENSE
-+sha256  be0487398bba08e7772b4077b637787b94973b53c44b3cbdd6c7dab10ed15035  LICENSE
-diff --git a/package/python-bidict/python-bidict.mk b/package/python-bidict/python-bidict.mk
-index c6b7b862ea..7ba15db605 100644
---- a/package/python-bidict/python-bidict.mk
-+++ b/package/python-bidict/python-bidict.mk
+ sha256  eb31a0c5a4fb09b8a4e32055d25c1e5f9c358a2752fef3cd720213d1ccfee241  LICENSE
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index c37b068b36..0742fac639 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BIDICT_VERSION = 0.21.3
-+PYTHON_BIDICT_VERSION = 0.22.0
- PYTHON_BIDICT_SOURCE = bidict-$(PYTHON_BIDICT_VERSION).tar.gz
--PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/3f/81/7221b28d692af5c5fc180c4850b8e4a48c7db92b3d529b430488f67db74f
-+PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/2b/84/159749556b9c49ea4489dadeb94d44f05d6033d1db3af4c83120ecac5b15
- PYTHON_BIDICT_SETUP_TYPE = setuptools
- PYTHON_BIDICT_LICENSE = MPL-2.0
- PYTHON_BIDICT_LICENSE_FILES = LICENSE
+-PYTHON_CHARSET_NORMALIZER_VERSION = 2.0.11
++PYTHON_CHARSET_NORMALIZER_VERSION = 2.0.12
+ PYTHON_CHARSET_NORMALIZER_SOURCE = charset-normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
+-PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/e8/e8/b6cfd28fb430b2ec9923ad0147025bf8bbdf304b1eb3039b69f1ce44ed6e
++PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/56/31/7bcaf657fafb3c6db8c787a865434290b726653c912085fbd371e9b92e1c
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
