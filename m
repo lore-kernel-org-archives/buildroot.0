@@ -1,66 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22764C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 15:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0261C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 16:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C61041106;
-	Thu, 21 Apr 2022 15:39:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48CD34179E;
+	Thu, 21 Apr 2022 16:30:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AiqNKaKueN5M; Thu, 21 Apr 2022 15:39:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4oLLJ-j6ePVn; Thu, 21 Apr 2022 16:30:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0C7B410B7;
-	Thu, 21 Apr 2022 15:39:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB10E41606;
+	Thu, 21 Apr 2022 16:30:14 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 369D41BF304
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 15:39:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 09DCF1BF3D9
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 16:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2518981A3E
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 15:39:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC94384089
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 16:30:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dmcdVzD0byik for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 15:39:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AECC5819CC
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 15:39:13 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:7d82:8745:111f:47d9])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id D25955FF96;
- Thu, 21 Apr 2022 17:39:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1650555551;
- bh=zjtjhDQJtegZy/k/unuW029eAHVJVyHqWhyyPWoNKDg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=hJeaz+EebBRNJzBKRVMzcTCrJRA5jrdanm08KbeKPCAh1TO9t/L9GCUzVg8vlRD0c
- WIiULuXQ1OUk6DCh3utdiu9V2B3YzcG1G5w4xNtCrp1wswO3yzb+HR3OqqUbkxfY9u
- 9DsN1b1haTz+Wm/OVhnNBX2+GwntpXJRsFwhi3ieJPcOg/4jd7AhJaxyMEa4Y3YVxL
- CVMHvzFmjtjsYYCS1QIstzdp+qsuQH9I3wv0Qo1JZWVwQ6laPs43iH67DmH5tacYLu
- aOCmyrCQZ5TF2W6sIpvMRt1VLoRQC0u+UY4WGx8x08h8N04e46LqOxDGY3ga6YfPzO
- GINXIokHcHtmQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 21 Apr 2022 17:39:08 +0200
-Date: Thu, 21 Apr 2022 17:39:08 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20220421153908.GN2730@scaer>
-References: <20220420200102.2420626-1-yann.morin.1998@free.fr>
- <8b28d775-d65a-d6e2-2b50-6bfc6549df0b@mind.be>
+ with ESMTP id cR87uadO2OFw for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 16:30:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C469483F95
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 16:30:12 +0000 (UTC)
+Received: from pwmachine.localnet (unknown [92.186.13.154])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 1845120E57E0;
+ Thu, 21 Apr 2022 09:30:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1845120E57E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1650558610;
+ bh=PKE7fXpsJQOP2nsOnkKVwT0fjW/fsYGurISE7U1bV0w=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=fI4lzwOE1c5upXUyZZPSY/++bLd71aKhzwQu3zYgRVLnjz34w09m53Agn9dHFILTn
+ hUmieAFwlxqisKolVOuyYuoIXVjpVblafunrNz1TkC99BKCqjNjh+HxcJ/WdOVx+u+
+ qnAJO9idSmW0rc5pj06x12xa5fdxesd9/9wXeR4I=
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: buildroot@buildroot.org, Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Apr 2022 17:30:06 +0100
+Message-ID: <2626500.mvXUDI8C0e@pwmachine>
+Organization: Microsoft
+In-Reply-To: <6813316c-23f9-3521-1eca-df43f9205d34@mind.be>
+References: <20220414172857.35100-1-flaniel@linux.microsoft.com>
+ <6813316c-23f9-3521-1eca-df43f9205d34@mind.be>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <8b28d775-d65a-d6e2-2b50-6bfc6549df0b@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/wtfutil: new package
+Subject: Re: [Buildroot] [RFC PATCH v1 0/1] New "docker" ready qemu config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,68 +65,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gerome Burlats <gerome.burlats@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2022-04-21 09:22 +0200, Arnout Vandecappelle spake thusly:
-> On 20/04/2022 22:01, Yann E. MORIN wrote:
-> >Some of wtfutils modules (i.e. plugins) can call to external tools, so
->  Modules are not optional?
+Hi.
 
-As far as I can see, no. All modules are builtin into the wtfutil
-executable, and there is no way to provide out-of-tree modules loaded at
-runtime. And indeed, using the word 'plugins' was wrong (well, they can
-only be plugged in at build time).
+Le mardi 19 avril 2022, 22:16:43 BST Arnout Vandecappelle a =E9crit :
+> On 14/04/2022 19:28, Francis Laniel wrote:
+> > Hi.
+> > =
 
-Also this is go, everything is static in that world.
+> > =
 
-Upstream would however like to go for an actual, real plugin mechanism,
-but it seems the go ecosystem is not making that easy:
-https://github.com/wtfutil/wtf/issues/1092#issuecomment-892312321
+> > First, I hope you are fine and the same for your relatives.
+> > =
 
-[--SNIP--]
-> >+WTFUTIL_VERSION = 0.41.0
-> >+WTFUTIL_SITE = $(call github,wtfutil,wtf,v$(WTFUTIL_VERSION))
->  If the upstream repository is called wtf, and the help text says "WTF is
-> ...", why do you call it wtfutil?
+> > In this contribution, I added a new qemu config for x86_64.
+> > This configuration is mainly based on qemu_x86_64_defconfig but it adds
+> > kernel CONFIG_ to be able to use docker.
+> > It also adds package related to docker like DOCKER_CLI and CONTAINERD.
+> =
 
-The website is wtfutil.com. The utility is named wtfutil. It is packaged
-as wtfutil in some distro repositories already (Homebrew, macports,
-Arch...).
+>   We don't like adding "demo" defconfigs that are basically another
+> defconfig with some packages enabled. It's true that there is some value =
+to
+> knowing which combination of packages can provide a certain super-feature,
+> but the problem is that the basic config (in this case, qemu_x86_64) is n=
+ot
+> going to be useful for most people.
+> =
 
-The README.md also states:
+>   In this particular case, there isn't even that much "combination". Just
+> docker-engine and docker-cli.
+> =
 
-    WTF (aka 'wtfutil') is the personal information dashboard for your
-    terminal, providing at-a-glance access to your very important but
-    infrequently-needed stats and data.
+>   The kernel config options do have value, but these should instead be set
+> by containerd (or docker-engine, or docker-proxy, as appropriate), using
+> CONTAINERD_LINUX_CONFIG_FIXUPS.
 
-Finally, wtf on its own is a bit on the tendentious side; using the
-longer name tones the term down a bit.
+Sorry, I did not check docker-engine.mk before writing this contribution.
+I was not aware of PACKAGE_NAME_LINUX_CONFIG_FIXUPS and will rework my sysd=
+ig =
 
-Yeah, that is not all entirely convincing, but I believe wtfutil to be a
-better name overall...
+0.29.1 contribution to make use ot it!
 
-Regards,
-Yann E. MORIN.
+> =
 
->  Regards,
->  Arnout
-> 
-> >+WTFUTIL_LICENSE = MPL-2.0
-> >+WTFUTIL_LICENSE_FILES = LICENSE.md
-> >+
-> >+$(eval $(golang-package))
+>   Regards,
+>   Arnout
+> =
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> > The CONFIG_ options added were checked with moby check-config script [1=
+].
+> > =
+
+> > I was able to build and execute the image with start-qemu.sh:
+> > Welcome to Buildroot
+> > buildroot login: root
+> > # docker run --rm hello-world
+> > Unable to find image 'hello-world:latest' locally
+> > latest: Pulling from library/hello-world
+> > 2db29710123e: Pull complete
+> > Digest:
+> > sha256:10d7d58d5ebd2a652f4d93fdd86da8f265f5318c6a73cc5b6a9798ff6d2b2e67
+> > Status: Downloaded newer image for hello-world:latest
+> > =
+
+> > Hello from Docker!
+> > This message shows that your installation appears to be working correct=
+ly.
+> > =
+
+> > Sadly, the image has to a bit big (more than 300M) but I think it is fi=
+ne
+> > since this image will only be used for virtualization.
+> > =
+
+> > If you say any way to improve this contribution, feel free to share it!
+> > =
+
+> > Francis Laniel (1):
+> >    qemu_x86_64_docker: add new qemu defconfig
+> >   =
+
+> >   DEVELOPERS                             |   2 +
+> >   board/qemu/x86_64_docker/linux.config  | 112 +++++++++++++++++++++++++
+> >   board/qemu/x86_64_docker/post-build.sh |  11 +++
+> >   board/qemu/x86_64_docker/readme.txt    |   7 ++
+> >   configs/qemu_x86_64_docker_defconfig   |  49 +++++++++++
+> >   5 files changed, 181 insertions(+)
+> >   create mode 100644 board/qemu/x86_64_docker/linux.config
+> >   create mode 100755 board/qemu/x86_64_docker/post-build.sh
+> >   create mode 100644 board/qemu/x86_64_docker/readme.txt
+> >   create mode 100644 configs/qemu_x86_64_docker_defconfig
+> > =
+
+> > Best regards and thank you in advance.
+> > ---
+> > [1] https://github.com/moby/moby/blob/master/contrib/check-config.sh
+
+Best regards.
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
