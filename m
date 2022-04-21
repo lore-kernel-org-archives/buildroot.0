@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B701C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 19:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8119C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 19:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46317411F3;
-	Thu, 21 Apr 2022 19:42:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id seDAVynCufB3; Thu, 21 Apr 2022 19:42:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 384EA411C1;
-	Thu, 21 Apr 2022 19:42:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4CA491BF387
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:42:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BB3D84367
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:42:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 560398439D;
+	Thu, 21 Apr 2022 19:43:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AZ9BXoTH5xyG for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 19:42:16 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N8n2Ve3sosa6; Thu, 21 Apr 2022 19:43:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 641C584384;
+	Thu, 21 Apr 2022 19:43:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AB88A1BF387
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:43:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 952D36FE5B
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:43:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o5mzMVreXvLB for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 19:43:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F112B84343
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 19:42:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D052084031; Thu, 21 Apr 2022 19:32:11 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6B236F5D3
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 19:43:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id BAF6384044; Thu, 21 Apr 2022 19:33:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 21:41:16 +0200
+Date: Thu, 21 Apr 2022 21:42:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53efc185bbd8f777f80b46ba45077c0836844631
-X-Git-Newrev: 786f96627cd6e4b4ee5297782e9abbed9453cfd9
+X-Git-Oldrev: add69bdec274192ff571330a37e1549ac20db543
+X-Git-Newrev: 6ab8b1e26386527659c27d9b194a0915e1ff6c34
 X-Patchwork-Hint: ignore
-Message-Id: <20220421193211.D052084031@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fetchmail: fix openssl build
+Message-Id: <20220421193338.BAF6384044@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] meson-package: prevent cmake
+ find_package() picking up host libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,100 +59,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=786f96627cd6e4b4ee5297782e9abbed9453cfd9
+commit: https://git.buildroot.net/buildroot/commit/?id=6ab8b1e26386527659c27d9b194a0915e1ff6c34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following openssl build failure raised since bump to version
-6.4.29 in commit ba6fd52195f2e3d0b04baae40cfe084226824d31:
+The meson build system uses (1) pkg-config and (2) cmake find_package to locate
+dependencies and stops only if a package is found. Cmake uses a toolchain file
+that is generated by meson from the existing configuration [1].
 
-/home/autobuild/autobuild/instance-5/output-1/host/bin/arc-buildroot-linux-gnu-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -I/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include -I/usr/kerberos/include  -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib -o fetchmail socket.o getpass.o fetchmail.o env.o idle.o options.o daemon.o driver.o transact.o sink.o smtp.o idlist.o uid.o mxget.o md5ify.o cram.o gssapi.o opie.o interface.o netrc.o unmime.o conf.o checkalias.o uid_db.o lock.o rcfile_l.o rcfile_y.o ucs/norm_charmap.o fm_realpath.o  pop3.o imap.o etrn.o odmr.o     libfm.a  strlcpy.o strlcat.o  /usr/lib/libssl.so /usr/lib/libcrypto.so
-/usr/lib/libssl.so: file not recognized: file format not recognized
+The cmake toolchain file misses CMAKE_FIND_ROOT_PATH and CMAKE_FIND_ROOT_PATH_*
+settings, and find_package() falls back to the default behaviour and looks for
+dependencies on the build machine (the Buildroot HOST_DIR).
 
-Fixes:
- - http://autobuild.buildroot.org/results/815f18f25017be178d478458c48712d9a8570d5a
+Use a feature introduced in meson 0.56.0 [2] to pass the Buildroot toolchain
+file to cmake instead of using a meson-generated one.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes the following build failures:
+http://autobuild.buildroot.org/results/056/05673ed04c6f044f1b56b9d5342d61653be43a18/
+http://autobuild.buildroot.org/results/f0a/f0a9e719114f19dc9d20622ed85dd4f8e968c20f/
+http://autobuild.buildroot.org/results/527/527ee199813abbacd61c3fa32b517ea60af60659/
+
+[1[ see mesonbuild/cmake/toolchain.py
+[2] see https://mesonbuild.com/CMake-module.html#cross-compilation
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ure.ac-fix-cross-compilation-with-openssl.patch | 56 ++++++++++++++++++++++
- package/fetchmail/fetchmail.mk                     |  2 +
- 2 files changed, 58 insertions(+)
+ package/pkg-meson.mk                   | 1 +
+ support/misc/cross-compilation.conf.in | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch b/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
-new file mode 100644
-index 0000000000..fff848196a
---- /dev/null
-+++ b/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
-@@ -0,0 +1,56 @@
-+From 262aa59c1a7a7100e1dd4e73a6d0112d9becc701 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 1 Apr 2022 19:23:06 +0200
-+Subject: [PATCH] configure.ac: fix cross-compilation with openssl
-+
-+Don't call AC_LIB_LINKFLAGS when the libraries are retrieved through
-+pkg-config to avoid the following build failure when cross-compiling
-+raised since commit 77503f545d2806d07ab83c59ed9a96f435d281da:
-+
-+/home/autobuild/autobuild/instance-5/output-1/host/bin/arc-buildroot-linux-gnu-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -I/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include -I/usr/kerberos/include  -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib -o fetchmail socket.o getpass.o fetchmail.o env.o idle.o options.o daemon.o driver.o transact.o sink.o smtp.o idlist.o uid.o mxget.o md5ify.o cram.o gssapi.o opie.o interface.o netrc.o unmime.o conf.o checkalias.o uid_db.o lock.o rcfile_l.o rcfile_y.o ucs/norm_charmap.o fm_realpath.o  pop3.o imap.o etrn.o odmr.o     libfm.a  strlcpy.o strlcat.o  /usr/lib/libssl.so /usr/lib/libcrypto.so
-+/usr/lib/libssl.so: file not recognized: file format not recognized
-+
-+This build failure is raised because AC_LIB_LINKFLAGS will override the
-+pkg-config target libraries by the host openssl libraries:
-+
-+configure: Enabling OpenSSL support in /home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr.
-+configure: SSL-check: trying pkg-config for openssl
-+checking for SSL... yes
-+checking how to link with libssl... /usr/lib/libssl.so /usr/lib/libcrypto.so
-+configure: From pkg-config: Adding /usr/lib/libssl.so /usr/lib/libcrypto.so to LIBS. LDFLAGS= -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/815f18f25017be178d478458c48712d9a8570d5a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.com/fetchmail/fetchmail/-/merge_requests/42]
-+---
-+ configure.ac | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bd042d51..80e5bf91 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -838,15 +838,13 @@ else
-+     PKG_CHECK_MODULES([SSL],[$i],[
-+ 	  set -- $SSL_LIBS
-+ 	  while test $# -ge 1 ; do
-+-		  case $1 in -l*|lib*) :                     ;;
-++		  case $1 in -l*|lib*) LIBS="$LIBS $1"       ;;
-+ 				    *) LDFLAGS="$LDFLAGS $1" ;;
-+ 		  esac
-+ 		  shift
-+ 	  done
-+ 	  CPPFLAGS="$SSL_CFLAGS $CPPFLAGS"
-+-	  AC_LIB_LINKFLAGS([ssl], [crypto])
-+-	  AS_MESSAGE([From pkg-config: Adding $LIBSSL to LIBS. LDFLAGS=$LDFLAGS])
-+-	  LIBS="$LIBS $LIBSSL"
-++	  AS_MESSAGE([From pkg-config: $SSL_LIBS])
-+ 	  found=1
-+ 	  break],[: ignore-error])
-+     done
-+-- 
-+2.35.1
-+
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index b97f01a423..25dfcae87b 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -12,6 +12,8 @@ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
- FETCHMAIL_LICENSE_FILES = COPYING
- FETCHMAIL_CPE_ID_VENDOR = fetchmail
- FETCHMAIL_SELINUX_MODULES = fetchmail mta
-+# We're patching configure.ac
-+FETCHMAIL_AUTORECONF = YES
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 9e70d49b60..f1390a18d0 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -81,6 +81,7 @@ define PKG_MESON_CROSSCONFIG_SED
+         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
+         -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
+         -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
++        -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+         -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
+         -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
+         $(TOPDIR)/support/misc/cross-compilation.conf.in
+diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
+index 1977a83501..235e5a8495 100644
+--- a/support/misc/cross-compilation.conf.in
++++ b/support/misc/cross-compilation.conf.in
+@@ -26,6 +26,9 @@ needs_exe_wrapper = true
+ sys_root = '@STAGING_DIR@'
+ pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
+ pkg_config_static = '@STATIC@'
++# enable meson build to pass a toolchain file to cmake
++cmake_toolchain_file = '@HOST_DIR@/share/buildroot/toolchainfile.cmake'
++cmake_defaults = false
  
- FETCHMAIL_CONF_OPTS = \
- 	--with-ssl=$(STAGING_DIR)/usr
+ [host_machine]
+ system = 'linux'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
