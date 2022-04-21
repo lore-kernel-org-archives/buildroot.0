@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB124C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 813AAC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:03:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1770B611C5;
-	Thu, 21 Apr 2022 21:03:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 70vSshi8vElF; Thu, 21 Apr 2022 21:03:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1668611AD;
-	Thu, 21 Apr 2022 21:03:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0648C1BF3E3
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F13141149
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42AB64112F;
+	Thu, 21 Apr 2022 21:03:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id byHeZar6bB2s for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TtAl1puy-xUf; Thu, 21 Apr 2022 21:03:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B2094114B;
+	Thu, 21 Apr 2022 21:03:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CA481C1189
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C030F41700
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KP7Xu44Gm6Xc for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 21:02:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02B184114C
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E79FF419DA
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 21:02:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CB511840FF; Thu, 21 Apr 2022 20:52:06 +0000 (UTC)
+ id AAE1D84105; Thu, 21 Apr 2022 20:52:06 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 22:32:39 +0200
+Date: Thu, 21 Apr 2022 22:32:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90bdef4f17d46929c2c0e19110a11dbcc4ba851d
-X-Git-Newrev: 7e0fbf4dcd4cd0cf17cfe89ebf6808fdace8f01f
+X-Git-Oldrev: 530c72ad7559e0bdafa86eb81dc1ff2444238e2c
+X-Git-Newrev: fb9a422eba604cbdcd78826a6d520146c4fffad2
 X-Patchwork-Hint: ignore
-Message-Id: <20220421205206.CB511840FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pixman: fix mips build
+Message-Id: <20220421205206.AAE1D84105@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/botan: fix mips64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +58,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e0fbf4dcd4cd0cf17cfe89ebf6808fdace8f01f
+commit: https://git.buildroot.net/buildroot/commit/?id=fb9a422eba604cbdcd78826a6d520146c4fffad2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable Loongson MMI fast paths to fix the following mips build failure:
+Disable cc-tests to avoid the following build failure on mips64:
 
-./loongson-mmintrin.h:407:2: error: impossible constraint in 'asm'
-  407 |  asm("pinsrh_%3 %0, %1, %2\n\t"
-      |  ^~~
+  ERROR: Configured target is mips64 but compiler probe indicates mips32
 
 Fixes:
- - http://autobuild.buildroot.org/results/75267aa5b5a631f091d4c8cb6ad9baeb5f72ee11
- - http://autobuild.buildroot.org/results/55b7431a50b85c24406131af1932d6f3f6853de6
+ - http://autobuild.buildroot.org/results/c44f44f36686268479563afd879db588e15ede7d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pixman/pixman.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/botan/botan.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 6fab539593..64302fa49a 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -19,7 +19,9 @@ HOST_PIXMAN_DEPENDENCIES = host-pkgconf
- PIXMAN_AUTORECONF = YES
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index f9ebcf8d0a..6095844b14 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -15,6 +15,7 @@ BOTAN_INSTALL_STAGING = YES
  
- # don't build gtk based demos
--PIXMAN_CONF_OPTS = --disable-gtk
-+PIXMAN_CONF_OPTS = \
-+	--disable-gtk \
-+	--disable-loongson-mmi
- 
- # The ARM SIMD code from pixman requires a recent enough ARM core, but
- # there is a runtime CPU check that makes sure it doesn't get used if
+ BOTAN_CONF_OPTS = \
+ 	--cpu=$(BR2_ARCH) \
++	--disable-cc-tests \
+ 	--os=linux \
+ 	--cc=gcc \
+ 	--cc-bin="$(TARGET_CXX)" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
