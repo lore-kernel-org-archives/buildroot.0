@@ -1,46 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8119C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 19:43:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C04CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 19:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 560398439D;
-	Thu, 21 Apr 2022 19:43:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4DE8417CF;
+	Thu, 21 Apr 2022 19:44:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N8n2Ve3sosa6; Thu, 21 Apr 2022 19:43:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6OwPybbTnWOq; Thu, 21 Apr 2022 19:44:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 641C584384;
-	Thu, 21 Apr 2022 19:43:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB88A1BF387
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:43:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7657D41729;
+	Thu, 21 Apr 2022 19:44:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6872C1BF387
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 952D36FE5B
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:43:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56E2F41124
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 19:44:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o5mzMVreXvLB for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 19:43:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6B236F5D3
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 19:43:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id BAF6384044; Thu, 21 Apr 2022 19:33:38 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 21:42:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: add69bdec274192ff571330a37e1549ac20db543
-X-Git-Newrev: 6ab8b1e26386527659c27d9b194a0915e1ff6c34
-X-Patchwork-Hint: ignore
-Message-Id: <20220421193338.BAF6384044@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] meson-package: prevent cmake
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0H6pWp6aGEbQ for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 19:44:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6642441169
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 19:44:46 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c4b1:aa4d:25d5:982f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id B8FBE5FF27;
+ Thu, 21 Apr 2022 21:44:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1650570284;
+ bh=ce9V+RIpaRvW3B4a6bKc3L9D+7t/ZtijrAvDmo+QWZQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=lS0KJBaP8aR17pA3e7AHE+VTdBL2umrDM8FoVY+6b/8vRHtCnlBe96qQawFKXo3uE
+ C9Gjrl01vS3d+QSYZPXcolA76PrMNEM8zlFjNi0LBrnbaHf1t2N4iKQnHqgrYetTIJ
+ nEo6b1rDIRPmpIEd+cwtv+m5MHtOVN573q8lGSiZBA4Q+253qZtcUc0dLAVTz3UEc5
+ mQhss936Y+UBw01SSOUKlSzXI7ph7ZJBaeTuRzMwK0ziGWt521SO5fK0k9bHNfZKTc
+ lKcgaop/xCFikWehco84S8pcVRXgDidwFyLwqme4WbAYfJZ31fNUCPqMvQePYjrqvL
+ de/25HcjWjdaw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 21 Apr 2022 21:44:40 +0200
+Date: Thu, 21 Apr 2022 21:44:40 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Andreas Ziegler <br015@umbiko.net>
+Message-ID: <20220421194440.GR2730@scaer>
+References: <20220421152530.3900282-1-br015@umbiko.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220421152530.3900282-1-br015@umbiko.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] meson-package: prevent cmake
  find_package() picking up host libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -53,67 +72,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ab8b1e26386527659c27d9b194a0915e1ff6c34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Andreas, All,
 
-The meson build system uses (1) pkg-config and (2) cmake find_package to locate
-dependencies and stops only if a package is found. Cmake uses a toolchain file
-that is generated by meson from the existing configuration [1].
+On 2022-04-21 17:25 +0200, Andreas Ziegler spake thusly:
+> The meson build system uses (1) pkg-config and (2) cmake find_package to locate 
+> dependencies and stops only if a package is found. Cmake uses a toolchain file 
+> that is generated by meson from the existing configuration [1]. 
+> 
+> The cmake toolchain file misses CMAKE_FIND_ROOT_PATH and CMAKE_FIND_ROOT_PATH_* 
+> settings, and find_package() falls back to the default behaviour and looks for 
+> dependencies on the build machine (the Buildroot HOST_DIR). 
+> 
+> Use a feature introduced in meson 0.56.0 [2] to pass the Buildroot toolchain 
+> file to cmake instead of using a meson-generated one. 
+> 
+> Fixes the following build failures:
+> http://autobuild.buildroot.org/results/056/05673ed04c6f044f1b56b9d5342d61653be43a18/
+> http://autobuild.buildroot.org/results/f0a/f0a9e719114f19dc9d20622ed85dd4f8e968c20f/
+> http://autobuild.buildroot.org/results/527/527ee199813abbacd61c3fa32b517ea60af60659/
+> 
+> [1[ see mesonbuild/cmake/toolchain.py
+> [2] see https://mesonbuild.com/CMake-module.html#cross-compilation
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 
-The cmake toolchain file misses CMAKE_FIND_ROOT_PATH and CMAKE_FIND_ROOT_PATH_*
-settings, and find_package() falls back to the default behaviour and looks for
-dependencies on the build machine (the Buildroot HOST_DIR).
+Thanks for the detailed commit log.
 
-Use a feature introduced in meson 0.56.0 [2] to pass the Buildroot toolchain
-file to cmake instead of using a meson-generated one.
+Applied to master, thanks.
 
-Fixes the following build failures:
-http://autobuild.buildroot.org/results/056/05673ed04c6f044f1b56b9d5342d61653be43a18/
-http://autobuild.buildroot.org/results/f0a/f0a9e719114f19dc9d20622ed85dd4f8e968c20f/
-http://autobuild.buildroot.org/results/527/527ee199813abbacd61c3fa32b517ea60af60659/
+Regards,
+Yann E. MORIN.
 
-[1[ see mesonbuild/cmake/toolchain.py
-[2] see https://mesonbuild.com/CMake-module.html#cross-compilation
+> ---
+>  package/pkg-meson.mk                   | 1 +
+>  support/misc/cross-compilation.conf.in | 3 +++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 9e70d49b60..f1390a18d0 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -81,6 +81,7 @@ define PKG_MESON_CROSSCONFIG_SED
+>          -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
+>          -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
+>          -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
+> +        -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>          -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
+>          -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
+>          $(TOPDIR)/support/misc/cross-compilation.conf.in
+> diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
+> index 1977a83501..235e5a8495 100644
+> --- a/support/misc/cross-compilation.conf.in
+> +++ b/support/misc/cross-compilation.conf.in
+> @@ -26,6 +26,9 @@ needs_exe_wrapper = true
+>  sys_root = '@STAGING_DIR@'
+>  pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
+>  pkg_config_static = '@STATIC@'
+> +# enable meson build to pass a toolchain file to cmake
+> +cmake_toolchain_file = '@HOST_DIR@/share/buildroot/toolchainfile.cmake'
+> +cmake_defaults = false
+>  
+>  [host_machine]
+>  system = 'linux'
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-meson.mk                   | 1 +
- support/misc/cross-compilation.conf.in | 3 +++
- 2 files changed, 4 insertions(+)
-
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 9e70d49b60..f1390a18d0 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -81,6 +81,7 @@ define PKG_MESON_CROSSCONFIG_SED
-         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
-         -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
-         -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
-+        -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-         -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
-         -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
-         $(TOPDIR)/support/misc/cross-compilation.conf.in
-diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
-index 1977a83501..235e5a8495 100644
---- a/support/misc/cross-compilation.conf.in
-+++ b/support/misc/cross-compilation.conf.in
-@@ -26,6 +26,9 @@ needs_exe_wrapper = true
- sys_root = '@STAGING_DIR@'
- pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
- pkg_config_static = '@STATIC@'
-+# enable meson build to pass a toolchain file to cmake
-+cmake_toolchain_file = '@HOST_DIR@/share/buildroot/toolchainfile.cmake'
-+cmake_defaults = false
- 
- [host_machine]
- system = 'linux'
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
