@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEFA7C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 18:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCFC1C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 18:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F8BE60FC1;
-	Thu, 21 Apr 2022 18:04:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FAC182422;
+	Thu, 21 Apr 2022 18:04:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y2BxQiqtj3lw; Thu, 21 Apr 2022 18:04:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RFUQUmoo4hTm; Thu, 21 Apr 2022 18:04:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB87860FAC;
-	Thu, 21 Apr 2022 18:04:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 211E41C1189
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB10A81C21;
+	Thu, 21 Apr 2022 18:04:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 099521BF406
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAC9860FA2
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A32982FAE
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n7gwHEIAk7bi for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 18:01:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P2SF5Hbs6x-N for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 18:01:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9D9860FAE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 785D183E27
  for <buildroot@buildroot.org>; Thu, 21 Apr 2022 18:01:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E1C8F83FB8; Thu, 21 Apr 2022 17:50:56 +0000 (UTC)
+ id 7C47983FB8; Thu, 21 Apr 2022 17:50:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 19:53:06 +0200
+Date: Thu, 21 Apr 2022 19:32:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33a4b795b23a72a8517afc1ca5ceccaad66d426b
-X-Git-Newrev: c44f745c8c2af821a00276141052a4e2e66128ed
+X-Git-Oldrev: 30cbb1e21716b205d1bbd5fc23d53a3f83773f22
+X-Git-Newrev: 84fe47d008d44cf0ec22885406d5644cdfbf072c
 X-Patchwork-Hint: ignore
-Message-Id: <20220421175056.E1C8F83FB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/diffutils: fix build on arceb
+Message-Id: <20220421175056.7C47983FB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbpf: needs __sync_*_4 intrisics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,73 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c44f745c8c2af821a00276141052a4e2e66128ed
+commit: https://git.buildroot.net/buildroot/commit/?id=84fe47d008d44cf0ec22885406d5644cdfbf072c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump to version 3.8 in
-commit 1f89c80417ad03127650b22c41ec4e30d42c549f:
-
-sigsegv.c: In function 'sigsegv_handler':
-sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
-  979 |                       : vma.is_near_this (addr, &vma))
-      |                            ^
+libbpf needs __sync_*_4 intrisics since bump to version 0.7.0 in commit
+4b1003855b02f6d9c77de634c9d0f636470e7388 and
+https://github.com/libbpf/libbpf/commit/b0c3d7133faa55fbcbc19f76f9cc9e183e178c97
 
 Fixes:
- - http://autobuild.buildroot.org/results/8c5b8b37eb3c2667c75666079b056df7e0023e05
+ - No autobuilder failures (yet)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...gsegv-Fix-compilation-error-on-arceb-CPUs.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/libbpf/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/diffutils/0004-sigsegv-Fix-compilation-error-on-arceb-CPUs.patch b/package/diffutils/0004-sigsegv-Fix-compilation-error-on-arceb-CPUs.patch
-new file mode 100644
-index 0000000000..20db798f3a
---- /dev/null
-+++ b/package/diffutils/0004-sigsegv-Fix-compilation-error-on-arceb-CPUs.patch
-@@ -0,0 +1,41 @@
-+From 1957bb5113a2bf02c7ecf0815125eec04b9476d2 Mon Sep 17 00:00:00 2001
-+From: Bruno Haible <bruno@clisp.org>
-+Date: Sat, 16 Apr 2022 03:01:51 +0200
-+Subject: sigsegv: Fix compilation error on arceb CPUs.
-+
-+Reported by Fabrice Fontaine <fontaine.fabrice@gmail.com> in
-+<https://lists.gnu.org/archive/html/bug-gnulib/2022-04/msg00028.html>.
-+
-+* m4/stack-direction.m4 (SV_STACK_DIRECTION): Treat the 'arc' variants
-+like 'arc'.
-+
-+[Retrieved (and backported) from:
-+https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=1957bb5113a2bf02c7ecf0815125eec04b9476d2]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ChangeLog             | 8 ++++++++
-+ m4/stack-direction.m4 | 4 ++--
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
-+index 1df823e..924c5de 100644
-+--- a/m4/stack-direction.m4
-++++ b/m4/stack-direction.m4
-+@@ -1,4 +1,4 @@
-+-# stack-direction.m4 serial 7
-++# stack-direction.m4 serial 11
-+ dnl Copyright (C) 2002-2021 Free Software Foundation, Inc.
-+ dnl This file is free software, distributed under the terms of the GNU
-+ dnl General Public License.  As a special exception to the GNU General
-+@@ -18,7 +18,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
-+       a29k | \
-+       aarch64* | \
-+       alpha* | \
-+-      arc | \
-++      arc | arceb | arc32 | arc64 | \
-+       arm* | strongarm* | xscale* | \
-+       avr | avr32 | \
-+       bfin | \
-+-- 
-+cgit v1.1
-+
+diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
+index 3aa6679b3a..b3d6e44c6a 100644
+--- a/package/libbpf/Config.in
++++ b/package/libbpf/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
+ config BR2_PACKAGE_LIBBPF
+ 	bool "libbpf"
+ 	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on !BR2_STATIC_LIBS # elfutils
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
+@@ -27,6 +28,7 @@ config BR2_PACKAGE_LIBBPF
+ 
+ comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
+ 	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
