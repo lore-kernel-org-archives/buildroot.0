@@ -1,82 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE995C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 11:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D37EFC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 14:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 621C68401F;
-	Thu, 21 Apr 2022 11:57:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C24640C62;
+	Thu, 21 Apr 2022 14:45:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vh_28XTAQj71; Thu, 21 Apr 2022 11:57:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w327CWIN0KG0; Thu, 21 Apr 2022 14:45:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5538083F3D;
-	Thu, 21 Apr 2022 11:57:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D15801BF9B5
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 11:57:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25CFA40499;
+	Thu, 21 Apr 2022 14:45:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4BF51BF2A0
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 14:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF61160C22
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 11:57:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C136F40499
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 14:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vCakp2q3uFkb for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 11:57:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A06BB60881
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 11:57:37 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id y21so3048905wmi.2
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 04:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Jp8jY3iIvAFv1Hgz2zvUcN+rXGHwoMGnWHCX/DdQxcI=;
- b=PZkSabC0Wm4/5i8vCPpRSOR+47oXYq/Ref9KDFbE4VWENOxJVldN7T/fmMFRDM2v8k
- KWHExj66KklBLtJ04rFNNKi1O8Qxm6PCBgf+5uIaEz/8D7TlOrzkL0IUPigYZZfGFc2C
- xe9LXUxez1vXFSksRqCsIyZZPGTj2tXK0scfHVgUMrxsB32jVs7ansMPL4JQIOkLRAfA
- tUbNWqyQoysOiTRrndCt5ZoDaf82ANtRaDSGnVIUzVX2hnLwihi8PJp/UNuuFNJSqrNc
- BskrxSirpVda9IZWtdmSbTXWbJE+hAmX3OE/O9nvV3h8rCwhhTsRwUhxm86pbWLXk+3M
- cJVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Jp8jY3iIvAFv1Hgz2zvUcN+rXGHwoMGnWHCX/DdQxcI=;
- b=iBoaRoJI9EgLbNBXYegDV1qR7OpfkebejN/y0y+/UM6mjlht+DsbreSLEvrdpkSUOK
- 47V+ueoeX19Yfx/9jaOGm/qJ6YKsjE4+/nleC2n/y/d4UQbilb2j0M7q/GP50Bhhcudu
- 18Qxvt/rWB5C5ldaZX1vJHIWJWesRndacA5rLoC9kRrpSoz2eLNr8wnKjTkRCcrh17wB
- T8ecMbaztCR/dKfLT03Rxvitv7DLfW4Jfh7xjl+04qiH1i8Dq9LG6RczgILfb4TzoAS8
- h2KggJNtOcURbn720vPG6rTDVPT21MBF2dUWBcmVgtZ/nvqBKsRUhxk+bVlCkaayVC3V
- g1yg==
-X-Gm-Message-State: AOAM533kJXzmoOP3AfELJ5VgWAkOzLejyefuDNT2gj91fdZLR7axPRqQ
- 9yakqNaEhHVPpFZk7a24x3LHy8y9CnA=
-X-Google-Smtp-Source: ABdhPJzFbKiecRFTPyAgCINX5l/AnXcMbfzbG6m+KUqYqt5Cmt7mVCvYdDhqKeiDZXGWR5VKxUJsIw==
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr8093060wmc.94.1650542255385; 
- Thu, 21 Apr 2022 04:57:35 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- y6-20020a05600015c600b0020a8f950471sm2698427wry.115.2022.04.21.04.57.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Apr 2022 04:57:34 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 13:55:29 +0200
-Message-Id: <20220421115529.2625137-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ytD6WnsefPao for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 14:45:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0E29F4029B
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 14:45:37 +0000 (UTC)
+Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 5D342C543338;
+ Thu, 21 Apr 2022 16:45:35 +0200 (CEST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/arptables: fix build with
- BR2_OPTIMIZE_0
+Date: Thu, 21 Apr 2022 14:45:35 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <20220409160921.GA3547512@scaer>
+References: <20220331132230.227424-1-br015@umbiko.net>
+ <eb0cfc91-7c2b-875f-9e2d-a8e8a0a8291f@mind.be>
+ <9d97e0d4e0d90badb3339638aa7e453d@umbiko.net>
+ <185b80c4-9083-c5f9-a555-f28183160b11@mind.be>
+ <20220409160921.GA3547512@scaer>
+Message-ID: <501822bdbd2742b7158a919346718827@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: Re: [Buildroot] User-visible Config.in feature sub-options [was:
+ Re: [PATCH 1/1] package/mpd: explicitly disable features to avoid collision
+ with host packages]
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,96 +62,207 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: =?UTF-8?Q?J=C3=B6rg_Krause?= <joerg.krause@embedded.rocks>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with BR2_OPTIMIZE_0 raised since the
-addition of the package in commit
-efc10eb6b87884f1f7917462d78af6953fcd99e3 and
-https://git.netfilter.org/arptables/commit/?id=369afc14de1d89ff5627ff4c5f72f6f839244b50:
+Hi Yann, Arnout, *,
 
-libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
-   48 | #define GET_TARGET  arpt_get_target
-      |                     ^~~~~~~~~~~~~~~
-libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
-   16 | GET_TARGET(STRUCT_ENTRY *e)
-      | ^~~~~~~~~~
-In file included from .//include/libarptc/libarptc.h:7,
-                 from libarptc/libarptc.c:26:
-.//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
-  196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
-      |                                           ^~~~~~~~~~~~~~~
+I would like to postpone this change for the moment; the root cause for 
+the addressed build failures lies within the meson build system (patch 
+coming) and fixing this will make some of the proposed modifications 
+unnecessary.
 
-Fixes:
- - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
+I would still like to implement the selection logic changes, because I 
+started to notice some inconsistencies and also missing features.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...tc-libarptc_incl.c-fix-build-with-O0.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
+Kind regards,
+Andreas
 
-diff --git a/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch b/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
-new file mode 100644
-index 0000000000..29f2d714e2
---- /dev/null
-+++ b/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
-@@ -0,0 +1,49 @@
-+From 7d8285ae92253017a15282dd25f76d76eed49518 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 21 Apr 2022 13:43:23 +0200
-+Subject: [PATCH] libarptc/libarptc_incl.c: fix build with -O0
-+
-+Fix the following build failure with -O0:
-+
-+libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
-+   48 | #define GET_TARGET  arpt_get_target
-+      |                     ^~~~~~~~~~~~~~~
-+libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
-+   16 | GET_TARGET(STRUCT_ENTRY *e)
-+      | ^~~~~~~~~~
-+In file included from .//include/libarptc/libarptc.h:7,
-+                 from libarptc/libarptc.c:26:
-+.//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
-+  196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
-+      |                                           ^~~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libarptc/libarptc_incl.c | 8 --------
-+ 1 file changed, 8 deletions(-)
-+
-+diff --git a/libarptc/libarptc_incl.c b/libarptc/libarptc_incl.c
-+index c4d5de3..441f2de 100644
-+--- a/libarptc/libarptc_incl.c
-++++ b/libarptc/libarptc_incl.c
-+@@ -11,14 +11,6 @@
-+ /* (C)1999 Paul ``Rusty'' Russell - Placed under the GNU GPL (See
-+    COPYING for details). */
-+ 
-+-#ifndef __OPTIMIZE__
-+-STRUCT_ENTRY_TARGET *
-+-GET_TARGET(STRUCT_ENTRY *e)
-+-{
-+-	return (void *)e + e->target_offset;
-+-}
-+-#endif
-+-
-+ static int sockfd = -1;
-+ static void *arptc_fn = NULL;
-+ 
-+-- 
-+2.35.1
-+
--- 
-2.35.1
 
+On 2022-04-09 16:09, Yann E. MORIN wrote:
+> Arnout, Andreas, All,
+> 
+> On 2022-04-09 17:41 +0200, Arnout Vandecappelle spake thusly:
+>> On 08/04/2022 15:22, Andreas Ziegler wrote:
+>> >Outline of the proposed next version of this change:
+>> >[I did not want to make so many changes, but you are right, it makes sense.]
+>> >Separate logic from implementation: Remove feature dependencies from
+>> >mpd.mk and put selection logic into Config.in exclusively.
+>>  As you can see from the description above: this is making things 
+>> quite
+>> complicated. And one of the tenets of Buildroot is to keep things 
+>> simple.
+> [--SNIP--]
+>>  We don't have a consistent policy for this case, but I believe the 
+>> policy
+>> should be:
+>> 
+>> - Add Config.in options only for features that are important, 
+>> meaningful for
+>> the user (e.g. codec support).
+>> 
+>> - Add Config.in options only for features that have a size impact 
+>> (usually
+>> due to the dependencies they pull in).
+>> 
+>> - In the .mk file, don't use the Config.in options but instead use 
+>> automatic
+>> dependencies only.
+> 
+> That would be very confusign from a user perspective: they would not
+> enable a feature of a package, yet the package would have that feature
+> enabled if th3e depedency is enabled.
+> 
+> Besides the technical surprise, this could also lead to licensing 
+> issues
+> if the combination of the two packages require special handling (e.g.
+> because the library license propagates top the package).
+> 
+> So, the settings from Config.in must be abode by.
+> 
+>> That way, the .mk file is kept simple (no problematic cases like the
+>> libupnp/expat interaction in this patch). The Config.in is a bit
+>> complicated, but it doesn't explode.
+>> 
+>>  Bottom line: I think it's actually the reverse that needs to be done.
+> 
+> Err. I don;'t understand what you meant here... :-(
+> 
+>> >In the makefile, a feature is responsible only to select or deselect its
+>> >configure option and, if this feature relies on a library, add a
+>> >dependency on this.
+>> 
+>>  So I think the .mk file should simply contain things like:
+>> 
+>> ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+>> MPD_DEPENDENCIES += libvorbis
+>> MPD_CONF_OPTS += -Dvorbis=enabled -Dvorbisenc=enabled
+>> else
+>> MPD_CONF_OPTS += -Dvorbis=disabled -Dvorbisenc=disabled
+>> endif
+>> 
+>> and BR2_PACKAGE_MPD_VORBIS only has an indirect effect, by selecting
+>> BR2_PACKAGE_LIBVORBIS.
+> 
+> I highly disagree; the conditional should be on the package setting, 
+> not
+> the dependency.
+> 
+>> >Duplicated selection logic in mpd.mk will be eliminated. A build
+>> >dependency will only be added if it is present in the mpd configuration,
+>> >and not be inherited accidentally from concurrent packages.
+>>  So this is exactly the reverse of what I'd want. I think it makes the 
+>> .mk
+>> file harder to maintain for no practical gain.
+> 
+> Yet, the proposal by Andreas is I believe the correct way to handle the
+> situation.
+> 
+>> >This impacts the following features: expat, id3tag, yajl. id3tag already
+>> >is half implemented, but not used consistently (has an option entry in
+>> >Config.in, but does not select this, but handles dependencies
+>> >individually). expat and yajl would be created as hidden options without
+>> >visibility (no user interaction necessary).
+>>  Yes, that would indeed be an alternative to keep the .mk file 
+>> simpler. I
+>> take it you mean to add a blind option BR2_PACKAGE_MPD_EXPAT that gets
+>> selected by the other MPD options that rely on expat. This indeed 
+>> simplifies
+>> things, but it is still a bit more complicated than what I propose.
+> 
+> But more correct.
+> 
+>> >Separate vorbis decoder and encoder options; currently the decoder feature
+>> >BR2_PACKAGE_MPD_VORBIS enables both ogg/vorbis decoding and ogg/vorbis
+>> >encoding, which is probably not intended.
+>>  I don't see a reason why you would want only one or the other. It has
+>> virtually no impact on size.
+> 
+> Indeed here, vorbis support should just enable both the 
+> encoder/decoder.
+> 
+> The only reason that we might want to be able to chose, is if enabling
+> one or the other have different requirements: extra size requirements,
+> extra dependencies, legal issues in your jurisdiction, etc...
+> 
+>>  In summary, I think we have the following three options for packages 
+>> where
+>> we decide we want user-visible sub-options.
+>> 
+>> - 1-to-1 mapping with the package configure options. Interaction 
+>> between the
+>> options is expressed with select/depends in Config.in. The .mk file 
+>> simply
+>> maps the Config.in options. If it's really not relevant for the user, 
+>> a
+>> Config.in option can be made blind. This is what Andreas proposes.
+> 
+> I am OK with that.
+> 
+>> - Only automatic dependencies in the .mk file, except in cases where 
+>> it has
+>> an important size or behaviour impact. Add Config.in options only in 
+>> case it
+>> is relevant. This is what I propose.
+> 
+> I am OK with the principle, but this does not look like what you
+> proposed above, as the build-dependencies would be on the dependency
+> being enabled, not the package option (e.g. BR2_PACKAGE_MPD_VORBIS vs.
+> BR2_PACKAGE_LIBVORBIS as you showed above).
+> 
+>> - Add Config.in options for important features. Express 
+>> interdependencies
+>> between package configure options in the .mk file. This is the current
+>> situation for mpd.
+> 
+> I don;t see a difference here: "Add Config.in options only in case it 
+> is
+> relevant" and "Add Config.in options for important features" are 
+> exactly
+> the same in mny eyes...
+> 
+>>  So let's see what the other maintainers think. If you (or the other
+>> maintainers) don't agree, we can compromise and go back to the 
+>> original
+>> patch (with just the npupnp/expat situation resolved).
+> 
+> So, I'll summariser my position:
+> 
+>   - add Config.in options when it makes sense:
+>     - important size delta
+>     - legal issues
+>     those options select the appropriate packages
+> 
+>   - in the .mk:
+>       - add conditional blocks based on those options, add build
+>         dependencies as appropriate;
+>       - add conditoinal dependencies on package for automatic
+>         dependencies
+> 
+>>  Ideally I'd like the maintainers (and anybody else, really) to come 
+>> to a
+>> decision here and eventually formalize it in the manual. Because it's 
+>> not
+>> the first time this discussion crops up.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___        
+>        |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There 
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   
+> conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
