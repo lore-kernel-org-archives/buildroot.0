@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36139C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00030C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:05:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4B7C41700;
-	Thu, 21 Apr 2022 21:04:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JjWrKct8kITK; Thu, 21 Apr 2022 21:04:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1659415D2;
-	Thu, 21 Apr 2022 21:04:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FCED1BF3E3
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF0534114A
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFDE8411C3;
+	Thu, 21 Apr 2022 21:05:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lcUWH9uiPOIs for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7sc-PP6d43TU; Thu, 21 Apr 2022 21:05:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAF114118E;
+	Thu, 21 Apr 2022 21:05:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EFE41BF3E3
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A07B419F0
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a0fdJWLX8jXw for <buildroot@lists.busybox.net>;
  Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B3254114F
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 21:02:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A69841C39
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 21:02:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D4B7E840FF; Thu, 21 Apr 2022 20:52:06 +0000 (UTC)
+ id C258184104; Thu, 21 Apr 2022 20:52:06 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 21 Apr 2022 22:32:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e0fbf4dcd4cd0cf17cfe89ebf6808fdace8f01f
-X-Git-Newrev: 7d81d082aaaa105fa8ac8d06a4bc9d63cef6352c
+X-Git-Oldrev: 064ad45d35ba4fa8042d251c642c0f721ad0a2b2
+X-Git-Newrev: 90bdef4f17d46929c2c0e19110a11dbcc4ba851d
 X-Patchwork-Hint: ignore
-Message-Id: <20220421205206.D4B7E840FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pybind: needs C++
+Message-Id: <20220421205206.C258184104@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/keepalived: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +58,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d81d082aaaa105fa8ac8d06a4bc9d63cef6352c
+commit: https://git.buildroot.net/buildroot/commit/?id=90bdef4f17d46929c2c0e19110a11dbcc4ba851d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-python-pybind needs C++ since its addition in commit
-f42f2a63b3c5733dc56a58b18d6ba417a59d8342:
+Fix the following build failure with libressl:
 
--- Check for working CXX compiler: /usr/bin/c++ - broken
-CMake Error at /nvmedata/autobuild/instance-24/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
-  The C++ compiler
-
-    "/usr/bin/c++"
-
-  is not able to compile a simple test program.
+/nvmedata/autobuild/instance-9/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: check/libcheck.a(check_ssl.o): in function `ssl_connect':
+check_ssl.c:(.text+0x7da): undefined reference to `SSL_set0_wbio'
 
 Fixes:
- - http://autobuild.buildroot.org/results/90364b752bef3f7b4b1fd9181e21030349e0e529
+ - http://autobuild.buildroot.org/results/76f72a3c7350ea265e2277c89d68e5256410e94c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pybind/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../keepalived/0003-fix-build-with-libressl.patch  | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/python-pybind/Config.in b/package/python-pybind/Config.in
-index 604cb9ee67..6e03cc62fc 100644
---- a/package/python-pybind/Config.in
-+++ b/package/python-pybind/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_PYTHON_PYBIND
- 	bool "python-pybind"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  PyBind is a lightweight header-only library that exposes C++
- 	  types in Python and vice versa, mainly to create Python
- 	  bindings of existing C++ code.
- 
- 	  http://pybind11.readthedocs.org/en/master
+diff --git a/package/keepalived/0003-fix-build-with-libressl.patch b/package/keepalived/0003-fix-build-with-libressl.patch
+new file mode 100644
+index 0000000000..090d35511c
+--- /dev/null
++++ b/package/keepalived/0003-fix-build-with-libressl.patch
+@@ -0,0 +1,50 @@
++From bbec15d4781670ac1be5e543cb04543f79200e69 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 12 Apr 2022 20:30:57 +0200
++Subject: [PATCH] fix build with libressl
 +
-+comment "python-pybind needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
++SSL_set0_rbio is provided by libressl since version 3.4.0 and
++https://github.com/libressl-portable/openbsd/commit/c99939f9665a9c3c648682b4987df46600b70efc
++but SSL_set0_wbio is not provided resulting in the following build
++failure:
++
++/nvmedata/autobuild/instance-9/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: check/libcheck.a(check_ssl.o): in function `ssl_connect':
++check_ssl.c:(.text+0x7da): undefined reference to `SSL_set0_wbio'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/76f72a3c7350ea265e2277c89d68e5256410e94c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/acassen/keepalived/commit/bbec15d4781670ac1be5e543cb04543f79200e69]
++---
++ configure.ac                 | 2 +-
++ keepalived/check/check_ssl.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5a2ea76ec..e8b5ccc41 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1327,7 +1327,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++ AC_CHECK_FUNCS([SSL_CTX_set_verify_depth])
++ 
++ # SSL_set0_rbio(), SSL_set0_wbio() OPENSSL_init_crypto() and TLS_method() introduced OpenSSL v1.1.0
++-AC_CHECK_FUNCS([SSL_set0_rbio OPENSSL_init_crypto TLS_method])
+++AC_CHECK_FUNCS([SSL_set0_wbio OPENSSL_init_crypto TLS_method])
++ 
++ # In OpenSSL v1.1.1 the call to SSL_CTX_new() fails if OPENSSL_init_crypto() has been called with
++ # OPENSSL_INIT_NO_LOAD_CONFIG. It does not fail in v1.1.0h and v1.1.1b.
++diff --git a/keepalived/check/check_ssl.c b/keepalived/check/check_ssl.c
++index 0155fce59..2cbedb8d3 100644
++--- a/keepalived/check/check_ssl.c
+++++ b/keepalived/check/check_ssl.c
++@@ -234,7 +234,7 @@ ssl_connect(thread_ref_t thread, int new_req)
++ 		BIO_get_fd(req->bio, &bio_fd);
++ 		if (fcntl(bio_fd, F_SETFD, fcntl(bio_fd, F_GETFD) | FD_CLOEXEC) == -1)
++ 			log_message(LOG_INFO, "Setting CLOEXEC failed on ssl socket - errno %d", errno);
++-#ifdef HAVE_SSL_SET0_RBIO
+++#ifdef HAVE_SSL_SET0_WBIO
++ 		BIO_up_ref(req->bio);
++ 		SSL_set0_rbio(req->ssl, req->bio);
++ 		SSL_set0_wbio(req->ssl, req->bio);
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
