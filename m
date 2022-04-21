@@ -1,188 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0DCC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 09:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AFC1C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 10:04:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B27A405BB;
-	Thu, 21 Apr 2022 09:25:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2524E81B23;
+	Thu, 21 Apr 2022 10:04:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LS8rpbDJcLmq; Thu, 21 Apr 2022 09:25:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cvT79_FnP2Qx; Thu, 21 Apr 2022 10:04:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3FC4B404DF;
-	Thu, 21 Apr 2022 09:25:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 87B791BF356
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 09:25:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C348681AF6;
+	Thu, 21 Apr 2022 10:04:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 223081BF487
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 10:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 750B060F9B
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 09:25:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E31D40556
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 10:04:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=microchip.com header.b="ILNvm24C";
- dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com
- header.b="rSJrcnpo"
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6I98I5XpM3Ir for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 09:25:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.154.123])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 563FD607A4
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 09:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1650533141; x=1682069141;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-id:content-transfer-encoding: mime-version;
- bh=CGLVs42QR7Rx4xXPvt5/SmeLM7pFcTFmsM05fytcPEs=;
- b=ILNvm24Cy9D6HXsAd1E5Ic3/SSthtrgSnZlIi2zMkWnyYGwwEW95cXAZ
- YWn+WMThr8USiRElfQolEU6PBXc9vhysnn8Pr9a2hknsYsEG+Nv1hNBts
- /x4BfpHN28u4g/iYPrhvkIUSnCx+NWdoePwCwkYKqAhSUH/TCNRfrAxkt
- 9cUIel05JqmXiBGcvH6VkjzX/SWeM4Zhr/Dr5bs2fHijSuOrU4Y15Cckz
- uFA19t2sEIiUDzHDpptVT9k8VU/WyWD6hSAjfnGd0G6xmESHHtb6McqOu
- 9p3OqLMhWabwW1kTAUcze12YXdwuz4GgCfQ6ClYw4MSdxkNfuBsA8Lb1t A==;
-X-IronPort-AV: E=Sophos;i="5.90,278,1643698800"; d="scan'208";a="93077011"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 21 Apr 2022 02:25:40 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 21 Apr 2022 02:25:39 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server
- (version=TLS1_2, 
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Thu, 21 Apr 2022 02:25:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DyXKvECjp9S67Ke2aShI2Sr87bTzIOWpFY2hsAbNegownz64alu5CuvxCujl9L2bLu0PYxM6B3vAk/a9KkGfeyBg4cGw6nCAwUR2lIPMRvS3DfmZlvpm+TrWnB0ZOQ/dCP+cwX7GOQHWrh9Okilr1F7e813ROtfqtUR/W1p+r8P18xx2CRI1Hh9VEKgEzWU5aAee+ttkz9CNIS2yaW2dHz5y4nKj5EH+7IeOYqNR3SyIpm8mvgXOfv2/LMQHCbN9hRga+4bWt9+j0wLgpbFFeV5NNa/HszlcECOWVrHbiNpX0x+PmP0KlzquvptyuXThdlzSjkRpS02f5mG0nIne3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CGLVs42QR7Rx4xXPvt5/SmeLM7pFcTFmsM05fytcPEs=;
- b=PRQo6WqXiZCtIXYVyr5S1MW1IkBeTWwwk8rr7IYSBkdX3i13bJM1bU/mkVeVkzvQinEhCcxSvOmAQXQpaYUI8kyoFH50MbKclywYiPJTgqf+7ahSADZnXVX2nLMExnJAbKAGqWSpU4pwm7ovEp2SR+Vnzyu7ngc/Ur6wgDEujoEBFE/zoheEPUI19tpzGylnliP5EZAWiJyockjPzbRYDyMgqVuFvkT/xKMfKwm+nG8vgKHvmouOyO4fmbSZG/5stP0sAhpAZ7fw84+gxL+Ro9bv14ox0Z7iRbqeEhGb4xsbzaS6MnyCFMRebLsD9BE0V2dnITlgEoeo0MKoHZ+zaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CGLVs42QR7Rx4xXPvt5/SmeLM7pFcTFmsM05fytcPEs=;
- b=rSJrcnpoYr3vliEgBRdblc7aphQF7V9LOPy8sKzpNcFX/cUj1z1E1ZUiplC+Lr0G5O4/NREEO8+/C8RWp/UhKONX9jLSwEWg8xahgtxVavvYIqusKLFNdVBgYIrSs5Fj6eEOwkV/iTbJ5RK8y2/lknXqjXqwL1qlKRAg4Kx5f7U=
-Received: from BL1PR11MB5384.namprd11.prod.outlook.com (2603:10b6:208:311::14)
- by SJ0PR11MB5939.namprd11.prod.outlook.com (2603:10b6:a03:42e::21)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 21 Apr
- 2022 09:25:37 +0000
-Received: from BL1PR11MB5384.namprd11.prod.outlook.com
- ([fe80::39cb:eae2:1dbc:a5f2]) by BL1PR11MB5384.namprd11.prod.outlook.com
- ([fe80::39cb:eae2:1dbc:a5f2%8]) with mapi id 15.20.5186.014; Thu, 21 Apr 2022
- 09:25:37 +0000
-To: <fontaine.fabrice@gmail.com>
-Thread-Topic: [PATCH 1/1] package/dhcp: use internal bind
-Thread-Index: AQHYTmEZ03FYkSO1E0aa3ZrEpJPiy6zsKDSAgAAOXOOAAF/EAIAA5G6AgAAJoDiAAZ23gIAADdeAgABxAwCABxzhgIAAP2AAgAAT2ACAAGKzgIACswIA
-Date: Thu, 21 Apr 2022 09:25:37 +0000
-Message-ID: <65316bc2-f596-3b3e-71fc-ffafa87e2165@microchip.com>
-References: <20220403100318.2581647-1-fontaine.fabrice@gmail.com>
- <8735ims60b.fsf@dell.be.48ers.dk>
- <d1a1ead3-98a8-35fe-4c4c-e7fd3f02e058@microchip.com>
- <CAPi7W81VbAArhoyDEJrNMeseVXgmJzu2+K39njx1j5y3_5mb5g@mail.gmail.com>
- <8735iifser.fsf@dell.be.48ers.dk>
- <34fddc8f-8710-65f9-330d-81fefe64354a@microchip.com>
- <87y20aeb04.fsf@dell.be.48ers.dk>
- <CAPi7W83dikm9d7KWjKfqYwr7mP3U4WzAzdw6iLF6gmOkTgwB-Q@mail.gmail.com>
- <8d53da79-2a90-8649-6f46-22b33b7bdbe5@microchip.com>
- <87bkx5crop.fsf@dell.be.48ers.dk>
- <d864ae21-b68f-b30b-ce07-cd66b473e4f9@microchip.com>
- <CAPi7W82XAg4jMw6z5LR=rg-HoZGBbfDC13XbpXtr0hppW92QEw@mail.gmail.com>
- <CAPi7W83uC=WLeMufRy9OC2G2m61BtUu1v_KX-nuiUBRFTwd8sQ@mail.gmail.com>
- <f10430c3-6805-eadd-7161-82db2309c198@microchip.com>
- <CAPi7W81tjVJ66QKgGVWHqytr-rakz4b6dK2TKVR7dc=tPiaxQA@mail.gmail.com>
- <2a14aebd-8213-0966-b0d4-392ca9ce36e6@microchip.com>
- <CAPi7W82y2e=mbjNRUyiondGuTWxyD=NewNKSquxW-hUfL=A9qw@mail.gmail.com>
-In-Reply-To: <CAPi7W82y2e=mbjNRUyiondGuTWxyD=NewNKSquxW-hUfL=A9qw@mail.gmail.com>
-Accept-Language: en-US, ro-RO
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 288d28e6-cafe-4029-7f94-08da2378e53e
-x-ms-traffictypediagnostic: SJ0PR11MB5939:EE_
-x-microsoft-antispam-prvs: <SJ0PR11MB593970B919CA28A07B1E11CBE8F49@SJ0PR11MB5939.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QlzznfAI57bguPzghdf/HWf1vbQLWfLny7g1V2f08JV9NYVHLe5ALrXzM1HOKGXbxsOzxy1LmMiVHzCnlecSnSW8GsPJH2BfZN+X1cnHhnZI2Fql1d6gVU+SUkRFESj0H1EBNRsKXinMOsuAnwjbY8p5xbjEZ2MLvcNRQMfg3rc/ZBbgpofHPbVZHZcfJa81EC8gCUN5ami4LnS3RHmQXEeTvrkLcaEtGLb6CpvIzAtCEOwVHzEpK2vQ5TeZicFn0dErTZZwxJ+5Alqo9Gr338lxL1dBtUqVLxcxVLkZVA94JMRd4nrGLzX9ZdufsKgNDJcuNNiDWd/o1BHwQ9c5M+FIuNerk+5bdUfB6SyJvngvxJm5opB4/7wYnzvCB9Y7dGUPmo/IxfdoUlkCm+9Zf8RFelPBs2IpfTciyN+XpgXdz57X8GhANoMkhuRjY3os8AbaCfEWwqJIRIH/GyLSYg+rVoAm0nS06sk9KgLDtYgeFVtzyDmp6w0AY3xn9Ai6vtZxuwYoFZ1hC5bYGQ08f5fhrFoQRAzIy5RHTHxj4dp75qtlt53loaM7vScLtKaGnYddjoqwXIrejUnIHSKDu6bjQllFEJ0Eftacc0zIb9u990Fv19UBWolRzoyQjcnb9XE3iGIjWcDwuNIX9c+x1teZWbbskdtb0Xaly5Wkj5EHgdirqUlFBReYDvfxWy74wT9D1WiTUkgGS8nauXAjOm/yNPgWU+5jP7hQ+6aYBJtpf2LLb5xjmSkDoX8eufagCwyplNTFEKcSDWUfXJr4qNoUJYQR4+vIh1FFchYm0rSe3LD38QF/59JUjwCikAQBC9/+T0SZ6Rmxrx8yQst06IUi25lOCf+p7gFRJVjbxWE=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BL1PR11MB5384.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(366004)(5660300002)(4326008)(186003)(38100700002)(38070700005)(54906003)(966005)(508600001)(66946007)(31696002)(8676002)(64756008)(91956017)(66446008)(2616005)(6916009)(6486002)(122000001)(76116006)(316002)(71200400001)(66476007)(86362001)(2906002)(26005)(66556008)(83380400001)(31686004)(45080400002)(66574015)(6506007)(6512007)(53546011)(8936002)(36756003)(43740500002)(45980500001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q1lnVyszOXFaUThCVlpKZC85Y2pLdkFyaS8rTmc1YURNVjFmRlB1cWp3TjAx?=
- =?utf-8?B?T25GaDlIM2pUSkoxWWJlTjdVMVF4L2VuM05VSHNsbFhFaDlsY1JTNS9MWkxH?=
- =?utf-8?B?Q2M2OVZ2aVMrWVlFa25vV2t3cFZlMDdhMVkrM0JpVVNNN2VXZENIKzhFczlM?=
- =?utf-8?B?U1Q1Z3YzWXR6K3dLN0FHWVc0YkJnSisxSFRoeGcvSlE5R0dmUHZNYVlFdXJr?=
- =?utf-8?B?bk1jNElEMEtybkNSUFVtQlgvNmVPWk5uU29nVSt1bTVoSUtkUHVBRlpzZTVX?=
- =?utf-8?B?WHJUc05MM1JjTHErbTlXNmh1eHJRc1ZUOXMvU00yaW8xS2d2RVBhSVNUcjVS?=
- =?utf-8?B?eFdxdzFLZXNuVGY4VC94UGJxdEY1Ui95MHRjTktuZUlUZ3FQbDRvZU4rNVNp?=
- =?utf-8?B?T24yQWJaRTY2WVVUQ0ZvVzY0Y0dYNjhFTHpIVS93bFA3a2p0ekl0UXVyZXYv?=
- =?utf-8?B?amo1RjM5SmRqd3J3aTZnZENjclI2YjIyVll4amxrMXZSWlJuSzRwTzQ0NkpB?=
- =?utf-8?B?SVRwUUsvSllydW9aT3RJamFzTTZ2eEZxTDYvWFc3aW1TWkRrczl1c09mbUVK?=
- =?utf-8?B?L2NpMGxZWjV2dnlxd29xQUUrdEVrTE9zL1FxYi93Ym42a0lZOVFaY1pDVjg0?=
- =?utf-8?B?WkI2MzRpWnNqSXp2bVIyb3krOTVraWNrQmFJdU0vVFZDMWMyQ0lOVmI4NWo2?=
- =?utf-8?B?TWpOZTIwdnNHZ1lSRVZNb0FlcUFDakx1MFM3QW0vdWs3dC9DOE9vbVF4eGoz?=
- =?utf-8?B?ZUt0RkpWbVpEZER3cWdMaDUrcUpxSWZ4cUxDejY1YlVzOFJyancxaUhlM2Fp?=
- =?utf-8?B?L24xWThSc2JKWldTWVRzcnRIRzMxeGhQM20waXU0OXIrR29PR2xkV3d0eTQ4?=
- =?utf-8?B?TVpRL3NLT2gzWmdUVjBJenFXNlE0dTBVcXdieDRZZEpDaGp1ZHRsYXRjNzZD?=
- =?utf-8?B?WlR4WThtWWREWjZMZHFuQ3ROMnNsVUl3UmRtbW44N0xNclE5MGFJUks3YllE?=
- =?utf-8?B?aTU0SkNma0NGQ3kreU15N095RnlzZmd6Y0M2SDhLSURpMGM4NHRqQlFwNFVy?=
- =?utf-8?B?Y2dOYWRoMUpKc1B5djhRN2tBUEZyRnZWdHVnemljSjdWd2g5UWxDTnMxYmZ2?=
- =?utf-8?B?bTJZbFpWUHk0V2hhZTcwOTVIaW9EUzFTWFNRV3haUExhOERkSGVPMXJiV2hy?=
- =?utf-8?B?akwxSTJWa0xYQ0JRZmV0cjViK2IxTFV4WHNXTDU4SXhGdTJvbWVmTVByeEdy?=
- =?utf-8?B?cEFSSmNRVHkxeVUvVzVNeGpVTGpZd0p4ZU9kZnQyTHYvdFE5Y0FIMVZuclN1?=
- =?utf-8?B?WE1tMHJxemRPWXhOcnd5TVVOSGwzdDBCTVFpZGhLSjd3RDJ3Um5qTGRVbU9q?=
- =?utf-8?B?cWxqbTY2VTVPampGUnhyaTVicHZKdzhPdG1wTGlsbmdwcHlFRmhteHF3MkJI?=
- =?utf-8?B?aTdIM0tETHlhUDB0SFh6UnBCNkJIcjRMU1BVM1lKNk9mSEdGRndDRVJxaXlF?=
- =?utf-8?B?TmV2WGl6bU1GaE5TeHI0NGhTN1NQN1VVTUtDRDMrek9VeFNaSlhuaVQ4TUti?=
- =?utf-8?B?VFVxNDM0bmhnQi9PbFBsNC9DUHI4bDFCcXJJUlVseXhPQzlla01Da3hqS3kw?=
- =?utf-8?B?TjREVGdHOWpXa09iWHppRGdqSE9kdjZFbCtmZzR3WW1PUTBLUDlLc2hqZkk3?=
- =?utf-8?B?UE5aVFVYZ1N3ME45V1hlZDVoNjU0dS9meHRyNk5HWWVRN2NoOS82SldTc1J1?=
- =?utf-8?B?TFdaV3JPRWlyamJlQUIwSk10Zy83RkVmMFIyRS93eHdYUEtWWkFlc3JDa0l1?=
- =?utf-8?B?RmtiNXdUUnFUT002b3Q1R2Yrem01TkNFWTNuTjBBTW1JS0oyOC9xdUpIQ3RV?=
- =?utf-8?B?aWR3N2k4ZFdjdUczMEovZ1JaM0tzaG1HaFRBMVJyLzFYQmZHR0h6QnRMVHp3?=
- =?utf-8?B?M3doc0Q3TWlZMitrVktUMm9sOUVlTWI3b25DZDdlano3MTFtWWVIZFJxWU5J?=
- =?utf-8?B?dVMzcmQ5TTRCcm9OSGh1YUNrdlhUclJVa09EdkVZYWlqTmw3S2lwK0RMUkxu?=
- =?utf-8?B?SEZveWN1cnIrNy9ncVJla0ttY3o1ejJHUjJuOERkYlNIekJydnplUS9pUTdn?=
- =?utf-8?B?aHRicjg5Z0t3K2FZMVBwNHVDRUFRa2oyZS9IbHEvK2NhMU5Yck1sNDFKbkdw?=
- =?utf-8?B?WW5xNWtJZHRRTWlSdWpUUTRKbFNXeXFmKzFOKzdXeGE0QTZpYjNoakxHNk5x?=
- =?utf-8?B?aUJqNDQ4RzJWZzJGVUV1Z3VRTkRaejlINExZa2NSZ2t3ZzI4NmxYR09qcldN?=
- =?utf-8?B?UlpSbUg3cXNJUldMWXo4NHdramRCR1AwMStpNTlzb0trTUswK2tjZkNFRTU0?=
- =?utf-8?Q?rz2EP9DM69aXX9cM=3D?=
-Content-ID: <AC0447955458C54CBA8477944D9EF1E8@namprd11.prod.outlook.com>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lg8JzZqNptql for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 10:04:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A200D400BA
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 10:04:31 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id t6so2495230wra.4
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 03:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Yl5eXkyXwuR2c4l/ZUz+WNMdPFfCRj4+aN+ft64H7gE=;
+ b=KcGJ0tVIP8n93ShaopCK986lEGG3dgASAJ3u7VaFGrzf2S8YqqxQol6WCVS9F2V9Cr
+ umcvVpkxD+PcbwO2XOoW3lbq/T3jasOZg6c+wljHWHwnn8JJnLHgiQupQoRamp1n5HTK
+ si9f2zVlmpDg2K2txRaM89Tg9GVUclUSB0tfJ5R7irkxMTyz8+gS+1KjlbHUptS7nJVf
+ zHVvZSc2wjyYB3jtLuL1tjyd93J6qVvwuwyKFyFsRXPYUSAL4wqBNWhWVbKaE7e3m9oa
+ b7j3hKU9yMgh3FkfkRMRihnKQM8+L78P79gTjje0DPtIio9QfHxTjzYDCl3NIsf0guz+
+ qYiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Yl5eXkyXwuR2c4l/ZUz+WNMdPFfCRj4+aN+ft64H7gE=;
+ b=irWL3eB1OgXZQ/XMKBw/V9OvCXSt2srWDPCoN4iJM7a4F9VlmvM1f4sA5OSQFuz34j
+ cf9VqWM2uNMq+j4/ylreSkEyRaLOHKKOJqhOBz80EHIymyrmxcq7mBJwdilwu8vMCvgk
+ L6t0s9j7EBsnPFlVHsLTB0euWTOR2YuRo9wHEYFsZ7hWdyRNjtbSqi+PcSfDKFGxG7rl
+ yBURstjhz7ALQapn+Q0TrVKuvdXEpNMECxzYVtfizPKFwCFNWMNI9XCtiWriYv8JpNAj
+ 3pGJJUy0qdDsR2w8UsI+tFNZfLh+wZglagLzQQGHZh5wiLp6218bXjOhsqERYjsLZ6L5
+ nowA==
+X-Gm-Message-State: AOAM532pndem/6P+FG4+BQjAShWhvr9Mf8yTNkkHnd9f4UC/xyveef5t
+ bwsB3QANt4WDyW6jgOw2Kp3ymNb+jgA=
+X-Google-Smtp-Source: ABdhPJxOeduGObxu6UoAgx3u6hS5Pzcq7yLAtCPQ8S/rPlZMeM29LQYzU0uqAFft/mFXB6hucz7zcQ==
+X-Received: by 2002:adf:ed8f:0:b0:207:ac33:801f with SMTP id
+ c15-20020adfed8f000000b00207ac33801fmr18486273wro.453.1650535469560; 
+ Thu, 21 Apr 2022 03:04:29 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ m1-20020a1ca301000000b003929c4bf250sm1745797wme.13.2022.04.21.03.04.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 21 Apr 2022 03:04:28 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 21 Apr 2022 12:02:33 +0200
+Message-Id: <20220421100233.3845088-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5384.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 288d28e6-cafe-4029-7f94-08da2378e53e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2022 09:25:37.5003 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dQseZ5/lG5vDKCYfOWIfq8WlDHDJ0FJzn8Pb1jXQ5HIp5VOr4ydtxLLRkttgJBZaXSSU5hSSAxBq3SLM+HpBlZbrU5QpYOnDWwasI6M7AHE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5939
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: use internal bind
+Subject: [Buildroot] [PATCH 1/1] package/argp-standalone: bump to version
+ 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -194,100 +88,305 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Eugen.Hristev--- via buildroot" <buildroot@buildroot.org>
-Reply-To: Eugen.Hristev@microchip.com
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gNC8xOS8yMiA3OjEyIFBNLCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOg0KPiBMZSBtYXIuIDE5
-IGF2ci4gMjAyMiDDoCAxMjoxOSwgPEV1Z2VuLkhyaXN0ZXZAbWljcm9jaGlwLmNvbT4gYSDDqWNy
-aXQgOg0KPj4NCj4+IE9uIDQvMTkvMjIgMTI6MDggUE0sIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6
-DQo+Pj4gSGVsbG8gRXVnZW4sDQo+Pj4NCj4+PiBMZSBtYXIuIDE5IGF2ci4gMjAyMiDDoCAwNzoy
-MSwgPEV1Z2VuLkhyaXN0ZXZAbWljcm9jaGlwLmNvbT4gYSDDqWNyaXQgOg0KPj4+Pg0KPj4+PiBP
-biA0LzE0LzIyIDc6NDQgUE0sIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6DQo+Pj4+PiBMZSBqZXUu
-IDE0IGF2ci4gMjAyMiDDoCAxMTo1OSwgRmFicmljZSBGb250YWluZQ0KPj4+Pj4gPGZvbnRhaW5l
-LmZhYnJpY2VAZ21haWwuY29tPiBhIMOpY3JpdCA6DQo+Pj4+Pj4NCj4+Pj4+PiBIZWxsbyBFdWdl
-biwNCj4+Pj4+Pg0KPj4+Pj4+IExlIGpldS4gMTQgYXZyLiAyMDIyIMOgIDExOjEwLCA8RXVnZW4u
-SHJpc3RldkBtaWNyb2NoaXAuY29tPiBhIMOpY3JpdCA6DQo+Pj4+Pj4+DQo+Pj4+Pj4+IE9uIDQv
-MTMvMjIgMTE6MjkgQU0sIFBldGVyIEtvcnNnYWFyZCB3cm90ZToNCj4+Pj4+Pj4+Pj4+Pj4gICAg
-ICAgPEV1Z2VuLkhyaXN0ZXZAbWljcm9jaGlwLmNvbT4gd3JpdGVzOg0KPj4+Pj4+Pj4NCj4+Pj4+
-Pj4+ICAgICAgPiBPbiA0LzEyLzIyIDk6MTcgUE0sIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6DQo+
-Pj4+Pj4+PiAgICAgID4+IExlIG1hci4gMTIgYXZyLiAyMDIyIMOgIDE0OjM0LCBQZXRlciBLb3Jz
-Z2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IGEgw6ljcml0IDoNCj4+Pj4+Pj4+ICAgICAgPj4+
-DQo+Pj4+Pj4+PiAgICAgID4+Pj4+Pj4+IDxFdWdlbi5IcmlzdGV2QG1pY3JvY2hpcC5jb20+IHdy
-aXRlczoNCj4+Pj4+Pj4+ICAgICAgPj4+DQo+Pj4+Pj4+PiAgICAgID4+PiBIaSwNCj4+Pj4+Pj4+
-ICAgICAgPj4+DQo+Pj4+Pj4+PiAgICAgID4+PiA+PiBZZWFoLiBFdWdlbiwgaXMgdGhlcmUgYW55
-IHNwZWNpZmljIHJlYXNvbiB3aHkgeW91IHVzZSB0aGUgZGhjcCBwYWNrYWdlDQo+Pj4+Pj4+PiAg
-ICAgID4+PiA+PiBvdmVyIHRoZSBvdGhlciBESENQIGNsaWVudHMgd2UgcHJvdmlkZT8NCj4+Pj4+
-Pj4+ICAgICAgPj4+DQo+Pj4+Pj4+PiAgICAgID4+PiA+IEhpc3RvcmljYWwgcmVhc29ucywgYW5k
-IHRoZSBmYWN0IHRoYXQgcGVvcGxlIGhhdmUgd29ya2luZyBjb25maWd1cmF0aW9ucw0KPj4+Pj4+
-Pj4gICAgICA+Pj4gPiB1c2luZyB0aGlzIHBhY2thZ2UuLi4gSSB3YXMgdW5hd2FyZSB0aGF0IGl0
-IHdhcyBkdWUgdG8gYmUgcmVtb3ZlZC4NCj4+Pj4+Pj4+ICAgICAgPj4+ID4gV2Ugd2lsbCB0cnkg
-dG8gc3dpdGNoIHRvIGEgZGlmZmVyZW50IHBhY2thZ2UgaW4gdGhlIGZ1dHVyZS4gVGhhbmtzIGZv
-cg0KPj4+Pj4+Pj4gICAgICA+Pj4gPiBsZXR0aW5nIG1lIGtub3cuDQo+Pj4+Pj4+PiAgICAgID4+
-PiA+IEhvd2V2ZXIsIGlmIHRoZSBwYWNrYWdlIGlzIHN0aWxsIGluIHRoaXMgYnVpbGRyb290IHJl
-bGVhc2UsIGl0IGhhcyB0bw0KPj4+Pj4+Pj4gICAgICA+Pj4gPiB3b3JrIHJpZ2h0ID8NCj4+Pj4+
-Pj4+ICAgICAgPj4+DQo+Pj4+Pj4+PiAgICAgID4+PiBZZXMsIHRoYXQgaXMgdGhlIGlkZWEuIElm
-IGl0IGlzIGRlYWQgdXBzdHJlYW0gYW5kIGhhcmQgdG8gZml4IHRoZW4gdGhhdA0KPj4+Pj4+Pj4g
-ICAgICA+Pj4gbmF0dXJhbGx5IG1ha2VzIGl0IGhhcmRlciB0byBkbywgYnV0IHRoZSBpbnRlbnRp
-b24gaXMgdG8gZml4IGl0Lg0KPj4+Pj4+Pj4gICAgICA+Pg0KPj4+Pj4+Pj4gICAgICA+PiBUaGUg
-Zm9sbG93aW5nIHBhdGNoIHNob3VsZCBmaXggdGhlIGlzc3VlOg0KPj4+Pj4+Pj4gICAgICA+PiBo
-dHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjIw
-NDEyMTgxNjA3LjE0NTE1ODAtMS1mb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbS8NCj4+Pj4+Pj4+
-DQo+Pj4+Pj4+PiAgICAgID4gSGksDQo+Pj4+Pj4+Pg0KPj4+Pj4+Pj4gICAgICA+IHlvdXIgcGF0
-Y2ggdG9nZXRoZXIgd2l0aCB0aGUgb3RoZXIgb25lICgNCj4+Pj4+Pj4+ICAgICAgPiBodHRwczov
-L3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoL0RVMFAyNTFNQjA3
-Nzk3Q0FBRTgwQzk4NURDODk3NjMzNUUzRTc5QERVMFAyNTFNQjA3NzkuRVVSUDI1MS5QUk9ELk9V
-VExPT0suQ09NLw0KPj4+Pj4+Pj4gICAgICA+ICksDQo+Pj4+Pj4+Pg0KPj4+Pj4+Pj4gICAgICA+
-IHNvbHZlIHRoZSBidWlsZCBwcm9ibGVtIGZvciB0aGlzIHBhY2thZ2UuDQo+Pj4+Pj4+Pg0KPj4+
-Pj4+Pj4gVGhleSBhcmUgbm93IGJvdGggYWRkZWQgdG8gdGhlIDIwMjIuMDIueCBicmFuY2gsIHRo
-YW5rcy4NCj4+Pj4+Pj4+DQo+Pj4+Pj4+PiAtLQ0KPj4+Pj4+Pj4gQnllLCBQZXRlciBLb3JzZ2Fh
-cmQNCj4+Pj4+Pj4+DQo+Pj4+Pj4+DQo+Pj4+Pj4+IEhlbGxvIGFnYWluIEZhYnJpY2UsDQo+Pj4+
-Pj4+DQo+Pj4+Pj4+IEFmdGVyIG1hbmFnaW5nIHRvIHN1Y2Nlc3NmdWxseSBidWlsZCBhbGwgb3Vy
-IGRlZmNvbmZpZ3Mgbm93LCB3aGlsZQ0KPj4+Pj4+PiB0ZXN0aW5nIG9uIGFub3RoZXIgYm9hcmQg
-KHNhbWE3ZzVlayksIEkgbm90aWNlZCB0aGlzIG1lc3NhZ2UgYXQgYm9vdCBsb2cgOg0KPj4+Pj4+
-Pg0KPj4+Pj4+PiBTdGFydGluZyBESENQIHNlcnZlcjogL3Vzci9zYmluL2RoY3BkOiBlcnJvciB3
-aGlsZSBsb2FkaW5nIHNoYXJlZA0KPj4+Pj4+PiBsaWJyYXJpZXM6IGxpYmlycy5zby4xNjE6IGNh
-bm5vdCBvcGVuIHNoYXJlZCBvYmplY3QgZmlsZTogTm8gc3VjaCBmaWxlDQo+Pj4+Pj4+IG9yIGRp
-cmVjdG9yeQ0KPj4+Pj4+Pg0KPj4+Pj4+PiBEaWdnaW5nIHlpZWxkcyB0aGF0IGxpYmlycyBpcyBw
-YXJ0IG9mIGJpbmQgcGFja2FnZS4gRG8geW91IGtub3cgd2h5IHRoaXMNCj4+Pj4+Pj4gaGFwcGVu
-cyBhbmQgd2hhdCBjb3VsZCBiZSB0aGUgY2F1c2U/IENvdWxkIGxhdGVzdCBwYXRjaGVzIGFmZmVj
-dCB0aGUgZGhjcGQgPw0KPj4+Pj4+DQo+Pj4+Pj4gSW5kZWVkLCB0aGUgaW50ZXJuYWwgYmluZCBs
-aWJyYXJpZXMgKGluY2x1ZGluZyBsaWJpcnMuc28uMTYxKSBhcmUNCj4+Pj4+PiBjb3JyZWN0bHkg
-aW5zdGFsbGVkIGluIHN0YWdpbmcgZGlyZWN0b3J5IGJ1dCBub3QgaW4gdGhlIHRhcmdldA0KPj4+
-Pj4+IGRpcmVjdG9yeSBiZWNhdXNlIGRoY3AubWsgaXMgb3ZlcnJpZGluZyBESENQX0lOU1RBTExf
-VEFSR0VUX0NNRFMuDQo+Pj4+Pj4gSSdsbCBzZW5kIGEgcGF0Y2ggYnkgdGhlIGVuZCBvZiB0aGUg
-ZGF5Lg0KPj4+Pj4NCj4+Pj4+IFRoZSBmb2xsb3dpbmcgcGF0Y2ggc2hvdWxkIGZpeCB0aGUgaXNz
-dWU6DQo+Pj4+PiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290
-L3BhdGNoLzIwMjIwNDE0MTY0MTA5LjE3MjQ4NzMtMS1mb250YWluZS5mYWJyaWNlQGdtYWlsLmNv
-bS8NCj4+Pj4+DQo+Pj4+DQo+Pj4+IEhlbGxvIEZhYnJpY2UsDQo+Pj4+DQo+Pj4+IFRoZSBsaWJp
-cnMgcHJvYmxlbSBpcyBnb25lIG5vdywgdGhhbmtzLiBIb3dldmVyLCBJIGdldCBhIG5ldyBlcnJv
-cjoNCj4+Pj4NCj4+Pj4NCj4+Pj4gU3RhcnRpbmcgREhDUCBzZXJ2ZXI6IC91c3Ivc2Jpbi9kaGNw
-ZDogZXJyb3Igd2hpbGUgbG9hZGluZyBzaGFyZWQNCj4+Pj4gbGlicmFyaWVzOiBsaWJpc2NjZmcu
-c28uMTYzOiBjYW5ub3Qgb3BlbiBzaGFyZWQgb2JqZWN0IGZpbGU6IE5vIHN1Y2gNCj4+Pj4gZmls
-ZSBvciBkaXJlY3RvcnkNCj4+Pj4NCj4+Pj4gTG9va3MgbGlrZSB0aGVyZSBhcmUgc3RpbGwgcHJv
-YmxlbXMgb24gbXkgc2lkZQ0KPj4+DQo+Pj4gbGliaXNjY2ZnLnNvLjE2MyBpcyBpbnN0YWxsZWQg
-b24gdGFyZ2V0IHJvb3RmcyAoaW4gL3Vzci9saWIpLiBDYW4geW91DQo+Pj4gY2hlY2sgdGhhdCB0
-aGlzIGlzIGFsc28gdGhlIGNhc2Ugb24geW91ciBzaWRlPw0KPj4NCj4+ICMgbHMgLWxhIC91c3Iv
-bGliL2xpYmlzYyoNCj4+IGxyd3hyd3hyd3ggICAgMSByb290ICAgICByb290ICAgICAgICAgICAg
-MTggQXByIDE4ICAyMDIyDQo+PiAvdXNyL2xpYi9saWJpc2Muc28gLT4gbGliaXNjLnNvLjExMDcu
-MC43DQo+PiBscnd4cnd4cnd4ICAgIDEgcm9vdCAgICAgcm9vdCAgICAgICAgICAgIDE4IEFwciAx
-OCAgMjAyMg0KPj4gL3Vzci9saWIvbGliaXNjLnNvLjExMDcgLT4gbGliaXNjLnNvLjExMDcuMC43
-DQo+PiAtcnd4ci14ci14ICAgIDEgcm9vdCAgICAgcm9vdCAgICAgICAgMzE3OTYwIEFwciAxOCAg
-MjAyMg0KPj4gL3Vzci9saWIvbGliaXNjLnNvLjExMDcuMC43DQo+PiAjDQo+Pg0KPj4NCj4+IEl0
-IGxvb2tzIGxpa2UgaXQncyBub3QuDQo+IA0KPiBJIHdhcyBhYmxlIHRvIGZpbmQgYW5kIGZpeCB0
-aGUgaXNzdWU6DQo+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJv
-b3QvcGF0Y2gvMjAyMjA0MTkxNjExMzAuMzQzMTQ5Mi0xLWZvbnRhaW5lLmZhYnJpY2VAZ21haWwu
-Y29tLw0KPiANCg0KVGhhbmsgeW91IGZvciB5b3VyIHBhdGNoZXMgIQ0KSXQgbG9va3MgdGhhdCBp
-dCB3b3JrcyBmaW5lIG5vdy4NCg0KU2VudCBhIHJldmlld2VkLWJ5IHRhZyBvbiB5b3VyIHBhdGNo
-Lg0KDQpFdWdlbg0KPj4NCj4+Pg0KPj4+Pg0KPj4+PiBUaGFua3MsDQo+Pj4+IEV1Z2VuDQo+Pj4+
-DQo+Pj4+Pj4NCj4+Pj4+Pj4NCj4+Pj4+Pj4gVGhhbmtzICENCj4+Pj4+Pj4gRXVnZW4NCj4+Pj4+
-Pg0KPj4+Pj4+IEJlc3QgUmVnYXJkcywNCj4+Pj4+Pg0KPj4+Pj4+IEZhYnJpY2UNCj4+Pj4+DQo+
-Pj4+PiBCZXN0IFJlZ2FyZHMsDQo+Pj4+Pg0KPj4+Pj4gRmFicmljZQ0KPj4+Pj4NCj4+Pj4NCj4+
-Pg0KPj4+IEJlc3QgUmVnYXJkcywNCj4+Pg0KPj4+IEZhYnJpY2UNCj4+Pg0KPj4NCg0KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Switch site to an up-to-date fork
+- Drop first and second patches (not needed since:
+  https://github.com/ericonr/argp-standalone/commit/c474ac2af74a8ba336b5480927741c13950ea01b
+  https://github.com/ericonr/argp-standalone/commit/80691135993109ec0c8a41327418195fc6d82694
+- Drop third patch (not needed since:
+  https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043)
+- License is LGPL-2.1+ since
+  https://github.com/ericonr/argp-standalone/commit/c474ac2af74a8ba336b5480927741c13950ea01b
+- README.md can be used as the license file since
+  https://github.com/ericonr/argp-standalone/commit/da0206414df4fe55f70b6dfba86ec232acf5d444
+- This bump will also fix the following build failure with
+  BR2_OPTIMIZE_0 thanks to
+  https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
+
+  /nvmedata/autobuild/instance-27/output-1/host/lib/gcc/microblaze-buildroot-linux-uclibc/10.3.0/../../../../microblaze-buildroot-linux-uclibc/bin/ld: libargp.a(argp-help.o): in function `indent_to':
+  /nvmedata/autobuild/instance-27/output-1/build/argp-standalone-1.3/argp-help.c:930: undefined reference to `argp_fmtstream_point'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8e2cd69356f40bae534847ad58f4aa0dabb4c791
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-throw-in-funcdef.patch               | 79 -------------------
+ package/argp-standalone/0002-isprint.patch    | 45 -----------
+ .../0003-fix_build_with_c99_compilers.patch   | 68 ----------------
+ package/argp-standalone/Config.in             |  2 +-
+ package/argp-standalone/argp-standalone.hash  |  4 +-
+ package/argp-standalone/argp-standalone.mk    | 11 ++-
+ 6 files changed, 10 insertions(+), 199 deletions(-)
+ delete mode 100644 package/argp-standalone/0001-throw-in-funcdef.patch
+ delete mode 100644 package/argp-standalone/0002-isprint.patch
+ delete mode 100644 package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+
+diff --git a/package/argp-standalone/0001-throw-in-funcdef.patch b/package/argp-standalone/0001-throw-in-funcdef.patch
+deleted file mode 100644
+index 4a90751e1e..0000000000
+--- a/package/argp-standalone/0001-throw-in-funcdef.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-# --- T2-COPYRIGHT-NOTE-BEGIN ---
+-# This copyright note is auto-generated by ./scripts/Create-CopyPatch.
+-# 
+-# T2 SDE: package/.../rng-tools/throw-in-funcdef.patch.argp-standalone
+-# Copyright (C) 2006 The T2 SDE Project
+-# 
+-# More information can be found in the files COPYING and README.
+-# 
+-# This patch file is dual-licensed. It is available under the license the
+-# patched project is licensed under, as long as it is an OpenSource license
+-# as defined at http://www.opensource.org/ (e.g. BSD, X11) or under the terms
+-# of the GNU General Public License as published by the Free Software
+-# Foundation; either version 2 of the License, or (at your option) any later
+-# version.
+-# --- T2-COPYRIGHT-NOTE-END ---
+-
+-
+-No __THROW in function implementation.
+-	--jsaw
+-
+---- argp-standalone-1.4-test2/argp.h.orig	2006-01-06 02:29:59.000000000 +0100
+-+++ argp-standalone-1.4-test2/argp.h	2006-01-06 02:41:10.000000000 +0100
+-@@ -560,17 +560,17 @@
+- # endif
+- 
+- # ifndef ARGP_EI
+--#  define ARGP_EI extern __inline__
+-+#  define ARGP_EI extern inline
+- # endif
+- 
+- ARGP_EI void
+--__argp_usage (__const struct argp_state *__state) __THROW
+-+__argp_usage (__const struct argp_state *__state)
+- {
+-   __argp_state_help (__state, stderr, ARGP_HELP_STD_USAGE);
+- }
+- 
+- ARGP_EI int
+--__option_is_short (__const struct argp_option *__opt) __THROW
+-+__option_is_short (__const struct argp_option *__opt)
+- {
+-   if (__opt->flags & OPTION_DOC)
+-     return 0;
+-@@ -582,7 +582,7 @@
+- }
+- 
+- ARGP_EI int
+--__option_is_end (__const struct argp_option *__opt) __THROW
+-+__option_is_end (__const struct argp_option *__opt)
+- {
+-   return !__opt->key && !__opt->name && !__opt->doc && !__opt->group;
+- }
+---- argp-standalone-1.4-test2/argp-parse.c.orig	2006-01-06 02:47:48.000000000 +0100
+-+++ argp-standalone-1.4-test2/argp-parse.c	2006-01-06 02:48:16.000000000 +0100
+-@@ -1290,13 +1290,13 @@
+- /* Defined here, in case a user is not inlining the definitions in
+-  * argp.h */
+- void
+--__argp_usage (__const struct argp_state *__state) __THROW
+-+__argp_usage (__const struct argp_state *__state)
+- {
+-   __argp_state_help (__state, stderr, ARGP_HELP_STD_USAGE);
+- }
+- 
+- int
+--__option_is_short (__const struct argp_option *__opt) __THROW
+-+__option_is_short (__const struct argp_option *__opt) 
+- {
+-   if (__opt->flags & OPTION_DOC)
+-     return 0;
+-@@ -1310,7 +1310,7 @@
+- }
+- 
+- int
+--__option_is_end (__const struct argp_option *__opt) __THROW
+-+__option_is_end (__const struct argp_option *__opt) 
+- {
+-   return !__opt->key && !__opt->name && !__opt->doc && !__opt->group;
+- }
+diff --git a/package/argp-standalone/0002-isprint.patch b/package/argp-standalone/0002-isprint.patch
+deleted file mode 100644
+index 9c08366f68..0000000000
+--- a/package/argp-standalone/0002-isprint.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-Subject: restrict value range passed to isprint function
+-
+-According to C standards isprint argument shall be representable as an
+-unsigned char or be equal to EOF, otherwise the behaviour is undefined.
+-
+-Passing arbitrary ints leads to segfault in nm program from elfutils.
+-
+-Restrict isprint argument range to values representable by unsigned char.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Index: b/argp.h
+-===================================================================
+---- a/argp.h
+-+++ b/argp.h
+-@@ -23,6 +23,7 @@
+- 
+- #include <stdio.h>
+- #include <ctype.h>
+-+#include <limits.h>
+- 
+- #define __need_error_t
+- #include <errno.h>
+-@@ -577,7 +578,7 @@
+-   else
+-     {
+-       int __key = __opt->key;
+--      return __key > 0 && isprint (__key);
+-+      return __key > 0 && __key <= UCHAR_MAX && isprint (__key);
+-     }
+- }
+- 
+-Index: b/argp-parse.c
+-===================================================================
+---- a/argp-parse.c
+-+++ b/argp-parse.c
+-@@ -1292,7 +1292,7 @@
+-       int __key = __opt->key;
+-       /* FIXME: whether or not a particular key implies a short option
+-        * ought not to be locale dependent. */
+--      return __key > 0 && isprint (__key);
+-+      return __key > 0 && __key <= UCHAR_MAX && isprint (__key);
+-     }
+- }
+- 
+diff --git a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+deleted file mode 100644
+index 56b753b607..0000000000
+--- a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From b2dfa011a3fdcb7d22764d143517d0fbd1c2a201 Mon Sep 17 00:00:00 2001
+-From: Emmanuel Dreyfus <manu@netbsd.org>
+-Date: Wed, 22 Jan 2014 14:47:23 +0100
+-Subject: [PATCH] Fix build with c99 compilers
+-
+-BUG: 764655
+-Change-Id: If5dfdc9c7427bd3d39d8da8f79e33ae2da6a3137
+-Signed-off-by: Emmanuel Dreyfus <manu@netbsd.org>
+-Reviewed-on: http://review.gluster.org/6034
+-Reviewed-by: Harshavardhana <harsha@harshavardhana.net>
+-Tested-by: Gluster Build System <jenkins@build.gluster.com>
+----
+-
+-diff --git a/argp-fmtstream.c b/argp-fmtstream.c
+-index 7f79285..494b6b3 100644
+---- a/argp-fmtstream.c
+-+++ b/argp-fmtstream.c
+-@@ -389,6 +389,7 @@
+- weak_alias (__argp_fmtstream_printf, argp_fmtstream_printf)
+- #endif
+- 
+-+#if __STDC_VERSION__ - 199900L < 1
+- /* Duplicate the inline definitions in argp-fmtstream.h, for compilers
+-  * that don't do inlining. */
+- size_t
+-@@ -471,5 +472,6 @@
+-     __argp_fmtstream_update (__fs);
+-   return __fs->point_col >= 0 ? __fs->point_col : 0;
+- }
+-+#endif /* __STDC_VERSION__ - 199900L < 1 */
+- 
+- #endif /* !ARGP_FMTSTREAM_USE_LINEWRAP */
+-diff --git a/argp-fmtstream.h b/argp-fmtstream.h
+-index e797b11..828f435 100644
+---- a/argp-fmtstream.h
+-+++ b/argp-fmtstream.h
+-@@ -153,6 +153,7 @@
+- 				      __const char *__fmt, ...)
+-      PRINTF_STYLE(2,3);
+- 
+-+#if __STDC_VERSION__ - 199900L < 1
+- extern int __argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
+- extern int argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
+- 
+-@@ -163,6 +164,7 @@
+- 				      __const char *__str, size_t __len);
+- extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
+- 				    __const char *__str, size_t __len);
+-+#endif /* __STDC_VERSION__ - 199900L < 1 */
+- 
+- /* Access macros for various bits of state.  */
+- #define argp_fmtstream_lmargin(__fs) ((__fs)->lmargin)
+-@@ -172,6 +174,7 @@
+- #define __argp_fmtstream_rmargin argp_fmtstream_rmargin
+- #define __argp_fmtstream_wmargin argp_fmtstream_wmargin
+- 
+-+#if __STDC_VERSION__ - 199900L < 1
+- /* Set __FS's left margin to LMARGIN and return the old value.  */
+- extern size_t argp_fmtstream_set_lmargin (argp_fmtstream_t __fs,
+- 					  size_t __lmargin);
+-@@ -193,6 +196,7 @@
+- /* Return the column number of the current output point in __FS.  */
+- extern size_t argp_fmtstream_point (argp_fmtstream_t __fs);
+- extern size_t __argp_fmtstream_point (argp_fmtstream_t __fs);
+-+#endif /* __STDC_VERSION__ - 199900L < 1 */
+- 
+- /* Internal routines.  */
+- extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
+diff --git a/package/argp-standalone/Config.in b/package/argp-standalone/Config.in
+index 3319dd945c..891d4aedaa 100644
+--- a/package/argp-standalone/Config.in
++++ b/package/argp-standalone/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_ARGP_STANDALONE
+ 	help
+ 	  Glibc hierarchical argument parsing standalone library.
+ 
+-	  http://www.lysator.liu.se/~nisse/misc/
++	  https://github.com/ericonr/argp-standalone/
+diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
+index c780f9e53f..1e56c663d4 100644
+--- a/package/argp-standalone/argp-standalone.hash
++++ b/package/argp-standalone/argp-standalone.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
++sha256  879d76374424dce051b812f16f43c6d16de8dbaddd76002f83fd1b6e57d39e0b  argp-standalone-1.4.1.tar.gz
+ 
+ # License file
+-sha256  bbb8919aa520069b0234faf5e83a94052d278419ffe97ca8e843ecc9b212d1ab  argp.h
++sha256  b5db0353a5b1902fc8a2e055d8899dd0c189ce73a31e67af9a0ffc24711b63f0  README.md
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 651bc400f4..80ca04046d 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -4,11 +4,14 @@
+ #
+ ################################################################################
+ 
+-ARGP_STANDALONE_VERSION = 1.3
+-ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
++ARGP_STANDALONE_VERSION = 1.4.1
++ARGP_STANDALONE_SITE = \
++	$(call github,ericonr,argp-standalone,$(ARGP_STANDALONE_VERSION))
+ ARGP_STANDALONE_INSTALL_STAGING = YES
+-ARGP_STANDALONE_LICENSE = LGPL-2.0+
+-ARGP_STANDALONE_LICENSE_FILES = argp.h
++ARGP_STANDALONE_LICENSE = LGPL-2.1+
++ARGP_STANDALONE_LICENSE_FILES = README.md
++# From git
++ARGP_STANDALONE_AUTORECONF = YES
+ 
+ ARGP_STANDALONE_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
