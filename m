@@ -1,49 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FF21C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 15:26:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B4AC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 15:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20B21841C5;
-	Thu, 21 Apr 2022 15:26:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BeJJa441O1h7; Thu, 21 Apr 2022 15:26:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 034F78412A;
-	Thu, 21 Apr 2022 15:26:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B969E1BF304
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 15:25:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A760C6F593
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 15:25:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7B9E6137E;
+	Thu, 21 Apr 2022 15:37:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PWs840xddcYT for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 15:25:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1CF8C61391
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 15:25:57 +0000 (UTC)
-Received: from iago.. (unknown [151.37.170.42])
- by serv15.avernis.de (Postfix) with ESMTPSA id 69CC6C5431E5;
- Thu, 21 Apr 2022 17:25:55 +0200 (CEST)
-From: Andreas Ziegler <br015@umbiko.net>
-To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 17:25:30 +0200
-Message-Id: <20220421152530.3900282-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.34.1
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SOOHSIGgfMWg; Thu, 21 Apr 2022 15:37:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D460261351;
+	Thu, 21 Apr 2022 15:37:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EA5F1BF304
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 15:37:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0638B410B7
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 15:37:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FGEnlWsoyuWy for <buildroot@lists.busybox.net>;
+ Thu, 21 Apr 2022 15:37:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 11C1F40499
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 15:37:11 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id u15so10782867ejf.11
+ for <buildroot@buildroot.org>; Thu, 21 Apr 2022 08:37:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=odJW5YbQtyCq7VikCY/vHbN4xw/l3bLw2D7Kee68iCk=;
+ b=N5OQlKgZnRcTfNs3uxJw2uuHiB/TTwwye8oxRQ4KeuaVCDuLz9dYXOuD1S19hPlWMk
+ q84D1C/Bu6AA9k7fs2r3kDw4ycn02dt6ZTJkbFLGMKiFbcxkq3AUX0nk+JaPAqMjxcte
+ lEL2yw/wFmVK1I+hV7DFIPm00GM0ILdrTM/7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=odJW5YbQtyCq7VikCY/vHbN4xw/l3bLw2D7Kee68iCk=;
+ b=0YqRxpDnp/myT5dLDK0NeyM1dJgH7sjXVZUgGOTrdWG8KVb7s6+QSRQgRcVx4Z8Mqx
+ yT8BWw2f0WA6eogRHfXlzqwW5nVq6s1BEAnRyhSqRiLWh5u7XXkdEdoRuEIs0x+lzlPn
+ /hPBlpvzR6B+jdDtXbviokMoPhu6uODs/2jkXo82YAhtKEksFrKUsxybtReYBuMwbSzL
+ Eg9c+0NCGNcNkv8D9yGAYBuYD1uL94kin3c90C8ZIRcG++NnAnb/98GKdIONnCMAaxrx
+ eZ48KIjrpJTso7oVZj+LqeuInRptiGL4+fBFDsw1t+maLkoha4RKTEpxbEG44YweHz+o
+ XyWA==
+X-Gm-Message-State: AOAM53137M+QLPsrOrB5YCwfoK67nb+RcLp7duAfG143U2XdntVeIBJ0
+ tYhjRMyeF4NwoFZ0y7L4RcsfZmEXSfg2UVbf9Y9MGM4tCbYRoQ==
+X-Google-Smtp-Source: ABdhPJzXqDz/CJpTFDKvW4id8rwCExkkyjjyuyRvQX7ESOkCG9oBUerD7KcHkwDgNKzAbS1o9p2VCLO4GNFcd9uFj8c=
+X-Received: by 2002:a17:906:9f1d:b0:6e8:88f4:3545 with SMTP id
+ fy29-20020a1709069f1d00b006e888f43545mr94050ejc.167.1650555430046; Thu, 21
+ Apr 2022 08:37:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH 1/1] meson-package: prevent cmake find_package()
- picking up host libraries
+References: <CADYjeSsCzsQbWw25kghn49m6vZ9XBMi5NQfBHhTh5X6E3z=JFg@mail.gmail.com>
+ <CADYjeStJRry=ed46Km6nsaFk+wtbaxs0bLDfiPmtJ7xwZs2UwA@mail.gmail.com>
+ <Yio9dHRYViMb7+iG@arch-zen.localdomain>
+In-Reply-To: <Yio9dHRYViMb7+iG@arch-zen.localdomain>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Thu, 21 Apr 2022 21:06:58 +0530
+Message-ID: <CAMty3ZAWobw-jq0Z=Uc1BGmg_tuPTvUNjOq07fZox=VLCXh-zg@mail.gmail.com>
+To: Jan Havran <havran.jan@email.cz>
+Subject: Re: [Buildroot] How to connect to Wifi on start-up using Buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,67 +81,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Andreas Ziegler <br015@umbiko.net>
+Cc: buildroot@buildroot.org, Sourabh Hegde <hrsourabh011@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The meson build system uses (1) pkg-config and (2) cmake find_package to locate 
-dependencies and stops only if a package is found. Cmake uses a toolchain file 
-that is generated by meson from the existing configuration [1]. 
+Hi All,
 
-The cmake toolchain file misses CMAKE_FIND_ROOT_PATH and CMAKE_FIND_ROOT_PATH_* 
-settings, and find_package() falls back to the default behaviour and looks for 
-dependencies on the build machine (the Buildroot HOST_DIR). 
+On Thu, Mar 10, 2022 at 11:33 PM Jan Havran <havran.jan@email.cz> wrote:
+>
+> Hi Sourabh,
+>
+> after enabling RPi firmware you must load the Wifi driver - since you are using
+> systemd, it should by handled by udev on start I think.
+>
+> So you probably just need to configure /etc/network/interfaces to start wpa_supplicant
+> on wlan0 with /etc/wpa_supplicant.conf file, where you can put your credentials.
+> Or at least that is what I have done, but I am not using systemd.
+>
+> I did something similar some time ago, you can check it here:
+> https://gitlab.com/sonicpp/gnss-pi/-/commit/caf0317c024e51fc7e322deacd09ec9346d47e26
+>
+> (note that to make "my" credentials public in that commit was an intention).
+>
+> P.S.: if you want to have any modifications to be part of your image with filesystem,
+> you can do it by using rootfs overlays for example:
+> https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+>
+> Regards,
+>
+> Jan Havran
+>
+> V Thu, Mar 10, 2022 at 05:43:27PM +0100, Sourabh Hegde napsal(a):
+> > Hello All,
+> >
+> > I am trying to connect my Raspberry Pi CM4 to Wifi automatically after
+> > start-up. I am using Buildroot based Linux distribution. I have worked with
+> > Yocto before and it provides systemd-networkd and wpa_supplicant feature to
+> > connect to wifi on boot. I am lloking something similar in Buildroot but
+> > couldn't find any notes online.
+> >
+> > So far, I think I have enabled the necessary config/driver using "make
+> > menuconfig" :
+> > [image: wpa_supplicant.png]
+> > [image: firmware.png]
+> >
+> > But now, how can I set-up wpa_supplicant.conf? Any link to notes or
+> > suggestion would be helpful.
 
-Use a feature introduced in meson 0.56.0 [2] to pass the Buildroot toolchain 
-file to cmake instead of using a meson-generated one. 
+Did anyone find the fix for it? I did see master is failing still.
 
-Fixes the following build failures:
-http://autobuild.buildroot.org/results/056/05673ed04c6f044f1b56b9d5342d61653be43a18/
-http://autobuild.buildroot.org/results/f0a/f0a9e719114f19dc9d20622ed85dd4f8e968c20f/
-http://autobuild.buildroot.org/results/527/527ee199813abbacd61c3fa32b517ea60af60659/
+# cat /etc/wpa_supplicant.conf
+ctrl_interface=/var/run/wpa_supplicant
+ap_scan=1
 
-[1[ see mesonbuild/cmake/toolchain.py
-[2] see https://mesonbuild.com/CMake-module.html#cross-compilation
+network={
+  key_mgmt=NONE
+}
+network={
+        ssid="ARJ"
+        #psk="Ind123#"
+        psk=8078b7e8da96488dcd3561466208348e028cafa46172882cbe3329d6c7caf4a7
+}
+# wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
+Successfully initialized wpa_supplicant
+Line 1: unknown global field 'ctrl_interface=/var/run/wpa_supplicant'.
+Line 1: Invalid configuration line 'ctrl_interface=/var/run/wpa_supplicant'.
+Failed to read or parse configuration '/etc/wpa_supplicant.conf'.
+: CTRL-EVENT-DSCP-POLICY clear_all
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
----
- package/pkg-meson.mk                   | 1 +
- support/misc/cross-compilation.conf.in | 3 +++
- 2 files changed, 4 insertions(+)
-
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 9e70d49b60..f1390a18d0 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -81,6 +81,7 @@ define PKG_MESON_CROSSCONFIG_SED
-         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
-         -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
-         -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
-+        -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-         -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
-         -e "s%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g" \
-         $(TOPDIR)/support/misc/cross-compilation.conf.in
-diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
-index 1977a83501..235e5a8495 100644
---- a/support/misc/cross-compilation.conf.in
-+++ b/support/misc/cross-compilation.conf.in
-@@ -26,6 +26,9 @@ needs_exe_wrapper = true
- sys_root = '@STAGING_DIR@'
- pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
- pkg_config_static = '@STATIC@'
-+# enable meson build to pass a toolchain file to cmake
-+cmake_toolchain_file = '@HOST_DIR@/share/buildroot/toolchainfile.cmake'
-+cmake_defaults = false
- 
- [host_machine]
- system = 'linux'
--- 
-2.34.1
-
+Jagan.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
