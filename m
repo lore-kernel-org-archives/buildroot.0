@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD66C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13780C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09D87411DF;
-	Thu, 21 Apr 2022 21:05:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SuBZfK5bk5Lc; Thu, 21 Apr 2022 21:05:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E60164118B;
-	Thu, 21 Apr 2022 21:05:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9AD091C1189
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5FA082FF9
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC73F83033;
+	Thu, 21 Apr 2022 21:05:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vg3dQNQ9OpaE for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a4UjrLjMBJ9t; Thu, 21 Apr 2022 21:05:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0D6782CD3;
+	Thu, 21 Apr 2022 21:05:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D1591BF3E3
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CEA441149
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:02:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vAKUUAwVNgDo for <buildroot@lists.busybox.net>;
  Thu, 21 Apr 2022 21:02:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE782832DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BCAB4113C
  for <buildroot@buildroot.org>; Thu, 21 Apr 2022 21:02:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8375C84104; Thu, 21 Apr 2022 20:52:06 +0000 (UTC)
+ id 4A6A8840FF; Thu, 21 Apr 2022 20:52:06 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 22:32:38 +0200
+Date: Thu, 21 Apr 2022 22:28:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 845f963842766019d3c83a6ab7ea592bc3017f75
-X-Git-Newrev: 338009c7ba33fb718d5d0256f6049d9e593f9464
+X-Git-Oldrev: c99d2d34298ddfed16581ae3405ed70b52640cb5
+X-Git-Newrev: 7a441e4cf967094f2e2429a37dd2107bb91d2a81
 X-Patchwork-Hint: ignore
-Message-Id: <20220421205206.8375C84104@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/quazip: doesn't build with zlib-ng
+Message-Id: <20220421205206.4A6A8840FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv4: add tbb support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +58,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=338009c7ba33fb718d5d0256f6049d9e593f9464
+commit: https://git.buildroot.net/buildroot/commit/?id=7a441e4cf967094f2e2429a37dd2107bb91d2a81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-quazip doesn't build with zlib-ng since bump to version 1.9.9-b1 in
-commit 1f7b12a0b4572d7e763c431a63c22cfb912b8b14 and the removal of
-z_crc_t and FAR:
-https://github.com/zlib-ng/zlib-ng/commit/4db4cfdb5badc8860f7410732b12c45216d709b3
-https://github.com/zlib-ng/zlib-ng/commit/0db1040667b13c0f9405af810f669857a487b08e:
-
-/nvmedata/autobuild/instance-16/output-1/build/quazip-1.2/quazip/unzip.c:196:11: error: unknown type name 'z_crc_t'
-  196 |     const z_crc_t FAR * pcrc_32_tab;
-      |           ^~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/02272c154ce58bacf0518dab5fc1ef0084121e1a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/quazip/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/opencv4/Config.in  | 14 ++++++++++++++
+ package/opencv4/opencv4.mk | 10 ++++++++--
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/package/quazip/Config.in b/package/quazip/Config.in
-index e980297558..a670ed458c 100644
---- a/package/quazip/Config.in
-+++ b/package/quazip/Config.in
-@@ -1,10 +1,13 @@
- config BR2_PACKAGE_QUAZIP
- 	bool "quazip"
-+	depends on BR2_PACKAGE_LIBZLIB
- 	depends on BR2_PACKAGE_QT5
--	select BR2_PACKAGE_ZLIB
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+index 31c32385da..23d34a9d22 100644
+--- a/package/opencv4/Config.in
++++ b/package/opencv4/Config.in
+@@ -309,6 +309,20 @@ config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
  	help
- 	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
- 	  ZIP/UNZIP package that can be used to access ZIP
- 	  archives. It uses the Qt toolkit.
+ 	  Use shared protobuf from the target system.
  
- 	  http://quazip.sourceforge.net
++config BR2_PACKAGE_OPENCV4_WITH_TBB
++	bool "tbb support"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # tbb
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # tbb
++	select BR2_PACKAGE_TBB
++	help
++	  Use shared tbb from the target system.
 +
-+comment "quazip needs libzlib"
-+	depends on !BR2_PACKAGE_LIBZLIB
++comment "tbb needs a glibc or musl toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
++
++comment "tbb needs exception_ptr"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ config BR2_PACKAGE_OPENCV4_WITH_TIFF
+ 	bool "tiff support"
+ 	select BR2_PACKAGE_TIFF
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index e75f7144de..0563026b18 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -155,8 +155,7 @@ OPENCV4_CONF_OPTS += \
+ 	-DBUILD_WITH_DYNAMIC_IPP=OFF \
+ 	-DWITH_INTELPERC=OFF \
+ 	-DWITH_IPP=OFF \
+-	-DWITH_IPP_A=OFF \
+-	-DWITH_TBB=OFF
++	-DWITH_IPP_A=OFF
+ 
+ # Smartek stuff
+ OPENCV4_CONF_OPTS += -DWITH_GIGEAPI=OFF
+@@ -313,6 +312,13 @@ else
+ OPENCV4_CONF_OPTS += -DWITH_QT=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_TBB),y)
++OPENCV4_CONF_OPTS += -DWITH_TBB=ON
++OPENCV4_DEPENDENCIES += tbb
++else
++OPENCV4_CONF_OPTS += -DWITH_TBB=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENCV4_WITH_TIFF),y)
+ OPENCV4_CONF_OPTS += -DWITH_TIFF=ON
+ OPENCV4_DEPENDENCIES += tiff
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
