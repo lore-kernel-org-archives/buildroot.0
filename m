@@ -1,83 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17600C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 21:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18CEBC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 00:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE0D541C72;
-	Thu, 21 Apr 2022 21:57:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 772E260FFF;
+	Fri, 22 Apr 2022 00:11:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id shTNGmw789uL; Thu, 21 Apr 2022 21:56:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EgLamSCm_d6z; Fri, 22 Apr 2022 00:11:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E21841C6D;
-	Thu, 21 Apr 2022 21:56:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0D92F1BF95C
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:56:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 888FE60EC9;
+	Fri, 22 Apr 2022 00:11:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 641341BF284
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 00:11:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDAEB400FD
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 21:56:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5237F60EC9
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 00:11:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wYCxyzT2nAfP for <buildroot@lists.busybox.net>;
- Thu, 21 Apr 2022 21:56:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F275640C77
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 21:56:44 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id m14so8457615wrb.6
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 14:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=3MndRDI7PR7+Kr7Ua6DpVNTAlfiJuBqx2j4jdCooHzU=;
- b=SnfE/D2FktPWAAQHZAf1qmaeg0aQKzfDNm08VkynWkmMynP4LIBcQb7fugUx4a0rwg
- 9RiAkkxdGZj//pvVlrIwHY91COrwfwSKwAxkcEuxWFH68XLeBiEaiuhRuyRwAIIArkHV
- GGIsGMyuxihn7GCydNfm3ze3ixmXXQUYJeKcz46uhmac0hoUfjt1WQgqeu4loyfZhTyd
- T4r8JPTTc8wf0x/qWS5sRPphi1OPDVJraStn/16Xv10vNwn/90DRwxr82yMrUVsjRfET
- 4zwjz/brizYBpp97aV3GtJcSO4tN6PBqUeo2ph0wPl0BczkuhUHOS/K+h1tZstrX3Lzf
- +cbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=3MndRDI7PR7+Kr7Ua6DpVNTAlfiJuBqx2j4jdCooHzU=;
- b=XRGyDUxvjk1p8dTld3kmf1Q2oPuw+EukAeCzRNZT7Z9mMl+MyAmyr7Eow1wt58ySbA
- SSopN7UWGoMTr2UkJaHn6R9siU+2SSATuELkHkXc6qZ+BNqeBQZfcYftRHI7b9bacxOq
- C9Ep2MXOb098z+pjJbpKC4cn8py3NOMgDLBdjfvw9C+kPf+v3Nj7btArqmEbuKC2COts
- kLSeXJjFAJshvjblY0iN2wrawsebKgBs8NItMvOWcbyi9977Wx24A5/LjYEgfoi28FX1
- q76EYHap14+0o9FQYEIFf/ESI518Si2XsKddn8F6M4tWNBJJQhwUjrbtjXpxxvkhBnoI
- 9PzA==
-X-Gm-Message-State: AOAM532t9YNEe3fDaLXJTA+ydt2hN3RDVFBb8SuTmy9mtApWRJLRIdMP
- 5UDRFfaV910O7ig0yfx/NEDKCzfjOZs=
-X-Google-Smtp-Source: ABdhPJyfkPcDVxlqny9JpoRFcCqqYe1QoYZL2Oid7sQZGWmRBEBcvKW662s/U20vZt16AmqN98OLfw==
-X-Received: by 2002:a5d:64cb:0:b0:20a:903f:5d70 with SMTP id
- f11-20020a5d64cb000000b0020a903f5d70mr1222513wri.138.1650578202891; 
- Thu, 21 Apr 2022 14:56:42 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- d18-20020a05600c34d200b0038ed14b7ac3sm133341wmq.40.2022.04.21.14.56.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Apr 2022 14:56:41 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 23:54:44 +0200
-Message-Id: <20220421215444.3798671-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220421215444.3798671-1-fontaine.fabrice@gmail.com>
-References: <20220421215444.3798671-1-fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mFJ42FM0NPMF for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 00:11:05 +0000 (UTC)
+X-Greylist: delayed 00:15:13 by SQLgrey-1.8.0
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86A9460EB3
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 00:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+ s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=I6RhC
+ 62dLqjbRAB1VVhsmhs/+olP/TIzJilTOnWs+ew=; b=OclDhHd/SlnUTrfr49PAH
+ gkHlx1f0C2rhk0BpzW/Th/L6IG6Qhi0tsEyW//zr0rWb4r5igE6vJ2eAF7AOiuIi
+ de6DCrkFvbMuUkWEYKcwzoIk+k6mNon46IwFYbvb/Gu2BZC1eS9OkGb64iVtqW7M
+ jo/fiFV0dDuxxovyfrNwQk=
+Received: from [192.168.31.190] (unknown [123.185.181.60])
+ by smtp13 (Coremail) with SMTP id EcCowAC3x0ME72FiDqjcCQ--.61377S2;
+ Fri, 22 Apr 2022 07:55:48 +0800 (CST)
+Message-ID: <0fd2d0f7-d067-0f65-23dd-68aff1e61d94@163.com>
+Date: Thu, 21 Apr 2022 16:55:47 -0700
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/zlog: fix CVE-2021-43521
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220420135549.3536397-1-tianyuanhao3@163.com>
+ <20220421191653.GO2730@scaer>
+From: TIAN Yuanhao <tianyuanhao3@163.com>
+In-Reply-To: <20220421191653.GO2730@scaer>
+X-CM-TRANSID: EcCowAC3x0ME72FiDqjcCQ--.61377S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFWrJFyDJF4fJFWxKr48Zwb_yoW8AFWfpw
+ 4rAF13Kr18Wr1Ika4jg3WIvr15ZrZYqw4UJ3sxC3WxtFyUGr1kKr43trWYqrW7X3yfCw4U
+ Aa17Kw15Ww1rZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UTuWJUUUUU=
+X-Originating-IP: [123.185.181.60]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiXADpjVXl2WukyAABsX
+Subject: Re: [Buildroot] [PATCH] package/systemd: add the missing sgx group
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,69 +70,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-A Buffer Overflow vulnerability exists in zlog 1.2.15 via
-zlog_conf_build_with_file in src/zlog/src/conf.c.
+Hi Yann,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...verflow-at-zlog_conf_build_with_file.patch | 25 +++++++++++++++++++
- package/zlog/zlog.mk                          |  3 +++
- 2 files changed, 28 insertions(+)
- create mode 100644 package/zlog/0001-Fix-stack-buffer-overflow-at-zlog_conf_build_with_file.patch
+On 4/21/22 12:16, Yann E. MORIN wrote:
+> Yuanhao, All,
+>
+> On 2022-04-20 06:55 -0700, TIAN Yuanhao spake thusly:
+>> systemd-udevd needs this group:
+>>    /usr/lib/udev/rules.d/50-udev-default.rules:43 Unknown group 'sgx', ignoring
+>>
+>> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+>> ---
+>>   package/systemd/systemd.mk | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>> index b07fac27d4..44185a35a0 100644
+>> --- a/package/systemd/systemd.mk
+>> +++ b/package/systemd/systemd.mk
+>> @@ -603,6 +603,7 @@ endef
+>>   
+>>   define SYSTEMD_USERS
+>>   	# udev user groups
+>> +	- - sgx -1 * - - - SGX device nodes
+> This should have been in the udev virtual package, as all the
+> udev-related users and groups have been moved there to be common between
+> systemd-udevd and the stand-alone eudev, in commit d648d81dd581
+> (packages/{eudev, systemd}: move common users to package/udev).
+>
+> Applied to master with this fixed, thanks.
+>
+> Would you be kind enough to send a follow-up patch that removes the now
+> misleading "# udev user groups" comment, and adds a comment, in systemd
+> and eudev, that directs changes to the udev virtual package instead,
+> please?
+I did notice the common rules in the udev virtual package. However "sgx" 
+only appears in systemd but not eudev. Besides, I found that the 
+"render" group in systemd should be "video" in eudev.
 
-diff --git a/package/zlog/0001-Fix-stack-buffer-overflow-at-zlog_conf_build_with_file.patch b/package/zlog/0001-Fix-stack-buffer-overflow-at-zlog_conf_build_with_file.patch
-new file mode 100644
-index 0000000000..d5f23e1b26
---- /dev/null
-+++ b/package/zlog/0001-Fix-stack-buffer-overflow-at-zlog_conf_build_with_file.patch
-@@ -0,0 +1,25 @@
-+From a5be8b3a8ddc498de4ad041757285136a55d97e3 Mon Sep 17 00:00:00 2001
-+From: XiangfeiCH <chenthrone@163.com>
-+Date: Tue, 12 Apr 2022 00:13:35 +0800
-+Subject: [PATCH] Fix stack-buffer-overflow at zlog_conf_build_with_file
-+
-+[Retrieved from:
-+https://github.com/HardySimpson/zlog/commit/a5be8b3a8ddc498de4ad041757285136a55d97e3]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/conf.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/conf.c b/src/conf.c
-+index 0f862fa..9a4cb75 100644
-+--- a/src/conf.c
-++++ b/src/conf.c
-+@@ -305,7 +305,7 @@ static int zlog_conf_build_with_file(zlog_conf_t * a_conf)
-+ 				/* Oops the buffer is full - what now? */
-+ 				pline = line;
-+ 			} else {
-+-				for (p--; isspace((int)*p); --p)
-++				for (p--; p >= line && isspace((int)*p); --p)
-+ 					/*EMPTY*/;
-+ 				p++;
-+ 				*p = 0;
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index c7b7035c1f..1929a45a3e 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
-@@ -11,6 +11,9 @@ ZLOG_LICENSE_FILES = COPYING
- ZLOG_CPE_ID_VENDOR = zlog_project
- ZLOG_INSTALL_STAGING = YES
- 
-+# 0001-Fix-stack-buffer-overflow-at-zlog_conf_build_with_file.patch
-+ZLOG_IGNORE_CVES += CVE-2021-43521
-+
- define ZLOG_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
- 		-C $(@D) all
--- 
-2.35.1
+Regards,
+TIAN Yuanhao
+>
+> Regards,
+> Yann E. MORIN.
+>
+>>   	# systemd user groups
+>>   	- - systemd-journal -1 * - - - Journal
+>>   	$(SYSTEMD_REMOTE_USER)
+>> -- 
+>> 2.25.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
