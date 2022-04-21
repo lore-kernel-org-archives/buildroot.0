@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9282CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 18:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05F8C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Apr 2022 18:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5116D83F47;
-	Thu, 21 Apr 2022 18:01:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 549C240A13;
+	Thu, 21 Apr 2022 18:01:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id asBOhrNrQe2O; Thu, 21 Apr 2022 18:01:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lX7S7_Lt0MOC; Thu, 21 Apr 2022 18:01:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6CE9683022;
-	Thu, 21 Apr 2022 18:01:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 15F251C1190
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FFB240A07;
+	Thu, 21 Apr 2022 18:01:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 214EB1C11A5
  for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1A1160E00
- for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EA8C409EC
+ for <buildroot@lists.busybox.net>; Thu, 21 Apr 2022 18:01:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b57HFFVz15sh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P3d0AkF-vlvk for <buildroot@lists.busybox.net>;
  Thu, 21 Apr 2022 18:01:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 317B360B17
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B9F64046B
  for <buildroot@buildroot.org>; Thu, 21 Apr 2022 18:01:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3755683FB8; Thu, 21 Apr 2022 17:50:56 +0000 (UTC)
+ id 6647D83FC0; Thu, 21 Apr 2022 17:50:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 21 Apr 2022 19:31:40 +0200
+Date: Thu, 21 Apr 2022 19:31:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d1e207f976018e44c964cbe661d5fa315f529527
-X-Git-Newrev: bbb3370efbe92132cf4a00fa7bb267f9f4d6bc8a
+X-Git-Oldrev: c2f829a71a728b689f8571187e1ff5b81f48a754
+X-Git-Newrev: 090a6ab0fcd24a20fd51882d8b4ce11c184d29aa
 X-Patchwork-Hint: ignore
-Message-Id: <20220421175056.3755683FB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tvheadend: fix FTBFS
+Message-Id: <20220421175056.6647D83FC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libudfread: needs __sync_*_4 or
+ threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,77 +54,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0468087558569685145=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0468087558569685145==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=bbb3370efbe92132cf4a00fa7bb267f9f4d6bc8a
+commit: https://git.buildroot.net/buildroot/commit/?id=090a6ab0fcd24a20fd51882d8b4ce11c184d29aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the folloing build failure raised since commit
-04164b81e76e29fb9482245e808b46af2aa67bc6:
+libudfread needs __sync_*_4 or threads since its addition in commit
+c477885e3f3c31d3922af1fc0e47e6f5f35b1645 and
+https://code.videolan.org/videolan/libudfread/-/commit/06c3cb9223a3cb5ab048e42ab353958f422a8f57
+to avoid the following build failure:
 
-src/utils.c: In function 'sha512sum256':
-src/utils.c:619:45: error: token " " is not valid in preprocessor expressions
-  619 | #if OPENSSL_VERSION_NUMBER >= 0x1010101fL && !defined(LIBRESSL_VERSION_NUMBER)
-      |                                             ^
+src/udfread.c:108:3: error: #error no atomic operation support
+  108 | # error no atomic operation support
+      |   ^~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/caf0f5e4c6ad0f2764f07d33f594b6121cea87bc
+ - http://autobuild.buildroot.org/results/f76d475f49d525095ac0054224b50b9e612691d6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tvheadend/0003-Fix-FTBFS-in-utils-c.patch | 28 +++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/libudfread/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/tvheadend/0003-Fix-FTBFS-in-utils-c.patch b/package/tvheadend/0003-Fix-FTBFS-in-utils-c.patch
-new file mode 100644
-index 0000000000..2caa281490
---- /dev/null
-+++ b/package/tvheadend/0003-Fix-FTBFS-in-utils-c.patch
-@@ -0,0 +1,28 @@
-+From fd01737270d98c28465c86a688bd7d1c640486c5 Mon Sep 17 00:00:00 2001
-+From: Michael Marley <michael@michaelmarley.com>
-+Date: Wed, 6 Apr 2022 21:47:49 -0400
-+Subject: [PATCH] Fix FTBFS in utils.c
+diff --git a/package/libudfread/Config.in b/package/libudfread/Config.in
+index 8d42570500..c1f3f23af9 100644
+--- a/package/libudfread/Config.in
++++ b/package/libudfread/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_LIBUDFREAD
+ 	bool "libudfread"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  UDF reader
+ 
+ 	  https://code.videolan.org/videolan/libudfread
 +
-+U+0020 SPACE and U+00A0 NO-BREAK SPACE look the same, but they
-+aren't the same.
-+
-+[Retrieved from:
-+https://github.com/tvheadend/tvheadend/commit/fd01737270d98c28465c86a688bd7d1c640486c5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/utils.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/utils.c b/src/utils.c
-+index eecb10e116..bc6401d22f 100644
-+--- a/src/utils.c
-++++ b/src/utils.c
-+@@ -616,7 +616,7 @@ sha256sum ( const char *str, int lowercase )
-+ char *
-+ sha512sum256 ( const char *str, int lowercase )
-+ {
-+-#if OPENSSL_VERSION_NUMBER >= 0x1010101fL && !defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER >= 0x1010101fL && !defined(LIBRESSL_VERSION_NUMBER)
-+   return openssl_hash_hexstr(str, lowercase, EVP_sha512_256(), 32);
-+ #else
-+   return NULL;
-
---===============0468087558569685145==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++comment "libudfread needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0468087558569685145==--
