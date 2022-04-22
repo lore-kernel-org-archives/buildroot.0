@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17456C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DA29C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 19:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA22940ADA;
-	Fri, 22 Apr 2022 18:50:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9278840AE9;
+	Fri, 22 Apr 2022 19:22:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ypEqTCpmYRQG; Fri, 22 Apr 2022 18:50:32 +0000 (UTC)
+	with ESMTP id 6vKQXOfHYcVC; Fri, 22 Apr 2022 19:22:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74E3540AC7;
-	Fri, 22 Apr 2022 18:50:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FBB21C11A5
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:50:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB62E40AE8;
+	Fri, 22 Apr 2022 19:22:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DC6E1BF9A4
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 19:22:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DA8561049
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:50:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27DFB40AE8
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 19:22:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KVInXM8demwb for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 18:50:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 34EA660FFE
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=QIdi0FYV3BEVIVuZQHtD+3a5+/De0/wSPbz1MLYgmJo=; b=NDU98NPsj60VuvjjXEENG8S0IQ
- 5h5kkCNIw7k+RKKs3vfWeK62QTHJav+WauMNTrywxzShbLxMxinsbvv4007b4/f5cZo+i611V8q3c
- W9HzzuzqLF4AsNOOBNUHP/dwXk/Ipldd6tAVt2bej4QGdHW7BSgD4/BMQKsFREZtC18Sw6oVsI8nk
- pUMi5M+ANf7giVwCj3OJ1OwdQTDpvnKZkvqnCR3pCCDJXGutJZNqFnIeuVPjV+3SPGSzMKPa8z3k1
- xYwZa5JzReohhNpDdSjgCh8Gs1b6HpXbWAOsjhzZYDoo7SmnfHV8IijLa1mKgzd2mw815/KvcNNfx
- hUmzi8Uw==;
-Received: from 91-153-34-227.elisa-laajakaista.fi ([91.153.34.227] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1nhyML-000Bq3-MN; Fri, 22 Apr 2022 20:50:25 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 43ba9d05;
- Fri, 22 Apr 2022 18:50:15 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 21:50:15 +0300
-Message-Id: <20220422185015.3486540-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.36.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I7QpHySb-PCC for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 19:22:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk
+ [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E80D40360
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 19:22:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (Authenticated sender: adalessandro) with ESMTPSA id 7B9F71F46B90
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+ s=mail; t=1650655363;
+ bh=fnkRUVNUP5SeohKaIbbaWY7g5a0VsVrgn9h6twp8cmU=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=FrnDruh0qEinb+oADGQYzktTN6L7ZOsH1VAJ3quP2CdHqqkOpP765NXGRsjud7JTk
+ GTvRnzUTs/fDHCoKtLH6SL/dPg2CgNpIGuZd0U3UWWhhyeJib1NuWDhroJQ3mBsRMW
+ DPWEV4uopHnDqY7b1ZxyFXA0CbsG7nuWwBrM6EtcgC9+eKSKrPgR9lZaztn2Jldx12
+ 8Dj7n0aLbqI9/wIxo6vSX99B385dA0nHF7ABU30uojztbNwoqUp5VbslIJgo69fLhW
+ gCc+EnESIiBnGZLwrknnpXZ7fC1OTLqTDHDKtieercUXqSUreMpKbwtO+x+Wskovqb
+ PABPhGu9rTd2g==
+Message-ID: <c2c70fd1-3bce-8dae-8f38-8dcb16d2f833@collabora.com>
+Date: Fri, 22 Apr 2022 16:22:36 -0300
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version 2.36.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To: Arnout Vandecappelle <arnout@mind.be>,
+ Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+References: <20220131145555.2819020-1-michael@amarulasolutions.com>
+ <e7701dd2-5636-2891-0e47-7a518c1dc961@mind.be>
+ <CAOf5uw=rqEpd5eC-tjV=bNAqwE7-VS152GByK_KZ58TCrZTbfw@mail.gmail.com>
+ <b8664feb-5b6b-9261-62ab-4743a01b7721@mind.be>
+From: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+In-Reply-To: <b8664feb-5b6b-9261-62ab-4743a01b7721@mind.be>
+Subject: Re: [Buildroot] [PATCH V3] board: Add support for iMX8MN BSH SMM S2
+ PRO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,56 +71,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Jagan Teki <jagan@amarulasolutions.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bugfix release, with the usual flurry of correctness fixes, and a patch
-to fix the build with the accessibility support disabled. Release notes:
-
-  https://wpewebkit.org/release/wpewebkit-2.36.1.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 1e1aa62117..3923c32111 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.36.0.tar.xz.sums
--md5  b7b951cd7f6eb4a8585338505ce71234  wpewebkit-2.36.0.tar.xz
--sha1  904629a9ce3a4ab67d47315b008dc3152d504205  wpewebkit-2.36.0.tar.xz
--sha256  096aa9f87d9bfbfc80f558388a86721cdcc508b42ddef10bd270aec9aee96d5a  wpewebkit-2.36.0.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.36.1.tar.xz.sums
-+md5  7ba1c7fd0f67891ad137d11cac12f7a9  wpewebkit-2.36.1.tar.xz
-+sha1  0918a4daded01f42e65ec02a69f21cd6705311db  wpewebkit-2.36.1.tar.xz
-+sha256  ec83d8b2f8c3479ce9950d69440f3b9876ab70200fe6f4e07686054a0cba5723  wpewebkit-2.36.1.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index df29d6f170..9c9a9a2838 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.36.0
-+WPEWEBKIT_VERSION = 2.36.1
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
--- 
-2.36.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyLzEyLzIyIDA5OjQyLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPiAKPiAKPiBP
+biAxMi8wMi8yMDIyIDEzOjM2LCBNaWNoYWVsIE5henphcmVubyBUcmltYXJjaGkgd3JvdGU6Cj4+
+IEhpCj4+Cj4+IE9uIFNhdCwgRmViIDEyLCAyMDIyIGF0IDE6MTAgUE0gQXJub3V0IFZhbmRlY2Fw
+cGVsbGUgPGFybm91dEBtaW5kLmJlPgo+PiB3cm90ZToKPj4+Cj4+Pgo+Pj4KPj4+IE9uIDMxLzAx
+LzIwMjIgMTU6NTUsIE1pY2hhZWwgVHJpbWFyY2hpIHdyb3RlOgo+Pj4+IEFkZCBpbml0aWFsIHN1
+cHBvcnQgZm9yIGlNWDhNTiBCU0ggU01NIFMyIFBSTyBib2FyZDoKPj4+Pgo+Pj4+IC0gTGludXg6
+IHY1LjE3LXJjMQo+Pj4KPj4+IMKgwqAgSSdtIGEgYml0IHVuY29tZm9ydGFibGUgdG8gYWRkIGFu
+IC1yYyB2ZXJzaW9uLiBCdXQgSSBndWVzcyBpdCBjYW4KPj4+IGJlIHVwZGF0ZWQKPj4+IGFzIHNv
+b24gYXMgNS4xNyBpcyByZWxlYXNlZC4KPj4KPj4gT2ssIEkgd2lsbCB0aGVuIHdhaXQKPiAKPiDC
+oE5vLCB3aGF0IEkgbWVhbnQgdG8gc2F5IGlzOiBpdCdzIE9LIHRvIGRvIGl0IHdpdGggdGhlIC1y
+YywganVzdCBtYWtlCj4gc3VyZSB0aGF0IHlvdSB1cGRhdGUgaXQgdG8gdGhlIHJlbGVhc2UgdmVy
+c2lvbiB3aGVuIGl0IGNvbWVzIGFyb3VuZAo+ICh3aGljaCB3aWxsIHN0aWxsIGJlIGFub3RoZXIg
+OC1pc2ggd2Vla3MpLgoKU3VwcG9ydCBpcyBub3cgYWxtb3N0IGNvbXBsZXRlbHkgbWVyZ2VkIHVw
+c3RyZWFtIGZvciBrZXJuZWwgYW5kIHUtYm9vdC4KV2UgY291bGQgdXBkYXRlIHRoZSBwYXRjaCB0
+byBwdWxsIGZyb206CgoqIGxpbnV4OiB2NS4xNyAoYXVkaW8gZm9yIHRoaXMgYm9hcmQgaXMgZW5h
+YmxlZCBpbiB2NS4xOC1yYzMpCiogdS1ib290OiB2MjAyMi4wNy1yYzEgKHJlbGVhc2VkIG9uIE1v
+biAyNSBBcHJpbCAyMDIyLCAyIGRheXMgcmVtYWluaW5nKQoKV2UgY2FuIHVwZGF0ZSBsYXRlciBv
+biB0aGUgbGludXggcmVsZWFzZSB0byBpbmNsdWRlIHRvIHdob2xlIHN1cHBvcnQgYW5kCmF0IGxl
+YXN0IHdlIGNhbiBnZXQgcmlkIG9mIHRoZSBjdXN0b20gdS1ib290IHJlcG8vYnJhbmNoLgoKUmVn
+YXJkcywKQXJpZWwKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
