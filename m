@@ -1,55 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5452C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 07:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE67C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 07:32:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6643A408B4;
-	Fri, 22 Apr 2022 07:16:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D3C883E3A;
+	Fri, 22 Apr 2022 07:32:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jOO3mJfpTsO2; Fri, 22 Apr 2022 07:16:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 47Jf2AslMAsE; Fri, 22 Apr 2022 07:32:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67830408A3;
-	Fri, 22 Apr 2022 07:16:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DFA883089;
+	Fri, 22 Apr 2022 07:32:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0DC461BF3D9
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:16:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B05D81BF3DB
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:32:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF81B419DF
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:16:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D5EB41A34
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:32:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G9a1SMdFUHMJ for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 07:16:47 +0000 (UTC)
+ with ESMTP id e7-AVkHayuIS for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 07:32:48 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B7363419D3
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 07:16:47 +0000 (UTC)
-Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
- by mailout10.t-online.de (Postfix) with SMTP id 962F26A5E
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 09:16:44 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.196.216]) by fwd77.t-online.de
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8A9A409B3
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 07:32:48 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout12.t-online.de (Postfix) with SMTP id A9E505C28
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 09:32:45 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.196.216]) by fwd70.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nhnX2-4IPdlh0; Fri, 22 Apr 2022 09:16:44 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45350)
+ esmtp id 1nhnmX-2bxWwz0; Fri, 22 Apr 2022 09:32:45 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45358)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nhnX1-0002dU-Sf
- for buildroot@buildroot.org; Fri, 22 Apr 2022 09:16:43 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nhnmW-0005Nc-US
+ for buildroot@buildroot.org; Fri, 22 Apr 2022 09:32:45 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 09:16:43 +0200
-Message-Id: <20220422071643.60273-1-bernd.kuhls@t-online.de>
+Date: Fri, 22 Apr 2022 09:32:44 +0200
+Message-Id: <20220422073244.63829-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1650611804-0001606D-EE6F3EC6/0/0 CLEAN NORMAL
-X-TOI-MSGID: 4947c387-b01d-41f5-9269-73cd5b7a0c05
-Subject: [Buildroot] [PATCH 1/1] package/xmrig: bump version to 6.17.0
+X-TOI-EXPURGATEID: 150726::1650612765-00004E7B-7FD6312C/0/0 CLEAN NORMAL
+X-TOI-MSGID: ba894913-ee7c-4d2a-b722-144d547a1a52
+Subject: [Buildroot] [PATCH 1/1] package/kodi-skin-confluence: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,32 +68,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index ff5f80a67b..7863c0319d 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index e3d1ff73f4..c840e5b161 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  245ba47a6b8ae8e9a9df1c055e90f22f944a7d1219416cb30268881d0c0d377b  xmrig-6.16.4.tar.gz
-+sha256  748a989390202ba2d1ccbd9d9a6b8cbd6551149cbab63b347fd1ed6df0254faa  xmrig-6.17.0.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 1feab499fc..6e21e550a4 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
+ # Locally computed
+-sha256  49ba4dcf4b512ac0a97bd1a4ebf14685d294d89a7a07c26ddda0fe730c8aa047  kodi-skin-confluence-37a196cdb58c0da87b5b22b047a5d44dc447f1ae.tar.gz
++sha256  c57b9a303ad1ebf14ad487901e5da15eba7b3a40304046974fad1d64fb7b8b57  kodi-skin-confluence-e6d31bc84eea73a04b2a23358929d5276be832b8.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index fcae506d1e..c32718fd10 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XMRIG_VERSION = 6.16.4
-+XMRIG_VERSION = 6.17.0
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+-KODI_SKIN_CONFLUENCE_VERSION = 37a196cdb58c0da87b5b22b047a5d44dc447f1ae
++KODI_SKIN_CONFLUENCE_VERSION = e6d31bc84eea73a04b2a23358929d5276be832b8
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.30.2
 
