@@ -1,55 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE67C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 07:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 456BFC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 07:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D3C883E3A;
-	Fri, 22 Apr 2022 07:32:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E03F341A48;
+	Fri, 22 Apr 2022 07:47:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 47Jf2AslMAsE; Fri, 22 Apr 2022 07:32:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oD_i1s1tzTSg; Fri, 22 Apr 2022 07:47:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DFA883089;
-	Fri, 22 Apr 2022 07:32:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0B2741A43;
+	Fri, 22 Apr 2022 07:47:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B05D81BF3DB
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:32:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DAB371BF3D9
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D5EB41A34
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:32:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAC7941A43
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:47:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e7-AVkHayuIS for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 07:32:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A8A9A409B3
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 07:32:48 +0000 (UTC)
-Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
- by mailout12.t-online.de (Postfix) with SMTP id A9E505C28
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 09:32:45 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.196.216]) by fwd70.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nhnmX-2bxWwz0; Fri, 22 Apr 2022 09:32:45 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45358)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nhnmW-0005Nc-US
- for buildroot@buildroot.org; Fri, 22 Apr 2022 09:32:45 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id qp2Cns-onw7a for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 07:47:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6B48941A2F
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 07:47:39 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id c10so9837768wrb.1
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 00:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ibyrUElT/rRn6DnYs/SdaAmRU1/sBqPwjT3KnhmD7Mw=;
+ b=FW2YCOERgf4dUfTI1EuBS+GDxdbtX5WjSqS8zCuSrL69E6Tq2XCvX2fGuZ9JJ9V747
+ 0XLlT1V7jMNI/GP4kWOW3mA/1Sf2gk47Z6P5EUglzGw5kK4zDL780jIeFY3uTJRl/kDt
+ aanNrbQUU9nHJvzgILbGwr3kZi1vleIG8g4Q2dAbhF5z63shAnO08V9dlRM8YQIrOT6g
+ FTgJIVqQkhLzvsZRsSduwHf614vq61XaHv3dmURcDeOWa/G5eLhwU63S0Z2izGIbZPbl
+ BZiBlW5g0RB6nBite3T0KPoO6OlrMBL3NlyOzHWnLP/JfgblAqH3lVFXtPcMf3dJa2MZ
+ sqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ibyrUElT/rRn6DnYs/SdaAmRU1/sBqPwjT3KnhmD7Mw=;
+ b=6JIJj4SodCdgBj5gkK5iGmYL45OH17GFFhbIfoTsepErrMmcg64UDR8dEpexvwzsUL
+ 3YZn72XKATf4drJl6h2kzQz6YFBCkMZuzVvXG5waO4KQqjtMSIaaTKvoX0WDNsZcBl07
+ Jua+zX4MMmDBZ3xUswbpMacG7MiLEihTULqwGLvNKZJBZ/rN/GbRaBg2t8r7Q/Dw9a/Q
+ KzY+QUMxkEScGzDbVsiZOa7KK5Pwqvhm1sKb+hgehxGZF22WOUpBcXaqch1zq+ABledo
+ JuYJDz/mgJL4FmA/NpHujr84buz51ddH0UPsxipFUWt//CPSlgtzGp4UkFVVaQzgB9wS
+ n87w==
+X-Gm-Message-State: AOAM531o+bKYeG1gOEOVslPLh3WQrRRe4pltkQ1gytlnx3CkvF1PD6Wf
+ YmNxEUaSDCi55d7RjqSwRFMytXYhFQ4=
+X-Google-Smtp-Source: ABdhPJzUBar6wWsv6ovZrbiG1Ap1/6wNdG+8bKJhKwuhWuUpmv8xqPHx3M+k3eyYGuTB4p8QlZLCsw==
+X-Received: by 2002:a5d:6201:0:b0:207:8d91:aaa9 with SMTP id
+ y1-20020a5d6201000000b002078d91aaa9mr2621696wru.262.1650613657301; 
+ Fri, 22 Apr 2022 00:47:37 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ m21-20020a05600c3b1500b003928f20b7besm1008295wms.42.2022.04.22.00.47.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 22 Apr 2022 00:47:36 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 09:32:44 +0200
-Message-Id: <20220422073244.63829-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Fri, 22 Apr 2022 09:44:56 +0200
+Message-Id: <20220422074456.4104082-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1650612765-00004E7B-7FD6312C/0/0 CLEAN NORMAL
-X-TOI-MSGID: ba894913-ee7c-4d2a-b722-144d547a1a52
-Subject: [Buildroot] [PATCH 1/1] package/kodi-skin-confluence: bump version
+Subject: [Buildroot] [PATCH 1/1] package/adwaita-icon-theme: needs host gcc
+ >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,41 +86,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix the following build failure raised since bump of harfbuzz to version
+3.1.2 in commit 6861933d22006fbe8c961a41506beac826881f33:
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index e3d1ff73f4..c840e5b161 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  49ba4dcf4b512ac0a97bd1a4ebf14685d294d89a7a07c26ddda0fe730c8aa047  kodi-skin-confluence-37a196cdb58c0da87b5b22b047a5d44dc447f1ae.tar.gz
-+sha256  c57b9a303ad1ebf14ad487901e5da15eba7b3a40304046974fad1d64fb7b8b57  kodi-skin-confluence-e6d31bc84eea73a04b2a23358929d5276be832b8.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index fcae506d1e..c32718fd10 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SKIN_CONFLUENCE_VERSION = 37a196cdb58c0da87b5b22b047a5d44dc447f1ae
-+KODI_SKIN_CONFLUENCE_VERSION = e6d31bc84eea73a04b2a23358929d5276be832b8
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+In file included from ../src/hb.hh:473:0,
+                 from ../src/hb-buffer-verify.cc:27:
+../src/hb-vector.hh:206:20: error: 'is_trivially_copy_assignable' is not a member of 'std'
+      hb_enable_if (std::is_trivially_copy_assignable<T>::value)>
+                    ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/bbc48cb5232c617d4ff1d0bafd63bb3c9c72d556
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/adwaita-icon-theme/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/adwaita-icon-theme/Config.in b/package/adwaita-icon-theme/Config.in
+index d200570e76..71b839d996 100644
+--- a/package/adwaita-icon-theme/Config.in
++++ b/package/adwaita-icon-theme/Config.in
+@@ -1,5 +1,10 @@
+ config BR2_PACKAGE_ADWAITA_ICON_THEME
+ 	bool "adwaita icon theme"
+ 	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
++	# host-libgtk3 -> host-librsvg -> host-pango -> host-harfbuzz
++	depends on BR2_HOST_GCC_AT_LEAST_4_9
+ 	help
+ 	  Adwaita icon theme
++
++comment "adwaita icon theme needs host gcc >= 4.9"
++	depends on !BR2_HOST_GCC_AT_LEAST_4_9
 -- 
-2.30.2
+2.35.1
 
 _______________________________________________
 buildroot mailing list
