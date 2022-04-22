@@ -1,59 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D6B9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24653C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3BB941CAD;
-	Fri, 22 Apr 2022 18:17:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8440607EC;
+	Fri, 22 Apr 2022 18:44:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q83FiI4_nRf3; Fri, 22 Apr 2022 18:17:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id apyXqURBowDy; Fri, 22 Apr 2022 18:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AAEA41CA6;
-	Fri, 22 Apr 2022 18:16:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B843360757;
+	Fri, 22 Apr 2022 18:44:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9F38A1BF330
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E12311C11A5
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:44:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D71F61034
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF519606FF
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:44:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=linux.microsoft.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tEXWZSzIr-OD for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 18:16:34 +0000 (UTC)
+ with ESMTP id cjvIgE-QVSne for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 18:44:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp3.osuosl.org (Postfix) with ESMTP id C872861033
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:16:34 +0000 (UTC)
-Received: from pwmachine.home (unknown [92.186.13.154])
- by linux.microsoft.com (Postfix) with ESMTPSA id 0311920E7048;
- Fri, 22 Apr 2022 11:16:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0311920E7048
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
- s=default; t=1650651394;
- bh=FsZMZvZXLw5Teet2fao+SzIwj4wwc+OMBiOGX6TFR7I=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=TZHMRO3v35R1DTEicXZgFD39leQ236Hqty0JOSAuv/e7oOEq2QVWsMLCk+hK8riSw
- +madGWwWJ8tX/jbB5YqxZJTVroKG7sqTMEqNjCO7eDM+dThvoZPk17UQeNjI2RWIcp
- tVia51CqumwehNirw0FcWnGwVqmqsaYzg441/D5g=
-From: Francis Laniel <flaniel@linux.microsoft.com>
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BAD45606F5
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:44:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=ApNfxvrtnDg5TwSlXmFqQBODOg9rVrxhoe1eb11hbMQ=; b=Xzgu8rLXFRPrBjDFmtLP6SW1yM
+ 8W0wQ4Lzk6Tvk1VZijimw3ux55KEaj8O66tejg1Y3P2AcZqaspNlFXZVpiwZdGngSPpJ0rjJ2HNCY
+ QtobtCMtALdh7V3W1MWBR1G/d7eDvV5bLsYlRaYIv/iHHXJvQCM6H3kwd1gHzSUjg6YBRJw0IW5ae
+ o8lxoaufsubBCtJ3tCLnhtJ2+yZ+ZJYhHHeB7JvvGADUObsR7jc/5bV/W8xphUKRqiF4KGXNVtPMU
+ YQddHCsV2IjsjlLmrGvCSKy2pHmIEG3kSPa9EJmXZdmh8AHuVqZIMQuRTXfQIDEJVi3x5mRzZR+mE
+ iNCespsg==;
+Received: from 91-153-34-227.elisa-laajakaista.fi ([91.153.34.227] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1nhyGs-000Bh2-9M; Fri, 22 Apr 2022 20:44:46 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 98758525;
+ Fri, 22 Apr 2022 18:44:31 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 19:16:12 +0100
-Message-Id: <20220422181612.51246-3-flaniel@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422181612.51246-1-flaniel@linux.microsoft.com>
-References: <20220422181612.51246-1-flaniel@linux.microsoft.com>
+Date: Fri, 22 Apr 2022 21:44:31 +0300
+Message-Id: <20220422184431.3471788-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC PATCH v1 2/2] package/pahole: use commit
- 73383b3a39af
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.36.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,66 +69,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Francis Laniel <flaniel@linux.microsoft.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This modification uses buildroot host-libbpf instead of pahole libbpf git
-submodule.
-Also, it nows uses commit:
-73383b3a39af ("libbpf: Update libbpf to the latest git HEAD")
-To avoid compile errors due to use of depecrated APIs (like btf__get_nr_types).
+Bugfix release, with the usual flurry of correctness fixes, and a patch
+to fix the build with the accessibility support disabled. Release notes:
 
-A build pre hook was also added to Linux to avoid conflicts regarding bpf.h
-which added to HOST_DIR by host-libbpf.
+  https://webkitgtk.org/2022/04/21/webkitgtk2.36.1-released.html
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/pahole/pahole.hash |  2 +-
- package/pahole/pahole.mk   | 14 +++++++-------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/pahole/pahole.hash b/package/pahole/pahole.hash
-index 420db15e75..8e5560b5e7 100644
---- a/package/pahole/pahole.hash
-+++ b/package/pahole/pahole.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cde85af68b368f50a913be387f94f6b43612a04af6c92387b4dcabb712a668fe  pahole-v1.23-br1.tar.gz
-+sha256  3531396c0568793ef8ca1a2fbb44ef2e1e81bdd55496a4487b83ba4d95df9d99  pahole-73383b3a39afe86b22e098773e47b8546c48a649.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
-index da6d67e6a2..199fa8cc11 100644
---- a/package/pahole/pahole.mk
-+++ b/package/pahole/pahole.mk
-@@ -4,14 +4,14 @@
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 38068745ee..00a342ed7f 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.36.0.tar.xz.sums
+-md5  1e3fe866ab6e41e7ec3deb80bd5b3a85  webkitgtk-2.36.0.tar.xz
+-sha1  5b90bc59c2f442223de1a4d9dc8ff604888abb3c  webkitgtk-2.36.0.tar.xz
+-sha256  b877cca1f105235f5dd57c7ac2b2c2be3c6b691ff444f93925c7254cf156c64d  webkitgtk-2.36.0.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.36.1.tar.xz.sums
++md5  e6100df7f82d95a4e65176b10f5ab011  webkitgtk-2.36.1.tar.xz
++sha1  36a95b906e54bcf94d2be04e1cbaac3584da7eb1  webkitgtk-2.36.1.tar.xz
++sha256  0149ea5fb1d20f2a9981677d45c952a047330001ea24a8dc29035239f12c0c8f  webkitgtk-2.36.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index eca175d1bd..9e85c5b78f 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHOLE_VERSION = v1.23
--PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git
--PAHOLE_SITE_METHOD = git
--# pahole contains git submodule and relies on them to be built.
--PAHOLE_GIT_SUBMODULES = YES
--HOST_PAHOLE_DEPENDENCIES = host-elfutils
-+PAHOLE_VERSION = 73383b3a39afe86b22e098773e47b8546c48a649
-+PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot
-+HOST_PAHOLE_DEPENDENCIES = \
-+	host-elfutils \
-+	host-libbpf
- # Defining __LIB is needed to build pahole.
--HOST_PAHOLE_CONF_OPTS = -D__LIB=lib
-+# Set LIBBPF_EMBEDDED to OFF to use host-libbpf.
-+HOST_PAHOLE_CONF_OPTS = -D__LIB=lib -DLIBBPF_EMBEDDED=OFF
- PAHOLE_LICENSE = GPL-2.0
- PAHOLE_LICENSE_FILES = COPYING
- 
+-WEBKITGTK_VERSION = 2.36.0
++WEBKITGTK_VERSION = 2.36.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
-2.25.1
+2.36.0
 
 _______________________________________________
 buildroot mailing list
