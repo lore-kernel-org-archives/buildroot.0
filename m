@@ -4,55 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02FDAC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:16:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D6B9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96CB241C84;
-	Fri, 22 Apr 2022 18:16:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3BB941CAD;
+	Fri, 22 Apr 2022 18:17:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x_L1RbM_yM_N; Fri, 22 Apr 2022 18:16:46 +0000 (UTC)
+	with ESMTP id Q83FiI4_nRf3; Fri, 22 Apr 2022 18:17:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7425A41C74;
-	Fri, 22 Apr 2022 18:16:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AAEA41CA6;
+	Fri, 22 Apr 2022 18:16:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E57631BF330
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F38A1BF330
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E22CD61033
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D71F61034
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=linux.microsoft.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GeypOjOTtVu5 for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 18:16:33 +0000 (UTC)
+ with ESMTP id tEXWZSzIr-OD for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 18:16:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FD7560F18
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:16:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C872861033
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:16:34 +0000 (UTC)
 Received: from pwmachine.home (unknown [92.186.13.154])
- by linux.microsoft.com (Postfix) with ESMTPSA id 425AD20E7045;
- Fri, 22 Apr 2022 11:16:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 425AD20E7045
+ by linux.microsoft.com (Postfix) with ESMTPSA id 0311920E7048;
+ Fri, 22 Apr 2022 11:16:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0311920E7048
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
- s=default; t=1650651392;
- bh=rNjNSx0FnVGImFiIaB/hDexIDSR6m9HU1s3Fd1WVjKo=;
+ s=default; t=1650651394;
+ bh=FsZMZvZXLw5Teet2fao+SzIwj4wwc+OMBiOGX6TFR7I=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=LigPDjH2WKTBoLYUZN7T5qW/h6t/enZWk3TWSy5qUKWpDZZrK05+Z96/AkEtL9zGO
- 7rw/kf0pZNrhhwjap9YCauKaxPGdGF9jZa4+NPOZOnddKr/p646T/L60hDy7ZKIB5w
- r1fFi+Jve8uEtEGjlFCXDSEPFKFqvxJZCWb8iwXM=
+ b=TZHMRO3v35R1DTEicXZgFD39leQ236Hqty0JOSAuv/e7oOEq2QVWsMLCk+hK8riSw
+ +madGWwWJ8tX/jbB5YqxZJTVroKG7sqTMEqNjCO7eDM+dThvoZPk17UQeNjI2RWIcp
+ tVia51CqumwehNirw0FcWnGwVqmqsaYzg441/D5g=
 From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 19:16:11 +0100
-Message-Id: <20220422181612.51246-2-flaniel@linux.microsoft.com>
+Date: Fri, 22 Apr 2022 19:16:12 +0100
+Message-Id: <20220422181612.51246-3-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422181612.51246-1-flaniel@linux.microsoft.com>
 References: <20220422181612.51246-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC PATCH v1 1/2] package/libbpf: build for host
+Subject: [Buildroot] [RFC PATCH v1 2/2] package/pahole: use commit
+ 73383b3a39af
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,44 +68,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Francis Laniel <flaniel@linux.microsoft.com>,
  Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogRnJhbmNpcyBMYW5pZWwgPGZsYW5pZWxAbGludXgubWljcm9zb2Z0LmNv
-bT4KLS0tCiBwYWNrYWdlL2xpYmJwZi9saWJicGYubWsgfCAyNSArKysrKysrKysrKysrKysrKysr
-KysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMjUgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvbGliYnBmL2xpYmJwZi5tayBiL3BhY2thZ2UvbGliYnBmL2xpYmJwZi5tawppbmRleCBk
-NjkxNDc1N2Q3Li43MDkyNzdmYWM0IDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYmJwZi9saWJicGYu
-bWsKKysrIGIvcGFja2FnZS9saWJicGYvbGliYnBmLm1rCkBAIC0xMCw2ICsxMCw3IEBAIExJQkJQ
-Rl9MSUNFTlNFID0gR1BMLTIuMCwgTEdQTC0yLjEsIEJTRC0yLUNsYXVzZQogTElCQlBGX0xJQ0VO
-U0VfRklMRVMgPSBMSUNFTlNFIExJQ0VOU0UuQlNELTItQ2xhdXNlIExJQ0VOU0UuTEdQTC0yLjEK
-IExJQkJQRl9DUEVfSURfVkVORE9SID0gbGliYnBmX3Byb2plY3QKIExJQkJQRl9ERVBFTkRFTkNJ
-RVMgPSBob3N0LWJpc29uIGhvc3QtZmxleCBob3N0LXBrZ2NvbmYgZWxmdXRpbHMgemxpYgorSE9T
-VF9MSUJCUEZfREVQRU5ERU5DSUVTID0gaG9zdC1iaXNvbiBob3N0LWZsZXggaG9zdC1wa2djb25m
-IGhvc3QtZWxmdXRpbHMgaG9zdC16bGliCiBMSUJCUEZfSU5TVEFMTF9TVEFHSU5HID0gWUVTCiAK
-IGRlZmluZSBMSUJCUEZfQlVJTERfQ01EUwpAQCAtMzgsNCArMzksMjggQEAgZGVmaW5lIExJQkJQ
-Rl9JTlNUQUxMX1RBUkdFVF9DTURTCiAJCS1DICQoQEQpL3NyYyBpbnN0YWxsIERFU1RESVI9JChU
-QVJHRVRfRElSKQogZW5kZWYKIAorZGVmaW5lIEhPU1RfTElCQlBGX0lOU1RBTExfQ01EUworCSQo
-SE9TVF9NQUtFX0VOVikgJChIT1NUX0NPTkZJR1VSRV9PUFRTKSAkKE1BS0UpIFwKKwkJLUMgJChA
-RCkvc3JjIGluc3RhbGwgaW5zdGFsbF91YXBpX2hlYWRlcnMgREVTVERJUj0kKEhPU1RfRElSKQor
-CisJIyBXZSBuZWVkIHRvIGluc3RhbGxfdWFwaV9oZWFkZXJzIHNvIHdlIGhhdmUgYnRmLmggdG8g
-Y29tcGlsZQorCSMgaG9zdC1wYWhvbGUuCisJIyBOb25ldGhlbGVzcywgdGhpcyB0YXJnZXQgYWRk
-cyBicGYuaCB3aGljaCBnZW5lcmF0ZXMgYSBjb25mbGljdCB3aGVuCisJIyBidWlsZGluZyB0aGUg
-a2VybmVsOgorCSMgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGxpYmJwZl9pbnRlcm5hbC5oOjE3OjAs
-IGZyb20gc3Ryc2V0LmM6OToKKwkjIHJlbG9fY29yZS5oOjEwOjY6IGVycm9yOiBuZXN0ZWQgcmVk
-ZWZpbml0aW9uIG9mIOKAmGVudW0gYnBmX2NvcmVfcmVsb19raW5k4oCZCisJIyBlbnVtIGJwZl9j
-b3JlX3JlbG9fa2luZCB7CisJIyBefn5+fn5+fn5+fn5+fn5+fn4KKwkjIHJlbG9fY29yZS5oOjEw
-OjY6IGVycm9yOiByZWRlY2xhcmF0aW9uIG9mIOKAmGVudW0gYnBmX2NvcmVfcmVsb19raW5k4oCZ
-CisJIyBJbiBmaWxlIGluY2x1ZGVkIGZyb20gbGliYnBmX2xlZ2FjeS5oOjEzOjAsCisJIyAJCWZy
-b20gbGliYnBmX2ludGVybmFsLmg6MTYsCisJIyAJCWZyb20gc3Ryc2V0LmM6OToKKwkjIC9ob21l
-L2ZyYW5jaXMvYnVpbGRyb290L291dHB1dC9ob3N0L2luY2x1ZGUvbGludXgvYnBmLmg6NjQ5Nzo2
-OiBub3RlOiBvcmlnaW5hbGx5IGRlZmluZWQgaGVyZQorCSMgZW51bSBicGZfY29yZV9yZWxvX2tp
-bmQgeworCSMgU28sIGJldHRlciB0byByZW1vdmUgcmVtb3ZlIGl0IG5vdyBzaW5jZSB3ZSBkbyBu
-b3QgbmVlZCBpdCB0byBidWlsZAorCSMgaG9zdC1wYWhvbGUuCisJcm0gJChIT1NUX0RJUikvaW5j
-bHVkZS9saW51eC9icGYuaAorZW5kZWYKKwogJChldmFsICQoZ2VuZXJpYy1wYWNrYWdlKSkKKyQo
-ZXZhbCAkKGhvc3QtZ2VuZXJpYy1wYWNrYWdlKSkKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+This modification uses buildroot host-libbpf instead of pahole libbpf git
+submodule.
+Also, it nows uses commit:
+73383b3a39af ("libbpf: Update libbpf to the latest git HEAD")
+To avoid compile errors due to use of depecrated APIs (like btf__get_nr_types).
+
+A build pre hook was also added to Linux to avoid conflicts regarding bpf.h
+which added to HOST_DIR by host-libbpf.
+
+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+---
+ package/pahole/pahole.hash |  2 +-
+ package/pahole/pahole.mk   | 14 +++++++-------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/pahole/pahole.hash b/package/pahole/pahole.hash
+index 420db15e75..8e5560b5e7 100644
+--- a/package/pahole/pahole.hash
++++ b/package/pahole/pahole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cde85af68b368f50a913be387f94f6b43612a04af6c92387b4dcabb712a668fe  pahole-v1.23-br1.tar.gz
++sha256  3531396c0568793ef8ca1a2fbb44ef2e1e81bdd55496a4487b83ba4d95df9d99  pahole-73383b3a39afe86b22e098773e47b8546c48a649.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
+index da6d67e6a2..199fa8cc11 100644
+--- a/package/pahole/pahole.mk
++++ b/package/pahole/pahole.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-PAHOLE_VERSION = v1.23
+-PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+-PAHOLE_SITE_METHOD = git
+-# pahole contains git submodule and relies on them to be built.
+-PAHOLE_GIT_SUBMODULES = YES
+-HOST_PAHOLE_DEPENDENCIES = host-elfutils
++PAHOLE_VERSION = 73383b3a39afe86b22e098773e47b8546c48a649
++PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot
++HOST_PAHOLE_DEPENDENCIES = \
++	host-elfutils \
++	host-libbpf
+ # Defining __LIB is needed to build pahole.
+-HOST_PAHOLE_CONF_OPTS = -D__LIB=lib
++# Set LIBBPF_EMBEDDED to OFF to use host-libbpf.
++HOST_PAHOLE_CONF_OPTS = -D__LIB=lib -DLIBBPF_EMBEDDED=OFF
+ PAHOLE_LICENSE = GPL-2.0
+ PAHOLE_LICENSE_FILES = COPYING
+ 
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
