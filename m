@@ -1,59 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54FE6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 10:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE20FC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 10:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E60C741A5A;
-	Fri, 22 Apr 2022 10:16:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F8B884365;
+	Fri, 22 Apr 2022 10:16:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PRKtiibMADX5; Fri, 22 Apr 2022 10:16:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oTzMd1Zm2wGv; Fri, 22 Apr 2022 10:16:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7424D41A4C;
-	Fri, 22 Apr 2022 10:16:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 66D191BF281
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 10:15:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77F0C84356;
+	Fri, 22 Apr 2022 10:16:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 591AD1BF281
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 10:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6023841A4C
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 10:15:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45E8884356
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 10:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m2R2c_pEEjHm for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 10:15:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qONv68V07KaJ for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 10:16:48 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F23D241A2F
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 10:15:56 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::228])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 38603C4399
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 10:09:33 +0000 (UTC)
-Received: (Authenticated sender: thomas.perrot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 17DDD1BF210;
- Fri, 22 Apr 2022 10:09:26 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3C76F8427F
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 10:16:47 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C559D60005;
+ Fri, 22 Apr 2022 10:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650622167;
+ t=1650622605;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=D+yhOlxkbAobSny5cderLrRY/BzxoF+UwVCHAF12cK4=;
- b=KdBfyBMiPqRcDpKOsf/YP3KYs1Ng/76YZJUzaGxUHO2jvJjmie9YiItX0SHzutdZ/6ZSm4
- OihV4ukjqnRtcx9chbcY/KcinNQR/0+qjUOhir3i/JbYItbNAq+Q0skzLI3+ZNANellgul
- gV5jb68IEXCmccc1q2pN4dVBSZrQGLOFUnG1jzIISmdf9yGX6FUm7MlrnwJnDHcQSfEb3h
- dtN4hVTE6r1rz9lHRish+HrbKvICb8hPQxBMnM+6TbmjRs5iDBbrJg6k6QYgzLegp132gC
- hUkK6XK+4+ATbxwEKVeSCI2O9Vk2CZZgMMLOMc0O6gxlpX1nO3bBLXpMWdhjuQ==
-To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 12:09:18 +0200
-Message-Id: <20220422100918.2818811-1-thomas.perrot@bootlin.com>
-X-Mailer: git-send-email 2.35.1
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RFgUWkJlhtbr8hBNkxOWhWO7cpXsshNVGMK4hOZ4jDM=;
+ b=Oq+tSQXDK+/+959YHu8ddnVhHXpdiAwat7oE0F1gHDQ+SwS8ZNrDC2AnPtEWAb2SobCtuH
+ Oc7Q2PJpvaNQDgmzwiSZnHvPc4BJTLY349qQluJZdG8mXIjWD19v/c7xpe55UDVTMrXVI3
+ yldWdDXsbVG87vUWqWT8bH/G6AKSWPbFkHzDLV2snh/Vib9BsURVGgnWBHeh3uPH6Wsq1G
+ b/NEwQ2j6yU5bw/Fa694lMUQ+G/wtzLx6SyX0fHxU6eM5imULTlca1Kr9F2AQXIHf4NcWG
+ BV/2xTLcXim1RtUNUo/TzwPo+3FVRo0ilWn2RZTSl+1Q7aOnOvCz0TxoZpg4Qw==
+Date: Fri, 22 Apr 2022 12:16:43 +0200
+To: Thomas Perrot <thomas.perrot@bootlin.com>
+Message-ID: <20220422121639.5118cd38@windsurf>
+In-Reply-To: <13e22a566019cfbb7f9a6de52a485dad687e1217.camel@bootlin.com>
+References: <20220420083923.3875405-1-thomas.perrot@bootlin.com>
+ <20220420083923.3875405-2-thomas.perrot@bootlin.com>
+ <87pmlbr70w.fsf@tarshish>
+ <13e22a566019cfbb7f9a6de52a485dad687e1217.camel@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/2] package/imx-cst: new package
+Subject: Re: [Buildroot] [PATCH 2/2] package/imx-cst: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,136 +70,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perrot via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perrot <thomas.perrot@bootlin.com>
-Cc: Thomas Perrot <thomas.perrot@bootlin.com>, thomas.petazzoni@bootlin.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package provides i.MX Code Signing Tools uses to sign i.MX bootloader
-to enable secure boot (HABv4 and AHAB).
-
-Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
----
-
-Changes v2:
-  - Add a trailing slash
-  - Preserve CFLAGS and LDFLAGS
-
-Changes v3:
-  - Hard code the OSTYPE variable to linux64
-
- DEVELOPERS                     |  1 +
- package/Config.in.host         |  1 +
- package/imx-cst/Config.in.host |  8 +++++++
- package/imx-cst/imx-cst.hash   |  3 +++
- package/imx-cst/imx-cst.mk     | 43 ++++++++++++++++++++++++++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/imx-cst/Config.in.host
- create mode 100644 package/imx-cst/imx-cst.hash
- create mode 100644 package/imx-cst/imx-cst.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6e49334dcc42..86cb04e54e5d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2767,6 +2767,7 @@ F:	package/xorcurses/
-
- N:	Thomas Perrot <thomas.perrot@bootlin.com>
- F:	package/byacc/
-+F:	package/imx-cst/
-
- N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- F:	arch/Config.in.arm
-diff --git a/package/Config.in.host b/package/Config.in.host
-index cd1c34b5a3d9..282594b40b8d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -40,6 +40,7 @@ menu "Host utilities"
- 	source "package/google-breakpad/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
- 	source "package/imagemagick/Config.in.host"
-+	source "package/imx-cst/Config.in.host"
- 	source "package/imx-mkimage/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jh71xx-tools/Config.in.host"
-diff --git a/package/imx-cst/Config.in.host b/package/imx-cst/Config.in.host
-new file mode 100644
-index 000000000000..84cb825e59cf
---- /dev/null
-+++ b/package/imx-cst/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_IMX_CST
-+	bool "host imx-cst"
-+	help
-+	  I.MX code signing tool provides software code signing
-+	  support designed that integrate the HABv4 and AHAB
-+	  library.
-+
-+	  https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL
-diff --git a/package/imx-cst/imx-cst.hash b/package/imx-cst/imx-cst.hash
-new file mode 100644
-index 000000000000..9c27bfe82038
---- /dev/null
-+++ b/package/imx-cst/imx-cst.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  2bcc03c7cedba58f7207a72a28e75cfe78007988d68c1095c793cce991c2936e  imx-cst-e2c687a856e6670e753147aacef42d0a3c07891a-br1.tar.gz
-+sha256  5dee6f54c636a97b15d7e9dfc8075248c36764b3819828cbc94cbd17c1755fb9  LICENSE.bsd3
-diff --git a/package/imx-cst/imx-cst.mk b/package/imx-cst/imx-cst.mk
-new file mode 100644
-index 000000000000..120f9c5575e1
---- /dev/null
-+++ b/package/imx-cst/imx-cst.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# imx-cst
-+#
-+################################################################################
-+
-+# debian/3.3.1+dfsg-2
-+IMX_CST_SITE = https://gitlab.apertis.org/pkg/imx-code-signing-tool.git
-+IMX_CST_SITE_METHOD = git
-+IMX_CST_VERSION = e2c687a856e6670e753147aacef42d0a3c07891a
-+IMX_CST_LICENSE = BSD-3-Clause
-+IMX_CST_LICENSE_FILES = LICENSE.bsd3
-+
-+HOST_IMX_CST_DEPENDENCIES = host-byacc host-flex host-openssl
-+
-+# We don't use HOST_CONFIGURE_OPTS when building cst, because we need
-+# to preserve the CFLAGS/LDFLAGS used by their Makefile.
-+define HOST_IMX_CST_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) \
-+		OSTYPE=linux64 \
-+		ENCRYPTION=yes \
-+		AR="$(HOSTAR)" \
-+		CC="$(HOSTCC)" \
-+		LD="$(HOSTCC)" \
-+		OBJCOPY="$(HOSTOBJCOPY)" \
-+		RANLIB="$(HOSTRANLIB)" \
-+		EXTRACFLAGS="$(HOST_CFLAGS) $(HOST_CPPFLAGS)" \
-+		EXTRALDFLAGS="$(HOST_LDFLAGS)" \
-+		PWD=$(@D)/code/cst \
-+		-C $(@D)/code/cst \
-+		build
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		COPTS="$(HOST_CFLAGS) $(HOST_CPPFLAGS) $(HOST_LDFLAGS)" \
-+		-C $(@D)/code/hab_csf_parser
-+endef
-+
-+define HOST_IMX_CST_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.linux64/cst $(HOST_DIR)/bin/cst
-+	$(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.linux64/srktool $(HOST_DIR)/bin/srktool
-+	$(INSTALL) -D -m 755 $(@D)/code/hab_csf_parser/csf_parser $(HOST_DIR)/bin/csf_parser
-+endef
-+
-+$(eval $(host-generic-package))
---
-2.35.1
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpPbiBGcmksIDIyIEFwciAyMDIyIDEyOjA5OjAwICswMjAwClRob21hcyBQZXJyb3Qg
+PHRob21hcy5wZXJyb3RAYm9vdGxpbi5jb20+IHdyb3RlOgoKPiA+IEl0IGxvb2tzIGxpa2UgdGhl
+IG9ubHkgZGlmZmVyZW5jZSBiZXR3ZWVuIDY0IGFuZCAzMiBpcyBpbiBvcGVuc3NsCj4gPiBidWls
+ZAo+ID4gcnVsZSwgYW5kIGZvciB4ODYgKGhvc3QpIHRhcmdldHMgb25seS4gV2UgZG9uJ3QgdXNl
+IHRoaXMgb3BlbnNzbCBydWxlCj4gPiBzaW5jZSB3ZSBidWlsZCBob3N0LW9wZW5zc2wgd2l0aCBv
+dXIgb3duIHJ1bGVzLiBTbyBtYXliZSB3ZSBjYW4ganVzdAo+ID4gYXJiaXRyYXJpbHkgY2hvb3Nl
+IGhhcmQgY29kZWQgJ2xpbnV4NjQnLiBJdCBzZWVtcyB0aGF0Cj4gPiBkZWJpYW4vTWFrZWZpbGUK
+PiA+IGRvZXMgdGhhdC4gIAo+IAo+IFRoYW5rcyBmb3IgeW91ciByZXZpZXcsIEnigJltIHN1Ym1p
+dHRpbmcgYSB2MyB3aXRoIHRoZSBPU1RZUEUgdmFyaWFibGUKPiBoYXJkY29kZWQgdG8gbGludXg2
+NC4KCk5vLCBwbGVhc2UgZG9uJ3QuIFdlJ3JlIGRvaW5nIHRoZSBidWlsZCBsaWtlIHRoaXM6Cgpi
+dWlsZDoKICAgICAgICAkKE1BS0UpIC1DICQoQ1NUX0NPREVfUEFUSCkvb2JqLiQoT1NUWVBFKSBi
+dWlsZAoKQW5kIGNvZGUvY3N0L2NvZGUvb2JqLmxpbnV4MzIvTWFrZWZpbGUgY29udGFpbnM6CgpD
+T1BUSU9OUyArPSAtbTMyCkxET1BUSU9OUyArPSAtbTMyCgp3aGlsZSBjb2RlL2NzdC9jb2RlL29i
+ai5saW51eDY0L01ha2VmaWxlIGNvbnRhaW5zCgpDT1BUSU9OUyArPSAtbTY0CkxET1BUSU9OUyAr
+PSAtbTY0CgpBbmQgSSBjYW4gZGVmaW5pdGVseSBzZWUgdGhlIC1tNjQgYmVpbmcgYWRkZWQgaW4g
+dGhlIGNvbXBpbGVyIGZsYWdzCndoZW4gZG9pbmcgYSBidWlsZCBvbiBhIHg4Ni02NCBob3N0IChy
+dW4gdGhlIGJ1aWxkIHdpdGggVkVSQk9TRT0xLCB5b3UKd2lsbCBzZWUpLgoKU28gaWYgeW91IHVz
+ZSBsaW51eDY0IHVuY29uZGl0aW9uYWxseSwgdGhlIENTVCBiaW5hcmllcyB3aWxsIGJlIGJ1aWx0
+CndpdGggLW02NCwgZXZlbiBvbiAzMi1iaXQgaG9zdCBtYWNoaW5lcyA9PiBiYWQuCgpUaG9tYXMK
+LS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQg
+TGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGlu
+LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
