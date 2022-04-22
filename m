@@ -1,53 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 646D0C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 22:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7BEBC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 22:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F02141CA1;
-	Fri, 22 Apr 2022 22:37:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F34140B10;
+	Fri, 22 Apr 2022 22:37:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cqvp9e0FAfxP; Fri, 22 Apr 2022 22:37:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H3OT5MzBGLD8; Fri, 22 Apr 2022 22:37:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A46A541A2A;
-	Fri, 22 Apr 2022 22:37:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 773001C11A9
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:36:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7513040B0E;
+	Fri, 22 Apr 2022 22:37:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A2BE1BF2BE
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 741E261412
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:36:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46B7940B03
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:37:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=embeddedts.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MHzxxLHKue_f for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 22:36:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gc3T03RKahG2 for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 22:36:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.185])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 870296140F
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 22:36:58 +0000 (UTC)
-Received: from 1ni1tX-000545-TD by out3c.electric.net with emc1-ok (Exim
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.179])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6F18F40195
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 22:36:59 +0000 (UTC)
+Received: from 1ni1tY-0007zx-UA by out3d.electric.net with emc1-ok (Exim
  4.94.2) (envelope-from <kris@embeddedTS.com>)
- id 1ni1tY-00055i-VP; Fri, 22 Apr 2022 15:36:56 -0700
-Received: by emcmailer; Fri, 22 Apr 2022 15:36:56 -0700
+ id 1ni1tZ-00081U-UY; Fri, 22 Apr 2022 15:36:57 -0700
+Received: by emcmailer; Fri, 22 Apr 2022 15:36:57 -0700
 Received: from [66.210.251.27] (helo=mail.embeddedts.com)
- by out3c.electric.net with esmtps (TLS1.2) tls
+ by out3d.electric.net with esmtps (TLS1.2) tls
  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
  (envelope-from <kris@embeddedTS.com>)
- id 1ni1tX-000545-TD; Fri, 22 Apr 2022 15:36:55 -0700
+ id 1ni1tY-0007zx-UA; Fri, 22 Apr 2022 15:36:56 -0700
 Received: from tsdebian.ts-local.net (unknown [75.164.70.254])
- by mail.embeddedts.com (Postfix) with ESMTPSA id 51D4840838;
- Fri, 22 Apr 2022 15:36:54 -0700 (MST)
+ by mail.embeddedts.com (Postfix) with ESMTPSA id 9ACCC4083E;
+ Fri, 22 Apr 2022 15:36:55 -0700 (MST)
 To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 15:36:08 -0700
-Message-Id: <20220422223611.10443-2-kris@embeddedTS.com>
+Date: Fri, 22 Apr 2022 15:36:11 -0700
+Message-Id: <20220422223611.10443-5-kris@embeddedTS.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20220422223611.10443-1-kris@embeddedTS.com>
 References: <20220422223611.10443-1-kris@embeddedTS.com>
@@ -65,15 +63,15 @@ X-PolicySMART: 13164782, 15749372, 26810492
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
  d=embeddedTS.com; s=mailanyone20220121;
  h=References:In-Reply-To:Message-Id:Date:To:From;
- bh=vY5HvWXfsQN2WTUNm9d42VX5ukOadLQ3LpxsP3p8uug=;
- b=KwzgzrupQ1dua6khP4jOPE7YU614W2Uc5M66d6Rwi7yKUpZ64XOD73RLdKaOug5ilb/svdvSNokXWidUmrop/mdtqX+GxMBT1Si+I/7n/s7eKj+LgKWlvgbpONMwFvLa2YZWUZjHqnQidJUjIxjVeiAHiO2j133Kbdzmqe+wC/yHsjVeumknRgjIg83dgnGC81Gw5bJTueGlRFn8t9CRnO0uMKlt5qL7ihejBWssns9iqRFIWDbESjAkS+lO7Cui9ymj1vOxiojvOrW/WxvBeVMNJTxXEwoF6hBL12v333dYqfRvMtwzVvGJ2vM3TYNVU49hbekZtFjYe0By08sWvQ==;
+ bh=fPpj4lGrJTEHFstnNGQCVqA3cb499aV2ugEYxS1hAIA=;
+ b=IFL6Q3t7b6e76BkcmMfd7GY0TawDKJ1qZwM/k0fhFlQ/Qgifd4xHcS0jlHiNSemvy1JdGYvuXjBMdhElaZLTRtEC5fmz0HqAA1wtu3+7FIR8FtZzowAFb5B16K6E20aT36go/KDTYCLPuLIt1QoaigxWZwFbeo9+Nc5uVVX3WBBdt9+SUKWdwO/oWWKoS1PWGBjvNZR6clJjkqJ93Za4cTnFKYTzTs91UcLVy7kbSze19enubrBJDn7c9b5Jd2bA6ws5YkRSXlSFZ5qAGaHlpwiOkyd1q3ia7GdnEKD/yT9QhqWbxcrYmaaKH2CHnk1QPmLfYGLVI0v7xNNSiMXZSQ==;
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
-Subject: [Buildroot] [PATCH v2 1/4] package/wilc1000-firmware: bump to 15.6
+Subject: [Buildroot] [PATCH v2 4/4] package/wilc-driver: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,112 +95,154 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Supports both WILC1000 (Wi-Fi only) and WILC3000 (Wi-Fi/BLE) hardware.
-
-To support WILC3000 this commit adds a separate config option,
-the original config option from this package is still valid.
-
-License information copied from Microchip's buildroot-external
-project.
+WILC1000/3000 driver pulled from at91-linux tree set-up to be built
+as an external module. Upstream Linux kernel does not support
+WILC3000 features at this time. This package is intended to bridge
+that gap until WILC1000/3000 is fully supported in kernel.
 
 Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
 ---
- package/wilc1000-firmware/Config.in              | 27 +++++++++++++++++++--
- package/wilc1000-firmware/wilc1000-firmware.hash |  2 +-
- package/wilc1000-firmware/wilc1000-firmware.mk   | 31 ++++++++++++++++--------
- 3 files changed, 47 insertions(+), 13 deletions(-)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/wilc-driver/Config.in        | 58 ++++++++++++++++++++++++++++++++++++
+ package/wilc-driver/wilc-driver.hash |  2 ++
+ package/wilc-driver/wilc-driver.mk   | 29 ++++++++++++++++++
+ 5 files changed, 91 insertions(+)
+ create mode 100644 package/wilc-driver/Config.in
+ create mode 100644 package/wilc-driver/wilc-driver.hash
+ create mode 100644 package/wilc-driver/wilc-driver.mk
 
-diff --git a/package/wilc1000-firmware/Config.in b/package/wilc1000-firmware/Config.in
-index df8a7a6b60..0734c7ad99 100644
---- a/package/wilc1000-firmware/Config.in
-+++ b/package/wilc1000-firmware/Config.in
-@@ -1,6 +1,29 @@
- config BR2_PACKAGE_WILC1000_FIRMWARE
- 	bool "wilc1000-firmware"
- 	help
--	  Firmware for Atmel Wilc1000 wireless device
-+	  Firmware for Microchip WILC1000 wireless device
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fc0f52edf5..1e6b2d0f48 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1664,6 +1664,7 @@ F:	configs/octavo_osd32mp1_red_defconfig
  
--	  https://github.com/linux4sc/wireless-firmware.git
-+	  These binary blobs are provided directly from Microchip.
-+	  Ideally, the firmware version should match driver version.
-+	  Generally, the latest firmware would be acceptible regardless
-+	  of driver version.
-+
-+	  These will be installed to /lib/firmware/mchp/
-+
-+	  https://github.com/linux4wilc/firmware
-+
-+if BR2_PACKAGE_WILC1000_FIRMWARE
-+config BR2_PACKAGE_WILC3000_FIRMWARE
-+	bool "wilc3000-firmware"
+ N:	Kris Bahnsen <kris@embeddedTS.com>
+ F:	package/wilc-firmware/
++F:	package/wilc-driver/
+ 
+ N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+ F:	package/bcusdk/
+diff --git a/package/Config.in b/package/Config.in
+index 1ff7f4cc66..8d5ed427c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -610,6 +610,7 @@ endmenu
+ 	source "package/usbutils/Config.in"
+ 	source "package/w_scan/Config.in"
+ 	source "package/wf111/Config.in"
++	source "package/wilc-driver/Config.in"
+ 	source "package/wipe/Config.in"
+ 	source "package/xorriso/Config.in"
+ 	source "package/xr819-xradio/Config.in"
+diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
+new file mode 100644
+index 0000000000..caf46ae281
+--- /dev/null
++++ b/package/wilc-driver/Config.in
+@@ -0,0 +1,58 @@
++config BR2_PACKAGE_WILC_DRIVER
++	bool "wilc kernel module"
 +	help
-+	  Firmware for Microchip WILC3000 wireless device
++	  External kernel module for WILC1000/3000 devices.
 +
-+	  These binary blobs are provided directly from Microchip.
-+	  Ideally, the firmware version should match driver version.
-+	  Generally, the latest firmware would be acceptible regardless
-+	  of driver version.
++	  wilc kernel driver source as found in Microchip's at91-linux
++	  kernel tree with added Kbuild file to be built as a generic
++	  external module.
 +
-+	  These will be installed to /lib/firmware/mchp/
++	  The wilc1000 driver currently maintained in Linux kernel does
++	  not support BLE of the WILC3000 hardware. This package is
++	  meant to bridge that gap until Microchip can get WILC3000
++	  support upstream.
 +
-+	  https://github.com/linux4wilc/firmware
++	  Supports both SDIO and SPI modes.
++
++	  https://github.com/embeddedTS/wilc3000-external-module
++
++if BR2_PACKAGE_WILC_DRIVER
++
++config BR2_PACKAGE_WILC_DRIVER_SPI
++	bool "SPI"
++	help
++	  This module adds support for the SPI interface of adapters
++	  using WILC1000/3000 chipset. The WILC1000/3000 has a Serial
++	  Peripheral Interface (SPI) that operates as an SPI slave.
++	  This SPI interface can be used for control and for serial
++	  I/O of 802.11 data. The SPI is a full-duplex slave
++	  synchronous serial interface that is available immediately
++	  following reset when pin 9 (SDIO_SPI_CFG) is tied to VDDIO.
++	  Select this if your platform is using the SPI bus.
++
++config BR2_PACKAGE_WILC_DRIVER_SDIO
++	bool "SDIO"
++	help
++	  This module adds support for the SDIO interface of adapters
++	  using WILC1000/3000 chipset. The WILC1000/3000 SDIO is a full
++	  speed interface. It meets SDIO card specification version 2.0.
++	  The interface supports the 1-bit/4-bit SD transfer mode at the
++	  clock range of 0-50 MHz. The host can use this interface to
++	  read and write from any register within the chip as well as
++	  configure the WILC1000/3000 for data DMA. To use this
++	  interface, pin9 (SDIO_SPI_CFG) must be grounded. Select this
++	  if your platform is using the SDIO bus.
++
++if BR2_PACKAGE_WILC_DRIVER_SDIO
++
++config BR2_PACKAGE_WILC_DRIVER_SDIO_OOB
++	bool "Enable out-of-band interrupt"
++	help
++	  This option enables out-of-band interrupt support for the
++	  WILC1000/3000 chipset. This OOB interrupt is intended to
++	  provide a faster interrupt mechanism for SDIO host controllers
++	  that don't support SDIO interrupt. Select this option If the
++	  SDIO host controller in your platform doesn't support SDIO
++	  time division interrupt.
 +endif
-diff --git a/package/wilc1000-firmware/wilc1000-firmware.hash b/package/wilc1000-firmware/wilc1000-firmware.hash
-index 5344efe517..9d55be9edc 100644
---- a/package/wilc1000-firmware/wilc1000-firmware.hash
-+++ b/package/wilc1000-firmware/wilc1000-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a2e7a327dd545ba2051946f7613005cbde88fdd952afb8eecdd1dacda7e767d2  v14.1_Firmware.zip
-+sha256  29bb5739136cdb4088cb52af59badce05cc7e562bca40e9f29fef7f8f7c19cb8  wilc1000-firmware-wilc_linux_15_6.tar.gz
-diff --git a/package/wilc1000-firmware/wilc1000-firmware.mk b/package/wilc1000-firmware/wilc1000-firmware.mk
-index 6f504d67a0..0af81c7110 100644
---- a/package/wilc1000-firmware/wilc1000-firmware.mk
-+++ b/package/wilc1000-firmware/wilc1000-firmware.mk
-@@ -4,21 +4,32 @@
- #
- ################################################################################
- 
--WILC1000_FIRMWARE_VERSION = 14.1
--WILC1000_FIRMWARE_SITE = https://github.com/linux4sc/wireless-firmware/archive
--WILC1000_FIRMWARE_SOURCE = v$(WILC1000_FIRMWARE_VERSION)_Firmware.zip
-+WILC1000_FIRMWARE_VERSION = wilc_linux_15_6
-+WILC1000_FIRMWARE_SITE = $(call github,linux4wilc,firmware,$(WILC1000_FIRMWARE_VERSION))
- 
--WILC1000_FIRMWARE_LICENSE = PROPRIETARY
-+WILC1000_FIRMWARE_LICENSE = Microchip firmware
-+WILC1000_FIRMWARE_LICENSE_FILES = LICENSE.wilc_fw
- 
--define WILC1000_FIRMWARE_EXTRACT_CMDS
--	$(UNZIP) -d $(BUILD_DIR) $(WILC1000_FIRMWARE_DL_DIR)/$(WILC1000_FIRMWARE_SOURCE)
--	mv $(BUILD_DIR)/wireless-firmware-$(WILC1000_FIRMWARE_VERSION)_Firmware/* $(@D)
--	rmdir $(BUILD_DIR)/wireless-firmware-$(WILC1000_FIRMWARE_VERSION)_Firmware
-+ifeq ($(BR2_PACKAGE_WILC1000_FIRMWARE),y)
-+WILC1000_FIRMWARE_FILES += \
-+	wilc1000_wifi_firmware.bin
++endif
+diff --git a/package/wilc-driver/wilc-driver.hash b/package/wilc-driver/wilc-driver.hash
+new file mode 100644
+index 0000000000..b51591e8d8
+--- /dev/null
++++ b/package/wilc-driver/wilc-driver.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  4796b1a53781f8702a335b0146d488a9422b71dab39f6f154f955b0ad1711199  wilc-driver-linux4microchip-2021.10-1.tar.gz
+diff --git a/package/wilc-driver/wilc-driver.mk b/package/wilc-driver/wilc-driver.mk
+new file mode 100644
+index 0000000000..a89af30e29
+--- /dev/null
++++ b/package/wilc-driver/wilc-driver.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# wilc-driver
++#
++################################################################################
++
++WILC_DRIVER_VERSION = linux4microchip-2021.10-1
++WILC_DRIVER_SITE = $(call github,embeddedTS,wilc3000-external-module,$(WILC_DRIVER_VERSION))
++
++WILC_DRIVER_LICENSE = GPL-2.0
++WILC_DRIVER_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_WILC_DRIVER_SPI),y)
++WILC_DRIVER_MODULE_MAKE_OPTS += \
++	CONFIG_WILC_SPI=m
 +endif
 +
-+ifeq ($(BR2_PACKAGE_WILC3000_FIRMWARE),y)
-+WILC1000_FIRMWARE_FILES += \
-+	wilc3000_ble_firmware.bin \
-+	wilc3000_wifi_firmware.bin
++ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO),y)
++WILC_DRIVER_MODULE_MAKE_OPTS += \
++	CONFIG_WILC_SDIO=m
 +endif
 +
-+define WILC1000_FIRMWARE_INSTALL_FILES
-+	cd $(@D) && \
-+		$(TAR) cf install.tar $(sort $(WILC1000_FIRMWARE_FILES)) && \
-+		$(TAR) xf install.tar -C $(TARGET_DIR)/lib/firmware/mchp
- endef
- 
- define WILC1000_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/wilc1003_firmware.bin \
--		$(TARGET_DIR)/lib/firmware/atmel/wilc1003_firmware.bin
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/firmware/mchp/
-+	$(WILC1000_FIRMWARE_INSTALL_FILES)
- endef
- 
- $(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO_OOB),y)
++WILC_DRIVER_MODULE_MAKE_OPTS += \
++	CONFIG_WILC_HW_OOB_INTR=y
++endif
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
 2.11.0
 
