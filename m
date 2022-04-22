@@ -1,83 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D53C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B67EDC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 18:16:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0709041A50;
-	Fri, 22 Apr 2022 18:14:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6710760F18;
+	Fri, 22 Apr 2022 18:16:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GPoOUFa9ZHfF; Fri, 22 Apr 2022 18:14:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fdHJ3guSz3xs; Fri, 22 Apr 2022 18:16:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC73A41A1E;
-	Fri, 22 Apr 2022 18:14:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 38A1B1BF330
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:14:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7752D60FE6;
+	Fri, 22 Apr 2022 18:16:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A531A1BF330
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3658A823CF
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:14:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1BBE60FE6
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 18:16:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pZXjFlBwfsDD for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 18:14:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
- [IPv6:2607:f8b0:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B0E4481DCB
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:14:41 +0000 (UTC)
-Received: by mail-pl1-x630.google.com with SMTP id c12so12559815plr.6
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 11:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=+IDzeznOBU7hkY8WxgF+h3spDeRSGJsxmFEN1kP0c8c=;
- b=qGMQjENByd1N6a2V1IQXehezQvdaVRMJhYEz7gdnUh1JFyO7fVeJvx7NkWUqB25u8X
- lOPdDP42DMQ7mR3ib7hjQQQRb59PqZfDtlSkS3v15vTD7NLY7Kh5Hg/sqleP/k+5+hQ5
- AwB03MgPzzzwHhTCjU9HMFhyWR94X87eu3A6srHkYaWYXOLfltGX6tFGHpoKlajA8X39
- +QUfjCjvhEKk+V3x/HrBKQyFVytHQ1NohI1PKpwchFtAl1BTs+MgSZhsobWuI2nRXLfG
- PvlGua0WtWNeYSys/dUR2AjVRi3jEHl0vFqLD2EpgA1lDW+yPigLhCnhEY7lwQ40sQX7
- KgWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=+IDzeznOBU7hkY8WxgF+h3spDeRSGJsxmFEN1kP0c8c=;
- b=1PClX1D6qE0Akihm9/QpoQAiJYPbOQdwN/OQSD/l/2eQAchcg7LkAmAegNWv4f4PgO
- JjJ0OqZbP2Rh4dfhT16v+ZsKrYJJ/+YCgoNcFjdbLmJeTA8c+OEtHkWTpapFZrcQsj32
- wBc6mELKvH4XRvMvXaUW4XbaZDoUZEVpgFwIFOL3J8nyq85KJ/2I0qj7aXMhc/1XDS9d
- +Ln/ABDVb5Ayl50gBIqCqcHg5x8QpI24Y/awNZRjDxDsno1l7/V8d7vv/F8jS/XyJr2a
- mF1nJ3MnDf4qypRzSnZUzioFRCN6tN8THGtKyMaF7xpMkJo6YY/KL/ao9vobv2zbxPks
- MA9Q==
-X-Gm-Message-State: AOAM531lXHayk635vvF9EbCzjQ5eQuoeLCywXe5efBLwS+sa7HHhzW/L
- jSrNCodrOOCbEJrSbHyupH2McYwZjNiBow==
-X-Google-Smtp-Source: ABdhPJwSWkA11d+y5ZQm+Fnx8B0v87tzBdyRbxNzca5Hz4HuVPFJ8qTTsElj9Pm6c6wYm1G/uN0B1g==
-X-Received: by 2002:a17:902:e88a:b0:15a:3463:4dce with SMTP id
- w10-20020a170902e88a00b0015a34634dcemr5785366plg.120.1650651280456; 
- Fri, 22 Apr 2022 11:14:40 -0700 (PDT)
-Received: from localhost.localdomain (172-223-248-144.res.spectrum.com.
- [172.223.248.144]) by smtp.gmail.com with ESMTPSA id
- 124-20020a621982000000b0050a73577a37sm3301175pfz.45.2022.04.22.11.14.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 22 Apr 2022 11:14:39 -0700 (PDT)
-From: Joseph Kogut <joseph.kogut@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F7ip1E6VUriO for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 18:16:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B042060F18
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 18:16:29 +0000 (UTC)
+Received: from pwmachine.home (unknown [92.186.13.154])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 4459320E7045;
+ Fri, 22 Apr 2022 11:16:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4459320E7045
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1650651388;
+ bh=MNg2VJdJBm8lg8MWI2gbgon3PjebBUpVOwnwaCJXVPI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=CH3/3pQbwyxyU6jn7zRrrmriulrUkOcHGZL9sJkZ407zNWYe/MwH42Bo4SmzVFkY+
+ fpbt8NHCrR1RsM3tWcOvbJkW9qLgbUxN5FTjpm6Ybm9p5G78We4Zt0c2Q20Z2jy31f
+ hedJJT4j0b0I2fD1vqzjjIsvlMHyA3YJ83EaDvIk=
+From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 11:14:18 -0700
-Message-Id: <20220422181418.2411463-2-joseph.kogut@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220422181418.2411463-1-joseph.kogut@gmail.com>
-References: <20220422181418.2411463-1-joseph.kogut@gmail.com>
+Date: Fri, 22 Apr 2022 19:16:10 +0100
+Message-Id: <20220422181612.51246-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/libcurl: add host-nghttp2 to host
- deps
+Subject: [Buildroot] [RFC PATCH v1 0/2] Use host-libbpf for host-pahole.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,44 +60,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Matt Weber <matthew.weber@collins.com>
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes building host-libcurl, which otherwise would fail with
-undefined references to nghttp2 symbols.
+Hi.
 
-/usr/bin/ld: ../lib/.libs/libcurl.so: undefined reference to `nghttp2_pack_settings_payload'
-/usr/bin/ld: ../lib/.libs/libcurl.so: undefined reference to `nghttp2_http2_strerror'
-/usr/bin/ld: ../lib/.libs/libcurl.so: undefined reference to `nghttp2_submit_request'
-/usr/bin/ld: ../lib/.libs/libcurl.so: undefined reference to `nghttp2_submit_rst_stream'
-<snip>
-collect2: error: ld returned 1 exit status
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/libcurl/libcurl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Following a failed build involving libbpf, Thomas Pettazzoni suggested me to
+remove git submodule from host-pahole to build it the "buildroot way".
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 97857954db..d5805a1d32 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -173,7 +173,7 @@ endef
- LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
- endif
- 
--HOST_LIBCURL_DEPENDENCIES = host-openssl
-+HOST_LIBCURL_DEPENDENCIES = host-openssl host-nghttp2
- HOST_LIBCURL_CONF_OPTS = \
- 	--disable-manual \
- 	--disable-ntlm-wb \
+So, in this contribution, I first added host recipe to libbpf.
+Then, I removed git submobule used by host-pahole to get libbpf to instead use
+host-libbpf.
+
+I was able to build and run a qemu image:
+Welcome to Buildroot
+buildroot login: root
+# zcat /proc/config.gz | grep BTF
+CONFIG_DEBUG_INFO_BTF=y
+CONFIG_PAHOLE_HAS_SPLIT_BTF=y
+CONFIG_DEBUG_INFO_BTF_MODULES=y
+
+Nonetheless, I am not really happy with this contribution as I had to add a bad
+tweak removing a header file installed by host-libbpf to avoid a kernel build
+error:
+
+So, I marked this contribution as RFC to get your opinions about it.
+
+Francis Laniel (2):
+  package/libbpf: build for host
+  package/pahole: use commit 73383b3a39af
+
+ linux/linux.mk             | 11 +++++++++++
+ package/libbpf/libbpf.mk   |  7 +++++++
+ package/pahole/pahole.hash |  2 +-
+ package/pahole/pahole.mk   | 14 +++++++-------
+ 4 files changed, 26 insertions(+), 8 deletions(-)
+
+
+Best regards and thank you in advance.
 -- 
-2.36.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
