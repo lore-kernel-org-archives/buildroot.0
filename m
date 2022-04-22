@@ -1,74 +1,131 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D98DC4321E
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 06:02:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C563EC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 07:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 725E6840E0;
-	Fri, 22 Apr 2022 06:02:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BF7560F08;
+	Fri, 22 Apr 2022 07:07:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CERm3np6Mq5O; Fri, 22 Apr 2022 06:02:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w96JO83arpyx; Fri, 22 Apr 2022 07:06:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EFA2840C8;
-	Fri, 22 Apr 2022 06:02:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 528621BF846
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 06:02:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 976B960EF5;
+	Fri, 22 Apr 2022 07:06:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C1C71BF2C6
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F7F1840C8
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 06:02:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 390E64196D
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 07:06:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mWK-I4rlF14q for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 06:02:25 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=abatec.at
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TA_s3LZ_N5_S for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 07:06:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0587B83F1A
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 06:02:24 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id y21so4468653wmi.2
- for <buildroot@buildroot.org>; Thu, 21 Apr 2022 23:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=MrMTQYP05XRXQAgA49uR6c1Jbd3sRJB+DZKZuv69tTY=;
- b=bRxJhTfdbWs+/bdNZf1V2ZUFWw5iZgbt6KAsqzc3ihO8NrXsc9AN5lKlcRwlBaVcWa
- fJ3y9R3xo2eXkFfpNQszSFwHS+2Lv3MTz+W+joYw5Fy1QNVD0AqrLxdwetCU26gzNLfV
- mHPGuoOZST0XYpdZFZ5Lt1PYXu4UwaSgFbocfL7Lt+C5tvSkwKjF+duMezntG4BjsJ5r
- YaVi+nRq479dTb5xacdYHhw3YlwL/9SAAEIokv1oAX13U22MpJ2SFEZBpfr2enPix6wC
- pfhHDo+jTnFa7fFA9ObifJQ3oNMKrG3f3Sb2ask/2Bm84z6dq3qgFapKhI4H7Hso/d4r
- 88kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=MrMTQYP05XRXQAgA49uR6c1Jbd3sRJB+DZKZuv69tTY=;
- b=z4SlFaHdPEhJ8z0SnlodHELc9u9LYP3DrwAIJwJYzPkVIgTxyms4E5kPyuHYLWVmhU
- mBKwdOd9ptjU9ACoWvJHpmunx08r6lCwrnm8sjEptEqxWUPZcnHixyWB03OzYep3cu6i
- jXz6C2WXKruq+OaHeopUDgNHwjhPj75wVzCmImuXe8vIx3oYjISJgxfZLqZ1+jvEuB7H
- WBUJ15UNMvOMqXYDBtI2fjbdgsuBsiU6Aor0+G8DbqVqi0Q4dX88VLCCsDTdIC400dYH
- 5rKwSFXdON0HDB+jAARA3RS2ZbIHzzz0Z8gLVq6LCTc8ZuFRLYnj3T34U+983AWBYWNP
- /g2w==
-X-Gm-Message-State: AOAM531yyPWiE2ywLOOBXfuuWB4rmg35TVhKjCOAG7TDRLQ+vD1gIMZa
- NptjDQ/Is3v1/QSxz98uDz8ERLSzaK+8yxa1G48=
-X-Google-Smtp-Source: ABdhPJyEGxAqCLh+76cqpNe+vh+ysCO/5p1wgjCRPRNDPtE6BBB8Z6r7O0cKchEaToiDOV5feA7QCiloU/aSDfIuB/4=
-X-Received: by 2002:a05:600c:4f54:b0:392:9267:7930 with SMTP id
- m20-20020a05600c4f5400b0039292677930mr11746165wmq.63.1650607343125; Thu, 21
- Apr 2022 23:02:23 -0700 (PDT)
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com
+ (mail-db8eur05on2060e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e1a::60e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07DD5418FC
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 07:06:52 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j5uy6VkqrfNNVoltsbyeobnY4h2M/cXIpMAbzRUIUaHKaztBYavNjSRTLuoDVwoZ+b9CxjVbavez0NgQrUIoOzrpUpKELBUuDLE4iI+5kAOMAuZxuQkrOBVCo7JF8X/wUmHnFirnrzJS4BPI87Ia2SqnhYtjAH5XNChYNWXgQgddKSA2IzYegdhC3GWu+5J6Qbr8OOUZJpPz1y40QQunuErJCKJR7/Uij5QTtvxv2OS71YsmX+ZFfZRqXXyf0AdF67IGPTwon6AJuBN5c9aTMthUtKkCf2/kwKyAKYbawU5xCl+gh5Kbg/kezcC6PLvivX3bmN5RwGLKzA34VdRcUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1GfknOS+rKHu+22cPmySx41XE8OkO3Kf/+TW1TTejp0=;
+ b=LJ7aPOTCXFWNZF/uS1FJp0GLBm9HYTXeEOnN4+f06r89quP2crQNWruQ7ZVUe6QE5snEUAB0mcSZmivVP+s5j2j1jC4OPMnGEUKlENqG54LOPczYWlkU1bn1Zzb1QNG6nHkOpJvg+Q9t7ZsoPWKhdPdLH5gq4glhercuIrra5zvtXYwud+XhtH/K//bMdNaWv7dUpaOTJ18C12xpZVcFgi/vP5Yg7W+mr1TdQT9tFnTFgITSlIb0lKgU6f7h/zpSJlmTq5xazUurDx0FGuYhjP6PA+3Tib2DXo64Er1QtJZxEML6o8uTSMzfXU4P7O9lk5K9dBlhG7kmpWXwIp5DTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
+ dkim=pass header.d=abatec.at; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abatec.at; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1GfknOS+rKHu+22cPmySx41XE8OkO3Kf/+TW1TTejp0=;
+ b=Ei9X7q/TN48rrwBOxEOWFBc1m1h469QezEothiUg/mLI/eE1B2Jj2KN70m8tFV06g9YXMvUaN1UlUmZAJuDTOpFBVoN5G8WMjhf2BQEm65Phzv0I+mkPXtA0FfiQYhqSi2JCD1bGZCsTWTdmj42DnEnyA7DeX1P8NV1SodUnhqM=
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
+ by AM8P190MB0979.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:1d3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Fri, 22 Apr
+ 2022 07:06:49 +0000
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::9da2:efa4:47aa:e92c]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::9da2:efa4:47aa:e92c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 07:06:49 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH 1/1] package/sam-ba: update link
+Thread-Index: AQHYVhc2a2qxHLiAQECiDect//nrXg==
+Date: Fri, 22 Apr 2022 07:06:48 +0000
+Message-ID: <VI1P190MB049366A16260EA4FCC31A8859FF79@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=abatec.at;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 117373c5-3fe5-472f-d3f0-08da242eab61
+x-ms-traffictypediagnostic: AM8P190MB0979:EE_
+x-microsoft-antispam-prvs: <AM8P190MB097981E9077AA28D6157803D9FF79@AM8P190MB0979.EURP190.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9dBRmTFnNUS3Ku+H9NI7p3AcCenncxhZfGof1RuczIAVj500z6d6yIpI2PdKlPxpJ0Fv+QjIl6zuiUG5GE9Prz1y4dKUY5nPT7/rXnmgnpsUNUchW3139/IaU6No06WllBGMJLpJ6mFbb3il4Xdxna1eDQu1DdqsRKJfKu+Ja9bNXqS+BM/H1J5Ssmu+g/g2YsF62XLKfygxOG/TFnSaOzVJ/wcAtEBy5V+YFJDXEVJfW/kYnkBb2EZTZgBdo6tOXuHKL511bT+EHDS/VDdDYfoOFkB2Hpbcex1avefI+N0UY2MXUYEkPwYZH+qJ2iIc6ev6ORdFpEBDtr8DOYMe2/nTZ3xzcbd13a89Mr6D9KX8h+VPMuZ/IAE4/ap9k1Yni3LYuZgLPVGE78gRhhENPAhJEthgMbl7niUPjzUzXzCs5QN246rwgKPvDTplG8vOD+AH8vvRGxqw+5OZqpAcigBKpLD9p8jXZiakose/GRGkE+BYEzsR/BSFfXmftTA3KqwCzp1itPJRgWUzA/PPHX8RR/FM7SqrT7U/ZF4P6xXs3TSKSi8+qwfHJjVqnniTmp1JO6r/xdZm1LwcEMFaJSO/3+mWp05bLTTotv2Z1NDyAhgL4cYGIBUoMIBOo3VgXtmzf2LBNWOfCCVLtHsjJ0AsqS34EfNij/fvIeBSpUh0PNFt3MfyOQOwhhC3ATCP+AEZVuoYTlbSfOXuqVhaJGosYmdiDYGHYA5TKYbRpJH2rdPu2kzRJt3iNZo0tMfi8EE9xG6/ZQ2MHbaHWBYQXmlMQYL9KUOQTq330Kyn1As=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(39840400004)(346002)(136003)(396003)(376002)(366004)(966005)(64756008)(7696005)(9686003)(66446008)(66946007)(66556008)(33656002)(66476007)(8676002)(5660300002)(4326008)(38070700005)(38100700002)(76116006)(86362001)(508600001)(186003)(6506007)(52536014)(2906002)(8936002)(4744005)(316002)(55016003)(6916009)(122000001)(83380400001)(71200400001)(54906003);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?v4E37KDerxa2TsqFxvg4FdnDDy/xGLDjnDY9b1QFpLY5zmJUl1Wiunrgev?=
+ =?iso-8859-1?Q?ZHDTtn6TGqFEPA7uSpu6Cy8oUZQOIV0bvmJYXyyqeUrLsyNrLjCKISiw2C?=
+ =?iso-8859-1?Q?6h8vl5v0miBTJT27kzcDKm3ltIVRRNM0ZhaEPuBGf1LXL1uPFARDx30H4k?=
+ =?iso-8859-1?Q?Ozq40vAEOaKhJlpiCSc9YF4jGIatz4AUZgHbYg79f7Vr2SFiPlCtWqt8mJ?=
+ =?iso-8859-1?Q?fZ7k2kWY49+yq1GCQhI4/epbQGhZMtqz0n6Rb3q6PnxHYUTzBx6ueCuXBP?=
+ =?iso-8859-1?Q?CxeG2LQiRCIJ7ds/MtSR5WxmKTC+AFYhX1LWMCMU/nfaRt6EUmVmGGVH93?=
+ =?iso-8859-1?Q?6zG/4zgDSuCs2mzWzmGjPkn/xikdP9Fa+qFiboV2xmEgWOXW84N0nXqarl?=
+ =?iso-8859-1?Q?m4h16dd2lcvHToG/nkfFucca8Os3qay4rL41tYWDbqqgRuaicS0w/AC3dp?=
+ =?iso-8859-1?Q?Gz/3d2giod+1GnARqg2nfOSFmpocUhktjVQK6kclbtRFeonz1fbpF/GgWC?=
+ =?iso-8859-1?Q?S3ZF20wuYGxXaCotKgwg99M0IKEpbnW8fJGyBFLJNbSYV4mTjq9hnWE+j1?=
+ =?iso-8859-1?Q?nD02YG5lztRMHb2b39UGiRLB+Nz2lMZQYLkcpb/ocYCh4yq05eP7p4RMgK?=
+ =?iso-8859-1?Q?SLYHAr7rkM3wUdEBE4ZQTt9Y+oN+oIx9PObHeKNQU8wok4So08v0oanb9X?=
+ =?iso-8859-1?Q?c4MdaRxH7DH/Z3OH3S8SLcVplYat8hlzLejz0IxqDDqxMUCldArwhvxnT+?=
+ =?iso-8859-1?Q?QktLy1UQuUa8uPWlGHQ0m0GsOQg8DlcU7n1AUg7X+g7aAVfyN6J2lby/Lp?=
+ =?iso-8859-1?Q?pC9da95mloPNubyDofcNtSYfvu/iIgIqg5zBfeSX3dLbZnNpcVL4w6zEvp?=
+ =?iso-8859-1?Q?7ZurngzOlsxlbDJMZYhQCnF/gmHbiOuFizUJn0aMqtW3ge2d3iZSwYvnjr?=
+ =?iso-8859-1?Q?qzpbdLpA7GeBOA4qbvO44XHVv6SwTDIZHVRnWuF5xNMTeONKk+uDyYbqb+?=
+ =?iso-8859-1?Q?MoNdK0T3SsvayVclQjHSLMtTLt0Eg8J1r22/0yftd0d/DsvIdAekNyVSID?=
+ =?iso-8859-1?Q?V/8hUfPgFFt40CT4Un6XlE2kf5IoFvLgtKDYjXZFbBV9VWDIJC5YcpYQ3m?=
+ =?iso-8859-1?Q?wURLEP/dIOA++a3FJrVe3B23uCsX+fdkoN+nsSipOTsGwrZuKZfSzZNPp3?=
+ =?iso-8859-1?Q?MO/my2NYVdfJEJAkmJkV0AnfDzR7E1CDEqLUbig141Xtdh4D8bDm3r9pJR?=
+ =?iso-8859-1?Q?Oc5sxs+7PcgE/C2yiS7xu/6wN04ZGjHLFXM2qCETnJvmb5ZwUFRX8PbvTy?=
+ =?iso-8859-1?Q?tOlYdSHi2tzBVkMn3gfeo1Evz3+uituCPhNVEzBt495e9nGefviXPFTRc1?=
+ =?iso-8859-1?Q?E6x20yu17XIN/dP/Q/rmoV5MbL3ZiHLHdhJIQN+4nR6aXs/3Rpq2V/FbCQ?=
+ =?iso-8859-1?Q?NGJcWeeD2hz5DFL5Leazmzm6A5Qz/DNNOqAUkTb1ridFkqLxp5/hTDx//E?=
+ =?iso-8859-1?Q?5EzssIfIPa/mHbqj1u469qMqG6HMV+iV9TGuUriAZbMowTR4cMEQgISXmm?=
+ =?iso-8859-1?Q?eW2kinfVFQu7raOqijkDW+pk6h/uz5zMIGRiWcZqvfRARW4xJXDY1wy2mS?=
+ =?iso-8859-1?Q?fY8u2OYh6KVnsdE+QVNmP1tq+baVHx7rhS5nKdNCeDNud5BK6ZgDMkQbv4?=
+ =?iso-8859-1?Q?BMMHV/D6mLOHF4aE3IvpinKFGzTOVBZtNE3Wgaznufd0/goR06xutDl1kd?=
+ =?iso-8859-1?Q?eTvDTjMiYABIXFBJjk/4U4flsIVYfel1rn4CPQwgfQP0LALV9bWr93x9rO?=
+ =?iso-8859-1?Q?9lJpVwBDa91FERW4dAiapPyVuyYINBtQqch/Q+Ec7HBoNxXhs6+O?=
 MIME-Version: 1.0
-References: <20220421215611.1362150-1-festevam@gmail.com>
-In-Reply-To: <20220421215611.1362150-1-festevam@gmail.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 22 Apr 2022 08:02:11 +0200
-Message-ID: <CAEyMn7b3NObc3KLLGAJtrSnG2iThYQMj2voNFQEQK5mbgjmDbg@mail.gmail.com>
-To: Fabio Estevam <festevam@gmail.com>
-Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: Bump
- U-Boot
+X-OriginatorOrg: abatec.at
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 117373c5-3fe5-472f-d3f0-08da242eab61
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 07:06:48.8600 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KZamVnn1JexO8KDhbwSqrHXnbOKfC9hs6qa9jA0RfcPFRQVsJ9yEktM9gI+5ANKSKo4LgufuZZbapUuejR8O5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P190MB0979
+Subject: [Buildroot] [PATCH 1/1] package/sam-ba: update link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,412 +137,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: frieder.schrempf@kontron.de, buildroot@buildroot.org
+From: Lang Daniel via buildroot <buildroot@buildroot.org>
+Reply-To: Lang Daniel <d.lang@abatec.at>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabio,
+The link to at91.com is outdated and redirects to linux4sam.org
 
-Am Do., 21. Apr. 2022 um 23:56 Uhr schrieb Fabio Estevam <festevam@gmail.com>:
->
-> Bump U-Boot to version 2022.04 and remove the two patches
-> that have already been upstreamed.
->
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+---
+ package/sam-ba/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for doing this.
-
-Acked-By: Heiko Thiery <heiko.thiery@gmail.com>
-
-> ---
-> Hi Heiko,
->
-> This is not tested.
->
-> Did it by inspection.
->
->  ...m-kontron-n801x-s-convert-options-to.patch |  31 --
->  ...m-kontron-n801x-s-add-common-board-u.patch | 305 ------------------
->  configs/kontron_bl_imx8mm_defconfig           |   4 +-
->  3 files changed, 1 insertion(+), 339 deletions(-)
->  delete mode 100644 board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
->  delete mode 100644 board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
->
-> diff --git a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
-> deleted file mode 100644
-> index 6d76282defb2..000000000000
-> --- a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
-> +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -From 95a311af81cd47c44d3d6e3f717f06a06d8f3dfd Mon Sep 17 00:00:00 2001
-> -From: Heiko Thiery <heiko.thiery@gmail.com>
-> -Date: Mon, 10 Jan 2022 14:13:02 +0100
-> -Subject: [PATCH 1/2] imx: imx8mm: imx8mm-kontron-n801x-s: convert options to Kconfig
-> -
-> -CONFIG_SPL_MMC and CONFIG_SPL_SERIAL
-> -
-> -Patch submitted upstream:
-> -https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-1-heiko.thiery@gmail.com/
-> -
-> -Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ----
-> - configs/kontron-sl-mx8mm_defconfig | 2 ++
-> - 1 file changed, 2 insertions(+)
-> -
-> -diff --git a/configs/kontron-sl-mx8mm_defconfig b/configs/kontron-sl-mx8mm_defconfig
-> -index 35d12fca32..940bf07a92 100644
-> ---- a/configs/kontron-sl-mx8mm_defconfig
-> -+++ b/configs/kontron-sl-mx8mm_defconfig
-> -@@ -15,6 +15,8 @@ CONFIG_SPL_DM_SPI=y
-> - CONFIG_DEFAULT_DEVICE_TREE="imx8mm-kontron-n801x-s"
-> - CONFIG_SPL_TEXT_BASE=0x7E1000
-> - CONFIG_TARGET_KONTRON_MX8MM=y
-> -+CONFIG_SPL_MMC=y
-> -+CONFIG_SPL_SERIAL=y
-> - CONFIG_BOOTCOUNT_BOOTLIMIT=3
-> - CONFIG_SPL=y
-> - CONFIG_DISTRO_DEFAULTS=y
-> ---
-> -2.30.2
-> -
-> diff --git a/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch b/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
-> deleted file mode 100644
-> index a88d7aba870b..000000000000
-> --- a/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
-> +++ /dev/null
-> @@ -1,305 +0,0 @@
-> -From ef694c19c074333fd16589ec6ffef3e7ca895186 Mon Sep 17 00:00:00 2001
-> -From: Heiko Thiery <heiko.thiery@gmail.com>
-> -Date: Wed, 12 Jan 2022 08:44:36 +0100
-> -Subject: [PATCH 2/2] imx: imx8mm: imx8mm-kontron-n801x-s: add common board
-> - u-boot.dtsi
-> -
-> -When using a board variant that selects the lvds specific dtb the
-> -*.u-boot.dtsi file will not be included. To have a lvds dtb specific
-> -u-boot.dtsi file move this part to a common board u-boot.dtsi file and
-> -include this in the board base u-boot.dtsi and create an additional one
-> -for the lvds variant.
-> -
-> -Patch submitted upstream:
-> -https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-2-heiko.thiery@gmail.com/
-> -
-> -Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ----
-> - .../imx8mm-kontron-n801x-s-lvds-u-boot.dtsi   |   6 +
-> - .../dts/imx8mm-kontron-n801x-s-u-boot.dtsi    | 124 +----------------
-> - arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi | 128 ++++++++++++++++++
-> - 3 files changed, 135 insertions(+), 123 deletions(-)
-> - create mode 100644 arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
-> - create mode 100644 arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
-> -
-> -diff --git a/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
-> -new file mode 100644
-> -index 0000000000..4bf75722bf
-> ---- /dev/null
-> -+++ b/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
-> -@@ -0,0 +1,6 @@
-> -+// SPDX-License-Identifier: GPL-2.0+
-> -+/*
-> -+ * Copyright (C) 2019 Kontron Electronics GmbH
-> -+ */
-> -+
-> -+#include "imx8mm-kontron-n801x-u-boot.dtsi"
-> -diff --git a/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
-> -index 22d18e6f1c..4bf75722bf 100644
-> ---- a/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
-> -+++ b/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
-> -@@ -3,126 +3,4 @@
-> -  * Copyright (C) 2019 Kontron Electronics GmbH
-> -  */
-> -
-> --#include "imx8mm-u-boot.dtsi"
-> --
-> --/ {
-> --      aliases {
-> --              usb0 = &usbotg1;
-> --              usb1 = &usbotg2;
-> --      };
-> --
-> --      wdt-reboot {
-> --              compatible = "wdt-reboot";
-> --              wdt = <&wdog1>;
-> --              u-boot,dm-spl;
-> --      };
-> --
-> --      firmware {
-> --              optee {
-> --                      compatible = "linaro,optee-tz";
-> --                      method = "smc";
-> --              };
-> --      };
-> --};
-> --
-> --&fec1 {
-> --      phy-mode = "rgmii-rxid";
-> --};
-> --
-> --&i2c1 {
-> --      u-boot,dm-spl;
-> --      u-boot,dm-pre-reloc;
-> --};
-> --
-> --&i2c2 {
-> --      status = "okay";
-> --      u-boot,dm-spl;
-> --      u-boot,dm-pre-reloc;
-> --};
-> --
-> --&pinctrl_ecspi1 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&pinctrl_i2c1 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&pinctrl_pmic {
-> --      u-boot,dm-spl;
-> --      fsl,pins = <
-> --              MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0               0x141
-> --              /* Disable Pullup for SD_VSEL */
-> --              MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4               0x41
-> --      >;
-> --};
-> --
-> --&pinctrl_uart3 {
-> --      u-boot,dm-spl;
-> --      u-boot,dm-pre-reloc;
-> --};
-> --
-> --&pinctrl_usdhc1 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&pinctrl_usdhc1_100mhz {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&pinctrl_usdhc1_200mhz {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&pinctrl_usdhc2 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&pca9450 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&{/soc@0/bus@30800000/i2c@30a20000/pmic@25/regulators} {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&ecspi1 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&gpio1 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&gpio2 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&gpio3 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&gpio4 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&gpio5 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&uart3 {
-> --      u-boot,dm-spl;
-> --      u-boot,dm-pre-reloc;
-> --};
-> --
-> --&usdhc1 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&usdhc2 {
-> --      u-boot,dm-spl;
-> --};
-> --
-> --&wdog1 {
-> --      u-boot,dm-spl;
-> --};
-> -+#include "imx8mm-kontron-n801x-u-boot.dtsi"
-> -diff --git a/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
-> -new file mode 100644
-> -index 0000000000..22d18e6f1c
-> ---- /dev/null
-> -+++ b/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
-> -@@ -0,0 +1,128 @@
-> -+// SPDX-License-Identifier: GPL-2.0+
-> -+/*
-> -+ * Copyright (C) 2019 Kontron Electronics GmbH
-> -+ */
-> -+
-> -+#include "imx8mm-u-boot.dtsi"
-> -+
-> -+/ {
-> -+      aliases {
-> -+              usb0 = &usbotg1;
-> -+              usb1 = &usbotg2;
-> -+      };
-> -+
-> -+      wdt-reboot {
-> -+              compatible = "wdt-reboot";
-> -+              wdt = <&wdog1>;
-> -+              u-boot,dm-spl;
-> -+      };
-> -+
-> -+      firmware {
-> -+              optee {
-> -+                      compatible = "linaro,optee-tz";
-> -+                      method = "smc";
-> -+              };
-> -+      };
-> -+};
-> -+
-> -+&fec1 {
-> -+      phy-mode = "rgmii-rxid";
-> -+};
-> -+
-> -+&i2c1 {
-> -+      u-boot,dm-spl;
-> -+      u-boot,dm-pre-reloc;
-> -+};
-> -+
-> -+&i2c2 {
-> -+      status = "okay";
-> -+      u-boot,dm-spl;
-> -+      u-boot,dm-pre-reloc;
-> -+};
-> -+
-> -+&pinctrl_ecspi1 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&pinctrl_i2c1 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&pinctrl_pmic {
-> -+      u-boot,dm-spl;
-> -+      fsl,pins = <
-> -+              MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0               0x141
-> -+              /* Disable Pullup for SD_VSEL */
-> -+              MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4               0x41
-> -+      >;
-> -+};
-> -+
-> -+&pinctrl_uart3 {
-> -+      u-boot,dm-spl;
-> -+      u-boot,dm-pre-reloc;
-> -+};
-> -+
-> -+&pinctrl_usdhc1 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&pinctrl_usdhc1_100mhz {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&pinctrl_usdhc1_200mhz {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&pinctrl_usdhc2 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&pca9450 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&{/soc@0/bus@30800000/i2c@30a20000/pmic@25/regulators} {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&ecspi1 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&gpio1 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&gpio2 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&gpio3 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&gpio4 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&gpio5 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&uart3 {
-> -+      u-boot,dm-spl;
-> -+      u-boot,dm-pre-reloc;
-> -+};
-> -+
-> -+&usdhc1 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&usdhc2 {
-> -+      u-boot,dm-spl;
-> -+};
-> -+
-> -+&wdog1 {
-> -+      u-boot,dm-spl;
-> -+};
-> ---
-> -2.30.2
-> -
-> diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-> index 2b7e121e252e..705222df2833 100644
-> --- a/configs/kontron_bl_imx8mm_defconfig
-> +++ b/configs/kontron_bl_imx8mm_defconfig
-> @@ -3,8 +3,6 @@ BR2_aarch64=y
->  BR2_cortex_a53=y
->  BR2_ARM_FPU_VFPV3=y
->
-> -BR2_GLOBAL_PATCH_DIR="board/kontron/bl-imx8mm/patches"
-> -
->  # System
->  BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
->
-> @@ -40,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> --
-> 2.25.1
->
+diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
+index b96e377e79..1967f33ab3 100644
+--- a/package/sam-ba/Config.in.host
++++ b/package/sam-ba/Config.in.host
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_HOST_SAM_BA
+ 	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
+ 	  microcontrollers.
+ 
+-	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools
++	  https://www.linux4sam.org/bin/view/Linux4SAM/SoftwareTools
+ 	  https://www.microchip.com/en-us/development-tool/SAM-BA-IN-SYSTEM-PROGRAMMER
+-- 
+2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
