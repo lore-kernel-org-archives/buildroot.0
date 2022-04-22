@@ -1,80 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D59C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 22:37:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7B4BC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 22:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF5F61417;
-	Fri, 22 Apr 2022 22:37:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B6EF40B14;
+	Fri, 22 Apr 2022 22:48:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rci3XKlmB9nE; Fri, 22 Apr 2022 22:37:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HyztEAjfDask; Fri, 22 Apr 2022 22:48:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6380F61414;
-	Fri, 22 Apr 2022 22:37:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F0E140B0F;
+	Fri, 22 Apr 2022 22:48:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74D2F1BF2BE
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:37:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E7711BF2BE
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60A5340195
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:37:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C4E540B0F
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 22:48:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=embeddedts.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QlNe_1GHhHWk for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 22:36:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.189])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A841F40AFC
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 22:36:58 +0000 (UTC)
-Received: from 1ni1tX-00054O-W5 by out3c.electric.net with emc1-ok (Exim
- 4.94.2) (envelope-from <kris@embeddedTS.com>)
- id 1ni1tZ-00056E-UA; Fri, 22 Apr 2022 15:36:57 -0700
-Received: by emcmailer; Fri, 22 Apr 2022 15:36:57 -0700
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
- by out3c.electric.net with esmtps (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <kris@embeddedTS.com>)
- id 1ni1tX-00054O-W5; Fri, 22 Apr 2022 15:36:56 -0700
-Received: from tsdebian.ts-local.net (unknown [75.164.70.254])
- by mail.embeddedts.com (Postfix) with ESMTPSA id 2B34C4083C;
- Fri, 22 Apr 2022 15:36:55 -0700 (MST)
-To: buildroot@buildroot.org
-Date: Fri, 22 Apr 2022 15:36:10 -0700
-Message-Id: <20220422223611.10443-4-kris@embeddedTS.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20220422223611.10443-1-kris@embeddedTS.com>
-References: <20220422223611.10443-1-kris@embeddedTS.com>
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS: TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=embeddedTS.com; s=mailanyone20220121;
- h=References:In-Reply-To:Message-Id:Date:To:From;
- bh=KxC0hVZP2HchHnCh4VRLCVRpxsTw+PZLFlskbH36oKQ=;
- b=Z7xg9M4Gk1XCKhlA8HlssBKa0PlYXSUueYNzIWUaWMKgxJal1aWUA4MMLHkTY5pv1Rwz23iXrGTDsAIPD7++PcBu4MepOvHck/Wj8NFrWK1ggb/UjLgsrvhupQcIz5dwWWNuzurVKF6FEXMkHsjIeWL94dpk5t1bYvigq2Xf3Fw5fOLVg9TljWgj6nWh0JVoNeYel/aYzBTaiCoyjqwiNIQmnAqmKkYCHOkNa1DdL43jSkb6qf6b9WDNdXti3hqcidpJSmdnctURr310cXRORTdc+PfCfSEvKgD9caU1yIHjgONqMzlEJtpVoNUChSQkPhcbCXmGUGF8/Webev9cOw==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-Subject: [Buildroot] [PATCH v2 3/4] configs: add WILC3000_FIRMWARE to
- compatible devices
+ with ESMTP id rFB5SselPsCv for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 22:48:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C0B71400FE
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 22:48:46 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id k23so19024144ejd.3
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 15:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=JN8A2iOuHLZM6yHoP037kc39cNxW2fWJOZ9eBNDtZlU=;
+ b=RlnAVh85UwLgLgbUYh+2QIb/lP1ExyQ/5aW6im80HLoeBOsk8D06x60J3MHf8kforp
+ BOBRndspY5nUGs2hDFTjv+Nm6CZkcq84zE/QVdNd5FvdIEkMZOSk19X5kWyDCSTKxr7l
+ jA9RT3RVeWGMeKWRh6PS22suAIZP9T+DuwEihk8LPn3xv3bzMUr31tNJiovyzu5jF5nH
+ wg0Ugy2f44Im3NYFTSJ3xfbOxLs2R1jshX4Ax6bM5Grd9F0+858rHKMYOHIzmbUqRoLk
+ m0W8dc+SPmkl2QiZHwidTXUKbwr6uh/zlS/n1pc9+18dzRIci3bfpXHKTPFFUVo2dOey
+ ZwZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=JN8A2iOuHLZM6yHoP037kc39cNxW2fWJOZ9eBNDtZlU=;
+ b=I9J9EThh2GByAdR0Ffk6E2z2I7blqTyXDKLJVA3KwzPE8JxjGhYaPNDZqQaDetlr22
+ Lvp89q4m7EkhBO5EaGcv+tG7lUTLoWNUA0PwixktKk1z29eYAYdaqTYbnEg+mfFUkCZ7
+ fmcbBM3cYva/mg+Rs7twC9pjKAA2b3gtnUFUad9F+j6JwIf6MK8lPKV4AP7wYSgs1Cee
+ JSTDpyl59GQi+vCdg8azkrHaIjlSDm2Fyw7hjOvBuPW0IDF8VsAGXwSqzn9SjHGj0mgP
+ Z00HHr3S0NRj2mBWfivU7KSx9gPWx9X5XdlmnYY5F1hmRZr1sy0XAS2m5Er+7bSJ+U3L
+ V6QA==
+X-Gm-Message-State: AOAM532JpeVRw9YznH4vlWSsnDhwTFhr9Lw1JEvagDKziQNrjk2ttvP9
+ F9OnTPL3jbOtMOjhMdgwQoZQDA==
+X-Google-Smtp-Source: ABdhPJwGs43wbo4ZMl4PL7iTIL591IzbXNj6KY2YL4zUROJDEadDdd0f1IAdJGgj6dx04uPTxSVoww==
+X-Received: by 2002:a17:906:58d2:b0:6da:b635:fbf3 with SMTP id
+ e18-20020a17090658d200b006dab635fbf3mr5988486ejs.40.1650667724767; 
+ Fri, 22 Apr 2022 15:48:44 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ g16-20020a170906521000b006d58773e992sm1152013ejm.188.2022.04.22.15.48.44
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 22 Apr 2022 15:48:44 -0700 (PDT)
+Message-ID: <af269bcf-1b8f-c111-c9d0-1ddb0608ddbf@mind.be>
+Date: Sat, 23 Apr 2022 00:48:43 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Francis Laniel <flaniel@linux.microsoft.com>, buildroot@buildroot.org
+References: <20220422143134.28561-1-flaniel@linux.microsoft.com>
+ <20220422143134.28561-3-flaniel@linux.microsoft.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220422143134.28561-3-flaniel@linux.microsoft.com>
+Subject: Re: [Buildroot] [RFC PATCH v3 2/2] package/sysdig: bump to 0.29.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,189 +94,405 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
-Reply-To: Kris Bahnsen <kris@embeddedTS.com>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Mark Featherston <mark@embeddedTS.com>, Kris Bahnsen <kris@embeddedTS.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The update to wilc-firmware added firmware files for WILC3000
-devices as a separate config option. All Atmel/Microchip defconfigs
-that previously only had WILC1000_FIRMWARE either have WILC3000
-Wi-Fi hardware (WILC3000 is the same silicon but with BLE added)
-or have the capacity to have either WILC1000 or WILC3000 devices
-added to the system. Install all firmware blobs to these devices
-by default.
+  Hi Francis,
 
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
----
- configs/at91sam9x5ek_dev_defconfig                     | 1 +
- configs/at91sam9x5ek_mmc_dev_defconfig                 | 1 +
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig       | 1 +
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig       | 1 +
- configs/atmel_sama5d3_xplained_dev_defconfig           | 1 +
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig       | 1 +
- configs/atmel_sama5d4_xplained_dev_defconfig           | 1 +
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig       | 1 +
- configs/microchip_sam9x60ek_mmc_dev_defconfig          | 1 +
- configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig | 1 +
- configs/microchip_sama5d2_icp_mmc_dev_defconfig        | 1 +
- configs/microchip_sama7g5ek_mmc_dev_defconfig          | 1 +
- 12 files changed, 12 insertions(+)
+  Thanks for continuing to work on this!
 
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index bfa8e95941..8714463d89 100644
---- a/configs/at91sam9x5ek_dev_defconfig
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -47,6 +47,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index 2e1a5c7f59..9481594716 100644
---- a/configs/at91sam9x5ek_mmc_dev_defconfig
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -50,6 +50,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index ba2fa46790..38618a5732 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -39,6 +39,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_RNG_TOOLS=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index a8b68ca0a2..1654408aa5 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -53,6 +53,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index cdfd9de17e..64455cb2e0 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -49,6 +49,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index a2205aeefa..8f5724d631 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -52,6 +52,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index f8783f5652..fab91cf0b3 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -50,6 +50,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index b4e99f658a..f9074e9862 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -53,6 +53,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
-index 06e03967c4..2b4e234297 100644
---- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
-+++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
-@@ -36,6 +36,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-index 3bcd5f0200..f9aa6cdc05 100644
---- a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-+++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-@@ -39,6 +39,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-index 27d1d3409d..b1b22c1312 100644
---- a/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-+++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-@@ -32,6 +32,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_SETSERIAL=y
- BR2_PACKAGE_SPI_TOOLS=y
-diff --git a/configs/microchip_sama7g5ek_mmc_dev_defconfig b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-index 6eb6c282e0..d68846e553 100644
---- a/configs/microchip_sama7g5ek_mmc_dev_defconfig
-+++ b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-@@ -30,6 +30,7 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_WILC3000_FIRMWARE=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_RNG_TOOLS=y
- # BR2_PACKAGE_RNG_TOOLS_JITTERENTROPY_LIBRARY is not set
--- 
-2.11.0
+On 22/04/2022 16:31, Francis Laniel wrote:
+> sysdig 0.27.1 cannot be cross-compiled to, e.g., aarch64 because it uses open()
+> syscall [1].
+> This patch bumps its version to enable cross-compilation.
+> 
+> By doing so, we can remove the previous patches.
+> But this commit introduces new patches.
+> Indeed, libsinsp (lib system inspection), libscap (lib system capture) and the
+> kernel module were moved to falcosecurity/libs.
+> Sadly, it is not possible to compile sysdig with pre-compiled libs (like we do
+> in buildroot).
+> So, this contribution introduces a new patch to build sysdig with already built
+> falcosecurity/libs.
+> 
+> [1] https://marc.info/?l=buildroot&m=164951521629400
+> 
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> ---
+>   ...BUNDLED_DEPS-before-getting-nlohmann.patch | 51 ++++++++++++
+>   ...ATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 -------------------
+>   ...gainst-libabseil-cpp-which-grpc-uses.patch | 47 -----------
+>   ...e-Add-libsinsp.a-as-IMPORTED-library.patch | 59 +++++++++++++
+>   package/sysdig/Config.in                      | 31 ++-----
+>   package/sysdig/sysdig.hash                    |  4 +-
+>   package/sysdig/sysdig.mk                      | 55 ++++++-------
+>   7 files changed, 141 insertions(+), 188 deletions(-)
+>   create mode 100644 package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+>   delete mode 100644 package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
+>   delete mode 100644 package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
+>   create mode 100644 package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch
+> 
+> diff --git a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+> new file mode 100644
+> index 0000000000..29f03b1b61
+> --- /dev/null
+> +++ b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+> @@ -0,0 +1,51 @@
+> +From 0dbebd008c04d266dc41c4bec8280a0744fd5130 Mon Sep 17 00:00:00 2001
+> +From: Francis Laniel <flaniel@linux.microsoft.com>
+> +Date: Wed, 13 Apr 2022 18:01:11 +0100
+> +Subject: [PATCH 1/2] cmake: Check USE_BUNDLED_DEPS before getting
 
+  There should be no N/M in patches. check-package reports this.
+
+> + nlohmann-json.
+> +
+> +Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+
+  Please send your patches upstream (i.e. create a merge request on the sysdig 
+project) before even sending it to Buildroot, and add
+
+Upstream: https://github.com/...
+
+to the patch you submit to Buildroot.
+
+  This way, it's easier to find if the patch can be removed when the package 
+version is bumped.
+
+  Also, for reviewing, it allows us to check if upstream has any comments on the 
+patch. Upstream generally has a better idea of how things are supposed to work 
+than we do. And if they end up committing an alternative approach, we can simply 
+pick that one (while committing) instead of the one you submitted.
+
+
+> +---
+> + cmake/modules/nlohmann-json.cmake | 29 +++++++++++++++++++----------
+> + 1 file changed, 19 insertions(+), 10 deletions(-)
+> +
+> +diff --git a/cmake/modules/nlohmann-json.cmake b/cmake/modules/nlohmann-json.cmake
+> +index bb1279d7..feb0f071 100644
+> +--- a/cmake/modules/nlohmann-json.cmake
+> ++++ b/cmake/modules/nlohmann-json.cmake
+> +@@ -16,13 +16,22 @@
+> + # limitations under the License.
+> + #
+> +
+> +-set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
+> +-message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
+> +-set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
+> +-ExternalProject_Add(
+> +-  njson
+> +-  URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
+> +-  URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
+> +-  CONFIGURE_COMMAND ""
+> +-  BUILD_COMMAND ""
+> +-  INSTALL_COMMAND "")
+> ++if(NOT USE_BUNDLED_DEPS)
+> ++  find_path(NJSON_INCLUDE_DIR NAMES nlohmann/json.hpp)
+> ++  if(NJSON_INCLUDE_DIR)
+> ++    message(STATUS "Found njson: include: ${NJSON_INCLUDE_DIR}")
+> ++  else()
+> ++    message(FATAL_ERROR "Couldn't find system njson")
+> ++  endif()
+> ++else()
+> ++  set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
+> ++  message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
+> ++  set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
+> ++  ExternalProject_Add(
+> ++    njson
+> ++    URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
+> ++    URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
+> ++    CONFIGURE_COMMAND ""
+> ++    BUILD_COMMAND ""
+> ++    INSTALL_COMMAND "")
+> ++endif()
+> +--
+> +2.25.1
+> +
+> diff --git a/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch b/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
+> deleted file mode 100644
+> index 7873210281..0000000000
+> --- a/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
+> +++ /dev/null
+> @@ -1,82 +0,0 @@
+> -From cc8bccc3ebb90103900a7f0f2b085ddb723b8792 Mon Sep 17 00:00:00 2001
+> -From: Francis Laniel <flaniel@linux.microsoft.com>
+> -Date: Wed, 6 Apr 2022 16:54:37 +0100
+> -Subject: [PATCH] libsinsp: Apply PATCH_COMMAND to fix lua types and function.
+> -
+> -Buildroot luajit 5.1 seems to not have compatibility between luaL_reg and
+> -luaL_Reg.
+> -So, we apply sysdig CMakeLists.txt PATCH_COMMAND to fix this and lua function
+> -call as well.
+> -Note that, this PATCH_COMMAND was added in sysdig in:
+> -a064440394c9 ("Adding power support to Travis builds (#1566)")
+> -
+> -This patch is also present in kubernetes/minikube in:
+> -f036c279bc59 ("Add patch for compiling sysdig with system luajit")
+
+  You didn't apply this patch to falcosecurity-libs. Is it no longer needed there?
+
+[snip]
+> diff --git a/package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch b/package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch
+> new file mode 100644
+> index 0000000000..30601c2430
+> --- /dev/null
+> +++ b/package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch
+> @@ -0,0 +1,59 @@
+> +From e681028c5567582f9c66cf2b11234ab3a1cacc73 Mon Sep 17 00:00:00 2001
+> +From: Francis Laniel <flaniel@linux.microsoft.com>
+> +Date: Fri, 15 Apr 2022 14:17:48 +0100
+> +Subject: [PATCH 2/2] cmake: Add libsinsp.a as IMPORTED library.
+> +
+> +libsinsp.a is created by falcosecurity/libs which is downloaded while building
+> +sysdig.
+> +
+> +In buildroot, we do not want to depend of external download.
+> +This patch adds libsinsp.a as IMPORTER library and links all its dependencies
+> +against it.
+> +
+> +Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> +---
+> + userspace/sysdig/CMakeLists.txt | 28 ++++++++++++++++++++++++++++
+> + 1 file changed, 28 insertions(+)
+> +
+> +diff --git a/userspace/sysdig/CMakeLists.txt b/userspace/sysdig/CMakeLists.txt
+> +index 401d65e3..ef339b71 100644
+> +--- a/userspace/sysdig/CMakeLists.txt
+> ++++ b/userspace/sysdig/CMakeLists.txt
+> +@@ -86,6 +86,34 @@ target_include_directories(
+> + if(NOT WIN32)
+> + 	include_directories(${PROJECT_BINARY_DIR}/driver/src)
+> +
+> ++	if(SCAP_STATIC_LIBRARY_PATH AND SINSP_STATIC_LIBRARY_PATH)
+
+  If you add new CMake variables, use the SET command to define them and give 
+them a help text.
+
+  However, is it necessary to set them? Can't you just use find_library to find 
+them in the sysroot? It's basically the same approach as for finding the JSON 
+library in the other patch.
+
+  Except... Apparently falcosecurity-libs doesn't actually install its stuff. It 
+really is meant to be used as a submodule.
+
+  OK, it looks like this is really trying to fight upstream too much. So then 
+it's probably better to revert to your earlier proposal: turn falcosecurity-libs 
+into a generic package that just downloads stuff and doesn't install, and do the 
+build from the sysdig build. I think, since it's not using in-tree build, that 
+it doesn't even write anything in the falcosecurity-libs source directory, 
+right? So the ugliness is rather limited...
+
+
+> ++		find_library(ABSL_SYNC_LIB NAMES absl_synchronization)
+> ++		find_library(B64_LIB NAMES b64)
+> ++		find_library(CARES_LIB NAMES cares)
+> ++		find_library(ELF_LIB NAMES elf)
+> ++		find_library(GTEST_LIB NAMES gtest)
+> ++		find_library(JQ_LIB NAMES jq)
+> ++		find_library(JSONCPP_LIB NAMES jsoncpp)
+> ++		find_library(LUAJIT_LIB NAMES luajit luajit-5.1)
+> ++		find_library(PROTOBUF_LIB NAMES protobuf)
+> ++		find_library(TBB_LIB NAMES tbb)
+> ++		find_library(ZLIB_LIB NAMES z)
+> ++
+> ++		find_package(CURL REQUIRED)
+> ++		find_package(gRPC REQUIRED)
+> ++		find_package(OpenSSL REQUIRED)
+> ++
+> ++		set(GPR_LIB gRPC::gpr)
+> ++		set(GRPC_LIB gRPC::grpc)
+> ++		set(GRPCPP_LIB gRPC::grpc++)
+> ++
+> ++		add_library(sinsp STATIC IMPORTED)
+> ++		set_target_properties(sinsp PROPERTIES
+> ++			IMPORTED_LOCATION "${SINSP_STATIC_LIBRARY_PATH}"
+> ++			INTERFACE_LINK_LIBRARIES "${ABSL_SYNC_LIB};${B64_LIB};${CARES_LIB};${CURL_LIBRARIES};${ELF_LIB};${GPR_LIB};${GRPC_LIB};${GRPCPP_LIB};${GTEST_LIB};${JQ_LIB};${JSONCPP_LIB};${LUAJIT_LIB};${OPENSSL_LIBRARIES};${PROTOBUF_LIB};${TBB_LIB};${SCAP_STATIC_LIBRARY_PATH};${ZLIB_LIB}"
+> ++		)
+> ++	endif()
+> ++
+> + 	target_link_libraries(sysdig
+> + 		sinsp
+> + 		"${YAMLCPP_LIB}")
+> +--
+> +2.25.1
+> +
+> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+> index c124054105..e00516a2b5 100644
+> --- a/package/sysdig/Config.in
+> +++ b/package/sysdig/Config.in
+> @@ -1,26 +1,11 @@
+>   config BR2_PACKAGE_SYSDIG
+>   	bool "sysdig"
+> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+>   	depends on BR2_LINUX_KERNEL
+> -	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, jq, protobuf, tbb
+> -	depends on !BR2_STATIC_LIBS # elfutils, protobuf, tbb
+> -	depends on BR2_USE_WCHAR # elfutils
+> -	depends on BR2_TOOLCHAIN_USES_GLIBC # elfutils
+> -	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+
+  All these dependencies should still stay, they just become indirect dependencies.
+
+  Except, if you don't do any actual build of falcosecurity-libs and only do it 
+in sysdig, then all these dependencies and selects should also stay in sysdig.
+
+  Also, you should not make falcosecurity-libs a user-selectable option in that 
+case. It still would need a Config.in entry, but without prompt.
+
+
+> -	select BR2_PACKAGE_C_ARES > -	select BR2_PACKAGE_ELFUTILS
+> -	select BR2_PACKAGE_GRPC
+> -	select BR2_PACKAGE_JQ
+> -	select BR2_PACKAGE_JSONCPP
+> -	select BR2_PACKAGE_LIBB64
+> -	select BR2_PACKAGE_LIBCURL
+> +	depends on BR2_INSTALL_LIBSTDCPP # yaml-cpp
+> +	select BR2_PACKAGE_FALCOSECURITY_LIBS
+>   	select BR2_PACKAGE_NCURSES
+> -	select BR2_PACKAGE_OPENSSL
+> -	select BR2_PACKAGE_PROTOBUF
+> -	select BR2_PACKAGE_TBB
+> -	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+> +	select BR2_PACKAGE_YAML_CPP
+>   	help
+>   	  Sysdig is open source, system-level exploration:
+>   	  capture system state and activity from a running Linux
+> @@ -30,10 +15,6 @@ config BR2_PACKAGE_SYSDIG
+>   
+>   	  https://github.com/draios/sysdig/wiki
+>   
+> -comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
+> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> +comment "sysdig needs a toolchain w/ C++, a Linux kernel and luajit or lua 5.1 to be built"
+>   	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+> -		|| !BR2_TOOLCHAIN_HAS_THREADS \
+> -		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
+> -		|| !BR2_TOOLCHAIN_USES_GLIBC \
+> -	    || !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+> +		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+> diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
+> index 4ec46abfc3..380c9dce1e 100644
+> --- a/package/sysdig/sysdig.hash
+> +++ b/package/sysdig/sysdig.hash
+> @@ -1,5 +1,3 @@
+>   # sha256 locally computed
+> -sha256  b9d05854493d245a7a7e75f77fc654508f720aab5e5e8a3a932bd8eb54e49bda  sysdig-0.27.1.tar.gz
+> +sha256  3721c97f0da43c1a68d2962d30363525d8532ab5f2534dfefc86d175e17e423e  sysdig-0.29.1.tar.gz
+>   sha256  a88fbf820b38b1c7fabc6efe291b8259e02ae21326f56fe31c6c9adf374b2702  COPYING
+> -sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  driver/GPL2.txt
+> -sha256  e3f6a43d097ed68176e9738de925d98b938e1bccf6d6bd1bcd79395eca8f76ed  driver/MIT.txt
+> diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+> index 9a9aaa35c3..c6487c2337 100644
+> --- a/package/sysdig/sysdig.mk
+> +++ b/package/sysdig/sysdig.mk
+> @@ -4,10 +4,10 @@
+>   #
+>   ################################################################################
+>   
+> -SYSDIG_VERSION = 0.27.1
+> +SYSDIG_VERSION = 0.29.1
+>   SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+> -SYSDIG_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
+> -SYSDIG_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
+> +SYSDIG_LICENSE = Apache-2.0
+> +SYSDIG_LICENSE_FILE = COPYING
+>   SYSDIG_CPE_ID_VENDOR = sysdig
+>   SYSDIG_CONF_OPTS = \
+>   	-DENABLE_DKMS=OFF \
+> @@ -16,39 +16,32 @@ SYSDIG_CONF_OPTS = \
+>   SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+>   
+>   SYSDIG_DEPENDENCIES = \
+> -	c-ares \
+> -	elfutils \
+> -	grpc \
+> -	jq \
+> -	jsoncpp \
+> -	libb64 \
+> -	libcurl \
+> -	luainterpreter \
+> +	falcosecurity-libs \
+>   	ncurses \
+> -	openssl \
+> -	protobuf \
+> -	tbb \
+> -	zlib
+> +	json-for-modern-cpp \
+> +	yaml-cpp
+>   
+> -# sysdig creates the module Makefile from a template, which contains a
+> -# single place-holder, KBUILD_FLAGS, wich is only replaced with two
+> -# things:
+> -#   - debug flags, which we don't care about here,
+> -#   - 'sysdig-feature' flags, which are never set, so always empty
+> -# So, just replace the place-holder with the only meaningful value: nothing.
+> -define SYSDIG_MODULE_GEN_MAKEFILE
+> -	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
+> -	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
+> -	$(SED) 's/@PROBE_NAME@/sysdig-probe/;' $(@D)/driver/Makefile
+> -endef
+> -SYSDIG_POST_PATCH_HOOKS += SYSDIG_MODULE_GEN_MAKEFILE
+> +# We need to set all these variables to avoid compiling falcosecurity-libs
+> +# twice.
+> +SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR=$(BUILD_DIR)/falcosecurity-libs-e5c53d648f3c4694385bbe488e7d47eaa36c229a
+
+  Put spaces around assignments. Doesn't check-package warn about this?
+
+  Also, use $(FALCOSECURITY_LIBS_SRCDIR) instead of reconstructing it. And with 
+that, there's actually no need to introduce a variable for it. In fact, I don't 
+see the point for any of the variables defined below, they only obfuscate what 
+is going on.
+
+> +SYSDIG_FALCOSECURITY_LIBS_DRIVER_CONFIG_DIR=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR)/buildroot-build/driver/src
+> +SYSDIG_FALCOSECURITY_LIBS_LIBSCAP_SOURCE_DIR=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR)/userspace/libscap
+> +SYSDIG_FALCOSECURITY_LIBS_LIBSINSP_SOURCE_DIR=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR)/userspace/libsinsp
+> +SYSDIG_FALCOSECURITY_LIBS_CHISEL_SOURCE_DIR=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR)/userspace/chisel
+> +SYSDIG_FALCOSECURITY_LIBS_LIBSCAP_STATIC_LIB_PATH=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR)/buildroot-build/libscap/libscap.a
+> +SYSDIG_FALCOSECURITY_LIBS_LIBSINSP_STATIC_LIB_PATH=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR)/buildroot-build/libsinsp/libsinsp.a
+>   
+> -# Don't build the driver as part of the 'standard' procedure, we'll
+> -# build it on our own with the kernel-module infra.
+> -SYSDIG_CONF_OPTS += -DBUILD_DRIVER=OFF
+> +# SCAP_STATIC_LIBRARY_PATH and SINSP_STATIC_LIBRARY_PATH were added by patch.
+> +SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(SYSDIG_FALCOSECURITY_LIBS_SOURCE_DIR) \
+
+  Small nit: if you have a multiline assignment, split it like this:
+
+SYSDIG_CONF_OPTS += \
+	-D...
+
+  Also, there's already a SYSDIG_CONF_OPTS assignment above, and both are 
+unconditional. Merge them. Yes, I know this was already wrong before.
+
+> +	-DHAVE_LIBSCAP=On \
+
+  We use ON and OFF for CMake. Doesn't make a difference, but it's nice if 
+things are consistent.
+
+  Regards,
+  Arnout
+
+> +	-DLIBSCAP_INCLUDE_DIRS="$(SYSDIG_FALCOSECURITY_LIBS_LIBSCAP_SOURCE_DIR);$(SYSDIG_FALCOSECURITY_LIBS_DRIVER_CONFIG_DIR)" \
+> +	-DHAVE_LIBSINSP=On \
+> +	-DLIBSINSP_INCLUDE_DIRS="$(SYSDIG_FALCOSECURITY_LIBS_LIBSINSP_SOURCE_DIR);$(SYSDIG_FALCOSECURITY_LIBS_CHISEL_SOURCE_DIR)" \
+> +	-DVALIJSON_INCLUDE=$(BUILD_DIR)/valijson-0.6/include/valijson \
+> +	-DSCAP_STATIC_LIBRARY_PATH=$(SYSDIG_FALCOSECURITY_LIBS_LIBSCAP_STATIC_LIB_PATH) \
+> +	-DSINSP_STATIC_LIBRARY_PATH=$(SYSDIG_FALCOSECURITY_LIBS_LIBSINSP_STATIC_LIB_PATH)
+>   
+>   SYSDIG_MODULE_SUBDIRS = driver
+>   SYSDIG_MODULE_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
+>   
+> -$(eval $(kernel-module))
+>   $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
