@@ -1,64 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE20FC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 10:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79791C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Apr 2022 14:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F8B884365;
-	Fri, 22 Apr 2022 10:16:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE54B60FF5;
+	Fri, 22 Apr 2022 14:31:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oTzMd1Zm2wGv; Fri, 22 Apr 2022 10:16:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lmO8qf1hmH5p; Fri, 22 Apr 2022 14:31:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77F0C84356;
-	Fri, 22 Apr 2022 10:16:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 591AD1BF281
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 10:16:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD5F160B09;
+	Fri, 22 Apr 2022 14:31:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02D651BF232
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 14:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45E8884356
- for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 10:16:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E44094018B
+ for <buildroot@lists.busybox.net>; Fri, 22 Apr 2022 14:31:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qONv68V07KaJ for <buildroot@lists.busybox.net>;
- Fri, 22 Apr 2022 10:16:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C76F8427F
- for <buildroot@buildroot.org>; Fri, 22 Apr 2022 10:16:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C559D60005;
- Fri, 22 Apr 2022 10:16:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650622605;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RFgUWkJlhtbr8hBNkxOWhWO7cpXsshNVGMK4hOZ4jDM=;
- b=Oq+tSQXDK+/+959YHu8ddnVhHXpdiAwat7oE0F1gHDQ+SwS8ZNrDC2AnPtEWAb2SobCtuH
- Oc7Q2PJpvaNQDgmzwiSZnHvPc4BJTLY349qQluJZdG8mXIjWD19v/c7xpe55UDVTMrXVI3
- yldWdDXsbVG87vUWqWT8bH/G6AKSWPbFkHzDLV2snh/Vib9BsURVGgnWBHeh3uPH6Wsq1G
- b/NEwQ2j6yU5bw/Fa694lMUQ+G/wtzLx6SyX0fHxU6eM5imULTlca1Kr9F2AQXIHf4NcWG
- BV/2xTLcXim1RtUNUo/TzwPo+3FVRo0ilWn2RZTSl+1Q7aOnOvCz0TxoZpg4Qw==
-Date: Fri, 22 Apr 2022 12:16:43 +0200
-To: Thomas Perrot <thomas.perrot@bootlin.com>
-Message-ID: <20220422121639.5118cd38@windsurf>
-In-Reply-To: <13e22a566019cfbb7f9a6de52a485dad687e1217.camel@bootlin.com>
-References: <20220420083923.3875405-1-thomas.perrot@bootlin.com>
- <20220420083923.3875405-2-thomas.perrot@bootlin.com>
- <87pmlbr70w.fsf@tarshish>
- <13e22a566019cfbb7f9a6de52a485dad687e1217.camel@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P7Pw7a8Y_2WJ for <buildroot@lists.busybox.net>;
+ Fri, 22 Apr 2022 14:31:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 242674017B
+ for <buildroot@buildroot.org>; Fri, 22 Apr 2022 14:31:51 +0000 (UTC)
+Received: from pwmachine.home (unknown [92.186.13.154])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 4755120E65CD;
+ Fri, 22 Apr 2022 07:31:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4755120E65CD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1650637908;
+ bh=x0XBeqa9wOLvtPVtj4zKem1dfabCO4vW3hEQnDHWlps=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Xthe8X5cbTaeUJYUuiTlNztXuY320/ZvoQLOyY25Ta+c94VfjlAC0bbtHxAAxS60b
+ 15RjlXFuA6uk/xk7zDa6/3vp01EtqxrWh1MZhQqkOxhc4MTje5YCHu4RlBzC25oXU+
+ Ep1K29ivnVusXlyM54tT4IOW1FxZa7NMCmVYO6oc=
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: buildroot@buildroot.org
+Date: Fri, 22 Apr 2022 15:31:32 +0100
+Message-Id: <20220422143134.28561-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/imx-cst: new package
+Subject: [Buildroot] [RFC PATCH v3 0/2] Bump sysdig to 0.29.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,35 +62,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpPbiBGcmksIDIyIEFwciAyMDIyIDEyOjA5OjAwICswMjAwClRob21hcyBQZXJyb3Qg
-PHRob21hcy5wZXJyb3RAYm9vdGxpbi5jb20+IHdyb3RlOgoKPiA+IEl0IGxvb2tzIGxpa2UgdGhl
-IG9ubHkgZGlmZmVyZW5jZSBiZXR3ZWVuIDY0IGFuZCAzMiBpcyBpbiBvcGVuc3NsCj4gPiBidWls
-ZAo+ID4gcnVsZSwgYW5kIGZvciB4ODYgKGhvc3QpIHRhcmdldHMgb25seS4gV2UgZG9uJ3QgdXNl
-IHRoaXMgb3BlbnNzbCBydWxlCj4gPiBzaW5jZSB3ZSBidWlsZCBob3N0LW9wZW5zc2wgd2l0aCBv
-dXIgb3duIHJ1bGVzLiBTbyBtYXliZSB3ZSBjYW4ganVzdAo+ID4gYXJiaXRyYXJpbHkgY2hvb3Nl
-IGhhcmQgY29kZWQgJ2xpbnV4NjQnLiBJdCBzZWVtcyB0aGF0Cj4gPiBkZWJpYW4vTWFrZWZpbGUK
-PiA+IGRvZXMgdGhhdC4gIAo+IAo+IFRoYW5rcyBmb3IgeW91ciByZXZpZXcsIEnigJltIHN1Ym1p
-dHRpbmcgYSB2MyB3aXRoIHRoZSBPU1RZUEUgdmFyaWFibGUKPiBoYXJkY29kZWQgdG8gbGludXg2
-NC4KCk5vLCBwbGVhc2UgZG9uJ3QuIFdlJ3JlIGRvaW5nIHRoZSBidWlsZCBsaWtlIHRoaXM6Cgpi
-dWlsZDoKICAgICAgICAkKE1BS0UpIC1DICQoQ1NUX0NPREVfUEFUSCkvb2JqLiQoT1NUWVBFKSBi
-dWlsZAoKQW5kIGNvZGUvY3N0L2NvZGUvb2JqLmxpbnV4MzIvTWFrZWZpbGUgY29udGFpbnM6CgpD
-T1BUSU9OUyArPSAtbTMyCkxET1BUSU9OUyArPSAtbTMyCgp3aGlsZSBjb2RlL2NzdC9jb2RlL29i
-ai5saW51eDY0L01ha2VmaWxlIGNvbnRhaW5zCgpDT1BUSU9OUyArPSAtbTY0CkxET1BUSU9OUyAr
-PSAtbTY0CgpBbmQgSSBjYW4gZGVmaW5pdGVseSBzZWUgdGhlIC1tNjQgYmVpbmcgYWRkZWQgaW4g
-dGhlIGNvbXBpbGVyIGZsYWdzCndoZW4gZG9pbmcgYSBidWlsZCBvbiBhIHg4Ni02NCBob3N0IChy
-dW4gdGhlIGJ1aWxkIHdpdGggVkVSQk9TRT0xLCB5b3UKd2lsbCBzZWUpLgoKU28gaWYgeW91IHVz
-ZSBsaW51eDY0IHVuY29uZGl0aW9uYWxseSwgdGhlIENTVCBiaW5hcmllcyB3aWxsIGJlIGJ1aWx0
-CndpdGggLW02NCwgZXZlbiBvbiAzMi1iaXQgaG9zdCBtYWNoaW5lcyA9PiBiYWQuCgpUaG9tYXMK
-LS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQg
-TGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGlu
-LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi.
+
+
+In this contribution, I bumped sysdig version to 0.29.1.
+Indeed, following this discussion [1], Arnout Vandecappelle noted sysdig 0.27.1
+cannot be cross-compiled to, e.g., aarch64 because it uses the open() syscall.
+
+To fix this, I bumped sysdig to 0.29.1.
+Sadly, some components of sysdig, like libsinsp, libscap and the kernel modules,
+were moved to falcosecurity/libs.
+So, I added the falcosecurity-libs package.
+A new patch was added to sysdig recipe to avoid compiling again
+falcosecurity-libs.
+Nonetheless, this patch is a bit big, so I prefered to keep the RFC tag to
+gather your opinion about it.
+
+I was nonetheless able to build and run sysdig with start-qemu.sh:
+Welcome to Buildroot
+buildroot login: root
+# scap: loading out-of-tree module taints kernel.
+scap: driver loading, scap 0.1.1dev
+scap: adding new consumer (____ptrval____)
+scap: initializing ring buffer for CPU 0
+scap: CPU buffer initialized, size=8388608
+scap: starting capture
+2 14:29:14.500045202 0 <NA> (113) > switch next=10 pgft_maj=212 pgft_min=1175 vm_size=45204 vm_rss=18256 vm_swap=0
+...
+97 14:29:14.514272929 0 <NA> (113) > switch next=114 pgft_maj=213 pgft_min=1180 vm_size=45204 vm_rss=18256 vm_swap=
+scap: deallocating consumer (____ptrval____)
+scap: no more consumers, stopping capture
+
+So, if you see a particular way to fix the problem I described above or any
+problem with this contribution, feel free to share it!
+
+Changes since:
+ v2:
+  - Add linux CONFIG_ option to execute falcosecurity-libs kernel module.
+  - falcosecurity-libs driver name was set so sysdig automatically loads it.
+
+Francis Laniel (2):
+  falcosecurity-libs: add new package
+  package/sysdig: bump to 0.29.1
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...cmake-Permit-setting-GRPC_CPP_PLUGIN.patch | 34 ++++++++
+ package/falcosecurity-libs/Config.in          | 38 +++++++++
+ .../falcosecurity-libs.hash                   |  5 ++
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 75 +++++++++++++++++
+ ...BUNDLED_DEPS-before-getting-nlohmann.patch | 51 ++++++++++++
+ ...ATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 -------------------
+ ...gainst-libabseil-cpp-which-grpc-uses.patch | 47 -----------
+ ...e-Add-libsinsp.a-as-IMPORTED-library.patch | 59 +++++++++++++
+ package/sysdig/Config.in                      | 31 ++-----
+ package/sysdig/sysdig.hash                    |  4 +-
+ package/sysdig/sysdig.mk                      | 55 ++++++-------
+ 13 files changed, 295 insertions(+), 188 deletions(-)
+ create mode 100644 package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
+ create mode 100644 package/falcosecurity-libs/Config.in
+ create mode 100644 package/falcosecurity-libs/falcosecurity-libs.hash
+ create mode 100644 package/falcosecurity-libs/falcosecurity-libs.mk
+ create mode 100644 package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+ delete mode 100644 package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
+ delete mode 100644 package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
+ create mode 100644 package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch
+
+
+Best regards and thank you in advance.
+---
+[1] https://marc.info/?l=buildroot&m=164951521629400
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
