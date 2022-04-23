@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A30C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8406C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 784C260D50;
-	Sat, 23 Apr 2022 16:30:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE8360F6C;
+	Sat, 23 Apr 2022 16:30:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8yOOHSFDmUib; Sat, 23 Apr 2022 16:30:26 +0000 (UTC)
+	with ESMTP id UazKVaSbJHqE; Sat, 23 Apr 2022 16:30:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD49E60BC8;
-	Sat, 23 Apr 2022 16:30:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B637C1BF5DF
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:30:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 980AF60D53;
+	Sat, 23 Apr 2022 16:30:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 095C31BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A42D0408E1
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:30:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA7D64048A
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:30:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j7PGq_PcV8o4 for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 16:30:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ILOfLeLLHHn for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 16:30:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 751D5408D2
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:30:22 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id w16so580687ejb.13
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 09:30:22 -0700 (PDT)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C136400DA
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:30:50 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id k23so21870046ejd.3
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 09:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=CLfpIiGpAnoo8VQlG8ltr1qHRDqe/QxxbgE3L68bCwI=;
- b=ZD+hk4Ck1rtX1Hu33b02RnMJ1z2MDGP6LUgb4c6h5heQlNg10iI1WlImTr08DIW/2D
- oFnVvP2K6TXUmC1zpNXI224vu91n45bTzd6+yHKJbrfS6KZwgdKxkeT2wQPxEuQTRt9o
- iHVLdr29mx51Cg0PG+htCdsa0ckTFqlPQsZLHrgDZKIJA2JjJmp6eksRE4OoxC6zZvJj
- lfW554mWV58H8by5bCt7DKhrtFzNXadwvG47s+PyBjv9OWs2c1FcY5iD1FU5RDz/Oh/H
- 8KLuzHvcfyEP/5SaLxp9RKc2lIcDlGvWKpADHestX1yxwDrGsBOdjvbB0eNPphl279dS
- 91rw==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=GY6kSenZgScQ5uyUSR4yXhMMoQxT8t+Gib4pRaEeaFQ=;
+ b=F64HGEkc2PxNHku7PscEZlZ1SYphUdY5GbyXkhxslCxFQY5Ok1ivCiRvKOXrANjNPV
+ UUTSex63lAtxkwL6AxtpaPhB8m032kOs1IYu2jz4iV6O3jdgoUdd8ZdcP4avAlISIXFg
+ 0LE0TVNlrPQy5xdTS0zR5+PuRg4mM5//LlNJjkXWtGAlAiDKEPkIqdXDYH0+xvArkjy7
+ kqOdI152qE3rhvWDxra/S9C1IzdF4Y7pi9MELjLkpnWDLZQ+9GlCxhov8ebecXcLTlnB
+ UytYGs7aYCLIutmqyTz8DtIZPzbaXuL/Yf+6I5dZyhpf8MaOEd37Eoaw0IeJpoBH/Ryx
+ qwyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=CLfpIiGpAnoo8VQlG8ltr1qHRDqe/QxxbgE3L68bCwI=;
- b=lkzjM84oljZBWeRUB30n2R+Kjzv8HOz5t1SBwUWEeHLqtsxGfVInR1KnYvK/Dru5VK
- JsLamh90BljCJxttL4lGY/9JbL3xzcoJlTgapgfKEFHFg0TSJ/sSgvc2h5VnhDRZeXXl
- c2GH+q/DW1g+mSZK1O3IzjMVuxcPVInHtxQM//zZwJOT4x1wLiTkdMxuw0X6fNqKdvKE
- yeHoHecdtYR2eiatXb6kfq41doZDVbpLDYdEZq/yZfX3i8PP1Su1MtO9n2E3gZ5ALVZC
- E2BlvWbD9Zb9TU9RQsxZnoEFjAerUq8g9wwcSlFNXShJh+8TDh072jGnud/7PTiDLoQb
- lcSA==
-X-Gm-Message-State: AOAM532Fzfmrt3/tefw0xbytycvsYWrhnVV5+vulGMIftY2FsWWsJOb6
- Hl0pjsNDv6/kgsIPbVCXwDHvtYG7ct3Qnw==
-X-Google-Smtp-Source: ABdhPJww7zC/7OQLIAhPvmo1tkKyETRJ4HhpRsW/R9xtcYill+iiRdFuwgsu0Jd84ZUFDQNjXRtJDg==
-X-Received: by 2002:a17:907:3e16:b0:6df:b4f0:5cc2 with SMTP id
- hp22-20020a1709073e1600b006dfb4f05cc2mr8971541ejc.285.1650731420746; 
- Sat, 23 Apr 2022 09:30:20 -0700 (PDT)
+ bh=GY6kSenZgScQ5uyUSR4yXhMMoQxT8t+Gib4pRaEeaFQ=;
+ b=dJMTrH7IyaLXS1Wx7CxR26joGtmGSHEJyz5uptig3cj1YNilcDp4S9xJB2sUlSYsjh
+ DuLKOpdK3hnllHTaXzJtpqqEqZOTvqah2dP4WmhqzgwtqNGFGVUng35au6Omy+e9PzE0
+ t1npWNi7rVXnEfACnlyEDwe+ZH52hoqIJFONY8K4XlkGoE88vZq92eniZcQM1sbMiIGK
+ YAL33ArshJJyq9QVmjVdrQFaQBdojvbHSJ0ykDjYumI2HvSTxSkwzffBaDJDmaWz/FPJ
+ Rg1pkLBX4RndsNkxM/cFYU6uT9aoqDv1X5967ic1wWekWUuj+go6CmD+RrLTtTK57GTd
+ xhOA==
+X-Gm-Message-State: AOAM531n1tQwn7eGOFo2tuuYoQlh/lMSPBGZryV1qFTDIr7CPtr7xj2D
+ KwcVpl+00/gHmd4oe1dlsd8tuQ==
+X-Google-Smtp-Source: ABdhPJwoniOKs1ZrP9BQhcAMMOHfGlmhIcXrDAbBBvdDEVylw0HFSYCjazhhLHQm2/nHLi+jrrZnxg==
+X-Received: by 2002:a17:907:608f:b0:6f3:671d:d2f9 with SMTP id
+ ht15-20020a170907608f00b006f3671dd2f9mr5196782ejc.675.1650731449075; 
+ Sat, 23 Apr 2022 09:30:49 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- tc3-20020a1709078d0300b006f00345be60sm1743526ejc.22.2022.04.23.09.30.19
+ la10-20020a170907780a00b006e889ee7741sm1819023ejc.75.2022.04.23.09.30.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Apr 2022 09:30:20 -0700 (PDT)
-Message-ID: <53e35dcc-6ace-0c5d-bd41-b3efbbd94c41@mind.be>
-Date: Sat, 23 Apr 2022 18:30:19 +0200
+ Sat, 23 Apr 2022 09:30:48 -0700 (PDT)
+Message-ID: <79e52372-031a-2836-b2ab-2f78f629d29f@mind.be>
+Date: Sat, 23 Apr 2022 18:30:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Dario Binacchi <dariobin@libero.it>, buildroot@buildroot.org
-References: <20220421102410.3794-1-dariobin@libero.it>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220421115529.2625137-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220421102410.3794-1-dariobin@libero.it>
-Subject: Re: [Buildroot] [PATCH 1/1] package/valgrind: fix compilation for
- uclibc
+In-Reply-To: <20220421115529.2625137-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/arptables: fix build with
+ BR2_OPTIMIZE_0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,37 +102,96 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/04/2022 12:24, Dario Binacchi wrote:
-> - Add upstream patch ([1]) to fix compilation for uclibc
+On 21/04/2022 13:55, Fabrice Fontaine wrote:
+> Fix the following build failure with BR2_OPTIMIZE_0 raised since the
+> addition of the package in commit
+> efc10eb6b87884f1f7917462d78af6953fcd99e3 and
+> https://git.netfilter.org/arptables/commit/?id=369afc14de1d89ff5627ff4c5f72f6f839244b50:
 > 
-> - Add autoreconf as the patch touches configure.ac
+> libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
+>     48 | #define GET_TARGET  arpt_get_target
+>        |                     ^~~~~~~~~~~~~~~
+> libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
+>     16 | GET_TARGET(STRUCT_ENTRY *e)
+>        | ^~~~~~~~~~
+> In file included from .//include/libarptc/libarptc.h:7,
+>                   from libarptc/libarptc.c:26:
+> .//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
+>    196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
+>        |                                           ^~~~~~~~~~~~~~~
 > 
-> [1] https://sourceware.org/git/?p=valgrind.git;a=commit;h=9c9fd9ae24b45f915f0759d32f662835c26d37c3
+> Fixes:
+>   - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
 > 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   ...tc-libarptc_incl.c-fix-build-with-O0.patch | 49 +++++++++++++++++++
+>   1 file changed, 49 insertions(+)
+>   create mode 100644 package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
+> 
+> diff --git a/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch b/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
+> new file mode 100644
+> index 0000000000..29f2d714e2
+> --- /dev/null
+> +++ b/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
+> @@ -0,0 +1,49 @@
+> +From 7d8285ae92253017a15282dd25f76d76eed49518 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Thu, 21 Apr 2022 13:43:23 +0200
+> +Subject: [PATCH] libarptc/libarptc_incl.c: fix build with -O0
+> +
+> +Fix the following build failure with -O0:
+> +
+> +libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
+> +   48 | #define GET_TARGET  arpt_get_target
+> +      |                     ^~~~~~~~~~~~~~~
+> +libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
+> +   16 | GET_TARGET(STRUCT_ENTRY *e)
+> +      | ^~~~~~~~~~
+> +In file included from .//include/libarptc/libarptc.h:7,
+> +                 from libarptc/libarptc.c:26:
+> +.//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
+> +  196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
+> +      |                                           ^~~~~~~~~~~~~~~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-[snip]
-> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-> index 52f2a04ffa..a5600a81b8 100644
-> --- a/package/valgrind/valgrind.mk
-> +++ b/package/valgrind/valgrind.mk
-> @@ -14,6 +14,7 @@ VALGRIND_CONF_OPTS = \
->   	--disable-ubsan \
->   	--without-mpicc
->   VALGRIND_INSTALL_STAGING = YES
-> +VALGRIND_AUTORECONF=YES
+  No upstream reference? Is upstream dead?
 
-  You should add a comment above to track why autoreconf is needed.
-
-  Applied to master with that fixed, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
->   
->   # Valgrind must be compiled with no stack protection, so forcefully
->   # pass -fno-stack-protector to override what Buildroot may have in
+> +---
+> + libarptc/libarptc_incl.c | 8 --------
+> + 1 file changed, 8 deletions(-)
+> +
+> +diff --git a/libarptc/libarptc_incl.c b/libarptc/libarptc_incl.c
+> +index c4d5de3..441f2de 100644
+> +--- a/libarptc/libarptc_incl.c
+> ++++ b/libarptc/libarptc_incl.c
+> +@@ -11,14 +11,6 @@
+> + /* (C)1999 Paul ``Rusty'' Russell - Placed under the GNU GPL (See
+> +    COPYING for details). */
+> +
+> +-#ifndef __OPTIMIZE__
+> +-STRUCT_ENTRY_TARGET *
+> +-GET_TARGET(STRUCT_ENTRY *e)
+> +-{
+> +-	return (void *)e + e->target_offset;
+> +-}
+> +-#endif
+> +-
+> + static int sockfd = -1;
+> + static void *arptc_fn = NULL;
+> +
+> +--
+> +2.35.1
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
