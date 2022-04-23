@@ -1,83 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E1D3C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 20:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751F9C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 20:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D32EF408D9;
-	Sat, 23 Apr 2022 20:42:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 168A660D50;
+	Sat, 23 Apr 2022 20:42:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uOqBZzNYR8te; Sat, 23 Apr 2022 20:42:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MfPuEQkJM0O0; Sat, 23 Apr 2022 20:42:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95696408BA;
-	Sat, 23 Apr 2022 20:42:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31F8760D5F;
+	Sat, 23 Apr 2022 20:42:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A3641BF59E
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 20:41:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 821071BF59E
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 20:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 180B560C08
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 20:41:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7051760B4A
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 20:41:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SykJqWnrnBNT for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 20:41:40 +0000 (UTC)
+ with ESMTP id Sl-Bu41BHE9f for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 20:41:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9D0EB60B83
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 20:41:40 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id v12so8797992wrv.10
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 13:41:40 -0700 (PDT)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 905D160B83
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 20:41:42 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id v12so8798037wrv.10
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 13:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=Ls1ozZQtN56obWr1eQ9ZMPEopTjRbnAO6oAgi7NXKzM=;
- b=i+WWf1QnGO0OyRS+viARXVro2OR6m7/hlMnAwPTDZ2nEzA0Dm/f/7iwQ2xJpxNOGGQ
- 2E1eKkIpjQPbNPnnv08WCRC50OyEJZLRNaKOhes0FeBoYPfvmwDncrYfVcE5aITLiqnN
- +dQig2NN8ebxO/3yZdslnjiMP04oFuk4WjNrYfbl9OKLazbIxkLPV79psV/JJmQU3PB3
- 9vM+CuvOt19FwI56UF0Gs+v+gqOtsR17typ3hOG25zpCyn0X+nAnF7f2pRjLxsMKGfxm
- zqh1r3oNZdAXtAZ7zOFFG0J07mx8isrhVCqSJTBtFGxksJ+ywMMyi/WzL7rukUQR9IE5
- 8geQ==
+ bh=K8peXh3ZvpjBQP2JzjqZGSBt7PBp4mJOz/SnNSwnEbM=;
+ b=nriQISzOtFGS5yFySphueKzb9le2P0gdy2R58uOiMbsKt7VkolOBx/fwA8e8OACc9c
+ xN4xZzWsbLtFOCbb3042CHvYe7imZapN0DuiDq+4bjt7zhthCtsG+fGSZdkOMWJUxRqr
+ KQTM37fXXosp9wh/14cx9jMNe9VzzH/zChqxMBy1SEYkGbc2dp7sQ6cFoXsVSZsaUlEC
+ 5xk93grcBFvdFf8mjijAazC3SwGkJe6Bes9HprybUaby6Tr0i+fzx8X9cKIJMinSkHNc
+ W8paw3xHyhYcqKtiyU8FlNWwubPXcIPpJO9K2H2WHBbx1YcLsgwbdkQ+XBcQ5g92zDoO
+ IJCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=Ls1ozZQtN56obWr1eQ9ZMPEopTjRbnAO6oAgi7NXKzM=;
- b=6qDO08eBOgwtPQP5VyMXH0nXwuMb9hdZZWT6Ptz/M13SSte41qIgfgduN43EX7hq7N
- H56Mf2w8W1B4zZsktV+oekv+N2MULdeA4wEF2nq86YhbsfSq+roPQ1+ILViCKaRVZVVC
- AO+i+ARO/qUNVOU0g9FyBLsmbVcC0LupH2J+0DtbAy3Z2RGTdczRV7CB5QxunDjkD2P0
- GBv8tQtFEWzU/O+ZT6uUAEGBkUpN6CDKQY2+u4WLPNV00VBHQDl8Yc6rHkQhG2/VJ6tC
- taVxXJHSpGk2qWdzNz6wE3daRzMUokNDVwpZJny5GSRMY4w5EyaJLtlMpjiNSJeIdkX4
- Vg3A==
-X-Gm-Message-State: AOAM531U8VEuzd2+JpjJro1jLZ3tbIybhR70t32Td79NXgELUBN0zUB4
- xPh0j5nKvBmlxpqhs34K620KmhqPYhQ=
-X-Google-Smtp-Source: ABdhPJzyYsKaxA81y3eN3ajH25p7y9Pp4lWNgsgceb5+m2smLVbLRYCs6FBdDZdohCha3Ook94fooQ==
-X-Received: by 2002:a05:6000:1a89:b0:20a:9e23:584b with SMTP id
- f9-20020a0560001a8900b0020a9e23584bmr8342554wry.359.1650746498599; 
- Sat, 23 Apr 2022 13:41:38 -0700 (PDT)
+ bh=K8peXh3ZvpjBQP2JzjqZGSBt7PBp4mJOz/SnNSwnEbM=;
+ b=AmNB0aXbUoYGQQzW9EhjUAxiEbpyYtsPKKujJxNPR2qs2e+uhA68OdEKuDhiOBt0Tq
+ U2Ndp5WDor5VmMwNsGTvRwfPrxHGDPn7ex2etu8GIIXEgrwsopxj9eVh9pxULekKtqAb
+ BCavmpeRqkyYQ1nWZ5fJp0JGgqoOEtZnqUCO0lDXJ0eOcPmBZKbGtdd0uyyNcnzit9uP
+ K1nxLKqn3WQka5C/eVwImz37Osukc0fHhGGfe6ZF+vlTVHyMMFi8/bIEjrtLpAgh1aSH
+ 4AaOLRyip3Tgv08j0VnQfhb+VNvzv8kUgipa7USwP0WhqrZ1OfcK6Xhs5E6my15iRHFn
+ wGOg==
+X-Gm-Message-State: AOAM532PIctHwwYfS8RaAO1P4VO+Sbi+U0z7Gco5/0HMu2YUZQ4GMH+P
+ /q+G93opJIQ62sgVU8zWDYDgR2gdQYA=
+X-Google-Smtp-Source: ABdhPJwlgqhcbhjbLBQshg+w14h4HNHptoxSIoEbHBXlshoMzTVLlxhz9L+vAPZzYJ/b7RD/7+F4zg==
+X-Received: by 2002:adf:f30f:0:b0:20a:d71f:d85f with SMTP id
+ i15-20020adff30f000000b0020ad71fd85fmr1182537wro.342.1650746500559; 
+ Sat, 23 Apr 2022 13:41:40 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- l9-20020a1c7909000000b0038eb8171fa5sm4782312wme.1.2022.04.23.13.41.36
+ l9-20020a1c7909000000b0038eb8171fa5sm4782312wme.1.2022.04.23.13.41.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Apr 2022 13:41:37 -0700 (PDT)
+ Sat, 23 Apr 2022 13:41:39 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 22:39:23 +0200
-Message-Id: <20220423203924.1796541-3-fontaine.fabrice@gmail.com>
+Date: Sat, 23 Apr 2022 22:39:24 +0200
+Message-Id: <20220423203924.1796541-4-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220423203924.1796541-1-fontaine.fabrice@gmail.com>
 References: <20220423203924.1796541-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,3/4] package/assimp: force libzlib
+Subject: [Buildroot] [PATCH v2,4/4] package/quazip: force libzlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,36 +99,29 @@ Force libzlib instead of depending on it
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/assimp/Config.in | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/quazip/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 833e559a6f..5ffb50cd79 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -2,8 +2,9 @@ config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
+diff --git a/package/quazip/Config.in b/package/quazip/Config.in
+index a670ed458c..bba5eddf3d 100644
+--- a/package/quazip/Config.in
++++ b/package/quazip/Config.in
+@@ -1,13 +1,11 @@
+ config BR2_PACKAGE_QUAZIP
+ 	bool "quazip"
 -	depends on BR2_PACKAGE_LIBZLIB
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	depends on BR2_PACKAGE_QT5
 +	select BR2_PACKAGE_ZLIB
 +	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
  	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
- 	  library to import various well-known 3D model formats in a
-@@ -14,11 +15,7 @@ config BR2_PACKAGE_ASSIMP
- 	  http://www.assimp.org
+ 	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
+ 	  ZIP/UNZIP package that can be used to access ZIP
+ 	  archives. It uses the Qt toolkit.
  
- comment "assimp needs a toolchain w/ C++, wchar"
--	depends on BR2_PACKAGE_LIBZLIB
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
--comment "assimp needs libzlib"
--	depends on !BR2_PACKAGE_LIBZLIB
+ 	  http://quazip.sourceforge.net
 -
- comment "assimp needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-comment "quazip needs libzlib"
+-	depends on !BR2_PACKAGE_LIBZLIB
 -- 
 2.35.1
 
