@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 698E9C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B3E6C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:16:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 307646100A;
-	Sat, 23 Apr 2022 15:15:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED6788305C;
+	Sat, 23 Apr 2022 15:16:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YFj1adi7hzgI; Sat, 23 Apr 2022 15:15:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id raV3CWwGxhxH; Sat, 23 Apr 2022 15:16:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18C4960F75;
-	Sat, 23 Apr 2022 15:15:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 044491BF95C
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B00B8144C;
+	Sat, 23 Apr 2022 15:16:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 055A61BF421
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:13:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B723E409EE
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8D5E419E5
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sdj9FnOurRQ6 for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H5uqzq-1_jqv for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF83740917
+ by smtp4.osuosl.org (Postfix) with ESMTP id F074141A4C
  for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B689583FDF; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
+ id C666683FDF; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 16:59:31 +0200
+Date: Sat, 23 Apr 2022 17:00:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5bc935665bc08d4e144f6aea0786df5aaade248a
-X-Git-Newrev: b790ff27d5461df4de22732611a1eb4beee68f91
+X-Git-Oldrev: 2097e1ba3904be8f7cd388fe1d16a099da83ef99
+X-Git-Newrev: 5c7f712c4814c0aacbd11bf71e2f81a3b33365bb
 X-Patchwork-Hint: ignore
-Message-Id: <20220423150245.B689583FDF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/multipath-tools: bump to version
- 0.8.9
+Message-Id: <20220423150245.C666683FDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/batman-adv: needs CONFIG_CRC16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,125 +58,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b790ff27d5461df4de22732611a1eb4beee68f91
+commit: https://git.buildroot.net/buildroot/commit/?id=5c7f712c4814c0aacbd11bf71e2f81a3b33365bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Text has been added to README.md, but the section about licenses hasn't
-been modified. Unfortunately there are still many files without license
-info, so the small piece of text in README.md that says files with no
-license info are LGPL-2.0 is still relevant.
+CONFIG_CRC16 is needed to avoid the following build failure:
 
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-[Arnout: update README.md hash]
+ERROR: modpost: "crc16" [/nvmedata/autobuild/instance-6/output-1/build/batman-adv-2021.4/net/batman-adv/batman-adv.ko] undefined!
+
+Fixes:
+ - http://autobuild.buildroot.org/results/64bf0f89ef444dda4d1277c0e46d189ad2515713
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ultipath-use-pkg-config-to-get-path-to-he.patch | 69 ----------------------
- package/multipath-tools/multipath-tools.hash       |  4 +-
- package/multipath-tools/multipath-tools.mk         |  2 +-
- 3 files changed, 3 insertions(+), 72 deletions(-)
+ package/batman-adv/batman-adv.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
-deleted file mode 100644
-index 0d46f12a69..0000000000
---- a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From 922855e245c8bdadc0d24b5b706549b18fb5f079 Mon Sep 17 00:00:00 2001
--From: Alexander Egorenkov <egorenar-dev@posteo.net>
--Date: Sat, 21 Nov 2020 11:08:56 +0100
--Subject: [PATCH] kpartx, libmultipath: use pkg-config to get path to
-- headers
--
--Use pkg-config in Makefile to find path to devmapper and udev headers
--to enable cross-compilation.
--
--Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-----
-- kpartx/Makefile       |  2 +-
-- libmultipath/Makefile | 12 ++++++------
-- 2 files changed, 7 insertions(+), 7 deletions(-)
--
--diff --git a/kpartx/Makefile b/kpartx/Makefile
--index 2906a984..29573890 100644
----- a/kpartx/Makefile
--+++ b/kpartx/Makefile
--@@ -8,7 +8,7 @@ LDFLAGS += $(BIN_LDFLAGS)
-- 
-- LIBDEPS += -ldevmapper
-- 
---ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
--+ifneq ($(call check_func,dm_task_set_cookie,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
-- 	CFLAGS += -DLIBDM_API_COOKIE
-- endif
-- 
--diff --git a/libmultipath/Makefile b/libmultipath/Makefile
--index 62ba16e8..3ad9130c 100644
----- a/libmultipath/Makefile
--+++ b/libmultipath/Makefile
--@@ -20,27 +20,27 @@ ifdef SYSTEMD
-- 	endif
-- endif
-- 
---ifneq ($(call check_func,dm_task_no_flush,/usr/include/libdevmapper.h),0)
--+ifneq ($(call check_func,dm_task_no_flush,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
-- 	CFLAGS += -DLIBDM_API_FLUSH -D_GNU_SOURCE
-- endif
-- 
---ifneq ($(call check_func,dm_task_get_errno,/usr/include/libdevmapper.h),0)
--+ifneq ($(call check_func,dm_task_get_errno,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
-- 	CFLAGS += -DLIBDM_API_GET_ERRNO
-- endif
-- 
---ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
--+ifneq ($(call check_func,dm_task_set_cookie,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
-- 	CFLAGS += -DLIBDM_API_COOKIE
-- endif
-- 
---ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,/usr/include/libudev.h),0)
--+ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,$(shell $(PKG_CONFIG) --variable=includedir libudev)/libudev.h),0)
-- 	CFLAGS += -DLIBUDEV_API_RECVBUF
-- endif
-- 
---ifneq ($(call check_func,dm_task_deferred_remove,/usr/include/libdevmapper.h),0)
--+ifneq ($(call check_func,dm_task_deferred_remove,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
-- 	CFLAGS += -DLIBDM_API_DEFERRED
-- endif
-- 
---ifneq ($(call check_func,dm_hold_control_dev,/usr/include/libdevmapper.h),0)
--+ifneq ($(call check_func,dm_hold_control_dev,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
-- 	CFLAGS += -DLIBDM_API_HOLD_CONTROL
-- endif
-- 
---- 
--2.29.2
--
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index f063848681..58d8de369c 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,7 +1,7 @@
- # Locally computed:
--sha256  ff45ddb18a1effbfbe5712f513dd3b7146c68141091fc1c2489af8d6197026ef  multipath-tools-0.8.8.tar.gz
-+sha256  27a426facea0474e6dc48e026a94f7c86890d3f27b439b07ec26b0b9887b0cc4  multipath-tools-0.8.9.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
--sha256  b1bd70cc61ab014cc2e744af6b117db481ef4fa5d59cb3a21d86059935c666df  README.md
-+sha256  a3777a6b4433a23246eed8a88ca8466e3d21a2f758c03d060201fe2c44ff5484  README.md
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index eecfe39002..c0b7c5721e 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 838f9b1851..6a1aaa699c 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -35,6 +35,7 @@ define BATMAN_ADV_CONFIGURE_CMDS
+ endef
  
--MULTIPATH_TOOLS_VERSION = 0.8.8
-+MULTIPATH_TOOLS_VERSION = 0.8.9
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ define BATMAN_ADV_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC16)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_LIBCRC32C)
+ endef
  
- MULTIPATH_TOOLS_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
