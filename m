@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8057DC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6180C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:14:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C73C81419;
-	Sat, 23 Apr 2022 15:14:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 779DD817B0;
+	Sat, 23 Apr 2022 15:14:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KlO0uIxhPYsg; Sat, 23 Apr 2022 15:14:17 +0000 (UTC)
+	with ESMTP id G7dbSgjnLPHv; Sat, 23 Apr 2022 15:14:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79EB6813C2;
-	Sat, 23 Apr 2022 15:14:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E2C461BF421
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 696168175B;
+	Sat, 23 Apr 2022 15:14:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0417B1BF95C
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB093606E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A54D83E0B
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lxZixiG3w_N6 for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4fPG9ZJAAo_o for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AC44606F5
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D62F983E0C
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E720283FF5; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
+ id 9EBCA83FE2; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 17:03:15 +0200
+Date: Sat, 23 Apr 2022 16:43:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a9e9146447df86bf1fffe6352bdc9dc5e056c5f
-X-Git-Newrev: fc440e46396bf7942b539a5542a71e5232708379
+X-Git-Oldrev: c9954aec7990f01334bf80309fc700ea84b8f103
+X-Git-Newrev: a8614ffc07993feca1a3094c1488a11913cb4e87
 X-Patchwork-Hint: ignore
-Message-Id: <20220423150245.E720283FF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janet: bump to version 1.21.2
+Message-Id: <20220423150245.9EBCA83FE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/trinity: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,46 +53,97 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0839336171413273869=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc440e46396bf7942b539a5542a71e5232708379
+--===============0839336171413273869==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=a8614ffc07993feca1a3094c1488a11913cb4e87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fix the following build failure on musl:
+
+In file included from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/asm/ioctl.h:12,
+                 from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/linux/ioctl.h:5,
+                 from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/linux/fs.h:14,
+                 from ioctls/vfs.c:3:
+ioctls/vfs.c:109:35: error: 'loff_t' undeclared here (not in a function); did you mean 'off_t'?
+  109 |  { .name = "FIOQSIZE", .request = FIOQSIZE, },
+      |                                   ^~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b7f46072751a8d70fa02f1c625c5279f70bec853
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/janet/janet.hash | 2 +-
- package/janet/janet.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0003-Use-fcntl-h-for-dev_t-mode_t.patch        | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/janet/janet.hash b/package/janet/janet.hash
-index 50e6b1fef0..aff8e95bb5 100644
---- a/package/janet/janet.hash
-+++ b/package/janet/janet.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  02ff892f4bfc060a8a37f4a5c3e659bf34ba5f1f1c5eb07d60dc2642c5cf0476  janet-1.19.2.tar.gz
-+sha256  52db8d18f93351256d0731810e8bea95516db8142f51eeb31664f7884bf63088  janet-1.21.2.tar.gz
- 
- # Locally calculated
- sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index 5b6a9a182d..24a0f86032 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JANET_VERSION = 1.19.2
-+JANET_VERSION = 1.21.2
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
+diff --git a/package/trinity/0003-Use-fcntl-h-for-dev_t-mode_t.patch b/package/trinity/0003-Use-fcntl-h-for-dev_t-mode_t.patch
+new file mode 100644
+index 0000000000..c4d9811b8a
+--- /dev/null
++++ b/package/trinity/0003-Use-fcntl-h-for-dev_t-mode_t.patch
+@@ -0,0 +1,46 @@
++From b1a0aef9978d4a41e7e601c277d4fb1b0cfbed89 Mon Sep 17 00:00:00 2001
++From: Dave Jones <davej@codemonkey.org.uk>
++Date: Thu, 26 Aug 2021 11:17:34 -0400
++Subject: [PATCH] Use fcntl.h for dev_t & mode_t
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Should fix:
++
++In file included from /usr/include/bits/statx.h:31,
++                 from /usr/include/sys/stat.h:446,
++                 from include/files.h:3,
++                 from include/shm.h:6,
++                 from syscalls/x86/modify_ldt.c:12:
++/usr/include/linux/stat.h:57:2: error: unknown type name ‘__s64’
++  __s64 tv_sec;
++  ^~~~~
++/usr/include/linux/stat.h:58:2: error: unknown type name ‘__u32’
++  __u32 tv_nsec;
++  ^~~~~
++/usr/include/linux/stat.h:59:2: error: unknown type name ‘__s32’
++  __s32 __reserved;
++  ^~~~~
++/usr/include/linux/stat.h:101:2: error: unknown type name ‘__u32’
++  __u32 stx_mask; /* What results were written [uncond] */
++
++[Retrieved from:
++https://github.com/kernelslacker/trinity/commit/b1a0aef9978d4a41e7e601c277d4fb1b0cfbed89]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/files.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/files.h b/include/files.h
++index 2a8e0e2d..ba3cc98f 100644
++--- a/include/files.h
+++++ b/include/files.h
++@@ -1,6 +1,6 @@
++ #pragma once
++ 
++-#include <sys/stat.h>
+++#include <fcntl.h>
++ #include "fd.h"
++ 
++ unsigned long get_o_flags(void);
+
+--===============0839336171413273869==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0839336171413273869==--
