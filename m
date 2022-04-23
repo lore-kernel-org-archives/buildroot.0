@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 754FAC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1C08C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:14:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2946860E3F;
-	Sat, 23 Apr 2022 15:13:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sjTSWyXiba34; Sat, 23 Apr 2022 15:13:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FA7760BA8;
-	Sat, 23 Apr 2022 15:13:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A9D81BF421
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 81122400DA
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7118340A18;
+	Sat, 23 Apr 2022 15:14:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hQIeu4vwjcMw for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ucrakwPQqpUa; Sat, 23 Apr 2022 15:14:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D84540734;
+	Sat, 23 Apr 2022 15:14:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A403D1BF421
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBA3F41B39
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xoXzw7DwGWXB for <buildroot@lists.busybox.net>;
  Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD08F40734
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF0D9419E5
  for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9644983FDF; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
+ id 84DE183FE2; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 16:43:46 +0200
+Date: Sat, 23 Apr 2022 16:43:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 650c66b1a3c121abf1801b1e450cc4f0c5dfcd51
-X-Git-Newrev: c9954aec7990f01334bf80309fc700ea84b8f103
+X-Git-Oldrev: 174808651947428e68fd5380c8968ce26bb297d5
+X-Git-Newrev: 7b9b7daf52ad44d334e632b95082d3eed3a5a7fe
 X-Patchwork-Hint: ignore
-Message-Id: <20220423150245.9644983FDF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vuejs-router: bump to version
- 4.0.14
+Message-Id: <20220423150245.84DE183FE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openlayers: bump to version 6.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +58,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9954aec7990f01334bf80309fc700ea84b8f103
+commit: https://git.buildroot.net/buildroot/commit/?id=7b9b7daf52ad44d334e632b95082d3eed3a5a7fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/vuejs-router/vuejs-router.hash | 2 +-
- package/vuejs-router/vuejs-router.mk   | 2 +-
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
-index 13ce97d32c..fe270a6062 100644
---- a/package/vuejs-router/vuejs-router.hash
-+++ b/package/vuejs-router/vuejs-router.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  baf5e9dfb0a1e344f0f460a5cd521e17fd3842386ce36b8e6d53c1053d49cf1e  vue-router-4.0.12.tgz
-+sha256  6adff85db2045a092ba4bf37e95cdc3c661cfe4f3e7f7cbc36082a57c05c6365  vue-router-4.0.14.tgz
- sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
-diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
-index 9c7dcc76bf..397a78e1a7 100644
---- a/package/vuejs-router/vuejs-router.mk
-+++ b/package/vuejs-router/vuejs-router.mk
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index 2d6c2fb9d3..1c93b9a729 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  aeb8107a23a99d79efb6031c7cf901307b63571c39fd744f771d4a707e06a14f  v6.12.0-dist.zip
++sha256  8a9fda6e392688c049ebb88fb2c73b5788b4965b625443de4cca7d4688b1fb82  v6.14.1-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 7532bb7f68..4626e7545a 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VUEJS_ROUTER_VERSION = 4.0.12
-+VUEJS_ROUTER_VERSION = 4.0.14
- VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
- VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
- VUEJS_ROUTER_LICENSE = MIT
+-OPENLAYERS_VERSION = 6.12.0
++OPENLAYERS_VERSION = 6.14.1
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
