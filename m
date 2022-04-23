@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8406C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 389ECC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:31:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE8360F6C;
-	Sat, 23 Apr 2022 16:30:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E43704183D;
+	Sat, 23 Apr 2022 16:31:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UazKVaSbJHqE; Sat, 23 Apr 2022 16:30:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q4C705DiWK99; Sat, 23 Apr 2022 16:31:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 980AF60D53;
-	Sat, 23 Apr 2022 16:30:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 095C31BF5DF
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:30:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B694E41520;
+	Sat, 23 Apr 2022 16:31:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 470411BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA7D64048A
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:30:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 34B458272C
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:31:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1ILOfLeLLHHn for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 16:30:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PJpLAJK2S5f9 for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 16:31:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C136400DA
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:30:50 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id k23so21870046ejd.3
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 09:30:50 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F17E58272A
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:31:09 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id g20so13856568edw.6
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 09:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=GY6kSenZgScQ5uyUSR4yXhMMoQxT8t+Gib4pRaEeaFQ=;
- b=F64HGEkc2PxNHku7PscEZlZ1SYphUdY5GbyXkhxslCxFQY5Ok1ivCiRvKOXrANjNPV
- UUTSex63lAtxkwL6AxtpaPhB8m032kOs1IYu2jz4iV6O3jdgoUdd8ZdcP4avAlISIXFg
- 0LE0TVNlrPQy5xdTS0zR5+PuRg4mM5//LlNJjkXWtGAlAiDKEPkIqdXDYH0+xvArkjy7
- kqOdI152qE3rhvWDxra/S9C1IzdF4Y7pi9MELjLkpnWDLZQ+9GlCxhov8ebecXcLTlnB
- UytYGs7aYCLIutmqyTz8DtIZPzbaXuL/Yf+6I5dZyhpf8MaOEd37Eoaw0IeJpoBH/Ryx
- qwyg==
+ bh=A7gesU8r+giG/LQ+7BPUt2YjXKV6m2kHZH1CopXoLpo=;
+ b=DFkxIFuS74nciX425bjVE9wOOvNb0hPGIPE+xQBd+KCpeJcfBtfTgPoCJ8a7Qc3Km2
+ l3QdJLolLADsmNb+qUOsF6OETKpeQ4GJcG9YBqDzI6vAXl30E1wX2DXDiRYx4ftXI6vj
+ 4CFDtx2e0P7WAk6Fi8hdRFsd6FSv/eO0eaeMfyUqsNA/hjRUSBI4aQoi7+eAbTFRO0TQ
+ q1AMewpTFhzn8l0zMdkazBwO1+JFVRauM4+FPF4or43TSJyohoougoKCp3MW247LjkNn
+ ncRRHijeEhJvCUnUzPcdYNgqNhEH9x6hAtnM8IJuivVVl8WgpmRhBQ8ANl14XmJXnjOw
+ DzWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=GY6kSenZgScQ5uyUSR4yXhMMoQxT8t+Gib4pRaEeaFQ=;
- b=dJMTrH7IyaLXS1Wx7CxR26joGtmGSHEJyz5uptig3cj1YNilcDp4S9xJB2sUlSYsjh
- DuLKOpdK3hnllHTaXzJtpqqEqZOTvqah2dP4WmhqzgwtqNGFGVUng35au6Omy+e9PzE0
- t1npWNi7rVXnEfACnlyEDwe+ZH52hoqIJFONY8K4XlkGoE88vZq92eniZcQM1sbMiIGK
- YAL33ArshJJyq9QVmjVdrQFaQBdojvbHSJ0ykDjYumI2HvSTxSkwzffBaDJDmaWz/FPJ
- Rg1pkLBX4RndsNkxM/cFYU6uT9aoqDv1X5967ic1wWekWUuj+go6CmD+RrLTtTK57GTd
- xhOA==
-X-Gm-Message-State: AOAM531n1tQwn7eGOFo2tuuYoQlh/lMSPBGZryV1qFTDIr7CPtr7xj2D
- KwcVpl+00/gHmd4oe1dlsd8tuQ==
-X-Google-Smtp-Source: ABdhPJwoniOKs1ZrP9BQhcAMMOHfGlmhIcXrDAbBBvdDEVylw0HFSYCjazhhLHQm2/nHLi+jrrZnxg==
-X-Received: by 2002:a17:907:608f:b0:6f3:671d:d2f9 with SMTP id
- ht15-20020a170907608f00b006f3671dd2f9mr5196782ejc.675.1650731449075; 
- Sat, 23 Apr 2022 09:30:49 -0700 (PDT)
+ bh=A7gesU8r+giG/LQ+7BPUt2YjXKV6m2kHZH1CopXoLpo=;
+ b=yMGJiOG2ZlmAyZkmWLVMyHAP2Si9AFCdjUNdI4WCRslzZDzwkPp78WYrTsj79CvAgJ
+ JOAyET1OqMcWReugmfDQaeD71bqmQBPl/DZDQoJxyJjxl0E0rym0vc+mf3Yzee2T7M4j
+ xz1TCRBUg8yuElcdLkO0Ieus97WsT0L2MxG2HgYn5FJZBPyK9bvfJxTpgs1K0wosyQ2z
+ qvnAJ95gyPXmj6Ig64z6h4W7WQ67XcxYcMJcQmoXvI3z5/2fDibGmeaEA+luiZNiyRBW
+ IpqrPEMdYIW2tiEhNLdBEor8wecHZXLezAviKmzbC0uH4d6oPGc1q3Pub5+orQkV+B7Y
+ lLnw==
+X-Gm-Message-State: AOAM531a5k6XSjsDeAqITaRu7XIbib/iktEG/ysRWv9mJl3oxyaiOfF2
+ eAkBJdtelYY2uX7eHeS1cBNzgw==
+X-Google-Smtp-Source: ABdhPJwkd4MqL9A9TtXRMExP1d5zkXtOXN1N/HLAz+jR5HoWUuU9nKN8GF5LaSk0VFshBzpKwbk9Kg==
+X-Received: by 2002:a05:6402:438c:b0:423:f57a:596f with SMTP id
+ o12-20020a056402438c00b00423f57a596fmr10493546edc.367.1650731468144; 
+ Sat, 23 Apr 2022 09:31:08 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- la10-20020a170907780a00b006e889ee7741sm1819023ejc.75.2022.04.23.09.30.48
+ l20-20020a1709062a9400b006ce71a88bf5sm1811988eje.183.2022.04.23.09.31.07
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Apr 2022 09:30:48 -0700 (PDT)
-Message-ID: <79e52372-031a-2836-b2ab-2f78f629d29f@mind.be>
-Date: Sat, 23 Apr 2022 18:30:48 +0200
+ Sat, 23 Apr 2022 09:31:07 -0700 (PDT)
+Message-ID: <54ceb68b-1dd9-f0d4-a3ef-d6116e26766f@mind.be>
+Date: Sat, 23 Apr 2022 18:31:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220421115529.2625137-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220421171257.2675041-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220421115529.2625137-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/arptables: fix build with
- BR2_OPTIMIZE_0
+In-Reply-To: <20220421171257.2675041-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version
+ to 19.7.13-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,96 +102,41 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/04/2022 13:55, Fabrice Fontaine wrote:
-> Fix the following build failure with BR2_OPTIMIZE_0 raised since the
-> addition of the package in commit
-> efc10eb6b87884f1f7917462d78af6953fcd99e3 and
-> https://git.netfilter.org/arptables/commit/?id=369afc14de1d89ff5627ff4c5f72f6f839244b50:
-> 
-> libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
->     48 | #define GET_TARGET  arpt_get_target
->        |                     ^~~~~~~~~~~~~~~
-> libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
->     16 | GET_TARGET(STRUCT_ENTRY *e)
->        | ^~~~~~~~~~
-> In file included from .//include/libarptc/libarptc.h:7,
->                   from libarptc/libarptc.c:26:
-> .//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
->    196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
->        |                                           ^~~~~~~~~~~~~~~
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   ...tc-libarptc_incl.c-fix-build-with-O0.patch | 49 +++++++++++++++++++
->   1 file changed, 49 insertions(+)
->   create mode 100644 package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
-> 
-> diff --git a/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch b/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
-> new file mode 100644
-> index 0000000000..29f2d714e2
-> --- /dev/null
-> +++ b/package/arptables/0002-libarptc-libarptc_incl.c-fix-build-with-O0.patch
-> @@ -0,0 +1,49 @@
-> +From 7d8285ae92253017a15282dd25f76d76eed49518 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Thu, 21 Apr 2022 13:43:23 +0200
-> +Subject: [PATCH] libarptc/libarptc_incl.c: fix build with -O0
-> +
-> +Fix the following build failure with -O0:
-> +
-> +libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
-> +   48 | #define GET_TARGET  arpt_get_target
-> +      |                     ^~~~~~~~~~~~~~~
-> +libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
-> +   16 | GET_TARGET(STRUCT_ENTRY *e)
-> +      | ^~~~~~~~~~
-> +In file included from .//include/libarptc/libarptc.h:7,
-> +                 from libarptc/libarptc.c:26:
-> +.//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
-> +  196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
-> +      |                                           ^~~~~~~~~~~~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-  No upstream reference? Is upstream dead?
+On 21/04/2022 19:12, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> +---
-> + libarptc/libarptc_incl.c | 8 --------
-> + 1 file changed, 8 deletions(-)
-> +
-> +diff --git a/libarptc/libarptc_incl.c b/libarptc/libarptc_incl.c
-> +index c4d5de3..441f2de 100644
-> +--- a/libarptc/libarptc_incl.c
-> ++++ b/libarptc/libarptc_incl.c
-> +@@ -11,14 +11,6 @@
-> + /* (C)1999 Paul ``Rusty'' Russell - Placed under the GNU GPL (See
-> +    COPYING for details). */
-> +
-> +-#ifndef __OPTIMIZE__
-> +-STRUCT_ENTRY_TARGET *
-> +-GET_TARGET(STRUCT_ENTRY *e)
-> +-{
-> +-	return (void *)e + e->target_offset;
-> +-}
-> +-#endif
-> +-
-> + static int sockfd = -1;
-> + static void *arptc_fn = NULL;
-> +
-> +--
-> +2.35.1
-> +
+> ---
+>   package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+>   package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> index 0b88d5c747..4f9a60e942 100644
+> --- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> +++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  07d96b1b0c3b464c0bf02279fa8cab9ccdf675344129f3a970b14bafce225fb4  kodi-pvr-zattoo-19.7.11-Matrix.tar.gz
+> +sha256  64fbbb6c816993b39d35fa000e76b9cb1846ae8ae580e807da943f51e4a3afd7  kodi-pvr-zattoo-19.7.13-Matrix.tar.gz
+>   sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+> diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> index 95c5de0925..f2badeaa05 100644
+> --- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> +++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -KODI_PVR_ZATTOO_VERSION = 19.7.11-Matrix
+> +KODI_PVR_ZATTOO_VERSION = 19.7.13-Matrix
+>   KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+>   KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+>   KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
