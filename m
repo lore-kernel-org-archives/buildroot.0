@@ -1,88 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE5FEC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1911EC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8680B408B2;
-	Sat, 23 Apr 2022 16:32:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAD20418C1;
+	Sat, 23 Apr 2022 16:33:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KXfDur4n4wA8; Sat, 23 Apr 2022 16:33:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69A37417CA;
+	Sat, 23 Apr 2022 16:33:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 746AB1BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:32:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F97A4060F
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:32:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sXOBfLE_YpzG; Sat, 23 Apr 2022 16:32:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 749A14048A;
-	Sat, 23 Apr 2022 16:32:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6A16E1BF5DF
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:32:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61886417CA
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:32:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xSZ_Go21T0bZ for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 16:32:31 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56D9F414D1
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:32:31 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id w16so586904ejb.13
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 09:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=rQ1kC5UY6ngiEG+LcmS9/mgL9xf9oqiyYj31srHixJw=;
- b=V+kD0tn10oTFuX5AdnlpZqro7H0ehz82GF8siK8BWPvbHlFTBJXf5cUQnSONsdh0P2
- 8JyFYJ0FtKfzDqGdIw0pCnAqOb3bRYxPoBzuDHuQBx2IwlvRpzYwxfDwxEDp9CCn9RkN
- KE3bJDTcH3kzYiWB/QnmjyXx1zzTiOO/zYeRGvrs45yV9+3JH+3sX9MNx2DHQGdVWNmW
- jxW0h5WgyJZ1NSbx0ihFYU/uJbjhJsyDYsQZb5rEQPijr+cteu7gulxL1LlDjVA8nY0f
- ohQE1UHokQSjQqLpx86JZ8zaNT86Xz8gN/g39EyNH9Bw4peAk/15MXHBl0nU9u2Nvh9d
- Hu7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=rQ1kC5UY6ngiEG+LcmS9/mgL9xf9oqiyYj31srHixJw=;
- b=jvtiHfzrKDlaHt0HNLDk/PikIpBvYu9Tm2TpDQ7IKcAAjfst8TkWSnj7phVlT/g/WB
- HQrI4IjxHn23WdXVfNhElkQ5hewtOuETrWnjTfuuIgktlEZvWIQPG0T7Xl0TH+gFk1o8
- fjS4uj9GRGJB3/5e0xC0Q/7SGZhLFtpsorQFT7k+a6XIVmj1jjHCjdmLbLdg/SAeHWrH
- lX6IMchTMnEpxR5fXdPDx5rNj1sk98TcGnhHs1XQekd37zyfLRSbPjnvMJuDxmOCxGFo
- S/gSctixRlOF6OrMf3w6jPOWsxoqvrQJamHeIGpWCdh7O2UXaS9ptzu4XmKIM5u8jw95
- +IYA==
-X-Gm-Message-State: AOAM5326Nfq7Dx69WvyfNY54hqrNviohtbrdSHu28ghvmap71jjiWBW+
- YHIPVfnvtqxoJa5i/sOl7WOfcsqy2wr21g==
-X-Google-Smtp-Source: ABdhPJyVZc5gvlKEPmKHD3sr6Efv1o958Rfn3Vn5zGbnI+HNqunfvOvndYIQ6kjm3c+0nTZeTpWRww==
-X-Received: by 2002:a17:906:6a24:b0:6f3:78cf:1575 with SMTP id
- qw36-20020a1709066a2400b006f378cf1575mr2144904ejc.760.1650731549528; 
- Sat, 23 Apr 2022 09:32:29 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- x7-20020aa7cd87000000b004207282701fsm2325928edv.63.2022.04.23.09.32.28
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Apr 2022 09:32:29 -0700 (PDT)
-Message-ID: <a44c2481-bd4d-1b0a-ad8a-93820b47a19b@mind.be>
-Date: Sat, 23 Apr 2022 18:32:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220421215444.3798671-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220421215444.3798671-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/zlog: add ZLOG_CPE_ID_VENDOR
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QLdin7umKmrp for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 16:32:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6B4E4048A
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:32:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 4F3207FB06; Sat, 23 Apr 2022 16:22:49 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 23 Apr 2022 18:15:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 26470f64109326037f521e2cfa2c2a3c0fe5cedb
+X-Git-Newrev: cc10bd5777af492b786c7d6c7fc917b855c6b7d8
+X-Patchwork-Hint: ignore
+Message-Id: <20220423162249.4F3207FB06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv4: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,41 +52,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=cc10bd5777af492b786c7d6c7fc917b855c6b7d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add BR2_PACKAGE_OPENCV4_LIB_DNN to fix the following uclibc build
+failure raised since bump to version 4.5.5 in commit
+b6922313937712a89841b58d3b355edd53754bca and
+https://github.com/opencv/opencv/commit/1feb3838b51c0b27b0f3e64f02358ff5ef3111b8:
 
-On 21/04/2022 23:54, Fabrice Fontaine wrote:
-> cpe:2.3:a:zlog_project:zlog is a valid CPE identifier for this package:
-> 
->    https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azlog_project%3Azlog
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+/home/giuliobenetti/autobuild/run/instance-3/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp: In member function 'float cv::dnn::RoundFunctor::calculate(float) const':
+/home/giuliobenetti/autobuild/run/instance-3/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp:1260:43: error: 'fegetround' is not a member of 'std'
+ 1260 |         int old_rounding_direction = std::fegetround();
+      |                                           ^~~~~~~~~~
+/home/peko/autobuild/instance-0/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp:1261:14: error: 'fesetround' is not a member of 'std'
+ 1261 |         std::fesetround(FE_TONEAREST);
+      |              ^~~~~~~~~~
+/home/peko/autobuild/instance-0/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp:1261:25: error: 'FE_TONEAREST' was not declared in this scope
+ 1261 |         std::fesetround(FE_TONEAREST);
+      |                         ^~~~~~~~~~~~
 
-  Applied both to master, thanks.
+Indeed, uclibc pretends to implement fenv but it raises build failures
+on numerous architectures (or1k, sh4, xtensa, mipsel, arm, arc, riscv64,
+etc.)
 
-  Regards,
-  Arnout
+Fixes:
+ - http://autobuild.buildroot.org/results/a6dd3c10acfbf6bc1af867d770cf0ce926c6ce84
 
-> ---
->   package/zlog/zlog.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-> index e2410d3665..c7b7035c1f 100644
-> --- a/package/zlog/zlog.mk
-> +++ b/package/zlog/zlog.mk
-> @@ -8,6 +8,7 @@ ZLOG_VERSION = 1.2.15
->   ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
->   ZLOG_LICENSE = LGPL-2.1
->   ZLOG_LICENSE_FILES = COPYING
-> +ZLOG_CPE_ID_VENDOR = zlog_project
->   ZLOG_INSTALL_STAGING = YES
->   
->   define ZLOG_BUILD_CMDS
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/opencv4/Config.in  | 11 +++++++++++
+ package/opencv4/opencv4.mk |  1 +
+ 2 files changed, 12 insertions(+)
+
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+index 23d34a9d22..a61a106952 100644
+--- a/package/opencv4/Config.in
++++ b/package/opencv4/Config.in
+@@ -30,6 +30,17 @@ config BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	  Include opencv_calib3d (camera calibration and 3d
+ 	  reconstruction) module into the OpenCV build.
+ 
++config BR2_PACKAGE_OPENCV4_LIB_DNN
++	bool "dnn"
++	# dnn needs fenv.h which is not provided by uclibc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  Include opencv_dnn (Deep Neural Networks) module into the
++	  OpenCV build.
++
++comment "dnn needs a glibc or musl toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
++
+ config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
+ 	bool "features2d"
+ 	select BR2_PACKAGE_OPENCV4_LIB_FLANN
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index 0563026b18..84e0487dc4 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -92,6 +92,7 @@ OPENCV4_CONF_OPTS += \
+ 	-DBUILD_opencv_apps=OFF \
+ 	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV4_LIB_CALIB3D),ON,OFF) \
+ 	-DBUILD_opencv_core=ON \
++	-DBUILD_opencv_dnn=$(if $(BR2_PACKAGE_OPENCV4_LIB_DNN),ON,OFF) \
+ 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV4_LIB_FEATURES2D),ON,OFF) \
+ 	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV4_LIB_FLANN),ON,OFF) \
+ 	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV4_LIB_HIGHGUI),ON,OFF) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
