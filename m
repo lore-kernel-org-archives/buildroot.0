@@ -1,46 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C713C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 863DEC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2954C83E76;
-	Sat, 23 Apr 2022 15:38:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xTAKJJ6U9nEq; Sat, 23 Apr 2022 15:38:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05D9883E64;
-	Sat, 23 Apr 2022 15:38:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A1E21BF421
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:38:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4614E40609
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:38:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B1C140734;
+	Sat, 23 Apr 2022 15:51:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qkcPIVPLNzhm for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 15:38:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 606CB404A3
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:38:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 169AB84119; Sat, 23 Apr 2022 15:28:29 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BXfo3lRXKKpE; Sat, 23 Apr 2022 15:51:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26ED8405C1;
+	Sat, 23 Apr 2022 15:51:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B8D01BF421
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:51:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 385F360A6D
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:51:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dSrZ_WjWTqln for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 15:51:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D5CB7606EC
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:51:19 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ n126-20020a1c2784000000b0038e8af3e788so7038792wmn.1
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 08:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=A0jPa1DrderyQj44S8vktMrYUKut6B9xyUT347SVOCY=;
+ b=AJjA6r/Ml4dxmOc4Uq2BwO4sxEfYGeufa+r/9r56Ae2PFHswBsbcvKRDYTJ2OKrSMq
+ YWl9PEkvWtloQlwlcnTsPPTv8+/smSckb6hR1LdmSIJs/qDS+UCeb3KIdzJTOSMs8C3X
+ FQHc7Zaopu18Idw7lI5o78us7UVXx/ufZ5IWwOzsjqvWwy0oOvimPBTGTa3f0MUmyj4R
+ WBlLVlc4Ft/X3/SNU14TtHo+GPHLFWaRxRH4sgO5ncPfyIdsH68kjLZwM2oHHi6Ua7Kr
+ nUM84fE61Ty7TZ1Ni9MUU9bPc5DY5N9Yqzju77CfyZGqJThl6/Hv6o3SBuJ5ID9yYBQJ
+ lUDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=A0jPa1DrderyQj44S8vktMrYUKut6B9xyUT347SVOCY=;
+ b=XWfvYKn1XVQIdO2wmailAAebbCSgns42kJdIXHydyb1aQcv5xDMKiCEXNmEueQ8qjD
+ +jMktcu/3+X+WFvr5uxWA75rRVGwuxk66W0Glp7A6uR4B/zIvVnHqhb0PWa3sAS46MGw
+ PjBYZnr7K6f6Uq75ZnlzeE2z2wa4XZC0e9xX5CtDbRdKtR8j6VGLe3NrJxgcJnsUzOWy
+ z7wb0JpmPoHNCX8EsI9+LtdwWVqAn6vS5vgIb/0ZS7uIPNVik8/lSVS/Rs2TShu+csnk
+ 2gZ4PnvlowASzV9D2P7kVK6DDSM2KpNcoEX5LNV1yo8V5VejQDT6s+YrqrpbRnvoEGZ2
+ pc+Q==
+X-Gm-Message-State: AOAM530nazT1yH4ne1eSVczKpgwNCxPcO6B4z7iTtIvtuVD2nAYklnCm
+ TnnHlHz7/rTNnJ2wR3AR8zOEmKgank4=
+X-Google-Smtp-Source: ABdhPJzSVxBhrIjgp/8Z2JgKdCOQJOdyVuyuK4fiBDjHR4wwaEe2tT1M2sp6/XaN0tbevku7JLbtPg==
+X-Received: by 2002:a05:600c:a44:b0:38e:3ce3:3148 with SMTP id
+ c4-20020a05600c0a4400b0038e3ce33148mr9123502wmq.26.1650729077605; 
+ Sat, 23 Apr 2022 08:51:17 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ m8-20020a056000008800b00207b3fa7fc0sm4864886wrx.108.2022.04.23.08.51.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 23 Apr 2022 08:51:17 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 17:34:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d211f67016446b9e843259b1195be04691fecec
-X-Git-Newrev: fc68bcf9b57e9b7324c6b567a766b72522580b8a
-X-Patchwork-Hint: ignore
-Message-Id: <20220423152829.169AB84119@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/boost: drop tagged layout
+Date: Sat, 23 Apr 2022 17:49:03 +0200
+Message-Id: <20220423154903.155257-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/ding-libs: bump to version 0.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,215 +88,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Gregory Dymarek <gregd72002@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc68bcf9b57e9b7324c6b567a766b72522580b8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Update site to get latest release
+- Update indentation in hash file (two spaces)
 
-Drop boost tagged layout which raises the following build failure with
-botan or libcpprestsdk:
-
-/nvmedata/autobuild/instance-31/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/11.2.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: cannot find -lboost_system
-
-CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
-  Could NOT find Boost (missing: random system thread filesystem chrono
-  atomic date_time regex) (found version "1.78.0")
-
-While at it:
- - drop BR2_PACKAGE_BOOST_LAYOUT and BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
- - move --layout=system, --ignore-site-config,
-   --user-config=$(@D)/user-config.jam, -j$(PARALLEL_JOBS), -q and
-   --prefix=$(HOST_DIR) to BOOST_OPTS and HOST_BOOST_OPTS
- - drop parentheses to avoid spawning a useless sub-shell
- - use b2 everywhere instead of mixing b2 and
-   tools/build/src/engine/bjam
- - drop uneeded 'echo "" >> $(@D)/user-config.jam'
-
-BR2_PACKAGE_BOOST_LAYOUT_SYSTEM is not added to Config.in.legacy since
-nothing changes for configs which already had it selected.
-
-Fixes:
- - http://autobuild.buildroot.org/results/f237c9345faf8c28f3c73f7d8acb49271fe61780
- - http://autobuild.buildroot.org/results/a73225e40fa29bc3b24f36a86719e80c8e469d1f
+https://github.com/SSSD/ding-libs/releases/tag/0.6.2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Arnout: don't add BR2_PACKAGE_BOOST_LAYOUT_SYSTEM to Config.in.legacy]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy        |  7 +++++++
- package/boost/Config.in | 27 -------------------------
- package/boost/boost.mk  | 53 +++++++++++++++++--------------------------------
- 3 files changed, 25 insertions(+), 62 deletions(-)
+ package/ding-libs/Config.in      | 2 +-
+ package/ding-libs/ding-libs.hash | 8 +++++---
+ package/ding-libs/ding-libs.mk   | 5 ++---
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 27a4fcd33b..2b9575fe22 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -152,6 +152,13 @@ config BR2_BINUTILS_VERSION_2_35_X
- 	help
- 	  binutils 2.35 has been removed, use a newer version.
+diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
+index 64b111e6a1..e4f869728a 100644
+--- a/package/ding-libs/Config.in
++++ b/package/ding-libs/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_DING_LIBS
+ 	  initialization format (INI) into a library collection data
+ 	  structure (libini_config).
  
-+config BR2_PACKAGE_BOOST_LAYOUT_TAGGED
-+	bool "boost tagged layout removed"
-+	select BR2_LEGACY
-+	help
-+	  Boost tagged layout isn't handled by some packages (e.g. botan
-+	  or libcpprestsdk).
+-	  https://pagure.io/SSSD/ding-libs
++	  https://github.com/SSSD/ding-libs
+ 
+ comment "ding-libs needs NLS enabled"
+ 	depends on BR2_SYSTEM_ENABLE_NLS
+diff --git a/package/ding-libs/ding-libs.hash b/package/ding-libs/ding-libs.hash
+index 2ac5bd8eee..d5d87faccd 100644
+--- a/package/ding-libs/ding-libs.hash
++++ b/package/ding-libs/ding-libs.hash
+@@ -1,4 +1,6 @@
++# From https://github.com/SSSD/ding-libs/releases/download/0.6.2/ding-libs-0.6.2.tar.gz.sha256sum
++sha256  e5f07f34f5921bcb5ccccfe3751c28497879a6451cd7b395e99e24d9b5728e8d  ding-libs-0.6.2.tar.gz
 +
- config BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
- 	bool "boost versioned layout removed"
- 	select BR2_LEGACY
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 9e96be7878..b99b01f22e 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -16,33 +16,6 @@ config BR2_PACKAGE_BOOST
+ # Locally computed
+-sha256 ad3c573641701f67d4b6bd8a5a71f0b65d45fd39fe961495ef5f5d3c57fc0963 ding-libs-ding_libs-0_6_1.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
+-sha256 6c57f43c939054fd4b831f271a14c97a488c38f98cdda5e887c5d396e3b3bc58 COPYING.LESSER
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  6c57f43c939054fd4b831f271a14c97a488c38f98cdda5e887c5d396e3b3bc58  COPYING.LESSER
+diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
+index 1e8fa59d69..a4ee7351b5 100644
+--- a/package/ding-libs/ding-libs.mk
++++ b/package/ding-libs/ding-libs.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_BOOST
- 
--choice
--	prompt "Layout"
--	default BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
--	help
--	  Selects the layout of Boost binary names
--
--config BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
--	bool "system"
--	help
--	  Boost binary names do not include the Boost version number
--	  or the name and version number of the compiler.
--
--config BR2_PACKAGE_BOOST_LAYOUT_TAGGED
--	bool "tagged"
--	help
--	  Boost binary names include the encoded build properties such
--	  as variant and threading, but do not include compiler name
--	  and version, or Boost version. This option is useful if you
--	  build several variants of Boost, using the same compiler.
--
--endchoice
--
--config BR2_PACKAGE_BOOST_LAYOUT
--	string
--	default "system" if BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
--	default "tagged" if BR2_PACKAGE_BOOST_LAYOUT_TAGGED
--
- config BR2_PACKAGE_BOOST_ATOMIC
- 	bool "boost-atomic"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 032ba5c820..346d309777 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -76,7 +76,9 @@ BOOST_DEPENDENCIES += python3
- endif
- 
- HOST_BOOST_OPTS += --no-cmake-config toolset=gcc threading=multi \
--	variant=release link=shared runtime-link=shared
-+	variant=release link=shared runtime-link=shared -j$(PARALLEL_JOBS) -q \
-+	--ignore-site-config --layout=system --prefix=$(HOST_DIR) \
-+	--user-config=$(@D)/user-config.jam
- 
- ifeq ($(BR2_MIPS_OABI32),y)
- BOOST_ABI = o32
-@@ -90,7 +92,12 @@ BOOST_OPTS += --no-cmake-config \
- 	toolset=gcc \
- 	threading=multi \
- 	abi=$(BOOST_ABI) \
--	variant=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release)
-+	variant=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
-+	-j$(PARALLEL_JOBS) \
-+	-q \
-+	--ignore-site-config \
-+	--layout=system \
-+	--user-config=$(@D)/user-config.jam
- 
- ifeq ($(BR2_sparc64),y)
- BOOST_OPTS += architecture=sparc instruction-set=ultrasparc
-@@ -119,43 +126,29 @@ endif
- 
- BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
- BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
--BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
- 
- # how verbose should the build be?
- BOOST_OPTS += $(if $(QUIET),-d,-d+1)
- HOST_BOOST_OPTS += $(if $(QUIET),-d,-d+1)
- 
- define BOOST_CONFIGURE_CMDS
--	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
-+	cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS)
- 	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
--	echo "" >> $(@D)/user-config.jam
- 	sed -i "s/: -O.* ;/: $(TARGET_OPTIMIZATION) ;/" $(@D)/tools/build/src/tools/gcc.jam
- endef
- 
- define BOOST_BUILD_CMDS
--	(cd $(@D) && $(TARGET_MAKE_ENV) ./tools/build/src/engine/bjam -j$(PARALLEL_JOBS) -q \
--	--user-config=$(@D)/user-config.jam \
--	$(BOOST_OPTS) \
--	--ignore-site-config \
--	--layout=$(BOOST_LAYOUT))
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./b2 $(BOOST_OPTS)
- endef
- 
- define BOOST_INSTALL_TARGET_CMDS
--	(cd $(@D) && $(TARGET_MAKE_ENV) ./b2 -j$(PARALLEL_JOBS) -q \
--	--user-config=$(@D)/user-config.jam \
--	$(BOOST_OPTS) \
--	--prefix=$(TARGET_DIR)/usr \
--	--ignore-site-config \
--	--layout=$(BOOST_LAYOUT) install )
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./b2 $(BOOST_OPTS) \
-+		--prefix=$(TARGET_DIR)/usr install
- endef
- 
- define BOOST_INSTALL_STAGING_CMDS
--	(cd $(@D) && $(TARGET_MAKE_ENV) ./tools/build/src/engine/bjam -j$(PARALLEL_JOBS) -q \
--	--user-config=$(@D)/user-config.jam \
--	$(BOOST_OPTS) \
--	--prefix=$(STAGING_DIR)/usr \
--	--ignore-site-config \
--	--layout=$(BOOST_LAYOUT) install)
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./b2 $(BOOST_OPTS) \
-+		--prefix=$(STAGING_DIR)/usr install
- endef
- 
- # These hooks will help us to detect missing select in Config.in
-@@ -177,26 +170,16 @@ endef
- BOOST_POST_INSTALL_TARGET_HOOKS += BOOST_CHECK_TARGET_LIBRARIES
- 
- define HOST_BOOST_CONFIGURE_CMDS
--	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
-+	cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS)
- 	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
--	echo "" >> $(@D)/user-config.jam
- endef
- 
- define HOST_BOOST_BUILD_CMDS
--	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
--	--user-config=$(@D)/user-config.jam \
--	$(HOST_BOOST_OPTS) \
--	--ignore-site-config \
--	--prefix=$(HOST_DIR) )
-+	cd $(@D) && ./b2 $(HOST_BOOST_OPTS)
- endef
- 
- define HOST_BOOST_INSTALL_CMDS
--	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
--	--user-config=$(@D)/user-config.jam \
--	$(HOST_BOOST_OPTS) \
--	--prefix=$(HOST_DIR) \
--	--ignore-site-config \
--	--layout=$(BOOST_LAYOUT) install )
-+	cd $(@D) && ./b2 $(HOST_BOOST_OPTS) install
- endef
- 
- $(eval $(generic-package))
+-DING_LIBS_VERSION = 0.6.1
+-DING_LIBS_SOURCE = ding-libs-ding_libs-$(subst .,_,$(DING_LIBS_VERSION)).tar.gz
++DING_LIBS_VERSION = 0.6.2
+ DING_LIBS_SITE = \
+-	https://pagure.io/SSSD/ding-libs/archive/ding_libs-$(subst .,_,$(DING_LIBS_VERSION))
++	https://github.com/SSSD/ding-libs/releases/download/$(DING_LIBS_VERSION)
+ DING_LIBS_DEPENDENCIES = host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
