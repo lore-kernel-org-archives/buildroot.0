@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE913C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD21FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 16:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BAFD60D53;
-	Sat, 23 Apr 2022 16:34:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A1406100C;
+	Sat, 23 Apr 2022 16:34:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IuIiNDfuXguv; Sat, 23 Apr 2022 16:34:09 +0000 (UTC)
+	with ESMTP id v-LFjYa72s3C; Sat, 23 Apr 2022 16:34:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62E0A60E26;
-	Sat, 23 Apr 2022 16:34:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C3691BF5DF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90C0561058;
+	Sat, 23 Apr 2022 16:34:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D5E1D1BF5DF
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC06F4048A
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA72060E26
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 16:32:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FUEmDI7i-_dB for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ItYQhLN-seYL for <buildroot@lists.busybox.net>;
  Sat, 23 Apr 2022 16:32:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 453D54049A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1764060E43
  for <buildroot@buildroot.org>; Sat, 23 Apr 2022 16:32:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E4BB381008; Sat, 23 Apr 2022 16:22:49 +0000 (UTC)
+ id B5B8C84202; Sat, 23 Apr 2022 16:22:49 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 23 Apr 2022 18:25:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d238a94ba714b992b14f47e7e1e7b813a1c3ca91
-X-Git-Newrev: 01427de27dbe4062ae1ee4d11114a2b6eda0c26f
+X-Git-Oldrev: 3c5ca1fd7e6e1300c0690ff0823e1d128e9ed32b
+X-Git-Newrev: 8389e6ea54505263dabf6b439ac4ef64074620f8
 X-Patchwork-Hint: ignore
-Message-Id: <20220423162249.E4BB381008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zlog: add ZLOG_CPE_ID_VENDOR
+Message-Id: <20220423162249.B5B8C84202@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 19.7.13-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,31 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01427de27dbe4062ae1ee4d11114a2b6eda0c26f
+commit: https://git.buildroot.net/buildroot/commit/?id=8389e6ea54505263dabf6b439ac4ef64074620f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:zlog_project:zlog is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azlog_project%3Azlog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/zlog/zlog.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index e2410d3665..c7b7035c1f 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
-@@ -8,6 +8,7 @@ ZLOG_VERSION = 1.2.15
- ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
- ZLOG_LICENSE = LGPL-2.1
- ZLOG_LICENSE_FILES = COPYING
-+ZLOG_CPE_ID_VENDOR = zlog_project
- ZLOG_INSTALL_STAGING = YES
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index 0b88d5c747..4f9a60e942 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  07d96b1b0c3b464c0bf02279fa8cab9ccdf675344129f3a970b14bafce225fb4  kodi-pvr-zattoo-19.7.11-Matrix.tar.gz
++sha256  64fbbb6c816993b39d35fa000e76b9cb1846ae8ae580e807da943f51e4a3afd7  kodi-pvr-zattoo-19.7.13-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 95c5de0925..f2badeaa05 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define ZLOG_BUILD_CMDS
+-KODI_PVR_ZATTOO_VERSION = 19.7.11-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.13-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
