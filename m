@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74AA2C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66EA1C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B60760F16;
-	Sat, 23 Apr 2022 15:15:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2123060BF7;
+	Sat, 23 Apr 2022 15:15:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fZoFt9l6htz; Sat, 23 Apr 2022 15:15:24 +0000 (UTC)
+	with ESMTP id QvaJlKtS9WJl; Sat, 23 Apr 2022 15:15:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 325C460BC8;
-	Sat, 23 Apr 2022 15:15:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 80C091BF421
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2016060F21;
+	Sat, 23 Apr 2022 15:15:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E65BE1BF421
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B734340A6A
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDCD841A07
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MgxfNMfbmaIA for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bQ1Wih_MYK-Z for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2138D40A18
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEECA41A1B
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DFA4383FE2; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
+ id A6C8783FD4; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 17:02:47 +0200
+Date: Sat, 23 Apr 2022 16:43:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd5842a1dd03642b2ea0844396b2348f7f0f39f3
-X-Git-Newrev: 2a9e9146447df86bf1fffe6352bdc9dc5e056c5f
+X-Git-Oldrev: a8614ffc07993feca1a3094c1488a11913cb4e87
+X-Git-Newrev: dac5873314581786630466741074c1e3af61b2b4
 X-Patchwork-Hint: ignore
-Message-Id: <20220423150245.DFA4383FE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/enchant: bump to version 2.3.3
+Message-Id: <20220423150245.A6C8783FD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/expat: disable examples,
+ tests and xmlwf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a9e9146447df86bf1fffe6352bdc9dc5e056c5f
+commit: https://git.buildroot.net/buildroot/commit/?id=dac5873314581786630466741074c1e3af61b2b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Disable examples and tests (enabled by default) through
+--without-{examples,tests} which are available since version 2.2.7 and
+https://github.com/libexpat/libexpat/commit/1fdfd8a1b490f8ac9e7e11896298e41cc210d87d
+
+Also disable xmlwf (a binary that determines if an XML document is
+well-formed) through --without-xmlwf which is available since version
+2.2.4 and
+https://github.com/libexpat/libexpat/commit/9d950527a07783c104aada685384edf3f8f23f8a
+
+This will fix the following build failure on riscv64:
+
+ERROR: reloc type R_RISCV_SET6 unsupported in this context
+
+Fixes:
+ - http://autobuild.buildroot.org/results/99890c9c7ebe3266dd533c81352a3cbcf4d3d738
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/enchant/enchant.hash | 2 +-
- package/enchant/enchant.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/expat/expat.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
-index 9df5316aac..36ac4e07bd 100644
---- a/package/enchant/enchant.hash
-+++ b/package/enchant/enchant.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  ce9ba47fd4d34031bd69445598a698a6611602b2b0e91d705e91a6f5099ead6e  enchant-2.3.2.tar.gz
-+sha256  3da12103f11cf49c3cf2fd2ce3017575c5321a489e5b9bfa81dd91ec413f3891  enchant-2.3.3.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
-index e00fcb25e1..ee6f061956 100644
---- a/package/enchant/enchant.mk
-+++ b/package/enchant/enchant.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index b29b0e1d26..92a3bfda8e 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -15,8 +15,9 @@ EXPAT_LICENSE_FILES = COPYING
+ EXPAT_CPE_ID_VENDOR = libexpat_project
+ EXPAT_CPE_ID_PRODUCT = libexpat
  
--ENCHANT_VERSION = 2.3.2
-+ENCHANT_VERSION = 2.3.3
- ENCHANT_SITE = \
- 	https://github.com/AbiWord/enchant/releases/download/v$(ENCHANT_VERSION)
- ENCHANT_INSTALL_STAGING = YES
+-EXPAT_CONF_OPTS = --without-docbook
+-HOST_EXPAT_CONF_OPTS = --without-docbook
++EXPAT_CONF_OPTS = \
++	--without-docbook --without-examples --without-tests --without-xmlwf
++HOST_EXPAT_CONF_OPTS = --without-docbook --without-examples --without-tests
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
