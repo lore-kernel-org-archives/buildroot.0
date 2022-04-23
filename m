@@ -1,64 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D4FDC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 14:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B736EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 14:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC90960F75;
-	Sat, 23 Apr 2022 14:02:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5871040477;
+	Sat, 23 Apr 2022 14:12:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zZlIV-uTBvrV; Sat, 23 Apr 2022 14:02:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eQd-Tj05ecg6; Sat, 23 Apr 2022 14:12:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A87C160E43;
-	Sat, 23 Apr 2022 14:02:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67F094052B;
+	Sat, 23 Apr 2022 14:12:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A16F61BF307
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 14:02:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 132A71BF82F
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 14:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B03841A55
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 14:02:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBDB24156C
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 14:12:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HVjEYRxZ2tnU for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 14:02:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 095D441A47
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 14:02:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 604A1240004;
- Sat, 23 Apr 2022 14:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1650722564;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xqVGkv/YmFqBlc//rbQM7fSnudtCmNSGX2PfrOXty2k=;
- b=YgEiNnQOoNdQ33mglhk7/AbPDwIAxvB+5a9XUAF4Jm9An0LRckHcgdanH5qMHSZ5+2aa3m
- x5MuiY1QE3lrzlhx+InvWjhj0If4TAbOROLcXWMuH3EReq3lRnXemA1+t26n/ezXOVUeZ6
- 2zNrpH0NIS6+zCQhC/0/t6vA9UNET22Kp7dc3x73qnK9H2sUeEYrLdnSbZZdMToT6Box8n
- ViTHAd9gZOgt2jasLtqgiaIg9UymN8UbekBZ+76osRFhjgBCuy7Q9LB/ZlH9IEy8ta6nOD
- A3GnehVnFCvg/X1zPYfKWHWz9+UZTt9HPqhTa5nbXIPBIiQ0PCjcn9QovraFMQ==
-Date: Sat, 23 Apr 2022 16:02:41 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220423160241.3246f49b@windsurf>
-In-Reply-To: <20220422215813.2528195-1-fontaine.fabrice@gmail.com>
-References: <20220422215813.2528195-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: lsfd needs headers
- >= 3.19
+ with ESMTP id kt47_tylcdLk for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 14:12:03 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1815F41555
+ for <buildroot@buildroot.org>; Sat, 23 Apr 2022 14:12:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id E946C83FA7; Sat, 23 Apr 2022 14:01:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Apr 2022 16:07:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5706080f69402cf2689d8a38cde38c2b9cc01183
+X-Git-Newrev: 5a96dbad7e7f9a049d8d152ab15c056ff468c591
+X-Patchwork-Hint: ignore
+Message-Id: <20220423140153.E946C83FA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/binutils: make 2.37 the default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,37 +53,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 22 Apr 2022 23:58:13 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a96dbad7e7f9a049d8d152ab15c056ff468c591
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> lsfd depends on kcmp.h which is only exported since kernel 3.19 and
-> https://github.com/torvalds/linux/commit/3f4994cfc15f38a3159c6e3a4b3ab2e1481a6b02
-> resulting in the following build failure since bump to version 2.38 in
-> commit ee978e853a6a4c9bb5ed661c1ae704e79f155a35:
-> 
-> configure: error: lsfd selected, but required linux/kcmp.h header file not available
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/555c272fe0f966f7f46d493236cb6dabeca24d9b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/util-linux/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/Config.in.host | 2 +-
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 21b15b5c36..e639c67149 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_36_X if !BR2_arc && !BR2_csky
++	default BR2_BINUTILS_VERSION_2_37_X if !BR2_arc && !BR2_csky
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	help
+ 	  Select the version of binutils you wish to use.
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 8c4a1371ca..c94ebe0995 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2020.09-release
+ else
+-BINUTILS_VERSION = 2.36.1
++BINUTILS_VERSION = 2.37
+ endif
+ endif # BINUTILS_VERSION
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
