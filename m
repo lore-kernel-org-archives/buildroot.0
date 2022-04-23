@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A537C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353CFC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D72CD419A5;
-	Sat, 23 Apr 2022 15:10:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE03541A1B;
+	Sat, 23 Apr 2022 15:12:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9mxP6Ju1nfT6; Sat, 23 Apr 2022 15:10:37 +0000 (UTC)
+	with ESMTP id Acw9VpkMv5A6; Sat, 23 Apr 2022 15:12:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93CD5409BE;
-	Sat, 23 Apr 2022 15:10:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60E421BF421
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:10:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4B5C419E5;
+	Sat, 23 Apr 2022 15:12:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3966C1BF421
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DDB2606E7
- for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:10:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26A0783E0C
+ for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OiEwOXXo5YeP for <buildroot@lists.busybox.net>;
- Sat, 23 Apr 2022 15:10:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h4yg31xYzXaX for <buildroot@lists.busybox.net>;
+ Sat, 23 Apr 2022 15:12:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6FC0F6068A
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:10:33 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id a21so1515124edb.1
- for <buildroot@buildroot.org>; Sat, 23 Apr 2022 08:10:33 -0700 (PDT)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A1F483E0B
+ for <buildroot@busybox.net>; Sat, 23 Apr 2022 15:12:18 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id e30so10173314eda.0
+ for <buildroot@busybox.net>; Sat, 23 Apr 2022 08:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=9KhIZdN4HleBI+jrpUDSt/W6EiyTSTGNXZCKlSn2u30=;
- b=LUf+Gqa0koJ21yMzK+pjABTlwEaobgoraEqd9HL6sALuZ35BR+i7YutfJIrwgTyjvc
- EmpShGrfgezm7c2OI87t7ZXNDCl9J950yRKnsKNmskWfk4NMU1A6pLlUSnkc8pLnQvKL
- RSm4e9dKZnkSAIZfhiSRE30FMIjhH017jtEG/ZmPYQG92nuMAUw7h2pH4M6CBbpDos1m
- eD8B8m98thNBsTI9K+ToFi7CxWz8SYmapbqE407QECLC4tih+DxLS3ZLxYyqYnBmypzC
- ePmIe+647VHM1JeSioISDeR3RsMy+lVKv5P6y1cVTcY8+1GQAyk8O5TppvZLcHRueT8U
- M8Cw==
+ bh=PNUIfJTCEHN0X8yAZ3efSB8Czuyut6ezrmOD3ErXYcM=;
+ b=HYP5NbZGh3Qr9cCGuoQ5SdMD7BhxLYvxInTv68S/qKhMhS1vWoOXsDHRZtJ3I1DCme
+ ehfR1bp0ZO/OfXzq1ADyQdp1ZIP5ndfbdn/CCJOaoXnPrFrvYdiw5fYMrMTyKIzoWfCM
+ sfDVwmsgaoOsFpHMYdkzqzs3wRzspoEXhJKQvcsyo3qpWM7ACJl/POBSUvRmrjoNFIS2
+ heZSTpbuQxwdbPUAtN26WNksM4O2b3lxsQhN6NixCwYG7yNW3SImh3hAWQmkCwzDde60
+ QLznhqtRTCmAc5ReEFhq+2PbkHZjJIi1zpOsQfDTKg5xW5XhmgqvP5JHk08oglnPH19u
+ 7SoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=9KhIZdN4HleBI+jrpUDSt/W6EiyTSTGNXZCKlSn2u30=;
- b=6BXRXiC/67Q2k7Kdhh+Xy6UzsAHIUTh1Gt+en5yH1jER/5MnqnrJsiEHlh2/of739x
- B75gvhNb2TkwpwhiOxMYemKEDhO02ek4B5DxtYSPK0Wa9O/2v/BMAJ4dt7SaWFT8Divo
- 9jkxVeDCiJNHv/Mnxw+ofkTyCJjK2N8CbpFTtfXd1ln3MpeyAVKlTC7cqPSP2yYAjt74
- O8U6TkULGbNdSZS0QYO1PNzYCix4koEy/gYoAY+MyCxZlPluIrEo4f/bXYeQHXZHPsHg
- okWAvpdJLXl87sMRqgFCSqdf/jBaSLWNT5tBajPnjEE5hWQnJC7EXRnSfKPkuPxTWAjh
- mg/g==
-X-Gm-Message-State: AOAM533/tq15/IEssLs9K1qFALCSSrcwqxFloZ0ENDmsoZ1IztcGuT1V
- 9kUSwFQTh7vU8D1r81Gu7IVPiKP3+AfXvA==
-X-Google-Smtp-Source: ABdhPJxx3mGThi7/CDSXYLqX+V1wGNnkIX7H8ZIMJzmZW+5zvU+3tgfRQjQCQ0WNqGL58u2LP4pLAA==
-X-Received: by 2002:a05:6402:270b:b0:424:7dd:9d7b with SMTP id
- y11-20020a056402270b00b0042407dd9d7bmr10523292edd.92.1650726631547; 
- Sat, 23 Apr 2022 08:10:31 -0700 (PDT)
+ bh=PNUIfJTCEHN0X8yAZ3efSB8Czuyut6ezrmOD3ErXYcM=;
+ b=NdpbJTW0AwnWTDnxqMkcsbj5MwPS98JXUd+9WyCiDq1xmB9xrG/le1iEUg0mIWzs5Y
+ DIWdKW6c5ABX1BnDdqHZZgNVCkaHLljQI9YA87D7dYjdF536v+lj3McQNrpugAu1ai0m
+ Cx+HWpz6Zz93whhCtgiHPapeks4yb3EAAMwjyXhbQynVLWmdCCRQMnYSX0v+DOrBL6zp
+ DY13qX2TYFKRRjyk2jrsXa+OI/XsqI6T+jRpYfXJXZ1RZ8AAJlkP7ZZ30CJudzUKPkcx
+ 2VN0XccQ8r4bx+3Y3uev58nt8v3eO/tKDYYCf+OM1vazGObXE0ViW02XHE/vUMsdqe1m
+ XmJg==
+X-Gm-Message-State: AOAM531bQWNFpMWjfbzG+fLKcvmdShpgekJAWg8YZVgDkk/7ZnHO3cUr
+ z4u9SA3SoDCzw0Nxv8jYOGKKAA==
+X-Google-Smtp-Source: ABdhPJzOwlR+mVlQBecMtTvnbOtLSGpW3AkAANJZ+3NeJvFItbbDEoY6LUe3q4Ixkj8yb+gI4FfdAA==
+X-Received: by 2002:a50:954b:0:b0:41a:c9cb:8778 with SMTP id
+ v11-20020a50954b000000b0041ac9cb8778mr10518548eda.165.1650726736974; 
+ Sat, 23 Apr 2022 08:12:16 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- h8-20020a1709066d8800b006e09a49a713sm1745867ejt.159.2022.04.23.08.10.31
+ s5-20020a508dc5000000b004241a4abbdfsm2333284edh.45.2022.04.23.08.12.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Apr 2022 08:10:31 -0700 (PDT)
-Message-ID: <cfba7e93-1592-4163-9dde-81cfc93494d2@mind.be>
-Date: Sat, 23 Apr 2022 17:10:30 +0200
+ Sat, 23 Apr 2022 08:12:16 -0700 (PDT)
+Message-ID: <840c347b-841d-74ef-d4ad-e38b9126bb38@mind.be>
+Date: Sat, 23 Apr 2022 17:12:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220419200122.4095481-1-fontaine.fabrice@gmail.com>
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220420072530.3422018-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220419200122.4095481-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] boot/shim: add
- BR2_PACKAGE_SHIM_ARCH_SUPPORTS
+In-Reply-To: <20220420072530.3422018-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH] package/enchant: bump to version 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,46 +101,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 19/04/2022 22:01, Fabrice Fontaine wrote:
-> Add BR2_PACKAGE_SHIM_ARCH_SUPPORTS as requested by Thomas Petazzoni in
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220419121409.2055818-1-fontaine.fabrice@gmail.com
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   boot/shim/Config.in | 13 ++++++++++---
->   1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/boot/shim/Config.in b/boot/shim/Config.in
-> index b0e549a51b..a762ad9215 100644
-> --- a/boot/shim/Config.in
-> +++ b/boot/shim/Config.in
-> @@ -1,8 +1,15 @@
-> -config BR2_TARGET_SHIM
-> -	bool "shim"
-> +config BR2_PACKAGE_SHIM_ARCH_SUPPORTS
-> +	bool
->   	# it includes gnu-efi
->   	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
+On 20/04/2022 09:25, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-  depends comes after default (as reported by check-package).
+  Applied to master, as well as your other 5 version bumps, thanks.
 
-  Applied to master with that fixed, thanks.
+  I also changed the author email on each commit to @gadz.org to match your 
+signoff (I have an apply-hook that checks this). It would be nice if you could 
+configure things so that your mails already have this.
 
   Regards,
   Arnout
 
-> -	depends on !BR2_mips64el
-> +	default y if BR2_aarch64 || BR2_aarch64_be
-> +	default y if BR2_arm || BR2_armeb
-> +	default y if BR2_i386
-> +	default y if BR2_x86_64
-> +
-> +config BR2_TARGET_SHIM
-> +	bool "shim"
-> +	depends on BR2_PACKAGE_SHIM_ARCH_SUPPORTS
->   	help
->   	  Boot loader to chain-load signed boot loaders under Secure
->   	  Boot.
+> ---
+>   package/enchant/enchant.hash | 2 +-
+>   package/enchant/enchant.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
+> index 9df5316aa..36ac4e07b 100644
+> --- a/package/enchant/enchant.hash
+> +++ b/package/enchant/enchant.hash
+> @@ -1,3 +1,3 @@
+>   # locally computed
+> -sha256  ce9ba47fd4d34031bd69445598a698a6611602b2b0e91d705e91a6f5099ead6e  enchant-2.3.2.tar.gz
+> +sha256  3da12103f11cf49c3cf2fd2ce3017575c5321a489e5b9bfa81dd91ec413f3891  enchant-2.3.3.tar.gz
+>   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
+> index e00fcb25e..ee6f06195 100644
+> --- a/package/enchant/enchant.mk
+> +++ b/package/enchant/enchant.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -ENCHANT_VERSION = 2.3.2
+> +ENCHANT_VERSION = 2.3.3
+>   ENCHANT_SITE = \
+>   	https://github.com/AbiWord/enchant/releases/download/v$(ENCHANT_VERSION)
+>   ENCHANT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
