@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6180C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C606C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Apr 2022 15:14:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 779DD817B0;
-	Sat, 23 Apr 2022 15:14:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BC8540A6D;
+	Sat, 23 Apr 2022 15:14:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G7dbSgjnLPHv; Sat, 23 Apr 2022 15:14:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lvJIZR-KHHbv; Sat, 23 Apr 2022 15:14:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 696168175B;
-	Sat, 23 Apr 2022 15:14:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0417B1BF95C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6CF6E40A5F;
+	Sat, 23 Apr 2022 15:14:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11B171BF95D
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A54D83E0B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9946640734
  for <buildroot@lists.busybox.net>; Sat, 23 Apr 2022 15:12:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4fPG9ZJAAo_o for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xqsydX46887Z for <buildroot@lists.busybox.net>;
  Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D62F983E0C
+ by smtp2.osuosl.org (Postfix) with ESMTP id E6805409EE
  for <buildroot@buildroot.org>; Sat, 23 Apr 2022 15:12:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9EBCA83FE2; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
+ id BE47B83FE2; Sat, 23 Apr 2022 15:02:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Apr 2022 16:43:49 +0200
+Date: Sat, 23 Apr 2022 17:00:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9954aec7990f01334bf80309fc700ea84b8f103
-X-Git-Newrev: a8614ffc07993feca1a3094c1488a11913cb4e87
+X-Git-Oldrev: b790ff27d5461df4de22732611a1eb4beee68f91
+X-Git-Newrev: 2097e1ba3904be8f7cd388fe1d16a099da83ef99
 X-Patchwork-Hint: ignore
-Message-Id: <20220423150245.9EBCA83FE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/trinity: fix musl build
+Message-Id: <20220423150245.BE47B83FE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] packages/libwebsockets: add patch that
+ removes duplicate LwsCheckRequirements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,97 +54,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0839336171413273869=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0839336171413273869==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a8614ffc07993feca1a3094c1488a11913cb4e87
+commit: https://git.buildroot.net/buildroot/commit/?id=2097e1ba3904be8f7cd388fe1d16a099da83ef99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure on musl:
-
-In file included from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/asm/ioctl.h:12,
-                 from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/linux/ioctl.h:5,
-                 from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/linux/fs.h:14,
-                 from ioctls/vfs.c:3:
-ioctls/vfs.c:109:35: error: 'loff_t' undeclared here (not in a function); did you mean 'off_t'?
-  109 |  { .name = "FIOQSIZE", .request = FIOQSIZE, },
-      |                                   ^~~~~~~~
-
 Fixes:
- - http://autobuild.buildroot.org/results/b7f46072751a8d70fa02f1c625c5279f70bec853
+  CMake Error at /home/buildroot/autobuild/run/instance-2/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/libwebsockets/libwebsockets-config.cmake:35 (include):
+  include could not find load file:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+      LwsCheckRequirements
+  Call Stack (most recent call first):
+    CMakeLists.txt:54 (find_package)
+
+Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0003-Use-fcntl-h-for-dev_t-mode_t.patch        | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ ...ake-remove-duplicate-LwsCheckRequirements.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/trinity/0003-Use-fcntl-h-for-dev_t-mode_t.patch b/package/trinity/0003-Use-fcntl-h-for-dev_t-mode_t.patch
+diff --git a/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch b/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch
 new file mode 100644
-index 0000000000..c4d9811b8a
+index 0000000000..fc76a2b610
 --- /dev/null
-+++ b/package/trinity/0003-Use-fcntl-h-for-dev_t-mode_t.patch
-@@ -0,0 +1,46 @@
-+From b1a0aef9978d4a41e7e601c277d4fb1b0cfbed89 Mon Sep 17 00:00:00 2001
-+From: Dave Jones <davej@codemonkey.org.uk>
-+Date: Thu, 26 Aug 2021 11:17:34 -0400
-+Subject: [PATCH] Use fcntl.h for dev_t & mode_t
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch
+@@ -0,0 +1,26 @@
++From 99a8b9c4422bed45c8b7412a1e121056f2a6132a Mon Sep 17 00:00:00 2001
++From: Andy Green <andy@warmcat.com>
++Date: Mon, 7 Feb 2022 14:48:55 +0000
++Subject: [PATCH] cmake: remove duplicate LwsCheckRequirements
 +
-+Should fix:
-+
-+In file included from /usr/include/bits/statx.h:31,
-+                 from /usr/include/sys/stat.h:446,
-+                 from include/files.h:3,
-+                 from include/shm.h:6,
-+                 from syscalls/x86/modify_ldt.c:12:
-+/usr/include/linux/stat.h:57:2: error: unknown type name ‘__s64’
-+  __s64 tv_sec;
-+  ^~~~~
-+/usr/include/linux/stat.h:58:2: error: unknown type name ‘__u32’
-+  __u32 tv_nsec;
-+  ^~~~~
-+/usr/include/linux/stat.h:59:2: error: unknown type name ‘__s32’
-+  __s32 __reserved;
-+  ^~~~~
-+/usr/include/linux/stat.h:101:2: error: unknown type name ‘__u32’
-+  __u32 stx_mask; /* What results were written [uncond] */
-+
-+[Retrieved from:
-+https://github.com/kernelslacker/trinity/commit/b1a0aef9978d4a41e7e601c277d4fb1b0cfbed89]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Andy Green <andy@warmcat.com>
++Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 +---
-+ include/files.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ cmake/libwebsockets-config.cmake.in | 1 -
++ 1 file changed, 1 deletion(-)
 +
-+diff --git a/include/files.h b/include/files.h
-+index 2a8e0e2d..ba3cc98f 100644
-+--- a/include/files.h
-++++ b/include/files.h
-+@@ -1,6 +1,6 @@
-+ #pragma once
++diff --git a/cmake/libwebsockets-config.cmake.in b/cmake/libwebsockets-config.cmake.in
++index 6247b2cb..8ba97e6f 100644
++--- a/cmake/libwebsockets-config.cmake.in
+++++ b/cmake/libwebsockets-config.cmake.in
++@@ -32,6 +32,5 @@ endforeach()
 + 
-+-#include <sys/stat.h>
-++#include <fcntl.h>
-+ #include "fd.h"
++ include(CheckIncludeFile)
++ include(CheckCSourceCompiles)
++-include(LwsCheckRequirements)
++ set(requirements 1)
 + 
-+ unsigned long get_o_flags(void);
-
---===============0839336171413273869==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++-- 
++2.35.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0839336171413273869==--
