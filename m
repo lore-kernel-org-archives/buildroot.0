@@ -1,81 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6B7BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 20:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D346EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 20:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6083460ABE;
-	Sun, 24 Apr 2022 20:56:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 864BF4109B;
+	Sun, 24 Apr 2022 20:57:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4UdzVUvajN18; Sun, 24 Apr 2022 20:56:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GqZF2DR8Dbrh; Sun, 24 Apr 2022 20:57:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B7A560AB3;
-	Sun, 24 Apr 2022 20:56:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57E9E1BF404
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A4A440A04;
+	Sun, 24 Apr 2022 20:57:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A69A71BF404
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 382AB81468
+ by smtp3.osuosl.org (Postfix) with ESMTP id A354260A92
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:56:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K_UIKvV6BG9b for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 20:56:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HSaWFhAwtkd0 for <buildroot@lists.busybox.net>;
+ Sun, 24 Apr 2022 20:56:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07DD581467
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 20:56:47 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id o5so8222469ils.11
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 13:56:47 -0700 (PDT)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ED79360A78
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 20:56:48 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id t4so8219618ilo.12
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 13:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6g1qqKZJHH9b6BoXwiYhtLZFzqMMh76bIhbpnmDevMM=;
- b=aozrYRxHHOulCC6cqVjyXgiTjcK8jCxvb9bTrgZg9IMU1tnPb1NxBKpRFjhks6wmVQ
- FeiBQ7udmqGLoUcTSTvixlCBfk+xC1WMAAw7BntzGBnRaSZgwizgEgdc4HT41odMbwJA
- 8ggNkWfL3ezcxzcVw+ahn4LJLRXueDKKHKFzCcU8vetDuYNCz/ZhH51+AGez7hS8BGXl
- fWBIl1Rm7agF/q6zrm3TOqYi0kPX/e6qTRe3XH9CXhAMXWfn81nuDYzjCL+vd8OgBt3j
- Usns5hOCxZV9dYhB3y+H87IUu5nLXnFYu97uCDhX09N6zxX1/NKRwpu6UlildkxGn0BA
- 2Fbw==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=WtGsnBfFtu3XSxCc5ZbCwnvQtQfuu4JcA+xEi+1v9bw=;
+ b=DiCjFZfkJVp65j0FsO1V5nbkkF0ZphOxnOR7UxwZAcHXv3hCCBhMHSv/XIOCWuSLxA
+ 95XMv4ykX04+Mykp/DSkp+aKEru1MN1khIytVVjxSFFLjEDt9p/TMPmh+Rfs261TKsSE
+ R1wB8CWKtvLMH7krDBI3u7JZTkS81RTwSwBce3x8nr3unfXzPIOwx7fuqo1AyjmvQEbP
+ h9qY//DUvCpIT+gnI9MZgEyrzXrHTJzQFksaebwaZSjq6Wv2FwU01T2VthnbzxnspCRc
+ xQ9eqYvbKhPhEDo6b1Wfs9pz/3A3yx/fpWQhv9/AF/Yg8RM88E6QWqG/fznMUBWMTrWx
+ UeXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6g1qqKZJHH9b6BoXwiYhtLZFzqMMh76bIhbpnmDevMM=;
- b=e5hB4Qa8v4cWTf0jJ5e1q/m7rtCmgm5OUlUyJDpwmEMPlAHbCPzSkFNq8fnY56lR/Z
- tmr215ybitcTeAE7OHZqGKNeMfsPS8f8bF+tC1b8Kmx2fRT5r3cgZQri8NQvSL9ZOZWK
- KbgE2YGiOBUeaxKELy+Eufs0gZxKPc+aSEP964vjab1mN/11R2wsRoLxJJyiogGc4ZVx
- KWfZlR795dY+iya9Yzohj7NGAVWBexdKKzR1E682MGfileNyjgHEvIxGKKFOLcYxNDsD
- oFS4Dt6Ld29SBJw6QjYaaC7r36UKbBSqesw5f6LfhJX4PjPoWKxSgLhhj+hoDwQnp36N
- Puog==
-X-Gm-Message-State: AOAM532HHRdRBpcuq8WAUz6JBmIzWMEhuCfonh0pSWPB8waWd1aBabce
- bZdf+wwwnIs3P9srOjAcLVUNOVf1bdCbXg==
-X-Google-Smtp-Source: ABdhPJw9v32UdPGh+H7NqF6DENsUTP0z+i6be40RNFssKhxWKpcWB5jaDEB1eYMLAzi6VVirAjx+xQ==
-X-Received: by 2002:a05:6e02:1cad:b0:2cb:f94c:2eab with SMTP id
- x13-20020a056e021cad00b002cbf94c2eabmr5317711ill.259.1650833806862; 
- Sun, 24 Apr 2022 13:56:46 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=WtGsnBfFtu3XSxCc5ZbCwnvQtQfuu4JcA+xEi+1v9bw=;
+ b=vcTxonY/Ut8Q23Zkx1lzmq0nRxg0QFhCJeS6CY+5pfyz15t0jDUZiNuE3wky9929jS
+ 4q5eCF8LfvDgDalndk9PSzroYNxygCE2QM6Cw8GfCKzfOSrKOt/jsH+jEtjuxQ+Nrz3g
+ uWRg+W1YafOKJsYfMCRKmxvhuoTRn1d2iEVLD2AueHHbnQwpHWxGVkIxYeBzXjUafJ4S
+ eUlyzS9X5FOCxLsJLNlU6icoaR++bTzdNEpD92vSkFo39Cb4gLVdCx7ybge6qgEFk7L0
+ ZlS45rt0u5kS3X2bCb6l78ej5K9U7mvgOt0/mvW3WYhWS8hla1pyxcKm5mw37kEHniF6
+ Xd+A==
+X-Gm-Message-State: AOAM533RN/qKR4cjcpmpIE7ViTJpl0pAEUaB0RKtsUtQG9D8ThbVrX0y
+ isF/H4aa53X3C+rFFq7ZhIKSJRnyXJfySw==
+X-Google-Smtp-Source: ABdhPJxB7cW42mkmJ4QtQCefZJMprWDt6wucG07Tzv12hZHR2rUXOpllqX27779fxEcwGJToD66BMw==
+X-Received: by 2002:a92:d212:0:b0:2cb:7635:9940 with SMTP id
+ y18-20020a92d212000000b002cb76359940mr5472379ily.132.1650833807896; 
+ Sun, 24 Apr 2022 13:56:47 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
  j1-20020a926e01000000b002cc52449a19sm5152350ilc.35.2022.04.24.13.56.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Apr 2022 13:56:46 -0700 (PDT)
+ Sun, 24 Apr 2022 13:56:47 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 14:56:35 -0600
-Message-Id: <20220424205639.1618386-1-james.hilliard1@gmail.com>
+Date: Sun, 24 Apr 2022 14:56:36 -0600
+Message-Id: <20220424205639.1618386-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220424205639.1618386-1-james.hilliard1@gmail.com>
+References: <20220424205639.1618386-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v6 1/5] package/pkg-python: migrate flit to new
- bootstrapping sequence
+Subject: [Buildroot] [PATCH v6 2/5] package/pkg-python.mk: remove hardcoded
+ paths for host Python
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,120 +90,46 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?=D0=A0=D0=BE=D0=BC=D0=B0=D0=BD=20=D0=94=D0=BE=D0=BD=D1=87?=
+ =?UTF-8?q?=D0=B5=D0=BD=D0=BA=D0=BE?= <dpb@corrigendum.ru>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are a number of flit toolchain dependencies currently in the
-process of deprecating distutils based fallbacks.
-
-This will be needed in order to update tomli.
-
-We need to migrate these to use a new bootstrap based build+install
-sequence which relies on flit's bootstrap wheel build+install
-features to build and install host-python-pypa-build and
-host-python-installer which gives us a full pep517 toolchain.
-
-Note that one can run host-python-flit-core commands for building
-and installing itself since the package build directory is the cwd.
-
-We need to add a special flit-bootstrap SETUP_TYPE for dependencies
-of host-python-pypa-build and host-python-installer which can not
-use the normal flit SETUP_TYPE which would cause a circular dependency
-issue.
-
-We need to special case dependency exclusions for
-host-python-flit-core and host-python-installer to avoid circular
-dependencies in the flit-bootstrap SETUP_TYPE.
-
-We also need to special case the installation command for
-host-python-flit-core since it can not depend on host-python-installer
-due to host-python-installer requiring host-python-flit-core.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
-Changes v3 -> v4:
-  - rebase
-Changes v2 -> v3:
-  - add special flit-bootstrap SETUP_TYPE
-  - don't change package SETUP_TYPE's yet
-Changes v1 -> v2:
-  - formatting/cleanup
-  - add comments
----
- package/pkg-python.mk | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 867341fc7b..2e7704a0a9 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -154,6 +154,9 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
- 	--scripts=$(HOST_DIR)/bin \
- 	--data=$(HOST_DIR)
- 
-+HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
-+	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
- # and installation of a Python package should be done, implements a
-@@ -203,7 +206,7 @@ $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
- $(2)_BASE_BUILD_CMD = setup.py build
- $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
- endif
--else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
-+else ifneq ($$(filter flit flit-bootstrap pep517,$$($(2)_SETUP_TYPE)),)
- ifeq ($(4),target)
- $(2)_BASE_ENV = $$(PKG_PYTHON_PEP517_ENV)
- $(2)_BASE_BUILD_CMD = -m build -n -w
-@@ -211,9 +214,24 @@ $(2)_BASE_INSTALL_TARGET_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $
- $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
-+# Use flit built in wheel builder for packages that are flit-bootstrap packages.
-+# This is needed to avoid a circular with host-python-pypa-build and those dependencies.
-+#
-+ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
-+$(2)_BASE_BUILD_CMD = -m flit_core.wheel
-+ifeq ($(1),host-python-flit-core)
-+# Use flit built in bootstrap_install for installing host-python-flit-core.
-+# This is due to host-python-installer depending on host-python-flit-core.
-+#
-+$(2)_BASE_INSTALL_CMD = -m bootstrap_install dist/* $$(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS)
-+else
-+$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
-+endif
-+else
- $(2)_BASE_BUILD_CMD = -m build -n -w
- $(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
- endif
-+endif
- else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
- endif
-@@ -239,6 +257,12 @@ $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
- ifeq ($$($(2)_SETUP_TYPE),flit)
- $(2)_DEPENDENCIES += host-python-flit-core
- endif
-+else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
-+ifneq ($$(filter host-python-flit-core host-python-installer,$(1)),)
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python-flit-core,$(1)),,host-python-flit-core)
-+else
-+$(2)_DEPENDENCIES += host-python-flit-core host-python-installer
-+endif
- endif # SETUP_TYPE
- 
- # Python interpreter to use for building the package.
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTog0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+IDxkcGJAY29ycmlnZW5kdW0ucnU+CgpX
+aGVuIGluc3RhbGxlciBpcyB1c2VkIHRvIGluc3RhbGwgcGFja2FnZXMgZm9yIGhvc3QgUHl0aG9u
+LCBpdCBjYW4gZmlndXJlCm91dCBieSBpdHNlbGYgd2hpY2ggcGF0aHMgdG8gdXNlLiBXZSBqdXN0
+IG5lZWQgdG8gdXNlIHRoZSBpbnN0YWxsZXIgQ0xJCmluc3RlYWQgb2Ygb3VyIHdyYXBwZXIgc2Ny
+aXB0LgoKU2lnbmVkLW9mZi1ieTog0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+IDxkcGJAY29y
+cmlnZW5kdW0ucnU+ClNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFy
+ZDFAZ21haWwuY29tPgotLS0KQ2hhbmdlcyB2NCAtPiB2NToKICAtIGFkZCByZWJhc2VkIHJlbW92
+ZSBoYXJkY29kZWQgcGF0aHMgcGF0Y2gKLS0tCiBwYWNrYWdlL3BrZy1weXRob24ubWsgfCAxMiAr
+Ky0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9u
+cygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLXB5dGhvbi5tayBiL3BhY2thZ2UvcGtnLXB5
+dGhvbi5tawppbmRleCAyZTc3MDRhMGE5Li4xNTQ4MTBlMWNjIDEwMDY0NAotLS0gYS9wYWNrYWdl
+L3BrZy1weXRob24ubWsKKysrIGIvcGFja2FnZS9wa2ctcHl0aG9uLm1rCkBAIC0xNDYsMTQgKzE0
+Niw2IEBAIEhPU1RfUEtHX1BZVEhPTl9QRVA1MTdfRU5WID0gXAogCVBZVEhPTk5PVVNFUlNJVEU9
+MSBcCiAJJChIT1NUX0NPTkZJR1VSRV9PUFRTKQogCi1IT1NUX1BLR19QWVRIT05fUEVQNTE3X0lO
+U1RBTExfT1BUUyA9IFwKLQktLWludGVycHJldGVyPS9iaW4vcHl0aG9uIFwKLQktLXNjcmlwdC1r
+aW5kPXBvc2l4IFwKLQktLXB1cmVsaWI9JChIT1NUX0RJUikvbGliL3B5dGhvbiQoUFlUSE9OM19W
+RVJTSU9OX01BSk9SKS9zaXRlLXBhY2thZ2VzIFwKLQktLWhlYWRlcnM9JChIT1NUX0RJUikvaW5j
+bHVkZS9weXRob24kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikgXAotCS0tc2NyaXB0cz0kKEhPU1Rf
+RElSKS9iaW4gXAotCS0tZGF0YT0kKEhPU1RfRElSKQotCiBIT1NUX1BLR19QWVRIT05fUEVQNTE3
+X0JPT1RTVFJBUF9JTlNUQUxMX09QVFMgPSBcCiAJLS1pbnN0YWxsZGlyPSQoSE9TVF9ESVIpL2xp
+Yi9weXRob24kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikvc2l0ZS1wYWNrYWdlcwogCkBAIC0yMjUs
+MTEgKzIxNywxMSBAQCBpZmVxICgkKDEpLGhvc3QtcHl0aG9uLWZsaXQtY29yZSkKICMKICQoMilf
+QkFTRV9JTlNUQUxMX0NNRCA9IC1tIGJvb3RzdHJhcF9pbnN0YWxsIGRpc3QvKiAkJChIT1NUX1BL
+R19QWVRIT05fUEVQNTE3X0JPT1RTVFJBUF9JTlNUQUxMX09QVFMpCiBlbHNlCi0kKDIpX0JBU0Vf
+SU5TVEFMTF9DTUQgPSAkKFRPUERJUikvc3VwcG9ydC9zY3JpcHRzL3B5aW5zdGFsbGVyLnB5IGRp
+c3QvKiAkJChIT1NUX1BLR19QWVRIT05fUEVQNTE3X0lOU1RBTExfT1BUUykKKyQoMilfQkFTRV9J
+TlNUQUxMX0NNRCA9IC1tIGluc3RhbGxlciBkaXN0LyoKIGVuZGlmCiBlbHNlCiAkKDIpX0JBU0Vf
+QlVJTERfQ01EID0gLW0gYnVpbGQgLW4gLXcKLSQoMilfQkFTRV9JTlNUQUxMX0NNRCA9ICQoVE9Q
+RElSKS9zdXBwb3J0L3NjcmlwdHMvcHlpbnN0YWxsZXIucHkgZGlzdC8qICQkKEhPU1RfUEtHX1BZ
+VEhPTl9QRVA1MTdfSU5TVEFMTF9PUFRTKQorJCgyKV9CQVNFX0lOU1RBTExfQ01EID0gLW0gaW5z
+dGFsbGVyIGRpc3QvKgogZW5kaWYKIGVuZGlmCiBlbHNlCi0tIAoyLjI1LjEKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
