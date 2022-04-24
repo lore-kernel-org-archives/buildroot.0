@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C00FFC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 08:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C108EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 08:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 546AC60D76;
-	Sun, 24 Apr 2022 08:52:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6CA9940A5F;
+	Sun, 24 Apr 2022 08:52:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1t6T5BGcAE5H; Sun, 24 Apr 2022 08:52:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JgXKXUKMHbcI; Sun, 24 Apr 2022 08:52:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 602D560D5A;
-	Sun, 24 Apr 2022 08:52:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6C33E1BF3C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 835AC40A88;
+	Sun, 24 Apr 2022 08:52:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FBA71BF963
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 08:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A42960D5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5DF1E40432
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 08:52:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gImxfCQcrXpl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oWZTnrh_PPPg for <buildroot@lists.busybox.net>;
  Sun, 24 Apr 2022 08:52:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2F1B60BF0
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA96040104
  for <buildroot@buildroot.org>; Sun, 24 Apr 2022 08:52:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id BCFB284150; Sun, 24 Apr 2022 08:41:58 +0000 (UTC)
+ id C55318414E; Sun, 24 Apr 2022 08:41:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 10:45:17 +0200
+Date: Sun, 24 Apr 2022 10:46:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04ea3d38dd76f4e96f4961143d674aff59b13d3f
-X-Git-Newrev: ec190481a76b494d348e0e03cfa3c580bb444d03
+X-Git-Oldrev: ec190481a76b494d348e0e03cfa3c580bb444d03
+X-Git-Newrev: 42a3300ae5641bf45c4c8f6a1306f4e06dc93034
 X-Patchwork-Hint: ignore
-Message-Id: <20220424084158.BCFB284150@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/Config.in.sh: move
- BR2_ARCH_HAS_MMU_MANDATORY one level up
+Message-Id: <20220424084158.C55318414E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/Config.in: remove
+ BR2_ARCH_HAS_MMU_MANDATORY from BR2_aarch64*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec190481a76b494d348e0e03cfa3c580bb444d03
+commit: https://git.buildroot.net/buildroot/commit/?id=42a3300ae5641bf45c4c8f6a1306f4e06dc93034
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that all SuperH cores have an MMU, and must use it, move back the
-select BR2_ARCH_HAS_MMU_MANDATORY one level up.
+Selecting BR2_ARCH_HAS_MMU_MANDATORY from BR2_aarch64 and
+BR2_aarch64_be doesn't make much sense, because the actual ARM cores
+described in arch/Config.in.arm then all select
+BR2_ARCH_HAS_MMU_OPTIONAL. So we end up with both
+BR2_ARCH_HAS_MMU_OPTIONAL and BR2_ARCH_HAS_MMU_MANDATORY, which
+doesn't make any sense.
+
+To prevent this, we remove the selection of BR2_ARCH_HAS_MMU_MANDATORY
+from BR2_aarch64 and BR2_aarch64_be, and let arch/Config.in.arm do its
+job. What arch/Config.in.arm does is currently incorrect, but it will
+be fixed in a separate commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- arch/Config.in    | 1 +
- arch/Config.in.sh | 4 ----
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ arch/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/arch/Config.in b/arch/Config.in
-index e51ef60f40..1ea4e21413 100644
+index 1ea4e21413..49e16fce38 100644
 --- a/arch/Config.in
 +++ b/arch/Config.in
-@@ -228,6 +228,7 @@ config BR2_s390x
- 
- config BR2_sh
- 	bool "SuperH"
-+	select BR2_ARCH_HAS_MMU_MANDATORY
+@@ -60,7 +60,6 @@ config BR2_armeb
+ config BR2_aarch64
+ 	bool "AArch64 (little endian)"
+ 	select BR2_ARCH_IS_64
+-	select BR2_ARCH_HAS_MMU_MANDATORY
  	help
- 	  SuperH (or SH) is a 32-bit reduced instruction set computer
- 	  (RISC) instruction set architecture (ISA) developed by
-diff --git a/arch/Config.in.sh b/arch/Config.in.sh
-index f00954bb5e..d3acc8ccf8 100644
---- a/arch/Config.in.sh
-+++ b/arch/Config.in.sh
-@@ -7,16 +7,12 @@ choice
- 
- config BR2_sh4
- 	bool "sh4 (SH4 little endian)"
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+@@ -69,7 +68,6 @@ config BR2_aarch64
+ config BR2_aarch64_be
+ 	bool "AArch64 (big endian)"
+ 	select BR2_ARCH_IS_64
 -	select BR2_ARCH_HAS_MMU_MANDATORY
- config BR2_sh4eb
- 	bool "sh4eb (SH4 big endian)"
--	select BR2_ARCH_HAS_MMU_MANDATORY
- config BR2_sh4a
- 	bool "sh4a (SH4A little endian)"
--	select BR2_ARCH_HAS_MMU_MANDATORY
- config BR2_sh4aeb
- 	bool "sh4aeb (SH4A big endian)"
--	select BR2_ARCH_HAS_MMU_MANDATORY
- endchoice
- 
- config BR2_ARCH
+ 	help
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
