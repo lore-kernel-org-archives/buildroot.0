@@ -1,65 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5FCFC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 17:39:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9695EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 17:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DEAB415A0;
-	Sun, 24 Apr 2022 17:39:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3502A60B06;
+	Sun, 24 Apr 2022 17:44:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Np04jhulvSJy; Sun, 24 Apr 2022 17:39:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C257541570;
-	Sun, 24 Apr 2022 17:39:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A07271BF352
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 17:39:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C49060AED
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 17:39:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K4dhlWU2ymFC for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 17:39:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 48EC860A93
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 17:39:32 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:657d:21bd:cb37:8719])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 5374B7802D7;
- Sun, 24 Apr 2022 19:39:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1650821968;
- bh=FAwSi+XdFd0+dN9wwoHjZL3oGUDw9rFTZy0Ut/jOMdk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=EkzI5BceR2UIYarCyYoJEOJ7kkjHUEQBfdbgvDdzjmCOkYmF3fctVnS4rbM2IkKe4
- PoxLvZVawQgBC4P179bjyctjRy+42/E0JsHriLEpwZnYYQB5HSPMxcm85yUtqIFibZ
- AiKrFHHNFRiRFdOwxdwBrv3hSYcJVyZqShfamEOaCuhUj2gje3RlynaqSR+Os1E1M6
- BxciHUwg5RHfXwcjVX4QQPnXcR+pOhgCUuxSIJW+tsi7xUTryf03Yxxo3h9Lmvwg1a
- YUTvBkz9yYrPYxj2U2V7xEVWlb2AmMED5vLzPIqrBmy1FcjiD4pe+dlK3gEPMN35ba
- UzI9QKbefL9JQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 24 Apr 2022 19:39:26 +0200
-Date: Sun, 24 Apr 2022 19:39:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220424173926.GY2730@scaer>
-References: <20220424171355.3174629-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220424171355.3174629-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/pamtester: fix build without C++
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id W_aiDUaBN3Kx; Sun, 24 Apr 2022 17:44:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44E1A60AB3;
+	Sun, 24 Apr 2022 17:44:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BB7D1BF352
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 17:44:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDB33400E2
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 17:44:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7uLfLTdkFdQ0 for <buildroot@lists.busybox.net>;
+ Sun, 24 Apr 2022 17:44:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 395BC4002B
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 17:44:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 798B284239; Sun, 24 Apr 2022 17:34:13 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 24 Apr 2022 19:44:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5a8ad464b328dcff95e89052abfc8196e6ade996
+X-Git-Newrev: aa0aeb4bfa2de530cf108dc3043766896c09d3e1
+X-Patchwork-Hint: ignore
+Message-Id: <20220424173413.798B284239@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/omniorb: fix openssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,59 +52,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=aa0aeb4bfa2de530cf108dc3043766896c09d3e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-04-24 19:13 +0200, Fabrice Fontaine spake thusly:
-> Run autoreconf to avoid the following build failure without C++:
-> 
-> configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c000aff659da024b6eef42bca824bdea7b5541c2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/pamtester/pamtester.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/pamtester/pamtester.mk b/package/pamtester/pamtester.mk
-> index b09e4d1cc0..2d8f1317ca 100644
-> --- a/package/pamtester/pamtester.mk
-> +++ b/package/pamtester/pamtester.mk
-> @@ -9,5 +9,7 @@ PAMTESTER_SITE = https://download.sourceforge.net/project/pamtester/pamtester/$(
->  PAMTESTER_DEPENDENCIES = linux-pam
->  PAMTESTER_LICENSE = BSD-3-Clause
->  PAMTESTER_LICENSE_FILES = LICENSE
-> +# Fix build failure without C++
-> +PAMTESTER_AUTORECONF = YES
+Add host-pkgconf dependency to fix the following build failure with
+openssl raised since commit 9d519412d65e13e4a7ffbb83edd8d1e4b2dfe4b7:
 
-Why does autoreconfiguring fix the issue?
+/nvmedata/autobuild/instance-25/output-1/per-package/omniorb/host/bin/m68k-buildroot-linux-uclibc-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -Wall -Wno-unused -fexceptions  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I.. -I./.. -I../../../../../include/omniORB4/internal -I../../../../../include/omniORB4/internal -D_OMNIORB_SSL_LIBRARY -D__OMNIORB4__ -I../../../../../stub -D_REENTRANT -I/usr/include -I. -I. -I../../../../../include -I../../../../../include -D__OSVERSION__=2 -D__linux__ -D__m68k__ -o static/sslActive.o sslActive.cc
+m68k-buildroot-linux-uclibc-g++: WARNING: unsafe header/library path used in cross-compilation: '-I/usr/include'
+In file included from /usr/include/stdlib.h:55,
+                 from /usr/include/openssl/crypto.h:14,
+                 from /usr/include/openssl/bio.h:20,
+                 from /usr/include/openssl/ssl.h:18,
+                 from ../../../../../include/omniORB4/sslContext.h:48,
+                 from sslActive.cc:32:
+/usr/include/bits/floatn.h:75:70: error: unknown machine mode '__TC__'
+   75 | typedef _Complex float __cfloat128 __attribute__ ((__mode__ (__TC__)));
+      |
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/47b1906eb7dd122a81191d14ad663c5931cbfade
 
->  $(eval $(autotools-package))
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/omniorb/omniorb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index b44ec53fd5..d6434735cf 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -25,7 +25,7 @@ HOST_OMNIORB_CONF_OPTS += --disable-longdouble
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OMNIORB_CONF_OPTS += --with-openssl
+-OMNIORB_DEPENDENCIES += openssl
++OMNIORB_DEPENDENCIES += host-pkgconf openssl
+ else
+ OMNIORB_CONF_OPTS += --without-openssl
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
