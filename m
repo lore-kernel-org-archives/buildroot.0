@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D88BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 15:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D15DCC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 15:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 064C640156;
-	Sun, 24 Apr 2022 15:53:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9858560BBA;
+	Sun, 24 Apr 2022 15:54:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2rCs_on36jUE; Sun, 24 Apr 2022 15:53:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mb2UIai8SZ-B; Sun, 24 Apr 2022 15:54:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 142AE4018F;
-	Sun, 24 Apr 2022 15:53:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC35860F39;
+	Sun, 24 Apr 2022 15:54:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E7B121BF962
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1EA2D1BF964
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1DF460B78
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CBDF60B77
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YK-_ihwdSBRG for <buildroot@lists.busybox.net>;
+ with ESMTP id AORKCLkYtIb1 for <buildroot@lists.busybox.net>;
  Sun, 24 Apr 2022 15:53:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D198F60B77
+ by smtp3.osuosl.org (Postfix) with ESMTP id C548E60B62
  for <buildroot@buildroot.org>; Sun, 24 Apr 2022 15:53:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 4BF838421A; Sun, 24 Apr 2022 15:43:21 +0000 (UTC)
+ id 3D9388422F; Sun, 24 Apr 2022 15:43:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 16:53:46 +0200
+Date: Sun, 24 Apr 2022 16:53:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dfb42ab91b7b1f58bc89362403321ed7063dda9f
-X-Git-Newrev: 5a8ad464b328dcff95e89052abfc8196e6ade996
+X-Git-Oldrev: f7744aba7bcc7f4ad38ff4bba3d0c37969544fce
+X-Git-Newrev: dfb42ab91b7b1f58bc89362403321ed7063dda9f
 X-Patchwork-Hint: ignore
-Message-Id: <20220424154321.4BF838421A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/quazip: force libzlib
+Message-Id: <20220424154321.3D9388422F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/assimp: force libzlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,7 +58,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8ad464b328dcff95e89052abfc8196e6ade996
+commit: https://git.buildroot.net/buildroot/commit/?id=dfb42ab91b7b1f58bc89362403321ed7063dda9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Force libzlib instead of depending on it
@@ -66,29 +66,36 @@ Force libzlib instead of depending on it
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/quazip/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/assimp/Config.in | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/quazip/Config.in b/package/quazip/Config.in
-index a670ed458c..bba5eddf3d 100644
---- a/package/quazip/Config.in
-+++ b/package/quazip/Config.in
-@@ -1,13 +1,11 @@
- config BR2_PACKAGE_QUAZIP
- 	bool "quazip"
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 833e559a6f..5ffb50cd79 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -2,8 +2,9 @@ config BR2_PACKAGE_ASSIMP
+ 	bool "assimp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
 -	depends on BR2_PACKAGE_LIBZLIB
- 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
 +	select BR2_PACKAGE_ZLIB
 +	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
  	help
- 	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
- 	  ZIP/UNZIP package that can be used to access ZIP
- 	  archives. It uses the Qt toolkit.
+ 	  Open Asset Import Library (assimp) is a portable Open Source
+ 	  library to import various well-known 3D model formats in a
+@@ -14,11 +15,7 @@ config BR2_PACKAGE_ASSIMP
+ 	  http://www.assimp.org
  
- 	  http://quazip.sourceforge.net
--
--comment "quazip needs libzlib"
+ comment "assimp needs a toolchain w/ C++, wchar"
+-	depends on BR2_PACKAGE_LIBZLIB
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+-comment "assimp needs libzlib"
 -	depends on !BR2_PACKAGE_LIBZLIB
+-
+ comment "assimp needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
