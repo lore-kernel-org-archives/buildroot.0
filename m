@@ -1,65 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CF7AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 20:58:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 533FFC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 21:40:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD44981760;
-	Sun, 24 Apr 2022 20:58:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3EB260A84;
+	Sun, 24 Apr 2022 21:40:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CwIE0RiRSWln; Sun, 24 Apr 2022 20:58:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gXHXfYuCJljk; Sun, 24 Apr 2022 21:40:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5F96814B3;
-	Sun, 24 Apr 2022 20:58:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C398860774;
+	Sun, 24 Apr 2022 21:40:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 465B51BF404
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:57:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 220981BF470
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 21:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 431E14018F
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:57:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FCD4401F2
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 21:40:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2X3NiK5n_mRE for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 20:57:46 +0000 (UTC)
+ with ESMTP id hZF5G35EsScQ for <buildroot@lists.busybox.net>;
+ Sun, 24 Apr 2022 21:40:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3B5B54002B
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 20:57:46 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e526:f26f:858a:a199])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0F62919F58C;
- Sun, 24 Apr 2022 22:57:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1650833864;
- bh=XlH36skakwhOvw34phhJuxaw3xgOJTP8blPl+coQRTI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Hj/kgrlHmxjEo8k7FdTYlS9arYSH/K/WKYyAaOHo06k3pLdsBiiXG3lnjfEiNOnTZ
- URUvGtCk/fFf0bogEnGyOuI1Rgfw4Q7Y3D8mP35U5Rm729ie1ePakoTBgNirLUDphR
- Acan+pLtKvAc06fVHwAgX4p+FIjhnq8D4mUNAtt3o7zuw1OdxYZxcceAXrNjyPtlmi
- 5agfAvl5B3c5GOhc+ji3WQixrnwLzS7sM+9Ns5BkVRyIdEjiHkVmAvSOInVXixTavD
- XXQ0HJ9xf2lMlCix7Pya9eGjTeNkckHR0ck4aVHEIAJ5SRFrv32gBDOKv9FmmL6qIj
- 9rh8ruEF2p3Fw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 24 Apr 2022 22:57:38 +0200
-Date: Sun, 24 Apr 2022 22:57:38 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220424205738.GB3624965@scaer>
-References: <20220424200014.1336771-1-fontaine.fabrice@gmail.com>
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C89BC4002B
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 21:40:06 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id z19so9397994iof.12
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 14:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=WtGsnBfFtu3XSxCc5ZbCwnvQtQfuu4JcA+xEi+1v9bw=;
+ b=qiWqtz2pQErQbuhFLch/Nz8b49+n7c6WD8FuUIEzqL4oAY0H5dEOesBYic7zjTcgKU
+ wNRYYwnEDmTCUPoVdlDWOGCzy0KosYKfhz/yrtJi/yg4LedMIim2r3c9UleDU4H6ZqO3
+ fx3BR45j7Hxe0xzvRFpUX+Ou74Sz7/AokKczDaerwxEI/GjAigZofMvX27hUFB+c8Wrh
+ 7YKpoDF71yqyppniG2PGAJQVpkH/vpwtOu1zmWNYk0Nr8wL/7J5Aw5cDV274D0sXeiro
+ zKMX/WMGtn/XnRvg82NLR+C+z6+jPSvaPbfm34YLXRMddXjJQcvfddrGvndGFQF56B91
+ OpSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=WtGsnBfFtu3XSxCc5ZbCwnvQtQfuu4JcA+xEi+1v9bw=;
+ b=Sekcjmfo1hIWzI21RoaLlJVMcDnmvZJbmofXYrSCwOlZIjYZ5LtpfGo8byxgjy5fda
+ ib6UVrCQys4r0DfhNnJLEvbHawWyTqsVzjvhLsJDOYjI6CHkGU5HjOq931XM+IWnGZEB
+ lPfzbEAFTcEeHCy+0DbvOdhv4Xe6ajjFzkBMpByC+3LyLS6TSXqE3c+FMhSqhRFQ6yB2
+ iT453i+4/+RmgwXKvM49rAoCMAG8+HMW7vhiYjisTKCjJmcQeG0YEFrue3GD4mS53ZPf
+ OzaM1azjZMkN6oJXiRh9wuUri/nJtAglXKXsNUbst1Km9Ru48cLlIu7xY3reAuE7xwg9
+ /pvA==
+X-Gm-Message-State: AOAM5318McMW0X1erBsBPcTg20Si7nA9reedlRehiL/JFbZxshGANDnZ
+ OExYfm02PrrF4fsfERGH2ww9s2ew/xaFdQ==
+X-Google-Smtp-Source: ABdhPJygrlI9h5kaHHWDoylJk0hweWqmjgvK1JLlm4grSkU8wCOqmnwBpAF4rLDUd2tRI/0xjgpJIQ==
+X-Received: by 2002:a02:234a:0:b0:32a:f07c:e8 with SMTP id
+ u71-20020a02234a000000b0032af07c00e8mr564147jau.87.1650836405801; 
+ Sun, 24 Apr 2022 14:40:05 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ o19-20020a056e0214d300b002cbec3af6casm5385084ilk.30.2022.04.24.14.40.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Apr 2022 14:40:05 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 24 Apr 2022 15:39:55 -0600
+Message-Id: <20220424213958.1747120-2-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220424213958.1747120-1-james.hilliard1@gmail.com>
+References: <20220424213958.1747120-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220424200014.1336771-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/2] package/libselinux: fix host build
+Subject: [Buildroot] [PATCH v7 2/5] package/pkg-python.mk: remove hardcoded
+ paths for host Python
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,114 +89,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Tenart <atenart@kernel.org>, Matt Weber <matthew.weber@collins.com>,
- Marcus Folkesson <marcus.folkesson@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?=D0=A0=D0=BE=D0=BC=D0=B0=D0=BD=20=D0=94=D0=BE=D0=BD=D1=87?=
+ =?UTF-8?q?=D0=B5=D0=BD=D0=BA=D0=BE?= <dpb@corrigendum.ru>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
-
-On 2022-04-24 22:00 +0200, Fabrice Fontaine spake thusly:
-> The following build failure is raised since commit
-> 1745fcde740057951dcc5429f3bfabd103b764a1 because
-> $(HOST_PKG_PYTHON_DISTUTILS_ENV) contains $(HOST_CONFIGURE_OPTS) and so
-> will override LDFLAGS passed by libselinux.mk:
-> 
-> /usr/bin/gcc -O2 -I/nvmedata/autobuild/instance-11/output-1/host/include -I../include -D_GNU_SOURCE  -DNO_ANDROID_BACKEND  -L/nvmedata/autobuild/instance-11/output-1/host/lib -Wl,-rpath,/nvmedata/autobuild/instance-11/output-1/host/lib -shared -o libselinux.so.1 avc.lo avc_internal.lo avc_sidtab.lo booleans.lo callbacks.lo canonicalize_context.lo checkAccess.lo check_context.lo checkreqprot.lo compute_av.lo compute_create.lo compute_member.lo compute_relabel.lo compute_user.lo context.lo deny_unknown.lo disable.lo enabled.lo fgetfilecon.lo freecon.lo freeconary.lo fsetfilecon.lo get_context_list.lo get_default_type.lo get_initial_context.lo getenforce.lo getfilecon.lo getpeercon.lo init.lo is_customizable_type.lo label.lo label_db.lo label_file.lo label_media.lo label_support.lo label_x.lo lgetfilecon.lo load_policy.lo lsetfilecon.lo mapping.lo matchmediacon.lo matchpathcon.lo policyvers.lo procattr.lo query_user_context.lo regex.lo reject_unknown.lo selinux_check_securetty_context
- .l
->  o selinux_config.lo selinux_restorecon.lo sestatus.lo setenforce.lo setexecfilecon.lo setfilecon.lo setrans_client.lo seusers.lo sha1.lo stringrep.lo validatetrans.lo   -ldl -Wl,-soname,libselinux.so.1,--version-script=libselinux.map,-z,defs,-z,relro
-> /usr/bin/ld: regex.lo: in function `regex_writef':
-> regex.c:(.text+0x7c): undefined reference to `pcre_fullinfo'
-> 
-> To fix this build failure, instead of moving LDFLAGS after
-> $(HOST_PKG_PYTHON_DISTUTILS_ENV), drop LDFLAGS and add host-pkgconf
-> dependency to retrieve pcre dependencies as pkg-config is supported
-> since version 3.2 and
-> https://github.com/SELinuxProject/selinux/commit/74093beab0c605641ec413be81e31e6b2f55d8d4
-> 
-> Dropping LDFLAGS will also drop -lpthread which doesn't seem to raise
-> any build failures with test-pkg:
-> 
->                     bootlin-armv5-uclibc [1/6]: OK
->                      bootlin-armv7-glibc [2/6]: OK
->                    bootlin-armv7m-uclibc [3/6]: SKIPPED
->                      bootlin-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: SKIPPED
->                             sourcery-arm [6/6]: SKIPPED
-> 
-> Apply the same update to the target variant for consistancy.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d16995f0decef9c9bf58cab4fa30f7daab6918fb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Series of two patches applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libselinux/libselinux.mk | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index 5790e79040..c6be8e638a 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -10,7 +10,8 @@ LIBSELINUX_LICENSE = Public Domain
->  LIBSELINUX_LICENSE_FILES = LICENSE
->  LIBSELINUX_CPE_ID_VENDOR = selinuxproject
->  
-> -LIBSELINUX_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) libsepol pcre
-> +LIBSELINUX_DEPENDENCIES = \
-> +	$(BR2_COREUTILS_HOST_DEPENDENCY) host-pkgconf libsepol pcre
->  
->  LIBSELINUX_INSTALL_STAGING = YES
->  
-> @@ -52,8 +53,7 @@ endif # python3
->  # when the python binding is enabled.
->  LIBSELINUX_MAKE_OPTS += \
->  	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-> -	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
-> -	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
-> +	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
->  
->  define LIBSELINUX_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> @@ -76,13 +76,12 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
->  endef
->  
->  HOST_LIBSELINUX_DEPENDENCIES = \
-> -	host-libsepol host-pcre host-swig host-python3
-> +	host-pkgconf host-libsepol host-pcre host-swig host-python3
->  
->  HOST_LIBSELINUX_MAKE_OPTS = \
->  	$(HOST_CONFIGURE_OPTS) \
->  	PREFIX=$(HOST_DIR) \
->  	SHLIBDIR=$(HOST_DIR)/lib \
-> -	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
->  	$(HOST_PKG_PYTHON_DISTUTILS_ENV) \
->  	PYTHON=python$(PYTHON3_VERSION_MAJOR)
->  
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTog0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+IDxkcGJAY29ycmlnZW5kdW0ucnU+CgpX
+aGVuIGluc3RhbGxlciBpcyB1c2VkIHRvIGluc3RhbGwgcGFja2FnZXMgZm9yIGhvc3QgUHl0aG9u
+LCBpdCBjYW4gZmlndXJlCm91dCBieSBpdHNlbGYgd2hpY2ggcGF0aHMgdG8gdXNlLiBXZSBqdXN0
+IG5lZWQgdG8gdXNlIHRoZSBpbnN0YWxsZXIgQ0xJCmluc3RlYWQgb2Ygb3VyIHdyYXBwZXIgc2Ny
+aXB0LgoKU2lnbmVkLW9mZi1ieTog0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+IDxkcGJAY29y
+cmlnZW5kdW0ucnU+ClNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFy
+ZDFAZ21haWwuY29tPgotLS0KQ2hhbmdlcyB2NCAtPiB2NToKICAtIGFkZCByZWJhc2VkIHJlbW92
+ZSBoYXJkY29kZWQgcGF0aHMgcGF0Y2gKLS0tCiBwYWNrYWdlL3BrZy1weXRob24ubWsgfCAxMiAr
+Ky0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9u
+cygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLXB5dGhvbi5tayBiL3BhY2thZ2UvcGtnLXB5
+dGhvbi5tawppbmRleCAyZTc3MDRhMGE5Li4xNTQ4MTBlMWNjIDEwMDY0NAotLS0gYS9wYWNrYWdl
+L3BrZy1weXRob24ubWsKKysrIGIvcGFja2FnZS9wa2ctcHl0aG9uLm1rCkBAIC0xNDYsMTQgKzE0
+Niw2IEBAIEhPU1RfUEtHX1BZVEhPTl9QRVA1MTdfRU5WID0gXAogCVBZVEhPTk5PVVNFUlNJVEU9
+MSBcCiAJJChIT1NUX0NPTkZJR1VSRV9PUFRTKQogCi1IT1NUX1BLR19QWVRIT05fUEVQNTE3X0lO
+U1RBTExfT1BUUyA9IFwKLQktLWludGVycHJldGVyPS9iaW4vcHl0aG9uIFwKLQktLXNjcmlwdC1r
+aW5kPXBvc2l4IFwKLQktLXB1cmVsaWI9JChIT1NUX0RJUikvbGliL3B5dGhvbiQoUFlUSE9OM19W
+RVJTSU9OX01BSk9SKS9zaXRlLXBhY2thZ2VzIFwKLQktLWhlYWRlcnM9JChIT1NUX0RJUikvaW5j
+bHVkZS9weXRob24kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikgXAotCS0tc2NyaXB0cz0kKEhPU1Rf
+RElSKS9iaW4gXAotCS0tZGF0YT0kKEhPU1RfRElSKQotCiBIT1NUX1BLR19QWVRIT05fUEVQNTE3
+X0JPT1RTVFJBUF9JTlNUQUxMX09QVFMgPSBcCiAJLS1pbnN0YWxsZGlyPSQoSE9TVF9ESVIpL2xp
+Yi9weXRob24kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikvc2l0ZS1wYWNrYWdlcwogCkBAIC0yMjUs
+MTEgKzIxNywxMSBAQCBpZmVxICgkKDEpLGhvc3QtcHl0aG9uLWZsaXQtY29yZSkKICMKICQoMilf
+QkFTRV9JTlNUQUxMX0NNRCA9IC1tIGJvb3RzdHJhcF9pbnN0YWxsIGRpc3QvKiAkJChIT1NUX1BL
+R19QWVRIT05fUEVQNTE3X0JPT1RTVFJBUF9JTlNUQUxMX09QVFMpCiBlbHNlCi0kKDIpX0JBU0Vf
+SU5TVEFMTF9DTUQgPSAkKFRPUERJUikvc3VwcG9ydC9zY3JpcHRzL3B5aW5zdGFsbGVyLnB5IGRp
+c3QvKiAkJChIT1NUX1BLR19QWVRIT05fUEVQNTE3X0lOU1RBTExfT1BUUykKKyQoMilfQkFTRV9J
+TlNUQUxMX0NNRCA9IC1tIGluc3RhbGxlciBkaXN0LyoKIGVuZGlmCiBlbHNlCiAkKDIpX0JBU0Vf
+QlVJTERfQ01EID0gLW0gYnVpbGQgLW4gLXcKLSQoMilfQkFTRV9JTlNUQUxMX0NNRCA9ICQoVE9Q
+RElSKS9zdXBwb3J0L3NjcmlwdHMvcHlpbnN0YWxsZXIucHkgZGlzdC8qICQkKEhPU1RfUEtHX1BZ
+VEhPTl9QRVA1MTdfSU5TVEFMTF9PUFRTKQorJCgyKV9CQVNFX0lOU1RBTExfQ01EID0gLW0gaW5z
+dGFsbGVyIGRpc3QvKgogZW5kaWYKIGVuZGlmCiBlbHNlCi0tIAoyLjI1LjEKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
