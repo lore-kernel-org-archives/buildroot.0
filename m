@@ -1,75 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 962C6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 18:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD4CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 19:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3819181AC4;
-	Sun, 24 Apr 2022 18:10:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FB3441516;
+	Sun, 24 Apr 2022 19:12:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-jHEw5W1M5Q; Sun, 24 Apr 2022 18:10:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Cnxi0EmHhKBH; Sun, 24 Apr 2022 19:12:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B19F813CF;
-	Sun, 24 Apr 2022 18:10:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 504601BF316
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 18:10:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B516F40880;
+	Sun, 24 Apr 2022 19:12:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FCF51BF348
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 19:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D0E4813CF
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 18:10:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79FCC40880
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 19:12:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lFzKUUZrfKsi for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 18:10:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qZ51gZS3eG-Q for <buildroot@lists.busybox.net>;
+ Sun, 24 Apr 2022 19:12:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
- [IPv6:2607:f8b0:4864:20::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24F0F81389
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 18:10:21 +0000 (UTC)
-Received: by mail-oi1-x229.google.com with SMTP id 12so14808227oix.12
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 11:10:21 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33C1940873
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 19:12:40 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id x18so18087484wrc.0
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 12:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=vvItrxLkBBy9VCkvAaiMn0oSoYi3vouGPoFOEY8pwAk=;
- b=QZjS+7F8S+Jb4be/ws2FwYMelaEmQKaIcDzCuYuyNqxXAzNU6lMGB2M5LNrGrgSdto
- m2mANhCG5A7Bi4oKiS7qrCcmOSd/OrOGnhXfbMt+LuuGcC8vMTWXcZIlmHwj5a+pifOp
- 3jgyuCGYLceFqF+gqlexKBgaGCM8Xd2XFpYapu6OAKt5rLt7tqmepqGcsqnjxwkLVu4B
- HRG+gTlCKlGkCGLA7y6ZQ1JUr1qEKn/kXXf3upiK8qE90+B2MUPnFnsBheefTrFu1mjB
- sXzqrGu5U2ncILiH/vOBlhCzsANrweLEuyzmR5WjV9MqHh9OxnhJroFUN01g9WYhDtUp
- Z62g==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vAuklGnp104mK0eftFjD4r5SdQ+sYDHH2wRl2jDDACc=;
+ b=dotNJxC284TQU7XQl/7LghpzUZcWnVnLhVtuzzMAnAgNfQEMh5esCb8MU3xyXX/BoW
+ x9bqHm1l5JAuMniRP5MB12LiS+ERCd+HyegcqPW5KfRZ7mrMhPZw4H5FeVXVzKaCMVNP
+ ZT/Xhacpk18nrAN7Pryozf5mMOK14pawH1T2XyjzdY3crbXr0Xpj0L8Aia5Eov/3vGJh
+ 53GW6XRlHOzxJ3Blir4TxsFdVj9cAdgfcVmurCArqiO1Gkvz/p+MOyG3kSP3thGqdv1O
+ Nj5zXz2Xx6JwsNVTLk9G3xDWBjoInDYGnX19qk76HPh9mM0ZMZsuIrDfNgaFXeWo3/T1
+ bxAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=vvItrxLkBBy9VCkvAaiMn0oSoYi3vouGPoFOEY8pwAk=;
- b=HMz+ad2DavjEJOv0ZxA5vHTGbGBtu2wnOiQ63MFutXmq/jMhaHyj9hhfZUp1Ve0W+f
- NqyR1OYw9kpO6lxuCINSLGk7dMp4fJQRv5ObPm6ea+4uXkVDcUwp3ioChRz5eQCBDCC8
- x43Ddw865J/NT4l1m1T+OnffO7rfK6ZVPDWyI9G27D9Lor8eF3XINEyaUIj0B8DZ4pV/
- AH1zKA1OBUMUiLMqdB/FlnazCwXNuS6R0cNYMt1w2f1hBSQQBSOTHGBClMt7dsJgwtMt
- ph+Gzb/kzejDAIxC7HAnVIsS/x8KGC2ZcOHI9aueifYIuGzL0EjNRwZQNqrqZajZyd9u
- 2OjQ==
-X-Gm-Message-State: AOAM532h5HBCN2rSnXlQf1knjuifqnWH4ECvdQsgDCq1jNpvR4WFU3Zy
- 6S90VZLlJ3eUK4WYsJDSu+zSORQjfSzUxANVBFY9z+qE
-X-Google-Smtp-Source: ABdhPJy1dNnyAm6DpKq+M2hYWGOghIacLRlXyYNFytTmLQHSXr/m+2g1UsTDmVP1pfnRNZyqxiCe6ch2Zyz9PtaJxVQ=
-X-Received: by 2002:a05:6808:1a09:b0:325:2f1e:1956 with SMTP id
- bk9-20020a0568081a0900b003252f1e1956mr843571oib.228.1650823821045; Sun, 24
- Apr 2022 11:10:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220424171355.3174629-1-fontaine.fabrice@gmail.com>
- <20220424173926.GY2730@scaer>
-In-Reply-To: <20220424173926.GY2730@scaer>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vAuklGnp104mK0eftFjD4r5SdQ+sYDHH2wRl2jDDACc=;
+ b=GWLYdfxAd5hyu68iN52vQbp2iPP0iswmQ8W/J7PsgejUA838YKIxxEL6kf56sJ9AA8
+ U20ZqGegLWZkBJFWesHwRJK8aBgPqiYCXIBceNjgBJbvCM/m8XfUW5NfCMTWr6LlZyhB
+ EyU02Fu9C6kAsK5hSSegAbcFGLtHSKGg7wlqfjQavYDgyKuaFLDKxnf73fpfJ8dWNeUT
+ wr+CGxvZ+YSiJSRglydBWwLpR8Mdi7T+bKTBWemsrSwgUd1H9VRqyihl0Rxsy2ItId+m
+ xeqw3ltUrxt375AZNLzz/GKbEgNbvkaYA0vb1gnz6s/Wo1TeSbBVt+hlQYdjRDZOQZPn
+ /c9Q==
+X-Gm-Message-State: AOAM533H/LKX5uKepDLuyVY0BUxjIAjuQKOULIsGhzqYI+o8b/p68vfs
+ mz49ZQlwhdIiwyIa/2C+bidjGByuLCI=
+X-Google-Smtp-Source: ABdhPJw1Tudaj/SFHCuBkVDDi4PFnknkb5AmhlHQhcjeJiEp63lQxToOgvIo/5rOBQbp5ixzRAoaJw==
+X-Received: by 2002:a05:6000:86:b0:20a:d7be:e09b with SMTP id
+ m6-20020a056000008600b0020ad7bee09bmr3680560wrx.398.1650827558057; 
+ Sun, 24 Apr 2022 12:12:38 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ p125-20020a1c2983000000b0038e5ca446bcsm9905215wmp.5.2022.04.24.12.12.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Apr 2022 12:12:37 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Apr 2022 20:08:15 +0200
-Message-ID: <CAPi7W83x8mv9nbdHD2y=uxxuPD6Mt0oJyMvm4QuXwc41G7gacA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/pamtester: fix build without C++
+To: buildroot@buildroot.org
+Date: Sun, 24 Apr 2022 21:10:32 +0200
+Message-Id: <20220424191032.3222587-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: fix build with
+ argp-standalone
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,47 +86,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-WWFubiwKCkxlIGRpbS4gMjQgYXZyLiAyMDIyIMOgIDE5OjM5LCBZYW5uIEUuIE1PUklOIDx5YW5u
-Lm1vcmluLjE5OThAZnJlZS5mcj4gYSDDqWNyaXQgOgo+Cj4gRmFicmljZSwgQWxsLAo+Cj4gT24g
-MjAyMi0wNC0yNCAxOToxMyArMDIwMCwgRmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6Cj4g
-PiBSdW4gYXV0b3JlY29uZiB0byBhdm9pZCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZhaWx1cmUgd2l0
-aG91dCBDKys6Cj4gPgo+ID4gY29uZmlndXJlOiBlcnJvcjogQysrIHByZXByb2Nlc3NvciAiL2xp
-Yi9jcHAiIGZhaWxzIHNhbml0eSBjaGVjawo+ID4KPiA+IEZpeGVzOgo+ID4gIC0gaHR0cDovL2F1
-dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvYzAwMGFmZjY1OWRhMDI0YjZlZWY0MmJjYTgy
-NGJkZWE3YjU1NDFjMgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZv
-bnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAgcGFja2FnZS9wYW10ZXN0ZXIv
-cGFtdGVzdGVyLm1rIHwgMiArKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykK
-PiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9wYW10ZXN0ZXIvcGFtdGVzdGVyLm1rIGIvcGFj
-a2FnZS9wYW10ZXN0ZXIvcGFtdGVzdGVyLm1rCj4gPiBpbmRleCBiMDllNGQxY2MwLi4yZDhmMTMx
-N2NhIDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS9wYW10ZXN0ZXIvcGFtdGVzdGVyLm1rCj4gPiAr
-KysgYi9wYWNrYWdlL3BhbXRlc3Rlci9wYW10ZXN0ZXIubWsKPiA+IEBAIC05LDUgKzksNyBAQCBQ
-QU1URVNURVJfU0lURSA9IGh0dHBzOi8vZG93bmxvYWQuc291cmNlZm9yZ2UubmV0L3Byb2plY3Qv
-cGFtdGVzdGVyL3BhbXRlc3Rlci8kKAo+ID4gIFBBTVRFU1RFUl9ERVBFTkRFTkNJRVMgPSBsaW51
-eC1wYW0KPiA+ICBQQU1URVNURVJfTElDRU5TRSA9IEJTRC0zLUNsYXVzZQo+ID4gIFBBTVRFU1RF
-Ul9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ID4gKyMgRml4IGJ1aWxkIGZhaWx1cmUgd2l0aG91
-dCBDKysKPiA+ICtQQU1URVNURVJfQVVUT1JFQ09ORiA9IFlFUwo+Cj4gV2h5IGRvZXMgYXV0b3Jl
-Y29uZmlndXJpbmcgZml4IHRoZSBpc3N1ZT8KCkkgZGlkbid0IGRpZyB0b28gbXVjaCBpbnRvIGl0
-IGJ1dCBpdCByZW1vdmVzIHRob3NlIHdyb25nIENYWENQUCB0ZXN0cwpmcm9tIHRoZSBjb25maWd1
-cmUgZmlsZS4KCj4KPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4KPiA+ICAkKGV2YWwgJChh
-dXRvdG9vbHMtcGFja2FnZSkpCj4gPiAtLQo+ID4gMi4zNS4xCj4gPgo+ID4gX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+IGJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKPiA+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPiBodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPgo+IC0tCj4gLi0tLS0tLS0tLS0t
-LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0t
-LS0tLS0tLS0tLS4KPiB8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8i
-XCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAo+IHwgKzMzIDY2MiAzNzYgMDU2
-IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAg
-ICAgICB8Cj4gfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdB
-SU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKPiB8IGh0dHA6Ly95bW9yaW4uaXMtYS1n
-ZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAg
-fAo+ICctLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0t
-LS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCgpCZXN0IFJlZ2FyZHMsCgpGYWJyaWNlCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Fix the following build failure raised since bump of argp-standalone to
+version 1.4.1 in commit 0fe85041bc9e0b4ade4d71dd10b61c3b9ec8945d and
+https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
+
+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
+cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
+cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...onfigure.ac-replace-argp_usage-check.patch | 40 +++++++++++++++++++
+ package/cryptsetup/cryptsetup.mk              |  1 +
+ 2 files changed, 41 insertions(+)
+ create mode 100644 package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+
+diff --git a/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+new file mode 100644
+index 0000000000..66e3be350c
+--- /dev/null
++++ b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+@@ -0,0 +1,40 @@
++From 21515ad7a3b000ee6038f82bbb428ab527002bbd Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 24 Apr 2022 19:47:53 +0200
++Subject: [PATCH] configure.ac: replace argp_usage check
++
++Replace check for argp_usage by argp_parse as argp_usage is not used by
++cryptsetup. Moreover, this will fix the following build failure raised
++with argp-standalone in version 1.4.0 and
++https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
++
++/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
++cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
++/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
++cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://gitlab.com/cryptsetup/cryptsetup/-/issues/737]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index d31fb0a7..e47179f2 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -413,7 +413,7 @@ if test "x$enable_ssh_token" = "xyes"; then
++ 	AC_CHECK_DECLS([ssh_session_is_known_server], [], [], [#include <libssh/libssh.h>])
++ 	AC_CHECK_HEADER([argp.h], [], AC_MSG_ERROR([You need argp library.]))
++ 	saved_LIBS=$LIBS
++-	AC_SEARCH_LIBS([argp_usage],[argp])
+++	AC_SEARCH_LIBS([argp_parse],[argp])
++ 	AC_SUBST(ARGP_LIBS, $LIBS)
++ 	LIBS=$saved_LIBS
++ fi
++-- 
++2.35.1
++
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index ddb10f1da3..20cf5d6346 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -19,6 +19,7 @@ CRYPTSETUP_CPE_ID_VENDOR = cryptsetup_project
+ CRYPTSETUP_INSTALL_STAGING = YES
+ 
+ # 0001-Add-check-program-for-symver-attribute.patch
++# 0002-configure.ac-replace-argp_usage-check.patch
+ CRYPTSETUP_AUTORECONF = YES
+ 
+ CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
