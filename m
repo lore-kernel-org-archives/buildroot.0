@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46852C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 08:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92DA3C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 08:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9C1840A6D;
-	Sun, 24 Apr 2022 08:52:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57F2340432;
+	Sun, 24 Apr 2022 08:53:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mkA6vGMyYd8a; Sun, 24 Apr 2022 08:52:51 +0000 (UTC)
+	with ESMTP id Hiqo93zmIfPd; Sun, 24 Apr 2022 08:53:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A020540AB6;
-	Sun, 24 Apr 2022 08:52:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 84C5E1BF963
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 08:52:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4B2440A5F;
+	Sun, 24 Apr 2022 08:53:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 326551BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 08:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C06D4159A
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 08:52:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8668960B94
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 08:52:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nkotvT-o_lZJ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CgSxJBR39Wq3 for <buildroot@lists.busybox.net>;
  Sun, 24 Apr 2022 08:52:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C71CB41518
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A26D60BB4
  for <buildroot@buildroot.org>; Sun, 24 Apr 2022 08:52:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id CDE188414F; Sun, 24 Apr 2022 08:41:58 +0000 (UTC)
+ id B42688414F; Sun, 24 Apr 2022 08:41:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 10:49:58 +0200
+Date: Sun, 24 Apr 2022 10:38:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 42a3300ae5641bf45c4c8f6a1306f4e06dc93034
-X-Git-Newrev: 8c925613dc1d3af6031c9a39bb51b418cfe2b9d8
+X-Git-Oldrev: aa8a2dacf2ef3081a403a82e93b3815383d8a107
+X-Git-Newrev: 04ea3d38dd76f4e96f4961143d674aff59b13d3f
 X-Patchwork-Hint: ignore
-Message-Id: <20220424084158.CDE188414F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/Config.in.arm: re-organize MMU
- selection
+Message-Id: <20220424084158.B42688414F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch: drop support for SH2A
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,466 +58,146 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c925613dc1d3af6031c9a39bb51b418cfe2b9d8
+commit: https://git.buildroot.net/buildroot/commit/?id=04ea3d38dd76f4e96f4961143d674aff59b13d3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So far, all ARM cores were selecting BR2_ARCH_HAS_MMU_OPTIONAL, except
-no-MMU cores which were selecting nothing.
+Until commit "arch/Config.in.sh: fixup MMU selection" in this series,
+SH2A could either be used with BR2_USE_MMU disabled or BR2_USE_MMU
+enabled.
 
-In practice, MMU-capable ARM cores are always used with their MMU
-enabled, so it doesn't make sense to support the use case of not using
-the MMU on such cores.
+The later made absolutely no sense, since SH2A does not have a MMU:
+MMU support was introduced starting from SH3 according to
+https://en.wikipedia.org/wiki/SuperH#SH-3
 
-Consequently, to simplify things, we group the MMU handling in the
-BR2_ARM_CPU_ARM* options: BR2_ARM_CPU_ARMV4, BR2_ARM_CPU_ARMV5,
-BR2_ARM_CPU_ARMV6, BR2_ARM_CPU_ARMV7A, BR2_ARM_CPU_ARMV8A all select
-BR2_ARCH_HAS_MMU_MANDATORY, while BR2_ARM_CPU_ARMV7M continues to
-select nothing, indicating that there is no MMU available at all.
+Also, since commit 22d5501e03b019218b718b5de7ca74824a8eaf42 ("arch:
+tidy up binary formats config"), which was merged in Buildroot
+2015.05, the architecture tuple used when BR2_sh2a=y and BR2_USE_MMU
+disabled is sh2a-buildroot-uclinux-uclibc, and this was already
+unsupported back in the days of Buildroot 2015.08 and binutils 2.24,
+causing the build to fail with:
+
+*** BFD does not support target sh2a-buildroot-uclinux-uclibc.
+
+just like it fails to build today with recent version of binutils.
+
+So, this has been broken since 2015.08, and nobody complained. SH2A is
+seldom used, so it's time to kill it.
+
+It is worth mentioning that there had been an attempt at resurrecting
+SH2 support around 2015 (see https://lwn.net/Articles/647636/) as part
+of the J2 core. This effort led to the addition of FDPIC support for
+SH2A in the musl C library (and therefore proper ELF binaries, with
+shared libraries), but that was never supported in Buildroot. Now that
+the J2 project is essentially dead, there is no reason to bother with
+this.
 
 Fixes:
 
- http://autobuild.buildroot.net/results/33277d4687ca9a04dbfb02c50e5755ff9e55b0b4/ (FLAT
- selected on AArch64)
-
- http://autobuild.buildroot.net/results/5e34d11393e14fc36fd6e72b69679bc4fd1e3798/ (FLAT
- selected on AArch64 big-endian)
+  http://autobuild.buildroot.net/results/63d01d33ae30f86b63b9f42a9fea116f2f3e9005/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- arch/Config.in.arm | 59 +++++-------------------------------------------------
- 1 file changed, 5 insertions(+), 54 deletions(-)
+ Config.in.legacy                        | 7 +++++++
+ arch/Config.in.sh                       | 5 +----
+ package/uclibc/Config.in                | 1 -
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ utils/genrandconfig                     | 9 +++------
+ 5 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 85040ac89f..fa2e882550 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -73,21 +73,26 @@ config BR2_ARM_CPU_HAS_THUMB2
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2b9575fe22..387653f45d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- config BR2_ARM_CPU_ARMV4
- 	bool
-+	select BR2_ARCH_HAS_MMU_MANDATORY
+ comment "Legacy options removed in 2022.05"
  
- config BR2_ARM_CPU_ARMV5
- 	bool
-+	select BR2_ARCH_HAS_MMU_MANDATORY
++config BR2_sh2a
++	bool "sh2a architecture support removed"
++	select BR2_LEGACY
++	help
++	  The SuperH 2A (SH2A) architecture was not maintained, and
++	  broken, so its support was dropped.
++
+ config BR2_BINUTILS_VERSION_2_35_X
+ 	bool "binutils 2.35.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index a012cbf491..f00954bb5e 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -5,8 +5,6 @@ choice
+ 	help
+ 	  Specific CPU variant to use
  
- config BR2_ARM_CPU_ARMV6
- 	bool
-+	select BR2_ARCH_HAS_MMU_MANDATORY
- 
- config BR2_ARM_CPU_ARMV7A
- 	bool
-+	select BR2_ARCH_HAS_MMU_MANDATORY
- 
- config BR2_ARM_CPU_ARMV7M
- 	bool
- 
- config BR2_ARM_CPU_ARMV8A
- 	bool
-+	select BR2_ARCH_HAS_MMU_MANDATORY
- 
- choice
- 	prompt "Target Architecture Variant"
-@@ -103,23 +108,19 @@ config BR2_arm920t
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV4
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_arm922t
- 	bool "arm922t"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV4
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_fa526
- 	bool "fa526/626"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_ARMV4
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_strongarm
- 	bool "strongarm sa110/sa1100"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_ARMV4
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 
- comment "armv5 cores"
- config BR2_arm926t
-@@ -128,18 +129,15 @@ config BR2_arm926t
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV5
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_iwmmxt
- 	bool "iwmmxt"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_ARMV5
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_xscale
- 	bool "xscale"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV5
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 
- comment "armv6 cores"
- config BR2_arm1136j_s
-@@ -147,34 +145,29 @@ config BR2_arm1136j_s
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_arm1136jf_s
- 	bool "arm1136jf-s"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_arm1176jz_s
- 	bool "arm1176jz-s"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_arm1176jzf_s
- 	bool "arm1176jzf-s"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_arm11mpcore
- 	bool "mpcore"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 
- comment "armv7a cores"
- config BR2_cortex_a5
-@@ -184,7 +177,6 @@ config BR2_cortex_a5
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a7
- 	bool "cortex-A7"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -192,7 +184,6 @@ config BR2_cortex_a7
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a8
- 	bool "cortex-A8"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -200,7 +191,6 @@ config BR2_cortex_a8
- 	select BR2_ARM_CPU_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a9
- 	bool "cortex-A9"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -208,7 +198,6 @@ config BR2_cortex_a9
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a12
- 	bool "cortex-A12"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -216,7 +205,6 @@ config BR2_cortex_a12
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a15
- 	bool "cortex-A15"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -224,7 +212,6 @@ config BR2_cortex_a15
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a15_a7
- 	bool "cortex-A15/A7 big.LITTLE"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -232,7 +219,6 @@ config BR2_cortex_a15_a7
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- config BR2_cortex_a17
- 	bool "cortex-A17"
-@@ -241,7 +227,6 @@ config BR2_cortex_a17
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_cortex_a17_a7
- 	bool "cortex-A17/A7 big.LITTLE"
-@@ -250,14 +235,12 @@ config BR2_cortex_a17_a7
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_pj4
- 	bool "pj4"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_VFPV3
- 	select BR2_ARM_CPU_ARMV7A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 
- comment "armv7m cores"
- config BR2_cortex_m3
-@@ -286,7 +269,6 @@ config BR2_cortex_a32
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_cortex_a35
- 	bool "cortex-A35"
-@@ -295,7 +277,6 @@ config BR2_cortex_a35
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_cortex_a53
- 	bool "cortex-A53"
-@@ -304,7 +285,6 @@ config BR2_cortex_a53
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a57
- 	bool "cortex-A57"
- 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-@@ -312,7 +292,6 @@ config BR2_cortex_a57
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a57_a53
- 	bool "cortex-A57/A53 big.LITTLE"
- 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-@@ -320,7 +299,6 @@ config BR2_cortex_a57_a53
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_cortex_a72
- 	bool "cortex-A72"
-@@ -329,7 +307,6 @@ config BR2_cortex_a72
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_cortex_a72_a53
- 	bool "cortex-A72/A53 big.LITTLE"
-@@ -338,7 +315,6 @@ config BR2_cortex_a72_a53
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_cortex_a73
- 	bool "cortex-A73"
-@@ -347,7 +323,6 @@ config BR2_cortex_a73
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_cortex_a73_a35
- 	bool "cortex-A73/A35 big.LITTLE"
-@@ -356,7 +331,6 @@ config BR2_cortex_a73_a35
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_cortex_a73_a53
- 	bool "cortex-A73/A53 big.LITTLE"
-@@ -365,14 +339,12 @@ config BR2_cortex_a73_a53
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_emag
- 	bool "emag"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_exynos_m1
- 	bool "exynos-m1"
-@@ -381,63 +353,54 @@ config BR2_exynos_m1
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_falkor
- 	bool "falkor"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_phecda
- 	bool "phecda"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_qdf24xx
- 	bool "qdf24xx"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_thunderx
- 	bool "thunderx (aka octeontx)"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_thunderxt81
- 	bool "thunderxt81 (aka octeontx81)"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt83
- 	bool "thunderxt83 (aka octeontx83)"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt88
- 	bool "thunderxt88"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt88p1
- 	bool "thunderxt88p1"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_xgene1
- 	bool "xgene1"
-@@ -446,7 +409,6 @@ config BR2_xgene1
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 
- comment "armv8.1a cores"
-@@ -455,21 +417,18 @@ config BR2_thunderx2t99
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderx2t99p1
- 	bool "thunderx2t99p1"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_vulcan
- 	bool "vulcan"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 
- comment "armv8.2a cores"
-@@ -478,21 +437,18 @@ config BR2_cortex_a55
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- config BR2_cortex_a75
- 	bool "cortex-A75"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- config BR2_cortex_a75_a55
- 	bool "cortex-A75/A55 big.LITTLE"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- config BR2_cortex_a76
- 	bool "cortex-A76"
-@@ -501,7 +457,6 @@ config BR2_cortex_a76
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_cortex_a76_a55
- 	bool "cortex-A76/A55 big.LITTLE"
-@@ -510,7 +465,6 @@ config BR2_cortex_a76_a55
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_neoverse_n1
- 	bool "neoverse-N1 (aka ares)"
-@@ -519,14 +473,12 @@ config BR2_neoverse_n1
- 	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_tsv110
- 	bool "tsv110"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 
- comment "armv8.4a cores"
-@@ -535,7 +487,6 @@ config BR2_saphira
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+-config BR2_sh2a
+-	bool "sh2a (SH2A big endian)"
+ config BR2_sh4
+ 	bool "sh4 (SH4 little endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+@@ -22,7 +20,6 @@ config BR2_sh4aeb
  endchoice
  
+ config BR2_ARCH
+-	default "sh2a"		if BR2_sh2a
+ 	default "sh4"		if BR2_sh4
+ 	default "sh4eb"		if BR2_sh4eb
+ 	default "sh4a"		if BR2_sh4a
+@@ -33,7 +30,7 @@ config BR2_NORMALIZED_ARCH
+ 
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_sh4 || BR2_sh4a
+-	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
++	default "BIG"		if BR2_sh4eb || BR2_sh4aeb
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "Renesas / SuperH SH"
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 2091166b62..310414bebc 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -124,7 +124,6 @@ config BR2_UCLIBC_MIPS_NAN
+ 
+ config BR2_UCLIBC_SH_TYPE
+ 	string
+-	default "SH2A" if BR2_sh2a
+ 	default "SH4"  if BR2_sh4 || BR2_sh4eb
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+ 
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 4004c0edf8..be89f68ab5 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -31,7 +31,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_arm     || BR2_armeb    || \
+ 		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_or1k    || BR2_powerpc || BR2_RISCV_64 || BR2_sh2a   || \
++		   BR2_or1k    || BR2_powerpc || BR2_RISCV_64 || \
+ 		   BR2_sh4     || BR2_sh4eb   || BR2_sparc || BR2_xtensa || \
+ 		   BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 59fe34e58d..adefb8f502 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -237,12 +237,9 @@ def fixup_config(sysinfo, configfile):
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+        BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+         return False
+-    # libffi not available on sh2a and ARMv7-M, but propagating libffi
+-    # arch dependencies in Buildroot is really too much work, so we
+-    # handle this here.
+-    if 'BR2_sh2a=y\n' in configlines and \
+-       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+-        return False
++    # libffi not available on ARMv7-M, but propagating libffi arch
++    # dependencies in Buildroot is really too much work, so we handle
++    # this here.
+     if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
+        'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+         return False
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
