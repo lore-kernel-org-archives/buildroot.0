@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E60C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 20:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA9CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 20:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53DCA401CC;
-	Sun, 24 Apr 2022 20:57:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7F9C401F2;
+	Sun, 24 Apr 2022 20:58:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tzGTeTHnJauq; Sun, 24 Apr 2022 20:57:57 +0000 (UTC)
+	with ESMTP id NIkymhsZBn8G; Sun, 24 Apr 2022 20:58:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A81EB40286;
-	Sun, 24 Apr 2022 20:57:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C13E40339;
+	Sun, 24 Apr 2022 20:58:09 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D2DA1BF404
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:57:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10D9B1BF404
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A34760A92
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63BA560A92
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 20:57:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1-Mp6NoLebgD for <buildroot@lists.busybox.net>;
+ with ESMTP id 3RhK_c2u3zWx for <buildroot@lists.busybox.net>;
  Sun, 24 Apr 2022 20:57:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E2A760AB7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 871E560AB3
  for <buildroot@buildroot.org>; Sun, 24 Apr 2022 20:57:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 873C68426E; Sun, 24 Apr 2022 20:47:06 +0000 (UTC)
+ id 7D8658426B; Sun, 24 Apr 2022 20:47:06 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 22:56:50 +0200
+Date: Sun, 24 Apr 2022 22:55:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3bdfb5f5ad2d43cca491a7bc621800eaa0064c38
-X-Git-Newrev: 663b2edcd2be99638842edaf0406f4c984f32918
+X-Git-Oldrev: 9993a36f5e1296e86f00376f795de485386bd913
+X-Git-Newrev: 3bdfb5f5ad2d43cca491a7bc621800eaa0064c38
 X-Patchwork-Hint: ignore
-Message-Id: <20220424204706.873C68426E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libselinux: switch to pcre2
+Message-Id: <20220424204706.7D8658426B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libselinux: fix host build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,77 +58,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=663b2edcd2be99638842edaf0406f4c984f32918
+commit: https://git.buildroot.net/buildroot/commit/?id=3bdfb5f5ad2d43cca491a7bc621800eaa0064c38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to pcre2 which is available since version 3.2 and
-https://github.com/SELinuxProject/selinux/commit/50f0910cf05bdc1d10710c7c3fb748a178473387
-as pcre is EOL
+The following build failure is raised since commit
+1745fcde740057951dcc5429f3bfabd103b764a1 because
+$(HOST_PKG_PYTHON_DISTUTILS_ENV) contains $(HOST_CONFIGURE_OPTS) and so
+will override LDFLAGS passed by libselinux.mk:
 
-pcre2 is used by default since version 3.4 and
-https://github.com/SELinuxProject/selinux/commit/e0da140d82c0ebebf1060ce87d0f11276c7fc59a
+/usr/bin/gcc -O2 -I/nvmedata/autobuild/instance-11/output-1/host/include -I../include -D_GNU_SOURCE  -DNO_ANDROID_BACKEND  -L/nvmedata/autobuild/instance-11/output-1/host/lib -Wl,-rpath,/nvmedata/autobuild/instance-11/output-1/host/lib -shared -o libselinux.so.1 avc.lo avc_internal.lo avc_sidtab.lo booleans.lo callbacks.lo canonicalize_context.lo checkAccess.lo check_context.lo checkreqprot.lo compute_av.lo compute_create.lo compute_member.lo compute_relabel.lo compute_user.lo context.lo deny_unknown.lo disable.lo enabled.lo fgetfilecon.lo freecon.lo freeconary.lo fsetfilecon.lo get_context_list.lo get_default_type.lo get_initial_context.lo getenforce.lo getfilecon.lo getpeercon.lo init.lo is_customizable_type.lo label.lo label_db.lo label_file.lo label_media.lo label_support.lo label_x.lo lgetfilecon.lo load_policy.lo lsetfilecon.lo mapping.lo matchmediacon.lo matchpathcon.lo policyvers.lo procattr.lo query_user_context.lo regex.lo reject_unknown.lo selinux_check_securetty_context.l
+ o selinux_config.lo selinux_restorecon.lo sestatus.lo setenforce.lo setexecfilecon.lo setfilecon.lo setrans_client.lo seusers.lo sha1.lo stringrep.lo validatetrans.lo   -ldl -Wl,-soname,libselinux.so.1,--version-script=libselinux.map,-z,defs,-z,relro
+/usr/bin/ld: regex.lo: in function `regex_writef':
+regex.c:(.text+0x7c): undefined reference to `pcre_fullinfo'
+
+To fix this build failure, instead of moving LDFLAGS after
+$(HOST_PKG_PYTHON_DISTUTILS_ENV), drop LDFLAGS and add host-pkgconf
+dependency to retrieve pcre dependencies as pkg-config is supported
+since version 3.2 and
+https://github.com/SELinuxProject/selinux/commit/74093beab0c605641ec413be81e31e6b2f55d8d4
+
+Dropping LDFLAGS will also drop -lpthread which doesn't seem to raise
+any build failures with test-pkg:
+
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: SKIPPED
+                            sourcery-arm [6/6]: SKIPPED
+
+Apply the same update to the target variant for consistency.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d16995f0decef9c9bf58cab4fa30f7daab6918fb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libselinux/Config.in     |  2 +-
- package/libselinux/libselinux.mk | 10 ++++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/libselinux/libselinux.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-index 348757abce..3098fe3ea4 100644
---- a/package/libselinux/Config.in
-+++ b/package/libselinux/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBSELINUX
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsepol
- 	select BR2_PACKAGE_LIBSEPOL
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  libselinux is the runtime SELinux library that provides
 diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index c6be8e638a..db35da130f 100644
+index 5790e79040..c6be8e638a 100644
 --- a/package/libselinux/libselinux.mk
 +++ b/package/libselinux/libselinux.mk
-@@ -11,7 +11,7 @@ LIBSELINUX_LICENSE_FILES = LICENSE
+@@ -10,7 +10,8 @@ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
  LIBSELINUX_CPE_ID_VENDOR = selinuxproject
  
- LIBSELINUX_DEPENDENCIES = \
--	$(BR2_COREUTILS_HOST_DEPENDENCY) host-pkgconf libsepol pcre
-+	$(BR2_COREUTILS_HOST_DEPENDENCY) host-pkgconf libsepol pcre2
+-LIBSELINUX_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) libsepol pcre
++LIBSELINUX_DEPENDENCIES = \
++	$(BR2_COREUTILS_HOST_DEPENDENCY) host-pkgconf libsepol pcre
  
  LIBSELINUX_INSTALL_STAGING = YES
  
-@@ -20,7 +20,8 @@ LIBSELINUX_INSTALL_STAGING = YES
- LIBSELINUX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	ARCH=$(NORMALIZED_ARCH) \
--	SHLIBDIR=/usr/lib
-+	SHLIBDIR=/usr/lib \
-+	USE_PCRE2=y
+@@ -52,8 +53,7 @@ endif # python3
+ # when the python binding is enabled.
+ LIBSELINUX_MAKE_OPTS += \
+ 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+-	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
+-	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
++	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
  
- LIBSELINUX_MAKE_INSTALL_TARGETS = install
- 
-@@ -76,14 +77,15 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
+ define LIBSELINUX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+@@ -76,13 +76,12 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
  endef
  
  HOST_LIBSELINUX_DEPENDENCIES = \
--	host-pkgconf host-libsepol host-pcre host-swig host-python3
-+	host-pkgconf host-libsepol host-pcre2 host-swig host-python3
+-	host-libsepol host-pcre host-swig host-python3
++	host-pkgconf host-libsepol host-pcre host-swig host-python3
  
  HOST_LIBSELINUX_MAKE_OPTS = \
  	$(HOST_CONFIGURE_OPTS) \
  	PREFIX=$(HOST_DIR) \
  	SHLIBDIR=$(HOST_DIR)/lib \
+-	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
  	$(HOST_PKG_PYTHON_DISTUTILS_ENV) \
--	PYTHON=python$(PYTHON3_VERSION_MAJOR)
-+	PYTHON=python$(PYTHON3_VERSION_MAJOR) \
-+	USE_PCRE2=y
+ 	PYTHON=python$(PYTHON3_VERSION_MAJOR)
  
- define HOST_LIBSELINUX_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
