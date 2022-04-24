@@ -1,83 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACEADC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 21:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94BD9C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 00:03:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66F3681BB4;
-	Sun, 24 Apr 2022 21:41:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE73040328;
+	Mon, 25 Apr 2022 00:03:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YVPxYyyxAAWD; Sun, 24 Apr 2022 21:41:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rKX2v12qlYP3; Mon, 25 Apr 2022 00:03:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47A2881B72;
-	Sun, 24 Apr 2022 21:41:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C5FF1BF470
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 21:40:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B145C40292;
+	Mon, 25 Apr 2022 00:03:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 03C621BF968
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 00:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99C0740196
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 21:40:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E652F81990
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 00:03:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ns2u0WBObw7C for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 21:40:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8522C40179
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 21:40:08 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id m13so431831iob.4
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 14:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=Tn8n+1hjcwsOcAzeQ/cfPd3vR7pG2AUyBP7qWHq3hm4=;
- b=Tw2Sd1m9AbWSJhuJkjqWUko5HDAtZUg4D+iSj7wBYwjrSnx7IyCZSXuIM1DSE67uJ1
- UBz+/mE608UgvKA0rJd3BVxfzQ6PN21xlLFZjB0wV/AAEuJ064oWMK86O1UzuR/ftYxD
- XKQ9ZB5WQpZdWhUvMeSJGZrGRdYY6cRCGGxiNZbGnayk7eNfp13cF0a0V/UW3TqKenJS
- 5s3wAMl0d19H8I80LUXTg6mgfxhzqdHy2d7mwy6N8wIFttK/n52vapK0jwORb0isq0AS
- 6bA46baEjhN4mw734mwDv/FdWo6Qr8q/EuIG40+NmwqSD76iWrLPGLNCErLoag96/W5Y
- /QBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=Tn8n+1hjcwsOcAzeQ/cfPd3vR7pG2AUyBP7qWHq3hm4=;
- b=UaGKrK4y2jDMXUVdhhnHAitUL07vrgAEJAwIehtk/+EV9hwEV2jVuwBt3RpjkrRGAv
- Y9NXmVF/WittuT6/zerK8FZRTv0kwVnHiMs4lEA0fLwzDBj5JNCHSURQBD5OcIJqtzl5
- rOLLSkHwKwDX11Zrnlks79g3g7p7ONUra5Z3PnKV5AbK70SIZN9cHBbd3pdZVOxun96y
- GrrvRjWTYKCDJMcJoOEBFskaGQFcpMTc3oO2VUB7oYviGoB7mZbEN7sh74D6TuQomJlD
- zzRfR5noWvV3bME3WTcCytgsz9rxfDAPWwbzANSNU3nTcPZsUyjpK4fMt8dlWhed0arQ
- jeEw==
-X-Gm-Message-State: AOAM532zxQq/wrxVeSFbaC2K6SSinamMR7Inybbvz3f0pHJq0PRIhOiW
- ORqzBBxzdL3KoEycTaD0qzBtAyc2GTn98Q==
-X-Google-Smtp-Source: ABdhPJyHHKSomIVdz/oMXjcF9JOAYax01u0ID6c1a74DQXqdgSqRmwBdCX/CLpKlNcNcX/uRk8oPoQ==
-X-Received: by 2002:a05:6638:62d:b0:32a:ef65:fc85 with SMTP id
- h13-20020a056638062d00b0032aef65fc85mr685782jar.176.1650836407535; 
- Sun, 24 Apr 2022 14:40:07 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- o19-20020a056e0214d300b002cbec3af6casm5385084ilk.30.2022.04.24.14.40.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Apr 2022 14:40:07 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=yuriev.ru
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qEm2CsUUArU5 for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 00:03:49 +0000 (UTC)
+X-Greylist: delayed 00:07:09 by SQLgrey-1.8.0
+Received: from forward106p.mail.yandex.net (forward106p.mail.yandex.net
+ [77.88.28.109])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B9E1F8197D
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 00:03:48 +0000 (UTC)
+Received: from myt5-4d7a402984d6.qloud-c.yandex.net
+ (myt5-4d7a402984d6.qloud-c.yandex.net
+ [IPv6:2a02:6b8:c12:1fa2:0:640:4d7a:4029])
+ by forward106p.mail.yandex.net (Yandex) with ESMTP id 49EA22FC1200
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 02:56:34 +0300 (MSK)
+Received: from myt5-aad1beefab42.qloud-c.yandex.net
+ (myt5-aad1beefab42.qloud-c.yandex.net [2a02:6b8:c12:128:0:640:aad1:beef])
+ by myt5-4d7a402984d6.qloud-c.yandex.net (mxback/Yandex) with ESMTP id
+ YCySKfhw3q-uYg0UYm4; Mon, 25 Apr 2022 02:56:34 +0300
+X-Yandex-Fwd: 2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yuriev.ru; s=mail;
+ t=1650844594; bh=83xtX2slLiSON9KN/vp1ZfSzXlICnm30bfnyIyQpEy4=;
+ h=Date:Subject:Cc:To:From:Message-Id;
+ b=mvYsX70rd43RLoc09rKHbPyRmrvQhJnSqjceupUD0L5+F4E5Yp+jzNb1W6qlzQhfR
+ S1YNNRzmIznwmiad61g1G0borppygdqudRLIuX8cgUDtvGsIqnBNzquYsrwvQzfbhm
+ 4eeRIt+MLxqXhZOwzXtnRoVFIAvLYG+CiNS8mTqc=
+Authentication-Results: myt5-4d7a402984d6.qloud-c.yandex.net;
+ dkim=pass header.i=@yuriev.ru
+Received: by myt5-aad1beefab42.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
+ id yf0hXBcWMB-uXMqxmFp; Mon, 25 Apr 2022 02:56:33 +0300
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client certificate not present)
+From: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?=
+ <leo@yuriev.ru>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 15:39:58 -0600
-Message-Id: <20220424213958.1747120-5-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220424213958.1747120-1-james.hilliard1@gmail.com>
-References: <20220424213958.1747120-1-james.hilliard1@gmail.com>
+Date: Mon, 25 Apr 2022 02:56:15 +0300
+Message-Id: <20220424235618.471682-1-leo@yuriev.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v7 5/5] package/python-pyparsing: bump to
- version 3.0.8
+Subject: [Buildroot] [PATCH 1/1] package/libmdbx: bump version to 0.11.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,64 +75,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C?=
+ =?UTF-8?q?=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?= <leo@yuriev.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package now requires flit and must use the flit-bootstrap setup
-type for the host build since it is a dependency of
-host-python-pypa-build.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v6 -> v7:
-  - only use flit-boostrap for host-python-pyparsing
----
- package/python-pyparsing/python-pyparsing.hash | 4 ++--
- package/python-pyparsing/python-pyparsing.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index 1e56e878a1..e7137d55c9 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  9d38774991175444e21a3dfa865876cc  pyparsing-3.0.7.tar.gz
--sha256  18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea  pyparsing-3.0.7.tar.gz
-+md5  971252e99e1e02a4c27f001894e0422d  pyparsing-3.0.8.tar.gz
-+sha256  7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954  pyparsing-3.0.8.tar.gz
- # Locally computed sha256 checksums
- sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 2fb705bc7a..7e458042f5 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
- 
--PYTHON_PYPARSING_VERSION = 3.0.7
-+PYTHON_PYPARSING_VERSION = 3.0.8
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/d6/60/9bed18f43275b34198eb9720d4c1238c68b3755620d20df0afd89424d32b
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/31/df/789bd0556e65cf931a5b87b603fcf02f79ff04d5379f3063588faaf9c1e4
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
--PYTHON_PYPARSING_SETUP_TYPE = setuptools
-+PYTHON_PYPARSING_SETUP_TYPE = flit
-+HOST_PYTHON_PYPARSING_SETUP_TYPE = flit-bootstrap
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBpcyBzdGFibGUgYnVnZml4IHJlbGVhc2Ugb2YgbGlibWRieC4gU28gaXQgaXMgcmVhc29u
+YWJsZSB0byBiYWNrcG9ydAp0aGlzIHBhdGNoIHRvIGFsbCBhcHBsaWNhYmxlIHJlbGVhc2VzL2Jy
+YW5jaGVzIG9mIGJ1aWxkcm9vdC4KClJlbGVhc2Ugbm90ZXMgZm9yIHYwLjExLjcgaHR0cHM6Ly9n
+aXRmbGljLnJ1L3Byb2plY3QvZXJ0aGluay9saWJtZGJ4L3JlbGVhc2UvOTBlYzk5ODUtY2Q2MC00
+ZDlhLThjOTgtODQxNzUwNmZkMjZkCgpUaGUgY29tcGxldGUgQ2hhbmdlTG9nOiBodHRwczovL2dp
+dGZsaWMucnUvcHJvamVjdC9lcnRoaW5rL2xpYm1kYngvYmxvYj9maWxlPUNoYW5nZUxvZy5tZAoK
+U2lnbmVkLW9mZi1ieTog0JvQtdC+0L3QuNC0INCu0YDRjNC10LIgKExlb25pZCBZdXJpZXYpIDxs
+ZW9AeXVyaWV2LnJ1PgotLS0KIHBhY2thZ2UvbGlibWRieC9Db25maWcuaW4gICAgfCAyICstCiBw
+YWNrYWdlL2xpYm1kYngvbGlibWRieC5oYXNoIHwgNCArKy0tCiBwYWNrYWdlL2xpYm1kYngvbGli
+bWRieC5tayAgIHwgNiArKystLS0KIDMgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA2
+IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlibWRieC9Db25maWcuaW4gYi9w
+YWNrYWdlL2xpYm1kYngvQ29uZmlnLmluCmluZGV4IGQxM2Y3MzkzOGYuLjJjZGU3ZWQ1ZTkgMTAw
+NjQ0Ci0tLSBhL3BhY2thZ2UvbGlibWRieC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9saWJtZGJ4
+L0NvbmZpZy5pbgpAQCAtMTMsNyArMTMsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTElCTURCWAog
+CSAgbGlibWRieCBzdXJwYXNzZXMgdGhlIGxlZ2VuZGFyeSBMTURCIGluIHRlcm1zIG9mCiAJICBy
+ZWxpYWJpbGl0eSwgZmVhdHVyZXMgYW5kIHBlcmZvcm1hbmNlLgogCi0JICBodHRwczovL2dpdGh1
+Yi5jb20vZXJ0aGluay9saWJtZGJ4CisJICBodHRwczovL2dpdGZsaWMucnUvcHJvamVjdC9lcnRo
+aW5rL2xpYm1kYngKIAogaWYgQlIyX1BBQ0tBR0VfTElCTURCWAogCmRpZmYgLS1naXQgYS9wYWNr
+YWdlL2xpYm1kYngvbGlibWRieC5oYXNoIGIvcGFja2FnZS9saWJtZGJ4L2xpYm1kYnguaGFzaApp
+bmRleCAyNDgzZDE0ZGQxLi43ZDY2M2IzZGEwIDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYm1kYngv
+bGlibWRieC5oYXNoCisrKyBiL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lmhhc2gKQEAgLTEsNSAr
+MSw1IEBACi0jIEhhc2hlcyBmcm9tOiBodHRwczovL2dpdGh1Yi5jb20vZXJ0aGluay9saWJtZGJ4
+L3JlbGVhc2VzLwotc2hhMjU2ICA4ODRkZTUyOGY1YzJhYmFiMjE4N2I3YzRjODRiNzY5ZDI1NTFl
+MWE3NDhjYmZkZjBhZTRjMGY1YzlmOGRiZDI3ICBsaWJtZGJ4LWFtYWxnYW1hdGVkLTAuMTEuNC50
+YXIuZ3oKKyMgSGFzaGVzIGZyb206IGh0dHBzOi8vbGlibWRieC53ZWJzaXRlLnlhbmRleGNsb3Vk
+Lm5ldC9yZWxlYXNlL1NIQTI1NlNVTVMKK3NoYTI1NiAgM2E5ZmI2YTRjZDk0MWU2NDY1OTcyMzU1
+MTg3MTQzNzNmZGExY2E2ZDRjNWUyMzY2OWFmZTcwZWE4N2MyMDk0MCAgbGlibWRieC1hbWFsZ2Ft
+YXRlZC0wLjExLjcudGFyLnh6CiAKICMgTG9jYWxseSBjYWxjdWxhdGVkCiBzaGEyNTYgIDMxMGZl
+MjVjODU4YTk1MTVmYzhjOGQ3ZDFmMjRhNjdjOTQ5NmY4NGE5MWUwYTBlNDFlYTk5NzViMTM3MWU1
+NjkgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lm1rIGIvcGFj
+a2FnZS9saWJtZGJ4L2xpYm1kYngubWsKaW5kZXggMWFmZjhmYmI0ZC4uYTcwNTZiMjg1MCAxMDA2
+NDQKLS0tIGEvcGFja2FnZS9saWJtZGJ4L2xpYm1kYngubWsKKysrIGIvcGFja2FnZS9saWJtZGJ4
+L2xpYm1kYngubWsKQEAgLTQsOSArNCw5IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwog
+Ci1MSUJNREJYX1ZFUlNJT04gPSAwLjExLjQKLUxJQk1EQlhfU09VUkNFID0gbGlibWRieC1hbWFs
+Z2FtYXRlZC0kKExJQk1EQlhfVkVSU0lPTikudGFyLmd6Ci1MSUJNREJYX1NJVEUgPSBodHRwczov
+L2dpdGh1Yi5jb20vZXJ0aGluay9saWJtZGJ4L3JlbGVhc2VzL2Rvd25sb2FkL3YkKExJQk1EQlhf
+VkVSU0lPTikKK0xJQk1EQlhfVkVSU0lPTiA9IDAuMTEuNworTElCTURCWF9TT1VSQ0UgPSBsaWJt
+ZGJ4LWFtYWxnYW1hdGVkLSQoTElCTURCWF9WRVJTSU9OKS50YXIueHoKK0xJQk1EQlhfU0lURSA9
+IGh0dHBzOi8vbGlibWRieC53ZWJzaXRlLnlhbmRleGNsb3VkLm5ldC9yZWxlYXNlCiBMSUJNREJY
+X1NVUFBPUlRTX0lOX1NPVVJDRV9CVUlMRCA9IE5PCiBMSUJNREJYX0xJQ0VOU0UgPSBPTERBUC0y
+LjgKIExJQk1EQlhfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKLS0gCjIuMzYuMAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
