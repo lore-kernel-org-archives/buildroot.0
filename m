@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 533FFC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 21:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D73C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 21:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3EB260A84;
-	Sun, 24 Apr 2022 21:40:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CD7360AD6;
+	Sun, 24 Apr 2022 21:40:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gXHXfYuCJljk; Sun, 24 Apr 2022 21:40:11 +0000 (UTC)
+	with ESMTP id K5g4yB5sgVDQ; Sun, 24 Apr 2022 21:40:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C398860774;
-	Sun, 24 Apr 2022 21:40:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 220981BF470
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7920760ACE;
+	Sun, 24 Apr 2022 21:40:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BF7521BF470
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 21:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0FCD4401F2
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE24481347
  for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 21:40:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hZF5G35EsScQ for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 21:40:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 347fl6LrKbQR for <buildroot@lists.busybox.net>;
+ Sun, 24 Apr 2022 21:40:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C89BC4002B
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 21:40:06 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id z19so9397994iof.12
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 14:40:06 -0700 (PDT)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5BCCB8133A
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 21:40:07 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id i196so14013994ioa.1
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 14:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=WtGsnBfFtu3XSxCc5ZbCwnvQtQfuu4JcA+xEi+1v9bw=;
- b=qiWqtz2pQErQbuhFLch/Nz8b49+n7c6WD8FuUIEzqL4oAY0H5dEOesBYic7zjTcgKU
- wNRYYwnEDmTCUPoVdlDWOGCzy0KosYKfhz/yrtJi/yg4LedMIim2r3c9UleDU4H6ZqO3
- fx3BR45j7Hxe0xzvRFpUX+Ou74Sz7/AokKczDaerwxEI/GjAigZofMvX27hUFB+c8Wrh
- 7YKpoDF71yqyppniG2PGAJQVpkH/vpwtOu1zmWNYk0Nr8wL/7J5Aw5cDV274D0sXeiro
- zKMX/WMGtn/XnRvg82NLR+C+z6+jPSvaPbfm34YLXRMddXjJQcvfddrGvndGFQF56B91
- OpSQ==
+ bh=a0NKFLYCvuCd7IUDOBOi5UYPQyOMwrgrQwUGVCeFIRs=;
+ b=LKtrAPbnOCv54+J4xN0JuTKOkt9Ad3rVDndhu3CNo44gvDBfIz2W+tkdOYdaGK35Kr
+ NAKs0HhywSJs8/ZQUwFXa8nHV/oKIoXz1vcPSgNpZuqNoaQVmq5fmS87g45i/aL0rXbF
+ ro0NvEscRj4cZ294DbPDj0pppMzinQp30Hv2pdJm5u28OQNMJhQ29I+D7DjTeoDkyHVt
+ sIhFJnEneNd02WlyVTRiJM+as9kSIEl3zGubBQEypEBlvbxd13ZUVCLapTQ84M/9g9k1
+ IO6fEVznu6GppAkkckM4FKsoZqcEx1O8ObMfw4mos+b+3kxuvljZwq7i8HWxLVRslrfC
+ xR0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=WtGsnBfFtu3XSxCc5ZbCwnvQtQfuu4JcA+xEi+1v9bw=;
- b=Sekcjmfo1hIWzI21RoaLlJVMcDnmvZJbmofXYrSCwOlZIjYZ5LtpfGo8byxgjy5fda
- ib6UVrCQys4r0DfhNnJLEvbHawWyTqsVzjvhLsJDOYjI6CHkGU5HjOq931XM+IWnGZEB
- lPfzbEAFTcEeHCy+0DbvOdhv4Xe6ajjFzkBMpByC+3LyLS6TSXqE3c+FMhSqhRFQ6yB2
- iT453i+4/+RmgwXKvM49rAoCMAG8+HMW7vhiYjisTKCjJmcQeG0YEFrue3GD4mS53ZPf
- OzaM1azjZMkN6oJXiRh9wuUri/nJtAglXKXsNUbst1Km9Ru48cLlIu7xY3reAuE7xwg9
- /pvA==
-X-Gm-Message-State: AOAM5318McMW0X1erBsBPcTg20Si7nA9reedlRehiL/JFbZxshGANDnZ
- OExYfm02PrrF4fsfERGH2ww9s2ew/xaFdQ==
-X-Google-Smtp-Source: ABdhPJygrlI9h5kaHHWDoylJk0hweWqmjgvK1JLlm4grSkU8wCOqmnwBpAF4rLDUd2tRI/0xjgpJIQ==
-X-Received: by 2002:a02:234a:0:b0:32a:f07c:e8 with SMTP id
- u71-20020a02234a000000b0032af07c00e8mr564147jau.87.1650836405801; 
- Sun, 24 Apr 2022 14:40:05 -0700 (PDT)
+ bh=a0NKFLYCvuCd7IUDOBOi5UYPQyOMwrgrQwUGVCeFIRs=;
+ b=r0navvDaVTl9XaANb2nIHO1HCBFjevkudbXGwh1MhoR60tEpoGN3kDp+dcuWdvqadi
+ bFVXy17zGgmntieEO5T/gsXCQVGWztdGFtnFw8s7UTdsHClb8lKf0FkFDROuH2WZFcnv
+ lfVGRBObOnUFoGS2Jk2gYO7sys5r1iv/5hloa2LtHplg1t87IhbaEvDRwJDP+6Stgakg
+ tCIZ4usuYH3isSG9U9dFmH9d0agUZhTPPsRocMxvyvTH4iKYwrA/a97IgodcAegZ3Q3R
+ PRBqqxcimY04veeTcWmoIGl0SfS0kiLWmEc4Oe1T3RVk8Ay4f8aKGRY3yaI6FjW8ar4f
+ jTbA==
+X-Gm-Message-State: AOAM5334HELVcWIvZfy4cEGK4Xjjj6Z4rbhqK8qBcAAtlCXNpEWFfN05
+ YxTKQjSGo5fiJZT4SAFlsNiue5vW2VCA+w==
+X-Google-Smtp-Source: ABdhPJyQpAurLPH5vBSAmfcUeo/b2Hn43BIU9KSbJgZF5B98DuxfHVqu2j54Vi0ZUCoialgQDd5ruQ==
+X-Received: by 2002:a5d:8486:0:b0:64c:6c6b:4660 with SMTP id
+ t6-20020a5d8486000000b0064c6c6b4660mr5853353iom.21.1650836406333; 
+ Sun, 24 Apr 2022 14:40:06 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
  o19-20020a056e0214d300b002cbec3af6casm5385084ilk.30.2022.04.24.14.40.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Apr 2022 14:40:05 -0700 (PDT)
+ Sun, 24 Apr 2022 14:40:06 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 15:39:55 -0600
-Message-Id: <20220424213958.1747120-2-james.hilliard1@gmail.com>
+Date: Sun, 24 Apr 2022 15:39:56 -0600
+Message-Id: <20220424213958.1747120-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220424213958.1747120-1-james.hilliard1@gmail.com>
 References: <20220424213958.1747120-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v7 2/5] package/pkg-python.mk: remove hardcoded
- paths for host Python
+Subject: [Buildroot] [PATCH v7 3/5] package/python-flit-core: migrate setup
+ type to flit bootstrap
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,47 +89,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- =?UTF-8?q?=D0=A0=D0=BE=D0=BC=D0=B0=D0=BD=20=D0=94=D0=BE=D0=BD=D1=87?=
- =?UTF-8?q?=D0=B5=D0=BD=D0=BA=D0=BE?= <dpb@corrigendum.ru>,
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTog0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+IDxkcGJAY29ycmlnZW5kdW0ucnU+CgpX
-aGVuIGluc3RhbGxlciBpcyB1c2VkIHRvIGluc3RhbGwgcGFja2FnZXMgZm9yIGhvc3QgUHl0aG9u
-LCBpdCBjYW4gZmlndXJlCm91dCBieSBpdHNlbGYgd2hpY2ggcGF0aHMgdG8gdXNlLiBXZSBqdXN0
-IG5lZWQgdG8gdXNlIHRoZSBpbnN0YWxsZXIgQ0xJCmluc3RlYWQgb2Ygb3VyIHdyYXBwZXIgc2Ny
-aXB0LgoKU2lnbmVkLW9mZi1ieTog0KDQvtC80LDQvSDQlNC+0L3Rh9C10L3QutC+IDxkcGJAY29y
-cmlnZW5kdW0ucnU+ClNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFy
-ZDFAZ21haWwuY29tPgotLS0KQ2hhbmdlcyB2NCAtPiB2NToKICAtIGFkZCByZWJhc2VkIHJlbW92
-ZSBoYXJkY29kZWQgcGF0aHMgcGF0Y2gKLS0tCiBwYWNrYWdlL3BrZy1weXRob24ubWsgfCAxMiAr
-Ky0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9u
-cygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLXB5dGhvbi5tayBiL3BhY2thZ2UvcGtnLXB5
-dGhvbi5tawppbmRleCAyZTc3MDRhMGE5Li4xNTQ4MTBlMWNjIDEwMDY0NAotLS0gYS9wYWNrYWdl
-L3BrZy1weXRob24ubWsKKysrIGIvcGFja2FnZS9wa2ctcHl0aG9uLm1rCkBAIC0xNDYsMTQgKzE0
-Niw2IEBAIEhPU1RfUEtHX1BZVEhPTl9QRVA1MTdfRU5WID0gXAogCVBZVEhPTk5PVVNFUlNJVEU9
-MSBcCiAJJChIT1NUX0NPTkZJR1VSRV9PUFRTKQogCi1IT1NUX1BLR19QWVRIT05fUEVQNTE3X0lO
-U1RBTExfT1BUUyA9IFwKLQktLWludGVycHJldGVyPS9iaW4vcHl0aG9uIFwKLQktLXNjcmlwdC1r
-aW5kPXBvc2l4IFwKLQktLXB1cmVsaWI9JChIT1NUX0RJUikvbGliL3B5dGhvbiQoUFlUSE9OM19W
-RVJTSU9OX01BSk9SKS9zaXRlLXBhY2thZ2VzIFwKLQktLWhlYWRlcnM9JChIT1NUX0RJUikvaW5j
-bHVkZS9weXRob24kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikgXAotCS0tc2NyaXB0cz0kKEhPU1Rf
-RElSKS9iaW4gXAotCS0tZGF0YT0kKEhPU1RfRElSKQotCiBIT1NUX1BLR19QWVRIT05fUEVQNTE3
-X0JPT1RTVFJBUF9JTlNUQUxMX09QVFMgPSBcCiAJLS1pbnN0YWxsZGlyPSQoSE9TVF9ESVIpL2xp
-Yi9weXRob24kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikvc2l0ZS1wYWNrYWdlcwogCkBAIC0yMjUs
-MTEgKzIxNywxMSBAQCBpZmVxICgkKDEpLGhvc3QtcHl0aG9uLWZsaXQtY29yZSkKICMKICQoMilf
-QkFTRV9JTlNUQUxMX0NNRCA9IC1tIGJvb3RzdHJhcF9pbnN0YWxsIGRpc3QvKiAkJChIT1NUX1BL
-R19QWVRIT05fUEVQNTE3X0JPT1RTVFJBUF9JTlNUQUxMX09QVFMpCiBlbHNlCi0kKDIpX0JBU0Vf
-SU5TVEFMTF9DTUQgPSAkKFRPUERJUikvc3VwcG9ydC9zY3JpcHRzL3B5aW5zdGFsbGVyLnB5IGRp
-c3QvKiAkJChIT1NUX1BLR19QWVRIT05fUEVQNTE3X0lOU1RBTExfT1BUUykKKyQoMilfQkFTRV9J
-TlNUQUxMX0NNRCA9IC1tIGluc3RhbGxlciBkaXN0LyoKIGVuZGlmCiBlbHNlCiAkKDIpX0JBU0Vf
-QlVJTERfQ01EID0gLW0gYnVpbGQgLW4gLXcKLSQoMilfQkFTRV9JTlNUQUxMX0NNRCA9ICQoVE9Q
-RElSKS9zdXBwb3J0L3NjcmlwdHMvcHlpbnN0YWxsZXIucHkgZGlzdC8qICQkKEhPU1RfUEtHX1BZ
-VEhPTl9QRVA1MTdfSU5TVEFMTF9PUFRTKQorJCgyKV9CQVNFX0lOU1RBTExfQ01EID0gLW0gaW5z
-dGFsbGVyIGRpc3QvKgogZW5kaWYKIGVuZGlmCiBlbHNlCi0tIAoyLjI1LjEKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+This package needs to use flit-bootstrap since it is a dependency
+of host-python-pypa-build.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-flit-core/python-flit-core.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
+index 0e058a1f17..aaf4c77c6a 100644
+--- a/package/python-flit-core/python-flit-core.mk
++++ b/package/python-flit-core/python-flit-core.mk
+@@ -8,6 +8,6 @@ PYTHON_FLIT_CORE_VERSION = 3.7.1
+ PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
+ PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/15/d1/d8798b83e953fd6f86ca9b50f93eec464a9305b0661469c8234e61095481
+ PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
+-PYTHON_FLIT_CORE_SETUP_TYPE = pep517
++PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
+ 
+ $(eval $(host-python-package))
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
