@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D15DCC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 15:54:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49872C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 15:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9858560BBA;
-	Sun, 24 Apr 2022 15:54:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C77F8410D3;
+	Sun, 24 Apr 2022 15:54:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mb2UIai8SZ-B; Sun, 24 Apr 2022 15:54:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gmmyZCrhqWME; Sun, 24 Apr 2022 15:54:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC35860F39;
-	Sun, 24 Apr 2022 15:54:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1EA2D1BF964
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90714410D5;
+	Sun, 24 Apr 2022 15:54:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 043071BF383
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CBDF60B77
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF35E40145
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AORKCLkYtIb1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WE2c46YTOxEO for <buildroot@lists.busybox.net>;
  Sun, 24 Apr 2022 15:53:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C548E60B62
+ by smtp2.osuosl.org (Postfix) with ESMTP id B10F840121
  for <buildroot@buildroot.org>; Sun, 24 Apr 2022 15:53:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 3D9388422F; Sun, 24 Apr 2022 15:43:21 +0000 (UTC)
+ id 27B958421A; Sun, 24 Apr 2022 15:43:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 16:53:44 +0200
+Date: Sun, 24 Apr 2022 16:53:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7744aba7bcc7f4ad38ff4bba3d0c37969544fce
-X-Git-Newrev: dfb42ab91b7b1f58bc89362403321ed7063dda9f
+X-Git-Oldrev: a6e7a8511526687d27d45570171bd9e4dda6bd59
+X-Git-Newrev: cdfe7d17b395813f66e231ed183a7b75afb14b8f
 X-Patchwork-Hint: ignore
-Message-Id: <20220424154321.3D9388422F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/assimp: force libzlib
+Message-Id: <20220424154321.27B958421A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zlib: add
+ BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfb42ab91b7b1f58bc89362403321ed7063dda9f
+commit: https://git.buildroot.net/buildroot/commit/?id=cdfe7d17b395813f66e231ed183a7b75afb14b8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Force libzlib instead of depending on it
+Add BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/assimp/Config.in | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/zlib/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 833e559a6f..5ffb50cd79 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -2,8 +2,9 @@ config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	depends on BR2_PACKAGE_LIBZLIB
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
+diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+index d6d94889a7..3a486376ac 100644
+--- a/package/zlib/Config.in
++++ b/package/zlib/Config.in
+@@ -1,3 +1,6 @@
++config BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
++	bool
++
+ config BR2_PACKAGE_ZLIB_NG_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_arm
+@@ -33,6 +36,7 @@ config BR2_PACKAGE_LIBZLIB
+ config BR2_PACKAGE_ZLIB_NG
+ 	bool "zlib-ng"
+ 	depends on BR2_PACKAGE_ZLIB_NG_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
+ 	select BR2_PACKAGE_HAS_ZLIB
  	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
- 	  library to import various well-known 3D model formats in a
-@@ -14,11 +15,7 @@ config BR2_PACKAGE_ASSIMP
- 	  http://www.assimp.org
- 
- comment "assimp needs a toolchain w/ C++, wchar"
--	depends on BR2_PACKAGE_LIBZLIB
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
--comment "assimp needs libzlib"
--	depends on !BR2_PACKAGE_LIBZLIB
--
- comment "assimp needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	  Zlib replacement with optimizations for
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
